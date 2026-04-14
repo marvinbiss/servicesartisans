@@ -18,21 +18,21 @@ export interface BlogArticleMeta {
 
 /** Map category to a default emoji for the blog listing grid */
 export const categoryEmoji: Record<string, string> = {
-  'Tarifs': '💰',
-  'Conseils': '💡',
+  Tarifs: '💰',
+  Conseils: '💡',
   'Fiches métier': '👷',
-  'Guides': '📋',
-  'Réglementation': '⚖️',
+  Guides: '📋',
+  Réglementation: '⚖️',
   'Aides & Subventions': '🏛️',
-  'Saisonnier': '🌿',
-  'Sécurité': '🔒',
-  'Securite': '🔒',
-  'Énergie': '⚡',
-  'Energie': '⚡',
-  'DIY': '🔧',
-  'Inspiration': '✨',
-  'Matériaux': '🧱',
-  'Urgences': '🚨',
+  Saisonnier: '🌿',
+  Sécurité: '🔒',
+  Securite: '🔒',
+  Énergie: '⚡',
+  Energie: '⚡',
+  DIY: '🔧',
+  Inspiration: '✨',
+  Matériaux: '🧱',
+  Urgences: '🚨',
 }
 
 /** Emojis assigned to the original 27 articles (preserve exact existing ones) */
@@ -112,8 +112,8 @@ const existingEmojis: Record<string, string> = {
 
 /** Normalize non-accented category names to their accented equivalents */
 const categoryNormalize: Record<string, string> = {
-  'Securite': 'Sécurité',
-  'Energie': 'Énergie',
+  Securite: 'Sécurité',
+  Energie: 'Énergie',
 }
 
 function normalizeCategory(category: string): string {

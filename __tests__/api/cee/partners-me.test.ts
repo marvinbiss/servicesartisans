@@ -5,12 +5,10 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const mockJsonFn = vi.fn(
-  (body: unknown, init?: { status?: number }) => ({
-    body,
-    status: init?.status ?? 200,
-  })
-)
+const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => ({
+  body,
+  status: init?.status ?? 200,
+}))
 vi.mock('next/server', () => ({
   NextResponse: {
     json: (body: unknown, init?: { status?: number }) => mockJsonFn(body, init),
@@ -85,7 +83,9 @@ describe('GET /api/cee/partners/me', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    ;(mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({
+    ;(
+      mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({
       data: { user: null },
       error: null,
     })

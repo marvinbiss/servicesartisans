@@ -11,7 +11,14 @@ export function stripHtml(str: string | null | undefined): string | null | undef
 
 /** Base CMS page schema — shared fields between create and update */
 const baseCmsFields = {
-  slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets'),
+  slug: z
+    .string()
+    .min(1)
+    .max(200)
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets'
+    ),
   page_type: z.enum(['static', 'blog', 'service', 'location', 'homepage', 'faq']),
   title: z.string().min(1).max(500),
   content_json: z.record(z.string(), z.unknown()).nullable().optional(),
@@ -28,8 +35,18 @@ const baseCmsFields = {
   tags: z.array(z.string().min(1).max(100)).max(50).optional(),
   read_time: z.string().max(50).nullable().optional(),
   featured_image: z.string().url().max(2048).nullable().optional(),
-  service_slug: z.string().max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).nullable().optional(),
-  location_slug: z.string().max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).nullable().optional(),
+  service_slug: z
+    .string()
+    .max(200)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .nullable()
+    .optional(),
+  location_slug: z
+    .string()
+    .max(200)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    .nullable()
+    .optional(),
   sort_order: z.coerce.number().int().min(0).optional(),
 }
 
@@ -48,10 +65,20 @@ export const updatePageSchema = z.object(baseCmsFields).partial()
 
 /** Apply stripHtml to all text-only fields on a validated CMS payload */
 export function sanitizeTextFields<T extends Record<string, unknown>>(data: T): T {
-  const textFields = ['title', 'meta_title', 'meta_description', 'excerpt', 'author', 'author_bio', 'category'] as const
+  const textFields = [
+    'title',
+    'meta_title',
+    'meta_description',
+    'excerpt',
+    'author',
+    'author_bio',
+    'category',
+  ] as const
   for (const field of textFields) {
     if (field in data && data[field] !== undefined) {
-      (data as Record<string, unknown>)[field] = stripHtml(data[field] as string | null | undefined)
+      ;(data as Record<string, unknown>)[field] = stripHtml(
+        data[field] as string | null | undefined
+      )
     }
   }
   return data

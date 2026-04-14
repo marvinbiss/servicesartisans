@@ -17,7 +17,10 @@ export interface SmartDefaults {
  * Extract service slug from the current URL path.
  * Matches patterns like /services/plombier, /services/plombier/paris, /devis?service=plombier
  */
-export function detectServiceFromURL(pathname: string, searchParams?: URLSearchParams): string | null {
+export function detectServiceFromURL(
+  pathname: string,
+  searchParams?: URLSearchParams
+): string | null {
   // Check query params first (?service=plombier)
   const fromQuery = searchParams?.get('service')
   if (fromQuery) {
@@ -40,7 +43,10 @@ export function detectServiceFromURL(pathname: string, searchParams?: URLSearchP
  * Extract city name from the current URL path.
  * Matches patterns like /services/plombier/paris, /devis?ville=paris
  */
-export function detectVilleFromURL(pathname: string, searchParams?: URLSearchParams): string | null {
+export function detectVilleFromURL(
+  pathname: string,
+  searchParams?: URLSearchParams
+): string | null {
   // Check query params first (?ville=paris)
   const fromQuery = searchParams?.get('ville')
   if (fromQuery) {

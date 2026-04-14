@@ -24,7 +24,7 @@ export default function RelatedArticles({ serviceSlug, limit = 5 }: RelatedArtic
       const slugLower = article.slug.toLowerCase()
       const titleLower = article.title.toLowerCase()
       const excerptLower = article.excerpt.toLowerCase()
-      const tagsLower = article.tags.map(t => t.toLowerCase())
+      const tagsLower = article.tags.map((t) => t.toLowerCase())
 
       for (const term of searchTerms) {
         // Slug match (strongest signal)
@@ -32,7 +32,7 @@ export default function RelatedArticles({ serviceSlug, limit = 5 }: RelatedArtic
         // Title match
         if (titleLower.includes(term)) score += 2
         // Tag match
-        if (tagsLower.some(t => t.includes(term) || term.includes(t))) score += 2
+        if (tagsLower.some((t) => t.includes(term) || term.includes(t))) score += 2
         // Excerpt match
         if (excerptLower.includes(term)) score += 1
       }
@@ -85,36 +85,39 @@ function buildSearchTerms(slug: string): string[] {
 
   // Common trade-name → topic mappings
   const variants: Record<string, string[]> = {
-    'plombier': ['plombier', 'plomberie', 'plombiers'],
-    'electricien': ['electricien', 'electrique', 'electricite', 'electriques', 'electriq'],
-    'chauffagiste': ['chauffagiste', 'chauffage', 'chaudiere', 'pompe-a-chaleur'],
-    'couvreur': ['couvreur', 'toiture', 'couverture', 'toit'],
-    'menuisier': ['menuisier', 'menuiserie', 'fenetre', 'bois'],
+    plombier: ['plombier', 'plomberie', 'plombiers'],
+    electricien: ['electricien', 'electrique', 'electricite', 'electriques', 'electriq'],
+    chauffagiste: ['chauffagiste', 'chauffage', 'chaudiere', 'pompe-a-chaleur'],
+    couvreur: ['couvreur', 'toiture', 'couverture', 'toit'],
+    menuisier: ['menuisier', 'menuiserie', 'fenetre', 'bois'],
     'peintre-en-batiment': ['peintre', 'peinture', 'ravalement'],
-    'macon': ['macon', 'maconnerie', 'beton', 'fondation'],
-    'carreleur': ['carreleur', 'carrelage', 'faience'],
-    'cuisiniste': ['cuisiniste', 'cuisine'],
-    'climaticien': ['climaticien', 'climatisation', 'clim'],
-    'vitrier': ['vitrier', 'vitre', 'vitrage', 'verre'],
-    'charpentier': ['charpentier', 'charpente', 'ossature'],
-    'serrurier': ['serrurier', 'serrure', 'serrurerie'],
-    'terrassier': ['terrassier', 'terrassement', 'excavation'],
-    'facade': ['facade', 'ravalement', 'enduit'],
+    macon: ['macon', 'maconnerie', 'beton', 'fondation'],
+    carreleur: ['carreleur', 'carrelage', 'faience'],
+    cuisiniste: ['cuisiniste', 'cuisine'],
+    climaticien: ['climaticien', 'climatisation', 'clim'],
+    vitrier: ['vitrier', 'vitre', 'vitrage', 'verre'],
+    charpentier: ['charpentier', 'charpente', 'ossature'],
+    serrurier: ['serrurier', 'serrure', 'serrurerie'],
+    terrassier: ['terrassier', 'terrassement', 'excavation'],
+    facade: ['facade', 'ravalement', 'enduit'],
     'isolation-thermique': ['isolation', 'isolant', 'thermique'],
     'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffage'],
     'salle-de-bain': ['salle-de-bain', 'bain', 'douche', 'sanitaire'],
-    'domotique': ['domotique', 'connecte', 'smart'],
-    'paysagiste': ['paysagiste', 'jardin', 'paysage', 'exterieur'],
-    'pisciniste': ['piscine', 'pisciniste', 'bassin'],
+    domotique: ['domotique', 'connecte', 'smart'],
+    paysagiste: ['paysagiste', 'jardin', 'paysage', 'exterieur'],
+    pisciniste: ['piscine', 'pisciniste', 'bassin'],
   }
 
   const found = variants[slug]
   if (found) {
-    found.forEach(t => terms.add(t))
+    found.forEach((t) => terms.add(t))
   }
 
   // Also add slug parts (e.g. "peintre-en-batiment" → "peintre", "batiment")
-  slug.split('-').filter(p => p.length > 2 && p !== 'en' && p !== 'de').forEach(p => terms.add(p))
+  slug
+    .split('-')
+    .filter((p) => p.length > 2 && p !== 'en' && p !== 'de')
+    .forEach((p) => terms.add(p))
 
   return Array.from(terms)
 }

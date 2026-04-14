@@ -337,17 +337,23 @@ describe('createPageSchema', () => {
   })
 
   it('rejects location page without service_slug (refine)', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'location', location_slug: 'paris' }))
+    const result = createPageSchema.safeParse(
+      validPage({ page_type: 'location', location_slug: 'paris' })
+    )
     expect(result.success).toBe(false)
   })
 
   it('rejects location page without location_slug (refine)', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'location', service_slug: 'plomberie' }))
+    const result = createPageSchema.safeParse(
+      validPage({ page_type: 'location', service_slug: 'plomberie' })
+    )
     expect(result.success).toBe(false)
   })
 
   it('accepts service page with service_slug', () => {
-    const result = createPageSchema.safeParse(validPage({ page_type: 'service', service_slug: 'plomberie' }))
+    const result = createPageSchema.safeParse(
+      validPage({ page_type: 'service', service_slug: 'plomberie' })
+    )
     expect(result.success).toBe(true)
   })
 
@@ -359,7 +365,9 @@ describe('createPageSchema', () => {
   })
 
   it('validates og_image_url as URL', () => {
-    const valid = createPageSchema.safeParse(validPage({ og_image_url: 'https://example.com/og.png' }))
+    const valid = createPageSchema.safeParse(
+      validPage({ og_image_url: 'https://example.com/og.png' })
+    )
     expect(valid.success).toBe(true)
 
     const invalid = createPageSchema.safeParse(validPage({ og_image_url: 'not-a-url' }))
@@ -367,7 +375,9 @@ describe('createPageSchema', () => {
   })
 
   it('validates canonical_url as URL', () => {
-    const valid = createPageSchema.safeParse(validPage({ canonical_url: 'https://example.com/page' }))
+    const valid = createPageSchema.safeParse(
+      validPage({ canonical_url: 'https://example.com/page' })
+    )
     expect(valid.success).toBe(true)
 
     const invalid = createPageSchema.safeParse(validPage({ canonical_url: 'not-a-url' }))
@@ -375,7 +385,9 @@ describe('createPageSchema', () => {
   })
 
   it('validates featured_image as URL', () => {
-    const valid = createPageSchema.safeParse(validPage({ featured_image: 'https://example.com/img.jpg' }))
+    const valid = createPageSchema.safeParse(
+      validPage({ featured_image: 'https://example.com/img.jpg' })
+    )
     expect(valid.success).toBe(true)
 
     const invalid = createPageSchema.safeParse(validPage({ featured_image: 'not-a-url' }))
@@ -530,7 +542,9 @@ describe('buildPayload', () => {
   })
 
   it('nullifies location_slug for non-location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'service', serviceSlug: 'plomberie', locationSlug: 'paris' }))
+    const payload = buildPayload(
+      validFormData({ pageType: 'service', serviceSlug: 'plomberie', locationSlug: 'paris' })
+    )
     expect(payload.location_slug).toBeNull()
   })
 
@@ -540,7 +554,9 @@ describe('buildPayload', () => {
   })
 
   it('keeps both slugs for location pages', () => {
-    const payload = buildPayload(validFormData({ pageType: 'location', serviceSlug: 'plomberie', locationSlug: 'paris' }))
+    const payload = buildPayload(
+      validFormData({ pageType: 'location', serviceSlug: 'plomberie', locationSlug: 'paris' })
+    )
     expect(payload.service_slug).toBe('plomberie')
     expect(payload.location_slug).toBe('paris')
   })

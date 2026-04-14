@@ -192,12 +192,16 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
                 </table>
-                ${data.message ? `
+                ${
+                  data.message
+                    ? `
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d1fae5;">
                   <p style="color: #666; font-size: 13px; margin: 0 0 5px 0;">Message du client:</p>
                   <p style="color: #333; font-size: 14px; margin: 0; font-style: italic;">"${data.message}"</p>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
@@ -331,7 +335,7 @@ ${SITE_NAME}
                 Bonjour,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Le rendez-vous prévu le <strong>${data.date}</strong> a été annulé par ${data.cancelledBy === 'client' ? 'le client' : 'l\'artisan'}.
+                Le rendez-vous prévu le <strong>${data.date}</strong> a été annulé par ${data.cancelledBy === 'client' ? 'le client' : "l'artisan"}.
               </p>
 
               <div style="background: #fef2f2; border-radius: 8px; padding: 20px; margin: 25px 0; border-left: 4px solid #dc2626;">
@@ -349,12 +353,16 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #666;">Horaire:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.startTime} - ${data.endTime}</td>
                   </tr>
-                  ${data.reason ? `
+                  ${
+                    data.reason
+                      ? `
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Raison:</td>
                     <td style="padding: 8px 0; color: #333;">${data.reason}</td>
                   </tr>
-                  ` : ''}
+                  `
+                      : ''
+                  }
                 </table>
               </div>
 
@@ -369,7 +377,7 @@ ${SITE_NAME}
       </html>
     `,
     text: `
-Le rendez-vous prévu le ${data.date} a été annulé par ${data.cancelledBy === 'client' ? 'le client' : 'l\'artisan'}.
+Le rendez-vous prévu le ${data.date} a été annulé par ${data.cancelledBy === 'client' ? 'le client' : "l'artisan"}.
 
 Service: ${data.serviceName}
 Date prévue: ${data.date}
@@ -413,12 +421,16 @@ ${SITE_NAME}
                     <td style="padding: 8px 0; color: #666;">Date:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.date}</td>
                   </tr>
-                  ${data.amount ? `
+                  ${
+                    data.amount
+                      ? `
                   <tr>
                     <td style="padding: 8px 0; color: #666;">Montant:</td>
                     <td style="padding: 8px 0; color: #333; font-weight: 500;">${data.amount}</td>
                   </tr>
-                  ` : ''}
+                  `
+                      : ''
+                  }
                 </table>
               </div>
 

@@ -57,7 +57,11 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
   const hasData = data.some((d) => d.bookings > 0 || d.users > 0 || d.reviews > 0)
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100" role="region" aria-label="Graphique d'activité des 30 derniers jours">
+    <div
+      className="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
+      role="region"
+      aria-label="Graphique d'activité des 30 derniers jours"
+    >
       <h3 className="font-semibold text-gray-900 mb-6">Activité des 30 derniers jours</h3>
       {!hasData ? (
         <div className="h-[300px] flex items-center justify-center text-gray-400">
@@ -65,98 +69,106 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
         </div>
       ) : (
         <>
-        <div className="sr-only">
-          <p>Graphique montrant les réservations, inscriptions et avis sur les 30 derniers jours.</p>
-          <table>
-            <thead><tr><th>Date</th><th>Réservations</th><th>Inscriptions</th><th>Avis</th></tr></thead>
-            <tbody>
-              {data.filter(d => d.bookings > 0 || d.users > 0 || d.reviews > 0).map(d => (
-                <tr key={d.date}>
-                  <td>{formatDateTick(d.date)}</td>
-                  <td>{d.bookings}</td>
-                  <td>{d.users}</td>
-                  <td>{d.reviews}</td>
+          <div className="sr-only">
+            <p>
+              Graphique montrant les réservations, inscriptions et avis sur les 30 derniers jours.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Réservations</th>
+                  <th>Inscriptions</th>
+                  <th>Avis</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-            <defs>
-              <linearGradient id="fillBookings" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="fillUsers" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="fillReviews" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-            <XAxis
-              dataKey="date"
-              tickFormatter={formatDateTick}
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
-              tickLine={false}
-              axisLine={{ stroke: '#e5e7eb' }}
-              interval={4}
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-            />
-            <Tooltip
-              labelFormatter={(label: ReactNode) => formatDateTick(String(label ?? ''))}
-              contentStyle={{
-                borderRadius: '8px',
-                border: '1px solid #e5e7eb',
-                boxShadow: '0 4px 6px -1px rgba(0,0,0,.1)',
-                fontSize: '13px',
-              }}
-            />
-            <Legend
-              iconType="circle"
-              wrapperStyle={{ fontSize: '13px', paddingTop: '12px' }}
-            />
-            <Area
-              type="monotone"
-              dataKey="bookings"
-              name="Réservations"
-              stroke="#3b82f6"
-              fill="url(#fillBookings)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4, strokeWidth: 2 }}
-            />
-            <Area
-              type="monotone"
-              dataKey="users"
-              name="Inscriptions"
-              stroke="#10b981"
-              fill="url(#fillUsers)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4, strokeWidth: 2 }}
-            />
-            <Area
-              type="monotone"
-              dataKey="reviews"
-              name="Avis"
-              stroke="#f59e0b"
-              fill="url(#fillReviews)"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4, strokeWidth: 2 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+              </thead>
+              <tbody>
+                {data
+                  .filter((d) => d.bookings > 0 || d.users > 0 || d.reviews > 0)
+                  .map((d) => (
+                    <tr key={d.date}>
+                      <td>{formatDateTick(d.date)}</td>
+                      <td>{d.bookings}</td>
+                      <td>{d.users}</td>
+                      <td>{d.reviews}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+              <defs>
+                <linearGradient id="fillBookings" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="fillUsers" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="fillReviews" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
+                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={formatDateTick}
+                tick={{ fontSize: 11, fill: '#9ca3af' }}
+                tickLine={false}
+                axisLine={{ stroke: '#e5e7eb' }}
+                interval={4}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: '#9ca3af' }}
+                tickLine={false}
+                axisLine={false}
+                allowDecimals={false}
+              />
+              <Tooltip
+                labelFormatter={(label: ReactNode) => formatDateTick(String(label ?? ''))}
+                contentStyle={{
+                  borderRadius: '8px',
+                  border: '1px solid #e5e7eb',
+                  boxShadow: '0 4px 6px -1px rgba(0,0,0,.1)',
+                  fontSize: '13px',
+                }}
+              />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: '13px', paddingTop: '12px' }} />
+              <Area
+                type="monotone"
+                dataKey="bookings"
+                name="Réservations"
+                stroke="#3b82f6"
+                fill="url(#fillBookings)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 2 }}
+              />
+              <Area
+                type="monotone"
+                dataKey="users"
+                name="Inscriptions"
+                stroke="#10b981"
+                fill="url(#fillUsers)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 2 }}
+              />
+              <Area
+                type="monotone"
+                dataKey="reviews"
+                name="Avis"
+                stroke="#f59e0b"
+                fill="url(#fillReviews)"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, strokeWidth: 2 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </>
       )}
     </div>

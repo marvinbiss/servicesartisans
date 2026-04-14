@@ -14,7 +14,13 @@ interface TrackTelLinkProps {
  * Client wrapper for tel: links in server components.
  * Fires phone_click event on click.
  */
-export default function TrackTelLink({ href, children, source, className, 'aria-label': ariaLabel }: TrackTelLinkProps) {
+export default function TrackTelLink({
+  href,
+  children,
+  source,
+  className,
+  'aria-label': ariaLabel,
+}: TrackTelLinkProps) {
   return (
     <a
       href={href}

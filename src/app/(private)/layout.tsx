@@ -6,11 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default async function PrivateLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function PrivateLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const {
     data: { user },

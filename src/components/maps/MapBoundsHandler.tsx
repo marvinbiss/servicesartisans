@@ -28,7 +28,7 @@ export default function MapBoundsHandler({ onBoundsChange }: MapBoundsHandlerPro
         east: bounds.getEast(),
         west: bounds.getWest(),
         center: map.getCenter(),
-        zoom: map.getZoom()
+        zoom: map.getZoom(),
       })
     }
 

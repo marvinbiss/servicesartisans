@@ -42,9 +42,8 @@ export default function ListsPage() {
     return () => controller.abort()
   }, [fetchLists])
 
-  const filteredLists = typeFilter === 'all'
-    ? lists
-    : lists.filter((l) => l.list_type === typeFilter)
+  const filteredLists =
+    typeFilter === 'all' ? lists : lists.filter((l) => l.list_type === typeFilter)
 
   return (
     <div>
@@ -87,59 +86,82 @@ export default function ListsPage() {
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] text-sm" aria-label="Liste des listes de contacts">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Contacts</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Créée le</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {loading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <tr key={i}>
-                  {Array.from({ length: 5 }).map((__, j) => (
-                    <td key={j} className="px-4 py-3"><div className="h-4 bg-gray-100 rounded animate-pulse" /></td>
-                  ))}
-                </tr>
-              ))
-            ) : filteredLists.length === 0 ? (
+          <table className="w-full min-w-[600px] text-sm" aria-label="Liste des listes de contacts">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                  <List className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  {lists.length === 0
-                    ? 'Aucune liste. Créez votre première liste de contacts.'
-                    : 'Aucune liste pour ce filtre.'}
-                </td>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Nom
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Type
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Contacts
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Description
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Créée le
+                </th>
               </tr>
-            ) : (
-              filteredLists.map((list) => (
-                <tr key={list.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <Link href={`/admin/prospection/lists/${list.id}`} className="font-medium text-blue-600 hover:underline">
-                      {list.name}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
-                    }`}>
-                      {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-right">{list.contact_count.toLocaleString('fr-FR')}</td>
-                  <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">{list.description || '-'}</td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">
-                    {new Date(list.created_at).toLocaleDateString('fr-FR')}
+            </thead>
+            <tbody className="divide-y">
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <tr key={i}>
+                    {Array.from({ length: 5 }).map((__, j) => (
+                      <td key={j} className="px-4 py-3">
+                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : filteredLists.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
+                    <List className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    {lists.length === 0
+                      ? 'Aucune liste. Créez votre première liste de contacts.'
+                      : 'Aucune liste pour ce filtre.'}
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filteredLists.map((list) => (
+                  <tr key={list.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/admin/prospection/lists/${list.id}`}
+                        className="font-medium text-blue-600 hover:underline"
+                      >
+                        {list.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          list.list_type === 'static'
+                            ? 'bg-gray-100 text-gray-700'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
+                        {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {list.contact_count.toLocaleString('fr-FR')}
+                    </td>
+                    <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">
+                      {list.description || '-'}
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">
+                      {new Date(list.created_at).toLocaleDateString('fr-FR')}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

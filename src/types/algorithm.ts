@@ -78,13 +78,16 @@ export const DEFAULT_ALGORITHM_CONFIG: Omit<AlgorithmConfig, 'id' | 'updated_at'
   exclude_inactive_days: 90,
   prefer_claimed: true,
 
-  urgency_low_multiplier: 1.00,
-  urgency_medium_multiplier: 1.00,
-  urgency_high_multiplier: 1.50,
-  urgency_emergency_multiplier: 2.00,
+  urgency_low_multiplier: 1.0,
+  urgency_medium_multiplier: 1.0,
+  urgency_high_multiplier: 1.5,
+  urgency_emergency_multiplier: 2.0,
 }
 
-export const MATCHING_STRATEGY_META: Record<MatchingStrategy, { label: string; description: string }> = {
+export const MATCHING_STRATEGY_META: Record<
+  MatchingStrategy,
+  { label: string; description: string }
+> = {
   round_robin: {
     label: 'Round Robin',
     description: 'Distribution equitable : chaque artisan recoit un lead a tour de role',
@@ -99,7 +102,10 @@ export const MATCHING_STRATEGY_META: Record<MatchingStrategy, { label: string; d
   },
 }
 
-export const SPECIALTY_MATCH_META: Record<SpecialtyMatchMode, { label: string; description: string }> = {
+export const SPECIALTY_MATCH_META: Record<
+  SpecialtyMatchMode,
+  { label: string; description: string }
+> = {
   exact: {
     label: 'Exact',
     description: 'Le service doit correspondre exactement',

@@ -32,26 +32,26 @@ interface CityMapProps {
 
 // City coordinates (main cities)
 const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  'paris': { lat: 48.8566, lng: 2.3522 },
-  'marseille': { lat: 43.2965, lng: 5.3698 },
-  'lyon': { lat: 45.7640, lng: 4.8357 },
-  'toulouse': { lat: 43.6047, lng: 1.4442 },
-  'nice': { lat: 43.7102, lng: 7.2620 },
-  'nantes': { lat: 47.2184, lng: -1.5536 },
-  'strasbourg': { lat: 48.5734, lng: 7.7521 },
-  'montpellier': { lat: 43.6108, lng: 3.8767 },
-  'bordeaux': { lat: 44.8378, lng: -0.5792 },
-  'lille': { lat: 50.6292, lng: 3.0573 },
-  'rennes': { lat: 48.1173, lng: -1.6778 },
-  'reims': { lat: 49.2583, lng: 4.0317 },
+  paris: { lat: 48.8566, lng: 2.3522 },
+  marseille: { lat: 43.2965, lng: 5.3698 },
+  lyon: { lat: 45.764, lng: 4.8357 },
+  toulouse: { lat: 43.6047, lng: 1.4442 },
+  nice: { lat: 43.7102, lng: 7.262 },
+  nantes: { lat: 47.2184, lng: -1.5536 },
+  strasbourg: { lat: 48.5734, lng: 7.7521 },
+  montpellier: { lat: 43.6108, lng: 3.8767 },
+  bordeaux: { lat: 44.8378, lng: -0.5792 },
+  lille: { lat: 50.6292, lng: 3.0573 },
+  rennes: { lat: 48.1173, lng: -1.6778 },
+  reims: { lat: 49.2583, lng: 4.0317 },
   'le-havre': { lat: 49.4944, lng: 0.1079 },
   'saint-etienne': { lat: 45.4397, lng: 4.3872 },
-  'toulon': { lat: 43.1242, lng: 5.9280 },
-  'grenoble': { lat: 45.1885, lng: 5.7245 },
-  'dijon': { lat: 47.3220, lng: 5.0415 },
-  'angers': { lat: 47.4784, lng: -0.5632 },
-  'nimes': { lat: 43.8367, lng: 4.3601 },
-  'villeurbanne': { lat: 45.7669, lng: 4.8795 },
+  toulon: { lat: 43.1242, lng: 5.928 },
+  grenoble: { lat: 45.1885, lng: 5.7245 },
+  dijon: { lat: 47.322, lng: 5.0415 },
+  angers: { lat: 47.4784, lng: -0.5632 },
+  nimes: { lat: 43.8367, lng: 4.3601 },
+  villeurbanne: { lat: 45.7669, lng: 4.8795 },
 }
 
 // Default France center
@@ -68,7 +68,9 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
   useEffect(() => {
     async function fetchProviders() {
       try {
-        const response = await fetch(`/api/providers/by-city?city=${encodeURIComponent(cityName)}&limit=20`)
+        const response = await fetch(
+          `/api/providers/by-city?city=${encodeURIComponent(cityName)}&limit=20`
+        )
         if (response.ok) {
           const data = await response.json()
           // Filter providers with valid coordinates
@@ -109,7 +111,8 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
           </h2>
           {providers.length > 0 && (
             <p className="text-sm text-charcoal-500">
-              {providers.length} artisan{providers.length > 1 ? 's' : ''} référencé{providers.length > 1 ? 's' : ''}
+              {providers.length} artisan{providers.length > 1 ? 's' : ''} référencé
+              {providers.length > 1 ? 's' : ''}
             </p>
           )}
         </div>

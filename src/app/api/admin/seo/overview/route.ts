@@ -33,11 +33,7 @@ export async function GET() {
       .gte('date', d28),
 
     // Previous 7 days (days -14 to -7) for trend comparison
-    supabase
-      .from('gsc_daily_metrics')
-      .select('page_path, clicks')
-      .gte('date', d14)
-      .lt('date', d7),
+    supabase.from('gsc_daily_metrics').select('page_path, clicks').gte('date', d14).lt('date', d7),
 
     // Pages crawled but never indexed (lifecycle alerts)
     supabase

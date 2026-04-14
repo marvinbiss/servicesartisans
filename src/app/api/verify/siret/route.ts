@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2001,
-          message: 'Le numéro SIRET est requis'
-        }
+          message: 'Le numéro SIRET est requis',
+        },
       },
       { status: 400 }
     )
@@ -59,8 +59,8 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2002,
-          message: 'Le numéro SIRET doit contenir 14 chiffres'
-        }
+          message: 'Le numéro SIRET doit contenir 14 chiffres',
+        },
       },
       { status: 400 }
     )
@@ -73,8 +73,8 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2003,
-          message: 'Le numéro SIRET est invalide'
-        }
+          message: 'Le numéro SIRET est invalide',
+        },
       },
       { status: 400 }
     )
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
             activity: 'Services',
             isActive: true,
             createdAt: '2020-01-01',
-          }
+          },
         })
       }
 
@@ -107,22 +107,19 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 9001,
-            message: 'Service de vérification temporairement indisponible'
-          }
+            message: 'Service de vérification temporairement indisponible',
+          },
         },
         { status: 503 }
       )
     }
 
-    const response = await fetch(
-      `https://api.insee.fr/entreprises/sirene/V3/siret/${siretClean}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${apiToken}`,
-          'Accept': 'application/json',
-        },
-      }
-    )
+    const response = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siretClean}`, {
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        Accept: 'application/json',
+      },
+    })
 
     if (response.status === 404) {
       return NextResponse.json(
@@ -130,8 +127,8 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 2004,
-            message: 'Aucun établissement trouvé avec ce numéro SIRET'
-          }
+            message: 'Aucun établissement trouvé avec ce numéro SIRET',
+          },
         },
         { status: 404 }
       )
@@ -150,8 +147,8 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 2004,
-            message: 'Aucun établissement trouvé avec ce numéro SIRET'
-          }
+            message: 'Aucun établissement trouvé avec ce numéro SIRET',
+          },
         },
         { status: 404 }
       )
@@ -159,7 +156,8 @@ export async function GET(request: NextRequest) {
 
     const adresse = etablissement.adresseEtablissement
     const uniteLegale = etablissement.uniteLegale
-    const isActive = etablissement.periodesEtablissement?.[0]?.etatAdministratifEtablissement === 'A'
+    const isActive =
+      etablissement.periodesEtablissement?.[0]?.etatAdministratifEtablissement === 'A'
 
     return NextResponse.json({
       success: true,
@@ -170,13 +168,15 @@ export async function GET(request: NextRequest) {
           adresse.numeroVoieEtablissement,
           adresse.typeVoieEtablissement,
           adresse.libelleVoieEtablissement,
-        ].filter(Boolean).join(' '),
+        ]
+          .filter(Boolean)
+          .join(' '),
         city: adresse.libelleCommuneEtablissement,
         postalCode: adresse.codePostalEtablissement,
         activity: uniteLegale.activitePrincipaleUniteLegale,
         isActive,
         createdAt: uniteLegale.dateCreationUniteLegale,
-      }
+      },
     })
   } catch (error) {
     logger.error('SIRET verification error', error)
@@ -185,8 +185,8 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 9002,
-          message: 'Erreur lors de la vérification du SIRET'
-        }
+          message: 'Erreur lors de la vérification du SIRET',
+        },
       },
       { status: 500 }
     )

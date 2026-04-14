@@ -66,9 +66,7 @@ function getIdentifier(request: NextRequest): string {
 
   // Fall back to IP address
   const forwardedFor = request.headers.get('x-forwarded-for')
-  const ip = forwardedFor?.split(',')[0]?.trim() ||
-             request.headers.get('x-real-ip') ||
-             'unknown'
+  const ip = forwardedFor?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown'
 
   return `ip:${ip}`
 }
@@ -76,9 +74,7 @@ function getIdentifier(request: NextRequest): string {
 /**
  * Rate limit middleware function
  */
-export async function rateLimitMiddleware(
-  request: NextRequest
-): Promise<NextResponse | null> {
+export async function rateLimitMiddleware(request: NextRequest): Promise<NextResponse | null> {
   const pathname = request.nextUrl.pathname
 
   // Only apply to API routes
@@ -94,11 +90,7 @@ export async function rateLimitMiddleware(
   const config = getRateLimitConfig(pathname)
   const identifier = `${getIdentifier(request)}:${pathname}`
 
-  const result = await rateLimiter.isAllowed(
-    identifier,
-    config.limit,
-    config.windowSeconds
-  )
+  const result = await rateLimiter.isAllowed(identifier, config.limit, config.windowSeconds)
 
   if (!result.allowed) {
     return NextResponse.json(
@@ -148,7 +140,7 @@ class InMemoryRateLimiter {
     let requests = this.requests.get(identifier) || []
 
     // Filter to only requests within the window
-    requests = requests.filter(time => time > windowStart)
+    requests = requests.filter((time) => time > windowStart)
 
     if (requests.length >= limit) {
       return { allowed: false, remaining: 0 }
@@ -170,7 +162,7 @@ class InMemoryRateLimiter {
     const cutoff = Date.now() - windowSeconds * 1000
     const entries = Array.from(this.requests.entries())
     for (const [key, requests] of entries) {
-      const filtered = requests.filter(time => time > cutoff)
+      const filtered = requests.filter((time) => time > cutoff)
       if (filtered.length === 0) {
         this.requests.delete(key)
       } else {

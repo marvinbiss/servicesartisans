@@ -18,20 +18,15 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import {
-  validateIban,
-} from '@/lib/cee/iban-crypto'
+import { validateIban } from '@/lib/cee/iban-crypto'
 import { scoreQuiz, QUIZ_QUESTIONS } from '@/lib/cee/quiz-questions'
-import {
-  PARTNER_TRANSITIONS,
-  canTransition,
-} from '@/lib/cee/leads-service'
+import { PARTNER_TRANSITIONS, canTransition } from '@/lib/cee/leads-service'
 
 describe('CEE — input validation hardening (SQL injection surface)', () => {
   it('validateIban rejects SQL-injection style payloads', () => {
     const payloads = [
       "FR14' OR 1=1 --",
-      "FR14; DROP TABLE cee_artisan_partners;",
+      'FR14; DROP TABLE cee_artisan_partners;',
       "FR14' UNION SELECT iban_encrypted FROM cee_artisan_partners --",
       '<script>alert(1)</script>',
       '${process.env.CEE_IBAN_KEY}',
@@ -100,9 +95,10 @@ describe('CEE — quiz scoring invariants (server-side, MUST-7)', () => {
 
   it('ignores extraneous keys injected by malicious client', () => {
     const answers: Record<string, number> = {
-      ...(Object.fromEntries(
-        QUIZ_QUESTIONS.map((q) => [q.id, q.correct])
-      ) as Record<string, number>),
+      ...(Object.fromEntries(QUIZ_QUESTIONS.map((q) => [q.id, q.correct])) as Record<
+        string,
+        number
+      >),
       __proto__: 999,
       score: 999,
       certified: 1,

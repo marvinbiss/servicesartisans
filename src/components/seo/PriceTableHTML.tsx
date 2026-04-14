@@ -15,13 +15,13 @@ import Link from 'next/link'
 import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
-  tasks: string[]           // commonTasks du trade
-  serviceName: string       // ex: "Plombier"
-  serviceSlug?: string      // slug du service pour les liens (ex: "plombier")
-  location?: string         // ex: "Paris" (optionnel)
-  locationSlug?: string     // slug de la ville pour les liens (ex: "paris")
-  multiplier?: number       // multiplicateur regional (defaut 1)
-  unit?: string             // ex: "€/h"
+  tasks: string[] // commonTasks du trade
+  serviceName: string // ex: "Plombier"
+  serviceSlug?: string // slug du service pour les liens (ex: "plombier")
+  location?: string // ex: "Paris" (optionnel)
+  locationSlug?: string // slug de la ville pour les liens (ex: "paris")
+  multiplier?: number // multiplicateur regional (defaut 1)
+  unit?: string // ex: "€/h"
 }
 
 /**
@@ -73,21 +73,23 @@ export default function PriceTableHTML({
       <table className="w-full text-left">
         <caption className="px-5 py-3 text-left text-base font-semibold text-charcoal-900 bg-white border-b border-sand-200">
           {captionText}
-          {unit && (
-            <span className="ml-2 text-sm font-normal text-charcoal-500">
-              ({unit})
-            </span>
-          )}
+          {unit && <span className="ml-2 text-sm font-normal text-charcoal-500">({unit})</span>}
         </caption>
         <thead>
           <tr className="bg-sand-50 border-b border-sand-300">
             <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700">
               Prestation
             </th>
-            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right">
+            <th
+              scope="col"
+              className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right"
+            >
               Prix indicatif
             </th>
-            <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center w-28">
+            <th
+              scope="col"
+              className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center w-28"
+            >
               Action
             </th>
           </tr>
@@ -119,7 +121,11 @@ export default function PriceTableHTML({
                 <td className="hidden sm:table-cell px-3 py-4 border-t border-sand-200 text-center">
                   {serviceSlug ? (
                     <Link
-                      href={locationSlug ? `/devis/${serviceSlug}/${locationSlug}` : `/devis/${serviceSlug}`}
+                      href={
+                        locationSlug
+                          ? `/devis/${serviceSlug}/${locationSlug}`
+                          : `/devis/${serviceSlug}`
+                      }
                       className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit
@@ -140,10 +146,12 @@ export default function PriceTableHTML({
         <tfoot>
           <tr className="bg-sand-50/80 border-t border-sand-300">
             <td colSpan={3} className="px-5 py-3 text-xs text-charcoal-500 italic">
-              Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le professionnel.
+              Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le
+              professionnel.
               {location && multiplier !== 1 && (
                 <span className="ml-1">
-                  Tarifs ajustés pour {location} ({multiplier > 1 ? '+' : ''}{Math.round((multiplier - 1) * 100)}&nbsp;% vs moyenne nationale).
+                  Tarifs ajustés pour {location} ({multiplier > 1 ? '+' : ''}
+                  {Math.round((multiplier - 1) * 100)}&nbsp;% vs moyenne nationale).
                 </span>
               )}
             </td>

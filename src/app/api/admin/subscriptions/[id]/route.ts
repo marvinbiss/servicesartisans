@@ -7,16 +7,16 @@ import { z } from 'zod'
 // PATCH request schema
 const changeSubscriptionSchema = z.object({
   newPlan: z.enum(['pro', 'premium']),
-  proration: z.enum(['create_prorations', 'none', 'always_invoice']).optional().default('create_prorations'),
+  proration: z
+    .enum(['create_prorations', 'none', 'always_invoice'])
+    .optional()
+    .default('create_prorations'),
 })
 
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un abonnement
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with payments:read permission
     const authResult = await requirePermission('payments', 'read')
@@ -43,7 +43,13 @@ export async function GET(
     } catch {
       logger.warn('Stripe not configured or subscription not found')
       return NextResponse.json(
-        { success: false, error: { message: 'Abonnements Stripe non disponibles. Vérifiez la configuration STRIPE_SECRET_KEY.' } },
+        {
+          success: false,
+          error: {
+            message:
+              'Abonnements Stripe non disponibles. Vérifiez la configuration STRIPE_SECRET_KEY.',
+          },
+        },
         { status: 503 }
       )
     }
@@ -57,10 +63,7 @@ export async function GET(
 }
 
 // PATCH - Modifier un abonnement (changer de plan)
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with payments:write permission (changing plans)
     const authResult = await requirePermission('payments', 'write')
@@ -79,7 +82,10 @@ export async function PATCH(
     const validation = changeSubscriptionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: validation.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: validation.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -122,7 +128,10 @@ export async function PATCH(
     } catch (stripeError) {
       logger.error('Stripe subscription change failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors du changement de plan' } },
+        {
+          success: false,
+          error: { message: 'Stripe non configuré ou erreur lors du changement de plan' },
+        },
         { status: 503 }
       )
     }

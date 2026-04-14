@@ -26,19 +26,74 @@ interface UnclaimedDevisModalProps {
 // ---------------------------------------------------------------------------
 
 const SERVICE_OPTIONS: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'Installation sanitaire', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'Autre'],
-  electricien: ['Panne électrique', 'Installation', 'Mise aux normes', 'Éclairage', 'Tableau électrique', 'Autre'],
-  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte', 'Autre'],
-  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur', 'Autre'],
-  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond', 'Autre'],
+  plombier: [
+    "Fuite d'eau",
+    'Installation sanitaire',
+    'Débouchage',
+    'Chauffe-eau',
+    'Robinetterie',
+    'Autre',
+  ],
+  electricien: [
+    'Panne électrique',
+    'Installation',
+    'Mise aux normes',
+    'Éclairage',
+    'Tableau électrique',
+    'Autre',
+  ],
+  serrurier: [
+    'Porte claquée',
+    'Serrure cassée',
+    'Changement de serrure',
+    'Double de clé',
+    'Blindage de porte',
+    'Autre',
+  ],
+  chauffagiste: [
+    'Panne chaudière',
+    'Entretien chaudière',
+    'Radiateur',
+    'Plancher chauffant',
+    'Pompe à chaleur',
+    'Autre',
+  ],
+  peintre: [
+    'Peinture intérieure',
+    'Peinture extérieure',
+    'Ravalement façade',
+    'Papier peint',
+    'Plafond',
+    'Autre',
+  ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet', 'Autre'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure', 'Autre'],
-  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage', 'Autre'],
+  carreleur: [
+    'Carrelage sol',
+    'Carrelage mural',
+    'Faïence salle de bain',
+    'Terrasse extérieure',
+    'Autre',
+  ],
+  couvreur: [
+    'Fuite toiture',
+    'Rénovation toiture',
+    'Gouttière',
+    'Isolation toiture',
+    'Démoussage',
+    'Autre',
+  ],
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition', 'Autre'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture', 'Autre'],
 }
 
-const DEFAULT_SERVICES = ['Réparation', 'Installation', 'Entretien', 'Rénovation', 'Diagnostic', 'Autre']
+const DEFAULT_SERVICES = [
+  'Réparation',
+  'Installation',
+  'Entretien',
+  'Rénovation',
+  'Diagnostic',
+  'Autre',
+]
 
 const URGENCY_OPTIONS = [
   { value: 'urgent', label: 'Urgent', icon: '\uD83D\uDD34' },
@@ -250,7 +305,9 @@ export function UnclaimedDevisModal({
                   <Wrench className="w-4.5 h-4.5 text-primary-500" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="font-heading font-bold text-sm text-charcoal-900">ServicesArtisans</p>
+                  <p className="font-heading font-bold text-sm text-charcoal-900">
+                    ServicesArtisans
+                  </p>
                   <p className="text-xs text-charcoal-500">
                     Trouvez un {specialty.toLowerCase()} disponible à {city}
                   </p>
@@ -412,7 +469,9 @@ export function UnclaimedDevisModal({
                           }`}
                         />
                         {phoneError && (
-                          <p className="text-red-500 text-xs mt-1.5" role="alert">{phoneError}</p>
+                          <p className="text-red-500 text-xs mt-1.5" role="alert">
+                            {phoneError}
+                          </p>
                         )}
 
                         {/* Consent */}
@@ -427,9 +486,16 @@ export function UnclaimedDevisModal({
                             }}
                             className="mt-1 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-primary-400"
                           />
-                          <label htmlFor="modal-consent" className="text-xs text-charcoal-500 leading-relaxed">
-                            J&apos;accepte d&apos;être mis en relation avec des artisans partenaires.{' '}
-                            <Link href="/confidentialite" className="text-primary-500 underline hover:text-primary-600">
+                          <label
+                            htmlFor="modal-consent"
+                            className="text-xs text-charcoal-500 leading-relaxed"
+                          >
+                            J&apos;accepte d&apos;être mis en relation avec des artisans
+                            partenaires.{' '}
+                            <Link
+                              href="/confidentialite"
+                              className="text-primary-500 underline hover:text-primary-600"
+                            >
                               Politique de confidentialité
                             </Link>
                           </label>

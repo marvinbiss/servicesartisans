@@ -142,8 +142,24 @@ describe('GET /api/client/messages', () => {
     setAuthUser({ id: USER_UUID })
 
     const mockMessages = [
-      { id: 'm1', conversation_id: CONV_UUID, sender_id: USER_UUID, sender_type: 'client', content: 'Bonjour', read_at: null, created_at: '2026-02-20T10:00:00Z' },
-      { id: 'm2', conversation_id: CONV_UUID, sender_id: PROVIDER_UUID, sender_type: 'artisan', content: 'Salut', read_at: null, created_at: '2026-02-20T10:05:00Z' },
+      {
+        id: 'm1',
+        conversation_id: CONV_UUID,
+        sender_id: USER_UUID,
+        sender_type: 'client',
+        content: 'Bonjour',
+        read_at: null,
+        created_at: '2026-02-20T10:00:00Z',
+      },
+      {
+        id: 'm2',
+        conversation_id: CONV_UUID,
+        sender_id: PROVIDER_UUID,
+        sender_type: 'artisan',
+        content: 'Salut',
+        read_at: null,
+        created_at: '2026-02-20T10:05:00Z',
+      },
     ]
 
     builderResults = [
@@ -156,7 +172,9 @@ describe('GET /api/client/messages', () => {
     ]
 
     const { GET } = await import('@/app/api/client/messages/route')
-    const result = (await GET(makeGetRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
+    const result = (await GET(
+      makeGetRequest({ conversation_id: CONV_UUID })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(200)
     expect(result.body).toEqual({ messages: mockMessages, currentUserId: USER_UUID })
@@ -171,7 +189,9 @@ describe('GET /api/client/messages', () => {
     ]
 
     const { GET } = await import('@/app/api/client/messages/route')
-    const result = (await GET(makeGetRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
+    const result = (await GET(
+      makeGetRequest({ conversation_id: CONV_UUID })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(404)
     expect(result.body.error).toBe('Conversation non trouv\u00e9e')
@@ -193,7 +213,13 @@ describe('GET /api/client/messages', () => {
       },
     ]
 
-    const lastMsg = { id: 'm1', content: 'Dernier message', created_at: '2026-02-20T11:00:00Z', sender_type: 'client', read_at: null }
+    const lastMsg = {
+      id: 'm1',
+      content: 'Dernier message',
+      created_at: '2026-02-20T11:00:00Z',
+      sender_type: 'client',
+      read_at: null,
+    }
 
     builderResults = [
       // Call 0: conversations.select(...).eq('client_id').eq('status').order(...) -> conversations
@@ -219,7 +245,9 @@ describe('GET /api/client/messages', () => {
     setAuthUser({ id: USER_UUID })
 
     const { GET } = await import('@/app/api/client/messages/route')
-    const result = (await GET(makeGetRequest({ conversation_id: 'not-a-uuid' }))) as unknown as MockResult
+    const result = (await GET(
+      makeGetRequest({ conversation_id: 'not-a-uuid' })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(400)
     expect(result.body.error).toBe('Paramètres invalides')
@@ -236,7 +264,9 @@ describe('GET /api/client/messages', () => {
     ]
 
     const { GET } = await import('@/app/api/client/messages/route')
-    const result = (await GET(makeGetRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
+    const result = (await GET(
+      makeGetRequest({ conversation_id: CONV_UUID })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(500)
     expect(result.body.error).toBe('Erreur lors de la r\u00e9cup\u00e9ration des messages')
@@ -287,7 +317,9 @@ describe('POST /api/client/messages', () => {
     setAuthUser({ id: USER_UUID })
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({ conversation_id: CONV_UUID }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({ conversation_id: CONV_UUID })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(400)
     expect(result.body.error).toBe('Erreur de validation')
@@ -313,10 +345,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      conversation_id: CONV_UUID,
-      content: 'Bonjour, je voudrais un devis.',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        conversation_id: CONV_UUID,
+        content: 'Bonjour, je voudrais un devis.',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -332,10 +366,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      conversation_id: CONV_UUID,
-      content: 'Hello',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        conversation_id: CONV_UUID,
+        content: 'Hello',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(403)
     expect(result.body.error).toContain('non trouv')
@@ -345,9 +381,11 @@ describe('POST /api/client/messages', () => {
     setAuthUser({ id: USER_UUID })
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      content: 'Hello',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        content: 'Hello',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(400)
     expect(result.body.error).toBe('conversation_id ou provider_id requis')
@@ -373,10 +411,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
-      content: 'Hello',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        provider_id: PROVIDER_UUID,
+        content: 'Hello',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -406,10 +446,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
-      content: 'Bonjour',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        provider_id: PROVIDER_UUID,
+        content: 'Bonjour',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -427,10 +469,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      provider_id: PROVIDER_UUID,
-      content: 'Hello',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        provider_id: PROVIDER_UUID,
+        content: 'Hello',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(500)
     expect(result.body.error).toContain('cr\u00e9ation')
@@ -447,10 +491,12 @@ describe('POST /api/client/messages', () => {
     ]
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({
-      conversation_id: CONV_UUID,
-      content: 'Hello',
-    }))) as unknown as MockResult
+    const result = (await POST(
+      makePostRequest({
+        conversation_id: CONV_UUID,
+        content: 'Hello',
+      })
+    )) as unknown as MockResult
 
     expect(result.status).toBe(500)
     expect(result.body.error).toContain('envoi')

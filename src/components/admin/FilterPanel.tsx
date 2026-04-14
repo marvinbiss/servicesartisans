@@ -38,7 +38,11 @@ export function FilterPanel({
   )
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4" role="search" aria-label="Filtres">
+    <div
+      className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+      role="search"
+      aria-label="Filtres"
+    >
       <div className="flex flex-col lg:flex-row gap-4">
         {filters.map((filter) => (
           <div key={filter.key} className="flex-shrink-0">

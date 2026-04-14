@@ -73,15 +73,23 @@ export function DataTable<T>({
                 }`}
                 style={{ width: column.width }}
                 onClick={() => column.sortable && onSort?.(column.key)}
-                aria-sort={column.sortable && sortKey === column.key ? (sortOrder === 'asc' ? 'ascending' : 'descending') : undefined}
+                aria-sort={
+                  column.sortable && sortKey === column.key
+                    ? sortOrder === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : undefined
+                }
               >
                 <div className="flex items-center gap-1">
                   {column.header}
-                  {column.sortable && sortKey === column.key && (
-                    sortOrder === 'asc'
-                      ? <ChevronUp className="w-4 h-4" />
-                      : <ChevronDown className="w-4 h-4" />
-                  )}
+                  {column.sortable &&
+                    sortKey === column.key &&
+                    (sortOrder === 'asc' ? (
+                      <ChevronUp className="w-4 h-4" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4" />
+                    ))}
                 </div>
               </th>
             ))}

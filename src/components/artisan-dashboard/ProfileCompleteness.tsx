@@ -130,7 +130,9 @@ const FIELDS: FieldDef[] = [
     icon: <Clock className="w-4 h-4" aria-hidden="true" />,
     tab: 'disponibilite',
     check: (p) =>
-      !!p.opening_hours && typeof p.opening_hours === 'object' && Object.keys(p.opening_hours).length > 0,
+      !!p.opening_hours &&
+      typeof p.opening_hours === 'object' &&
+      Object.keys(p.opening_hours).length > 0,
   },
   {
     key: 'website',
@@ -166,7 +168,8 @@ function computeScore(provider: CompletenessProvider) {
 
 function getScoreColor(score: number): { bar: string; bg: string; text: string } {
   if (score < 40) return { bar: 'bg-red-500', bg: 'bg-red-50', text: 'text-red-700' }
-  if (score < 70) return { bar: 'bg-secondary-400', bg: 'bg-secondary-50', text: 'text-secondary-700' }
+  if (score < 70)
+    return { bar: 'bg-secondary-400', bg: 'bg-secondary-50', text: 'text-secondary-700' }
   return { bar: 'bg-accent-500', bg: 'bg-accent-50', text: 'text-accent-700' }
 }
 
@@ -198,9 +201,7 @@ const ProfileCompleteness = React.memo(function ProfileCompleteness({
     <div className="bg-white rounded-xl border border-charcoal-200 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-charcoal-900">
-          Compl\u00e9tude du profil
-        </h3>
+        <h3 className="text-base font-semibold text-charcoal-900">Compl\u00e9tude du profil</h3>
         <span className={`text-sm font-bold ${colors.text}`}>{score}%</span>
       </div>
 

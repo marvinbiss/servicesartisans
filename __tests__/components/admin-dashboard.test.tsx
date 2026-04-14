@@ -15,8 +15,18 @@ import React from 'react'
 
 // --- next/link mock ---
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -53,7 +63,9 @@ vi.mock('lucide-react', () => {
 // --- recharts mock ---
 vi.mock('recharts', () => ({
   AreaChart: ({ children, data }: { children: React.ReactNode; data: unknown[] }) => (
-    <div data-testid="area-chart" data-count={data?.length ?? 0}>{children}</div>
+    <div data-testid="area-chart" data-count={data?.length ?? 0}>
+      {children}
+    </div>
   ),
   Area: ({ dataKey, name }: { dataKey: string; name: string }) => (
     <div data-testid={`area-${dataKey}`} data-name={name} />
@@ -99,8 +111,12 @@ vi.mock('@/components/admin/ConfirmationModal', () => ({
         <p data-testid="modal-title">{title}</p>
         <p data-testid="modal-message">{message}</p>
         {children}
-        <button data-testid="modal-confirm" onClick={onConfirm}>Confirmer</button>
-        <button data-testid="modal-cancel" onClick={onClose}>Annuler</button>
+        <button data-testid="modal-confirm" onClick={onConfirm}>
+          Confirmer
+        </button>
+        <button data-testid="modal-cancel" onClick={onClose}>
+          Annuler
+        </button>
       </div>
     )
   },
@@ -108,12 +124,20 @@ vi.mock('@/components/admin/ConfirmationModal', () => ({
 
 // --- Toast mock ---
 vi.mock('@/components/admin/Toast', () => ({
-  Toast: ({ toast, onClose }: { toast: { type: string; message: string } | null; onClose: () => void }) => {
+  Toast: ({
+    toast,
+    onClose,
+  }: {
+    toast: { type: string; message: string } | null
+    onClose: () => void
+  }) => {
     if (!toast) return null
     return (
       <div data-testid="toast" data-type={toast.type}>
         {toast.message}
-        <button onClick={onClose} data-testid="toast-close">close</button>
+        <button onClick={onClose} data-testid="toast-close">
+          close
+        </button>
       </div>
     )
   },
@@ -137,13 +161,15 @@ import { ActivityChart } from '@/components/admin/dashboard/ActivityChart'
 // Test data factories
 // ============================================
 
-function buildStats(overrides: Partial<{
-  totalUsers: number
-  totalArtisans: number
-  totalBookings: number
-  totalRevenue: number
-  trends: { users: number; bookings: number; revenue: number }
-}> = {}) {
+function buildStats(
+  overrides: Partial<{
+    totalUsers: number
+    totalArtisans: number
+    totalBookings: number
+    totalRevenue: number
+    trends: { users: number; bookings: number; revenue: number }
+  }> = {}
+) {
   return {
     totalUsers: 1250,
     totalArtisans: 48,
@@ -572,26 +598,20 @@ describe('PendingReports', () => {
     })
 
     it('does not render report data when loading', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={true} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={true} onMutate={mockOnMutate} />)
       expect(screen.queryByText('Spam')).not.toBeInTheDocument()
     })
   })
 
   describe('empty state', () => {
     it('shows empty state message when no reports', () => {
-      render(
-        <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByText('Aucun signalement en attente')).toBeInTheDocument()
       expect(screen.getByText('Tous les signalements ont été traités')).toBeInTheDocument()
     })
 
     it('renders CheckCircle icon in empty state', () => {
-      render(
-        <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByTestId('icon-CheckCircle')).toBeInTheDocument()
     })
 
@@ -606,9 +626,7 @@ describe('PendingReports', () => {
 
   describe('data rendering', () => {
     it('renders all pending reports', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       // First report: review + spam
       expect(screen.getByText('Avis')).toBeInTheDocument()
@@ -622,16 +640,12 @@ describe('PendingReports', () => {
 
     it('shows report count badge', () => {
       const reports = buildReports()
-      render(
-        <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByText('2')).toBeInTheDocument()
     })
 
     it('renders formatted date in French for each report', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
       // 14 feb 2026 in fr-FR short: "14 févr. 2026"
       expect(screen.getByText(/14 févr\. 2026/)).toBeInTheDocument()
       expect(screen.getByText(/13 févr\. 2026/)).toBeInTheDocument()
@@ -639,9 +653,7 @@ describe('PendingReports', () => {
 
     it('does not render description when it is null', () => {
       const reports = buildReports()
-      render(
-        <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />)
       // Second report has null description — only the first description should be present
       const descriptions = screen.queryAllByText('Ce commentaire est du spam évident')
       expect(descriptions).toHaveLength(1)
@@ -649,15 +661,53 @@ describe('PendingReports', () => {
 
     it('renders correct French reason labels', () => {
       const reports = [
-        { id: '1', target_type: 'review', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '2', target_type: 'review', reason: 'inappropriate', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '3', target_type: 'review', reason: 'fake', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '4', target_type: 'review', reason: 'harassment', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '5', target_type: 'review', reason: 'other', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
+        {
+          id: '1',
+          target_type: 'review',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '2',
+          target_type: 'review',
+          reason: 'inappropriate',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '3',
+          target_type: 'review',
+          reason: 'fake',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '4',
+          target_type: 'review',
+          reason: 'harassment',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '5',
+          target_type: 'review',
+          reason: 'other',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
       ]
-      render(
-        <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />)
 
       expect(screen.getByText('Spam')).toBeInTheDocument()
       expect(screen.getByText('Inapproprié')).toBeInTheDocument()
@@ -668,14 +718,44 @@ describe('PendingReports', () => {
 
     it('renders correct French target type labels', () => {
       const reports = [
-        { id: '1', target_type: 'review', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '2', target_type: 'user', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '3', target_type: 'provider', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
-        { id: '4', target_type: 'message', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
+        {
+          id: '1',
+          target_type: 'review',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '2',
+          target_type: 'user',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '3',
+          target_type: 'provider',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
+        {
+          id: '4',
+          target_type: 'message',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
       ]
-      render(
-        <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />)
 
       expect(screen.getByText('Avis')).toBeInTheDocument()
       expect(screen.getByText('Utilisateur')).toBeInTheDocument()
@@ -685,36 +765,36 @@ describe('PendingReports', () => {
 
     it('falls back to raw target_type when label is not mapped', () => {
       const reports = [
-        { id: '1', target_type: 'booking_unknown', reason: 'spam', description: null, status: 'pending', created_at: '2026-02-10T00:00:00Z', reporter_id: null },
+        {
+          id: '1',
+          target_type: 'booking_unknown',
+          reason: 'spam',
+          description: null,
+          status: 'pending',
+          created_at: '2026-02-10T00:00:00Z',
+          reporter_id: null,
+        },
       ]
-      render(
-        <PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={reports} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByText('booking_unknown')).toBeInTheDocument()
     })
   })
 
   describe('action buttons', () => {
     it('renders resolve button with correct aria-label for each report', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       expect(resolveButtons).toHaveLength(2)
     })
 
     it('renders dismiss button with correct aria-label for each report', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
       const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
       expect(dismissButtons).toHaveLength(2)
     })
 
     it('opens confirmation modal when resolve button is clicked', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -724,9 +804,7 @@ describe('PendingReports', () => {
     })
 
     it('opens confirmation modal when dismiss button is clicked', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
       fireEvent.click(dismissButtons[0])
@@ -736,9 +814,7 @@ describe('PendingReports', () => {
     })
 
     it('calls adminMutate with correct parameters on resolve confirmation', async () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       // Click resolve on first report
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
@@ -750,16 +826,14 @@ describe('PendingReports', () => {
         fireEvent.click(confirmBtn)
       })
 
-      expect(mockAdminMutate).toHaveBeenCalledWith(
-        '/api/admin/reports/rpt1/resolve',
-        { method: 'POST', body: { action: 'resolve' } }
-      )
+      expect(mockAdminMutate).toHaveBeenCalledWith('/api/admin/reports/rpt1/resolve', {
+        method: 'POST',
+        body: { action: 'resolve' },
+      })
     })
 
     it('calls adminMutate with dismiss action on dismiss confirmation', async () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       // Click dismiss on first report
       const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
@@ -771,18 +845,16 @@ describe('PendingReports', () => {
         fireEvent.click(confirmBtn)
       })
 
-      expect(mockAdminMutate).toHaveBeenCalledWith(
-        '/api/admin/reports/rpt1/resolve',
-        { method: 'POST', body: { action: 'dismiss' } }
-      )
+      expect(mockAdminMutate).toHaveBeenCalledWith('/api/admin/reports/rpt1/resolve', {
+        method: 'POST',
+        body: { action: 'dismiss' },
+      })
     })
 
     it('calls onMutate after successful resolution', async () => {
       mockAdminMutate.mockResolvedValue({ success: true })
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -798,9 +870,7 @@ describe('PendingReports', () => {
     it('shows success toast after resolving a report', async () => {
       mockAdminMutate.mockResolvedValue({ success: true })
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -818,9 +888,7 @@ describe('PendingReports', () => {
     it('shows success toast with dismiss message after rejecting', async () => {
       mockAdminMutate.mockResolvedValue({ success: true })
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
       fireEvent.click(dismissButtons[0])
@@ -837,9 +905,7 @@ describe('PendingReports', () => {
     it('shows error toast when adminMutate fails', async () => {
       mockAdminMutate.mockRejectedValue(new Error('Erreur serveur'))
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -857,9 +923,7 @@ describe('PendingReports', () => {
     it('shows fallback error message when error has no message', async () => {
       mockAdminMutate.mockRejectedValue('string error')
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -876,9 +940,7 @@ describe('PendingReports', () => {
     it('does not call onMutate when adminMutate fails', async () => {
       mockAdminMutate.mockRejectedValue(new Error('fail'))
 
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
 
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       fireEvent.click(resolveButtons[0])
@@ -894,16 +956,12 @@ describe('PendingReports', () => {
 
   describe('header and navigation', () => {
     it('displays "Signalements" heading', () => {
-      render(
-        <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByText('Signalements')).toBeInTheDocument()
     })
 
     it('renders "Voir tout" link pointing to /admin/signalements', () => {
-      render(
-        <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />)
       const link = screen.getByRole('link', { name: /Voir tout/ })
       expect(link).toHaveAttribute('href', '/admin/signalements')
     })
@@ -911,16 +969,12 @@ describe('PendingReports', () => {
 
   describe('accessibility', () => {
     it('has region role with correct aria-label', () => {
-      render(
-        <PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={[]} loading={false} onMutate={mockOnMutate} />)
       expect(screen.getByRole('region', { name: 'Signalements en attente' })).toBeInTheDocument()
     })
 
     it('resolve buttons have title attribute "Résoudre"', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
       const resolveButtons = screen.getAllByRole('button', { name: 'Résoudre ce signalement' })
       resolveButtons.forEach((btn) => {
         expect(btn).toHaveAttribute('title', 'Résoudre')
@@ -928,9 +982,7 @@ describe('PendingReports', () => {
     })
 
     it('dismiss buttons have title attribute "Rejeter"', () => {
-      render(
-        <PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />
-      )
+      render(<PendingReports reports={buildReports()} loading={false} onMutate={mockOnMutate} />)
       const dismissButtons = screen.getAllByRole('button', { name: 'Rejeter ce signalement' })
       dismissButtons.forEach((btn) => {
         expect(btn).toHaveAttribute('title', 'Rejeter')
@@ -1032,7 +1084,9 @@ describe('ActivityChart', () => {
   describe('accessibility', () => {
     it('has region role with aria-label describing the chart', () => {
       render(<ActivityChart data={buildChartData()} loading={false} />)
-      const region = screen.getByRole('region', { name: /Graphique d'activité des 30 derniers jours/ })
+      const region = screen.getByRole('region', {
+        name: /Graphique d'activité des 30 derniers jours/,
+      })
       expect(region).toBeInTheDocument()
     })
 

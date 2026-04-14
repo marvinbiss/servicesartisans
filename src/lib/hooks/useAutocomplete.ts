@@ -166,11 +166,7 @@ export function useAddressAutocomplete(
 export function useCityAutocomplete(
   options: Omit<UseAutocompleteOptions, 'type'> = {}
 ): UseAutocompleteResult {
-  const {
-    minLength = 2,
-    debounce: debounceMs = 300,
-    limit = 10,
-  } = options
+  const { minLength = 2, debounce: debounceMs = 300, limit = 10 } = options
 
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<AdresseSuggestion[]>([])
@@ -370,7 +366,9 @@ export function useSiretValidation() {
     } else if (digits.length <= 9) {
       setSiret(`${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`)
     } else {
-      setSiret(`${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`)
+      setSiret(
+        `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
+      )
     }
   }, [])
 
@@ -402,7 +400,7 @@ export function useGeolocation() {
 
   const getCurrentPosition = useCallback(() => {
     if (!navigator.geolocation) {
-      setError('La géolocalisation n\'est pas supportée par votre navigateur')
+      setError("La géolocalisation n'est pas supportée par votre navigateur")
       return
     }
 

@@ -102,7 +102,7 @@ async function getAccessToken(): Promise<string> {
   const response = await fetch('https://api.insee.fr/token', {
     method: 'POST',
     headers: {
-      'Authorization': `Basic ${credentials}`,
+      Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: 'grant_type=client_credentials',
@@ -118,7 +118,7 @@ async function getAccessToken(): Promise<string> {
 
   const data = await response.json()
   accessToken = data.access_token
-  tokenExpiry = now + (data.expires_in * 1000)
+  tokenExpiry = now + data.expires_in * 1000
 
   return accessToken!
 }
@@ -148,63 +148,66 @@ async function sireneRequest<T>(
 
   try {
     return await circuitBreaker.execute(async () => {
-      return await retry(async () => {
-        const token = await getAccessToken()
+      return await retry(
+        async () => {
+          const token = await getAccessToken()
 
-        const url = new URL(`${INSEE_API_BASE}${endpoint}`)
-        if (options.params) {
-          Object.entries(options.params).forEach(([key, value]) => {
-            url.searchParams.append(key, value)
-          })
-        }
-
-        const response = await fetch(url.toString(), {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-          },
-          signal: AbortSignal.timeout(10000),
-        })
-
-        const duration = Date.now() - start
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new NotFoundError('Entreprise')
-          }
-          if (response.status === 429) {
-            const retryAfter = parseInt(response.headers.get('Retry-After') || '60')
-            throw new APIError('INSEE', 'Rate limit exceeded', {
-              code: ErrorCode.API_RATE_LIMIT,
-              statusCode: 429,
-              retryable: true,
-              context: { retryAfter },
+          const url = new URL(`${INSEE_API_BASE}${endpoint}`)
+          if (options.params) {
+            Object.entries(options.params).forEach(([key, value]) => {
+              url.searchParams.append(key, value)
             })
           }
-          throw new APIError('INSEE', `API error: ${response.status}`, {
-            statusCode: response.status,
-            context: { endpoint },
-            retryable: response.status >= 500,
+
+          const response = await fetch(url.toString(), {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+            },
+            signal: AbortSignal.timeout(10000),
           })
-        }
 
-        const data = await response.json()
-        logger.api.request(url.toString(), 'GET', { statusCode: response.status, duration })
+          const duration = Date.now() - start
 
-        // Cache successful response
-        if (options.cacheKey) {
-          apiCache.set(options.cacheKey, data, options.cacheTtl || 24 * 60 * 60 * 1000)
-        }
+          if (!response.ok) {
+            if (response.status === 404) {
+              throw new NotFoundError('Entreprise')
+            }
+            if (response.status === 429) {
+              const retryAfter = parseInt(response.headers.get('Retry-After') || '60')
+              throw new APIError('INSEE', 'Rate limit exceeded', {
+                code: ErrorCode.API_RATE_LIMIT,
+                statusCode: 429,
+                retryable: true,
+                context: { retryAfter },
+              })
+            }
+            throw new APIError('INSEE', `API error: ${response.status}`, {
+              statusCode: response.status,
+              context: { endpoint },
+              retryable: response.status >= 500,
+            })
+          }
 
-        return data as T
-      }, {
-        maxAttempts: 3,
-        initialDelay: 1000,
-        maxDelay: 10000,
-        onRetry: (error, attempt, delay) => {
-          logger.warn(`Retry attempt ${attempt}`, { error, delay })
+          const data = await response.json()
+          logger.api.request(url.toString(), 'GET', { statusCode: response.status, duration })
+
+          // Cache successful response
+          if (options.cacheKey) {
+            apiCache.set(options.cacheKey, data, options.cacheTtl || 24 * 60 * 60 * 1000)
+          }
+
+          return data as T
         },
-      })
+        {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          maxDelay: 10000,
+          onRetry: (error, attempt, delay) => {
+            logger.warn(`Retry attempt ${attempt}`, { error, delay })
+          },
+        }
+      )
     })
   } catch (error) {
     logger.error('SIRENE request failed', error as Error, { endpoint })
@@ -313,10 +316,7 @@ export async function rechercherEtablissements(options: {
   params.nombre = String(options.nombre || 20)
   params.debut = String(options.debut || 0)
 
-  const response = await sireneRequest<SireneResponse<EtablissementSirene>>(
-    '/siret',
-    { params }
-  )
+  const response = await sireneRequest<SireneResponse<EtablissementSirene>>('/siret', { params })
 
   return {
     etablissements: response.etablissements || [],
@@ -349,9 +349,7 @@ export async function verifierSiret(siret: string): Promise<{
     return {
       valide: true,
       actif,
-      message: actif
-        ? 'Établissement actif'
-        : 'Établissement fermé',
+      message: actif ? 'Établissement actif' : 'Établissement fermé',
       etablissement,
     }
   } catch (error) {
@@ -393,7 +391,7 @@ export function formatAdresseEtablissement(etablissement: EtablissementSirene): 
  * Tranches effectifs INSEE codes
  */
 export const TRANCHES_EFFECTIFS: Record<string, string> = {
-  'NN': 'Non employeur',
+  NN: 'Non employeur',
   '00': '0 salarié',
   '01': '1 ou 2 salariés',
   '02': '3 à 5 salariés',

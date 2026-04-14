@@ -58,9 +58,8 @@ export default function ProviderList({
   }, [highlightedProviderId])
 
   // Merge external sortOrder prop into filters
-  const effectiveSortBy = sortOrder === 'name' ? 'name'
-    : sortOrder === 'rating' ? 'rating'
-    : filters.sortBy
+  const effectiveSortBy =
+    sortOrder === 'name' ? 'name' : sortOrder === 'rating' ? 'rating' : filters.sortBy
 
   const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
@@ -157,15 +156,9 @@ export default function ProviderList({
             ))}
           </ul>
         ) : (
-          <div
-            className="text-center py-12"
-            role="status"
-            aria-live="polite"
-          >
+          <div className="text-center py-12" role="status" aria-live="polite">
             <p className="text-charcoal-500 text-lg">Aucun artisan trouvé</p>
-            <p className="text-charcoal-400 text-sm mt-2">
-              Essayez de modifier vos filtres
-            </p>
+            <p className="text-charcoal-400 text-sm mt-2">Essayez de modifier vos filtres</p>
           </div>
         )}
       </div>

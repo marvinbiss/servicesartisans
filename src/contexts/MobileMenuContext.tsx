@@ -13,18 +13,11 @@ const MobileMenuContext = createContext<MobileMenuContextType | undefined>(undef
 export function MobileMenuProvider({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), [])
 
-  const value = useMemo(
-    () => ({ isMenuOpen, setIsMenuOpen, toggleMenu }),
-    [isMenuOpen, toggleMenu],
-  )
+  const value = useMemo(() => ({ isMenuOpen, setIsMenuOpen, toggleMenu }), [isMenuOpen, toggleMenu])
 
-  return (
-    <MobileMenuContext.Provider value={value}>
-      {children}
-    </MobileMenuContext.Provider>
-  )
+  return <MobileMenuContext.Provider value={value}>{children}</MobileMenuContext.Provider>
 }
 
 export function useMobileMenu() {

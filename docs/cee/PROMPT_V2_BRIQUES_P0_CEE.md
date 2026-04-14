@@ -10,12 +10,14 @@
 ## 0. ARCHITECTURE STRATÉGIQUE (contexte à lire AVANT code)
 
 **Deux sociétés juridiques distinctes** :
+
 - **ServicesArtisans SAS** (existante) : marketplace SaaS + revente leads intra-groupe
 - **ServicesArtisans Energy SAS** (nouvelle, à constituer) : apport d'affaires artisans + mandataire CEE sous un délégataire partenaire (Engie vague 1)
 
 **Flux chantier CEE type** : bénéficiaire saisit simulateur → lead SA SAS → dispatch artisan exclusif → SA Energy monte le dossier CEE → 2 revenus distincts (commission artisan 10% HT + marge mandataire CEE).
 
 **Référentiel mémoire** :
+
 - `servicesartisans-architecture-double-societe.md`
 - `servicesartisans-mandataire-cee-cdp-2026-04-14.md`
 - `servicesartisans-emmy-operations.md`
@@ -41,13 +43,13 @@
 
 ## 2. PLAN D'EXÉCUTION — 5 PR SÉQUENTIELLES
 
-| PR | Scope | Durée |
-|---|---|---|
-| **PR1** | Migrations 420-425 (référentiels + devis + providers + cee_leads + observabilité + outbox) | 3-5j |
-| **PR2** | Brique 1 — détection CEE sur `/api/devis` + seed référentiels + backfill 100k devis | 3j |
-| **PR3** | Brique 3 — flag MAR providers (staging + atomic swap + cron hebdo) | 2j |
+| PR      | Scope                                                                                              | Durée |
+| ------- | -------------------------------------------------------------------------------------------------- | ----- |
+| **PR1** | Migrations 420-425 (référentiels + devis + providers + cee_leads + observabilité + outbox)         | 3-5j  |
+| **PR2** | Brique 1 — détection CEE sur `/api/devis` + seed référentiels + backfill 100k devis                | 3j    |
+| **PR3** | Brique 3 — flag MAR providers (staging + atomic swap + cron hebdo)                                 | 2j    |
 | **PR4** | Brique 2 — simulateur public `/simulateur-aides-cee` + 4 étapes + reveal + API + RGPD + rate-limit | 7-10j |
-| **PR5** | Outbox Brevo + séquence 7 touches + webhooks + dashboards + alerts | 2-3j |
+| **PR5** | Outbox Brevo + séquence 7 touches + webhooks + dashboards + alerts                                 | 2-3j  |
 
 **Ordre d'exécution strict** : PR1 obligatoire avant toute autre. PR2 et PR3 parallélisables après PR1. PR4 bloque sur PR1+PR2. PR5 bloque sur PR4.
 
@@ -81,12 +83,14 @@ grep -E "PIPEDRIVE|BREVO|SENTRY|UPSTASH|TURNSTILE|CRON" .env.example
 ## 4. PR1 — DDL MIGRATIONS 420-425 (LE PRÉREQUIS ABSOLU)
 
 **Les fichiers SQL sont déjà produits** dans `docs/cee/` :
+
 - `420_425_cee_mandataire.sql` (6 migrations dans 1 fichier, à splitter)
 - `rollback_420_425.sql`
 - `smoke_tests_420_425.sql` (20 SELECTs de vérification)
 - `README.md`
 
 ### Action dev :
+
 1. Splitter `420_425_cee_mandataire.sql` en 6 fichiers `supabase/migrations/420_*.sql` à `425_*.sql` selon les séparateurs `-- === FILE: xxx.sql ===`
 2. Vérifier prérequis : extension `pgcrypto`, fonction `public.set_updated_at()`, JWT avec claims `role` et `provider_id`
 3. `supabase db push` (ou Dashboard SQL editor — split multi-statements selon quirks mémoire)
@@ -95,16 +99,17 @@ grep -E "PIPEDRIVE|BREVO|SENTRY|UPSTASH|TURNSTILE|CRON" .env.example
 
 ### Contenu fonctionnel des 6 migrations (résumé) :
 
-| Migration | Contenu |
-|---|---|
-| 420 | 5 tables référentiels : `cee_operations_ref`, `cee_forfaits`, `cee_spot_prices`, `revenus_plafonds`, `zones_climatiques_ref` (**clé = `code_insee VARCHAR(5)` commune, PAS département** — Hautes-Alpes + Corse mixtes) |
-| 421 | 3 ENUMs : `cee_lead_status`, `categorie_revenus`, `zone_climatique` |
-| 422 | Extension `devis` : `cee_eligible`, `cee_operation_code` FK, `cee_forfait_id` FK snapshot, `cee_prime_estimee_cts` INTEGER, `cee_prime_version` (hash), `cee_lead_id` FK, `cee_detector_version`, `cee_detected_at`, CHECK format BAR-XX-NNN, index partiel |
-| 423 | Extension `providers` : `is_mar_agree`, `mar_source_id`, `mar_last_seen_at`, `mar_imported_at`, `mar_revoked_at`, `mar_qualifications` jsonb + table `mar_staging` |
-| 424 | `cee_leads` (email_hash SHA-256 generated, RLS admin/artisan/anon-deny, dédoublonnage index partiel 24h, trigger updated_at, expires_at 3 ans) + `cee_mandats` + FK inverse `devis.cee_lead_id` |
-| 425 | `cee_simulator_events` (expires 90j), `cee_pipedrive_outbox`, `cee_emails_outbox`, `cee_email_events`, MV `v_cee_funnel_conversion`, MV `v_cee_leads_daily_stats` |
+| Migration | Contenu                                                                                                                                                                                                                                                     |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 420       | 5 tables référentiels : `cee_operations_ref`, `cee_forfaits`, `cee_spot_prices`, `revenus_plafonds`, `zones_climatiques_ref` (**clé = `code_insee VARCHAR(5)` commune, PAS département** — Hautes-Alpes + Corse mixtes)                                     |
+| 421       | 3 ENUMs : `cee_lead_status`, `categorie_revenus`, `zone_climatique`                                                                                                                                                                                         |
+| 422       | Extension `devis` : `cee_eligible`, `cee_operation_code` FK, `cee_forfait_id` FK snapshot, `cee_prime_estimee_cts` INTEGER, `cee_prime_version` (hash), `cee_lead_id` FK, `cee_detector_version`, `cee_detected_at`, CHECK format BAR-XX-NNN, index partiel |
+| 423       | Extension `providers` : `is_mar_agree`, `mar_source_id`, `mar_last_seen_at`, `mar_imported_at`, `mar_revoked_at`, `mar_qualifications` jsonb + table `mar_staging`                                                                                          |
+| 424       | `cee_leads` (email_hash SHA-256 generated, RLS admin/artisan/anon-deny, dédoublonnage index partiel 24h, trigger updated_at, expires_at 3 ans) + `cee_mandats` + FK inverse `devis.cee_lead_id`                                                             |
+| 425       | `cee_simulator_events` (expires 90j), `cee_pipedrive_outbox`, `cee_emails_outbox`, `cee_email_events`, MV `v_cee_funnel_conversion`, MV `v_cee_leads_daily_stats`                                                                                           |
 
 ### Règles techniques DDL
+
 - Tous montants en **INTEGER centimes** (suffixe `_cts`), jamais NUMERIC
 - `email_hash` = `GENERATED ALWAYS AS (encode(digest(lower(email),'sha256'),'hex')) STORED`
 - `telephone_e164` avec CHECK `^\+[1-9][0-9]{6,14}$`
@@ -120,22 +125,25 @@ grep -E "PIPEDRIVE|BREVO|SENTRY|UPSTASH|TURNSTILE|CRON" .env.example
 
 ### Sources officielles à consulter (à J-7 du lancement)
 
-| Référentiel | Source à consulter | Format |
-|---|---|---|
-| `zones_climatiques_ref` (par code INSEE) | Arrêté 4 septembre 2014, annexe III (Légifrance) | PDF → CSV parsing manuel |
-| `revenus_plafonds` 4 tranches Anah 2026 | Arrêté janvier 2026 JO (revalorisation annuelle) | Tableau officiel |
-| `cee_forfaits` CdP Chauffage 2026 | Charte Coup de Pouce publiée sur ecologie.gouv.fr | Charte PDF |
-| `cee_forfaits` MPR Parcours par geste 2026 | Barème MPR (anah.gouv.fr + maprimerenov.gouv.fr) | Tableau officiel |
-| `cee_spot_prices` (seed dernières 12 mois) | emmy.fr publication mensuelle 1er du mois | CSV export |
-| Fiche BAR-TH-171 (formule kWhc) | PNCEE fiche officielle en vigueur | PDF + formule |
+| Référentiel                                | Source à consulter                                | Format                   |
+| ------------------------------------------ | ------------------------------------------------- | ------------------------ |
+| `zones_climatiques_ref` (par code INSEE)   | Arrêté 4 septembre 2014, annexe III (Légifrance)  | PDF → CSV parsing manuel |
+| `revenus_plafonds` 4 tranches Anah 2026    | Arrêté janvier 2026 JO (revalorisation annuelle)  | Tableau officiel         |
+| `cee_forfaits` CdP Chauffage 2026          | Charte Coup de Pouce publiée sur ecologie.gouv.fr | Charte PDF               |
+| `cee_forfaits` MPR Parcours par geste 2026 | Barème MPR (anah.gouv.fr + maprimerenov.gouv.fr)  | Tableau officiel         |
+| `cee_spot_prices` (seed dernières 12 mois) | emmy.fr publication mensuelle 1er du mois         | CSV export               |
+| Fiche BAR-TH-171 (formule kWhc)            | PNCEE fiche officielle en vigueur                 | PDF + formule            |
 
 ### Seeds provisoires en dev/staging uniquement
+
 Tant que les valeurs 2026 ne sont pas sourcées :
+
 - Utiliser les valeurs **2025 taggées `date_validite_fin = '2025-12-31'`**
 - Flag `date_validite_debut = '2026-01-01'` pour les valeurs à renseigner
 - Disclaimer simulateur masqué en prod tant que `SELECT COUNT(*) FROM cee_forfaits WHERE date_validite_debut = '2026-01-01' AND montant_kwh_cumac IS NULL > 0`
 
 ### ⚠️ Erreurs connues du prompt V1 à NE PAS reproduire
+
 - Paris (75) = **H1**, pas H2
 - Marseille (13), Vaucluse (84) = **H3**, pas H2
 - Zone climatique = **code INSEE commune**, pas département (Hautes-Alpes, Corse mixtes)
@@ -163,23 +171,23 @@ SELECT COUNT(*) >= 34960 AS ok FROM zones_climatiques_ref; -- nb communes INSEE 
 
 ```ts
 export interface EligibilityInput {
-  devis_id: string;
-  provider_id: string;
-  type_travaux: string;
-  montant_ht_cts: number;
-  surface_m2?: number;
-  code_postal?: string;
-  annee_construction?: number;
-  energie_remplacee?: string;
+  devis_id: string
+  provider_id: string
+  type_travaux: string
+  montant_ht_cts: number
+  surface_m2?: number
+  code_postal?: string
+  annee_construction?: number
+  energie_remplacee?: string
 }
 
 export interface EligibilityResult {
-  eligible: boolean;
-  operation_code?: string;
-  forfait_id?: number;
-  prime_estimee_cts?: number;
-  detector_version: string; // hash de la logique, ex: "v1.0.0-2026-04-14"
-  reasons_rejected?: string[];
+  eligible: boolean
+  operation_code?: string
+  forfait_id?: number
+  prime_estimee_cts?: number
+  detector_version: string // hash de la logique, ex: "v1.0.0-2026-04-14"
+  reasons_rejected?: string[]
 }
 
 export async function detectCEEEligibility(input: EligibilityInput): Promise<EligibilityResult>
@@ -218,12 +226,14 @@ try {
 ```
 
 ### Script backfill : `scripts/backfill-cee-devis.ts`
+
 - Batch 1000/run, cursor-based `WHERE id > $cursor ORDER BY id`
 - Off-peak (nuit)
 - Métriques : `cee_eligible_ratio`, `detected_count`, `errors_count`
 - Dry-run mode obligatoire
 
 ### Tests
+
 - `detect-eligibility.test.ts` : 20 cas de test minimum couvrant chaque règle
 - Snapshot tests sur format operation_code
 - Mock Supabase, pas d'appel réseau
@@ -233,6 +243,7 @@ try {
 ## 7. PR3 — BRIQUE 3 : FLAG MAR PROVIDERS
 
 ### ⚠️ Prérequis bloquant
+
 **Le dataset MAR N'EXISTE PAS en open data officiel.** Action obligatoire avant coder :
 
 1. Ouvrir DevTools Network sur `https://france-renov.gouv.fr/annuaire-ar/recherche`
@@ -272,6 +283,7 @@ REFRESH MATERIALIZED VIEW + IndexNow + Sentry metric
 ```
 
 ### Contraintes techniques
+
 - **Match SIREN uniquement** (9 chiffres), pas SIRET (multi-établissements)
 - User-Agent : `ServicesArtisans-MAR-Sync/1.0 (+tech@servicesartisans.fr)`
 - Rate : 1 req/s strict
@@ -289,11 +301,13 @@ Le fallback HTML scraping cheerio est fragile (DOM france-renov peut changer san
 - Plan de résolution manuel documenté : si DOM change → capture nouveau sélecteur via DevTools → PR hotfix parser.
 
 ### Dispatch artisan
+
 **NE PAS** réinventer. Intégrer au dispatch marketplace existant :
+
 ```ts
 // dans le service dispatch existant, ajouter une règle
 if (lead.type_travaux === 'renovation_ampleur' || lead.operation_code.startsWith('BAR-TH-REN')) {
-  query = query.eq('is_mar_agree', true);
+  query = query.eq('is_mar_agree', true)
 }
 ```
 
@@ -352,7 +366,7 @@ GET /api/cee/bareme?cp=&foyer=  // renvoie tranches Bleu/Jaune/Violet/Rose selon
 
 ```ts
 // lib/cee/schemas.ts
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const CeeLeadSchema = z.object({
   email: z.string().email().max(254).toLowerCase(),
@@ -361,20 +375,30 @@ export const CeeLeadSchema = z.object({
   telephone: z.string().regex(/^(\+33|0)[1-9](\d{8})$/),
   code_postal: z.string().regex(/^\d{5}$/),
   departement: z.string().regex(/^(0[1-9]|[1-8]\d|9[0-5]|2[AB])$/),
-  type_travaux: z.enum(['pac_air_eau','pac_air_air','ite','iti','combles','plancher_bas','vmc','chauffe_eau','renovation_ampleur']),
+  type_travaux: z.enum([
+    'pac_air_eau',
+    'pac_air_air',
+    'ite',
+    'iti',
+    'combles',
+    'plancher_bas',
+    'vmc',
+    'chauffe_eau',
+    'renovation_ampleur',
+  ]),
   surface_m2: z.number().int().min(5).max(500),
-  annee_construction_tranche: z.enum(['<1948','1948-1974','1975-1989','1990-2005','>2005']),
-  energie_actuelle: z.enum(['gaz','fioul','electricite','bois','charbon']),
+  annee_construction_tranche: z.enum(['<1948', '1948-1974', '1975-1989', '1990-2005', '>2005']),
+  energie_actuelle: z.enum(['gaz', 'fioul', 'electricite', 'bois', 'charbon']),
   foyer_personnes: z.number().int().min(1).max(12),
-  revenus_categorie: z.enum(['tres_modeste','modeste','intermediaire','superieur']),
-  consent_rgpd_obligatoire: z.literal(true),    // case obligatoire mise en relation
-  consent_rgpd_privacy: z.literal(true),        // case obligatoire politique
+  revenus_categorie: z.enum(['tres_modeste', 'modeste', 'intermediaire', 'superieur']),
+  consent_rgpd_obligatoire: z.literal(true), // case obligatoire mise en relation
+  consent_rgpd_privacy: z.literal(true), // case obligatoire politique
   consent_marketing: z.boolean().default(false), // case facultative
   consent_tel_bloctel: z.boolean().default(false), // case facultative si tel
   turnstile_token: z.string().min(20),
   website: z.string().max(0), // honeypot
   sim_token: z.string().uuid().optional(), // référence à session simulator_events
-});
+})
 ```
 
 ### Rate-limit + Turnstile + honeypot
@@ -386,24 +410,28 @@ Voir §11.
 ## 8bis. SPEC UX DÉTAILLÉE SIMULATEUR
 
 ### Étape 1 — Type de travaux
+
 - **H1** : `Quelle rénovation voulez-vous financer ?`
 - **Sous-titre** : `En 2 minutes, on calcule vos aides CEE + MaPrimeRénov'. Sans créer de compte.`
 - **Progress** : `1/4 — 25%`
 - **6 cards** grille 2×3 desktop / 1 col mobile, hauteur 120px (PAC, Chaudière biomasse, Isolation murs, Isolation combles, Menuiseries, Solaire)
 - Auto-advance 300ms après sélection mobile
-- Réassurance latérale : `Service 100% gratuit` + `Sans engagement` + témoignage « *J'ai touché 4 200€ de CEE sur ma PAC, dossier monté en 3 semaines.* » — Marc L., Rennes
+- Réassurance latérale : `Service 100% gratuit` + `Sans engagement` + témoignage « _J'ai touché 4 200€ de CEE sur ma PAC, dossier monté en 3 semaines._ » — Marc L., Rennes
 
 ### Étape 2 — Logement
+
 - Champs : `<AddressAutocomplete>` (API BAN `api-adresse.data.gouv.fr/search?q=&limit=5` debounce 250ms), CP (pré-rempli via BAN), surface (number 10-1000), année construction (tranches select), énergie actuelle (radio 4), statut occupant (radio 2)
 - Tooltip année : « Pas sûr ? Regardez votre acte de propriété ou taxe foncière. »
 
 ### Étape 3 — Revenus
+
 - `<RevenusPicker>` : 4 cards colorées (Bleu/Jaune/Violet/Rose) avec plafonds dynamiques selon CP + foyer
 - Foyer stepper `[−] 1 [+]` max 8
 - API `/api/cee/bareme?cp=&foyer=` renvoie seuils
 - Tooltip : « Les tranches sont ajustées selon votre code postal et votre foyer (barème ANAH 2026). »
 
 ### Étape 3bis — REVEAL
+
 - H1 animé : `Votre estimation : jusqu'à XX XXX€ d'aides` (compteur 1.2s easeOut via rAF)
 - Breakdown : Prime CEE / MPR / Total / Reste à charge
 - Barre comparaison : « Moyenne nationale : 6 200€. Votre estimation : 8 400€ (+35%) »
@@ -412,6 +440,7 @@ Voir §11.
 - CTA principal : `Débloquer mon estimation exacte + voir mon artisan RGE →`
 
 ### Étape 4 — Coordonnées
+
 - Champs : prénom, nom, email, tel (masque `00 00 00 00 00`)
 - **3 cases RGPD séparées** (texte exact §10)
 - Turnstile widget en bas
@@ -419,10 +448,12 @@ Voir §11.
 - CTA : `Envoyer ma demande — 100% gratuit`
 
 ### Résultat thank-you
+
 - H1 : `Votre dossier est en route`
 - Sous-titre : `[Nom] vient de recevoir votre projet. Il vous appelle sous 48h ouvrées. Un récap est parti sur [email].`
 
 ### Exit intent modal
+
 - Desktop : `mousemove` vers `e.clientY < 10`
 - Mobile : scroll up rapide + `history.pushState`
 - 1× max par session (`sessionStorage`)
@@ -431,6 +462,7 @@ Voir §11.
 ### Micro-copy (40 éléments) — voir fichier séparé `docs/cee/microcopy-simulateur.md` (à créer avec la liste exhaustive)
 
 ### Benchmarks conversion
+
 - Étape 1 : 85% (marché 70-75%)
 - Étape 2 : 70% (marché 50-55%)
 - Étape 3 : 62% (marché 38-42%)
@@ -445,11 +477,13 @@ Voir §11.
 ### Pipedrive — Pipeline CEE
 
 **Script bootstrap** : `scripts/bootstrap-pipedrive-cee.ts` (one-shot, à lancer 1 fois)
+
 - Crée le pipeline `CEE - Mandataire` (8 stages avec probabilités 10/25/40/55/75/85/92/100%)
 - Crée les custom fields Person (8 champs) et Deal (13 champs) — voir spec agent
 - Stocke les keys hashés dans `env.PIPEDRIVE_FIELD_KEYS_JSON`
 
 ### Outbox Pipedrive
+
 - Réutiliser pattern de `83dc422f` (cron 6h, DLQ 3 échecs)
 - Idempotency-Key = `cee_lead.id` pour Person, `uuid_v5(lead.id, 'deal')` pour Deal
 - Dédoublonnage Person : `GET /persons/search?term={email}&exact_match=true` avant création
@@ -457,6 +491,7 @@ Voir §11.
 ### Brevo — Séquence 7 touches
 
 Templates à créer dans Brevo (IDs en env var) :
+
 - `CEE_NURTURE_01_RECAP` (J+0 immédiat)
 - `CEE_NURTURE_02_GUIDE_{pac,ite,combles,vmc}` (J+1 conditionnel type_travaux)
 - `CEE_NURTURE_03_COMPARE` (J+3)
@@ -470,6 +505,7 @@ Templates à créer dans Brevo (IDs en env var) :
 **Footer opt-out** obligatoire (conforme L.34-5 CPCE) dans chaque template.
 
 ### Webhook Brevo `/api/webhooks/brevo`
+
 - Signature HMAC-SHA256 via `BREVO_WEBHOOK_SECRET`
 - Insert `cee_email_events`
 - Si `event_type ∈ ('unsubscribe','spam')` → `UPDATE cee_leads SET unsubscribed_at=now()` + cancel futurs emails outbox
@@ -479,6 +515,7 @@ Templates à créer dans Brevo (IDs en env var) :
 **Sentry tags globaux** : `cee_lead_id`, `simulator_step`, `operation_code`, `outbox_kind`, `attempt_n`
 
 **Métriques `/api/metrics`** (format Prometheus) :
+
 - `cee_simulator_views_total{step}`
 - `cee_simulator_abandons_total{step}`
 - `cee_leads_created_total{source}`
@@ -489,6 +526,7 @@ Templates à créer dans Brevo (IDs en env var) :
 - `cee_api_leads_latency_seconds_bucket`
 
 **Alerts Grafana → Slack #cee-ops** :
+
 - Détection CEE drop >20% sur 24h (P1)
 - Pipedrive fail rate >5% sur 1h (P1)
 - Events flood >10k/h (P2 DDoS)
@@ -524,21 +562,25 @@ Réclamation : vous pouvez introduire une réclamation auprès de la CNIL (3 Pla
 ### 4 cases à cocher (non cochées par défaut)
 
 **Case 1 — OBLIGATOIRE** :
+
 ```
 ☐ Je consens à la transmission de ma demande à un artisan RGE partenaire de ServicesArtisans pour qu'il me recontacte en vue d'établir un devis gratuit et sans engagement. Je comprends qu'un seul artisan sera destinataire de ma demande (lead exclusif).
 ```
 
 **Case 2 — OBLIGATOIRE** :
+
 ```
 ☐ Je reconnais avoir pris connaissance des informations ci-dessus relatives au traitement de mes données personnelles et de la [Politique de confidentialité](/politique-confidentialite).
 ```
 
 **Case 3 — OPTIONNELLE** :
+
 ```
 ☐ J'accepte de recevoir par email des informations sur les aides à la rénovation énergétique et les services de ServicesArtisans (désinscription en 1 clic dans chaque email).
 ```
 
 **Case 4 — OPTIONNELLE** (si téléphone renseigné, obligation Bloctel L.223-1 C. conso) :
+
 ```
 ☐ J'accepte d'être contacté par téléphone par l'artisan RGE partenaire pour les besoins de mon projet. J'ai été informé(e) de mon droit de m'inscrire gratuitement sur la liste d'opposition au démarchage téléphonique Bloctel (www.bloctel.gouv.fr).
 ```
@@ -556,18 +598,23 @@ ServicesArtisans est un service privé, édité par ServicesArtisans SAS. Il ne 
 ```
 
 ### Écran mandat CEE (si souscription)
+
 6 mentions obligatoires arrêté 2/11/2023 + formulaire rétractation R.221-1 — voir `docs/cee/mentions-mandat-cee.md` (à créer avec texte complet agent RGPD).
 
 ### Bandeau cookies (CNIL-conforme)
+
 Boutons symétriques `Tout accepter` / `Tout refuser` / `Personnaliser` — voir texte agent RGPD.
 
 ### Page `/politique-confidentialite`
+
 15 sections — voir plan agent RGPD.
 
 ### AIPD obligatoire
+
 Justification : 5 critères CNIL 11/10/2018 (scoring + données financières + personnes vulnérables + grande échelle + croisement). Template PIA v3 CNIL.
 
 ### Registre traitements (art. 30 RGPD)
+
 Entrée T-2026-001 "Simulateur CEE et mise en relation artisan RGE" — tableau complet agent RGPD.
 
 ---
@@ -575,17 +622,20 @@ Entrée T-2026-001 "Simulateur CEE et mise en relation artisan RGE" — tableau 
 ## 11. RATE-LIMIT + ANTI-SPAM + TRACKING
 
 ### Upstash Ratelimit
+
 ```ts
-import { Ratelimit } from '@upstash/ratelimit';
+import { Ratelimit } from '@upstash/ratelimit'
 const rl = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(5, '1 h'),
-  prefix: 'rl:cee-leads'
-});
+  prefix: 'rl:cee-leads',
+})
 ```
+
 5 submissions/IP/h sur `POST /api/cee/leads`. Réponse 429 avec `Retry-After`.
 
 ### Turnstile Cloudflare
+
 - Widget étape 4 : `TURNSTILE_SITE_KEY` (public)
 - Server-side verify : `POST https://challenges.cloudflare.com/turnstile/v0/siteverify` avec `TURNSTILE_SECRET_KEY`
 - **Bypass dev local** : si `BYPASS_TURNSTILE=true` ET `NODE_ENV !== 'production'` → `return { success: true }` sans appel réseau. Sinon PR4 impossible à tester en local.
@@ -595,30 +645,36 @@ const rl = new Ratelimit({
 // lib/cee/turnstile.ts
 export async function verifyTurnstile(token: string, ip?: string) {
   if (process.env.BYPASS_TURNSTILE === 'true' && process.env.NODE_ENV !== 'production') {
-    return { success: true, bypass: true };
+    return { success: true, bypass: true }
   }
   // ... appel siteverify normal
 }
 // lib/env.ts (boot check)
 if (process.env.NODE_ENV === 'production' && process.env.BYPASS_TURNSTILE === 'true') {
-  throw new Error('SECURITY: BYPASS_TURNSTILE=true interdit en production');
+  throw new Error('SECURITY: BYPASS_TURNSTILE=true interdit en production')
 }
 ```
 
 ### Honeypot
+
 ```html
-<input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
+<input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" />
 ```
+
 Si rempli → 204 silent drop + `Sentry.captureMessage('honeypot_hit', level='info')`
 
 ### Dédoublonnage
+
 ```sql
 SELECT count(*) FROM cee_leads WHERE email_hash = $1 AND created_at > now() - interval '24 hours'
 ```
+
 Si ≥ 3 → `duplicate_of = first.id`, skip Pipedrive + skip Brevo.
 
 ### Tracking événements simulateur
+
 Events envoyés à `POST /api/cee/simulator-events` (insert async, non bloquant) :
+
 - `view_step_{n}` (1..4)
 - `view_reveal`, `view_result`
 - `submit_step_{n}` avec `{durationMs, fieldsFilled}`

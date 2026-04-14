@@ -25,11 +25,7 @@ function ensureVapidConfigured(): boolean {
   }
 
   try {
-    webpush.setVapidDetails(
-      'mailto:support@servicesartisans.fr',
-      publicKey,
-      privateKey
-    )
+    webpush.setVapidDetails('mailto:support@servicesartisans.fr', publicKey, privateKey)
     vapidConfigured = true
     return true
   } catch (err) {
@@ -199,9 +195,7 @@ export async function sendPushToUser(
   subscriptions: PushSubscription[],
   payload: PushNotificationPayload
 ): Promise<{ sent: number; failed: number; expiredEndpoints: string[] }> {
-  const results = await Promise.all(
-    subscriptions.map((sub) => sendPushNotification(sub, payload))
-  )
+  const results = await Promise.all(subscriptions.map((sub) => sendPushNotification(sub, payload)))
 
   const expiredEndpoints: string[] = []
   let sent = 0

@@ -72,8 +72,7 @@ export function rateLimitedResponse(resetMs: number): NextResponse {
       success: false,
       error: {
         code: 'RATE_LIMITED',
-        message:
-          'Trop de requêtes. Merci de patienter avant de réessayer.',
+        message: 'Trop de requêtes. Merci de patienter avant de réessayer.',
       },
     },
     {
@@ -85,24 +84,12 @@ export function rateLimitedResponse(resetMs: number): NextResponse {
   )
 }
 
-export function serverErrorResponse(
-  code: string,
-  message: string
-): NextResponse {
-  return NextResponse.json(
-    { success: false, error: { code, message } },
-    { status: 500 }
-  )
+export function serverErrorResponse(code: string, message: string): NextResponse {
+  return NextResponse.json({ success: false, error: { code, message } }, { status: 500 })
 }
 
-export function badRequestResponse(
-  code: string,
-  message: string
-): NextResponse {
-  return NextResponse.json(
-    { success: false, error: { code, message } },
-    { status: 400 }
-  )
+export function badRequestResponse(code: string, message: string): NextResponse {
+  return NextResponse.json({ success: false, error: { code, message } }, { status: 400 })
 }
 
 export function notFoundResponse(message: string): NextResponse {
@@ -117,9 +104,7 @@ export function notFoundResponse(message: string): NextResponse {
  * In production, throws a 500 NextResponse if the env var is missing.
  * In dev, logs a warning and returns null (route continues with dev fallback).
  */
-export function requireEnvProd(
-  varName: string
-): NextResponse | null {
+export function requireEnvProd(varName: string): NextResponse | null {
   const value = process.env[varName]
   if (!value || value.length === 0) {
     if (process.env.NODE_ENV === 'production') {
@@ -127,10 +112,7 @@ export function requireEnvProd(
         action: 'cee-env-missing',
         varName,
       })
-      return serverErrorResponse(
-        'CONFIG_ERROR',
-        'Configuration serveur incomplète'
-      )
+      return serverErrorResponse('CONFIG_ERROR', 'Configuration serveur incomplète')
     }
     logger.warn('cee-route: env var missing (dev mode, continuing)', {
       action: 'cee-env-missing-dev',

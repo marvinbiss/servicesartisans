@@ -110,9 +110,9 @@ describe('PARTNER_TRANSITIONS', () => {
 
 describe('createCeeLead', () => {
   it('retourne lead existant si dédoublonnage <24h', async () => {
-    const fromMock = vi.fn().mockReturnValue(
-      makeSelectBuilder({ data: { id: 'lead_exist' }, error: null })
-    )
+    const fromMock = vi
+      .fn()
+      .mockReturnValue(makeSelectBuilder({ data: { id: 'lead_exist' }, error: null }))
     const supabase = { from: fromMock }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -295,9 +295,7 @@ describe('updateCeePartnerStatus', () => {
   })
 
   it('throw si partner introuvable', async () => {
-    const fromMock = vi.fn().mockReturnValueOnce(
-      makeSelectBuilder({ data: null, error: null })
-    )
+    const fromMock = vi.fn().mockReturnValueOnce(makeSelectBuilder({ data: null, error: null }))
     const supabase = { from: fromMock }
     await expect(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

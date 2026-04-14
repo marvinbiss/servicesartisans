@@ -31,7 +31,7 @@ describe('RgeBadge — cas null / vides', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualibat']}
         sourceUrl={null}
-      />,
+      />
     )
     expect(container.firstChild).toBeNull()
   })
@@ -43,19 +43,14 @@ describe('RgeBadge — cas null / vides', () => {
         validUntil={FUTURE_DATE}
         organismes={null}
         sourceUrl={null}
-      />,
+      />
     )
     expect(container.firstChild).toBeNull()
   })
 
   it('retourne null si qualifications est un tableau vide', () => {
     const { container } = render(
-      <RgeBadge
-        qualifications={[]}
-        validUntil={FUTURE_DATE}
-        organismes={null}
-        sourceUrl={null}
-      />,
+      <RgeBadge qualifications={[]} validUntil={FUTURE_DATE} organismes={null} sourceUrl={null} />
     )
     expect(container.firstChild).toBeNull()
   })
@@ -67,7 +62,7 @@ describe('RgeBadge — cas null / vides', () => {
         validUntil={null}
         organismes={null}
         sourceUrl={null}
-      />,
+      />
     )
     expect(container.firstChild).toBeNull()
   })
@@ -79,7 +74,7 @@ describe('RgeBadge — cas null / vides', () => {
         validUntil={undefined}
         organismes={null}
         sourceUrl={null}
-      />,
+      />
     )
     expect(container.firstChild).toBeNull()
   })
@@ -91,7 +86,7 @@ describe('RgeBadge — cas null / vides', () => {
         validUntil={PAST_DATE}
         organismes={null}
         sourceUrl={null}
-      />,
+      />
     )
     expect(container.firstChild).toBeNull()
   })
@@ -105,7 +100,7 @@ describe('RgeBadge — mode expanded (default)', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualit\u2019EnR']}
         sourceUrl="https://example.com"
-      />,
+      />
     )
     expect(screen.getByText(/Certifi/i)).toBeInTheDocument()
     expect(screen.getByText(/RGE/)).toBeInTheDocument()
@@ -118,7 +113,7 @@ describe('RgeBadge — mode expanded (default)', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualit\u2019EnR']}
         sourceUrl={null}
-      />,
+      />
     )
     // "(1 qualif)"
     expect(screen.getByText(/\(1 qualif\)/)).toBeInTheDocument()
@@ -136,7 +131,7 @@ describe('RgeBadge — mode expanded (default)', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualit\u2019EnR', 'Qualibat']}
         sourceUrl={null}
-      />,
+      />
     )
     expect(screen.getByText(/\(3 qualifs\)/)).toBeInTheDocument()
   })
@@ -152,7 +147,7 @@ describe('RgeBadge — mode expanded (default)', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualit\u2019EnR']}
         sourceUrl={null}
-      />,
+      />
     )
     expect(screen.getByText('QualiPAC Module')).toBeInTheDocument()
     expect(screen.getByText('QualiSol CESI')).toBeInTheDocument()
@@ -165,7 +160,7 @@ describe('RgeBadge — mode expanded (default)', () => {
         validUntil={FUTURE_DATE}
         organismes={['Qualibat']}
         sourceUrl="https://data.gouv.fr/rge"
-      />,
+      />
     )
     const link = screen.getByRole('link')
     expect(link).toHaveAttribute('href', 'https://data.gouv.fr/rge')
@@ -183,7 +178,7 @@ describe('RgeBadge — mode compact', () => {
         organismes={['Qualit\u2019EnR']}
         sourceUrl={null}
         compact
-      />,
+      />
     )
     expect(screen.getByText('RGE')).toBeInTheDocument()
   })
@@ -196,7 +191,7 @@ describe('RgeBadge — mode compact', () => {
         organismes={null}
         sourceUrl={null}
         compact
-      />,
+      />
     )
     expect(screen.queryByText(/Certifi\u00e9 RGE/)).not.toBeInTheDocument()
   })
@@ -209,7 +204,7 @@ describe('RgeBadge — mode compact', () => {
         organismes={['Qualit\u2019EnR']}
         sourceUrl={null}
         compact
-      />,
+      />
     )
     const pill = container.querySelector('span[title]')
     expect(pill).not.toBeNull()
@@ -230,7 +225,7 @@ describe('RgeBadge — mode compact', () => {
         organismes={null}
         sourceUrl={null}
         compact
-      />,
+      />
     )
     expect(screen.getByText('\u00d73')).toBeInTheDocument()
   })
@@ -243,7 +238,7 @@ describe('RgeBadge — mode compact', () => {
         organismes={null}
         sourceUrl={null}
         compact
-      />,
+      />
     )
     expect(screen.queryByText(/\u00d71/)).not.toBeInTheDocument()
   })

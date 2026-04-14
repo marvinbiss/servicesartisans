@@ -64,11 +64,7 @@ export class AnalyticsService {
   /**
    * Track page view
    */
-  async trackPageView(
-    path: string,
-    userId?: string,
-    referrer?: string
-  ): Promise<void> {
+  async trackPageView(path: string, userId?: string, referrer?: string): Promise<void> {
     await this.trackEvent({
       event_type: 'page_view',
       user_id: userId,
@@ -79,11 +75,7 @@ export class AnalyticsService {
   /**
    * Track search
    */
-  async trackSearch(
-    query: string,
-    results: number,
-    userId?: string
-  ): Promise<void> {
+  async trackSearch(query: string, results: number, userId?: string): Promise<void> {
     await this.trackEvent({
       event_type: 'search',
       user_id: userId,
@@ -111,11 +103,7 @@ export class AnalyticsService {
   /**
    * Track quote request
    */
-  async trackQuoteRequest(
-    providerId: string,
-    userId: string,
-    service: string
-  ): Promise<void> {
+  async trackQuoteRequest(providerId: string, userId: string, service: string): Promise<void> {
     await this.trackEvent({
       event_type: 'quote_request',
       user_id: userId,
@@ -127,10 +115,7 @@ export class AnalyticsService {
   /**
    * Track provider profile view
    */
-  async trackProfileView(
-    providerId: string,
-    userId?: string
-  ): Promise<void> {
+  async trackProfileView(providerId: string, userId?: string): Promise<void> {
     await this.trackEvent({
       event_type: 'profile_view',
       user_id: userId,
@@ -172,9 +157,7 @@ export class AnalyticsService {
     const totalProviders = providersResult.count || 0
     const bookings = bookingsResult.data || []
     const totalBookings = bookings.length
-    const completedBookings = bookings.filter(
-      (b) => b.status === 'completed'
-    ).length
+    const completedBookings = bookings.filter((b) => b.status === 'completed').length
     const totalRevenue = bookings
       .filter((b) => b.status === 'completed')
       .reduce((sum, b) => sum + (b.total_price || 0), 0)
@@ -183,20 +166,16 @@ export class AnalyticsService {
     const newUsersThisMonth = monthlyUsersResult.count || 0
 
     // Calculate revenue this month
-    const monthlyBookings = bookings.filter(
-      (b) => new Date(b.created_at) >= startOfMonth
-    )
+    const monthlyBookings = bookings.filter((b) => new Date(b.created_at) >= startOfMonth)
     const revenueThisMonth = monthlyBookings
       .filter((b) => b.status === 'completed')
       .reduce((sum, b) => sum + (b.total_price || 0), 0)
 
     // Conversion rate (bookings / profile views)
-    const conversionRate =
-      totalBookings > 0 ? (completedBookings / totalBookings) * 100 : 0
+    const conversionRate = totalBookings > 0 ? (completedBookings / totalBookings) * 100 : 0
 
     // Average booking value
-    const averageBookingValue =
-      completedBookings > 0 ? totalRevenue / completedBookings : 0
+    const averageBookingValue = completedBookings > 0 ? totalRevenue / completedBookings : 0
 
     // Top services (mock data - would need proper join)
     const topServices = [
@@ -247,30 +226,21 @@ export class AnalyticsService {
   async getProviderMetrics(providerId: string): Promise<ProviderMetrics> {
     const supabase = await createServerClient()
 
-    const [bookingsResult, reviewsResult, quotesResult, profileViewsResult] =
-      await Promise.all([
-        supabase
-          .from('bookings')
-          .select('id, status, total_price, created_at, service_type')
-          .eq('provider_id', providerId)
-          .limit(50000),
-        supabase
-          .from('reviews')
-          .select('rating')
-          .eq('provider_id', providerId)
-          .limit(50000),
-        supabase
-          .from('quotes')
-          .select('id, status')
-          .eq('provider_id', providerId)
-          .limit(50000),
-        // Use count query instead of fetching all rows just to count them
-        supabase
-          .from('analytics_events')
-          .select('id', { count: 'exact', head: true })
-          .eq('provider_id', providerId)
-          .eq('event_type', 'profile_view'),
-      ])
+    const [bookingsResult, reviewsResult, quotesResult, profileViewsResult] = await Promise.all([
+      supabase
+        .from('bookings')
+        .select('id, status, total_price, created_at, service_type')
+        .eq('provider_id', providerId)
+        .limit(50000),
+      supabase.from('reviews').select('rating').eq('provider_id', providerId).limit(50000),
+      supabase.from('quotes').select('id, status').eq('provider_id', providerId).limit(50000),
+      // Use count query instead of fetching all rows just to count them
+      supabase
+        .from('analytics_events')
+        .select('id', { count: 'exact', head: true })
+        .eq('provider_id', providerId)
+        .eq('event_type', 'profile_view'),
+    ])
 
     const bookings = bookingsResult.data || []
     const reviews = reviewsResult.data || []
@@ -309,13 +279,10 @@ export class AnalyticsService {
 
     const totalReviews = reviews.length
     const averageRating =
-      totalReviews > 0
-        ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
-        : 0
+      totalReviews > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
 
     const acceptedQuotes = quotes.filter((q) => q.status === 'accepted').length
-    const quoteAcceptanceRate =
-      quotes.length > 0 ? (acceptedQuotes / quotes.length) * 100 : 0
+    const quoteAcceptanceRate = quotes.length > 0 ? (acceptedQuotes / quotes.length) * 100 : 0
 
     // Mock response time - would need message timestamps
     const responseTime = 30
@@ -341,9 +308,7 @@ export class AnalyticsService {
     }
   }
 
-  private groupByDay(
-    bookings: { created_at: string }[]
-  ): { date: string; count: number }[] {
+  private groupByDay(bookings: { created_at: string }[]): { date: string; count: number }[] {
     const counts: Record<string, number> = {}
 
     bookings.forEach((b) => {

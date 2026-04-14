@@ -3,17 +3,22 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Shield, Activity, Star, AlertTriangle, ArrowRight, MessageSquare, Phone } from 'lucide-react'
+import {
+  Shield,
+  Activity,
+  Star,
+  AlertTriangle,
+  ArrowRight,
+  MessageSquare,
+  Phone,
+} from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
 import { RecentActivity } from '@/components/admin/dashboard/RecentActivity'
 import { PendingReports } from '@/components/admin/dashboard/PendingReports'
 
-class ChartErrorBoundary extends Component<
-  { children: ReactNode },
-  { hasError: boolean }
-> {
+class ChartErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   state = { hasError: false }
 
   static getDerivedStateFromError() {
@@ -40,7 +45,10 @@ class ChartErrorBoundary extends Component<
 
 // Lazy-load recharts bundle (~150KB) — only fetched when dashboard renders
 const ActivityChart = dynamic(
-  () => import('@/components/admin/dashboard/ActivityChart').then(m => ({ default: m.ActivityChart })),
+  () =>
+    import('@/components/admin/dashboard/ActivityChart').then((m) => ({
+      default: m.ActivityChart,
+    })),
   {
     ssr: false,
     loading: () => (
@@ -259,13 +267,18 @@ export default function AdminDashboard() {
               {!isLoading && (
                 <>
                   <span className="text-sm text-gray-500">
-                    Total : <span className="font-semibold text-gray-900">{data?.estimationLeads?.total ?? 0}</span>
+                    Total :{' '}
+                    <span className="font-semibold text-gray-900">
+                      {data?.estimationLeads?.total ?? 0}
+                    </span>
                   </span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    (data?.estimationLeads?.today ?? 0) > 0
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-gray-100 text-gray-500'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      (data?.estimationLeads?.today ?? 0) > 0
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-gray-100 text-gray-500'
+                    }`}
+                  >
                     {data?.estimationLeads?.today ?? 0} aujourd'hui
                   </span>
                 </>
@@ -292,11 +305,18 @@ export default function AdminDashboard() {
           ) : (
             <div className="divide-y divide-gray-50">
               {data?.estimationLeads?.recent?.map((lead) => (
-                <div key={lead.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors">
+                <div
+                  key={lead.id}
+                  className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
+                >
                   <div className="flex items-center gap-4 min-w-0">
-                    <span className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium ${
-                      lead.source === 'chat' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'
-                    }`}>
+                    <span
+                      className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium ${
+                        lead.source === 'chat'
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-orange-100 text-orange-700'
+                      }`}
+                    >
                       {lead.source === 'chat' ? 'Chat' : 'Rappel'}
                     </span>
                     <div className="min-w-0">
@@ -315,7 +335,12 @@ export default function AdminDashboard() {
                       <Phone className="w-4 h-4" />
                     </a>
                     <span className="text-xs text-gray-400">
-                      {new Date(lead.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                      {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </span>
                   </div>
                 </div>

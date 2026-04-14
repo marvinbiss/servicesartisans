@@ -27,11 +27,7 @@
 
 function validateCeeIbanKey(): void {
   // Skip in test / CI / build environments.
-  if (
-    process.env.VITEST ||
-    process.env.NODE_ENV === 'test' ||
-    process.env.NEXT_BUILD_SKIP_DB
-  ) {
+  if (process.env.VITEST || process.env.NODE_ENV === 'test' || process.env.NEXT_BUILD_SKIP_DB) {
     return
   }
 
@@ -40,8 +36,7 @@ function validateCeeIbanKey(): void {
     // Key absent — not fatal outside production (dev may skip CEE feature).
     if (process.env.NODE_ENV === 'production') {
       throw new Error(
-        '[CEE_IBAN_KEY] Missing in production. ' +
-          'Set a base64-encoded 32-byte key (AES-256).'
+        '[CEE_IBAN_KEY] Missing in production. ' + 'Set a base64-encoded 32-byte key (AES-256).'
       )
     }
     return
@@ -52,15 +47,14 @@ function validateCeeIbanKey(): void {
     decoded = Buffer.from(raw, 'base64')
   } catch {
     throw new Error(
-      '[CEE_IBAN_KEY] Not valid base64. ' +
-        'Provide a base64-encoded 32-byte key (AES-256).'
+      '[CEE_IBAN_KEY] Not valid base64. ' + 'Provide a base64-encoded 32-byte key (AES-256).'
     )
   }
 
   if (decoded.length !== 32) {
     throw new Error(
       `[CEE_IBAN_KEY] Decoded to ${decoded.length} bytes — expected exactly 32 (AES-256). ` +
-        'Re-generate with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64\'))"'
+        "Re-generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\""
     )
   }
 }
@@ -150,4 +144,3 @@ export function validateIban(iban: string): IbanValidationResult {
   const last4 = normalized.slice(-4)
   return { valid: true, last4, normalized }
 }
-

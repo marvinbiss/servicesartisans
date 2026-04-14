@@ -8,7 +8,10 @@ import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import type { CmsPage } from '@/types/cms'
 
-type CMSPageListItem = Pick<CmsPage, 'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'>
+type CMSPageListItem = Pick<
+  CmsPage,
+  'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'
+>
 
 interface CMSResponse {
   success: boolean
@@ -98,9 +101,7 @@ export default function AdminContenuPage() {
   if (status) params.set('status', status)
   if (search) params.set('search', search)
 
-  const { data, isLoading, error, mutate } = useAdminFetch<CMSResponse>(
-    `/api/admin/cms?${params}`
-  )
+  const { data, isLoading, error, mutate } = useAdminFetch<CMSResponse>(`/api/admin/cms?${params}`)
 
   const pages = data?.data || []
   const total = data?.pagination?.total || 0
@@ -130,7 +131,9 @@ export default function AdminContenuPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Gestion du contenu</h1>
-            <p className="text-gray-500 mt-1">{total} page{total !== 1 ? 's' : ''}</p>
+            <p className="text-gray-500 mt-1">
+              {total} page{total !== 1 ? 's' : ''}
+            </p>
           </div>
           <Link
             href="/admin/contenu/nouveau"
@@ -197,10 +200,7 @@ export default function AdminContenuPage() {
             </div>
           ) : error ? (
             <div className="p-8">
-              <ErrorBanner
-                message={error.message}
-                onRetry={() => mutate()}
-              />
+              <ErrorBanner message={error.message} onRetry={() => mutate()} />
             </div>
           ) : pages.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -210,22 +210,40 @@ export default function AdminContenuPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px] sm:min-w-[700px]" aria-label="Liste des pages CMS">
+                <table
+                  className="w-full min-w-[400px] sm:min-w-[700px]"
+                  aria-label="Liste des pages CMS"
+                >
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Titre
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Type
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Statut
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Dernière modification
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Actions
                       </th>
                     </tr>

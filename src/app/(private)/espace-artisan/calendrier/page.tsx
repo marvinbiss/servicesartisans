@@ -5,7 +5,10 @@ import useSWR from 'swr'
 import { Calendar as CalendarIcon, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
-import Calendar, { type CalendarBooking, type CalendarAvailabilitySlot } from '@/components/artisan-dashboard/Calendar'
+import Calendar, {
+  type CalendarBooking,
+  type CalendarAvailabilitySlot,
+} from '@/components/artisan-dashboard/Calendar'
 import { getArtisanUrl } from '@/lib/utils'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -46,18 +49,18 @@ export default function CalendrierPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   // Charger le profil artisan (pour la sidebar)
-  const { data: statsData } = useSWR<StatsResponse>(
-    '/api/artisan/stats',
-    fetcher,
-    { revalidateOnFocus: false }
-  )
+  const { data: statsData } = useSWR<StatsResponse>('/api/artisan/stats', fetcher, {
+    revalidateOnFocus: false,
+  })
 
   // Charger les bookings du mois
-  const { data: bookingsData, error: bookingsError, isLoading } = useSWR<BookingsResponse>(
-    `/api/artisan/bookings?month=${month}&year=${year}`,
-    fetcher,
-    { revalidateOnFocus: false }
-  )
+  const {
+    data: bookingsData,
+    error: bookingsError,
+    isLoading,
+  } = useSWR<BookingsResponse>(`/api/artisan/bookings?month=${month}&year=${year}`, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   const bookings = bookingsData?.bookings ?? []
   const availabilitySlots = bookingsData?.availabilitySlots ?? []
@@ -86,9 +89,9 @@ export default function CalendrierPage() {
   }, [year, month])
 
   const handlePreviousMonth = useCallback(() => {
-    setMonth(prev => {
+    setMonth((prev) => {
       if (prev === 0) {
-        setYear(y => y - 1)
+        setYear((y) => y - 1)
         return 11
       }
       return prev - 1
@@ -96,9 +99,9 @@ export default function CalendrierPage() {
   }, [])
 
   const handleNextMonth = useCallback(() => {
-    setMonth(prev => {
+    setMonth((prev) => {
       if (prev === 11) {
-        setYear(y => y + 1)
+        setYear((y) => y + 1)
         return 0
       }
       return prev + 1
@@ -110,10 +113,9 @@ export default function CalendrierPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/espace-artisan' },
-            { label: 'Calendrier' },
-          ]} />
+          <Breadcrumb
+            items={[{ label: 'Espace Artisan', href: '/espace-artisan' }, { label: 'Calendrier' }]}
+          />
         </div>
       </div>
 
@@ -146,11 +148,10 @@ export default function CalendrierPage() {
               <div className="mb-4 flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-red-800">
-                    Erreur de chargement
-                  </p>
+                  <p className="text-sm font-medium text-red-800">Erreur de chargement</p>
                   <p className="text-sm text-red-600 mt-1">
-                    {bookingsError.message || 'Impossible de charger les réservations. Veuillez réessayer.'}
+                    {bookingsError.message ||
+                      'Impossible de charger les réservations. Veuillez réessayer.'}
                   </p>
                 </div>
               </div>
@@ -172,20 +173,18 @@ export default function CalendrierPage() {
             {/* Stats rapides */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
               <div className="bg-white rounded-xl shadow-sm p-4 text-center">
-                <div className="text-2xl font-bold text-primary-600">
-                  {bookings.length}
-                </div>
+                <div className="text-2xl font-bold text-primary-600">{bookings.length}</div>
                 <div className="text-xs text-charcoal-500 mt-1">RDV ce mois</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 text-center">
                 <div className="text-2xl font-bold text-accent-600">
-                  {bookings.filter(b => b.status === 'confirmed').length}
+                  {bookings.filter((b) => b.status === 'confirmed').length}
                 </div>
                 <div className="text-xs text-charcoal-500 mt-1">Confirmés</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-4 text-center col-span-2 sm:col-span-1">
                 <div className="text-2xl font-bold text-secondary-600">
-                  {bookings.filter(b => b.status === 'pending').length}
+                  {bookings.filter((b) => b.status === 'pending').length}
                 </div>
                 <div className="text-xs text-charcoal-500 mt-1">En attente</div>
               </div>

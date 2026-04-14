@@ -364,9 +364,7 @@ export async function sendCeeCertificationEmail(
 // Partner activated (status → active)
 // ---------------------------------------------------------------------------
 
-function buildCeePartnerActivatedHtml(
-  params: CeePartnerActivatedEmailParams
-): string {
+function buildCeePartnerActivatedHtml(params: CeePartnerActivatedEmailParams): string {
   const { artisanName, dashboardUrl } = params
   return `<!DOCTYPE html>
 <html lang="fr">

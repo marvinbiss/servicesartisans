@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  ChevronLeft,
-  Mail,
-  Edit2,
-  Eye,
-  Save,
-  Check,
-} from 'lucide-react'
+import { ChevronLeft, Mail, Edit2, Eye, Save, Check } from 'lucide-react'
 
 interface EmailTemplate {
   id: string
@@ -81,8 +74,14 @@ L'équipe ServicesArtisans`,
     id: 'quote_request',
     name: 'Nouvelle demande de devis',
     subject: 'Nouvelle demande de devis',
-    description: 'Email envoyé à l\'artisan pour une demande de devis',
-    variables: ['{{artisan_name}}', '{{client_name}}', '{{service}}', '{{description}}', '{{dashboard_link}}'],
+    description: "Email envoyé à l'artisan pour une demande de devis",
+    variables: [
+      '{{artisan_name}}',
+      '{{client_name}}',
+      '{{service}}',
+      '{{description}}',
+      '{{dashboard_link}}',
+    ],
     content: `Bonjour {{artisan_name}},
 
 Vous avez reçu une nouvelle demande de devis !
@@ -100,7 +99,7 @@ L'équipe ServicesArtisans`,
     id: 'review_notification',
     name: 'Nouvel avis',
     subject: 'Vous avez reçu un nouvel avis',
-    description: 'Email envoyé à l\'artisan pour un nouvel avis',
+    description: "Email envoyé à l'artisan pour un nouvel avis",
     variables: ['{{artisan_name}}', '{{rating}}', '{{review_text}}', '{{client_name}}'],
     content: `Bonjour {{artisan_name}},
 
@@ -123,7 +122,7 @@ function loadTemplates(): EmailTemplate[] {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (!stored) return EMAIL_TEMPLATES
     const saved = JSON.parse(stored) as Record<string, { subject: string; content: string }>
-    return EMAIL_TEMPLATES.map(t => {
+    return EMAIL_TEMPLATES.map((t) => {
       const override = saved[t.id]
       return override ? { ...t, subject: override.subject, content: override.content } : t
     })
@@ -135,7 +134,7 @@ function loadTemplates(): EmailTemplate[] {
 function saveTemplates(templates: EmailTemplate[]) {
   const overrides: Record<string, { subject: string; content: string }> = {}
   for (const t of templates) {
-    const original = EMAIL_TEMPLATES.find(o => o.id === t.id)
+    const original = EMAIL_TEMPLATES.find((o) => o.id === t.id)
     if (original && (t.subject !== original.subject || t.content !== original.content)) {
       overrides[t.id] = { subject: t.subject, content: t.content }
     }
@@ -169,10 +168,8 @@ export default function EmailTemplatesPage() {
     if (!editingId) return
 
     setSaving(true)
-    const updated = templates.map(t =>
-      t.id === editingId
-        ? { ...t, content: editContent, subject: editSubject }
-        : t
+    const updated = templates.map((t) =>
+      t.id === editingId ? { ...t, content: editContent, subject: editSubject } : t
     )
     setTemplates(updated)
     saveTemplates(updated)
@@ -202,7 +199,10 @@ export default function EmailTemplatesPage() {
     preview = preview.replace(/\{\{client_name\}\}/g, 'Marie Durand')
     preview = preview.replace(/\{\{verify_link\}\}/g, 'https://servicesartisans.fr/verify/abc123')
     preview = preview.replace(/\{\{reset_link\}\}/g, 'https://servicesartisans.fr/reset/xyz789')
-    preview = preview.replace(/\{\{dashboard_link\}\}/g, 'https://servicesartisans.fr/espace-artisan')
+    preview = preview.replace(
+      /\{\{dashboard_link\}\}/g,
+      'https://servicesartisans.fr/espace-artisan'
+    )
     preview = preview.replace(/\{\{expiry_time\}\}/g, '24 heures')
     preview = preview.replace(/\{\{service\}\}/g, 'Plomberie')
     preview = preview.replace(/\{\{description\}\}/g, 'Réparation fuite sous évier')
@@ -287,9 +287,7 @@ export default function EmailTemplatesPage() {
               {editingId === template.id && (
                 <div className="p-6 space-y-4 bg-gray-50">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Sujet
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sujet</label>
                     <input
                       type="text"
                       value={editSubject}
@@ -298,9 +296,7 @@ export default function EmailTemplatesPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Contenu
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
                     <textarea
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
@@ -370,7 +366,7 @@ export default function EmailTemplatesPage() {
           <h3 className="font-medium text-blue-900 mb-2">À propos des templates</h3>
           <p className="text-sm text-blue-700">
             Les modifications apportées aux templates seront appliquées à tous les futurs emails.
-            Les variables entre doubles accolades (ex: {"{{user_name}}"}) seront automatiquement
+            Les variables entre doubles accolades (ex: {'{{user_name}}'}) seront automatiquement
             remplacées par les valeurs réelles lors de l'envoi.
           </p>
         </div>

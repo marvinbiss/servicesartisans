@@ -14,9 +14,7 @@ export function useCallbackCountdown(): UseCallbackCountdownReturn {
   useEffect(() => {
     if (countdown === null || countdown <= 0) return
     const timer = setInterval(() => {
-      setCountdown((prev) =>
-        prev !== null && prev > 0 ? prev - 1 : 0,
-      )
+      setCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))
     }, 1000)
     return () => clearInterval(timer)
   }, [countdown])

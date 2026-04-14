@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import {
-  ChevronLeft,
-  Save,
-  User,
-  Mail,
-  Phone,
-  Shield,
-} from 'lucide-react'
+import { ChevronLeft, Save, User, Mail, Phone, Shield } from 'lucide-react'
 
 interface UserData {
   id: string
@@ -40,7 +33,7 @@ export default function EditUserPage() {
 
   useEffect(() => {
     fetchUser()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const fetchUser = async () => {
@@ -155,9 +148,7 @@ export default function EditUserPage() {
             </h2>
             <div className="grid gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom complet
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
                 <input
                   type="text"
                   value={formData.full_name}
@@ -204,9 +195,7 @@ export default function EditUserPage() {
             <div className="grid gap-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Rôle
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
                   <input
                     type="text"
                     value={formData.role}

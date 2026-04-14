@@ -25,13 +25,9 @@ export const dynamic = 'force-dynamic'
  */
 function validateMagicBytes(bytes: Uint8Array): boolean {
   // JPEG: FF D8 FF
-  const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff
   // PNG: 89 50 4E 47
-  const isPng =
-    bytes[0] === 0x89 &&
-    bytes[1] === 0x50 &&
-    bytes[2] === 0x4E &&
-    bytes[3] === 0x47
+  const isPng = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
   // WebP: RIFF....WEBP (bytes 0-3 = RIFF, bytes 8-11 = WEBP)
   const isWebp =
     bytes.length >= 12 &&
@@ -44,11 +40,7 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
     bytes[10] === 0x42 &&
     bytes[11] === 0x50
   // GIF: 47 49 46 38
-  const isGif =
-    bytes[0] === 0x47 &&
-    bytes[1] === 0x49 &&
-    bytes[2] === 0x46 &&
-    bytes[3] === 0x38
+  const isGif = bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x38
 
   return isJpeg || isPng || isWebp || isGif
 }
@@ -60,7 +52,7 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
 function validateVideoMagicBytes(bytes: Uint8Array): boolean {
   if (bytes.length < 12) return false
   // WebM: 1A 45 DF A3
-  if (bytes[0] === 0x1A && bytes[1] === 0x45 && bytes[2] === 0xDF && bytes[3] === 0xA3) return true
+  if (bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3) return true
   // MP4/MOV: "ftyp" at offset 4
   if (bytes[4] === 0x66 && bytes[5] === 0x74 && bytes[6] === 0x79 && bytes[7] === 0x70) return true
   return false
@@ -83,13 +75,13 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Verify user is an artisan
@@ -100,10 +92,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (!profile || profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
 
     // Parse multipart form data
@@ -122,10 +111,7 @@ export async function POST(request: NextRequest) {
     const fileType = typeValidation.data
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'Aucun fichier fourni' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Aucun fichier fourni' }, { status: 400 })
     }
 
     // Validate file type
@@ -187,9 +173,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get public URL
-    const { data: urlData } = supabase.storage
-      .from(PORTFOLIO_BUCKET)
-      .getPublicUrl(uploadData.path)
+    const { data: urlData } = supabase.storage.from(PORTFOLIO_BUCKET).getPublicUrl(uploadData.path)
 
     return NextResponse.json({
       success: true,
@@ -202,9 +186,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Portfolio upload error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur lors de l\'upload' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Erreur serveur lors de l'upload" }, { status: 500 })
   }
 }

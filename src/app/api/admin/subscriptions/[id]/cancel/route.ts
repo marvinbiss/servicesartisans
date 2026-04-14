@@ -13,10 +13,7 @@ const cancelSubscriptionSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Annuler ou réactiver un abonnement
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with payments:cancel permission
     const authResult = await requirePermission('payments', 'cancel')
@@ -35,7 +32,10 @@ export async function POST(
     const result = cancelSubscriptionSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -54,19 +54,19 @@ export async function POST(
     } catch (stripeError) {
       logger.error('Stripe subscription operation failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors de l\'opération' } },
+        {
+          success: false,
+          error: { message: "Stripe non configuré ou erreur lors de l'opération" },
+        },
         { status: 503 }
       )
     }
 
     // Log d'audit
-    await logAdminAction(
-      authResult.admin.id,
-      `subscription.${action}`,
-      'subscription',
-      params.id,
-      { action, immediately }
-    )
+    await logAdminAction(authResult.admin.id, `subscription.${action}`, 'subscription', params.id, {
+      action,
+      immediately,
+    })
 
     return NextResponse.json({
       success: true,

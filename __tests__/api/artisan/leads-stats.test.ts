@@ -55,7 +55,7 @@ function mockSupabaseChain(overrides: Record<string, unknown> = {}) {
   // Make each method return the chain for fluent API
   for (const key of Object.keys(chain)) {
     if (typeof chain[key] === 'function' && !['single', 'limit'].includes(key)) {
-      (chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
+      ;(chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
     }
   }
   return chain
@@ -121,14 +121,19 @@ describe('GET /api/artisan/leads/stats', () => {
       50, // total
       10, // pending
       15, // viewed
-      5,  // declined
-      8,  // quoted (lead_events)
-      4,  // accepted
-      2,  // completed
+      5, // declined
+      8, // quoted (lead_events)
+      4, // accepted
+      2, // completed
       12, // thisMonth
-      8,  // lastMonth
+      8, // lastMonth
       // 6 trend months
-      3, 4, 6, 8, 10, 12,
+      3,
+      4,
+      6,
+      8,
+      10,
+      12,
     ]
 
     mockAdminFrom.mockImplementation(() => {
@@ -145,7 +150,7 @@ describe('GET /api/artisan/leads/stats', () => {
       // Make fluent
       for (const key of Object.keys(adminChain)) {
         if (typeof adminChain[key] === 'function' && key !== 'limit') {
-          (adminChain[key] as ReturnType<typeof vi.fn>).mockReturnValue(adminChain)
+          ;(adminChain[key] as ReturnType<typeof vi.fn>).mockReturnValue(adminChain)
         }
       }
 

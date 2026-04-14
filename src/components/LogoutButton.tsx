@@ -45,11 +45,7 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
       disabled={isLoading}
       className={`flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full disabled:opacity-50 ${className}`}
     >
-      {isLoading ? (
-        <Loader2 className="w-5 h-5 animate-spin" />
-      ) : (
-        <LogOut className="w-5 h-5" />
-      )}
+      {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <LogOut className="w-5 h-5" />}
       {isLoading ? 'Déconnexion...' : 'Déconnexion'}
     </button>
   )

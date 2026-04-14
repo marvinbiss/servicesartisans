@@ -14,7 +14,9 @@ export default function SecurityBadge({ className = '' }: SecurityBadgeProps) {
         <Lock className="h-3 w-3" aria-hidden="true" />
         Connexion sécurisée SSL
       </span>
-      <span className="hidden sm:inline text-charcoal-200" aria-hidden="true">|</span>
+      <span className="hidden sm:inline text-charcoal-200" aria-hidden="true">
+        |
+      </span>
       <span className="inline-flex items-center gap-1">
         <ShieldCheck className="h-3 w-3" aria-hidden="true" />
         Données protégées RGPD

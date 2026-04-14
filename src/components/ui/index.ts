@@ -21,7 +21,14 @@ export type { TextareaProps } from './Textarea'
 export { default as Select } from './Select'
 export type { SelectProps, SelectOption } from './Select'
 
-export { Skeleton, CardSkeleton, ListSkeleton, GridSkeleton, PageSkeleton, FormSkeleton } from './Skeleton'
+export {
+  Skeleton,
+  CardSkeleton,
+  ListSkeleton,
+  GridSkeleton,
+  PageSkeleton,
+  FormSkeleton,
+} from './Skeleton'
 
 export { default as Card, CardHeader, CardContent, CardFooter } from './Card'
 export type { CardProps, CardHeaderProps, CardContentProps, CardFooterProps } from './Card'

@@ -78,7 +78,7 @@ export default function AdminArtisanDetailPage() {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
+          Pragma: 'no-cache',
         },
       })
       if (response.ok) {
@@ -180,12 +180,24 @@ export default function AdminArtisanDetailPage() {
 
   const getStatusBadge = () => {
     if (!artisan.is_active) {
-      return <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Suspendu</span>
+      return (
+        <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+          Suspendu
+        </span>
+      )
     }
     if (!artisan.is_verified) {
-      return <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">En attente de vérification</span>
+      return (
+        <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
+          En attente de vérification
+        </span>
+      )
     }
-    return <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Vérifié</span>
+    return (
+      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+        Vérifié
+      </span>
+    )
   }
 
   return (
@@ -204,10 +216,7 @@ export default function AdminArtisanDetailPage() {
           <div className="flex flex-wrap items-start justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  {artisan.name || 'Sans nom'}
-                </h1>
-
+                <h1 className="text-2xl font-bold text-gray-900">{artisan.name || 'Sans nom'}</h1>
               </div>
               <p className="text-gray-500 mt-1">{artisan.email}</p>
               <div className="flex items-center gap-3 mt-3">
@@ -229,7 +238,12 @@ export default function AdminArtisanDetailPage() {
 
             <div className="flex items-center gap-3">
               <a
-                href={getArtisanUrl({ stable_id: artisan?.stable_id || artisanId, slug: artisan?.slug || undefined, specialty: artisan?.specialty || undefined, city: artisan?.address_city || undefined })}
+                href={getArtisanUrl({
+                  stable_id: artisan?.stable_id || artisanId,
+                  slug: artisan?.slug || undefined,
+                  specialty: artisan?.specialty || undefined,
+                  city: artisan?.address_city || undefined,
+                })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
@@ -274,7 +288,9 @@ export default function AdminArtisanDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Adresse</p>
                     <p className="text-gray-900">
-                      {[artisan.address_street, artisan.address_postal_code, artisan.address_city].filter(Boolean).join(', ') || '-'}
+                      {[artisan.address_street, artisan.address_postal_code, artisan.address_city]
+                        .filter(Boolean)
+                        .join(', ') || '-'}
                     </p>
                   </div>
                 </div>
@@ -332,14 +348,14 @@ export default function AdminArtisanDetailPage() {
                         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                         {artisan.rating_average.toFixed(1)}
                       </>
-                    ) : 'N/A'}
+                    ) : (
+                      'N/A'
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Nombre d'avis</span>
-                  <span className="font-semibold text-gray-900">
-                    {artisan.review_count || 0}
-                  </span>
+                  <span className="font-semibold text-gray-900">{artisan.review_count || 0}</span>
                 </div>
               </div>
             </div>
@@ -408,12 +424,24 @@ export default function AdminArtisanDetailPage() {
       </div>
 
       {toast && (
-        <div role="status" aria-live="polite" className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
-          toast.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
-        }`}>
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
+            toast.type === 'success'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}
+        >
           <div className="flex items-center gap-2">
             <span className="text-sm">{toast.message}</span>
-            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+            <button
+              onClick={() => setToast(null)}
+              className="text-current opacity-50 hover:opacity-100"
+              aria-label="Fermer"
+            >
+              ×
+            </button>
           </div>
         </div>
       )}

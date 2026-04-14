@@ -139,7 +139,10 @@ export async function POST(request: NextRequest) {
 
   if (!partnerCheck) {
     return NextResponse.json(
-      { success: false, error: { code: 'FORBIDDEN', message: 'Accès non autorisé à ce partenaire' } },
+      {
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Accès non autorisé à ce partenaire' },
+      },
       { status: 403 }
     )
   }
@@ -174,4 +177,3 @@ export async function POST(request: NextRequest) {
     { status: httpStatus }
   )
 }
-

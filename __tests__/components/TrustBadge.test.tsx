@@ -10,7 +10,7 @@ import React from 'react'
 const TrustBadge = ({
   badge,
   showLabel = true,
-  size = 'md'
+  size = 'md',
 }: {
   badge: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
   showLabel?: boolean
@@ -22,20 +22,20 @@ const TrustBadge = ({
     bronze: 'Bronze',
     silver: 'Argent',
     gold: 'Or',
-    platinum: 'Platine'
+    platinum: 'Platine',
   }
 
   const colors: Record<string, string> = {
     bronze: 'bg-amber-600',
     silver: 'bg-gray-400',
     gold: 'bg-yellow-500',
-    platinum: 'bg-purple-600'
+    platinum: 'bg-purple-600',
   }
 
   const sizes: Record<string, string> = {
     sm: 'text-xs px-1.5 py-0.5',
     md: 'text-sm px-2 py-1',
-    lg: 'text-base px-3 py-1.5'
+    lg: 'text-base px-3 py-1.5',
   }
 
   return (

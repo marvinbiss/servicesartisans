@@ -80,17 +80,19 @@ export default async function CommissionsPage() {
     if (error) throw error
 
     if (data) {
-      commissions = (data as unknown as Array<{
-        id: string
-        dossier_id: string
-        amount_cts: number
-        status: string
-        sent_at: string | null
-        confirmed_at: string | null
-        created_at: string
-        partner: { provider_id: string; iban_last4: string | null } | null
-        dossier: { operation_code: string } | null
-      }>).map((row) => ({
+      commissions = (
+        data as unknown as Array<{
+          id: string
+          dossier_id: string
+          amount_cts: number
+          status: string
+          sent_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          partner: { provider_id: string; iban_last4: string | null } | null
+          dossier: { operation_code: string } | null
+        }>
+      ).map((row) => ({
         id: row.id,
         dossier_id: row.dossier_id,
         operation_code: row.dossier?.operation_code ?? '—',
@@ -147,9 +149,7 @@ export default async function CommissionsPage() {
       <header className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold">Mes commissions CEE</h1>
-          <p className="mt-1 text-primary-100">
-            Historique de vos versements SA Energy.
-          </p>
+          <p className="mt-1 text-primary-100">Historique de vos versements SA Energy.</p>
         </div>
       </header>
 
@@ -157,15 +157,26 @@ export default async function CommissionsPage() {
         {/* KPIs */}
         <section aria-label="Totaux commissions" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
-            { label: 'En attente', value: formatEuros(pendingTotal), color: 'bg-amber-50 text-amber-800 border-amber-200' },
-            { label: `Payé ${new Date().getFullYear()}`, value: formatEuros(paidYtd), color: 'bg-green-50 text-green-800 border-green-200' },
-            { label: 'Total versé (cumulé)', value: formatEuros(paidTotal), color: 'bg-primary-50 text-primary-800 border-primary-200' },
+            {
+              label: 'En attente',
+              value: formatEuros(pendingTotal),
+              color: 'bg-amber-50 text-amber-800 border-amber-200',
+            },
+            {
+              label: `Payé ${new Date().getFullYear()}`,
+              value: formatEuros(paidYtd),
+              color: 'bg-green-50 text-green-800 border-green-200',
+            },
+            {
+              label: 'Total versé (cumulé)',
+              value: formatEuros(paidTotal),
+              color: 'bg-primary-50 text-primary-800 border-primary-200',
+            },
           ].map((kpi) => (
-            <div
-              key={kpi.label}
-              className={`rounded-xl border ${kpi.color} p-5`}
-            >
-              <p className="text-xs font-semibold uppercase tracking-wide opacity-70">{kpi.label}</p>
+            <div key={kpi.label} className={`rounded-xl border ${kpi.color} p-5`}>
+              <p className="text-xs font-semibold uppercase tracking-wide opacity-70">
+                {kpi.label}
+              </p>
               <p className="mt-1 text-2xl font-bold">{kpi.value}</p>
             </div>
           ))}

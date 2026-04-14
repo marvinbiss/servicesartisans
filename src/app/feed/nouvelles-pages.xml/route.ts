@@ -3,7 +3,11 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { services, villes } from '@/lib/data/france'
 
 function escapeXml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 export const revalidate = 86400 // 24h
@@ -61,12 +65,16 @@ export async function GET() {
   entries.sort((a, b) => b.date.getTime() - a.date.getTime())
   const top = entries.slice(0, 200)
 
-  const items = top.map(e => `    <item>
+  const items = top
+    .map(
+      (e) => `    <item>
       <title>${escapeXml(e.title)}</title>
       <link>${e.url}</link>
       <guid isPermaLink="true">${e.url}</guid>
       <pubDate>${e.date.toUTCString()}</pubDate>
-    </item>`).join('\n')
+    </item>`
+    )
+    .join('\n')
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

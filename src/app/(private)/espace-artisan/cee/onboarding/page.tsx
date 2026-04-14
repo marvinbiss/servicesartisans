@@ -62,8 +62,7 @@ export default async function CeeOnboardingPage() {
   let fetchError = false
 
   try {
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
     const res = await fetch(`${siteUrl}/api/cee/partners/me`, {
       headers: {
         Cookie: (await import('next/headers')).cookies().toString(),
@@ -98,24 +97,16 @@ export default async function CeeOnboardingPage() {
       {/* Page header */}
       <header className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold font-heading">
-            Devenir partenaire CEE
-          </h1>
+          <h1 className="text-2xl font-bold font-heading">Devenir partenaire CEE</h1>
           <p className="mt-1 text-primary-100 text-sm">
             Certificats d&apos;Économies d&apos;Énergie — SA Energy
           </p>
         </div>
       </header>
 
-      <main
-        id="main-content"
-        className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8"
-      >
+      <main id="main-content" className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         {fetchError && !partner ? (
-          <div
-            role="alert"
-            className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center"
-          >
+          <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
             <p className="font-semibold text-red-800">
               Impossible de charger votre dossier partenaire.
             </p>

@@ -46,7 +46,8 @@ vi.mock('@/lib/supabase/admin', () => ({ createAdminClient: vi.fn(() => mockSupa
 
 const updateStatusMock = vi.fn(async () => ({ id: 'p', status: 'certified' }))
 vi.mock('@/lib/cee/leads-service', () => ({
-  updateCeePartnerStatus: (...args: unknown[]) => (updateStatusMock as (...a: unknown[]) => unknown)(...args),
+  updateCeePartnerStatus: (...args: unknown[]) =>
+    (updateStatusMock as (...a: unknown[]) => unknown)(...args),
 }))
 
 vi.mock('@/lib/cee/emails', () => ({
@@ -67,7 +68,11 @@ const originalEnv = { ...process.env }
 
 beforeEach(async () => {
   vi.clearAllMocks()
-  ;(process.env as Record<string, string | undefined>) = { ...originalEnv, NODE_ENV: 'test', NEXT_PUBLIC_SITE_URL: 'http://localhost:3000' }
+  ;(process.env as Record<string, string | undefined>) = {
+    ...originalEnv,
+    NODE_ENV: 'test',
+    NEXT_PUBLIC_SITE_URL: 'http://localhost:3000',
+  }
   ;(maybeSingleMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({
     data: { id: 'partner-1', status: 'convention_signed' },
     error: null,
@@ -102,7 +107,9 @@ describe('POST /api/cee/partners/training/quiz', () => {
     const res = (await POST(makeRequest(cheatingBody) as never)) as unknown as MockResult
     expect(res.status).toBe(200)
     // Server recomputes: 0 correct.
-    expect((res.body as { data: { score: number; passed: boolean; certified: boolean } }).data.score).toBe(0)
+    expect(
+      (res.body as { data: { score: number; passed: boolean; certified: boolean } }).data.score
+    ).toBe(0)
     expect((res.body as { data: { passed: boolean } }).data.passed).toBe(false)
     expect((res.body as { data: { certified: boolean } }).data.certified).toBe(false)
     expect(updateStatusMock).not.toHaveBeenCalled()
@@ -139,14 +146,14 @@ describe('POST /api/cee/partners/training/quiz', () => {
       const ok = (await POST(makeRequest({ answers: {} }) as never)) as unknown as MockResult
       expect(ok.status).toBe(200)
     }
-    const throttled = (await POST(
-      makeRequest({ answers: {} }) as never
-    )) as unknown as MockResult
+    const throttled = (await POST(makeRequest({ answers: {} }) as never)) as unknown as MockResult
     expect(throttled.status).toBe(429)
   })
 
   it('returns 401 when not authenticated', async () => {
-    ;(mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({ data: { user: null }, error: null })
+    ;(
+      mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({ data: { user: null }, error: null })
     const { POST } = await import('@/app/api/cee/partners/training/quiz/route')
     const res = (await POST(makeRequest({ answers: {} }) as never)) as unknown as MockResult
     expect(res.status).toBe(401)

@@ -68,9 +68,13 @@ export default function CrawlStatsPage() {
             <div>
               <p className="text-sm text-gray-500">Crawl moyen/jour</p>
               <p className="text-2xl font-bold text-gray-900">
-                {isLoading ? '—' : data?.crawlRate?.length
-                  ? Math.round(data.crawlRate.reduce((s, r) => s + r.count, 0) / data.crawlRate.length).toLocaleString('fr-FR')
-                  : '0'}
+                {isLoading
+                  ? '—'
+                  : data?.crawlRate?.length
+                    ? Math.round(
+                        data.crawlRate.reduce((s, r) => s + r.count, 0) / data.crawlRate.length
+                      ).toLocaleString('fr-FR')
+                    : '0'}
               </p>
             </div>
           </div>
@@ -96,7 +100,7 @@ export default function CrawlStatsPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Crawl par jour</h2>
           <div className="flex items-end gap-1 h-40">
             {[...data.crawlRate].reverse().map((day) => {
-              const maxCount = Math.max(...data.crawlRate.map(d => d.count))
+              const maxCount = Math.max(...data.crawlRate.map((d) => d.count))
               const height = maxCount > 0 ? (day.count / maxCount) * 100 : 0
               return (
                 <div key={day.day} className="flex-1 flex flex-col items-center gap-1">
@@ -106,7 +110,10 @@ export default function CrawlStatsPage() {
                     style={{ height: `${height}%`, minHeight: day.count > 0 ? '4px' : '0px' }}
                   />
                   <span className="text-[10px] text-gray-400 -rotate-45 origin-top-left whitespace-nowrap">
-                    {new Date(day.day).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}
+                    {new Date(day.day).toLocaleDateString('fr-FR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                    })}
                   </span>
                 </div>
               )
@@ -122,7 +129,7 @@ export default function CrawlStatsPage() {
             { id: 'top' as const, label: 'Top 100 pages crawlées' },
             { id: 'types' as const, label: 'Distribution par type' },
             { id: 'recent' as const, label: 'Crawls récents' },
-          ].map(tab => (
+          ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -162,7 +169,9 @@ export default function CrawlStatsPage() {
                 </tbody>
               </table>
               {data.topPages.length === 0 && (
-                <p className="text-gray-400 text-center py-8">Aucun crawl enregistré pour le moment.</p>
+                <p className="text-gray-400 text-center py-8">
+                  Aucun crawl enregistré pour le moment.
+                </p>
               )}
             </div>
           )}
@@ -171,11 +180,13 @@ export default function CrawlStatsPage() {
           {activeTab === 'types' && data?.pageTypes && (
             <div className="space-y-3">
               {data.pageTypes.map((type) => {
-                const maxCount = Math.max(...data.pageTypes.map(t => t.count))
+                const maxCount = Math.max(...data.pageTypes.map((t) => t.count))
                 const width = maxCount > 0 ? (type.count / maxCount) * 100 : 0
                 return (
                   <div key={type.page_type} className="flex items-center gap-3">
-                    <span className="w-32 text-sm font-medium text-gray-700 truncate">{type.page_type}</span>
+                    <span className="w-32 text-sm font-medium text-gray-700 truncate">
+                      {type.page_type}
+                    </span>
                     <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
                       <div
                         className="bg-orange-400 h-full rounded-full flex items-center justify-end pr-2"
@@ -206,12 +217,20 @@ export default function CrawlStatsPage() {
                 </thead>
                 <tbody>
                   {data.recentCrawls.map((crawl, i) => (
-                    <tr key={`${crawl.url}-${i}`} className="border-b border-gray-50 hover:bg-gray-50">
+                    <tr
+                      key={`${crawl.url}-${i}`}
+                      className="border-b border-gray-50 hover:bg-gray-50"
+                    >
                       <td className="py-2 font-mono text-xs truncate max-w-[400px]">{crawl.url}</td>
-                      <td className="py-2 text-xs text-gray-500 truncate max-w-[300px]">{crawl.user_agent}</td>
+                      <td className="py-2 text-xs text-gray-500 truncate max-w-[300px]">
+                        {crawl.user_agent}
+                      </td>
                       <td className="py-2 text-right text-gray-500 whitespace-nowrap">
                         {new Date(crawl.created_at).toLocaleString('fr-FR', {
-                          day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit',
+                          day: '2-digit',
+                          month: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
                         })}
                       </td>
                     </tr>

@@ -49,10 +49,18 @@ export function UserStatusBadge({ status }: { status: string }) {
     banned: 'Banni',
     deleted: 'Supprimé',
   }
-  return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  return (
+    <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  )
 }
 
-export function ProviderStatusBadge({ isVerified, isActive }: { isVerified: boolean; isActive: boolean }) {
+export function ProviderStatusBadge({
+  isVerified,
+  isActive,
+}: {
+  isVerified: boolean
+  isActive: boolean
+}) {
   if (!isActive) {
     return <StatusBadge variant="error">Suspendu</StatusBadge>
   }
@@ -94,7 +102,9 @@ export function PaymentStatusBadge({ status }: { status: string }) {
     refunded: 'Remboursé',
     canceled: 'Annulé',
   }
-  return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  return (
+    <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  )
 }
 
 export function ReviewStatusBadge({ status }: { status: string }) {
@@ -116,7 +126,9 @@ export function ReviewStatusBadge({ status }: { status: string }) {
     hidden: 'Masqué',
     flagged: 'Signalé',
   }
-  return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  return (
+    <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  )
 }
 
 export function BookingStatusBadge({ status }: { status: string }) {
@@ -134,7 +146,9 @@ export function BookingStatusBadge({ status }: { status: string }) {
     cancelled: 'Annulé',
     canceled: 'Annulé',
   }
-  return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  return (
+    <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  )
 }
 
 export function ReportStatusBadge({ status }: { status: string }) {
@@ -150,5 +164,7 @@ export function ReportStatusBadge({ status }: { status: string }) {
     resolved: 'Résolu',
     dismissed: 'Rejeté',
   }
-  return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  return (
+    <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
+  )
 }

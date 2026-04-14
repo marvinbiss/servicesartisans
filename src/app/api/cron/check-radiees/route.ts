@@ -47,7 +47,7 @@ export async function GET(request: Request) {
     }
 
     // Filtrer les SIRET valides (14 chiffres)
-    const validProviders = providers.filter(p => p.siret && /^\d{14}$/.test(p.siret))
+    const validProviders = providers.filter((p) => p.siret && /^\d{14}$/.test(p.siret))
     logger.info(`check-radiees: ${validProviders.length} providers à vérifier`)
 
     if (validProviders.length === 0) {
@@ -60,11 +60,11 @@ export async function GET(request: Request) {
     // Traiter par batch
     for (let i = 0; i < validProviders.length; i += BATCH_SIZE) {
       const batch = validProviders.slice(i, i + BATCH_SIZE)
-      const sirets = batch.map(p => p.siret!)
+      const sirets = batch.map((p) => p.siret!)
 
       try {
         // Requête INSEE: chercher ces SIRET
-        const query = sirets.map(s => `siret:${s}`).join(' OR ')
+        const query = sirets.map((s) => `siret:${s}`).join(' OR ')
         const url = new URL(`${SIRENE_CONFIG.baseUrl}/siret`)
         url.searchParams.set('q', query)
         url.searchParams.set('nombre', BATCH_SIZE.toString())
@@ -72,8 +72,8 @@ export async function GET(request: Request) {
 
         const response = await fetch(url.toString(), {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
           },
         })
 
@@ -132,7 +132,7 @@ export async function GET(request: Request) {
 
       // Pause entre les batchs pour respecter le rate limit (30 req/min)
       if (i + BATCH_SIZE < validProviders.length) {
-        await new Promise(resolve => setTimeout(resolve, 2200))
+        await new Promise((resolve) => setTimeout(resolve, 2200))
       }
     }
 

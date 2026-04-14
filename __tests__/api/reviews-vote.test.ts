@@ -14,14 +14,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Mocks
 // ============================================
 
-const mockJsonFn = vi.fn((body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
-  body,
-  status: init?.status ?? 200,
-  headers: init?.headers ?? {},
-}))
+const mockJsonFn = vi.fn(
+  (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
+    body,
+    status: init?.status ?? 200,
+    headers: init?.headers ?? {},
+  })
+)
 
 vi.mock('next/server', () => ({
-  NextResponse: { json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => mockJsonFn(body, init) },
+  NextResponse: {
+    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) =>
+      mockJsonFn(body, init),
+  },
 }))
 
 vi.mock('@/lib/logger', () => ({
@@ -31,9 +36,11 @@ vi.mock('@/lib/logger', () => ({
 // Rate limiter mock — always allow by default
 let mockRateLimitAllowed = true
 vi.mock('@/lib/rate-limiter', () => ({
-  checkRateLimit: vi.fn().mockImplementation(() =>
-    Promise.resolve({ allowed: mockRateLimitAllowed, resetTime: Date.now() + 3600000 })
-  ),
+  checkRateLimit: vi
+    .fn()
+    .mockImplementation(() =>
+      Promise.resolve({ allowed: mockRateLimitAllowed, resetTime: Date.now() + 3600000 })
+    ),
   getClientIp: vi.fn().mockImplementation((headers: Headers) => {
     return headers.get('x-forwarded-for') || '127.0.0.1'
   }),
@@ -170,12 +177,16 @@ describe('POST /api/reviews/vote', () => {
     const { POST } = await import('@/app/api/reviews/vote/route')
 
     // First vote succeeds
-    const result1 = (await POST(makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip }))) as unknown as MockResult
+    const result1 = (await POST(
+      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip })
+    )) as unknown as MockResult
     expect(result1.status).toBe(200)
 
     // Second vote from same IP is rejected
     adminFromCallCount = 0
-    const result2 = (await POST(makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip }))) as unknown as MockResult
+    const result2 = (await POST(
+      makePostRequest({ reviewId: REVIEW_UUID }, { 'x-forwarded-for': ip })
+    )) as unknown as MockResult
     expect(result2.status).toBe(409)
     expect(result2.body.error).toMatchObject({ message: 'Vous avez déjà voté pour cet avis' })
   })
@@ -198,7 +209,9 @@ describe('POST /api/reviews/vote', () => {
     const result = (await POST(makePostRequest({ reviewId: REVIEW_UUID }))) as unknown as MockResult
 
     expect(result.status).toBe(429)
-    expect(result.body.error).toMatchObject({ message: 'Trop de votes, veuillez réessayer plus tard' })
+    expect(result.body.error).toMatchObject({
+      message: 'Trop de votes, veuillez réessayer plus tard',
+    })
   })
 
   it('handles null helpful_count gracefully', async () => {

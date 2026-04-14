@@ -61,10 +61,7 @@ export function renderMarkdown(text: string): React.ReactNode[] {
 // Greeting bubble: contextual proactive message
 // ---------------------------------------------------------------------------
 
-export function getGreetingMessage(
-  context: EstimationContext,
-  isReturning: boolean,
-): string {
+export function getGreetingMessage(context: EstimationContext, isReturning: boolean): string {
   const metier = context.metier.toLowerCase()
   const ville = context.ville
   const pageUrl = context.pageUrl || ''

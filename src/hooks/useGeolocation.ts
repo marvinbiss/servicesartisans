@@ -23,7 +23,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
     enableHighAccuracy = true,
     timeout = 10000,
     maximumAge = 300000, // 5 minutes cache
-    watch = false
+    watch = false,
   } = options
 
   const [state, setState] = useState<GeolocationState>({
@@ -31,7 +31,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
     longitude: null,
     accuracy: null,
     error: null,
-    loading: false
+    loading: false,
   })
 
   const [watchId, setWatchId] = useState<number | null>(null)
@@ -42,7 +42,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
       longitude: position.coords.longitude,
       accuracy: position.coords.accuracy,
       error: null,
-      loading: false
+      loading: false,
     })
   }, [])
 
@@ -51,54 +51,47 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
 
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        errorMessage = 'Vous avez refusé l\'accès à votre position. Veuillez autoriser la géolocalisation dans les paramètres de votre navigateur.'
+        errorMessage =
+          "Vous avez refusé l'accès à votre position. Veuillez autoriser la géolocalisation dans les paramètres de votre navigateur."
         break
       case error.POSITION_UNAVAILABLE:
-        errorMessage = 'Votre position n\'est pas disponible pour le moment.'
+        errorMessage = "Votre position n'est pas disponible pour le moment."
         break
       case error.TIMEOUT:
         errorMessage = 'La demande de géolocalisation a expiré. Veuillez réessayer.'
         break
     }
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       error: errorMessage,
-      loading: false
+      loading: false,
     }))
   }, [])
 
   const getLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
-        error: 'La géolocalisation n\'est pas supportée par votre navigateur',
-        loading: false
+        error: "La géolocalisation n'est pas supportée par votre navigateur",
+        loading: false,
       }))
       return
     }
 
-    setState(prev => ({ ...prev, loading: true, error: null }))
+    setState((prev) => ({ ...prev, loading: true, error: null }))
 
     const geoOptions: PositionOptions = {
       enableHighAccuracy,
       timeout,
-      maximumAge
+      maximumAge,
     }
 
     if (watch) {
-      const id = navigator.geolocation.watchPosition(
-        handleSuccess,
-        handleError,
-        geoOptions
-      )
+      const id = navigator.geolocation.watchPosition(handleSuccess, handleError, geoOptions)
       setWatchId(id)
     } else {
-      navigator.geolocation.getCurrentPosition(
-        handleSuccess,
-        handleError,
-        geoOptions
-      )
+      navigator.geolocation.getCurrentPosition(handleSuccess, handleError, geoOptions)
     }
   }, [enableHighAccuracy, timeout, maximumAge, watch, handleSuccess, handleError])
 
@@ -120,6 +113,6 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
     ...state,
     getLocation,
     clearWatch,
-    isWatching: watchId !== null
+    isWatching: watchId !== null,
   }
 }

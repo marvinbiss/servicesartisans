@@ -75,13 +75,10 @@ export function verifyResendSignature(
 
     // Svix may send multiple signatures space-separated (versioned: "v1,<sig>")
     const signatures = svixSignature.split(' ')
-    return signatures.some(sig => {
+    return signatures.some((sig) => {
       const sigValue = sig.split(',').pop() || sig
       try {
-        return crypto.timingSafeEqual(
-          Buffer.from(expectedSignature),
-          Buffer.from(sigValue)
-        )
+        return crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(sigValue))
       } catch {
         // timingSafeEqual throws if buffers differ in length
         return false

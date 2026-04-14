@@ -7,7 +7,7 @@ import { sendSMS } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
 
 export interface SMSProspectionParams {
-  to: string  // phone_e164 format (+33...)
+  to: string // phone_e164 format (+33...)
   body: string
 }
 

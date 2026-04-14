@@ -16,7 +16,7 @@ function createTestArtisan(overrides: Partial<Artisan> = {}): Artisan {
     is_verified: false,
     services: [],
     service_prices: [],
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -26,7 +26,7 @@ describe('getDisplayName', () => {
       is_center: true,
       business_name: 'Centre de Plomberie Paris',
       first_name: 'Jean',
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Centre de Plomberie Paris')
   })
@@ -36,7 +36,7 @@ describe('getDisplayName', () => {
       is_center: false,
       business_name: 'Plomberie Dupont',
       first_name: 'Jean',
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Plomberie Dupont')
   })
@@ -45,7 +45,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: 'Jean',
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Jean Dupont')
   })
@@ -54,7 +54,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: 'Jean',
-      last_name: null
+      last_name: null,
     })
     expect(getDisplayName(artisan)).toBe('Jean')
   })
@@ -63,7 +63,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: null,
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Dupont')
   })
@@ -72,7 +72,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: null,
-      last_name: null
+      last_name: null,
     })
     expect(getDisplayName(artisan)).toBe('Artisan')
   })
@@ -81,7 +81,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: '',
-      last_name: ''
+      last_name: '',
     })
     expect(getDisplayName(artisan)).toBe('Artisan')
   })
@@ -90,7 +90,7 @@ describe('getDisplayName', () => {
     const artisan = createTestArtisan({
       business_name: null,
       first_name: '  Jean  ',
-      last_name: '  Dupont  '
+      last_name: '  Dupont  ',
     })
     // The function concatenates and trims the outer whitespace
     const result = getDisplayName(artisan)
@@ -103,7 +103,7 @@ describe('getDisplayName', () => {
       is_center: true,
       business_name: 'Mon Entreprise',
       first_name: 'Jean',
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Mon Entreprise')
   })
@@ -113,7 +113,7 @@ describe('getDisplayName', () => {
       is_center: true,
       business_name: null,
       first_name: 'Jean',
-      last_name: 'Dupont'
+      last_name: 'Dupont',
     })
     expect(getDisplayName(artisan)).toBe('Jean Dupont')
   })

@@ -51,7 +51,12 @@ export default function ProspectionDashboard() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -64,7 +69,9 @@ export default function ProspectionDashboard() {
           {channels.map((ch) => (
             <div key={ch.channel} className="bg-white rounded-lg border p-4">
               <div className="flex items-center gap-2 mb-3">
-                <span className="font-medium capitalize">{ch.channel === 'whatsapp' ? 'WhatsApp' : ch.channel.toUpperCase()}</span>
+                <span className="font-medium capitalize">
+                  {ch.channel === 'whatsapp' ? 'WhatsApp' : ch.channel.toUpperCase()}
+                </span>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">

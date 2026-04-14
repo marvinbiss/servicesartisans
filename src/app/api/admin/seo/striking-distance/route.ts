@@ -50,7 +50,10 @@ export async function GET() {
       }
 
       // Aggregate manually
-      const grouped = new Map<string, { impressions: number; clicks: number; positions: number[]; count: number }>()
+      const grouped = new Map<
+        string,
+        { impressions: number; clicks: number; positions: number[]; count: number }
+      >()
       for (const row of fallbackData || []) {
         const key = `${row.page_path}|||${row.query}`
         const existing = grouped.get(key) || { impressions: 0, clicks: 0, positions: [], count: 0 }
@@ -71,9 +74,8 @@ export async function GET() {
             avg_position: Math.round(avgPos * 100) / 100,
             total_impressions: val.impressions,
             total_clicks: val.clicks,
-            ctr_percent: val.impressions > 0
-              ? Math.round((val.clicks / val.impressions) * 10000) / 100
-              : 0,
+            ctr_percent:
+              val.impressions > 0 ? Math.round((val.clicks / val.impressions) * 10000) / 100 : 0,
           }
         })
         .filter((r) => r.avg_position >= 4 && r.avg_position <= 10 && r.total_impressions > 20)

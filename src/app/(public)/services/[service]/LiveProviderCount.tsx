@@ -18,8 +18,8 @@ export default function LiveProviderCount({
   useEffect(() => {
     if (initialCount > 0 || !serviceSlug) return
     fetch(`/api/providers/listing?service=${serviceSlug}&limit=1`)
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
         if (typeof data?.totalCount === 'number' && data.totalCount > 0) {
           setCount(data.totalCount)
         }
@@ -27,9 +27,5 @@ export default function LiveProviderCount({
       .catch(() => {})
   }, [initialCount, serviceSlug])
 
-  return (
-    <span className={className}>
-      {count > 0 ? count.toLocaleString('fr-FR') : '—'}
-    </span>
-  )
+  return <span className={className}>{count > 0 ? count.toLocaleString('fr-FR') : '—'}</span>
 }

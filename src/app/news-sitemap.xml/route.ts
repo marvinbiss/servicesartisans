@@ -47,9 +47,7 @@ ${urls.join('\n')}
 
   // Last-Modified = date du dernier article récent (Google utilise cet en-tête
   // pour décider d'un HTTP 304 Not Modified et économiser des ressources côté serveur).
-  const lastModified = recentArticles[0]
-    ? new Date(recentArticles[0].date)
-    : new Date()
+  const lastModified = recentArticles[0] ? new Date(recentArticles[0].date) : new Date()
 
   return new Response(xml, {
     headers: {

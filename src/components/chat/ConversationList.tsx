@@ -47,9 +47,7 @@ export function ConversationList({
     const convAny = conv as unknown as Record<string, unknown>
     const providerData = convAny.provider as { name?: string } | undefined
     const clientData = convAny.client as { full_name?: string } | undefined
-    const displayName = userType === 'client'
-      ? providerData?.name
-      : clientData?.full_name
+    const displayName = userType === 'client' ? providerData?.name : clientData?.full_name
     return displayName?.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
@@ -95,9 +93,7 @@ export function ConversationList({
           <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400 p-4">
             <MessageSquare className="w-12 h-12 mb-4 opacity-50" />
             <p className="text-center">
-              {searchQuery
-                ? 'Aucune conversation trouvée'
-                : 'Aucune conversation pour le moment'}
+              {searchQuery ? 'Aucune conversation trouvée' : 'Aucune conversation pour le moment'}
             </p>
           </div>
         ) : (
@@ -106,9 +102,7 @@ export function ConversationList({
               const convAny = conversation as unknown as Record<string, unknown>
               const providerData = convAny.provider as { id?: string; name?: string } | undefined
               const clientData = convAny.client as { id?: string; full_name?: string } | undefined
-              const name = userType === 'client'
-                ? providerData?.name
-                : clientData?.full_name
+              const name = userType === 'client' ? providerData?.name : clientData?.full_name
               // avatar_url was dropped from providers; not reliably available
               const avatar: string | undefined = undefined
 
@@ -169,8 +163,8 @@ export function ConversationList({
                       {conversation.booking_id
                         ? 'Réservation en cours'
                         : conversation.quote_id
-                        ? 'Demande de devis'
-                        : 'Conversation'}
+                          ? 'Demande de devis'
+                          : 'Conversation'}
                     </p>
                   </div>
                 </button>

@@ -18,7 +18,9 @@ const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => {
     body,
     status: init?.status ?? 200,
     headers: {
-      set: (key: string, value: string) => { capturedHeaders[key] = value },
+      set: (key: string, value: string) => {
+        capturedHeaders[key] = value
+      },
     },
   }
   return resp
@@ -97,9 +99,7 @@ function createProviderQueryBuilder(): Record<string, unknown> {
   }
 
   // Make builder thenable — await resolves with the mock result
-  ;(builder as Record<string, unknown>).then = (
-    resolve: (v: unknown) => unknown,
-  ) => {
+  ;(builder as Record<string, unknown>).then = (resolve: (v: unknown) => unknown) => {
     return resolve({
       data: mockQueryResult.data ?? null,
       error: mockQueryResult.error ?? null,
@@ -127,7 +127,12 @@ vi.mock('@/lib/supabase/admin', () => ({
 // --- Admin auth mock ---
 let mockAuthResult: {
   success: boolean
-  admin?: { id: string; email: string; role: string; permissions: Record<string, Record<string, boolean>> }
+  admin?: {
+    id: string
+    email: string
+    role: string
+    permissions: Record<string, Record<string, boolean>>
+  }
   error?: unknown
 }
 
@@ -173,9 +178,7 @@ function sampleProvider(overrides: Record<string, unknown> = {}) {
     rating_average: 4.5,
     review_count: 12,
     created_at: '2026-01-15T10:00:00Z',
-    provider_services: [
-      { service: { name: 'Plomberie', slug: 'plomberie' } },
-    ],
+    provider_services: [{ service: { name: 'Plomberie', slug: 'plomberie' } }],
     ...overrides,
   }
 }
@@ -225,9 +228,7 @@ describe('GET /api/admin/providers', () => {
     const { GET } = await import('@/app/api/admin/providers/route')
     const result = await GET(createMockRequest() as never)
 
-    expect(result).toEqual(
-      expect.objectContaining({ status: 401 })
-    )
+    expect(result).toEqual(expect.objectContaining({ status: 401 }))
   })
 
   // ------------------------------------------
@@ -235,7 +236,9 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('returns providers list on success', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as { body: Record<string, unknown> }
+    const result = (await GET(createMockRequest() as never)) as unknown as {
+      body: Record<string, unknown>
+    }
 
     expect(result.body).toHaveProperty('success', true)
     expect(result.body).toHaveProperty('providers')
@@ -251,7 +254,9 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 55 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '3', limit: '10' }) as never) as unknown as {
+    const result = (await GET(
+      createMockRequest({ page: '3', limit: '10' }) as never
+    )) as unknown as {
       body: { page: number; totalPages: number; total: number }
     }
 
@@ -300,11 +305,7 @@ describe('GET /api/admin/providers', () => {
     const { GET } = await import('@/app/api/admin/providers/route')
     await GET(createMockRequest({ filter: 'suspended' }) as never)
 
-    expect(mockInCalls).toEqual(
-      expect.arrayContaining([
-        ['is_active', [false]],
-      ])
-    )
+    expect(mockInCalls).toEqual(expect.arrayContaining([['is_active', [false]]]))
     // Should not filter by is_verified
     const verifiedCalls = mockInCalls.filter(([col]) => col === 'is_verified')
     expect(verifiedCalls).toHaveLength(0)
@@ -340,7 +341,7 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('returns 400 when page is 0', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '0' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ page: '0' }) as never)) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -352,7 +353,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 when limit exceeds max (100)', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '200' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ limit: '200' }) as never)) as unknown as {
       body: { success: boolean }
       status: number
     }
@@ -372,7 +373,7 @@ describe('GET /api/admin/providers', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { success: boolean; error: { message: string; code: string } }
       status: number
     }
@@ -393,7 +394,7 @@ describe('GET /api/admin/providers', () => {
     shouldThrowOnCreate = true
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -401,10 +402,7 @@ describe('GET /api/admin/providers', () => {
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
     expect(result.body.error.message).toBe('Erreur serveur')
-    expect(mockLoggerError).toHaveBeenCalledWith(
-      'Admin providers list error',
-      expect.any(Error)
-    )
+    expect(mockLoggerError).toHaveBeenCalledWith('Admin providers list error', expect.any(Error))
   })
 
   // ------------------------------------------
@@ -412,26 +410,28 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('transforms provider data correctly', async () => {
     mockQueryResult = {
-      data: [sampleProvider({
-        name: 'Martin Électricité',
-        email: 'martin@example.com',
-        phone: '+33698765432',
-        address_city: 'Lyon',
-        address_region: 'Auvergne-Rhône-Alpes',
-        is_verified: false,
-        is_active: true,
-        rating_average: 3.8,
-        review_count: 7,
-        source: 'scraping',
-        siret: '98765432109876',
-        specialty: 'Électricité',
-      })],
+      data: [
+        sampleProvider({
+          name: 'Martin Électricité',
+          email: 'martin@example.com',
+          phone: '+33698765432',
+          address_city: 'Lyon',
+          address_region: 'Auvergne-Rhône-Alpes',
+          is_verified: false,
+          is_active: true,
+          rating_average: 3.8,
+          review_count: 7,
+          source: 'scraping',
+          siret: '98765432109876',
+          specialty: 'Électricité',
+        }),
+      ],
       error: null,
       count: 1,
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { providers: Array<Record<string, unknown>> }
     }
 
@@ -476,7 +476,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 40 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '20' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ limit: '20' }) as never)) as unknown as {
       body: { totalPages: number }
     }
 
@@ -487,7 +487,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 41 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '20' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ limit: '20' }) as never)) as unknown as {
       body: { totalPages: number }
     }
 
@@ -498,7 +498,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { totalPages: number; total: number }
     }
 
@@ -513,8 +513,14 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
-      body: { success: boolean; providers: unknown[]; total: number; page: number; totalPages: number }
+    const result = (await GET(createMockRequest() as never)) as unknown as {
+      body: {
+        success: boolean
+        providers: unknown[]
+        total: number
+        page: number
+        totalPages: number
+      }
     }
 
     expect(result.body.success).toBe(true)
@@ -528,7 +534,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: null, error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { providers: unknown[] }
     }
 
@@ -578,7 +584,7 @@ describe('GET /api/admin/providers', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { providers: Array<Record<string, unknown>> }
     }
 
@@ -587,13 +593,15 @@ describe('GET /api/admin/providers', () => {
 
   it('defaults email and phone to empty string when null', async () => {
     mockQueryResult = {
-      data: [sampleProvider({ email: null, phone: null, address_city: null, address_region: null })],
+      data: [
+        sampleProvider({ email: null, phone: null, address_city: null, address_region: null }),
+      ],
       error: null,
       count: 1,
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { providers: Array<Record<string, unknown>> }
     }
 
@@ -613,7 +621,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 for negative page number', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '-1' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ page: '-1' }) as never)) as unknown as {
       status: number
       body: { success: boolean }
     }
@@ -624,7 +632,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 for invalid filter value', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ filter: 'bogus' }) as never) as unknown as {
+    const result = (await GET(createMockRequest({ filter: 'bogus' }) as never)) as unknown as {
       status: number
       body: { success: boolean }
     }
@@ -648,7 +656,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [sampleProvider()], error: null, count: null }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as unknown as {
+    const result = (await GET(createMockRequest() as never)) as unknown as {
       body: { total: number; totalPages: number }
     }
 

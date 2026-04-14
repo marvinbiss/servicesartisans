@@ -12,17 +12,17 @@ const faqItems: FAQItem[] = [
   {
     question: 'Est-ce vraiment gratuit ?',
     answer:
-      'Oui, le service est 100% gratuit pour les particuliers. Vous recevez des devis sans aucun frais. Ce sont les artisans qui financent le service en s\'inscrivant sur la plateforme.',
+      "Oui, le service est 100% gratuit pour les particuliers. Vous recevez des devis sans aucun frais. Ce sont les artisans qui financent le service en s'inscrivant sur la plateforme.",
   },
   {
     question: 'Comment sont sélectionnés les artisans ?',
     answer:
-      'Chaque artisan est vérifié via son numéro SIREN auprès des données officielles INSEE. Nous contrôlons l\'existence légale de l\'entreprise, son activité et sa localisation. Les avis clients permettent ensuite de garantir la qualité des prestations.',
+      "Chaque artisan est vérifié via son numéro SIREN auprès des données officielles INSEE. Nous contrôlons l'existence légale de l'entreprise, son activité et sa localisation. Les avis clients permettent ensuite de garantir la qualité des prestations.",
   },
   {
-    question: 'Suis-je obligé d\'accepter un devis ?',
+    question: "Suis-je obligé d'accepter un devis ?",
     answer:
-      'Absolument pas. Vous êtes libre de comparer les devis reçus et de choisir celui qui vous convient le mieux, ou de n\'en accepter aucun. Il n\'y a aucun engagement de votre part.',
+      "Absolument pas. Vous êtes libre de comparer les devis reçus et de choisir celui qui vous convient le mieux, ou de n'en accepter aucun. Il n'y a aucun engagement de votre part.",
   },
 ]
 

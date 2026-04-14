@@ -84,7 +84,7 @@ const errorMessages: Record<BookingErrorCode, { message: string; action?: string
   },
   UNKNOWN: {
     message: 'Une erreur inattendue est survenue.',
-    action: "Contactez le support si le problème persiste.",
+    action: 'Contactez le support si le problème persiste.',
   },
 }
 
@@ -298,7 +298,7 @@ export async function safeFetch<T>(
     if (!response.ok) {
       let errorMessage = response.statusText
       try {
-        const errorData = await response.json() as { error?: string }
+        const errorData = (await response.json()) as { error?: string }
         errorMessage = errorData.error || response.statusText
       } catch {
         // Ignore JSON parse errors

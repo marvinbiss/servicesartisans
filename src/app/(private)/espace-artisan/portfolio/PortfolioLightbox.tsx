@@ -173,12 +173,7 @@ export default function PortfolioLightbox({
                 }`}
               >
                 <Image
-                  src={
-                    item.thumbnail_url ||
-                    item.image_url ||
-                    item.after_image_url ||
-                    ''
-                  }
+                  src={item.thumbnail_url || item.image_url || item.after_image_url || ''}
                   alt={item.title}
                   fill
                   className="object-cover"

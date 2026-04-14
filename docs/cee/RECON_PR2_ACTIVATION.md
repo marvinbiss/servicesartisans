@@ -11,26 +11,26 @@
 
 ## Disponible (réutiliser)
 
-| Besoin | Chemin | Usage PR2 |
-|---|---|---|
-| Envoi email | `src/lib/email/resend.ts` | Invite artisan, relances |
-| Template email CEE | `src/lib/cee/emails.ts` | Ajouter `sendCeePartnerInvite`, `sendCeeCertificationEmail` |
-| HMAC webhook verify | `src/lib/prospection/webhook-security.ts` | Pattern pour `verifyYousignSignature` |
-| CRON_SECRET extract | `src/app/api/cron/cee-relance/route.ts` | Idem côté Yousign webhook (header alt) |
-| Admin auth | `src/lib/admin-auth.ts` | `requirePermission('cee_partners', 'write')` |
-| /espace-artisan/cee | `src/app/(private)/espace-artisan/cee/page.tsx` | Ajouter `/onboarding/*` |
-| React PDF | `@react-pdf/renderer@3.3.0` | Composant `ConventionPDF.tsx` |
-| Dispatcher devis→CEE | `src/lib/cee/dispatcher-integration.ts` | Référence pour `createCeeLead()` |
+| Besoin               | Chemin                                          | Usage PR2                                                   |
+| -------------------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| Envoi email          | `src/lib/email/resend.ts`                       | Invite artisan, relances                                    |
+| Template email CEE   | `src/lib/cee/emails.ts`                         | Ajouter `sendCeePartnerInvite`, `sendCeeCertificationEmail` |
+| HMAC webhook verify  | `src/lib/prospection/webhook-security.ts`       | Pattern pour `verifyYousignSignature`                       |
+| CRON_SECRET extract  | `src/app/api/cron/cee-relance/route.ts`         | Idem côté Yousign webhook (header alt)                      |
+| Admin auth           | `src/lib/admin-auth.ts`                         | `requirePermission('cee_partners', 'write')`                |
+| /espace-artisan/cee  | `src/app/(private)/espace-artisan/cee/page.tsx` | Ajouter `/onboarding/*`                                     |
+| React PDF            | `@react-pdf/renderer@3.3.0`                     | Composant `ConventionPDF.tsx`                               |
+| Dispatcher devis→CEE | `src/lib/cee/dispatcher-integration.ts`         | Référence pour `createCeeLead()`                            |
 
 ## Gaps (à créer)
 
-| Gap | Solution |
-|---|---|
-| SDK Yousign | HTTP direct (pas de SDK npm officiel fiable) — wrapper maison `src/lib/cee/yousign.ts` |
-| Helper IBAN encrypt | `src/lib/cee/iban-crypto.ts` — appelle `pgp_sym_encrypt` côté SQL avec `CEE_IBAN_KEY` |
-| `createCeeLead()` | `src/lib/cee/leads-service.ts` |
-| `cee_partners` perm | Ajouter à `src/types/admin.ts` + RBAC matrix |
-| Env vars | `CEE_IBAN_KEY`, `YOUSIGN_API_KEY`, `YOUSIGN_WEBHOOK_SECRET` → `.env.example` + Vercel |
+| Gap                 | Solution                                                                               |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| SDK Yousign         | HTTP direct (pas de SDK npm officiel fiable) — wrapper maison `src/lib/cee/yousign.ts` |
+| Helper IBAN encrypt | `src/lib/cee/iban-crypto.ts` — appelle `pgp_sym_encrypt` côté SQL avec `CEE_IBAN_KEY`  |
+| `createCeeLead()`   | `src/lib/cee/leads-service.ts`                                                         |
+| `cee_partners` perm | Ajouter à `src/types/admin.ts` + RBAC matrix                                           |
+| Env vars            | `CEE_IBAN_KEY`, `YOUSIGN_API_KEY`, `YOUSIGN_WEBHOOK_SECRET` → `.env.example` + Vercel  |
 
 ## Routes API PR2
 

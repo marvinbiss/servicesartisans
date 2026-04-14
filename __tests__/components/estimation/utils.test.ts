@@ -87,7 +87,11 @@ describe('shouldShowLeadForm', () => {
   })
 
   it('returns true when content contains price pattern **80\u20AC \u2014 150\u20AC**', () => {
-    expect(shouldShowLeadForm('Le prix serait entre **80\u20AC \u2014 150\u20AC** pour ce type de travaux.')).toBe(true)
+    expect(
+      shouldShowLeadForm(
+        'Le prix serait entre **80\u20AC \u2014 150\u20AC** pour ce type de travaux.'
+      )
+    ).toBe(true)
   })
 
   it('returns true when content contains price pattern with spaces **80 \u20AC \u2014 150 \u20AC**', () => {

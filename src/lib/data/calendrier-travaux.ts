@@ -44,12 +44,12 @@ export const calendrierTravaux: CalendrierMois[] = [
     ],
     travauxAEviter: [
       'Peinture extérieure (températures trop basses, humidité élevée)',
-      'Terrassement et fondations (sol gelé ou gorgé d\'eau)',
+      "Terrassement et fondations (sol gelé ou gorgé d'eau)",
       'Pose de carrelage extérieur (risque de gel avant prise complète)',
-      'Ravalement de façade (l\'enduit ne sèche pas correctement sous 5 °C)',
+      "Ravalement de façade (l'enduit ne sèche pas correctement sous 5 °C)",
     ],
     conseilDuMois:
-      "Vérifiez que vos aérations ne sont pas obstruées : une bonne ventilation est essentielle en hiver pour éviter la condensation et les moisissures, même si on est tenté de tout fermer pour garder la chaleur.",
+      'Vérifiez que vos aérations ne sont pas obstruées : une bonne ventilation est essentielle en hiver pour éviter la condensation et les moisissures, même si on est tenté de tout fermer pour garder la chaleur.',
     climatNote:
       'Températures moyennes de 2 à 7 °C. Risque de gel et de neige sur la moitié nord. Ensoleillement faible (8 h de jour). Humidité relative élevée (80-90 %).',
   },
@@ -60,7 +60,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Élagage des arbres',
         description:
-          "Février est le dernier mois idéal pour élaguer les arbres avant la reprise de la sève. Les branches mortes ou dangereuses proches de la maison ou des lignes électriques doivent être coupées par un professionnel.",
+          'Février est le dernier mois idéal pour élaguer les arbres avant la reprise de la sève. Les branches mortes ou dangereuses proches de la maison ou des lignes électriques doivent être coupées par un professionnel.',
         service: 'paysagiste',
       },
       {
@@ -76,16 +76,16 @@ export const calendrierTravaux: CalendrierMois[] = [
         service: 'isolation-thermique',
       },
       {
-        titre: 'Détection et traitement de l\'humidité',
+        titre: "Détection et traitement de l'humidité",
         description:
-          'Les taches d\'humidité et moisissures sont particulièrement visibles en hiver. Faites diagnostiquer l\'origine (infiltration, remontée capillaire, condensation) pour traiter le problème à la source avant le printemps.',
+          "Les taches d'humidité et moisissures sont particulièrement visibles en hiver. Faites diagnostiquer l'origine (infiltration, remontée capillaire, condensation) pour traiter le problème à la source avant le printemps.",
         service: 'macon',
       },
     ],
     travauxAEviter: [
       'Plantation de haies et arbustes (sol encore gelé dans le nord)',
       'Travaux de toiture en zone de montagne (neige, verglas)',
-      'Pose d\'enduit extérieur (risque de gel nocturne)',
+      "Pose d'enduit extérieur (risque de gel nocturne)",
     ],
     conseilDuMois:
       "Profitez des dernières semaines d'hiver pour purger vos radiateurs : un radiateur qui chauffe mal en haut mais reste froid en bas contient de l'air. La purge est simple et gratuite, et améliore immédiatement le confort.",
@@ -128,14 +128,14 @@ export const calendrierTravaux: CalendrierMois[] = [
     conseilDuMois:
       "C'est le moment de déposer vos demandes d'aides MaPrimeRénov' et CEE si vous prévoyez des travaux de rénovation énergétique au printemps. Les délais de traitement peuvent atteindre 4 à 6 semaines.",
     climatNote:
-      'Températures de 6 à 14 °C. Équinoxe de printemps le 20 mars. Les jours passent à 12 h. Alternance de pluie et d\'éclaircies. Dernières gelées matinales possibles.',
+      "Températures de 6 à 14 °C. Équinoxe de printemps le 20 mars. Les jours passent à 12 h. Alternance de pluie et d'éclaircies. Dernières gelées matinales possibles.",
   },
   {
     mois: 'Avril',
     slug: 'avril',
     travauxRecommandes: [
       {
-        titre: 'Isolation thermique par l\'extérieur (ITE)',
+        titre: "Isolation thermique par l'extérieur (ITE)",
         description:
           "Avril est idéal pour lancer une ITE : les températures sont douces (10-20 °C), le temps est généralement sec et l'enduit sèche dans de bonnes conditions. Le chantier sera terminé avant l'été.",
         service: 'isolation-thermique',
@@ -155,7 +155,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Traitement anti-termites et anti-capricornes',
         description:
-          "Les insectes xylophages reprennent leur activité au printemps. Faites inspecter votre charpente et vos boiseries. Un traitement préventif ou curatif protège la structure pour 10 ans.",
+          'Les insectes xylophages reprennent leur activité au printemps. Faites inspecter votre charpente et vos boiseries. Un traitement préventif ou curatif protège la structure pour 10 ans.',
         service: 'charpentier',
       },
     ],
@@ -175,7 +175,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Peinture extérieure',
         description:
-          "Mai offre les conditions idéales pour la peinture extérieure : températures stables (15-22 °C), peu de pluie et jours longs. Rafraîchissez vos volets, portails, clôtures et boiseries extérieures.",
+          'Mai offre les conditions idéales pour la peinture extérieure : températures stables (15-22 °C), peu de pluie et jours longs. Rafraîchissez vos volets, portails, clôtures et boiseries extérieures.',
         service: 'peintre',
       },
       {
@@ -187,7 +187,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Aménagement de jardin et clôture',
         description:
-          "La terre est réchauffée et les plantes reprennent. Créez vos massifs, posez votre clôture, installez un portail automatique ou aménagez un espace extérieur avant les réceptions estivales.",
+          'La terre est réchauffée et les plantes reprennent. Créez vos massifs, posez votre clôture, installez un portail automatique ou aménagez un espace extérieur avant les réceptions estivales.',
         service: 'paysagiste',
       },
       {
@@ -199,25 +199,25 @@ export const calendrierTravaux: CalendrierMois[] = [
     ],
     travauxAEviter: [
       'Couler une dalle en cas de canicule précoce (séchage trop rapide = fissures)',
-      'Planter des végétaux si la sécheresse s\'installe sans système d\'arrosage',
+      "Planter des végétaux si la sécheresse s'installe sans système d'arrosage",
     ],
     conseilDuMois:
-      "Les ponts de mai réduisent les semaines de travail. Anticipez les commandes de matériaux et confirmez les plannings avec vos artisans pour éviter les retards liés aux jours fériés.",
+      'Les ponts de mai réduisent les semaines de travail. Anticipez les commandes de matériaux et confirmez les plannings avec vos artisans pour éviter les retards liés aux jours fériés.',
     climatNote:
-      'Températures de 13 à 22 °C. Ensoleillement généreux (15 h de jour). Risque d\'orages ponctuels mais longues périodes sèches. Conditions optimales pour la plupart des travaux extérieurs.',
+      "Températures de 13 à 22 °C. Ensoleillement généreux (15 h de jour). Risque d'orages ponctuels mais longues périodes sèches. Conditions optimales pour la plupart des travaux extérieurs.",
   },
   {
     mois: 'Juin',
     slug: 'juin',
     travauxRecommandes: [
       {
-        titre: 'Construction d\'extension ou surélévation',
+        titre: "Construction d'extension ou surélévation",
         description:
           "Juin lance la haute saison de la construction. Les conditions météo sont stables, le béton sèche bien et les jours longs permettent d'avancer rapidement. Visez une livraison avant l'automne.",
         service: 'macon',
       },
       {
-        titre: 'Installation d\'une pompe à chaleur',
+        titre: "Installation d'une pompe à chaleur",
         description:
           "Installer une PAC en juin permet d'en profiter dès l'hiver suivant et de bénéficier de la fonction rafraîchissement pendant l'été. Les délais d'installation sont de 1 à 3 jours hors terrassement.",
         service: 'pompe-a-chaleur',
@@ -236,13 +236,13 @@ export const calendrierTravaux: CalendrierMois[] = [
       },
     ],
     travauxAEviter: [
-      'Pose de bitume ou d\'asphalte en cas de forte chaleur (déformation du revêtement)',
+      "Pose de bitume ou d'asphalte en cas de forte chaleur (déformation du revêtement)",
       'Travaux de plâtrerie extérieure par temps très chaud (séchage trop rapide)',
     ],
     conseilDuMois:
-      "Pensez à la protection solaire avant la canicule : stores, volets roulants, films solaires ou brise-soleil. Ces équipements réduisent la température intérieure de 5 à 10 °C et évitent le recours à la climatisation.",
+      'Pensez à la protection solaire avant la canicule : stores, volets roulants, films solaires ou brise-soleil. Ces équipements réduisent la température intérieure de 5 à 10 °C et évitent le recours à la climatisation.',
     climatNote:
-      'Températures de 16 à 27 °C. Solstice d\'été le 21 juin (16 h de jour). Risque de canicule précoce. Orages parfois violents. Ensoleillement maximal dans le sud.',
+      "Températures de 16 à 27 °C. Solstice d'été le 21 juin (16 h de jour). Risque de canicule précoce. Orages parfois violents. Ensoleillement maximal dans le sud.",
   },
   {
     mois: 'Juillet',
@@ -263,25 +263,25 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Pose de carrelage extérieur',
         description:
-          "Le temps chaud et sec de juillet est parfait pour la pose de carrelage sur terrasse ou plage de piscine. La colle et les joints sèchent rapidement. Respectez toutefois les joints de dilatation pour éviter les fissures thermiques.",
+          'Le temps chaud et sec de juillet est parfait pour la pose de carrelage sur terrasse ou plage de piscine. La colle et les joints sèchent rapidement. Respectez toutefois les joints de dilatation pour éviter les fissures thermiques.',
         service: 'carreleur',
       },
       {
         titre: 'Installation de volets roulants',
         description:
-          "Les volets roulants (surtout solaires) apportent un confort thermique immédiat en été. Pas besoin de gros travaux : les modèles en rénovation se posent en une demi-journée par fenêtre.",
+          'Les volets roulants (surtout solaires) apportent un confort thermique immédiat en été. Pas besoin de gros travaux : les modèles en rénovation se posent en une demi-journée par fenêtre.',
         service: 'menuisier',
       },
     ],
     travauxAEviter: [
       'Couler du béton par canicule (> 35 °C) sans précautions (risque de fissuration)',
-      'Pose d\'ITE avec enduit par forte chaleur (l\'enduit sèche trop vite et craquelle)',
+      "Pose d'ITE avec enduit par forte chaleur (l'enduit sèche trop vite et craquelle)",
       'Travaux de couverture aux heures les plus chaudes (sécurité des couvreurs)',
     ],
     conseilDuMois:
       "Si vous partez en vacances, coupez l'eau au compteur pour éviter un dégât des eaux pendant votre absence. Un flexible de machine à laver ou un raccord qui lâche en votre absence peut causer des milliers d'euros de dommages.",
     climatNote:
-      'Températures de 19 à 31 °C. Canicule possible (surtout dans le sud et l\'est). Orages parfois violents avec grêle. Sécheresse fréquente. Ensoleillement maximal.',
+      "Températures de 19 à 31 °C. Canicule possible (surtout dans le sud et l'est). Orages parfois violents avec grêle. Sécheresse fréquente. Ensoleillement maximal.",
   },
   {
     mois: 'Août',
@@ -320,7 +320,7 @@ export const calendrierTravaux: CalendrierMois[] = [
     conseilDuMois:
       "Beaucoup d'artisans prennent leurs congés en août. Réservez vos interventions dès juin. En revanche, les artisans qui travaillent en août sont souvent plus disponibles et réactifs : profitez-en pour les petits travaux.",
     climatNote:
-      'Températures de 18 à 30 °C. Orages de fin d\'été fréquents. Risque de sécheresse dans le sud. Les nuits commencent à rafraîchir fin août. Jours qui raccourcissent (14 h).',
+      "Températures de 18 à 30 °C. Orages de fin d'été fréquents. Risque de sécheresse dans le sud. Les nuits commencent à rafraîchir fin août. Jours qui raccourcissent (14 h).",
   },
   {
     mois: 'Septembre',
@@ -341,7 +341,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Ramonage de cheminée',
         description:
-          "Le ramonage est obligatoire au moins une fois par an (deux fois pour le bois). Septembre est le moment idéal : avant la première flambée et quand les ramoneurs ne sont pas encore débordés par la demande hivernale.",
+          'Le ramonage est obligatoire au moins une fois par an (deux fois pour le bois). Septembre est le moment idéal : avant la première flambée et quand les ramoneurs ne sont pas encore débordés par la demande hivernale.',
         service: 'chauffagiste',
       },
       {
@@ -373,11 +373,11 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Installation de poêle à bois ou granulés',
         description:
-          "Octobre est le dernier mois pour installer un poêle avant les premiers froids. Le conduit de fumée, la ventilation et le raccordement doivent être réalisés par un professionnel qualifié RGE pour les aides.",
+          'Octobre est le dernier mois pour installer un poêle avant les premiers froids. Le conduit de fumée, la ventilation et le raccordement doivent être réalisés par un professionnel qualifié RGE pour les aides.',
         service: 'chauffagiste',
       },
       {
-        titre: 'Mise hors d\'eau d\'un chantier',
+        titre: "Mise hors d'eau d'un chantier",
         description:
           "Si vous avez lancé une construction ou extension cet été, la mise hors d'eau (toiture posée) doit être achevée avant les pluies d'automne. C'est la priorité absolue pour protéger la structure pendant l'hiver.",
         service: 'couvreur',
@@ -391,20 +391,20 @@ export const calendrierTravaux: CalendrierMois[] = [
     ],
     travauxAEviter: [
       'Commencer un ravalement de façade (risque de gel nocturne dès fin octobre dans le nord)',
-      'Lancer un terrassement sans urgence (sol qui se gorge d\'eau)',
-      'Pose d\'enduit extérieur à la chaux (trop humide pour un bon séchage)',
+      "Lancer un terrassement sans urgence (sol qui se gorge d'eau)",
+      "Pose d'enduit extérieur à la chaux (trop humide pour un bon séchage)",
     ],
     conseilDuMois:
       "Programmez le désembouage de votre circuit de chauffage si vos radiateurs sont tièdes ou présentent des bruits. Les boues réduisent l'efficacité du chauffage de 15 à 40 % et accélèrent l'usure de la chaudière.",
     climatNote:
-      'Températures de 8 à 17 °C. Passage à l\'heure d\'hiver fin octobre. Pluies fréquentes, jours courts (10-11 h). Premières gelées matinales possibles dans le nord et l\'est.',
+      "Températures de 8 à 17 °C. Passage à l'heure d'hiver fin octobre. Pluies fréquentes, jours courts (10-11 h). Premières gelées matinales possibles dans le nord et l'est.",
   },
   {
     mois: 'Novembre',
     slug: 'novembre',
     travauxRecommandes: [
       {
-        titre: 'Travaux d\'intérieur (cuisine, salle de bain)',
+        titre: "Travaux d'intérieur (cuisine, salle de bain)",
         description:
           "Novembre est parfait pour les rénovations intérieures : nouvelle cuisine, salle de bain, aménagement de combles. Les artisans d'intérieur sont plus disponibles qu'au printemps et les travaux ne dépendent pas de la météo.",
         service: 'plombier',
@@ -424,17 +424,17 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Diagnostic et traitement des ponts thermiques',
         description:
-          "Les ponts thermiques sont très visibles en novembre grâce à la caméra thermique (le contraste chaud/froid est maximal). Faites réaliser une thermographie pour identifier les points faibles de votre isolation.",
+          'Les ponts thermiques sont très visibles en novembre grâce à la caméra thermique (le contraste chaud/froid est maximal). Faites réaliser une thermographie pour identifier les points faibles de votre isolation.',
         service: 'isolation-thermique',
       },
     ],
     travauxAEviter: [
       'Tout travail de maçonnerie extérieure (gel, pluie, humidité)',
-      'Peinture extérieure (conditions défavorables jusqu\'en mars)',
+      "Peinture extérieure (conditions défavorables jusqu'en mars)",
       'Construction de terrasse bois (le bois doit être posé sur un sol sec)',
     ],
     conseilDuMois:
-      "Vérifiez le bon fonctionnement de vos détecteurs de fumée (obligatoires) et de monoxyde de carbone (recommandés). Changez les piles. Les intoxications au CO augmentent fortement dès la mise en route du chauffage.",
+      'Vérifiez le bon fonctionnement de vos détecteurs de fumée (obligatoires) et de monoxyde de carbone (recommandés). Changez les piles. Les intoxications au CO augmentent fortement dès la mise en route du chauffage.',
     climatNote:
       'Températures de 4 à 11 °C. Jours courts (9 h). Brouillard et humidité. Premières neiges en altitude. Les gelées deviennent régulières dans la moitié nord.',
   },
@@ -461,7 +461,7 @@ export const calendrierTravaux: CalendrierMois[] = [
         service: 'electricien',
       },
       {
-        titre: 'Planification et devis pour l\'année suivante',
+        titre: "Planification et devis pour l'année suivante",
         description:
           "Décembre est le mois de la planification. Prenez rendez-vous avec les artisans, demandez des devis, montez vos dossiers d'aides. Les carnets de commandes se remplissent vite dès janvier.",
         service: 'macon',
@@ -476,6 +476,6 @@ export const calendrierTravaux: CalendrierMois[] = [
     conseilDuMois:
       "Pensez à vérifier votre consommation de chauffage par rapport à l'année précédente. Une hausse inexpliquée peut signaler une dégradation de l'isolation, un défaut de chaudière ou des fuites dans le circuit de chauffage.",
     climatNote:
-      'Températures de 1 à 7 °C. Jours les plus courts de l\'année (8 h). Gel fréquent, neige possible partout. Solstice d\'hiver le 21 décembre. Priorité aux travaux intérieurs.',
+      "Températures de 1 à 7 °C. Jours les plus courts de l'année (8 h). Gel fréquent, neige possible partout. Solstice d'hiver le 21 décembre. Priorité aux travaux intérieurs.",
   },
 ]

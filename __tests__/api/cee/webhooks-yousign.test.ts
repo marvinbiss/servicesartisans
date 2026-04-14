@@ -9,12 +9,10 @@ import crypto from 'crypto'
 
 const SECRET = 'test-yousign-webhook-secret-random-ok-32'
 
-const mockJsonFn = vi.fn(
-  (body: unknown, init?: { status?: number }) => ({
-    body,
-    status: init?.status ?? 200,
-  })
-)
+const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => ({
+  body,
+  status: init?.status ?? 200,
+}))
 vi.mock('next/server', () => ({
   NextResponse: {
     json: (body: unknown, init?: { status?: number }) => mockJsonFn(body, init),
@@ -116,9 +114,7 @@ describe('POST /api/webhooks/yousign', () => {
 
   it('rejects missing signature/timestamp (401)', async () => {
     const { POST } = await import('@/app/api/webhooks/yousign/route')
-    const res = (await POST(
-      makeRequest('{}') as never
-    )) as unknown as MockResult
+    const res = (await POST(makeRequest('{}') as never)) as unknown as MockResult
     expect(res.status).toBe(401)
   })
 

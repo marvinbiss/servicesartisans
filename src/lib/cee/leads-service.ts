@@ -97,7 +97,10 @@ const CeeLeadInputSchema = z.object({
     .string()
     .regex(/^\+[1-9][0-9]{6,14}$/)
     .nullish(),
-  code_postal: z.string().regex(/^[0-9]{5}$/).nullish(),
+  code_postal: z
+    .string()
+    .regex(/^[0-9]{5}$/)
+    .nullish(),
   ville: z.string().max(100).nullish(),
   zone_climatique: z.enum(['H1', 'H2', 'H3']).nullish(),
   operation_code: z.string().max(20).nullish(),
@@ -283,10 +286,7 @@ export async function createCeePartner(
 /**
  * Vérifie si une transition de status est autorisée.
  */
-export function canTransition(
-  from: CeePartnerStatus,
-  to: CeePartnerStatus
-): boolean {
+export function canTransition(from: CeePartnerStatus, to: CeePartnerStatus): boolean {
   return PARTNER_TRANSITIONS[from]?.includes(to) ?? false
 }
 
@@ -321,9 +321,7 @@ export async function updateCeePartnerStatus(
   }
 
   if (!canTransition(currentStatus, newStatus)) {
-    throw new Error(
-      `Transition interdite: ${currentStatus} → ${newStatus}`
-    )
+    throw new Error(`Transition interdite: ${currentStatus} → ${newStatus}`)
   }
 
   const now = new Date().toISOString()

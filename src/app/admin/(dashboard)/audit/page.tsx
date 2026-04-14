@@ -1,15 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  Shield,
-  ChevronLeft,
-  ChevronRight,
-  User,
-  FileText,
-  Loader2,
-  Activity,
-} from 'lucide-react'
+import { Shield, ChevronLeft, ChevronRight, User, FileText, Loader2, Activity } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { StatCard } from '@/components/dashboard/StatCard'
 import type { LeadEventType } from '@/types/leads'
@@ -55,18 +47,18 @@ const ENTITY_TYPES = [
 ]
 
 const eventTypeLabels: Record<string, string> = {
-  'created': 'Créé',
-  'dispatched': 'Distribué',
-  'viewed': 'Consulté',
-  'quoted': 'Devis envoyé',
-  'declined': 'Refusé',
-  'accepted': 'Accepté',
-  'completed': 'Terminé',
-  'cancelled': 'Annulé',
-  'expired': 'Expiré',
-  'pending': 'En attente',
-  'reassigned': 'Réassigné',
-  'refused': 'Refusé',
+  created: 'Créé',
+  dispatched: 'Distribué',
+  viewed: 'Consulté',
+  quoted: 'Devis envoyé',
+  declined: 'Refusé',
+  accepted: 'Accepté',
+  completed: 'Terminé',
+  cancelled: 'Annulé',
+  expired: 'Expiré',
+  pending: 'En attente',
+  reassigned: 'Réassigné',
+  refused: 'Refusé',
 }
 
 type AuditTab = 'audit_logs' | 'lead_events'
@@ -139,7 +131,13 @@ export default function AdminAuditPage() {
           const data = await response.json()
           // Map lead_assignments to LeadEvent shape
           const assignments: LeadEvent[] = (data.assignments || []).map(
-            (a: { id: string; lead_id: string; provider_id: string | null; status: string; assigned_at: string }) => ({
+            (a: {
+              id: string
+              lead_id: string
+              provider_id: string | null
+              status: string
+              assigned_at: string
+            }) => ({
               id: a.id,
               lead_id: a.lead_id,
               provider_id: a.provider_id ?? null,
@@ -150,7 +148,8 @@ export default function AdminAuditPage() {
             })
           )
           setLeadEvents(assignments)
-          const stats: { pending: number; viewed: number; quoted: number; total: number } = data.stats || {}
+          const stats: { pending: number; viewed: number; quoted: number; total: number } =
+            data.stats || {}
           setEventsTotal(stats.total || 0)
           setEventsTotalPages(Math.ceil((stats.total || 0) / 20) || 1)
           // Build type counts from stats
@@ -171,15 +170,21 @@ export default function AdminAuditPage() {
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleString('fr-FR', {
-      day: '2-digit', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
     })
   }
 
   const getActionBadge = (action: string) => {
     if (action.includes('create')) return <StatusBadge variant="success">Création</StatusBadge>
-    if (action.includes('update') || action.includes('change')) return <StatusBadge variant="info">Modification</StatusBadge>
-    if (action.includes('delete') || action.includes('cancel')) return <StatusBadge variant="error">Suppression</StatusBadge>
+    if (action.includes('update') || action.includes('change'))
+      return <StatusBadge variant="info">Modification</StatusBadge>
+    if (action.includes('delete') || action.includes('cancel'))
+      return <StatusBadge variant="error">Suppression</StatusBadge>
     if (action.includes('ban')) return <StatusBadge variant="error">Ban</StatusBadge>
     if (action.includes('refund')) return <StatusBadge variant="warning">Remboursement</StatusBadge>
     return <StatusBadge variant="default">Action</StatusBadge>
@@ -229,7 +234,9 @@ export default function AdminAuditPage() {
           <button
             onClick={() => setActiveTab('lead_events')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'lead_events' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              activeTab === 'lead_events'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Activity className="w-4 h-4 inline mr-1.5" />
@@ -238,7 +245,9 @@ export default function AdminAuditPage() {
           <button
             onClick={() => setActiveTab('audit_logs')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'audit_logs' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              activeTab === 'audit_logs'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Shield className="w-4 h-4 inline mr-1.5" />
@@ -253,24 +262,36 @@ export default function AdminAuditPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => { setEventTypeFilter(''); setEventsPage(1) }}
+                  onClick={() => {
+                    setEventTypeFilter('')
+                    setEventsPage(1)
+                  }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    !eventTypeFilter ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    !eventTypeFilter
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
                   Tous ({totalEventsAll})
                 </button>
-                {Object.entries(eventTypeCounts).sort((a, b) => b[1] - a[1]).map(([type, count]) => (
-                  <button
-                    key={type}
-                    onClick={() => { setEventTypeFilter(type); setEventsPage(1) }}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                      eventTypeFilter === type ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {eventTypeLabels[type] || type} ({count})
-                  </button>
-                ))}
+                {Object.entries(eventTypeCounts)
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([type, count]) => (
+                    <button
+                      key={type}
+                      onClick={() => {
+                        setEventTypeFilter(type)
+                        setEventsPage(1)
+                      }}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                        eventTypeFilter === type
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      {eventTypeLabels[type] || type} ({count})
+                    </button>
+                  ))}
               </div>
             </div>
 
@@ -281,14 +302,42 @@ export default function AdminAuditPage() {
             ) : (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Événements des leads">
+                  <table
+                    className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
+                    aria-label="Événements des leads"
+                  >
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID du lead</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l'artisan</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métadonnées</th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Date
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Type
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          ID du lead
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          ID de l'artisan
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Métadonnées
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -306,16 +355,25 @@ export default function AdminAuditPage() {
                               {formatDate(e.created_at)}
                             </td>
                             <td className="px-4 py-3">
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                e.event_type === 'created' ? 'bg-blue-100 text-blue-700' :
-                                e.event_type === 'dispatched' ? 'bg-blue-100 text-blue-700' :
-                                e.event_type === 'viewed' ? 'bg-yellow-100 text-yellow-700' :
-                                e.event_type === 'quoted' ? 'bg-green-100 text-green-700' :
-                                e.event_type === 'declined' ? 'bg-gray-100 text-gray-600' :
-                                e.event_type === 'accepted' ? 'bg-blue-100 text-blue-700' :
-                                e.event_type === 'completed' ? 'bg-green-100 text-green-800' :
-                                'bg-gray-100 text-gray-600'
-                              }`}>
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  e.event_type === 'created'
+                                    ? 'bg-blue-100 text-blue-700'
+                                    : e.event_type === 'dispatched'
+                                      ? 'bg-blue-100 text-blue-700'
+                                      : e.event_type === 'viewed'
+                                        ? 'bg-yellow-100 text-yellow-700'
+                                        : e.event_type === 'quoted'
+                                          ? 'bg-green-100 text-green-700'
+                                          : e.event_type === 'declined'
+                                            ? 'bg-gray-100 text-gray-600'
+                                            : e.event_type === 'accepted'
+                                              ? 'bg-blue-100 text-blue-700'
+                                              : e.event_type === 'completed'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-gray-100 text-gray-600'
+                                }`}
+                              >
                                 {eventTypeLabels[e.event_type] || e.event_type}
                               </span>
                             </td>
@@ -379,43 +437,65 @@ export default function AdminAuditPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Type d'entité</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                    Type d'entité
+                  </label>
                   <select
                     value={entityType}
-                    onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
+                    onChange={(e) => {
+                      setEntityType(e.target.value)
+                      setLogsPage(1)
+                    }}
                     aria-label="Filtrer par type d'entité"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   >
                     {ENTITY_TYPES.map((type) => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Action</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                    Action
+                  </label>
                   <input
                     type="text"
                     value={action}
-                    onChange={(e) => { setAction(e.target.value); setLogsPage(1) }}
+                    onChange={(e) => {
+                      setAction(e.target.value)
+                      setLogsPage(1)
+                    }}
                     placeholder="ban, refund..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Début</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                    Début
+                  </label>
                   <input
                     type="date"
                     value={dateFrom}
-                    onChange={(e) => { setDateFrom(e.target.value); setLogsPage(1) }}
+                    onChange={(e) => {
+                      setDateFrom(e.target.value)
+                      setLogsPage(1)
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Fin</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                    Fin
+                  </label>
                   <input
                     type="date"
                     value={dateTo}
-                    onChange={(e) => { setDateTo(e.target.value); setLogsPage(1) }}
+                    onChange={(e) => {
+                      setDateTo(e.target.value)
+                      setLogsPage(1)
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -436,14 +516,42 @@ export default function AdminAuditPage() {
               ) : (
                 <>
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Logs d'audit administrateur">
+                    <table
+                      className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
+                      aria-label="Logs d'audit administrateur"
+                    >
                       <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/50">
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Admin</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Action</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entité</th>
-                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Détails</th>
+                          <th
+                            scope="col"
+                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          >
+                            Date
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          >
+                            Admin
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          >
+                            Action
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          >
+                            Entité
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          >
+                            Détails
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -456,7 +564,9 @@ export default function AdminAuditPage() {
                               <div className="flex items-center gap-2">
                                 <User className="w-3.5 h-3.5 text-gray-400" />
                                 <div>
-                                  <p className="text-sm text-gray-900">{log.admin?.full_name || 'Admin'}</p>
+                                  <p className="text-sm text-gray-900">
+                                    {log.admin?.full_name || 'Admin'}
+                                  </p>
                                   <p className="text-xs text-gray-400">{log.admin?.email}</p>
                                 </div>
                               </div>
@@ -466,9 +576,13 @@ export default function AdminAuditPage() {
                               <p className="text-xs text-gray-400 font-mono mt-0.5">{log.action}</p>
                             </td>
                             <td className="px-4 py-3">
-                              <p className="text-sm text-gray-700 capitalize">{log.resource_type}</p>
+                              <p className="text-sm text-gray-700 capitalize">
+                                {log.resource_type}
+                              </p>
                               {log.resource_id && (
-                                <p className="text-xs text-gray-400 font-mono">{log.resource_id.slice(0, 8)}</p>
+                                <p className="text-xs text-gray-400 font-mono">
+                                  {log.resource_id.slice(0, 8)}
+                                </p>
                               )}
                             </td>
                             <td className="px-4 py-3">

@@ -24,13 +24,23 @@ export interface ClusterLink {
   path: string
   label: string
   priority: number // 1 = highest
-  type: 'pillar' | 'tarifs' | 'devis' | 'avis' | 'urgence' | 'blog' | 'guide' | 'probleme' | 'service' | 'barometre'
+  type:
+    | 'pillar'
+    | 'tarifs'
+    | 'devis'
+    | 'avis'
+    | 'urgence'
+    | 'blog'
+    | 'guide'
+    | 'probleme'
+    | 'service'
+    | 'barometre'
 }
 
 export interface TopicalCluster {
-  service: string       // slug du service
-  serviceName: string   // nom affiche
-  pillar: string        // page pilier (ex: /services/plombier)
+  service: string // slug du service
+  serviceName: string // nom affiche
+  pillar: string // page pilier (ex: /services/plombier)
   cluster: ClusterLink[]
 }
 
@@ -39,36 +49,156 @@ export interface TopicalCluster {
 // ---------------------------------------------------------------------------
 
 const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
-  'plombier': ['prix-plombier-2026-tarifs-horaires', 'comment-choisir-son-plombier', 'fuite-eau-que-faire-urgence'],
-  'electricien': ['prix-electricien-2026-tarifs-travaux', 'comment-choisir-electricien-guide', 'electricite-normes-securite'],
-  'serrurier': ['prix-serrurier-2026-tarifs-interventions', 'comment-choisir-serrurier-conseils', 'securiser-maison-cambriolage-solutions'],
-  'chauffagiste': ['prix-chauffagiste-2026-installation-entretien', 'comment-choisir-chauffagiste-guide', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026'],
-  'peintre-en-batiment': ['prix-peintre-batiment-2026-guide-complet', 'peinture-interieure-conseils', 'renover-facade-ravalement-guide'],
-  'menuisier': ['prix-menuisier-2026-tarifs-travaux', 'comment-choisir-menuisier-guide', 'menuiseries-bois-pvc-alu-comparatif'],
-  'carreleur': ['prix-carreleur-2026-pose-fourniture', 'comment-choisir-carreleur-guide', 'guide-carrelage-salle-de-bain'],
-  'couvreur': ['prix-toiture-2026-refection-reparation-materiaux', 'comment-choisir-couvreur-guide', 'toiture-renovation-prix-2026'],
-  'macon': ['prix-macon-2026-gros-oeuvre-renovation', 'comment-choisir-macon-guide', 'agrandir-maison-extension-guide'],
-  'jardinier': ['prix-jardinier-paysagiste-2026', 'comment-choisir-jardinier-paysagiste', 'amenager-terrasse-exterieure-guide'],
-  'vitrier': ['prix-vitrier-2026-remplacement-vitrage', 'comment-choisir-vitrier-guide', 'guide-fenetre-double-vitrage'],
-  'climaticien': ['prix-climaticien-2026-installation-entretien', 'comment-choisir-climaticien-guide', 'climatisation-reversible-guide'],
-  'cuisiniste': ['prix-cuisiniste-2026-pose-cuisine', 'comment-choisir-cuisiniste-guide', 'renover-cuisine-guide-complet-etapes'],
-  'solier': ['prix-solier-revetement-sol-2026', 'comment-choisir-solier-guide', 'beton-cire-vs-resine-vs-carrelage'],
-  'nettoyage': ['prix-nettoyage-professionnel-2026', 'comment-choisir-entreprise-nettoyage', 'entretien-annuel-maison-checklist-complete'],
-  'terrassier': ['prix-extension-maison-2026', 'construire-garage-guide-permis-budget', 'permis-construire-declaration-prealable-guide'],
-  'charpentier': ['prix-toiture-2026-refection-reparation-materiaux', 'toiture-renovation-prix-2026', 'types-de-tuiles-guide'],
-  'zingueur': ['comment-choisir-zingueur-guide', 'prix-toiture-2026-refection-reparation-materiaux', 'etancheite-toiture-terrasse-solutions'],
-  'etancheiste': ['etancheite-toiture-terrasse-solutions', 'humidite-moisissure-maison-solutions', 'prix-toiture-2026-refection-reparation-materiaux'],
-  'facadier': ['prix-ravalement-facade-2026', 'renover-facade-ravalement-guide', 'types-enduit-facade'],
-  'platrier': ['plaque-de-platre-ba13-guide', 'prix-renovation-appartement-2026-budget', 'renovation-maison-par-ou-commencer'],
-  'pompe-a-chaleur': ['prix-pompe-a-chaleur-2026', 'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026', 'cumul-aides-renovation-2026-tableau'],
-  'panneaux-solaires': ['panneaux-solaires-rentabilite-2026', 'prix-panneaux-solaires-2026', 'installer-panneau-solaire-maison-2026'],
-  'isolation-thermique': ['prix-isolation-thermique-2026-tarifs', 'isolation-combles-materiaux-guide', 'cumul-aides-renovation-2026-tableau'],
-  'renovation-energetique': ['travaux-renovation-energetique-par-ou-commencer', 'dpe-obligatoire-2026-guide', 'eco-ptz-2026-conditions-montant'],
-  'salle-de-bain': ['renovation-salle-de-bain-budget-etapes', 'tendances-salle-de-bain-2026', 'prix-salle-de-bain-complete-2026'],
-  'ramoneur': ['ramonage-obligatoire-avant-hiver', 'entretien-chaudiere-annuel', 'preparer-maison-hiver-checklist'],
-  'domoticien': ['comment-choisir-domoticien-guide', 'domotique-maison-connectee-guide-debutant', 'prix-domotique-maison-2026'],
-  'borne-recharge': ['prix-borne-recharge-domicile-2026', 'electricite-normes-securite', 'domotique-maison-connectee-guide-debutant'],
-  'alarme-securite': ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions', 'domotique-maison-connectee-guide-debutant'],
+  plombier: [
+    'prix-plombier-2026-tarifs-horaires',
+    'comment-choisir-son-plombier',
+    'fuite-eau-que-faire-urgence',
+  ],
+  electricien: [
+    'prix-electricien-2026-tarifs-travaux',
+    'comment-choisir-electricien-guide',
+    'electricite-normes-securite',
+  ],
+  serrurier: [
+    'prix-serrurier-2026-tarifs-interventions',
+    'comment-choisir-serrurier-conseils',
+    'securiser-maison-cambriolage-solutions',
+  ],
+  chauffagiste: [
+    'prix-chauffagiste-2026-installation-entretien',
+    'comment-choisir-chauffagiste-guide',
+    'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026',
+  ],
+  'peintre-en-batiment': [
+    'prix-peintre-batiment-2026-guide-complet',
+    'peinture-interieure-conseils',
+    'renover-facade-ravalement-guide',
+  ],
+  menuisier: [
+    'prix-menuisier-2026-tarifs-travaux',
+    'comment-choisir-menuisier-guide',
+    'menuiseries-bois-pvc-alu-comparatif',
+  ],
+  carreleur: [
+    'prix-carreleur-2026-pose-fourniture',
+    'comment-choisir-carreleur-guide',
+    'guide-carrelage-salle-de-bain',
+  ],
+  couvreur: [
+    'prix-toiture-2026-refection-reparation-materiaux',
+    'comment-choisir-couvreur-guide',
+    'toiture-renovation-prix-2026',
+  ],
+  macon: [
+    'prix-macon-2026-gros-oeuvre-renovation',
+    'comment-choisir-macon-guide',
+    'agrandir-maison-extension-guide',
+  ],
+  jardinier: [
+    'prix-jardinier-paysagiste-2026',
+    'comment-choisir-jardinier-paysagiste',
+    'amenager-terrasse-exterieure-guide',
+  ],
+  vitrier: [
+    'prix-vitrier-2026-remplacement-vitrage',
+    'comment-choisir-vitrier-guide',
+    'guide-fenetre-double-vitrage',
+  ],
+  climaticien: [
+    'prix-climaticien-2026-installation-entretien',
+    'comment-choisir-climaticien-guide',
+    'climatisation-reversible-guide',
+  ],
+  cuisiniste: [
+    'prix-cuisiniste-2026-pose-cuisine',
+    'comment-choisir-cuisiniste-guide',
+    'renover-cuisine-guide-complet-etapes',
+  ],
+  solier: [
+    'prix-solier-revetement-sol-2026',
+    'comment-choisir-solier-guide',
+    'beton-cire-vs-resine-vs-carrelage',
+  ],
+  nettoyage: [
+    'prix-nettoyage-professionnel-2026',
+    'comment-choisir-entreprise-nettoyage',
+    'entretien-annuel-maison-checklist-complete',
+  ],
+  terrassier: [
+    'prix-extension-maison-2026',
+    'construire-garage-guide-permis-budget',
+    'permis-construire-declaration-prealable-guide',
+  ],
+  charpentier: [
+    'prix-toiture-2026-refection-reparation-materiaux',
+    'toiture-renovation-prix-2026',
+    'types-de-tuiles-guide',
+  ],
+  zingueur: [
+    'comment-choisir-zingueur-guide',
+    'prix-toiture-2026-refection-reparation-materiaux',
+    'etancheite-toiture-terrasse-solutions',
+  ],
+  etancheiste: [
+    'etancheite-toiture-terrasse-solutions',
+    'humidite-moisissure-maison-solutions',
+    'prix-toiture-2026-refection-reparation-materiaux',
+  ],
+  facadier: [
+    'prix-ravalement-facade-2026',
+    'renover-facade-ravalement-guide',
+    'types-enduit-facade',
+  ],
+  platrier: [
+    'plaque-de-platre-ba13-guide',
+    'prix-renovation-appartement-2026-budget',
+    'renovation-maison-par-ou-commencer',
+  ],
+  'pompe-a-chaleur': [
+    'prix-pompe-a-chaleur-2026',
+    'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026',
+    'cumul-aides-renovation-2026-tableau',
+  ],
+  'panneaux-solaires': [
+    'panneaux-solaires-rentabilite-2026',
+    'prix-panneaux-solaires-2026',
+    'installer-panneau-solaire-maison-2026',
+  ],
+  'isolation-thermique': [
+    'prix-isolation-thermique-2026-tarifs',
+    'isolation-combles-materiaux-guide',
+    'cumul-aides-renovation-2026-tableau',
+  ],
+  'renovation-energetique': [
+    'travaux-renovation-energetique-par-ou-commencer',
+    'dpe-obligatoire-2026-guide',
+    'eco-ptz-2026-conditions-montant',
+  ],
+  'salle-de-bain': [
+    'renovation-salle-de-bain-budget-etapes',
+    'tendances-salle-de-bain-2026',
+    'prix-salle-de-bain-complete-2026',
+  ],
+  ramoneur: [
+    'ramonage-obligatoire-avant-hiver',
+    'entretien-chaudiere-annuel',
+    'preparer-maison-hiver-checklist',
+  ],
+  domoticien: [
+    'comment-choisir-domoticien-guide',
+    'domotique-maison-connectee-guide-debutant',
+    'prix-domotique-maison-2026',
+  ],
+  'borne-recharge': [
+    'prix-borne-recharge-domicile-2026',
+    'electricite-normes-securite',
+    'domotique-maison-connectee-guide-debutant',
+  ],
+  'alarme-securite': [
+    'securite-alarme-maison-guide-2026',
+    'securiser-maison-cambriolage-solutions',
+    'domotique-maison-connectee-guide-debutant',
+  ],
 }
 
 // ---------------------------------------------------------------------------
@@ -157,8 +287,9 @@ export function getTopicalCluster(serviceSlug: string): TopicalCluster | null {
 
   // 6. Related services (priority 5 — cross-silo, lower priority)
   // Sort by weight so gravity hubs appear first
-  const related = [...(relatedServices[serviceSlug] || [])]
-    .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
+  const related = [...(relatedServices[serviceSlug] || [])].sort(
+    (a, b) => getServiceWeight(b) - getServiceWeight(a)
+  )
   for (const relSlug of related.slice(0, 3)) {
     const relTrade = tradeContent[relSlug]
     if (relTrade) {
@@ -185,13 +316,13 @@ export function getTopicalCluster(serviceSlug: string): TopicalCluster | null {
 export function getClusterLinksForPage(
   serviceSlug: string,
   currentPath: string,
-  maxLinks: number = 8,
+  maxLinks: number = 8
 ): ClusterLink[] {
   const cluster = getTopicalCluster(serviceSlug)
   if (!cluster) return []
 
   return cluster.cluster
-    .filter(link => link.path !== currentPath)
+    .filter((link) => link.path !== currentPath)
     .sort((a, b) => a.priority - b.priority)
     .slice(0, maxLinks)
 }
@@ -202,7 +333,7 @@ export function getClusterLinksForPage(
  */
 export function getClusterLinksForArticle(
   articleSlug: string,
-  maxLinks: number = 6,
+  maxLinks: number = 6
 ): { service: string; serviceName: string; links: ClusterLink[] }[] {
   const results: { service: string; serviceName: string; links: ClusterLink[] }[] = []
 
@@ -211,7 +342,7 @@ export function getClusterLinksForArticle(
       const cluster = getTopicalCluster(serviceSlug)
       if (cluster) {
         const links = cluster.cluster
-          .filter(link => link.path !== `/blog/${articleSlug}`)
+          .filter((link) => link.path !== `/blog/${articleSlug}`)
           .sort((a, b) => a.priority - b.priority)
           .slice(0, maxLinks)
         results.push({ service: serviceSlug, serviceName: cluster.serviceName, links })
@@ -242,7 +373,7 @@ export function getServicesForArticle(articleSlug: string): string[] {
  */
 export function getClusterRelatedArticles(
   articleSlug: string,
-  maxArticles: number = 4,
+  maxArticles: number = 4
 ): { slug: string; title: string; serviceSlug: string }[] {
   const services = getServicesForArticle(articleSlug)
   const seen = new Set<string>([articleSlug])

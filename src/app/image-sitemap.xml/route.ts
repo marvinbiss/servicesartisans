@@ -38,7 +38,14 @@ export async function GET() {
 
   // 1. Homepage
   urls.push(
-    urlEntry(SITE_URL, [{ loc: heroImage.src, title: heroImage.alt, caption: 'Trouvez les meilleurs artisans en France sur ServicesArtisans — plateforme de mise en relation avec des professionnels qualifiés' }])
+    urlEntry(SITE_URL, [
+      {
+        loc: heroImage.src,
+        title: heroImage.alt,
+        caption:
+          'Trouvez les meilleurs artisans en France sur ServicesArtisans — plateforme de mise en relation avec des professionnels qualifiés',
+      },
+    ])
   )
 
   // 2. Pages de services — une image par métier
@@ -47,7 +54,11 @@ export async function GET() {
     if (img) {
       urls.push(
         urlEntry(`${SITE_URL}/services/${service.slug}`, [
-          { loc: img.src, title: img.alt, caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur ServicesArtisans` },
+          {
+            loc: img.src,
+            title: img.alt,
+            caption: `Photo de ${service.name} professionnel — trouvez un ${service.name.toLowerCase()} qualifié près de chez vous sur ServicesArtisans`,
+          },
         ])
       )
     }
@@ -61,7 +72,11 @@ export async function GET() {
       .join('-')
     urls.push(
       urlEntry(`${SITE_URL}/villes/${citySlug}`, [
-        { loc: img.src, title: img.alt, caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur ServicesArtisans` },
+        {
+          loc: img.src,
+          title: img.alt,
+          caption: `Photo de ${cityName} — trouvez des artisans qualifiés à ${cityName} sur ServicesArtisans`,
+        },
       ])
     )
   }
@@ -72,7 +87,13 @@ export async function GET() {
     const img = getBlogImage(slug, article?.category)
     const articleTitle = article?.title || slug.replace(/-/g, ' ')
     urls.push(
-      urlEntry(`${SITE_URL}/blog/${slug}`, [{ loc: img.src, title: img.alt, caption: `Illustration de l'article « ${articleTitle} » — blog ServicesArtisans` }])
+      urlEntry(`${SITE_URL}/blog/${slug}`, [
+        {
+          loc: img.src,
+          title: img.alt,
+          caption: `Illustration de l'article « ${articleTitle} » — blog ServicesArtisans`,
+        },
+      ])
     )
   }
 
@@ -80,7 +101,10 @@ export async function GET() {
   const staticPageMap: Record<string, { url: string; captionPrefix: string }> = {
     howItWorks: { url: `${SITE_URL}/comment-ca-marche`, captionPrefix: 'Comment ça marche' },
     about: { url: `${SITE_URL}/a-propos`, captionPrefix: 'À propos de ServicesArtisans' },
-    verification: { url: `${SITE_URL}/notre-processus-de-verification`, captionPrefix: 'Processus de vérification des artisans' },
+    verification: {
+      url: `${SITE_URL}/notre-processus-de-verification`,
+      captionPrefix: 'Processus de vérification des artisans',
+    },
   }
 
   for (const [key, { url: pageUrl, captionPrefix }] of Object.entries(staticPageMap)) {
@@ -89,7 +113,11 @@ export async function GET() {
       urls.push(
         urlEntry(
           pageUrl,
-          imgs.map((img) => ({ loc: img.src, title: img.alt, caption: `${captionPrefix} — ${img.alt}` }))
+          imgs.map((img) => ({
+            loc: img.src,
+            title: img.alt,
+            caption: `${captionPrefix} — ${img.alt}`,
+          }))
         )
       )
     }
@@ -114,9 +142,7 @@ ${urls.join('\n')}
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400',
-      ...(latestDate
-        ? { 'Last-Modified': latestDate.toUTCString() }
-        : {}),
+      ...(latestDate ? { 'Last-Modified': latestDate.toUTCString() } : {}),
     },
   })
 }

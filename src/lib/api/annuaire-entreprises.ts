@@ -23,13 +23,13 @@ let lastRequestTime = 0
 // ============================================
 
 export interface AnnuaireEtablissement {
-  activite_principale: string        // NAF code (e.g., '43.21A')
+  activite_principale: string // NAF code (e.g., '43.21A')
   adresse: string
   code_postal: string
   commune: string
   date_creation: string
   est_siege: boolean
-  etat_administratif: 'A' | 'F'     // A=actif, F=fermé
+  etat_administratif: 'A' | 'F' // A=actif, F=fermé
   geo_adresse: string | null
   latitude: string | null
   longitude: string | null
@@ -57,10 +57,10 @@ export interface AnnuaireEntreprise {
   date_creation: string
   date_mise_a_jour: string | null
   dirigeants: AnnuaireDirigeant[]
-  etat_administratif: 'A' | 'C'     // A=actif, C=cessé
+  etat_administratif: 'A' | 'C' // A=actif, C=cessé
   nature_juridique: string
   section_activite_principale: string
-  statut_diffusion: 'O' | 'P'       // O=diffusible, P=partiellement
+  statut_diffusion: 'O' | 'P' // O=diffusible, P=partiellement
   tranche_effectif_salarie: string | null
   annee_tranche_effectif_salarie: string | null
   caractere_employeur: 'O' | 'N' | null
@@ -134,7 +134,7 @@ async function rateLimitWait(): Promise<void> {
   const now = Date.now()
   const elapsed = now - lastRequestTime
   if (elapsed < MIN_REQUEST_INTERVAL) {
-    await new Promise(resolve => setTimeout(resolve, MIN_REQUEST_INTERVAL - elapsed))
+    await new Promise((resolve) => setTimeout(resolve, MIN_REQUEST_INTERVAL - elapsed))
   }
   lastRequestTime = Date.now()
 }
@@ -143,10 +143,7 @@ async function rateLimitWait(): Promise<void> {
 // API REQUEST
 // ============================================
 
-async function annuaireRequest<T>(
-  endpoint: string,
-  params: Record<string, string>
-): Promise<T> {
+async function annuaireRequest<T>(endpoint: string, params: Record<string, string>): Promise<T> {
   const logger = apiLogger.child({ api: 'annuaire-entreprises' })
   const start = Date.now()
 
@@ -160,7 +157,7 @@ async function annuaireRequest<T>(
       })
 
       const response = await fetch(url.toString(), {
-        headers: { 'Accept': 'application/json' },
+        headers: { Accept: 'application/json' },
       })
 
       const duration = Date.now() - start
@@ -252,9 +249,7 @@ export async function searchArtisansByNafAndDepartment(
 /**
  * Récupère une entreprise par SIREN
  */
-export async function getEntrepriseBySiren(
-  siren: string
-): Promise<AnnuaireEntreprise | null> {
+export async function getEntrepriseBySiren(siren: string): Promise<AnnuaireEntreprise | null> {
   try {
     const response = await searchEntreprises({
       q: siren,
@@ -290,12 +285,7 @@ export async function* collectAllPages(
   let totalPages = 1
 
   while (page <= totalPages) {
-    const response = await searchArtisansByNafAndDepartment(
-      codeNaf,
-      departement,
-      page,
-      25
-    )
+    const response = await searchArtisansByNafAndDepartment(codeNaf, departement, page, 25)
 
     totalPages = response.total_pages
 

@@ -73,7 +73,9 @@ export async function getCeeOperationDetails(
 
   const { data, error } = await supabase
     .from('cee_operations')
-    .select('code, nom, domaine, sous_domaine, rge_qualifications_requises, non_cumulable_avec, public_cible')
+    .select(
+      'code, nom, domaine, sous_domaine, rge_qualifications_requises, non_cumulable_avec, public_cible'
+    )
     .eq('is_active', true)
     .in('code', codes)
 

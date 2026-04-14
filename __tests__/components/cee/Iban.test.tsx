@@ -22,11 +22,7 @@ function renderIban(partnerOverrides = {}) {
   } as Parameters<typeof Iban>[0]['partner']
 
   return render(
-    <Iban
-      partner={partner}
-      onNext={mockOnNext}
-      onPartnerRefresh={mockOnPartnerRefresh}
-    />
+    <Iban partner={partner} onNext={mockOnNext} onPartnerRefresh={mockOnPartnerRefresh} />
   )
 }
 

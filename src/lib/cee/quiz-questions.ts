@@ -27,8 +27,7 @@ export const PASS_THRESHOLD = 8
 export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
   {
     id: 'q1',
-    question:
-      'Quel texte encadre les obligations du mandataire CEE depuis novembre 2023 ?',
+    question: 'Quel texte encadre les obligations du mandataire CEE depuis novembre 2023 ?',
     choices: [
       'Arrêté du 2 novembre 2023',
       'Décret du 15 décembre 2022',
@@ -39,8 +38,7 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
   },
   {
     id: 'q2',
-    question:
-      'Pour une opération BAR-TH-171 (PAC air/eau), qui signe le mandat CEE ?',
+    question: 'Pour une opération BAR-TH-171 (PAC air/eau), qui signe le mandat CEE ?',
     choices: [
       "L'artisan uniquement",
       'Le bénéficiaire (client final) avant le début des travaux',
@@ -52,7 +50,7 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
   {
     id: 'q3',
     question: "Quelle est la date limite de dépôt d'un dossier CEE après la fin des travaux ?",
-    choices: ['3 mois', '6 mois', '12 mois', "Pas de limite"],
+    choices: ['3 mois', '6 mois', '12 mois', 'Pas de limite'],
     correct: 2,
   },
   {
@@ -70,7 +68,12 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
     id: 'q5',
     question:
       'Quelle qualification RGE est nécessaire pour une opération de pompe à chaleur air/eau ?',
-    choices: ['Qualibat 5911', 'QualiPAC module CET', 'Qualifelec IRVE', 'Qualit\u2019ENR QualiBois'],
+    choices: [
+      'Qualibat 5911',
+      'QualiPAC module CET',
+      'Qualifelec IRVE',
+      'Qualit\u2019ENR QualiBois',
+    ],
     correct: 1,
   },
   {
@@ -92,7 +95,7 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
   },
   {
     id: 'q8',
-    question: "En cas de non-conformité détectée après dépôt, qui supporte la retenue ?",
+    question: 'En cas de non-conformité détectée après dépôt, qui supporte la retenue ?',
     choices: [
       'Le client',
       "L'artisan (article X de la convention mandataire)",
@@ -108,14 +111,13 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
       'En clair en base',
       'Chiffrés via pgcrypto, les 4 derniers chiffres seuls visibles',
       'Uniquement sur papier',
-      "Dans un fichier .env",
+      'Dans un fichier .env',
     ],
     correct: 1,
   },
   {
     id: 'q10',
-    question:
-      "Quel document justifie l'éligibilité précarité énergétique pour un bonus CEE ?",
+    question: "Quel document justifie l'éligibilité précarité énergétique pour un bonus CEE ?",
     choices: [
       'Avis d\u2019imposition + justificatif domicile (grille ANAH)',
       'Attestation sur l\u2019honneur seule',

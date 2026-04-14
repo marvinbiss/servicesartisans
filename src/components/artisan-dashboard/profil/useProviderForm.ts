@@ -45,7 +45,7 @@ export function useProviderForm(provider: ProviderData, fields: readonly (keyof 
   }, [])
 
   const setField = useCallback((field: keyof Provider, value: unknown) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    setFormData((prev) => ({ ...prev, [field]: value }))
     setError(null)
   }, [])
 
@@ -59,7 +59,8 @@ export function useProviderForm(provider: ProviderData, fields: readonly (keyof 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault()
       // Modern browsers ignore custom messages but still show a prompt
-      e.returnValue = 'Vous avez des modifications non sauvegardées. Voulez-vous vraiment quitter cette page ?'
+      e.returnValue =
+        'Vous avez des modifications non sauvegardées. Voulez-vous vraiment quitter cette page ?'
     }
 
     window.addEventListener('beforeunload', handleBeforeUnload)

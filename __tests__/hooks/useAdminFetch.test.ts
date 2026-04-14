@@ -103,18 +103,14 @@ describe('adminFetcher', () => {
 
   it('throws Error with message from the error response body', async () => {
     const errorBody = { error: { message: 'Accès refusé' } }
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse(errorBody, { ok: false, status: 403 })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse(errorBody, { ok: false, status: 403 }))
 
     await expect(adminFetcher!('/api/admin/secret')).rejects.toThrow('Accès refusé')
   })
 
   it('attaches the HTTP status to the thrown error', async () => {
     const errorBody = { error: { message: 'Introuvable' } }
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse(errorBody, { ok: false, status: 404 })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse(errorBody, { ok: false, status: 404 }))
 
     try {
       await adminFetcher!('/api/admin/missing')
@@ -125,9 +121,7 @@ describe('adminFetcher', () => {
   })
 
   it('falls back to "Erreur {status}" when error body has no message', async () => {
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse({}, { ok: false, status: 500 })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse({}, { ok: false, status: 500 }))
 
     await expect(adminFetcher!('/api/admin/broken')).rejects.toThrow('Erreur 500')
   })
@@ -150,10 +144,7 @@ describe('adminFetcher', () => {
 
   it('throws a timeout error when the request is aborted', async () => {
     // Simulate an AbortError coming from fetch
-    const abortError = new DOMException(
-      'The operation was aborted.',
-      'AbortError'
-    )
+    const abortError = new DOMException('The operation was aborted.', 'AbortError')
     ;(fetch as Mock).mockRejectedValueOnce(abortError)
 
     await expect(adminFetcher!('/api/admin/slow')).rejects.toThrow(
@@ -165,9 +156,7 @@ describe('adminFetcher', () => {
     const networkError = new TypeError('Failed to fetch')
     ;(fetch as Mock).mockRejectedValueOnce(networkError)
 
-    await expect(adminFetcher!('/api/admin/offline')).rejects.toThrow(
-      'Failed to fetch'
-    )
+    await expect(adminFetcher!('/api/admin/offline')).rejects.toThrow('Failed to fetch')
   })
 
   // ---------------------------------------------------------------
@@ -253,9 +242,7 @@ describe('adminMutate', () => {
   })
 
   it('supports POST method', async () => {
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse({ id: 1, name: 'New Provider' })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse({ id: 1, name: 'New Provider' }))
 
     const result = await adminMutate('/api/admin/providers', {
       method: 'POST',
@@ -289,9 +276,7 @@ describe('adminMutate', () => {
 
   it('throws Error with message from the error body on non-ok response', async () => {
     const errorBody = { error: { message: 'Prestataire non trouvé' } }
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse(errorBody, { ok: false, status: 404 })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse(errorBody, { ok: false, status: 404 }))
 
     await expect(
       adminMutate('/api/admin/providers/999', {
@@ -302,9 +287,7 @@ describe('adminMutate', () => {
   })
 
   it('falls back to "Erreur {status}" when error body has no message', async () => {
-    ;(fetch as Mock).mockResolvedValueOnce(
-      mockResponse({}, { ok: false, status: 422 })
-    )
+    ;(fetch as Mock).mockResolvedValueOnce(mockResponse({}, { ok: false, status: 422 }))
 
     await expect(
       adminMutate('/api/admin/providers/1', {
@@ -319,9 +302,9 @@ describe('adminMutate', () => {
       mockResponse({ error: null }, { ok: false, status: 500 })
     )
 
-    await expect(
-      adminMutate('/api/admin/providers/1', { method: 'DELETE' })
-    ).rejects.toThrow('Erreur 500')
+    await expect(adminMutate('/api/admin/providers/1', { method: 'DELETE' })).rejects.toThrow(
+      'Erreur 500'
+    )
   })
 
   // ---------------------------------------------------------------
@@ -329,10 +312,7 @@ describe('adminMutate', () => {
   // ---------------------------------------------------------------
 
   it('throws a timeout error when the request is aborted', async () => {
-    const abortError = new DOMException(
-      'The operation was aborted.',
-      'AbortError'
-    )
+    const abortError = new DOMException('The operation was aborted.', 'AbortError')
     ;(fetch as Mock).mockRejectedValueOnce(abortError)
 
     await expect(
@@ -375,9 +355,7 @@ describe('adminMutate', () => {
       mockResponse({ error: { message: 'fail' } }, { ok: false, status: 500 })
     )
 
-    await adminMutate('/api/admin/fail', { method: 'POST', body: {} }).catch(
-      () => {}
-    )
+    await adminMutate('/api/admin/fail', { method: 'POST', body: {} }).catch(() => {})
 
     expect(clearSpy).toHaveBeenCalled()
     clearSpy.mockRestore()

@@ -82,15 +82,24 @@ export default function AdminRemovalRequestsPage() {
         return
       }
 
-      const result = await adminMutate<{ success: boolean; message?: string }>('/api/admin/removal-requests', {
-        method: 'PATCH',
-        body: {
-          requestId: actionModal.requestId,
-          action: actionModal.action,
-          ...(adminNotes.trim() ? { adminNotes: adminNotes.trim() } : {}),
-        },
+      const result = await adminMutate<{ success: boolean; message?: string }>(
+        '/api/admin/removal-requests',
+        {
+          method: 'PATCH',
+          body: {
+            requestId: actionModal.requestId,
+            action: actionModal.action,
+            ...(adminNotes.trim() ? { adminNotes: adminNotes.trim() } : {}),
+          },
+        }
+      )
+      setActionModal({
+        open: false,
+        requestId: '',
+        action: 'approve',
+        providerName: '',
+        requesterName: '',
       })
-      setActionModal({ open: false, requestId: '', action: 'approve', providerName: '', requesterName: '' })
       setAdminNotes('')
       if (result?.message) setActionSuccess(result.message)
       mutate()
@@ -112,11 +121,23 @@ export default function AdminRemovalRequestsPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><Clock className="w-3 h-3" /> En attente</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+            <Clock className="w-3 h-3" /> En attente
+          </span>
+        )
       case 'approved':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3" /> Approuvée</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            <CheckCircle className="w-3 h-3" /> Approuvée
+          </span>
+        )
       case 'rejected':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3" /> Rejetée</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+            <XCircle className="w-3 h-3" /> Rejetée
+          </span>
+        )
       default:
         return null
     }
@@ -145,7 +166,10 @@ export default function AdminRemovalRequestsPage() {
             <CheckCircle className="w-4 h-4" />
             <span>{actionSuccess}</span>
           </div>
-          <button onClick={() => setActionSuccess(null)} className="text-green-600 hover:text-green-800 text-sm">
+          <button
+            onClick={() => setActionSuccess(null)}
+            className="text-green-600 hover:text-green-800 text-sm"
+          >
             Fermer
           </button>
         </div>
@@ -161,7 +185,10 @@ export default function AdminRemovalRequestsPage() {
         ].map(({ value, label }) => (
           <button
             key={value}
-            onClick={() => { setFilter(value); setPage(1) }}
+            onClick={() => {
+              setFilter(value)
+              setPage(1)
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === value
                 ? 'bg-red-100 text-red-800 border border-red-200'
@@ -189,18 +216,28 @@ export default function AdminRemovalRequestsPage() {
       ) : requests.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <Trash2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">Aucune demande {filter !== 'all' ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}` : ''}</p>
+          <p className="text-gray-500 font-medium">
+            Aucune demande{' '}
+            {filter !== 'all'
+              ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}`
+              : ''}
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
           {requests.map((req) => (
-            <div key={req.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div
+              key={req.id}
+              className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between">
                 <div className="space-y-3 flex-1">
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-semibold text-gray-900">{req.provider?.name || 'Artisan inconnu'}</span>
+                    <span className="font-semibold text-gray-900">
+                      {req.provider?.name || 'Artisan inconnu'}
+                    </span>
                     {req.provider?.address_city && (
                       <span className="text-gray-500 text-sm">— {req.provider.address_city}</span>
                     )}
@@ -217,14 +254,19 @@ export default function AdminRemovalRequestsPage() {
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Mail className="w-4 h-4 text-gray-400" />
-                      <a href={`mailto:${req.requester_email}`} className="text-blue-600 hover:underline">
+                      <a
+                        href={`mailto:${req.requester_email}`}
+                        className="text-blue-600 hover:underline"
+                      >
                         {req.requester_email}
                       </a>
                     </div>
                     {req.requester_siret && (
                       <div className="flex items-center gap-2 text-sm">
                         <span className="text-gray-500">SIRET :</span>
-                        <span className="font-mono font-medium text-gray-900">{req.requester_siret}</span>
+                        <span className="font-mono font-medium text-gray-900">
+                          {req.requester_siret}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -266,26 +308,30 @@ export default function AdminRemovalRequestsPage() {
                   {req.status === 'pending' && (
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setActionModal({
-                          open: true,
-                          requestId: req.id,
-                          action: 'approve',
-                          providerName: req.provider?.name || 'Artisan',
-                          requesterName: req.requester_name,
-                        })}
+                        onClick={() =>
+                          setActionModal({
+                            open: true,
+                            requestId: req.id,
+                            action: 'approve',
+                            providerName: req.provider?.name || 'Artisan',
+                            requesterName: req.requester_name,
+                          })
+                        }
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approuver
                       </button>
                       <button
-                        onClick={() => setActionModal({
-                          open: true,
-                          requestId: req.id,
-                          action: 'reject',
-                          providerName: req.provider?.name || 'Artisan',
-                          requesterName: req.requester_name,
-                        })}
+                        onClick={() =>
+                          setActionModal({
+                            open: true,
+                            requestId: req.id,
+                            action: 'reject',
+                            providerName: req.provider?.name || 'Artisan',
+                            requesterName: req.requester_name,
+                          })
+                        }
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                       >
                         <XCircle className="w-4 h-4" />
@@ -326,13 +372,12 @@ export default function AdminRemovalRequestsPage() {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={actionModal.open}
-        onClose={() => { setActionModal({ ...actionModal, open: false }); setAdminNotes('') }}
+        onClose={() => {
+          setActionModal({ ...actionModal, open: false })
+          setAdminNotes('')
+        }}
         onConfirm={confirmAction}
-        title={
-          actionModal.action === 'approve'
-            ? 'Approuver la suppression'
-            : 'Rejeter la demande'
-        }
+        title={actionModal.action === 'approve' ? 'Approuver la suppression' : 'Rejeter la demande'}
         message={
           actionModal.action === 'approve'
             ? `Approuver la suppression de la fiche "${actionModal.providerName}" demandée par ${actionModal.requesterName} ? La fiche sera désactivée et mise en noindex.`
@@ -343,18 +388,26 @@ export default function AdminRemovalRequestsPage() {
       >
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {actionModal.action === 'reject' ? 'Motif du rejet (obligatoire)' : 'Notes admin (optionnel)'}
+            {actionModal.action === 'reject'
+              ? 'Motif du rejet (obligatoire)'
+              : 'Notes admin (optionnel)'}
           </label>
           <textarea
             value={adminNotes}
             onChange={(e) => setAdminNotes(e.target.value)}
-            placeholder={actionModal.action === 'reject' ? 'Expliquez pourquoi la demande est rejetée...' : 'Notes internes sur cette décision...'}
+            placeholder={
+              actionModal.action === 'reject'
+                ? 'Expliquez pourquoi la demande est rejetée...'
+                : 'Notes internes sur cette décision...'
+            }
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={3}
             maxLength={1000}
           />
           {actionModal.action === 'reject' && (
-            <p className="text-xs text-gray-400 mt-1">Le motif sera conservé dans le dossier de la demande.</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Le motif sera conservé dans le dossier de la demande.
+            </p>
           )}
         </div>
       </ConfirmationModal>

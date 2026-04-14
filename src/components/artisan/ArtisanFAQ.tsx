@@ -57,11 +57,7 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
                     className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-primary-400 text-white' : 'bg-sand-200 text-charcoal-500'}`}
                     aria-hidden="true"
                   >
-                    {isOpen ? (
-                      <Minus className="w-4 h-4" />
-                    ) : (
-                      <Plus className="w-4 h-4" />
-                    )}
+                    {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </div>
                 </button>
               </h3>

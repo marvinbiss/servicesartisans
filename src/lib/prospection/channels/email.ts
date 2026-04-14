@@ -30,10 +30,7 @@ export async function sendProspectionEmail(params: EmailProspectionParams): Prom
       subject: params.subject,
       html: params.html,
       text: params.text,
-      tags: [
-        { name: 'type', value: 'prospection' },
-        ...(params.tags || []),
-      ],
+      tags: [{ name: 'type', value: 'prospection' }, ...(params.tags || [])],
     })
 
     return { success: true, id: result.id }
@@ -51,15 +48,12 @@ export async function sendProspectionEmailBatch(
   emails: EmailProspectionParams[]
 ): Promise<{ sent: number; failed: number; results: EmailResult[] }> {
   try {
-    const batchParams = emails.map(e => ({
+    const batchParams = emails.map((e) => ({
       to: e.to,
       subject: e.subject,
       html: e.html,
       text: e.text,
-      tags: [
-        { name: 'type', value: 'prospection' },
-        ...(e.tags || []),
-      ],
+      tags: [{ name: 'type', value: 'prospection' }, ...(e.tags || [])],
     }))
 
     const results = await sendBatchEmails({ emails: batchParams })
@@ -67,7 +61,7 @@ export async function sendProspectionEmailBatch(
     return {
       sent: results.length,
       failed: emails.length - results.length,
-      results: results.map(r => ({ success: true, id: r.id })),
+      results: results.map((r) => ({ success: true, id: r.id })),
     }
   } catch (error) {
     logger.error('Prospection email batch error', error as Error)

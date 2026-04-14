@@ -42,11 +42,7 @@ export default function GuaranteeCards({ variant = 'grid', className = '' }: Gua
   return (
     <section aria-label="Nos garanties" className={className}>
       <ul
-        className={
-          isGrid
-            ? 'grid grid-cols-1 sm:grid-cols-2 gap-3'
-            : 'flex flex-col gap-2.5'
-        }
+        className={isGrid ? 'grid grid-cols-1 sm:grid-cols-2 gap-3' : 'flex flex-col gap-2.5'}
         role="list"
       >
         {guarantees.map((g) => (
@@ -56,12 +52,8 @@ export default function GuaranteeCards({ variant = 'grid', className = '' }: Gua
           >
             <span className="mt-0.5">{g.icon}</span>
             <div className="min-w-0">
-              <p className="font-heading text-sm font-semibold text-charcoal-900">
-                {g.title}
-              </p>
-              <p className="mt-0.5 text-xs leading-relaxed text-charcoal-500">
-                {g.description}
-              </p>
+              <p className="font-heading text-sm font-semibold text-charcoal-900">{g.title}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-charcoal-500">{g.description}</p>
             </div>
           </li>
         ))}

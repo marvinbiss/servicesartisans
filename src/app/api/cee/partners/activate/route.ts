@@ -66,10 +66,7 @@ export async function POST(request: NextRequest) {
         action: 'cee-activate-illegal',
         partnerId: partner.id,
         from: partner.status,
-        error:
-          transError instanceof Error
-            ? transError.message
-            : String(transError),
+        error: transError instanceof Error ? transError.message : String(transError),
       })
       return badRequestResponse(
         'ILLEGAL_TRANSITION',
@@ -79,8 +76,7 @@ export async function POST(request: NextRequest) {
 
     // Fail-open notification email.
     if (ctx.email) {
-      const siteUrl =
-        process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
       sendCeePartnerActivatedEmail({
         to: ctx.email,
         artisanName: ctx.email.split('@')[0],

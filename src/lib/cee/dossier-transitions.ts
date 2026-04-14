@@ -60,10 +60,7 @@ export const DOSSIER_TRANSITIONS: Record<CeeDossierV3Status, CeeDossierV3Status[
 /**
  * Vérifie si une transition est autorisée.
  */
-export function canTransitionDossier(
-  from: CeeDossierV3Status,
-  to: CeeDossierV3Status
-): boolean {
+export function canTransitionDossier(from: CeeDossierV3Status, to: CeeDossierV3Status): boolean {
   return DOSSIER_TRANSITIONS[from]?.includes(to) ?? false
 }
 
@@ -71,10 +68,7 @@ export function canTransitionDossier(
  * Asserte qu'une transition est autorisée.
  * Lève une erreur détaillée en cas de transition illégale (CWE-639).
  */
-export function assertDossierTransition(
-  from: CeeDossierV3Status,
-  to: CeeDossierV3Status
-): void {
+export function assertDossierTransition(from: CeeDossierV3Status, to: CeeDossierV3Status): void {
   if (!canTransitionDossier(from, to)) {
     throw new Error(
       `Transition dossier illégale : ${from} → ${to}. ` +

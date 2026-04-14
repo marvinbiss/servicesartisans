@@ -33,19 +33,74 @@ interface FormData {
 // ---------------------------------------------------------------------------
 
 const SERVICE_OPTIONS: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'Installation sanitaire', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'Autre'],
-  electricien: ['Panne électrique', 'Installation', 'Mise aux normes', 'Éclairage', 'Tableau électrique', 'Autre'],
-  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte', 'Autre'],
-  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur', 'Autre'],
-  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond', 'Autre'],
+  plombier: [
+    "Fuite d'eau",
+    'Installation sanitaire',
+    'Débouchage',
+    'Chauffe-eau',
+    'Robinetterie',
+    'Autre',
+  ],
+  electricien: [
+    'Panne électrique',
+    'Installation',
+    'Mise aux normes',
+    'Éclairage',
+    'Tableau électrique',
+    'Autre',
+  ],
+  serrurier: [
+    'Porte claquée',
+    'Serrure cassée',
+    'Changement de serrure',
+    'Double de clé',
+    'Blindage de porte',
+    'Autre',
+  ],
+  chauffagiste: [
+    'Panne chaudière',
+    'Entretien chaudière',
+    'Radiateur',
+    'Plancher chauffant',
+    'Pompe à chaleur',
+    'Autre',
+  ],
+  peintre: [
+    'Peinture intérieure',
+    'Peinture extérieure',
+    'Ravalement façade',
+    'Papier peint',
+    'Plafond',
+    'Autre',
+  ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet', 'Autre'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure', 'Autre'],
-  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage', 'Autre'],
+  carreleur: [
+    'Carrelage sol',
+    'Carrelage mural',
+    'Faïence salle de bain',
+    'Terrasse extérieure',
+    'Autre',
+  ],
+  couvreur: [
+    'Fuite toiture',
+    'Rénovation toiture',
+    'Gouttière',
+    'Isolation toiture',
+    'Démoussage',
+    'Autre',
+  ],
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition', 'Autre'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture', 'Autre'],
 }
 
-const DEFAULT_SERVICES = ['Réparation', 'Installation', 'Entretien', 'Rénovation', 'Diagnostic', 'Autre']
+const DEFAULT_SERVICES = [
+  'Réparation',
+  'Installation',
+  'Entretien',
+  'Rénovation',
+  'Diagnostic',
+  'Autre',
+]
 
 const URGENCY_OPTIONS = [
   { value: 'urgent', label: 'Urgent', icon: '🔴' },
@@ -62,10 +117,9 @@ const STEP_LABELS = ['Travaux', 'Détails', 'Contact']
 
 const contactSchema = z.object({
   nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
-  telephone: z.string().refine(
-    (val) => isValidFrenchPhone(val),
-    'Numéro de téléphone français invalide'
-  ),
+  telephone: z
+    .string()
+    .refine((val) => isValidFrenchPhone(val), 'Numéro de téléphone français invalide'),
   email: z.string().email('Adresse email invalide'),
   consentement: z.literal(true, 'Vous devez accepter la politique de confidentialité'),
 })
@@ -145,21 +199,24 @@ export default function UnclaimedQuoteWizard({
 
   // ---- Handlers ----
 
-  const selectService = useCallback((service: string) => {
-    setFormData((prev) => ({ ...prev, serviceType: service }))
-    trackEvent('unclaimed_quote_service_selected', {
-      specialty: specialtySlug,
-      city: citySlug,
-      service,
-    })
-    // Auto-advance after selection
-    setTimeout(() => {
-      setDirection(1)
-      setStep(2)
-      setErrors({})
-      focusStep()
-    }, 200)
-  }, [specialtySlug, citySlug, focusStep])
+  const selectService = useCallback(
+    (service: string) => {
+      setFormData((prev) => ({ ...prev, serviceType: service }))
+      trackEvent('unclaimed_quote_service_selected', {
+        specialty: specialtySlug,
+        city: citySlug,
+        service,
+      })
+      // Auto-advance after selection
+      setTimeout(() => {
+        setDirection(1)
+        setStep(2)
+        setErrors({})
+        focusStep()
+      }, 200)
+    },
+    [specialtySlug, citySlug, focusStep]
+  )
 
   const selectUrgency = useCallback((urgency: string) => {
     setFormData((prev) => ({ ...prev, urgency }))
@@ -268,8 +325,8 @@ export default function UnclaimedQuoteWizard({
             Demande envoyée !
           </h2>
           <p className="text-charcoal-600 mb-2">
-            Un conseiller vous rappelle rapidement pour vous mettre en relation
-            avec un {specialty.toLowerCase()} qualifié à {city}.
+            Un conseiller vous rappelle rapidement pour vous mettre en relation avec un{' '}
+            {specialty.toLowerCase()} qualifié à {city}.
           </p>
           <p className="text-sm text-charcoal-400">
             Vérifiez votre boîte email ({formData.email}) et votre téléphone.
@@ -308,9 +365,7 @@ export default function UnclaimedQuoteWizard({
             <span className="text-sm font-heading font-semibold text-charcoal-600">
               Étape {step}/3
             </span>
-            <span className="text-sm font-semibold text-primary-500">
-              {Math.round(progress)}%
-            </span>
+            <span className="text-sm font-semibold text-primary-500">{Math.round(progress)}%</span>
           </div>
           <div className="relative h-2 bg-sand-200 rounded-full overflow-hidden">
             <motion.div
@@ -349,7 +404,9 @@ export default function UnclaimedQuoteWizard({
             ))}
           </div>
           {/* P1-3: aria-live for step changes */}
-          <span className="sr-only" aria-live="polite">Étape {step} sur 3</span>
+          <span className="sr-only" aria-live="polite">
+            Étape {step} sur 3
+          </span>
         </div>
 
         {/* Steps */}
@@ -486,7 +543,10 @@ export default function UnclaimedQuoteWizard({
               <div className="space-y-4">
                 {/* Nom */}
                 <div>
-                  <label htmlFor="unclaimed-nom" className="block font-heading text-sm font-semibold text-charcoal-800 mb-2">
+                  <label
+                    htmlFor="unclaimed-nom"
+                    className="block font-heading text-sm font-semibold text-charcoal-800 mb-2"
+                  >
                     Nom complet
                   </label>
                   <input
@@ -511,7 +571,10 @@ export default function UnclaimedQuoteWizard({
 
                 {/* Telephone */}
                 <div>
-                  <label htmlFor="unclaimed-telephone" className="block font-heading text-sm font-semibold text-charcoal-800 mb-2">
+                  <label
+                    htmlFor="unclaimed-telephone"
+                    className="block font-heading text-sm font-semibold text-charcoal-800 mb-2"
+                  >
                     Téléphone
                   </label>
                   <input
@@ -528,7 +591,11 @@ export default function UnclaimedQuoteWizard({
                     }`}
                   />
                   {errors.telephone && (
-                    <p id="error-unclaimed-telephone" className="text-red-500 text-xs mt-1" role="alert">
+                    <p
+                      id="error-unclaimed-telephone"
+                      className="text-red-500 text-xs mt-1"
+                      role="alert"
+                    >
                       {errors.telephone}
                     </p>
                   )}
@@ -536,7 +603,10 @@ export default function UnclaimedQuoteWizard({
 
                 {/* Email */}
                 <div>
-                  <label htmlFor="unclaimed-email" className="block font-heading text-sm font-semibold text-charcoal-800 mb-2">
+                  <label
+                    htmlFor="unclaimed-email"
+                    className="block font-heading text-sm font-semibold text-charcoal-800 mb-2"
+                  >
                     Email
                   </label>
                   <input
@@ -552,7 +622,11 @@ export default function UnclaimedQuoteWizard({
                     }`}
                   />
                   {errors.email && (
-                    <p id="error-unclaimed-email" className="text-red-500 text-xs mt-1" role="alert">
+                    <p
+                      id="error-unclaimed-email"
+                      className="text-red-500 text-xs mt-1"
+                      role="alert"
+                    >
                       {errors.email}
                     </p>
                   )}
@@ -567,14 +641,26 @@ export default function UnclaimedQuoteWizard({
                     onChange={(e) => handleInputChange('consentement', e.target.checked)}
                     className="mt-1 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-primary-400"
                   />
-                  <label htmlFor="unclaimed-consent" className="text-xs text-charcoal-500 leading-relaxed">
-                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-                    <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="text-primary-500 underline hover:text-primary-600">
+                  <label
+                    htmlFor="unclaimed-consent"
+                    className="text-xs text-charcoal-500 leading-relaxed"
+                  >
+                    J&apos;accepte que mes données soient utilisées pour traiter ma demande et me
+                    mettre en relation avec des artisans partenaires. Voir notre{' '}
+                    <a
+                      href="/confidentialite"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary-500 underline hover:text-primary-600"
+                    >
                       politique de confidentialité
-                    </a>.
+                    </a>
+                    .
                   </label>
                 </div>
-                {errors.consentement && <p className="text-red-500 text-xs -mt-2">{errors.consentement}</p>}
+                {errors.consentement && (
+                  <p className="text-red-500 text-xs -mt-2">{errors.consentement}</p>
+                )}
 
                 {/* Submit error */}
                 {errors.submit && (

@@ -31,7 +31,10 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
   const [actionError, setActionError] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
-  const [confirmModal, setConfirmModal] = useState<{ action: 'send' | 'pause'; open: boolean }>({ action: 'send', open: false })
+  const [confirmModal, setConfirmModal] = useState<{ action: 'send' | 'pause'; open: boolean }>({
+    action: 'send',
+    open: false,
+  })
 
   const fetchCampaign = useCallback(async () => {
     setError(null)
@@ -110,7 +113,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         setActionError(data.error?.message || 'Erreur')
       }
     } catch {
-      setActionError('Impossible d\'effectuer l\'action')
+      setActionError("Impossible d'effectuer l'action")
     } finally {
       setActionLoading(null)
     }
@@ -138,7 +141,10 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
     return (
       <div>
         <div className="mb-6">
-          <Link href="/admin/prospection/campaigns" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+          <Link
+            href="/admin/prospection/campaigns"
+            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          >
             <ArrowLeft className="w-4 h-4" /> Retour aux campagnes
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
@@ -152,23 +158,57 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
     )
   }
 
-  const sentPercent = campaign.total_recipients > 0
-    ? Math.round((campaign.sent_count / campaign.total_recipients) * 100)
-    : 0
+  const sentPercent =
+    campaign.total_recipients > 0
+      ? Math.round((campaign.sent_count / campaign.total_recipients) * 100)
+      : 0
 
   const statCards = [
-    { label: 'Destinataires', value: campaign.total_recipients, icon: Users, color: 'text-blue-600 bg-blue-100' },
-    { label: 'Envoyés', value: campaign.sent_count, icon: Send, color: 'text-green-600 bg-green-100' },
-    { label: 'Livrés', value: campaign.delivered_count, icon: CheckCircle, color: 'text-blue-600 bg-blue-100' },
-    { label: 'Réponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-blue-600 bg-blue-100' },
-    { label: 'Échecs', value: campaign.failed_count, icon: XCircle, color: 'text-red-600 bg-red-100' },
-    { label: 'Coût', value: `${campaign.actual_cost.toFixed(2)} €`, icon: DollarSign, color: 'text-amber-600 bg-amber-100' },
+    {
+      label: 'Destinataires',
+      value: campaign.total_recipients,
+      icon: Users,
+      color: 'text-blue-600 bg-blue-100',
+    },
+    {
+      label: 'Envoyés',
+      value: campaign.sent_count,
+      icon: Send,
+      color: 'text-green-600 bg-green-100',
+    },
+    {
+      label: 'Livrés',
+      value: campaign.delivered_count,
+      icon: CheckCircle,
+      color: 'text-blue-600 bg-blue-100',
+    },
+    {
+      label: 'Réponses',
+      value: campaign.replied_count,
+      icon: MessageSquare,
+      color: 'text-blue-600 bg-blue-100',
+    },
+    {
+      label: 'Échecs',
+      value: campaign.failed_count,
+      icon: XCircle,
+      color: 'text-red-600 bg-red-100',
+    },
+    {
+      label: 'Coût',
+      value: `${campaign.actual_cost.toFixed(2)} €`,
+      icon: DollarSign,
+      color: 'text-amber-600 bg-amber-100',
+    },
   ]
 
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/campaigns" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/campaigns"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux campagnes
         </Link>
         <div className="flex items-center gap-3">
@@ -188,11 +228,21 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
+          <button
+            onClick={() => setActionError(null)}
+            aria-label="Fermer le message d'erreur"
+            className="ml-auto"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
       {successMsg && (
-        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div
+          role="status"
+          aria-live="polite"
+          className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"
+        >
           {successMsg}
         </div>
       )}
@@ -204,7 +254,10 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             <Link
               href={`/admin/prospection/campaigns/${campaign.id}`}
               className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
-              onClick={(e) => { e.preventDefault(); setError('Éditez directement les champs sur cette page') }}
+              onClick={(e) => {
+                e.preventDefault()
+                setError('Éditez directement les champs sur cette page')
+              }}
             >
               Modifier
             </Link>
@@ -213,7 +266,8 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
               disabled={actionLoading === 'send'}
               className="flex items-center gap-1 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
             >
-              <Send className="w-4 h-4" /> {actionLoading === 'send' ? 'Lancement...' : 'Lancer la campagne'}
+              <Send className="w-4 h-4" />{' '}
+              {actionLoading === 'send' ? 'Lancement...' : 'Lancer la campagne'}
             </button>
           </>
         )}
@@ -223,7 +277,8 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             disabled={actionLoading === 'pause'}
             className="flex items-center gap-1 px-4 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50"
           >
-            <Pause className="w-4 h-4" /> {actionLoading === 'pause' ? 'Mise en pause...' : 'Mettre en pause'}
+            <Pause className="w-4 h-4" />{' '}
+            {actionLoading === 'pause' ? 'Mise en pause...' : 'Mettre en pause'}
           </button>
         )}
         {campaign.status === 'paused' && (
@@ -268,7 +323,8 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700">Progression d'envoi</span>
             <span className="text-sm text-gray-500">
-              {campaign.sent_count.toLocaleString('fr-FR')} / {campaign.total_recipients.toLocaleString('fr-FR')} ({sentPercent}%)
+              {campaign.sent_count.toLocaleString('fr-FR')} /{' '}
+              {campaign.total_recipients.toLocaleString('fr-FR')} ({sentPercent}%)
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -310,7 +366,9 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
               >
                 {campaign.list.name}
               </Link>
-              <p className="text-xs text-gray-400 mt-1">{campaign.list.contact_count.toLocaleString('fr-FR')} contacts</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {campaign.list.contact_count.toLocaleString('fr-FR')} contacts
+              </p>
             </div>
           ) : (
             <p className="text-sm text-gray-400">Aucune liste associée</p>
@@ -360,24 +418,32 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           </div>
           <div>
             <p className="text-gray-500">Créée le</p>
-            <p className="text-gray-900">{new Date(campaign.created_at).toLocaleDateString('fr-FR')}</p>
+            <p className="text-gray-900">
+              {new Date(campaign.created_at).toLocaleDateString('fr-FR')}
+            </p>
           </div>
           {campaign.started_at && (
             <div>
               <p className="text-gray-500">Lancée le</p>
-              <p className="text-gray-900">{new Date(campaign.started_at).toLocaleString('fr-FR')}</p>
+              <p className="text-gray-900">
+                {new Date(campaign.started_at).toLocaleString('fr-FR')}
+              </p>
             </div>
           )}
           {campaign.completed_at && (
             <div>
               <p className="text-gray-500">Terminée le</p>
-              <p className="text-gray-900">{new Date(campaign.completed_at).toLocaleString('fr-FR')}</p>
+              <p className="text-gray-900">
+                {new Date(campaign.completed_at).toLocaleString('fr-FR')}
+              </p>
             </div>
           )}
           {campaign.scheduled_at && (
             <div>
               <p className="text-gray-500">Planifiée le</p>
-              <p className="text-gray-900">{new Date(campaign.scheduled_at).toLocaleString('fr-FR')}</p>
+              <p className="text-gray-900">
+                {new Date(campaign.scheduled_at).toLocaleString('fr-FR')}
+              </p>
             </div>
           )}
           <div>
@@ -394,11 +460,18 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       <ConfirmationModal
         isOpen={confirmModal.open}
         onClose={() => setConfirmModal((prev) => ({ ...prev, open: false }))}
-        onConfirm={() => { setConfirmModal((prev) => ({ ...prev, open: false })); handleAction(confirmModal.action) }}
-        title={confirmModal.action === 'send' ? 'Lancer la campagne' : 'Mettre en pause la campagne'}
-        message={confirmModal.action === 'send'
-          ? 'Êtes-vous sûr de vouloir lancer cette campagne ? Les messages seront envoyés aux destinataires.'
-          : 'Êtes-vous sûr de vouloir mettre en pause cette campagne ?'}
+        onConfirm={() => {
+          setConfirmModal((prev) => ({ ...prev, open: false }))
+          handleAction(confirmModal.action)
+        }}
+        title={
+          confirmModal.action === 'send' ? 'Lancer la campagne' : 'Mettre en pause la campagne'
+        }
+        message={
+          confirmModal.action === 'send'
+            ? 'Êtes-vous sûr de vouloir lancer cette campagne ? Les messages seront envoyés aux destinataires.'
+            : 'Êtes-vous sûr de vouloir mettre en pause cette campagne ?'
+        }
         confirmText={confirmModal.action === 'send' ? 'Lancer' : 'Mettre en pause'}
         variant={confirmModal.action === 'send' ? 'warning' : 'info'}
       />

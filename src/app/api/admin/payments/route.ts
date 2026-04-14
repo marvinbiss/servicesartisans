@@ -35,7 +35,10 @@ export async function GET(request: NextRequest) {
     const result = paymentsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -124,10 +127,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
-      success: false,
-      error: { message: 'Type invalide' },
-    }, { status: 400 })
+    return NextResponse.json(
+      {
+        success: false,
+        error: { message: 'Type invalide' },
+      },
+      { status: 400 }
+    )
   } catch (error) {
     logger.error('Admin payments error', error)
     return NextResponse.json(

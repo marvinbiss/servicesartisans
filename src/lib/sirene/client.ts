@@ -121,7 +121,7 @@ export async function searchEtablissements(
   if (nafCodes.length === 1) {
     queries.push(`activitePrincipaleEtablissement:${nafCodes[0]}`)
   } else {
-    queries.push(`(${nafCodes.map(c => `activitePrincipaleEtablissement:${c}`).join(' OR ')})`)
+    queries.push(`(${nafCodes.map((c) => `activitePrincipaleEtablissement:${c}`).join(' OR ')})`)
   }
 
   // Filtrer par departement si specifie
@@ -142,15 +142,15 @@ export async function searchEtablissements(
     try {
       const response = await fetch(url.toString(), {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
         },
       })
 
       if (response.status === 429) {
         // Rate limit - attendre et reessayer
         logger.info('Rate limit atteint, attente...')
-        await new Promise(resolve => setTimeout(resolve, 60000))
+        await new Promise((resolve) => setTimeout(resolve, 60000))
         retries++
         continue
       }
@@ -172,13 +172,12 @@ export async function searchEtablissements(
         total: data.header?.total || 0,
         hasMore: debut + SIRENE_CONFIG.pageSize < (data.header?.total || 0),
       }
-
     } catch (error) {
       retries++
       if (retries >= SIRENE_CONFIG.maxRetries) {
         throw error
       }
-      await new Promise(resolve => setTimeout(resolve, SIRENE_CONFIG.retryDelay * retries))
+      await new Promise((resolve) => setTimeout(resolve, SIRENE_CONFIG.retryDelay * retries))
     }
   }
 
@@ -211,12 +210,13 @@ export function transformToProvider(etab: SireneEtablissement): {
   const periode = etab.periodesEtablissement?.[0]
 
   // Construire le nom
-  const name = ul.denominationUniteLegale
-    || ul.denominationUsuelle1UniteLegale
-    || periode?.denominationUsuelleEtablissement
-    || periode?.enseigne1Etablissement
-    || `${ul.prenomUsuelUniteLegale || ''} ${ul.nomUniteLegale || ''}`.trim()
-    || 'Entreprise'
+  const name =
+    ul.denominationUniteLegale ||
+    ul.denominationUsuelle1UniteLegale ||
+    periode?.denominationUsuelleEtablissement ||
+    periode?.enseigne1Etablissement ||
+    `${ul.prenomUsuelUniteLegale || ''} ${ul.nomUniteLegale || ''}`.trim() ||
+    'Entreprise'
 
   // Construire l'adresse
   const streetParts = [
@@ -227,9 +227,10 @@ export function transformToProvider(etab: SireneEtablissement): {
 
   // Obtenir le nombre d'employes
   const tranche = ul.trancheEffectifsUniteLegale
-  const effectif = tranche && TRANCHES_EFFECTIFS[tranche]
-    ? Math.round((TRANCHES_EFFECTIFS[tranche].min + TRANCHES_EFFECTIFS[tranche].max) / 2)
-    : null
+  const effectif =
+    tranche && TRANCHES_EFFECTIFS[tranche]
+      ? Math.round((TRANCHES_EFFECTIFS[tranche].min + TRANCHES_EFFECTIFS[tranche].max) / 2)
+      : null
 
   // Creer le slug
   const slug = name

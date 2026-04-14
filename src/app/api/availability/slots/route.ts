@@ -13,7 +13,10 @@ import { z } from 'zod'
 const slotsQuerySchema = z.object({
   artisanIds: z.string().min(1),
   days: z.coerce.number().int().min(1).max(30).optional().default(5),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  startDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
 })
 
 interface DayAvailability {
@@ -37,7 +40,10 @@ export async function GET(request: Request) {
     }
     const result = slotsQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json({ success: false, error: { message: 'Requête invalide', details: result.error.flatten() } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Requête invalide', details: result.error.flatten() } },
+        { status: 400 }
+      )
     }
     const { artisanIds: artisanIdsParam, days, startDate: startDateParam } = result.data
 

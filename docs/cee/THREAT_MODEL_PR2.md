@@ -9,16 +9,16 @@
 
 ## 1. Scope
 
-| Composant | Description |
-|---|---|
-| `POST /api/cee/partners/invite-batch` | Admin — envoi batch email Brevo aux artisans RGE |
-| `GET /api/cee/partners/me` | Artisan auth — lecture de son record `cee_artisan_partners` |
-| `POST /api/cee/partners/onboarding/iban` | Artisan auth — chiffrement IBAN via `pgp_sym_encrypt` |
-| `POST /api/cee/partners/onboarding/convention` | Artisan auth — création enveloppe Yousign |
-| `POST /api/webhooks/yousign` | Public — réception événements Yousign (HMAC obligatoire) |
-| `POST /api/cee/partners/training/quiz` | Artisan auth — soumission réponses quiz + score |
-| `POST /api/cee/partners/activate` | Admin ou auto — transition `certified → active` |
-| UI wizard 5 étapes | `/espace-artisan/cee/onboarding/*` — surface client |
+| Composant                                      | Description                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------- |
+| `POST /api/cee/partners/invite-batch`          | Admin — envoi batch email Brevo aux artisans RGE            |
+| `GET /api/cee/partners/me`                     | Artisan auth — lecture de son record `cee_artisan_partners` |
+| `POST /api/cee/partners/onboarding/iban`       | Artisan auth — chiffrement IBAN via `pgp_sym_encrypt`       |
+| `POST /api/cee/partners/onboarding/convention` | Artisan auth — création enveloppe Yousign                   |
+| `POST /api/webhooks/yousign`                   | Public — réception événements Yousign (HMAC obligatoire)    |
+| `POST /api/cee/partners/training/quiz`         | Artisan auth — soumission réponses quiz + score             |
+| `POST /api/cee/partners/activate`              | Admin ou auto — transition `certified → active`             |
+| UI wizard 5 étapes                             | `/espace-artisan/cee/onboarding/*` — surface client         |
 
 **Données sensibles** : IBAN (bytea pgcrypto), BIC, convention PDF signée, mandat CEE (rétention légale 10 ans R.221-1), score quiz, statut partenaire.
 
@@ -26,33 +26,33 @@
 
 ## 2. Threat Model STRIDE
 
-| Composant | Spoofing | Tampering | Repudiation | InfoDisclosure | DoS | ElevPrivilège |
-|---|---|---|---|---|---|---|
-| `invite-batch` | Admin JWT forgé (JWT claim `role`) | Payload Brevo injecté | Pas de log envoi | Fuite liste SIRET/email artisans | Blast 10k emails/appel | Non-admin déclenche blast |
-| `partners/me` | JWT autre artisan | — | — | Expose `iban_last4`, `bic`, statut | — | Artisan lit record d'un autre (IDOR si `user_id` mal filtré) |
-| `onboarding/iban` | JWT volé | IBAN substitué avant chiffrement | Pas de log `iban_last4` enregistré | IBAN en clair dans logs | Flood chiffrement | Modification IBAN d'un autre artisan |
-| `onboarding/convention` | JWT volé | `envelope_id` forgé en réponse | Pas de trace création enveloppe | PDF convention exposé sans auth | Flood création enveloppes Yousign (coût API) | Transition status sans quiz |
-| `webhooks/yousign` | Requête sans HMAC | Événement forgé → transition illégale | Pas d'idempotency → double traitement | — | Flood webhook → surcharge DB | Forcer `convention_signed` sans signature réelle |
-| `training/quiz` | JWT volé | Score manipulé côté client | Pas de trace tentatives | — | Flood quiz | Score 10/10 envoyé par client → auto-certify frauduleux |
-| `activate` | Admin JWT forgé | Transition `certified → active` sans pré-requis | Pas de log activation | — | — | Artisan non certifié activé |
-| UI wizard | Session hijack | IBAN affiché en clair (XSS) | — | IBAN visible dans DOM/logs front | — | Étapes wizard bypassées côté client |
+| Composant               | Spoofing                           | Tampering                                       | Repudiation                           | InfoDisclosure                     | DoS                                          | ElevPrivilège                                                |
+| ----------------------- | ---------------------------------- | ----------------------------------------------- | ------------------------------------- | ---------------------------------- | -------------------------------------------- | ------------------------------------------------------------ |
+| `invite-batch`          | Admin JWT forgé (JWT claim `role`) | Payload Brevo injecté                           | Pas de log envoi                      | Fuite liste SIRET/email artisans   | Blast 10k emails/appel                       | Non-admin déclenche blast                                    |
+| `partners/me`           | JWT autre artisan                  | —                                               | —                                     | Expose `iban_last4`, `bic`, statut | —                                            | Artisan lit record d'un autre (IDOR si `user_id` mal filtré) |
+| `onboarding/iban`       | JWT volé                           | IBAN substitué avant chiffrement                | Pas de log `iban_last4` enregistré    | IBAN en clair dans logs            | Flood chiffrement                            | Modification IBAN d'un autre artisan                         |
+| `onboarding/convention` | JWT volé                           | `envelope_id` forgé en réponse                  | Pas de trace création enveloppe       | PDF convention exposé sans auth    | Flood création enveloppes Yousign (coût API) | Transition status sans quiz                                  |
+| `webhooks/yousign`      | Requête sans HMAC                  | Événement forgé → transition illégale           | Pas d'idempotency → double traitement | —                                  | Flood webhook → surcharge DB                 | Forcer `convention_signed` sans signature réelle             |
+| `training/quiz`         | JWT volé                           | Score manipulé côté client                      | Pas de trace tentatives               | —                                  | Flood quiz                                   | Score 10/10 envoyé par client → auto-certify frauduleux      |
+| `activate`              | Admin JWT forgé                    | Transition `certified → active` sans pré-requis | Pas de log activation                 | —                                  | —                                            | Artisan non certifié activé                                  |
+| UI wizard               | Session hijack                     | IBAN affiché en clair (XSS)                     | —                                     | IBAN visible dans DOM/logs front   | —                                            | Étapes wizard bypassées côté client                          |
 
 ---
 
 ## 3. OWASP Top 10 2021 — Mapping PR2
 
-| Code | Risque | Exposition PR2 | Mitigation |
-|---|---|---|---|
-| A01 | Broken Access Control | `partners/me` sans filtre `user_id = auth.uid()` → IDOR ; `activate` accessible artisan | RLS `cee_artisan_partners_artisan_self_read` + `requirePermission('cee_partners','write')` |
-| A02 | Cryptographic Failures | `CEE_IBAN_KEY` absente → chiffrement silencieux ; concat string au lieu de bind params | Fail-close si key absente ; `pgp_sym_encrypt($1, $2)` bind strict |
-| A03 | Injection | Payload jsonb non validé dans `invite-batch` ; IBAN concaténé dans SQL | Zod validation + parameterized queries partout |
-| A04 | Insecure Design | Quiz scoring côté client possible ; status machine non miroir SQL côté app | Score calculé serveur ; `TRANSITIONS` map miroir du trigger 433 |
-| A05 | Security Misconfiguration | `CEE_IBAN_KEY` / `YOUSIGN_WEBHOOK_SECRET` absents en prod → fallback insécurisé | Fail-close obligatoire sur toutes les routes sensibles |
-| A06 | Vulnerable Components | SDK Yousign maison → surface d'erreur plus grande | Tests unitaires + replay test suite |
-| A07 | Auth Failures | Webhook Yousign public sans HMAC → elevation de privilège massive | `crypto.timingSafeEqual` + timestamp drift ≤5min |
-| A08 | Software Integrity | PDF convention généré sans hash → falsification post-signature possible | SHA-256 du PDF stocké dans `cee_artisan_partners` |
-| A09 | Logging Failures | IBAN complet loggué accidentellement ; pas de trace quiz tentatives | Logger wrapper `maskIban()` ; log systématique score + `provider_id` |
-| A10 | SSRF | `convention_pdf_url` Yousign stockée puis rechargée → SSRF si non validée | Valider schéma `https://api.yousign.app/*` avant stockage |
+| Code | Risque                    | Exposition PR2                                                                          | Mitigation                                                                                 |
+| ---- | ------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| A01  | Broken Access Control     | `partners/me` sans filtre `user_id = auth.uid()` → IDOR ; `activate` accessible artisan | RLS `cee_artisan_partners_artisan_self_read` + `requirePermission('cee_partners','write')` |
+| A02  | Cryptographic Failures    | `CEE_IBAN_KEY` absente → chiffrement silencieux ; concat string au lieu de bind params  | Fail-close si key absente ; `pgp_sym_encrypt($1, $2)` bind strict                          |
+| A03  | Injection                 | Payload jsonb non validé dans `invite-batch` ; IBAN concaténé dans SQL                  | Zod validation + parameterized queries partout                                             |
+| A04  | Insecure Design           | Quiz scoring côté client possible ; status machine non miroir SQL côté app              | Score calculé serveur ; `TRANSITIONS` map miroir du trigger 433                            |
+| A05  | Security Misconfiguration | `CEE_IBAN_KEY` / `YOUSIGN_WEBHOOK_SECRET` absents en prod → fallback insécurisé         | Fail-close obligatoire sur toutes les routes sensibles                                     |
+| A06  | Vulnerable Components     | SDK Yousign maison → surface d'erreur plus grande                                       | Tests unitaires + replay test suite                                                        |
+| A07  | Auth Failures             | Webhook Yousign public sans HMAC → elevation de privilège massive                       | `crypto.timingSafeEqual` + timestamp drift ≤5min                                           |
+| A08  | Software Integrity        | PDF convention généré sans hash → falsification post-signature possible                 | SHA-256 du PDF stocké dans `cee_artisan_partners`                                          |
+| A09  | Logging Failures          | IBAN complet loggué accidentellement ; pas de trace quiz tentatives                     | Logger wrapper `maskIban()` ; log systématique score + `provider_id`                       |
+| A10  | SSRF                      | `convention_pdf_url` Yousign stockée puis rechargée → SSRF si non validée               | Valider schéma `https://api.yousign.app/*` avant stockage                                  |
 
 ---
 
@@ -118,13 +118,13 @@
 
 ## 6. Variables d'env critiques
 
-| Var | Rôle | Fail-close prod ? | Rotation |
-|---|---|---|---|
-| `CEE_IBAN_KEY` | Clé symétrique `pgp_sym_encrypt` — chiffrement IBAN | **OUI** — exception si absent | Trimestrielle (re-chiffrement batch requis) |
-| `YOUSIGN_API_KEY` | Authentification API Yousign v3 | **OUI** — 500 si absent | Annuelle ou sur compromission |
-| `YOUSIGN_WEBHOOK_SECRET` | Vérification HMAC signature webhook | **OUI** — 500 si absent, webhook rejeté | Sur rotation côté Yousign dashboard |
-| `NEXT_PUBLIC_SITE_URL` | Validation CSRF `validateOrigin()` | Partiel — dev autorise all si absent | N/A (config) |
-| `CRON_SECRET` | Auth des crons purge RGPD | **OUI** — 401 si absent | Annuelle |
+| Var                      | Rôle                                                | Fail-close prod ?                       | Rotation                                    |
+| ------------------------ | --------------------------------------------------- | --------------------------------------- | ------------------------------------------- |
+| `CEE_IBAN_KEY`           | Clé symétrique `pgp_sym_encrypt` — chiffrement IBAN | **OUI** — exception si absent           | Trimestrielle (re-chiffrement batch requis) |
+| `YOUSIGN_API_KEY`        | Authentification API Yousign v3                     | **OUI** — 500 si absent                 | Annuelle ou sur compromission               |
+| `YOUSIGN_WEBHOOK_SECRET` | Vérification HMAC signature webhook                 | **OUI** — 500 si absent, webhook rejeté | Sur rotation côté Yousign dashboard         |
+| `NEXT_PUBLIC_SITE_URL`   | Validation CSRF `validateOrigin()`                  | Partiel — dev autorise all si absent    | N/A (config)                                |
+| `CRON_SECRET`            | Auth des crons purge RGPD                           | **OUI** — 401 si absent                 | Annuelle                                    |
 
 ---
 

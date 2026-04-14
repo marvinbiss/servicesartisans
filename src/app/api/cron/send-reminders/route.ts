@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { getNotificationService, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
+import {
+  getNotificationService,
+  type NotificationPayload,
+} from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
 
 // GET /api/cron/send-reminders - Send reminder emails for tomorrow's bookings
@@ -19,10 +22,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to send-reminders')
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
     // Calculate tomorrow's date range
@@ -35,14 +35,16 @@ export async function GET(request: Request) {
     // Fetch all confirmed bookings for tomorrow using scheduled_date (availability_slots has no FK on bookings)
     const { data: bookings, error } = await supabase
       .from('bookings')
-      .select(`
+      .select(
+        `
         id,
         service_name,
         status,
         scheduled_date,
         provider_id,
         client:profiles!client_id(full_name, email, phone_e164)
-      `)
+      `
+      )
       .eq('status', 'confirmed')
       .limit(500)
 
@@ -52,9 +54,8 @@ export async function GET(request: Request) {
     }
 
     // Filter bookings for tomorrow using scheduled_date
-    const tomorrowBookings = bookings?.filter(
-      (b) => b.scheduled_date && b.scheduled_date.startsWith(tomorrowStr)
-    ) || []
+    const tomorrowBookings =
+      bookings?.filter((b) => b.scheduled_date && b.scheduled_date.startsWith(tomorrowStr)) || []
 
     logger.info(`[Cron] Found ${tomorrowBookings.length} bookings for tomorrow`)
 
@@ -70,21 +71,24 @@ export async function GET(request: Request) {
     const { data: sentReminders } = await supabase
       .from('notification_logs')
       .select('booking_id')
-      .in('booking_id', tomorrowBookings.map((b) => b.id))
+      .in(
+        'booking_id',
+        tomorrowBookings.map((b) => b.id)
+      )
       .eq('type', 'reminder')
       .eq('status', 'sent')
 
     const sentBookingIds = new Set(sentReminders?.map((r) => r.booking_id) || [])
 
     // Filter out bookings that already received reminders
-    const bookingsToRemind = tomorrowBookings.filter(
-      (b) => !sentBookingIds.has(b.id)
-    )
+    const bookingsToRemind = tomorrowBookings.filter((b) => !sentBookingIds.has(b.id))
 
     logger.info(`[Cron] ${bookingsToRemind.length} bookings need reminders`)
 
     // Fetch artisan details for all bookings
-    const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean)))
+    const artisanIds = Array.from(
+      new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean))
+    )
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
@@ -96,12 +100,14 @@ export async function GET(request: Request) {
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
       const artisan = artisanMap.get(booking.provider_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-      const formattedDate = booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }) : ''
+      const formattedDate = booking.scheduled_date
+        ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+        : ''
 
       return {
         bookingId: booking.id,
@@ -136,9 +142,6 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     logger.error('[Cron] Error in send-reminders:', error)
-    return NextResponse.json(
-      { error: 'Échec de l\'envoi des rappels' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Échec de l'envoi des rappels" }, { status: 500 })
   }
 }

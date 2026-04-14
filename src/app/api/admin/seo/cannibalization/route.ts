@@ -29,7 +29,9 @@ export async function GET(request: Request) {
 
   let query = supabase
     .from('seo_cannibalization_pairs')
-    .select('id, query, page_a, page_b, avg_position_a, avg_position_b, total_impressions, status, resolution, detected_at, resolved_at')
+    .select(
+      'id, query, page_a, page_b, avg_position_a, avg_position_b, total_impressions, status, resolution, detected_at, resolved_at'
+    )
     .order('total_impressions', { ascending: false })
     .limit(limit)
 
@@ -45,7 +47,8 @@ export async function GET(request: Request) {
       return NextResponse.json({
         data: [],
         count: 0,
-        message: 'Table seo_cannibalization_pairs non disponible. Lancez le script cannibalization-detector.ts.',
+        message:
+          'Table seo_cannibalization_pairs non disponible. Lancez le script cannibalization-detector.ts.',
         timestamp: new Date().toISOString(),
       })
     }
@@ -68,7 +71,10 @@ export async function GET(request: Request) {
     unique_queries: queryGroups.size,
     summary: {
       total_pairs: data?.length || 0,
-      total_impressions_at_risk: (data || []).reduce((sum, r) => sum + (r.total_impressions || 0), 0),
+      total_impressions_at_risk: (data || []).reduce(
+        (sum, r) => sum + (r.total_impressions || 0),
+        0
+      ),
     },
     timestamp: new Date().toISOString(),
   })

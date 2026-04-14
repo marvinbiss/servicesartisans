@@ -27,7 +27,12 @@ function formatRelative(dateStr: string): string {
   return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
-export const LeadTable = memo(function LeadTable({ assignments, basePath, showProvider, providerNames }: LeadTableProps) {
+export const LeadTable = memo(function LeadTable({
+  assignments,
+  basePath,
+  showProvider,
+  providerNames,
+}: LeadTableProps) {
   if (assignments.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
@@ -104,12 +109,16 @@ export const LeadTable = memo(function LeadTable({ assignments, basePath, showPr
                     </td>
                   )}
                   <td className="px-4 py-3">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                    <span
+                      className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}
+                    >
                       {urg.label}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                    <span
+                      className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}
+                    >
                       {st.label}
                     </span>
                   </td>

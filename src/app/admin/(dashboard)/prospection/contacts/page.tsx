@@ -29,31 +29,34 @@ export default function ContactsPage() {
     }, 300)
   }
 
-  const fetchContacts = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true)
-    try {
-      setError(null)
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: '20',
-        type: typeFilter,
-        search: debouncedSearch,
-      })
-      const res = await fetch(`/api/admin/prospection/contacts?${params}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
-      const data = await res.json()
-      if (data.success) {
-        setContacts(data.data)
-        setTotalPages(data.pagination.totalPages)
-        setTotal(data.pagination.total)
+  const fetchContacts = useCallback(
+    async (signal?: AbortSignal) => {
+      setLoading(true)
+      try {
+        setError(null)
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: '20',
+          type: typeFilter,
+          search: debouncedSearch,
+        })
+        const res = await fetch(`/api/admin/prospection/contacts?${params}`, { signal })
+        if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+        const data = await res.json()
+        if (data.success) {
+          setContacts(data.data)
+          setTotalPages(data.pagination.totalPages)
+          setTotal(data.pagination.total)
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return
+        setError('Erreur de chargement')
+      } finally {
+        setLoading(false)
       }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
-    } finally {
-      setLoading(false)
-    }
-  }, [page, typeFilter, debouncedSearch])
+    },
+    [page, typeFilter, debouncedSearch]
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -69,10 +72,17 @@ export default function ContactsPage() {
           <p className="text-gray-500 mt-1">Gestion des contacts</p>
         </div>
         <div className="flex gap-2">
-          <button disabled title="Fonctionnalité non disponible" className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg opacity-50 cursor-not-allowed">
+          <button
+            disabled
+            title="Fonctionnalité non disponible"
+            className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg opacity-50 cursor-not-allowed"
+          >
             <Users className="w-4 h-4" /> Synchroniser les artisans
           </button>
-          <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <Link
+            href="/admin/prospection/contacts/import"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
             <Upload className="w-4 h-4" /> Importer CSV
           </Link>
         </div>
@@ -84,7 +94,12 @@ export default function ContactsPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -103,7 +118,10 @@ export default function ContactsPage() {
         </div>
         <select
           value={typeFilter}
-          onChange={(e) => { setTypeFilter(e.target.value); setPage(1) }}
+          onChange={(e) => {
+            setTypeFilter(e.target.value)
+            setPage(1)
+          }}
           aria-label="Filtrer par type de contact"
           className="border rounded-lg px-3 py-2 text-sm"
         >
@@ -120,54 +138,76 @@ export default function ContactsPage() {
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px] text-sm" aria-label="Liste des contacts de prospection">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ville</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {loading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i}>
-                  {Array.from({ length: 6 }).map((__, j) => (
-                    <td key={j} className="px-4 py-3"><div className="h-4 bg-gray-100 rounded animate-pulse" /></td>
-                  ))}
-                </tr>
-              ))
-            ) : contacts.length === 0 ? (
+          <table
+            className="w-full min-w-[700px] text-sm"
+            aria-label="Liste des contacts de prospection"
+          >
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                  <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  Aucun contact. Importez un CSV pour commencer.
-                </td>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Nom
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Type
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Email
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Téléphone
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Ville
+                </th>
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Source
+                </th>
               </tr>
-            ) : (
-              contacts.map((contact) => (
-                <tr key={contact.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">
-                    <Link href={`/admin/prospection/contacts/${contact.id}`} className="font-medium text-blue-600 hover:underline">
-                      {contact.contact_name || contact.company_name || '-'}
-                    </Link>
-                    {contact.company_name && contact.contact_name && (
-                      <div className="text-xs text-gray-400">{contact.company_name}</div>
-                    )}
+            </thead>
+            <tbody className="divide-y">
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i}>
+                    {Array.from({ length: 6 }).map((__, j) => (
+                      <td key={j} className="px-4 py-3">
+                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : contacts.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                    <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    Aucun contact. Importez un CSV pour commencer.
                   </td>
-                  <td className="px-4 py-3"><ContactTypeBadge type={contact.contact_type} /></td>
-                  <td className="px-4 py-3 text-gray-600">{contact.email || '-'}</td>
-                  <td className="px-4 py-3 text-gray-600">{contact.phone || '-'}</td>
-                  <td className="px-4 py-3 text-gray-600">{contact.city || '-'}</td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">{contact.source}</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                contacts.map((contact) => (
+                  <tr key={contact.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/admin/prospection/contacts/${contact.id}`}
+                        className="font-medium text-blue-600 hover:underline"
+                      >
+                        {contact.contact_name || contact.company_name || '-'}
+                      </Link>
+                      {contact.company_name && contact.contact_name && (
+                        <div className="text-xs text-gray-400">{contact.company_name}</div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <ContactTypeBadge type={contact.contact_type} />
+                    </td>
+                    <td className="px-4 py-3 text-gray-600">{contact.email || '-'}</td>
+                    <td className="px-4 py-3 text-gray-600">{contact.phone || '-'}</td>
+                    <td className="px-4 py-3 text-gray-600">{contact.city || '-'}</td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{contact.source}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -175,15 +215,17 @@ export default function ContactsPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
           <button
-            onClick={() => setPage(p => Math.max(1, p - 1))}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
             className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
           >
             Précédent
           </button>
-          <span className="text-sm text-gray-500">Page {page} / {totalPages}</span>
+          <span className="text-sm text-gray-500">
+            Page {page} / {totalPages}
+          </span>
           <button
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
             className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
           >

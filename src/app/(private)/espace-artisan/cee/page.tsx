@@ -316,8 +316,8 @@ export default async function EspaceArtisanCeePage() {
               Aucun dossier CEE pour le moment
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-charcoal-500">
-              Créez votre premier dossier pour commencer à valoriser vos chantiers éligibles CEE.
-              SA Energy s'occupe du montage complet.
+              Créez votre premier dossier pour commencer à valoriser vos chantiers éligibles CEE. SA
+              Energy s'occupe du montage complet.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
@@ -338,4 +338,3 @@ export default async function EspaceArtisanCeePage() {
     </div>
   )
 }
-

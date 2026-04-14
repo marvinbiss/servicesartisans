@@ -64,9 +64,12 @@ export default function AdminDispatchPage() {
   const params = new URLSearchParams({ page: String(page) })
   if (statusFilter !== 'all') params.set('status', statusFilter)
 
-  const { data, isLoading, error: fetchError, mutate } = useAdminFetch<DispatchData>(
-    `/api/admin/dispatch?${params}`
-  )
+  const {
+    data,
+    isLoading,
+    error: fetchError,
+    mutate,
+  } = useAdminFetch<DispatchData>(`/api/admin/dispatch?${params}`)
 
   const error = fetchError || (mutationError ? new Error(mutationError) : undefined)
 
@@ -111,9 +114,10 @@ export default function AdminDispatchPage() {
     { key: 'declined', label: 'Déclinés', count: data?.stats.declined || 0 },
   ]
 
-  const responseRate = data && data.stats.total > 0
-    ? Math.round(((data.stats.viewed + data.stats.quoted) / data.stats.total) * 100)
-    : 0
+  const responseRate =
+    data && data.stats.total > 0
+      ? Math.round(((data.stats.viewed + data.stats.quoted) / data.stats.total) * 100)
+      : 0
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -172,7 +176,10 @@ export default function AdminDispatchPage() {
           <StatusTabs
             tabs={statusTabs}
             activeTab={statusFilter}
-            onTabChange={(k) => { setStatusFilter(k as StatusFilter); setPage(1) }}
+            onTabChange={(k) => {
+              setStatusFilter(k as StatusFilter)
+              setPage(1)
+            }}
           />
         </div>
 
@@ -183,15 +190,48 @@ export default function AdminDispatchPage() {
         ) : data ? (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Liste des assignations de dispatch">
+              <table
+                className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
+                aria-label="Liste des assignations de dispatch"
+              >
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Artisan</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Statut</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assigné le</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vu le</th>
-                    <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Lead
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Artisan
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Statut
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Assigné le
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Vu le
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -222,21 +262,31 @@ export default function AdminDispatchPage() {
                             )}
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}
+                            >
                               {st.label}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                             {new Date(a.assigned_at).toLocaleString('fr-FR', {
-                              day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                              day: 'numeric',
+                              month: 'short',
+                              hour: '2-digit',
+                              minute: '2-digit',
                             })}
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
-                            {a.viewed_at
-                              ? new Date(a.viewed_at).toLocaleString('fr-FR', {
-                                  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-                                })
-                              : <span className="text-gray-300">—</span>}
+                            {a.viewed_at ? (
+                              new Date(a.viewed_at).toLocaleString('fr-FR', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
+                            ) : (
+                              <span className="text-gray-300">—</span>
+                            )}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1.5">

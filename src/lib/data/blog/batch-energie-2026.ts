@@ -2,11 +2,12 @@ import type { BlogArticle } from './articles'
 
 export const energieArticles: Record<string, BlogArticle> = {
   'prix-pompe-a-chaleur-2026': {
-    title: "Prix Pompe à Chaleur en 2026 : Coûts, Aides et Rentabilité",
+    title: 'Prix Pompe à Chaleur en 2026 : Coûts, Aides et Rentabilité',
     excerpt:
-      "Combien coûte une pompe à chaleur en 2026 ? Découvrez les prix par type (air-eau, air-air, géothermique), les aides disponibles et le retour sur investissement réel.",
-    metaTitle: "Prix Pompe à Chaleur 2026 : Tarifs et Aides",
-    metaDescription: "Comparez les prix PAC air-eau, air-air et géothermique en 2026. Aides MaPrimeRénov' incluses. Obtenez un devis gratuit.",
+      'Combien coûte une pompe à chaleur en 2026 ? Découvrez les prix par type (air-eau, air-air, géothermique), les aides disponibles et le retour sur investissement réel.',
+    metaTitle: 'Prix Pompe à Chaleur 2026 : Tarifs et Aides',
+    metaDescription:
+      "Comparez les prix PAC air-eau, air-air et géothermique en 2026. Aides MaPrimeRénov' incluses. Obtenez un devis gratuit.",
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-13',
@@ -14,11 +15,11 @@ export const energieArticles: Record<string, BlogArticle> = {
     category: 'Énergie',
     tags: ['pompe à chaleur', 'chauffage', 'prix', 'énergie', 'PAC'],
     keyTakeaways: [
-      "Une PAC air-eau coûte entre 8 000 et 16 000 € pose comprise en 2026, contre 15 000 à 30 000 € pour une PAC géothermique.",
+      'Une PAC air-eau coûte entre 8 000 et 16 000 € pose comprise en 2026, contre 15 000 à 30 000 € pour une PAC géothermique.',
       "MaPrimeRénov' peut couvrir jusqu'à 5 000 € pour les ménages modestes, cumulable avec les CEE et l'éco-PTZ.",
       "Le COP moyen d'une PAC air-eau est de 3 à 4, soit 3 à 4 kWh de chaleur produits pour 1 kWh d'électricité consommé.",
-      "Le retour sur investissement se situe entre 5 et 10 ans selon le système remplacé et la zone climatique.",
-      "Depuis mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 %, rendant la PAC encore plus compétitive.",
+      'Le retour sur investissement se situe entre 5 et 10 ans selon le système remplacé et la zone climatique.',
+      'Depuis mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 %, rendant la PAC encore plus compétitive.',
     ],
     faq: [
       {
@@ -27,12 +28,12 @@ export const energieArticles: Record<string, BlogArticle> = {
           "Le prix moyen d'une PAC air-eau se situe entre 8 000 et 16 000 € pose comprise. Ce tarif varie selon la puissance (6 à 16 kW), la marque (Daikin, Atlantic, Mitsubishi) et la complexité de l'installation. Les modèles réversibles (chauffage + climatisation) coûtent 10 à 20 % de plus.",
       },
       {
-        question: "Quelles aides pour installer une pompe à chaleur en 2026 ?",
+        question: 'Quelles aides pour installer une pompe à chaleur en 2026 ?',
         answer:
           "Vous pouvez cumuler MaPrimeRénov' (jusqu'à 5 000 €), les CEE (2 000 à 4 000 €), l'éco-PTZ (jusqu'à 50 000 € à taux zéro) et la TVA réduite à 5,5 %. Le reste à charge peut descendre à 3 000-5 000 € pour les ménages aux revenus modestes.",
       },
       {
-        question: "PAC air-eau ou géothermique : laquelle choisir ?",
+        question: 'PAC air-eau ou géothermique : laquelle choisir ?',
         answer:
           "La PAC air-eau convient à la majorité des maisons (coût modéré, installation simple). La PAC géothermique offre un rendement supérieur et constant toute l'année, mais nécessite un forage ou un terrain suffisant. Elle est rentable pour les grandes surfaces (> 150 m²) en zone climatique froide.",
       },
@@ -42,7 +43,7 @@ export const energieArticles: Record<string, BlogArticle> = {
           "Une PAC bien entretenue dure 15 à 20 ans. L'entretien obligatoire (depuis le décret de juillet 2020) coûte 150 à 300 € par an. Le compresseur est la pièce la plus coûteuse à remplacer (1 500 à 3 000 €), mais les pannes sont rares avant 10 ans.",
       },
       {
-        question: "Une PAC fonctionne-t-elle par grand froid ?",
+        question: 'Une PAC fonctionne-t-elle par grand froid ?',
         answer:
           "Les PAC air-eau modernes fonctionnent jusqu'à -20 °C, mais leur rendement baisse en dessous de -7 °C. Un appoint électrique intégré prend le relais. En zone H1 (Nord, Est), privilégiez un modèle haute température ou une PAC géothermique pour un confort optimal.",
       },
@@ -130,11 +131,12 @@ Pour obtenir le meilleur rapport qualité-prix, comparez les devis de 3 installa
   },
 
   'prix-panneaux-solaires-2026': {
-    title: "Prix Panneaux Solaires en 2026 : Installation, Rentabilité et Aides",
+    title: 'Prix Panneaux Solaires en 2026 : Installation, Rentabilité et Aides',
     excerpt:
       "Quel est le prix d'une installation de panneaux solaires en 2026 ? Guide complet avec les coûts par puissance, les aides, le tarif de rachat et le calcul de rentabilité.",
-    metaTitle: "Prix Panneaux Solaires 2026 : Coûts et Aides",
-    metaDescription: "Découvrez les prix panneaux solaires 2026 par puissance, aides et tarif de rachat. Calculez votre rentabilité. Devis gratuit.",
+    metaTitle: 'Prix Panneaux Solaires 2026 : Coûts et Aides',
+    metaDescription:
+      'Découvrez les prix panneaux solaires 2026 par puissance, aides et tarif de rachat. Calculez votre rentabilité. Devis gratuit.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-15',
@@ -142,29 +144,29 @@ Pour obtenir le meilleur rapport qualité-prix, comparez les devis de 3 installa
     category: 'Énergie',
     tags: ['panneaux solaires', 'énergie', 'prix', 'photovoltaïque'],
     keyTakeaways: [
-      "Une installation photovoltaïque de 3 kWc coûte entre 7 000 et 11 000 € pose comprise en 2026.",
+      'Une installation photovoltaïque de 3 kWc coûte entre 7 000 et 11 000 € pose comprise en 2026.',
       "Le tarif de rachat en obligation d'achat EDF OA est de 0,1297 €/kWh en autoconsommation avec vente du surplus (≤ 3 kWc) au S1 2026.",
       "La prime à l'autoconsommation atteint 1 140 € pour une installation ≤ 3 kWc, versée sur 5 ans.",
-      "Le retour sur investissement moyen se situe entre 8 et 12 ans pour une installation en autoconsommation avec vente du surplus.",
+      'Le retour sur investissement moyen se situe entre 8 et 12 ans pour une installation en autoconsommation avec vente du surplus.',
     ],
     faq: [
       {
-        question: "Combien coûte une installation de panneaux solaires en 2026 ?",
+        question: 'Combien coûte une installation de panneaux solaires en 2026 ?',
         answer:
           "Le prix dépend de la puissance : 7 000 à 11 000 € pour 3 kWc (8 panneaux), 12 000 à 18 000 € pour 6 kWc (16 panneaux) et 17 000 à 25 000 € pour 9 kWc (24 panneaux). Ces prix incluent les panneaux, l'onduleur, la pose et le raccordement Enedis.",
       },
       {
-        question: "Les panneaux solaires sont-ils rentables dans le Nord de la France ?",
+        question: 'Les panneaux solaires sont-ils rentables dans le Nord de la France ?',
         answer:
           "Oui, même dans le Nord. L'ensoleillement y est 20 à 30 % inférieur au Sud, mais les panneaux produisent tout de même 900 à 1 100 kWh/kWc/an contre 1 200 à 1 400 kWh/kWc/an dans le Sud. Le retour sur investissement est allongé de 2 à 3 ans, mais reste inférieur à 15 ans.",
       },
       {
-        question: "Quelle est la durée de vie des panneaux solaires ?",
+        question: 'Quelle est la durée de vie des panneaux solaires ?',
         answer:
           "Les panneaux photovoltaïques sont garantis 25 à 30 ans par les fabricants, avec une perte de rendement inférieure à 0,5 % par an. Après 25 ans, ils produisent encore 85 à 90 % de leur puissance initiale. L'onduleur, en revanche, doit être remplacé après 10 à 15 ans (coût : 1 000 à 2 500 €).",
       },
       {
-        question: "Autoconsommation ou vente totale : que choisir ?",
+        question: 'Autoconsommation ou vente totale : que choisir ?',
         answer:
           "L'autoconsommation avec vente du surplus est le choix le plus rentable pour la majorité des foyers. Vous consommez directement votre production (économie sur la facture) et vendez le surplus à EDF OA. La vente totale n'est intéressante que pour les grandes installations (> 9 kWc) sur toitures bien orientées.",
       },
@@ -254,11 +256,12 @@ Comparez les devis sur ServicesArtisans pour trouver un installateur qualifié p
   },
 
   'prix-borne-recharge-domicile-2026': {
-    title: "Prix Borne de Recharge à Domicile en 2026 : Coûts et Installation",
+    title: 'Prix Borne de Recharge à Domicile en 2026 : Coûts et Installation',
     excerpt:
       "Combien coûte l'installation d'une borne de recharge (wallbox) à domicile en 2026 ? Découvrez les prix, les aides et les étapes pour recharger votre voiture électrique chez vous.",
-    metaTitle: "Prix Borne de Recharge 2026 : Coûts et Aides",
-    metaDescription: "Découvrez le prix d'une wallbox en 2026 : installation, aides et étapes. Rechargez votre voiture chez vous. Obtenez un devis gratuit.",
+    metaTitle: 'Prix Borne de Recharge 2026 : Coûts et Aides',
+    metaDescription:
+      "Découvrez le prix d'une wallbox en 2026 : installation, aides et étapes. Rechargez votre voiture chez vous. Obtenez un devis gratuit.",
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-17',
@@ -266,34 +269,34 @@ Comparez les devis sur ServicesArtisans pour trouver un installateur qualifié p
     category: 'Énergie',
     tags: ['borne de recharge', 'électricité', 'prix', 'voiture électrique'],
     keyTakeaways: [
-      "Une borne de recharge 7,4 kW coûte entre 1 200 et 2 500 € pose comprise en 2026.",
+      'Une borne de recharge 7,4 kW coûte entre 1 200 et 2 500 € pose comprise en 2026.',
       "Le crédit d'impôt pour borne de recharge a été supprimé au 1er janvier 2026.",
       "L'installation doit être réalisée par un électricien certifié IRVE (obligatoire).",
-      "Recharger à domicile coûte 3 à 5 € pour 100 km, contre 8 à 15 € sur une borne rapide publique.",
+      'Recharger à domicile coûte 3 à 5 € pour 100 km, contre 8 à 15 € sur une borne rapide publique.',
     ],
     faq: [
       {
         question: "Quel est le prix d'une borne de recharge à domicile en 2026 ?",
         answer:
-          "Le prix total (borne + installation) varie de 1 200 à 2 500 € pour une wallbox 7,4 kW monophasée et de 1 800 à 3 500 € pour un modèle 11 kW triphasé. Le matériel seul coûte 500 à 1 500 € selon la marque (Wallbox, Schneider, Legrand, EVBox).",
+          'Le prix total (borne + installation) varie de 1 200 à 2 500 € pour une wallbox 7,4 kW monophasée et de 1 800 à 3 500 € pour un modèle 11 kW triphasé. Le matériel seul coûte 500 à 1 500 € selon la marque (Wallbox, Schneider, Legrand, EVBox).',
       },
       {
-        question: "La certification IRVE est-elle obligatoire ?",
+        question: 'La certification IRVE est-elle obligatoire ?',
         answer:
           "Oui, depuis le décret du 12 janvier 2017, toute installation de borne de recharge d'une puissance supérieure à 3,7 kW doit être réalisée par un électricien certifié IRVE (Infrastructure de Recharge pour Véhicules Électriques). Cette certification est aussi requise pour bénéficier des éventuelles aides locales.",
       },
       {
-        question: "Quelle puissance choisir pour sa borne ?",
+        question: 'Quelle puissance choisir pour sa borne ?',
         answer:
-          "Pour un usage quotidien standard (30 à 50 km/jour), une borne 7,4 kW monophasée suffit : elle recharge une batterie de 50 kWh en 7 heures environ. Si vous parcourez plus de 100 km/jour ou possédez un véhicule à grosse batterie (> 75 kWh), optez pour une borne 11 kW triphasée (recharge complète en 4-5 heures).",
+          'Pour un usage quotidien standard (30 à 50 km/jour), une borne 7,4 kW monophasée suffit : elle recharge une batterie de 50 kWh en 7 heures environ. Si vous parcourez plus de 100 km/jour ou possédez un véhicule à grosse batterie (> 75 kWh), optez pour une borne 11 kW triphasée (recharge complète en 4-5 heures).',
       },
       {
-        question: "Combien coûte la recharge à domicile ?",
+        question: 'Combien coûte la recharge à domicile ?',
         answer:
           "Avec un tarif heures creuses de 0,15 à 0,18 €/kWh, recharger une batterie de 50 kWh coûte 7,50 à 9 €, soit 2,50 à 3 € aux 100 km pour une consommation moyenne de 17 kWh/100 km. C'est 3 à 5 fois moins cher que les bornes rapides publiques et 4 à 6 fois moins cher que le carburant.",
       },
       {
-        question: "Peut-on installer une borne en copropriété ?",
+        question: 'Peut-on installer une borne en copropriété ?',
         answer:
           "Oui, grâce au droit à la prise (article L353-12 du Code de l'énergie). Vous devez informer le syndic par lettre recommandée. Le syndic ne peut s'y opposer que pour des raisons techniques sérieuses. Le coût peut être plus élevé en copropriété (2 000 à 4 000 €) en raison du tirage de câble depuis le tableau général.",
       },
@@ -386,11 +389,12 @@ Pour une installation conforme et sécurisée, faites appel à un électricien c
   },
 
   'dpe-obligatoire-2026-guide': {
-    title: "DPE Obligatoire 2026 : Tout ce qui Change pour les Propriétaires",
+    title: 'DPE Obligatoire 2026 : Tout ce qui Change pour les Propriétaires',
     excerpt:
-      "Le DPE évolue en 2026 avec de nouvelles obligations pour les propriétaires. Découvrez les changements, les échéances et les conséquences sur la location et la vente.",
-    metaTitle: "DPE Obligatoire 2026 : Guide Propriétaires",
-    metaDescription: "Découvrez les nouvelles obligations DPE 2026 pour propriétaires : échéances, conséquences location et vente. Obtenez un devis diagnostic.",
+      'Le DPE évolue en 2026 avec de nouvelles obligations pour les propriétaires. Découvrez les changements, les échéances et les conséquences sur la location et la vente.',
+    metaTitle: 'DPE Obligatoire 2026 : Guide Propriétaires',
+    metaDescription:
+      'Découvrez les nouvelles obligations DPE 2026 pour propriétaires : échéances, conséquences location et vente. Obtenez un devis diagnostic.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-19',
@@ -398,35 +402,35 @@ Pour une installation conforme et sécurisée, faites appel à un électricien c
     category: 'Réglementation',
     tags: ['DPE', 'diagnostic', 'réglementation', 'énergie'],
     keyTakeaways: [
-      "Depuis le 1er janvier 2025, les logements classés G sont interdits à la location. Les logements F suivront au 1er janvier 2028.",
-      "Le DPE est valable 10 ans, mais les DPE réalisés avant le 1er juillet 2021 ne sont plus valides.",
-      "Un DPE coûte entre 100 et 250 € selon la surface et la complexité du logement.",
-      "Le DPE est opposable juridiquement : un locataire ou un acheteur peut se retourner contre le vendeur en cas de DPE erroné.",
+      'Depuis le 1er janvier 2025, les logements classés G sont interdits à la location. Les logements F suivront au 1er janvier 2028.',
+      'Le DPE est valable 10 ans, mais les DPE réalisés avant le 1er juillet 2021 ne sont plus valides.',
+      'Un DPE coûte entre 100 et 250 € selon la surface et la complexité du logement.',
+      'Le DPE est opposable juridiquement : un locataire ou un acheteur peut se retourner contre le vendeur en cas de DPE erroné.',
       "La rénovation énergétique d'un logement classé G coûte en moyenne 20 000 à 50 000 €, mais les aides couvrent 40 à 90 % du montant.",
     ],
     faq: [
       {
-        question: "Mon logement est classé G, puis-je encore le louer en 2026 ?",
+        question: 'Mon logement est classé G, puis-je encore le louer en 2026 ?',
         answer:
           "Non. Depuis le 1er janvier 2025, les logements classés G (consommation > 420 kWh/m²/an) sont considérés comme indécents et ne peuvent plus faire l'objet d'un nouveau bail ni d'un renouvellement de bail. Les baux en cours restent valables, mais le locataire peut exiger des travaux de rénovation énergétique.",
       },
       {
-        question: "Combien coûte un DPE en 2026 ?",
+        question: 'Combien coûte un DPE en 2026 ?',
         answer:
-          "Un DPE coûte entre 100 et 250 € selon la surface du logement, sa localisation et le diagnostiqueur. Pour un appartement de 50 m², comptez 120 à 150 €. Pour une maison de 150 m², comptez 180 à 250 €. Le DPE doit être réalisé par un diagnostiqueur certifié.",
+          'Un DPE coûte entre 100 et 250 € selon la surface du logement, sa localisation et le diagnostiqueur. Pour un appartement de 50 m², comptez 120 à 150 €. Pour une maison de 150 m², comptez 180 à 250 €. Le DPE doit être réalisé par un diagnostiqueur certifié.',
       },
       {
-        question: "Le DPE est-il obligatoire pour tous les logements ?",
+        question: 'Le DPE est-il obligatoire pour tous les logements ?',
         answer:
           "Le DPE est obligatoire pour la vente et la location de tout logement, sauf exceptions : bâtiments indépendants de moins de 50 m², constructions provisoires (durée d'utilisation ≤ 2 ans), bâtiments agricoles et lieux de culte. La note DPE doit figurer sur toutes les annonces immobilières.",
       },
       {
-        question: "Comment améliorer la classe DPE de mon logement ?",
+        question: 'Comment améliorer la classe DPE de mon logement ?',
         answer:
           "Les travaux les plus efficaces sont, dans l'ordre : l'isolation des combles et de la toiture (gain de 1 à 2 classes), le remplacement des fenêtres simple vitrage par du double ou triple vitrage (gain de 0,5 à 1 classe), l'isolation des murs par l'extérieur (gain de 1 à 2 classes) et le remplacement du système de chauffage par une PAC ou une chaudière biomasse.",
       },
       {
-        question: "Que risque un propriétaire qui loue un logement classé G ?",
+        question: 'Que risque un propriétaire qui loue un logement classé G ?',
         answer:
           "Le locataire peut saisir le tribunal pour obtenir une mise en conformité du logement, une réduction de loyer ou des dommages et intérêts. Le juge peut également ordonner la réalisation de travaux sous astreinte. En cas de vente, l'acquéreur peut demander une réduction du prix ou l'annulation de la vente si le DPE est erroné.",
       },
@@ -436,7 +440,7 @@ Pour une installation conforme et sécurisée, faites appel à un électricien c
           "Depuis le 1er janvier 2023, la durée de validité d'un DPE est de 10 ans. Les DPE réalisés entre le 1er janvier 2018 et le 30 juin 2021 étaient valables jusqu'au 31 décembre 2022. Ceux réalisés entre le 1er juillet 2021 et le 31 décembre 2022 sont valables jusqu'au 31 décembre 2024.",
       },
       {
-        question: "Peut-on contester un DPE erroné ?",
+        question: 'Peut-on contester un DPE erroné ?',
         answer:
           "Oui, depuis la réforme de 2021, le DPE est opposable juridiquement. En cas d'erreur manifeste, contactez le diagnostiqueur par lettre recommandée, saisissez l'organisme certificateur (COFRAC, Bureau Veritas, DEKRA), puis mandatez un second diagnostiqueur pour un contre-DPE. Le délai de prescription est de 10 ans.",
       },
@@ -536,11 +540,12 @@ Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais
   },
 
   'passoire-thermique-interdiction-location-2026-guide-complet': {
-    title: "Passoires Thermiques : Interdiction de Location en 2026",
+    title: 'Passoires Thermiques : Interdiction de Location en 2026',
     excerpt:
-      "Les logements classés G sont interdits à la location depuis 2025. Quelles conséquences pour les propriétaires ? Quelles solutions pour rénover et quelles aides disponibles ?",
-    metaTitle: "Passoires Thermiques 2026 : Interdiction Location",
-    metaDescription: "Logement classé G interdit à la location. Découvrez les solutions de rénovation et aides disponibles. Obtenez un devis gratuit.",
+      'Les logements classés G sont interdits à la location depuis 2025. Quelles conséquences pour les propriétaires ? Quelles solutions pour rénover et quelles aides disponibles ?',
+    metaTitle: 'Passoires Thermiques 2026 : Interdiction Location',
+    metaDescription:
+      'Logement classé G interdit à la location. Découvrez les solutions de rénovation et aides disponibles. Obtenez un devis gratuit.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-21',
@@ -549,7 +554,7 @@ Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais
     tags: ['passoire thermique', 'DPE', 'location', 'réglementation'],
     keyTakeaways: [
       "1,6 million de logements classés G sont concernés par l'interdiction de location en vigueur depuis le 1er janvier 2025.",
-      "Le gel des loyers concerne tous les logements classés F et G, sans exception.",
+      'Le gel des loyers concerne tous les logements classés F et G, sans exception.',
       "MaPrimeRénov' Parcours accompagné finance jusqu'à 90 % des travaux pour les ménages très modestes.",
       "La rénovation globale d'une passoire thermique coûte en moyenne 25 000 à 50 000 €, avec un reste à charge de 3 000 à 15 000 € selon les revenus.",
     ],
@@ -565,12 +570,12 @@ Ne tardez pas : les artisans RGE sont de plus en plus sollicités et les délais
           "Les baux en cours restent valables. L'interdiction concerne les nouveaux baux et les renouvellements à compter du 1er janvier 2025 pour les logements G. Toutefois, le locataire peut à tout moment demander la mise en conformité du logement et saisir le juge en cas de refus du propriétaire.",
       },
       {
-        question: "Puis-je vendre mon logement classé G sans travaux ?",
+        question: 'Puis-je vendre mon logement classé G sans travaux ?',
         answer:
           "Oui, la vente reste possible quelle que soit la classe DPE. Cependant, un audit énergétique est obligatoire (à la charge du vendeur) et le DPE doit figurer dans l'annonce. En pratique, les acheteurs négocient fortement le prix des passoires thermiques (décote de 10 à 20 % constatée).",
       },
       {
-        question: "Combien de temps durent les travaux de rénovation énergétique ?",
+        question: 'Combien de temps durent les travaux de rénovation énergétique ?',
         answer:
           "Une rénovation globale (isolation + chauffage + ventilation) dure en moyenne 2 à 4 mois pour une maison et 1 à 3 mois pour un appartement. Ce délai inclut la phase de diagnostic, le montage des dossiers d'aides (4 à 8 semaines) et les travaux proprement dits.",
       },
@@ -674,11 +679,12 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
   },
 
   'eco-ptz-2026-conditions-montant': {
-    title: "Éco-PTZ 2026 : Conditions, Montants et Comment en Bénéficier",
+    title: 'Éco-PTZ 2026 : Conditions, Montants et Comment en Bénéficier',
     excerpt:
       "L'éco-prêt à taux zéro reste un levier majeur pour financer la rénovation énergétique en 2026. Découvrez les conditions, les montants et les étapes pour en bénéficier.",
-    metaTitle: "Éco-PTZ 2026 : Conditions et Montants",
-    metaDescription: "Découvrez les conditions de l'éco-PTZ 2026 : jusqu'à 50 000 € sans intérêts pour vos travaux de rénovation. Obtenez un devis gratuit.",
+    metaTitle: 'Éco-PTZ 2026 : Conditions et Montants',
+    metaDescription:
+      "Découvrez les conditions de l'éco-PTZ 2026 : jusqu'à 50 000 € sans intérêts pour vos travaux de rénovation. Obtenez un devis gratuit.",
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-23',
@@ -688,7 +694,7 @@ N'attendez pas : faites réaliser un audit énergétique et commencez les démar
     keyTakeaways: [
       "L'éco-PTZ permet d'emprunter jusqu'à 50 000 € à taux zéro pour des travaux de rénovation énergétique.",
       "Aucune condition de revenus n'est requise : tous les propriétaires y ont droit.",
-      "La durée de remboursement maximale est de 20 ans (240 mensualités).",
+      'La durée de remboursement maximale est de 20 ans (240 mensualités).',
       "L'éco-PTZ est cumulable avec MaPrimeRénov', les CEE et la TVA réduite.",
     ],
     faq: [
@@ -806,11 +812,12 @@ Trouvez des artisans RGE qualifiés sur ServicesArtisans et commencez votre proj
   },
 
   'prix-veranda-2026-guide-complet': {
-    title: "Prix Véranda en 2026 : Matériaux, Surfaces et Devis",
+    title: 'Prix Véranda en 2026 : Matériaux, Surfaces et Devis',
     excerpt:
-      "Combien coûte une véranda en 2026 ? Découvrez les prix par matériau (aluminium, bois, PVC, acier), par surface et les démarches administratives à connaître.",
-    metaTitle: "Prix Véranda 2026 : Tarifs par Matériau",
-    metaDescription: "Comparez les prix véranda 2026 : aluminium, bois, PVC et acier. Démarches et surfaces détaillées. Obtenez un devis gratuit.",
+      'Combien coûte une véranda en 2026 ? Découvrez les prix par matériau (aluminium, bois, PVC, acier), par surface et les démarches administratives à connaître.',
+    metaTitle: 'Prix Véranda 2026 : Tarifs par Matériau',
+    metaDescription:
+      'Comparez les prix véranda 2026 : aluminium, bois, PVC et acier. Démarches et surfaces détaillées. Obtenez un devis gratuit.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-25',
@@ -820,27 +827,27 @@ Trouvez des artisans RGE qualifiés sur ServicesArtisans et commencez votre proj
     keyTakeaways: [
       "Le prix moyen d'une véranda est de 1 000 à 2 500 €/m² pose comprise, soit 15 000 à 50 000 € pour une véranda de 15 à 20 m².",
       "L'aluminium est le matériau le plus populaire (60 % du marché) grâce à son rapport qualité-prix et sa facilité d'entretien.",
-      "Une déclaration préalable de travaux suffit pour une véranda de moins de 20 m². Au-delà, un permis de construire est requis.",
-      "La véranda augmente la surface habitable et donc la taxe foncière (50 à 150 €/an en moyenne).",
+      'Une déclaration préalable de travaux suffit pour une véranda de moins de 20 m². Au-delà, un permis de construire est requis.',
+      'La véranda augmente la surface habitable et donc la taxe foncière (50 à 150 €/an en moyenne).',
     ],
     faq: [
       {
         question: "Quel est le prix moyen d'une véranda de 20 m² ?",
         answer:
-          "Pour une véranda de 20 m², comptez entre 20 000 et 50 000 € pose comprise. Le prix varie selon le matériau : 20 000 à 30 000 € en aluminium, 25 000 à 40 000 € en bois, 15 000 à 25 000 € en PVC et 35 000 à 50 000 € en acier ou fer forgé.",
+          'Pour une véranda de 20 m², comptez entre 20 000 et 50 000 € pose comprise. Le prix varie selon le matériau : 20 000 à 30 000 € en aluminium, 25 000 à 40 000 € en bois, 15 000 à 25 000 € en PVC et 35 000 à 50 000 € en acier ou fer forgé.',
       },
       {
-        question: "Faut-il un permis de construire pour une véranda ?",
+        question: 'Faut-il un permis de construire pour une véranda ?',
         answer:
-          "Une déclaration préalable de travaux suffit si la surface de la véranda est inférieure à 20 m² (ou 40 m² en zone urbaine avec PLU). Au-delà, un permis de construire est obligatoire. Si la surface totale de la maison dépasse 150 m² après ajout de la véranda, le recours à un architecte est obligatoire.",
+          'Une déclaration préalable de travaux suffit si la surface de la véranda est inférieure à 20 m² (ou 40 m² en zone urbaine avec PLU). Au-delà, un permis de construire est obligatoire. Si la surface totale de la maison dépasse 150 m² après ajout de la véranda, le recours à un architecte est obligatoire.',
       },
       {
         question: "Une véranda est-elle habitable toute l'année ?",
         answer:
-          "Oui, à condition de choisir un vitrage performant (double vitrage à isolation renforcée, Ug ≤ 1,1 W/m²K), une toiture isolée (panneaux sandwich ou double vitrage) et un système de chauffage adapté. Une véranda bien isolée reste confortable de -5 °C à +35 °C extérieur.",
+          'Oui, à condition de choisir un vitrage performant (double vitrage à isolation renforcée, Ug ≤ 1,1 W/m²K), une toiture isolée (panneaux sandwich ou double vitrage) et un système de chauffage adapté. Une véranda bien isolée reste confortable de -5 °C à +35 °C extérieur.',
       },
       {
-        question: "Quelle orientation choisir pour sa véranda ?",
+        question: 'Quelle orientation choisir pour sa véranda ?',
         answer:
           "L'orientation sud ou sud-est est idéale pour profiter de la lumière naturelle et de la chaleur solaire en hiver. Prévoyez des protections solaires (stores, vitrage à contrôle solaire) pour éviter la surchauffe en été. L'orientation nord est déconseillée car elle offre peu de luminosité et de chaleur passive.",
       },
@@ -930,11 +937,12 @@ Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comp
   },
 
   'extension-maison-prix-m2-2026': {
-    title: "Extension Maison : Prix au m² en 2026 selon le Type",
+    title: 'Extension Maison : Prix au m² en 2026 selon le Type',
     excerpt:
       "Quel est le prix au m² pour agrandir sa maison en 2026 ? Comparatif des coûts par type d'extension : surélévation, extension latérale, véranda, ossature bois.",
-    metaTitle: "Extension Maison 2026 : Prix au m² et Devis",
-    metaDescription: "Comparez les prix au m² pour agrandir votre maison en 2026 : surélévation, extension, véranda. Obtenez un devis gratuit.",
+    metaTitle: 'Extension Maison 2026 : Prix au m² et Devis',
+    metaDescription:
+      'Comparez les prix au m² pour agrandir votre maison en 2026 : surélévation, extension, véranda. Obtenez un devis gratuit.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-27',
@@ -944,8 +952,8 @@ Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comp
     keyTakeaways: [
       "Le prix moyen d'une extension de maison varie de 1 200 à 3 500 €/m² selon le type de construction.",
       "L'extension en ossature bois est la plus rapide (4 à 8 semaines) et offre un bon rapport qualité-prix (1 500 à 2 500 €/m²).",
-      "Un permis de construire est obligatoire au-delà de 20 m² (40 m² en zone PLU) et un architecte est requis si la surface totale dépasse 150 m².",
-      "Une extension bien réalisée augmente la valeur du bien de 10 à 20 %.",
+      'Un permis de construire est obligatoire au-delà de 20 m² (40 m² en zone PLU) et un architecte est requis si la surface totale dépasse 150 m².',
+      'Une extension bien réalisée augmente la valeur du bien de 10 à 20 %.',
     ],
     faq: [
       {
@@ -956,15 +964,15 @@ Pour trouver un vérandaliste ou un menuisier qualifié près de chez vous, comp
       {
         question: "Combien de temps durent les travaux d'extension ?",
         answer:
-          "Les délais varient selon le type : 4 à 8 semaines pour une ossature bois, 8 à 16 semaines pour une extension en parpaing ou béton, 6 à 12 semaines pour une véranda et 12 à 20 semaines pour une surélévation. Ajoutez 2 à 3 mois de démarches administratives en amont.",
+          'Les délais varient selon le type : 4 à 8 semaines pour une ossature bois, 8 à 16 semaines pour une extension en parpaing ou béton, 6 à 12 semaines pour une véranda et 12 à 20 semaines pour une surélévation. Ajoutez 2 à 3 mois de démarches administratives en amont.',
       },
       {
-        question: "Faut-il un architecte pour une extension de maison ?",
+        question: 'Faut-il un architecte pour une extension de maison ?',
         answer:
           "Un architecte est obligatoire si la surface totale de la maison (existant + extension) dépasse 150 m² après travaux. En dessous de ce seuil, il n'est pas obligatoire mais fortement recommandé pour les projets complexes (surélévation, ouverture de mur porteur). Les honoraires d'architecte représentent 8 à 15 % du coût total des travaux.",
       },
       {
-        question: "Quelles aides pour financer une extension ?",
+        question: 'Quelles aides pour financer une extension ?',
         answer:
           "Les extensions ne sont pas éligibles à MaPrimeRénov' (réservée à la rénovation). En revanche, vous pouvez bénéficier de la TVA à 10 % si les travaux sont réalisés dans un logement de plus de 2 ans et de l'éco-PTZ si l'extension inclut des travaux de performance énergétique. Le PTZ classique est réservé à l'acquisition dans le neuf.",
       },
@@ -1067,11 +1075,12 @@ Comparez les devis de constructeurs et artisans qualifiés sur ServicesArtisans 
   },
 
   'prix-domotique-maison-2026-installation': {
-    title: "Prix Domotique Maison en 2026 : Solutions et Installation",
+    title: 'Prix Domotique Maison en 2026 : Solutions et Installation',
     excerpt:
-      "Combien coûte la domotique en 2026 ? Découvrez les prix des solutions connectées (éclairage, volets, chauffage, sécurité) et le budget pour une maison intelligente.",
-    metaTitle: "Prix Domotique Maison 2026 : Budget Complet",
-    metaDescription: "Découvrez les prix domotique 2026 : éclairage, volets, chauffage connecté. Budget maison intelligente. Obtenez un devis gratuit.",
+      'Combien coûte la domotique en 2026 ? Découvrez les prix des solutions connectées (éclairage, volets, chauffage, sécurité) et le budget pour une maison intelligente.',
+    metaTitle: 'Prix Domotique Maison 2026 : Budget Complet',
+    metaDescription:
+      'Découvrez les prix domotique 2026 : éclairage, volets, chauffage connecté. Budget maison intelligente. Obtenez un devis gratuit.',
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-03-01',
@@ -1079,29 +1088,29 @@ Comparez les devis de constructeurs et artisans qualifiés sur ServicesArtisans 
     category: 'Énergie',
     tags: ['domotique', 'maison connectée', 'prix', 'installation'],
     keyTakeaways: [
-      "Un système domotique complet coûte entre 5 000 et 20 000 € pour une maison de 100 m², installation comprise.",
-      "Les solutions sans fil (Zigbee, Z-Wave, Wi-Fi) sont 30 à 50 % moins chères que les systèmes filaires (KNX, Loxone).",
+      'Un système domotique complet coûte entre 5 000 et 20 000 € pour une maison de 100 m², installation comprise.',
+      'Les solutions sans fil (Zigbee, Z-Wave, Wi-Fi) sont 30 à 50 % moins chères que les systèmes filaires (KNX, Loxone).',
       "La domotique permet de réduire la consommation énergétique de 15 à 30 % grâce au pilotage intelligent du chauffage et de l'éclairage.",
       "Le marché de la maison connectée progresse de 20 % par an en France, tiré par les assistants vocaux et les économies d'énergie.",
     ],
     faq: [
       {
-        question: "Quel budget pour rendre sa maison connectée ?",
+        question: 'Quel budget pour rendre sa maison connectée ?',
         answer:
           "Le budget dépend de l'ampleur du projet. Pour un système basique (thermostat connecté + éclairage + 2-3 prises) : 500 à 1 500 €. Pour un système intermédiaire (volets, chauffage, éclairage, sécurité) : 3 000 à 8 000 €. Pour une installation complète (toute la maison, filaire KNX) : 10 000 à 25 000 €.",
       },
       {
-        question: "Domotique filaire ou sans fil : que choisir ?",
+        question: 'Domotique filaire ou sans fil : que choisir ?',
         answer:
-          "Le sans fil (Zigbee, Z-Wave, Wi-Fi, Matter) est idéal en rénovation : pas de travaux de câblage, installation rapide et coût réduit. Le filaire (KNX, Loxone) est recommandé en construction neuve : fiabilité supérieure, pas de problèmes de portée et durée de vie de 20 à 30 ans. Le protocole Matter (2023) unifie les écosystèmes et simplifie la compatibilité.",
+          'Le sans fil (Zigbee, Z-Wave, Wi-Fi, Matter) est idéal en rénovation : pas de travaux de câblage, installation rapide et coût réduit. Le filaire (KNX, Loxone) est recommandé en construction neuve : fiabilité supérieure, pas de problèmes de portée et durée de vie de 20 à 30 ans. Le protocole Matter (2023) unifie les écosystèmes et simplifie la compatibilité.',
       },
       {
-        question: "La domotique est-elle compatible avec tous les équipements ?",
+        question: 'La domotique est-elle compatible avec tous les équipements ?',
         answer:
-          "Le protocole Matter, lancé fin 2022, vise à unifier les écosystèmes (Apple HomeKit, Google Home, Amazon Alexa, Samsung SmartThings). En 2026, la majorité des nouveaux équipements sont compatibles Matter. Pour les anciens appareils, des passerelles (bridges) permettent de les intégrer au système.",
+          'Le protocole Matter, lancé fin 2022, vise à unifier les écosystèmes (Apple HomeKit, Google Home, Amazon Alexa, Samsung SmartThings). En 2026, la majorité des nouveaux équipements sont compatibles Matter. Pour les anciens appareils, des passerelles (bridges) permettent de les intégrer au système.',
       },
       {
-        question: "Faut-il un électricien pour installer la domotique ?",
+        question: 'Faut-il un électricien pour installer la domotique ?',
         answer:
           "Les solutions sans fil (ampoules connectées, prises, capteurs) peuvent être installées par un particulier. En revanche, la motorisation de volets, l'installation d'un système filaire KNX ou le pilotage du chauffage nécessitent un électricien qualifié, idéalement spécialisé en domotique.",
       },
@@ -1217,8 +1226,9 @@ Trouvez un électricien ou un intégrateur domotique qualifié sur ServicesArtis
     title: "Adaptation Logement Senior : Aides MaPrimeAdapt' et Prix en 2026",
     excerpt:
       "Comment adapter son logement pour le maintien à domicile ? Découvrez les travaux essentiels, le dispositif MaPrimeAdapt' et les autres aides pour les seniors et PMR en 2026.",
-    metaTitle: "Adaptation Logement Senior 2026 : Aides et Prix",
-    metaDescription: "Découvrez MaPrimeAdapt' 2026 et les aides pour adapter votre logement senior/PMR. Travaux essentiels et devis gratuit.",
+    metaTitle: 'Adaptation Logement Senior 2026 : Aides et Prix',
+    metaDescription:
+      "Découvrez MaPrimeAdapt' 2026 et les aides pour adapter votre logement senior/PMR. Travaux essentiels et devis gratuit.",
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-03-03',
@@ -1243,7 +1253,7 @@ Trouvez un électricien ou un intégrateur domotique qualifié sur ServicesArtis
           "MaPrimeAdapt' couvre 50 % des travaux pour les ménages modestes et 70 % pour les ménages très modestes, dans la limite de 22 000 € de travaux subventionnables. Le montant maximal de l'aide est donc de 11 000 € (modestes) ou 15 400 € (très modestes).",
       },
       {
-        question: "Quels travaux sont éligibles ?",
+        question: 'Quels travaux sont éligibles ?',
         answer:
           "Tous les travaux visant à améliorer l'accessibilité et la sécurité du logement : remplacement de la baignoire par une douche de plain-pied, installation de barres d'appui et de mains courantes, monte-escalier ou ascenseur domestique, élargissement des portes, revêtements antidérapants, volets roulants motorisés, éclairage automatique.",
       },

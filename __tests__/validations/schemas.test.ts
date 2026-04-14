@@ -194,8 +194,12 @@ describe('createBookingSchema', () => {
   })
 
   it('should reject deposit amount out of range', () => {
-    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: -1 }).success).toBe(false)
-    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: 10001 }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: -1 }).success).toBe(
+      false
+    )
+    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: 10001 }).success).toBe(
+      false
+    )
   })
 })
 
@@ -278,7 +282,9 @@ describe('createReviewSchema', () => {
   })
 
   it('should reject long comments', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, comment: 'a'.repeat(501) }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReview, comment: 'a'.repeat(501) }).success).toBe(
+      false
+    )
   })
 })
 
@@ -323,7 +329,9 @@ describe('signUpSchema', () => {
 
 describe('signInSchema', () => {
   it('should accept valid signin', () => {
-    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass' }).success).toBe(true)
+    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass' }).success).toBe(
+      true
+    )
   })
 
   it('should reject empty password', () => {
@@ -363,11 +371,15 @@ describe('createPaymentIntentSchema', () => {
   })
 
   it('should reject amount above maximum', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, amount: 1000001 }).success).toBe(false)
+    expect(createPaymentIntentSchema.safeParse({ ...validPayment, amount: 1000001 }).success).toBe(
+      false
+    )
   })
 
   it('should reject invalid currency', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'usd' }).success).toBe(false)
+    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'usd' }).success).toBe(
+      false
+    )
   })
 
   it('should accept deposit payment with percentage', () => {
@@ -380,8 +392,12 @@ describe('createPaymentIntentSchema', () => {
   })
 
   it('should reject deposit percentage out of range', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 5 }).success).toBe(false)
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 60 }).success).toBe(false)
+    expect(
+      createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 5 }).success
+    ).toBe(false)
+    expect(
+      createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 60 }).success
+    ).toBe(false)
   })
 })
 

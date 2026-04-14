@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 
 const tabs = [
-  { name: 'Vue d\'ensemble', href: '/admin/prospection', icon: LayoutDashboard, exact: true },
+  { name: "Vue d'ensemble", href: '/admin/prospection', icon: LayoutDashboard, exact: true },
   { name: 'Contacts', href: '/admin/prospection/contacts', icon: Users },
   { name: 'Listes', href: '/admin/prospection/lists', icon: List },
   { name: 'Modèles', href: '/admin/prospection/templates', icon: FileText },
@@ -34,7 +34,10 @@ export function ProspectionNav() {
   }
 
   return (
-    <nav aria-label="Navigation prospection" className="flex gap-1 overflow-x-auto border-b border-gray-200 pb-px mb-6">
+    <nav
+      aria-label="Navigation prospection"
+      className="flex gap-1 overflow-x-auto border-b border-gray-200 pb-px mb-6"
+    >
       {tabs.map((tab) => {
         const Icon = tab.icon
         const active = isActive(tab.href, tab.exact)

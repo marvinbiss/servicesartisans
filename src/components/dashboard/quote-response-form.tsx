@@ -50,9 +50,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Montant estimé (€)
-        </label>
+        <label className="block text-sm font-medium mb-1">Montant estimé (€)</label>
         <Input
           type="number"
           value={amount}
@@ -63,18 +61,11 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
 
       <div className="flex gap-2">
         {currentStatus !== 'responded' && (
-          <Button
-            onClick={() => updateStatus('responded')}
-            disabled={isLoading}
-          >
+          <Button onClick={() => updateStatus('responded')} disabled={isLoading}>
             ✓ Marquer comme répondu
           </Button>
         )}
-        <Button
-          variant="outline"
-          onClick={() => updateStatus('converted')}
-          disabled={isLoading}
-        >
+        <Button variant="outline" onClick={() => updateStatus('converted')} disabled={isLoading}>
           💰 Converti en client
         </Button>
         <Button

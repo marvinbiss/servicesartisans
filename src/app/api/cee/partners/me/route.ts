@@ -13,10 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import {
-  requireArtisanAuth,
-  serverErrorResponse,
-} from '@/lib/cee/route-helpers'
+import { requireArtisanAuth, serverErrorResponse } from '@/lib/cee/route-helpers'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -48,10 +45,7 @@ export async function GET(_request: NextRequest) {
         action: 'cee-partners-me-read',
         userId: ctx.userId,
       })
-      return serverErrorResponse(
-        'READ_FAILED',
-        'Impossible de récupérer votre dossier partenaire'
-      )
+      return serverErrorResponse('READ_FAILED', 'Impossible de récupérer votre dossier partenaire')
     }
 
     return NextResponse.json({

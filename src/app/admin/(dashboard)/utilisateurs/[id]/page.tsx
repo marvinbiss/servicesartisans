@@ -2,17 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import {
-  ArrowLeft,
-  Mail,
-  Phone,
-  Calendar,
-  Save,
-  Trash2,
-  User,
-  Star,
-  FileText,
-} from 'lucide-react'
+import { ArrowLeft, Mail, Phone, Calendar, Save, Trash2, User, Star, FileText } from 'lucide-react'
 import { UserStatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
@@ -139,15 +129,11 @@ export default function AdminUserDetailPage() {
 
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {user.full_name || 'Sans nom'}
-              </h1>
+              <h1 className="text-2xl font-bold text-gray-900">{user.full_name || 'Sans nom'}</h1>
               <p className="text-gray-500 mt-1">{user.email}</p>
               <div className="flex items-center gap-3 mt-2">
                 <UserStatusBadge status={getUserStatus()} />
-                {user.role && (
-                  <span className="text-sm text-gray-500 capitalize">{user.role}</span>
-                )}
+                {user.role && <span className="text-sm text-gray-500 capitalize">{user.role}</span>}
               </div>
             </div>
 
@@ -191,9 +177,7 @@ export default function AdminUserDetailPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom complet
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
                 {editMode ? (
                   <input
                     type="text"
@@ -210,9 +194,7 @@ export default function AdminUserDetailPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <p className="flex items-center gap-2 text-gray-900">
                   <Mail className="w-4 h-4 text-gray-400" />
                   {user.email}
@@ -220,9 +202,7 @@ export default function AdminUserDetailPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Rôle
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
                 <p className="flex items-center gap-2 text-gray-900">
                   <Phone className="w-4 h-4 text-gray-400" />
                   {user.role || '-'}

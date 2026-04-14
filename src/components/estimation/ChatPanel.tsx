@@ -16,12 +16,7 @@ interface ChatPanelProps {
   prompts: string[]
 }
 
-export const ChatPanel = memo(function ChatPanel({
-  context,
-  chat,
-  lead,
-  prompts,
-}: ChatPanelProps) {
+export const ChatPanel = memo(function ChatPanel({ context, chat, lead, prompts }: ChatPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -38,11 +33,7 @@ export const ChatPanel = memo(function ChatPanel({
   return (
     <>
       {/* Chat messages area */}
-      <div
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
-        role="log"
-        aria-live="polite"
-      >
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3" role="log" aria-live="polite">
         {/* Welcome message */}
         {chat.messages.length === 0 && (
           <motion.div
@@ -54,18 +45,15 @@ export const ChatPanel = memo(function ChatPanel({
               {context.artisan ? (
                 <>
                   Bonjour ! Je suis l'assistant IA d'estimation de{' '}
-                  <strong>{context.artisan.name}</strong>,{' '}
-                  {context.metier.toLowerCase()} à{' '}
-                  <strong>{context.ville}</strong>. Décrivez votre
-                  projet et je vous donnerai une estimation de prix.
+                  <strong>{context.artisan.name}</strong>, {context.metier.toLowerCase()} à{' '}
+                  <strong>{context.ville}</strong>. Décrivez votre projet et je vous donnerai une
+                  estimation de prix.
                 </>
               ) : (
                 <>
-                  Bonjour ! Je suis l'assistant IA d'estimation.
-                  Dites-moi quel projet vous avez en tête avec votre{' '}
-                  <strong>{context.metier.toLowerCase()}</strong> à{' '}
-                  <strong>{context.ville}</strong>, et je vous
-                  donnerai une estimation de prix.
+                  Bonjour ! Je suis l'assistant IA d'estimation. Dites-moi quel projet vous avez en
+                  tête avec votre <strong>{context.metier.toLowerCase()}</strong> à{' '}
+                  <strong>{context.ville}</strong>, et je vous donnerai une estimation de prix.
                 </>
               )}
             </div>
@@ -79,10 +67,7 @@ export const ChatPanel = memo(function ChatPanel({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className={
-              'flex ' +
-              (msg.role === 'user' ? 'justify-end' : 'justify-start')
-            }
+            className={'flex ' + (msg.role === 'user' ? 'justify-end' : 'justify-start')}
           >
             <div
               className={
@@ -92,15 +77,11 @@ export const ChatPanel = memo(function ChatPanel({
                   : 'rounded-tl-sm bg-sand-100 text-charcoal-800')
               }
             >
-              {msg.role === 'assistant'
-                ? renderMarkdown(msg.content)
-                : msg.content}
+              {msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content}
               {/* Streaming cursor */}
-              {msg.role === 'assistant' &&
-                idx === chat.messages.length - 1 &&
-                chat.isStreaming && (
-                  <span className="inline-block w-1.5 h-4 ml-0.5 bg-charcoal-400 animate-pulse rounded-sm align-text-bottom" />
-                )}
+              {msg.role === 'assistant' && idx === chat.messages.length - 1 && chat.isStreaming && (
+                <span className="inline-block w-1.5 h-4 ml-0.5 bg-charcoal-400 animate-pulse rounded-sm align-text-bottom" />
+              )}
             </div>
           </motion.div>
         ))}

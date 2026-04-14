@@ -82,15 +82,24 @@ export default function AdminClaimsPage() {
     try {
       setActionError(null)
       setActionSuccess(null)
-      const result = await adminMutate<{ success: boolean; message?: string }>('/api/admin/claims', {
-        method: 'PATCH',
-        body: {
-          claimId: actionModal.claimId,
-          action: actionModal.action,
-          ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
-        },
+      const result = await adminMutate<{ success: boolean; message?: string }>(
+        '/api/admin/claims',
+        {
+          method: 'PATCH',
+          body: {
+            claimId: actionModal.claimId,
+            action: actionModal.action,
+            ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
+          },
+        }
+      )
+      setActionModal({
+        open: false,
+        claimId: '',
+        action: 'approve',
+        providerName: '',
+        userName: '',
       })
-      setActionModal({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
       setRejectionReason('')
       if (result?.message) setActionSuccess(result.message)
       mutate()
@@ -112,11 +121,23 @@ export default function AdminClaimsPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><Clock className="w-3 h-3" /> En attente</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+            <Clock className="w-3 h-3" /> En attente
+          </span>
+        )
       case 'approved':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3" /> Approuvée</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            <CheckCircle className="w-3 h-3" /> Approuvée
+          </span>
+        )
       case 'rejected':
-        return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><XCircle className="w-3 h-3" /> Rejetée</span>
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+            <XCircle className="w-3 h-3" /> Rejetée
+          </span>
+        )
       default:
         return null
     }
@@ -131,9 +152,7 @@ export default function AdminClaimsPage() {
             <Shield className="w-7 h-7 text-amber-500" />
             Revendications de fiches
           </h1>
-          <p className="text-gray-500 mt-1">
-            Gérez les demandes de revendication des artisans
-          </p>
+          <p className="text-gray-500 mt-1">Gérez les demandes de revendication des artisans</p>
         </div>
       </div>
 
@@ -145,7 +164,10 @@ export default function AdminClaimsPage() {
             <CheckCircle className="w-4 h-4" />
             <span>{actionSuccess}</span>
           </div>
-          <button onClick={() => setActionSuccess(null)} className="text-green-600 hover:text-green-800 text-sm">
+          <button
+            onClick={() => setActionSuccess(null)}
+            className="text-green-600 hover:text-green-800 text-sm"
+          >
             Fermer
           </button>
         </div>
@@ -161,7 +183,10 @@ export default function AdminClaimsPage() {
         ].map(({ value, label }) => (
           <button
             key={value}
-            onClick={() => { setFilter(value); setPage(1) }}
+            onClick={() => {
+              setFilter(value)
+              setPage(1)
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === value
                 ? 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -189,18 +214,28 @@ export default function AdminClaimsPage() {
       ) : claims.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <Shield className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">Aucune demande {filter !== 'all' ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}` : ''}</p>
+          <p className="text-gray-500 font-medium">
+            Aucune demande{' '}
+            {filter !== 'all'
+              ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}`
+              : ''}
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
           {claims.map((claim) => (
-            <div key={claim.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div
+              key={claim.id}
+              className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between">
                 <div className="space-y-3 flex-1">
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-semibold text-gray-900">{claim.provider?.name || 'Artisan inconnu'}</span>
+                    <span className="font-semibold text-gray-900">
+                      {claim.provider?.name || 'Artisan inconnu'}
+                    </span>
                     {claim.provider?.address_city && (
                       <span className="text-gray-500 text-sm">— {claim.provider.address_city}</span>
                     )}
@@ -210,21 +245,31 @@ export default function AdminClaimsPage() {
                   <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
                     <div className="flex items-center gap-2 text-sm">
                       <User className="w-4 h-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">{claim.claimant_name || claim.user?.full_name || 'Utilisateur'}</span>
+                      <span className="font-medium text-gray-900">
+                        {claim.claimant_name || claim.user?.full_name || 'Utilisateur'}
+                      </span>
                       {claim.claimant_position && (
                         <span className="text-gray-500">— {claim.claimant_position}</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Mail className="w-4 h-4 text-gray-400" />
-                      <a href={`mailto:${claim.claimant_email || claim.user?.email}`} className="text-blue-600 hover:underline">
+                      <a
+                        href={`mailto:${claim.claimant_email || claim.user?.email}`}
+                        className="text-blue-600 hover:underline"
+                      >
                         {claim.claimant_email || claim.user?.email}
                       </a>
                     </div>
                     {claim.claimant_phone && (
                       <div className="flex items-center gap-2 text-sm">
                         <Phone className="w-4 h-4 text-gray-400" />
-                        <a href={`tel:${formatPhoneForTel(claim.claimant_phone)}`} className="text-gray-700">{claim.claimant_phone}</a>
+                        <a
+                          href={`tel:${formatPhoneForTel(claim.claimant_phone)}`}
+                          className="text-gray-700"
+                        >
+                          {claim.claimant_phone}
+                        </a>
                       </div>
                     )}
                     {claim.claimant_position && (
@@ -272,26 +317,30 @@ export default function AdminClaimsPage() {
                   {claim.status === 'pending' && (
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setActionModal({
-                          open: true,
-                          claimId: claim.id,
-                          action: 'approve',
-                          providerName: claim.provider?.name || 'Artisan',
-                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
-                        })}
+                        onClick={() =>
+                          setActionModal({
+                            open: true,
+                            claimId: claim.id,
+                            action: 'approve',
+                            providerName: claim.provider?.name || 'Artisan',
+                            userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                          })
+                        }
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approuver
                       </button>
                       <button
-                        onClick={() => setActionModal({
-                          open: true,
-                          claimId: claim.id,
-                          action: 'reject',
-                          providerName: claim.provider?.name || 'Artisan',
-                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
-                        })}
+                        onClick={() =>
+                          setActionModal({
+                            open: true,
+                            claimId: claim.id,
+                            action: 'reject',
+                            providerName: claim.provider?.name || 'Artisan',
+                            userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                          })
+                        }
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                       >
                         <XCircle className="w-4 h-4" />
@@ -302,13 +351,15 @@ export default function AdminClaimsPage() {
 
                   {claim.status === 'approved' && (
                     <button
-                      onClick={() => setActionModal({
-                        open: true,
-                        claimId: claim.id,
-                        action: 'unclaim',
-                        providerName: claim.provider?.name || 'Artisan',
-                        userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
-                      })}
+                      onClick={() =>
+                        setActionModal({
+                          open: true,
+                          claimId: claim.id,
+                          action: 'unclaim',
+                          providerName: claim.provider?.name || 'Artisan',
+                          userName: claim.claimant_name || claim.user?.full_name || 'Utilisateur',
+                        })
+                      }
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
                     >
                       <Undo2 className="w-4 h-4" />
@@ -348,32 +399,49 @@ export default function AdminClaimsPage() {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={actionModal.open}
-        onClose={() => { setActionModal({ ...actionModal, open: false }); setRejectionReason('') }}
+        onClose={() => {
+          setActionModal({ ...actionModal, open: false })
+          setRejectionReason('')
+        }}
         onConfirm={confirmAction}
         title={
-          actionModal.action === 'approve' ? 'Approuver la revendication'
-          : actionModal.action === 'unclaim' ? 'Dérevendiquer la fiche'
-          : 'Rejeter la revendication'
+          actionModal.action === 'approve'
+            ? 'Approuver la revendication'
+            : actionModal.action === 'unclaim'
+              ? 'Dérevendiquer la fiche'
+              : 'Rejeter la revendication'
         }
         message={
           actionModal.action === 'approve'
             ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée. Si l'artisan n'a pas de compte, un compte sera créé et il recevra un email pour définir son mot de passe.`
             : actionModal.action === 'unclaim'
-            ? `Retirer la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche redeviendra disponible et l'artisan perdra l'accès à sa gestion.`
-            : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
+              ? `Retirer la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche redeviendra disponible et l'artisan perdra l'accès à sa gestion.`
+              : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
         }
-        confirmText={actionModal.action === 'approve' ? 'Approuver' : actionModal.action === 'unclaim' ? 'Dérevendiquer' : 'Rejeter'}
+        confirmText={
+          actionModal.action === 'approve'
+            ? 'Approuver'
+            : actionModal.action === 'unclaim'
+              ? 'Dérevendiquer'
+              : 'Rejeter'
+        }
         variant={actionModal.action === 'approve' ? 'success' : 'danger'}
       >
         {(actionModal.action === 'reject' || actionModal.action === 'unclaim') && (
           <div className="mt-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {actionModal.action === 'unclaim' ? 'Motif de la dérevendication (optionnel)' : 'Motif du rejet (optionnel)'}
+              {actionModal.action === 'unclaim'
+                ? 'Motif de la dérevendication (optionnel)'
+                : 'Motif du rejet (optionnel)'}
             </label>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder={actionModal.action === 'unclaim' ? 'Expliquez pourquoi la revendication est retirée...' : 'Expliquez pourquoi la demande est rejetée...'}
+              placeholder={
+                actionModal.action === 'unclaim'
+                  ? 'Expliquez pourquoi la revendication est retirée...'
+                  : 'Expliquez pourquoi la demande est rejetée...'
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={500}

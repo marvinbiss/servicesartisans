@@ -31,7 +31,8 @@ export async function GET(request: NextRequest) {
 
   const { service, city } = parsed.data
   const supabase = createAdminClient()
-  const fields = 'id, name, slug, stable_id, specialty, address_city, rating_average, review_count, is_verified'
+  const fields =
+    'id, name, slug, stable_id, specialty, address_city, rating_average, review_count, is_verified'
 
   // Try same city first
   const { data: cityData } = await supabase
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
   }
 
   // Fallback: fill remaining with broader results
-  const existingIds = (cityData || []).map(p => p.id)
+  const existingIds = (cityData || []).map((p) => p.id)
   const remaining = 5 - (cityData?.length || 0)
 
   const { data: broadData } = await supabase

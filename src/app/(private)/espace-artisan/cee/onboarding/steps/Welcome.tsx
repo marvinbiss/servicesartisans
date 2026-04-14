@@ -24,7 +24,7 @@ const BENEFITS = [
     icon: Zap,
     title: 'Revenus additionnels',
     description:
-      "Percevez une prime CEE sur chaque dossier éligible déposé via ServicesArtisans Energy.",
+      'Percevez une prime CEE sur chaque dossier éligible déposé via ServicesArtisans Energy.',
   },
   {
     icon: Shield,
@@ -53,9 +53,7 @@ export default function Welcome({ onNext, onPartnerRefresh }: WelcomeProps) {
 
   const handleContinue = async () => {
     if (!consented) {
-      setConsentError(
-        'Vous devez accepter les conditions pour continuer.'
-      )
+      setConsentError('Vous devez accepter les conditions pour continuer.')
       return
     }
     setConsentError('')
@@ -70,26 +68,19 @@ export default function Welcome({ onNext, onPartnerRefresh }: WelcomeProps) {
   }
 
   return (
-    <section
-      className="p-6 sm:p-8"
-      aria-labelledby="welcome-heading"
-      data-testid="step-welcome"
-    >
+    <section className="p-6 sm:p-8" aria-labelledby="welcome-heading" data-testid="step-welcome">
       <header className="mb-8">
         <div className="mb-3 inline-flex items-center rounded-full bg-primary-50 px-3 py-1">
           <span className="text-xs font-bold uppercase tracking-widest text-primary-600">
             Étape 1 sur 5
           </span>
         </div>
-        <h2
-          id="welcome-heading"
-          className="font-heading text-2xl font-bold text-charcoal-900"
-        >
+        <h2 id="welcome-heading" className="font-heading text-2xl font-bold text-charcoal-900">
           Bienvenue chez SA Energy
         </h2>
         <p className="mt-2 text-charcoal-500">
-          Rejoignez le réseau de mandataires CEE de ServicesArtisans Energy et
-          valorisez chaque chantier éligible.
+          Rejoignez le réseau de mandataires CEE de ServicesArtisans Energy et valorisez chaque
+          chantier éligible.
         </p>
       </header>
 
@@ -110,9 +101,7 @@ export default function Welcome({ onNext, onPartnerRefresh }: WelcomeProps) {
               </div>
               <div>
                 <h3 className="font-semibold text-charcoal-900">{benefit.title}</h3>
-                <p className="mt-0.5 text-sm text-charcoal-500">
-                  {benefit.description}
-                </p>
+                <p className="mt-0.5 text-sm text-charcoal-500">{benefit.description}</p>
               </div>
             </li>
           )
@@ -122,11 +111,10 @@ export default function Welcome({ onNext, onPartnerRefresh }: WelcomeProps) {
       {/* Legal notice */}
       <div className="mb-6 rounded-xl border border-sand-300 bg-sand-50 p-4 text-sm text-charcoal-500">
         <p>
-          <strong className="text-charcoal-700">Base légale :</strong> Ce
-          partenariat est encadré par l&apos;arrêté du 2 novembre 2023 relatif
-          aux obligations d&apos;économies d&apos;énergie (R.221-1 du Code de
-          l&apos;énergie). SA Energy agit en tant que mandataire auprès du
-          délégataire CEE.
+          <strong className="text-charcoal-700">Base légale :</strong> Ce partenariat est encadré
+          par l&apos;arrêté du 2 novembre 2023 relatif aux obligations d&apos;économies
+          d&apos;énergie (R.221-1 du Code de l&apos;énergie). SA Energy agit en tant que mandataire
+          auprès du délégataire CEE.
         </p>
       </div>
 
@@ -149,13 +137,10 @@ export default function Welcome({ onNext, onPartnerRefresh }: WelcomeProps) {
               consentError ? 'border-red-500' : 'border-sand-400'
             )}
           />
-          <label
-            htmlFor="consent-checkbox"
-            className="cursor-pointer text-sm text-charcoal-700"
-          >
-            Je comprends le rôle de mandataire CEE de SA Energy et j&apos;accepte
-            d&apos;entamer la procédure d&apos;adhésion, incluant la signature
-            d&apos;une convention et la validation d&apos;un quiz de formation.
+          <label htmlFor="consent-checkbox" className="cursor-pointer text-sm text-charcoal-700">
+            Je comprends le rôle de mandataire CEE de SA Energy et j&apos;accepte d&apos;entamer la
+            procédure d&apos;adhésion, incluant la signature d&apos;une convention et la validation
+            d&apos;un quiz de formation.
           </label>
         </div>
         {consentError && (

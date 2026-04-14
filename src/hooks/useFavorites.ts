@@ -59,7 +59,7 @@ export function useFavorites() {
 
   const isFavorite = useCallback(
     (providerId: string) => favorites.includes(providerId),
-    [favorites],
+    [favorites]
   )
 
   const toggleFavorite = useCallback((providerId: string) => {

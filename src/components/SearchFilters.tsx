@@ -19,7 +19,12 @@ interface SearchFiltersProps {
   onControlledRgeChange?: (next: boolean) => void
 }
 
-export default function SearchFilters({ onFilterChange, totalResults, controlledRge, onControlledRgeChange }: SearchFiltersProps) {
+export default function SearchFilters({
+  onFilterChange,
+  totalResults,
+  controlledRge,
+  onControlledRgeChange,
+}: SearchFiltersProps) {
   const isRgeControlled = controlledRge !== undefined
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
@@ -52,11 +57,9 @@ export default function SearchFilters({ onFilterChange, totalResults, controlled
     }
   }
 
-  const activeFiltersCount = [
-    filters.verified,
-    rgeActive,
-    filters.minRating !== null,
-  ].filter(Boolean).length
+  const activeFiltersCount = [filters.verified, rgeActive, filters.minRating !== null].filter(
+    Boolean
+  ).length
 
   return (
     <div
@@ -72,11 +75,16 @@ export default function SearchFilters({ onFilterChange, totalResults, controlled
           aria-live="polite"
           aria-atomic="true"
         >
-          <span className="font-bold text-charcoal-900">{totalResults}</span> artisan{totalResults > 1 ? 's' : ''} trouvé{totalResults > 1 ? 's' : ''}
+          <span className="font-bold text-charcoal-900">{totalResults}</span> artisan
+          {totalResults > 1 ? 's' : ''} trouvé{totalResults > 1 ? 's' : ''}
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0" role="group" aria-label="Controles de tri et filtrage">
+        <div
+          className="flex items-center gap-2 sm:gap-3 flex-shrink-0"
+          role="group"
+          aria-label="Controles de tri et filtrage"
+        >
           {/* Sort dropdown */}
           <div className="relative">
             <label id={sortLabelId} className="sr-only">
@@ -91,7 +99,10 @@ export default function SearchFilters({ onFilterChange, totalResults, controlled
               <option value="name">Nom A-Z</option>
               <option value="rating">Meilleures notes</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" aria-hidden="true" />
+            <ChevronDown
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none"
+              aria-hidden="true"
+            />
           </div>
 
           {/* Filter button */}
@@ -164,7 +175,11 @@ export default function SearchFilters({ onFilterChange, totalResults, controlled
             </button>
 
             {/* Rating filter */}
-            <div className="flex items-center gap-1" role="group" aria-label="Filtrer par note minimum">
+            <div
+              className="flex items-center gap-1"
+              role="group"
+              aria-label="Filtrer par note minimum"
+            >
               {[4, 4.5].map((rating) => (
                 <button
                   key={rating}

@@ -12,16 +12,10 @@ export function verifyVapiSignature(payload: string, signature: string): boolean
     return false
   }
 
-  const expected = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex')
+  const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex')
 
   try {
-    return crypto.timingSafeEqual(
-      Buffer.from(expected, 'hex'),
-      Buffer.from(signature, 'hex')
-    )
+    return crypto.timingSafeEqual(Buffer.from(expected, 'hex'), Buffer.from(signature, 'hex'))
   } catch {
     return false
   }

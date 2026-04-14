@@ -95,7 +95,7 @@ export default function SettingsPage() {
   }
 
   const updateField = (field: string, value: unknown) => {
-    setSettings(prev => {
+    setSettings((prev) => {
       if (!prev) return prev
       const updated = { ...prev, [field]: value }
       setHasUnsavedChanges(JSON.stringify(updated) !== initialSettingsRef.current)
@@ -125,14 +125,17 @@ export default function SettingsPage() {
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
-            <span className="text-sm text-amber-600 font-medium">Modifications non sauvegardées</span>
+            <span className="text-sm text-amber-600 font-medium">
+              Modifications non sauvegardées
+            </span>
           )}
           <button
             onClick={handleSave}
             disabled={saving}
             className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Sauvegarder'}
+            <Save className="w-4 h-4" />{' '}
+            {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Sauvegarder'}
           </button>
         </div>
       </div>
@@ -143,7 +146,12 @@ export default function SettingsPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -168,7 +176,9 @@ export default function SettingsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Max auto-réponses par conversation</label>
+                <label className="block text-sm font-medium mb-1">
+                  Max auto-réponses par conversation
+                </label>
                 <input
                   type="number"
                   value={settings.max_auto_replies}
@@ -187,19 +197,34 @@ export default function SettingsPage() {
                 onChange={(e) => updateField('auto_reply_enabled', e.target.checked)}
                 className="w-4 h-4 rounded"
               />
-              <span className="text-sm font-medium">Activer les réponses automatiques IA (global)</span>
+              <span className="text-sm font-medium">
+                Activer les réponses automatiques IA (global)
+              </span>
             </label>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Mots-clés d'escalade (transfert humain)</label>
+              <label className="block text-sm font-medium mb-1">
+                Mots-clés d'escalade (transfert humain)
+              </label>
               <input
                 type="text"
                 value={settings.escalation_keywords.join(', ')}
-                onChange={(e) => updateField('escalation_keywords', e.target.value.split(',').map(k => k.trim()).filter(Boolean))}
+                onChange={(e) =>
+                  updateField(
+                    'escalation_keywords',
+                    e.target.value
+                      .split(',')
+                      .map((k) => k.trim())
+                      .filter(Boolean)
+                  )
+                }
                 className="w-full px-3 py-2 border rounded-lg text-sm"
                 placeholder="urgent, plainte, avocat, rgpd..."
               />
-              <p className="text-xs text-gray-400 mt-1">Séparés par des virgules. Si un message contient un de ces mots, la conversation sera assignée à un humain.</p>
+              <p className="text-xs text-gray-400 mt-1">
+                Séparés par des virgules. Si un message contient un de ces mots, la conversation
+                sera assignée à un humain.
+              </p>
             </div>
           </div>
 
@@ -211,7 +236,9 @@ export default function SettingsPage() {
               const field = `${type}_system_prompt` as keyof ProspectionAISettings
               return (
                 <div key={type} className="mb-4">
-                  <label className="block text-sm font-medium mb-1 capitalize">Prompt {type}s</label>
+                  <label className="block text-sm font-medium mb-1 capitalize">
+                    Prompt {type}s
+                  </label>
                   <textarea
                     value={settings[field] as string}
                     onChange={(e) => updateField(field, e.target.value)}
@@ -229,7 +256,12 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Modèle</label>
-                <input type="text" value={settings.claude_model} onChange={(e) => updateField('claude_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                <input
+                  type="text"
+                  value={settings.claude_model}
+                  onChange={(e) => updateField('claude_model', e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Max tokens (1-8000)</label>
@@ -255,8 +287,12 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="flex items-end">
-                <span className={`text-sm ${settings.claude_api_key_set ? 'text-green-600' : 'text-red-500'}`}>
-                  {settings.claude_api_key_set ? 'API Key configurée' : 'API Key manquante (ANTHROPIC_API_KEY)'}
+                <span
+                  className={`text-sm ${settings.claude_api_key_set ? 'text-green-600' : 'text-red-500'}`}
+                >
+                  {settings.claude_api_key_set
+                    ? 'API Key configurée'
+                    : 'API Key manquante (ANTHROPIC_API_KEY)'}
                 </span>
               </div>
             </div>
@@ -268,7 +304,12 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Modèle</label>
-                <input type="text" value={settings.openai_model} onChange={(e) => updateField('openai_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                <input
+                  type="text"
+                  value={settings.openai_model}
+                  onChange={(e) => updateField('openai_model', e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Max tokens (1-8000)</label>
@@ -294,8 +335,12 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="flex items-end">
-                <span className={`text-sm ${settings.openai_api_key_set ? 'text-green-600' : 'text-red-500'}`}>
-                  {settings.openai_api_key_set ? 'API Key configurée' : 'API Key manquante (OPENAI_API_KEY)'}
+                <span
+                  className={`text-sm ${settings.openai_api_key_set ? 'text-green-600' : 'text-red-500'}`}
+                >
+                  {settings.openai_api_key_set
+                    ? 'API Key configurée'
+                    : 'API Key manquante (OPENAI_API_KEY)'}
                 </span>
               </div>
             </div>

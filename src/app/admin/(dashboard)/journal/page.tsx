@@ -24,26 +24,26 @@ interface AuditLog {
 }
 
 const actionLabels: Record<string, string> = {
-  'create_provider': 'Création artisan',
-  'update_provider': 'Modification artisan',
-  'delete_provider': 'Suppression artisan',
-  'create_review': 'Création avis',
-  'update_review': 'Modification avis',
-  'delete_review': 'Suppression avis',
-  'ban_user': 'Bannissement utilisateur',
-  'unban_user': 'Débannissement utilisateur',
-  'create_service': 'Création service',
-  'update_service': 'Modification service',
-  'delete_service': 'Suppression service',
-  'create_user': 'Création utilisateur',
-  'update_user': 'Modification utilisateur',
-  'delete_user': 'Suppression utilisateur',
-  'verify_provider': 'Vérification artisan',
-  'suspend_provider': 'Suspension artisan',
-  'activate_provider': 'Réactivation artisan',
-  'resolve_report': 'Résolution signalement',
-  'dismiss_report': 'Rejet signalement',
-  'update_settings': 'Modification paramètres',
+  create_provider: 'Création artisan',
+  update_provider: 'Modification artisan',
+  delete_provider: 'Suppression artisan',
+  create_review: 'Création avis',
+  update_review: 'Modification avis',
+  delete_review: 'Suppression avis',
+  ban_user: 'Bannissement utilisateur',
+  unban_user: 'Débannissement utilisateur',
+  create_service: 'Création service',
+  update_service: 'Modification service',
+  delete_service: 'Suppression service',
+  create_user: 'Création utilisateur',
+  update_user: 'Modification utilisateur',
+  delete_user: 'Suppression utilisateur',
+  verify_provider: 'Vérification artisan',
+  suspend_provider: 'Suspension artisan',
+  activate_provider: 'Réactivation artisan',
+  resolve_report: 'Résolution signalement',
+  dismiss_report: 'Rejet signalement',
+  update_settings: 'Modification paramètres',
 }
 
 interface JournalResponse {
@@ -69,7 +69,8 @@ export default function AdminJournalPage() {
     if (action.includes('update') || action.includes('edit')) return 'text-blue-700 bg-blue-100'
     if (action.includes('delete') || action.includes('remove')) return 'text-red-700 bg-red-100'
     if (action.includes('dispatch') || action.includes('assign')) return 'text-blue-700 bg-blue-100'
-    if (action.includes('verify') || action.includes('approve')) return 'text-green-700 bg-green-100'
+    if (action.includes('verify') || action.includes('approve'))
+      return 'text-green-700 bg-green-100'
     return 'text-gray-700 bg-gray-100'
   }
 
@@ -82,9 +83,7 @@ export default function AdminJournalPage() {
               <Shield className="w-6 h-6 text-gray-400" />
               Journal Admin
             </h1>
-            <p className="text-gray-500 mt-1">
-              Journal immuable — {total} entrées au total
-            </p>
+            <p className="text-gray-500 mt-1">Journal immuable — {total} entrées au total</p>
           </div>
           <button
             onClick={() => mutate()}
@@ -114,14 +113,27 @@ export default function AdminJournalPage() {
           <>
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px] sm:min-w-[700px] text-sm" aria-label="Journal des actions administrateur">
+                <table
+                  className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
+                  aria-label="Journal des actions administrateur"
+                >
                   <thead>
                     <tr className="border-b border-gray-100 text-left text-gray-500">
-                      <th scope="col" className="px-4 py-3 font-medium">Date</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Action</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Ressource</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Admin</th>
-                      <th scope="col" className="px-4 py-3 font-medium">Détails</th>
+                      <th scope="col" className="px-4 py-3 font-medium">
+                        Date
+                      </th>
+                      <th scope="col" className="px-4 py-3 font-medium">
+                        Action
+                      </th>
+                      <th scope="col" className="px-4 py-3 font-medium">
+                        Ressource
+                      </th>
+                      <th scope="col" className="px-4 py-3 font-medium">
+                        Admin
+                      </th>
+                      <th scope="col" className="px-4 py-3 font-medium">
+                        Détails
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
@@ -130,12 +142,17 @@ export default function AdminJournalPage() {
                         <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                           <Clock className="w-3 h-3 inline mr-1" />
                           {new Date(log.created_at).toLocaleString('fr-FR', {
-                            day: '2-digit', month: '2-digit', year: '2-digit',
-                            hour: '2-digit', minute: '2-digit',
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${actionColor(log.action)}`}>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${actionColor(log.action)}`}
+                          >
                             {actionLabels[log.action] || log.action}
                           </span>
                         </td>
@@ -155,9 +172,7 @@ export default function AdminJournalPage() {
                           {log.user_id ? log.user_id.slice(0, 8) + '...' : '—'}
                         </td>
                         <td className="px-4 py-3 text-gray-400 text-xs max-w-xs truncate">
-                          {log.new_value
-                            ? JSON.stringify(log.new_value).slice(0, 80)
-                            : '—'}
+                          {log.new_value ? JSON.stringify(log.new_value).slice(0, 80) : '—'}
                         </td>
                       </tr>
                     ))}
@@ -174,7 +189,9 @@ export default function AdminJournalPage() {
                 >
                   <ChevronLeft className="w-4 h-4" /> Préc.
                 </button>
-                <span className="text-sm text-gray-600">Page {page} / {totalPages}</span>
+                <span className="text-sm text-gray-600">
+                  Page {page} / {totalPages}
+                </span>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}

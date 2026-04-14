@@ -7,16 +7,16 @@ export interface DiagnosticSubProblem {
   id: string
   label: string
   description: string
-  recommendedService: string       // service slug (from trade-content.ts)
-  alternativeServices?: string[]   // fallback suggestions
-  estimatedPriceRange?: string     // e.g. "80-250 EUR"
+  recommendedService: string // service slug (from trade-content.ts)
+  alternativeServices?: string[] // fallback suggestions
+  estimatedPriceRange?: string // e.g. "80-250 EUR"
   urgencyTip?: string
 }
 
 export interface DiagnosticCategory {
   id: string
   label: string
-  icon: string  // emoji
+  icon: string // emoji
   subProblems: DiagnosticSubProblem[]
 }
 
@@ -28,11 +28,12 @@ export const diagnosticCategories: DiagnosticCategory[] = [
     subProblems: [
       {
         id: 'fuite-eau',
-        label: 'Fuite d\'eau',
+        label: "Fuite d'eau",
         description: 'Fuite visible sur un tuyau, un raccord ou sous un évier',
         recommendedService: 'plombier',
         estimatedPriceRange: '90-300 €',
-        urgencyTip: 'Coupez l\'arrivée d\'eau au compteur général immédiatement pour limiter les dégâts.',
+        urgencyTip:
+          "Coupez l'arrivée d'eau au compteur général immédiatement pour limiter les dégâts.",
       },
       {
         id: 'robinet-casse',
@@ -44,16 +45,17 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'chauffe-eau-panne',
         label: 'Chauffe-eau en panne',
-        description: 'Plus d\'eau chaude, fuite au ballon ou bruit anormal',
+        description: "Plus d'eau chaude, fuite au ballon ou bruit anormal",
         recommendedService: 'plombier',
         alternativeServices: ['chauffagiste'],
         estimatedPriceRange: '800-2 500 €',
-        urgencyTip: 'En attendant le professionnel, coupez l\'alimentation électrique ou gaz du chauffe-eau.',
+        urgencyTip:
+          "En attendant le professionnel, coupez l'alimentation électrique ou gaz du chauffe-eau.",
       },
       {
         id: 'wc-bouche',
         label: 'WC bouché ou en panne',
-        description: 'Toilettes bouchées, chasse d\'eau défaillante ou fuite',
+        description: "Toilettes bouchées, chasse d'eau défaillante ou fuite",
         recommendedService: 'plombier',
         estimatedPriceRange: '80-250 €',
       },
@@ -63,7 +65,8 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         description: 'Évacuation lente ou bouchée (évier, douche, égout)',
         recommendedService: 'plombier',
         estimatedPriceRange: '80-250 €',
-        urgencyTip: 'Ne versez pas de produits chimiques : ils peuvent endommager vos canalisations.',
+        urgencyTip:
+          'Ne versez pas de produits chimiques : ils peuvent endommager vos canalisations.',
       },
     ],
   },
@@ -75,10 +78,10 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'panne-courant',
         label: 'Panne de courant',
-        description: 'Plus d\'électricité dans tout ou partie du logement',
+        description: "Plus d'électricité dans tout ou partie du logement",
         recommendedService: 'electricien',
         estimatedPriceRange: '100-300 €',
-        urgencyTip: 'Vérifiez d\'abord votre disjoncteur général et vos fusibles avant d\'appeler.',
+        urgencyTip: "Vérifiez d'abord votre disjoncteur général et vos fusibles avant d'appeler.",
       },
       {
         id: 'prise-gresille',
@@ -119,10 +122,11 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'porte-claquee',
         label: 'Porte claquée',
-        description: 'Porte fermée avec les clés à l\'intérieur',
+        description: "Porte fermée avec les clés à l'intérieur",
         recommendedService: 'serrurier',
         estimatedPriceRange: '80-150 €',
-        urgencyTip: 'Restez calme. Un serrurier qualifié peut ouvrir sans dégâts dans la majorité des cas.',
+        urgencyTip:
+          'Restez calme. Un serrurier qualifié peut ouvrir sans dégâts dans la majorité des cas.',
       },
       {
         id: 'cle-perdue',
@@ -135,7 +139,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'blindage-porte',
         label: 'Blindage de porte',
-        description: 'Renforcement de porte ou installation d\'une porte blindée',
+        description: "Renforcement de porte ou installation d'une porte blindée",
         recommendedService: 'serrurier',
         estimatedPriceRange: '800-4 500 €',
       },
@@ -159,7 +163,8 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         description: 'Chaudière qui ne démarre pas, bruit anormal ou code erreur',
         recommendedService: 'chauffagiste',
         estimatedPriceRange: '100-500 €',
-        urgencyTip: 'Si vous sentez une odeur de gaz, quittez les lieux et appelez le 0 800 47 33 33 (Urgence Gaz).',
+        urgencyTip:
+          'Si vous sentez une odeur de gaz, quittez les lieux et appelez le 0 800 47 33 33 (Urgence Gaz).',
       },
       {
         id: 'radiateur-froid',
@@ -204,7 +209,8 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         description: 'Fuite de toit, tuile cassée, gouttière percée',
         recommendedService: 'couvreur',
         estimatedPriceRange: '200-1 500 €',
-        urgencyTip: 'Placez des récipients sous la fuite et protégez vos meubles en attendant l\'artisan.',
+        urgencyTip:
+          "Placez des récipients sous la fuite et protégez vos meubles en attendant l'artisan.",
       },
       {
         id: 'fenetre-cassee',
@@ -239,7 +245,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'peinture-ecaillee',
         label: 'Peinture écaillée ou abîmée',
-        description: 'Peinture qui s\'écaille, taches ou traces d\'humidité',
+        description: "Peinture qui s'écaille, taches ou traces d'humidité",
         recommendedService: 'peintre-en-batiment',
         estimatedPriceRange: '20-45 €/m²',
       },
@@ -268,7 +274,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'installation-cuisine',
         label: 'Installation de cuisine',
-        description: 'Montage et pose d\'une cuisine équipée',
+        description: "Montage et pose d'une cuisine équipée",
         recommendedService: 'cuisiniste',
         alternativeServices: ['menuisier'],
         estimatedPriceRange: '2 000-10 000 €',
@@ -283,7 +289,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'taille-haie',
         label: 'Taille de haie ou entretien de jardin',
-        description: 'Tonte de pelouse, taille de haies, élagage d\'arbres',
+        description: "Tonte de pelouse, taille de haies, élagage d'arbres",
         recommendedService: 'jardinier',
         estimatedPriceRange: '30-60 €/h',
       },
@@ -343,7 +349,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       {
         id: 'alarme-securite',
         label: 'Alarme et sécurité',
-        description: 'Installation d\'alarme, vidéosurveillance, interphone',
+        description: "Installation d'alarme, vidéosurveillance, interphone",
         recommendedService: 'alarme-securite',
         alternativeServices: ['electricien'],
         estimatedPriceRange: '500-3 000 €',
@@ -356,50 +362,50 @@ export const diagnosticCategories: DiagnosticCategory[] = [
  * Noms lisibles des services pour l'affichage (slug -> label)
  */
 export const serviceLabels: Record<string, string> = {
-  'plombier': 'Plombier',
-  'electricien': 'Électricien',
-  'serrurier': 'Serrurier',
-  'chauffagiste': 'Chauffagiste',
+  plombier: 'Plombier',
+  electricien: 'Électricien',
+  serrurier: 'Serrurier',
+  chauffagiste: 'Chauffagiste',
   'peintre-en-batiment': 'Peintre en bâtiment',
-  'menuisier': 'Menuisier',
-  'carreleur': 'Carreleur',
-  'couvreur': 'Couvreur',
-  'macon': 'Maçon',
-  'jardinier': 'Jardinier-paysagiste',
-  'vitrier': 'Vitrier',
-  'climaticien': 'Climaticien',
-  'cuisiniste': 'Cuisiniste',
-  'solier': 'Solier (revêtements de sol)',
-  'nettoyage': 'Nettoyage',
-  'charpentier': 'Charpentier',
-  'domoticien': 'Domoticien',
+  menuisier: 'Menuisier',
+  carreleur: 'Carreleur',
+  couvreur: 'Couvreur',
+  macon: 'Maçon',
+  jardinier: 'Jardinier-paysagiste',
+  vitrier: 'Vitrier',
+  climaticien: 'Climaticien',
+  cuisiniste: 'Cuisiniste',
+  solier: 'Solier (revêtements de sol)',
+  nettoyage: 'Nettoyage',
+  charpentier: 'Charpentier',
+  domoticien: 'Domoticien',
   'alarme-securite': 'Alarme & Sécurité',
-  'pisciniste': 'Pisciniste',
-  'paysagiste': 'Paysagiste',
+  pisciniste: 'Pisciniste',
+  paysagiste: 'Paysagiste',
 }
 
 /**
  * Icônes emoji associées à chaque service
  */
 export const serviceIcons: Record<string, string> = {
-  'plombier': '🚿',
-  'electricien': '⚡',
-  'serrurier': '🔑',
-  'chauffagiste': '🔥',
+  plombier: '🚿',
+  electricien: '⚡',
+  serrurier: '🔑',
+  chauffagiste: '🔥',
   'peintre-en-batiment': '🎨',
-  'menuisier': '🪚',
-  'carreleur': '🧱',
-  'couvreur': '🏠',
-  'macon': '🏗️',
-  'jardinier': '🌿',
-  'vitrier': '🪟',
-  'climaticien': '❄️',
-  'cuisiniste': '🍳',
-  'solier': '🪵',
-  'nettoyage': '🧹',
-  'charpentier': '🪓',
-  'domoticien': '🏡',
+  menuisier: '🪚',
+  carreleur: '🧱',
+  couvreur: '🏠',
+  macon: '🏗️',
+  jardinier: '🌿',
+  vitrier: '🪟',
+  climaticien: '❄️',
+  cuisiniste: '🍳',
+  solier: '🪵',
+  nettoyage: '🧹',
+  charpentier: '🪓',
+  domoticien: '🏡',
   'alarme-securite': '🔔',
-  'pisciniste': '🏊',
-  'paysagiste': '🌳',
+  pisciniste: '🏊',
+  paysagiste: '🌳',
 }

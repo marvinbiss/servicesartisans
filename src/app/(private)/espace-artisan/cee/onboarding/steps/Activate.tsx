@@ -11,14 +11,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  CheckCircle,
-  CreditCard,
-  FileText,
-  Award,
-  Rocket,
-  AlertCircle,
-} from 'lucide-react'
+import { CheckCircle, CreditCard, FileText, Award, Rocket, AlertCircle } from 'lucide-react'
 import { clsx } from 'clsx'
 import Button from '@/components/ui/Button'
 import { QUIZ_QUESTIONS, PASS_THRESHOLD } from '@/lib/cee/quiz-questions'
@@ -48,9 +41,7 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
       id: 'iban',
       icon: CreditCard,
       label: 'Coordonnées bancaires',
-      detail: partner?.iban_last4
-        ? `Compte se terminant par ···· ${partner.iban_last4}`
-        : null,
+      detail: partner?.iban_last4 ? `Compte se terminant par ···· ${partner.iban_last4}` : null,
       complete: Boolean(partner?.iban_last4),
     },
     {
@@ -67,8 +58,7 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
       icon: Award,
       label: 'Quiz de formation validé',
       detail:
-        partner?.certification_score !== null &&
-        partner?.certification_score !== undefined
+        partner?.certification_score !== null && partner?.certification_score !== undefined
           ? `Score : ${partner.certification_score}/${QUIZ_QUESTIONS.length} (seuil : ${PASS_THRESHOLD})`
           : null,
       complete: Boolean(partner?.certified_at),
@@ -111,35 +101,24 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
   }
 
   return (
-    <section
-      className="p-6 sm:p-8"
-      aria-labelledby="activate-heading"
-      data-testid="step-activate"
-    >
+    <section className="p-6 sm:p-8" aria-labelledby="activate-heading" data-testid="step-activate">
       <header className="mb-6">
         <div className="mb-3 inline-flex items-center rounded-full bg-primary-50 px-3 py-1">
           <span className="text-xs font-bold uppercase tracking-widest text-primary-600">
             Étape 5 sur 5
           </span>
         </div>
-        <h2
-          id="activate-heading"
-          className="font-heading text-2xl font-bold text-charcoal-900"
-        >
+        <h2 id="activate-heading" className="font-heading text-2xl font-bold text-charcoal-900">
           Activation de votre compte partenaire
         </h2>
         <p className="mt-2 text-charcoal-500">
-          Vérifiez le récapitulatif ci-dessous, puis activez votre compte pour
-          commencer à déposer des dossiers CEE.
+          Vérifiez le récapitulatif ci-dessous, puis activez votre compte pour commencer à déposer
+          des dossiers CEE.
         </p>
       </header>
 
       {/* Checklist */}
-      <ul
-        className="mb-6 space-y-3"
-        role="list"
-        aria-label="Récapitulatif des étapes"
-      >
+      <ul className="mb-6 space-y-3" role="list" aria-label="Récapitulatif des étapes">
         {checklist.map((item) => {
           const Icon = item.icon
           return (
@@ -147,9 +126,7 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
               key={item.id}
               className={clsx(
                 'flex items-center gap-4 rounded-xl border p-4',
-                item.complete
-                  ? 'border-accent-200 bg-accent-50'
-                  : 'border-red-200 bg-red-50'
+                item.complete ? 'border-accent-200 bg-accent-50' : 'border-red-200 bg-red-50'
               )}
             >
               <div
@@ -160,10 +137,7 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
                 aria-hidden="true"
               >
                 <Icon
-                  className={clsx(
-                    'h-5 w-5',
-                    item.complete ? 'text-accent-600' : 'text-red-500'
-                  )}
+                  className={clsx('h-5 w-5', item.complete ? 'text-accent-600' : 'text-red-500')}
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -182,18 +156,12 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
                       aria-label="Complété"
                     />
                   ) : (
-                    <AlertCircle
-                      className="h-4 w-4 shrink-0 text-red-500"
-                      aria-label="Incomplet"
-                    />
+                    <AlertCircle className="h-4 w-4 shrink-0 text-red-500" aria-label="Incomplet" />
                   )}
                 </div>
                 {item.detail && (
                   <p
-                    className={clsx(
-                      'text-sm',
-                      item.complete ? 'text-accent-600' : 'text-red-600'
-                    )}
+                    className={clsx('text-sm', item.complete ? 'text-accent-600' : 'text-red-600')}
                   >
                     {item.detail}
                   </p>
@@ -217,8 +185,8 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
         >
           <p className="font-semibold">Étapes incomplètes</p>
           <p className="mt-0.5">
-            Toutes les étapes doivent être validées avant l&apos;activation.
-            Revenez aux étapes précédentes.
+            Toutes les étapes doivent être validées avant l&apos;activation. Revenez aux étapes
+            précédentes.
           </p>
         </div>
       )}
@@ -263,10 +231,7 @@ export default function Activate({ partner, onPartnerRefresh }: ActivateProps) {
         </Button>
       </div>
       {!allComplete && (
-        <p
-          id="activate-incomplete-msg"
-          className="mt-2 text-right text-sm text-charcoal-400"
-        >
+        <p id="activate-incomplete-msg" className="mt-2 text-right text-sm text-charcoal-400">
           Complétez toutes les étapes pour activer votre compte.
         </p>
       )}

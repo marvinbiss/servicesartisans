@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Shield,
-  UserPlus,
-  ChevronLeft,
-  ChevronRight,
-  Trash2,
-} from 'lucide-react'
+import { Shield, UserPlus, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import type { AdminRole, AdminUser } from '@/types/admin'
@@ -29,7 +23,11 @@ export default function AdminsManagementPage() {
   const [totalPages, setTotalPages] = useState(1)
 
   // Modal states
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; adminId: string; adminEmail: string }>({
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean
+    adminId: string
+    adminEmail: string
+  }>({
     open: false,
     adminId: '',
     adminEmail: '',
@@ -70,13 +68,13 @@ export default function AdminsManagementPage() {
       })
       if (!response.ok) {
         const data = await response.json().catch(() => null)
-        throw new Error(data?.error?.message || 'Erreur lors de l\'ajout')
+        throw new Error(data?.error?.message || "Erreur lors de l'ajout")
       }
       setAddModal(false)
       setNewAdmin({ email: '', role: 'admin' })
       fetchAdmins()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'ajout de l\'administrateur')
+      setError(err instanceof Error ? err.message : "Erreur lors de l'ajout de l'administrateur")
     } finally {
       setAdding(false)
     }
@@ -92,7 +90,7 @@ export default function AdminsManagementPage() {
       setDeleteModal({ open: false, adminId: '', adminEmail: '' })
       fetchAdmins()
     } catch {
-      setError('Erreur lors de la suppression de l\'administrateur')
+      setError("Erreur lors de la suppression de l'administrateur")
     }
   }
 
@@ -150,9 +148,7 @@ export default function AdminsManagementPage() {
           <div className="flex flex-wrap gap-3">
             {Object.entries(ROLE_LABELS).map(([role, { label, color }]) => (
               <div key={role} className="flex items-center gap-2">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${color}`}>
-                  {label}
-                </span>
+                <span className={`px-2 py-1 rounded text-xs font-medium ${color}`}>{label}</span>
                 <span className="text-xs text-gray-500">
                   {role === 'super_admin' && '(Accès total)'}
                   {role === 'admin' && '(CRUD limité)'}
@@ -165,7 +161,9 @@ export default function AdminsManagementPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchAdmins} />}
+        {error && (
+          <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchAdmins} />
+        )}
 
         {/* Admins List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -184,16 +182,28 @@ export default function AdminsManagementPage() {
                 <table className="w-full min-w-[600px]" aria-label="Liste des administrateurs">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                      >
                         Email
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                      >
                         Rôle
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                      >
                         Ajouté le
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -207,12 +217,16 @@ export default function AdminsManagementPage() {
                         <td className="px-6 py-4">
                           <select
                             value={admin.role}
-                            onChange={(e) => handleRoleChange(admin.id, e.target.value as AdminRole)}
+                            onChange={(e) =>
+                              handleRoleChange(admin.id, e.target.value as AdminRole)
+                            }
                             aria-label={`Rôle de ${admin.email}`}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 ${ROLE_LABELS[admin.role].color}`}
                           >
                             {Object.entries(ROLE_LABELS).map(([role, { label }]) => (
-                              <option key={role} value={role}>{label}</option>
+                              <option key={role} value={role}>
+                                {label}
+                              </option>
                             ))}
                           </select>
                         </td>
@@ -222,11 +236,13 @@ export default function AdminsManagementPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-end gap-2">
                             <button
-                              onClick={() => setDeleteModal({
-                                open: true,
-                                adminId: admin.id,
-                                adminEmail: admin.email,
-                              })}
+                              onClick={() =>
+                                setDeleteModal({
+                                  open: true,
+                                  adminId: admin.id,
+                                  adminEmail: admin.email,
+                                })
+                              }
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                               title="Supprimer"
                               aria-label={`Supprimer l'administrateur ${admin.email}`}
@@ -273,8 +289,15 @@ export default function AdminsManagementPage() {
       {/* Add Admin Modal */}
       {addModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div role="dialog" aria-modal="true" aria-labelledby="add-admin-title" className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-            <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">Ajouter un administrateur</h3>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-admin-title"
+            className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6"
+          >
+            <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">
+              Ajouter un administrateur
+            </h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -295,7 +318,9 @@ export default function AdminsManagementPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   {Object.entries(ROLE_LABELS).map(([role, { label }]) => (
-                    <option key={role} value={role}>{label}</option>
+                    <option key={role} value={role}>
+                      {label}
+                    </option>
                   ))}
                 </select>
               </div>

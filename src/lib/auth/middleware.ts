@@ -44,7 +44,10 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    const { data: { user }, error } = await supabase.auth.getUser(token)
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser(token)
 
     if (error || !user) {
       return { success: false, error: 'Invalid or expired token' }
@@ -83,17 +86,11 @@ export async function requireRole(
   const authResult = await verifyAuth(request)
 
   if (!authResult.success || !authResult.user) {
-    return NextResponse.json(
-      { error: authResult.error || 'Unauthorized' },
-      { status: 401 }
-    )
+    return NextResponse.json({ error: authResult.error || 'Unauthorized' }, { status: 401 })
   }
 
   if (!allowedRoles.includes(authResult.user.role)) {
-    return NextResponse.json(
-      { error: 'Insufficient permissions' },
-      { status: 403 }
-    )
+    return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
   }
 
   return { user: authResult.user }

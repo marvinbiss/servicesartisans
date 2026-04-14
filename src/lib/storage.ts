@@ -20,7 +20,10 @@ interface UploadOptions {
 /**
  * Validate file type and size
  */
-export function validateFile(file: File, type: 'image' | 'video'): { valid: boolean; error?: string } {
+export function validateFile(
+  file: File,
+  type: 'image' | 'video'
+): { valid: boolean; error?: string } {
   const allowedTypes = type === 'image' ? ALLOWED_IMAGE_TYPES : ALLOWED_VIDEO_TYPES
   const maxSize = type === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE
 
@@ -69,21 +72,17 @@ export async function uploadFile(
   const filePath = generateFilePath(artisanId, file.name)
 
   // Upload to Supabase Storage
-  const { data, error } = await supabase.storage
-    .from(PORTFOLIO_BUCKET)
-    .upload(filePath, file, {
-      cacheControl: '31536000', // 1 year
-      upsert: false,
-    })
+  const { data, error } = await supabase.storage.from(PORTFOLIO_BUCKET).upload(filePath, file, {
+    cacheControl: '31536000', // 1 year
+    upsert: false,
+  })
 
   if (error) {
     throw new Error(`Erreur d'upload: ${error.message}`)
   }
 
   // Get public URL
-  const { data: urlData } = supabase.storage
-    .from(PORTFOLIO_BUCKET)
-    .getPublicUrl(data.path)
+  const { data: urlData } = supabase.storage.from(PORTFOLIO_BUCKET).getPublicUrl(data.path)
 
   const result: UploadedFile = {
     url: urlData.publicUrl,
@@ -149,9 +148,7 @@ export async function deleteFile(fileUrl: string): Promise<void> {
 
   const filePath = decodeURIComponent(pathMatch[1])
 
-  const { error } = await supabase.storage
-    .from(PORTFOLIO_BUCKET)
-    .remove([filePath])
+  const { error } = await supabase.storage.from(PORTFOLIO_BUCKET).remove([filePath])
 
   if (error) {
     throw new Error(`Erreur de suppression: ${error.message}`)

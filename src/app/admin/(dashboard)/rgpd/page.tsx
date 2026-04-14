@@ -38,12 +38,20 @@ export default function AdminRgpdPage() {
 
   // Search user for manual action
   const [searchEmail, setSearchEmail] = useState('')
-  const [foundUser, setFoundUser] = useState<{ id: string; email: string; full_name: string | null } | null>(null)
+  const [foundUser, setFoundUser] = useState<{
+    id: string
+    email: string
+    full_name: string | null
+  } | null>(null)
   const [searching, setSearching] = useState(false)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   // Modal
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; userId: string; userName: string }>({
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean
+    userId: string
+    userName: string
+  }>({
     open: false,
     userId: '',
     userName: '',
@@ -87,7 +95,9 @@ export default function AdminRgpdPage() {
     if (!searchEmail) return
     try {
       setSearching(true)
-      const response = await fetch(`/api/admin/users?search=${encodeURIComponent(searchEmail)}&limit=1`)
+      const response = await fetch(
+        `/api/admin/users?search=${encodeURIComponent(searchEmail)}&limit=1`
+      )
       if (response.ok) {
         const data = await response.json()
         if (data.users && data.users.length > 0) {
@@ -157,7 +167,10 @@ export default function AdminRgpdPage() {
   }
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { variant: 'warning' | 'info' | 'success' | 'error'; label: string }> = {
+    const config: Record<
+      string,
+      { variant: 'warning' | 'info' | 'success' | 'error'; label: string }
+    > = {
       pending: { variant: 'warning', label: 'En attente' },
       processing: { variant: 'info', label: 'En cours' },
       completed: { variant: 'success', label: 'Terminé' },
@@ -173,7 +186,9 @@ export default function AdminRgpdPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Conformité RGPD</h1>
-          <p className="text-gray-500 mt-1">Gestion des demandes d'export et de suppression de données</p>
+          <p className="text-gray-500 mt-1">
+            Gestion des demandes d'export et de suppression de données
+          </p>
         </div>
 
         {/* Manual Action Card */}
@@ -224,11 +239,13 @@ export default function AdminRgpdPage() {
                     {exportingUser === foundUser.id ? 'Export...' : 'Exporter'}
                   </button>
                   <button
-                    onClick={() => setDeleteModal({
-                      open: true,
-                      userId: foundUser.id,
-                      userName: foundUser.full_name || foundUser.email,
-                    })}
+                    onClick={() =>
+                      setDeleteModal({
+                        open: true,
+                        userId: foundUser.id,
+                        userName: foundUser.full_name || foundUser.email,
+                      })
+                    }
                     className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -246,8 +263,8 @@ export default function AdminRgpdPage() {
           <div>
             <p className="font-medium text-amber-800">Attention</p>
             <p className="text-sm text-amber-700">
-              La suppression des données est irréversible. Assurez-vous d'avoir effectué un export avant toute suppression.
-              Les données seront anonymisées conformément au RGPD.
+              La suppression des données est irréversible. Assurez-vous d'avoir effectué un export
+              avant toute suppression. Les données seront anonymisées conformément au RGPD.
             </p>
           </div>
         </div>
@@ -271,9 +288,13 @@ export default function AdminRgpdPage() {
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {s === 'all' ? 'Toutes' :
-                     s === 'pending' ? 'En attente' :
-                     s === 'processing' ? 'En cours' : 'Terminées'}
+                    {s === 'all'
+                      ? 'Toutes'
+                      : s === 'pending'
+                        ? 'En attente'
+                        : s === 'processing'
+                          ? 'En cours'
+                          : 'Terminées'}
                   </button>
                 ))}
               </div>
@@ -296,9 +317,11 @@ export default function AdminRgpdPage() {
                   <div key={request.id} className="p-4 hover:bg-gray-50">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-lg ${
-                          request.request_type === 'export' ? 'bg-blue-100' : 'bg-red-100'
-                        }`}>
+                        <div
+                          className={`p-2 rounded-lg ${
+                            request.request_type === 'export' ? 'bg-blue-100' : 'bg-red-100'
+                          }`}
+                        >
                           {request.request_type === 'export' ? (
                             <Download className={`w-5 h-5 text-blue-600`} />
                           ) : (
@@ -327,7 +350,9 @@ export default function AdminRgpdPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">
+                  Page {page} sur {totalPages}
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
@@ -351,12 +376,24 @@ export default function AdminRgpdPage() {
       </div>
 
       {toast && (
-        <div role="status" aria-live="polite" className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
-          toast.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
-        }`}>
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
+            toast.type === 'success'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}
+        >
           <div className="flex items-center gap-2">
             <span className="text-sm">{toast.message}</span>
-            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+            <button
+              onClick={() => setToast(null)}
+              className="text-current opacity-50 hover:opacity-100"
+              aria-label="Fermer"
+            >
+              ×
+            </button>
           </div>
         </div>
       )}

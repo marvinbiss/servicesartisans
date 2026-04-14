@@ -11,10 +11,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 
-const SOURCE_PATH = path.resolve(
-  __dirname,
-  '../../../src/lib/rge/city-listings.ts',
-)
+const SOURCE_PATH = path.resolve(__dirname, '../../../src/lib/rge/city-listings.ts')
 
 describe('RGE_LIST_SELECT (source-level guard)', () => {
   const source = readFileSync(SOURCE_PATH, 'utf8')

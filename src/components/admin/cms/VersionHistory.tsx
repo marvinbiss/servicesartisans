@@ -33,7 +33,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
         credentials: 'include',
       })
       if (!res.ok) throw new Error('Erreur lors du chargement des versions')
-      const json = await res.json() as { success: boolean; data: VersionData[] }
+      const json = (await res.json()) as { success: boolean; data: VersionData[] }
       setVersions(json.data || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue')
@@ -109,13 +109,15 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
   }
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Historique des versions" className="fixed inset-0 z-50 overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Historique des versions"
+      className="fixed inset-0 z-50 overflow-y-auto"
+    >
       <div className="flex min-h-screen items-start justify-center p-4">
         {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black/50 transition-opacity"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
 
         {/* Modal */}
         <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full my-8">
@@ -123,9 +125,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <div className="flex items-center gap-2">
               <History className="w-5 h-5 text-gray-500" />
-              <h2 className="text-lg font-semibold text-gray-900">
-                Historique des versions
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900">Historique des versions</h2>
               {!loading && (
                 <span className="text-xs text-gray-400">
                   {versions.length} version{versions.length > 1 ? 's' : ''}
@@ -176,9 +176,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                         {/* Timeline dot */}
                         <div
                           className={`absolute left-1.5 top-2 w-3 h-3 rounded-full border-2 ${
-                            isLatest
-                              ? 'bg-blue-600 border-blue-600'
-                              : 'bg-white border-gray-300'
+                            isLatest ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'
                           }`}
                         />
 
@@ -194,18 +192,14 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                                 {badge.text}
                               </span>
                               {isLatest && (
-                                <span className="text-xs text-blue-600 font-medium">
-                                  Actuelle
-                                </span>
+                                <span className="text-xs text-blue-600 font-medium">Actuelle</span>
                               )}
                             </div>
                             <p className="text-xs text-gray-500 mt-0.5">
                               {formatDate(version.created_at)}
                             </p>
                             {version.change_summary && (
-                              <p className="text-sm text-gray-600 mt-1">
-                                {version.change_summary}
-                              </p>
+                              <p className="text-sm text-gray-600 mt-1">{version.change_summary}</p>
                             )}
                           </div>
 
@@ -238,12 +232,14 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
 
       {/* Restore confirmation modal */}
       {confirmRestore && (
-        <div role="dialog" aria-modal="true" aria-label="Confirmer la restauration" className="fixed inset-0 z-[60] overflow-y-auto">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Confirmer la restauration"
+          className="fixed inset-0 z-[60] overflow-y-auto"
+        >
           <div className="flex min-h-screen items-center justify-center p-4">
-            <div
-              className="fixed inset-0 bg-black/50"
-              onClick={() => setConfirmRestore(null)}
-            />
+            <div className="fixed inset-0 bg-black/50" onClick={() => setConfirmRestore(null)} />
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Restaurer cette version ?

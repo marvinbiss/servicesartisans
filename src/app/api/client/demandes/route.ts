@@ -14,19 +14,20 @@ export async function GET() {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     // Fetch devis requests for this client
     const { data: demandes, error: demandesError } = await supabase
       .from('devis_requests')
-      .select(`
+      .select(
+        `
         *,
         quotes(
           id,
@@ -37,7 +38,8 @@ export async function GET() {
           created_at,
           provider:providers!provider_id(id, name)
         )
-      `)
+      `
+      )
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
 
@@ -52,24 +54,24 @@ export async function GET() {
     // Calculate stats
     const stats = {
       total: demandes?.length || 0,
-      enAttente: demandes?.filter(d => d.status === 'pending').length || 0,
-      devisRecus: demandes?.filter(d => d.status === 'sent').length || 0,
-      acceptes: demandes?.filter(d => d.status === 'accepted').length || 0,
-      refuses: demandes?.filter(d => d.status === 'refused').length || 0,
-      termines: demandes?.filter(d => d.status === 'completed').length || 0,
+      enAttente: demandes?.filter((d) => d.status === 'pending').length || 0,
+      devisRecus: demandes?.filter((d) => d.status === 'sent').length || 0,
+      acceptes: demandes?.filter((d) => d.status === 'accepted').length || 0,
+      refuses: demandes?.filter((d) => d.status === 'refused').length || 0,
+      termines: demandes?.filter((d) => d.status === 'completed').length || 0,
     }
 
-    return NextResponse.json({
-      demandes: demandes || [],
-      stats
-    }, {
-      headers: { 'Cache-Control': 'private, no-store, max-age=0' }
-    })
+    return NextResponse.json(
+      {
+        demandes: demandes || [],
+        stats,
+      },
+      {
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }
+    )
   } catch (error) {
     logger.error('Client demandes GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

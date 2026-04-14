@@ -129,10 +129,7 @@ export async function getAllPriorityPages(): Promise<PriorityPage[]> {
 /**
  * Vérifie si une ligne GSC est éligible comme page prioritaire.
  */
-export function isEligibleForPriority(
-  position: number,
-  impressions: number
-): boolean {
+export function isEligibleForPriority(position: number, impressions: number): boolean {
   return (
     position >= PRIORITY_POSITION_MIN &&
     position <= PRIORITY_POSITION_MAX &&

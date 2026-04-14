@@ -36,15 +36,9 @@ export const GreetingBubble = memo(function GreetingBubble({
       >
         <X className="h-3.5 w-3.5" />
       </button>
-      <p className="text-sm text-charcoal-800 font-medium leading-snug">
-        {message}
-      </p>
+      <p className="text-sm text-charcoal-800 font-medium leading-snug">{message}</p>
       {/* Price teaser */}
-      {priceTeaser && (
-        <p className="text-xs text-charcoal-500 mt-1 italic">
-          {priceTeaser}
-        </p>
-      )}
+      {priceTeaser && <p className="text-xs text-charcoal-500 mt-1 italic">{priceTeaser}</p>}
       <div className="flex items-center mt-1.5">
         <p className="text-xs text-primary-400 font-semibold flex items-center gap-1">
           <Sparkles className="h-3 w-3" />

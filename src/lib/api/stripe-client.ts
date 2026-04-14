@@ -72,12 +72,13 @@ export async function createCustomer(params: CreateCustomerParams): Promise<Stri
     const stripe = getStripeClient()
 
     const customer = await retry(
-      () => stripe.customers.create({
-        email: params.email,
-        name: params.name,
-        phone: params.phone,
-        metadata: params.metadata,
-      }),
+      () =>
+        stripe.customers.create({
+          email: params.email,
+          name: params.name,
+          phone: params.phone,
+          metadata: params.metadata,
+        }),
       {
         maxAttempts: 3,
         initialDelay: 500,

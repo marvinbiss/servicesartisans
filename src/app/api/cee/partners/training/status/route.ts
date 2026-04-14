@@ -15,11 +15,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { PASS_THRESHOLD } from '@/lib/cee/quiz-questions'
-import {
-  requireArtisanAuth,
-  notFoundResponse,
-  serverErrorResponse,
-} from '@/lib/cee/route-helpers'
+import { requireArtisanAuth, notFoundResponse, serverErrorResponse } from '@/lib/cee/route-helpers'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'

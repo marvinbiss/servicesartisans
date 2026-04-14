@@ -45,8 +45,7 @@ export interface SignatureRequestStatus {
 // Config
 // ---------------------------------------------------------------------------
 
-const YOUSIGN_BASE_URL =
-  process.env.YOUSIGN_BASE_URL || 'https://api.yousign.app/v3'
+const YOUSIGN_BASE_URL = process.env.YOUSIGN_BASE_URL || 'https://api.yousign.app/v3'
 const HTTP_TIMEOUT_MS = 10_000
 const WEBHOOK_MAX_DRIFT_SEC = 300
 
@@ -162,32 +161,30 @@ export async function createSignatureRequest(
   const pdfBlob = new Blob([conventionPdfBuffer as any], { type: 'application/pdf' })
   fd.append('file', pdfBlob, 'convention.pdf')
 
-  const docRes = await yousignFetch(
-    `/signature_requests/${envelopeId}/documents`,
-    { method: 'POST', body: fd, isFormData: true }
-  )
+  const docRes = await yousignFetch(`/signature_requests/${envelopeId}/documents`, {
+    method: 'POST',
+    body: fd,
+    isFormData: true,
+  })
   if (!docRes.ok) {
     throw new Error(`Yousign document upload failed: ${docRes.status}`)
   }
   const doc = (await docRes.json()) as { id: string }
 
   // 3. Signer
-  const signerRes = await yousignFetch(
-    `/signature_requests/${envelopeId}/signers`,
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        info: {
-          first_name: artisanName.split(' ')[0] || artisanName,
-          last_name: artisanName.split(' ').slice(1).join(' ') || artisanName,
-          email: artisanEmail,
-          locale: 'fr',
-        },
-        signature_level: 'electronic_signature',
-        signature_authentication_mode: 'no_otp',
-      }),
-    }
-  )
+  const signerRes = await yousignFetch(`/signature_requests/${envelopeId}/signers`, {
+    method: 'POST',
+    body: JSON.stringify({
+      info: {
+        first_name: artisanName.split(' ')[0] || artisanName,
+        last_name: artisanName.split(' ').slice(1).join(' ') || artisanName,
+        email: artisanEmail,
+        locale: 'fr',
+      },
+      signature_level: 'electronic_signature',
+      signature_authentication_mode: 'no_otp',
+    }),
+  })
   if (!signerRes.ok) {
     throw new Error(`Yousign signer failed: ${signerRes.status}`)
   }
@@ -197,10 +194,9 @@ export async function createSignatureRequest(
   }
 
   // 4. Activate
-  const activateRes = await yousignFetch(
-    `/signature_requests/${envelopeId}/activate`,
-    { method: 'POST' }
-  )
+  const activateRes = await yousignFetch(`/signature_requests/${envelopeId}/activate`, {
+    method: 'POST',
+  })
   if (!activateRes.ok) {
     throw new Error(`Yousign activate failed: ${activateRes.status}`)
   }
@@ -221,9 +217,7 @@ export async function createSignatureRequest(
 /**
  * Récupère le status d'une signature request.
  */
-export async function getSignatureRequest(
-  envelopeId: string
-): Promise<SignatureRequestStatus> {
+export async function getSignatureRequest(envelopeId: string): Promise<SignatureRequestStatus> {
   const res = await yousignFetch(`/signature_requests/${envelopeId}`, {
     method: 'GET',
   })
@@ -291,10 +285,7 @@ export function verifyYousignWebhook(
 
   // HMAC-SHA256 hex (Yousign convention : signature = hex digest sur rawBody seul
   // OU sur `timestamp.rawBody` selon configuration. On supporte les deux).
-  const expectedA = crypto
-    .createHmac('sha256', secret)
-    .update(rawBody)
-    .digest('hex')
+  const expectedA = crypto.createHmac('sha256', secret).update(rawBody).digest('hex')
   const expectedB = crypto
     .createHmac('sha256', secret)
     .update(`${timestamp}.${rawBody}`)

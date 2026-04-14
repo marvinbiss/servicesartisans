@@ -97,7 +97,7 @@ export const PORTFOLIO_CATEGORIES = [
   { value: 'autre', label: 'Autre' },
 ] as const
 
-export type PortfolioCategory = typeof PORTFOLIO_CATEGORIES[number]['value']
+export type PortfolioCategory = (typeof PORTFOLIO_CATEGORIES)[number]['value']
 
 // File validation constants
 export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']

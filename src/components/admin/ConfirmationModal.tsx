@@ -19,7 +19,10 @@ interface ConfirmationModalProps {
   children?: React.ReactNode
 }
 
-const variantConfig: Record<ModalVariant, { icon: typeof AlertTriangle; colors: string; buttonColors: string }> = {
+const variantConfig: Record<
+  ModalVariant,
+  { icon: typeof AlertTriangle; colors: string; buttonColors: string }
+> = {
   danger: {
     icon: AlertTriangle,
     colors: 'bg-red-100 text-red-600',
@@ -136,10 +139,7 @@ export function ConfirmationModal({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-screen items-center justify-center p-4">
         {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black/50 transition-opacity"
-          onClick={handleClose}
-        />
+        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={handleClose} />
 
         {/* Modal */}
         <div
@@ -160,12 +160,19 @@ export function ConfirmationModal({
           </button>
 
           {/* Icon */}
-          <div className={clsx('w-12 h-12 rounded-full flex items-center justify-center mb-4', config.colors)}>
+          <div
+            className={clsx(
+              'w-12 h-12 rounded-full flex items-center justify-center mb-4',
+              config.colors
+            )}
+          >
             <Icon className="w-6 h-6" />
           </div>
 
           {/* Content */}
-          <h3 id="confirmation-modal-title" className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+          <h3 id="confirmation-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
+            {title}
+          </h3>
           <p className="text-gray-600 mb-4">{message}</p>
 
           {/* Custom content */}
@@ -175,7 +182,9 @@ export function ConfirmationModal({
           {requireConfirmation && (
             <div className="mb-4">
               <p className="text-sm text-gray-500 mb-2">
-                Tapez <span className="font-mono font-semibold text-gray-900">{requireConfirmation}</span> pour confirmer
+                Tapez{' '}
+                <span className="font-mono font-semibold text-gray-900">{requireConfirmation}</span>{' '}
+                pour confirmer
               </p>
               <input
                 type="text"

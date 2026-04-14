@@ -185,7 +185,9 @@ export function unsafeCreateSlug(value: string): Slug {
 // EXTRACTION (pour passer aux APIs externes)
 // ============================================================================
 
-export function extractId(branded: ProviderId | UserId | QuoteId | ReviewId | ServiceId | CityId): string {
+export function extractId(
+  branded: ProviderId | UserId | QuoteId | ReviewId | ServiceId | CityId
+): string {
   return branded as string
 }
 

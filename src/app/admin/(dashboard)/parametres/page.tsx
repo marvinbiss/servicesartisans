@@ -160,7 +160,7 @@ export default function AdminParametresPage() {
           label: 'Inscriptions activées',
           key: 'registrationEnabled',
           type: 'toggle',
-          description: 'Permettre aux nouveaux utilisateurs de s\'inscrire',
+          description: "Permettre aux nouveaux utilisateurs de s'inscrire",
         },
         {
           label: 'Vérification email obligatoire',
@@ -331,7 +331,10 @@ export default function AdminParametresPage() {
           {sections.map((section) => {
             const Icon = section.icon
             return (
-              <div key={section.title} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div
+                key={section.title}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+              >
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
                   <Icon className="w-5 h-5 text-gray-400" />
                   <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
@@ -346,16 +349,20 @@ export default function AdminParametresPage() {
                       <div className="ml-4">
                         {field.type === 'toggle' ? (
                           <button
-                            onClick={() => setSettings({
-                              ...settings,
-                              [field.key]: !settings[field.key as keyof PlatformSettings],
-                            })}
+                            onClick={() =>
+                              setSettings({
+                                ...settings,
+                                [field.key]: !settings[field.key as keyof PlatformSettings],
+                              })
+                            }
                             role="switch"
                             aria-checked={!!settings[field.key as keyof PlatformSettings]}
                             aria-label={field.label}
                             className={`relative w-12 h-6 rounded-full transition-colors ${
                               settings[field.key as keyof PlatformSettings]
-                                ? ('warning' in field && field.warning) ? 'bg-red-600' : 'bg-blue-600'
+                                ? 'warning' in field && field.warning
+                                  ? 'bg-red-600'
+                                  : 'bg-blue-600'
                                 : 'bg-gray-300'
                             }`}
                           >
@@ -369,10 +376,12 @@ export default function AdminParametresPage() {
                           <input
                             type="number"
                             value={settings[field.key as keyof PlatformSettings] as number}
-                            onChange={(e) => setSettings({
-                              ...settings,
-                              [field.key]: parseFloat(e.target.value) || 0,
-                            })}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                [field.key]: parseFloat(e.target.value) || 0,
+                              })
+                            }
                             aria-label={field.label}
                             {...('min' in field ? { min: field.min } : {})}
                             {...('max' in field ? { max: field.max } : {})}
@@ -383,10 +392,12 @@ export default function AdminParametresPage() {
                           <input
                             type={field.type}
                             value={settings[field.key as keyof PlatformSettings] as string}
-                            onChange={(e) => setSettings({
-                              ...settings,
-                              [field.key]: e.target.value,
-                            })}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                [field.key]: e.target.value,
+                              })
+                            }
                             aria-label={field.label}
                             {...('maxLength' in field ? { maxLength: field.maxLength } : {})}
                             className="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -411,7 +422,8 @@ export default function AdminParametresPage() {
               <div>
                 <p className="font-medium text-gray-900">Réinitialiser les statistiques</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  Remettre à zéro toutes les statistiques de la plateforme. Cette action est irréversible.
+                  Remettre à zéro toutes les statistiques de la plateforme. Cette action est
+                  irréversible.
                 </p>
               </div>
               <button

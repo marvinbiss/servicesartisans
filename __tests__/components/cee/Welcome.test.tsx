@@ -11,11 +11,7 @@ const mockOnPartnerRefresh = vi.fn().mockResolvedValue(undefined)
 
 function renderWelcome() {
   return render(
-    <Welcome
-      partner={null}
-      onNext={mockOnNext}
-      onPartnerRefresh={mockOnPartnerRefresh}
-    />
+    <Welcome partner={null} onNext={mockOnNext} onPartnerRefresh={mockOnPartnerRefresh} />
   )
 }
 

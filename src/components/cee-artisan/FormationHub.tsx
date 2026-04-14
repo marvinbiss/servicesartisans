@@ -53,14 +53,14 @@ const VIDEO_MODULES: VideoModule[] = [
   },
   {
     id: 'v2',
-    title: "Les fiches d\u2019op\u00e9rations standardis\u00e9es",
+    title: 'Les fiches d\u2019op\u00e9rations standardis\u00e9es',
     description: 'BAR-TH, BAR-EN : comment les lire et les appliquer à vos chantiers.',
     durationMin: 18,
     wistiaId: 'placeholder-v2',
   },
   {
     id: 'v3',
-    title: "Montage d\u2019un dossier complet",
+    title: 'Montage d\u2019un dossier complet',
     description: 'Pièces obligatoires, délais, erreurs les plus fréquentes.',
     durationMin: 22,
     wistiaId: 'placeholder-v3',
@@ -114,7 +114,9 @@ export default function FormationHub({
     setQuizState({ kind: 'in_progress' })
     // Focus the quiz section
     setTimeout(() => {
-      document.getElementById('quiz-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      document
+        .getElementById('quiz-section')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       document.getElementById('quiz-q-0')?.focus()
     }, 100)
   }
@@ -396,9 +398,7 @@ export default function FormationHub({
                               name={`question-${q.id}`}
                               value={cIdx}
                               checked={isSelected}
-                              onChange={() =>
-                                setAnswers((prev) => ({ ...prev, [q.id]: cIdx }))
-                              }
+                              onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: cIdx }))}
                               className="mt-0.5 h-4 w-4 shrink-0 accent-primary-500"
                             />
                             {choice}
@@ -454,9 +454,7 @@ export default function FormationHub({
             aria-live="polite"
             className={[
               'rounded-xl border p-6 text-center',
-              quizState.passed
-                ? 'border-green-200 bg-green-50'
-                : 'border-red-200 bg-red-50',
+              quizState.passed ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50',
             ].join(' ')}
           >
             {quizState.passed ? (
@@ -464,10 +462,14 @@ export default function FormationHub({
             ) : (
               <AlertTriangle className="mx-auto h-12 w-12 text-red-500" aria-hidden="true" />
             )}
-            <p className={`mt-3 text-2xl font-bold ${quizState.passed ? 'text-green-800' : 'text-red-800'}`}>
+            <p
+              className={`mt-3 text-2xl font-bold ${quizState.passed ? 'text-green-800' : 'text-red-800'}`}
+            >
               {quizState.score} / {QUIZ_QUESTIONS.length}
             </p>
-            <p className={`mt-1 text-sm font-medium ${quizState.passed ? 'text-green-700' : 'text-red-700'}`}>
+            <p
+              className={`mt-1 text-sm font-medium ${quizState.passed ? 'text-green-700' : 'text-red-700'}`}
+            >
               {quizState.passed
                 ? 'Félicitations ! Vous êtes certifié CEE SA Energy.'
                 : `Score insuffisant. Seuil requis : ${PASS_THRESHOLD}/${QUIZ_QUESTIONS.length}.`}

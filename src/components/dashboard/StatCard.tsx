@@ -39,7 +39,15 @@ function AnimatedValue({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>
 }
 
-export const StatCard = memo(function StatCard({ title, value, subtitle, trend, icon, color = 'blue', delay = 0 }: StatCardProps) {
+export const StatCard = memo(function StatCard({
+  title,
+  value,
+  subtitle,
+  trend,
+  icon,
+  color = 'blue',
+  delay = 0,
+}: StatCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -49,21 +57,20 @@ export const StatCard = memo(function StatCard({ title, value, subtitle, trend, 
     >
       <div className="bg-white rounded-xl border border-sand-200 p-5 transition-shadow">
         <div className="flex items-start justify-between">
-          <div className={`p-2.5 rounded-lg ${colorMap[color]}`}>
-            {icon}
-          </div>
+          <div className={`p-2.5 rounded-lg ${colorMap[color]}`}>{icon}</div>
           {trend && (
-            <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
-              trend.isPositive
-                ? 'bg-accent-50 text-accent-700'
-                : 'bg-red-50 text-red-700'
-            }`}>
+            <div
+              className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
+                trend.isPositive ? 'bg-accent-50 text-accent-700' : 'bg-red-50 text-red-700'
+              }`}
+            >
               {trend.isPositive ? (
                 <TrendingUp className="w-3 h-3" />
               ) : (
                 <TrendingDown className="w-3 h-3" />
               )}
-              {trend.isPositive ? '+' : ''}{trend.value}%
+              {trend.isPositive ? '+' : ''}
+              {trend.value}%
             </div>
           )}
         </div>

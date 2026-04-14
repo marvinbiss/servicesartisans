@@ -30,7 +30,7 @@ const steps: Step[] = [
   {
     icon: <ThumbsUp className="h-5 w-5" aria-hidden="true" />,
     title: 'Choisissez librement',
-    description: 'Comparez les offres et sélectionnez l\'artisan qui vous convient.',
+    description: "Comparez les offres et sélectionnez l'artisan qui vous convient.",
     duration: 'Sans engagement',
   },
 ]

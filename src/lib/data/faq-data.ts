@@ -3,20 +3,20 @@ export const faqCategories = [
     name: 'Général',
     questions: [
       {
-        q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est un annuaire d\'artisans de France. Les données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
+        q: "Qu'est-ce que ServicesArtisans ?",
+        a: "ServicesArtisans est un annuaire d'artisans de France. Les données proviennent directement des registres SIREN officiels de l'État via l'API Annuaire des Entreprises. Le service est 100% gratuit.",
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: 'Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans. Pas d\'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d\'artisans que vous le souhaitez.',
+        a: "Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans. Pas d'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d'artisans que vous le souhaitez.",
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
+        a: "C'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l'artisan de votre choix pour obtenir un devis gratuit.",
       },
       {
-        q: 'D\'où proviennent les données des artisans ?',
-        a: 'Toutes nos données proviennent de l\'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est référencé via son numéro SIREN, garantissant qu\'il s\'agit d\'une entreprise réelle et active.',
+        q: "D'où proviennent les données des artisans ?",
+        a: "Toutes nos données proviennent de l'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est référencé via son numéro SIREN, garantissant qu'il s'agit d'une entreprise réelle et active.",
       },
     ],
   },
@@ -32,7 +32,7 @@ export const faqCategories = [
         a: 'Un conseiller vous rappelle rapidement pour vous mettre en relation avec des artisans disponibles dans votre zone.',
       },
       {
-        q: 'Suis-je obligé d\'accepter un devis ?',
+        q: "Suis-je obligé d'accepter un devis ?",
         a: 'Non, vous êtes libre de refuser tous les devis. Notre service est sans engagement.',
       },
       {
@@ -46,11 +46,11 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.',
+        a: "Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l'État français. Nous contrôlons que l'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.",
       },
       {
         q: 'Les artisans sont-ils assurés ?',
-        a: 'Les artisans du bâtiment sont légalement tenus de disposer d\'une garantie décennale (art. L241-1 Code des assurances). Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.',
+        a: "Les artisans du bâtiment sont légalement tenus de disposer d'une garantie décennale (art. L241-1 Code des assurances). Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.",
       },
       {
         q: 'Puis-je voir les avis sur un artisan ?',
@@ -62,8 +62,8 @@ export const faqCategories = [
     name: 'Paiement & Garanties',
     questions: [
       {
-        q: 'Comment payer l\'artisan ?',
-        a: 'Le paiement se fait directement entre vous et l\'artisan, selon les modalités convenues ensemble (espèces, chèque, virement, etc.).',
+        q: "Comment payer l'artisan ?",
+        a: "Le paiement se fait directement entre vous et l'artisan, selon les modalités convenues ensemble (espèces, chèque, virement, etc.).",
       },
       {
         q: 'Quelles garanties ai-je sur les travaux ?',
@@ -71,7 +71,7 @@ export const faqCategories = [
       },
       {
         q: 'Que faire en cas de litige ?',
-        a: 'Contactez-nous via notre page Contact. Nous vous accompagnons dans la résolution du litige et pouvons servir de médiateur avec l\'artisan.',
+        a: "Contactez-nous via notre page Contact. Nous vous accompagnons dans la résolution du litige et pouvons servir de médiateur avec l'artisan.",
       },
     ],
   },
@@ -95,10 +95,9 @@ export const faqCategories = [
 ]
 
 // Flat array of all FAQ items for the FAQPage structured data schema
-export const faqItems: { question: string; answer: string }[] = faqCategories.flatMap(
-  (category) =>
-    category.questions.map((q) => ({
-      question: q.q,
-      answer: q.a,
-    }))
+export const faqItems: { question: string; answer: string }[] = faqCategories.flatMap((category) =>
+  category.questions.map((q) => ({
+    question: q.q,
+    answer: q.a,
+  }))
 )

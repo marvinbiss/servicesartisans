@@ -4,8 +4,20 @@
  * Based on best practices from Doctolib, Calendly, and Acuity
  */
 
-import { sendBookingConfirmation, sendBookingReminder, sendCancellationEmail, sendPaymentFailedEmail } from './email'
-import { sendBookingConfirmationSMS, sendReminder24hSMS, sendReminder1hSMS, sendCancellationSMS, sendRescheduleSMS, type SMSData } from './sms'
+import {
+  sendBookingConfirmation,
+  sendBookingReminder,
+  sendCancellationEmail,
+  sendPaymentFailedEmail,
+} from './email'
+import {
+  sendBookingConfirmationSMS,
+  sendReminder24hSMS,
+  sendReminder1hSMS,
+  sendCancellationSMS,
+  sendRescheduleSMS,
+  type SMSData,
+} from './sms'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 
@@ -111,7 +123,9 @@ async function withRetry<T>(
       return { success: true, result, attempts: attempt + 1 }
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
-      logger.warn(`[Notification] ${operationName} attempt ${attempt + 1} failed`, { message: lastError.message })
+      logger.warn(`[Notification] ${operationName} attempt ${attempt + 1} failed`, {
+        message: lastError.message,
+      })
 
       if (attempt < RETRY_CONFIG.maxRetries - 1) {
         const delay = calculateRetryDelay(attempt)
@@ -248,7 +262,14 @@ export class UnifiedNotificationService {
     }, `Email ${type}`)
 
     // Log notification
-    await this.logNotification(payload.bookingId, type, 'email', result.success, payload.clientEmail, result.error)
+    await this.logNotification(
+      payload.bookingId,
+      type,
+      'email',
+      result.success,
+      payload.clientEmail,
+      result.error
+    )
 
     return { success: result.success, error: result.error }
   }
@@ -344,8 +365,7 @@ export class UnifiedNotificationService {
   }> {
     // Sort by priority
     const sortedPayloads = [...payloads].sort(
-      (_a, _b) =>
-        NOTIFICATION_PRIORITY[type] - NOTIFICATION_PRIORITY[type]
+      (_a, _b) => NOTIFICATION_PRIORITY[type] - NOTIFICATION_PRIORITY[type]
     )
 
     const results: Array<{

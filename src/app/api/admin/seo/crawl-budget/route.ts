@@ -26,18 +26,10 @@ export async function GET() {
   // Fetch raw data in parallel
   const [recentLogs, last7dLogs] = await Promise.all([
     // Last 30 days for top pages
-    supabase
-      .from('googlebot_logs')
-      .select('url, created_at')
-      .gte('created_at', d30)
-      .limit(50000),
+    supabase.from('googlebot_logs').select('url, created_at').gte('created_at', d30).limit(50000),
 
     // Last 7 days for frequency analysis
-    supabase
-      .from('googlebot_logs')
-      .select('url, created_at')
-      .gte('created_at', d7)
-      .limit(20000),
+    supabase.from('googlebot_logs').select('url, created_at').gte('created_at', d7).limit(20000),
   ])
 
   // ── Pages per day (last 30 days) ─────────────────────────────────────────
@@ -95,9 +87,7 @@ export async function GET() {
   // ── Summary stats ────────────────────────────────────────────────────────
   const totalCrawls30d = recentLogs.data?.length || 0
   const totalCrawls7d = last7dLogs.data?.length || 0
-  const avgPerDay30d = pagesPerDay.length > 0
-    ? Math.round(totalCrawls30d / pagesPerDay.length)
-    : 0
+  const avgPerDay30d = pagesPerDay.length > 0 ? Math.round(totalCrawls30d / pagesPerDay.length) : 0
   const uniquePages30d = pageCounts.size
 
   return NextResponse.json({

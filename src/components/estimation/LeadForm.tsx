@@ -48,9 +48,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           }
           style={{ fontSize: '16px' }}
         />
-        {lead.leadPhoneError && (
-          <p className="text-xs text-red-600 mt-1">{lead.leadPhoneError}</p>
-        )}
+        {lead.leadPhoneError && <p className="text-xs text-red-600 mt-1">{lead.leadPhoneError}</p>}
       </div>
       <input
         type="email"
@@ -69,14 +67,12 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           className="mt-0.5"
         />
         <span>
-          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en relation avec des artisans partenaires. Voir notre{' '}
-          <a
-            href="/confidentialite"
-            target="_blank"
-            className="underline"
-          >
+          J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en
+          relation avec des artisans partenaires. Voir notre{' '}
+          <a href="/confidentialite" target="_blank" className="underline">
             politique de confidentialité
-          </a>.
+          </a>
+          .
         </span>
       </label>
       {lead.leadError && (
@@ -94,9 +90,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
         ) : (
           <>
             <ArrowRight className="h-4 w-4" />
-            {context.artisan
-              ? 'Contacter mon artisan'
-              : 'Obtenir mon devis gratuit'}
+            {context.artisan ? 'Contacter mon artisan' : 'Obtenir mon devis gratuit'}
           </>
         )}
       </button>

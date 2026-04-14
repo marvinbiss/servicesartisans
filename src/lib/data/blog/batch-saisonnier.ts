@@ -2,11 +2,12 @@ import type { BlogArticle } from './articles'
 
 export const saisonnierArticles: Record<string, BlogArticle> = {
   'preparer-maison-hiver-checklist': {
-    title: 'Préparer sa maison pour l\'hiver : la check-list complète',
+    title: "Préparer sa maison pour l'hiver : la check-list complète",
     excerpt:
       'Chauffage, isolation, toiture, plomberie… Suivez notre check-list en 8 étapes pour hiverner votre maison sereinement et éviter les mauvaises surprises dès les premiers froids.',
-    metaTitle: 'Préparer sa Maison pour l\'Hiver : Checklist 2026',
-    metaDescription: 'Découvrez la checklist en 8 étapes pour hiverner votre maison : chauffage, isolation, toiture et plomberie. Obtenez un devis gratuit.',
+    metaTitle: "Préparer sa Maison pour l'Hiver : Checklist 2026",
+    metaDescription:
+      'Découvrez la checklist en 8 étapes pour hiverner votre maison : chauffage, isolation, toiture et plomberie. Obtenez un devis gratuit.',
     image: '/images/blog/preparer-maison-hiver-checklist.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-03-06',
@@ -16,34 +17,34 @@ export const saisonnierArticles: Record<string, BlogArticle> = {
     keyTakeaways: [
       'La révision annuelle de la chaudière est obligatoire (décret 2009-649) et doit être réalisée par un professionnel certifié avant le début de la saison de chauffe.',
       'Le ramonage du conduit de cheminée est exigé 1 à 2 fois par an selon les arrêtés préfectoraux ; le certificat est indispensable pour votre assurance habitation.',
-      'Calorifuger les tuyaux exposés au gel et purger les robinets extérieurs permet d\'éviter des dégâts des eaux pouvant coûter plusieurs milliers d\'euros.',
-      'Un planning d\'intervention étalé entre octobre et mi-novembre vous garantit la disponibilité des artisans et des tarifs plus compétitifs.',
+      "Calorifuger les tuyaux exposés au gel et purger les robinets extérieurs permet d'éviter des dégâts des eaux pouvant coûter plusieurs milliers d'euros.",
+      "Un planning d'intervention étalé entre octobre et mi-novembre vous garantit la disponibilité des artisans et des tarifs plus compétitifs.",
     ],
     faq: [
       {
-        question: 'Quand faut-il commencer à préparer sa maison pour l\'hiver ?',
+        question: "Quand faut-il commencer à préparer sa maison pour l'hiver ?",
         answer:
-          'Idéalement dès la fin du mois de septembre. Les professionnels du chauffage et du ramonage sont très sollicités à partir de mi-octobre. Planifier vos interventions tôt vous assure un meilleur choix de créneaux et souvent de meilleurs tarifs. La période optimale pour l\'ensemble des travaux préparatoires s\'étend d\'octobre à mi-novembre.',
+          "Idéalement dès la fin du mois de septembre. Les professionnels du chauffage et du ramonage sont très sollicités à partir de mi-octobre. Planifier vos interventions tôt vous assure un meilleur choix de créneaux et souvent de meilleurs tarifs. La période optimale pour l'ensemble des travaux préparatoires s'étend d'octobre à mi-novembre.",
       },
       {
         question: 'La révision de chaudière est-elle vraiment obligatoire chaque année ?',
         answer:
-          'Oui, le décret n° 2009-649 du 9 juin 2009 impose un entretien annuel des chaudières dont la puissance est comprise entre 4 et 400 kW, qu\'elles fonctionnent au gaz, au fioul, au bois ou au charbon. L\'installateur ou le chauffagiste remet une attestation d\'entretien dans les 15 jours suivant la visite. Cette attestation peut être exigée par votre assureur en cas de sinistre.',
+          "Oui, le décret n° 2009-649 du 9 juin 2009 impose un entretien annuel des chaudières dont la puissance est comprise entre 4 et 400 kW, qu'elles fonctionnent au gaz, au fioul, au bois ou au charbon. L'installateur ou le chauffagiste remet une attestation d'entretien dans les 15 jours suivant la visite. Cette attestation peut être exigée par votre assureur en cas de sinistre.",
       },
       {
-        question: 'Combien coûte la préparation complète d\'une maison pour l\'hiver ?',
+        question: "Combien coûte la préparation complète d'une maison pour l'hiver ?",
         answer:
-          'Le budget varie selon la taille du logement et les interventions nécessaires. Comptez environ 90 à 150 € pour la révision de chaudière, 50 à 90 € par conduit pour le ramonage, et 200 à 600 € pour des travaux d\'isolation ponctuels (joints, bas de porte, calfeutrage). Au total, un budget de 400 à 900 € couvre l\'essentiel pour une maison de taille moyenne.',
+          "Le budget varie selon la taille du logement et les interventions nécessaires. Comptez environ 90 à 150 € pour la révision de chaudière, 50 à 90 € par conduit pour le ramonage, et 200 à 600 € pour des travaux d'isolation ponctuels (joints, bas de porte, calfeutrage). Au total, un budget de 400 à 900 € couvre l'essentiel pour une maison de taille moyenne.",
       },
       {
         question: 'Comment savoir si mon isolation est suffisante ?',
         answer:
-          'Plusieurs signes révèlent une isolation déficiente : sensation de paroi froide près des murs ou fenêtres, condensation récurrente sur les vitres, facture de chauffage anormalement élevée, ou courants d\'air perceptibles près des ouvertures. Un diagnostic thermique réalisé par un professionnel (environ 300 à 800 €) permet d\'identifier précisément les points faibles. Vous pouvez aussi réaliser un test simple avec une bougie le long des fenêtres et portes pour détecter les infiltrations d\'air.',
+          "Plusieurs signes révèlent une isolation déficiente : sensation de paroi froide près des murs ou fenêtres, condensation récurrente sur les vitres, facture de chauffage anormalement élevée, ou courants d'air perceptibles près des ouvertures. Un diagnostic thermique réalisé par un professionnel (environ 300 à 800 €) permet d'identifier précisément les points faibles. Vous pouvez aussi réaliser un test simple avec une bougie le long des fenêtres et portes pour détecter les infiltrations d'air.",
       },
       {
         question: 'Quelles aides financières existent pour les travaux de préparation hivernale ?',
         answer:
-          'MaPrimeRénov\' finance une partie des travaux d\'isolation et de remplacement de système de chauffage, selon vos revenus et le gain énergétique. Les CEE (Certificats d\'Économies d\'Énergie) offrent des primes complémentaires pour l\'isolation et le chauffage performant. L\'éco-PTZ permet d\'emprunter jusqu\'à 50 000 € à taux zéro pour un bouquet de travaux. Enfin, certaines collectivités locales proposent des aides additionnelles. Consultez france-renov.gouv.fr pour un bilan personnalisé.',
+          "MaPrimeRénov' finance une partie des travaux d'isolation et de remplacement de système de chauffage, selon vos revenus et le gain énergétique. Les CEE (Certificats d'Économies d'Énergie) offrent des primes complémentaires pour l'isolation et le chauffage performant. L'éco-PTZ permet d'emprunter jusqu'à 50 000 € à taux zéro pour un bouquet de travaux. Enfin, certaines collectivités locales proposent des aides additionnelles. Consultez france-renov.gouv.fr pour un bilan personnalisé.",
       },
     ],
     content: [

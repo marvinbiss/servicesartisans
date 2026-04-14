@@ -50,10 +50,11 @@ export async function GET(request: Request) {
 
     // Stats résumé
     const total = (data || []).length
-    const enhancedCount = (data || []).filter(p => p.enhanced).length
-    const avgPosition = total > 0
-      ? Math.round(((data || []).reduce((sum, p) => sum + p.position, 0) / total) * 10) / 10
-      : 0
+    const enhancedCount = (data || []).filter((p) => p.enhanced).length
+    const avgPosition =
+      total > 0
+        ? Math.round(((data || []).reduce((sum, p) => sum + p.position, 0) / total) * 10) / 10
+        : 0
 
     return NextResponse.json({
       success: true,
@@ -103,7 +104,10 @@ export async function POST(request: Request) {
 
     if (!rows.length) {
       return NextResponse.json(
-        { success: false, error: { message: 'Aucune donnée à importer. Envoyez un tableau JSON.' } },
+        {
+          success: false,
+          error: { message: 'Aucune donnée à importer. Envoyez un tableau JSON.' },
+        },
         { status: 400 }
       )
     }
@@ -133,9 +137,14 @@ export async function POST(request: Request) {
       // Retirer le trailing slash (sauf pour la racine)
       if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1)
 
-      const position = typeof row.position === 'number' ? row.position : parseFloat(String(row.position || '0'))
-      const impressions = typeof row.impressions === 'number' ? row.impressions : parseInt(String(row.impressions || '0'), 10)
-      const clicks = typeof row.clicks === 'number' ? row.clicks : parseInt(String(row.clicks || '0'), 10)
+      const position =
+        typeof row.position === 'number' ? row.position : parseFloat(String(row.position || '0'))
+      const impressions =
+        typeof row.impressions === 'number'
+          ? row.impressions
+          : parseInt(String(row.impressions || '0'), 10)
+      const clicks =
+        typeof row.clicks === 'number' ? row.clicks : parseInt(String(row.clicks || '0'), 10)
       const query = row.query || ''
 
       // Vérifier l'éligibilité

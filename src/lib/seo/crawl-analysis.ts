@@ -312,7 +312,7 @@ export async function getNeverCrawledPages(
     return []
   }
 
-  const crawledUrls = new Set((crawledData || []).map(r => r.url))
+  const crawledUrls = new Set((crawledData || []).map((r) => r.url))
 
   // Get active providers to build expected service×ville URLs
   const { data: providers } = await supabase
@@ -347,7 +347,7 @@ export async function getNeverCrawledPages(
           .replace(/^-|-$/g, '')
 
         const hubUrl = `/services/${serviceSlug}/${citySlug}`
-        if (!crawledUrls.has(hubUrl) && !neverCrawled.some(n => n.url === hubUrl)) {
+        if (!crawledUrls.has(hubUrl) && !neverCrawled.some((n) => n.url === hubUrl)) {
           neverCrawled.push({ url: hubUrl, source: 'provider-hub' })
           if (neverCrawled.length >= limit) break
         }

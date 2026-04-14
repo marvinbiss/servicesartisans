@@ -26,8 +26,11 @@ export async function GET(request: NextRequest) {
 
     if (!region && !departement) {
       return NextResponse.json(
-        { error: 'Paramètre "region" ou "departement" requis. Exemple : ?region=ile-de-france ou ?departement=75' },
-        { status: 400, headers: CORS_HEADERS },
+        {
+          error:
+            'Paramètre "region" ou "departement" requis. Exemple : ?region=ile-de-france ou ?departement=75',
+        },
+        { status: 400, headers: CORS_HEADERS }
       )
     }
 
@@ -35,7 +38,9 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('barometre_stats')
-      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at')
+      .select(
+        'metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at'
+      )
       .is('ville', null)
 
     if (region) {
@@ -44,14 +49,12 @@ export async function GET(request: NextRequest) {
       query = query.eq('departement_code', departement)
     }
 
-    const { data, error } = await query
-      .order('nb_artisans', { ascending: false })
-      .limit(100)
+    const { data, error } = await query.order('nb_artisans', { ascending: false }).limit(100)
 
     if (error) {
       return NextResponse.json(
         { error: 'Erreur interne lors de la récupération des données.' },
-        { status: 500, headers: CORS_HEADERS },
+        { status: 500, headers: CORS_HEADERS }
       )
     }
 
@@ -60,12 +63,14 @@ export async function GET(request: NextRequest) {
     const totalArtisans = rows.reduce((s, r) => s + (r.nb_artisans ?? 0), 0)
     const totalAvis = rows.reduce((s, r) => s + (r.nb_avis ?? 0), 0)
     const ratedRows = rows.filter((r) => r.note_moyenne !== null)
-    const noteMoyenne = ratedRows.length > 0
-      ? Math.round(
-          (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_artisans ?? 1), 0) /
-            ratedRows.reduce((s, r) => s + (r.nb_artisans ?? 1), 0)) * 100,
-        ) / 100
-      : null
+    const noteMoyenne =
+      ratedRows.length > 0
+        ? Math.round(
+            (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_artisans ?? 1), 0) /
+              ratedRows.reduce((s, r) => s + (r.nb_artisans ?? 1), 0)) *
+              100
+          ) / 100
+        : null
 
     return NextResponse.json(
       {
@@ -91,12 +96,12 @@ export async function GET(request: NextRequest) {
           ...CORS_HEADERS,
           'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
         },
-      },
+      }
     )
   } catch {
     return NextResponse.json(
       { error: 'Erreur serveur inattendue.' },
-      { status: 500, headers: CORS_HEADERS },
+      { status: 500, headers: CORS_HEADERS }
     )
   }
 }

@@ -23,9 +23,9 @@ function getTwilioClient(): twilio.Twilio {
 }
 
 export interface WhatsAppSendParams {
-  to: string  // phone_e164 format (+33...)
+  to: string // phone_e164 format (+33...)
   body?: string
-  contentSid?: string  // Twilio Content SID pour templates approuvés
+  contentSid?: string // Twilio Content SID pour templates approuvés
   contentVariables?: Record<string, string>
 }
 
@@ -66,7 +66,9 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
       messageParams.statusCallback = `${siteUrl}/api/admin/prospection/webhooks/twilio`
     }
 
-    const result = await client.messages.create(messageParams as unknown as Parameters<typeof client.messages.create>[0])
+    const result = await client.messages.create(
+      messageParams as unknown as Parameters<typeof client.messages.create>[0]
+    )
 
     logger.info('WhatsApp sent', { to: params.to, sid: result.sid })
     return { success: true, sid: result.sid }

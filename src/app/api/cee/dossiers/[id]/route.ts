@@ -37,34 +37,65 @@ async function resolveId(ctx: RouteContext): Promise<string> {
 }
 
 const DOSSIER_DETAIL_SELECT = [
-  'id', 'reference', 'partner_id', 'provider_id',
-  'client_email_hash', 'client_code_postal', 'client_commune_insee',
-  'foyer_personnes', 'revenus_categorie', 'rfr_declared_cts',
-  'operation_code', 'type_travaux', 'surface_m2', 'annee_construction', 'energie_remplacee',
-  'montant_ht_cts', 'montant_ttc_cts', 'prime_total_cts', 'reste_a_charge_cts',
-  'date_devis', 'date_chantier_prevue', 'date_chantier_realisee',
-  'forfait_id', 'forfait_version', 'prime_cee_cts', 'prime_mpr_cts',
-  'commission_rate', 'commission_amount_cts', 'commission_status',
-  'status', 'qa_score', 'qa_reviewed_at', 'qa_notes',
-  'delegataire', 'delegataire_reference', 'pncee_reference',
-  'delegataire_response_status', 'delegataire_response_motif',
-  'created_at', 'updated_at', 'expires_at',
+  'id',
+  'reference',
+  'partner_id',
+  'provider_id',
+  'client_email_hash',
+  'client_code_postal',
+  'client_commune_insee',
+  'foyer_personnes',
+  'revenus_categorie',
+  'rfr_declared_cts',
+  'operation_code',
+  'type_travaux',
+  'surface_m2',
+  'annee_construction',
+  'energie_remplacee',
+  'montant_ht_cts',
+  'montant_ttc_cts',
+  'prime_total_cts',
+  'reste_a_charge_cts',
+  'date_devis',
+  'date_chantier_prevue',
+  'date_chantier_realisee',
+  'forfait_id',
+  'forfait_version',
+  'prime_cee_cts',
+  'prime_mpr_cts',
+  'commission_rate',
+  'commission_amount_cts',
+  'commission_status',
+  'status',
+  'qa_score',
+  'qa_reviewed_at',
+  'qa_notes',
+  'delegataire',
+  'delegataire_reference',
+  'pncee_reference',
+  'delegataire_response_status',
+  'delegataire_response_motif',
+  'created_at',
+  'updated_at',
+  'expires_at',
 ].join(',')
 
 // Fields the artisan is allowed to patch (draft or qa_rejected only)
-const PatchableFieldsSchema = z.object({
-  type_travaux: z.string().min(1).max(200).optional(),
-  surface_m2: z.number().positive().nullish(),
-  annee_construction: z.number().int().min(1800).max(2100).nullish(),
-  energie_remplacee: z.string().max(50).nullish(),
-  date_chantier_prevue: z
-    .string()
-    .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
-    .nullish(),
-  foyer_personnes: z.number().int().min(1).max(12).optional(),
-  revenus_categorie: z.enum(['tres_modeste', 'modeste', 'intermediaire', 'superieur']).optional(),
-  rfr_declared_cts: z.number().int().nonnegative().nullish(),
-}).strict()
+const PatchableFieldsSchema = z
+  .object({
+    type_travaux: z.string().min(1).max(200).optional(),
+    surface_m2: z.number().positive().nullish(),
+    annee_construction: z.number().int().min(1800).max(2100).nullish(),
+    energie_remplacee: z.string().max(50).nullish(),
+    date_chantier_prevue: z
+      .string()
+      .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+      .nullish(),
+    foyer_personnes: z.number().int().min(1).max(12).optional(),
+    revenus_categorie: z.enum(['tres_modeste', 'modeste', 'intermediaire', 'superieur']).optional(),
+    rfr_declared_cts: z.number().int().nonnegative().nullish(),
+  })
+  .strict()
 
 // ---------------------------------------------------------------------------
 // GET /api/cee/dossiers/[id]

@@ -19,18 +19,12 @@ export async function GET(request: NextRequest) {
 
     const result = suggestionsQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json(
-        { suggestions: [], recentSearches: [] },
-        { status: 200 }
-      )
+      return NextResponse.json({ suggestions: [], recentSearches: [] }, { status: 200 })
     }
 
     const sanitized = sanitizeSearchQuery(result.data.q)
     if (!sanitized || sanitized.length < 2) {
-      return NextResponse.json(
-        { suggestions: [], recentSearches: [] },
-        { status: 200 }
-      )
+      return NextResponse.json({ suggestions: [], recentSearches: [] }, { status: 200 })
     }
 
     const supabase = createAdminClient()
@@ -86,9 +80,8 @@ export async function GET(request: NextRequest) {
           id: provider.id,
           label: provider.name,
           slug: provider.slug,
-          subtitle: [provider.specialty, provider.address_city]
-            .filter(Boolean)
-            .join(' — ') || undefined,
+          subtitle:
+            [provider.specialty, provider.address_city].filter(Boolean).join(' — ') || undefined,
           verified: provider.is_verified || false,
           siret: provider.siret || undefined,
         })
@@ -105,10 +98,7 @@ export async function GET(request: NextRequest) {
     )
   } catch (error) {
     logger.error('Search suggestions API error', error)
-    return NextResponse.json(
-      { suggestions: [], recentSearches: [] },
-      { status: 200 }
-    )
+    return NextResponse.json({ suggestions: [], recentSearches: [] }, { status: 200 })
   }
 }
 

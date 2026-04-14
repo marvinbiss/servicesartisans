@@ -51,7 +51,12 @@ export default function AnalyticsPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -63,39 +68,64 @@ export default function AnalyticsPage() {
           <h2 className="font-semibold">Détail par canal</h2>
         </div>
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px] text-sm" aria-label="Détail des performances par canal">
-          <thead>
-            <tr className="border-b">
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Échecs</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Taux livraison</th>
-              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Taux réponse</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {channels.map((ch) => (
-              <tr key={ch.channel}>
-                <td className="px-4 py-3 font-medium capitalize">{ch.channel === 'whatsapp' ? 'WhatsApp' : ch.channel.toUpperCase()}</td>
-                <td className="px-4 py-3 text-right">{ch.sent.toLocaleString('fr-FR')}</td>
-                <td className="px-4 py-3 text-right">{ch.delivered.toLocaleString('fr-FR')}</td>
-                <td className="px-4 py-3 text-right">{ch.replied.toLocaleString('fr-FR')}</td>
-                <td className="px-4 py-3 text-right text-red-500">{ch.failed.toLocaleString('fr-FR')}</td>
-                <td className="px-4 py-3 text-right text-green-600">{ch.delivery_rate.toFixed(1)}%</td>
-                <td className="px-4 py-3 text-right text-blue-600">{ch.reply_rate.toFixed(1)}%</td>
+          <table
+            className="w-full min-w-[700px] text-sm"
+            aria-label="Détail des performances par canal"
+          >
+            <thead>
+              <tr className="border-b">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                  Canal
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Envoyés
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Livrés
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Réponses
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Échecs
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Taux livraison
+                </th>
+                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                  Taux réponse
+                </th>
               </tr>
-            ))}
-            {channels.length === 0 && !loading && (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
-                  Aucune donnée disponible
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y">
+              {channels.map((ch) => (
+                <tr key={ch.channel}>
+                  <td className="px-4 py-3 font-medium capitalize">
+                    {ch.channel === 'whatsapp' ? 'WhatsApp' : ch.channel.toUpperCase()}
+                  </td>
+                  <td className="px-4 py-3 text-right">{ch.sent.toLocaleString('fr-FR')}</td>
+                  <td className="px-4 py-3 text-right">{ch.delivered.toLocaleString('fr-FR')}</td>
+                  <td className="px-4 py-3 text-right">{ch.replied.toLocaleString('fr-FR')}</td>
+                  <td className="px-4 py-3 text-right text-red-500">
+                    {ch.failed.toLocaleString('fr-FR')}
+                  </td>
+                  <td className="px-4 py-3 text-right text-green-600">
+                    {ch.delivery_rate.toFixed(1)}%
+                  </td>
+                  <td className="px-4 py-3 text-right text-blue-600">
+                    {ch.reply_rate.toFixed(1)}%
+                  </td>
+                </tr>
+              ))}
+              {channels.length === 0 && !loading && (
+                <tr>
+                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                    Aucune donnée disponible
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

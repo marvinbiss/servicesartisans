@@ -24,24 +24,12 @@ interface ConventionProps {
   onPartnerRefresh: () => Promise<void>
 }
 
-type ConventionState =
-  | 'idle'
-  | 'loading'
-  | 'signing'
-  | 'polling'
-  | 'signed'
-  | 'error'
+type ConventionState = 'idle' | 'loading' | 'signing' | 'polling' | 'signed' | 'error'
 
-export default function Convention({
-  partner,
-  onNext,
-  onPartnerRefresh,
-}: ConventionProps) {
+export default function Convention({ partner, onNext, onPartnerRefresh }: ConventionProps) {
   const isAlreadySigned = Boolean(partner?.convention_signed_at)
 
-  const [state, setState] = useState<ConventionState>(
-    isAlreadySigned ? 'signed' : 'idle'
-  )
+  const [state, setState] = useState<ConventionState>(isAlreadySigned ? 'signed' : 'idle')
   const [signerUrl, setSignerUrl] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
@@ -70,7 +58,7 @@ export default function Convention({
         stopPolling()
         setState('error')
         setErrorMessage(
-          'Délai d\'attente dépassé. Actualisez la page pour vérifier le statut de votre signature.'
+          "Délai d'attente dépassé. Actualisez la page pour vérifier le statut de votre signature."
         )
         return
       }
@@ -114,8 +102,7 @@ export default function Convention({
       if (res.status === 409) {
         // IBAN_REQUIRED
         setErrorMessage(
-          json?.error?.message ||
-            'Veuillez d\'abord renseigner votre IBAN (étape précédente).'
+          json?.error?.message || "Veuillez d'abord renseigner votre IBAN (étape précédente)."
         )
         setState('error')
         return
@@ -137,9 +124,7 @@ export default function Convention({
       } else {
         // No iframe URL (sandbox/mock mode) — start polling anyway
         setState('polling')
-        setStatusMessage(
-          'Convention créée. En attente de confirmation de votre signature.'
-        )
+        setStatusMessage('Convention créée. En attente de confirmation de votre signature.')
         startPolling()
       }
     } catch {
@@ -165,25 +150,17 @@ export default function Convention({
             Étape 3 sur 5
           </span>
         </div>
-        <h2
-          id="convention-heading"
-          className="font-heading text-2xl font-bold text-charcoal-900"
-        >
+        <h2 id="convention-heading" className="font-heading text-2xl font-bold text-charcoal-900">
           Convention de partenariat
         </h2>
         <p className="mt-2 text-charcoal-500">
-          Signez électroniquement votre convention mandataire CEE conforme à
-          l&apos;arrêté du 2 novembre 2023.
+          Signez électroniquement votre convention mandataire CEE conforme à l&apos;arrêté du 2
+          novembre 2023.
         </p>
       </header>
 
       {/* Status announcements */}
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-        role="status"
-      >
+      <div aria-live="polite" aria-atomic="true" className="sr-only" role="status">
         {statusMessage}
       </div>
 
@@ -199,10 +176,11 @@ export default function Convention({
             {partner?.convention_signed_at && (
               <p className="text-sm text-accent-600">
                 Signée le{' '}
-                {new Date(partner.convention_signed_at).toLocaleDateString(
-                  'fr-FR',
-                  { day: 'numeric', month: 'long', year: 'numeric' }
-                )}
+                {new Date(partner.convention_signed_at).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
               </p>
             )}
           </div>
@@ -252,13 +230,14 @@ export default function Convention({
       )}
 
       {/* Polling progress */}
-      {(state === 'polling') && (
+      {state === 'polling' && (
         <div className="mb-6 flex items-center gap-3 rounded-xl border border-sand-200 bg-sand-50 p-4">
-          <RefreshCw className="h-5 w-5 shrink-0 motion-safe:animate-spin text-primary-400" aria-hidden="true" />
+          <RefreshCw
+            className="h-5 w-5 shrink-0 motion-safe:animate-spin text-primary-400"
+            aria-hidden="true"
+          />
           <div>
-            <p className="font-medium text-charcoal-700">
-              En attente de votre signature…
-            </p>
+            <p className="font-medium text-charcoal-700">En attente de votre signature…</p>
             <p className="text-sm text-charcoal-500">
               Cette fenêtre se mettra à jour automatiquement après la signature.
             </p>
@@ -276,10 +255,9 @@ export default function Convention({
                 Convention mandataire CEE — SA Energy
               </p>
               <p className="mt-0.5 text-sm text-charcoal-500">
-                6 mentions obligatoires — arrêté du 2 novembre 2023 (R.221-1) :
-                identification des parties, périmètre des opérations, obligations
-                du mandataire, conditions de rémunération, durée et résiliation,
-                dispositions CEE.
+                6 mentions obligatoires — arrêté du 2 novembre 2023 (R.221-1) : identification des
+                parties, périmètre des opérations, obligations du mandataire, conditions de
+                rémunération, durée et résiliation, dispositions CEE.
               </p>
             </div>
           </div>

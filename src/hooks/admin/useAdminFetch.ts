@@ -76,10 +76,10 @@ export function useAdminFetch<T = unknown>(
   url: string | null | undefined,
   config?: SWRConfiguration
 ): UseAdminFetchResult<T> {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<T>(
-    url ?? null,
-    { ...DEFAULT_CONFIG, ...config }
-  )
+  const { data, error, isLoading, isValidating, mutate } = useSWR<T>(url ?? null, {
+    ...DEFAULT_CONFIG,
+    ...config,
+  })
 
   return { data, isLoading, error, mutate, isValidating }
 }

@@ -32,7 +32,8 @@ function checkRateLimit(ip: string): boolean {
 
 const securityHeaders = {
   'Content-Type': 'text/html; charset=utf-8',
-  'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'",
+  'Content-Security-Policy':
+    "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'",
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
 }
@@ -123,9 +124,10 @@ function unsubscribePage(message: string, success: boolean): string {
   <div class="card">
     <div class="icon">${success ? '&#10003;' : '&#10007;'}</div>
     <h1>${escapeHtml(message)}</h1>
-    <p>${success
-      ? 'Vous ne recevrez plus de communications de notre part.'
-      : 'Veuillez réessayer ou contacter support@servicesartisans.fr'
+    <p>${
+      success
+        ? 'Vous ne recevrez plus de communications de notre part.'
+        : 'Veuillez réessayer ou contacter support@servicesartisans.fr'
     }</p>
   </div>
 </body>

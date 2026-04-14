@@ -42,41 +42,64 @@ describe('artisanRegistrationSchema', () => {
     })
     expect(result.success).toBe(false)
     if (!result.success) {
-      const passwordError = result.error.issues.find(i => i.path.includes('confirmPassword'))
+      const passwordError = result.error.issues.find((i) => i.path.includes('confirmPassword'))
       expect(passwordError).toBeDefined()
     }
   })
 
   it('should reject invalid SIRET (not 14 digits)', () => {
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '123' }).success).toBe(false)
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '1234567890123' }).success).toBe(false)
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '123456789012345' }).success).toBe(false)
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, siret: 'abcdefghijklmn' }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '123' }).success
+    ).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '1234567890123' }).success
+    ).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, siret: '123456789012345' })
+        .success
+    ).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, siret: 'abcdefghijklmn' }).success
+    ).toBe(false)
   })
 
   it('should reject invalid postal code', () => {
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: '7500' }).success).toBe(false)
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: '750011' }).success).toBe(false)
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: 'ABCDE' }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: '7500' }).success
+    ).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: '750011' }).success
+    ).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, postalCode: 'ABCDE' }).success
+    ).toBe(false)
   })
 
   it('should reject when acceptTerms is not true', () => {
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, acceptTerms: false }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, acceptTerms: false }).success
+    ).toBe(false)
   })
 
   it('should reject too short business name', () => {
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, businessName: 'A' }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, businessName: 'A' }).success
+    ).toBe(false)
   })
 
   it('should reject too short address', () => {
-    expect(artisanRegistrationSchema.safeParse({ ...validRegistration, address: '12' }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({ ...validRegistration, address: '12' }).success
+    ).toBe(false)
   })
 
   it('should reject description exceeding max length', () => {
-    expect(artisanRegistrationSchema.safeParse({
-      ...validRegistration,
-      description: 'a'.repeat(2001),
-    }).success).toBe(false)
+    expect(
+      artisanRegistrationSchema.safeParse({
+        ...validRegistration,
+        description: 'a'.repeat(2001),
+      }).success
+    ).toBe(false)
   })
 
   it('should reject missing required fields', () => {

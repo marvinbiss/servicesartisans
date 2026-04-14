@@ -57,8 +57,7 @@ export async function POST(request: NextRequest) {
       return serverErrorResponse('READ_FAILED', 'Erreur serveur')
     }
 
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
     const results = {
       invited: 0,

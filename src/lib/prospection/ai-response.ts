@@ -34,15 +34,23 @@ interface AIGenerateResult {
  * Générer une réponse IA contextuelle
  */
 export async function generateAIResponse(params: AIGenerateParams): Promise<AIGenerateResult> {
-  const { provider, model, systemPrompt, conversationHistory, contactContext, maxTokens, temperature } = params
+  const {
+    provider,
+    model,
+    systemPrompt,
+    conversationHistory,
+    contactContext,
+    maxTokens,
+    temperature,
+  } = params
 
   // Construire le contexte
   const contextStr = buildContactContext(contactContext)
   const fullSystemPrompt = `${systemPrompt}\n\nContexte du contact:\n${contextStr}`
 
   // Historique de conversation
-  const messages = conversationHistory.map(msg => ({
-    role: msg.direction === 'inbound' ? 'user' as const : 'assistant' as const,
+  const messages = conversationHistory.map((msg) => ({
+    role: msg.direction === 'inbound' ? ('user' as const) : ('assistant' as const),
     content: msg.content,
   }))
 
@@ -56,7 +64,10 @@ export async function generateAIResponse(params: AIGenerateParams): Promise<AIGe
 
   const validation = validateAIOutput(result.content)
   if (!validation.valid) {
-    logger.warn('AI output validation failed', { reason: validation.reason, contentPreview: result.content.substring(0, 100) })
+    logger.warn('AI output validation failed', {
+      reason: validation.reason,
+      contentPreview: result.content.substring(0, 100),
+    })
     return {
       ...result,
       content: 'Merci pour votre message. Un conseiller va vous recontacter rapidement.',
@@ -152,16 +163,13 @@ async function generateWithOpenAI(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model,
         max_tokens: maxTokens,
         temperature,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages,
-        ],
+        messages: [{ role: 'system', content: systemPrompt }, ...messages],
       }),
       signal: controller.signal,
     })
@@ -206,7 +214,10 @@ function sanitizeForPrompt(value: string): string {
   return value
     .normalize('NFKC') // Normalize Unicode homoglyphs to canonical form
     .replace(/["\n\r]/g, ' ')
-    .replace(/\b(ignore|forget|disregard|override|system|instruction|prompt|assistant|human|user|role|function|tool)\b/gi, '')
+    .replace(
+      /\b(ignore|forget|disregard|override|system|instruction|prompt|assistant|human|user|role|function|tool)\b/gi,
+      ''
+    )
     .trim()
     .substring(0, 200)
 }
@@ -225,7 +236,7 @@ function buildContactContext(contact: ProspectionContact): string {
   if (contact.city) parts.push(`Ville: "${sanitizeForPrompt(contact.city)}"`)
   if (contact.department) parts.push(`Département: "${sanitizeForPrompt(contact.department)}"`)
   if (contact.tags.length > 0) {
-    const sanitizedTags = contact.tags.map(t => sanitizeForPrompt(t))
+    const sanitizedTags = contact.tags.map((t) => sanitizeForPrompt(t))
     parts.push(`Tags: "${sanitizedTags.join(', ')}"`)
   }
 
@@ -265,15 +276,13 @@ export function validateAIOutput(content: string): { valid: boolean; reason?: st
  */
 export function shouldEscalate(content: string, keywords: string[]): boolean {
   const lowerContent = content.toLowerCase()
-  return keywords.some(keyword => lowerContent.includes(keyword.toLowerCase()))
+  return keywords.some((keyword) => lowerContent.includes(keyword.toLowerCase()))
 }
 
 /**
  * Générer avec fallback (essaie le provider principal, puis le secondaire)
  */
-export async function generateWithFallback(
-  params: AIGenerateParams
-): Promise<AIGenerateResult> {
+export async function generateWithFallback(params: AIGenerateParams): Promise<AIGenerateResult> {
   try {
     return await generateAIResponse(params)
   } catch (primaryError) {

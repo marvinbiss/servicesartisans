@@ -29,7 +29,15 @@ export interface AuditLog {
   id: string
   user_id: string
   action: string
-  resource_type: 'user' | 'provider' | 'review' | 'payment' | 'service' | 'settings' | 'booking' | 'cms_page'
+  resource_type:
+    | 'user'
+    | 'provider'
+    | 'review'
+    | 'payment'
+    | 'service'
+    | 'settings'
+    | 'booking'
+    | 'cms_page'
   resource_id?: string
   old_value?: Record<string, unknown>
   new_value?: Record<string, unknown>
@@ -403,4 +411,12 @@ export interface PlatformSettings {
 
 // Export helper types
 export type SortOrder = 'asc' | 'desc'
-export type EntityType = 'user' | 'provider' | 'review' | 'payment' | 'service' | 'booking' | 'quote' | 'report'
+export type EntityType =
+  | 'user'
+  | 'provider'
+  | 'review'
+  | 'payment'
+  | 'service'
+  | 'booking'
+  | 'quote'
+  | 'report'

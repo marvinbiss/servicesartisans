@@ -2,11 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import type {
-  ServiceStructuredData,
-  HomepageStructuredData,
-  FaqStructuredData,
-} from '@/types/cms'
+import type { ServiceStructuredData, HomepageStructuredData, FaqStructuredData } from '@/types/cms'
 
 // Maximum number of items allowed per structured field type
 const STRUCTURED_LIMITS = {
@@ -75,7 +71,9 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
   const certifications = data.certifications || []
 
   // Validation state for FAQ items
-  const [faqTouched, setFaqTouched] = useState<Record<number, { question?: boolean; answer?: boolean }>>({})
+  const [faqTouched, setFaqTouched] = useState<
+    Record<number, { question?: boolean; answer?: boolean }>
+  >({})
   // Validation state for common tasks
   const [taskTouched, setTaskTouched] = useState<Record<number, { name?: boolean }>>({})
 
@@ -92,16 +90,17 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
     <div className="space-y-8">
       {/* Price range */}
       <div>
-        <SectionHeader title="Fourchette de prix" description="Prix minimum et maximum du service" />
+        <SectionHeader
+          title="Fourchette de prix"
+          description="Prix minimum et maximum du service"
+        />
         <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="block text-xs text-gray-500 mb-1">Min</label>
             <input
               type="number"
               value={priceRange.min}
-              onChange={(e) =>
-                update('priceRange', { ...priceRange, min: Number(e.target.value) })
-              }
+              onChange={(e) => update('priceRange', { ...priceRange, min: Number(e.target.value) })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
@@ -112,9 +111,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             <input
               type="number"
               value={priceRange.max}
-              onChange={(e) =>
-                update('priceRange', { ...priceRange, max: Number(e.target.value) })
-              }
+              onChange={(e) => update('priceRange', { ...priceRange, max: Number(e.target.value) })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
@@ -125,17 +122,13 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             <input
               type="text"
               value={priceRange.unit}
-              onChange={(e) =>
-                update('priceRange', { ...priceRange, unit: e.target.value })
-              }
+              onChange={(e) => update('priceRange', { ...priceRange, unit: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               placeholder="EUR"
             />
           </div>
         </div>
-        {priceRangeError && (
-          <p className="mt-1 text-xs text-red-600">{priceRangeError}</p>
-        )}
+        {priceRangeError && <p className="mt-1 text-xs text-red-600">{priceRangeError}</p>}
       </div>
 
       {/* Common tasks */}
@@ -177,9 +170,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       }`}
                       placeholder="Nom de la tâche"
                     />
-                    {nameEmpty && (
-                      <p className="mt-0.5 text-xs text-red-600">Nom requis</p>
-                    )}
+                    {nameEmpty && <p className="mt-0.5 text-xs text-red-600">Nom requis</p>}
                   </div>
                   <input
                     type="number"
@@ -224,9 +215,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                {taskPriceError && (
-                  <p className="mt-0.5 text-xs text-red-600">{taskPriceError}</p>
-                )}
+                {taskPriceError && <p className="mt-0.5 text-xs text-red-600">{taskPriceError}</p>}
               </div>
             )
           })}
@@ -368,9 +357,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   }`}
                   placeholder="Réponse"
                 />
-                {answerEmpty && (
-                  <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>
-                )}
+                {answerEmpty && <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>}
               </div>
             )
           })}
@@ -392,7 +379,10 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
 
       {/* Certifications */}
       <div>
-        <SectionHeader title="Certifications" description="Labels et certifications du prestataire" />
+        <SectionHeader
+          title="Certifications"
+          description="Labels et certifications du prestataire"
+        />
         <div className="flex flex-wrap gap-2 mb-2">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {certifications.map((cert, index) => (
@@ -506,7 +496,9 @@ interface FaqFieldsProps {
 function FaqFields({ data, update }: FaqFieldsProps) {
   const categoryName = data.categoryName || ''
   const items = data.items || []
-  const [touched, setTouched] = useState<Record<number, { question?: boolean; answer?: boolean }>>({})
+  const [touched, setTouched] = useState<Record<number, { question?: boolean; answer?: boolean }>>(
+    {}
+  )
 
   return (
     <div className="space-y-6">
@@ -595,9 +587,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                   }`}
                   placeholder="Réponse (texte enrichi supporté)"
                 />
-                {answerEmpty && (
-                  <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>
-                )}
+                {answerEmpty && <p className="mt-0.5 text-xs text-red-600">Réponse requise</p>}
               </div>
             )
           })}
@@ -722,7 +712,9 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Sous-titre (optionnel)</label>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Sous-titre (optionnel)
+                    </label>
                     <input
                       type="text"
                       value={section.subtitle || ''}

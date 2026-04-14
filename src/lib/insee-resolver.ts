@@ -48,9 +48,9 @@ function isInseeCode(city: string): boolean {
  * Also fills in address_region if missing.
  * Returns the same object reference if no change needed (no copy).
  */
-export function resolveProviderCity<T extends { address_city?: string | null; address_region?: string | null }>(
-  provider: T,
-): T {
+export function resolveProviderCity<
+  T extends { address_city?: string | null; address_region?: string | null },
+>(provider: T): T {
   const city = provider.address_city
   if (!city || !isInseeCode(city)) return provider
 
@@ -60,23 +60,27 @@ export function resolveProviderCity<T extends { address_city?: string | null; ad
   return {
     ...provider,
     address_city: commune.n,
-    ...((!provider.address_region && commune.r) ? { address_region: commune.r } : {}),
+    ...(!provider.address_region && commune.r ? { address_region: commune.r } : {}),
   }
 }
 
 /**
  * Resolve INSEE codes for an array of providers (batch).
  */
-export function resolveProviderCities<T extends { address_city?: string | null; address_region?: string | null }>(
-  providers: T[],
-): T[] {
+export function resolveProviderCities<
+  T extends { address_city?: string | null; address_region?: string | null },
+>(providers: T[]): T[] {
   return providers.map(resolveProviderCity)
 }
 
 // ─── Reverse map: city name → INSEE codes (for queries) ─────────────
 
 const _normalize = (t: string) =>
-  t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+  t
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
 
 // Build reverse map lazily (only on first use)
 let _reverseMap: Map<string, string[]> | null = null
@@ -119,7 +123,7 @@ export function getCityValues(cityName: string, deptCode?: string): string[] {
 
   // Filter by department when multiple communes share the same name
   if (deptCode && codes.length > 1) {
-    const filtered = codes.filter(code => {
+    const filtered = codes.filter((code) => {
       const entry = communes[code]
       return entry && entry.d === deptCode
     })

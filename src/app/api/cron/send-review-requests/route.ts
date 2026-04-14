@@ -95,7 +95,10 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Review Cron] Unauthorized access attempt')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     // Calculate time window: appointments that started 2-3 hours ago (availability_slots has no FK on bookings)
@@ -103,19 +106,23 @@ export async function GET(request: Request) {
     const windowStart = new Date(now.getTime() - 3 * 60 * 60 * 1000) // 3h ago
     const windowEnd = new Date(now.getTime() - 2 * 60 * 60 * 1000) // 2h ago
 
-    logger.info(`[Review Cron] Looking for completed appointments between ${windowStart.toISOString()} and ${windowEnd.toISOString()}`)
+    logger.info(
+      `[Review Cron] Looking for completed appointments between ${windowStart.toISOString()} and ${windowEnd.toISOString()}`
+    )
 
     // Fetch completed bookings in the time window using scheduled_date
     const { data: bookings, error } = await supabase
       .from('bookings')
-      .select(`
+      .select(
+        `
         id,
         service_name,
         status,
         scheduled_date,
         provider_id,
         client:profiles!client_id(full_name, email, phone_e164)
-      `)
+      `
+      )
       .in('status', ['confirmed', 'completed'])
       .gte('scheduled_date', windowStart.toISOString())
       .lte('scheduled_date', windowEnd.toISOString())
@@ -143,20 +150,23 @@ export async function GET(request: Request) {
     const { data: sentRequests } = await supabase
       .from('notification_logs')
       .select('booking_id')
-      .in('booking_id', completedBookings.map((b) => b.id))
+      .in(
+        'booking_id',
+        completedBookings.map((b) => b.id)
+      )
       .eq('type', 'review_request')
       .eq('status', 'sent')
 
     const sentBookingIds = new Set(sentRequests?.map((r) => r.booking_id) || [])
 
-    const bookingsToRequest = completedBookings.filter(
-      (b) => !sentBookingIds.has(b.id)
-    )
+    const bookingsToRequest = completedBookings.filter((b) => !sentBookingIds.has(b.id))
 
     logger.info(`[Review Cron] ${bookingsToRequest.length} need review requests`)
 
     // Fetch artisan details
-    const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => b.provider_id).filter(Boolean)))
+    const artisanIds = Array.from(
+      new Set(bookingsToRequest.map((b) => b.provider_id).filter(Boolean))
+    )
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
@@ -246,15 +256,10 @@ export async function GET(request: Request) {
     }
 
     // Mark bookings as completed if they were confirmed
-    const confirmedIds = bookingsToRequest
-      .filter((b) => b.status === 'confirmed')
-      .map((b) => b.id)
+    const confirmedIds = bookingsToRequest.filter((b) => b.status === 'confirmed').map((b) => b.id)
 
     if (confirmedIds.length > 0) {
-      await supabase
-        .from('bookings')
-        .update({ status: 'completed' })
-        .in('id', confirmedIds)
+      await supabase.from('bookings').update({ status: 'completed' }).in('id', confirmedIds)
     }
 
     logger.info(`[Review Cron] Completed: ${sentCount} sent, ${failedCount} failed`)
@@ -269,7 +274,7 @@ export async function GET(request: Request) {
   } catch (error) {
     logger.error('[Review Cron] Error:', error)
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de l\'envoi des demandes d\'avis' } },
+      { success: false, error: { message: "Erreur lors de l'envoi des demandes d'avis" } },
       { status: 500 }
     )
   }

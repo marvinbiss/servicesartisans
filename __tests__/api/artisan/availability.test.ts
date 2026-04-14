@@ -29,8 +29,24 @@ import { requireArtisan } from '@/lib/auth/artisan-guard'
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const sampleSlots = [
-  { id: 'slot-1', artisan_id: 'user-123', date: '2026-04-15', start_time: '09:00', end_time: '10:00', is_available: true, created_at: '2026-03-01' },
-  { id: 'slot-2', artisan_id: 'user-123', date: '2026-04-15', start_time: '14:00', end_time: '15:00', is_available: true, created_at: '2026-03-01' },
+  {
+    id: 'slot-1',
+    artisan_id: 'user-123',
+    date: '2026-04-15',
+    start_time: '09:00',
+    end_time: '10:00',
+    is_available: true,
+    created_at: '2026-03-01',
+  },
+  {
+    id: 'slot-2',
+    artisan_id: 'user-123',
+    date: '2026-04-15',
+    start_time: '14:00',
+    end_time: '15:00',
+    is_available: true,
+    created_at: '2026-03-01',
+  },
 ]
 
 /**
@@ -50,7 +66,7 @@ function makeChain(result: unknown, singleResult?: unknown) {
   }
   for (const key of Object.keys(chain)) {
     if (typeof chain[key] === 'function' && key !== 'single') {
-      (chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
+      ;(chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
     }
   }
   // Thenable (quand on await la chaîne directement)
@@ -116,9 +132,7 @@ describe('GET /api/artisan/availability', () => {
   it('retourne les créneaux triés (happy path)', async () => {
     // GET fait un seul from('availability_slots') qui retourne la liste
     const supabase = {
-      from: vi.fn().mockReturnValue(
-        makeChain({ data: sampleSlots, error: null })
-      ),
+      from: vi.fn().mockReturnValue(makeChain({ data: sampleSlots, error: null })),
     }
     mockAuthSuccess(supabase)
 
@@ -146,7 +160,9 @@ describe('POST /api/artisan/availability', () => {
     mockAuthFail()
 
     const { POST } = await import('@/app/api/artisan/availability/route')
-    const response = await POST(createJsonRequest({ date: '2026-04-20', start_time: '10:00', end_time: '11:00' }))
+    const response = await POST(
+      createJsonRequest({ date: '2026-04-20', start_time: '10:00', end_time: '11:00' })
+    )
     expect(response.status).toBe(401)
   })
 
@@ -173,9 +189,7 @@ describe('POST /api/artisan/availability', () => {
   })
 
   it('retourne 409 en cas de chevauchement', async () => {
-    const existingSlots = [
-      { id: 'existing-1', start_time: '09:30', end_time: '10:30' },
-    ]
+    const existingSlots = [{ id: 'existing-1', start_time: '09:30', end_time: '10:30' }]
     // POST fait : 1) from('availability_slots').select().eq().eq() pour overlap check
     const overlapChain = makeChain({ data: existingSlots, error: null })
     const supabase = {
@@ -211,10 +225,7 @@ describe('POST /api/artisan/availability', () => {
           return makeChain({ data: [], error: null })
         }
         // Insert chain — insert().select().single()
-        return makeChain(
-          { data: newSlot, error: null },
-          { data: newSlot, error: null }
-        )
+        return makeChain({ data: newSlot, error: null }, { data: newSlot, error: null })
       }),
     }
     mockAuthSuccess(supabase)
@@ -255,11 +266,9 @@ describe('DELETE /api/artisan/availability', () => {
     expect(response.status).toBe(400)
   })
 
-  it('retourne 404 si le créneau n\'existe pas', async () => {
+  it("retourne 404 si le créneau n'existe pas", async () => {
     const supabase = {
-      from: vi.fn().mockReturnValue(
-        makeChain({}, { data: null, error: { code: 'PGRST116' } })
-      ),
+      from: vi.fn().mockReturnValue(makeChain({}, { data: null, error: { code: 'PGRST116' } })),
     }
     mockAuthSuccess(supabase)
 
@@ -271,10 +280,13 @@ describe('DELETE /api/artisan/availability', () => {
   it('retourne 403 si le créneau appartient à un autre artisan', async () => {
     const supabase = {
       from: vi.fn().mockReturnValue(
-        makeChain({}, {
-          data: { id: '550e8400-e29b-41d4-a716-446655440000', artisan_id: 'other-user-999' },
-          error: null,
-        })
+        makeChain(
+          {},
+          {
+            data: { id: '550e8400-e29b-41d4-a716-446655440000', artisan_id: 'other-user-999' },
+            error: null,
+          }
+        )
       ),
     }
     mockAuthSuccess(supabase)
@@ -294,17 +306,23 @@ describe('DELETE /api/artisan/availability', () => {
         callIdx++
         if (callIdx === 1) {
           // Fetch slot — .single()
-          return makeChain({}, {
-            data: { id: slotId, artisan_id: 'user-123' },
-            error: null,
-          })
+          return makeChain(
+            {},
+            {
+              data: { id: slotId, artisan_id: 'user-123' },
+              error: null,
+            }
+          )
         }
         if (callIdx === 2) {
           // Check active bookings — .single() returns null (no booking)
-          return makeChain({}, {
-            data: null,
-            error: null,
-          })
+          return makeChain(
+            {},
+            {
+              data: null,
+              error: null,
+            }
+          )
         }
         // Delete chain
         return makeChain({ error: null })

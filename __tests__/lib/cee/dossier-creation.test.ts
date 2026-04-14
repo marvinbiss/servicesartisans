@@ -28,13 +28,15 @@ vi.mock('@/lib/logger', () => ({
 // Helpers
 // ---------------------------------------------------------------------------
 
-function makePartnerRow(overrides: Partial<{
-  status: string
-  convention_signed_at: string | null
-  certified_at: string | null
-  operations_allowed: string[]
-  rge_date_fin: string | null
-}> = {}) {
+function makePartnerRow(
+  overrides: Partial<{
+    status: string
+    convention_signed_at: string | null
+    certified_at: string | null
+    operations_allowed: string[]
+    rge_date_fin: string | null
+  }> = {}
+) {
   const {
     status = 'active',
     convention_signed_at = '2026-01-01T00:00:00Z',
@@ -50,9 +52,7 @@ function makePartnerRow(overrides: Partial<{
     certified_at,
     operations_allowed,
     provider: {
-      rge_qualifications: [
-        { code: 'QualiPAC', date_debut: '2024-01-01', date_fin: rge_date_fin },
-      ],
+      rge_qualifications: [{ code: 'QualiPAC', date_debut: '2024-01-01', date_fin: rge_date_fin }],
     },
   }
 }
@@ -132,7 +132,7 @@ function buildMockSupabase(partnerRow: unknown, existingDossier: unknown = null)
     _singleInsert: singleInsert,
   }
 }
-void buildMockSupabase;
+void buildMockSupabase
 
 function makeValidInput(): CreateDossierInput {
   return {
@@ -230,11 +230,7 @@ describe('checkDossierCreationGates', () => {
         })),
       })),
     }
-    const result = await checkDossierCreationGates(
-      supabase as never,
-      'partner-1',
-      'BAR-TH-171'
-    )
+    const result = await checkDossierCreationGates(supabase as never, 'partner-1', 'BAR-TH-171')
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.error).toBe('PARTNER_NOT_ACTIVE')
   })

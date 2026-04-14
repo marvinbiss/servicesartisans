@@ -15,7 +15,12 @@ export { ArtisanSimilar } from './ArtisanSimilar'
 export { default as ArtisanInternalLinks } from './ArtisanInternalLinks'
 export { ArtisanPhotoGrid } from './ArtisanPhotoGrid'
 export { ArtisanQuoteForm } from './ArtisanQuoteForm'
-export { ArtisanPageSkeleton, ArtisanPhotoGridSkeleton, ArtisanHeroSkeleton, ArtisanSidebarSkeleton } from './ArtisanSkeleton'
+export {
+  ArtisanPageSkeleton,
+  ArtisanPhotoGridSkeleton,
+  ArtisanHeroSkeleton,
+  ArtisanSidebarSkeleton,
+} from './ArtisanSkeleton'
 export { ArtisanBusinessCard } from './ArtisanBusinessCard'
 export { ArtisanContactCard } from './ArtisanContactCard'
 export { ArtisanUrgencyBanner } from './ArtisanUrgencyBanner'

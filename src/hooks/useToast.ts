@@ -39,51 +39,66 @@ export function useToast(): UseToastReturn {
       clearTimeout(timer)
       timersRef.current.delete(id)
     }
-    setToasts(prev => prev.filter(t => t.id !== id))
+    setToasts((prev) => prev.filter((t) => t.id !== id))
   }, [])
 
-  const addToast = useCallback((toast: Omit<Toast, 'id'>): string => {
-    const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-    const duration = toast.duration ?? DEFAULT_DURATION
+  const addToast = useCallback(
+    (toast: Omit<Toast, 'id'>): string => {
+      const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      const duration = toast.duration ?? DEFAULT_DURATION
 
-    setToasts(prev => [...prev, { ...toast, id }])
+      setToasts((prev) => [...prev, { ...toast, id }])
 
-    if (duration > 0) {
-      const timer = setTimeout(() => {
-        removeToast(id)
-      }, duration)
-      timersRef.current.set(id, timer)
-    }
+      if (duration > 0) {
+        const timer = setTimeout(() => {
+          removeToast(id)
+        }, duration)
+        timersRef.current.set(id, timer)
+      }
 
-    return id
-  }, [removeToast])
+      return id
+    },
+    [removeToast]
+  )
 
   const clearToasts = useCallback(() => {
-    timersRef.current.forEach(timer => clearTimeout(timer))
+    timersRef.current.forEach((timer) => clearTimeout(timer))
     timersRef.current.clear()
     setToasts([])
   }, [])
 
-  const success = useCallback((title: string, message?: string) => {
-    return addToast({ type: 'success', title, message })
-  }, [addToast])
+  const success = useCallback(
+    (title: string, message?: string) => {
+      return addToast({ type: 'success', title, message })
+    },
+    [addToast]
+  )
 
-  const error = useCallback((title: string, message?: string) => {
-    return addToast({ type: 'error', title, message, duration: 8000 })
-  }, [addToast])
+  const error = useCallback(
+    (title: string, message?: string) => {
+      return addToast({ type: 'error', title, message, duration: 8000 })
+    },
+    [addToast]
+  )
 
-  const warning = useCallback((title: string, message?: string) => {
-    return addToast({ type: 'warning', title, message })
-  }, [addToast])
+  const warning = useCallback(
+    (title: string, message?: string) => {
+      return addToast({ type: 'warning', title, message })
+    },
+    [addToast]
+  )
 
-  const info = useCallback((title: string, message?: string) => {
-    return addToast({ type: 'info', title, message })
-  }, [addToast])
+  const info = useCallback(
+    (title: string, message?: string) => {
+      return addToast({ type: 'info', title, message })
+    },
+    [addToast]
+  )
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      timersRef.current.forEach(timer => clearTimeout(timer))
+      timersRef.current.forEach((timer) => clearTimeout(timer))
     }
   }, [])
 

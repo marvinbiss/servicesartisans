@@ -57,10 +57,7 @@ function touch(key: string, bucket: Bucket): void {
  * Records the hit atomically (if allowed) so the second call within the
  * window sees the updated count.
  */
-export function checkRateLimit(
-  key: string,
-  options: RateLimitOptions
-): RateLimitResult {
+export function checkRateLimit(key: string, options: RateLimitOptions): RateLimitResult {
   const { max, windowMs } = options
   const now = Date.now()
   const windowStart = now - windowMs

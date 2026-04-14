@@ -11,7 +11,9 @@ import React from 'react'
 
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
-    const I = ({ className }: { className?: string }) => <span data-testid={`icon-${name}`} className={className} />
+    const I = ({ className }: { className?: string }) => (
+      <span data-testid={`icon-${name}`} className={className} />
+    )
     I.displayName = name
     return I
   }
@@ -22,7 +24,10 @@ vi.mock('lucide-react', () => {
 
 // ── Import après mocks ─────────────────────────────────────────────────────
 
-import { OpeningHoursEditor, DEFAULT_OPENING_HOURS } from '@/components/artisan-dashboard/OpeningHoursEditor'
+import {
+  OpeningHoursEditor,
+  DEFAULT_OPENING_HOURS,
+} from '@/components/artisan-dashboard/OpeningHoursEditor'
 
 // ── Tests ──────────────────────────────────────────────────────────────────
 
@@ -129,7 +134,7 @@ describe('OpeningHoursEditor', () => {
     expect(newValue.lundi.ouvert).toBe(true)
   })
 
-  it('affiche une erreur quand la fermeture est avant l\'ouverture', () => {
+  it("affiche une erreur quand la fermeture est avant l'ouverture", () => {
     const badHours = {
       ...DEFAULT_OPENING_HOURS,
       lundi: { ouvert: true, debut: '18:00', fin: '08:00' },

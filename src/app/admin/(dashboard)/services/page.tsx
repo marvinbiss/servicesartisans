@@ -1,13 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  Search,
-  Plus,
-  Edit2,
-  Trash2,
-  Grid,
-} from 'lucide-react'
+import { Search, Plus, Edit2, Trash2, Grid } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
@@ -35,7 +29,11 @@ export default function AdminServicesPage() {
     open: false,
     service: null,
   })
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; serviceId: string; serviceName: string }>({
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean
+    serviceId: string
+    serviceName: string
+  }>({
     open: false,
     serviceId: '',
     serviceName: '',
@@ -72,9 +70,7 @@ export default function AdminServicesPage() {
   const handleSave = async () => {
     try {
       const isNew = !editModal.service
-      const url = isNew
-        ? '/api/admin/services'
-        : `/api/admin/services/${editModal.service?.id}`
+      const url = isNew ? '/api/admin/services' : `/api/admin/services/${editModal.service?.id}`
       const method = isNew ? 'POST' : 'PATCH'
 
       const response = await fetch(url, {
@@ -84,7 +80,11 @@ export default function AdminServicesPage() {
       })
 
       if (!response.ok) {
-        setError(isNew ? 'Erreur lors de la création du service' : 'Erreur lors de la modification du service')
+        setError(
+          isNew
+            ? 'Erreur lors de la création du service'
+            : 'Erreur lors de la modification du service'
+        )
       }
 
       setEditModal({ open: false, service: null })
@@ -173,11 +173,7 @@ export default function AdminServicesPage() {
 
         {/* Error banner */}
         {error && (
-          <ErrorBanner
-            message={error}
-            onDismiss={() => setError(null)}
-            onRetry={fetchServices}
-          />
+          <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchServices} />
         )}
 
         {/* Services Grid */}
@@ -202,9 +198,7 @@ export default function AdminServicesPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      {service.icon && (
-                        <span className="text-2xl">{service.icon}</span>
-                      )}
+                      {service.icon && <span className="text-2xl">{service.icon}</span>}
                       <div>
                         <h3 className="font-medium text-gray-900">{service.name}</h3>
                         <p className="text-sm text-gray-500">{service.slug}</p>
@@ -215,9 +209,7 @@ export default function AdminServicesPage() {
                     </StatusBadge>
                   </div>
                   {service.description && (
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                      {service.description}
-                    </p>
+                    <p className="mt-2 text-sm text-gray-600 line-clamp-2">{service.description}</p>
                   )}
                   <div className="flex items-center gap-2 mt-4">
                     <button
@@ -228,11 +220,13 @@ export default function AdminServicesPage() {
                       Modifier
                     </button>
                     <button
-                      onClick={() => setDeleteModal({
-                        open: true,
-                        serviceId: service.id,
-                        serviceName: service.name,
-                      })}
+                      onClick={() =>
+                        setDeleteModal({
+                          open: true,
+                          serviceId: service.id,
+                          serviceName: service.name,
+                        })
+                      }
                       className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -250,8 +244,16 @@ export default function AdminServicesPage() {
       {editModal.open && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
-            <div className="fixed inset-0 bg-black/50" onClick={() => setEditModal({ open: false, service: null })} />
-            <div role="dialog" aria-modal="true" aria-labelledby="edit-service-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div
+              className="fixed inset-0 bg-black/50"
+              onClick={() => setEditModal({ open: false, service: null })}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="edit-service-title"
+              className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+            >
               <h3 id="edit-service-title" className="text-lg font-semibold text-gray-900 mb-4">
                 {editModal.service ? 'Modifier le service' : 'Nouveau service'}
               </h3>
@@ -269,7 +271,9 @@ export default function AdminServicesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -280,7 +284,9 @@ export default function AdminServicesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Icône (emoji)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Icône (emoji)
+                  </label>
                   <input
                     type="text"
                     value={formData.icon}

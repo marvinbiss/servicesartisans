@@ -65,10 +65,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
       />
 
       <div className="flex gap-2">
-        <Button
-          onClick={handleSubmit}
-          disabled={isLoading || !response.trim()}
-        >
+        <Button onClick={handleSubmit} disabled={isLoading || !response.trim()}>
           {isLoading ? 'Publication...' : 'Publier'}
         </Button>
         <Button variant="ghost" onClick={() => setIsOpen(false)}>

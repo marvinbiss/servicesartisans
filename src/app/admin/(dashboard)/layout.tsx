@@ -4,16 +4,16 @@ import { AdminSidebar } from '@/components/admin/sidebar'
 
 // Admin email whitelist from environment variable
 // Set ADMIN_EMAILS in .env.local as comma-separated list
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .filter((email) => email.trim().length > 0)
 
-export default async function AdminDashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   // Verify user is authenticated
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
     redirect('/admin/connexion')
@@ -30,10 +30,11 @@ export default async function AdminDashboardLayout({
     .single()
 
   if (!profileError && profile) {
-    isAdmin = profile.role === 'super_admin' ||
-              profile.role === 'admin' ||
-              profile.role === 'moderator' ||
-              profile.is_admin === true
+    isAdmin =
+      profile.role === 'super_admin' ||
+      profile.role === 'admin' ||
+      profile.role === 'moderator' ||
+      profile.is_admin === true
   }
 
   // Fallback: check email whitelist
@@ -47,11 +48,19 @@ export default async function AdminDashboardLayout({
 
   return (
     <div className="flex min-h-screen">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded"
+      >
         Aller au contenu principal
       </a>
       <AdminSidebar />
-      <main id="main-content" className="flex-1 bg-gray-50 min-w-0" role="main" aria-label="Contenu principal de l'administration">
+      <main
+        id="main-content"
+        className="flex-1 bg-gray-50 min-w-0"
+        role="main"
+        aria-label="Contenu principal de l'administration"
+      >
         {children}
       </main>
     </div>

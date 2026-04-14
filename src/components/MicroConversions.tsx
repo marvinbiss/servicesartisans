@@ -18,7 +18,11 @@ interface MicroConversionsProps {
  * - Time on page (30s, 60s, 120s)
  * - Content engagement signals
  */
-export default function MicroConversions({ pageType, serviceSlug, cityName }: MicroConversionsProps) {
+export default function MicroConversions({
+  pageType,
+  serviceSlug,
+  cityName,
+}: MicroConversionsProps) {
   const scrollMilestones = useRef(new Set<number>())
   const timeMilestones = useRef(new Set<number>())
 

@@ -10,7 +10,9 @@ import React from 'react'
 
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
-    const I = ({ className }: { className?: string }) => <span data-testid={`icon-${name}`} className={className} />
+    const I = ({ className }: { className?: string }) => (
+      <span data-testid={`icon-${name}`} className={className} />
+    )
     I.displayName = name
     return I
   }
@@ -31,7 +33,11 @@ describe('InterventionZoneEditor', () => {
 
     // Le summary affiche "50 km" dans le texte principal (text-2xl)
     const summary = screen.getByText((_, el) => {
-      return el?.tagName === 'SPAN' && el.classList.contains('text-2xl') && el.textContent?.trim() === '50 km'
+      return (
+        el?.tagName === 'SPAN' &&
+        el.classList.contains('text-2xl') &&
+        el.textContent?.trim() === '50 km'
+      )
     })
     expect(summary).toBeInTheDocument()
     const slider = screen.getByRole('slider')
@@ -71,7 +77,11 @@ describe('InterventionZoneEditor', () => {
     render(<InterventionZoneEditor value={50} city="Paris" onChange={vi.fn()} />)
 
     const summary = screen.getByText((_, el) => {
-      return el?.tagName === 'SPAN' && el.classList.contains('text-2xl') && el.textContent?.trim() === '50 km'
+      return (
+        el?.tagName === 'SPAN' &&
+        el.classList.contains('text-2xl') &&
+        el.textContent?.trim() === '50 km'
+      )
     })
     expect(summary).toBeInTheDocument()
     expect(screen.getByText('autour de Paris')).toBeInTheDocument()
@@ -84,13 +94,16 @@ describe('InterventionZoneEditor', () => {
   })
 
   it('clampe la valeur entre 5 et 200', () => {
-    const { rerender } = render(
-      <InterventionZoneEditor value={0} city="Lyon" onChange={vi.fn()} />
-    )
+    const { rerender } = render(<InterventionZoneEditor value={0} city="Lyon" onChange={vi.fn()} />)
     // Valeur sous le minimum → clampée à 5
-    const getSummary = (text: string) => screen.getByText((_, el) => {
-      return el?.tagName === 'SPAN' && el.classList.contains('text-2xl') && el.textContent?.trim() === text
-    })
+    const getSummary = (text: string) =>
+      screen.getByText((_, el) => {
+        return (
+          el?.tagName === 'SPAN' &&
+          el.classList.contains('text-2xl') &&
+          el.textContent?.trim() === text
+        )
+      })
     expect(getSummary('5 km')).toBeInTheDocument()
 
     rerender(<InterventionZoneEditor value={999} city="Lyon" onChange={vi.fn()} />)

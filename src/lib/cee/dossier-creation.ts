@@ -86,7 +86,10 @@ export const CreateDossierInputSchema = z.object({
   client_nom_b64: z.string().min(1),
   client_prenom_b64: z.string().min(1),
   client_email_b64: z.string().min(1),
-  client_email_hash: z.string().length(64).regex(/^[a-f0-9]{64}$/),
+  client_email_hash: z
+    .string()
+    .length(64)
+    .regex(/^[a-f0-9]{64}$/),
   client_telephone_b64: z.string().nullish(),
   client_adresse_b64: z.string().min(1),
   client_code_postal: z.string().regex(/^[0-9]{5}$/),
@@ -96,9 +99,7 @@ export const CreateDossierInputSchema = z.object({
   revenus_categorie: z.enum(['tres_modeste', 'modeste', 'intermediaire', 'superieur']),
   rfr_declared_cts: z.number().int().nonnegative().nullish(),
   // Chantier
-  operation_code: z
-    .string()
-    .regex(/^(BAR|BAT|IND|RES|TRA|AGRI)-[A-Z]{2}-[0-9]{3}$/),
+  operation_code: z.string().regex(/^(BAR|BAT|IND|RES|TRA|AGRI)-[A-Z]{2}-[0-9]{3}$/),
   type_travaux: z.string().min(1).max(200),
   surface_m2: z.number().positive().nullish(),
   annee_construction: z.number().int().min(1800).max(2100).nullish(),
@@ -184,7 +185,9 @@ export async function checkDossierCreationGates(
   partnerId: string,
   operationCode: string,
   depositDate: Date = new Date()
-): Promise<{ ok: true; partner: PartnerRow } | { ok: false; error: BusinessGateError; detail?: string }> {
+): Promise<
+  { ok: true; partner: PartnerRow } | { ok: false; error: BusinessGateError; detail?: string }
+> {
   const { data: partner, error: partnerError } = await supabase
     .from('cee_artisan_partners')
     .select(
@@ -368,9 +371,7 @@ export async function createDossier(
   const prenomBuf = Buffer.from(data.client_prenom_b64, 'base64')
   const emailBuf = Buffer.from(data.client_email_b64, 'base64')
   const adresseBuf = Buffer.from(data.client_adresse_b64, 'base64')
-  const telBuf = data.client_telephone_b64
-    ? Buffer.from(data.client_telephone_b64, 'base64')
-    : null
+  const telBuf = data.client_telephone_b64 ? Buffer.from(data.client_telephone_b64, 'base64') : null
 
   const { data: inserted, error: insertError } = await supabase
     .from('cee_dossiers')

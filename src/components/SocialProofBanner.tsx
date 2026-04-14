@@ -67,7 +67,12 @@ function useAnimatedNumber(target: number, duration = 1800, enabled = true) {
   return { value, play }
 }
 
-export function SocialProofBanner({ metier, ville, variant = 'inline', animated = true }: SocialProofBannerProps) {
+export function SocialProofBanner({
+  metier,
+  ville,
+  variant = 'inline',
+  animated = true,
+}: SocialProofBannerProps) {
   const [stats, setStats] = useState<DemandStats | null>(null)
   const [loaded, setLoaded] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -88,20 +93,24 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
           return
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
 
     const params = new URLSearchParams()
     if (metier) params.set('service', metier)
     if (ville) params.set('city', ville)
 
     fetch(`/api/stats/demand?${params}`, { signal: controller.signal })
-      .then(r => r.json())
+      .then((r) => r.json())
       .then((data: DemandStats) => {
         setStats(data)
         setLoaded(true)
         try {
           sessionStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }))
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       })
       .catch((err) => {
         if (err instanceof DOMException && err.name === 'AbortError') return
@@ -138,7 +147,7 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
           observer.disconnect()
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     )
 
     observer.observe(containerRef.current)
@@ -162,7 +171,10 @@ export function SocialProofBanner({ metier, ville, variant = 'inline', animated 
       )
     }
     return (
-      <div ref={containerRef} className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
+      <div
+        ref={containerRef}
+        className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500"
+      >
         <span className="flex items-center gap-1">
           <FileText className="w-3.5 h-3.5" />
           {devisDisplay} demandes de devis cette semaine

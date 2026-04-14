@@ -58,9 +58,9 @@ const moneyPageSet = new Set<string>()
 const allMoneyPages: MoneyPage[] = []
 
 function computeTier(cityIndex: number): 1 | 2 | 3 {
-  if (cityIndex < 3) return 1   // Top 3 cities → tier 1 (30 pages)
-  if (cityIndex < 10) return 2  // Cities 4-10 → tier 2 (100 pages total)
-  return 3                      // Cities 11-20 → tier 3 (200 pages total)
+  if (cityIndex < 3) return 1 // Top 3 cities → tier 1 (30 pages)
+  if (cityIndex < 10) return 2 // Cities 4-10 → tier 2 (100 pages total)
+  return 3 // Cities 11-20 → tier 3 (200 pages total)
 }
 
 // Build the data once at module load
@@ -90,7 +90,7 @@ export function getTopMoneyPages(): MoneyPage[] {
  * Returns money pages filtered by tier (cumulative: tier 2 includes tier 1).
  */
 export function getMoneyPagesByTier(tier: 1 | 2 | 3): MoneyPage[] {
-  return allMoneyPages.filter(p => p.tier <= tier)
+  return allMoneyPages.filter((p) => p.tier <= tier)
 }
 
 /**

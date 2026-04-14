@@ -21,7 +21,7 @@ interface LeadsTrendChartProps {
   data: MonthlyData[]
 }
 
-const CHART_COLOR = '#E86B4B'      // primary-400
+const CHART_COLOR = '#E86B4B' // primary-400
 const CHART_COLOR_CURRENT = '#C24B2A' // primary-600
 
 function CustomTooltip({

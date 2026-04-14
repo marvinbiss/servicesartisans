@@ -74,9 +74,7 @@ export async function logAuditEvent(params: AuditLogParams): Promise<void> {
     const headersList = await headers()
 
     const ipAddress =
-      headersList.get('x-forwarded-for')?.split(',')[0] ||
-      headersList.get('x-real-ip') ||
-      'unknown'
+      headersList.get('x-forwarded-for')?.split(',')[0] || headersList.get('x-real-ip') || 'unknown'
 
     const userAgent = headersList.get('user-agent') || 'unknown'
 

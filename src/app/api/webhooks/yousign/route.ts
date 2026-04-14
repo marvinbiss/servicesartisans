@@ -70,9 +70,7 @@ export async function POST(request: NextRequest) {
     request.headers.get('X-Yousign-Signature-256') ||
     ''
   const timestamp =
-    request.headers.get('x-yousign-timestamp') ||
-    request.headers.get('X-Yousign-Timestamp') ||
-    ''
+    request.headers.get('x-yousign-timestamp') || request.headers.get('X-Yousign-Timestamp') || ''
 
   if (!signature || !timestamp) {
     return unauthorized('Missing signature or timestamp')
@@ -178,10 +176,7 @@ export async function POST(request: NextRequest) {
         logger.warn('yousign-webhook: transition skipped', {
           action: 'yousign-webhook-transition-skip',
           partnerId: partner.id,
-          error:
-            transError instanceof Error
-              ? transError.message
-              : String(transError),
+          error: transError instanceof Error ? transError.message : String(transError),
         })
       }
     }

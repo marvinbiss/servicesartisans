@@ -1,7 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { Users, Briefcase, Calendar, DollarSign, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import {
+  Users,
+  Briefcase,
+  Calendar,
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+} from 'lucide-react'
 
 interface Stats {
   totalUsers: number
@@ -32,8 +40,7 @@ function TrendBadge({ value }: { value: number }) {
   if (value > 0) {
     return (
       <span className="flex items-center gap-1 text-xs font-medium text-green-600">
-        <TrendingUp className="w-3 h-3" />
-        +{value}%
+        <TrendingUp className="w-3 h-3" />+{value}%
       </span>
     )
   }
@@ -62,7 +69,9 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
   if (loading || !stats) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array.from({ length: 4 }, (_, i) => <SkeletonCard key={i} />)}
+        {Array.from({ length: 4 }, (_, i) => (
+          <SkeletonCard key={i} />
+        ))}
       </div>
     )
   }
@@ -128,7 +137,9 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
               </div>
             )}
           </div>
-          <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{card.value}</p>
+          <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            {card.value}
+          </p>
           <p className="text-sm text-gray-500 mt-1">{card.label}</p>
         </Link>
       ))}

@@ -37,7 +37,7 @@ const getDossierMock = vi.fn()
 const getOwnerMock = vi.fn()
 const updateMock = vi.fn()
 const _insertEventMock = vi.fn().mockResolvedValue({ error: null })
-void _insertEventMock;
+void _insertEventMock
 
 const mockSupabase = {
   auth: {
@@ -80,7 +80,10 @@ const mockSupabase = {
     if (table === 'cee_dossier_events') {
       return {
         insert: vi.fn(() => ({
-          then: vi.fn((cb: (r: { error: null }) => void) => { cb({ error: null }); return undefined }),
+          then: vi.fn((cb: (r: { error: null }) => void) => {
+            cb({ error: null })
+            return undefined
+          }),
         })),
       }
     }
@@ -104,7 +107,10 @@ const mockAdmin = {
     if (table === 'cee_dossier_events') {
       return {
         insert: vi.fn(() => ({
-          then: vi.fn((cb: (r: { error: null }) => void) => { cb({ error: null }); return undefined }),
+          then: vi.fn((cb: (r: { error: null }) => void) => {
+            cb({ error: null })
+            return undefined
+          }),
         })),
       }
     }
@@ -143,7 +149,12 @@ beforeEach(async () => {
   })
   getOwnerMock.mockResolvedValue({ data: { id: 'partner-1' }, error: null })
   updateMock.mockResolvedValue({
-    data: { id: 'dossier-1', reference: 'SAE-202604-000001', status: 'submitted_by_artisan', updated_at: '2026-04-14T10:00:00Z' },
+    data: {
+      id: 'dossier-1',
+      reference: 'SAE-202604-000001',
+      status: 'submitted_by_artisan',
+      updated_at: '2026-04-14T10:00:00Z',
+    },
     error: null,
   })
   const rl = await import('@/lib/cee/rate-limit')
@@ -162,7 +173,10 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     })
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'dossier-1' } }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(401)
   })
 
@@ -182,7 +196,10 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     for (let i = 0; i < 3; i++) {
       await POST(makeRequest('dossier-1') as never, ctx as never)
     }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(429)
   })
 
@@ -190,7 +207,10 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     getDossierMock.mockResolvedValueOnce({ data: null, error: null })
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'nonexistent' } }
-    const res = (await POST(makeRequest('nonexistent') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('nonexistent') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(404)
   })
 
@@ -198,14 +218,20 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     getOwnerMock.mockResolvedValueOnce({ data: null, error: null })
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'dossier-1' } }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(404)
   })
 
   it('transitions draft → submitted_by_artisan (200)', async () => {
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'dossier-1' } }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(200)
     expect((res.body as { success: boolean }).success).toBe(true)
     const data = (res.body as { data: { status: string } }).data
@@ -219,7 +245,10 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     })
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'dossier-1' } }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(422)
     const body = res.body as { error: { code: string } }
     expect(body.error.code).toBe('ILLEGAL_TRANSITION')
@@ -232,7 +261,10 @@ describe('POST /api/cee/dossiers/[id]/submit', () => {
     })
     const { POST } = await import('@/app/api/cee/dossiers/[id]/submit/route')
     const ctx = { params: { id: 'dossier-1' } }
-    const res = (await POST(makeRequest('dossier-1') as never, ctx as never)) as unknown as MockResult
+    const res = (await POST(
+      makeRequest('dossier-1') as never,
+      ctx as never
+    )) as unknown as MockResult
     expect(res.status).toBe(422)
   })
 })

@@ -122,7 +122,8 @@ export default function RecentActivityFeed({
               </div>
               <div>
                 <p className="text-sm font-medium text-charcoal-800">
-                  {artisanCount} artisan{artisanCount > 1 ? 's' : ''} disponible{artisanCount > 1 ? 's' : ''} {zoneText}
+                  {artisanCount} artisan{artisanCount > 1 ? 's' : ''} disponible
+                  {artisanCount > 1 ? 's' : ''} {zoneText}
                 </p>
                 {artisanCount <= 5 && (
                   <p className="text-xs font-medium text-primary-500">

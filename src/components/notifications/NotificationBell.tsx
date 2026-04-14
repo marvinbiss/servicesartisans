@@ -138,7 +138,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
               {unreadCount > 0 && (
                 <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
                   <Check className="h-3 w-3 mr-1" />
-                  Tout marquer lu
+                  Tout marquer comme lu
                 </Button>
               )}
             </div>

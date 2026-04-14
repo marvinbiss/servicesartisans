@@ -11,7 +11,9 @@ import React from 'react'
 
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
-    const I = ({ className }: { className?: string }) => <span data-testid={`icon-${name}`} className={className} />
+    const I = ({ className }: { className?: string }) => (
+      <span data-testid={`icon-${name}`} className={className} />
+    )
     I.displayName = name
     return I
   }
@@ -64,13 +66,13 @@ describe('Calendar', () => {
     render(<Calendar {...baseProps} />)
 
     // Avril a 30 jours — chaque jour est un bouton avec aria-label
-    const dayButtons = screen.getAllByRole('button').filter(btn =>
-      btn.getAttribute('aria-label')?.includes('Avril')
-    )
+    const dayButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => btn.getAttribute('aria-label')?.includes('Avril'))
     expect(dayButtons).toHaveLength(30)
   })
 
-  it('affiche le titre du mois et de l\'année', () => {
+  it("affiche le titre du mois et de l'année", () => {
     render(<Calendar {...baseProps} />)
     expect(screen.getByText('Avril 2026')).toBeInTheDocument()
   })
@@ -118,7 +120,7 @@ describe('Calendar', () => {
     expect(day15.querySelector('span')?.textContent).toContain('1')
   })
 
-  it('affiche l\'indicateur vert pour un jour avec disponibilité', () => {
+  it("affiche l'indicateur vert pour un jour avec disponibilité", () => {
     const slots: CalendarAvailabilitySlot[] = [
       {
         id: 's1',

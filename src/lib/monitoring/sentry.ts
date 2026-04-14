@@ -184,20 +184,15 @@ export async function measurePerformance<T>(
   operation: string,
   fn: () => Promise<T>
 ): Promise<T> {
-  return Sentry.startSpan(
-    { name, op: operation },
-    async () => {
-      return await fn()
-    }
-  )
+  return Sentry.startSpan({ name, op: operation }, async () => {
+    return await fn()
+  })
 }
 
 /**
  * Create a custom scope for grouped errors
  */
-export function withScope(
-  callback: (scope: Sentry.Scope) => void
-) {
+export function withScope(callback: (scope: Sentry.Scope) => void) {
   Sentry.withScope(callback)
 }
 

@@ -1,13 +1,51 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import {
-  Wrench, Zap, Key, Flame, PaintBucket, Home, Hammer, HardHat,
-  Droplets, Wind, Thermometer, TreeDeciduous, Sofa, Sparkles,
-  ShieldCheck, ArrowRight, TrendingUp, Award, MapPin,
-  Shovel, Axe, Shield, Building, Paintbrush, Construction, Link as LinkIcon,
-  Maximize, PanelTop, Bath, Ruler, Palette, Cpu, Sun, Snowflake,
-  Leaf, PlugZap, Factory, Trees, Waves, ShieldAlert, Radio,
-  ArrowUpDown, ClipboardCheck, Bug, Truck
+  Wrench,
+  Zap,
+  Key,
+  Flame,
+  PaintBucket,
+  Home,
+  Hammer,
+  HardHat,
+  Droplets,
+  Wind,
+  Thermometer,
+  TreeDeciduous,
+  Sofa,
+  Sparkles,
+  ShieldCheck,
+  ArrowRight,
+  TrendingUp,
+  Award,
+  MapPin,
+  Shovel,
+  Axe,
+  Shield,
+  Building,
+  Paintbrush,
+  Construction,
+  Link as LinkIcon,
+  Maximize,
+  PanelTop,
+  Bath,
+  Ruler,
+  Palette,
+  Cpu,
+  Sun,
+  Snowflake,
+  Leaf,
+  PlugZap,
+  Factory,
+  Trees,
+  Waves,
+  ShieldAlert,
+  Radio,
+  ArrowUpDown,
+  ClipboardCheck,
+  Bug,
+  Truck,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
@@ -21,7 +59,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 // Set of valid service slugs that have dedicated pages
-const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
+const validServiceSlugs = new Set(staticServicesList.map((s) => s.slug))
 
 // ISR: Revalidate every hour
 export const revalidate = REVALIDATE.services
@@ -36,7 +74,14 @@ export const metadata: Metadata = {
     title: 'Tous les Métiers Artisans — Devis Gratuit',
     description: `${staticServicesList.length} métiers du bâtiment. Artisans référencés dans 101 départements. Trouvez un professionnel qualifié, devis gratuit.`,
     url: `${SITE_URL}/services`,
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Tous les services artisans',
+      },
+    ],
   },
   robots: {
     index: true,
@@ -58,143 +103,377 @@ const allServices = [
     icon: Droplets,
     color: 'blue',
     services: [
-      { name: 'Plombier', slug: 'plombier', icon: Wrench, description: 'Réparation fuites, installation sanitaire, débouchage' },
-      { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, description: 'Chaudière, pompe à chaleur, plancher chauffant' },
-      { name: 'Climaticien', slug: 'climaticien', icon: Wind, description: 'Installation et entretien climatisation' },
-      { name: 'Salle de bain', slug: 'salle-de-bain', icon: Bath, description: 'Création et rénovation de salles de bain' },
-      { name: 'Ramoneur', slug: 'ramoneur', icon: Factory, description: 'Ramonage cheminées et conduits' },
-    ]
+      {
+        name: 'Plombier',
+        slug: 'plombier',
+        icon: Wrench,
+        description: 'Réparation fuites, installation sanitaire, débouchage',
+      },
+      {
+        name: 'Chauffagiste',
+        slug: 'chauffagiste',
+        icon: Flame,
+        description: 'Chaudière, pompe à chaleur, plancher chauffant',
+      },
+      {
+        name: 'Climaticien',
+        slug: 'climaticien',
+        icon: Wind,
+        description: 'Installation et entretien climatisation',
+      },
+      {
+        name: 'Salle de bain',
+        slug: 'salle-de-bain',
+        icon: Bath,
+        description: 'Création et rénovation de salles de bain',
+      },
+      {
+        name: 'Ramoneur',
+        slug: 'ramoneur',
+        icon: Factory,
+        description: 'Ramonage cheminées et conduits',
+      },
+    ],
   },
   {
     category: 'Électricité & Domotique',
     icon: Zap,
     color: 'amber',
     services: [
-      { name: 'Électricien', slug: 'electricien', icon: Zap, description: 'Installation, mise aux normes, dépannage' },
-      { name: 'Domoticien', slug: 'domoticien', icon: Cpu, description: 'Maison connectée, automatisation' },
-      { name: 'Antenniste', slug: 'antenniste', icon: Radio, description: 'Antennes TV, paraboles, TNT' },
-      { name: 'Borne de recharge', slug: 'borne-recharge', icon: PlugZap, description: 'Installation bornes véhicules électriques' },
-    ]
+      {
+        name: 'Électricien',
+        slug: 'electricien',
+        icon: Zap,
+        description: 'Installation, mise aux normes, dépannage',
+      },
+      {
+        name: 'Domoticien',
+        slug: 'domoticien',
+        icon: Cpu,
+        description: 'Maison connectée, automatisation',
+      },
+      {
+        name: 'Antenniste',
+        slug: 'antenniste',
+        icon: Radio,
+        description: 'Antennes TV, paraboles, TNT',
+      },
+      {
+        name: 'Borne de recharge',
+        slug: 'borne-recharge',
+        icon: PlugZap,
+        description: 'Installation bornes véhicules électriques',
+      },
+    ],
   },
   {
     category: 'Sécurité',
     icon: ShieldCheck,
     color: 'green',
     services: [
-      { name: 'Serrurier', slug: 'serrurier', icon: Key, description: 'Ouverture de porte, changement serrure, blindage' },
-      { name: 'Alarme et sécurité', slug: 'alarme-securite', icon: ShieldAlert, description: 'Alarme, vidéosurveillance, contrôle d\'accès' },
-    ]
+      {
+        name: 'Serrurier',
+        slug: 'serrurier',
+        icon: Key,
+        description: 'Ouverture de porte, changement serrure, blindage',
+      },
+      {
+        name: 'Alarme et sécurité',
+        slug: 'alarme-securite',
+        icon: ShieldAlert,
+        description: "Alarme, vidéosurveillance, contrôle d'accès",
+      },
+    ],
   },
   {
     category: 'Gros œuvre & Maçonnerie',
     icon: HardHat,
     color: 'orange',
     services: [
-      { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation, extension' },
-      { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie, étanchéité' },
-      { name: 'Charpentier', slug: 'charpentier', icon: Axe, description: 'Charpente bois, ossature' },
-      { name: 'Façadier', slug: 'facadier', icon: Building, description: 'Ravalement, isolation extérieure' },
-      { name: 'Terrassier', slug: 'terrassier', icon: Shovel, description: 'Terrassement, VRD, assainissement' },
-      { name: 'Étanchéiste', slug: 'etancheiste', icon: Shield, description: 'Étanchéité toiture, terrasse, fondations' },
-      { name: 'Zingueur', slug: 'zingueur', icon: Droplets, description: 'Gouttières, chéneaux, descentes' },
-    ]
+      {
+        name: 'Maçon',
+        slug: 'macon',
+        icon: HardHat,
+        description: 'Construction, rénovation, extension',
+      },
+      {
+        name: 'Couvreur',
+        slug: 'couvreur',
+        icon: Home,
+        description: 'Toiture, zinguerie, étanchéité',
+      },
+      {
+        name: 'Charpentier',
+        slug: 'charpentier',
+        icon: Axe,
+        description: 'Charpente bois, ossature',
+      },
+      {
+        name: 'Façadier',
+        slug: 'facadier',
+        icon: Building,
+        description: 'Ravalement, isolation extérieure',
+      },
+      {
+        name: 'Terrassier',
+        slug: 'terrassier',
+        icon: Shovel,
+        description: 'Terrassement, VRD, assainissement',
+      },
+      {
+        name: 'Étanchéiste',
+        slug: 'etancheiste',
+        icon: Shield,
+        description: 'Étanchéité toiture, terrasse, fondations',
+      },
+      {
+        name: 'Zingueur',
+        slug: 'zingueur',
+        icon: Droplets,
+        description: 'Gouttières, chéneaux, descentes',
+      },
+    ],
   },
   {
     category: 'Menuiserie & Agencement',
     icon: Hammer,
     color: 'violet',
     services: [
-      { name: 'Menuisier', slug: 'menuisier', icon: Hammer, description: 'Fenêtres, portes, escaliers, placards' },
-      { name: 'Cuisiniste', slug: 'cuisiniste', icon: Sofa, description: 'Conception et pose de cuisines' },
-      { name: 'Storiste', slug: 'storiste', icon: PanelTop, description: 'Stores, volets roulants, pergolas' },
-      { name: 'Ascensoriste', slug: 'ascensoriste', icon: ArrowUpDown, description: 'Installation et maintenance ascenseurs' },
-    ]
+      {
+        name: 'Menuisier',
+        slug: 'menuisier',
+        icon: Hammer,
+        description: 'Fenêtres, portes, escaliers, placards',
+      },
+      {
+        name: 'Cuisiniste',
+        slug: 'cuisiniste',
+        icon: Sofa,
+        description: 'Conception et pose de cuisines',
+      },
+      {
+        name: 'Storiste',
+        slug: 'storiste',
+        icon: PanelTop,
+        description: 'Stores, volets roulants, pergolas',
+      },
+      {
+        name: 'Ascensoriste',
+        slug: 'ascensoriste',
+        icon: ArrowUpDown,
+        description: 'Installation et maintenance ascenseurs',
+      },
+    ],
   },
   {
     category: 'Finitions & Revêtements',
     icon: PaintBucket,
     color: 'pink',
     services: [
-      { name: 'Peintre en bâtiment', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture intérieure et extérieure' },
-      { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Pose carrelage, faïence, mosaïque' },
-      { name: 'Solier-moquettiste', slug: 'solier', icon: Home, description: 'Parquet, moquette, sols souples' },
-      { name: 'Poseur de parquet', slug: 'poseur-de-parquet', icon: Sparkles, description: 'Parquet massif, contrecollé, stratifié' },
-      { name: 'Plâtrier', slug: 'platrier', icon: Paintbrush, description: 'Cloisons, plafonds, isolation' },
-    ]
+      {
+        name: 'Peintre en bâtiment',
+        slug: 'peintre-en-batiment',
+        icon: PaintBucket,
+        description: 'Peinture intérieure et extérieure',
+      },
+      {
+        name: 'Carreleur',
+        slug: 'carreleur',
+        icon: Sparkles,
+        description: 'Pose carrelage, faïence, mosaïque',
+      },
+      {
+        name: 'Solier-moquettiste',
+        slug: 'solier',
+        icon: Home,
+        description: 'Parquet, moquette, sols souples',
+      },
+      {
+        name: 'Poseur de parquet',
+        slug: 'poseur-de-parquet',
+        icon: Sparkles,
+        description: 'Parquet massif, contrecollé, stratifié',
+      },
+      {
+        name: 'Plâtrier',
+        slug: 'platrier',
+        icon: Paintbrush,
+        description: 'Cloisons, plafonds, isolation',
+      },
+    ],
   },
   {
     category: 'Métallerie & Vitrerie',
     icon: Construction,
     color: 'slate',
     services: [
-      { name: 'Vitrier', slug: 'vitrier', icon: Maximize, description: 'Remplacement vitres, miroirs, double vitrage' },
-      { name: 'Métallier', slug: 'metallier', icon: Construction, description: 'Ouvrages métalliques, serrurerie' },
-      { name: 'Ferronnier', slug: 'ferronnier', icon: LinkIcon, description: 'Ferronnerie d\'art, garde-corps, portails' },
-      { name: 'Miroitier', slug: 'miroitier', icon: Maximize, description: 'Miroirs sur mesure, crédences en verre' },
-    ]
+      {
+        name: 'Vitrier',
+        slug: 'vitrier',
+        icon: Maximize,
+        description: 'Remplacement vitres, miroirs, double vitrage',
+      },
+      {
+        name: 'Métallier',
+        slug: 'metallier',
+        icon: Construction,
+        description: 'Ouvrages métalliques, serrurerie',
+      },
+      {
+        name: 'Ferronnier',
+        slug: 'ferronnier',
+        icon: LinkIcon,
+        description: "Ferronnerie d'art, garde-corps, portails",
+      },
+      {
+        name: 'Miroitier',
+        slug: 'miroitier',
+        icon: Maximize,
+        description: 'Miroirs sur mesure, crédences en verre',
+      },
+    ],
   },
   {
     category: 'Énergie & Rénovation',
     icon: Leaf,
     color: 'emerald',
     services: [
-      { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: Thermometer, description: 'Installation et entretien PAC' },
-      { name: 'Panneaux solaires', slug: 'panneaux-solaires', icon: Sun, description: 'Photovoltaïque et solaire thermique' },
-      { name: 'Isolation thermique', slug: 'isolation-thermique', icon: Snowflake, description: 'ITE, ITI, combles, planchers' },
-      { name: 'Rénovation énergétique', slug: 'renovation-energetique', icon: Leaf, description: 'Audit, travaux globaux, aides MaPrimeRénov\'' },
-    ]
+      {
+        name: 'Pompe à chaleur',
+        slug: 'pompe-a-chaleur',
+        icon: Thermometer,
+        description: 'Installation et entretien PAC',
+      },
+      {
+        name: 'Panneaux solaires',
+        slug: 'panneaux-solaires',
+        icon: Sun,
+        description: 'Photovoltaïque et solaire thermique',
+      },
+      {
+        name: 'Isolation thermique',
+        slug: 'isolation-thermique',
+        icon: Snowflake,
+        description: 'ITE, ITI, combles, planchers',
+      },
+      {
+        name: 'Rénovation énergétique',
+        slug: 'renovation-energetique',
+        icon: Leaf,
+        description: "Audit, travaux globaux, aides MaPrimeRénov'",
+      },
+    ],
   },
   {
     category: 'Décoration & Architecture',
     icon: Palette,
     color: 'pink',
     services: [
-      { name: 'Architecte d\'intérieur', slug: 'architecte-interieur', icon: Ruler, description: 'Conception d\'espaces, aménagement' },
-      { name: 'Décorateur', slug: 'decorateur', icon: Palette, description: 'Décoration intérieure, home staging' },
-    ]
+      {
+        name: "Architecte d'intérieur",
+        slug: 'architecte-interieur',
+        icon: Ruler,
+        description: "Conception d'espaces, aménagement",
+      },
+      {
+        name: 'Décorateur',
+        slug: 'decorateur',
+        icon: Palette,
+        description: 'Décoration intérieure, home staging',
+      },
+    ],
   },
   {
     category: 'Extérieur & Jardin',
     icon: TreeDeciduous,
     color: 'emerald',
     services: [
-      { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Création et entretien jardins' },
-      { name: 'Paysagiste', slug: 'paysagiste', icon: Trees, description: 'Aménagement paysager, terrasses' },
-      { name: 'Pisciniste', slug: 'pisciniste', icon: Waves, description: 'Construction et entretien piscines' },
-    ]
+      {
+        name: 'Jardinier',
+        slug: 'jardinier',
+        icon: TreeDeciduous,
+        description: 'Création et entretien jardins',
+      },
+      {
+        name: 'Paysagiste',
+        slug: 'paysagiste',
+        icon: Trees,
+        description: 'Aménagement paysager, terrasses',
+      },
+      {
+        name: 'Pisciniste',
+        slug: 'pisciniste',
+        icon: Waves,
+        description: 'Construction et entretien piscines',
+      },
+    ],
   },
   {
     category: 'Diagnostics & Expertises',
     icon: ClipboardCheck,
     color: 'blue',
     services: [
-      { name: 'Diagnostiqueur', slug: 'diagnostiqueur', icon: ClipboardCheck, description: 'DPE, amiante, plomb, électricité' },
-      { name: 'Géomètre', slug: 'geometre', icon: MapPin, description: 'Bornage, topographie, division' },
-    ]
+      {
+        name: 'Diagnostiqueur',
+        slug: 'diagnostiqueur',
+        icon: ClipboardCheck,
+        description: 'DPE, amiante, plomb, électricité',
+      },
+      {
+        name: 'Géomètre',
+        slug: 'geometre',
+        icon: MapPin,
+        description: 'Bornage, topographie, division',
+      },
+    ],
   },
   {
     category: 'Nuisibles & Hygiène',
     icon: Bug,
     color: 'orange',
     services: [
-      { name: 'Désinsectisation', slug: 'desinsectisation', icon: Bug, description: 'Cafards, punaises de lit, guêpes' },
-      { name: 'Dératisation', slug: 'deratisation', icon: Bug, description: 'Rats, souris, rongeurs' },
-      { name: 'Nettoyage professionnel', slug: 'nettoyage', icon: Sparkles, description: 'Nettoyage professionnel, remise en état' },
-    ]
+      {
+        name: 'Désinsectisation',
+        slug: 'desinsectisation',
+        icon: Bug,
+        description: 'Cafards, punaises de lit, guêpes',
+      },
+      {
+        name: 'Dératisation',
+        slug: 'deratisation',
+        icon: Bug,
+        description: 'Rats, souris, rongeurs',
+      },
+      {
+        name: 'Nettoyage professionnel',
+        slug: 'nettoyage',
+        icon: Sparkles,
+        description: 'Nettoyage professionnel, remise en état',
+      },
+    ],
   },
   {
     category: 'Déménagement & Transport',
     icon: Truck,
     color: 'slate',
     services: [
-      { name: 'Déménageur', slug: 'demenageur', icon: Truck, description: 'Déménagement, transport de meubles' },
-    ]
+      {
+        name: 'Déménageur',
+        slug: 'demenageur',
+        icon: Truck,
+        description: 'Déménagement, transport de meubles',
+      },
+    ],
   },
 ]
 
 const colorClasses: Record<string, { bg: string; icon: string; hover: string }> = {
   blue: { bg: 'bg-primary-50', icon: 'text-primary-500', hover: 'group-hover:bg-primary-100' },
-  amber: { bg: 'bg-secondary-50', icon: 'text-secondary-600', hover: 'group-hover:bg-secondary-100' },
+  amber: {
+    bg: 'bg-secondary-50',
+    icon: 'text-secondary-600',
+    hover: 'group-hover:bg-secondary-100',
+  },
   green: { bg: 'bg-accent-50', icon: 'text-accent-600', hover: 'group-hover:bg-accent-100' },
   orange: { bg: 'bg-primary-50', icon: 'text-primary-400', hover: 'group-hover:bg-primary-100' },
   violet: { bg: 'bg-sand-100', icon: 'text-charcoal-600', hover: 'group-hover:bg-sand-200' },
@@ -211,9 +490,7 @@ export default async function ServicesPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
@@ -266,24 +543,27 @@ export default async function ServicesPage() {
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
             <Award className="w-4 h-4 text-secondary-400" />
-            <span className="text-sm font-medium text-white/90">{staticServicesList.length} métiers du bâtiment</span>
+            <span className="text-sm font-medium text-white/90">
+              {staticServicesList.length} métiers du bâtiment
+            </span>
           </div>
 
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
             Tous nos{' '}
-            <span className="bg-gradient-terra bg-clip-text text-transparent">
-              services
-            </span>{' '}
+            <span className="bg-gradient-terra bg-clip-text text-transparent">services</span>{' '}
             artisans
           </h1>
           <p className="text-xl text-sand-300 max-w-2xl mx-auto mb-6">
-            Trouvez le professionnel idéal pour tous vos travaux.
-            Artisans référencés, devis gratuits.
+            Trouvez le professionnel idéal pour tous vos travaux. Artisans référencés, devis
+            gratuits.
           </p>
 
           {/* GeoPageCTA above the fold */}
           <div className="max-w-2xl mx-auto mb-10">
-            <GeoPageCTA title="Trouvez votre artisan en 2 minutes" subtitle="Devis gratuit et sans engagement d'artisans vérifiés" />
+            <GeoPageCTA
+              title="Trouvez votre artisan en 2 minutes"
+              subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
+            />
           </div>
 
           {/* Stats */}
@@ -317,14 +597,18 @@ export default async function ServicesPage() {
             return (
               <div key={category.category} className="mb-16">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className={`w-14 h-14 ${colors.bg} rounded-2xl flex items-center justify-center shadow-sm`}>
+                  <div
+                    className={`w-14 h-14 ${colors.bg} rounded-2xl flex items-center justify-center shadow-sm`}
+                  >
                     <CategoryIcon className={`w-7 h-7 ${colors.icon}`} />
                   </div>
                   <div>
                     <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
                       {category.category}
                     </h2>
-                    <p className="text-sm text-charcoal-500">{category.services.length} services disponibles</p>
+                    <p className="text-sm text-charcoal-500">
+                      {category.services.length} services disponibles
+                    </p>
                   </div>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -341,7 +625,9 @@ export default async function ServicesPage() {
                         >
                           <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-sand-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
                           <div className="relative">
-                            <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}>
+                            <div
+                              className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}
+                            >
                               <Icon className={`w-6 h-6 ${colors.icon}`} />
                             </div>
                             <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-2">
@@ -364,12 +650,12 @@ export default async function ServicesPage() {
                         <div className="absolute top-3 right-3 text-xs bg-sand-200 text-charcoal-500 px-2 py-1 rounded-full">
                           Bientôt
                         </div>
-                        <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}>
+                        <div
+                          className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}
+                        >
                           <Icon className={`w-6 h-6 ${colors.icon}`} />
                         </div>
-                        <h3 className="font-semibold text-charcoal-900 mb-2">
-                          {service.name}
-                        </h3>
+                        <h3 className="font-semibold text-charcoal-900 mb-2">{service.name}</h3>
                         <p className="text-sm text-charcoal-500 leading-relaxed">
                           {service.description}
                         </p>
@@ -445,7 +731,9 @@ export default async function ServicesPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/20 backdrop-blur-sm rounded-full border border-primary-400/30 mb-6">
             <Sparkles className="w-4 h-4 text-primary-300" />
-            <span className="text-sm font-medium text-primary-200">Devis gratuit en quelques clics</span>
+            <span className="text-sm font-medium text-primary-200">
+              Devis gratuit en quelques clics
+            </span>
           </div>
 
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
@@ -463,7 +751,6 @@ export default async function ServicesPage() {
           </Link>
         </div>
       </section>
-
     </div>
   )
 }

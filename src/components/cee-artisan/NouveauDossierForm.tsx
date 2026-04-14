@@ -81,7 +81,11 @@ const STEPS: Array<{ id: StepId; label: string; icon: typeof User }> = [
 
 const CEE_OPERATIONS_BY_QUAL: Record<
   string,
-  Array<{ code: string; label: string; params: Array<{ key: string; label: string; unit: string }> }>
+  Array<{
+    code: string
+    label: string
+    params: Array<{ key: string; label: string; unit: string }>
+  }>
 > = {
   QualiPAC: [
     {
@@ -111,7 +115,7 @@ const CEE_OPERATIONS_BY_QUAL: Record<
     },
     {
       code: 'BAR-EN-103',
-      label: "Isolation murs par l\u2019ext\u00e9rieur",
+      label: 'Isolation murs par l\u2019ext\u00e9rieur',
       params: [
         { key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' },
         { key: 'classe_ite', label: 'Classe ITE', unit: '' },
@@ -140,7 +144,8 @@ function getQualFamille(code: string): string | null {
   if (code.startsWith('Qualibat')) return 'Qualibat'
   if (code.startsWith('QualiBois')) return 'QualiBois'
   if (code.startsWith('Qualifelec')) return 'Qualifelec'
-  if (code.startsWith('QualiSol') || code.startsWith('QualiPV') || code.startsWith('Qualit')) return 'Qualibat'
+  if (code.startsWith('QualiSol') || code.startsWith('QualiPV') || code.startsWith('Qualit'))
+    return 'Qualibat'
   return null
 }
 
@@ -218,7 +223,9 @@ export default function NouveauDossierForm({
     anneeConstruction: '',
     precarite: false,
   })
-  const [chantierErrors, setChantierErrors] = useState<Partial<Record<keyof ChantierData, string>>>({})
+  const [chantierErrors, setChantierErrors] = useState<Partial<Record<keyof ChantierData, string>>>(
+    {}
+  )
 
   const [ficheData, setFicheData] = useState<FicheData>({
     operationCode: '',
@@ -227,9 +234,10 @@ export default function NouveauDossierForm({
   const [ficheErrors, setFicheErrors] = useState<Partial<Record<string, string>>>({})
 
   // Zone climatique auto déduite du CP
-  const zoneClimatique = clientData.codePostal.length >= 5
-    ? (postalCodeToClimateZone(clientData.codePostal) ?? null)
-    : null
+  const zoneClimatique =
+    clientData.codePostal.length >= 5
+      ? (postalCodeToClimateZone(clientData.codePostal) ?? null)
+      : null
 
   // Opérations disponibles selon les qualifications artisan
   const availableOps = useMemo_ops(rgeQualifications)
@@ -252,9 +260,12 @@ export default function NouveauDossierForm({
     if (!clientData.nom.trim()) errors.nom = 'Le nom est requis.'
     if (!clientData.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(clientData.email))
       errors.email = 'Adresse email invalide.'
-    if (!clientData.phone.trim() || !/^(\+33|0)[1-9][\d\s]{7,}$/.test(clientData.phone.replace(/\s/g, '')))
+    if (
+      !clientData.phone.trim() ||
+      !/^(\+33|0)[1-9][\d\s]{7,}$/.test(clientData.phone.replace(/\s/g, ''))
+    )
       errors.phone = 'Numéro de téléphone invalide.'
-    if (!clientData.adresse.trim()) errors.adresse = "L\u2019adresse est requise."
+    if (!clientData.adresse.trim()) errors.adresse = 'L\u2019adresse est requise.'
     if (!clientData.codePostal.trim() || !/^\d{5}$/.test(clientData.codePostal))
       errors.codePostal = 'Code postal invalide (5 chiffres).'
     setClientErrors(errors)
@@ -281,8 +292,7 @@ export default function NouveauDossierForm({
     if (op) {
       for (const param of op.params) {
         const val = ficheData.parametresTechniques[param.key]
-        if (!val || !val.trim())
-          errors[param.key] = `${param.label} est requis.`
+        if (!val || !val.trim()) errors[param.key] = `${param.label} est requis.`
       }
     }
     setFicheErrors(errors)
@@ -370,14 +380,9 @@ export default function NouveauDossierForm({
 
   if (!isCertified) {
     return (
-      <div
-        role="alert"
-        className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-center"
-      >
+      <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-6 text-center">
         <ShieldAlert className="mx-auto h-10 w-10 text-amber-600" aria-hidden="true" />
-        <h2 className="mt-4 text-lg font-semibold text-amber-800">
-          Formation obligatoire requise
-        </h2>
+        <h2 className="mt-4 text-lg font-semibold text-amber-800">Formation obligatoire requise</h2>
         <p className="mt-2 text-sm text-amber-700">
           Vous devez compléter la formation CEE et obtenir votre certification (score ≥ 8/10) avant
           de pouvoir créer un dossier.
@@ -417,8 +422,8 @@ export default function NouveauDossierForm({
                   isDone
                     ? 'border-primary-500 bg-primary-500 text-white'
                     : isActive
-                    ? 'border-primary-500 bg-white text-primary-600 shadow-sm'
-                    : 'border-sand-300 bg-white text-charcoal-400',
+                      ? 'border-primary-500 bg-white text-primary-600 shadow-sm'
+                      : 'border-sand-300 bg-white text-charcoal-400',
                   idx > currentIdx + 1 ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
                 ].join(' ')}
               >
@@ -441,10 +446,7 @@ export default function NouveauDossierForm({
       </nav>
 
       {/* Panneau actif */}
-      <div
-        id={formId}
-        className="rounded-xl border border-sand-300 bg-white p-6"
-      >
+      <div id={formId} className="rounded-xl border border-sand-300 bg-white p-6">
         {/* ─ Étape 1 : Client ─────────────────────────────────────────── */}
         {step === 'client' && (
           <fieldset>
@@ -452,12 +454,7 @@ export default function NouveauDossierForm({
               Informations client
             </legend>
             <div className="space-y-4">
-              <FormField
-                label="Nom complet"
-                id="client-nom"
-                required
-                error={clientErrors.nom}
-              >
+              <FormField label="Nom complet" id="client-nom" required error={clientErrors.nom}>
                 <input
                   id="client-nom"
                   type="text"
@@ -490,12 +487,7 @@ export default function NouveauDossierForm({
                 />
               </FormField>
 
-              <FormField
-                label="Téléphone"
-                id="client-phone"
-                required
-                error={clientErrors.phone}
-              >
+              <FormField label="Téléphone" id="client-phone" required error={clientErrors.phone}>
                 <input
                   id="client-phone"
                   type="tel"
@@ -533,11 +525,7 @@ export default function NouveauDossierForm({
                 id="client-cp"
                 required
                 error={clientErrors.codePostal}
-                hint={
-                  zoneClimatique
-                    ? `Zone climatique détectée : ${zoneClimatique}`
-                    : undefined
-                }
+                hint={zoneClimatique ? `Zone climatique détectée : ${zoneClimatique}` : undefined}
               >
                 <input
                   id="client-cp"
@@ -641,7 +629,10 @@ export default function NouveauDossierForm({
                   onChange={(e) => setChantierData((p) => ({ ...p, precarite: e.target.checked }))}
                   className="mt-0.5 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-2 focus:ring-primary-400 focus:ring-offset-1"
                 />
-                <label htmlFor="chantier-precarite" className="text-sm text-charcoal-700 cursor-pointer">
+                <label
+                  htmlFor="chantier-precarite"
+                  className="text-sm text-charcoal-700 cursor-pointer"
+                >
                   Ménage en situation de précarité énergétique
                   <span className="ml-1 text-xs text-charcoal-500">(prime majorée × 1,5)</span>
                 </label>
@@ -689,51 +680,52 @@ export default function NouveauDossierForm({
                   </select>
                 </FormField>
 
-                {ficheData.operationCode && (() => {
-                  const op = availableOps.find((o) => o.code === ficheData.operationCode)
-                  if (!op || op.params.length === 0) return null
-                  return (
-                    <div className="space-y-4 rounded-lg border border-sand-200 bg-sand-50 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
-                        Paramètres techniques — {op.code}
-                      </p>
-                      {op.params.map((param) => (
-                        <FormField
-                          key={param.key}
-                          label={param.label}
-                          id={`param-${param.key}`}
-                          required
-                          error={ficheErrors[param.key]}
-                        >
-                          <div className="flex gap-2">
-                            <input
-                              id={`param-${param.key}`}
-                              type="number"
-                              inputMode="decimal"
-                              value={ficheData.parametresTechniques[param.key] ?? ''}
-                              onChange={(e) =>
-                                setFicheData((p) => ({
-                                  ...p,
-                                  parametresTechniques: {
-                                    ...p.parametresTechniques,
-                                    [param.key]: e.target.value,
-                                  },
-                                }))
-                              }
-                              aria-invalid={!!ficheErrors[param.key]}
-                              className={`${inputCx(!!ficheErrors[param.key])} flex-1`}
-                            />
-                            {param.unit && (
-                              <span className="inline-flex items-center rounded-lg border border-sand-300 bg-sand-100 px-3 text-sm text-charcoal-500">
-                                {param.unit}
-                              </span>
-                            )}
-                          </div>
-                        </FormField>
-                      ))}
-                    </div>
-                  )
-                })()}
+                {ficheData.operationCode &&
+                  (() => {
+                    const op = availableOps.find((o) => o.code === ficheData.operationCode)
+                    if (!op || op.params.length === 0) return null
+                    return (
+                      <div className="space-y-4 rounded-lg border border-sand-200 bg-sand-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
+                          Paramètres techniques — {op.code}
+                        </p>
+                        {op.params.map((param) => (
+                          <FormField
+                            key={param.key}
+                            label={param.label}
+                            id={`param-${param.key}`}
+                            required
+                            error={ficheErrors[param.key]}
+                          >
+                            <div className="flex gap-2">
+                              <input
+                                id={`param-${param.key}`}
+                                type="number"
+                                inputMode="decimal"
+                                value={ficheData.parametresTechniques[param.key] ?? ''}
+                                onChange={(e) =>
+                                  setFicheData((p) => ({
+                                    ...p,
+                                    parametresTechniques: {
+                                      ...p.parametresTechniques,
+                                      [param.key]: e.target.value,
+                                    },
+                                  }))
+                                }
+                                aria-invalid={!!ficheErrors[param.key]}
+                                className={`${inputCx(!!ficheErrors[param.key])} flex-1`}
+                              />
+                              {param.unit && (
+                                <span className="inline-flex items-center rounded-lg border border-sand-300 bg-sand-100 px-3 text-sm text-charcoal-500">
+                                  {param.unit}
+                                </span>
+                              )}
+                            </div>
+                          </FormField>
+                        ))}
+                      </div>
+                    )
+                  })()}
               </div>
             )}
           </fieldset>
@@ -750,13 +742,18 @@ export default function NouveauDossierForm({
                 <RecapItem label="Nom" value={clientData.nom} />
                 <RecapItem label="Email" value={clientData.email} />
                 <RecapItem label="Téléphone" value={clientData.phone} />
-                <RecapItem label="Adresse" value={`${clientData.adresse}, ${clientData.codePostal}`} />
+                <RecapItem
+                  label="Adresse"
+                  value={`${clientData.adresse}, ${clientData.codePostal}`}
+                />
               </RecapSection>
 
               <RecapSection title="Chantier">
                 <RecapItem
                   label="Type"
-                  value={chantierData.typeLogement === 'maison' ? 'Maison individuelle' : 'Appartement'}
+                  value={
+                    chantierData.typeLogement === 'maison' ? 'Maison individuelle' : 'Appartement'
+                  }
                 />
                 <RecapItem label="Surface" value={`${chantierData.surface} m²`} />
                 <RecapItem label="Année construction" value={chantierData.anneeConstruction} />
@@ -799,9 +796,9 @@ export default function NouveauDossierForm({
                   </div>
                 </div>
                 <p className="mt-3 flex items-start gap-1.5 text-xs text-charcoal-500">
-                  <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                  * Commission indicative versée après validation PNCEE. Le montant définitif est
-                  calculé au dépôt.
+                  <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />* Commission
+                  indicative versée après validation PNCEE. Le montant définitif est calculé au
+                  dépôt.
                 </p>
               </div>
             ) : (
@@ -882,7 +879,11 @@ export default function NouveauDossierForm({
 
 function useMemo_ops(
   rgeQualifications: RgeQualification[]
-): Array<{ code: string; label: string; params: Array<{ key: string; label: string; unit: string }> }> {
+): Array<{
+  code: string
+  label: string
+  params: Array<{ key: string; label: string; unit: string }>
+}> {
   const today = new Date()
   const validFamilles = new Set<string>()
 
@@ -898,7 +899,11 @@ function useMemo_ops(
     return Object.values(CEE_OPERATIONS_BY_QUAL).flat()
   }
 
-  const ops: Array<{ code: string; label: string; params: Array<{ key: string; label: string; unit: string }> }> = []
+  const ops: Array<{
+    code: string
+    label: string
+    params: Array<{ key: string; label: string; unit: string }>
+  }> = []
   for (const famille of Array.from(validFamilles)) {
     const familleOps = CEE_OPERATIONS_BY_QUAL[famille]
     if (familleOps) ops.push(...familleOps)
@@ -945,9 +950,7 @@ function FormField({
         )}
       </label>
       {children}
-      {hint && !error && (
-        <p className="text-xs text-charcoal-500">{hint}</p>
-      )}
+      {hint && !error && <p className="text-xs text-charcoal-500">{hint}</p>}
       {error && (
         <p id={`${id}-error`} role="alert" className="flex items-center gap-1 text-xs text-red-600">
           <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -958,16 +961,12 @@ function FormField({
   )
 }
 
-function RecapSection({
-  title,
-  children,
-}: {
-  title: string
-  children: React.ReactNode
-}) {
+function RecapSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-sand-200 bg-sand-50 p-4">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-charcoal-500">{title}</p>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-charcoal-500">
+        {title}
+      </p>
       <dl className="space-y-1.5">{children}</dl>
     </div>
   )

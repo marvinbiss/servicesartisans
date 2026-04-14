@@ -95,14 +95,11 @@ export default function OnboardingWizard({ initialPartner }: OnboardingWizardPro
     }
   }, [currentStep])
 
-  const goTo = useCallback(
-    (step: WizardStep) => {
-      const label = STEPS.find((s) => s.id === step)?.label ?? step
-      setStepAnnouncement(`Étape : ${label}`)
-      setCurrentStep(step)
-    },
-    []
-  )
+  const goTo = useCallback((step: WizardStep) => {
+    const label = STEPS.find((s) => s.id === step)?.label ?? step
+    setStepAnnouncement(`Étape : ${label}`)
+    setCurrentStep(step)
+  }, [])
 
   const goNext = useCallback(() => {
     const idx = STEPS.findIndex((s) => s.id === currentStep)
@@ -150,12 +147,7 @@ export default function OnboardingWizard({ initialPartner }: OnboardingWizardPro
   return (
     <div className="space-y-6">
       {/* Screen-reader step announcement */}
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-        role="status"
-      >
+      <div aria-live="polite" aria-atomic="true" className="sr-only" role="status">
         {stepAnnouncement}
       </div>
 
@@ -168,10 +160,7 @@ export default function OnboardingWizard({ initialPartner }: OnboardingWizardPro
             const isLast = idx === STEPS.length - 1
 
             return (
-              <li
-                key={step.id}
-                className={clsx('flex items-center', !isLast && 'flex-1')}
-              >
+              <li key={step.id} className={clsx('flex items-center', !isLast && 'flex-1')}>
                 <div className="flex flex-col items-center">
                   <button
                     type="button"
@@ -190,14 +179,16 @@ export default function OnboardingWizard({ initialPartner }: OnboardingWizardPro
                         : isCurrent
                           ? 'border-primary-500 bg-primary-500 text-white cursor-default'
                           : 'border-sand-300 bg-white text-charcoal-400 cursor-not-allowed',
-                      (!isCompleted && !isCurrent) && 'opacity-60',
+                      !isCompleted && !isCurrent && 'opacity-60',
                       'motion-safe:transition-all motion-safe:duration-200'
                     )}
                   >
                     {isCompleted ? (
                       <CheckCircle className="h-5 w-5" aria-hidden="true" />
                     ) : isCurrent ? (
-                      <span aria-hidden="true" className="text-sm font-bold">{idx + 1}</span>
+                      <span aria-hidden="true" className="text-sm font-bold">
+                        {idx + 1}
+                      </span>
                     ) : (
                       <Circle className="h-4 w-4" aria-hidden="true" />
                     )}

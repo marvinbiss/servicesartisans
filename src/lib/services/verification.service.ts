@@ -3,7 +3,13 @@
  * Combines multiple APIs for comprehensive business verification
  */
 
-import { getEntrepriseParSiret, verifierSanteEntreprise, getBadgeConfiance, validateSiret, validateSiren } from '../api/pappers'
+import {
+  getEntrepriseParSiret,
+  verifierSanteEntreprise,
+  getBadgeConfiance,
+  validateSiret,
+  validateSiren,
+} from '../api/pappers'
 import { verifierSiret as verifierSiretSirene } from '../api/sirene'
 import { geocoder } from '../api/adresse'
 import { apiLogger } from '@/lib/logger'
@@ -267,7 +273,11 @@ export async function batchVerify(
               siretExists: false,
               entreprise: null,
               sante: { saine: false, score: 0, raisons: ['Erreur de vérification'] },
-              badge: { niveau: 'none' as const, label: 'Erreur', description: 'Erreur de vérification' },
+              badge: {
+                niveau: 'none' as const,
+                label: 'Erreur',
+                description: 'Erreur de vérification',
+              },
               verifiedAt: new Date().toISOString(),
               sources: [],
             },
@@ -325,14 +335,14 @@ export function calculateTrustScore(verification: VerificationResult): {
       (1000 * 60 * 60 * 24 * 365)
     : 0
   factors.push({
-    name: 'Plus de 2 ans d\'ancienneté',
+    name: "Plus de 2 ans d'ancienneté",
     points: 15,
     met: years >= 2,
   })
 
   // More than 5 years old
   factors.push({
-    name: 'Plus de 5 ans d\'ancienneté',
+    name: "Plus de 5 ans d'ancienneté",
     points: 10,
     met: years >= 5,
   })
@@ -369,7 +379,7 @@ export function getVerificationSummary(verification: VerificationResult): {
     return {
       status: 'error',
       title: 'SIRET invalide',
-      description: 'Le numéro SIRET fourni n\'est pas valide',
+      description: "Le numéro SIRET fourni n'est pas valide",
       details: ['Vérifiez le format du numéro (14 chiffres)'],
     }
   }
@@ -378,8 +388,8 @@ export function getVerificationSummary(verification: VerificationResult): {
     return {
       status: 'error',
       title: 'Entreprise introuvable',
-      description: 'Ce SIRET n\'existe pas dans les registres officiels',
-      details: ['Vérifiez le numéro SIRET auprès de l\'artisan'],
+      description: "Ce SIRET n'existe pas dans les registres officiels",
+      details: ["Vérifiez le numéro SIRET auprès de l'artisan"],
     }
   }
 
@@ -387,7 +397,7 @@ export function getVerificationSummary(verification: VerificationResult): {
     return {
       status: 'warning',
       title: 'Entreprise inactive',
-      description: 'Cette entreprise n\'est plus en activité',
+      description: "Cette entreprise n'est plus en activité",
       details: verification.sante.raisons,
     }
   }
@@ -396,7 +406,7 @@ export function getVerificationSummary(verification: VerificationResult): {
     return {
       status: 'warning',
       title: 'Procédure en cours',
-      description: 'Cette entreprise fait l\'objet d\'une procédure collective',
+      description: "Cette entreprise fait l'objet d'une procédure collective",
       details: [verification.entreprise.procedureEnCours || 'Procédure en cours'],
     }
   }
@@ -416,7 +426,7 @@ export function getVerificationSummary(verification: VerificationResult): {
   return {
     status: 'verified',
     title: 'Entreprise référencée',
-    description: 'Entreprise active mais avec quelques points d\'attention',
+    description: "Entreprise active mais avec quelques points d'attention",
     details: verification.sante.raisons,
   }
 }

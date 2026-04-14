@@ -27,23 +27,34 @@ function calculateQualityScore(provider: Record<string, unknown>): {
   const flags: string[] = []
 
   // Identity (30 points)
-  if (provider.name) score += 10; else flags.push('missing_name')
-  if (provider.siren) score += 10; else flags.push('missing_siren')
-  if (provider.siret) score += 10; else flags.push('missing_siret')
+  if (provider.name) score += 10
+  else flags.push('missing_name')
+  if (provider.siren) score += 10
+  else flags.push('missing_siren')
+  if (provider.siret) score += 10
+  else flags.push('missing_siret')
 
   // Address (25 points)
-  if (provider.address_street) score += 5; else flags.push('missing_street')
-  if (provider.address_city) score += 5; else flags.push('missing_city')
-  if (provider.address_postal_code) score += 5; else flags.push('missing_postal_code')
-  if (provider.address_department) score += 5; else flags.push('missing_department')
-  if (provider.latitude && provider.longitude) score += 5; else flags.push('missing_gps')
+  if (provider.address_street) score += 5
+  else flags.push('missing_street')
+  if (provider.address_city) score += 5
+  else flags.push('missing_city')
+  if (provider.address_postal_code) score += 5
+  else flags.push('missing_postal_code')
+  if (provider.address_department) score += 5
+  else flags.push('missing_department')
+  if (provider.latitude && provider.longitude) score += 5
+  else flags.push('missing_gps')
 
   // Contact (15 points)
-  if (provider.phone) score += 10; else flags.push('missing_phone')
-  if (provider.email) score += 5; else flags.push('missing_email')
+  if (provider.phone) score += 10
+  else flags.push('missing_phone')
+  if (provider.email) score += 5
+  else flags.push('missing_email')
 
   // Business info (10 points)
-  if (provider.specialty) score += 10; else flags.push('missing_specialty')
+  if (provider.specialty) score += 10
+  else flags.push('missing_specialty')
 
   // Extras (5 points)
   if (provider.description) score += 5
@@ -61,7 +72,10 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     logger.info('[Cron] Starting data quality score recalculation')
@@ -75,7 +89,9 @@ export async function GET(request: Request) {
       // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
         .from('providers')
-        .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, specialty, description, updated_at')
+        .select(
+          'id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, specialty, description, updated_at'
+        )
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')
@@ -110,13 +126,21 @@ export async function GET(request: Request) {
                 data_quality_flags: u.flags,
               })
               .eq('id', u.id)
-              .then(({ error: updateError }) => ({ id: u.id, score: u.score, flags: u.flags, updateError }))
+              .then(({ error: updateError }) => ({
+                id: u.id,
+                score: u.score,
+                flags: u.flags,
+                updateError,
+              }))
           )
         )
 
         for (const result of results) {
           if (result.updateError) {
-            logger.error(`[Cron] Failed to update quality score for provider ${result.id}:`, result.updateError)
+            logger.error(
+              `[Cron] Failed to update quality score for provider ${result.id}:`,
+              result.updateError
+            )
             totalErrors++
           } else {
             totalUpdated++

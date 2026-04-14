@@ -15,10 +15,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-const MIGRATION_PATH = join(
-  process.cwd(),
-  'supabase/migrations/106_dashboard_v2.sql'
-)
+const MIGRATION_PATH = join(process.cwd(), 'supabase/migrations/106_dashboard_v2.sql')
 
 let migrationSQL: string
 
@@ -46,7 +43,7 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
     })
 
     it('enforces event_type CHECK constraint', () => {
-      expect(migrationSQL).toContain("CHECK (event_type IN (")
+      expect(migrationSQL).toContain('CHECK (event_type IN (')
       expect(migrationSQL).toContain("'created'")
       expect(migrationSQL).toContain("'dispatched'")
       expect(migrationSQL).toContain("'viewed'")
@@ -119,7 +116,7 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
     })
 
     it('raises exception with descriptive message', () => {
-      expect(migrationSQL).toContain("audit_logs is immutable: % not allowed")
+      expect(migrationSQL).toContain('audit_logs is immutable: % not allowed')
     })
   })
 })
@@ -140,7 +137,7 @@ describe('Dashboard V2 — No Public Imports', () => {
     it(`${file} does not import from (public)`, () => {
       try {
         const content = readFileSync(join(process.cwd(), file), 'utf-8')
-        expect(content).not.toContain('from \'@/app/(public)')
+        expect(content).not.toContain("from '@/app/(public)")
         expect(content).not.toContain('from "@/app/(public)')
         expect(content).not.toContain('/(public)/')
       } catch {
@@ -151,10 +148,7 @@ describe('Dashboard V2 — No Public Imports', () => {
 })
 
 describe('Dashboard V2 — X-Robots-Tag + Cache-Control', () => {
-  const middleware = readFileSync(
-    join(process.cwd(), 'src/middleware.ts'),
-    'utf-8'
-  )
+  const middleware = readFileSync(join(process.cwd(), 'src/middleware.ts'), 'utf-8')
 
   it('middleware sets X-Robots-Tag for private routes', () => {
     expect(middleware).toContain('X-Robots-Tag')
@@ -172,10 +166,7 @@ describe('Dashboard V2 — X-Robots-Tag + Cache-Control', () => {
 
 describe('Dashboard V2 — Admin Auth on /api/admin/leads', () => {
   it('/api/admin/leads/route.ts calls requirePermission()', () => {
-    const content = readFileSync(
-      join(process.cwd(), 'src/app/api/admin/leads/route.ts'),
-      'utf-8'
-    )
+    const content = readFileSync(join(process.cwd(), 'src/app/api/admin/leads/route.ts'), 'utf-8')
     expect(content).toContain('requirePermission')
   })
 })

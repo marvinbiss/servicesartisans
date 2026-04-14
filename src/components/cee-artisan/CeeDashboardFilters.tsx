@@ -55,9 +55,7 @@ export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersPro
     if (search.trim()) {
       const q = search.trim().toLowerCase()
       result = result.filter(
-        (d) =>
-          d.operation_code.toLowerCase().includes(q) ||
-          (d.postal_code ?? '').includes(q)
+        (d) => d.operation_code.toLowerCase().includes(q) || (d.postal_code ?? '').includes(q)
       )
     }
     return result
@@ -82,10 +80,7 @@ export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersPro
       >
         {/* Recherche texte */}
         <div className="flex-1 min-w-[200px]">
-          <label
-            htmlFor={searchId}
-            className="block text-xs font-medium text-charcoal-600 mb-1"
-          >
+          <label htmlFor={searchId} className="block text-xs font-medium text-charcoal-600 mb-1">
             Rechercher (opération, code postal)
           </label>
           <div className="relative">
@@ -107,11 +102,11 @@ export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersPro
 
         {/* Filtre statut */}
         <div className="min-w-[180px]">
-          <label
-            htmlFor={statusId}
-            className="block text-xs font-medium text-charcoal-600 mb-1"
-          >
-            <SlidersHorizontal className="mr-1 inline h-3.5 w-3.5 text-charcoal-400" aria-hidden="true" />
+          <label htmlFor={statusId} className="block text-xs font-medium text-charcoal-600 mb-1">
+            <SlidersHorizontal
+              className="mr-1 inline h-3.5 w-3.5 text-charcoal-400"
+              aria-hidden="true"
+            />
             Statut
           </label>
           <select

@@ -57,9 +57,7 @@ export function SEOPanel({
           {/* Meta title */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-sm font-medium text-gray-700">
-                Titre meta
-              </label>
+              <label className="text-sm font-medium text-gray-700">Titre meta</label>
               <span
                 className={`text-xs ${
                   titleLength > titleMax ? 'text-red-600 font-medium' : 'text-gray-400'
@@ -86,9 +84,7 @@ export function SEOPanel({
           {/* Meta description */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-sm font-medium text-gray-700">
-                Meta description
-              </label>
+              <label className="text-sm font-medium text-gray-700">Meta description</label>
               <span
                 className={`text-xs ${
                   descriptionLength > descriptionMax ? 'text-red-600 font-medium' : 'text-gray-400'
@@ -114,9 +110,7 @@ export function SEOPanel({
 
           {/* Google SERP preview */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Aperçu Google
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Aperçu Google</label>
             <div className="border border-gray-200 rounded-lg p-4 bg-white">
               <div className="max-w-[600px]">
                 {/* Title */}
@@ -129,7 +123,8 @@ export function SEOPanel({
                 </p>
                 {/* Description */}
                 <p className="text-sm text-[#545454] mt-0.5 line-clamp-2">
-                  {seoDescription || 'La description de la page apparaîtra ici dans les résultats de recherche Google.'}
+                  {seoDescription ||
+                    'La description de la page apparaîtra ici dans les résultats de recherche Google.'}
                 </p>
               </div>
             </div>

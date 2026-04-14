@@ -64,7 +64,6 @@ function makeBuilder(tableName: string) {
     deleteCaptures.push({ table: tableName, eqs: [...eqs] })
     return b
   })
-
   ;(b as Record<string, unknown>).then = (resolve: (v: unknown) => unknown) => {
     const result = mockResults[tableName] || { data: null, error: null }
     return resolve({ data: result.data, error: result.error })
@@ -173,7 +172,10 @@ describe('TwoFactorAuthService', () => {
   // ------------------------------------------
   describe('generateSetup', () => {
     it('creates secret, QR code URL, and 10 backup codes', async () => {
-      mockResults['two_factor_auth'] = { data: null, error: { code: 'PGRST116', message: 'not found' } }
+      mockResults['two_factor_auth'] = {
+        data: null,
+        error: { code: 'PGRST116', message: 'not found' },
+      }
 
       const svc = await getService()
       const result = await svc.generateSetup(TEST_USER_ID, TEST_EMAIL)
@@ -244,8 +246,7 @@ describe('TwoFactorAuthService', () => {
 
       const profileUpdate = updateCaptures.find(
         (c) =>
-          c.table === 'profiles' &&
-          (c.row as Record<string, unknown>).two_factor_enabled === true
+          c.table === 'profiles' && (c.row as Record<string, unknown>).two_factor_enabled === true
       )
       expect(profileUpdate).toBeDefined()
 
@@ -532,8 +533,7 @@ describe('TwoFactorAuthService', () => {
 
       const profileUpdate = updateCaptures.find(
         (c) =>
-          c.table === 'profiles' &&
-          (c.row as Record<string, unknown>).two_factor_enabled === false
+          c.table === 'profiles' && (c.row as Record<string, unknown>).two_factor_enabled === false
       )
       expect(profileUpdate).toBeDefined()
     })
@@ -557,9 +557,7 @@ describe('TwoFactorAuthService', () => {
       mockResults['security_logs'] = { data: [], error: null }
 
       const svc = await getService()
-      await expect(svc.disable(TEST_USER_ID, '000000')).rejects.toThrow(
-        'Invalid verification code'
-      )
+      await expect(svc.disable(TEST_USER_ID, '000000')).rejects.toThrow('Invalid verification code')
     })
   })
 

@@ -180,7 +180,7 @@ export default async function AdminCeeDashboardPage() {
       color: FUNNEL_COLORS['brouillon'],
     },
     {
-      label: 'Engagement signe',
+      label: 'Engagement signé',
       count: countByStatus['engagement_signe'] ?? 0,
       color: FUNNEL_COLORS['engagement_signe'],
     },
@@ -190,12 +190,12 @@ export default async function AdminCeeDashboardPage() {
       color: FUNNEL_COLORS['travaux_en_cours'],
     },
     {
-      label: 'Depose delegataire',
+      label: 'Déposé délégataire',
       count: countByStatus['depose_delegataire'] ?? 0,
       color: FUNNEL_COLORS['depose_delegataire'],
     },
     {
-      label: 'Valide',
+      label: 'Validé',
       count: countByStatus['valide'] ?? 0,
       color: FUNNEL_COLORS['valide'],
     },
@@ -249,8 +249,8 @@ export default async function AdminCeeDashboardPage() {
               weekCount > 0 ? { text: `+${weekCount} cette semaine`, positive: true } : undefined
             }
           />
-          <CeeKpiCard icon={Zap} label="kWhc total qualifie" value={fmtNum(totalKwhcQualifie)} />
-          <CeeKpiCard icon={Euro} label="Prime totale estimee" value={fmtEur(totalPrimeEstimee)} />
+          <CeeKpiCard icon={Zap} label="kWhc total qualifié" value={fmtNum(totalKwhcQualifie)} />
+          <CeeKpiCard icon={Euro} label="Prime totale estimée" value={fmtEur(totalPrimeEstimee)} />
           <CeeKpiCard
             icon={TrendingUp}
             label="Taux de conversion"
@@ -258,7 +258,7 @@ export default async function AdminCeeDashboardPage() {
             variation={
               conversionRate > 0
                 ? {
-                    text: `${engagedCount}/${poolCount} dossiers engages`,
+                    text: `${engagedCount}/${poolCount} dossiers engagés`,
                     positive: conversionRate >= 30,
                   }
                 : undefined
@@ -286,7 +286,7 @@ export default async function AdminCeeDashboardPage() {
             </div>
             <p className="text-2xl font-bold text-gray-900">{fmtNum(stagnantCount)}</p>
             <p className="text-xs text-gray-500 mt-1">
-              Brouillons crees il y a plus de 3 jours sans progression
+              Brouillons créés il y a plus de 3 jours sans progression
             </p>
           </div>
         </div>
@@ -297,9 +297,9 @@ export default async function AdminCeeDashboardPage() {
           <div className="bg-white border border-sand-200 shadow-sm rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <h3 className="text-sm font-semibold text-gray-700">Top 5 operations</h3>
+              <h3 className="text-sm font-semibold text-gray-700">Top 5 opérations</h3>
             </div>
-            {topOperations.length === 0 && <p className="text-sm text-gray-400">Aucune donnee</p>}
+            {topOperations.length === 0 && <p className="text-sm text-gray-400">Aucune donnée</p>}
             <div className="space-y-3">
               {topOperations.map(([code, count], i) => (
                 <div key={code} className="flex items-center justify-between">

@@ -123,9 +123,13 @@ export default function AdminMessagesPage() {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                {s === 'all' ? 'Toutes' :
-                 s === 'active' ? 'Actives' :
-                 s === 'archived' ? 'Archivées' : 'Bloquées'}
+                {s === 'all'
+                  ? 'Toutes'
+                  : s === 'active'
+                    ? 'Actives'
+                    : s === 'archived'
+                      ? 'Archivées'
+                      : 'Bloquées'}
               </button>
             ))}
           </div>
@@ -172,9 +176,7 @@ export default function AdminMessagesPage() {
                               <p className="font-medium text-gray-900">
                                 {conversation.client?.full_name || 'Sans nom'}
                               </p>
-                              <p className="text-sm text-gray-500">
-                                {conversation.client?.email}
-                              </p>
+                              <p className="text-sm text-gray-500">{conversation.client?.email}</p>
                             </div>
                           </div>
 
@@ -186,7 +188,9 @@ export default function AdminMessagesPage() {
                             <div>
                               <p className="text-xs text-gray-500 uppercase">Artisan</p>
                               <p className="font-medium text-gray-900">
-                                {conversation.provider?.name || conversation.provider?.full_name || 'Sans nom'}
+                                {conversation.provider?.name ||
+                                  conversation.provider?.full_name ||
+                                  'Sans nom'}
                               </p>
                               <p className="text-sm text-gray-500">
                                 {conversation.provider?.email}
@@ -200,9 +204,7 @@ export default function AdminMessagesPage() {
                             <Clock className="w-4 h-4" />
                             Dernier message: {formatDate(conversation.last_message_at)}
                           </span>
-                          <span>
-                            Créée le {formatDate(conversation.created_at)}
-                          </span>
+                          <span>Créée le {formatDate(conversation.created_at)}</span>
                         </div>
                       </div>
 
@@ -237,7 +239,9 @@ export default function AdminMessagesPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">
+                  Page {page} sur {totalPages}
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}

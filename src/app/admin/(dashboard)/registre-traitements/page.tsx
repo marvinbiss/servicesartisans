@@ -148,7 +148,8 @@ export default function RegistreTraitementsPage() {
               Registre des activités de traitement — Article 30 du RGPD
             </p>
             <p className="text-sm text-gray-400 mt-1">
-              Dernière mise à jour : {new Date(LAST_UPDATED).toLocaleDateString('fr-FR', {
+              Dernière mise à jour :{' '}
+              {new Date(LAST_UPDATED).toLocaleDateString('fr-FR', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -193,32 +194,24 @@ export default function RegistreTraitementsPage() {
               <tbody className="divide-y divide-gray-100">
                 {traitements.map((t, index) => (
                   <tr key={index} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-900 min-w-[180px]">
-                      {t.nom}
-                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 min-w-[180px]">{t.nom}</td>
                     <td className="px-4 py-3 text-gray-600 min-w-[180px]">{t.finalite}</td>
                     <td className="px-4 py-3 min-w-[180px]">
                       <span className="inline-block px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs font-medium">
                         {t.baseLegale}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[200px]">
-                      {t.categoriesDonnees}
-                    </td>
+                    <td className="px-4 py-3 text-gray-600 min-w-[200px]">{t.categoriesDonnees}</td>
                     <td className="px-4 py-3 text-gray-600 min-w-[160px]">
                       {t.personnesConcernees}
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[180px]">
-                      {t.destinataires}
-                    </td>
+                    <td className="px-4 py-3 text-gray-600 min-w-[180px]">{t.destinataires}</td>
                     <td className="px-4 py-3 min-w-[160px]">
                       <span className="inline-block px-2 py-1 bg-amber-50 text-amber-700 rounded text-xs font-medium">
                         {t.dureeConservation}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[160px]">
-                      {t.mesuresSecurite}
-                    </td>
+                    <td className="px-4 py-3 text-gray-600 min-w-[160px]">{t.mesuresSecurite}</td>
                   </tr>
                 ))}
               </tbody>
@@ -240,7 +233,10 @@ export default function RegistreTraitementsPage() {
           </p>
           <p>
             <strong>DPO :</strong> Contact via la page{' '}
-            <a href="/confidentialite" className="text-blue-600 hover:underline print:text-gray-900">
+            <a
+              href="/confidentialite"
+              className="text-blue-600 hover:underline print:text-gray-900"
+            >
               Politique de confidentialité
             </a>
             .

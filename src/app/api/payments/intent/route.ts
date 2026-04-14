@@ -23,13 +23,12 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -42,7 +41,8 @@ export async function POST(request: Request) {
       )
     }
 
-    const { bookingId, artisanId, amount, description, paymentType, depositPercentage } = parsed.data
+    const { bookingId, artisanId, amount, description, paymentType, depositPercentage } =
+      parsed.data
 
     // Verify booking belongs to user
     const { data: booking, error: bookingError } = await supabase
@@ -53,10 +53,7 @@ export async function POST(request: Request) {
       .single()
 
     if (bookingError || !booking) {
-      return NextResponse.json(
-        { error: 'Réservation introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Réservation introuvable' }, { status: 404 })
     }
 
     // Calculate actual amount based on payment type
@@ -84,9 +81,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Payment intent error', { error })
-    return NextResponse.json(
-      { error: 'Erreur lors de la création du paiement' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur lors de la création du paiement' }, { status: 500 })
   }
 }

@@ -69,7 +69,7 @@ export default function AEOAnswerBlock({
       <div className="flex items-center gap-2 mb-3" data-nosnippet>
         <BadgeCheck className="w-4 h-4 text-primary-500 flex-shrink-0" />
         <span className="text-xs font-semibold text-primary-600 uppercase tracking-wider">
-          Fiche v{'e'}rifi{'e'}e
+          Fiche vérifiée
         </span>
       </div>
 
@@ -78,7 +78,7 @@ export default function AEOAnswerBlock({
         <span itemProp="name">
           <strong>{serviceName}</strong>
         </span>{' '}
-        {'a'}{' '}
+        à{' '}
         <span itemProp="areaServed" itemScope itemType="https://schema.org/City">
           <strong itemProp="name">{villeName}</strong>
           <meta itemProp="containedInPlace" content={departmentName} />
@@ -88,7 +88,7 @@ export default function AEOAnswerBlock({
           <meta itemProp="name" content="ServicesArtisans" />
           <strong>{formatNumber(providerCount)}</strong>
         </span>{' '}
-        artisan{providerCount > 1 ? 's' : ''} v{'e'}rifi{'e'}
+        artisan{providerCount > 1 ? 's' : ''} vérifié
         {providerCount > 1 ? 's' : ''}.
         {hasRating && (
           <>
@@ -103,7 +103,7 @@ export default function AEOAnswerBlock({
             Prix indicatifs{' : '}
             <strong>
               <span itemProp="lowPrice">{priceRange?.min ?? 0}</span>
-              {'€'} {'a'} <span itemProp="highPrice">{priceRange?.max ?? 0}</span>
+              {'€'} à <span itemProp="highPrice">{priceRange?.max ?? 0}</span>
               {'€'}
             </strong>
             .
@@ -126,7 +126,7 @@ export default function AEOAnswerBlock({
           <Link href="/" className="text-primary-500 hover:text-primary-600 font-medium">
             ServicesArtisans.fr
           </Link>
-          {' — '}annuaire v{'e'}rifi{'e'} SIREN.
+          {' — '}annuaire vérifié SIREN.
         </p>
       </div>
     </div>

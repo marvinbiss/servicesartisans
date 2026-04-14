@@ -113,7 +113,10 @@ export function AdminSidebar() {
             <X className="w-5 h-5" />
           </button>
         </div>
-        <nav className="p-4 space-y-1 flex-1 overflow-y-auto" aria-label="Menu principal administration">
+        <nav
+          className="p-4 space-y-1 flex-1 overflow-y-auto"
+          aria-label="Menu principal administration"
+        >
           {nav.map((item) => {
             const Icon = item.icon
             return (

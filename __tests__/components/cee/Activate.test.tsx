@@ -39,12 +39,7 @@ describe('Activate step', () => {
   })
 
   it('renders the activate button when all steps complete', () => {
-    render(
-      <Activate
-        partner={makePartner()}
-        onPartnerRefresh={mockOnPartnerRefresh}
-      />
-    )
+    render(<Activate partner={makePartner()} onPartnerRefresh={mockOnPartnerRefresh} />)
     const btn = screen.getByTestId('activate-btn')
     expect(btn).toBeTruthy()
     expect((btn as HTMLButtonElement).disabled).toBe(false)
@@ -52,10 +47,7 @@ describe('Activate step', () => {
 
   it('shows all 3 checklist items as complete', () => {
     const { container } = render(
-      <Activate
-        partner={makePartner()}
-        onPartnerRefresh={mockOnPartnerRefresh}
-      />
+      <Activate partner={makePartner()} onPartnerRefresh={mockOnPartnerRefresh} />
     )
     // 3 list items should have accent (complete) styling, not red (incomplete)
     const incompleteItems = container.querySelectorAll('.border-red-200')
@@ -93,12 +85,7 @@ describe('Activate step', () => {
       json: async () => ({ data: { status: 'active' } }),
     } as Response)
 
-    render(
-      <Activate
-        partner={makePartner()}
-        onPartnerRefresh={mockOnPartnerRefresh}
-      />
-    )
+    render(<Activate partner={makePartner()} onPartnerRefresh={mockOnPartnerRefresh} />)
 
     fireEvent.click(screen.getByTestId('activate-btn'))
 
@@ -131,12 +118,7 @@ describe('Activate step', () => {
       }),
     } as Response)
 
-    render(
-      <Activate
-        partner={makePartner()}
-        onPartnerRefresh={mockOnPartnerRefresh}
-      />
-    )
+    render(<Activate partner={makePartner()} onPartnerRefresh={mockOnPartnerRefresh} />)
 
     fireEvent.click(screen.getByTestId('activate-btn'))
 
@@ -167,10 +149,7 @@ describe('Activate step', () => {
 
   it('section has aria-labelledby', () => {
     const { container } = render(
-      <Activate
-        partner={makePartner()}
-        onPartnerRefresh={mockOnPartnerRefresh}
-      />
+      <Activate partner={makePartner()} onPartnerRefresh={mockOnPartnerRefresh} />
     )
     const section = container.querySelector('[aria-labelledby="activate-heading"]')
     expect(section).toBeTruthy()

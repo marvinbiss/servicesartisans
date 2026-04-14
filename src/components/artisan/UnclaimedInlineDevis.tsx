@@ -22,19 +22,74 @@ interface UnclaimedInlineDevisProps {
 // ---------------------------------------------------------------------------
 
 const SERVICE_OPTIONS: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'Installation sanitaire', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'Autre'],
-  electricien: ['Panne électrique', 'Installation', 'Mise aux normes', 'Éclairage', 'Tableau électrique', 'Autre'],
-  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte', 'Autre'],
-  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur', 'Autre'],
-  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond', 'Autre'],
+  plombier: [
+    "Fuite d'eau",
+    'Installation sanitaire',
+    'Débouchage',
+    'Chauffe-eau',
+    'Robinetterie',
+    'Autre',
+  ],
+  electricien: [
+    'Panne électrique',
+    'Installation',
+    'Mise aux normes',
+    'Éclairage',
+    'Tableau électrique',
+    'Autre',
+  ],
+  serrurier: [
+    'Porte claquée',
+    'Serrure cassée',
+    'Changement de serrure',
+    'Double de clé',
+    'Blindage de porte',
+    'Autre',
+  ],
+  chauffagiste: [
+    'Panne chaudière',
+    'Entretien chaudière',
+    'Radiateur',
+    'Plancher chauffant',
+    'Pompe à chaleur',
+    'Autre',
+  ],
+  peintre: [
+    'Peinture intérieure',
+    'Peinture extérieure',
+    'Ravalement façade',
+    'Papier peint',
+    'Plafond',
+    'Autre',
+  ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet', 'Autre'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure', 'Autre'],
-  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage', 'Autre'],
+  carreleur: [
+    'Carrelage sol',
+    'Carrelage mural',
+    'Faïence salle de bain',
+    'Terrasse extérieure',
+    'Autre',
+  ],
+  couvreur: [
+    'Fuite toiture',
+    'Rénovation toiture',
+    'Gouttière',
+    'Isolation toiture',
+    'Démoussage',
+    'Autre',
+  ],
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition', 'Autre'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture', 'Autre'],
 }
 
-const DEFAULT_SERVICES = ['Réparation', 'Installation', 'Entretien', 'Rénovation', 'Diagnostic', 'Autre']
+const DEFAULT_SERVICES = [
+  'Réparation',
+  'Installation',
+  'Entretien',
+  'Rénovation',
+  'Diagnostic',
+  'Autre',
+]
 
 // ---------------------------------------------------------------------------
 // Component
@@ -61,7 +116,7 @@ export function UnclaimedInlineDevis({
     setSubmitError('')
 
     if (!serviceType) {
-      setSubmitError('Veuillez sélectionner un type d\'intervention')
+      setSubmitError("Veuillez sélectionner un type d'intervention")
       return
     }
 
@@ -134,12 +189,8 @@ export function UnclaimedInlineDevis({
         <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-7 h-7 text-green-600" aria-hidden="true" />
         </div>
-        <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
-          Demande envoyée !
-        </h3>
-        <p className="text-charcoal-600 text-sm">
-          Un conseiller vous rappelle rapidement.
-        </p>
+        <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">Demande envoyée !</h3>
+        <p className="text-charcoal-600 text-sm">Un conseiller vous rappelle rapidement.</p>
       </div>
     )
   }
@@ -159,7 +210,10 @@ export function UnclaimedInlineDevis({
 
       {/* Service type select */}
       <div className="mb-4">
-        <label htmlFor="inline-service-type" className="block text-sm font-semibold text-charcoal-700 mb-2">
+        <label
+          htmlFor="inline-service-type"
+          className="block text-sm font-semibold text-charcoal-700 mb-2"
+        >
           Type d&apos;intervention
         </label>
         <select
@@ -179,7 +233,10 @@ export function UnclaimedInlineDevis({
 
       {/* Phone input */}
       <div className="mb-4">
-        <label htmlFor="inline-phone" className="block text-sm font-semibold text-charcoal-700 mb-2">
+        <label
+          htmlFor="inline-phone"
+          className="block text-sm font-semibold text-charcoal-700 mb-2"
+        >
           Votre téléphone <span className="text-red-500">*</span>
         </label>
         <input
@@ -198,7 +255,9 @@ export function UnclaimedInlineDevis({
           }`}
         />
         {phoneError && (
-          <p className="text-red-500 text-xs mt-1.5" role="alert">{phoneError}</p>
+          <p className="text-red-500 text-xs mt-1.5" role="alert">
+            {phoneError}
+          </p>
         )}
       </div>
 
@@ -216,7 +275,10 @@ export function UnclaimedInlineDevis({
         />
         <label htmlFor="inline-consent" className="text-xs text-charcoal-500 leading-relaxed">
           J&apos;accepte d&apos;être mis en relation avec des artisans partenaires.{' '}
-          <Link href="/confidentialite" className="text-primary-500 underline hover:text-primary-600">
+          <Link
+            href="/confidentialite"
+            className="text-primary-500 underline hover:text-primary-600"
+          >
             Politique de confidentialité
           </Link>
         </label>

@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  ReactNode,
-} from 'react'
+import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
 import { useToast } from '@/hooks/useToast'
 import { ToastContainer } from '@/components/ui/Toast'
 
@@ -56,7 +49,7 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
         return [...prev, provider]
       })
     },
-    [warning],
+    [warning]
   )
 
   const removeFromCompare = useCallback((providerId: string) => {
@@ -65,7 +58,7 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
 
   const isInCompare = useCallback(
     (providerId: string) => compareList.some((p) => p.id === providerId),
-    [compareList],
+    [compareList]
   )
 
   const clearCompare = useCallback(() => {
@@ -80,7 +73,7 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
       isInCompare,
       clearCompare,
     }),
-    [compareList, addToCompare, removeFromCompare, isInCompare, clearCompare],
+    [compareList, addToCompare, removeFromCompare, isInCompare, clearCompare]
   )
 
   return (

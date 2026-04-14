@@ -155,10 +155,11 @@ describe('generateCacheKey', () => {
 describe('dedupeRequest', () => {
   it('deduplicates concurrent requests with same key', async () => {
     let callCount = 0
-    const fetcher = () => new Promise<string>((resolve) => {
-      callCount++
-      setTimeout(() => resolve('result'), 10)
-    })
+    const fetcher = () =>
+      new Promise<string>((resolve) => {
+        callCount++
+        setTimeout(() => resolve('result'), 10)
+      })
 
     const [r1, r2, r3] = await Promise.all([
       dedupeRequest('dedup:key', fetcher),
@@ -186,10 +187,7 @@ describe('dedupeRequest', () => {
     const f1 = vi.fn().mockResolvedValue('a')
     const f2 = vi.fn().mockResolvedValue('b')
 
-    const [r1, r2] = await Promise.all([
-      dedupeRequest('dedup:x', f1),
-      dedupeRequest('dedup:y', f2),
-    ])
+    const [r1, r2] = await Promise.all([dedupeRequest('dedup:x', f1), dedupeRequest('dedup:y', f2)])
 
     expect(r1).toBe('a')
     expect(r2).toBe('b')

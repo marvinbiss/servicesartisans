@@ -166,7 +166,7 @@ export function classifyPageType(pathname: string): PageType {
 export function calculateDifferentiation(
   providerCount: number,
   hasCommuneData: boolean,
-  hasTradeContent: boolean,
+  hasTradeContent: boolean
 ): number {
   let score = 0
 

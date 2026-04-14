@@ -18,7 +18,7 @@ export interface SuggestedSlot {
 export function getRecommendedSlots(
   _slots: unknown[],
   _preferences?: unknown,
-  _options?: unknown,
+  _options?: unknown
 ): SuggestedSlot[] {
   return []
 }

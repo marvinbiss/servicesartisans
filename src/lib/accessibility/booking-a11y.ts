@@ -45,8 +45,7 @@ export function announce(message: string, priority: 'polite' | 'assertive' = 'po
 
 // Calendar-specific announcements
 export const calendarAnnouncements = {
-  monthChanged: (month: string, year: number) =>
-    announce(`Calendrier: ${month} ${year}`),
+  monthChanged: (month: string, year: number) => announce(`Calendrier: ${month} ${year}`),
 
   dateSelected: (date: Date, slotsCount: number) => {
     const dateStr = date.toLocaleDateString('fr-FR', {
@@ -58,22 +57,20 @@ export const calendarAnnouncements = {
       slotsCount === 0
         ? 'Aucun créneau disponible'
         : slotsCount === 1
-        ? '1 créneau disponible'
-        : `${slotsCount} créneaux disponibles`
+          ? '1 créneau disponible'
+          : `${slotsCount} créneaux disponibles`
     announce(`${dateStr}. ${slotsText}`)
   },
 
   slotSelected: (time: string, artisan: string) =>
     announce(`Créneau sélectionné: ${time} avec ${artisan}`, 'assertive'),
 
-  slotUnavailable: () =>
-    announce('Ce créneau n\'est plus disponible', 'assertive'),
+  slotUnavailable: () => announce("Ce créneau n'est plus disponible", 'assertive'),
 
   bookingConfirmed: (date: string, time: string) =>
     announce(`Réservation confirmée pour le ${date} à ${time}`, 'assertive'),
 
-  formError: (errorMessage: string) =>
-    announce(`Erreur: ${errorMessage}`, 'assertive'),
+  formError: (errorMessage: string) => announce(`Erreur: ${errorMessage}`, 'assertive'),
 
   loading: () => announce('Chargement en cours...'),
 

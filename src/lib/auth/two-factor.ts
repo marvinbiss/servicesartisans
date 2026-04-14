@@ -129,17 +129,18 @@ export class TwoFactorAuthService {
     const hashedBackupCodes = backupCodes.map((code) => this.hashCode(code))
 
     // Store in database (not verified yet)
-    await this.supabase
-      .from('two_factor_auth')
-      .upsert({
+    await this.supabase.from('two_factor_auth').upsert(
+      {
         user_id: userId,
         secret: this.encryptSecret(secret),
         backup_codes: hashedBackupCodes,
         verified: false,
         created_at: new Date().toISOString(),
-      }, {
+      },
+      {
         onConflict: 'user_id',
-      })
+      }
+    )
 
     return {
       secret,
@@ -317,10 +318,7 @@ export class TwoFactorAuthService {
     }
 
     // Delete 2FA record
-    await this.supabase
-      .from('two_factor_auth')
-      .delete()
-      .eq('user_id', userId)
+    await this.supabase.from('two_factor_auth').delete().eq('user_id', userId)
 
     // Update profile
     await this.supabase
@@ -469,14 +467,12 @@ export class TwoFactorAuthService {
     event: string,
     details?: Record<string, unknown>
   ): Promise<void> {
-    await this.supabase
-      .from('security_logs')
-      .insert({
-        user_id: userId,
-        event_type: event,
-        details,
-        created_at: new Date().toISOString(),
-      })
+    await this.supabase.from('security_logs').insert({
+      user_id: userId,
+      event_type: event,
+      details,
+      created_at: new Date().toISOString(),
+    })
   }
 }
 

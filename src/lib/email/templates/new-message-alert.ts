@@ -39,31 +39,31 @@ export function getNewMessageAlertEmail(data: {
 
   <p style="color: #555; line-height: 1.6;">
     Bonjour ${htmlEscape(recipientName)},<br><br>
-    <strong>${htmlEscape(senderName)}</strong> vous a envoy\u00e9 un message :
+    <strong>${htmlEscape(senderName)}</strong> vous a envoyé un message :
   </p>
 
   <div style="background: #f8fafc; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0;">
     <p style="margin: 0; color: #333; font-style: italic; line-height: 1.6;">
-      "${htmlEscape(preview)}"
+      «&nbsp;${htmlEscape(preview)}&nbsp;»
     </p>
   </div>
 
   <div style="text-align: center; margin: 32px 0;">
     <a href="${htmlEscape(conversationUrl)}"
        style="background: #2563eb; color: white; padding: 14px 36px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block;">
-      R\u00e9pondre
+      Répondre
     </a>
   </div>
 
   <p style="color: #888; font-size: 13px; line-height: 1.5; text-align: center;">
-    R\u00e9pondez rapidement pour maintenir une bonne relation avec vos clients.
+    Répondez rapidement pour maintenir une bonne relation avec vos clients.
   </p>
 
   <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    Vous recevez cet email car vous \u00eates inscrit sur ServicesArtisans.<br>
-    G\u00e9rez vos notifications dans votre <a href="${htmlEscape(conversationUrl)}" style="color: #999;">espace personnel</a>.
+    Vous recevez cet email car vous êtes inscrit sur ServicesArtisans.<br>
+    Gérez vos notifications dans votre <a href="${htmlEscape(conversationUrl)}" style="color: #999;">espace personnel</a>.
   </p>
 </body>
 </html>`,

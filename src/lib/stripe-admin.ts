@@ -14,7 +14,6 @@ function getStripe(): Stripe {
   return _stripe
 }
 
-
 /**
  * Récupérer l'historique des paiements d'un client
  */
@@ -61,7 +60,8 @@ export async function getSubscription(subscriptionId: string) {
       items: subscription.items.data.map((item) => ({
         id: item.id,
         priceId: item.price.id,
-        productId: typeof item.price.product === 'string' ? item.price.product : item.price.product.id,
+        productId:
+          typeof item.price.product === 'string' ? item.price.product : item.price.product.id,
         amount: item.price.unit_amount,
         interval: item.price.recurring?.interval,
       })),
@@ -109,10 +109,7 @@ export async function processRefund(
 /**
  * Annuler un abonnement
  */
-export async function cancelSubscription(
-  subscriptionId: string,
-  immediately = false
-) {
+export async function cancelSubscription(subscriptionId: string, immediately = false) {
   try {
     if (immediately) {
       // Annulation immédiate
@@ -251,9 +248,7 @@ export async function getCustomerInvoices(customerId: string, limit = 10) {
       periodStart: invoice.period_start
         ? new Date(invoice.period_start * 1000).toISOString()
         : null,
-      periodEnd: invoice.period_end
-        ? new Date(invoice.period_end * 1000).toISOString()
-        : null,
+      periodEnd: invoice.period_end ? new Date(invoice.period_end * 1000).toISOString() : null,
     }))
   } catch (error) {
     logger.error('Error fetching customer invoices', error as Error)
@@ -290,9 +285,7 @@ export async function listAllSubscriptions(
         id: sub.id,
         customerId: typeof sub.customer === 'string' ? sub.customer : sub.customer.id,
         customerEmail:
-          typeof sub.customer === 'object' && 'email' in sub.customer
-            ? sub.customer.email
-            : null,
+          typeof sub.customer === 'object' && 'email' in sub.customer ? sub.customer.email : null,
         status: sub.status,
         currentPeriodStart: new Date(sub.current_period_start * 1000).toISOString(),
         currentPeriodEnd: new Date(sub.current_period_end * 1000).toISOString(),

@@ -53,14 +53,7 @@ export default function Badge({
         className
       )}
     >
-      {dot && (
-        <span
-          className={clsx(
-            'w-1.5 h-1.5 rounded-full',
-            dotColors[variant]
-          )}
-        />
-      )}
+      {dot && <span className={clsx('w-1.5 h-1.5 rounded-full', dotColors[variant])} />}
       {icon}
       {children}
     </span>
@@ -87,7 +80,11 @@ export function StatusBadge({ status }: { status: string }) {
 }
 
 // Slot availability badges
-export function SlotBadge({ type }: { type: 'popular' | 'recommended' | 'last_minute' | 'available' }) {
+export function SlotBadge({
+  type,
+}: {
+  type: 'popular' | 'recommended' | 'last_minute' | 'available'
+}) {
   const config: Record<string, { variant: BadgeProps['variant']; label: string }> = {
     popular: { variant: 'warning', label: 'Très demandé' },
     recommended: { variant: 'primary', label: 'Recommandé' },

@@ -5,8 +5,14 @@ import { getOverviewStats, getChannelPerformance } from '@/lib/prospection/analy
 import { z } from 'zod'
 
 const querySchema = z.object({
-  date_from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  date_to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  date_from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  date_to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -24,7 +30,10 @@ export async function GET(request: NextRequest) {
     const parsed = querySchema.safeParse(rawParams)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres de date invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres de date invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -46,6 +55,9 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Analytics error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

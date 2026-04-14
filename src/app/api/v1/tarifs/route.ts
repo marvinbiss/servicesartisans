@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     if (!metier) {
       return NextResponse.json(
         { error: 'Le paramètre "metier" est requis. Exemple : ?metier=plombier' },
-        { status: 400, headers: CORS_HEADERS },
+        { status: 400, headers: CORS_HEADERS }
       )
     }
 
@@ -37,7 +37,9 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('barometre_stats')
-      .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at')
+      .select(
+        'metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_artisans, note_moyenne, nb_avis, taux_verification, updated_at'
+      )
       .eq('metier_slug', metier)
 
     if (ville) {
@@ -55,7 +57,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       return NextResponse.json(
         { error: 'Erreur interne lors de la récupération des données.' },
-        { status: 500, headers: CORS_HEADERS },
+        { status: 500, headers: CORS_HEADERS }
       )
     }
 
@@ -80,12 +82,12 @@ export async function GET(request: NextRequest) {
           ...CORS_HEADERS,
           'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
         },
-      },
+      }
     )
   } catch {
     return NextResponse.json(
       { error: 'Erreur serveur inattendue.' },
-      { status: 500, headers: CORS_HEADERS },
+      { status: 500, headers: CORS_HEADERS }
     )
   }
 }

@@ -58,8 +58,7 @@ export class MemoryCache<T = unknown> {
     // Check if expired
     if (now > entry.expiresAt) {
       // Check stale-while-revalidate window
-      if (this.staleWhileRevalidate > 0 &&
-          now < entry.expiresAt + this.staleWhileRevalidate) {
+      if (this.staleWhileRevalidate > 0 && now < entry.expiresAt + this.staleWhileRevalidate) {
         // Return stale value, mark for revalidation
         entry.hits++
         entry.lastAccess = now
@@ -242,7 +241,7 @@ export class MemoryCache<T = unknown> {
       }
     })
 
-    keysToDelete.forEach(key => {
+    keysToDelete.forEach((key) => {
       this.delete(key)
       cleaned++
     })
@@ -313,13 +312,13 @@ export function memoize<TArgs extends unknown[], TReturn>(
 
 // Global cache instances
 export const apiCache = new MemoryCache({
-  ttl: 60 * 60 * 1000,    // 1 hour
+  ttl: 60 * 60 * 1000, // 1 hour
   maxSize: 500,
   staleWhileRevalidate: 5 * 60 * 1000, // 5 minutes
 })
 
 export const searchCache = new MemoryCache({
-  ttl: 5 * 60 * 1000,     // 5 minutes
+  ttl: 5 * 60 * 1000, // 5 minutes
   maxSize: 200,
 })
 
@@ -330,9 +329,12 @@ export const geocodeCache = new MemoryCache({
 
 // Periodic cleanup
 if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
-    apiCache.cleanup()
-    searchCache.cleanup()
-    geocodeCache.cleanup()
-  }, 5 * 60 * 1000) // Every 5 minutes
+  setInterval(
+    () => {
+      apiCache.cleanup()
+      searchCache.cleanup()
+      geocodeCache.cleanup()
+    },
+    5 * 60 * 1000
+  ) // Every 5 minutes
 }

@@ -85,7 +85,7 @@ export async function getRgeNationalStats(): Promise<RgeNationalStats> {
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }
 
@@ -104,9 +104,7 @@ export interface RgeServiceStats {
  * (les grosses agglos trustent largement le classement) sans requête GROUP BY
  * (non supportée par supabase-js sans RPC dédiée).
  */
-export async function getRgeServiceStats(
-  serviceSlug: RgeAllowedService,
-): Promise<RgeServiceStats> {
+export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promise<RgeServiceStats> {
   if (IS_BUILD) return { total: 0, topCities: [] }
 
   if (!isRgeAllowedService(serviceSlug)) {
@@ -168,7 +166,7 @@ export async function getRgeServiceStats(
           .select('code_insee,slug,name')
           .in(
             'code_insee',
-            topInseeCodes.map((t) => t.code),
+            topInseeCodes.map((t) => t.code)
           )
           .eq('is_active', true)
 
@@ -202,6 +200,6 @@ export async function getRgeServiceStats(
       }
     },
     CACHE_TTL_6H,
-    { skipNull: true },
+    { skipNull: true }
   )
 }

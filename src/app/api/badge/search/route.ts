@@ -18,7 +18,9 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabase
     .from('providers')
-    .select('name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count')
+    .select(
+      'name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count'
+    )
     .or(`name.ilike.%${safeQ}%,slug.ilike.%${safeQ}%`)
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
@@ -29,20 +31,23 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ results: [] })
   }
 
-  return NextResponse.json({
-    results: (data || []).map((p) => ({
-      name: p.name,
-      slug: p.slug,
-      stable_id: p.stable_id,
-      specialty: p.specialty,
-      city: p.address_city,
-      is_verified: p.is_verified === true,
-      rating: p.rating_average,
-      reviews: p.review_count,
-    })),
-  }, {
-    headers: {
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600',
+  return NextResponse.json(
+    {
+      results: (data || []).map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        stable_id: p.stable_id,
+        specialty: p.specialty,
+        city: p.address_city,
+        is_verified: p.is_verified === true,
+        rating: p.rating_average,
+        reviews: p.review_count,
+      })),
     },
-  })
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=600',
+      },
+    }
+  )
 }

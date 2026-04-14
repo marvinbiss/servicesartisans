@@ -198,12 +198,10 @@ export async function runGSCSync(): Promise<SyncResult> {
   for (let i = 0; i < rows.length; i += UPSERT_BATCH_SIZE) {
     const batch = rows.slice(i, i + UPSERT_BATCH_SIZE)
 
-    const { error } = await supabase
-      .from('gsc_daily_metrics')
-      .upsert(batch, {
-        onConflict: 'page_path,query,date',
-        ignoreDuplicates: false,
-      })
+    const { error } = await supabase.from('gsc_daily_metrics').upsert(batch, {
+      onConflict: 'page_path,query,date',
+      ignoreDuplicates: false,
+    })
 
     if (error) {
       logger.error(`GSC sync: upsert error at batch ${Math.floor(i / UPSERT_BATCH_SIZE)}`, error, {

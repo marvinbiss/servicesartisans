@@ -29,10 +29,12 @@ function generateStars(rating: number, x: number, y: number): string {
   for (let i = 0; i < 5; i++) {
     const cx = x + i * gap + 6
     const cy = y
-    const fill = i < Math.floor(rating) ? '#f59e0b' : (i < rating ? `url(#hs${i})` : '#d1d5db')
+    const fill = i < Math.floor(rating) ? '#f59e0b' : i < rating ? `url(#hs${i})` : '#d1d5db'
     if (i < rating && i >= Math.floor(rating)) {
       const pct = Math.round((rating - Math.floor(rating)) * 100)
-      stars.push(`<defs><linearGradient id="hs${i}"><stop offset="${pct}%" stop-color="#f59e0b"/><stop offset="${pct}%" stop-color="#d1d5db"/></linearGradient></defs>`)
+      stars.push(
+        `<defs><linearGradient id="hs${i}"><stop offset="${pct}%" stop-color="#f59e0b"/><stop offset="${pct}%" stop-color="#d1d5db"/></linearGradient></defs>`
+      )
     }
     stars.push(`<polygon points="${starPoints(cx, cy, 5.5, 2.5)}" fill="${fill}"/>`)
   }
@@ -61,7 +63,9 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('providers')
-    .select('name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count')
+    .select(
+      'name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count'
+    )
 
   if (slug) {
     query = query.eq('slug', slug)
@@ -86,9 +90,21 @@ export async function GET(request: NextRequest) {
     })
   }
 
-  const name = escapeXml((provider.name || 'Artisan').length > 26 ? (provider.name || 'Artisan').slice(0, 24) + '...' : (provider.name || 'Artisan'))
-  const specialty = escapeXml((provider.specialty || '').length > 28 ? (provider.specialty || '').slice(0, 26) + '...' : (provider.specialty || ''))
-  const city = escapeXml((provider.address_city || '').length > 20 ? (provider.address_city || '').slice(0, 18) + '...' : (provider.address_city || ''))
+  const name = escapeXml(
+    (provider.name || 'Artisan').length > 26
+      ? (provider.name || 'Artisan').slice(0, 24) + '...'
+      : provider.name || 'Artisan'
+  )
+  const specialty = escapeXml(
+    (provider.specialty || '').length > 28
+      ? (provider.specialty || '').slice(0, 26) + '...'
+      : provider.specialty || ''
+  )
+  const city = escapeXml(
+    (provider.address_city || '').length > 20
+      ? (provider.address_city || '').slice(0, 18) + '...'
+      : provider.address_city || ''
+  )
   const rating = Math.min(5, Math.max(0, provider.rating_average || 0))
   const reviews = provider.review_count || 0
   const isVerified = provider.is_verified === true
@@ -104,7 +120,7 @@ export async function GET(request: NextRequest) {
   const brandColor = '#3464f4'
   const verifiedColor = isVerified ? '#059669' : '#94a3b8'
   const verifiedLabel = isVerified ? 'Verifie' : 'Reference'
-  const verifiedBg = isVerified ? (isDark ? '#064e3b' : '#ecfdf5') : (isDark ? '#1e293b' : '#f1f5f9')
+  const verifiedBg = isVerified ? (isDark ? '#064e3b' : '#ecfdf5') : isDark ? '#1e293b' : '#f1f5f9'
 
   let svg: string
 
@@ -148,12 +164,16 @@ export async function GET(request: NextRequest) {
   <text x="55" y="68" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="${subtextColor}">${escapeXml(locationLine)}</text>
 
   <!-- Stars + Reviews -->
-  ${hasRating ? `
+  ${
+    hasRating
+      ? `
   ${generateStars(rating, 55, 86)}
   <text x="${55 + 5 * 14 + 8}" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${rating.toFixed(1)} (${reviews} avis)</text>
-  ` : `
+  `
+      : `
   <text x="55" y="90" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${isActive ? 'Artisan actif sur ServicesArtisans.fr' : 'Fiche sur ServicesArtisans.fr'}</text>
-  `}
+  `
+  }
 
   <!-- Brand -->
   <text x="${w - 15}" y="${h - 10}" text-anchor="end" font-family="system-ui,-apple-system,sans-serif" font-size="8" font-weight="600" fill="${brandColor}" opacity="0.6">ServicesArtisans.fr</text>

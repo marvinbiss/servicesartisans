@@ -134,10 +134,7 @@ export async function POST(request: NextRequest) {
           action: 'cee-quiz-transition-block',
           partnerId: partner.id,
           from: partner.status,
-          error:
-            transError instanceof Error
-              ? transError.message
-              : String(transError),
+          error: transError instanceof Error ? transError.message : String(transError),
         })
       }
     }

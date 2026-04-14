@@ -78,10 +78,10 @@ export default function EditArtisanPage() {
         return !value.trim() ? 'Le nom est requis' : null
       case 'phone':
         return value && !/^(\+33|0)[1-9][\d\s.-]{7,13}$/.test(value.replace(/\s/g, ''))
-          ? 'Numéro de téléphone invalide' : null
+          ? 'Numéro de téléphone invalide'
+          : null
       case 'address_postal_code':
-        return value && !/^\d{5}$/.test(value)
-          ? 'Le code postal doit contenir 5 chiffres' : null
+        return value && !/^\d{5}$/.test(value) ? 'Le code postal doit contenir 5 chiffres' : null
       default:
         return null
     }
@@ -89,7 +89,7 @@ export default function EditArtisanPage() {
 
   function handleBlur(name: string, value: string) {
     const error = validateField(name, value)
-    setFieldErrors(prev => {
+    setFieldErrors((prev) => {
       if (error) return { ...prev, [name]: error }
       const { [name]: _, ...rest } = prev
       return rest
@@ -98,7 +98,7 @@ export default function EditArtisanPage() {
 
   function clearFieldError(name: string) {
     if (fieldErrors[name]) {
-      setFieldErrors(prev => {
+      setFieldErrors((prev) => {
         const { [name]: _, ...rest } = prev
         return rest
       })
@@ -155,7 +155,7 @@ export default function EditArtisanPage() {
 
   // Track form changes
   const updateFormData = (updates: Partial<typeof formData>) => {
-    setFormData(prev => ({ ...prev, ...updates }))
+    setFormData((prev) => ({ ...prev, ...updates }))
     setHasChanges(true)
   }
 
@@ -249,10 +249,7 @@ export default function EditArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Toast notification */}
-      <Toast
-        toast={toast}
-        onClose={() => setToast(null)}
-      />
+      <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -298,14 +295,20 @@ export default function EditArtisanPage() {
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="full_name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Nom complet
                   </label>
                   <input
                     id="full_name"
                     type="text"
                     value={formData.full_name}
-                    onChange={(e) => { updateFormData({ full_name: e.target.value }); clearFieldError('full_name') }}
+                    onChange={(e) => {
+                      updateFormData({ full_name: e.target.value })
+                      clearFieldError('full_name')
+                    }}
                     onBlur={(e) => handleBlur('full_name', e.target.value)}
                     placeholder="Jean Dupont"
                     maxLength={200}
@@ -316,7 +319,10 @@ export default function EditArtisanPage() {
                   )}
                 </div>
                 <div>
-                  <label htmlFor="specialty" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="specialty"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Spécialité
                   </label>
                   <input
@@ -354,7 +360,10 @@ export default function EditArtisanPage() {
                     id="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => { updateFormData({ phone: e.target.value }); clearFieldError('phone') }}
+                    onChange={(e) => {
+                      updateFormData({ phone: e.target.value })
+                      clearFieldError('phone')
+                    }}
                     onBlur={(e) => handleBlur('phone', e.target.value)}
                     placeholder="01 23 45 67 89"
                     maxLength={20}
@@ -380,7 +389,10 @@ export default function EditArtisanPage() {
                 />
               </div>
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Description
                 </label>
                 <textarea
@@ -418,7 +430,10 @@ export default function EditArtisanPage() {
             </h2>
             <div className="grid gap-4">
               <div>
-                <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="address_street"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Adresse complète
                 </label>
                 <input
@@ -433,14 +448,20 @@ export default function EditArtisanPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="address_postal_code" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_postal_code"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Code postal
                   </label>
                   <input
                     id="address_postal_code"
                     type="text"
                     value={formData.address_postal_code}
-                    onChange={(e) => { updateFormData({ address_postal_code: e.target.value }); clearFieldError('address_postal_code') }}
+                    onChange={(e) => {
+                      updateFormData({ address_postal_code: e.target.value })
+                      clearFieldError('address_postal_code')
+                    }}
                     onBlur={(e) => handleBlur('address_postal_code', e.target.value)}
                     placeholder="75001"
                     maxLength={10}
@@ -451,7 +472,10 @@ export default function EditArtisanPage() {
                   )}
                 </div>
                 <div>
-                  <label htmlFor="address_city" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_city"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Ville
                   </label>
                   <input
@@ -465,7 +489,10 @@ export default function EditArtisanPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="address_region" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_region"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Région
                   </label>
                   <input
@@ -491,9 +518,7 @@ export default function EditArtisanPage() {
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vérifié
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Vérifié</label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_verified: !formData.is_verified })}
@@ -512,9 +537,7 @@ export default function EditArtisanPage() {
                   </button>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Actif
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Actif</label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_active: !formData.is_active })}
@@ -541,12 +564,11 @@ export default function EditArtisanPage() {
                       Note: {artisan.rating_average?.toFixed(1) || 'N/A'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {artisan.review_count} avis
-                  </div>
+                  <div className="text-sm text-gray-500">{artisan.review_count} avis</div>
                   {artisan.updated_at && (
                     <div className="text-sm text-gray-400">
-                      Dernière modification: {new Date(artisan.updated_at).toLocaleDateString('fr-FR')}
+                      Dernière modification:{' '}
+                      {new Date(artisan.updated_at).toLocaleDateString('fr-FR')}
                     </div>
                   )}
                 </div>

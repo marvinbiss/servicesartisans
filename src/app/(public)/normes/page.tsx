@@ -117,7 +117,7 @@ const categories = [
         name: 'DTU 45.10',
         scope: 'Isolation des combles par soufflage',
         requirements:
-          'Résistance thermique minimale R ≥ 7 m².K/W en combles perdus (8 recommandé pour MaPrimeRénov), épaisseur selon le matériau (30-35 cm en laine de verre), pare-vapeur côté chaud, repérage des boîtiers électriques, protection des spots encastrés.',
+          'Résistance thermique minimale R ≥ 7 m².K/W en combles perdus (8 recommandé pour MaPrimeRénov’), épaisseur selon le matériau (30-35 cm en laine de verre), pare-vapeur côté chaud, repérage des boîtiers électriques, protection des spots encastrés.',
         service: '/services/isolation-thermique',
         serviceLabel: 'Trouver un isolateur',
       },

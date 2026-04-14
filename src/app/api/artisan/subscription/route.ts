@@ -27,9 +27,6 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('Subscription GET error:', error)
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

@@ -3,11 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import {
-  QUIZ_QUESTIONS,
-  PASS_THRESHOLD,
-  scoreQuiz,
-} from './quiz-questions'
+import { QUIZ_QUESTIONS, PASS_THRESHOLD, scoreQuiz } from './quiz-questions'
 
 describe('QUIZ_QUESTIONS', () => {
   it('contains exactly 10 questions', () => {

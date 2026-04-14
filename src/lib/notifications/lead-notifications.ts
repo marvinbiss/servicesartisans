@@ -20,7 +20,7 @@ const SITE_NAME = 'ServicesArtisans'
 // ============================================================
 
 interface LeadEventPayload {
-  id: string            // lead_events.id
+  id: string // lead_events.id
   lead_id: string
   event_type: LeadEventType
   provider_id: string | null
@@ -48,18 +48,21 @@ interface NotificationSpec {
 // Event → Notification mapping
 // ============================================================
 
-const EVENT_CONFIG: Record<string, {
-  channels: ('email' | 'in_app')[]
-  targetRoles: ('client' | 'artisan')[]
-}> = {
-  created:    { channels: ['email', 'in_app'], targetRoles: ['client'] },
+const EVENT_CONFIG: Record<
+  string,
+  {
+    channels: ('email' | 'in_app')[]
+    targetRoles: ('client' | 'artisan')[]
+  }
+> = {
+  created: { channels: ['email', 'in_app'], targetRoles: ['client'] },
   dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
-  viewed:     { channels: ['in_app'],          targetRoles: ['client'] },
-  quoted:     { channels: ['email', 'in_app'], targetRoles: ['client'] },
-  accepted:   { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
-  refused:    { channels: ['in_app'],          targetRoles: ['artisan'] },
-  completed:  { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
-  expired:    { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
+  viewed: { channels: ['in_app'], targetRoles: ['client'] },
+  quoted: { channels: ['email', 'in_app'], targetRoles: ['client'] },
+  accepted: { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
+  refused: { channels: ['in_app'], targetRoles: ['artisan'] },
+  completed: { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
+  expired: { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
 }
 
 // ============================================================
@@ -73,11 +76,15 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
   const supabase = createAdminClient()
 
   // Resolve lead details (try devis_requests first, then leads table)
-  let lead: LeadData & { client_email?: string; client_phone?: string; client_id?: string | null } | null = null
+  let lead:
+    | (LeadData & { client_email?: string; client_phone?: string; client_id?: string | null })
+    | null = null
 
   const { data: devisLead } = await supabase
     .from('devis_requests')
-    .select('id, service_name, city, postal_code, client_name, client_email, client_phone, client_id')
+    .select(
+      'id, service_name, city, postal_code, client_name, client_email, client_phone, client_id'
+    )
     .eq('id', event.lead_id)
     .single()
 
@@ -144,7 +151,7 @@ async function deliverNotification(
   eventId: string,
   channel: 'email' | 'in_app',
   target: NotificationTarget,
-  spec: NotificationSpec,
+  spec: NotificationSpec
 ): Promise<void> {
   // Idempotency check: skip if already delivered
   const { data: existing } = await supabase
@@ -216,7 +223,7 @@ interface LeadData {
 function buildNotificationSpec(
   event: LeadEventPayload,
   lead: LeadData,
-  target: NotificationTarget,
+  target: NotificationTarget
 ): NotificationSpec | null {
   const location = lead.city
     ? `${lead.city}${lead.postal_code ? ` (${lead.postal_code})` : ''}`
@@ -227,7 +234,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_created',
         title: 'Demande bien reçue',
-        message: `Votre demande pour "${lead.service_name}" à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
+        message: `Votre demande pour «\u00a0${lead.service_name}\u00a0» à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
         link: '/espace-client/mes-demandes',
         emailSubject: `Demande reçue – ${lead.service_name}`,
         emailHtml: emailTemplate({
@@ -237,7 +244,7 @@ function buildNotificationSpec(
           body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone.`,
           ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
           ctaLabel: 'Suivre ma demande',
-          footer: 'Vous recevrez une notification dès qu\'un artisan vous enverra un devis.',
+          footer: 'Vous recevrez une notification dès qu’un artisan vous enverra un devis.',
         }),
       }
 
@@ -245,7 +252,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_dispatched',
         title: 'Nouveau lead reçu',
-        message: `Demande de ${lead.client_name} pour "${lead.service_name}" à ${location}.`,
+        message: `Demande de ${lead.client_name} pour «\u00a0${lead.service_name}\u00a0» à ${location}.`,
         link: '/espace-artisan/leads',
         emailSubject: `Nouveau lead – ${lead.service_name} à ${location}`,
         emailHtml: emailTemplate({
@@ -263,7 +270,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_viewed',
         title: 'Un artisan a consulté votre demande',
-        message: `Un artisan a pris connaissance de votre demande pour "${lead.service_name}".`,
+        message: `Un artisan a pris connaissance de votre demande pour «\u00a0${lead.service_name}\u00a0».`,
         link: `/espace-client/mes-demandes/${lead.id}`,
         emailSubject: '',
         emailHtml: '',
@@ -274,7 +281,7 @@ function buildNotificationSpec(
       return {
         type: 'quote_received',
         title: 'Nouveau devis reçu',
-        message: `Un artisan vous a envoyé un devis pour "${lead.service_name}"${amount}.`,
+        message: `Un artisan vous a envoyé un devis pour «\u00a0${lead.service_name}\u00a0»${amount}.`,
         link: `/espace-client/mes-demandes/${lead.id}`,
         emailSubject: `Devis reçu – ${lead.service_name}`,
         emailHtml: emailTemplate({
@@ -293,14 +300,14 @@ function buildNotificationSpec(
       return {
         type: 'lead_closed',
         title: 'Devis accepté !',
-        message: `${lead.client_name} a accepté votre devis pour "${lead.service_name}".`,
+        message: `${lead.client_name} a accepté votre devis pour «\u00a0${lead.service_name}\u00a0».`,
         link: '/espace-artisan/leads',
         emailSubject: `Devis accepté – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Votre devis a été accepté',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
-          body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l'intervention.`,
+          body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l’intervention.`,
           ctaUrl: `${SITE_URL}/espace-artisan/leads`,
           ctaLabel: 'Voir le lead',
           footer: '',
@@ -311,7 +318,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_closed',
         title: 'Devis refusé',
-        message: `Votre devis pour "${lead.service_name}" n'a pas été retenu.`,
+        message: `Votre devis pour «\u00a0${lead.service_name}\u00a0» n’a pas été retenu.`,
         link: '/espace-artisan/leads',
         emailSubject: '',
         emailHtml: '',
@@ -322,7 +329,7 @@ function buildNotificationSpec(
         return {
           type: 'lead_closed',
           title: 'Mission terminée',
-          message: `La mission pour "${lead.service_name}" est terminée. Merci de votre confiance !`,
+          message: `La mission pour «\u00a0${lead.service_name}\u00a0» est terminée. Merci de votre confiance !`,
           link: `/espace-client/mes-demandes/${lead.id}`,
           emailSubject: `Mission terminée – ${lead.service_name}`,
           emailHtml: emailTemplate({
@@ -332,14 +339,14 @@ function buildNotificationSpec(
             body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
             ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
             ctaLabel: 'Voir le détail',
-            footer: 'N\'hésitez pas à laisser un avis pour aider d\'autres clients.',
+            footer: "N'hésitez pas à laisser un avis pour aider d'autres clients.",
           }),
         }
       }
       return {
         type: 'lead_closed',
         title: 'Mission terminée',
-        message: `La mission "${lead.service_name}" pour ${lead.client_name} est terminée.`,
+        message: `La mission «\u00a0${lead.service_name}\u00a0» pour ${lead.client_name} est terminée.`,
         link: '/espace-artisan/leads',
         emailSubject: `Mission terminée – ${lead.service_name}`,
         emailHtml: emailTemplate({
@@ -358,7 +365,7 @@ function buildNotificationSpec(
         return {
           type: 'lead_closed',
           title: 'Demande expirée',
-          message: `Votre demande pour "${lead.service_name}" a expiré sans réponse.`,
+          message: `Votre demande pour «\u00a0${lead.service_name}\u00a0» a expiré sans réponse.`,
           link: `/espace-client/mes-demandes/${lead.id}`,
           emailSubject: `Demande expirée – ${lead.service_name}`,
           emailHtml: emailTemplate({
@@ -375,7 +382,7 @@ function buildNotificationSpec(
       return {
         type: 'lead_closed',
         title: 'Lead expiré',
-        message: `Le lead "${lead.service_name}" de ${lead.client_name} a expiré.`,
+        message: `Le lead «\u00a0${lead.service_name}\u00a0» de ${lead.client_name} a expiré.`,
         link: '/espace-artisan/leads',
         emailSubject: `Lead expiré – ${lead.service_name}`,
         emailHtml: emailTemplate({

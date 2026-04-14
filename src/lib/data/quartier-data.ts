@@ -27,7 +27,13 @@ export interface QuartierProfile {
   // Building
   epoque: 'medieval' | 'haussmannien' | '1945-1970' | '1970-2000' | 'post-2000'
   typeLogement: 'appartement' | 'maison' | 'mixte' | 'hlm'
-  typeQuartier: 'historique' | 'résidentiel' | 'commercial' | 'populaire' | 'pavillonnaire' | 'mixte'
+  typeQuartier:
+    | 'historique'
+    | 'résidentiel'
+    | 'commercial'
+    | 'populaire'
+    | 'pavillonnaire'
+    | 'mixte'
   densite: 'haute' | 'moyenne' | 'faible'
 
   // Real estate
@@ -96,7 +102,7 @@ function computeCodePostal(
   ville: Ville,
   quartierName: string,
   quartierIndex: number,
-  quartierCount: number,
+  quartierCount: number
 ): string {
   const { slug, codePostal, departementCode } = ville
 
@@ -114,20 +120,30 @@ function computeCodePostal(
   if (slug === 'lyon') {
     const lyonMap: Record<string, string> = {
       "presqu'ile": '69001',
-      'presquile': '69001',
+      presquile: '69001',
       'vieux lyon': '69005',
       'part-dieu': '69003',
-      'confluence': '69002',
+      confluence: '69002',
       'croix-rousse': '69004',
-      'gerland': '69007',
-      'villeurbanne': '69100',
+      gerland: '69007',
+      villeurbanne: '69100',
     }
     const lower = quartierName.toLowerCase()
     for (const [key, val] of Object.entries(lyonMap)) {
       if (lower.includes(key)) return val
     }
     // Fallback by index
-    const lyonCodes = ['69001', '69002', '69003', '69004', '69005', '69006', '69007', '69008', '69009']
+    const lyonCodes = [
+      '69001',
+      '69002',
+      '69003',
+      '69004',
+      '69005',
+      '69006',
+      '69007',
+      '69008',
+      '69009',
+    ]
     return lyonCodes[quartierIndex % lyonCodes.length]
   }
 
@@ -137,14 +153,17 @@ function computeCodePostal(
       'vieux-port': '13001',
       'le panier': '13002',
       'la joliette': '13002',
-      'castellane': '13004',
+      castellane: '13004',
       'la canebiere': '13001',
-      'canebière': '13001',
-      'prado': '13008',
-      'bonneveine': '13008',
+      canebière: '13001',
+      prado: '13008',
+      bonneveine: '13008',
       'les calanques': '13009',
     }
-    const lower = quartierName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const lower = quartierName
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
     for (const [key, val] of Object.entries(marseilleMap)) {
       if (lower.includes(key.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))) return val
     }
@@ -159,9 +178,8 @@ function computeCodePostal(
       // Increment by 100 for each quartier beyond the first
       const variant = baseNum + quartierIndex * 100
       // Keep within same department prefix
-      const deptPrefix = departementCode.length <= 2
-        ? codePostal.substring(0, 2)
-        : codePostal.substring(0, 3)
+      const deptPrefix =
+        departementCode.length <= 2 ? codePostal.substring(0, 2) : codePostal.substring(0, 3)
       const variantStr = variant.toString().padStart(5, '0')
       // Make sure department prefix stays the same
       if (variantStr.startsWith(deptPrefix)) {
@@ -181,21 +199,21 @@ const REGION_BASE_PRICE: Record<string, number> = {
   'Île-de-France': 4500,
   "Provence-Alpes-Côte d'Azur": 3500,
   'Auvergne-Rhône-Alpes': 3000,
-  'Occitanie': 2500,
+  Occitanie: 2500,
   'Nouvelle-Aquitaine': 2300,
-  'Bretagne': 2200,
+  Bretagne: 2200,
   'Pays de la Loire': 2200,
-  'Normandie': 2000,
+  Normandie: 2000,
   'Hauts-de-France': 2000,
   'Grand Est': 2100,
   'Bourgogne-Franche-Comté': 2000,
   'Centre-Val de Loire': 2000,
-  'Corse': 2800,
-  'Guadeloupe': 2200,
-  'Martinique': 2300,
-  'Guyane': 1800,
+  Corse: 2800,
+  Guadeloupe: 2200,
+  Martinique: 2300,
+  Guyane: 1800,
   'La Réunion': 2400,
-  'Mayotte': 1600,
+  Mayotte: 1600,
   'Nouvelle-Calédonie': 2500,
   'Polynésie française': 2300,
 }
@@ -209,7 +227,10 @@ function getRegionBasePrice(region: string): number {
 // ---------------------------------------------------------------------------
 
 const TYPE_QUARTIER_KEYWORDS: [RegExp, QuartierProfile['typeQuartier']][] = [
-  [/centre|vieux|vieil|vieille|historique|intra-muros|ecusson|écusson|cathédrale|cathedrale/i, 'historique'],
+  [
+    /centre|vieux|vieil|vieille|historique|intra-muros|ecusson|écusson|cathédrale|cathedrale/i,
+    'historique',
+  ],
   [/zone|commercial|marché|marche|halles|gare|forum/i, 'commercial'],
   [/cité|cite|hlm|grand.?ensemble|quartier(?:\s|$)/i, 'populaire'],
   [/parc |résiden|residen|colline|coteau|bois|jardin|pavillon/i, 'pavillonnaire'],
@@ -219,7 +240,7 @@ function computeTypeQuartier(
   quartierName: string,
   quartierIndex: number,
   quartierCount: number,
-  _population: number,
+  _population: number
 ): QuartierProfile['typeQuartier'] {
   const normalized = quartierName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   for (const [regex, type] of TYPE_QUARTIER_KEYWORDS) {
@@ -238,9 +259,18 @@ function computeTypeQuartier(
 // ---------------------------------------------------------------------------
 
 const ERA_KEYWORDS: [RegExp, QuartierProfile['epoque']][] = [
-  [/centre|vieux|vieil|vieille|historique|château|chateau|cathédrale|cathedrale|intra-muros|ecusson|écusson|terra.?vecchia|panier|médiéval/i, 'medieval'],
-  [/gare|république|republique|haussmann|boulevar|faubourg|opera|opéra|presqu|halles/i, 'haussmannien'],
-  [/zone|zac|technopole|sophia|port-marianne|confluence|euroméditerranée|euromediterranee|eco-quartier|écoquartier|atlantis/i, 'post-2000'],
+  [
+    /centre|vieux|vieil|vieille|historique|château|chateau|cathédrale|cathedrale|intra-muros|ecusson|écusson|terra.?vecchia|panier|médiéval/i,
+    'medieval',
+  ],
+  [
+    /gare|république|republique|haussmann|boulevar|faubourg|opera|opéra|presqu|halles/i,
+    'haussmannien',
+  ],
+  [
+    /zone|zac|technopole|sophia|port-marianne|confluence|euroméditerranée|euromediterranee|eco-quartier|écoquartier|atlantis/i,
+    'post-2000',
+  ],
   [/hlm|grand.?ensemble|cité|cite|minguettes|courneuve|4000|3000|quartiers nord/i, '1945-1970'],
 ]
 
@@ -248,7 +278,7 @@ function computeEpoque(
   quartierName: string,
   quartierIndex: number,
   quartierCount: number,
-  population: number,
+  population: number
 ): QuartierProfile['epoque'] {
   const normalized = quartierName.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   for (const [regex, era] of ERA_KEYWORDS) {
@@ -271,25 +301,91 @@ function computeEpoque(
 // Altitude determination
 // ---------------------------------------------------------------------------
 
-const MOUNTAIN_DEPTS = new Set(['04', '05', '06', '09', '15', '31', '38', '39', '43', '48', '63', '64', '65', '66', '73', '74', '2A', '2B', '974'])
-const COASTAL_DEPTS = new Set(['06', '13', '14', '17', '22', '29', '30', '33', '34', '40', '44', '50', '56', '59', '62', '64', '66', '76', '80', '83', '85', '971', '972', '974', '976', '988', '2A', '2B'])
-const HILL_KEYWORDS = /colline|coteau|bellevue|haut|mont(?:agne|redon|martre|ferrand|reynaud)|plateau|butte|cimiez|croix-rousse/i
+const MOUNTAIN_DEPTS = new Set([
+  '04',
+  '05',
+  '06',
+  '09',
+  '15',
+  '31',
+  '38',
+  '39',
+  '43',
+  '48',
+  '63',
+  '64',
+  '65',
+  '66',
+  '73',
+  '74',
+  '2A',
+  '2B',
+  '974',
+])
+const COASTAL_DEPTS = new Set([
+  '06',
+  '13',
+  '14',
+  '17',
+  '22',
+  '29',
+  '30',
+  '33',
+  '34',
+  '40',
+  '44',
+  '50',
+  '56',
+  '59',
+  '62',
+  '64',
+  '66',
+  '76',
+  '80',
+  '83',
+  '85',
+  '971',
+  '972',
+  '974',
+  '976',
+  '988',
+  '2A',
+  '2B',
+])
+const HILL_KEYWORDS =
+  /colline|coteau|bellevue|haut|mont(?:agne|redon|martre|ferrand|reynaud)|plateau|butte|cimiez|croix-rousse/i
 
 // Large cities in mountain departments that are actually in valleys/plains
 const VALLEY_CITIES = new Set([
-  'toulouse', 'perpignan', 'pau', 'bayonne', 'grenoble', 'clermont-ferrand',
-  'nice', 'cannes', 'antibes', 'grasse', 'cagnes-sur-mer',
-  'ajaccio', 'bastia', 'foix', 'aurillac',
+  'toulouse',
+  'perpignan',
+  'pau',
+  'bayonne',
+  'grenoble',
+  'clermont-ferrand',
+  'nice',
+  'cannes',
+  'antibes',
+  'grasse',
+  'cagnes-sur-mer',
+  'ajaccio',
+  'bastia',
+  'foix',
+  'aurillac',
 ])
 
 function computeAltitude(
   quartierName: string,
   deptCode: string,
   villeSlug: string,
-  population: number,
+  population: number
 ): QuartierProfile['altitude'] {
   const nameLower = quartierName.toLowerCase()
-  if (/plage|port|littoral|maritime|bord.?de.?mer|sablettes|calanques|promenade|corniche|giens|capte|salins/i.test(nameLower)) {
+  if (
+    /plage|port|littoral|maritime|bord.?de.?mer|sablettes|calanques|promenade|corniche|giens|capte|salins/i.test(
+      nameLower
+    )
+  ) {
     return 'littoral'
   }
   if (HILL_KEYWORDS.test(nameLower)) return 'colline'
@@ -312,7 +408,7 @@ function computeTypeLogement(
   typeQuartier: QuartierProfile['typeQuartier'],
   epoque: QuartierProfile['epoque'],
   population: number,
-  densite: QuartierProfile['densite'],
+  densite: QuartierProfile['densite']
 ): QuartierProfile['typeLogement'] {
   if (typeQuartier === 'populaire' && epoque === '1945-1970') return 'hlm'
   if (typeQuartier === 'pavillonnaire') return 'maison'
@@ -327,7 +423,7 @@ function computeTypeLogement(
 
 function computeDensite(
   typeQuartier: QuartierProfile['typeQuartier'],
-  population: number,
+  population: number
 ): QuartierProfile['densite'] {
   if (population > 200000) {
     if (typeQuartier === 'pavillonnaire') return 'moyenne'
@@ -348,19 +444,19 @@ function computeDensite(
 // ---------------------------------------------------------------------------
 
 const TYPE_QUARTIER_PRICE_MULT: Record<QuartierProfile['typeQuartier'], number> = {
-  'historique': 1.30,
-  'commercial': 1.10,
-  'populaire': 0.80,
-  'pavillonnaire': 1.15,
-  'résidentiel': 1.05,
-  'mixte': 1.00,
+  historique: 1.3,
+  commercial: 1.1,
+  populaire: 0.8,
+  pavillonnaire: 1.15,
+  résidentiel: 1.05,
+  mixte: 1.0,
 }
 
 function computePrixM2(
   ville: Ville,
   quartierName: string,
   typeQuartier: QuartierProfile['typeQuartier'],
-  population: number,
+  population: number
 ): number {
   // Check for real data first
   const realKey = `${ville.slug}::${quartierName}`
@@ -411,7 +507,7 @@ function computeTauxProprietaires(
   typeQuartier: QuartierProfile['typeQuartier'],
   typeLogement: QuartierProfile['typeLogement'],
   population: number,
-  h: number,
+  h: number
 ): number {
   let base: number
   if (typeLogement === 'hlm') base = 15
@@ -439,7 +535,10 @@ function computeTauxProprietaires(
 
 type DPELetter = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G'
 
-function computeDPE(epoque: QuartierProfile['epoque'], h: number): { dpeMedian: DPELetter; tauxPassoires: number } {
+function computeDPE(
+  epoque: QuartierProfile['epoque'],
+  h: number
+): { dpeMedian: DPELetter; tauxPassoires: number } {
   switch (epoque) {
     case 'medieval':
       return { dpeMedian: 'E', tauxPassoires: 25 + (h % 11) }
@@ -458,21 +557,60 @@ function computeDPE(epoque: QuartierProfile['epoque'], h: number): { dpeMedian: 
 // Natural risks
 // ---------------------------------------------------------------------------
 
-const SEISMIC_DEPTS = new Set(['06', '64', '65', '66', '31', '09', '73', '74', '38', '971', '972', '976'])
+const SEISMIC_DEPTS = new Set([
+  '06',
+  '64',
+  '65',
+  '66',
+  '31',
+  '09',
+  '73',
+  '74',
+  '38',
+  '971',
+  '972',
+  '976',
+])
 const CLAY_DEPTS = new Set(['75', '77', '78', '91', '92', '93', '94', '95', '33', '47', '31', '81'])
 const RADON_DEPTS = new Set(['03', '15', '19', '23', '43', '48', '63', '87', '29', '22', '56'])
-const COASTAL_RISK_DEPTS = new Set(['06', '13', '17', '29', '33', '34', '40', '44', '56', '59', '62', '64', '66', '76', '80', '83', '85', '971', '972', '974', '976'])
+const COASTAL_RISK_DEPTS = new Set([
+  '06',
+  '13',
+  '17',
+  '29',
+  '33',
+  '34',
+  '40',
+  '44',
+  '56',
+  '59',
+  '62',
+  '64',
+  '66',
+  '76',
+  '80',
+  '83',
+  '85',
+  '971',
+  '972',
+  '974',
+  '976',
+])
 
-function computeRisques(
-  quartierName: string,
-  deptCode: string,
-): QuartierProfile['risques'] {
+function computeRisques(quartierName: string, deptCode: string): QuartierProfile['risques'] {
   const risques: QuartierProfile['risques'] = []
-  const nameLower = quartierName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const nameLower = quartierName
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
 
   // Littoral risk
   if (COASTAL_RISK_DEPTS.has(deptCode)) {
-    if (/plage|port(?!e)|mer |maritime|littoral|corniche|sablettes|calanques|giens|capte|promenade.?des.?anglais|croisette|bord.?de|ocean/i.test(nameLower)) {
+    if (
+      /plage|port(?!e)|mer |maritime|littoral|corniche|sablettes|calanques|giens|capte|promenade.?des.?anglais|croisette|bord.?de|ocean/i.test(
+        nameLower
+      )
+    ) {
       risques.push('littoral')
     }
   }
@@ -488,7 +626,11 @@ function computeRisques(
   }
 
   // Flooding
-  if (/riviere|fleuve|pont(?:-| |$)|port(?:-| |$)|berge|quai|ile |île |confluence|estuaire|bord.?de|val.?de/i.test(nameLower)) {
+  if (
+    /riviere|fleuve|pont(?:-| |$)|port(?:-| |$)|berge|quai|ile |île |confluence|estuaire|bord.?de|val.?de/i.test(
+      nameLower
+    )
+  ) {
     risques.push('inondation')
   }
 
@@ -506,17 +648,33 @@ function computeRisques(
 
 const METRO_CITIES = new Set(['paris', 'lyon', 'marseille', 'toulouse', 'lille', 'rennes'])
 const TRAM_CITIES = new Set([
-  'bordeaux', 'strasbourg', 'nantes', 'montpellier', 'nice', 'grenoble',
-  'saint-etienne', 'dijon', 'tours', 'orleans', 'le-mans', 'angers',
-  'brest', 'caen', 'rouen', 'le-havre', 'clermont-ferrand', 'mulhouse',
-  'nancy', 'besancon',
+  'bordeaux',
+  'strasbourg',
+  'nantes',
+  'montpellier',
+  'nice',
+  'grenoble',
+  'saint-etienne',
+  'dijon',
+  'tours',
+  'orleans',
+  'le-mans',
+  'angers',
+  'brest',
+  'caen',
+  'rouen',
+  'le-havre',
+  'clermont-ferrand',
+  'mulhouse',
+  'nancy',
+  'besancon',
 ])
 const IDF_DEPTS = new Set(['75', '77', '78', '91', '92', '93', '94', '95'])
 
 function computeTransport(
   ville: Ville,
   quartierName: string,
-  population: number,
+  population: number
 ): QuartierProfile['transport'] {
   const transport: QuartierProfile['transport'] = []
   const villeSlug = ville.slug
@@ -568,7 +726,7 @@ function computePopulationEstimee(
   population: number,
   quartierIndex: number,
   quartierCount: number,
-  h: number,
+  h: number
 ): number {
   if (quartierCount === 0) return population
   // Base: even distribution with variation
@@ -614,20 +772,40 @@ const DESC_TEMPLATES = [
 ]
 
 const ERA_ADJECTIVES: Record<QuartierProfile['epoque'], string[]> = {
-  'medieval': ['d\'époque médiévale', 'du centre ancien', 'à caractère historique', 'du vieux centre'],
-  'haussmannien': ['de style haussmannien', 'de facture classique', 'du XIXe siècle', 'de l\'ère Haussmann'],
-  '1945-1970': ['d\'après-guerre', 'des années 50-60', 'de la reconstruction', 'des Trente Glorieuses'],
-  '1970-2000': ['des années 80-90', 'de facture contemporaine', 'de la fin du XXe siècle', 'de l\'ère moderne'],
-  'post-2000': ['de construction récente', 'du XXIe siècle', 'aux normes actuelles', 'de dernière génération'],
+  medieval: ["d'époque médiévale", 'du centre ancien', 'à caractère historique', 'du vieux centre'],
+  haussmannien: [
+    'de style haussmannien',
+    'de facture classique',
+    'du XIXe siècle',
+    "de l'ère Haussmann",
+  ],
+  '1945-1970': [
+    "d'après-guerre",
+    'des années 50-60',
+    'de la reconstruction',
+    'des Trente Glorieuses',
+  ],
+  '1970-2000': [
+    'des années 80-90',
+    'de facture contemporaine',
+    'de la fin du XXe siècle',
+    "de l'ère moderne",
+  ],
+  'post-2000': [
+    'de construction récente',
+    'du XXIe siècle',
+    'aux normes actuelles',
+    'de dernière génération',
+  ],
 }
 
 const TYPE_ADJECTIVES: Record<QuartierProfile['typeQuartier'], string[]> = {
-  'historique': ['historique', 'au riche patrimoine', 'chargé d\'histoire', 'de caractère'],
-  'résidentiel': ['résidentiel', 'calme et résidentiel', 'paisible', 'résidentiel et verdoyant'],
-  'commercial': ['commerçant', 'dynamique', 'animé', 'au cœur commercial'],
-  'populaire': ['populaire', 'vivant', 'cosmopolite', 'animé et populaire'],
-  'pavillonnaire': ['pavillonnaire', 'verdoyant', 'résidentiel et arboré', 'calme et arboré'],
-  'mixte': ['mixte', 'polyvalent', 'diversifié', 'aux multiples facettes'],
+  historique: ['historique', 'au riche patrimoine', "chargé d'histoire", 'de caractère'],
+  résidentiel: ['résidentiel', 'calme et résidentiel', 'paisible', 'résidentiel et verdoyant'],
+  commercial: ['commerçant', 'dynamique', 'animé', 'au cœur commercial'],
+  populaire: ['populaire', 'vivant', 'cosmopolite', 'animé et populaire'],
+  pavillonnaire: ['pavillonnaire', 'verdoyant', 'résidentiel et arboré', 'calme et arboré'],
+  mixte: ['mixte', 'polyvalent', 'diversifié', 'aux multiples facettes'],
 }
 
 function generateDescription(
@@ -635,7 +813,7 @@ function generateDescription(
   villeName: string,
   epoque: QuartierProfile['epoque'],
   typeQuartier: QuartierProfile['typeQuartier'],
-  h: number,
+  h: number
 ): string {
   const templateIdx = h % DESC_TEMPLATES.length
   const eraAdj = ERA_ADJECTIVES[epoque][h % ERA_ADJECTIVES[epoque].length]
@@ -649,7 +827,7 @@ function generateDescription(
 // ---------------------------------------------------------------------------
 
 const ATOUT_HISTORIQUE = [
-  'Patrimoine architectural préservé et rues chargées d\'histoire',
+  "Patrimoine architectural préservé et rues chargées d'histoire",
   'Charme du centre ancien avec commerces de proximité',
   'Héritage historique exceptionnel et vie culturelle riche',
   'Architecture remarquable et ambiance pittoresque',
@@ -707,7 +885,7 @@ const ATOUT_RECENT_BBC = [
   'Constructions neuves performantes et espaces aménagés',
   'Habitat récent à haute performance énergétique',
   'Bâtiments modernes et faible empreinte énergétique',
-  'Quartier neuf alliant confort et économies d\'énergie',
+  "Quartier neuf alliant confort et économies d'énergie",
   'Éco-quartier aux standards énergétiques élevés',
 ]
 
@@ -721,7 +899,7 @@ function generateAtout(
   typeQuartier: QuartierProfile['typeQuartier'],
   epoque: QuartierProfile['epoque'],
   transport: QuartierProfile['transport'],
-  h: number,
+  h: number
 ): string {
   // Special cases
   if (epoque === 'post-2000' && (typeQuartier === 'résidentiel' || typeQuartier === 'mixte')) {
@@ -732,12 +910,18 @@ function generateAtout(
   }
 
   switch (typeQuartier) {
-    case 'historique': return ATOUT_HISTORIQUE[h % ATOUT_HISTORIQUE.length]
-    case 'résidentiel': return ATOUT_RESIDENTIEL[h % ATOUT_RESIDENTIEL.length]
-    case 'commercial': return ATOUT_COMMERCIAL[h % ATOUT_COMMERCIAL.length]
-    case 'populaire': return ATOUT_POPULAIRE[h % ATOUT_POPULAIRE.length]
-    case 'pavillonnaire': return ATOUT_PAVILLONNAIRE[h % ATOUT_PAVILLONNAIRE.length]
-    case 'mixte': return ATOUT_MIXTE[h % ATOUT_MIXTE.length]
+    case 'historique':
+      return ATOUT_HISTORIQUE[h % ATOUT_HISTORIQUE.length]
+    case 'résidentiel':
+      return ATOUT_RESIDENTIEL[h % ATOUT_RESIDENTIEL.length]
+    case 'commercial':
+      return ATOUT_COMMERCIAL[h % ATOUT_COMMERCIAL.length]
+    case 'populaire':
+      return ATOUT_POPULAIRE[h % ATOUT_POPULAIRE.length]
+    case 'pavillonnaire':
+      return ATOUT_PAVILLONNAIRE[h % ATOUT_PAVILLONNAIRE.length]
+    case 'mixte':
+      return ATOUT_MIXTE[h % ATOUT_MIXTE.length]
   }
 }
 
@@ -748,7 +932,7 @@ function generateAtout(
 function computeProfile(
   ville: Ville,
   quartierName: string,
-  quartierIndex: number,
+  quartierIndex: number
 ): QuartierProfile {
   const population = parsePop(ville.population)
   const quartierCount = ville.quartiers.length

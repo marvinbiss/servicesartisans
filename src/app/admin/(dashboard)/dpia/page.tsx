@@ -16,16 +16,14 @@ const risques = [
     probabilite: 'Faible',
     gravite: 'Élevée',
     score: 'yellow' as const,
-    mesures:
-      "RLS Supabase, auth obligatoire, rate limiting, logs d'audit",
+    mesures: "RLS Supabase, auth obligatoire, rate limiting, logs d'audit",
   },
   {
     risque: 'Utilisation abusive des coordonnées artisans',
     probabilite: 'Moyenne',
     gravite: 'Moyenne',
     score: 'yellow' as const,
-    mesures:
-      'Téléphones NON affichés publiquement (règle interne), email masqué',
+    mesures: 'Téléphones NON affichés publiquement (règle interne), email masqué',
   },
   {
     risque: 'Scraping massif des données',
@@ -39,24 +37,21 @@ const risques = [
     probabilite: 'Faible',
     gravite: 'Élevée',
     score: 'yellow' as const,
-    mesures:
-      'Pas d\'algorithme de scoring public, pas de trust_score affiché (colonnes supprimées)',
+    mesures: "Pas d'algorithme de scoring public, pas de trust_score affiché (colonnes supprimées)",
   },
   {
     risque: 'Violation de données (data breach)',
     probabilite: 'Faible',
     gravite: 'Élevée',
     score: 'yellow' as const,
-    mesures:
-      'Procédure Art. 33 en place, notification CNIL sous 72h, chiffrement transit',
+    mesures: 'Procédure Art. 33 en place, notification CNIL sous 72h, chiffrement transit',
   },
   {
     risque: 'Opposition ignorée ou retardée',
     probabilite: 'Faible',
     gravite: 'Élevée',
     score: 'yellow' as const,
-    mesures:
-      'noindex immédiat dès demande, traitement admin sous 72h, audit trail',
+    mesures: 'noindex immédiat dès demande, traitement admin sous 72h, audit trail',
   },
 ]
 
@@ -155,9 +150,7 @@ export default function AdminDpiaPage() {
 
         {/* Section 1 : Description du traitement */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            1. Description du traitement
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">1. Description du traitement</h2>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 bg-gray-50 rounded-lg">
               <dt className="text-sm font-medium text-gray-500 mb-1">Nature</dt>
@@ -205,14 +198,12 @@ export default function AdminDpiaPage() {
             <div className="p-4 bg-gray-50 rounded-lg">
               <h3 className="text-sm font-medium text-gray-500 mb-1">Minimisation des données</h3>
               <p className="text-sm text-gray-900">
-                Seules les données professionnelles publiques sont collectées (nom entreprise, SIRET,
-                adresse professionnelle, spécialité)
+                Seules les données professionnelles publiques sont collectées (nom entreprise,
+                SIRET, adresse professionnelle, spécialité)
               </p>
             </div>
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h3 className="text-sm font-medium text-blue-800 mb-1">
-                Données NON collectées
-              </h3>
+              <h3 className="text-sm font-medium text-blue-800 mb-1">Données NON collectées</h3>
               <p className="text-sm text-blue-700">
                 Données personnelles privées, données sensibles (Art. 9), casier judiciaire
               </p>
@@ -228,9 +219,7 @@ export default function AdminDpiaPage() {
 
         {/* Section 3 : Risques identifiés */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            3. Risques identifiés
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">3. Risques identifiés</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -263,9 +252,7 @@ export default function AdminDpiaPage() {
 
         {/* Section 4 : Mesures de protection */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            4. Mesures de protection
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">4. Mesures de protection</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-gray-50 rounded-lg">
               <h3 className="text-sm font-semibold text-gray-900 mb-2">Techniques</h3>
@@ -312,9 +299,7 @@ export default function AdminDpiaPage() {
 
         {/* Section 6 : Plan d'action */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            6. Plan d&apos;action
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">6. Plan d&apos;action</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>

@@ -21,8 +21,8 @@ export default function AdminSubscriptionsPage() {
             Fonctionnalité abonnements non disponible
           </h2>
           <p className="text-sm text-gray-500 max-w-md mx-auto">
-            La gestion des abonnements n'est pas encore configurée pour cette plateforme.
-            Revenez plus tard ou contactez l'équipe technique.
+            La gestion des abonnements n'est pas encore configurée pour cette plateforme. Revenez
+            plus tard ou contactez l'équipe technique.
           </p>
         </div>
       </div>

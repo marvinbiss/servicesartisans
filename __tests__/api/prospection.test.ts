@@ -43,7 +43,10 @@ const contactCreateSchema = z.object({
 const campaignQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled']).optional().default('all'),
+  status: z
+    .enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled'])
+    .optional()
+    .default('all'),
   channel: z.enum(['all', 'email', 'sms', 'whatsapp']).optional().default('all'),
 })
 
@@ -102,13 +105,14 @@ const listCreateSchema = z.object({
 // 5. SCHEMAS DE VALIDATION — Webhooks Twilio
 // ============================================
 
-const twilioWebhookSchema = z.object({
-  MessageSid: z.string().min(1, 'MessageSid is required'),
-  MessageStatus: z.string().min(1, 'MessageStatus is required'),
-  ErrorCode: z.string().optional(),
-  ErrorMessage: z.string().optional(),
-}).passthrough()
-
+const twilioWebhookSchema = z
+  .object({
+    MessageSid: z.string().min(1, 'MessageSid is required'),
+    MessageStatus: z.string().min(1, 'MessageStatus is required'),
+    ErrorCode: z.string().optional(),
+    ErrorMessage: z.string().optional(),
+  })
+  .passthrough()
 
 // ============================================
 // TESTS
@@ -130,7 +134,12 @@ describe('Prospection API — Contacts validation', () => {
 
     it('accepte des paramètres valides', () => {
       const result = contactQuerySchema.safeParse({
-        page: '3', limit: '50', type: 'artisan', search: 'plombier', department: '75', consent: 'opted_in',
+        page: '3',
+        limit: '50',
+        type: 'artisan',
+        search: 'plombier',
+        department: '75',
+        consent: 'opted_in',
       })
       expect(result.success).toBe(true)
       if (result.success) {
@@ -742,13 +751,15 @@ describe('Prospection API — Campaign state machine', () => {
 
 describe('Prospection API — Pagination logic', () => {
   it('calcule correctement offset pour page 1', () => {
-    const page = 1, limit = 20
+    const page = 1,
+      limit = 20
     const offset = (page - 1) * limit
     expect(offset).toBe(0)
   })
 
   it('calcule correctement offset pour page 5 avec limit 10', () => {
-    const page = 5, limit = 10
+    const page = 5,
+      limit = 10
     const offset = (page - 1) * limit
     expect(offset).toBe(40)
   })
@@ -776,7 +787,11 @@ describe('Prospection API — Template rendering', () => {
   function escapeTemplateValue(value: unknown): string {
     if (value === null || value === undefined) return ''
     const str = String(value)
-    return str.replace(/<[^>]*>/g, '').replace(/\{\{/g, '').replace(/\}\}/g, '').slice(0, 500)
+    return str
+      .replace(/<[^>]*>/g, '')
+      .replace(/\{\{/g, '')
+      .replace(/\}\}/g, '')
+      .slice(0, 500)
   }
 
   it('escape null → chaîne vide', () => {
@@ -815,11 +830,13 @@ describe('Prospection API — Template rendering', () => {
   // extractVariables logic
   function extractVariables(template: string): string[] {
     const matches = template.match(/\{\{(\w+)\}\}/g) || []
-    return Array.from(new Set(matches.map(m => m.replace(/\{\{|\}\}/g, ''))))
+    return Array.from(new Set(matches.map((m) => m.replace(/\{\{|\}\}/g, ''))))
   }
 
-  it('extrait les variables d\'un template', () => {
-    const vars = extractVariables('Bonjour {{contact_name}}, votre entreprise {{company_name}} à {{city}}')
+  it("extrait les variables d'un template", () => {
+    const vars = extractVariables(
+      'Bonjour {{contact_name}}, votre entreprise {{company_name}} à {{city}}'
+    )
     expect(vars).toContain('contact_name')
     expect(vars).toContain('company_name')
     expect(vars).toContain('city')
@@ -896,7 +913,9 @@ describe('Prospection API — Files existence & structure', () => {
   }
 
   it('toutes les routes admin utilisent requirePermission ou verifyTwilio/Resend', () => {
-    const adminRoutes = requiredRoutes.filter(r => r.includes('/admin/prospection/') && !r.includes('webhooks'))
+    const adminRoutes = requiredRoutes.filter(
+      (r) => r.includes('/admin/prospection/') && !r.includes('webhooks')
+    )
     for (const route of adminRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
       expect(content).toContain('requirePermission')
@@ -904,15 +923,21 @@ describe('Prospection API — Files existence & structure', () => {
   })
 
   it('les webhooks vérifient les signatures', () => {
-    const twilioRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/webhooks/twilio/route.ts'), 'utf-8')
+    const twilioRoute = readFileSync(
+      resolve(BASE, 'src/app/api/admin/prospection/webhooks/twilio/route.ts'),
+      'utf-8'
+    )
     expect(twilioRoute).toContain('verifyTwilioSignature')
 
-    const resendRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/webhooks/resend/route.ts'), 'utf-8')
+    const resendRoute = readFileSync(
+      resolve(BASE, 'src/app/api/admin/prospection/webhooks/resend/route.ts'),
+      'utf-8'
+    )
     expect(resendRoute).toContain('verifyResendSignature')
   })
 
   it('les routes admin utilisent createAdminClient ou délèguent au service layer', () => {
-    const adminRoutes = requiredRoutes.filter(r => r.includes('/admin/prospection/'))
+    const adminRoutes = requiredRoutes.filter((r) => r.includes('/admin/prospection/'))
     for (const route of adminRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
       // Route must either use createAdminClient directly OR import from service layer
@@ -944,7 +969,7 @@ describe('Prospection API — Files existence & structure', () => {
 
   it('les routes POST avec JSON body utilisent zod pour validation', () => {
     // Only check routes that do request.json() AND don't delegate to service layer
-    const routesWithJsonPost = requiredRoutes.filter(r => {
+    const routesWithJsonPost = requiredRoutes.filter((r) => {
       const content = readFileSync(resolve(BASE, r), 'utf-8')
       if (!content.includes('export async function POST')) return false
       if (!content.includes('request.json()')) return false
@@ -961,16 +986,29 @@ describe('Prospection API — Files existence & structure', () => {
   })
 
   it('les routes import/sync délèguent au service layer', () => {
-    const importRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/contacts/import/route.ts'), 'utf-8')
+    const importRoute = readFileSync(
+      resolve(BASE, 'src/app/api/admin/prospection/contacts/import/route.ts'),
+      'utf-8'
+    )
     expect(importRoute).toContain('importContacts')
 
-    const syncRoute = readFileSync(resolve(BASE, 'src/app/api/admin/prospection/contacts/sync/route.ts'), 'utf-8')
+    const syncRoute = readFileSync(
+      resolve(BASE, 'src/app/api/admin/prospection/contacts/sync/route.ts'),
+      'utf-8'
+    )
     expect(syncRoute).toContain('syncArtisansFromDatabase')
   })
 })
 
 describe('Prospection API — Migration SQL 302 security', () => {
-  const migrationPath = resolve(__dirname, '..', '..', 'supabase', 'migrations', '302_critical_security_fixes.sql')
+  const migrationPath = resolve(
+    __dirname,
+    '..',
+    '..',
+    'supabase',
+    'migrations',
+    '302_critical_security_fixes.sql'
+  )
 
   let sql: string
   try {
@@ -1025,7 +1063,7 @@ describe('Prospection API — Migration SQL 302 security', () => {
   it('AI settings singleton uses deterministic UUID', () => {
     expect(sql).toContain('00000000-0000-0000-0000-000000000001')
     // gen_random_uuid() should only appear in comments, never in executable SQL
-    const nonCommentLines = sql.split('\n').filter(line => !line.trimStart().startsWith('--'))
+    const nonCommentLines = sql.split('\n').filter((line) => !line.trimStart().startsWith('--'))
     const executableSQL = nonCommentLines.join('\n')
     expect(executableSQL).not.toContain('gen_random_uuid()')
   })

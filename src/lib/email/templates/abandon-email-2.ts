@@ -28,13 +28,13 @@ export function getAbandonEmail2(data: { service: string; city: string; unsubscr
 
   <p style="color: #555; line-height: 1.6;">
     Des centaines de propriétaires trouvent chaque mois leur artisan de confiance sur ServicesArtisans.
-    Votre demande de <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong> n'attend que vous.
+    Votre demande de <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong> n’attend que vous.
   </p>
 
   <div style="background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; padding: 20px; margin: 24px 0;">
     <p style="font-weight: 600; margin: 0 0 8px;">⏰ Les artisans se remplissent vite</p>
     <p style="color: #555; margin: 0; line-height: 1.5;">
-      Plus vous attendez, plus les délais d'intervention s'allongent.
+      Plus vous attendez, plus les délais d’intervention s’allongent.
       Recevez vos devis maintenant pour comparer et choisir sereinement.
     </p>
   </div>

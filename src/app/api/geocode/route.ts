@@ -48,7 +48,10 @@ export async function GET(request: NextRequest) {
         const result = geocodeSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Adresse requise', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'Adresse requise', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
@@ -66,7 +69,13 @@ export async function GET(request: NextRequest) {
         const result = reverseSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Coordonnées lon et lat valides requises', details: result.error.flatten() } },
+            {
+              success: false,
+              error: {
+                message: 'Coordonnées lon et lat valides requises',
+                details: result.error.flatten(),
+              },
+            },
             { status: 400 }
           )
         }
@@ -84,7 +93,10 @@ export async function GET(request: NextRequest) {
         const result = citiesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'Requête requise', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
@@ -103,20 +115,26 @@ export async function GET(request: NextRequest) {
         const result = addressesSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête requise', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'Requête requise', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
         const results = await autocompleteAdresse(result.data.q, {
           limit: result.data.limit,
-          postcode: result.data.postcode || undefined
+          postcode: result.data.postcode || undefined,
         })
         return NextResponse.json({ success: true, data: results })
       }
 
       default:
         return NextResponse.json(
-          { success: false, error: { message: 'Action invalide. Utilisez : geocode, reverse, cities, addresses' } },
+          {
+            success: false,
+            error: { message: 'Action invalide. Utilisez : geocode, reverse, cities, addresses' },
+          },
           { status: 400 }
         )
     }

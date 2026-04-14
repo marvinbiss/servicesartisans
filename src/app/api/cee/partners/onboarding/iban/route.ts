@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return badRequestResponse(
       'INVALID_BODY',
-      "Données invalides. Vérifiez IBAN, BIC et titulaire du compte."
+      'Données invalides. Vérifiez IBAN, BIC et titulaire du compte.'
     )
   }
 
@@ -118,16 +118,13 @@ export async function POST(request: NextRequest) {
       })
       return serverErrorResponse('CONFIG_ERROR', 'Configuration serveur incomplète')
     }
-    const { error: rpcError } = await ctx.supabase.rpc(
-      'cee_store_partner_iban',
-      {
-        p_partner_id: partner.id,
-        p_iban: ibanCheck.normalized,
-        p_bic: body.bic,
-        p_titulaire: body.titulaire,
-        p_key: key,
-      }
-    )
+    const { error: rpcError } = await ctx.supabase.rpc('cee_store_partner_iban', {
+      p_partner_id: partner.id,
+      p_iban: ibanCheck.normalized,
+      p_bic: body.bic,
+      p_titulaire: body.titulaire,
+      p_key: key,
+    })
 
     if (rpcError) {
       logger.error('cee-iban: RPC failed', rpcError, {

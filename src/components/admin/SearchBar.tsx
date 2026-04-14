@@ -54,7 +54,10 @@ export function SearchBar({
 
   return (
     <div className={`relative ${className}`}>
-      <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+      <Search
+        className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+        aria-hidden="true"
+      />
       <input
         type="text"
         value={internalValue}

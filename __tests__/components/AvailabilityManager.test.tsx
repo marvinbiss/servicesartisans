@@ -10,7 +10,9 @@ import React from 'react'
 
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
-    const I = ({ className }: { className?: string }) => <span data-testid={`icon-${name}`} className={className} />
+    const I = ({ className }: { className?: string }) => (
+      <span data-testid={`icon-${name}`} className={className} />
+    )
     I.displayName = name
     return I
   }
@@ -63,7 +65,7 @@ describe('AvailabilityManager', () => {
     expect(screen.getByText(/Aucun créneau à venir/)).toBeInTheDocument()
   })
 
-  it('affiche les selects d\'heure dans le formulaire', () => {
+  it("affiche les selects d'heure dans le formulaire", () => {
     render(<AvailabilityManager />)
 
     // Le select de date est présent
@@ -77,7 +79,7 @@ describe('AvailabilityManager', () => {
     expect(screen.getByRole('button', { name: /Ajouter/ })).toBeInTheDocument()
   })
 
-  it('affiche une erreur quand l\'heure de fin est avant l\'heure de début', () => {
+  it("affiche une erreur quand l'heure de fin est avant l'heure de début", () => {
     render(<AvailabilityManager />)
 
     // Par défaut : début=09:00, fin=10:00 → pas d'erreur
@@ -94,7 +96,7 @@ describe('AvailabilityManager', () => {
     expect(addButton).toBeDisabled()
   })
 
-  it('affiche une erreur quand l\'heure de fin est égale à l\'heure de début', () => {
+  it("affiche une erreur quand l'heure de fin est égale à l'heure de début", () => {
     render(<AvailabilityManager />)
 
     // Mettre début et fin à la même heure
@@ -114,7 +116,7 @@ describe('AvailabilityManager', () => {
     expect(screen.getByText('Chargement des créneaux...')).toBeInTheDocument()
   })
 
-  it('affiche le message d\'erreur quand le chargement échoue', () => {
+  it("affiche le message d'erreur quand le chargement échoue", () => {
     swrError = new Error('Network error')
     swrIsLoading = false
 

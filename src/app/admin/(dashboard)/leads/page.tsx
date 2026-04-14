@@ -86,9 +86,12 @@ export default function AdminLeadsPage() {
   if (searchQuery) leadsParams.set('search', searchQuery)
   if (urgencyFilter) leadsParams.set('urgency', urgencyFilter)
 
-  const { data: leadsData, isLoading, error: leadsError, mutate: mutateLeads } = useAdminFetch<LeadsResponse>(
-    `/api/admin/leads?${leadsParams}`
-  )
+  const {
+    data: leadsData,
+    isLoading,
+    error: leadsError,
+    mutate: mutateLeads,
+  } = useAdminFetch<LeadsResponse>(`/api/admin/leads?${leadsParams}`)
 
   // Build artisans URL
   const artisansParams = new URLSearchParams()
@@ -182,7 +185,9 @@ export default function AdminLeadsPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
           <div className="flex flex-wrap gap-4 items-end">
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Ville</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                Ville
+              </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -195,7 +200,9 @@ export default function AdminLeadsPage() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Métier</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                Métier
+              </label>
               <div className="relative">
                 <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -208,7 +215,9 @@ export default function AdminLeadsPage() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Recherche</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                Recherche
+              </label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -221,7 +230,9 @@ export default function AdminLeadsPage() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Urgence</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                Urgence
+              </label>
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
@@ -235,7 +246,10 @@ export default function AdminLeadsPage() {
               </select>
             </div>
             <button
-              onClick={() => { revalidateAll(); setPage(1) }}
+              onClick={() => {
+                revalidateAll()
+                setPage(1)
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <Search className="w-4 h-4" />
@@ -256,7 +270,9 @@ export default function AdminLeadsPage() {
           <button
             onClick={() => setTab('leads')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'leads' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              tab === 'leads'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <FileText className="w-4 h-4 inline mr-1.5" />
@@ -265,7 +281,9 @@ export default function AdminLeadsPage() {
           <button
             onClick={() => setTab('artisans')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'artisans' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              tab === 'artisans'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Users className="w-4 h-4 inline mr-1.5" />
@@ -283,16 +301,54 @@ export default function AdminLeadsPage() {
             {tab === 'leads' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[800px] text-sm" aria-label="Liste des leads">
+                  <table
+                    className="w-full min-w-[400px] sm:min-w-[800px] text-sm"
+                    aria-label="Liste des leads"
+                  >
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lieu</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgence</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignations</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Service
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Lieu
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Client
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Urgence
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Assignations
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Date
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -311,7 +367,9 @@ export default function AdminLeadsPage() {
                           return (
                             <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
                               <td className="px-4 py-3">
-                                <span className="font-medium text-gray-900">{lead.service_name}</span>
+                                <span className="font-medium text-gray-900">
+                                  {lead.service_name}
+                                </span>
                               </td>
                               <td className="px-4 py-3 text-gray-600">
                                 {lead.city ? (
@@ -319,11 +377,15 @@ export default function AdminLeadsPage() {
                                     <MapPin className="w-3.5 h-3.5 text-gray-400" />
                                     {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                                   </span>
-                                ) : '—'}
+                                ) : (
+                                  '—'
+                                )}
                               </td>
                               <td className="px-4 py-3 text-gray-600">{lead.client_name}</td>
                               <td className="px-4 py-3">
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                                <span
+                                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}
+                                >
                                   {urg.label}
                                 </span>
                               </td>
@@ -333,8 +395,13 @@ export default function AdminLeadsPage() {
                                     {leadAssignments.map((a) => {
                                       const st = STATUS_META[a.status] || STATUS_META.pending
                                       return (
-                                        <span key={a.id} className={`px-1.5 py-0.5 rounded text-xs font-medium ${st.cls}`}>
-                                          {providerNames[a.provider_id]?.split(' ')[0] || a.provider_id.slice(0, 6)}: {st.label}
+                                        <span
+                                          key={a.id}
+                                          className={`px-1.5 py-0.5 rounded text-xs font-medium ${st.cls}`}
+                                        >
+                                          {providerNames[a.provider_id]?.split(' ')[0] ||
+                                            a.provider_id.slice(0, 6)}
+                                          : {st.label}
                                         </span>
                                       )
                                     })}
@@ -344,7 +411,10 @@ export default function AdminLeadsPage() {
                                 )}
                               </td>
                               <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                                {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                })}
                               </td>
                               <td className="px-4 py-3">
                                 <button
@@ -376,14 +446,42 @@ export default function AdminLeadsPage() {
             {tab === 'artisans' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[600px] text-sm" aria-label="Liste des artisans pour le dispatch">
+                  <table
+                    className="w-full min-w-[400px] sm:min-w-[600px] text-sm"
+                    aria-label="Liste des artisans pour le dispatch"
+                  >
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Ville</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Nom
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Métier
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Ville
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Vérifié
+                        </th>
+                        <th
+                          scope="col"
+                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                        >
+                          Dernier lead
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -409,7 +507,10 @@ export default function AdminLeadsPage() {
                             </td>
                             <td className="px-4 py-3 text-gray-500 text-xs">
                               {a.last_lead_assigned_at
-                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                  })
                                 : 'Jamais'}
                             </td>
                           </tr>

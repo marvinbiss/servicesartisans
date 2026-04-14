@@ -46,15 +46,9 @@ export function UpgradeButton({ planId, className }: UpgradeButtonProps) {
         disabled={isLoading || planId === 'free'}
         className={className}
       >
-        {planId === 'free'
-          ? 'Plan gratuit'
-          : isLoading
-          ? 'Chargement...'
-          : 'Choisir ce plan'}
+        {planId === 'free' ? 'Plan gratuit' : isLoading ? 'Chargement...' : 'Choisir ce plan'}
       </Button>
-      {error && (
-        <p className="text-red-600 text-sm mt-2">{error}</p>
-      )}
+      {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
     </div>
   )
 }

@@ -53,9 +53,7 @@ function StatItem({
         <div className="font-heading text-lg font-bold text-charcoal-900 leading-tight mt-0.5">
           {value}
         </div>
-        {sublabel && (
-          <div className="text-xs text-charcoal-400 mt-0.5">{sublabel}</div>
-        )}
+        {sublabel && <div className="text-xs text-charcoal-400 mt-0.5">{sublabel}</div>}
       </div>
     </div>
   )
@@ -93,7 +91,13 @@ export default function ImmediateAnswerBlock({
   const svcLower = serviceName.toLowerCase()
 
   // Build visible stat items
-  const stats: { key: string; icon: React.ReactNode; label: string; value: string; sublabel?: string }[] = []
+  const stats: {
+    key: string
+    icon: React.ReactNode
+    label: string
+    value: string
+    sublabel?: string
+  }[] = []
 
   if (hasPricing) {
     const midPrice = Math.round(((effectiveMin ?? 0) + (effectiveMax ?? 0)) / 2)
@@ -188,8 +192,10 @@ export default function ImmediateAnswerBlock({
         {/* Source attribution for LLM citation */}
         <div className="px-5 pb-3 pt-1 border-t border-sand-100">
           <p className="text-xs text-charcoal-400" data-speakable="true">
-            Source : <strong>ServicesArtisans</strong> — Données vérifiées SIREN/SIRET, mise à jour quotidienne.
-            {hasProviders && ` ${providerCount} ${svcLower}${providerCount > 1 ? 's' : ''} référencé${providerCount > 1 ? 's' : ''} à ${villeName}.`}
+            Source : <strong>ServicesArtisans</strong> — Données vérifiées SIREN/SIRET, mise à jour
+            quotidienne.
+            {hasProviders &&
+              ` ${providerCount} ${svcLower}${providerCount > 1 ? 's' : ''} référencé${providerCount > 1 ? 's' : ''} à ${villeName}.`}
           </p>
         </div>
       </div>

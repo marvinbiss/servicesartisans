@@ -116,8 +116,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'IBAN_REQUIRED',
-            message:
-              'Veuillez renseigner votre IBAN avant de générer la convention.',
+            message: 'Veuillez renseigner votre IBAN avant de générer la convention.',
           },
         },
         { status: 409 }
@@ -209,10 +208,7 @@ export async function POST(request: NextRequest) {
       logger.warn('cee-convention: status transition skipped', {
         action: 'cee-convention-transition-skip',
         partnerId: partner.id,
-        error:
-          transError instanceof Error
-            ? transError.message
-            : String(transError),
+        error: transError instanceof Error ? transError.message : String(transError),
       })
     }
 

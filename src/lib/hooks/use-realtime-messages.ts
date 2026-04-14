@@ -27,7 +27,7 @@ interface RealtimeMessage {
 export function useRealtimeMessages(
   conversationId: string | null | undefined,
   onNewMessage: (message: RealtimeMessage) => void,
-  onMessageUpdate?: (message: RealtimeMessage) => void,
+  onMessageUpdate?: (message: RealtimeMessage) => void
 ) {
   // Use a ref to avoid re-subscribing when callback identity changes
   const onNewMessageRef = useRef(onNewMessage)
@@ -54,7 +54,7 @@ export function useRealtimeMessages(
         },
         (payload) => {
           onNewMessageRef.current(payload.new as RealtimeMessage)
-        },
+        }
       )
       .on(
         'postgres_changes',
@@ -66,7 +66,7 @@ export function useRealtimeMessages(
         },
         (payload) => {
           onMessageUpdateRef.current?.(payload.new as RealtimeMessage)
-        },
+        }
       )
       .subscribe()
 

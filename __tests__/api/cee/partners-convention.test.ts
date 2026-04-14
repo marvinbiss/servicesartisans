@@ -132,11 +132,7 @@ describe('POST /api/cee/partners/convention', () => {
       data: { envelopeId: 'env-1', signerUrl: 'https://api.yousign.app/signer/abc' },
     })
     expect(createSignatureRequestMock).toHaveBeenCalled()
-    expect(updateStatusMock).toHaveBeenCalledWith(
-      expect.anything(),
-      'partner-1',
-      'convention_sent'
-    )
+    expect(updateStatusMock).toHaveBeenCalledWith(expect.anything(), 'partner-1', 'convention_sent')
   })
 
   it('rejects cross-site requests (CSRF, 403, MUST-9)', async () => {
@@ -157,7 +153,9 @@ describe('POST /api/cee/partners/convention', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    ;(mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({
+    ;(
+      mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({
       data: { user: null },
       error: null,
     })
@@ -212,9 +210,7 @@ describe('POST /api/cee/partners/convention', () => {
     const { POST } = await import('@/app/api/cee/partners/convention/route')
     const res = (await POST(makeRequest() as never)) as unknown as MockResult
     expect(res.status).toBe(200)
-    expect((res.body as { data: { signerUrl: string } }).data.signerUrl).toContain(
-      'yousign.com'
-    )
+    expect((res.body as { data: { signerUrl: string } }).data.signerUrl).toContain('yousign.com')
   })
 
   it('rate-limits at 10 req/min (11th returns 429, MUST-8)', async () => {

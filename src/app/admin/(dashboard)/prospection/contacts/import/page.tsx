@@ -30,7 +30,9 @@ export default function ImportPage() {
 
   const handleFileChange = (selectedFile: File | null) => {
     if (selectedFile && selectedFile.size > MAX_FILE_SIZE) {
-      setError(`Le fichier est trop volumineux (${(selectedFile.size / 1024 / 1024).toFixed(1)} Mo). Taille maximale : 50 Mo.`)
+      setError(
+        `Le fichier est trop volumineux (${(selectedFile.size / 1024 / 1024).toFixed(1)} Mo). Taille maximale : 50 Mo.`
+      )
       setFile(null)
       return
     }
@@ -48,7 +50,10 @@ export default function ImportPage() {
     formData.append('contact_type', contactType)
 
     try {
-      const res = await fetch('/api/admin/prospection/contacts/import', { method: 'POST', body: formData })
+      const res = await fetch('/api/admin/prospection/contacts/import', {
+        method: 'POST',
+        body: formData,
+      })
       if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
       const data = await res.json()
 
@@ -65,7 +70,7 @@ export default function ImportPage() {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'analyse du fichier')
+        setError("Erreur lors de l'analyse du fichier")
       }
     } finally {
       setLoading(false)
@@ -83,7 +88,10 @@ export default function ImportPage() {
     formData.append('mapping', JSON.stringify(mapping))
 
     try {
-      const res = await fetch('/api/admin/prospection/contacts/import', { method: 'POST', body: formData })
+      const res = await fetch('/api/admin/prospection/contacts/import', {
+        method: 'POST',
+        body: formData,
+      })
       if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
       const data = await res.json()
 
@@ -97,7 +105,7 @@ export default function ImportPage() {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'import')
+        setError("Erreur lors de l'import")
       }
     } finally {
       setLoading(false)
@@ -122,7 +130,10 @@ export default function ImportPage() {
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/contacts" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/contacts"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux contacts
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Import de contacts</h1>
@@ -135,7 +146,12 @@ export default function ImportPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -165,7 +181,9 @@ export default function ImportPage() {
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700"
               />
-              <p className="text-xs text-gray-400 mt-2">CSV avec séparateur ; ou , (encodage UTF-8) — max 50 Mo</p>
+              <p className="text-xs text-gray-400 mt-2">
+                CSV avec séparateur ; ou , (encodage UTF-8) — max 50 Mo
+              </p>
             </div>
           </div>
 
@@ -182,7 +200,9 @@ export default function ImportPage() {
       {/* Step: Mapping */}
       {step === 'mapping' && (
         <div className="bg-white rounded-lg border p-6">
-          <p className="text-sm text-gray-500 mb-4">{totalRows} lignes détectées. Mappez les colonnes :</p>
+          <p className="text-sm text-gray-500 mb-4">
+            {totalRows} lignes détectées. Mappez les colonnes :
+          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {headers.map((h) => (
@@ -191,12 +211,19 @@ export default function ImportPage() {
                 <ArrowRight className="w-4 h-4 text-gray-300 shrink-0" />
                 <select
                   value={mapping[h] || ''}
-                  onChange={(e) => setMapping(prev => ({ ...prev, [h]: (e.target.value || null) as ColumnMapping[string] }))}
+                  onChange={(e) =>
+                    setMapping((prev) => ({
+                      ...prev,
+                      [h]: (e.target.value || null) as ColumnMapping[string],
+                    }))
+                  }
                   aria-label={`Correspondance pour la colonne ${h}`}
                   className="flex-1 px-2 py-1.5 border rounded text-sm"
                 >
                   {fieldOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -207,16 +234,27 @@ export default function ImportPage() {
           {previewRows.length > 0 && (
             <div className="mb-6 overflow-x-auto">
               <p className="text-sm font-medium mb-2">Aperçu (5 premières lignes)</p>
-              <table className="text-xs border min-w-[500px]" aria-label="Aperçu des données importées">
+              <table
+                className="text-xs border min-w-[500px]"
+                aria-label="Aperçu des données importées"
+              >
                 <thead>
                   <tr className="bg-gray-50">
-                    {headers.map(h => <th scope="col" key={h} className="px-2 py-1 border text-left">{h}</th>)}
+                    {headers.map((h) => (
+                      <th scope="col" key={h} className="px-2 py-1 border text-left">
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
                   {previewRows.map((row, i) => (
                     <tr key={i}>
-                      {headers.map(h => <td key={h} className="px-2 py-1 border">{row[h] || ''}</td>)}
+                      {headers.map((h) => (
+                        <td key={h} className="px-2 py-1 border">
+                          {row[h] || ''}
+                        </td>
+                      ))}
                     </tr>
                   ))}
                 </tbody>
@@ -229,7 +267,8 @@ export default function ImportPage() {
             disabled={loading}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? 'Import en cours...' : `Importer ${totalRows} contacts`} <Check className="w-4 h-4" />
+            {loading ? 'Import en cours...' : `Importer ${totalRows} contacts`}{' '}
+            <Check className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -243,11 +282,26 @@ export default function ImportPage() {
           </div>
 
           <div className="space-y-2 text-sm mb-6">
-            <div className="flex justify-between"><span>Lignes analysées</span><span className="font-medium">{result.total_rows}</span></div>
-            <div className="flex justify-between"><span>Valides</span><span className="font-medium text-green-600">{result.valid}</span></div>
-            <div className="flex justify-between"><span>Importés</span><span className="font-medium text-green-600">{result.imported}</span></div>
-            <div className="flex justify-between"><span>Doublons</span><span className="font-medium text-yellow-600">{result.duplicates}</span></div>
-            <div className="flex justify-between"><span>Erreurs</span><span className="font-medium text-red-600">{result.errors}</span></div>
+            <div className="flex justify-between">
+              <span>Lignes analysées</span>
+              <span className="font-medium">{result.total_rows}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Valides</span>
+              <span className="font-medium text-green-600">{result.valid}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Importés</span>
+              <span className="font-medium text-green-600">{result.imported}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Doublons</span>
+              <span className="font-medium text-yellow-600">{result.duplicates}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Erreurs</span>
+              <span className="font-medium text-red-600">{result.errors}</span>
+            </div>
           </div>
 
           {result.error_details.length > 0 && (
@@ -257,7 +311,9 @@ export default function ImportPage() {
               </p>
               <div className="max-h-32 overflow-y-auto text-xs space-y-1">
                 {result.error_details.slice(0, 10).map((err, i) => (
-                  <div key={i} className="text-red-500">Ligne {err.row}: {err.message}</div>
+                  <div key={i} className="text-red-500">
+                    Ligne {err.row}: {err.message}
+                  </div>
                 ))}
               </div>
             </div>

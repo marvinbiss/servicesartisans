@@ -7,10 +7,7 @@ import { getQueueStats } from '@/lib/prospection/message-queue'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const authResult = await requirePermission('prospection', 'read')
     if (!authResult.success) return authResult.error
@@ -23,10 +20,7 @@ export async function GET(
       )
     }
 
-    const [stats, queueStats] = await Promise.all([
-      getCampaignStats(id),
-      getQueueStats(id),
-    ])
+    const [stats, queueStats] = await Promise.all([getCampaignStats(id), getQueueStats(id)])
 
     return NextResponse.json({
       success: true,
@@ -34,6 +28,9 @@ export async function GET(
     })
   } catch (error) {
     logger.error('Campaign stats error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

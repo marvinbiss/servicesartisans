@@ -103,7 +103,7 @@ async function adresseRequest<T>(
         })
 
         const response = await fetch(url.toString(), {
-          headers: { 'Accept': 'application/json' },
+          headers: { Accept: 'application/json' },
         })
 
         const duration = Date.now() - start
@@ -204,10 +204,7 @@ export async function autocompleteAdresse(
  * Autocomplete pour recherche de villes uniquement
  * @param query - Nom de ville ou code postal
  */
-export async function autocompleteVille(
-  query: string,
-  limit = 10
-): Promise<AdresseSuggestion[]> {
+export async function autocompleteVille(query: string, limit = 10): Promise<AdresseSuggestion[]> {
   if (!query || query.length < 2) return []
 
   const params: Record<string, string> = {
@@ -224,7 +221,7 @@ export async function autocompleteVille(
       useSearchCache: true,
     })
 
-    return data.features.map(f => ({
+    return data.features.map((f) => ({
       ...mapFeatureToSuggestion(f),
       label: f.properties.city || f.properties.label,
     }))
@@ -250,10 +247,14 @@ export async function geocoder(adresse: string): Promise<GeocodageResult | null>
   const cacheKey = `geocode:${adresse.toLowerCase().trim()}`
 
   try {
-    const data = await adresseRequest<APIResponse>('/search/', {
-      q: adresse,
-      limit: '1',
-    }, { cacheKey })
+    const data = await adresseRequest<APIResponse>(
+      '/search/',
+      {
+        q: adresse,
+        limit: '1',
+      },
+      { cacheKey }
+    )
 
     if (!data.features || data.features.length === 0) {
       return null
@@ -283,10 +284,7 @@ export async function geocoder(adresse: string): Promise<GeocodageResult | null>
  * @param lon - Longitude
  * @param lat - Latitude
  */
-export async function reverseGeocode(
-  lon: number,
-  lat: number
-): Promise<GeocodageResult | null> {
+export async function reverseGeocode(lon: number, lat: number): Promise<GeocodageResult | null> {
   // Validate coordinates
   if (typeof lon !== 'number' || typeof lat !== 'number') {
     throw new ValidationError('Coordonnées invalides')
@@ -300,10 +298,14 @@ export async function reverseGeocode(
   const cacheKey = `reverse:${lon.toFixed(5)}:${lat.toFixed(5)}`
 
   try {
-    const data = await adresseRequest<APIResponse>('/reverse/', {
-      lon: String(lon),
-      lat: String(lat),
-    }, { cacheKey })
+    const data = await adresseRequest<APIResponse>(
+      '/reverse/',
+      {
+        lon: String(lon),
+        lat: String(lat),
+      },
+      { cacheKey }
+    )
 
     if (!data.features || data.features.length === 0) {
       return null
@@ -332,9 +334,7 @@ export async function reverseGeocode(
  * Récupère toutes les communes d'un code postal
  * @param codePostal - Code postal (ex: "75001")
  */
-export async function getCommunesByCodePostal(
-  codePostal: string
-): Promise<AdresseSuggestion[]> {
+export async function getCommunesByCodePostal(codePostal: string): Promise<AdresseSuggestion[]> {
   if (!isValidCodePostal(codePostal)) {
     throw new ValidationError('Code postal invalide', {
       field: 'codePostal',
@@ -345,14 +345,18 @@ export async function getCommunesByCodePostal(
   const cacheKey = `communes:${codePostal}`
 
   try {
-    const data = await adresseRequest<APIResponse>('/search/', {
-      q: codePostal,
-      type: 'municipality',
-      limit: '20',
-    }, { cacheKey })
+    const data = await adresseRequest<APIResponse>(
+      '/search/',
+      {
+        q: codePostal,
+        type: 'municipality',
+        limit: '20',
+      },
+      { cacheKey }
+    )
 
     return data.features
-      .filter(f => f.properties.postcode === codePostal)
+      .filter((f) => f.properties.postcode === codePostal)
       .map(mapFeatureToSuggestion)
   } catch (error) {
     apiLogger.error('Get communes failed', error as Error, { codePostal })
@@ -363,23 +367,19 @@ export async function getCommunesByCodePostal(
 /**
  * Recherche CSV batch (pour imports massifs)
  */
-export async function geocodeBatch(
-  addresses: string[]
-): Promise<Array<GeocodageResult | null>> {
+export async function geocodeBatch(addresses: string[]): Promise<Array<GeocodageResult | null>> {
   // Process in smaller batches to avoid rate limiting
   const batchSize = 10
   const results: Array<GeocodageResult | null> = []
 
   for (let i = 0; i < addresses.length; i += batchSize) {
     const batch = addresses.slice(i, i + batchSize)
-    const batchResults = await Promise.all(
-      batch.map(addr => geocoder(addr).catch(() => null))
-    )
+    const batchResults = await Promise.all(batch.map((addr) => geocoder(addr).catch(() => null)))
     results.push(...batchResults)
 
     // Small delay between batches
     if (i + batchSize < addresses.length) {
-      await new Promise(r => setTimeout(r, 100))
+      await new Promise((r) => setTimeout(r, 100))
     }
   }
 
@@ -396,7 +396,7 @@ export async function geocodeBatch(
  */
 export function calculerDistance(
   coord1: [number, number], // [lon, lat]
-  coord2: [number, number]  // [lon, lat]
+  coord2: [number, number] // [lon, lat]
 ): number {
   const R = 6371 // Rayon de la Terre en km
   const dLat = toRad(coord2[1] - coord1[1])
@@ -424,9 +424,7 @@ export function filterByRadius<T extends { coordinates: [number, number] }>(
   center: [number, number],
   radiusKm: number
 ): T[] {
-  return items.filter(item =>
-    calculerDistance(item.coordinates, center) <= radiusKm
-  )
+  return items.filter((item) => calculerDistance(item.coordinates, center) <= radiusKm)
 }
 
 /**
@@ -436,8 +434,8 @@ export function sortByDistance<T extends { coordinates: [number, number] }>(
   items: T[],
   center: [number, number]
 ): T[] {
-  return [...items].sort((a, b) =>
-    calculerDistance(a.coordinates, center) - calculerDistance(b.coordinates, center)
+  return [...items].sort(
+    (a, b) => calculerDistance(a.coordinates, center) - calculerDistance(b.coordinates, center)
   )
 }
 
@@ -529,7 +527,10 @@ export function parseAdresse(adresse: string): {
     // City is usually after postal code
     const afterCp = adresse.substring(adresse.indexOf(cpMatch[1]) + 5).trim()
     if (afterCp) {
-      result.ville = afterCp.replace(/^[,\s]+/, '').split(/[,\n]/)[0].trim()
+      result.ville = afterCp
+        .replace(/^[,\s]+/, '')
+        .split(/[,\n]/)[0]
+        .trim()
     }
   }
 
@@ -593,8 +594,8 @@ export const DEPARTEMENTS: Record<string, string> = {
   '17': 'Charente-Maritime',
   '18': 'Cher',
   '19': 'Corrèze',
-  '21': 'Côte-d\'Or',
-  '22': 'Côtes-d\'Armor',
+  '21': "Côte-d'Or",
+  '22': "Côtes-d'Armor",
   '23': 'Creuse',
   '24': 'Dordogne',
   '25': 'Doubs',
@@ -669,7 +670,7 @@ export const DEPARTEMENTS: Record<string, string> = {
   '92': 'Hauts-de-Seine',
   '93': 'Seine-Saint-Denis',
   '94': 'Val-de-Marne',
-  '95': 'Val-d\'Oise',
+  '95': "Val-d'Oise",
   '971': 'Guadeloupe',
   '972': 'Martinique',
   '973': 'Guyane',

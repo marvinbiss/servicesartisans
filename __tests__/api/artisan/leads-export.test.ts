@@ -59,7 +59,7 @@ function buildSupabaseMock(assignments: unknown[] = [], queryError: unknown = nu
   // Make fluent
   for (const key of Object.keys(chain)) {
     if (typeof chain[key] === 'function' && !['single', 'auth'].includes(key)) {
-      (chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
+      ;(chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
     }
   }
 
@@ -144,7 +144,7 @@ describe('GET /api/artisan/leads/export', () => {
         }
         for (const key of Object.keys(chain)) {
           if (typeof chain[key] === 'function' && key !== 'single') {
-            (chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
+            ;(chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
           }
         }
         if (fromIdx === 1) {

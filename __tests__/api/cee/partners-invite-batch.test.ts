@@ -7,12 +7,10 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const mockJsonFn = vi.fn(
-  (body: unknown, init?: { status?: number }) => ({
-    body,
-    status: init?.status ?? 200,
-  })
-)
+const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => ({
+  body,
+  status: init?.status ?? 200,
+}))
 vi.mock('next/server', () => ({
   NextRequest: class NextRequestMock extends Request {},
   NextResponse: {
@@ -99,7 +97,10 @@ afterEach(() => {
 describe('POST /api/cee/partners/invite-batch', () => {
   it('returns 403 for non-admin user (Test 8)', async () => {
     const forbiddenResponse = mockJsonFn(
-      { success: false, error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Permission insuffisante' } },
+      {
+        success: false,
+        error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Permission insuffisante' },
+      },
       { status: 403 }
     )
     requirePermissionMock.mockResolvedValueOnce({
@@ -201,15 +202,14 @@ describe('POST /api/cee/partners/invite-batch', () => {
 
   it('rejects empty providerIds list (400)', async () => {
     const { POST } = await import('@/app/api/cee/partners/invite-batch/route')
-    const res = (await POST(
-      makeRequest({ providerIds: [] }) as never
-    )) as unknown as MockResult
+    const res = (await POST(makeRequest({ providerIds: [] }) as never)) as unknown as MockResult
     expect(res.status).toBe(400)
   })
 
   it('rejects batch > 200 providers (Zod max guard)', async () => {
-    const tooMany = Array.from({ length: 201 }, (_, i) =>
-      `00000000-0000-0000-0000-${String(i).padStart(12, '0')}`
+    const tooMany = Array.from(
+      { length: 201 },
+      (_, i) => `00000000-0000-0000-0000-${String(i).padStart(12, '0')}`
     )
     const { POST } = await import('@/app/api/cee/partners/invite-batch/route')
     const res = (await POST(

@@ -36,7 +36,7 @@ export default function DynamicFooterLinks() {
 
   // Deduplicate (stride can theoretically wrap, though unlikely with 100 items)
   const seen = new Set<string>()
-  const unique = selected.filter(p => {
+  const unique = selected.filter((p) => {
     const key = `${p.serviceSlug}::${p.villeSlug}`
     if (seen.has(key)) return false
     seen.add(key)
@@ -52,7 +52,7 @@ export default function DynamicFooterLinks() {
           Artisans populaires
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1.5">
-          {unique.map(page => (
+          {unique.map((page) => (
             <Link
               key={`${page.serviceSlug}-${page.villeSlug}`}
               href={`/services/${page.serviceSlug}/${page.villeSlug}`}

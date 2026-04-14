@@ -33,10 +33,9 @@ export function validateOrigin(request: NextRequest): boolean {
     return true
   }
 
-  const allowedUrls = [
-    process.env.NEXT_PUBLIC_SITE_URL,
-    process.env.NEXTAUTH_URL,
-  ].filter(Boolean) as string[]
+  const allowedUrls = [process.env.NEXT_PUBLIC_SITE_URL, process.env.NEXTAUTH_URL].filter(
+    Boolean
+  ) as string[]
 
   if (allowedUrls.length === 0) {
     return true

@@ -57,7 +57,11 @@ function SkeletonRow() {
 
 export function RecentActivity({ activity, loading }: RecentActivityProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Activité récente">
+    <div
+      className="bg-white rounded-xl shadow-sm border border-gray-100"
+      role="region"
+      aria-label="Activité récente"
+    >
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
         <h3 className="font-semibold text-gray-900">Activité récente</h3>
         <Link
@@ -81,10 +85,16 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
             const config = typeConfig[item.type] || typeConfig.user
             const Icon = config.icon
             const statusInfo = item.status
-              ? statusLabels[item.status] ?? { label: item.status, classes: 'bg-gray-100 text-gray-700' }
+              ? (statusLabels[item.status] ?? {
+                  label: item.status,
+                  classes: 'bg-gray-100 text-gray-700',
+                })
               : null
             return (
-              <div key={item.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
+              <div
+                key={item.id}
+                className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
+              >
                 <div className={`p-2 rounded-lg shrink-0 ${config.bg}`}>
                   <Icon className="w-5 h-5" />
                 </div>
@@ -95,7 +105,9 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
                 <div className="text-right shrink-0">
                   <p className="text-xs text-gray-400">{formatRelativeTime(item.timestamp)}</p>
                   {statusInfo && (
-                    <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${statusInfo.classes}`}>
+                    <span
+                      className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${statusInfo.classes}`}
+                    >
                       {statusInfo.label}
                     </span>
                   )}

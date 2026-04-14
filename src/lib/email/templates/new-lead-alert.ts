@@ -49,7 +49,7 @@ export function getNewLeadAlertEmail(data: {
 
   <div style="background: #fef3c7; border-radius: 10px; padding: 14px; margin: 20px 0; text-align: center;">
     <p style="margin: 0; font-size: 14px; color: #92400e;">
-      ⚡ <strong>Les artisans qui répondent en moins de 5 minutes ont 21x plus de chances d'être choisis</strong>
+      ⚡ <strong>Les artisans qui répondent en moins de 5 minutes ont 21 fois plus de chances d’être choisis</strong>
     </p>
   </div>
 

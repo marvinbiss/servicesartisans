@@ -75,7 +75,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
   }, [fetchTemplate])
 
   const insertVariable = (key: string) => {
-    setBody(prev => prev + `{{${key}}}`)
+    setBody((prev) => prev + `{{${key}}}`)
   }
 
   const handlePreview = async () => {
@@ -94,7 +94,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       const data = await res.json()
       if (data.success) setPreview(data.data.rendered_body)
     } catch {
-      setActionError('Impossible de générer l\'aperçu')
+      setActionError("Impossible de générer l'aperçu")
     }
   }
 
@@ -180,7 +180,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
     return (
       <div>
         <div className="mb-6">
-          <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+          <Link
+            href="/admin/prospection/templates"
+            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          >
             <ArrowLeft className="w-4 h-4" /> Retour aux modèles
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
@@ -197,7 +200,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/templates"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Modifier le modèle</h1>
@@ -210,11 +216,21 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
+          <button
+            onClick={() => setActionError(null)}
+            aria-label="Fermer le message d'erreur"
+            className="ml-auto"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
       {successMsg && (
-        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div
+          role="status"
+          aria-live="polite"
+          className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"
+        >
           {successMsg}
         </div>
       )}
@@ -281,15 +297,21 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
               onChange={(e) => setBody(e.target.value)}
               rows={8}
               className="w-full px-3 py-2 border rounded-lg text-sm font-mono"
-              placeholder={channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'}
+              placeholder={
+                channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'
+              }
             />
             {channel === 'sms' && (
-              <p className="text-xs text-gray-400 mt-1">{body.length}/160 caractères ({Math.ceil(body.length / 160) || 1} SMS)</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {body.length}/160 caractères ({Math.ceil(body.length / 160) || 1} SMS)
+              </p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Prompt IA pour les réponses (optionnel)</label>
+            <label className="block text-sm font-medium mb-1">
+              Prompt IA pour les réponses (optionnel)
+            </label>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
@@ -300,7 +322,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
           </div>
 
           <div className="flex gap-2 pt-4">
-            <button onClick={handlePreview} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
+            <button
+              onClick={handlePreview}
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+            >
               <Eye className="w-4 h-4" /> Aperçu
             </button>
             <button
@@ -376,11 +401,15 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-500">Créé le</span>
-                <span className="text-gray-700">{new Date(template.created_at).toLocaleDateString('fr-FR')}</span>
+                <span className="text-gray-700">
+                  {new Date(template.created_at).toLocaleDateString('fr-FR')}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Modifié le</span>
-                <span className="text-gray-700">{new Date(template.updated_at).toLocaleDateString('fr-FR')}</span>
+                <span className="text-gray-700">
+                  {new Date(template.updated_at).toLocaleDateString('fr-FR')}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Actif</span>
@@ -393,7 +422,9 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   <span className="text-gray-500">Variables utilisées</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {template.variables.map((v) => (
-                      <span key={v} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded">{v}</span>
+                      <span key={v} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded">
+                        {v}
+                      </span>
                     ))}
                   </div>
                 </div>

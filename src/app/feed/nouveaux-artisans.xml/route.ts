@@ -1,7 +1,11 @@
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 
 function escapeXml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 export const revalidate = 86400 // 24h
@@ -21,13 +25,17 @@ export async function GET() {
       .limit(100)
 
     if (data) {
-      items = data.map(p => `    <item>
+      items = data
+        .map(
+          (p) => `    <item>
       <title>${escapeXml(p.name || 'Artisan')}</title>
       <link>${SITE_URL}/artisans/${p.slug || p.stable_id}</link>
       <guid isPermaLink="true">${SITE_URL}/artisans/${p.slug || p.stable_id}</guid>
       <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>
       <description>${escapeXml(`${p.name} à ${p.address_city || 'France'} — Artisan référencé sur ${SITE_NAME}`)}</description>
-    </item>`).join('\n')
+    </item>`
+        )
+        .join('\n')
     }
   } catch {
     // DB unavailable — return empty feed

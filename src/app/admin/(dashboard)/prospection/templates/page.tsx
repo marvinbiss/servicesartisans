@@ -54,7 +54,12 @@ export default function TemplatesPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -84,9 +89,13 @@ export default function TemplatesPage() {
                 <ChannelIcon channel={tmpl.channel} className="w-4 h-4 text-gray-400" />
               </div>
               <div className="flex gap-2 mb-3">
-                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{tmpl.channel}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">
+                  {tmpl.channel}
+                </span>
                 {tmpl.audience_type && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 capitalize">{tmpl.audience_type}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 capitalize">
+                    {tmpl.audience_type}
+                  </span>
                 )}
               </div>
               {tmpl.subject && <p className="text-sm text-gray-500 mb-1">Sujet: {tmpl.subject}</p>}

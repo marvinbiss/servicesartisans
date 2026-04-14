@@ -12,7 +12,7 @@ interface DateRangePickerProps {
 }
 
 const DEFAULT_PRESETS = [
-  { label: 'Aujourd\'hui', days: 0 },
+  { label: "Aujourd'hui", days: 0 },
   { label: '7 derniers jours', days: 7 },
   { label: '30 derniers jours', days: 30 },
   { label: '90 derniers jours', days: 90 },
@@ -156,9 +156,7 @@ export function DateRangePicker({
         className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
       >
         <Calendar className="w-4 h-4 text-gray-400" />
-        <span className={startDate ? 'text-gray-900' : 'text-gray-500'}>
-          {getDisplayText()}
-        </span>
+        <span className={startDate ? 'text-gray-900' : 'text-gray-500'}>{getDisplayText()}</span>
         {(startDate || endDate) && (
           <button
             onClick={(e) => {
@@ -197,7 +195,9 @@ export function DateRangePicker({
               {/* Month navigation */}
               <div className="flex items-center justify-between mb-4">
                 <button
-                  onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
+                  onClick={() =>
+                    setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))
+                  }
                   className="p-1 hover:bg-gray-100 rounded"
                   aria-label="Mois précédent"
                 >
@@ -207,7 +207,9 @@ export function DateRangePicker({
                   {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                 </span>
                 <button
-                  onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
+                  onClick={() =>
+                    setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))
+                  }
                   className="p-1 hover:bg-gray-100 rounded"
                   aria-label="Mois suivant"
                 >
@@ -243,10 +245,10 @@ export function DateRangePicker({
                         selected
                           ? 'bg-blue-600 text-white'
                           : inRange
-                          ? 'bg-blue-100 text-blue-700'
-                          : today
-                          ? 'bg-gray-100 text-gray-900 font-medium'
-                          : 'text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-100 text-blue-700'
+                            : today
+                              ? 'bg-gray-100 text-gray-900 font-medium'
+                              : 'text-gray-700 hover:bg-gray-100'
                       }`}
                     >
                       {date.getDate()}

@@ -61,7 +61,11 @@ export default function AdminProvidersPage() {
     open: false,
     providerId: '',
   })
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; providerId: string; providerName: string }>({
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean
+    providerId: string
+    providerName: string
+  }>({
     open: false,
     providerId: '',
     providerName: '',
@@ -118,7 +122,8 @@ export default function AdminProvidersPage() {
         body: updates,
       })
 
-      const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
+      const actionText =
+        action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
       setToast({ message: `Artisan ${actionText} avec succès !`, type: 'success' })
 
       mutate()
@@ -150,28 +155,39 @@ export default function AdminProvidersPage() {
 
   const getStatusBadge = (provider: Provider) => {
     if (!provider.is_active) {
-      return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">Suspendu</span>
+      return (
+        <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+          Suspendu
+        </span>
+      )
     }
     if (!provider.is_verified) {
-      return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">En attente</span>
+      return (
+        <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
+          En attente
+        </span>
+      )
     }
-    return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Vérifié</span>
+    return (
+      <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+        Vérifié
+      </span>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gray-50" aria-label="Gestion des artisans">
       {/* Toast notification */}
-      <Toast
-        toast={toast}
-        onClose={() => setToast(null)}
-      />
+      <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Gestion des Artisans</h1>
             <p className="text-gray-500 mt-1">
-              {total > 0 ? `${total} artisan${total > 1 ? 's' : ''} au total` : 'Gérez les profils et vérifications des artisans'}
+              {total > 0
+                ? `${total} artisan${total > 1 ? 's' : ''} au total`
+                : 'Gérez les profils et vérifications des artisans'}
             </p>
           </div>
           <button
@@ -215,9 +231,13 @@ export default function AdminProvidersPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {f === 'all' ? 'Tous' :
-                   f === 'verified' ? 'Vérifiés' :
-                   f === 'pending' ? 'En attente' : 'Suspendus'}
+                  {f === 'all'
+                    ? 'Tous'
+                    : f === 'verified'
+                      ? 'Vérifiés'
+                      : f === 'pending'
+                        ? 'En attente'
+                        : 'Suspendus'}
                 </button>
               ))}
             </div>
@@ -259,25 +279,46 @@ export default function AdminProvidersPage() {
               )}
 
               <div className="overflow-x-auto relative">
-                <table className="w-full min-w-[500px] sm:min-w-[900px]" aria-label="Liste des artisans">
+                <table
+                  className="w-full min-w-[500px] sm:min-w-[900px]"
+                  aria-label="Liste des artisans"
+                >
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Artisan
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Service
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Localisation
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Statut
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Avis
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -293,7 +334,9 @@ export default function AdminProvidersPage() {
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">{provider.name}</p>
                               {provider.source === 'sirene-open' && (
-                                <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">SIRENE</span>
+                                <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">
+                                  SIRENE
+                                </span>
                               )}
                             </div>
                             {provider.email ? (
@@ -317,7 +360,9 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.address_city || 'Non renseigné'}</span>
+                            <span className="text-gray-900">
+                              {provider.address_city || 'Non renseigné'}
+                            </span>
                           </div>
                           {provider.address_region && (
                             <p className="text-sm text-gray-500">{provider.address_region}</p>
@@ -329,7 +374,9 @@ export default function AdminProvidersPage() {
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                               <span className="font-medium">{provider.rating_average}</span>
-                              <span className="text-gray-500 text-sm">({provider.review_count})</span>
+                              <span className="text-gray-500 text-sm">
+                                ({provider.review_count})
+                              </span>
                             </div>
                           ) : (
                             <span className="text-gray-400 text-sm">Aucun avis</span>
@@ -376,7 +423,13 @@ export default function AdminProvidersPage() {
 
                             {/* Delete button */}
                             <button
-                              onClick={() => setDeleteModal({ open: true, providerId: provider.id, providerName: provider.name })}
+                              onClick={() =>
+                                setDeleteModal({
+                                  open: true,
+                                  providerId: provider.id,
+                                  providerName: provider.name,
+                                })
+                              }
                               disabled={actionLoading === provider.id}
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                               title="Supprimer définitivement"

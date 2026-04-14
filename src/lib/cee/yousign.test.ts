@@ -37,10 +37,7 @@ describe('verifyYousignWebhook', () => {
     const verify = await getVerify()
     const body = '{"event":"x"}'
     const ts = Math.floor(Date.now() / 1000).toString()
-    const sig = crypto
-      .createHmac('sha256', SECRET)
-      .update(`${ts}.${body}`)
-      .digest('hex')
+    const sig = crypto.createHmac('sha256', SECRET).update(`${ts}.${body}`).digest('hex')
 
     expect(verify(body, sig, ts)).toBe(true)
   })
@@ -104,7 +101,8 @@ describe('createSignatureRequest', () => {
   })
 
   it('enchaîne draft → document → signer → activate et retourne envelopeId', async () => {
-    const fetchMock = vi.fn()
+    const fetchMock = vi
+      .fn()
       // 1. draft
       .mockResolvedValueOnce({
         ok: true,
@@ -164,7 +162,8 @@ describe('createSignatureRequest', () => {
   })
 
   it('retry 1× sur 5xx puis succès', async () => {
-    const fetchMock = vi.fn()
+    const fetchMock = vi
+      .fn()
       .mockResolvedValueOnce({ ok: false, status: 503, text: async () => 'down' })
       .mockResolvedValueOnce({ ok: true, status: 201, json: async () => ({ id: 'env_ok' }) })
       .mockResolvedValueOnce({ ok: true, status: 201, json: async () => ({ id: 'doc' }) })

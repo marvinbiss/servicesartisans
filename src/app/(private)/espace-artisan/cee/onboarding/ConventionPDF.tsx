@@ -16,14 +16,7 @@
  *   const buffer = await renderToBuffer(<ConventionPDF artisanName="..." artisanSiret="..." />)
  */
 
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-} from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
 
 // Register base fonts (safe fallback — no external CDN required)
 Font.registerHyphenationCallback((word) => [word])
@@ -206,27 +199,19 @@ export default function ConventionPDF({
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>SA Energy</Text>
-          <Text style={styles.subtitle}>
-            ServicesArtisans Energy SAS — mandataire CEE
-          </Text>
+          <Text style={styles.subtitle}>ServicesArtisans Energy SAS — mandataire CEE</Text>
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>
-          CONVENTION DE MANDAT CEE
-        </Text>
+        <Text style={styles.title}>CONVENTION DE MANDAT CEE</Text>
         <Text style={styles.titleSub}>
-          Arrêté du 2 novembre 2023 relatif aux obligations d&apos;économies
-          d&apos;énergie (article R.221-1 du Code de l&apos;énergie)
+          Arrêté du 2 novembre 2023 relatif aux obligations d&apos;économies d&apos;énergie (article
+          R.221-1 du Code de l&apos;énergie)
         </Text>
 
         {/* === MENTION 1 : Identification des parties === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 1 — IDENTIFICATION DES PARTIES
-        </Text>
-        <Text style={styles.paragraph}>
-          La présente convention est conclue entre :
-        </Text>
+        <Text style={styles.sectionTitle}>ARTICLE 1 — IDENTIFICATION DES PARTIES</Text>
+        <Text style={styles.paragraph}>La présente convention est conclue entre :</Text>
 
         <View style={styles.infoBox}>
           <Text style={[styles.paragraph, { fontFamily: 'Helvetica-Bold', marginBottom: 2 }]}>
@@ -252,9 +237,7 @@ export default function ConventionPDF({
           </View>
         </View>
 
-        <Text style={[styles.paragraph, { marginTop: 8 }]}>
-          Et :
-        </Text>
+        <Text style={[styles.paragraph, { marginTop: 8 }]}>Et :</Text>
 
         <View style={styles.infoBox}>
           <Text style={[styles.paragraph, { fontFamily: 'Helvetica-Bold', marginBottom: 2 }]}>
@@ -276,148 +259,132 @@ export default function ConventionPDF({
             <View style={styles.tableRow}>
               <Text style={styles.tableCellLabel}>Qualification RGE</Text>
               <Text style={styles.tableCell}>
-                Vérifiée via ADEME (base ADEME – service{' '}
-                ServicesArtisans)
+                Vérifiée via ADEME (base ADEME – service ServicesArtisans)
               </Text>
             </View>
           </View>
         </View>
 
         {/* === MENTION 2 : Périmètre des opérations === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 2 — PÉRIMÈTRE DES OPÉRATIONS ÉLIGIBLES CEE
-        </Text>
+        <Text style={styles.sectionTitle}>ARTICLE 2 — PÉRIMÈTRE DES OPÉRATIONS ÉLIGIBLES CEE</Text>
         <Text style={styles.paragraph}>
-          La présente convention porte sur les opérations standardisées
-          d&apos;économies d&apos;énergie définies à l&apos;article R.221-1 du
-          Code de l&apos;énergie et dont la liste est fixée par arrêté :
+          La présente convention porte sur les opérations standardisées d&apos;économies
+          d&apos;énergie définies à l&apos;article R.221-1 du Code de l&apos;énergie et dont la
+          liste est fixée par arrêté :
         </Text>
         <Text style={styles.listItem}>• BAR-TH-171 — Pompe à chaleur air/eau (logements)</Text>
-        <Text style={styles.listItem}>• BAR-TH-127 — Ventilation mécanique contrôlée double flux</Text>
+        <Text style={styles.listItem}>
+          • BAR-TH-127 — Ventilation mécanique contrôlée double flux
+        </Text>
         <Text style={styles.listItem}>• BAR-TH-113 — Chaudière à condensation</Text>
         <Text style={styles.listItem}>• BAR-EN-101 — Isolation des combles</Text>
         <Text style={styles.listItem}>• BAR-EN-102 — Isolation des murs</Text>
-        <Text style={styles.listItem}>• Et toute autre fiche d&apos;opération standardisée applicable</Text>
+        <Text style={styles.listItem}>
+          • Et toute autre fiche d&apos;opération standardisée applicable
+        </Text>
         <Text style={styles.paragraph}>
-          Le périmètre géographique est la France métropolitaine et les
-          départements d&apos;outre-mer. Les opérations sont réalisées au
-          bénéfice de personnes physiques ou morales (ménages, bailleurs).
+          Le périmètre géographique est la France métropolitaine et les départements
+          d&apos;outre-mer. Les opérations sont réalisées au bénéfice de personnes physiques ou
+          morales (ménages, bailleurs).
         </Text>
 
         {/* === MENTION 3 : Obligations du mandataire === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 3 — OBLIGATIONS DU MANDATAIRE (SA ENERGY)
-        </Text>
-        <Text style={styles.paragraph}>
-          SA Energy s&apos;engage à :
+        <Text style={styles.sectionTitle}>ARTICLE 3 — OBLIGATIONS DU MANDATAIRE (SA ENERGY)</Text>
+        <Text style={styles.paragraph}>SA Energy s&apos;engage à :</Text>
+        <Text style={styles.listItem}>
+          3.1. Monter les dossiers CEE dans le respect des exigences PNCEE (Programme National CEE)
+          et des fiches d&apos;opérations standardisées.
         </Text>
         <Text style={styles.listItem}>
-          3.1. Monter les dossiers CEE dans le respect des exigences PNCEE
-          (Programme National CEE) et des fiches d&apos;opérations
-          standardisées.
+          3.2. Déposer les dossiers auprès du délégataire en son nom et pour le compte de
+          l&apos;artisan mandant.
         </Text>
         <Text style={styles.listItem}>
-          3.2. Déposer les dossiers auprès du délégataire en son nom et pour le
-          compte de l&apos;artisan mandant.
+          3.3. Assurer le suivi administratif et répondre aux demandes de compléments du PNCEE.
         </Text>
         <Text style={styles.listItem}>
-          3.3. Assurer le suivi administratif et répondre aux demandes de
-          compléments du PNCEE.
-        </Text>
-        <Text style={styles.listItem}>
-          3.4. Conserver l&apos;ensemble des pièces justificatives pendant 10
-          ans conformément à l&apos;arrêté du 2 novembre 2023.
+          3.4. Conserver l&apos;ensemble des pièces justificatives pendant 10 ans conformément à
+          l&apos;arrêté du 2 novembre 2023.
         </Text>
         <Text style={styles.listItem}>
           3.5. Informer l&apos;artisan de tout contrôle PNCEE et des résultats.
         </Text>
         <Text style={styles.listItem}>
-          3.6. Traiter les données personnelles (IBAN) dans le respect du RGPD
-          et de la politique de sécurité SA Energy (chiffrement AES-256).
+          3.6. Traiter les données personnelles (IBAN) dans le respect du RGPD et de la politique de
+          sécurité SA Energy (chiffrement AES-256).
         </Text>
 
         {/* === MENTION 4 : Conditions de rémunération === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 4 — CONDITIONS DE RÉMUNÉRATION
+        <Text style={styles.sectionTitle}>ARTICLE 4 — CONDITIONS DE RÉMUNÉRATION</Text>
+        <Text style={styles.paragraph}>
+          L&apos;artisan perçoit une prime CEE calculée sur la base des volumes de kWh CUMAC validés
+          par le PNCEE, selon la grille tarifaire en vigueur communiquée lors de l&apos;invitation.
         </Text>
         <Text style={styles.paragraph}>
-          L&apos;artisan perçoit une prime CEE calculée sur la base des volumes
-          de kWh CUMAC validés par le PNCEE, selon la grille tarifaire en
-          vigueur communiquée lors de l&apos;invitation.
-        </Text>
-        <Text style={styles.paragraph}>
-          Le taux de commission de SA Energy est défini dans l&apos;annexe
-          tarifaire communiquée séparément lors de l&apos;onboarding. Les
-          paiements sont effectués par virement bancaire sur le compte IBAN
-          déclaré dans la présente convention, sous 30 jours suivant la
+          Le taux de commission de SA Energy est défini dans l&apos;annexe tarifaire communiquée
+          séparément lors de l&apos;onboarding. Les paiements sont effectués par virement bancaire
+          sur le compte IBAN déclaré dans la présente convention, sous 30 jours suivant la
           validation définitive du dossier par le PNCEE.
         </Text>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>
-            Important : le montant des primes est conditionné à la conformité
-            complète du dossier (qualification RGE en cours de validité, pièces
-            justificatives complètes, absence de non-conformité PNCEE).
+            Important : le montant des primes est conditionné à la conformité complète du dossier
+            (qualification RGE en cours de validité, pièces justificatives complètes, absence de
+            non-conformité PNCEE).
           </Text>
         </View>
 
         {/* === MENTION 5 : Durée et résiliation === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 5 — DURÉE ET CONDITIONS DE RÉSILIATION
+        <Text style={styles.sectionTitle}>ARTICLE 5 — DURÉE ET CONDITIONS DE RÉSILIATION</Text>
+        <Text style={styles.paragraph}>
+          La présente convention est conclue pour une durée indéterminée à compter de la date de
+          signature électronique par l&apos;artisan. Elle peut être résiliée par l&apos;une ou
+          l&apos;autre des parties :
+        </Text>
+        <Text style={styles.listItem}>
+          • Par lettre recommandée avec accusé de réception, avec un préavis de 30 jours.
+        </Text>
+        <Text style={styles.listItem}>
+          • Sans préavis en cas de faute grave : non-respect des exigences qualité PNCEE, fraude
+          documentaire ou fourniture de pièces falsifiées.
+        </Text>
+        <Text style={styles.listItem}>
+          • De plein droit en cas de perte de la qualification RGE requise pour les opérations
+          couvertes.
         </Text>
         <Text style={styles.paragraph}>
-          La présente convention est conclue pour une durée indéterminée à
-          compter de la date de signature électronique par l&apos;artisan. Elle
-          peut être résiliée par l&apos;une ou l&apos;autre des parties :
-        </Text>
-        <Text style={styles.listItem}>
-          • Par lettre recommandée avec accusé de réception, avec un préavis de
-          30 jours.
-        </Text>
-        <Text style={styles.listItem}>
-          • Sans préavis en cas de faute grave : non-respect des exigences
-          qualité PNCEE, fraude documentaire ou fourniture de pièces
-          falsifiées.
-        </Text>
-        <Text style={styles.listItem}>
-          • De plein droit en cas de perte de la qualification RGE requise pour
-          les opérations couvertes.
-        </Text>
-        <Text style={styles.paragraph}>
-          La résiliation n&apos;affecte pas les dossiers en cours de traitement
-          par le PNCEE à la date de résiliation.
+          La résiliation n&apos;affecte pas les dossiers en cours de traitement par le PNCEE à la
+          date de résiliation.
         </Text>
 
         {/* === MENTION 6 : Dispositions CEE === */}
-        <Text style={styles.sectionTitle}>
-          ARTICLE 6 — DISPOSITIONS SPÉCIFIQUES CEE
-        </Text>
+        <Text style={styles.sectionTitle}>ARTICLE 6 — DISPOSITIONS SPÉCIFIQUES CEE</Text>
         <Text style={styles.paragraph}>
-          Conformément à l&apos;arrêté du 2 novembre 2023 et à la loi
-          n°&nbsp;2025-594, l&apos;artisan mandant reconnaît et accepte :
+          Conformément à l&apos;arrêté du 2 novembre 2023 et à la loi n°&nbsp;2025-594,
+          l&apos;artisan mandant reconnaît et accepte :
         </Text>
         <Text style={styles.listItem}>
-          6.1. Que l&apos;artisan est responsable de la conformité RGE au
-          moment du devis ET de la facture.
+          6.1. Que l&apos;artisan est responsable de la conformité RGE au moment du devis ET de la
+          facture.
         </Text>
         <Text style={styles.listItem}>
-          6.2. Que le bénéficiaire (client final) doit signer le mandat CEE
-          AVANT le début des travaux.
+          6.2. Que le bénéficiaire (client final) doit signer le mandat CEE AVANT le début des
+          travaux.
         </Text>
         <Text style={styles.listItem}>
-          6.3. Que toute non-conformité détectée après dépôt engage la
-          responsabilité de l&apos;artisan (retenue ou rejet du dossier).
+          6.3. Que toute non-conformité détectée après dépôt engage la responsabilité de
+          l&apos;artisan (retenue ou rejet du dossier).
         </Text>
         <Text style={styles.listItem}>
-          6.4. Que les dossiers doivent être déposés dans les 12 mois suivant la
-          fin des travaux.
+          6.4. Que les dossiers doivent être déposés dans les 12 mois suivant la fin des travaux.
         </Text>
         <Text style={styles.listItem}>
-          6.5. Que les contrôles PNCEE peuvent intervenir à tout moment et que
-          l&apos;artisan doit y coopérer.
+          6.5. Que les contrôles PNCEE peuvent intervenir à tout moment et que l&apos;artisan doit y
+          coopérer.
         </Text>
         <Text style={styles.listItem}>
-          6.6. Que les présentes dispositions s&apos;appliquent pour toute la
-          durée de la période d&apos;obligations en cours (5e période CEE).
+          6.6. Que les présentes dispositions s&apos;appliquent pour toute la durée de la période
+          d&apos;obligations en cours (5e période CEE).
         </Text>
 
         {/* Signature area */}
@@ -429,9 +396,7 @@ export default function ConventionPDF({
             <Text style={styles.signatureSubText}>Date : {conventionDate}</Text>
           </View>
           <View style={styles.signatureBlock}>
-            <Text style={styles.signatureLabel}>
-              Pour {artisanName} (Mandant)
-            </Text>
+            <Text style={styles.signatureLabel}>Pour {artisanName} (Mandant)</Text>
             <View style={styles.signatureLine} />
             <Text style={styles.signatureSubText}>Signature électronique via Yousign</Text>
             <Text style={styles.signatureSubText}>Date : en attente</Text>
@@ -440,8 +405,8 @@ export default function ConventionPDF({
 
         {/* Footer */}
         <Text style={styles.footer}>
-          ServicesArtisans Energy SAS — Convention mandataire CEE — arrêté
-          du 2 novembre 2023 — Document généré le {conventionDate}
+          ServicesArtisans Energy SAS — Convention mandataire CEE — arrêté du 2 novembre 2023 —
+          Document généré le {conventionDate}
           {envelopeId ? ` — Réf. Yousign : ${envelopeId}` : ''}
         </Text>
       </Page>

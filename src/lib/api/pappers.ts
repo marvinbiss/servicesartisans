@@ -155,7 +155,7 @@ async function pappersRequest<T>(
           })
 
           const response = await fetch(url.toString(), {
-            headers: { 'Accept': 'application/json' },
+            headers: { Accept: 'application/json' },
             signal: AbortSignal.timeout(10000),
           })
 
@@ -228,7 +228,10 @@ export async function getEntrepriseParSiret(siret: string): Promise<EntrepriseCo
 
   // Validate SIRET checksum (Luhn algorithm)
   if (!validateSiretChecksum(siretClean)) {
-    throw new ValidationError('SIRET invalide (checksum incorrect)', { field: 'siret', value: siret })
+    throw new ValidationError('SIRET invalide (checksum incorrect)', {
+      field: 'siret',
+      value: siret,
+    })
   }
 
   try {
@@ -322,7 +325,7 @@ export async function rechercherEntreprises(
 
     const data = await pappersRequest<SearchResponse>('/recherche', params)
 
-    return (data.resultats || []).map(r => ({
+    return (data.resultats || []).map((r) => ({
       siren: r.siren,
       siret: r.siege?.siret || r.siren + '00000',
       nom: r.nom_entreprise,
@@ -424,7 +427,7 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
   const representants = (data.representants || []) as Array<Record<string, unknown>>
   const financesData = (data.finances || []) as Array<Record<string, unknown>>
 
-  const dirigeants: Dirigeant[] = representants.map(r => ({
+  const dirigeants: Dirigeant[] = representants.map((r) => ({
     nom: String(r.nom || ''),
     prenom: String(r.prenom || ''),
     fonction: String(r.qualite || ''),
@@ -432,7 +435,7 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
     nationalite: r.nationalite as string | undefined,
   }))
 
-  const finances: InfosFinancieres[] = financesData.map(f => ({
+  const finances: InfosFinancieres[] = financesData.map((f) => ({
     annee: Number(f.annee) || 0,
     chiffreAffaires: f.chiffre_affaires as number | null,
     resultat: f.resultat as number | null,
@@ -455,7 +458,9 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
 
   return {
     siren: String(data.siren || ''),
-    siret: String(siege.siret || data.siren) + '00000'.substring(0, 14 - String(siege.siret || data.siren).length),
+    siret:
+      String(siege.siret || data.siren) +
+      '00000'.substring(0, 14 - String(siege.siret || data.siren).length),
 
     nom: String(data.nom_entreprise || ''),
     nomCommercial: data.nom_commercial as string | null,
@@ -484,7 +489,9 @@ function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseCom
 
     capital: data.capital as number | null,
     capitalFormate: data.capital
-      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(data.capital))
+      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(
+          Number(data.capital)
+        )
       : null,
     dernierCA: dernierBilan.chiffreAffaires ?? null,
     dernierResultat: dernierBilan.resultat ?? null,
@@ -650,10 +657,10 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
  * Codes NAF courants pour les artisans
  */
 export const CODES_NAF_ARTISANS: Record<string, string> = {
-  '4321A': 'Travaux d\'installation électrique',
-  '4322A': 'Travaux d\'installation d\'eau et de gaz',
-  '4322B': 'Travaux d\'installation d\'équipements thermiques',
-  '4329A': 'Travaux d\'isolation',
+  '4321A': "Travaux d'installation électrique",
+  '4322A': "Travaux d'installation d'eau et de gaz",
+  '4322B': "Travaux d'installation d'équipements thermiques",
+  '4329A': "Travaux d'isolation",
   '4331Z': 'Travaux de plâtrerie',
   '4332A': 'Travaux de menuiserie bois et PVC',
   '4332B': 'Travaux de menuiserie métallique',
@@ -664,6 +671,6 @@ export const CODES_NAF_ARTISANS: Record<string, string> = {
   '4391B': 'Travaux de couverture',
   '4399C': 'Travaux de maçonnerie générale',
   '4520A': 'Entretien et réparation de véhicules automobiles',
-  '9524Z': 'Réparation de meubles et d\'équipements du foyer',
-  '9529Z': 'Réparation d\'autres biens personnels et domestiques',
+  '9524Z': "Réparation de meubles et d'équipements du foyer",
+  '9529Z': "Réparation d'autres biens personnels et domestiques",
 }

@@ -1,6 +1,15 @@
 'use client'
 
-import { Mail, MessageSquare, Phone, Users, Send, TrendingUp, DollarSign, Inbox } from 'lucide-react'
+import {
+  Mail,
+  MessageSquare,
+  Phone,
+  Users,
+  Send,
+  TrendingUp,
+  DollarSign,
+  Inbox,
+} from 'lucide-react'
 import type { OverviewStats } from '@/types/prospection'
 
 interface StatsCardsProps {
@@ -15,7 +24,9 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       value: stats?.total_contacts || 0,
       icon: Users,
       color: 'text-blue-600 bg-blue-100',
-      detail: stats ? `${stats.contacts_by_type.artisan} artisans, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} mairies` : '',
+      detail: stats
+        ? `${stats.contacts_by_type.artisan} artisans, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} mairies`
+        : '',
     },
     {
       name: 'Campagnes actives',
@@ -29,7 +40,9 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       value: stats?.total_messages_sent || 0,
       icon: MessageSquare,
       color: 'text-blue-600 bg-blue-100',
-      detail: stats ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}` : '',
+      detail: stats
+        ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}`
+        : '',
     },
     {
       name: 'Taux de livraison',
@@ -81,9 +94,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
             <p className="text-2xl font-bold text-gray-900">
               {typeof card.value === 'number' ? card.value.toLocaleString('fr-FR') : card.value}
             </p>
-            {card.detail && (
-              <p className="text-xs text-gray-400 mt-1">{card.detail}</p>
-            )}
+            {card.detail && <p className="text-xs text-gray-400 mt-1">{card.detail}</p>}
           </div>
         )
       })}
@@ -94,10 +105,14 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
 // Icônes de canal
 export function ChannelIcon({ channel, className }: { channel: string; className?: string }) {
   switch (channel) {
-    case 'email': return <Mail className={className || 'w-4 h-4'} />
-    case 'sms': return <Phone className={className || 'w-4 h-4'} />
-    case 'whatsapp': return <MessageSquare className={className || 'w-4 h-4'} />
-    default: return null
+    case 'email':
+      return <Mail className={className || 'w-4 h-4'} />
+    case 'sms':
+      return <Phone className={className || 'w-4 h-4'} />
+    case 'whatsapp':
+      return <MessageSquare className={className || 'w-4 h-4'} />
+    default:
+      return null
   }
 }
 
@@ -122,7 +137,9 @@ export function CampaignStatusBadge({ status }: { status: string }) {
   }
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || 'bg-gray-100 text-gray-700'}`}>
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || 'bg-gray-100 text-gray-700'}`}
+    >
       {labels[status] || status}
     </span>
   )
@@ -143,7 +160,9 @@ export function ContactTypeBadge({ type }: { type: string }) {
   }
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-gray-100 text-gray-700'}`}>
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-gray-100 text-gray-700'}`}
+    >
       {labels[type] || type}
     </span>
   )

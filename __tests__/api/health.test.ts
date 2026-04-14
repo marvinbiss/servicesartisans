@@ -11,20 +11,23 @@ import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
 
 let capturedHeaders: Record<string, string> = {}
 
-const mockJsonFn = vi.fn((body: unknown, init?: { status?: number; headers?: Record<string, string> }) => {
-  if (init?.headers) {
-    capturedHeaders = init.headers
+const mockJsonFn = vi.fn(
+  (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => {
+    if (init?.headers) {
+      capturedHeaders = init.headers
+    }
+    return {
+      body,
+      status: init?.status ?? 200,
+      headers: init?.headers ?? {},
+    }
   }
-  return {
-    body,
-    status: init?.status ?? 200,
-    headers: init?.headers ?? {},
-  }
-})
+)
 
 vi.mock('next/server', () => ({
   NextResponse: {
-    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => mockJsonFn(body, init),
+    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) =>
+      mockJsonFn(body, init),
   },
 }))
 
@@ -88,7 +91,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = (await GET()) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
@@ -106,7 +109,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = (await GET()) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
@@ -119,7 +122,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: { message: 'Connection refused' } }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = (await GET()) as unknown as {
       body: { status: string; checks: Record<string, { status: string; error?: string }> }
       status: number
     }
@@ -134,7 +137,7 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET() as unknown as {
+    const result = (await GET()) as unknown as {
       body: Record<string, unknown>
       status: number
     }

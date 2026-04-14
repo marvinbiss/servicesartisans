@@ -8,16 +8,107 @@ import { Save, ArrowLeft, AlertCircle } from 'lucide-react'
 import type { ListType, ContactType, ListFilterCriteria } from '@/types/prospection'
 
 const DEPARTMENTS = [
-  '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
-  '11', '12', '13', '14', '15', '16', '17', '18', '19', '2A', '2B',
-  '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-  '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
-  '41', '42', '43', '44', '45', '46', '47', '48', '49', '50',
-  '51', '52', '53', '54', '55', '56', '57', '58', '59', '60',
-  '61', '62', '63', '64', '65', '66', '67', '68', '69', '70',
-  '71', '72', '73', '74', '75', '76', '77', '78', '79', '80',
-  '81', '82', '83', '84', '85', '86', '87', '88', '89', '90',
-  '91', '92', '93', '94', '95', '971', '972', '973', '974', '976',
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '2A',
+  '2B',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28',
+  '29',
+  '30',
+  '31',
+  '32',
+  '33',
+  '34',
+  '35',
+  '36',
+  '37',
+  '38',
+  '39',
+  '40',
+  '41',
+  '42',
+  '43',
+  '44',
+  '45',
+  '46',
+  '47',
+  '48',
+  '49',
+  '50',
+  '51',
+  '52',
+  '53',
+  '54',
+  '55',
+  '56',
+  '57',
+  '58',
+  '59',
+  '60',
+  '61',
+  '62',
+  '63',
+  '64',
+  '65',
+  '66',
+  '67',
+  '68',
+  '69',
+  '70',
+  '71',
+  '72',
+  '73',
+  '74',
+  '75',
+  '76',
+  '77',
+  '78',
+  '79',
+  '80',
+  '81',
+  '82',
+  '83',
+  '84',
+  '85',
+  '86',
+  '87',
+  '88',
+  '89',
+  '90',
+  '91',
+  '92',
+  '93',
+  '94',
+  '95',
+  '971',
+  '972',
+  '973',
+  '974',
+  '976',
 ]
 
 const REGIONS = [
@@ -84,9 +175,10 @@ export default function CreateListPage() {
           name: name.trim(),
           description: description.trim() || undefined,
           list_type: listType,
-          filter_criteria: listType === 'dynamic' && Object.keys(filterCriteria).length > 0
-            ? filterCriteria
-            : undefined,
+          filter_criteria:
+            listType === 'dynamic' && Object.keys(filterCriteria).length > 0
+              ? filterCriteria
+              : undefined,
         }),
       })
 
@@ -112,7 +204,10 @@ export default function CreateListPage() {
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/lists" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/lists"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux listes
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Nouvelle liste</h1>
@@ -130,11 +225,16 @@ export default function CreateListPage() {
       <div className="bg-white rounded-lg border p-6 space-y-4 max-w-2xl">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium mb-1">Nom de la liste <span className="text-red-500">*</span></label>
+          <label className="block text-sm font-medium mb-1">
+            Nom de la liste <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             value={name}
-            onChange={(e) => { setName(e.target.value); setNameError(null) }}
+            onChange={(e) => {
+              setName(e.target.value)
+              setNameError(null)
+            }}
             className={`w-full px-3 py-2 border rounded-lg text-sm ${nameError ? 'border-red-300' : ''}`}
             placeholder="Ex: Artisans plombiers Ile-de-France"
           />
@@ -212,7 +312,9 @@ export default function CreateListPage() {
               >
                 <option value="">Tous</option>
                 {DEPARTMENTS.map((d) => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
                 ))}
               </select>
             </div>
@@ -226,7 +328,9 @@ export default function CreateListPage() {
               >
                 <option value="">Toutes</option>
                 {REGIONS.map((r) => (
-                  <option key={r} value={r}>{r}</option>
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
               </select>
             </div>

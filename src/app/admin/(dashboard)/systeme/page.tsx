@@ -28,7 +28,12 @@ interface SystemData {
   events: { total: number; today: number }
   assignments: { total: number; pending: number; viewed: number; quoted: number; declined: number }
   providers: { total: number; active: number; withLeads: number }
-  quality: { avgResponseMinutes: number; conversionRate: number; declineRate: number; expiredRate: number }
+  quality: {
+    avgResponseMinutes: number
+    conversionRate: number
+    declineRate: number
+    expiredRate: number
+  }
   funnel: Array<{ stage: string; count: number; rate: number }>
   dailyLeads: Array<{ date: string; label: string; count: number }>
   topServices: Array<{ service: string; count: number }>
@@ -110,7 +115,8 @@ export default function SystemDashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-400">
-              Mis à jour : {lastRefresh.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+              Mis à jour :{' '}
+              {lastRefresh.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
             </span>
             <button
               onClick={fetchData}
@@ -126,7 +132,9 @@ export default function SystemDashboardPage() {
         {/* Section 1: Volumes */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Volumes</h2>
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+            Volumes
+          </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
@@ -159,7 +167,9 @@ export default function SystemDashboardPage() {
         {/* Section 2: Assignations */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Assignations</h2>
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+            Assignations
+          </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-8">
           <StatCard
@@ -198,12 +208,16 @@ export default function SystemDashboardPage() {
         {/* Section 3: Qualité */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Qualité</h2>
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+            Qualité
+          </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           <StatCard
             title="Temps réponse moyen"
-            value={data.quality.avgResponseMinutes > 0 ? `${data.quality.avgResponseMinutes} min` : '—'}
+            value={
+              data.quality.avgResponseMinutes > 0 ? `${data.quality.avgResponseMinutes} min` : '—'
+            }
             icon={<Clock className="w-5 h-5" />}
             color="blue"
           />
@@ -258,14 +272,19 @@ export default function SystemDashboardPage() {
           <FunnelChart steps={data.funnel} title="Entonnoir de conversion" />
 
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Leads / jour (14 derniers jours)</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Leads / jour (14 derniers jours)
+            </h3>
             <div className="flex items-end gap-1.5 h-40">
               {data.dailyLeads.map((d) => (
                 <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
                   <span className="text-xs font-semibold text-gray-700 tabular-nums">
                     {d.count > 0 ? d.count : ''}
                   </span>
-                  <div className="w-full bg-gray-100 rounded-t overflow-hidden" style={{ height: '100%' }}>
+                  <div
+                    className="w-full bg-gray-100 rounded-t overflow-hidden"
+                    style={{ height: '100%' }}
+                  >
                     <div
                       className="w-full bg-blue-500 rounded-t transition-all duration-500"
                       style={{
@@ -275,7 +294,9 @@ export default function SystemDashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-xs text-gray-400 truncate w-full text-center">{d.label}</span>
+                  <span className="text-xs text-gray-400 truncate w-full text-center">
+                    {d.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -299,7 +320,9 @@ export default function SystemDashboardPage() {
                   <div key={s.service} className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
                     <span className="text-sm text-gray-700 flex-1 truncate">{s.service}</span>
-                    <span className="text-sm font-semibold text-gray-900 tabular-nums">{s.count}</span>
+                    <span className="text-sm font-semibold text-gray-900 tabular-nums">
+                      {s.count}
+                    </span>
                     <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-500 rounded-full"
@@ -325,7 +348,9 @@ export default function SystemDashboardPage() {
                   <div key={c.city} className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
                     <span className="text-sm text-gray-700 flex-1 truncate">{c.city}</span>
-                    <span className="text-sm font-semibold text-gray-900 tabular-nums">{c.count}</span>
+                    <span className="text-sm font-semibold text-gray-900 tabular-nums">
+                      {c.count}
+                    </span>
                     <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-500 rounded-full"
@@ -354,7 +379,9 @@ export default function SystemDashboardPage() {
                 <p className="text-xs text-blue-500 mt-1">Total événements</p>
               </div>
               <div className="p-3 bg-yellow-50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-yellow-700 tabular-nums">{data.events.today}</p>
+                <p className="text-2xl font-bold text-yellow-700 tabular-nums">
+                  {data.events.today}
+                </p>
                 <p className="text-xs text-yellow-500 mt-1">Aujourd'hui</p>
               </div>
             </div>

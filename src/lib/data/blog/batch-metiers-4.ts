@@ -1,11 +1,13 @@
 import type { BlogArticle } from './articles'
 
 export const metiers4Articles: Record<string, BlogArticle> = {
-  "comment-choisir-ascensoriste-guide": {
-    title: "Choisir son Ascensoriste en 2026 : Le Guide Complet",
-    excerpt: "Installation, maintenance, modernisation d'ascenseur : certifications, obligations légales et prix 2026 pour choisir le bon ascensoriste sans risque.",
-    metaTitle: "Choisir son Ascensoriste 2026 : Guide Complet",
-    metaDescription: "Découvrez comment choisir un ascensoriste : certifications, obligations légales et prix 2026. Obtenez un devis gratuit.",
+  'comment-choisir-ascensoriste-guide': {
+    title: 'Choisir son Ascensoriste en 2026 : Le Guide Complet',
+    excerpt:
+      "Installation, maintenance, modernisation d'ascenseur : certifications, obligations légales et prix 2026 pour choisir le bon ascensoriste sans risque.",
+    metaTitle: 'Choisir son Ascensoriste 2026 : Guide Complet',
+    metaDescription:
+      'Découvrez comment choisir un ascensoriste : certifications, obligations légales et prix 2026. Obtenez un devis gratuit.',
     content: [
       "En France, **680 000 ascenseurs** transportent quotidiennement plus de 100 millions de personnes. Pourtant, selon la DGCCRF, **23 % des contrats de maintenance** présentent des anomalies — clauses abusives, surfacturation de pièces ou non-respect des fréquences d'intervention. Que vous soyez syndic de copropriété, gestionnaire d'ERP ou propriétaire d'un immeuble, le choix de votre ascensoriste détermine la sécurité de vos occupants et le montant de vos charges sur 5 à 20 ans. Ce guide détaille les critères objectifs pour sélectionner un professionnel fiable. Consultez notre annuaire d'[ascensoristes vérifiés](/services/ascensoriste) pour comparer les offres dans votre secteur.\n\n:::info Contexte réglementaire\nLa loi SAE (Sécurité des Ascenseurs Existants) du 2 juillet 2003 et ses décrets d'application (décret n°2004-964 du 9 septembre 2004, modifié par le décret n°2012-674) imposent trois obligations : un entretien régulier par un professionnel qualifié, un contrôle technique quinquennal par un organisme agréé, et la mise en conformité progressive des appareils anciens. L'arrêté du 18 novembre 2004 définit 17 dispositifs de sécurité à installer par tranches. Depuis le 1er juillet 2025, la dernière tranche de mise en conformité est achevée : tout ascenseur non conforme expose le propriétaire à des sanctions pénales.\n:::",
 
@@ -19,33 +21,60 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Comment changer d'ascensoriste : le guide pratique\n\nChanger d'ascensoriste est un droit, mais la procédure doit être suivie scrupuleusement pour éviter les contentieux.\n\n**Étape 1 — Vérifiez les conditions de résiliation** de votre contrat actuel. Notez la date d'échéance, le préavis (souvent 3 à 6 mois) et les éventuelles pénalités. Envoyez votre lettre de résiliation en recommandé avec AR bien avant la date limite.\n\n**Étape 2 — Faites réaliser un état des lieux contradictoire** entre l'ancien et le nouveau prestataire. Ce document, signé des deux parties, décrit l'état exact de l'appareil à la date de transfert. Sans cet état des lieux, le nouveau prestataire pourra vous facturer toutes les anomalies comme des réparations urgentes.\n\n**Étape 3 — Exigez la restitution du carnet d'entretien**, des clés, des codes d'accès à l'armoire de manœuvre et de tout l'historique d'intervention. L'ancien ascensoriste est tenu de remettre ces éléments — c'est la propriété du propriétaire de l'appareil.\n\n**Étape 4 — Négociez avec le nouveau prestataire** une période de transition de 1 à 3 mois pendant laquelle il prend connaissance de l'appareil et effectue un diagnostic complet. Les bons ascensoristes proposent cette phase d'audit gratuitement.\n\nLe transfert de contrat est régi par l'article L.136-1 du Code de la consommation (pour les particuliers) et par les dispositions du Code civil (articles 1103 et suivants) pour les copropriétés. Un syndic professionnel devrait systématiquement consulter le conseil syndical avant de renouveler un contrat d'ascenseur.\n\n:::info Bon à savoir\nDepuis la loi Chatel (2008), renforcée par la loi Hamon (2014), le professionnel est tenu de vous informer de la date de reconduction de votre contrat. En cas de manquement, vous pouvez résilier à tout moment sans frais. Cette disposition s'applique aux contrats de maintenance d'ascenseur conclus avec des consommateurs (copropriétés incluses selon la jurisprudence récente).\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de ascensoriste en 2026](/blog/prix-ascensoriste-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de ascensoriste en 2026](/blog/prix-ascensoriste-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Questions essentielles à poser avant de signer\n\nAvant de vous engager avec un ascensoriste, posez ces questions décisives :\n\n- **Combien de techniciens avez-vous dans mon secteur géographique ?** Un technicien ne peut raisonnablement gérer plus de 60-80 appareils avec un niveau de service correct. Au-delà, les visites sont bâclées.\n\n- **Quel est votre délai garanti d'intervention pour personne bloquée ?** La réponse doit être contractuelle, pas verbale. Le standard du marché est 1 heure en zone urbaine.\n\n- **Quelle est votre politique de gestion des pièces détachées ?** L'ascensoriste doit avoir un stock de pièces courantes et un accès rapide aux pièces spécifiques. Pour les appareils anciens, vérifiez qu'il travaille avec des fournisseurs de pièces compatibles.\n\n- **Proposez-vous un accès en ligne au carnet d'entretien et aux rapports d'intervention ?** Les ascensoristes modernes offrent un portail client avec suivi en temps réel. C'est un signe de transparence et de professionnalisme.\n\n- **Quels sont vos indicateurs de performance ?** Taux de disponibilité, taux de pannes, temps moyen de réparation (MTTR) : un ascensoriste sérieux mesure et communique ces données.\n\nPour comparer efficacement, demandez des devis détaillés à au moins 3 ascensoristes et utilisez notre annuaire pour [trouver un ascensoriste qualifié](/services/ascensoriste) dans votre ville.\n\n:::takeaway\n- Vérifier la certification **NF Service** et les qualifications **Qualibat 5411/5412**\n- Exiger un contrat avec **délais d'intervention garantis** et **bordereau de prix des pièces**\n- Refuser les **engagements de plus de 5 ans** avec tacite reconduction longue\n- Faire réaliser un **audit indépendant** tous les 5 ans (obligation légale)\n- Comparer au moins **3 devis** incluant indépendants et majors\n- Budget maintenance : **1 800 – 6 000 €/an** selon contrat et zone géographique\n:::"
+      "## Questions essentielles à poser avant de signer\n\nAvant de vous engager avec un ascensoriste, posez ces questions décisives :\n\n- **Combien de techniciens avez-vous dans mon secteur géographique ?** Un technicien ne peut raisonnablement gérer plus de 60-80 appareils avec un niveau de service correct. Au-delà, les visites sont bâclées.\n\n- **Quel est votre délai garanti d'intervention pour personne bloquée ?** La réponse doit être contractuelle, pas verbale. Le standard du marché est 1 heure en zone urbaine.\n\n- **Quelle est votre politique de gestion des pièces détachées ?** L'ascensoriste doit avoir un stock de pièces courantes et un accès rapide aux pièces spécifiques. Pour les appareils anciens, vérifiez qu'il travaille avec des fournisseurs de pièces compatibles.\n\n- **Proposez-vous un accès en ligne au carnet d'entretien et aux rapports d'intervention ?** Les ascensoristes modernes offrent un portail client avec suivi en temps réel. C'est un signe de transparence et de professionnalisme.\n\n- **Quels sont vos indicateurs de performance ?** Taux de disponibilité, taux de pannes, temps moyen de réparation (MTTR) : un ascensoriste sérieux mesure et communique ces données.\n\nPour comparer efficacement, demandez des devis détaillés à au moins 3 ascensoristes et utilisez notre annuaire pour [trouver un ascensoriste qualifié](/services/ascensoriste) dans votre ville.\n\n:::takeaway\n- Vérifier la certification **NF Service** et les qualifications **Qualibat 5411/5412**\n- Exiger un contrat avec **délais d'intervention garantis** et **bordereau de prix des pièces**\n- Refuser les **engagements de plus de 5 ans** avec tacite reconduction longue\n- Faire réaliser un **audit indépendant** tous les 5 ans (obligation légale)\n- Comparer au moins **3 devis** incluant indépendants et majors\n- Budget maintenance : **1 800 – 6 000 €/an** selon contrat et zone géographique\n:::",
     ],
-    image: "🛗",
+    image: '🛗',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-11",
-    readTime: "15 min",
-    category: "Fiches métier",
-    tags: ["Ascenseur", "Maintenance", "Copropriété", "Sécurité", "ERP"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-11',
+    readTime: '15 min',
+    category: 'Fiches métier',
+    tags: ['Ascenseur', 'Maintenance', 'Copropriété', 'Sécurité', 'ERP'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Un contrat de maintenance d'ascenseur est-il obligatoire ?", answer: "Oui, le décret n°2004-964 du 9 septembre 2004 impose à tout propriétaire d'ascenseur de souscrire un contrat de maintenance avec un prestataire qualifié. Le contrat doit prévoir au minimum une visite mensuelle (pour les ascenseurs en copropriété) et le remplacement des pièces de sécurité défaillantes. L'absence de contrat expose le propriétaire à des sanctions pénales en cas d'accident." },
-      { question: "Quelle est la différence entre un contrat normal et un contrat complet ?", answer: "Le contrat normal (ou minimal) couvre les visites réglementaires, les vérifications de sécurité et les réglages courants. Les pièces et réparations sont facturées en supplément. Le contrat complet inclut le remplacement des pièces d'usure courante (câbles, patins, contacts de porte) et parfois les réparations mineures. Il coûte 30 à 50 % plus cher mais offre une meilleure maîtrise budgétaire." },
-      { question: "Peut-on changer d'ascensoriste en cours de contrat ?", answer: "Oui, à condition de respecter les conditions de résiliation prévues au contrat (préavis, date d'échéance). La loi Chatel impose au professionnel de vous informer de la date de reconduction. En cas de manquement, vous pouvez résilier à tout moment. Prévoyez un état des lieux contradictoire entre l'ancien et le nouveau prestataire pour éviter les litiges." },
-      { question: "Combien coûte l'installation d'un ascenseur neuf en 2026 ?", answer: "Pour un immeuble résidentiel, comptez entre 35 000 et 55 000 € pour un ascenseur hydraulique de 4 étages en province (45 000 – 70 000 € en Île-de-France), et entre 50 000 et 80 000 € pour un ascenseur à traction de 6 étages en province (65 000 – 100 000 € en Île-de-France). Un élévateur PMR coûte 15 000 à 30 000 € selon la course." },
-      { question: "Quelles normes s'appliquent aux ascenseurs en France ?", answer: "La norme EN 81-20/50 (depuis 2017) est le référentiel technique pour les installations neuves. La directive européenne 2014/33/UE impose le marquage CE. La loi SAE de 2003 et le décret n°2004-964 encadrent la maintenance et la mise en conformité des ascenseurs existants. L'arrêté du 18 novembre 2004 liste les 17 dispositifs de sécurité obligatoires." },
-      { question: "Comment vérifier la fiabilité d'un ascensoriste ?", answer: "Vérifiez la certification NF Service (NF 372) sur le site AFNOR, les qualifications Qualibat 5411/5412, l'assurance décennale et la RC professionnelle. Demandez des références de copropriétés similaires à la vôtre et contactez-les. Faites réaliser un audit indépendant par un bureau de contrôle agréé pour avoir un avis objectif sur l'état de votre ascenseur." }
-    ]
+      {
+        question: "Un contrat de maintenance d'ascenseur est-il obligatoire ?",
+        answer:
+          "Oui, le décret n°2004-964 du 9 septembre 2004 impose à tout propriétaire d'ascenseur de souscrire un contrat de maintenance avec un prestataire qualifié. Le contrat doit prévoir au minimum une visite mensuelle (pour les ascenseurs en copropriété) et le remplacement des pièces de sécurité défaillantes. L'absence de contrat expose le propriétaire à des sanctions pénales en cas d'accident.",
+      },
+      {
+        question: 'Quelle est la différence entre un contrat normal et un contrat complet ?',
+        answer:
+          "Le contrat normal (ou minimal) couvre les visites réglementaires, les vérifications de sécurité et les réglages courants. Les pièces et réparations sont facturées en supplément. Le contrat complet inclut le remplacement des pièces d'usure courante (câbles, patins, contacts de porte) et parfois les réparations mineures. Il coûte 30 à 50 % plus cher mais offre une meilleure maîtrise budgétaire.",
+      },
+      {
+        question: "Peut-on changer d'ascensoriste en cours de contrat ?",
+        answer:
+          "Oui, à condition de respecter les conditions de résiliation prévues au contrat (préavis, date d'échéance). La loi Chatel impose au professionnel de vous informer de la date de reconduction. En cas de manquement, vous pouvez résilier à tout moment. Prévoyez un état des lieux contradictoire entre l'ancien et le nouveau prestataire pour éviter les litiges.",
+      },
+      {
+        question: "Combien coûte l'installation d'un ascenseur neuf en 2026 ?",
+        answer:
+          'Pour un immeuble résidentiel, comptez entre 35 000 et 55 000 € pour un ascenseur hydraulique de 4 étages en province (45 000 – 70 000 € en Île-de-France), et entre 50 000 et 80 000 € pour un ascenseur à traction de 6 étages en province (65 000 – 100 000 € en Île-de-France). Un élévateur PMR coûte 15 000 à 30 000 € selon la course.',
+      },
+      {
+        question: "Quelles normes s'appliquent aux ascenseurs en France ?",
+        answer:
+          "La norme EN 81-20/50 (depuis 2017) est le référentiel technique pour les installations neuves. La directive européenne 2014/33/UE impose le marquage CE. La loi SAE de 2003 et le décret n°2004-964 encadrent la maintenance et la mise en conformité des ascenseurs existants. L'arrêté du 18 novembre 2004 liste les 17 dispositifs de sécurité obligatoires.",
+      },
+      {
+        question: "Comment vérifier la fiabilité d'un ascensoriste ?",
+        answer:
+          "Vérifiez la certification NF Service (NF 372) sur le site AFNOR, les qualifications Qualibat 5411/5412, l'assurance décennale et la RC professionnelle. Demandez des références de copropriétés similaires à la vôtre et contactez-les. Faites réaliser un audit indépendant par un bureau de contrôle agréé pour avoir un avis objectif sur l'état de votre ascenseur.",
+      },
+    ],
   },
 
-  "comment-choisir-metallier-guide": {
-    title: "Choisir son Métallier en 2026 : Le Guide Expert",
-    excerpt: "Garde-corps, escalier métallique, portail en fer forgé : qualifications, normes de sécurité et tarifs 2026 pour bien choisir votre métallier.",
-    metaTitle: "Choisir son Métallier 2026 : Guide Expert",
-    metaDescription: "Découvrez comment choisir un métallier qualifié : garde-corps, escalier, portail. Tarifs et normes 2026. Devis gratuit.",
+  'comment-choisir-metallier-guide': {
+    title: 'Choisir son Métallier en 2026 : Le Guide Expert',
+    excerpt:
+      'Garde-corps, escalier métallique, portail en fer forgé : qualifications, normes de sécurité et tarifs 2026 pour bien choisir votre métallier.',
+    metaTitle: 'Choisir son Métallier 2026 : Guide Expert',
+    metaDescription:
+      'Découvrez comment choisir un métallier qualifié : garde-corps, escalier, portail. Tarifs et normes 2026. Devis gratuit.',
     content: [
       "Le métallier est l'artisan de la structure et de l'esthétique métallique. En France, le secteur compte **12 500 entreprises de métallerie-serrurerie** selon la CAPEB, mais la qualité des prestations varie considérablement. Un garde-corps non conforme à la norme NF P 01-012, c'est un accident potentiel et une responsabilité civile engagée. Un escalier métallique mal calculé, c'est une structure qui vibre et se déforme sous charge. Ce guide vous donne les clés pour distinguer un métallier compétent d'un soudeur occasionnel. Retrouvez les [métalliers qualifiés près de chez vous](/services/metallier) sur notre annuaire.\n\n:::info Le métallier, un métier réglementé\nLa métallerie-serrurerie est un métier du bâtiment soumis à la qualification professionnelle obligatoire (loi n°96-603 du 5 juillet 1996, décret n°98-246). Le dirigeant ou un salarié doit justifier d'un CAP/BEP minimum ou de 3 ans d'expérience. Pour les travaux structurels (charpente métallique, planchers collaborants), les qualifications Qualibat série 4400 sont indispensables. Pour les ouvrages de sécurité (garde-corps, escaliers), la conformité aux Eurocodes et aux normes NF est une obligation légale, pas une option.\n:::",
 
@@ -57,32 +86,55 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Les 6 red flags d'un métallier à fuir\n\n1. **Pas de note de calcul pour un ouvrage structurel** : un escalier métallique, une mezzanine ou une charpente doivent faire l'objet d'un dimensionnement par calcul. Un métallier qui dit « je fais ça au feeling, j'ai l'habitude » met votre sécurité en danger.\n\n2. **Soudures apparentes de mauvaise qualité** : demandez à voir des réalisations précédentes. Des soudures irrégulières, poreuses ou non meulées sont le signe d'un manque de compétence technique. Sur l'inox, les soudures doivent être passivées pour éviter la corrosion.\n\n3. **Pas de traitement anticorrosion adapté** : un ouvrage en acier extérieur doit recevoir un traitement anticorrosion (galvanisation à chaud selon ISO 1461 et/ou thermolaquage). Un métallier qui propose une simple couche de peinture antirouille sur un portail extérieur ne connaît pas son métier.\n\n4. **Méconnaissance des normes garde-corps** : posez la question « quelle est la hauteur réglementaire d'un garde-corps ? ». Si la réponse n'est pas immédiate et précise (1 m minimum, 1,20 m si épaisseur < 50 cm), cherchez ailleurs.\n\n5. **Pas d'assurance décennale spécifique métallerie** : les ouvrages métalliques intégrés au bâti (escaliers, charpentes, garde-corps) sont couverts par la garantie décennale. Vérifiez que l'attestation mentionne explicitement l'activité de métallerie-serrurerie.\n\n6. **Atelier inexistant ou non équipé** : un vrai métallier dispose d'un atelier avec poste de soudure MIG/MAG et TIG, plieuse, cisaille, perceuse à colonne, meuleuse. Méfiez-vous du « métallier » qui travaille uniquement sur chantier avec un poste à souder de bricolage.\n\n:::expert Point de vue terrain\nLa métallerie est un métier où la **visite d'atelier** est le meilleur indicateur de qualité. Un atelier propre, organisé, avec des gabarits de fabrication et une table de montage de niveau, produit des ouvrages de qualité. Un atelier encombré et mal éclairé produit des ouvrages approximatifs. Demandez à visiter — un bon métallier sera fier de vous montrer son outil de travail.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de métallier en 2026](/blog/prix-metallier-2026-tarifs-travaux) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de métallier en 2026](/blog/prix-metallier-2026-tarifs-travaux) avec les prix moyens constatés dans toute la France.',
 
-      "## Comment évaluer un devis de métallerie\n\nUn devis de métallier doit être d'une précision chirurgicale. Voici les éléments indispensables :\n\n**Descriptif technique** : type d'acier (S235, S355), épaisseur des profils (tube carré 40x40x2, plat 40x8, etc.), type d'assemblage (soudé, boulonné), traitement de surface (galvanisation à chaud, métallisation, thermolaquage — avec teinte RAL si applicable).\n\n**Plans ou croquis cotés** : dimensions précises de l'ouvrage, emplacement des fixations, détail des assemblages. Pour un ouvrage complexe (escalier, charpente), un plan d'exécution côté est indispensable.\n\n**Conformité normative** : mention explicite des normes respectées (NF P 01-012 pour les garde-corps, Eurocode 3 pour les structures).\n\n**Conditions de pose** : durée d'intervention, moyens de levage si nécessaire (grue, nacelle), protection des ouvrages existants.\n\n**Garanties** : garantie décennale (obligatoire pour les ouvrages intégrés au bâti), garantie biennale sur les éléments d'équipement (motorisation de portail), garantie de parfait achèvement (1 an).\n\nComparez au minimum 3 devis en vérifiant que les spécifications techniques sont identiques. Un écart de 30 % entre devis pour un même ouvrage est normal (différences d'atelier, de méthode de fabrication). Au-delà de 50 %, méfiez-vous du devis le plus bas — il cache probablement des économies sur les matériaux ou le traitement anticorrosion.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat série 4400** et la certification **EN 1090** pour les ouvrages structurels\n- Exiger le respect des normes : **NF P 01-012** (garde-corps), **Eurocode 3** (structures acier)\n- Demander une **note de calcul** pour tout ouvrage structurel ou de sécurité\n- Visiter l'**atelier** avant de signer — c'est le meilleur indicateur de qualité\n- Budget : garde-corps **180 – 750 €/ml**, escalier **4 500 – 25 000 €** selon complexité\n- Vérifier l'**assurance décennale** avec activité métallerie explicitement mentionnée\n:::"
+      "## Comment évaluer un devis de métallerie\n\nUn devis de métallier doit être d'une précision chirurgicale. Voici les éléments indispensables :\n\n**Descriptif technique** : type d'acier (S235, S355), épaisseur des profils (tube carré 40x40x2, plat 40x8, etc.), type d'assemblage (soudé, boulonné), traitement de surface (galvanisation à chaud, métallisation, thermolaquage — avec teinte RAL si applicable).\n\n**Plans ou croquis cotés** : dimensions précises de l'ouvrage, emplacement des fixations, détail des assemblages. Pour un ouvrage complexe (escalier, charpente), un plan d'exécution côté est indispensable.\n\n**Conformité normative** : mention explicite des normes respectées (NF P 01-012 pour les garde-corps, Eurocode 3 pour les structures).\n\n**Conditions de pose** : durée d'intervention, moyens de levage si nécessaire (grue, nacelle), protection des ouvrages existants.\n\n**Garanties** : garantie décennale (obligatoire pour les ouvrages intégrés au bâti), garantie biennale sur les éléments d'équipement (motorisation de portail), garantie de parfait achèvement (1 an).\n\nComparez au minimum 3 devis en vérifiant que les spécifications techniques sont identiques. Un écart de 30 % entre devis pour un même ouvrage est normal (différences d'atelier, de méthode de fabrication). Au-delà de 50 %, méfiez-vous du devis le plus bas — il cache probablement des économies sur les matériaux ou le traitement anticorrosion.\n\n:::takeaway\n- Vérifier les qualifications **Qualibat série 4400** et la certification **EN 1090** pour les ouvrages structurels\n- Exiger le respect des normes : **NF P 01-012** (garde-corps), **Eurocode 3** (structures acier)\n- Demander une **note de calcul** pour tout ouvrage structurel ou de sécurité\n- Visiter l'**atelier** avant de signer — c'est le meilleur indicateur de qualité\n- Budget : garde-corps **180 – 750 €/ml**, escalier **4 500 – 25 000 €** selon complexité\n- Vérifier l'**assurance décennale** avec activité métallerie explicitement mentionnée\n:::",
     ],
-    image: "⚒️",
+    image: '⚒️',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-14",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Métallerie", "Serrurerie", "Garde-corps", "Escalier", "Fer forgé"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-14',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ['Métallerie', 'Serrurerie', 'Garde-corps', 'Escalier', 'Fer forgé'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre un métallier et un serrurier ?", answer: "Historiquement, le serrurier fabriquait les serrures et le métallier travaillait les ouvrages métalliques du bâtiment. Aujourd'hui, les deux métiers ont fusionné sous l'appellation 'métallier-serrurier'. Le métallier fabrique et pose les ouvrages métalliques (garde-corps, escaliers, portails, charpentes), tandis que le serrurier de dépannage intervient sur les serrures et cylindres. Sur ServicesArtisans, vous trouverez les deux spécialités." },
-      { question: "Un garde-corps doit-il obligatoirement mesurer 1 mètre de haut ?", answer: "Oui, la norme NF P 01-012 impose une hauteur minimale de 1 mètre pour les garde-corps d'habitation. Si l'épaisseur du garde-corps est inférieure à 50 cm, la hauteur minimale passe à 1,20 mètre. En ERP, les exigences peuvent être plus strictes selon le type d'établissement. Ces hauteurs se mesurent à partir du sol fini, pas du nez de marche." },
-      { question: "Faut-il une assurance décennale pour des travaux de métallerie ?", answer: "Oui, pour tous les ouvrages métalliques intégrés au bâti (escaliers, garde-corps fixés au gros œuvre, charpentes métalliques, mezzanines structurelles). L'attestation d'assurance décennale doit mentionner explicitement l'activité de métallerie-serrurerie. Les ouvrages non intégrés au bâti (mobilier métallique, portail amovible) relèvent de la garantie contractuelle classique." },
-      { question: "Quel traitement anticorrosion choisir pour un ouvrage métallique extérieur ?", answer: "La galvanisation à chaud (selon ISO 1461) est le traitement le plus durable : 30 à 50 ans en environnement urbain. Le thermolaquage (poudre époxy-polyester) offre un large choix de couleurs et une bonne durabilité (15-25 ans). L'idéal est le 'duplex' : galvanisation + thermolaquage, qui combine durabilité maximale et esthétique. La simple peinture antirouille est insuffisante pour un ouvrage extérieur permanent." },
-      { question: "Combien coûte un escalier métallique sur mesure ?", answer: "En 2026, comptez 4 500 à 8 000 € pour un escalier droit acier + marches bois en province (6 000 – 10 000 € en Île-de-France), 6 000 à 12 000 € pour un hélicoïdal en province, et 12 000 à 25 000 € pour un escalier design sur mesure avec matériaux nobles (inox, verre). Ces prix incluent la fourniture et la pose." }
-    ]
+      {
+        question: 'Quelle est la différence entre un métallier et un serrurier ?',
+        answer:
+          "Historiquement, le serrurier fabriquait les serrures et le métallier travaillait les ouvrages métalliques du bâtiment. Aujourd'hui, les deux métiers ont fusionné sous l'appellation 'métallier-serrurier'. Le métallier fabrique et pose les ouvrages métalliques (garde-corps, escaliers, portails, charpentes), tandis que le serrurier de dépannage intervient sur les serrures et cylindres. Sur ServicesArtisans, vous trouverez les deux spécialités.",
+      },
+      {
+        question: 'Un garde-corps doit-il obligatoirement mesurer 1 mètre de haut ?',
+        answer:
+          "Oui, la norme NF P 01-012 impose une hauteur minimale de 1 mètre pour les garde-corps d'habitation. Si l'épaisseur du garde-corps est inférieure à 50 cm, la hauteur minimale passe à 1,20 mètre. En ERP, les exigences peuvent être plus strictes selon le type d'établissement. Ces hauteurs se mesurent à partir du sol fini, pas du nez de marche.",
+      },
+      {
+        question: 'Faut-il une assurance décennale pour des travaux de métallerie ?',
+        answer:
+          "Oui, pour tous les ouvrages métalliques intégrés au bâti (escaliers, garde-corps fixés au gros œuvre, charpentes métalliques, mezzanines structurelles). L'attestation d'assurance décennale doit mentionner explicitement l'activité de métallerie-serrurerie. Les ouvrages non intégrés au bâti (mobilier métallique, portail amovible) relèvent de la garantie contractuelle classique.",
+      },
+      {
+        question: 'Quel traitement anticorrosion choisir pour un ouvrage métallique extérieur ?',
+        answer:
+          "La galvanisation à chaud (selon ISO 1461) est le traitement le plus durable : 30 à 50 ans en environnement urbain. Le thermolaquage (poudre époxy-polyester) offre un large choix de couleurs et une bonne durabilité (15-25 ans). L'idéal est le 'duplex' : galvanisation + thermolaquage, qui combine durabilité maximale et esthétique. La simple peinture antirouille est insuffisante pour un ouvrage extérieur permanent.",
+      },
+      {
+        question: 'Combien coûte un escalier métallique sur mesure ?',
+        answer:
+          'En 2026, comptez 4 500 à 8 000 € pour un escalier droit acier + marches bois en province (6 000 – 10 000 € en Île-de-France), 6 000 à 12 000 € pour un hélicoïdal en province, et 12 000 à 25 000 € pour un escalier design sur mesure avec matériaux nobles (inox, verre). Ces prix incluent la fourniture et la pose.',
+      },
+    ],
   },
 
-  "comment-choisir-architecte-interieur-guide": {
+  'comment-choisir-architecte-interieur-guide': {
     title: "Choisir son Architecte d'Intérieur en 2026 : Le Guide Décisif",
-    excerpt: "Rénovation, aménagement, décoration : diplômes reconnus, honoraires 2026 et critères clés pour sélectionner l'architecte d'intérieur qui transformera votre espace.",
+    excerpt:
+      "Rénovation, aménagement, décoration : diplômes reconnus, honoraires 2026 et critères clés pour sélectionner l'architecte d'intérieur qui transformera votre espace.",
     metaTitle: "Architecte d'Intérieur 2026 : Guide de Choix",
-    metaDescription: "Découvrez comment choisir un architecte d'intérieur : diplômes, honoraires 2026 et critères clés. Obtenez un devis gratuit.",
+    metaDescription:
+      "Découvrez comment choisir un architecte d'intérieur : diplômes, honoraires 2026 et critères clés. Obtenez un devis gratuit.",
     content: [
       "Le marché de l'architecture d'intérieur en France représente **2,3 milliards d'euros** en 2025 selon le Conseil français des architectes d'intérieur (CFAI), avec une croissance annuelle de 6 %. Mais derrière ce dynamisme se cache une réalité préoccupante : **le titre d'architecte d'intérieur n'est pas protégé par la loi**. N'importe qui peut s'autoproclamer « architecte d'intérieur » ou « designer d'espace » sans diplôme ni compétence vérifiée. Résultat : des projets mal conçus, des budgets explosés et des propriétaires déçus. Ce guide vous arme pour distinguer les vrais professionnels des amateurs. Trouvez un [architecte d'intérieur qualifié](/services/architecte-interieur) sur notre annuaire.\n\n:::warning Confusion fréquente\nNe confondez pas **architecte d'intérieur** et **décorateur d'intérieur**. L'architecte d'intérieur conçoit des espaces, modifie les volumes (cloisons, ouvertures, mezzanines), coordonne les corps de métier et maîtrise les contraintes techniques (structure, fluides, électricité). Le décorateur intervient sur l'esthétique : choix des couleurs, mobilier, textiles, luminaires. Les deux métiers sont complémentaires mais les compétences requises sont radicalement différentes. Un décorateur qui abat une cloison porteuse met votre bâtiment en danger.\n:::",
 
@@ -96,31 +148,58 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de architecte d'intérieur en 2026](/blog/prix-architecte-interieur-2026-tarifs) avec les prix moyens constatés dans toute la France.",
 
-      "## Comment évaluer le portfolio et les références\n\nLe portfolio est l'outil de sélection numéro un en architecture d'intérieur. Voici comment l'analyser avec un œil critique :\n\n**Diversité des projets** : un bon architecte d'intérieur a travaillé sur différents types de projets (appartements, maisons, commerces, bureaux) et différents styles. Un portfolio monochrome (que du contemporain blanc, par exemple) peut indiquer une vision limitée.\n\n**Photos avant/après** : c'est le test ultime. Les photos « après » sont toujours flatteuses, mais les photos « avant » montrent la capacité à transformer un espace contraint. Demandez-les systématiquement.\n\n**Projets similaires au vôtre** : si vous rénovez un appartement haussmannien, privilégiez un architecte qui a déjà travaillé sur du patrimoine ancien (gestion des moulures, planchers anciens, réseaux existants). Si vous aménagez un loft industriel, cherchez quelqu'un qui maîtrise les grands volumes et les structures apparentes.\n\n**Références vérifiables** : demandez les coordonnées de 2-3 anciens clients et appelez-les. Posez des questions précises : le budget a-t-il été respecté ? Le planning a-t-il été tenu ? Le suivi de chantier était-il rigoureux ? Y a-t-il eu des malfaçons ?\n\n**Publications** : un architecte d'intérieur publié dans des revues spécialisées (AD, Elle Décoration, Côté Maison, Ideat) a été sélectionné par un comité éditorial — c'est un gage de qualité, même si ce n'est ni nécessaire ni suffisant.\n\nRencontrez 2 à 3 architectes d'intérieur avant de vous décider. La première consultation est souvent gratuite ou peu coûteuse, et elle vous permet d'évaluer la qualité d'écoute, la compréhension de vos besoins et le feeling — paramètre important pour une collaboration qui peut durer des mois.\n\n:::takeaway\n- Vérifier le titre **CFAI** ou la qualification **OPQAI** — le seul filtre fiable\n- Exiger un **contrat écrit** détaillant phases, honoraires et calendrier\n- Honoraires 2026 : **8-18 %** du montant des travaux (mission complète)\n- Demander des **photos avant/après** et des **références vérifiables**\n- Vérifier l'**assurance RC Pro** et décennale si travaux structurels\n- Privilégier une rémunération **transparente** sans commissions occultes\n:::"
+      "## Comment évaluer le portfolio et les références\n\nLe portfolio est l'outil de sélection numéro un en architecture d'intérieur. Voici comment l'analyser avec un œil critique :\n\n**Diversité des projets** : un bon architecte d'intérieur a travaillé sur différents types de projets (appartements, maisons, commerces, bureaux) et différents styles. Un portfolio monochrome (que du contemporain blanc, par exemple) peut indiquer une vision limitée.\n\n**Photos avant/après** : c'est le test ultime. Les photos « après » sont toujours flatteuses, mais les photos « avant » montrent la capacité à transformer un espace contraint. Demandez-les systématiquement.\n\n**Projets similaires au vôtre** : si vous rénovez un appartement haussmannien, privilégiez un architecte qui a déjà travaillé sur du patrimoine ancien (gestion des moulures, planchers anciens, réseaux existants). Si vous aménagez un loft industriel, cherchez quelqu'un qui maîtrise les grands volumes et les structures apparentes.\n\n**Références vérifiables** : demandez les coordonnées de 2-3 anciens clients et appelez-les. Posez des questions précises : le budget a-t-il été respecté ? Le planning a-t-il été tenu ? Le suivi de chantier était-il rigoureux ? Y a-t-il eu des malfaçons ?\n\n**Publications** : un architecte d'intérieur publié dans des revues spécialisées (AD, Elle Décoration, Côté Maison, Ideat) a été sélectionné par un comité éditorial — c'est un gage de qualité, même si ce n'est ni nécessaire ni suffisant.\n\nRencontrez 2 à 3 architectes d'intérieur avant de vous décider. La première consultation est souvent gratuite ou peu coûteuse, et elle vous permet d'évaluer la qualité d'écoute, la compréhension de vos besoins et le feeling — paramètre important pour une collaboration qui peut durer des mois.\n\n:::takeaway\n- Vérifier le titre **CFAI** ou la qualification **OPQAI** — le seul filtre fiable\n- Exiger un **contrat écrit** détaillant phases, honoraires et calendrier\n- Honoraires 2026 : **8-18 %** du montant des travaux (mission complète)\n- Demander des **photos avant/après** et des **références vérifiables**\n- Vérifier l'**assurance RC Pro** et décennale si travaux structurels\n- Privilégier une rémunération **transparente** sans commissions occultes\n:::",
     ],
-    image: "🏠",
+    image: '🏠',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-17",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Architecture d'intérieur", "Décoration", "Rénovation", "Design", "Aménagement"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-17',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ["Architecture d'intérieur", 'Décoration', 'Rénovation', 'Design', 'Aménagement'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Quelle est la différence entre architecte d'intérieur et décorateur ?", answer: "L'architecte d'intérieur conçoit les espaces, modifie les volumes (cloisons, ouvertures, mezzanines), réalise des plans techniques et coordonne les corps de métier. Le décorateur intervient sur l'esthétique : choix des couleurs, mobilier, textiles, luminaires, sans toucher au bâti. L'architecte d'intérieur a un diplôme bac+5 reconnu par le CFAI, le décorateur n'a pas de diplôme réglementaire." },
-      { question: "Combien coûte un architecte d'intérieur en 2026 ?", answer: "Les honoraires varient selon le mode de rémunération : 8-12 % du montant des travaux pour un projet simple, 12-18 % pour un projet complexe (en Île-de-France, ajoutez 2-3 points). En forfait, comptez 3 000-8 000 € pour une conception sans suivi, 5 000-15 000 € pour un appartement en mission complète. Le taux horaire est de 80-200 € selon la zone géographique." },
-      { question: "Faut-il un architecte d'intérieur pour une petite rénovation ?", answer: "Pour un simple rafraîchissement (peinture, sol, luminaires), un décorateur ou votre propre sens esthétique peuvent suffire. En revanche, dès que vous touchez aux cloisons, à l'électricité, à la plomberie ou que vous redistribuez les espaces, un architecte d'intérieur apporte une réelle plus-value : optimisation de l'espace, coordination des artisans, respect du budget et des délais." },
-      { question: "Un architecte d'intérieur peut-il remplacer un architecte DPLG ?", answer: "Non, pas pour tous les projets. Dès que les travaux touchent à la structure porteuse du bâtiment ou que la surface de plancher créée dépasse 150 m², le recours à un architecte inscrit à l'Ordre (DPLG ou HMONP) est obligatoire (loi du 3 janvier 1977). L'architecte d'intérieur peut toutefois travailler en binôme avec un architecte DPLG pour les aspects créatifs et fonctionnels." },
-      { question: "Comment vérifier si un architecte d'intérieur est qualifié ?", answer: "Consultez l'annuaire du CFAI (cfai.fr) pour vérifier le titre 'Architecte d'intérieur CFAI'. Vous pouvez aussi vérifier la qualification OPQAI sur leur site. Demandez le diplôme et l'école d'origine. Les 16 écoles reconnues par le CFAI incluent Camondo, ENSAD, École Boulle, ENSAAMA, Penninghen et Strate. Vérifiez aussi l'assurance RC Pro." },
-      { question: "Que faire en cas de litige avec un architecte d'intérieur ?", answer: "Commencez par une mise en demeure par courrier recommandé. Si le professionnel est membre du CFAI, saisissez la commission de discipline du Conseil. Vous pouvez aussi recourir au médiateur de la consommation (obligatoire depuis 2016). En dernier recours, le tribunal judiciaire est compétent. L'assurance RC Pro de l'architecte d'intérieur couvre les dommages liés à ses erreurs de conception ou de suivi." }
-    ]
+      {
+        question: "Quelle est la différence entre architecte d'intérieur et décorateur ?",
+        answer:
+          "L'architecte d'intérieur conçoit les espaces, modifie les volumes (cloisons, ouvertures, mezzanines), réalise des plans techniques et coordonne les corps de métier. Le décorateur intervient sur l'esthétique : choix des couleurs, mobilier, textiles, luminaires, sans toucher au bâti. L'architecte d'intérieur a un diplôme bac+5 reconnu par le CFAI, le décorateur n'a pas de diplôme réglementaire.",
+      },
+      {
+        question: "Combien coûte un architecte d'intérieur en 2026 ?",
+        answer:
+          'Les honoraires varient selon le mode de rémunération : 8-12 % du montant des travaux pour un projet simple, 12-18 % pour un projet complexe (en Île-de-France, ajoutez 2-3 points). En forfait, comptez 3 000-8 000 € pour une conception sans suivi, 5 000-15 000 € pour un appartement en mission complète. Le taux horaire est de 80-200 € selon la zone géographique.',
+      },
+      {
+        question: "Faut-il un architecte d'intérieur pour une petite rénovation ?",
+        answer:
+          "Pour un simple rafraîchissement (peinture, sol, luminaires), un décorateur ou votre propre sens esthétique peuvent suffire. En revanche, dès que vous touchez aux cloisons, à l'électricité, à la plomberie ou que vous redistribuez les espaces, un architecte d'intérieur apporte une réelle plus-value : optimisation de l'espace, coordination des artisans, respect du budget et des délais.",
+      },
+      {
+        question: "Un architecte d'intérieur peut-il remplacer un architecte DPLG ?",
+        answer:
+          "Non, pas pour tous les projets. Dès que les travaux touchent à la structure porteuse du bâtiment ou que la surface de plancher créée dépasse 150 m², le recours à un architecte inscrit à l'Ordre (DPLG ou HMONP) est obligatoire (loi du 3 janvier 1977). L'architecte d'intérieur peut toutefois travailler en binôme avec un architecte DPLG pour les aspects créatifs et fonctionnels.",
+      },
+      {
+        question: "Comment vérifier si un architecte d'intérieur est qualifié ?",
+        answer:
+          "Consultez l'annuaire du CFAI (cfai.fr) pour vérifier le titre 'Architecte d'intérieur CFAI'. Vous pouvez aussi vérifier la qualification OPQAI sur leur site. Demandez le diplôme et l'école d'origine. Les 16 écoles reconnues par le CFAI incluent Camondo, ENSAD, École Boulle, ENSAAMA, Penninghen et Strate. Vérifiez aussi l'assurance RC Pro.",
+      },
+      {
+        question: "Que faire en cas de litige avec un architecte d'intérieur ?",
+        answer:
+          "Commencez par une mise en demeure par courrier recommandé. Si le professionnel est membre du CFAI, saisissez la commission de discipline du Conseil. Vous pouvez aussi recourir au médiateur de la consommation (obligatoire depuis 2016). En dernier recours, le tribunal judiciaire est compétent. L'assurance RC Pro de l'architecte d'intérieur couvre les dommages liés à ses erreurs de conception ou de suivi.",
+      },
+    ],
   },
 
-  "comment-choisir-pisciniste-guide": {
-    title: "Choisir son Pisciniste en 2026 : Le Guide Sans Concession",
-    excerpt: "Construction, rénovation, entretien de piscine : certifications FPP, normes de sécurité obligatoires et prix 2026 pour bien choisir votre pisciniste.",
-    metaTitle: "Choisir son Pisciniste 2026 : Guide Complet",
-    metaDescription: "Découvrez comment choisir un pisciniste : certifications FPP, normes de sécurité et prix 2026. Obtenez un devis gratuit piscine.",
+  'comment-choisir-pisciniste-guide': {
+    title: 'Choisir son Pisciniste en 2026 : Le Guide Sans Concession',
+    excerpt:
+      'Construction, rénovation, entretien de piscine : certifications FPP, normes de sécurité obligatoires et prix 2026 pour bien choisir votre pisciniste.',
+    metaTitle: 'Choisir son Pisciniste 2026 : Guide Complet',
+    metaDescription:
+      'Découvrez comment choisir un pisciniste : certifications FPP, normes de sécurité et prix 2026. Obtenez un devis gratuit piscine.',
     content: [
       "La France compte **3,4 millions de piscines privées** — le deuxième parc mondial après les États-Unis. Chaque année, **85 000 nouvelles piscines** sont construites, selon la Fédération des Professionnels de la Piscine (FPP). Mais la réalité derrière ces chiffres est moins idyllique : selon les données de la DGCCRF, **31 % des réclamations** liées aux piscines concernent des malfaçons (fissures, problèmes d'étanchéité, filtration défaillante) et **18 %** des litiges sur les délais non respectés. Un bassin mal construit, c'est un investissement de 30 000 à 80 000 € qui se transforme en cauchemar. Ce guide vous donne les armes pour choisir un pisciniste fiable. Consultez notre annuaire de [piscinistes qualifiés](/services/pisciniste) pour comparer les professionnels près de chez vous.\n\n:::info Cadre réglementaire\nLa construction d'une piscine est encadrée par plusieurs textes : le **Code de l'urbanisme** (déclaration préalable pour les bassins de 10 à 100 m², permis de construire au-delà de 100 m² ou avec un abri de plus de 1,80 m de hauteur), la **loi n°2003-9 du 3 janvier 2003** sur la sécurité des piscines (dispositif anti-noyade obligatoire), le **décret n°2003-1389** et l'**arrêté du 14 septembre 2004** détaillant les normes des dispositifs de sécurité. Depuis le 1er janvier 2024, le diagnostic de performance énergétique (DPE) prend en compte la piscine chauffée — un bassin énergivore peut dégrader la note de votre bien.\n:::",
 
@@ -132,33 +211,60 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Les 7 red flags d'un pisciniste douteux\n\n1. **Pas d'assurance décennale spécifique « piscine »** : vérifiez que l'attestation mentionne explicitement la construction de piscines. Une assurance générique « maçonnerie » peut ne pas couvrir les désordres d'étanchéité spécifiques aux bassins.\n\n2. **Devis sans étude de sol** : un pisciniste sérieux exige une étude géotechnique (ou a minima un sondage) avant de s'engager sur un prix. La nature du terrain (argile, nappe phréatique, roche) impacte considérablement le coût et la technique de construction. Un devis « ferme et définitif » sans étude de sol est une promesse impossible à tenir.\n\n3. **Calendrier irréaliste** : « votre piscine en 10 jours » pour une construction béton est un mensonge. Comptez réalistement 8 à 12 semaines pour une piscine béton (terrassement, structure, étanchéité, margelles, raccordements, mise en eau, mise en route). Une coque peut être posée en 1-2 semaines, mais les finitions prennent 2-3 semaines supplémentaires.\n\n4. **Demande d'acompte supérieur à 30 %** : l'échelonnement standard est 10-20 % à la commande, 30 % au terrassement, 30 % à la mise hors d'eau, et le solde à la réception. Un acompte de 50 % ou plus est un signal d'alarme.\n\n5. **Aucune mention du dispositif de sécurité dans le devis** : c'est une obligation légale. Un pisciniste qui « oublie » la sécurité ou la propose en option est soit incompétent, soit malhonnête.\n\n6. **Pas de bureau d'études pour le calcul de structure** : pour une piscine béton en terrain difficile (pente, nappe phréatique, sol argileux), un calcul de structure par un bureau d'études est indispensable. Un pisciniste qui se passe systématiquement de bureau d'études prend des risques avec votre investissement.\n\n7. **SAV inexistant après la mise en eau** : un bon pisciniste assure un suivi la première saison (équilibrage de l'eau, réglage de la filtration, conseil d'entretien). Celui qui disparaît après avoir encaissé le solde n'est pas un professionnel durable.\n\n:::expert Retour terrain\nLa première cause de litige en piscine est la **fissure structurelle** apparaissant dans les 2-3 premières années. Dans 80 % des cas, elle est due à une étude de sol absente ou bâclée. Les sols argileux (très fréquents en France) se gonflent et se rétractent au gré des saisons, exerçant des pressions considérables sur la structure du bassin. Ne faites jamais l'impasse sur l'étude géotechnique — son coût (1 000 – 2 000 €) est dérisoire face au prix de la piscine.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de pisciniste en 2026](/blog/prix-pisciniste-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de pisciniste en 2026](/blog/prix-pisciniste-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Le contrat : les clauses à vérifier ligne par ligne\n\nLe contrat de construction de piscine doit comporter les éléments suivants, conformément au Code de la consommation et aux recommandations de la FPP :\n\n**Description technique détaillée** : dimensions du bassin, type de construction (coque, béton projeté, béton armé banché), système de filtration (débit, type de média filtrant), revêtement d'étanchéité (liner, membrane armée, enduit, carrelage), margelles, local technique.\n\n**Plans côtés** : vue en plan et coupes avec implantation sur le terrain, distances aux limites de propriété (minimum 3 m en général, vérifiez le PLU de votre commune), cotes NGF si terrain en pente.\n\n**Calendrier d'exécution** : dates de début et de fin, avec pénalités de retard (standard : 1/1000e du montant par jour de retard). Vérifiez que le calendrier est réaliste — un retard de 2-3 semaines est courant mais au-delà, c'est problématique.\n\n**Échéancier de paiement** : conforme à l'avancement des travaux. Jamais plus de 30 % avant le début du terrassement.\n\n**Garanties** : garantie de parfait achèvement (1 an), garantie biennale (2 ans) sur les équipements (pompe, filtre, éclairage), garantie décennale (10 ans) sur la structure et l'étanchéité.\n\n**Dispositif de sécurité** : type, norme de référence, inclus dans le prix global.\n\n**Conditions de réception** : procès-verbal contradictoire avec possibilité d'émettre des réserves. La réception déclenche les garanties légales — ne signez jamais un PV de réception sans vérification approfondie.\n\n:::takeaway\n- Vérifier le label **Propiscines** (FPP) et l'assurance décennale **spécifique piscine**\n- Exiger une **étude de sol** avant tout engagement de prix\n- Budget 2026 : coque **18 000 – 48 000 €**, béton **30 000 – 100 000 €** selon finition et région\n- Le dispositif de sécurité est **obligatoire** (amende 45 000 €) — privilégier barrière ou volet\n- Acompte maximum **30 %** — paiement selon avancement réel\n- Vérifier le **calendrier réaliste** : 8-12 semaines pour du béton, 3-5 semaines pour une coque\n:::"
+      "## Le contrat : les clauses à vérifier ligne par ligne\n\nLe contrat de construction de piscine doit comporter les éléments suivants, conformément au Code de la consommation et aux recommandations de la FPP :\n\n**Description technique détaillée** : dimensions du bassin, type de construction (coque, béton projeté, béton armé banché), système de filtration (débit, type de média filtrant), revêtement d'étanchéité (liner, membrane armée, enduit, carrelage), margelles, local technique.\n\n**Plans côtés** : vue en plan et coupes avec implantation sur le terrain, distances aux limites de propriété (minimum 3 m en général, vérifiez le PLU de votre commune), cotes NGF si terrain en pente.\n\n**Calendrier d'exécution** : dates de début et de fin, avec pénalités de retard (standard : 1/1000e du montant par jour de retard). Vérifiez que le calendrier est réaliste — un retard de 2-3 semaines est courant mais au-delà, c'est problématique.\n\n**Échéancier de paiement** : conforme à l'avancement des travaux. Jamais plus de 30 % avant le début du terrassement.\n\n**Garanties** : garantie de parfait achèvement (1 an), garantie biennale (2 ans) sur les équipements (pompe, filtre, éclairage), garantie décennale (10 ans) sur la structure et l'étanchéité.\n\n**Dispositif de sécurité** : type, norme de référence, inclus dans le prix global.\n\n**Conditions de réception** : procès-verbal contradictoire avec possibilité d'émettre des réserves. La réception déclenche les garanties légales — ne signez jamais un PV de réception sans vérification approfondie.\n\n:::takeaway\n- Vérifier le label **Propiscines** (FPP) et l'assurance décennale **spécifique piscine**\n- Exiger une **étude de sol** avant tout engagement de prix\n- Budget 2026 : coque **18 000 – 48 000 €**, béton **30 000 – 100 000 €** selon finition et région\n- Le dispositif de sécurité est **obligatoire** (amende 45 000 €) — privilégier barrière ou volet\n- Acompte maximum **30 %** — paiement selon avancement réel\n- Vérifier le **calendrier réaliste** : 8-12 semaines pour du béton, 3-5 semaines pour une coque\n:::",
     ],
-    image: "🏊",
+    image: '🏊',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-20",
-    readTime: "16 min",
-    category: "Fiches métier",
-    tags: ["Piscine", "Construction", "Sécurité", "Jardin", "Été"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-20',
+    readTime: '16 min',
+    category: 'Fiches métier',
+    tags: ['Piscine', 'Construction', 'Sécurité', 'Jardin', 'Été'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Faut-il un permis de construire pour une piscine ?", answer: "Une déclaration préalable de travaux suffit pour les piscines de 10 à 100 m² de surface. Un permis de construire est nécessaire au-delà de 100 m² ou si vous installez un abri de plus de 1,80 m de hauteur. Les piscines de moins de 10 m² (mini-piscines) sont dispensées de formalités, sauf en zone protégée. Vérifiez aussi le PLU de votre commune pour les distances aux limites de propriété." },
-      { question: "Quel dispositif de sécurité choisir pour sa piscine ?", answer: "La barrière de protection (NF P 90-306) est statistiquement le dispositif le plus efficace. Le volet roulant (NF P 90-308) combine sécurité et praticité. L'abri (NF P 90-309) offre sécurité + prolongement de saison. L'alarme (NF P 90-307) est le moins cher mais le moins efficace car elle se déclenche après la chute. Pour des enfants en bas âge, la barrière est recommandée par tous les professionnels." },
-      { question: "Piscine coque ou béton : que choisir ?", answer: "La coque polyester est idéale pour un budget contraint et une installation rapide (1-2 semaines de pose). Le béton est supérieur en durabilité (30-50 ans vs 15-20 ans), en personnalisation des formes et en valeur patrimoniale. Le surcoût du béton est de 40-60 %. Pour un premier bassin familial standard, la coque offre le meilleur rapport qualité-prix. Pour un projet sur mesure ou haut de gamme, le béton s'impose." },
-      { question: "Combien coûte l'entretien annuel d'une piscine ?", answer: "En 2026, comptez 1 200 à 2 500 €/an pour un entretien en autonomie (produits chimiques, électricité de la pompe, hivernage, petites réparations). Un contrat d'entretien professionnel (ouverture/fermeture de saison, visites mensuelles, analyse d'eau, nettoyage) coûte 1 500 à 3 500 €/an. L'électrolyseur au sel réduit le budget produits chimiques de 30-50 % sur le long terme." },
-      { question: "Quelle est la durée de garantie d'une piscine ?", answer: "La garantie décennale (10 ans) couvre la structure et l'étanchéité du bassin. La garantie biennale (2 ans) couvre les équipements (pompe, filtre, éclairage, volet). La garantie de parfait achèvement (1 an) couvre toutes les malfaçons signalées à la réception. Le liner a une garantie fabricant de 10-15 ans mais sa durée de vie réelle est de 8-12 ans selon l'entretien." },
-      { question: "Comment vérifier la fiabilité d'un pisciniste ?", answer: "Vérifiez le label Propiscines sur propiscines.fr, l'assurance décennale spécifique piscine, les qualifications Qualibat 7131/7132. Demandez 3-4 références de chantiers récents et visitez si possible une réalisation en cours. Consultez les avis vérifiés sur ServicesArtisans. Méfiez-vous des piscinistes qui ne proposent pas de visite de chantier de référence." }
-    ]
+      {
+        question: 'Faut-il un permis de construire pour une piscine ?',
+        answer:
+          'Une déclaration préalable de travaux suffit pour les piscines de 10 à 100 m² de surface. Un permis de construire est nécessaire au-delà de 100 m² ou si vous installez un abri de plus de 1,80 m de hauteur. Les piscines de moins de 10 m² (mini-piscines) sont dispensées de formalités, sauf en zone protégée. Vérifiez aussi le PLU de votre commune pour les distances aux limites de propriété.',
+      },
+      {
+        question: 'Quel dispositif de sécurité choisir pour sa piscine ?',
+        answer:
+          "La barrière de protection (NF P 90-306) est statistiquement le dispositif le plus efficace. Le volet roulant (NF P 90-308) combine sécurité et praticité. L'abri (NF P 90-309) offre sécurité + prolongement de saison. L'alarme (NF P 90-307) est le moins cher mais le moins efficace car elle se déclenche après la chute. Pour des enfants en bas âge, la barrière est recommandée par tous les professionnels.",
+      },
+      {
+        question: 'Piscine coque ou béton : que choisir ?',
+        answer:
+          "La coque polyester est idéale pour un budget contraint et une installation rapide (1-2 semaines de pose). Le béton est supérieur en durabilité (30-50 ans vs 15-20 ans), en personnalisation des formes et en valeur patrimoniale. Le surcoût du béton est de 40-60 %. Pour un premier bassin familial standard, la coque offre le meilleur rapport qualité-prix. Pour un projet sur mesure ou haut de gamme, le béton s'impose.",
+      },
+      {
+        question: "Combien coûte l'entretien annuel d'une piscine ?",
+        answer:
+          "En 2026, comptez 1 200 à 2 500 €/an pour un entretien en autonomie (produits chimiques, électricité de la pompe, hivernage, petites réparations). Un contrat d'entretien professionnel (ouverture/fermeture de saison, visites mensuelles, analyse d'eau, nettoyage) coûte 1 500 à 3 500 €/an. L'électrolyseur au sel réduit le budget produits chimiques de 30-50 % sur le long terme.",
+      },
+      {
+        question: "Quelle est la durée de garantie d'une piscine ?",
+        answer:
+          "La garantie décennale (10 ans) couvre la structure et l'étanchéité du bassin. La garantie biennale (2 ans) couvre les équipements (pompe, filtre, éclairage, volet). La garantie de parfait achèvement (1 an) couvre toutes les malfaçons signalées à la réception. Le liner a une garantie fabricant de 10-15 ans mais sa durée de vie réelle est de 8-12 ans selon l'entretien.",
+      },
+      {
+        question: "Comment vérifier la fiabilité d'un pisciniste ?",
+        answer:
+          "Vérifiez le label Propiscines sur propiscines.fr, l'assurance décennale spécifique piscine, les qualifications Qualibat 7131/7132. Demandez 3-4 références de chantiers récents et visitez si possible une réalisation en cours. Consultez les avis vérifiés sur ServicesArtisans. Méfiez-vous des piscinistes qui ne proposent pas de visite de chantier de référence.",
+      },
+    ],
   },
 
-  "comment-choisir-antenniste-guide": {
-    title: "Choisir son Antenniste en 2026 : Le Guide Pratique",
-    excerpt: "Installation TNT, parabole, fibre optique, réseau collectif : qualifications requises, tarifs 2026 et pièges à éviter pour bien choisir votre antenniste.",
-    metaTitle: "Choisir son Antenniste 2026 : Guide Pratique",
-    metaDescription: "Découvrez comment choisir un antenniste qualifié : TNT, parabole, fibre. Tarifs 2026 et pièges à éviter. Devis gratuit.",
+  'comment-choisir-antenniste-guide': {
+    title: 'Choisir son Antenniste en 2026 : Le Guide Pratique',
+    excerpt:
+      'Installation TNT, parabole, fibre optique, réseau collectif : qualifications requises, tarifs 2026 et pièges à éviter pour bien choisir votre antenniste.',
+    metaTitle: 'Choisir son Antenniste 2026 : Guide Pratique',
+    metaDescription:
+      'Découvrez comment choisir un antenniste qualifié : TNT, parabole, fibre. Tarifs 2026 et pièges à éviter. Devis gratuit.',
     content: [
       "Avec le déploiement de la **TNT HD Ultra** et la généralisation de la fibre optique, le métier d'antenniste a considérablement évolué. En 2026, **27 millions de foyers français** reçoivent encore la télévision par voie hertzienne (TNT), et **4,2 millions de paraboles** sont installées sur les toits de France selon le CSA. Parallèlement, les réseaux collectifs d'antenne des immeubles nécessitent des mises à niveau régulières pour supporter les nouveaux standards de diffusion. Le problème : le métier d'antenniste n'est pas réglementé au même titre que l'électricité. N'importe quel bricoleur peut se déclarer « antenniste » et intervenir sur votre toiture — avec les risques que cela comporte pour votre réception, votre toiture et votre sécurité. Trouvez un [antenniste professionnel](/services/antenniste) vérifié sur notre annuaire.\n\n:::info Évolution du métier\nL'antenniste de 2026 n'est plus seulement un installateur d'antennes râteau. Le métier s'est élargi à la **distribution de signaux numériques** (TNT HD, satellite, IPTV), au **câblage réseau** (fibre optique FTTH, Ethernet catégorie 6/7), à la **domotique audiovisuelle** et aux **systèmes de réception collectifs** (SMATV). Un antenniste compétent maîtrise aussi bien les fréquences hertziennes que les réseaux IP. L'arrêté du 3 novembre 2014 relatif aux installations de réception de la TNT fixe les spécifications techniques minimales.\n:::",
 
@@ -170,33 +276,60 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Antenne collective en copropriété : les règles\n\nL'installation et la maintenance d'une antenne collective sont encadrées par la **loi n°66-457 du 2 juillet 1966** (dite « loi antenne ») et le **décret n°67-1171 du 22 décembre 1967**. Points clés :\n\n**Le droit à l'antenne** : tout copropriétaire ou locataire a le droit de recevoir les programmes de télévision. Si l'antenne collective ne fonctionne pas correctement, le syndic est tenu de la faire réparer ou remplacer. Si la copropriété refuse l'installation d'une antenne collective, chaque occupant a le droit d'installer une antenne individuelle (sous réserve de respecter les règles d'urbanisme et le règlement de copropriété).\n\n**Le choix de l'antenniste** : le syndic doit mettre en concurrence au minimum 2-3 prestataires. Le vote en assemblée générale se fait à la majorité simple (article 24 de la loi du 10 juillet 1965) pour la maintenance courante, et à la majorité absolue (article 25) pour une installation neuve ou une modernisation importante.\n\n**Le contrat de maintenance** : un contrat annuel incluant 1-2 visites préventives et un dépannage garanti sous 48h coûte **500 – 1 500 €/an** pour un immeuble de 20-40 logements. Vérifiez que le contrat couvre les pièces d'usure (amplificateurs, répartiteurs).\n\n**La mise aux normes** : avec l'arrêt progressif du signal analogique et les évolutions de la TNT HD, les réseaux collectifs anciens (câble coaxial bas de gamme, répartiteurs passifs) doivent être modernisés. Budget : **50 – 150 €/logement** pour une mise à niveau complète.\n\nPour trouver un antenniste spécialisé en réseaux collectifs, consultez notre annuaire de [professionnels de l'antenne](/services/antenniste) et filtrez par spécialité.\n\n:::info Fibre et antenne : la convergence\nDe plus en plus de copropriétés remplacent l'antenne collective par une solution **IPTV via fibre optique**. L'antenniste moderne doit savoir conseiller sur cette transition : analyse de la couverture fibre (vérifiez sur arcep.fr), comparaison des offres opérateurs, impact sur la qualité de réception (latence, nombre de chaînes). La fibre ne rend pas l'antenne obsolète : pour la réception TNT gratuite sans abonnement, l'antenne hertzienne reste la solution la plus économique.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de antenniste en 2026](/blog/prix-antenniste-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de antenniste en 2026](/blog/prix-antenniste-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Comment se déroule une bonne intervention\n\nUne intervention d'antenniste professionnelle suit un protocole précis :\n\n**1. Diagnostic préalable** : l'antenniste évalue votre situation — type de réception souhaitée (TNT, satellite, mixte), qualité du signal dans votre zone (consultez la carte de couverture TNT sur recevoirlatnt.fr), état de l'installation existante (câblage, connectique, antenne), contraintes d'accès à la toiture.\n\n**2. Devis détaillé** : le devis précise le type d'antenne recommandé (avec référence fabricant), l'amplificateur si nécessaire, le type et la longueur de câble, les connecteurs, le support de fixation (mât, embase), la protection d'étanchéité et la main-d'œuvre. Il mentionne aussi les conditions de garantie.\n\n**3. Installation** : fixation du support en toiture avec étanchéification, montage et orientation de l'antenne, tirage du câble coaxial avec des courbes respectant le rayon minimal (5 fois le diamètre du câble), raccordement des connecteurs F à compression, installation de l'amplificateur si nécessaire, raccordement aux prises TV.\n\n**4. Mesure et validation** : l'antenniste mesure le signal à chaque prise avec un mesureur de champ. Les valeurs attendues pour la TNT : niveau de signal entre 45 et 70 dBµV, MER (Modulation Error Ratio) supérieur à 25 dB, BER (Bit Error Rate) inférieur à 2×10⁻⁴ avant Viterbi. Il vous fournit ces mesures par écrit.\n\n**5. Remise en état** : la toiture est remise en état (tuiles repositionnées, étanchéité vérifiée), le câble est fixé proprement le long de la façade (attaches tous les 40-50 cm), et les passages intérieurs sont soignés.\n\nUn antenniste professionnel passe en moyenne **2 à 4 heures** pour une installation complète avec câblage. Si l'intervention dure 30 minutes, la qualité est probablement au rabais.\n\n:::takeaway\n- Exiger l'**habilitation électrique** et l'**assurance RC Pro** à jour\n- Demander une **mesure de signal** avec mesureur de champ après installation\n- Tarifs 2026 : antenne TNT **150 – 550 €**, parabole **200 – 750 €** selon zone\n- Vérifier la qualité du **passage de toiture** (étanchéité) avant de payer\n- Pour un problème de réception soudain, contacter d'abord l'**ANFR** (brouillage 5G possible)\n- En copropriété, mettre en concurrence **2-3 antennistes** minimum\n:::"
+      "## Comment se déroule une bonne intervention\n\nUne intervention d'antenniste professionnelle suit un protocole précis :\n\n**1. Diagnostic préalable** : l'antenniste évalue votre situation — type de réception souhaitée (TNT, satellite, mixte), qualité du signal dans votre zone (consultez la carte de couverture TNT sur recevoirlatnt.fr), état de l'installation existante (câblage, connectique, antenne), contraintes d'accès à la toiture.\n\n**2. Devis détaillé** : le devis précise le type d'antenne recommandé (avec référence fabricant), l'amplificateur si nécessaire, le type et la longueur de câble, les connecteurs, le support de fixation (mât, embase), la protection d'étanchéité et la main-d'œuvre. Il mentionne aussi les conditions de garantie.\n\n**3. Installation** : fixation du support en toiture avec étanchéification, montage et orientation de l'antenne, tirage du câble coaxial avec des courbes respectant le rayon minimal (5 fois le diamètre du câble), raccordement des connecteurs F à compression, installation de l'amplificateur si nécessaire, raccordement aux prises TV.\n\n**4. Mesure et validation** : l'antenniste mesure le signal à chaque prise avec un mesureur de champ. Les valeurs attendues pour la TNT : niveau de signal entre 45 et 70 dBµV, MER (Modulation Error Ratio) supérieur à 25 dB, BER (Bit Error Rate) inférieur à 2×10⁻⁴ avant Viterbi. Il vous fournit ces mesures par écrit.\n\n**5. Remise en état** : la toiture est remise en état (tuiles repositionnées, étanchéité vérifiée), le câble est fixé proprement le long de la façade (attaches tous les 40-50 cm), et les passages intérieurs sont soignés.\n\nUn antenniste professionnel passe en moyenne **2 à 4 heures** pour une installation complète avec câblage. Si l'intervention dure 30 minutes, la qualité est probablement au rabais.\n\n:::takeaway\n- Exiger l'**habilitation électrique** et l'**assurance RC Pro** à jour\n- Demander une **mesure de signal** avec mesureur de champ après installation\n- Tarifs 2026 : antenne TNT **150 – 550 €**, parabole **200 – 750 €** selon zone\n- Vérifier la qualité du **passage de toiture** (étanchéité) avant de payer\n- Pour un problème de réception soudain, contacter d'abord l'**ANFR** (brouillage 5G possible)\n- En copropriété, mettre en concurrence **2-3 antennistes** minimum\n:::",
     ],
-    image: "📡",
+    image: '📡',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-23",
-    readTime: "13 min",
-    category: "Fiches métier",
-    tags: ["Antenne", "TNT", "Satellite", "Télévision", "Réseau"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-23',
+    readTime: '13 min',
+    category: 'Fiches métier',
+    tags: ['Antenne', 'TNT', 'Satellite', 'Télévision', 'Réseau'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Faut-il une qualification spéciale pour être antenniste ?", answer: "Le métier d'antenniste n'est pas soumis à une qualification obligatoire spécifique, contrairement à l'électricité. Cependant, l'habilitation électrique est indispensable pour raccorder des équipements au réseau domestique. La certification Qualibat 5522, un BTS Systèmes numériques ou une formation constructeur attestent du professionnalisme. La formation au travail en hauteur est une obligation employeur." },
-      { question: "Combien coûte l'installation d'une antenne TNT en 2026 ?", answer: "En province, comptez 150 à 300 € pour une antenne standard avec amplificateur et câblage 1 TV, et 250 à 450 € pour une antenne haute performance en zone difficile. En Île-de-France, ajoutez 30 à 50 %. Ces prix incluent le matériel, la pose en toiture et le câblage. Un réglage d'antenne existante coûte 80 à 150 € en province." },
-      { question: "Mon antenne TNT ne fonctionne plus depuis la 5G, que faire ?", answer: "Le déploiement de la 5G en bande 700 MHz peut brouiller la réception TNT des foyers proches d'antennes-relais. Avant d'appeler un antenniste, contactez le service gratuit de l'ANFR au 0 970 818 818. L'agence diagnostique le problème et fournit gratuitement un filtre LTE si nécessaire. Si le problème persiste, un antenniste peut installer une antenne plus directive ou un filtre supplémentaire." },
-      { question: "Antenne ou box Internet pour recevoir la TV ?", answer: "L'antenne hertzienne (TNT) offre la réception gratuite des chaînes nationales sans abonnement, avec une qualité d'image HD stable. La box Internet (IPTV) donne accès à plus de chaînes mais nécessite un abonnement et dépend de la qualité de votre connexion Internet. En zone rurale avec un débit faible, l'antenne TNT reste souvent la meilleure solution. Les deux sont complémentaires." },
-      { question: "Qui paie l'antenne collective en copropriété ?", answer: "L'installation et la maintenance de l'antenne collective sont des charges communes réparties entre tous les copropriétaires selon les tantièmes. Le vote se fait en assemblée générale : majorité simple (article 24) pour la maintenance, majorité absolue (article 25) pour une installation neuve. Si l'antenne collective est défaillante, le syndic est tenu de la faire réparer." },
-      { question: "Combien de temps dure une installation d'antenne ?", answer: "Une installation complète (antenne TNT ou parabole + câblage + mesure) prend en moyenne 2 à 4 heures pour un professionnel équipé. Le réglage d'une antenne existante prend 30 minutes à 1 heure. Pour un réseau collectif en immeuble, comptez 1 à 3 jours selon la taille. Méfiez-vous des interventions de moins de 30 minutes — la qualité est probablement insuffisante." }
-    ]
+      {
+        question: 'Faut-il une qualification spéciale pour être antenniste ?',
+        answer:
+          "Le métier d'antenniste n'est pas soumis à une qualification obligatoire spécifique, contrairement à l'électricité. Cependant, l'habilitation électrique est indispensable pour raccorder des équipements au réseau domestique. La certification Qualibat 5522, un BTS Systèmes numériques ou une formation constructeur attestent du professionnalisme. La formation au travail en hauteur est une obligation employeur.",
+      },
+      {
+        question: "Combien coûte l'installation d'une antenne TNT en 2026 ?",
+        answer:
+          "En province, comptez 150 à 300 € pour une antenne standard avec amplificateur et câblage 1 TV, et 250 à 450 € pour une antenne haute performance en zone difficile. En Île-de-France, ajoutez 30 à 50 %. Ces prix incluent le matériel, la pose en toiture et le câblage. Un réglage d'antenne existante coûte 80 à 150 € en province.",
+      },
+      {
+        question: 'Mon antenne TNT ne fonctionne plus depuis la 5G, que faire ?',
+        answer:
+          "Le déploiement de la 5G en bande 700 MHz peut brouiller la réception TNT des foyers proches d'antennes-relais. Avant d'appeler un antenniste, contactez le service gratuit de l'ANFR au 0 970 818 818. L'agence diagnostique le problème et fournit gratuitement un filtre LTE si nécessaire. Si le problème persiste, un antenniste peut installer une antenne plus directive ou un filtre supplémentaire.",
+      },
+      {
+        question: 'Antenne ou box Internet pour recevoir la TV ?',
+        answer:
+          "L'antenne hertzienne (TNT) offre la réception gratuite des chaînes nationales sans abonnement, avec une qualité d'image HD stable. La box Internet (IPTV) donne accès à plus de chaînes mais nécessite un abonnement et dépend de la qualité de votre connexion Internet. En zone rurale avec un débit faible, l'antenne TNT reste souvent la meilleure solution. Les deux sont complémentaires.",
+      },
+      {
+        question: "Qui paie l'antenne collective en copropriété ?",
+        answer:
+          "L'installation et la maintenance de l'antenne collective sont des charges communes réparties entre tous les copropriétaires selon les tantièmes. Le vote se fait en assemblée générale : majorité simple (article 24) pour la maintenance, majorité absolue (article 25) pour une installation neuve. Si l'antenne collective est défaillante, le syndic est tenu de la faire réparer.",
+      },
+      {
+        question: "Combien de temps dure une installation d'antenne ?",
+        answer:
+          "Une installation complète (antenne TNT ou parabole + câblage + mesure) prend en moyenne 2 à 4 heures pour un professionnel équipé. Le réglage d'une antenne existante prend 30 minutes à 1 heure. Pour un réseau collectif en immeuble, comptez 1 à 3 jours selon la taille. Méfiez-vous des interventions de moins de 30 minutes — la qualité est probablement insuffisante.",
+      },
+    ],
   },
 
-  "comment-choisir-geometre-guide": {
-    title: "Choisir son Géomètre-Expert en 2026 : Le Guide Complet",
-    excerpt: "Bornage, division parcellaire, implantation : comprendre le monopole du géomètre-expert, les tarifs 2026 et les critères pour choisir le bon professionnel.",
-    metaTitle: "Géomètre-Expert 2026 : Guide et Tarifs",
-    metaDescription: "Découvrez comment choisir un géomètre-expert : bornage, division parcellaire, tarifs 2026. Obtenez un devis gratuit.",
+  'comment-choisir-geometre-guide': {
+    title: 'Choisir son Géomètre-Expert en 2026 : Le Guide Complet',
+    excerpt:
+      'Bornage, division parcellaire, implantation : comprendre le monopole du géomètre-expert, les tarifs 2026 et les critères pour choisir le bon professionnel.',
+    metaTitle: 'Géomètre-Expert 2026 : Guide et Tarifs',
+    metaDescription:
+      'Découvrez comment choisir un géomètre-expert : bornage, division parcellaire, tarifs 2026. Obtenez un devis gratuit.',
     content: [
       "Le géomètre-expert est le seul professionnel habilité à **fixer les limites de propriété** en France. Ce monopole, inscrit dans la loi depuis 1946, fait du géomètre-expert un acteur incontournable de toute transaction foncière, construction ou litige de voisinage. Pourtant, selon l'Ordre des géomètres-experts (OGE), **43 % des litiges fonciers** entre voisins auraient pu être évités par un bornage préalable. En 2026, la France compte environ **1 900 cabinets de géomètres-experts** employant **12 000 professionnels**. Les honoraires étant libres depuis 2015, les écarts de prix peuvent atteindre 100 % pour une même prestation. Ce guide vous aide à naviguer dans ce marché peu transparent. Consultez notre annuaire de [géomètres-experts](/services/geometre) pour comparer les professionnels de votre secteur.\n\n:::info Un métier réglementé et protégé\nLe géomètre-expert est une profession réglementée par la **loi n°46-942 du 7 mai 1946** modifiée. Le titre de géomètre-expert est protégé : seuls les professionnels inscrits au **tableau de l'Ordre des géomètres-experts** (OGE) peuvent exercer. L'usurpation du titre est un délit pénal (article 433-17 du Code pénal). Le géomètre-expert détient un **monopole légal** sur la délimitation des propriétés foncières (bornage). Il est aussi officier public pour l'établissement des documents d'arpentage transmis au cadastre.\n:::",
 
@@ -206,33 +339,60 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Les 5 red flags d'un géomètre-expert problématique\n\n1. **Non inscrit à l'Ordre des géomètres-experts** : c'est le critère éliminatoire absolu. Un professionnel non inscrit à l'OGE n'a pas le droit d'exercer les missions de bornage et de délimitation foncière. Vérifiez sur le site de l'Ordre ([geometre-expert.fr](https://www.geometre-expert.fr)) que le cabinet est bien inscrit au tableau.\n\n2. **Devis sans détail des prestations** : un devis sérieux détaille chaque étape (recherche documentaire, levé terrain, rédaction PV, dépôt au cadastre) avec le coût associé. Un forfait global sans détail cache souvent des prestations incomplètes — par exemple, le dépôt du document d'arpentage au cadastre n'est pas inclus.\n\n3. **Délais démesurés sans justification** : un bornage simple devrait être réalisé en 4 à 8 semaines (incluant la convocation des voisins avec préavis de 15 jours minimum). Un délai de 6 mois sans raison particulière (recherche d'archives difficile, voisin injoignable) indique un cabinet surchargé qui ne priorise pas votre dossier.\n\n4. **Refus de fournir le procès-verbal de bornage** : le PV de bornage est un document contractuel qui vous appartient. Certains cabinets « oublient » de le fournir ou le facturent en supplément. Il doit être inclus dans la prestation de bornage.\n\n5. **Absence de recherche documentaire préalable** : avant tout bornage, le géomètre-expert doit consulter les titres de propriété, les anciens plans cadastraux, les PV de bornage antérieurs et les documents d'urbanisme. Un géomètre qui se présente sur le terrain sans avoir fait ce travail préparatoire risque de fixer des limites erronées — avec des conséquences juridiques graves.\n\n:::warning Confusion cadastre/propriété\nLe plan cadastral n'est **PAS** un titre de propriété. C'est un document fiscal qui indique la position approximative des parcelles à des fins d'imposition. Seul le **bornage** (PV signé par toutes les parties) fixe juridiquement les limites de propriété. Un voisin qui vous dit « le cadastre prouve que cette bande de terrain est à moi » se trompe. Et un géomètre-expert qui s'appuie uniquement sur le cadastre sans croiser les titres de propriété fait un travail incomplet.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de géomètre en 2026](/blog/prix-geometre-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de géomètre en 2026](/blog/prix-geometre-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Le déroulement d'un bornage amiable\n\nLe bornage est la mission la plus courante du géomètre-expert. Voici comment il se déroule :\n\n**Étape 1 — Recherche documentaire** (1-2 semaines) : le géomètre-expert consulte les titres de propriété (au service de la publicité foncière), les plans cadastraux historiques, les PV de bornage antérieurs, les permis de construire et les documents d'urbanisme. Cette recherche est cruciale : elle permet de reconstituer l'historique foncier et d'identifier les indices de limites.\n\n**Étape 2 — Convocation des parties** : le géomètre-expert convoque tous les propriétaires riverains concernés par lettre recommandée avec AR, au moins 15 jours avant la date de rendez-vous sur le terrain. La convocation précise l'objet (bornage), le lieu et l'heure.\n\n**Étape 3 — Opération de terrain** : le jour J, le géomètre-expert rencontre les parties sur le terrain. Il présente les résultats de sa recherche documentaire, examine les indices physiques de limites (clôtures anciennes, murs, haies, bornes existantes), écoute les positions de chaque partie, et propose une limite qu'il justifie techniquement et juridiquement.\n\n**Étape 4 — Matérialisation** : si les parties acceptent la limite proposée, le géomètre-expert implante des bornes (repères physiques en béton, acier ou PVC) aux points caractéristiques de la limite. Les bornes sont géoréférencées (coordonnées GPS de précision centimétrique).\n\n**Étape 5 — Procès-verbal de bornage** : le géomètre-expert rédige un PV décrivant la limite fixée, accompagné d'un plan de bornage côté. Toutes les parties signent le PV. Ce document a la valeur d'un contrat et engage définitivement les signataires. Il est fortement recommandé de le publier au service de la publicité foncière pour le rendre opposable aux tiers (futurs acquéreurs).\n\n**Étape 6 — Mise à jour cadastrale** : le géomètre-expert établit un document d'arpentage (DMPC) transmis au service du cadastre pour mise à jour du plan cadastral. Cette étape est souvent facturée en supplément — vérifiez qu'elle est incluse dans le devis.\n\nSi les parties ne parviennent pas à un accord, le bornage devient **judiciaire** : l'une des parties saisit le tribunal judiciaire, qui désigne un géomètre-expert judiciaire. Le bornage judiciaire est plus long (6-18 mois) et plus coûteux, mais sa décision s'impose à toutes les parties.\n\n:::takeaway\n- Vérifier l'inscription à l'**Ordre des géomètres-experts** sur geometre-expert.fr\n- Le bornage est la **seule procédure** qui fixe juridiquement les limites de propriété\n- Tarifs 2026 : bornage **800 – 4 500 €**, division parcellaire **1 000 – 8 000 €**\n- Demander **2-3 devis détaillés** — les honoraires sont libres et négociables depuis 2015\n- Exiger le **procès-verbal de bornage** signé et le publier à la publicité foncière\n- Le plan cadastral n'est **PAS** un titre de propriété — ne confondez jamais les deux\n:::"
+      "## Le déroulement d'un bornage amiable\n\nLe bornage est la mission la plus courante du géomètre-expert. Voici comment il se déroule :\n\n**Étape 1 — Recherche documentaire** (1-2 semaines) : le géomètre-expert consulte les titres de propriété (au service de la publicité foncière), les plans cadastraux historiques, les PV de bornage antérieurs, les permis de construire et les documents d'urbanisme. Cette recherche est cruciale : elle permet de reconstituer l'historique foncier et d'identifier les indices de limites.\n\n**Étape 2 — Convocation des parties** : le géomètre-expert convoque tous les propriétaires riverains concernés par lettre recommandée avec AR, au moins 15 jours avant la date de rendez-vous sur le terrain. La convocation précise l'objet (bornage), le lieu et l'heure.\n\n**Étape 3 — Opération de terrain** : le jour J, le géomètre-expert rencontre les parties sur le terrain. Il présente les résultats de sa recherche documentaire, examine les indices physiques de limites (clôtures anciennes, murs, haies, bornes existantes), écoute les positions de chaque partie, et propose une limite qu'il justifie techniquement et juridiquement.\n\n**Étape 4 — Matérialisation** : si les parties acceptent la limite proposée, le géomètre-expert implante des bornes (repères physiques en béton, acier ou PVC) aux points caractéristiques de la limite. Les bornes sont géoréférencées (coordonnées GPS de précision centimétrique).\n\n**Étape 5 — Procès-verbal de bornage** : le géomètre-expert rédige un PV décrivant la limite fixée, accompagné d'un plan de bornage côté. Toutes les parties signent le PV. Ce document a la valeur d'un contrat et engage définitivement les signataires. Il est fortement recommandé de le publier au service de la publicité foncière pour le rendre opposable aux tiers (futurs acquéreurs).\n\n**Étape 6 — Mise à jour cadastrale** : le géomètre-expert établit un document d'arpentage (DMPC) transmis au service du cadastre pour mise à jour du plan cadastral. Cette étape est souvent facturée en supplément — vérifiez qu'elle est incluse dans le devis.\n\nSi les parties ne parviennent pas à un accord, le bornage devient **judiciaire** : l'une des parties saisit le tribunal judiciaire, qui désigne un géomètre-expert judiciaire. Le bornage judiciaire est plus long (6-18 mois) et plus coûteux, mais sa décision s'impose à toutes les parties.\n\n:::takeaway\n- Vérifier l'inscription à l'**Ordre des géomètres-experts** sur geometre-expert.fr\n- Le bornage est la **seule procédure** qui fixe juridiquement les limites de propriété\n- Tarifs 2026 : bornage **800 – 4 500 €**, division parcellaire **1 000 – 8 000 €**\n- Demander **2-3 devis détaillés** — les honoraires sont libres et négociables depuis 2015\n- Exiger le **procès-verbal de bornage** signé et le publier à la publicité foncière\n- Le plan cadastral n'est **PAS** un titre de propriété — ne confondez jamais les deux\n:::",
     ],
-    image: "📐",
+    image: '📐',
     author: "L'équipe ServicesArtisans",
-    date: "2026-02-26",
-    readTime: "14 min",
-    category: "Fiches métier",
-    tags: ["Géomètre", "Bornage", "Foncier", "Terrain", "Copropriété"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-02-26',
+    readTime: '14 min',
+    category: 'Fiches métier',
+    tags: ['Géomètre', 'Bornage', 'Foncier', 'Terrain', 'Copropriété'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Le bornage est-il obligatoire avant de vendre un terrain ?", answer: "Le bornage n'est pas légalement obligatoire pour une vente de terrain, sauf en lotissement (loi SRU). Cependant, il est très fortement recommandé : un terrain non borné expose l'acheteur à des litiges de voisinage ultérieurs. De nombreux notaires exigent un bornage avant de finaliser la vente. Le coût du bornage (800 – 2 200 € en moyenne) est dérisoire par rapport au prix du terrain." },
-      { question: "Quelle est la différence entre le cadastre et le bornage ?", answer: "Le cadastre est un document fiscal indiquant la position approximative des parcelles pour le calcul de l'impôt foncier. Sa précision est de l'ordre de 0,5 à 2 mètres en zone urbaine, parfois plus en zone rurale. Le bornage est un acte juridique qui fixe définitivement les limites de propriété avec une précision centimétrique. Seul le bornage fait foi en cas de litige — le cadastre n'a aucune valeur juridique en matière de limites de propriété." },
-      { question: "Combien coûte un géomètre-expert en 2026 ?", answer: "Les honoraires sont libres depuis 2015. Pour un bornage simple, comptez 800 à 1 500 € en province et 1 200 à 2 200 € en Île-de-France. Un relevé topographique coûte 500 à 3 500 € selon la surface. Une division parcellaire va de 1 000 à 8 000 €. Demandez toujours 2-3 devis détaillés car les écarts de prix peuvent atteindre 100 % pour une même prestation." },
-      { question: "Mon voisin refuse le bornage, que faire ?", answer: "L'article 646 du Code civil dispose que 'tout propriétaire peut obliger son voisin au bornage de leurs propriétés contiguës'. Si votre voisin refuse le bornage amiable, vous pouvez saisir le tribunal judiciaire pour un bornage judiciaire. Le juge désignera un géomètre-expert qui fixera les limites. Le jugement s'impose aux deux parties. Les frais sont généralement partagés, sauf si le tribunal en décide autrement." },
-      { question: "Faut-il un géomètre pour implanter une maison ?", answer: "L'implantation par un géomètre-expert n'est pas légalement obligatoire pour une maison individuelle, mais elle est très fortement recommandée, voire exigée par certaines assurances dommages-ouvrage. Le géomètre positionne la construction avec une précision centimétrique, garantissant le respect des règles d'urbanisme (retraits, distances aux limites). En cas de non-conformité découverte après construction, la démolition peut être ordonnée." },
-      { question: "Comment vérifier qu'un géomètre-expert est bien inscrit à l'Ordre ?", answer: "Consultez l'annuaire de l'Ordre des géomètres-experts sur geometre-expert.fr. Chaque géomètre-expert inscrit y figure avec son numéro d'inscription, l'adresse de son cabinet et sa zone d'exercice. L'inscription à l'Ordre est obligatoire pour exercer les missions de bornage et de délimitation foncière. Un professionnel non inscrit qui réalise un bornage commet un exercice illégal de la profession." }
-    ]
+      {
+        question: 'Le bornage est-il obligatoire avant de vendre un terrain ?',
+        answer:
+          "Le bornage n'est pas légalement obligatoire pour une vente de terrain, sauf en lotissement (loi SRU). Cependant, il est très fortement recommandé : un terrain non borné expose l'acheteur à des litiges de voisinage ultérieurs. De nombreux notaires exigent un bornage avant de finaliser la vente. Le coût du bornage (800 – 2 200 € en moyenne) est dérisoire par rapport au prix du terrain.",
+      },
+      {
+        question: 'Quelle est la différence entre le cadastre et le bornage ?',
+        answer:
+          "Le cadastre est un document fiscal indiquant la position approximative des parcelles pour le calcul de l'impôt foncier. Sa précision est de l'ordre de 0,5 à 2 mètres en zone urbaine, parfois plus en zone rurale. Le bornage est un acte juridique qui fixe définitivement les limites de propriété avec une précision centimétrique. Seul le bornage fait foi en cas de litige — le cadastre n'a aucune valeur juridique en matière de limites de propriété.",
+      },
+      {
+        question: 'Combien coûte un géomètre-expert en 2026 ?',
+        answer:
+          'Les honoraires sont libres depuis 2015. Pour un bornage simple, comptez 800 à 1 500 € en province et 1 200 à 2 200 € en Île-de-France. Un relevé topographique coûte 500 à 3 500 € selon la surface. Une division parcellaire va de 1 000 à 8 000 €. Demandez toujours 2-3 devis détaillés car les écarts de prix peuvent atteindre 100 % pour une même prestation.',
+      },
+      {
+        question: 'Mon voisin refuse le bornage, que faire ?',
+        answer:
+          "L'article 646 du Code civil dispose que 'tout propriétaire peut obliger son voisin au bornage de leurs propriétés contiguës'. Si votre voisin refuse le bornage amiable, vous pouvez saisir le tribunal judiciaire pour un bornage judiciaire. Le juge désignera un géomètre-expert qui fixera les limites. Le jugement s'impose aux deux parties. Les frais sont généralement partagés, sauf si le tribunal en décide autrement.",
+      },
+      {
+        question: 'Faut-il un géomètre pour implanter une maison ?',
+        answer:
+          "L'implantation par un géomètre-expert n'est pas légalement obligatoire pour une maison individuelle, mais elle est très fortement recommandée, voire exigée par certaines assurances dommages-ouvrage. Le géomètre positionne la construction avec une précision centimétrique, garantissant le respect des règles d'urbanisme (retraits, distances aux limites). En cas de non-conformité découverte après construction, la démolition peut être ordonnée.",
+      },
+      {
+        question: "Comment vérifier qu'un géomètre-expert est bien inscrit à l'Ordre ?",
+        answer:
+          "Consultez l'annuaire de l'Ordre des géomètres-experts sur geometre-expert.fr. Chaque géomètre-expert inscrit y figure avec son numéro d'inscription, l'adresse de son cabinet et sa zone d'exercice. L'inscription à l'Ordre est obligatoire pour exercer les missions de bornage et de délimitation foncière. Un professionnel non inscrit qui réalise un bornage commet un exercice illégal de la profession.",
+      },
+    ],
   },
 
-  "comment-choisir-demenageur-guide": {
-    title: "Choisir son Déménageur en 2026 : Le Guide Anti-Arnaques",
-    excerpt: "Devis, assurance, transport : labels de qualité, tarifs 2026 par volume et distance, et les pièges les plus courants des déménageurs malhonnêtes.",
-    metaTitle: "Choisir son Déménageur 2026 : Guide Anti-Arnaques",
-    metaDescription: "Comparez les déménageurs : labels, tarifs 2026 par volume et distance. Évitez les pièges courants. Obtenez un devis gratuit.",
+  'comment-choisir-demenageur-guide': {
+    title: 'Choisir son Déménageur en 2026 : Le Guide Anti-Arnaques',
+    excerpt:
+      'Devis, assurance, transport : labels de qualité, tarifs 2026 par volume et distance, et les pièges les plus courants des déménageurs malhonnêtes.',
+    metaTitle: 'Choisir son Déménageur 2026 : Guide Anti-Arnaques',
+    metaDescription:
+      'Comparez les déménageurs : labels, tarifs 2026 par volume et distance. Évitez les pièges courants. Obtenez un devis gratuit.',
     content: [
       "Chaque année, **3,1 millions de Français déménagent**, selon les données de l'INSEE. Le marché du déménagement représente **4,2 milliards d'euros** en 2026, partagé entre environ **2 800 entreprises** déclarées. Mais la DGCCRF classe régulièrement le déménagement parmi les **secteurs les plus touchés par les litiges** : objets cassés ou disparus, surfacturation par rapport au devis, retards de livraison, prise en otage des meubles tant que le supplément n'est pas payé. En 2025, le médiateur du transport a reçu **4 200 plaintes** liées au déménagement. Ce guide vous donne toutes les armes pour éviter ces situations. Consultez notre annuaire de [déménageurs vérifiés](/services/demenageur) pour comparer les offres.\n\n:::warning Secteur à risque\nLe déménagement est un secteur où les arnaques sont **structurellement fréquentes** : faibles barrières à l'entrée (pas de qualification obligatoire spécifique au déménagement), clientèle captive le jour J (vous ne pouvez pas annuler quand le camion est devant la porte), et difficulté à prouver les dommages après coup. La loi française (Code des transports, articles L. 1432-1 et suivants) encadre le secteur, mais les contrôles restent insuffisants. Votre meilleure protection : une sélection rigoureuse en amont.\n:::",
 
@@ -244,25 +404,50 @@ export const metiers4Articles: Record<string, BlogArticle> = {
 
       "## Les 7 red flags d'un déménageur malhonnête\n\n1. **Pas de visite technique avant le devis** : un devis « au pif » par téléphone garantit une surfacturation le jour J. Le déménageur arrive, constate que le volume réel est supérieur au volume estimé, et exige un supplément immédiat — sous menace de repartir avec vos affaires. Exigez une visite technique gratuite.\n\n2. **Prix anormalement bas** : un déménagement T3 local à 300 € est trop beau pour être vrai. Les charges salariales, le carburant, l'amortissement du véhicule et l'assurance coûtent un minimum incompressible. Un prix très bas signifie : personnel non déclaré, camion non assuré, ou surfacturation programmée le jour J.\n\n3. **Demande d'acompte supérieur à 30 %** : l'acompte standard est de 10 à 20 %. Au-delà de 30 %, le risque de défaillance (le déménageur ne vient pas le jour J) augmente significativement. Ne payez jamais la totalité avant la livraison.\n\n4. **Pas d'assurance ou assurance minimale** : le déménageur est responsable de plein droit des dommages (articles L. 1432-8 et suivants du Code des transports). Mais la couverture de base est souvent dérisoire (forfait de 23 € par kilo de colis endommagé). Vérifiez les plafonds d'indemnisation et souscrivez une assurance complémentaire « valeur déclarée » pour les objets de valeur.\n\n5. **Pas d'inventaire contradictoire au chargement** : l'état descriptif de vos biens (inventaire avec mention de l'état de chaque meuble) est votre preuve en cas de dommage. Un déménageur qui refuse de le remplir ou vous le fait signer vierge prépare un refus d'indemnisation.\n\n6. **Prise en otage des biens** : pratique illégale mais courante. Le déménageur arrive, charge le camion, puis exige un supplément pour « volume supérieur » et refuse de décharger tant que vous n'avez pas payé. C'est une **extorsion** (article 312-1 du Code pénal). Appelez la police si cela se produit.\n\n7. **Aucun avis en ligne vérifiable** : en 2026, une entreprise de déménagement légitime a des avis Google, des références clients et une présence en ligne. L'absence totale de traces numériques est suspecte — l'entreprise est peut-être récente (et inexpérimentée) ou change de nom régulièrement pour effacer les mauvais avis.\n\n:::expert Conseil terrain\nLe meilleur test : **demandez le nom et le numéro de téléphone de 3 clients récents** et appelez-les. Un déménageur sérieux fournira ces références sans hésiter. Posez des questions précises : le volume annoncé correspondait-il au volume réel ? Y a-t-il eu des suppléments non prévus ? Des objets ont-ils été endommagés ? Comment le litige a-t-il été traité ? Les réponses vous en apprendront plus que tous les labels du monde.\n:::",
 
-      "Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de déménageur en 2026](/blog/prix-demenageur-2026-tarifs) avec les prix moyens constatés dans toute la France.",
+      'Pour anticiper votre budget, consultez notre article détaillé sur les [tarifs de déménageur en 2026](/blog/prix-demenageur-2026-tarifs) avec les prix moyens constatés dans toute la France.',
 
-      "## Comment réagir en cas de litige\n\nMalgré toutes les précautions, des litiges peuvent survenir. Voici la marche à suivre :\n\n**Au moment de la livraison** :\n- Vérifiez chaque meuble et carton en présence du chef d'équipe\n- Notez toute anomalie (rayure, casse, manquant) sur la **lettre de voiture** (ou bon de livraison) AVANT de signer. Soyez précis : « table basse — plateau fissuré sur 15 cm » est recevable, « dégâts divers » ne l'est pas\n- Photographiez tous les dommages avec horodatage\n- Si le déménageur refuse que vous notiez les réserves, écrivez « signature sous réserves — état des lieux en cours » et envoyez un courrier recommandé dans les 3 jours\n\n**Après la livraison** :\n- Vous disposez de **10 jours calendaires** (article L. 133-3 du Code de commerce) pour notifier des réserves par courrier recommandé si vous constatez des dommages après le départ du déménageur (dommages cachés à l'intérieur d'un carton, par exemple)\n- Joignez les photos, la copie du devis et la copie de la lettre de voiture\n\n**Procédure de réclamation** :\n- Courrier recommandé AR au déménageur détaillant les dommages et la demande d'indemnisation\n- Si pas de réponse sous 30 jours : saisine du médiateur du transport (coordonnées obligatoires sur le devis)\n- Si échec de la médiation : saisine du tribunal judiciaire (< 5 000 € : tribunal de proximité, pas besoin d'avocat)\n\n**Prescription** : l'action en responsabilité contre le déménageur se prescrit par **1 an** à compter de la livraison (article L. 133-6 du Code de commerce). Ne tardez pas.\n\n:::takeaway\n- Vérifier l'inscription au **registre des transporteurs** (DREAL) — obligation légale\n- Privilégier les déménageurs certifiés **NF Service** (NF 318) ou adhérents **FAM**\n- Exiger une **visite technique gratuite** avant tout devis — jamais de devis par téléphone seul\n- Tarifs 2026 : T2 local **700 – 2 000 €**, T4 local **1 200 – 3 500 €**, longue distance **1 500 – 4 000 €**\n- Remplir l'**inventaire contradictoire** et noter les réserves AVANT de signer le bon de livraison\n- Délai de réserves complémentaires : **10 jours** par courrier recommandé\n- Déménager en **milieu de mois** et en **basse saison** pour économiser 20 à 40 %\n:::"
+      "## Comment réagir en cas de litige\n\nMalgré toutes les précautions, des litiges peuvent survenir. Voici la marche à suivre :\n\n**Au moment de la livraison** :\n- Vérifiez chaque meuble et carton en présence du chef d'équipe\n- Notez toute anomalie (rayure, casse, manquant) sur la **lettre de voiture** (ou bon de livraison) AVANT de signer. Soyez précis : « table basse — plateau fissuré sur 15 cm » est recevable, « dégâts divers » ne l'est pas\n- Photographiez tous les dommages avec horodatage\n- Si le déménageur refuse que vous notiez les réserves, écrivez « signature sous réserves — état des lieux en cours » et envoyez un courrier recommandé dans les 3 jours\n\n**Après la livraison** :\n- Vous disposez de **10 jours calendaires** (article L. 133-3 du Code de commerce) pour notifier des réserves par courrier recommandé si vous constatez des dommages après le départ du déménageur (dommages cachés à l'intérieur d'un carton, par exemple)\n- Joignez les photos, la copie du devis et la copie de la lettre de voiture\n\n**Procédure de réclamation** :\n- Courrier recommandé AR au déménageur détaillant les dommages et la demande d'indemnisation\n- Si pas de réponse sous 30 jours : saisine du médiateur du transport (coordonnées obligatoires sur le devis)\n- Si échec de la médiation : saisine du tribunal judiciaire (< 5 000 € : tribunal de proximité, pas besoin d'avocat)\n\n**Prescription** : l'action en responsabilité contre le déménageur se prescrit par **1 an** à compter de la livraison (article L. 133-6 du Code de commerce). Ne tardez pas.\n\n:::takeaway\n- Vérifier l'inscription au **registre des transporteurs** (DREAL) — obligation légale\n- Privilégier les déménageurs certifiés **NF Service** (NF 318) ou adhérents **FAM**\n- Exiger une **visite technique gratuite** avant tout devis — jamais de devis par téléphone seul\n- Tarifs 2026 : T2 local **700 – 2 000 €**, T4 local **1 200 – 3 500 €**, longue distance **1 500 – 4 000 €**\n- Remplir l'**inventaire contradictoire** et noter les réserves AVANT de signer le bon de livraison\n- Délai de réserves complémentaires : **10 jours** par courrier recommandé\n- Déménager en **milieu de mois** et en **basse saison** pour économiser 20 à 40 %\n:::",
     ],
-    image: "🚚",
+    image: '🚚',
     author: "L'équipe ServicesArtisans",
-    date: "2026-03-01",
-    readTime: "15 min",
-    category: "Fiches métier",
-    tags: ["Déménagement", "Transport", "Logement", "Conseils", "Budget"],
-    authorBio: "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: "2026-03-10",
+    date: '2026-03-01',
+    readTime: '15 min',
+    category: 'Fiches métier',
+    tags: ['Déménagement', 'Transport', 'Logement', 'Conseils', 'Budget'],
+    authorBio:
+      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
+    updatedDate: '2026-03-10',
     faq: [
-      { question: "Comment vérifier qu'un déménageur est déclaré ?", answer: "Vérifiez l'inscription au registre des transporteurs sur le site du ministère des Transports. Le déménageur doit aussi avoir un numéro SIRET vérifiable sur societe.com ou infogreffe.fr. La certification NF Service (NF 318) est le label de qualité de référence, vérifiable sur le site AFNOR. Un déménageur non inscrit au registre des transporteurs exerce illégalement." },
-      { question: "Combien coûte un déménagement en 2026 ?", answer: "Pour un déménagement local (< 50 km), comptez 400-800 € pour un studio en province, 700-1 400 € pour un T2/T3, et 1 200-2 500 € pour un T4/T5. En Île-de-France, ajoutez 40-60 %. Pour un déménagement longue distance (ex. Paris-Lyon), comptez 1 500-2 800 € pour 30 m³. La haute saison (juin-septembre) entraîne un surcoût de 20-40 %." },
-      { question: "Que faire si le déménageur casse un meuble ?", answer: "Notez immédiatement le dommage sur la lettre de voiture AVANT de signer, avec une description précise et des photos. Le déménageur est responsable de plein droit (Code des transports). Envoyez une réclamation par recommandé AR. Si les dommages sont découverts après le départ, vous avez 10 jours calendaires pour notifier des réserves par recommandé. L'action se prescrit par 1 an." },
-      { question: "Quelle assurance pour un déménagement ?", answer: "La responsabilité de base du déménageur est limitée à un forfait par kilo (souvent 23 €/kg). Pour les objets de valeur, souscrivez une assurance complémentaire 'valeur déclarée' (1-2 % de la valeur totale). Établissez un inventaire avec la valeur de chaque objet. Certaines assurances habitation couvrent aussi le déménagement — vérifiez votre contrat. Les objets de grande valeur (œuvres d'art, bijoux) doivent faire l'objet d'une déclaration spéciale." },
-      { question: "Peut-on annuler un déménagement après avoir signé le devis ?", answer: "Pour les contrats conclus à distance ou à domicile, vous bénéficiez d'un délai de rétractation de 14 jours (article L. 221-18 du Code de la consommation). Passé ce délai, les conditions d'annulation dépendent du contrat : les pénalités courantes sont de 10-30 % du montant. L'annulation moins de 48h avant le jour J entraîne généralement le paiement intégral de la prestation." },
-      { question: "Déménageur professionnel ou location de camion : que choisir ?", answer: "La location de camion (200-500 € pour un utilitaire 20 m³, 1-2 jours) est économique mais vous assumez tous les risques : pas d'assurance transport pour vos biens, effort physique intense, risque de blessure. Le déménageur professionnel coûte 2-3 fois plus mais apporte : main-d'œuvre formée, protection du mobilier, assurance transport, et gain de temps considérable. Pour un volume supérieur à 15-20 m³, le professionnel est recommandé." }
-    ]
+      {
+        question: "Comment vérifier qu'un déménageur est déclaré ?",
+        answer:
+          "Vérifiez l'inscription au registre des transporteurs sur le site du ministère des Transports. Le déménageur doit aussi avoir un numéro SIRET vérifiable sur societe.com ou infogreffe.fr. La certification NF Service (NF 318) est le label de qualité de référence, vérifiable sur le site AFNOR. Un déménageur non inscrit au registre des transporteurs exerce illégalement.",
+      },
+      {
+        question: 'Combien coûte un déménagement en 2026 ?',
+        answer:
+          'Pour un déménagement local (< 50 km), comptez 400-800 € pour un studio en province, 700-1 400 € pour un T2/T3, et 1 200-2 500 € pour un T4/T5. En Île-de-France, ajoutez 40-60 %. Pour un déménagement longue distance (ex. Paris-Lyon), comptez 1 500-2 800 € pour 30 m³. La haute saison (juin-septembre) entraîne un surcoût de 20-40 %.',
+      },
+      {
+        question: 'Que faire si le déménageur casse un meuble ?',
+        answer:
+          "Notez immédiatement le dommage sur la lettre de voiture AVANT de signer, avec une description précise et des photos. Le déménageur est responsable de plein droit (Code des transports). Envoyez une réclamation par recommandé AR. Si les dommages sont découverts après le départ, vous avez 10 jours calendaires pour notifier des réserves par recommandé. L'action se prescrit par 1 an.",
+      },
+      {
+        question: 'Quelle assurance pour un déménagement ?',
+        answer:
+          "La responsabilité de base du déménageur est limitée à un forfait par kilo (souvent 23 €/kg). Pour les objets de valeur, souscrivez une assurance complémentaire 'valeur déclarée' (1-2 % de la valeur totale). Établissez un inventaire avec la valeur de chaque objet. Certaines assurances habitation couvrent aussi le déménagement — vérifiez votre contrat. Les objets de grande valeur (œuvres d'art, bijoux) doivent faire l'objet d'une déclaration spéciale.",
+      },
+      {
+        question: 'Peut-on annuler un déménagement après avoir signé le devis ?',
+        answer:
+          "Pour les contrats conclus à distance ou à domicile, vous bénéficiez d'un délai de rétractation de 14 jours (article L. 221-18 du Code de la consommation). Passé ce délai, les conditions d'annulation dépendent du contrat : les pénalités courantes sont de 10-30 % du montant. L'annulation moins de 48h avant le jour J entraîne généralement le paiement intégral de la prestation.",
+      },
+      {
+        question: 'Déménageur professionnel ou location de camion : que choisir ?',
+        answer:
+          "La location de camion (200-500 € pour un utilitaire 20 m³, 1-2 jours) est économique mais vous assumez tous les risques : pas d'assurance transport pour vos biens, effort physique intense, risque de blessure. Le déménageur professionnel coûte 2-3 fois plus mais apporte : main-d'œuvre formée, protection du mobilier, assurance transport, et gain de temps considérable. Pour un volume supérieur à 15-20 m³, le professionnel est recommandé.",
+      },
+    ],
   },
 }

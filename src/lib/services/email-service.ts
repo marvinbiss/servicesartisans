@@ -22,13 +22,18 @@ const DEFAULT_FROM = 'ServicesArtisans <noreply@servicesartisans.fr>'
 /**
  * Send an email using Resend API
  */
-export async function sendEmail(options: EmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
+export async function sendEmail(
+  options: EmailOptions
+): Promise<{ success: boolean; id?: string; error?: string }> {
   const resendApiKey = process.env.RESEND_API_KEY
 
   if (!resendApiKey) {
     // Dev mode: log email details when API key not configured
     if (process.env.NODE_ENV === 'development') {
-      logger.info('[Email Service] No RESEND_API_KEY — would send to:', { to: options.to, subject: options.template.subject })
+      logger.info('[Email Service] No RESEND_API_KEY — would send to:', {
+        to: options.to,
+        subject: options.template.subject,
+      })
     }
     return { success: true, id: 'dev-mode' }
   }
@@ -38,15 +43,15 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${resendApiKey}`
+        Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
         from: options.from || DEFAULT_FROM,
         to: Array.isArray(options.to) ? options.to : [options.to],
         subject: options.template.subject,
         html: options.template.html,
-        text: options.template.text
-      })
+        text: options.template.text,
+      }),
     })
 
     const data = await response.json()
@@ -60,7 +65,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
     logger.error('[Email Service] Error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     }
   }
 }
@@ -109,7 +114,7 @@ export const emailTemplates = {
           </div>
         </body>
       </html>
-    `
+    `,
   }),
 
   // Welcome email for new artisans
@@ -169,11 +174,16 @@ export const emailTemplates = {
           </div>
         </body>
       </html>
-    `
+    `,
   }),
 
   // New booking notification
-  newBooking: (artisanName: string, clientName: string, service: string, date: string): EmailTemplate => ({
+  newBooking: (
+    artisanName: string,
+    clientName: string,
+    service: string,
+    date: string
+  ): EmailTemplate => ({
     subject: `Nouvelle réservation de ${clientName}`,
     html: `
       <!DOCTYPE html>
@@ -212,7 +222,7 @@ export const emailTemplates = {
           </div>
         </body>
       </html>
-    `
+    `,
   }),
 
   // Review request
@@ -256,7 +266,7 @@ export const emailTemplates = {
           </div>
         </body>
       </html>
-    `
+    `,
   }),
 
   // Password reset
@@ -297,11 +307,11 @@ export const emailTemplates = {
           </div>
         </body>
       </html>
-    `
-  })
+    `,
+  }),
 }
 
 export default {
   sendEmail,
-  emailTemplates
+  emailTemplates,
 }

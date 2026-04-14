@@ -38,13 +38,14 @@ export async function notifyNewMessage(params: MessageNotificationParams): Promi
   }
 
   try {
-    const conversationUrl = recipientRole === 'artisan'
-      ? `${SITE_URL}/espace-artisan/messages`
-      : `${SITE_URL}/espace-client/messages`
+    const conversationUrl =
+      recipientRole === 'artisan'
+        ? `${SITE_URL}/espace-artisan/messages`
+        : `${SITE_URL}/espace-client/messages`
 
     const { subject, html } = getNewMessageAlertEmail({
       recipientName: recipientName || (recipientRole === 'artisan' ? 'Artisan' : 'Client'),
-      senderName: senderName || 'Quelqu\'un',
+      senderName: senderName || "Quelqu'un",
       messagePreview: messageContent,
       conversationUrl,
     })
@@ -52,7 +53,10 @@ export async function notifyNewMessage(params: MessageNotificationParams): Promi
     const result = await sendEmail({ to: recipientEmail, subject, html })
 
     if (!result.success) {
-      logger.error('[message-notification] Email send failed:', { error: result.error, to: recipientEmail })
+      logger.error('[message-notification] Email send failed:', {
+        error: result.error,
+        to: recipientEmail,
+      })
       return false
     }
 

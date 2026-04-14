@@ -21,7 +21,7 @@ function getStripeInstance(): Stripe {
 export const stripe = new Proxy({} as Stripe, {
   get(_, prop: keyof Stripe) {
     return getStripeInstance()[prop]
-  }
+  },
 })
 
 export const PLANS = {
@@ -30,12 +30,7 @@ export const PLANS = {
     name: 'Gratuit',
     price: 0,
     priceId: null,
-    features: [
-      'Profil basique',
-      '5 demandes/mois',
-      'Messagerie',
-      'Support email',
-    ],
+    features: ['Profil basique', '5 demandes/mois', 'Messagerie', 'Support email'],
     limits: {
       demandesParMois: 5,
       photos: 3,

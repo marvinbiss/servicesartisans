@@ -97,12 +97,7 @@ export function ChatWindow({
     setNewMessage('')
 
     try {
-      await chatService.sendMessage(
-        conversationId,
-        content,
-        currentUserId,
-        currentUserType
-      )
+      await chatService.sendMessage(conversationId, content, currentUserId, currentUserType)
     } catch {
       // Restore the message so the user can retry
       setNewMessage(content)
@@ -114,12 +109,7 @@ export function ChatWindow({
 
   // Handle typing indicator
   const handleTyping = () => {
-    chatService.sendTypingIndicator(
-      conversationId,
-      currentUserId,
-      currentUserType,
-      true
-    )
+    chatService.sendTypingIndicator(conversationId, currentUserId, currentUserType, true)
   }
 
   // Format time
@@ -221,12 +211,7 @@ export function ChatWindow({
                   </span>
                 </div>
               )}
-              <div
-                className={cn(
-                  'flex',
-                  isOwn ? 'justify-end' : 'justify-start'
-                )}
-              >
+              <div className={cn('flex', isOwn ? 'justify-end' : 'justify-start')}>
                 <div
                   className={cn(
                     'max-w-[70%] rounded-2xl px-4 py-2',
@@ -242,21 +227,15 @@ export function ChatWindow({
                       isOwn ? 'justify-end' : 'justify-start'
                     )}
                   >
-                    <span
-                      className={cn(
-                        'text-xs',
-                        isOwn ? 'text-blue-200' : 'text-gray-400'
-                      )}
-                    >
+                    <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-gray-400')}>
                       {formatTime(message.created_at)}
                     </span>
-                    {isOwn && (
-                      message.read_at ? (
+                    {isOwn &&
+                      (message.read_at ? (
                         <CheckCheck className="w-3 h-3 text-blue-200" />
                       ) : (
                         <Check className="w-3 h-3 text-blue-200" />
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
               </div>
@@ -268,9 +247,18 @@ export function ChatWindow({
         {getTypingText() && (
           <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             <div className="flex gap-1">
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span
+                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                style={{ animationDelay: '0ms' }}
+              />
+              <span
+                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                style={{ animationDelay: '150ms' }}
+              />
+              <span
+                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                style={{ animationDelay: '300ms' }}
+              />
             </div>
             <span className="text-sm">{getTypingText()}</span>
           </div>
@@ -300,11 +288,7 @@ export function ChatWindow({
             className="flex-1"
             disabled={isSending}
           />
-          <Button
-            type="submit"
-            disabled={!newMessage.trim() || isSending}
-            className="px-4"
-          >
+          <Button type="submit" disabled={!newMessage.trim() || isSending} className="px-4">
             <Send className="w-5 h-5" />
           </Button>
         </form>

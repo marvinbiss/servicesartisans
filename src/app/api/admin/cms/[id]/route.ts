@@ -10,10 +10,7 @@ export const dynamic = 'force-dynamic'
 
 // --- GET: Single page by ID ---
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'read')
     if (!auth.success) return auth.error!
@@ -30,7 +27,9 @@ export async function GET(
 
     const { data: page, error } = await supabase
       .from('cms_pages')
-      .select('id, slug, page_type, title, content_json, content_html, structured_data, meta_title, meta_description, og_image_url, canonical_url, excerpt, author, author_bio, category, tags, read_time, featured_image, service_slug, location_slug, status, published_at, published_by, sort_order, is_active, created_by, updated_by, created_at, updated_at')
+      .select(
+        'id, slug, page_type, title, content_json, content_html, structured_data, meta_title, meta_description, og_image_url, canonical_url, excerpt, author, author_bio, category, tags, read_time, featured_image, service_slug, location_slug, status, published_at, published_by, sort_order, is_active, created_by, updated_by, created_at, updated_at'
+      )
       .eq('id', id)
       .single()
 
@@ -53,10 +52,7 @@ export async function GET(
 
 // --- PUT: Update page ---
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error!
@@ -82,7 +78,10 @@ export async function PUT(
     const parsed = updatePageSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -101,13 +100,19 @@ export async function PUT(
     // Guard against oversized JSON payloads
     if (validated.content_json && JSON.stringify(validated.content_json).length > 500000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' } },
+        {
+          success: false,
+          error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' },
+        },
         { status: 400 }
       )
     }
     if (validated.structured_data && JSON.stringify(validated.structured_data).length > 100000) {
       return NextResponse.json(
-        { success: false, error: { message: 'Les données structurées dépassent la taille maximale autorisée' } },
+        {
+          success: false,
+          error: { message: 'Les données structurées dépassent la taille maximale autorisée' },
+        },
         { status: 400 }
       )
     }
@@ -115,7 +120,13 @@ export async function PUT(
     const supabase = createAdminClient()
 
     // Fetch old slug/type before update for stale-path revalidation
-    let oldPage: { slug: string; page_type: string; service_slug: string | null; location_slug: string | null; status: string } | null = null
+    let oldPage: {
+      slug: string
+      page_type: string
+      service_slug: string | null
+      location_slug: string | null
+      status: string
+    } | null = null
     if (validated.slug || validated.page_type) {
       const { data } = await supabase
         .from('cms_pages')
@@ -145,13 +156,20 @@ export async function PUT(
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.update', 'cms_page', id, { slug: page.slug, page_type: page.page_type })
+    await logAdminAction(auth.admin!.id, 'cms_page.update', 'cms_page', id, {
+      slug: page.slug,
+      page_type: page.page_type,
+    })
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {
       revalidatePagePaths(page)
       // Also revalidate old path if slug/type changed
-      if (oldPage && oldPage.status === 'published' && (oldPage.slug !== page.slug || oldPage.page_type !== page.page_type)) {
+      if (
+        oldPage &&
+        oldPage.status === 'published' &&
+        (oldPage.slug !== page.slug || oldPage.page_type !== page.page_type)
+      ) {
         revalidatePagePaths(oldPage)
       }
     }
@@ -169,10 +187,7 @@ export async function PUT(
 
 // --- DELETE: Soft delete (set is_active = false) ---
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'delete')
     if (!auth.success) return auth.error!

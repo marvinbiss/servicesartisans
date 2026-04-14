@@ -4,12 +4,10 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const mockJsonFn = vi.fn(
-  (body: unknown, init?: { status?: number }) => ({
-    body,
-    status: init?.status ?? 200,
-  })
-)
+const mockJsonFn = vi.fn((body: unknown, init?: { status?: number }) => ({
+  body,
+  status: init?.status ?? 200,
+}))
 vi.mock('next/server', () => ({
   NextResponse: {
     json: (body: unknown, init?: { status?: number }) => mockJsonFn(body, init),
@@ -77,11 +75,7 @@ describe('POST /api/cee/partners/activate', () => {
     const res = (await POST(makeRequest() as never)) as unknown as MockResult
     expect(res.status).toBe(200)
     expect(res.body).toMatchObject({ success: true, data: { status: 'active' } })
-    expect(updateStatusMock).toHaveBeenCalledWith(
-      expect.anything(),
-      'partner-1',
-      'active'
-    )
+    expect(updateStatusMock).toHaveBeenCalledWith(expect.anything(), 'partner-1', 'active')
   })
 
   it('rejects illegal transition (400)', async () => {
@@ -106,7 +100,9 @@ describe('POST /api/cee/partners/activate', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    ;(mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({
+    ;(
+      mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({
       data: { user: null },
       error: null,
     })

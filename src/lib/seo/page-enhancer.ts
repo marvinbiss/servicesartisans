@@ -118,10 +118,7 @@ export async function shouldEnhancePage(pathname: string): Promise<boolean> {
  * Enregistre l'application des enrichissements dans seo_enhancement_log.
  * Fire-and-forget — ne bloque jamais le rendu.
  */
-async function logEnhancement(
-  pagePath: string,
-  enhancements: PageEnhancements
-): Promise<void> {
+async function logEnhancement(pagePath: string, enhancements: PageEnhancements): Promise<void> {
   try {
     const supabase = createAdminClient()
     const types: EnhancementType[] = []
@@ -133,16 +130,14 @@ async function logEnhancement(
     if (enhancements.useOptimizedMeta) types.push('optimized_meta')
 
     // Batch insert — un log par type d'enrichissement
-    const rows = types.map(type => ({
+    const rows = types.map((type) => ({
       page_path: pagePath,
       enhancement_type: type,
       applied_at: new Date().toISOString(),
     }))
 
     if (rows.length > 0) {
-      const { error } = await supabase
-        .from('seo_enhancement_log')
-        .insert(rows)
+      const { error } = await supabase.from('seo_enhancement_log').insert(rows)
 
       if (error) {
         logger.warn('Failed to log enhancement', { pagePath, error: error.message })

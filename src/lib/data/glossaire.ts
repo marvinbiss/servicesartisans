@@ -62,7 +62,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Longrine',
     slug: 'longrine',
     definition:
-      "La longrine est une poutre en béton armé qui relie les plots ou pieux de fondation entre eux. Elle répartit les charges du bâtiment et sert de support au plancher bas. On la retrouve fréquemment dans les constructions sur vide sanitaire ou terrain en pente.",
+      'La longrine est une poutre en béton armé qui relie les plots ou pieux de fondation entre eux. Elle répartit les charges du bâtiment et sert de support au plancher bas. On la retrouve fréquemment dans les constructions sur vide sanitaire ou terrain en pente.',
     category: 'Gros œuvre',
     relatedService: 'macon',
   },
@@ -70,7 +70,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Radier',
     slug: 'radier',
     definition:
-      "Le radier est une dalle de fondation épaisse qui couvre toute la surface au sol du bâtiment. Il est utilisé quand le sol est de mauvaise portance ou que la nappe phréatique est haute. Le radier répartit uniformément les charges, ce qui évite les tassements différentiels.",
+      'Le radier est une dalle de fondation épaisse qui couvre toute la surface au sol du bâtiment. Il est utilisé quand le sol est de mauvaise portance ou que la nappe phréatique est haute. Le radier répartit uniformément les charges, ce qui évite les tassements différentiels.',
     category: 'Gros œuvre',
     relatedService: 'macon',
   },
@@ -192,7 +192,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Chevron',
     slug: 'chevron',
     definition:
-      "Le chevron est une pièce de bois inclinée fixée sur les pannes de la charpente. Il supporte les liteaux sur lesquels sont posées les tuiles ou ardoises. Son espacement et sa section sont calculés en fonction de la charge de couverture et de la zone climatique (neige, vent).",
+      'Le chevron est une pièce de bois inclinée fixée sur les pannes de la charpente. Il supporte les liteaux sur lesquels sont posées les tuiles ou ardoises. Son espacement et sa section sont calculés en fonction de la charge de couverture et de la zone climatique (neige, vent).',
     category: 'Charpente & toiture',
     relatedService: 'charpentier',
   },
@@ -200,7 +200,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Panne',
     slug: 'panne',
     definition:
-      "La panne est une poutre horizontale de la charpente qui repose sur les fermes ou les murs pignons. On distingue la panne faîtière (au sommet), les pannes intermédiaires et la panne sablière (en bas de pente). Elles supportent les chevrons et transmettent les charges aux murs porteurs.",
+      'La panne est une poutre horizontale de la charpente qui repose sur les fermes ou les murs pignons. On distingue la panne faîtière (au sommet), les pannes intermédiaires et la panne sablière (en bas de pente). Elles supportent les chevrons et transmettent les charges aux murs porteurs.',
     category: 'Charpente & toiture',
     relatedService: 'charpentier',
   },
@@ -264,7 +264,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Voliges',
     slug: 'voliges',
     definition:
-      "Les voliges sont des planches minces clouées sur les chevrons pour former un support continu de couverture, notamment pour les ardoises ou les bardeaux. Contrairement aux liteaux (support discontinu), elles offrent une surface pleine qui facilite la fixation et renforce la rigidité du toit.",
+      'Les voliges sont des planches minces clouées sur les chevrons pour former un support continu de couverture, notamment pour les ardoises ou les bardeaux. Contrairement aux liteaux (support discontinu), elles offrent une surface pleine qui facilite la fixation et renforce la rigidité du toit.',
     category: 'Charpente & toiture',
     relatedService: 'couvreur',
   },
@@ -288,7 +288,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Chéneau',
     slug: 'cheneau',
     definition:
-      "Le chéneau est un canal en zinc, cuivre ou PVC intégré à la toiture pour collecter les eaux de pluie. Contrairement à la gouttière (suspendue en bord de toit), le chéneau est encastré dans la maçonnerie ou la charpente. Il nécessite un entretien régulier pour éviter les obstructions par les feuilles.",
+      'Le chéneau est un canal en zinc, cuivre ou PVC intégré à la toiture pour collecter les eaux de pluie. Contrairement à la gouttière (suspendue en bord de toit), le chéneau est encastré dans la maçonnerie ou la charpente. Il nécessite un entretien régulier pour éviter les obstructions par les feuilles.',
     category: 'Charpente & toiture',
     relatedService: 'couvreur',
   },
@@ -330,7 +330,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Cuivre (tuyauterie)',
     slug: 'cuivre-tuyauterie',
     definition:
-      "Le cuivre est le matériau traditionnel de la plomberie, apprécié pour sa durabilité (50 ans et plus), ses propriétés antibactériennes et sa résistance à la corrosion. Il se travaille par brasage ou avec des raccords à compression. Plus coûteux que le PER, il reste la référence en rénovation de qualité.",
+      'Le cuivre est le matériau traditionnel de la plomberie, apprécié pour sa durabilité (50 ans et plus), ses propriétés antibactériennes et sa résistance à la corrosion. Il se travaille par brasage ou avec des raccords à compression. Plus coûteux que le PER, il reste la référence en rénovation de qualité.',
     category: 'Plomberie',
     relatedService: 'plombier',
   },
@@ -343,7 +343,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'plombier',
   },
   {
-    term: 'Vanne d\'arrêt',
+    term: "Vanne d'arrêt",
     slug: 'vanne-arret',
     definition:
       "La vanne d'arrêt est un robinet qui permet de couper l'alimentation en eau d'un circuit ou d'un appareil. Chaque logement doit disposer d'une vanne générale et idéalement de vannes individuelles par circuit. Savoir où se trouve votre vanne d'arrêt est le premier réflexe en cas de fuite.",
@@ -420,7 +420,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Tableau divisionnaire',
     slug: 'tableau-divisionnaire',
     definition:
-      "Le tableau divisionnaire est un tableau électrique secondaire installé à distance du tableau principal, par exemple dans un garage ou une extension. Il est alimenté par un câble protégé depuis le tableau principal et dispose de ses propres protections (différentiel + disjoncteurs).",
+      'Le tableau divisionnaire est un tableau électrique secondaire installé à distance du tableau principal, par exemple dans un garage ou une extension. Il est alimenté par un câble protégé depuis le tableau principal et dispose de ses propres protections (différentiel + disjoncteurs).',
     category: 'Électricité',
     relatedService: 'electricien',
   },
@@ -444,7 +444,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'GTL (Gaine Technique Logement)',
     slug: 'gtl',
     definition:
-      "La GTL est un espace technique obligatoire (NF C 15-100) qui regroupe le tableau électrique, le coffret de communication (VDI), le disjoncteur de branchement et les arrivées de courant fort et faible. Elle doit être directement accessible et mesurer au minimum 60 cm de large.",
+      'La GTL est un espace technique obligatoire (NF C 15-100) qui regroupe le tableau électrique, le coffret de communication (VDI), le disjoncteur de branchement et les arrivées de courant fort et faible. Elle doit être directement accessible et mesurer au minimum 60 cm de large.',
     category: 'Électricité',
     relatedService: 'electricien',
   },
@@ -460,7 +460,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'NF C 15-100',
     slug: 'nf-c-15-100',
     definition:
-      "La NF C 15-100 est la norme française qui régit les installations électriques dans les bâtiments résidentiels. Elle définit le nombre minimal de prises, circuits et protections par pièce. Toute installation neuve ou rénovation complète doit la respecter. Le Consuel vérifie la conformité avant la mise en service.",
+      'La NF C 15-100 est la norme française qui régit les installations électriques dans les bâtiments résidentiels. Elle définit le nombre minimal de prises, circuits et protections par pièce. Toute installation neuve ou rénovation complète doit la respecter. Le Consuel vérifie la conformité avant la mise en service.',
     category: 'Électricité',
     relatedService: 'electricien',
   },
@@ -555,7 +555,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'isolation-thermique',
   },
   {
-    term: 'ITI (Isolation Thermique par l\'Intérieur)',
+    term: "ITI (Isolation Thermique par l'Intérieur)",
     slug: 'iti',
     definition:
       "L'ITI consiste à poser l'isolant sur la face intérieure des murs. C'est la solution la plus économique et la plus courante en rénovation. Ses inconvénients : elle réduit la surface habitable, ne traite pas tous les ponts thermiques et diminue l'inertie thermique des murs.",
@@ -563,7 +563,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'isolation-thermique',
   },
   {
-    term: 'ITE (Isolation Thermique par l\'Extérieur)',
+    term: "ITE (Isolation Thermique par l'Extérieur)",
     slug: 'ite',
     definition:
       "L'ITE consiste à envelopper le bâtiment d'un manteau isolant par l'extérieur, sous enduit ou sous bardage. Elle supprime la majorité des ponts thermiques, conserve l'inertie des murs et ne réduit pas la surface habitable. Plus coûteuse que l'ITI, elle offre les meilleures performances globales.",
@@ -635,7 +635,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'pompe-a-chaleur',
   },
   {
-    term: 'MaPrimeRénov\'',
+    term: "MaPrimeRénov'",
     slug: 'maprimenov',
     definition:
       "MaPrimeRénov' est l'aide financière principale de l'État pour la rénovation énergétique des logements. Son montant dépend des revenus du ménage, du type de travaux et du gain énergétique visé. Elle est cumulable avec les CEE, l'éco-PTZ et la TVA à 5,5 %. La demande se fait avant le début des travaux.",
@@ -643,7 +643,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'renovation-energetique',
   },
   {
-    term: 'CEE (Certificats d\'Économie d\'Énergie)',
+    term: "CEE (Certificats d'Économie d'Énergie)",
     slug: 'cee',
     definition:
       "Les CEE sont un dispositif qui oblige les fournisseurs d'énergie à financer des travaux d'économies d'énergie chez les particuliers. Concrètement, vous recevez une prime (versée par le fournisseur) pour vos travaux d'isolation, de chauffage ou de ventilation. Le montant varie selon les travaux et la zone géographique.",
@@ -728,7 +728,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Triple vitrage',
     slug: 'triple-vitrage',
     definition:
-      "Le triple vitrage comporte trois vitres et deux lames de gaz, offrant un Ug pouvant descendre à 0,5 W/m².K. Il est surtout pertinent pour les façades nord et dans les régions froides. Son poids supérieur nécessite des menuiseries renforcées. Le surcoût par rapport au double vitrage est de 50 à 80 %.",
+      'Le triple vitrage comporte trois vitres et deux lames de gaz, offrant un Ug pouvant descendre à 0,5 W/m².K. Il est surtout pertinent pour les façades nord et dans les régions froides. Son poids supérieur nécessite des menuiseries renforcées. Le surcoût par rapport au double vitrage est de 50 à 80 %.',
     category: 'Menuiserie',
     relatedService: 'menuisier',
   },
@@ -744,7 +744,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Vitrage à contrôle solaire',
     slug: 'vitrage-controle-solaire',
     definition:
-      "Le vitrage à contrôle solaire possède un traitement qui laisse passer la lumière tout en réfléchissant une partie de la chaleur du soleil. Son facteur solaire (g) est inférieur à 0,35. Il est recommandé pour les grandes baies vitrées exposées sud ou ouest afin de limiter la surchauffe estivale sans recourir à la climatisation.",
+      'Le vitrage à contrôle solaire possède un traitement qui laisse passer la lumière tout en réfléchissant une partie de la chaleur du soleil. Son facteur solaire (g) est inférieur à 0,35. Il est recommandé pour les grandes baies vitrées exposées sud ou ouest afin de limiter la surchauffe estivale sans recourir à la climatisation.',
     category: 'Menuiserie',
     relatedService: 'menuisier',
   },
@@ -775,7 +775,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'carreleur',
   },
   {
-    term: 'Primaire d\'accrochage',
+    term: "Primaire d'accrochage",
     slug: 'primaire-accrochage',
     definition:
       "Le primaire d'accrochage est un produit liquide appliqué sur un support avant l'enduit, le ragréage ou la colle à carrelage. Il améliore l'adhérence du produit suivant et régule l'absorption du support. Sauter cette étape est la cause n°1 de décollement des carrelages et enduits.",
@@ -794,7 +794,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Chape',
     slug: 'chape',
     definition:
-      "La chape est une couche de mortier (ciment ou anhydrite) coulée sur une dalle pour obtenir une surface plane et lisse. Elle peut intégrer un plancher chauffant et une isolation acoustique. Son épaisseur varie de 3 à 8 cm. Le temps de séchage (3 à 4 semaines pour une chape ciment) est à respecter impérativement avant la pose du revêtement.",
+      'La chape est une couche de mortier (ciment ou anhydrite) coulée sur une dalle pour obtenir une surface plane et lisse. Elle peut intégrer un plancher chauffant et une isolation acoustique. Son épaisseur varie de 3 à 8 cm. Le temps de séchage (3 à 4 semaines pour une chape ciment) est à respecter impérativement avant la pose du revêtement.',
     category: 'Revêtements',
     relatedService: 'carreleur',
   },
@@ -818,7 +818,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Faïence',
     slug: 'faience',
     definition:
-      "La faïence est un carrelage mural en terre cuite émaillée, plus léger et plus facile à couper que le grès cérame. Elle est destinée uniquement aux murs (trop fragile pour les sols). Très utilisée dans les salles de bain et cuisines, elle offre une grande variété de couleurs et de décors.",
+      'La faïence est un carrelage mural en terre cuite émaillée, plus léger et plus facile à couper que le grès cérame. Elle est destinée uniquement aux murs (trop fragile pour les sols). Très utilisée dans les salles de bain et cuisines, elle offre une grande variété de couleurs et de décors.',
     category: 'Revêtements',
     relatedService: 'carreleur',
   },
@@ -826,7 +826,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Émaux de Briare',
     slug: 'emaux-de-briare',
     definition:
-      "Les émaux de Briare sont de petites mosaïques en pâte de verre émaillée, originaires de la ville de Briare. Ils sont utilisés pour les piscines, les douches et les frises décoratives. Résistants au gel et aux produits chimiques, ils offrent une palette de couleurs éclatantes et une finition haut de gamme.",
+      'Les émaux de Briare sont de petites mosaïques en pâte de verre émaillée, originaires de la ville de Briare. Ils sont utilisés pour les piscines, les douches et les frises décoratives. Résistants au gel et aux produits chimiques, ils offrent une palette de couleurs éclatantes et une finition haut de gamme.',
     category: 'Revêtements',
     relatedService: 'carreleur',
   },
@@ -866,12 +866,12 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Béton ciré',
     slug: 'beton-cire',
     definition:
-      "Le béton ciré est un revêtement décoratif composé de ciment, de résine et de pigments, appliqué en couche mince (2-3 mm) sur un sol ou un mur. Il offre un rendu contemporain et sans joint. Sa mise en œuvre demande un savoir-faire particulier et un support parfaitement préparé pour éviter les fissures.",
+      'Le béton ciré est un revêtement décoratif composé de ciment, de résine et de pigments, appliqué en couche mince (2-3 mm) sur un sol ou un mur. Il offre un rendu contemporain et sans joint. Sa mise en œuvre demande un savoir-faire particulier et un support parfaitement préparé pour éviter les fissures.',
     category: 'Revêtements',
     relatedService: 'carreleur',
   },
   {
-    term: 'SPEC (Système de Protection à l\'Eau sous Carrelage)',
+    term: "SPEC (Système de Protection à l'Eau sous Carrelage)",
     slug: 'spec',
     definition:
       "Le SPEC est un système d'étanchéité liquide appliqué sous le carrelage dans les pièces humides (douche, salle de bain). Il se compose d'une résine, de bandes de renfort aux angles et d'une natte. Il est obligatoire dans les douches à l'italienne et fortement recommandé dans toute salle d'eau.",
@@ -910,14 +910,14 @@ export const glossaireTerms: GlossaireTerm[] = [
     category: 'Administratif & juridique',
   },
   {
-    term: 'Maître d\'œuvre',
+    term: "Maître d'œuvre",
     slug: 'maitre-oeuvre',
     definition:
       "Le maître d'œuvre est le professionnel (architecte, bureau d'études, économiste) qui conçoit le projet, coordonne les entreprises et contrôle la bonne exécution des travaux pour le compte du propriétaire. Il est le garant de la qualité technique et du respect du budget et des délais.",
     category: 'Administratif & juridique',
   },
   {
-    term: 'Maître d\'ouvrage',
+    term: "Maître d'ouvrage",
     slug: 'maitre-ouvrage',
     definition:
       "Le maître d'ouvrage est le commanditaire des travaux : c'est vous, le propriétaire. Vous définissez le programme, le budget et les délais. Vous êtes responsable du choix des entreprises et du paiement des travaux. En cas de construction neuve, vous devez souscrire l'assurance dommage-ouvrage.",
@@ -945,14 +945,14 @@ export const glossaireTerms: GlossaireTerm[] = [
     category: 'Administratif & juridique',
   },
   {
-    term: 'DROC (Déclaration d\'Ouverture de Chantier)',
+    term: "DROC (Déclaration d'Ouverture de Chantier)",
     slug: 'droc',
     definition:
       "La DROC est un formulaire Cerfa (n°13407) à déposer en mairie dès le début des travaux ayant fait l'objet d'un permis de construire. Elle informe l'administration que le chantier est lancé et déclenche le délai de validité du permis. Oublier cette déclaration peut poser problème lors de la revente.",
     category: 'Administratif & juridique',
   },
   {
-    term: 'DAACT (Déclaration d\'Achèvement et de Conformité des Travaux)',
+    term: "DAACT (Déclaration d'Achèvement et de Conformité des Travaux)",
     slug: 'daact',
     definition:
       "La DAACT est le formulaire Cerfa (n°13408) à déposer en mairie dans les 90 jours suivant l'achèvement des travaux soumis à permis de construire ou déclaration préalable. La mairie dispose de 3 mois (5 en secteur protégé) pour contester la conformité. Sans DAACT, le bien est considéré comme non conforme.",
@@ -987,7 +987,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     category: 'Administratif & juridique',
   },
   {
-    term: 'PLU (Plan Local d\'Urbanisme)',
+    term: "PLU (Plan Local d'Urbanisme)",
     slug: 'plu',
     definition:
       "Le PLU est le document d'urbanisme qui définit les règles de construction sur chaque parcelle d'une commune : hauteur maximale, emprise au sol, retrait par rapport aux limites, aspect extérieur. Il est consultable gratuitement en mairie ou sur le géoportail de l'urbanisme. Toute construction doit respecter le PLU en vigueur.",
@@ -1114,7 +1114,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Gaine ICTA',
     slug: 'gaine-icta',
     definition:
-      "La gaine ICTA (Isolant Cintrable Transversalement Annelé) est un tube souple en PVC dans lequel passent les câbles électriques. Elle protège les conducteurs contre les chocs mécaniques et facilite le remplacement ultérieur des fils. Son utilisation est obligatoire dans les constructions neuves et les rénovations.",
+      'La gaine ICTA (Isolant Cintrable Transversalement Annelé) est un tube souple en PVC dans lequel passent les câbles électriques. Elle protège les conducteurs contre les chocs mécaniques et facilite le remplacement ultérieur des fils. Son utilisation est obligatoire dans les constructions neuves et les rénovations.',
     category: 'Électricité',
     relatedService: 'electricien',
   },
@@ -1153,7 +1153,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     relatedService: 'diagnostiqueur',
   },
   {
-    term: 'Étanchéité à l\'air',
+    term: "Étanchéité à l'air",
     slug: 'etancheite-air',
     definition:
       "L'étanchéité à l'air mesure la capacité de l'enveloppe du bâtiment à limiter les fuites d'air parasites (prises, passages de gaines, menuiseries). Elle est mesurée par un test d'infiltrométrie (blower door) et est réglementée en construction neuve (RE2020). Une bonne étanchéité réduit les déperditions de 15 à 25 %.",
@@ -1200,7 +1200,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     term: 'Crépi (enduit de façade)',
     slug: 'crepi',
     definition:
-      "Le crépi est un enduit de finition appliqué sur les murs extérieurs pour les protéger des intempéries et leur donner un aspect esthétique. Il existe en finition grattée, talochée, projetée ou écrasée. Un crépi bien appliqué sur un support sain dure 15 à 30 ans avant de nécessiter un ravalement.",
+      'Le crépi est un enduit de finition appliqué sur les murs extérieurs pour les protéger des intempéries et leur donner un aspect esthétique. Il existe en finition grattée, talochée, projetée ou écrasée. Un crépi bien appliqué sur un support sain dure 15 à 30 ans avant de nécessiter un ravalement.',
     category: 'Revêtements',
     relatedService: 'facadier',
   },

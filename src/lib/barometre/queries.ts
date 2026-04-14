@@ -79,7 +79,10 @@ export async function getStatsByMetier(metierSlug: string): Promise<BarometreSta
 }
 
 /** Stats par métier dans une ville */
-async function _getStatsByMetierVille(metierSlug: string, villeSlug: string): Promise<BarometreStatRow | null> {
+async function _getStatsByMetierVille(
+  metierSlug: string,
+  villeSlug: string
+): Promise<BarometreStatRow | null> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -94,12 +97,19 @@ async function _getStatsByMetierVille(metierSlug: string, villeSlug: string): Pr
   }
 }
 
-export async function getStatsByMetierVille(metierSlug: string, villeSlug: string): Promise<BarometreStatRow | null> {
+export async function getStatsByMetierVille(
+  metierSlug: string,
+  villeSlug: string
+): Promise<BarometreStatRow | null> {
   if (IS_BUILD) return null
-  return unstable_cache(_getStatsByMetierVille, ['barometre-stats-metier-ville', metierSlug, villeSlug], {
-    revalidate: CACHE_TTL,
-    tags: ['barometre'],
-  })(metierSlug, villeSlug)
+  return unstable_cache(
+    _getStatsByMetierVille,
+    ['barometre-stats-metier-ville', metierSlug, villeSlug],
+    {
+      revalidate: CACHE_TTL,
+      tags: ['barometre'],
+    }
+  )(metierSlug, villeSlug)
 }
 
 /** Tous les métiers dans une région */
@@ -169,12 +179,21 @@ async function _getNationalStats(): Promise<NationalStats> {
     const totalArtisans = rows.reduce((s, r) => s + r.nb_artisans, 0)
     const totalAvis = rows.reduce((s, r) => s + r.nb_avis, 0)
     const ratedRows = rows.filter((r) => r.note_moyenne !== null)
-    const noteGlobale = ratedRows.length > 0
-      ? Math.round((ratedRows.reduce((s, r) => s + (r.note_moyenne ?? 0) * r.nb_artisans, 0) / ratedRows.reduce((s, r) => s + r.nb_artisans, 0)) * 100) / 100
-      : 4.2
-    const tauxVerifGlobal = totalArtisans > 0
-      ? Math.round((rows.reduce((s, r) => s + r.taux_verification * r.nb_artisans, 0) / totalArtisans) * 10000) / 10000
-      : 0
+    const noteGlobale =
+      ratedRows.length > 0
+        ? Math.round(
+            (ratedRows.reduce((s, r) => s + (r.note_moyenne ?? 0) * r.nb_artisans, 0) /
+              ratedRows.reduce((s, r) => s + r.nb_artisans, 0)) *
+              100
+          ) / 100
+        : 4.2
+    const tauxVerifGlobal =
+      totalArtisans > 0
+        ? Math.round(
+            (rows.reduce((s, r) => s + r.taux_verification * r.nb_artisans, 0) / totalArtisans) *
+              10000
+          ) / 10000
+        : 0
 
     // Count distinct villes
     const { count: villeCount } = await supabase
@@ -191,13 +210,27 @@ async function _getNationalStats(): Promise<NationalStats> {
       nbVilles: villeCount ?? 0,
     }
   } catch {
-    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
+    return {
+      totalArtisans: 940000,
+      noteGlobale: 4.2,
+      totalAvis: 0,
+      tauxVerifGlobal: 0,
+      nbMetiers: 0,
+      nbVilles: 0,
+    }
   }
 }
 
 export async function getNationalStats(): Promise<NationalStats> {
   if (IS_BUILD) {
-    return { totalArtisans: 940000, noteGlobale: 4.2, totalAvis: 0, tauxVerifGlobal: 0, nbMetiers: 0, nbVilles: 0 }
+    return {
+      totalArtisans: 940000,
+      noteGlobale: 4.2,
+      totalAvis: 0,
+      tauxVerifGlobal: 0,
+      nbMetiers: 0,
+      nbVilles: 0,
+    }
   }
   return unstable_cache(_getNationalStats, ['barometre-national-stats'], {
     revalidate: CACHE_TTL,
@@ -232,7 +265,9 @@ export async function getTopMetiers(limit = 10): Promise<BarometreStatRow[]> {
 }
 
 /** Top N villes par nb_artisans (toutes spécialités confondues) */
-async function _getTopVilles(limit: number): Promise<{ ville: string; ville_slug: string; total: number }[]> {
+async function _getTopVilles(
+  limit: number
+): Promise<{ ville: string; ville_slug: string; total: number }[]> {
   try {
     const supabase = createAdminClient()
     // On récupère les villes et on agrège côté client
@@ -269,7 +304,9 @@ async function _getTopVilles(limit: number): Promise<{ ville: string; ville_slug
   }
 }
 
-export async function getTopVilles(limit = 10): Promise<{ ville: string; ville_slug: string; total: number }[]> {
+export async function getTopVilles(
+  limit = 10
+): Promise<{ ville: string; ville_slug: string; total: number }[]> {
   if (IS_BUILD) return []
   return unstable_cache(_getTopVilles, ['barometre-top-villes', String(limit)], {
     revalidate: CACHE_TTL,
@@ -280,7 +317,7 @@ export async function getTopVilles(limit = 10): Promise<{ ville: string; ville_s
 /** Stats d'un métier dans les top 20 villes */
 async function _getMetierTopVilles(
   metierSlug: string,
-  villeNames: string[],
+  villeNames: string[]
 ): Promise<BarometreStatRow[]> {
   try {
     const supabase = createAdminClient()
@@ -298,7 +335,7 @@ async function _getMetierTopVilles(
 
 export async function getMetierTopVilles(
   metierSlug: string,
-  villeNames: string[],
+  villeNames: string[]
 ): Promise<BarometreStatRow[]> {
   if (IS_BUILD) return []
   return unstable_cache(_getMetierTopVilles, ['barometre-metier-top-villes', metierSlug], {

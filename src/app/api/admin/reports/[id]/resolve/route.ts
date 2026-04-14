@@ -14,10 +14,7 @@ const resolveReportSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Résoudre ou rejeter un signalement
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with reviews:write permission
     const authResult = await requirePermission('reviews', 'write')
@@ -37,7 +34,10 @@ export async function POST(
     const result = resolveReportSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -66,13 +66,10 @@ export async function POST(
     }
 
     // Log d'audit
-    await logAdminAction(
-      authResult.admin.id,
-      `report.${action}`,
-      'report',
-      params.id,
-      { status: newStatus, resolution }
-    )
+    await logAdminAction(authResult.admin.id, `report.${action}`, 'report', params.id, {
+      status: newStatus,
+      resolution,
+    })
 
     return NextResponse.json({
       success: true,

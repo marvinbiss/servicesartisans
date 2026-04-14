@@ -5,7 +5,19 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ProspectionNav } from '@/components/admin/prospection/ProspectionNav'
 import { ContactTypeBadge } from '@/components/admin/prospection/StatsCards'
-import { ArrowLeft, Save, AlertCircle, X, Shield, Mail, Phone, MapPin, Building, Tag, User } from 'lucide-react'
+import {
+  ArrowLeft,
+  Save,
+  AlertCircle,
+  X,
+  Shield,
+  Mail,
+  Phone,
+  MapPin,
+  Building,
+  Tag,
+  User,
+} from 'lucide-react'
 import type { ProspectionContact, ProspectionList, ProspectionMessage } from '@/types/prospection'
 
 export default function ContactDetailPage() {
@@ -174,7 +186,10 @@ export default function ContactDetailPage() {
     return (
       <div>
         <div className="mb-6">
-          <Link href="/admin/prospection/contacts" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+          <Link
+            href="/admin/prospection/contacts"
+            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          >
             <ArrowLeft className="w-4 h-4" /> Retour aux contacts
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
@@ -191,7 +206,10 @@ export default function ContactDetailPage() {
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/contacts" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/contacts"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux contacts
         </Link>
         <div className="flex items-center gap-3">
@@ -217,11 +235,21 @@ export default function ContactDetailPage() {
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
+          <button
+            onClick={() => setActionError(null)}
+            aria-label="Fermer le message d'erreur"
+            className="ml-auto"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
       {successMsg && (
-        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div
+          role="status"
+          aria-live="polite"
+          className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"
+        >
           {successMsg}
         </div>
       )}
@@ -247,54 +275,128 @@ export default function ContactDetailPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-gray-500 mb-1">Nom</label>
-                    <input type="text" value={editFields.contact_name} onChange={(e) => setEditFields(f => ({ ...f, contact_name: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input
+                      type="text"
+                      value={editFields.contact_name}
+                      onChange={(e) =>
+                        setEditFields((f) => ({ ...f, contact_name: e.target.value }))
+                      }
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Entreprise</label>
-                    <input type="text" value={editFields.company_name} onChange={(e) => setEditFields(f => ({ ...f, company_name: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                      Entreprise
+                    </label>
+                    <input
+                      type="text"
+                      value={editFields.company_name}
+                      onChange={(e) =>
+                        setEditFields((f) => ({ ...f, company_name: e.target.value }))
+                      }
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
-                    <input type="email" value={editFields.email} onChange={(e) => setEditFields(f => ({ ...f, email: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input
+                      type="email"
+                      value={editFields.email}
+                      onChange={(e) => setEditFields((f) => ({ ...f, email: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Téléphone</label>
-                    <input type="text" value={editFields.phone} onChange={(e) => setEditFields(f => ({ ...f, phone: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                      Téléphone
+                    </label>
+                    <input
+                      type="text"
+                      value={editFields.phone}
+                      onChange={(e) => setEditFields((f) => ({ ...f, phone: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Adresse</label>
-                  <input type="text" value={editFields.address} onChange={(e) => setEditFields(f => ({ ...f, address: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  <input
+                    type="text"
+                    value={editFields.address}
+                    onChange={(e) => setEditFields((f) => ({ ...f, address: e.target.value }))}
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                  />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Code postal</label>
-                    <input type="text" value={editFields.postal_code} onChange={(e) => setEditFields(f => ({ ...f, postal_code: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                      Code postal
+                    </label>
+                    <input
+                      type="text"
+                      value={editFields.postal_code}
+                      onChange={(e) =>
+                        setEditFields((f) => ({ ...f, postal_code: e.target.value }))
+                      }
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500 mb-1">Ville</label>
-                    <input type="text" value={editFields.city} onChange={(e) => setEditFields(f => ({ ...f, city: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <input
+                      type="text"
+                      value={editFields.city}
+                      onChange={(e) => setEditFields((f) => ({ ...f, city: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Département</label>
-                    <input type="text" value={editFields.department} onChange={(e) => setEditFields(f => ({ ...f, department: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                      Département
+                    </label>
+                    <input
+                      type="text"
+                      value={editFields.department}
+                      onChange={(e) => setEditFields((f) => ({ ...f, department: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-lg text-sm"
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Région</label>
-                  <input type="text" value={editFields.region} onChange={(e) => setEditFields(f => ({ ...f, region: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                  <input
+                    type="text"
+                    value={editFields.region}
+                    onChange={(e) => setEditFields((f) => ({ ...f, region: e.target.value }))}
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Tags (séparés par des virgules)</label>
-                  <input type="text" value={editFields.tags} onChange={(e) => setEditFields(f => ({ ...f, tags: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="tag1, tag2, tag3" />
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    Tags (séparés par des virgules)
+                  </label>
+                  <input
+                    type="text"
+                    value={editFields.tags}
+                    onChange={(e) => setEditFields((f) => ({ ...f, tags: e.target.value }))}
+                    className="w-full px-3 py-2 border rounded-lg text-sm"
+                    placeholder="tag1, tag2, tag3"
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Consentement</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    Consentement
+                  </label>
                   <select
                     value={editFields.consent_status}
-                    onChange={(e) => setEditFields(f => ({ ...f, consent_status: e.target.value as 'opted_in' | 'opted_out' | 'unknown' }))}
+                    onChange={(e) =>
+                      setEditFields((f) => ({
+                        ...f,
+                        consent_status: e.target.value as 'opted_in' | 'opted_out' | 'unknown',
+                      }))
+                    }
                     className="w-full px-3 py-2 border rounded-lg text-sm"
                   >
                     <option value="unknown">Inconnu</option>
@@ -344,7 +446,9 @@ export default function ContactDetailPage() {
                   <MapPin className="w-4 h-4 text-gray-400" />
                   <span className="text-gray-500 w-24">Adresse</span>
                   <span className="text-gray-900">
-                    {[contact.address, contact.postal_code, contact.city].filter(Boolean).join(', ') || '-'}
+                    {[contact.address, contact.postal_code, contact.city]
+                      .filter(Boolean)
+                      .join(', ') || '-'}
                   </span>
                 </div>
                 {(contact.department || contact.region) && (
@@ -362,7 +466,12 @@ export default function ContactDetailPage() {
                     <span className="text-gray-500 w-24">Tags</span>
                     <div className="flex flex-wrap gap-1">
                       {contact.tags.map((tag) => (
-                        <span key={tag} className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">{tag}</span>
+                        <span
+                          key={tag}
+                          className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600"
+                        >
+                          {tag}
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -375,7 +484,9 @@ export default function ContactDetailPage() {
                 <div className="flex items-center gap-3 text-sm">
                   <span className="w-4 h-4" />
                   <span className="text-gray-500 w-24">Créé le</span>
-                  <span className="text-gray-400 text-xs">{new Date(contact.created_at).toLocaleDateString('fr-FR')}</span>
+                  <span className="text-gray-400 text-xs">
+                    {new Date(contact.created_at).toLocaleDateString('fr-FR')}
+                  </span>
                 </div>
               </div>
             )}
@@ -385,32 +496,53 @@ export default function ContactDetailPage() {
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Historique des messages</h2>
             {messages.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">Aucun message envoyé à ce contact.</p>
+              <p className="text-sm text-gray-400 text-center py-6">
+                Aucun message envoyé à ce contact.
+              </p>
             ) : (
               <div className="space-y-3">
                 {messages.map((msg) => (
                   <div key={msg.id} className="border rounded-lg p-3 text-sm">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-gray-700 capitalize">{msg.channel}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        msg.status === 'delivered' || msg.status === 'read' || msg.status === 'replied' ? 'bg-green-100 text-green-700'
-                          : msg.status === 'failed' || msg.status === 'bounced' ? 'bg-red-100 text-red-700'
-                          : msg.status === 'sent' ? 'bg-blue-100 text-blue-700'
-                          : msg.status === 'queued' || msg.status === 'sending' ? 'bg-yellow-100 text-yellow-700'
-                          : msg.status === 'opted_out' || msg.status === 'cancelled' ? 'bg-gray-100 text-gray-600'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {msg.status === 'delivered' ? 'Livré'
-                          : msg.status === 'failed' ? 'Échoué'
-                          : msg.status === 'sent' ? 'Envoyé'
-                          : msg.status === 'queued' ? 'En file d’attente'
-                          : msg.status === 'sending' ? 'En cours d’envoi'
-                          : msg.status === 'read' ? 'Lu'
-                          : msg.status === 'replied' ? 'Répondu'
-                          : msg.status === 'bounced' ? 'Rejeté'
-                          : msg.status === 'opted_out' ? 'Désinscrit'
-                          : msg.status === 'cancelled' ? 'Annulé'
-                          : msg.status}
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${
+                          msg.status === 'delivered' ||
+                          msg.status === 'read' ||
+                          msg.status === 'replied'
+                            ? 'bg-green-100 text-green-700'
+                            : msg.status === 'failed' || msg.status === 'bounced'
+                              ? 'bg-red-100 text-red-700'
+                              : msg.status === 'sent'
+                                ? 'bg-blue-100 text-blue-700'
+                                : msg.status === 'queued' || msg.status === 'sending'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : msg.status === 'opted_out' || msg.status === 'cancelled'
+                                    ? 'bg-gray-100 text-gray-600'
+                                    : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        {msg.status === 'delivered'
+                          ? 'Livré'
+                          : msg.status === 'failed'
+                            ? 'Échoué'
+                            : msg.status === 'sent'
+                              ? 'Envoyé'
+                              : msg.status === 'queued'
+                                ? 'En file d’attente'
+                                : msg.status === 'sending'
+                                  ? 'En cours d’envoi'
+                                  : msg.status === 'read'
+                                    ? 'Lu'
+                                    : msg.status === 'replied'
+                                      ? 'Répondu'
+                                      : msg.status === 'bounced'
+                                        ? 'Rejeté'
+                                        : msg.status === 'opted_out'
+                                          ? 'Désinscrit'
+                                          : msg.status === 'cancelled'
+                                            ? 'Annulé'
+                                            : msg.status}
                       </span>
                     </div>
                     <p className="text-gray-600 line-clamp-2">{msg.rendered_body || '-'}</p>
@@ -434,20 +566,28 @@ export default function ContactDetailPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">Statut</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                  contact.consent_status === 'opted_in' ? 'bg-green-100 text-green-700'
-                    : contact.consent_status === 'opted_out' ? 'bg-red-100 text-red-700'
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
-                  {contact.consent_status === 'opted_in' ? 'Inscrit'
-                    : contact.consent_status === 'opted_out' ? 'Désinscrit'
-                    : 'Inconnu'}
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                    contact.consent_status === 'opted_in'
+                      ? 'bg-green-100 text-green-700'
+                      : contact.consent_status === 'opted_out'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  {contact.consent_status === 'opted_in'
+                    ? 'Inscrit'
+                    : contact.consent_status === 'opted_out'
+                      ? 'Désinscrit'
+                      : 'Inconnu'}
                 </span>
               </div>
               {contact.opted_out_at && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Désinscrit le</span>
-                  <span className="text-xs text-gray-400">{new Date(contact.opted_out_at).toLocaleDateString('fr-FR')}</span>
+                  <span className="text-xs text-gray-400">
+                    {new Date(contact.opted_out_at).toLocaleDateString('fr-FR')}
+                  </span>
                 </div>
               )}
             </div>

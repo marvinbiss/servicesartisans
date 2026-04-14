@@ -21,14 +21,16 @@ export async function GET() {
   // Feedfetcher to re-fetch on every request thinking the feed is always fresh).
   const latestDate = articles[0] ? new Date(articles[0].date) : new Date()
 
-  const items = articles.map((article) => `    <item>
+  const items = articles.map(
+    (article) => `    <item>
       <title>${escapeXml(article.title)}</title>
       <link>${SITE_URL}/blog/${article.slug}</link>
       <guid isPermaLink="true">${SITE_URL}/blog/${article.slug}</guid>
       <description>${escapeXml(article.excerpt)}</description>
       <pubDate>${new Date(article.date).toUTCString()}</pubDate>
       <category>${escapeXml(article.category)}</category>
-    </item>`)
+    </item>`
+  )
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

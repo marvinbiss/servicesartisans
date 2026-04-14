@@ -28,7 +28,9 @@ export default function AdminConnexionPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(typeof data.error === 'string' ? data.error : data.error?.message || 'Erreur de connexion')
+        setError(
+          typeof data.error === 'string' ? data.error : data.error?.message || 'Erreur de connexion'
+        )
         return
       }
 
@@ -54,12 +56,8 @@ export default function AdminConnexionPage() {
               <Shield className="w-8 h-8 text-white" />
             </div>
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Administration
-          </h1>
-          <p className="text-gray-400">
-            Connectez-vous pour accéder au panel admin
-          </p>
+          <h1 className="text-3xl font-bold text-white mb-2">Administration</h1>
+          <p className="text-gray-400">Connectez-vous pour accéder au panel admin</p>
         </div>
 
         {/* Login Card */}
@@ -91,9 +89,7 @@ export default function AdminConnexionPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Mot de passe
-              </label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
@@ -141,10 +137,7 @@ export default function AdminConnexionPage() {
 
         {/* Back to site */}
         <div className="mt-6 text-center">
-          <Link
-            href="/"
-            className="text-gray-400 hover:text-white text-sm transition-colors"
-          >
+          <Link href="/" className="text-gray-400 hover:text-white text-sm transition-colors">
             ← Retour au site
           </Link>
         </div>

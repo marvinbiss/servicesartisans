@@ -45,7 +45,6 @@ export async function searchEntreprisesOpen(
   departement: string,
   page: number = 1
 ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
-
   const params = new URLSearchParams({
     activite_principale: activite,
     departement,
@@ -61,13 +60,13 @@ export async function searchEntreprisesOpen(
     try {
       const response = await fetch(url, {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       })
 
       if (response.status === 429) {
         logger.info('Rate limit, attente...')
-        await new Promise(resolve => setTimeout(resolve, 60000))
+        await new Promise((resolve) => setTimeout(resolve, 60000))
         retries++
         continue
       }
@@ -87,13 +86,12 @@ export async function searchEntreprisesOpen(
         total: data.total_results || 0,
         hasMore: page < data.total_pages,
       }
-
     } catch (error) {
       retries++
       if (retries >= SIRENE_OPEN_CONFIG.maxRetries) {
         throw error
       }
-      await new Promise(resolve => setTimeout(resolve, SIRENE_OPEN_CONFIG.retryDelay * retries))
+      await new Promise((resolve) => setTimeout(resolve, SIRENE_OPEN_CONFIG.retryDelay * retries))
     }
   }
 
@@ -108,7 +106,6 @@ export async function searchByTermOpen(
   departement?: string,
   page: number = 1
 ): Promise<{ results: SearchResult[]; total: number; hasMore: boolean }> {
-
   const params = new URLSearchParams({
     q: term,
     etat_administratif: 'A',
@@ -129,7 +126,7 @@ export async function searchByTermOpen(
 
   try {
     const response = await fetch(url, {
-      headers: { 'Accept': 'application/json' },
+      headers: { Accept: 'application/json' },
     })
 
     logger.debug('API Response status', { status: response.status })
@@ -151,7 +148,6 @@ export async function searchByTermOpen(
       total: data.total_results || 0,
       hasMore: page < data.total_pages,
     }
-
   } catch (error) {
     logger.error('Search error', error as Error)
     return { results: [], total: 0, hasMore: false }
@@ -195,9 +191,10 @@ export function transformOpenResultToProvider(result: SearchResult): {
 
   // Obtenir le nombre d'employes
   const tranche = result.tranche_effectif_salarie
-  const effectif = tranche && TRANCHES_EFFECTIFS[tranche]
-    ? Math.round((TRANCHES_EFFECTIFS[tranche].min + TRANCHES_EFFECTIFS[tranche].max) / 2)
-    : null
+  const effectif =
+    tranche && TRANCHES_EFFECTIFS[tranche]
+      ? Math.round((TRANCHES_EFFECTIFS[tranche].min + TRANCHES_EFFECTIFS[tranche].max) / 2)
+      : null
 
   // Parse latitude/longitude as numbers
   const latitude = result.siege?.latitude ? parseFloat(result.siege.latitude) : null

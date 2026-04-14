@@ -16,7 +16,9 @@ export { DEFAULT_PERMISSIONS } from '@/types/admin'
 
 // Admin email whitelist from environment variable (fallback when profiles table doesn't exist)
 // Set ADMIN_EMAILS in .env.local as comma-separated list: admin1@example.com,admin2@example.com
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .filter((email) => email.trim().length > 0)
 
 /** Lightweight admin user for auth results (subset of full AdminUser from types/admin) */
 export interface AdminUser {
@@ -51,10 +53,9 @@ export function validateOrigin(request: NextRequest): boolean {
     return true
   }
 
-  const allowedUrls = [
-    process.env.NEXT_PUBLIC_SITE_URL,
-    process.env.NEXTAUTH_URL,
-  ].filter(Boolean) as string[]
+  const allowedUrls = [process.env.NEXT_PUBLIC_SITE_URL, process.env.NEXTAUTH_URL].filter(
+    Boolean
+  ) as string[]
 
   // If no allowed URLs are configured, allow all (development mode)
   if (allowedUrls.length === 0) {
@@ -64,7 +65,7 @@ export function validateOrigin(request: NextRequest): boolean {
   // Compare origin against allowed URLs
   try {
     const originHost = new URL(origin).origin
-    return allowedUrls.some(url => {
+    return allowedUrls.some((url) => {
       try {
         return new URL(url).origin === originHost
       } catch {
@@ -91,7 +92,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (secFetchSite === 'cross-site') {
       logger.warn('CSRF blocked: cross-site request detected via Sec-Fetch-Site')
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' },
+        },
         { status: 403 }
       )
     }
@@ -105,10 +109,9 @@ async function validateCsrf(): Promise<NextResponse | null> {
       return null
     }
 
-    const allowedUrls = [
-      process.env.NEXT_PUBLIC_SITE_URL,
-      process.env.NEXTAUTH_URL,
-    ].filter(Boolean) as string[]
+    const allowedUrls = [process.env.NEXT_PUBLIC_SITE_URL, process.env.NEXTAUTH_URL].filter(
+      Boolean
+    ) as string[]
 
     // If no allowed URLs are configured, allow all (development mode)
     if (allowedUrls.length === 0) {
@@ -122,12 +125,15 @@ async function validateCsrf(): Promise<NextResponse | null> {
     } catch {
       logger.warn('CSRF blocked: malformed origin header', { origin })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' },
+        },
         { status: 403 }
       )
     }
 
-    const isAllowed = allowedUrls.some(url => {
+    const isAllowed = allowedUrls.some((url) => {
       try {
         return new URL(url).origin === originHost
       } catch {
@@ -138,7 +144,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (!isAllowed) {
       logger.warn('CSRF blocked: origin mismatch', { origin: originHost, allowed: allowedUrls })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' },
+        },
         { status: 403 }
       )
     }
@@ -157,7 +166,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
 export async function verifyAdmin(): Promise<AdminAuthResult> {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return {
@@ -212,7 +224,13 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       return {
         success: false,
         error: NextResponse.json(
-          { success: false, error: { code: 'PROFILE_ACCESS_ERROR', message: 'Impossible de vérifier les permissions' } },
+          {
+            success: false,
+            error: {
+              code: 'PROFILE_ACCESS_ERROR',
+              message: 'Impossible de vérifier les permissions',
+            },
+          },
           { status: 503 }
         ),
       }
@@ -241,7 +259,8 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     }
 
     // If user has is_admin=true but no role column, grant super_admin
-    const adminRole: AdminRole = role && validRoles.includes(role) ? role : (isAdmin ? 'super_admin' : 'viewer')
+    const adminRole: AdminRole =
+      role && validRoles.includes(role) ? role : isAdmin ? 'super_admin' : 'viewer'
 
     return {
       success: true,
@@ -257,7 +276,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     return {
       success: false,
       error: NextResponse.json(
-        { success: false, error: { code: 'AUTH_ERROR', message: 'Erreur d\'authentification' } },
+        { success: false, error: { code: 'AUTH_ERROR', message: "Erreur d'authentification" } },
         { status: 500 }
       ),
     }
@@ -300,7 +319,10 @@ export async function requirePermission(
     return {
       success: false,
       error: NextResponse.json(
-        { success: false, error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Permission insuffisante' } },
+        {
+          success: false,
+          error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Permission insuffisante' },
+        },
         { status: 403 }
       ),
     }

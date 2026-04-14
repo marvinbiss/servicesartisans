@@ -246,8 +246,24 @@ export function getBarometreRegionBySlug(slug: string): BarometreRegion | undefi
 // ---------------------------------------------------------------------------
 
 export const TOP_VILLES = [
-  'Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice',
-  'Nantes', 'Montpellier', 'Strasbourg', 'Bordeaux', 'Lille',
-  'Rennes', 'Toulon', 'Reims', 'Saint-Étienne', 'Le Havre',
-  'Dijon', 'Grenoble', 'Angers', 'Nîmes', 'Clermont-Ferrand',
+  'Paris',
+  'Marseille',
+  'Lyon',
+  'Toulouse',
+  'Nice',
+  'Nantes',
+  'Montpellier',
+  'Strasbourg',
+  'Bordeaux',
+  'Lille',
+  'Rennes',
+  'Toulon',
+  'Reims',
+  'Saint-Étienne',
+  'Le Havre',
+  'Dijon',
+  'Grenoble',
+  'Angers',
+  'Nîmes',
+  'Clermont-Ferrand',
 ]

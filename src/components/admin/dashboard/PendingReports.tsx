@@ -114,7 +114,11 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
     <>
       <Toast toast={toast} onClose={() => setToast(null)} />
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Signalements en attente">
+      <div
+        className="bg-white rounded-xl shadow-sm border border-gray-100"
+        role="region"
+        aria-label="Signalements en attente"
+      >
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold text-gray-900">Signalements</h3>
@@ -146,7 +150,9 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
               <div key={report.id} className="p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3 min-w-0">
-                    <div className={`p-2 rounded-lg shrink-0 ${reasonColors[report.reason] || reasonColors.other}`}>
+                    <div
+                      className={`p-2 rounded-lg shrink-0 ${reasonColors[report.reason] || reasonColors.other}`}
+                    >
                       <AlertTriangle className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
@@ -159,7 +165,9 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
                         </span>
                       </div>
                       {report.description && (
-                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{report.description}</p>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          {report.description}
+                        </p>
                       )}
                       <p className="text-xs text-gray-400 mt-1">{formatDate(report.created_at)}</p>
                     </div>
@@ -197,7 +205,10 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
 
       <ConfirmationModal
         isOpen={modal.open}
-        onClose={() => { setModal({ open: false, reportId: '', action: 'resolve' }); setResolutionNotes('') }}
+        onClose={() => {
+          setModal({ open: false, reportId: '', action: 'resolve' })
+          setResolutionNotes('')
+        }}
         onConfirm={confirmAction}
         title={modal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
         message={`Êtes-vous sûr de vouloir ${modal.action === 'resolve' ? 'résoudre' : 'rejeter'} ce signalement ?`}
@@ -205,7 +216,10 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
         variant={modal.action === 'resolve' ? 'success' : 'warning'}
       >
         <div className="mb-4">
-          <label htmlFor="resolution-notes" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="resolution-notes"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Notes de résolution <span className="text-gray-400 font-normal">(optionnel)</span>
           </label>
           <textarea

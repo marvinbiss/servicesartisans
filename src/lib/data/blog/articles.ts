@@ -63,48 +63,48 @@ export interface BlogArticle {
  */
 const REDIRECTED_SLUGS: ReadonlySet<string> = new Set([
   // batch-seo-boost1 (all 5 removed — file emptied)
-  'maprimerenov-2026-guide-complet-aides-renovation',       // G1 → maprimerénov-2026-conditions-montants
-  'comment-choisir-artisan-confiance-guide-2026',            // G8 → comment-verifier-artisan-avant-engager
-  'prix-renovation-maison-2026-budget-complet',              // G16 → renovation-maison-prix-m2-2026
-  'pompe-a-chaleur-guide-complet-2026',                      // G9 → prix-pompe-a-chaleur-2026
-  'isolation-maison-guide-complet-materiaux-prix-aides',     // G15 → prix-isolation-thermique-2026-tarifs
+  'maprimerenov-2026-guide-complet-aides-renovation', // G1 → maprimerénov-2026-conditions-montants
+  'comment-choisir-artisan-confiance-guide-2026', // G8 → comment-verifier-artisan-avant-engager
+  'prix-renovation-maison-2026-budget-complet', // G16 → renovation-maison-prix-m2-2026
+  'pompe-a-chaleur-guide-complet-2026', // G9 → prix-pompe-a-chaleur-2026
+  'isolation-maison-guide-complet-materiaux-prix-aides', // G15 → prix-isolation-thermique-2026-tarifs
 
   // batch-seo-boost2 (all 5 removed — file emptied)
-  'dpe-diagnostic-performance-energetique-tout-savoir',      // G18 → dpe-obligatoire-2026-guide
-  'devis-travaux-comprendre-comparer-negocier',              // G7 → devis-travaux-comprendre
-  'renovation-salle-de-bain-guide-complet-prix-2026',        // G6 → renovation-salle-de-bain-budget-etapes
-  'entretien-maison-calendrier-annuel-checklist',            // G12 → entretien-annuel-maison-checklist-complete
-  'arnaques-artisans-reconnaitre-eviter-recours',            // G11 → 10-arnaques-courantes-batiment
+  'dpe-diagnostic-performance-energetique-tout-savoir', // G18 → dpe-obligatoire-2026-guide
+  'devis-travaux-comprendre-comparer-negocier', // G7 → devis-travaux-comprendre
+  'renovation-salle-de-bain-guide-complet-prix-2026', // G6 → renovation-salle-de-bain-budget-etapes
+  'entretien-maison-calendrier-annuel-checklist', // G12 → entretien-annuel-maison-checklist-complete
+  'arnaques-artisans-reconnaitre-eviter-recours', // G11 → 10-arnaques-courantes-batiment
 
   // batch-seo-boost3 (4 of 5 removed — kept prix-toiture)
   // Note: eco-ptz-2026-pret-taux-zero-renovation exists in BOTH batch-aides-2026 (pillar) and batch-seo-boost3 (deleted).
   // Since boost3 is now empty, the aides-2026 version surfaces as pillar. Do NOT exclude it.
-  'renovation-energetique-par-ou-commencer',                 // G13 → travaux-renovation-energetique-par-ou-commencer
-  'normes-electriques-2026-nfc-15-100-guide',                // G26 → electricite-normes-securite
-  'fuite-eau-urgence-guide-complet-gestes-couts',            // G27 → fuite-eau-que-faire-urgence
+  'renovation-energetique-par-ou-commencer', // G13 → travaux-renovation-energetique-par-ou-commencer
+  'normes-electriques-2026-nfc-15-100-guide', // G26 → electricite-normes-securite
+  'fuite-eau-urgence-guide-complet-gestes-couts', // G27 → fuite-eau-que-faire-urgence
 
   // batch-renovation-2026 (3 articles)
-  'renovation-salle-de-bain-prix-guide-2026',                // G6 → renovation-salle-de-bain-budget-etapes
-  'devis-travaux-guide-complet',                             // G7 → devis-travaux-comprendre
-  'cuisine-equipee-prix-pose-2026',                          // G20 → prix-cuisiniste-2026-pose-cuisine
+  'renovation-salle-de-bain-prix-guide-2026', // G6 → renovation-salle-de-bain-budget-etapes
+  'devis-travaux-guide-complet', // G7 → devis-travaux-comprendre
+  'cuisine-equipee-prix-pose-2026', // G20 → prix-cuisiniste-2026-pose-cuisine
 
   // batch-securite-energie (1 article)
-  'pompe-chaleur-air-eau-guide-2026',                        // G9 → prix-pompe-a-chaleur-2026
+  'pompe-chaleur-air-eau-guide-2026', // G9 → prix-pompe-a-chaleur-2026
 
   // batch-reglementation (1 article)
-  'aides-renovation-2026-cumul-guide',                       // G14 → cumul-aides-renovation-2026-tableau
+  'aides-renovation-2026-cumul-guide', // G14 → cumul-aides-renovation-2026-tableau
 
   // batch-aides-saisonnier (1 article)
-  'cumul-aides-renovation-energetique-2026',                 // G14 → cumul-aides-renovation-2026-tableau
+  'cumul-aides-renovation-energetique-2026', // G14 → cumul-aides-renovation-2026-tableau
 
   // batch-conseils (1 article)
-  'preparer-maison-hiver-guide-complet',                     // G21 → preparer-maison-hiver-checklist
+  'preparer-maison-hiver-guide-complet', // G21 → preparer-maison-hiver-checklist
 
   // batch-saisonnier-urgence (1 article)
-  'preparer-maison-hiver',                                   // G21 → preparer-maison-hiver-checklist
+  'preparer-maison-hiver', // G21 → preparer-maison-hiver-checklist
 
   // batch-energie-2026 (1 article)
-  'extension-maison-prix-m2-2026',                           // G23 → prix-extension-maison-2026
+  'extension-maison-prix-m2-2026', // G23 → prix-extension-maison-2026
 ])
 
 /** Every blog article keyed by slug (excluding redirected doublons) */

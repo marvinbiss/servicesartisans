@@ -19,7 +19,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
 <html lang="fr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1a1a1a;">
-  <span style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Votre demande de devis est presque finalisée — finalisez en 30 secondes, c'est gratuit.</span>
+  <span style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Votre demande de devis est presque finalisée — finalisez-la en 30 secondes, c’est gratuit.</span>
   <div style="text-align: center; margin-bottom: 24px;">
     <h1 style="color: #2563eb; font-size: 20px; margin: 0;">ServicesArtisans</h1>
   </div>
@@ -28,7 +28,7 @@ export function getAbandonEmail1(data: { service: string; city: string; unsubscr
 
   <p style="color: #555; line-height: 1.6;">
     Vous avez commencé une demande de devis pour <strong>${htmlEscape(service)}</strong> à <strong>${htmlEscape(city)}</strong>,
-    mais vous n'êtes pas allé au bout. Pas de souci — vos informations sont sauvegardées.
+    mais vous n’êtes pas allé au bout. Pas de souci — vos informations sont sauvegardées.
   </p>
 
   <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin: 24px 0;">

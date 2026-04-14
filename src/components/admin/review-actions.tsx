@@ -50,7 +50,10 @@ export function AdminReviewActions({ reviewId }: AdminReviewActionsProps) {
       <ConfirmationModal
         isOpen={rejectModal}
         onClose={() => setRejectModal(false)}
-        onConfirm={() => { setRejectModal(false); moderate('rejected') }}
+        onConfirm={() => {
+          setRejectModal(false)
+          moderate('rejected')
+        }}
         title="Rejeter l'avis"
         message="Êtes-vous sûr de vouloir rejeter cet avis ? Il ne sera plus visible publiquement."
         confirmText="Rejeter"

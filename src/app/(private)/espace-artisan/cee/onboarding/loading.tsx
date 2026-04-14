@@ -6,7 +6,11 @@
 
 export default function OnboardingLoading() {
   return (
-    <div className="min-h-screen bg-sand-50" aria-busy="true" aria-label="Chargement de l'onboarding CEE…">
+    <div
+      className="min-h-screen bg-sand-50"
+      aria-busy="true"
+      aria-label="Chargement de l'onboarding CEE…"
+    >
       {/* Header skeleton */}
       <div className="bg-gradient-to-r from-primary-500 to-primary-700">
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -25,9 +29,7 @@ export default function OnboardingLoading() {
                   <div className="h-11 w-11 animate-pulse rounded-full bg-sand-200" />
                   <div className="mt-1 hidden h-3 w-16 animate-pulse rounded bg-sand-100 sm:block" />
                 </div>
-                {idx < 4 && (
-                  <div className="mx-2 mb-4 h-0.5 flex-1 animate-pulse bg-sand-200" />
-                )}
+                {idx < 4 && <div className="mx-2 mb-4 h-0.5 flex-1 animate-pulse bg-sand-200" />}
               </div>
             ))}
           </div>

@@ -13,10 +13,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 
-const MIGRATION_PATH = join(
-  process.cwd(),
-  'supabase/migrations/107_notifications_v1.sql'
-)
+const MIGRATION_PATH = join(process.cwd(), 'supabase/migrations/107_notifications_v1.sql')
 
 let migrationSQL: string
 
@@ -46,7 +43,7 @@ describe('Notifications V1 Migration — Schema', () => {
     })
 
     it('enforces type CHECK constraint with all notification types', () => {
-      expect(migrationSQL).toContain("CHECK (type IN (")
+      expect(migrationSQL).toContain('CHECK (type IN (')
       expect(migrationSQL).toContain("'lead_created'")
       expect(migrationSQL).toContain("'lead_dispatched'")
       expect(migrationSQL).toContain("'lead_viewed'")
@@ -101,7 +98,9 @@ describe('Notifications V1 Migration — Schema', () => {
     })
 
     it('has RLS enabled with admin-only access', () => {
-      expect(migrationSQL).toContain('ALTER TABLE notification_deliveries ENABLE ROW LEVEL SECURITY')
+      expect(migrationSQL).toContain(
+        'ALTER TABLE notification_deliveries ENABLE ROW LEVEL SECURITY'
+      )
       expect(migrationSQL).toContain('Admins manage deliveries')
     })
 
@@ -125,10 +124,7 @@ describe('Notifications V1 Migration — Schema', () => {
 })
 
 describe('Notifications V1 — Lead Event Processor', () => {
-  const PROCESSOR_PATH = join(
-    process.cwd(),
-    'src/lib/notifications/lead-notifications.ts'
-  )
+  const PROCESSOR_PATH = join(process.cwd(), 'src/lib/notifications/lead-notifications.ts')
 
   let processorCode: string
 
@@ -173,11 +169,15 @@ describe('Notifications V1 — Lead Event Processor', () => {
 
   it('dispatched event targets artisan only', () => {
     // dispatched should notify artisan, not client
-    expect(processorCode).toContain("dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] }")
+    expect(processorCode).toContain(
+      "dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] }"
+    )
   })
 
   it('viewed event is in-app only (no email)', () => {
-    expect(processorCode).toContain("viewed:     { channels: ['in_app'],          targetRoles: ['client'] }")
+    expect(processorCode).toContain(
+      "viewed:     { channels: ['in_app'],          targetRoles: ['client'] }"
+    )
   })
 
   it('does not expose provider IDs in client-facing notification messages', () => {
@@ -201,7 +201,7 @@ describe('Notifications V1 — logLeadEvent Integration', () => {
   }
 
   it('logLeadEvent imports processLeadEvent', () => {
-    expect(eventsCode).toContain("import { processLeadEvent }")
+    expect(eventsCode).toContain('import { processLeadEvent }')
   })
 
   it('logLeadEvent calls processLeadEvent after insert', () => {
@@ -252,10 +252,7 @@ describe('Notifications V1 — API Routes (private only)', () => {
 
 describe('Notifications V1 — No SEO Impact', () => {
   it('no notification routes are in (public) route group', () => {
-    const publicNotifPath = join(
-      process.cwd(),
-      'src/app/(public)/notifications'
-    )
+    const publicNotifPath = join(process.cwd(), 'src/app/(public)/notifications')
     expect(existsSync(publicNotifPath)).toBe(false)
   })
 

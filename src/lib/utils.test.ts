@@ -23,7 +23,9 @@ describe('cn (classNames utility)', () => {
   it('should handle conditional classes', () => {
     const shouldInclude = true
     const shouldExclude = false
-    expect(cn('base', shouldInclude && 'included', shouldExclude && 'excluded')).toBe('base included')
+    expect(cn('base', shouldInclude && 'included', shouldExclude && 'excluded')).toBe(
+      'base included'
+    )
   })
 
   it('should handle undefined and null values', () => {
@@ -204,7 +206,7 @@ describe('isValidSIRET', () => {
 describe('calculateDistance', () => {
   it('should calculate distance between two points', () => {
     // Paris to Lyon is approximately 392 km
-    const distance = calculateDistance(48.8566, 2.3522, 45.7640, 4.8357)
+    const distance = calculateDistance(48.8566, 2.3522, 45.764, 4.8357)
     expect(distance).toBeGreaterThan(380)
     expect(distance).toBeLessThan(410)
   })
@@ -267,7 +269,12 @@ describe('getArtisanUrl', () => {
   })
 
   it('should prefer slug over stable_id', () => {
-    const url = getArtisanUrl({ specialty: 'electricien', city: 'Lyon', slug: 'martin-elec-69', stable_id: 'STBL123' })
+    const url = getArtisanUrl({
+      specialty: 'electricien',
+      city: 'Lyon',
+      slug: 'martin-elec-69',
+      stable_id: 'STBL123',
+    })
     expect(url).toContain('martin-elec-69')
     expect(url).not.toContain('STBL123')
   })

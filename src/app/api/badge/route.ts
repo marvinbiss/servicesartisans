@@ -19,7 +19,7 @@ function generateStars(rating: number, x: number, y: number, color: string): str
   for (let i = 0; i < 5; i++) {
     const cx = x + i * gap + starSize / 2
     const cy = y
-    const fill = i < Math.floor(rating) ? color : (i < rating ? `url(#halfStar${i})` : '#cbd5e1')
+    const fill = i < Math.floor(rating) ? color : i < rating ? `url(#halfStar${i})` : '#cbd5e1'
 
     if (i < rating && i >= Math.floor(rating)) {
       // Partial star — use a gradient
@@ -29,9 +29,7 @@ function generateStars(rating: number, x: number, y: number, color: string): str
       )
     }
 
-    stars.push(
-      `<polygon points="${starPoints(cx, cy, 6, 3)}" fill="${fill}"/>`
-    )
+    stars.push(`<polygon points="${starPoints(cx, cy, 6, 3)}" fill="${fill}"/>`)
   }
 
   return stars.join('\n    ')

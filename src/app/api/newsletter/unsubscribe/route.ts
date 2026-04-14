@@ -26,12 +26,18 @@ export async function GET(request: NextRequest) {
 
     // Verify token (HMAC-SHA256 of email)
     const unsubscribeSecret = process.env.UNSUBSCRIBE_SECRET || 'sa-newsletter-default-key'
-    const expectedToken = crypto.createHmac('sha256', unsubscribeSecret).update(email.toLowerCase().trim()).digest('hex')
+    const expectedToken = crypto
+      .createHmac('sha256', unsubscribeSecret)
+      .update(email.toLowerCase().trim())
+      .digest('hex')
     if (token !== expectedToken) {
-      return new NextResponse(htmlPage('Lien invalide', 'Le lien de désinscription est invalide.'), {
-        status: 400,
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-      })
+      return new NextResponse(
+        htmlPage('Lien invalide', 'Le lien de désinscription est invalide.'),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        }
+      )
     }
 
     const supabase = createAdminClient()

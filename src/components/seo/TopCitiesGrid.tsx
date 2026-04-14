@@ -93,9 +93,7 @@ export default function TopCitiesGrid({
                   {getAnchorText(serviceName, ville.name, intent)}
                 </span>
               </div>
-              <span className="text-xs text-charcoal-400">
-                ({ville.departementCode})
-              </span>
+              <span className="text-xs text-charcoal-400">({ville.departementCode})</span>
             </Link>
           ))}
         </div>

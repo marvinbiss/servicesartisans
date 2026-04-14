@@ -73,10 +73,13 @@ function createLogger(defaultContext?: LogContext): AppLogger {
 
     error(message: string, error?: unknown, context?: LogContext): void {
       if (shouldLog('error')) {
-        const errorDetails = error instanceof Error
-          ? { name: error.name, message: error.message, stack: error.stack }
-          : error
-        console.error(formatMessage('error', message, { ...mergeContext(context), error: errorDetails }))
+        const errorDetails =
+          error instanceof Error
+            ? { name: error.name, message: error.message, stack: error.stack }
+            : error
+        console.error(
+          formatMessage('error', message, { ...mergeContext(context), error: errorDetails })
+        )
       }
     },
 

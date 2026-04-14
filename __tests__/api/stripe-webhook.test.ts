@@ -64,14 +64,17 @@ function buildMockSupabaseAdmin() {
       if (table === 'webhook_events') {
         // First webhook_events call: insert (idempotency check)
         // After that: select (if unique violation) or update (markCompleted/markFailed)
-        const webhookCallsForTable = fromCallLog.filter(t => t === 'webhook_events').length
+        const webhookCallsForTable = fromCallLog.filter((t) => t === 'webhook_events').length
 
         if (webhookCallsForTable === 1) {
           // First call: insert for idempotency
           return {
             insert: vi.fn().mockImplementation(() => ({
               then: (resolve: (v: unknown) => unknown) =>
-                resolve({ data: idempotencyInsertResult.data, error: idempotencyInsertResult.error }),
+                resolve({
+                  data: idempotencyInsertResult.data,
+                  error: idempotencyInsertResult.error,
+                }),
             })),
           }
         }
@@ -82,7 +85,10 @@ function buildMockSupabaseAdmin() {
               eq: vi.fn().mockReturnValue({
                 single: vi.fn().mockReturnValue({
                   then: (resolve: (v: unknown) => unknown) =>
-                    resolve({ data: idempotencySelectResult.data, error: idempotencySelectResult.error }),
+                    resolve({
+                      data: idempotencySelectResult.data,
+                      error: idempotencySelectResult.error,
+                    }),
                 }),
               }),
             }),
@@ -100,7 +106,10 @@ function buildMockSupabaseAdmin() {
             eq: vi.fn().mockReturnValue({
               single: vi.fn().mockReturnValue({
                 then: (resolve: (v: unknown) => unknown) =>
-                  resolve({ data: idempotencySelectResult.data, error: idempotencySelectResult.error }),
+                  resolve({
+                    data: idempotencySelectResult.data,
+                    error: idempotencySelectResult.error,
+                  }),
               }),
             }),
           }),
@@ -164,7 +173,10 @@ vi.mock('@/lib/supabase/admin', () => ({
 // Helpers
 // ============================================
 
-function makeWebhookRequest(body: string = '{"test":"body"}', sig: string | null = 'whsec_test_sig') {
+function makeWebhookRequest(
+  body: string = '{"test":"body"}',
+  sig: string | null = 'whsec_test_sig'
+) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (sig) headers['stripe-signature'] = sig
   return new Request('http://localhost/api/stripe/webhook', {
@@ -174,7 +186,11 @@ function makeWebhookRequest(body: string = '{"test":"body"}', sig: string | null
   })
 }
 
-function makeStripeEvent(type: string, dataObject: Record<string, unknown>, id: string = 'evt_test_123') {
+function makeStripeEvent(
+  type: string,
+  dataObject: Record<string, unknown>,
+  id: string = 'evt_test_123'
+) {
   return {
     id,
     type,
@@ -226,9 +242,7 @@ describe('POST /api/stripe/webhook', () => {
 
     // headers() mock returns Headers without stripe-signature
     const { headers } = await import('next/headers')
-    vi.mocked(headers).mockResolvedValue(
-      new Headers({}) as Awaited<ReturnType<typeof headers>>
-    )
+    vi.mocked(headers).mockResolvedValue(new Headers({}) as Awaited<ReturnType<typeof headers>>)
 
     const result = await callPOST(request)
 
@@ -267,7 +281,10 @@ describe('POST /api/stripe/webhook', () => {
     // Simulate unique violation on insert (event already exists)
     idempotencyInsertResult = {
       data: null,
-      error: { code: '23505', message: 'duplicate key value violates unique constraint' } as { code: string; message: string },
+      error: { code: '23505', message: 'duplicate key value violates unique constraint' } as {
+        code: string
+        message: string
+      },
     }
     // Simulate finding existing completed event
     idempotencySelectResult = { data: { status: 'completed' }, error: null }

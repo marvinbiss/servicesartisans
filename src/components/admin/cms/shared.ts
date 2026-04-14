@@ -8,7 +8,13 @@ export const PAGE_TYPE_OPTIONS = [
 ] as const
 
 export const BLOG_CATEGORIES = [
-  'Conseils', 'Guides', 'Actualités', 'Témoignages', 'Réglementations', 'Tendances', 'Astuces'
+  'Conseils',
+  'Guides',
+  'Actualités',
+  'Témoignages',
+  'Réglementations',
+  'Tendances',
+  'Astuces',
 ] as const
 
 // Matches DB CHECK and Zod schema constraints
@@ -66,11 +72,14 @@ export function buildPayload(formData: {
     author: formData.author || null,
     author_bio: formData.authorBio || null,
     category: formData.category || null,
-    tags: formData.tags.filter(t => t.trim()),
+    tags: formData.tags.filter((t) => t.trim()),
     read_time: formData.readTime || null,
     featured_image: formData.featuredImage || null,
-    service_slug: (formData.pageType === 'service' || formData.pageType === 'location') ? (formData.serviceSlug || null) : null,
-    location_slug: formData.pageType === 'location' ? (formData.locationSlug || null) : null,
+    service_slug:
+      formData.pageType === 'service' || formData.pageType === 'location'
+        ? formData.serviceSlug || null
+        : null,
+    location_slug: formData.pageType === 'location' ? formData.locationSlug || null : null,
     sort_order: formData.sortOrder,
   }
 }

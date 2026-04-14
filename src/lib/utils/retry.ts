@@ -26,7 +26,9 @@ export interface RetryOptions {
   signal?: AbortSignal
 }
 
-const DEFAULT_OPTIONS: Required<Omit<RetryOptions, 'onRetry' | 'timeout' | 'signal' | 'isRetryable'>> = {
+const DEFAULT_OPTIONS: Required<
+  Omit<RetryOptions, 'onRetry' | 'timeout' | 'signal' | 'isRetryable'>
+> = {
   maxAttempts: 3,
   initialDelay: 1000,
   maxDelay: 30000,
@@ -65,10 +67,14 @@ function sleep(ms: number, signal?: AbortSignal): Promise<void> {
 
     const timeoutId = setTimeout(resolve, ms)
 
-    signal?.addEventListener('abort', () => {
-      clearTimeout(timeoutId)
-      reject(new DOMException('Aborted', 'AbortError'))
-    }, { once: true })
+    signal?.addEventListener(
+      'abort',
+      () => {
+        clearTimeout(timeoutId)
+        reject(new DOMException('Aborted', 'AbortError'))
+      },
+      { once: true }
+    )
   })
 }
 
@@ -107,10 +113,7 @@ async function withTimeout<T>(
 /**
  * Retry a function with exponential backoff
  */
-export async function retry<T>(
-  fn: () => Promise<T>,
-  options: RetryOptions = {}
-): Promise<T> {
+export async function retry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const opts = { ...DEFAULT_OPTIONS, ...options }
   const checkRetryable = options.isRetryable || isRetryableError
 
@@ -124,9 +127,7 @@ export async function retry<T>(
       }
 
       // Execute with optional timeout
-      const result = opts.timeout
-        ? await withTimeout(fn, opts.timeout, opts.signal)
-        : await fn()
+      const result = opts.timeout ? await withTimeout(fn, opts.timeout, opts.signal) : await fn()
 
       return result
     } catch (error) {

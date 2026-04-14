@@ -4,7 +4,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX, ShieldCheck, Star, Leaf } from 'lucide-react'
+import {
+  MapPin,
+  List,
+  Map as MapIcon,
+  Search,
+  ChevronDown,
+  ArrowRight,
+  FileText,
+  SearchX,
+  ShieldCheck,
+  Star,
+  Leaf,
+} from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 import { RgeTracking } from '@/lib/analytics/tracking'
@@ -75,48 +87,60 @@ export default function ServiceLocationPageClient({
   )
 
   // Update URL params when search/sort change
-  const updateUrlParams = useCallback((q: string, sort: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (q) {
-      params.set('q', q)
-    } else {
-      params.delete('q')
-    }
-    if (sort && sort !== 'default') {
-      params.set('sort', sort)
-    } else {
-      params.delete('sort')
-    }
-    const qs = params.toString()
-    router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
-  }, [router, searchParams])
+  const updateUrlParams = useCallback(
+    (q: string, sort: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (q) {
+        params.set('q', q)
+      } else {
+        params.delete('q')
+      }
+      if (sort && sort !== 'default') {
+        params.set('sort', sort)
+      } else {
+        params.delete('sort')
+      }
+      const qs = params.toString()
+      router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+    },
+    [router, searchParams]
+  )
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchQuery(value)
-    updateUrlParams(value, sortOrder)
-  }, [sortOrder, updateUrlParams])
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchQuery(value)
+      updateUrlParams(value, sortOrder)
+    },
+    [sortOrder, updateUrlParams]
+  )
 
-  const handleSortChange = useCallback((value: 'default' | 'name' | 'rating') => {
-    setSortOrder(value)
-    updateUrlParams(searchQuery, value)
-  }, [searchQuery, updateUrlParams])
+  const handleSortChange = useCallback(
+    (value: 'default' | 'name' | 'rating') => {
+      setSortOrder(value)
+      updateUrlParams(searchQuery, value)
+    },
+    [searchQuery, updateUrlParams]
+  )
 
   // Toggle RGE filter via URL — triggers a server re-render with filtered data
-  const handleRgeToggle = useCallback((next: boolean) => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (next) {
-      params.set('rge', '1')
-    } else {
-      params.delete('rge')
-    }
-    const qs = params.toString()
-    router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
-    RgeTracking.filterApply({
-      service: serviceSlug || service.slug,
-      city: locationSlug || location.slug,
-      active: next,
-    })
-  }, [router, searchParams, serviceSlug, locationSlug, service.slug, location.slug])
+  const handleRgeToggle = useCallback(
+    (next: boolean) => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (next) {
+        params.set('rge', '1')
+      } else {
+        params.delete('rge')
+      }
+      const qs = params.toString()
+      router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+      RgeTracking.filterApply({
+        service: serviceSlug || service.slug,
+        city: locationSlug || location.slug,
+        active: next,
+      })
+    },
+    [router, searchParams, serviceSlug, locationSlug, service.slug, location.slug]
+  )
 
   const hasMore = allProviders.length < liveCount
 
@@ -130,7 +154,7 @@ export default function ServiceLocationPageClient({
       if (!res.ok) throw new Error('fetch error')
       const data = await res.json()
       if (data.providers?.length) {
-        setAllProviders(prev => [...prev, ...data.providers])
+        setAllProviders((prev) => [...prev, ...data.providers])
       }
     } catch {
       // silently fail — user can retry by clicking again
@@ -148,9 +172,11 @@ export default function ServiceLocationPageClient({
       return
     }
     let cancelled = false
-    fetch(`/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&limit=${PAGE_SIZE}${rgeOnly ? '&rge=1' : ''}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
+    fetch(
+      `/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&limit=${PAGE_SIZE}${rgeOnly ? '&rge=1' : ''}`
+    )
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
         if (cancelled) return
         if (data?.providers?.length) {
           setAllProviders(data.providers)
@@ -160,8 +186,12 @@ export default function ServiceLocationPageClient({
         }
         setIsHydrating(false)
       })
-      .catch(() => { if (!cancelled) setIsHydrating(false) })
-    return () => { cancelled = true }
+      .catch(() => {
+        if (!cancelled) setIsHydrating(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [initialProviders.length, serviceSlug, locationSlug, rgeOnly])
 
   useEffect(() => {
@@ -172,42 +202,43 @@ export default function ServiceLocationPageClient({
   }, [])
 
   // Memoize providers for the map — avoids recreating the cluster on every render
-  const mapProviders = useMemo(() => allProviders.map(p => ({
-    id: p.id,
-    name: p.name || '',
-    stable_id: p.stable_id ?? undefined,
-    slug: p.slug,
-    latitude: p.latitude || 0,
-    longitude: p.longitude || 0,
-    rating_average: p.rating_average,
-    review_count: p.review_count,
-    specialty: p.specialty,
-    address_city: p.address_city,
-    is_verified: p.is_verified || false,
-    phone: p.phone,
-    address_street: p.address_street,
-    address_postal_code: p.address_postal_code,
-  })), [allProviders])
+  const mapProviders = useMemo(
+    () =>
+      allProviders.map((p) => ({
+        id: p.id,
+        name: p.name || '',
+        stable_id: p.stable_id ?? undefined,
+        slug: p.slug,
+        latitude: p.latitude || 0,
+        longitude: p.longitude || 0,
+        rating_average: p.rating_average,
+        review_count: p.review_count,
+        specialty: p.specialty,
+        address_city: p.address_city,
+        is_verified: p.is_verified || false,
+        phone: p.phone,
+        address_street: p.address_street,
+        address_postal_code: p.address_postal_code,
+      })),
+    [allProviders]
+  )
 
   // Default center: location coordinates -> provider average -> France fallback
   let computedLat = location.latitude
   let computedLng = location.longitude
   if (!computedLat || !computedLng) {
-    const withCoords = allProviders.filter(p => p.latitude && p.longitude)
+    const withCoords = allProviders.filter((p) => p.latitude && p.longitude)
     if (withCoords.length > 0) {
       computedLat = withCoords.reduce((sum, p) => sum + p.latitude!, 0) / withCoords.length
       computedLng = withCoords.reduce((sum, p) => sum + p.longitude!, 0) / withCoords.length
     }
   }
-  const mapCenter: [number, number] = [
-    computedLat || 46.603354,
-    computedLng || 1.888334,
-  ]
+  const mapCenter: [number, number] = [computedLat || 46.603354, computedLng || 1.888334]
   const mapZoom = computedLat ? 12 : 6
 
   // Compute average rating for reassurance bar
   const avgRating = useMemo(() => {
-    const rated = allProviders.filter(p => p.rating_average && p.rating_average > 0)
+    const rated = allProviders.filter((p) => p.rating_average && p.rating_average > 0)
     if (rated.length === 0) return null
     const sum = rated.reduce((s, p) => s + (p.rating_average || 0), 0)
     return (sum / rated.length).toFixed(1)
@@ -238,13 +269,15 @@ export default function ServiceLocationPageClient({
                 {liveCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <ShieldCheck className="w-4 h-4 text-accent-500" />
-                    <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan{liveCount > 1 ? 's' : ''} vérifié{liveCount > 1 ? 's' : ''}
+                    <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan
+                    {liveCount > 1 ? 's' : ''} vérifié{liveCount > 1 ? 's' : ''}
                   </span>
                 )}
                 {rgeCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <Leaf className="w-4 h-4 text-emerald-600" />
-                    <span className="font-semibold text-charcoal-900">{rgeCount}</span> certifié{rgeCount > 1 ? 's' : ''} RGE
+                    <span className="font-semibold text-charcoal-900">{rgeCount}</span> certifié
+                    {rgeCount > 1 ? 's' : ''} RGE
                   </span>
                 )}
                 {avgRating && (
@@ -262,7 +295,8 @@ export default function ServiceLocationPageClient({
               {recentDevisCount >= 120 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent-50 text-accent-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-accent-500 rounded-full animate-pulse" />
-                  {recentDevisCount} devis demand{'e'}{recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                  {recentDevisCount} devis demand{'e'}
+                  {recentDevisCount > 1 ? 's' : ''} ce mois-ci
                 </div>
               )}
             </div>
@@ -449,7 +483,8 @@ export default function ServiceLocationPageClient({
                   Aucun {service.name.toLowerCase()} référencé à {location.name} pour le moment
                 </h2>
                 <p className="text-charcoal-500 max-w-md mb-8">
-                  Demandez un devis et nous rechercherons un professionnel qualifié pour vous dans les plus brefs délais.
+                  Demandez un devis et nous rechercherons un professionnel qualifié pour vous dans
+                  les plus brefs délais.
                 </p>
                 <Link
                   href={`/devis/${serviceSlug || service.slug}/${locationSlug || ''}`}
@@ -466,7 +501,10 @@ export default function ServiceLocationPageClient({
                   <div className="mx-4 mt-4 mb-2 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-sm text-emerald-900">
                     <Leaf className="w-4 h-4 flex-shrink-0 mt-0.5 text-emerald-600" />
                     <p className="leading-snug">
-                      Pour les aides <span className="font-semibold">MaPrimeRénov&apos;</span>, <span className="font-semibold">CEE</span> et <span className="font-semibold">TVA 5,5&nbsp;%</span> : choisissez un artisan certifié RGE.
+                      Pour les aides <span className="font-semibold">MaPrimeRénov&apos;</span>,{' '}
+                      <span className="font-semibold">CEE</span> et{' '}
+                      <span className="font-semibold">TVA 5,5&nbsp;%</span> : choisissez un artisan
+                      certifié RGE.
                     </p>
                   </div>
                 )}
@@ -526,7 +564,6 @@ export default function ServiceLocationPageClient({
           </div>
         )}
       </div>
-
     </div>
   )
 }

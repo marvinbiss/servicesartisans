@@ -70,7 +70,7 @@ export function AdminProviderActions({ providerId, isActive }: AdminProviderActi
         isOpen={toggleModal}
         onClose={() => setToggleModal(false)}
         onConfirm={toggleActive}
-        title={isActive ? 'Désactiver l\'artisan' : 'Activer l\'artisan'}
+        title={isActive ? "Désactiver l'artisan" : "Activer l'artisan"}
         message={`Êtes-vous sûr de vouloir ${isActive ? 'désactiver' : 'activer'} cet artisan ?`}
         confirmText={isActive ? 'Désactiver' : 'Activer'}
         variant={isActive ? 'warning' : 'success'}

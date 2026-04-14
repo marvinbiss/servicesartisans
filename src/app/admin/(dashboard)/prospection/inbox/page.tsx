@@ -21,22 +21,25 @@ export default function InboxPage() {
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const fetchConversations = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true)
-    try {
-      setError(null)
-      const params = new URLSearchParams({ status: statusFilter })
-      const res = await fetch(`/api/admin/prospection/conversations?${params}`, { signal })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
-      const data = await res.json()
-      if (data.success) setConversations(data.data)
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return
-      setError('Erreur de chargement')
-    } finally {
-      setLoading(false)
-    }
-  }, [statusFilter])
+  const fetchConversations = useCallback(
+    async (signal?: AbortSignal) => {
+      setLoading(true)
+      try {
+        setError(null)
+        const params = new URLSearchParams({ status: statusFilter })
+        const res = await fetch(`/api/admin/prospection/conversations?${params}`, { signal })
+        if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
+        const data = await res.json()
+        if (data.success) setConversations(data.data)
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return
+        setError('Erreur de chargement')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [statusFilter]
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -57,7 +60,12 @@ export default function InboxPage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -88,7 +96,14 @@ export default function InboxPage() {
           </div>
         ) : (
           conversations.map((conv) => {
-            const contact = conv.contact as { contact_name?: string; company_name?: string; email?: string; contact_type?: string } | undefined
+            const contact = conv.contact as
+              | {
+                  contact_name?: string
+                  company_name?: string
+                  email?: string
+                  contact_type?: string
+                }
+              | undefined
             const status = statusLabels[conv.status] || { label: conv.status, color: 'bg-gray-100' }
             return (
               <Link
@@ -98,25 +113,45 @@ export default function InboxPage() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-3">
-                    <div className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      {conv.status === 'ai_handling' ? <Bot className="w-4 h-4 text-blue-600" /> : <User className="w-4 h-4 text-gray-500" />}
+                    <div
+                      className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-blue-100' : 'bg-gray-100'}`}
+                    >
+                      {conv.status === 'ai_handling' ? (
+                        <Bot className="w-4 h-4 text-blue-600" />
+                      ) : (
+                        <User className="w-4 h-4 text-gray-500" />
+                      )}
                     </div>
                     <div>
                       <span className="font-medium text-gray-900">
-                        {contact?.contact_name || contact?.company_name || contact?.email || 'Contact'}
+                        {contact?.contact_name ||
+                          contact?.company_name ||
+                          contact?.email ||
+                          'Contact'}
                       </span>
                       {contact?.contact_type && <ContactTypeBadge type={contact.contact_type} />}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <ChannelIcon channel={conv.channel} className="w-4 h-4 text-gray-400" />
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${status.color}`}>{status.label}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${status.color}`}>
+                      {status.label}
+                    </span>
                   </div>
                 </div>
                 <div className="ml-10 text-sm text-gray-500">
-                  {conv.ai_replies_count > 0 && <span className="mr-3">{conv.ai_replies_count} réponses IA</span>}
+                  {conv.ai_replies_count > 0 && (
+                    <span className="mr-3">{conv.ai_replies_count} réponses IA</span>
+                  )}
                   {conv.last_message_at && (
-                    <span>{new Date(conv.last_message_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>
+                      {new Date(conv.last_message_at).toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
                   )}
                 </div>
               </Link>

@@ -18,7 +18,10 @@ const MAX_BATCH_SIZE = 50
 export async function POST(request: NextRequest) {
   try {
     if (!process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Erreur de configuration serveur' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur de configuration serveur' } },
+        { status: 500 }
+      )
     }
 
     // Vérifier l'auth via Bearer token OU champ secret dans le body
@@ -29,7 +32,10 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Données invalides' } },
+        { status: 400 }
+      )
     }
 
     // Mode batch : { paths: [...] } avec Bearer auth
@@ -37,7 +43,10 @@ export async function POST(request: NextRequest) {
     if (batchResult.success) {
       // Auth via Bearer token obligatoire pour le batch
       if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
-        return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+        return NextResponse.json(
+          { success: false, error: { message: 'Secret invalide' } },
+          { status: 401 }
+        )
       }
 
       const { paths } = batchResult.data
@@ -71,13 +80,25 @@ export async function POST(request: NextRequest) {
     // Mode single (rétrocompatible) : { path, secret }
     const singleResult = revalidateSingleSchema.safeParse(body)
     if (!singleResult.success) {
-      return NextResponse.json({ success: false, error: { message: 'Données invalides — envoyez { path, secret } ou { paths: [...] } avec Bearer auth' } }, { status: 400 })
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message:
+              'Données invalides — envoyez { path, secret } ou { paths: [...] } avec Bearer auth',
+          },
+        },
+        { status: 400 }
+      )
     }
 
     const { path, secret } = singleResult.data
 
     if (secret !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Secret invalide' } },
+        { status: 401 }
+      )
     }
 
     // Revalider le chemin
@@ -95,7 +116,13 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la revalidation', details: err instanceof Error ? err.message : String(err) } },
+      {
+        success: false,
+        error: {
+          message: 'Erreur lors de la revalidation',
+          details: err instanceof Error ? err.message : String(err),
+        },
+      },
       { status: 500 }
     )
   }
@@ -105,22 +132,24 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     if (!process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Erreur de configuration serveur' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur de configuration serveur' } },
+        { status: 500 }
+      )
     }
 
     const authHeader = request.headers.get('authorization')
     const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
     if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
-      return NextResponse.json({ success: false, error: { message: 'Secret invalide' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Secret invalide' } },
+        { status: 401 }
+      )
     }
 
     // Revalider les pages principales
-    const paths = [
-      '/services/plombier/paris',
-      '/services',
-      '/',
-    ]
+    const paths = ['/services/plombier/paris', '/services', '/']
 
     for (const path of paths) {
       revalidatePath(path, 'page')
@@ -133,7 +162,13 @@ export async function GET(request: NextRequest) {
     })
   } catch (err) {
     return NextResponse.json(
-      { success: false, error: { message: 'Erreur lors de la revalidation', details: err instanceof Error ? err.message : String(err) } },
+      {
+        success: false,
+        error: {
+          message: 'Erreur lors de la revalidation',
+          details: err instanceof Error ? err.message : String(err),
+        },
+      },
       { status: 500 }
     )
   }

@@ -18,7 +18,10 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron] Unauthorized access to prospection-process')
-      return NextResponse.json({ success: false, error: { message: 'Non autorisé' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
     }
 
     const supabase = createAdminClient()
@@ -34,7 +37,10 @@ export async function GET(request: Request) {
 
     if (error) {
       logger.error('[Cron] Error fetching active campaigns', error)
-      return NextResponse.json({ success: false, error: { message: 'Erreur base de données' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur base de données' } },
+        { status: 500 }
+      )
     }
 
     if (!campaigns || campaigns.length === 0) {
@@ -62,6 +68,9 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     logger.error('[Cron] prospection-process error', error as Error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur interne' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur interne' } },
+      { status: 500 }
+    )
   }
 }

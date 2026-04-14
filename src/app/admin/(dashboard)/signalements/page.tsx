@@ -53,7 +53,9 @@ const TARGET_TYPE_LABELS: Record<string, string> = {
 
 export default function AdminSignalementsPage() {
   const [status, setStatus] = useState<'all' | 'pending' | 'reviewed' | 'dismissed'>('pending')
-  const [targetType, setTargetType] = useState<'all' | 'provider' | 'review' | 'user' | 'message'>('all')
+  const [targetType, setTargetType] = useState<'all' | 'provider' | 'review' | 'user' | 'message'>(
+    'all'
+  )
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
 
@@ -113,7 +115,11 @@ export default function AdminSignalementsPage() {
       fake: 'warning',
       other: 'default',
     }
-    return <StatusBadge variant={variants[reason] || 'default'}>{REASON_LABELS[reason] || reason}</StatusBadge>
+    return (
+      <StatusBadge variant={variants[reason] || 'default'}>
+        {REASON_LABELS[reason] || reason}
+      </StatusBadge>
+    )
   }
 
   return (
@@ -142,9 +148,13 @@ export default function AdminSignalementsPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {s === 'all' ? 'Tous' :
-                   s === 'pending' ? 'En attente' :
-                   s === 'reviewed' ? 'Traités' : 'Rejetés'}
+                  {s === 'all'
+                    ? 'Tous'
+                    : s === 'pending'
+                      ? 'En attente'
+                      : s === 'reviewed'
+                        ? 'Traités'
+                        : 'Rejetés'}
                 </button>
               ))}
             </div>
@@ -167,7 +177,13 @@ export default function AdminSignalementsPage() {
         </div>
 
         {/* Error Banner */}
-        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
+        {displayError && (
+          <ErrorBanner
+            message={displayError}
+            onDismiss={() => setActionError(null)}
+            onRetry={() => mutate()}
+          />
+        )}
 
         {/* Reports List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -188,11 +204,13 @@ export default function AdminSignalementsPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <AlertTriangle className={`w-5 h-5 ${
-                            report.reason === 'harassment' || report.reason === 'inappropriate'
-                              ? 'text-red-500'
-                              : 'text-amber-500'
-                          }`} />
+                          <AlertTriangle
+                            className={`w-5 h-5 ${
+                              report.reason === 'harassment' || report.reason === 'inappropriate'
+                                ? 'text-red-500'
+                                : 'text-amber-500'
+                            }`}
+                          />
                           {getReasonBadge(report.reason)}
                           <ReportStatusBadge status={report.status} />
                           <StatusBadge variant="default">
@@ -214,9 +232,7 @@ export default function AdminSignalementsPage() {
                         </div>
 
                         {report.description && (
-                          <p className="text-sm text-gray-600 mt-2">
-                            {report.description}
-                          </p>
+                          <p className="text-sm text-gray-600 mt-2">{report.description}</p>
                         )}
 
                         {report.resolution && (
@@ -229,22 +245,26 @@ export default function AdminSignalementsPage() {
                       {report.status === 'pending' && (
                         <div className="flex items-center gap-2 ml-4">
                           <button
-                            onClick={() => setActionModal({
-                              open: true,
-                              reportId: report.id,
-                              action: 'resolve',
-                            })}
+                            onClick={() =>
+                              setActionModal({
+                                open: true,
+                                reportId: report.id,
+                                action: 'resolve',
+                              })
+                            }
                             className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
                             title="Résoudre"
                           >
                             <CheckCircle className="w-5 h-5" />
                           </button>
                           <button
-                            onClick={() => setActionModal({
-                              open: true,
-                              reportId: report.id,
-                              action: 'dismiss',
-                            })}
+                            onClick={() =>
+                              setActionModal({
+                                open: true,
+                                reportId: report.id,
+                                action: 'dismiss',
+                              })
+                            }
                             className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg"
                             title="Rejeter"
                           >
@@ -259,7 +279,9 @@ export default function AdminSignalementsPage() {
 
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">Page {page} sur {totalPages}</p>
+                <p className="text-sm text-gray-500">
+                  Page {page} sur {totalPages}
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
@@ -286,10 +308,20 @@ export default function AdminSignalementsPage() {
       {actionModal.open && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
-            <div className="fixed inset-0 bg-black/50" onClick={() => setActionModal({ open: false, reportId: '', action: 'resolve' })} />
-            <div role="dialog" aria-modal="true" aria-labelledby="action-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div
+              className="fixed inset-0 bg-black/50"
+              onClick={() => setActionModal({ open: false, reportId: '', action: 'resolve' })}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="action-modal-title"
+              className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+            >
               <h3 id="action-modal-title" className="text-lg font-semibold text-gray-900 mb-4">
-                {actionModal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
+                {actionModal.action === 'resolve'
+                  ? 'Résoudre le signalement'
+                  : 'Rejeter le signalement'}
               </h3>
 
               <div className="mb-4">

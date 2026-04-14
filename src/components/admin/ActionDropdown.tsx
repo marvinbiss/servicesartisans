@@ -84,11 +84,12 @@ export function ActionDropdown({
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        {trigger || (variant === 'horizontal' ? (
-          <MoreHorizontal className="w-5 h-5" />
-        ) : (
-          <MoreVertical className="w-5 h-5" />
-        ))}
+        {trigger ||
+          (variant === 'horizontal' ? (
+            <MoreHorizontal className="w-5 h-5" />
+          ) : (
+            <MoreVertical className="w-5 h-5" />
+          ))}
       </button>
 
       {isOpen && (
@@ -101,9 +102,7 @@ export function ActionDropdown({
         >
           {actions.map((action, index) => (
             <div key={index}>
-              {action.divider && index > 0 && (
-                <div className="my-1 border-t border-gray-100" />
-              )}
+              {action.divider && index > 0 && <div className="my-1 border-t border-gray-100" />}
               <button
                 role="menuitem"
                 onClick={() => {

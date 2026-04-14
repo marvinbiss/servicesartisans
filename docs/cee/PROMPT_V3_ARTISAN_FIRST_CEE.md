@@ -14,13 +14,13 @@
 
 ### Pourquoi ce pivot
 
-| Dimension | BtoC simulateur | **BtoB artisan apporteur** |
-|---|---|---|
-| CAC | 90€/lead | **~0€ (base existante)** |
-| Conversion bout-en-bout | ~6% | **80-90%** (devis déjà signé) |
-| Dépendance trafic | Haute | **Nulle** (scale linéaire sur activation artisan) |
-| Ticket moyen | Moyen | **Supérieur** (artisan pousse au chantier) |
-| Coût d'acquisition scale | Exponentiel | **Constant** |
+| Dimension                | BtoC simulateur | **BtoB artisan apporteur**                        |
+| ------------------------ | --------------- | ------------------------------------------------- |
+| CAC                      | 90€/lead        | **~0€ (base existante)**                          |
+| Conversion bout-en-bout  | ~6%             | **80-90%** (devis déjà signé)                     |
+| Dépendance trafic        | Haute           | **Nulle** (scale linéaire sur activation artisan) |
+| Ticket moyen             | Moyen           | **Supérieur** (artisan pousse au chantier)        |
+| Coût d'acquisition scale | Exponentiel     | **Constant**                                      |
 
 ### Math cible
 
@@ -57,15 +57,15 @@ Version ambitieuse (500 × 3 = 1 500) = 29 M€/an brut. À valider par le taux 
 
 ## 2. PLAN D'EXÉCUTION — 7 PR SÉQUENTIELLES
 
-| PR | Scope | Durée |
-|---|---|---|
-| **PR1** | Migrations 420-428 (ref + devis + providers + dossiers + documents + commissions + partners + observabilité) | 4-6j |
-| **PR2** | Base artisan activation : email campaign + landing `/devenir-partenaire-cee` + onboarding wizard + convention DocuSign | 4j |
-| **PR3** | Portail artisan `/espace-artisan/cee` : dashboard + formation + certification + upload pièces | 6-8j |
-| **PR4** | Back-office ops SA Energy `/admin/cee` : queue dossiers + QA 3-5% + soumission délégataire + suivi statuts | 5-7j |
-| **PR5** | Détection CEE `/api/devis` (auto-flag) + backfill devis historiques | 3j |
-| **PR6** | Flag MAR providers (atomic swap) + simulateur public résiduel (lead gen léger) | 3-4j |
-| **PR7** | Commissions artisan (calcul + virement SEPA batch hebdo ou Stripe Connect) + Pipedrive pipeline ops + Brevo nurture artisan+client | 4j |
+| PR      | Scope                                                                                                                              | Durée |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **PR1** | Migrations 420-428 (ref + devis + providers + dossiers + documents + commissions + partners + observabilité)                       | 4-6j  |
+| **PR2** | Base artisan activation : email campaign + landing `/devenir-partenaire-cee` + onboarding wizard + convention DocuSign             | 4j    |
+| **PR3** | Portail artisan `/espace-artisan/cee` : dashboard + formation + certification + upload pièces                                      | 6-8j  |
+| **PR4** | Back-office ops SA Energy `/admin/cee` : queue dossiers + QA 3-5% + soumission délégataire + suivi statuts                         | 5-7j  |
+| **PR5** | Détection CEE `/api/devis` (auto-flag) + backfill devis historiques                                                                | 3j    |
+| **PR6** | Flag MAR providers (atomic swap) + simulateur public résiduel (lead gen léger)                                                     | 3-4j  |
+| **PR7** | Commissions artisan (calcul + virement SEPA batch hebdo ou Stripe Connect) + Pipedrive pipeline ops + Brevo nurture artisan+client | 4j    |
 
 **Dépendances** : PR1 bloque tout. PR2 avant PR3. PR3 avant PR4 (les ops valident des dossiers créés par artisans). PR5+PR6 parallèles après PR1. PR7 dernier.
 
@@ -113,6 +113,7 @@ grep -rn "docusign\|stripe" lib/ src/app/api/ 2>/dev/null
 ### Réutiliser partiellement V2
 
 Les migrations 420-425 du V2 (`docs/cee/420_425_cee_mandataire.sql`) restent valides pour :
+
 - 420 : 5 tables référentiels (zones clim INSEE, forfaits, SPOT, plafonds, opérations)
 - 421 : 3 ENUMs (à étendre)
 - 422 : extension `devis` (flag auto-détection)
@@ -364,6 +365,7 @@ CREATE INDEX idx_commissions_due ON cee_commissions(partner_id) WHERE status = '
 ### Smoke tests additionnels
 
 Ajouter à `smoke_tests_420_425.sql` (renommer en `smoke_tests_420_428.sql`) 15 tests :
+
 - RLS artisan ne voit pas dossiers d'un autre
 - Artisan non `active` ne peut pas INSERT dossier
 - Artisan peut UPDATE uniquement si status ∈ {draft, qa_rejected}
@@ -405,9 +407,10 @@ REFRESH MATERIALIZED VIEW mv_cee_partners_tam;
 
 **Segmenté par qualification** (PAC / ITE / Biomasse / Solaire).
 
-Objet : *"{prenom_dirigeant}, débloque 7 000€ d'aides sur chaque chantier PAC"*
+Objet : _"{prenom_dirigeant}, débloque 7 000€ d'aides sur chaque chantier PAC"_
 
 Corps (template — à adapter) :
+
 - H1 : Transformez vos devis en chantiers signés
 - Problème : "Vos clients hésitent devant 12 000€ ? Avec CEE + MPR, reste à charge 5 000€."
 - Solution : "ServicesArtisans Energy monte le dossier CEE à votre place. Vous encaissez votre chantier + une commission."
@@ -424,6 +427,7 @@ Envoi batch 500/jour, throttle SMTP Brevo, UTM tracking.
 Route publique, noindex (pour ne pas cannibaliser SEO hub).
 
 Sections :
+
 1. **Proof above fold** : "{N} artisans partenaires · {M} dossiers traités · {Z}M€ de primes versées"
 2. **Simulateur reverse** : "Votre chantier moyen en €" slider → "Votre commission mensuelle estimée : X €" (stimule FOMO)
 3. **Comment ça marche** : 5 étapes (invite → convention → formation → premier dossier → commission)
@@ -443,12 +447,14 @@ Route privée (auth artisan existante + claim vérifié). Si pas encore auth : r
 **Étape 2 — Scope** : opérations souhaitées (cases selon qualifs détectées), départements couverts (multi-select carte), volume estimé/mois (slider).
 
 **Étape 3 — Convention DocuSign** :
+
 - Genération PDF convention via template (champs pré-remplis : raison sociale, SIREN, dirigeant, IBAN, taux commission, scope)
 - Push enveloppe DocuSign via API
 - Webhook `/api/webhooks/docusign` met à jour `convention_signed_at` + stocke PDF signé
 - Email confirmation envoyé automatiquement
 
 **Étape 4 — Formation** :
+
 - 4 vidéos Wistia/Mux (3-5 min chacune) : (1) rôle SA Energy vs artisan, (2) pièces obligatoires par fiche BAR, (3) photos géoloc depuis 1/1/2026, (4) éthique + pièges fraude
 - Quiz 10 questions, seuil 8/10, retry illimité, tracking tentatives
 - Certification générée + PDF téléchargeable
@@ -474,6 +480,7 @@ POST /api/cee/partners/activate            # final, admin ou auto si quiz OK
 ### 6.1 Dashboard `/espace-artisan/cee`
 
 KPIs :
+
 - Dossiers en cours (par status)
 - Primes totales montées (ce mois / lifetime)
 - Commissions dues (€)
@@ -482,6 +489,7 @@ KPIs :
 - Prochain versement (date + montant)
 
 Blocks :
+
 - CTA "Nouveau dossier CEE"
 - Liste 10 derniers dossiers (status badge, montant, commission)
 - Alerte si dossiers `qa_rejected` (action requise)
@@ -496,10 +504,12 @@ Blocks :
 **Étape 3 — Chantier** : operation_code select filtré par qualifs artisan, type_travaux détail, surface, année construction, énergie remplacée, montant HT (number + ancillary TVA calc auto), date devis, date chantier prévue
 
 **Étape 4 — Preview prime** : calcul live `/api/cee/estimate-dossier` avec snapshot version
+
 - Affichage breakdown : CEE / MPR / Total / Commission artisan / Reste à charge client
 - Warning si seuils non atteints (ex. PAC ETAS insuffisant)
 
 **Étape 5 — Documents** : upload multiple drag&drop
+
 - Obligatoires : devis signé, mandat CEE signé (PDF pré-généré), avis d'imposition client, attestation RGE à date devis
 - À fournir post-chantier : facture, photos avant/après (géoloc + EXIF), PV réception
 - Virus scan côté storage (ClamAV lambda ou Supabase Storage policy)
@@ -525,6 +535,7 @@ Timeline events (audit trail), status machine visuelle, docs par kind, QA feedba
 ### 7.1 Queue QA `/admin/cee/queue`
 
 Table filtrable des dossiers `qa_pending` :
+
 - Colonnes : reference, artisan, client commune, opération, montant, prime, date soumission
 - Tri par SLA (24h max)
 - Bulk actions : approve, reject, assign reviewer
@@ -535,6 +546,7 @@ Table filtrable des dossiers `qa_pending` :
 Score 0-100, seuil 80 = pass auto, sinon escalation humain.
 
 Checks :
+
 - RGE valide à date devis (query ADEME cache)
 - Qualif cohérente avec operation_code
 - Zone clim correcte vs CP
@@ -577,6 +589,7 @@ Split view : pièces uploadées (iframe PDF/image) | checklist QA | formulaire d
 ## 8. PR5 — DÉTECTION CEE AUTO `/api/devis` (hérité V2)
 
 Inchangé vs V2 §6. Utilité réduite car V3 artisan-first, mais utile pour :
+
 - Sensibiliser les artisans non encore partenaires (bandeau "Ce devis serait éligible CEE, rejoignez notre programme")
 - Alimenter la séquence Brevo d'invitation automatiquement sur devis détectés
 - Backfill 100k devis historiques pour identifier les artisans à prioriser en activation
@@ -592,6 +605,7 @@ Inchangé vs V2 §7, avec **mode dégradé renforcé** : si fetch MAR échoue 3�
 ### 9.2 Simulateur public `/simulateur-aides-cee` (léger)
 
 Version réduite vs V2 :
+
 - **Objectif principal** : capture lead qualifié → **transmission à un artisan partenaire SA Energy** (pas juste dispatch marketplace)
 - Garde reverse funnel (reveal avant coordonnées) pour SEO + ads long terme
 - CTA final : "Un artisan partenaire vous rappelle sous 48h pour monter votre dossier"
@@ -607,6 +621,7 @@ Routes et conversion cible réduites (cible 25-30% au lieu de 42% — c'est un b
 ### 10.1 Calcul commission
 
 Trigger sur `cee_dossiers.status = 'validated'` :
+
 ```sql
 INSERT INTO cee_commissions (dossier_id, partner_id, amount_cts, status, scheduled_at)
 VALUES (NEW.id, NEW.partner_id, NEW.commission_amount_cts, 'due', now() + interval '7 days');
@@ -615,12 +630,14 @@ VALUES (NEW.id, NEW.partner_id, NEW.commission_amount_cts, 'due', now() + interv
 ### 10.2 Batch paiement hebdo (cron vendredi 10h)
 
 Option A — **SEPA Credit Transfer** :
+
 - Génération fichier XML pain.001.001.09 (norme SEPA SCT)
 - Upload sur portail banque pro (ou API Qonto/Shine si compte pro fintech)
 - Update batch_id sur commissions incluses
 - Confirmation bancaire via webhook ou réconciliation CSV J+1
 
 Option B — **Stripe Connect** (plus simple, coût ~0,25€/transfert) :
+
 - `stripe.transfers.create` avec `destination = stripe_connect_account_id`
 - Webhook `/api/webhooks/stripe` met à jour `confirmed_at`
 
@@ -629,6 +646,7 @@ Facture commission auto-générée (PDF stockage Supabase, numérotation continu
 ### 10.3 Pipedrive pipeline ops
 
 Pipeline "CEE - Dossiers" 8 stages :
+
 1. Partner invited (10%)
 2. Partner active (25%)
 3. Dossier submitted (40%)
@@ -662,6 +680,7 @@ Unsubscribe L.34-5 obligatoire sauf transactionnels critiques.
 ### 11.2 Mandat CEE (arrêté 2/11/2023) — 6 mentions obligatoires
 
 À coller dans le PDF mandat (template) :
+
 1. Identité mandant (bénéficiaire) et mandataire (SA Energy SAS, n°PPEE)
 2. Opérations couvertes par le mandat
 3. Durée du mandat et conditions de résiliation
@@ -669,7 +688,7 @@ Unsubscribe L.34-5 obligatoire sauf transactionnels critiques.
 5. Obligations du mandataire (montage, dépôt, reversement prime)
 6. Obligations du mandant (fourniture pièces, signature AH)
 
-+ **Bordereau rétractation R.221-1** (page 2, détachable, délai 14j)
+- **Bordereau rétractation R.221-1** (page 2, détachable, délai 14j)
 
 ### 11.3 Conservation
 
@@ -735,6 +754,7 @@ VIRUS_SCAN_WEBHOOK=     # ClamAV lambda
 ## 13. CHECKLIST GO-PROD V3 (35 items)
 
 ### Sécurité + conformité
+
 - [ ] Migrations 420-428 appliquées + smoke tests ✓ × 35
 - [ ] RLS `cee_dossiers` : artisan ne voit que ses dossiers (test 4 cas)
 - [ ] RLS `cee_dossier_documents` : idem
@@ -747,6 +767,7 @@ VIRUS_SCAN_WEBHOOK=     # ClamAV lambda
 - [ ] Registre traitements à jour (entrée T-2026-002)
 
 ### Métier
+
 - [ ] Formation quiz 10 questions, seuil 8/10, blocage si non certif
 - [ ] QA auto score ≥ 80 = pass, sinon humain
 - [ ] Sampling 3-5% QA humain même sur score élevé (audit)
@@ -756,12 +777,14 @@ VIRUS_SCAN_WEBHOOK=     # ClamAV lambda
 - [ ] Zones clim code INSEE commune (tests Paris H1, Marseille H3, Avignon H3)
 
 ### Activation
+
 - [ ] MV TAM rafraîchie, email batch Brevo testé sandbox 10 envois
 - [ ] Landing /devenir-partenaire-cee noindex, testée mobile
 - [ ] Onboarding 5 étapes complète sans bug (Playwright e2e)
 - [ ] Convention DocuSign : test round-trip (envoi → signature → webhook → PDF archivé)
 
 ### Ops
+
 - [ ] Dashboard `/admin/cee/queue` SLA 24h affiché
 - [ ] Queue QA priorisée (FIFO + outliers montant)
 - [ ] Soumission délégataire : 3 formats bordereau OK (Sonergia/Engie/TotalEnergies)
@@ -769,12 +792,14 @@ VIRUS_SCAN_WEBHOOK=     # ClamAV lambda
 - [ ] Alertes Grafana → Slack #cee-ops : QA SLA dépassé, taux rejet >10%, fraude cluster
 
 ### Paiement
+
 - [ ] Commission calculée auto sur `validated`, pas avant
 - [ ] Batch SEPA XML pain.001 conforme (test banque sandbox)
 - [ ] Facture commission PDF avec numérotation continue
 - [ ] Retry commissions échouées 3× puis DLQ + alerte
 
 ### Hostile
+
 - [ ] Rate-limit `/api/cee/dossiers` (abus artisan)
 - [ ] Rate-limit upload documents (50 MB/dossier, 10 docs max)
 - [ ] Dédoublonnage SHA256 documents cross-dossier (détection fraude)

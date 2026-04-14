@@ -75,7 +75,9 @@ export function PlatformStickyBar() {
                 Besoin d&apos;un artisan ?
               </p>
               <p className="text-xs text-charcoal-500 leading-tight">
-                <span className="hidden sm:inline">Un conseiller vous trouve un pro disponible · Gratuit</span>
+                <span className="hidden sm:inline">
+                  Un conseiller vous trouve un pro disponible · Gratuit
+                </span>
                 <span className="sm:hidden">On vous rappelle · Gratuit</span>
               </p>
             </div>

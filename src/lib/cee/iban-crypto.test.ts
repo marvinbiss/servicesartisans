@@ -58,4 +58,3 @@ describe('validateIban', () => {
     expect(validateIban('FR14-2004-1010').valid).toBe(false)
   })
 })
-

@@ -95,17 +95,12 @@ function validateSearchParams(params: Record<string, unknown>): {
   return {
     valid: errors.length === 0,
     errors,
-    sanitized
+    sanitized,
   }
 }
 
 // Distance calculation (Haversine formula)
-function calculateDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371 // Earth's radius in km
   const dLat = ((lat2 - lat1) * Math.PI) / 180
   const dLon = ((lon2 - lon1) * Math.PI) / 180
@@ -128,7 +123,7 @@ describe('Search API', () => {
         lon: 2.3522,
         radius: 25,
         minRating: 4,
-        sortBy: 'rating'
+        sortBy: 'rating',
       })
 
       expect(result.valid).toBe(true)
@@ -138,7 +133,7 @@ describe('Search API', () => {
 
     it('should reject query longer than 200 characters', () => {
       const result = validateSearchParams({
-        q: 'a'.repeat(201)
+        q: 'a'.repeat(201),
       })
 
       expect(result.valid).toBe(false)
@@ -148,7 +143,7 @@ describe('Search API', () => {
     it('should reject invalid latitude', () => {
       const result = validateSearchParams({
         lat: 91,
-        lon: 2.3522
+        lon: 2.3522,
       })
 
       expect(result.valid).toBe(false)
@@ -158,7 +153,7 @@ describe('Search API', () => {
     it('should reject invalid longitude', () => {
       const result = validateSearchParams({
         lat: 48.8566,
-        lon: 181
+        lon: 181,
       })
 
       expect(result.valid).toBe(false)
@@ -194,7 +189,7 @@ describe('Search API', () => {
     it('should calculate distance between Paris and Lyon', () => {
       // Paris: 48.8566, 2.3522
       // Lyon: 45.7640, 4.8357
-      const distance = calculateDistance(48.8566, 2.3522, 45.7640, 4.8357)
+      const distance = calculateDistance(48.8566, 2.3522, 45.764, 4.8357)
       // Expected: ~392 km
       expect(distance).toBeGreaterThan(380)
       expect(distance).toBeLessThan(400)

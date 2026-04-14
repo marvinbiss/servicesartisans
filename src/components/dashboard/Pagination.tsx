@@ -9,7 +9,11 @@ interface PaginationProps {
   onPageChange: (page: number) => void
 }
 
-export const Pagination = memo(function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
+export const Pagination = memo(function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
   if (totalPages <= 1) return null
 
   return (

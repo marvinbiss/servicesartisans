@@ -9,14 +9,26 @@ import React from 'react'
 // ── Mocks ──────────────────────────────────────────────────────────────────
 
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
 vi.mock('lucide-react', () => {
   const icon = (name: string) => {
-    const I = ({ className }: { className?: string }) => <span data-testid={`icon-${name}`} className={className} />
+    const I = ({ className }: { className?: string }) => (
+      <span data-testid={`icon-${name}`} className={className} />
+    )
     I.displayName = name
     return I
   }
@@ -40,7 +52,9 @@ vi.mock('lucide-react', () => {
 
 // ── Import après mocks ─────────────────────────────────────────────────────
 
-import ProfileCompleteness, { type CompletenessProvider } from '@/components/artisan-dashboard/ProfileCompleteness'
+import ProfileCompleteness, {
+  type CompletenessProvider,
+} from '@/components/artisan-dashboard/ProfileCompleteness'
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 

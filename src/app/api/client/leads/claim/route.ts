@@ -19,10 +19,16 @@ export const dynamic = 'force-dynamic'
 export async function POST() {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Non authentifié' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Non authentifié' } },
+        { status: 401 }
+      )
     }
 
     // Get user's email and phone from profile
@@ -33,7 +39,10 @@ export async function POST() {
       .single()
 
     if (!profile?.email) {
-      return NextResponse.json({ success: false, error: { message: 'Profil incomplet' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Profil incomplet' } },
+        { status: 400 }
+      )
     }
 
     // Use admin client to update leads where client_id is NULL
@@ -49,7 +58,10 @@ export async function POST() {
 
     if (updateError) {
       logger.error('Claim leads error:', updateError)
-      return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur serveur' } },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({
@@ -60,6 +72,9 @@ export async function POST() {
     })
   } catch (error) {
     logger.error('Claim leads POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

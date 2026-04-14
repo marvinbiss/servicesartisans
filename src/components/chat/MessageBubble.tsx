@@ -1,13 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import {
-  Check,
-  CheckCheck,
-  MoreVertical,
-  Reply,
-  Copy,
-} from 'lucide-react'
+import { Check, CheckCheck, MoreVertical, Reply, Copy } from 'lucide-react'
 import { ChatMessage } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'
 
@@ -42,12 +36,7 @@ export function MessageBubble({
   }
 
   return (
-    <div
-      className={cn(
-        'group relative flex',
-        isOwn ? 'justify-end' : 'justify-start'
-      )}
-    >
+    <div className={cn('group relative flex', isOwn ? 'justify-end' : 'justify-start')}>
       {/* Action buttons (hover) */}
       <div
         className={cn(
@@ -126,26 +115,17 @@ export function MessageBubble({
 
           {/* Timestamp and status */}
           <div
-            className={cn(
-              'flex items-center gap-1 mt-1',
-              isOwn ? 'justify-end' : 'justify-start'
-            )}
+            className={cn('flex items-center gap-1 mt-1', isOwn ? 'justify-end' : 'justify-start')}
           >
-            <span
-              className={cn(
-                'text-xs',
-                isOwn ? 'text-blue-200' : 'text-gray-400'
-              )}
-            >
+            <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-gray-400')}>
               {formatTime(message.created_at)}
             </span>
-            {isOwn && (
-              message.read_at ? (
+            {isOwn &&
+              (message.read_at ? (
                 <CheckCheck className="w-3 h-3 text-blue-200" />
               ) : (
                 <Check className="w-3 h-3 text-blue-200" />
-              )
-            )}
+              ))}
           </div>
         </div>
       </div>

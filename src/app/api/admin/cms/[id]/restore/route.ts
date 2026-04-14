@@ -18,10 +18,7 @@ const restoreSchema = z.object({
 
 // --- POST: Restore a specific version ---
 
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error!
@@ -47,7 +44,10 @@ export async function POST(
     const parsed = restoreSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -58,7 +58,9 @@ export async function POST(
     // Fetch the version to restore
     const { data: version, error: versionError } = await supabase
       .from('cms_page_versions')
-      .select('id, page_id, version_number, title, content_json, content_html, structured_data, meta_title, meta_description, status, created_by, created_at, change_summary')
+      .select(
+        'id, page_id, version_number, title, content_json, content_html, structured_data, meta_title, meta_description, status, created_by, created_at, change_summary'
+      )
       .eq('id', version_id)
       .eq('page_id', id)
       .single()
@@ -101,7 +103,10 @@ export async function POST(
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.restore', 'cms_page', id, { version_id, title: version.title })
+    await logAdminAction(auth.admin!.id, 'cms_page.restore', 'cms_page', id, {
+      version_id,
+      title: version.title,
+    })
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {

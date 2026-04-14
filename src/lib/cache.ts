@@ -8,12 +8,12 @@ const redisCache = new CacheService('sa:cache:')
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
-  services: 86400,  // 24 hours — les services ne changent quasi jamais
-  artisans: 3600,   // 1 hour — les profils artisans changent rarement
-  reviews: 3600,    // 1 hour — les avis changent rarement
-  locations: 604800,// 7 days — les communes ne changent jamais
-  stats: 86400,     // 24 hours — stats recalculées par cron quotidien
-  cms: 3600,        // 1 hour — contenu CMS change rarement
+  services: 86400, // 24 hours — les services ne changent quasi jamais
+  artisans: 3600, // 1 hour — les profils artisans changent rarement
+  reviews: 3600, // 1 hour — les avis changent rarement
+  locations: 604800, // 7 days — les communes ne changent jamais
+  stats: 86400, // 24 hours — stats recalculées par cron quotidien
+  cms: 3600, // 1 hour — contenu CMS change rarement
 } as const
 
 // ISR Revalidation times (in seconds)
@@ -56,11 +56,9 @@ export async function getCachedData<T>(
   // Cache miss: fetch fresh data
   const data = await fetcher()
 
-  const shouldSkip = options?.skipNull && (
-    data === null ||
-    data === undefined ||
-    (Array.isArray(data) && data.length === 0)
-  )
+  const shouldSkip =
+    options?.skipNull &&
+    (data === null || data === undefined || (Array.isArray(data) && data.length === 0))
 
   if (!shouldSkip) {
     // Write to both layers (fire-and-forget Redis to not block the response)
@@ -135,10 +133,7 @@ export function memoize<T extends (...args: unknown[]) => Promise<unknown>>(
  */
 const pendingRequests = new Map<string, Promise<unknown>>()
 
-export async function dedupeRequest<T>(
-  key: string,
-  fetcher: () => Promise<T>
-): Promise<T> {
+export async function dedupeRequest<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
   const pending = pendingRequests.get(key)
   if (pending) return pending as Promise<T>
 

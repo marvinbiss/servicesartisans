@@ -5,7 +5,7 @@ import {
   getEntrepriseParSiren,
   rechercherEntreprises,
   verifierSanteEntreprise,
-  getBadgeConfiance
+  getBadgeConfiance,
 } from '@/lib/api/pappers'
 import { z } from 'zod'
 
@@ -58,7 +58,10 @@ export async function GET(request: NextRequest) {
         const result = verifySchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
@@ -71,7 +74,7 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({
             success: false,
             error: { message: 'Entreprise non trouvée' },
-            code: 'NOT_FOUND'
+            code: 'NOT_FOUND',
           })
         }
 
@@ -85,9 +88,9 @@ export async function GET(request: NextRequest) {
             entreprise,
             verification: {
               sante,
-              badge
-            }
-          }
+              badge,
+            },
+          },
         })
       }
 
@@ -100,7 +103,10 @@ export async function GET(request: NextRequest) {
         const result = sirenSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIREN requis (9 chiffres)', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'SIREN requis (9 chiffres)', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
@@ -112,13 +118,13 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({
             success: false,
             error: { message: 'Entreprise non trouvée' },
-            code: 'NOT_FOUND'
+            code: 'NOT_FOUND',
           })
         }
 
         return NextResponse.json({
           success: true,
-          data: { entreprise }
+          data: { entreprise },
         })
       }
 
@@ -133,7 +139,13 @@ export async function GET(request: NextRequest) {
         const result = searchSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'Requête trop courte (min 2 caractères)', details: result.error.flatten() } },
+            {
+              success: false,
+              error: {
+                message: 'Requête trop courte (min 2 caractères)',
+                details: result.error.flatten(),
+              },
+            },
             { status: 400 }
           )
         }
@@ -141,12 +153,12 @@ export async function GET(request: NextRequest) {
 
         const resultats = await rechercherEntreprises(q, {
           codePostal: codePostal || undefined,
-          limit
+          limit,
         })
 
         return NextResponse.json({
           success: true,
-          data: resultats
+          data: resultats,
         })
       }
 
@@ -159,7 +171,10 @@ export async function GET(request: NextRequest) {
         const result = healthSchema.safeParse(queryParams)
         if (!result.success) {
           return NextResponse.json(
-            { success: false, error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() } },
+            {
+              success: false,
+              error: { message: 'SIRET requis (14 chiffres)', details: result.error.flatten() },
+            },
             { status: 400 }
           )
         }
@@ -169,7 +184,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({
           success: true,
-          data: sante
+          data: sante,
         })
       }
 
@@ -197,7 +212,10 @@ export async function POST(request: NextRequest) {
     // --- AUTH CHECK ---
     const { createClient: createServerClient } = await import('@/lib/supabase/server')
     const supabaseAuth = await createServerClient()
-    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAuth.auth.getUser()
 
     if (authError || !user) {
       return NextResponse.json(
@@ -210,7 +228,10 @@ export async function POST(request: NextRequest) {
     const result = entreprisePostSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -259,7 +280,7 @@ export async function POST(request: NextRequest) {
     if (!entreprise) {
       return NextResponse.json({
         success: false,
-        error: { message: 'Entreprise non trouvée' }
+        error: { message: 'Entreprise non trouvée' },
       })
     }
 
@@ -287,9 +308,9 @@ export async function POST(request: NextRequest) {
         entreprise,
         verification: {
           sante,
-          badge
-        }
-      }
+          badge,
+        },
+      },
     })
   } catch (error) {
     logger.error('Erreur enrichissement entreprise', error)

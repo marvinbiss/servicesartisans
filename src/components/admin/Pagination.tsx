@@ -68,13 +68,17 @@ export function Pagination({
   }
 
   return (
-    <nav className="px-6 py-4 border-t border-gray-100 flex items-center justify-between" aria-label="Pagination">
+    <nav
+      className="px-6 py-4 border-t border-gray-100 flex items-center justify-between"
+      aria-label="Pagination"
+    >
       <div className="flex items-center gap-4">
         {showTotal && (
           <p className="text-sm text-gray-500">
             {total > 0 ? (
               <>
-                Affichage {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, total)} sur {total}
+                Affichage {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, total)} sur{' '}
+                {total}
               </>
             ) : (
               'Aucun résultat'
@@ -134,9 +138,7 @@ export function Pagination({
                 aria-label={`Page ${pageNum}`}
                 aria-current={page === pageNum ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                  page === pageNum
-                    ? 'bg-blue-600 text-white'
-                    : 'hover:bg-gray-100 text-gray-600'
+                  page === pageNum ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 text-gray-600'
                 }`}
               >
                 {pageNum}

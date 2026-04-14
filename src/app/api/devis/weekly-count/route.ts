@@ -49,10 +49,7 @@ export async function GET(request: NextRequest) {
         query = query.eq('service_id', service.id)
       } else {
         // Slug inconnu → aucun devis ne matche
-        return NextResponse.json(
-          { count: 0 },
-          { headers: cacheHeaders() },
-        )
+        return NextResponse.json({ count: 0 }, { headers: cacheHeaders() })
       }
     }
 
@@ -67,22 +64,13 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       logger.error('weekly-count: Supabase query failed', { error: error.message, specialty, city })
-      return NextResponse.json(
-        { count: 0 },
-        { headers: cacheHeaders() },
-      )
+      return NextResponse.json({ count: 0 }, { headers: cacheHeaders() })
     }
 
-    return NextResponse.json(
-      { count: count ?? 0 },
-      { headers: cacheHeaders() },
-    )
+    return NextResponse.json({ count: count ?? 0 }, { headers: cacheHeaders() })
   } catch (err) {
     logger.error('weekly-count: Unexpected error', { error: String(err) })
-    return NextResponse.json(
-      { count: 0 },
-      { headers: cacheHeaders() },
-    )
+    return NextResponse.json({ count: 0 }, { headers: cacheHeaders() })
   }
 }
 

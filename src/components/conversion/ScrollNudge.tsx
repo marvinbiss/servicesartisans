@@ -103,16 +103,15 @@ export default function ScrollNudge({
           cursor-pointer touch-manipulation
           whitespace-nowrap
           transition-all duration-300 ease-out
-          ${exiting
-            ? 'opacity-0 translate-y-2 scale-95'
-            : 'opacity-100 translate-y-0 scale-100'
-          }
+          ${exiting ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100 translate-y-0 scale-100'}
         `}
         style={{
           animation: exiting ? 'none' : 'nudgeSlideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1)',
         }}
       >
-        <span aria-hidden="true" className="mr-1.5">&#128161;</span>
+        <span aria-hidden="true" className="mr-1.5">
+          &#128161;
+        </span>
         {message}
       </div>
 

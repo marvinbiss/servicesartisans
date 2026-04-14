@@ -10,12 +10,12 @@ export const NAF_CODES_BATIMENT = {
   '4312A': 'Travaux de terrassement courants',
   '4312B': 'Travaux de terrassement specialises',
   '4313Z': 'Forages et sondages',
-  '4321A': 'Travaux d\'installation electrique',
-  '4321B': 'Travaux d\'installation electrique dans tous locaux',
-  '4322A': 'Travaux d\'installation d\'eau et de gaz',
-  '4322B': 'Travaux d\'installation d\'equipements thermiques et de climatisation',
-  '4329A': 'Travaux d\'isolation',
-  '4329B': 'Autres travaux d\'installation',
+  '4321A': "Travaux d'installation electrique",
+  '4321B': "Travaux d'installation electrique dans tous locaux",
+  '4322A': "Travaux d'installation d'eau et de gaz",
+  '4322B': "Travaux d'installation d'equipements thermiques et de climatisation",
+  '4329A': "Travaux d'isolation",
+  '4329B': "Autres travaux d'installation",
   '4331Z': 'Travaux de platrerie',
   '4332A': 'Travaux de menuiserie bois et PVC',
   '4332B': 'Travaux de menuiserie metallique et serrurerie',
@@ -25,7 +25,7 @@ export const NAF_CODES_BATIMENT = {
   '4339Z': 'Autres travaux de finition',
   '4391A': 'Travaux de charpente',
   '4391B': 'Travaux de couverture par elements',
-  '4399A': 'Travaux d\'etancheification',
+  '4399A': "Travaux d'etancheification",
   '4399B': 'Travaux de montage de structures metalliques',
   '4399C': 'Travaux de maconnerie generale',
   '4399D': 'Autres travaux specialises de construction',
@@ -33,7 +33,7 @@ export const NAF_CODES_BATIMENT = {
 
   // Construction de batiments (Division 41)
   '4120A': 'Construction de maisons individuelles',
-  '4120B': 'Construction d\'autres batiments',
+  '4120B': "Construction d'autres batiments",
 
   // Genie civil (Division 42) - optionnel
   '4211Z': 'Construction de routes et autoroutes',

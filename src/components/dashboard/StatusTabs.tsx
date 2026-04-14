@@ -14,7 +14,11 @@ interface StatusTabsProps {
   onTabChange: (key: string) => void
 }
 
-export const StatusTabs = memo(function StatusTabs({ tabs, activeTab, onTabChange }: StatusTabsProps) {
+export const StatusTabs = memo(function StatusTabs({
+  tabs,
+  activeTab,
+  onTabChange,
+}: StatusTabsProps) {
   return (
     <div className="flex gap-2 flex-wrap" role="tablist">
       {tabs.map((tab) => (
@@ -30,7 +34,9 @@ export const StatusTabs = memo(function StatusTabs({ tabs, activeTab, onTabChang
           }`}
         >
           {tab.label}
-          <span className={`ml-1.5 ${activeTab === tab.key ? 'text-primary-200' : 'text-charcoal-400'}`}>
+          <span
+            className={`ml-1.5 ${activeTab === tab.key ? 'text-primary-200' : 'text-charcoal-400'}`}
+          >
             {tab.count}
           </span>
         </button>

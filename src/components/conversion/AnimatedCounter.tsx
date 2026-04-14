@@ -26,7 +26,7 @@ interface AnimatedCounterProps {
 function useCountUp(
   end: number,
   duration: number,
-  decimals: number,
+  decimals: number
 ): { ref: React.RefCallback<HTMLElement>; value: number; hasAnimated: boolean } {
   const [value, setValue] = useState(0)
   const [hasAnimated, setHasAnimated] = useState(false)
@@ -87,12 +87,12 @@ function useCountUp(
             observerRef.current?.disconnect()
           }
         },
-        { threshold: 0.2 },
+        { threshold: 0.2 }
       )
 
       observerRef.current.observe(node)
     },
-    [animate, end, hasAnimated],
+    [animate, end, hasAnimated]
   )
 
   // Cleanup au démontage

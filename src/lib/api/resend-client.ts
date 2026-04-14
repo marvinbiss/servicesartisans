@@ -28,7 +28,8 @@ export function getResendClient(): Resend {
 }
 
 // Default sender
-const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>'
+const DEFAULT_FROM =
+  process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>'
 
 // Types
 export interface EmailParams {
@@ -100,12 +101,14 @@ export async function sendEmail(params: EmailParams): Promise<EmailResult> {
           ...(params.bcc ? { bcc: Array.isArray(params.bcc) ? params.bcc : [params.bcc] } : {}),
           ...(params.tags ? { tags: params.tags } : {}),
           ...(params.headers ? { headers: params.headers } : {}),
-          ...(params.attachments?.length ? {
-            attachments: params.attachments.map(a => ({
-              filename: a.filename,
-              content: typeof a.content === 'string' ? Buffer.from(a.content) : a.content,
-            })),
-          } : {}),
+          ...(params.attachments?.length
+            ? {
+                attachments: params.attachments.map((a) => ({
+                  filename: a.filename,
+                  content: typeof a.content === 'string' ? Buffer.from(a.content) : a.content,
+                })),
+              }
+            : {}),
         } as ResendSendParams
 
         const response = await resend.emails.send(emailData)
@@ -166,7 +169,7 @@ export async function sendBatchEmails(params: BatchEmailParams): Promise<EmailRe
 
     type ResendBatchParams = Parameters<typeof resend.batch.send>[0]
 
-    const batchParams = params.emails.map(email => ({
+    const batchParams = params.emails.map((email) => ({
       from: email.from || DEFAULT_FROM,
       to: Array.isArray(email.to) ? email.to : [email.to],
       subject: email.subject,
@@ -193,7 +196,7 @@ export async function sendBatchEmails(params: BatchEmailParams): Promise<EmailRe
       id: result.id,
       from: params.emails[index].from || DEFAULT_FROM,
       to: Array.isArray(params.emails[index].to)
-        ? params.emails[index].to as string[]
+        ? (params.emails[index].to as string[])
         : [params.emails[index].to as string],
       createdAt: new Date(),
     }))
@@ -235,7 +238,9 @@ export async function sendWelcomeEmail(params: {
 
   <p>Nous sommes ravis de vous accueillir sur ServicesArtisans${isArtisan ? ', la plateforme qui connecte les artisans avec leurs clients' : ''}.</p>
 
-  ${isArtisan ? `
+  ${
+    isArtisan
+      ? `
   <p>Prochaines étapes pour démarrer :</p>
   <ul>
     <li>Complétez votre profil professionnel</li>
@@ -243,14 +248,16 @@ export async function sendWelcomeEmail(params: {
     <li>Définissez votre zone d'intervention</li>
     <li>Configurez vos disponibilités</li>
   </ul>
-  ` : `
+  `
+      : `
   <p>Vous pouvez maintenant :</p>
   <ul>
     <li>Rechercher des artisans qualifiés</li>
     <li>Demander des devis gratuits</li>
     <li>Prendre rendez-vous en ligne</li>
   </ul>
-  `}
+  `
+  }
 
   <div style="text-align: center; margin: 30px 0;">
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}${isArtisan ? '/espace-artisan' : '/espace-client'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
@@ -388,9 +395,7 @@ export async function sendClaimApprovedEmail(params: {
     to,
     subject: `Votre fiche "${providerName}" a été validée - ServicesArtisans`,
     html,
-    tags: [
-      { name: 'type', value: 'claim_approved' },
-    ],
+    tags: [{ name: 'type', value: 'claim_approved' }],
   })
 }
 

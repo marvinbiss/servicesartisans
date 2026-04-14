@@ -72,10 +72,10 @@ export async function GET() {
   }
 
   // Overall status
-  const statuses = Object.values(checks).map(c => c.status)
-  const allUnhealthy = statuses.length > 0 && statuses.every(s => s === 'unhealthy')
-  const anyUnhealthy = statuses.some(s => s === 'unhealthy')
-  const anyDegraded = statuses.some(s => s === 'degraded')
+  const statuses = Object.values(checks).map((c) => c.status)
+  const allUnhealthy = statuses.length > 0 && statuses.every((s) => s === 'unhealthy')
+  const anyUnhealthy = statuses.some((s) => s === 'unhealthy')
+  const anyDegraded = statuses.some((s) => s === 'degraded')
 
   let overallStatus: ServiceStatus = 'healthy'
   if (allUnhealthy) {
@@ -92,15 +92,18 @@ export async function GET() {
 
   const appVersion = env?.NEXT_PUBLIC_APP_VERSION ?? process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'
 
-  return NextResponse.json({
-    status: overallStatus,
-    timestamp: new Date().toISOString(),
-    version: appVersion,
-    uptime: process.uptime(),
-    latency: totalLatency,
-    checks,
-  }, {
-    status: overallStatus === 'unhealthy' ? 503 : 200,
-    headers: { 'Cache-Control': 'no-store, max-age=0' },
-  })
+  return NextResponse.json(
+    {
+      status: overallStatus,
+      timestamp: new Date().toISOString(),
+      version: appVersion,
+      uptime: process.uptime(),
+      latency: totalLatency,
+      checks,
+    },
+    {
+      status: overallStatus === 'unhealthy' ? 503 : 200,
+      headers: { 'Cache-Control': 'no-store, max-age=0' },
+    }
+  )
 }

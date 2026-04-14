@@ -137,12 +137,10 @@ export default function AdminUsersPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {f === 'all' ? 'Tous' :
-                   f === 'clients' ? 'Clients' : 'Artisans'}
+                  {f === 'all' ? 'Tous' : f === 'clients' ? 'Clients' : 'Artisans'}
                 </button>
               ))}
             </div>
-
           </div>
         </div>
 
@@ -172,19 +170,34 @@ export default function AdminUsersPage() {
                 <table className="w-full min-w-[800px]" aria-label="Liste des utilisateurs">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Utilisateur
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Rôle
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Statut
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Inscription
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -235,11 +248,13 @@ export default function AdminUsersPage() {
                               <Eye className="w-5 h-5" />
                             </button>
                             <button
-                              onClick={() => setBanModal({
-                                open: true,
-                                userId: user.id,
-                                userName: user.full_name || user.email,
-                              })}
+                              onClick={() =>
+                                setBanModal({
+                                  open: true,
+                                  userId: user.id,
+                                  userName: user.full_name || user.email,
+                                })
+                              }
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                               title="Bannir"
                             >
@@ -286,11 +301,19 @@ export default function AdminUsersPage() {
       {banModal.open && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
-            <div className="fixed inset-0 bg-black/50" onClick={() => {
-              setBanModal({ open: false, userId: '', userName: '' })
-              setBanReason('')
-            }} />
-            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div
+              className="fixed inset-0 bg-black/50"
+              onClick={() => {
+                setBanModal({ open: false, userId: '', userName: '' })
+                setBanReason('')
+              }}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="ban-modal-title"
+              className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+            >
               <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
                 Bannir utilisateur
               </h3>

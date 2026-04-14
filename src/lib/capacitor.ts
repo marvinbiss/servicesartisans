@@ -44,7 +44,8 @@ export const initPushNotifications = async () => {
 
     // Écouter l'enregistrement
     PushNotifications.addListener('registration', (token) => {
-      if (process.env.NODE_ENV === 'development') console.log('Push registration success, token:', token.value)
+      if (process.env.NODE_ENV === 'development')
+        console.log('Push registration success, token:', token.value)
       // Envoyer le token au backend pour l'associer à l'utilisateur
       return token.value
     })
@@ -56,12 +57,14 @@ export const initPushNotifications = async () => {
 
     // Notification reçue en foreground
     PushNotifications.addListener('pushNotificationReceived', (notification) => {
-      if (process.env.NODE_ENV === 'development') console.log('Push notification received:', notification)
+      if (process.env.NODE_ENV === 'development')
+        console.log('Push notification received:', notification)
     })
 
     // Notification cliquée
     PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-      if (process.env.NODE_ENV === 'development') console.log('Push notification action:', notification)
+      if (process.env.NODE_ENV === 'development')
+        console.log('Push notification action:', notification)
     })
   }
 
@@ -98,7 +101,9 @@ export const getCurrentPosition = async () => {
   }
 }
 
-export const watchPosition = (callback: (position: { latitude: number; longitude: number }) => void) => {
+export const watchPosition = (
+  callback: (position: { latitude: number; longitude: number }) => void
+) => {
   if (!isNative()) {
     const watchId = navigator.geolocation.watchPosition((pos) => {
       callback({
@@ -109,20 +114,17 @@ export const watchPosition = (callback: (position: { latitude: number; longitude
     return () => navigator.geolocation.clearWatch(watchId)
   }
 
-  const watchId = Geolocation.watchPosition(
-    { enableHighAccuracy: true },
-    (position, err) => {
-      if (position) {
-        callback({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-      }
-      if (err) {
-        console.error('Geolocation error:', err)
-      }
+  const watchId = Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
+    if (position) {
+      callback({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      })
     }
-  )
+    if (err) {
+      console.error('Geolocation error:', err)
+    }
+  })
 
   return () => {
     watchId.then((id) => Geolocation.clearWatch({ id }))

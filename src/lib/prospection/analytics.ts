@@ -20,15 +20,27 @@ export async function getCampaignStats(campaignId: string): Promise<CampaignStat
 
   const { data: campaign } = await supabase
     .from('prospection_campaigns')
-    .select('total_recipients, sent_count, delivered_count, opened_count, clicked_count, replied_count, failed_count, opted_out_count, actual_cost')
+    .select(
+      'total_recipients, sent_count, delivered_count, opened_count, clicked_count, replied_count, failed_count, opted_out_count, actual_cost'
+    )
     .eq('id', campaignId)
     .single()
 
   if (!campaign) {
     return {
-      total_recipients: 0, sent: 0, delivered: 0, opened: 0, clicked: 0,
-      replied: 0, failed: 0, opted_out: 0,
-      delivery_rate: 0, open_rate: 0, reply_rate: 0, bounce_rate: 0, total_cost: 0,
+      total_recipients: 0,
+      sent: 0,
+      delivered: 0,
+      opened: 0,
+      clicked: 0,
+      replied: 0,
+      failed: 0,
+      opted_out: 0,
+      delivery_rate: 0,
+      open_rate: 0,
+      reply_rate: 0,
+      bounce_rate: 0,
+      total_cost: 0,
     }
   }
 
@@ -56,10 +68,7 @@ export async function getCampaignStats(campaignId: string): Promise<CampaignStat
  * Vue d'ensemble globale
  * Optimized: uses parallel queries and in-JS grouping instead of N+1 loops
  */
-export async function getOverviewStats(
-  dateFrom?: string,
-  dateTo?: string
-): Promise<OverviewStats> {
+export async function getOverviewStats(dateFrom?: string, dateTo?: string): Promise<OverviewStats> {
   const supabase = createAdminClient()
 
   // Run all independent queries in parallel to minimize round-trips
@@ -100,9 +109,7 @@ export async function getOverviewStats(
     .in('status', ['open', 'ai_handling', 'human_required'])
 
   // 5. Cost data
-  const costPromise = supabase
-    .from('prospection_campaigns')
-    .select('actual_cost')
+  const costPromise = supabase.from('prospection_campaigns').select('actual_cost')
 
   // Await all queries in parallel
   const [
@@ -136,7 +143,12 @@ export async function getOverviewStats(
   const total_contacts = Object.values(contacts_by_type).reduce((a, b) => a + b, 0)
 
   // Group messages by channel and status in JS
-  const messages_by_channel: Record<ProspectionChannel, number> = { email: 0, sms: 0, whatsapp: 0, voice: 0 }
+  const messages_by_channel: Record<ProspectionChannel, number> = {
+    email: 0,
+    sms: 0,
+    whatsapp: 0,
+    voice: 0,
+  }
   let total_messages_sent = 0
   let totalDelivered = 0
   let totalReplied = 0
@@ -179,7 +191,8 @@ export async function getOverviewStats(
     active_campaigns: activeCampaignsResult.count || 0,
     total_messages_sent,
     messages_by_channel,
-    overall_delivery_rate: total_messages_sent > 0 ? (totalDelivered / total_messages_sent) * 100 : 0,
+    overall_delivery_rate:
+      total_messages_sent > 0 ? (totalDelivered / total_messages_sent) * 100 : 0,
     overall_reply_rate: totalDelivered > 0 ? (totalReplied / totalDelivered) * 100 : 0,
     total_conversations: totalConversationsResult.count || 0,
     open_conversations: openConversationsResult.count || 0,
@@ -212,7 +225,10 @@ export async function getChannelPerformance(
   const sentStatuses = new Set(['sent', 'delivered', 'read', 'replied'])
   const deliveredStatuses = new Set(['delivered', 'read', 'replied'])
 
-  const channelData: Record<string, { sent: number; delivered: number; replied: number; failed: number }> = {
+  const channelData: Record<
+    string,
+    { sent: number; delivered: number; replied: number; failed: number }
+  > = {
     email: { sent: 0, delivered: 0, replied: 0, failed: 0 },
     sms: { sent: 0, delivered: 0, replied: 0, failed: 0 },
     whatsapp: { sent: 0, delivered: 0, replied: 0, failed: 0 },
@@ -232,7 +248,7 @@ export async function getChannelPerformance(
   }
 
   const channels: ProspectionChannel[] = ['email', 'sms', 'whatsapp']
-  return channels.map(channel => {
+  return channels.map((channel) => {
     const d = channelData[channel]
     return {
       channel,

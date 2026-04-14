@@ -41,7 +41,10 @@ export async function POST(request: Request) {
     if (!rl.allowed) {
       return NextResponse.json(
         { success: false, error: { message: 'Trop de votes, veuillez réessayer plus tard' } },
-        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
       )
     }
 

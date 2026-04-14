@@ -6,7 +6,8 @@ export const inspirationArticles: Record<string, BlogArticle> = {
     excerpt:
       'Découvrez les tendances cuisine 2026 : îlot central multifonction, plans de travail en quartz ou céramique, couleurs vert sauge et terracotta, éclairage LED et budget détaillé par gamme.',
     metaTitle: 'Tendances Cuisine 2026 : Idées et Budget',
-    metaDescription: 'Découvrez les tendances cuisine 2026 : îlot central, quartz, couleurs tendance. Budget détaillé par gamme. Obtenez un devis gratuit.',
+    metaDescription:
+      'Découvrez les tendances cuisine 2026 : îlot central, quartz, couleurs tendance. Budget détaillé par gamme. Obtenez un devis gratuit.',
     image: '/images/blog/tendances-cuisine-2026.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-01-28',
@@ -28,12 +29,12 @@ export const inspirationArticles: Record<string, BlogArticle> = {
       {
         question: 'Quartz, céramique ou Dekton : quel plan de travail choisir ?',
         answer:
-          "Le quartz offre un excellent rapport qualité-prix et une grande variété de coloris. La céramique résiste mieux à la chaleur et aux rayures. Le Dekton combine les avantages des deux mais coûte plus cher. Le choix dépend de votre usage quotidien et de votre budget.",
+          'Le quartz offre un excellent rapport qualité-prix et une grande variété de coloris. La céramique résiste mieux à la chaleur et aux rayures. Le Dekton combine les avantages des deux mais coûte plus cher. Le choix dépend de votre usage quotidien et de votre budget.',
       },
       {
         question: 'Les cuisines blanches sont-elles démodées en 2026 ?',
         answer:
-          "Le blanc reste un classique indémodable, mais la tendance 2026 privilégie les associations bicolores : blanc et vert sauge, blanc et bois naturel, ou blanc cassé et terracotta. Le tout-blanc clinique laisse place à des ambiances plus chaleureuses.",
+          'Le blanc reste un classique indémodable, mais la tendance 2026 privilégie les associations bicolores : blanc et vert sauge, blanc et bois naturel, ou blanc cassé et terracotta. Le tout-blanc clinique laisse place à des ambiances plus chaleureuses.',
       },
       {
         question: "Combien de temps dure l'installation d'une cuisine ?",
@@ -213,7 +214,8 @@ En combinant les tendances 2026 avec l'expertise d'un professionnel qualifié, v
     excerpt:
       "Toutes les idées pour aménager votre terrasse en 2026 : revêtements, pergola bioclimatique, cuisine d'été, éclairage extérieur et budget détaillé de 3 000 à 20 000 €.",
     metaTitle: 'Aménagement Terrasse 2026 : Idées et Budget',
-    metaDescription: "Découvrez les meilleures idées terrasse 2026 : pergola, cuisine d'été, éclairage. Budget 3 000-20 000 €. Obtenez un devis gratuit.",
+    metaDescription:
+      "Découvrez les meilleures idées terrasse 2026 : pergola, cuisine d'été, éclairage. Budget 3 000-20 000 €. Obtenez un devis gratuit.",
     image: '/images/blog/amenagement-terrasse-exterieur-2026.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-15',
@@ -235,17 +237,17 @@ En combinant les tendances 2026 avec l'expertise d'un professionnel qualifié, v
       {
         question: 'Faut-il un permis de construire pour une pergola ?',
         answer:
-          "Une simple déclaration préalable suffit pour une pergola de moins de 20 m². Au-delà de 20 m², un permis de construire est nécessaire. En zone protégée (ABF), la déclaration préalable est obligatoire quelle que soit la surface. Renseignez-vous auprès de votre mairie avant de commencer.",
+          'Une simple déclaration préalable suffit pour une pergola de moins de 20 m². Au-delà de 20 m², un permis de construire est nécessaire. En zone protégée (ABF), la déclaration préalable est obligatoire quelle que soit la surface. Renseignez-vous auprès de votre mairie avant de commencer.',
       },
       {
         question: 'Combien coûte une pergola bioclimatique installée ?',
         answer:
-          "Une pergola bioclimatique à lames orientables coûte entre 3 000 et 15 000 € posée, selon la taille (10 à 30 m²), les matériaux (aluminium, bois) et les options (éclairage LED intégré, motorisation, capteurs météo). Les modèles autoportants sont généralement plus chers que les modèles adossés.",
+          'Une pergola bioclimatique à lames orientables coûte entre 3 000 et 15 000 € posée, selon la taille (10 à 30 m²), les matériaux (aluminium, bois) et les options (éclairage LED intégré, motorisation, capteurs météo). Les modèles autoportants sont généralement plus chers que les modèles adossés.',
       },
       {
         question: 'Comment éclairer sa terrasse sans trop dépenser ?',
         answer:
-          "Les solutions les plus économiques sont les guirlandes LED solaires (20 à 50 €), les bornes solaires de balisage (15 à 40 € pièce) et les spots encastrés LED basse consommation (30 à 80 € pièce). Pour un éclairage plus élaboré avec commande à distance, comptez 500 à 2 000 € tout compris.",
+          'Les solutions les plus économiques sont les guirlandes LED solaires (20 à 50 €), les bornes solaires de balisage (15 à 40 € pièce) et les spots encastrés LED basse consommation (30 à 80 € pièce). Pour un éclairage plus élaboré avec commande à distance, comptez 500 à 2 000 € tout compris.',
       },
       {
         question: 'Quelle est la meilleure période pour aménager sa terrasse ?',
@@ -450,7 +452,8 @@ Demandez toujours plusieurs devis détaillés, vérifiez les assurances des arti
     excerpt:
       "Guide complet pour l'aménagement de combles en 2026 : faisabilité, isolation RE2020, fenêtres de toit, escalier, budget de 800 à 1 500 €/m² et démarches administratives.",
     metaTitle: 'Aménager ses Combles 2026 : Guide et Budget',
-    metaDescription: "Découvrez comment aménager vos combles en 2026 : faisabilité, isolation, budget 800-1 500 €/m². Obtenez un devis gratuit.",
+    metaDescription:
+      'Découvrez comment aménager vos combles en 2026 : faisabilité, isolation, budget 800-1 500 €/m². Obtenez un devis gratuit.',
     image: '/images/blog/renovation-combles-amenagement.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-03-02',
@@ -477,7 +480,7 @@ Demandez toujours plusieurs devis détaillés, vérifiez les assurances des arti
       {
         question: 'Faut-il un permis de construire pour aménager ses combles ?',
         answer:
-          "En zone couverte par un PLU, une déclaration préalable suffit si la surface de plancher créée est inférieure à 40 m². Au-delà de 40 m², un permis de construire est obligatoire et le recours à un architecte est imposé si la surface totale de la maison dépasse 150 m² après travaux.",
+          'En zone couverte par un PLU, une déclaration préalable suffit si la surface de plancher créée est inférieure à 40 m². Au-delà de 40 m², un permis de construire est obligatoire et le recours à un architecte est imposé si la surface totale de la maison dépasse 150 m² après travaux.',
       },
       {
         question: 'Quelle isolation choisir pour des combles aménagés ?',

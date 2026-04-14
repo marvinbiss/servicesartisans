@@ -10,10 +10,7 @@ export const dynamic = 'force-dynamic'
 
 // --- POST: Publish a page ---
 
-export async function POST(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'publish')
     if (!auth.success) return auth.error!
@@ -88,10 +85,7 @@ export async function POST(
 
 // --- DELETE: Unpublish (revert to draft) ---
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'publish')
     if (!auth.success) return auth.error!

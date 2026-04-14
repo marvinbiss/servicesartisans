@@ -39,18 +39,16 @@ describe('FormationHub -- badge certifie', () => {
 describe('FormationHub -- alerte recyclage', () => {
   it('affiche alerte recyclage si needsRecycling=true', () => {
     render(
-      <FormationHub
-        {...BASE_PROPS}
-        certifiedAt="2025-01-01T00:00:00Z"
-        needsRecycling={true}
-      />
+      <FormationHub {...BASE_PROPS} certifiedAt="2025-01-01T00:00:00Z" needsRecycling={true} />
     )
     expect(screen.getByText(/Recyclage annuel requis/i)).toBeInTheDocument()
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 
   it('ne rend pas alerte si needsRecycling=false', () => {
-    render(<FormationHub {...BASE_PROPS} certifiedAt="2026-03-01T00:00:00Z" needsRecycling={false} />)
+    render(
+      <FormationHub {...BASE_PROPS} certifiedAt="2026-03-01T00:00:00Z" needsRecycling={false} />
+    )
     expect(screen.queryByText(/Recyclage annuel requis/i)).toBeNull()
   })
 })
@@ -90,19 +88,18 @@ describe('FormationHub -- modules video', () => {
 
 describe('FormationHub -- quiz score suffisant', () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ score: 9, passed: true }),
-    }))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ score: 9, passed: true }),
+      })
+    )
   })
 
   async function openQuiz() {
     render(
-      <FormationHub
-        {...BASE_PROPS}
-        certifiedAt="2026-01-01T00:00:00Z"
-        needsRecycling={true}
-      />
+      <FormationHub {...BASE_PROPS} certifiedAt="2026-01-01T00:00:00Z" needsRecycling={true} />
     )
     fireEvent.click(screen.getByRole('button', { name: /Repasser le quiz/i }))
     await waitFor(() =>
@@ -124,28 +121,25 @@ describe('FormationHub -- quiz score suffisant', () => {
       if (radios.length > 0) fireEvent.click(radios[0])
     }
     fireEvent.click(screen.getByRole('button', { name: /Valider mes r\u00e9ponses/i }))
-    await waitFor(() =>
-      expect(screen.getByText(/9 \/ 10/i)).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText(/9 \/ 10/i)).toBeInTheDocument())
     expect(screen.getByText(/F\u00e9licitations/i)).toBeInTheDocument()
   })
 })
 
 describe('FormationHub -- quiz score insuffisant', () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ score: 5, passed: false }),
-    }))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ score: 5, passed: false }),
+      })
+    )
   })
 
   it('affiche le bouton Repasser si score < 8', async () => {
     render(
-      <FormationHub
-        {...BASE_PROPS}
-        certifiedAt="2026-01-01T00:00:00Z"
-        needsRecycling={true}
-      />
+      <FormationHub {...BASE_PROPS} certifiedAt="2026-01-01T00:00:00Z" needsRecycling={true} />
     )
     fireEvent.click(screen.getByRole('button', { name: /Repasser le quiz/i }))
     await waitFor(() =>
@@ -164,20 +158,19 @@ describe('FormationHub -- quiz score insuffisant', () => {
 
 describe('FormationHub -- erreur API quiz', () => {
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({ error: 'Erreur interne serveur' }),
-    }))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: 'Erreur interne serveur' }),
+      })
+    )
   })
 
   it('affiche le message erreur en cas echec API', async () => {
     render(
-      <FormationHub
-        {...BASE_PROPS}
-        certifiedAt="2026-01-01T00:00:00Z"
-        needsRecycling={true}
-      />
+      <FormationHub {...BASE_PROPS} certifiedAt="2026-01-01T00:00:00Z" needsRecycling={true} />
     )
     fireEvent.click(screen.getByRole('button', { name: /Repasser le quiz/i }))
     await waitFor(() =>
@@ -189,9 +182,7 @@ describe('FormationHub -- erreur API quiz', () => {
       if (radios.length > 0) fireEvent.click(radios[0])
     }
     fireEvent.click(screen.getByRole('button', { name: /Valider mes r\u00e9ponses/i }))
-    await waitFor(() =>
-      expect(screen.getByText(/Erreur interne serveur/i)).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText(/Erreur interne serveur/i)).toBeInTheDocument())
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 })

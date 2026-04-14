@@ -1,4 +1,8 @@
-import type { QualificationData, QualificationScore, VapiFunctionSchema } from '@/types/voice-qualification'
+import type {
+  QualificationData,
+  QualificationScore,
+  VapiFunctionSchema,
+} from '@/types/voice-qualification'
 
 // ---------------------------------------------------------------------------
 // Prompt systeme Claude pour Vapi — Sophie, conseillere renovation energetique
@@ -49,14 +53,16 @@ IMPORTANT :
 export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
   {
     name: 'save_qualification',
-    description: 'Sauvegarde les données de qualification du prospect après avoir posé toutes les questions',
+    description:
+      'Sauvegarde les données de qualification du prospect après avoir posé toutes les questions',
     parameters: {
       type: 'object',
       properties: {
         project_type: {
           type: 'string',
           enum: ['pac', 'toiture', 'isolation'],
-          description: 'Type de projet : pompe à chaleur, toiture/couverture, ou isolation thermique',
+          description:
+            'Type de projet : pompe à chaleur, toiture/couverture, ou isolation thermique',
         },
         urgency: {
           type: 'string',
@@ -143,22 +149,112 @@ export const VAPI_FUNCTIONS: VapiFunctionSchema[] = [
 export const SERVICE_AREAS: Record<string, string[]> = {
   // Ile-de-France + grandes metropoles — phase 1
   pac: [
-    '75', '77', '78', '91', '92', '93', '94', '95', // IDF
-    '69', '13', '31', '33', '34', '44', '59', '67', '68', // Metropoles
-    '06', '83', '38', '42', '01', '74', '73', '26', '07', // Sud-Est
-    '35', '56', '29', '22', '53', '49', '72', '85', // Bretagne/Pays de Loire
+    '75',
+    '77',
+    '78',
+    '91',
+    '92',
+    '93',
+    '94',
+    '95', // IDF
+    '69',
+    '13',
+    '31',
+    '33',
+    '34',
+    '44',
+    '59',
+    '67',
+    '68', // Metropoles
+    '06',
+    '83',
+    '38',
+    '42',
+    '01',
+    '74',
+    '73',
+    '26',
+    '07', // Sud-Est
+    '35',
+    '56',
+    '29',
+    '22',
+    '53',
+    '49',
+    '72',
+    '85', // Bretagne/Pays de Loire
   ],
   toiture: [
-    '75', '77', '78', '91', '92', '93', '94', '95',
-    '69', '13', '31', '33', '34', '44', '59', '67', '68',
-    '06', '83', '38', '42', '01', '74', '73', '26', '07',
-    '35', '56', '29', '22', '53', '49', '72', '85',
+    '75',
+    '77',
+    '78',
+    '91',
+    '92',
+    '93',
+    '94',
+    '95',
+    '69',
+    '13',
+    '31',
+    '33',
+    '34',
+    '44',
+    '59',
+    '67',
+    '68',
+    '06',
+    '83',
+    '38',
+    '42',
+    '01',
+    '74',
+    '73',
+    '26',
+    '07',
+    '35',
+    '56',
+    '29',
+    '22',
+    '53',
+    '49',
+    '72',
+    '85',
   ],
   isolation: [
-    '75', '77', '78', '91', '92', '93', '94', '95',
-    '69', '13', '31', '33', '34', '44', '59', '67', '68',
-    '06', '83', '38', '42', '01', '74', '73', '26', '07',
-    '35', '56', '29', '22', '53', '49', '72', '85',
+    '75',
+    '77',
+    '78',
+    '91',
+    '92',
+    '93',
+    '94',
+    '95',
+    '69',
+    '13',
+    '31',
+    '33',
+    '34',
+    '44',
+    '59',
+    '67',
+    '68',
+    '06',
+    '83',
+    '38',
+    '42',
+    '01',
+    '74',
+    '73',
+    '26',
+    '07',
+    '35',
+    '56',
+    '29',
+    '22',
+    '53',
+    '49',
+    '72',
+    '85',
   ],
 }
 
@@ -186,19 +282,37 @@ export function calculateQualificationScore(data: QualificationData): Qualificat
 
   // Urgence (0-40 points)
   switch (data.urgency) {
-    case 'urgent': score += 40; break
-    case '3_months': score += 30; break
-    case '6_months': score += 15; break
-    case 'exploring': score += 5; break
+    case 'urgent':
+      score += 40
+      break
+    case '3_months':
+      score += 30
+      break
+    case '6_months':
+      score += 15
+      break
+    case 'exploring':
+      score += 5
+      break
   }
 
   // Budget (0-30 points)
   switch (data.budget_range) {
-    case '20000_plus': score += 30; break
-    case '10000_20000': score += 25; break
-    case '5000_10000': score += 15; break
-    case 'less_5000': score += 5; break
-    default: score += 10; break // unknown = neutre
+    case '20000_plus':
+      score += 30
+      break
+    case '10000_20000':
+      score += 25
+      break
+    case '5000_10000':
+      score += 15
+      break
+    case 'less_5000':
+      score += 5
+      break
+    default:
+      score += 10
+      break // unknown = neutre
   }
 
   // Surface (0-15 points)

@@ -34,7 +34,7 @@ export default function CreateTemplatePage() {
   const smsOverLimit = channel === 'sms' && body.length > 160
 
   const insertVariable = (key: string) => {
-    setBody(prev => prev + `{{${key}}}`)
+    setBody((prev) => prev + `{{${key}}}`)
   }
 
   const handlePreview = async () => {
@@ -52,7 +52,7 @@ export default function CreateTemplatePage() {
       if (err instanceof Error) {
         setError(err.message)
       } else {
-        setError('Erreur lors de l\'aperçu')
+        setError("Erreur lors de l'aperçu")
       }
     }
   }
@@ -94,7 +94,10 @@ export default function CreateTemplatePage() {
   return (
     <div>
       <div className="mb-6">
-        <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+        <Link
+          href="/admin/prospection/templates"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Nouveau modèle</h1>
@@ -106,7 +109,12 @@ export default function CreateTemplatePage() {
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-500 hover:text-red-700"
+          >
+            &times;
+          </button>
         </div>
       )}
 
@@ -115,13 +123,23 @@ export default function CreateTemplatePage() {
         <div className="lg:col-span-2 bg-white rounded-lg border p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Nom du modèle</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Invitation artisan plombier" />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg text-sm"
+              placeholder="Ex: Invitation artisan plombier"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Canal</label>
-              <select value={channel} onChange={(e) => setChannel(e.target.value as ProspectionChannel)} className="w-full px-3 py-2 border rounded-lg text-sm">
+              <select
+                value={channel}
+                onChange={(e) => setChannel(e.target.value as ProspectionChannel)}
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+              >
                 <option value="email">Email</option>
                 <option value="sms">SMS</option>
                 <option value="whatsapp">WhatsApp</option>
@@ -129,7 +147,11 @@ export default function CreateTemplatePage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Audience (optionnel)</label>
-              <select value={audienceType} onChange={(e) => setAudienceType(e.target.value as AudienceType | '')} className="w-full px-3 py-2 border rounded-lg text-sm">
+              <select
+                value={audienceType}
+                onChange={(e) => setAudienceType(e.target.value as AudienceType | '')}
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+              >
                 <option value="">Toutes</option>
                 <option value="artisan">Artisans</option>
                 <option value="client">Clients</option>
@@ -141,7 +163,13 @@ export default function CreateTemplatePage() {
           {channel === 'email' && (
             <div>
               <label className="block text-sm font-medium mb-1">Sujet</label>
-              <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Rejoignez ServicesArtisans, {{contact_name}} !" />
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg text-sm"
+                placeholder="Ex: Rejoignez ServicesArtisans, {{contact_name}} !"
+              />
             </div>
           )}
 
@@ -152,10 +180,14 @@ export default function CreateTemplatePage() {
               onChange={(e) => setBody(e.target.value)}
               rows={8}
               className={`w-full px-3 py-2 border rounded-lg text-sm font-mono ${smsOverLimit ? 'border-red-300 bg-red-50' : ''}`}
-              placeholder={channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'}
+              placeholder={
+                channel === 'sms' ? 'Max 160 caractères pour 1 SMS' : 'Contenu du message...'
+              }
             />
             {channel === 'sms' && (
-              <p className={`text-xs mt-1 ${smsOverLimit ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
+              <p
+                className={`text-xs mt-1 ${smsOverLimit ? 'text-red-600 font-medium' : 'text-gray-400'}`}
+              >
                 {body.length}/160 caractères ({Math.ceil(body.length / 160 || 1)} SMS)
                 {smsOverLimit && ' — Limite de 160 caractères dépassée'}
               </p>
@@ -163,7 +195,9 @@ export default function CreateTemplatePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Prompt IA pour les réponses (optionnel)</label>
+            <label className="block text-sm font-medium mb-1">
+              Prompt IA pour les réponses (optionnel)
+            </label>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
@@ -174,7 +208,10 @@ export default function CreateTemplatePage() {
           </div>
 
           <div className="flex gap-2 pt-4">
-            <button onClick={handlePreview} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
+            <button
+              onClick={handlePreview}
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+            >
               <Eye className="w-4 h-4" /> Aperçu
             </button>
             <button

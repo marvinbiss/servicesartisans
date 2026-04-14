@@ -73,9 +73,7 @@ export default function AdminToolsPage() {
       })
       if (res.ok) {
         setSuccess(`Artisan ${action === 'enable' ? 'activé' : 'désactivé'}`)
-        setProviderInfo((prev) =>
-          prev ? { ...prev, is_active: action === 'enable' } : prev
-        )
+        setProviderInfo((prev) => (prev ? { ...prev, is_active: action === 'enable' } : prev))
         setTimeout(() => setSuccess(null), 3000)
       } else {
         const data = await res.json()
@@ -156,7 +154,11 @@ export default function AdminToolsPage() {
               disabled={loading}
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Search className="w-4 h-4" />
+              )}
               Rechercher
             </button>
           </div>
@@ -169,14 +171,22 @@ export default function AdminToolsPage() {
                   <p className="text-xs text-gray-400">{providerInfo.id}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    providerInfo.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                  }`}>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      providerInfo.is_active
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
                     {providerInfo.is_active ? 'Actif' : 'Inactif'}
                   </span>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    providerInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                  }`}>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      providerInfo.is_verified
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
                     {providerInfo.is_verified ? 'Référencé' : 'Non référencé'}
                   </span>
                 </div>
@@ -213,7 +223,8 @@ export default function AdminToolsPage() {
             Rejouer un dispatch
           </h2>
           <p className="text-sm text-gray-500 mb-4">
-            Relance le round-robin pour une assignation existante. Un nouvel artisan sera sélectionné automatiquement.
+            Relance le round-robin pour une assignation existante. Un nouvel artisan sera
+            sélectionné automatiquement.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
@@ -230,7 +241,11 @@ export default function AdminToolsPage() {
               disabled={loading || !assignmentId.trim()}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4" />
+              )}
               Relancer la répartition
             </button>
           </div>
@@ -241,7 +256,10 @@ export default function AdminToolsPage() {
         <ConfirmationModal
           isOpen={disableModal}
           onClose={() => setDisableModal(false)}
-          onConfirm={() => { setDisableModal(false); toggleProvider('disable') }}
+          onConfirm={() => {
+            setDisableModal(false)
+            toggleProvider('disable')
+          }}
           title="Désactiver l'artisan"
           message={`Êtes-vous sûr de vouloir désactiver l'artisan « ${providerInfo.name} » ?`}
           confirmText="Désactiver"

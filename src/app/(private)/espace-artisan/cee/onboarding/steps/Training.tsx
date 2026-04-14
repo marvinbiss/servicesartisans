@@ -14,13 +14,7 @@
  */
 
 import { useState } from 'react'
-import {
-  PlayCircle,
-  CheckCircle,
-  XCircle,
-  ChevronRight,
-  AlertCircle,
-} from 'lucide-react'
+import { PlayCircle, CheckCircle, XCircle, ChevronRight, AlertCircle } from 'lucide-react'
 import { clsx } from 'clsx'
 import Button from '@/components/ui/Button'
 import { QUIZ_QUESTIONS, PASS_THRESHOLD } from '@/lib/cee/quiz-questions'
@@ -46,11 +40,7 @@ interface QuizResult {
   certified: boolean
 }
 
-export default function Training({
-  partner,
-  onNext,
-  onPartnerRefresh,
-}: TrainingProps) {
+export default function Training({ partner, onNext, onPartnerRefresh }: TrainingProps) {
   const isAlreadyCertified = Boolean(partner?.certified_at)
 
   const [answers, setAnswers] = useState<Record<string, number>>({})
@@ -89,15 +79,11 @@ export default function Training({
       const json = await res.json().catch(() => ({}))
 
       if (res.status === 429) {
-        setApiError(
-          'Trop de tentatives. Attendez une minute avant de réessayer.'
-        )
+        setApiError('Trop de tentatives. Attendez une minute avant de réessayer.')
         return
       }
       if (!res.ok) {
-        setApiError(
-          json?.error?.message || 'Erreur lors de la soumission du quiz.'
-        )
+        setApiError(json?.error?.message || 'Erreur lors de la soumission du quiz.')
         return
       }
 
@@ -135,10 +121,7 @@ export default function Training({
               Étape 4 sur 5
             </span>
           </div>
-          <h2
-            id="training-heading"
-            className="font-heading text-2xl font-bold text-charcoal-900"
-          >
+          <h2 id="training-heading" className="font-heading text-2xl font-bold text-charcoal-900">
             Formation &amp; quiz
           </h2>
         </header>
@@ -151,7 +134,8 @@ export default function Training({
           <div>
             <p className="font-semibold text-accent-700">Formation validée</p>
             <p className="text-sm text-accent-600">
-              Score : {partner?.certification_score ?? '—'}/{QUIZ_QUESTIONS.length} — Seuil de réussite : {PASS_THRESHOLD}/{QUIZ_QUESTIONS.length}
+              Score : {partner?.certification_score ?? '—'}/{QUIZ_QUESTIONS.length} — Seuil de
+              réussite : {PASS_THRESHOLD}/{QUIZ_QUESTIONS.length}
             </p>
           </div>
         </div>
@@ -172,35 +156,25 @@ export default function Training({
   }
 
   return (
-    <section
-      className="p-6 sm:p-8"
-      aria-labelledby="training-heading"
-      data-testid="step-training"
-    >
+    <section className="p-6 sm:p-8" aria-labelledby="training-heading" data-testid="step-training">
       <header className="mb-6">
         <div className="mb-3 inline-flex items-center rounded-full bg-primary-50 px-3 py-1">
           <span className="text-xs font-bold uppercase tracking-widest text-primary-600">
             Étape 4 sur 5
           </span>
         </div>
-        <h2
-          id="training-heading"
-          className="font-heading text-2xl font-bold text-charcoal-900"
-        >
+        <h2 id="training-heading" className="font-heading text-2xl font-bold text-charcoal-900">
           Formation &amp; quiz
         </h2>
         <p className="mt-2 text-charcoal-500">
-          Regardez les vidéos de formation, puis répondez aux{' '}
-          {QUIZ_QUESTIONS.length} questions du quiz. Score minimum :{' '}
-          {PASS_THRESHOLD}/{QUIZ_QUESTIONS.length}.
+          Regardez les vidéos de formation, puis répondez aux {QUIZ_QUESTIONS.length} questions du
+          quiz. Score minimum : {PASS_THRESHOLD}/{QUIZ_QUESTIONS.length}.
         </p>
       </header>
 
       {/* Videos */}
       <div className="mb-8">
-        <h3 className="mb-3 font-semibold text-charcoal-900">
-          Vidéos de formation
-        </h3>
+        <h3 className="mb-3 font-semibold text-charcoal-900">Vidéos de formation</h3>
         <ul className="grid gap-3 sm:grid-cols-2" role="list">
           {WISTIA_VIDEOS.map((video) => (
             <li
@@ -213,15 +187,10 @@ export default function Training({
                 aria-label={`Vidéo : ${video.title}`}
                 role="img"
               >
-                <PlayCircle
-                  className="h-12 w-12 text-white/60"
-                  aria-hidden="true"
-                />
+                <PlayCircle className="h-12 w-12 text-white/60" aria-hidden="true" />
               </div>
               <div className="p-3">
-                <p className="text-sm font-medium text-charcoal-900">
-                  {video.title}
-                </p>
+                <p className="text-sm font-medium text-charcoal-900">{video.title}</p>
                 <p className="text-xs text-charcoal-400">{video.duration}</p>
               </div>
             </li>
@@ -237,9 +206,7 @@ export default function Training({
           aria-atomic="true"
           className={clsx(
             'mb-6 flex items-start gap-3 rounded-xl border p-4',
-            result.passed
-              ? 'border-accent-200 bg-accent-50'
-              : 'border-red-200 bg-red-50'
+            result.passed ? 'border-accent-200 bg-accent-50' : 'border-red-200 bg-red-50'
           )}
         >
           {result.passed ? (
@@ -249,21 +216,13 @@ export default function Training({
           )}
           <div>
             <p
-              className={clsx(
-                'font-semibold',
-                result.passed ? 'text-accent-700' : 'text-red-800'
-              )}
+              className={clsx('font-semibold', result.passed ? 'text-accent-700' : 'text-red-800')}
             >
               {result.passed ? 'Quiz réussi !' : 'Quiz échoué'}
             </p>
-            <p
-              className={clsx(
-                'text-sm',
-                result.passed ? 'text-accent-600' : 'text-red-700'
-              )}
-            >
-              Score : {result.score}/{result.total} — Seuil de réussite :{' '}
-              {PASS_THRESHOLD}/{result.total}
+            <p className={clsx('text-sm', result.passed ? 'text-accent-600' : 'text-red-700')}>
+              Score : {result.score}/{result.total} — Seuil de réussite : {PASS_THRESHOLD}/
+              {result.total}
             </p>
             {!result.passed && (
               <p className="mt-1 text-sm text-red-700">
@@ -316,9 +275,7 @@ export default function Training({
                 aria-required="true"
               >
                 <legend className="font-semibold text-charcoal-900">
-                  <span className="mr-2 text-sm font-bold text-primary-500">
-                    Q{qIdx + 1}.
-                  </span>
+                  <span className="mr-2 text-sm font-bold text-primary-500">Q{qIdx + 1}.</span>
                   {question.question}
                 </legend>
                 <ul className="mt-3 space-y-2" role="list">

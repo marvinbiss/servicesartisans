@@ -47,9 +47,17 @@ export async function GET() {
       }
 
       // Aggregate by page
-      const grouped = new Map<string, { impressions: number; clicks: number; positions: number[]; count: number }>()
+      const grouped = new Map<
+        string,
+        { impressions: number; clicks: number; positions: number[]; count: number }
+      >()
       for (const row of rawData || []) {
-        const existing = grouped.get(row.page_path) || { impressions: 0, clicks: 0, positions: [], count: 0 }
+        const existing = grouped.get(row.page_path) || {
+          impressions: 0,
+          clicks: 0,
+          positions: [],
+          count: 0,
+        }
         existing.impressions += row.impressions || 0
         existing.clicks += row.clicks || 0
         existing.positions.push(Number(row.position))

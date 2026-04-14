@@ -1,5 +1,14 @@
 import Link from 'next/link'
-import { BookOpen, Euro, FileText, Star, AlertTriangle, Wrench, BarChart3, AlertCircle } from 'lucide-react'
+import {
+  BookOpen,
+  Euro,
+  FileText,
+  Star,
+  AlertTriangle,
+  Wrench,
+  BarChart3,
+  AlertCircle,
+} from 'lucide-react'
 import { getClusterLinksForPage, type ClusterLink } from '@/lib/seo/topical-clusters'
 import { getServiceWeight } from '@/lib/constants/navigation'
 
@@ -54,14 +63,12 @@ export default function TopicalClusterLinks({
   if (links.length === 0) return null
 
   // Group by type category for better visual organization
-  const intentLinks = links.filter(l =>
+  const intentLinks = links.filter((l) =>
     ['pillar', 'tarifs', 'devis', 'avis', 'urgence', 'barometre'].includes(l.type)
   )
-  const contentLinks = links.filter(l =>
-    ['blog', 'guide', 'probleme'].includes(l.type)
-  )
+  const contentLinks = links.filter((l) => ['blog', 'guide', 'probleme'].includes(l.type))
   const serviceLinks = links
-    .filter(l => l.type === 'service')
+    .filter((l) => l.type === 'service')
     .sort((a, b) => {
       // Extract slug from path like /services/{slug}
       const aSlug = a.path.split('/').pop() || ''
@@ -102,9 +109,7 @@ export default function TopicalClusterLinks({
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((mod) => (
             <div key={mod.title}>
-              <h4 className="text-sm font-semibold text-charcoal-800 mb-3">
-                {mod.title}
-              </h4>
+              <h4 className="text-sm font-semibold text-charcoal-800 mb-3">{mod.title}</h4>
               <div className="flex flex-wrap gap-2">
                 {mod.links.map((link) => {
                   const Icon = TYPE_ICONS[link.type]

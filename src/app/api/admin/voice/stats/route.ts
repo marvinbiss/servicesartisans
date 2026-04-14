@@ -28,13 +28,26 @@ export async function GET(request: NextRequest) {
     const { data: dailyStats } = await statsQuery
 
     // Get real-time totals from voice_calls
-    const [totalResult, scoreAResult, scoreBResult, scoreCResult, disqualifiedResult] = await Promise.all([
-      supabase.from('voice_calls').select('*', { count: 'exact', head: true }),
-      supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'A'),
-      supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'B'),
-      supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'C'),
-      supabase.from('voice_calls').select('*', { count: 'exact', head: true }).eq('qualification_score', 'disqualified'),
-    ])
+    const [totalResult, scoreAResult, scoreBResult, scoreCResult, disqualifiedResult] =
+      await Promise.all([
+        supabase.from('voice_calls').select('*', { count: 'exact', head: true }),
+        supabase
+          .from('voice_calls')
+          .select('*', { count: 'exact', head: true })
+          .eq('qualification_score', 'A'),
+        supabase
+          .from('voice_calls')
+          .select('*', { count: 'exact', head: true })
+          .eq('qualification_score', 'B'),
+        supabase
+          .from('voice_calls')
+          .select('*', { count: 'exact', head: true })
+          .eq('qualification_score', 'C'),
+        supabase
+          .from('voice_calls')
+          .select('*', { count: 'exact', head: true })
+          .eq('qualification_score', 'disqualified'),
+      ])
 
     const totalCalls = totalResult.count || 0
     const qualifiedA = scoreAResult.count || 0
@@ -52,7 +65,7 @@ export async function GET(request: NextRequest) {
           qualified_c: qualifiedC,
           disqualified: disqualifiedCount,
           qualification_rate: totalCalls
-            ? Math.round((qualifiedA + qualifiedB + qualifiedC) / totalCalls * 100)
+            ? Math.round(((qualifiedA + qualifiedB + qualifiedC) / totalCalls) * 100)
             : 0,
         },
         daily: dailyStats || [],

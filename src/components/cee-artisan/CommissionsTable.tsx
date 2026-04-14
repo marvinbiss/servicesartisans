@@ -54,7 +54,14 @@ function formatDate(iso: string | null): string {
 }
 
 function exportCsv(commissions: CeeCommissionRow[]) {
-  const header = ['ID dossier', 'Opération', 'Montant (€)', 'Statut', 'Date versement', 'IBAN (4 derniers)']
+  const header = [
+    'ID dossier',
+    'Opération',
+    'Montant (€)',
+    'Statut',
+    'Date versement',
+    'IBAN (4 derniers)',
+  ]
   const rows = commissions.map((c) => [
     c.dossier_id,
     c.operation_code,
@@ -177,9 +184,7 @@ export default function CommissionsTable({ commissions, loadError }: Commissions
                       {c.dossier_id.slice(0, 8)}…
                     </a>
                   </td>
-                  <td className="px-4 py-3 font-semibold text-charcoal-900">
-                    {c.operation_code}
-                  </td>
+                  <td className="px-4 py-3 font-semibold text-charcoal-900">{c.operation_code}</td>
                   <td className="px-4 py-3 text-right font-semibold text-charcoal-900">
                     {formatEuros(c.montant_eur)}
                   </td>
@@ -210,10 +215,7 @@ export default function CommissionsTable({ commissions, loadError }: Commissions
       {/* Cards mobile */}
       <ul className="space-y-3 sm:hidden" role="list">
         {commissions.map((c) => (
-          <li
-            key={c.id}
-            className="rounded-xl border border-sand-300 bg-white p-4"
-          >
+          <li key={c.id} className="rounded-xl border border-sand-300 bg-white p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-semibold text-charcoal-900">{c.operation_code}</p>

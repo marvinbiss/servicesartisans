@@ -26,15 +26,31 @@ import type { Provider } from '@/types'
 // Same shape as PROVIDER_LIST_SELECT in src/lib/supabase.ts. Duplicated here to avoid
 // touching supabase.ts (another agent may also be editing rge-related files).
 const RGE_LIST_SELECT = [
-  'id', 'stable_id', 'name', 'slug', 'specialty',
-  'address_street', 'address_postal_code', 'address_city', 'address_region',
-  'is_verified', 'is_active', 'noindex',
-  'rating_average', 'review_count',
-  'phone', 'siret',
-  'latitude', 'longitude',
+  'id',
+  'stable_id',
+  'name',
+  'slug',
+  'specialty',
+  'address_street',
+  'address_postal_code',
+  'address_city',
+  'address_region',
+  'is_verified',
+  'is_active',
+  'noindex',
+  'rating_average',
+  'review_count',
+  'phone',
+  'siret',
+  'latitude',
+  'longitude',
   'user_id',
-  'created_at', 'updated_at',
-  'rge_qualifications', 'rge_valid_until', 'rge_organismes', 'rge_source_url',
+  'created_at',
+  'updated_at',
+  'rge_qualifications',
+  'rge_valid_until',
+  'rge_organismes',
+  'rge_source_url',
 ].join(',')
 
 function todayIso(): string {
@@ -52,7 +68,7 @@ export interface RgeCityListingOptions {
  */
 export async function getRgeProvidersByCity(
   citySlug: string,
-  { limit = 50, offset = 0 }: RgeCityListingOptions = {},
+  { limit = 50, offset = 0 }: RgeCityListingOptions = {}
 ): Promise<Provider[]> {
   if (IS_BUILD) return []
 
@@ -92,7 +108,7 @@ export async function getRgeProvidersByCity(
       }
     },
     CACHE_TTL.artisans, // 1h
-    { skipNull: true },
+    { skipNull: true }
   )
 }
 
@@ -131,6 +147,6 @@ export async function getRgeProviderCountByCity(citySlug: string): Promise<numbe
         return 0
       }
     },
-    CACHE_TTL.artisans,
+    CACHE_TTL.artisans
   )
 }

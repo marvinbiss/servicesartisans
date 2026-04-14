@@ -25,9 +25,7 @@ interface HandlerOptions<T = unknown> {
   requireAdmin?: boolean
 }
 
-type HandlerFunction<T = unknown> = (
-  context: HandlerContext & { body: T }
-) => Promise<NextResponse>
+type HandlerFunction<T = unknown> = (context: HandlerContext & { body: T }) => Promise<NextResponse>
 
 /**
  * Create a standardized API handler with validation and auth

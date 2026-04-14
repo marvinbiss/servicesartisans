@@ -48,13 +48,11 @@ interface CommuneScoreRow {
   provider_count: number
 }
 
-
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const IS_BUILD =
-  process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 /** Weights for the scoring formula */
 const WEIGHT_PROVIDERS = 3
@@ -207,13 +205,18 @@ async function fetchReviewCountsByCity(): Promise<Map<string, number>> {
       for (const p of providers) {
         const city = p.address_city as string | null
         if (!city) continue
-        const citySlug = city.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+        const citySlug = city
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
         const count = providerReviewCounts.get(p.id as string) ?? 0
         map.set(citySlug, (map.get(citySlug) ?? 0) + count)
       }
     }
   } catch {
-    logger.warn('[page-scoring] Failed to fetch review counts', { action: 'fetchReviewCountsByCity' })
+    logger.warn('[page-scoring] Failed to fetch review counts', {
+      action: 'fetchReviewCountsByCity',
+    })
   }
 
   return map
@@ -274,10 +277,7 @@ async function loadScoringData(): Promise<ScoringData> {
   }
 }
 
-function computeScore(
-  villeSlug: string,
-  data: ScoringData,
-): number {
+function computeScore(villeSlug: string, data: ScoringData): number {
   const communeRow = data.communes.get(villeSlug)
   const staticCity = data.staticCities.get(villeSlug)
 
@@ -321,7 +321,9 @@ const _getScoresBatch = async (): Promise<Map<string, number>> => {
     }
   }
 
-  logger.info(`[page-scoring] Computed ${scores.size} scores for ${serviceSlugs.length} services × ${villes.length} cities`)
+  logger.info(
+    `[page-scoring] Computed ${scores.size} scores for ${serviceSlugs.length} services × ${villes.length} cities`
+  )
 
   return scores
 }
@@ -369,7 +371,7 @@ export async function getTopPages(limit: number): Promise<PageScore[]> {
  */
 export async function getTopPagesForService(
   serviceSlug: string,
-  limit: number,
+  limit: number
 ): Promise<PageScore[]> {
   const scores = await getScoresBatch()
   const prefix = `${serviceSlug}:`
@@ -389,10 +391,7 @@ export async function getTopPagesForService(
 /**
  * Return the top N services for a given city, sorted by descending score.
  */
-export async function getTopPagesForCity(
-  villeSlug: string,
-  limit: number,
-): Promise<PageScore[]> {
+export async function getTopPagesForCity(villeSlug: string, limit: number): Promise<PageScore[]> {
   const scores = await getScoresBatch()
   const suffix = `:${villeSlug}`
 

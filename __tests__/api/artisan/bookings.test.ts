@@ -58,12 +58,14 @@ const sampleSlots = [
   { id: 'slot-a', date: '2026-04-15', start_time: '14:00', end_time: '15:00', is_available: true },
 ]
 
-function buildSupabaseMock(overrides: {
-  bookings?: unknown[]
-  bookingsError?: unknown
-  slots?: unknown[]
-  slotsError?: unknown
-} = {}) {
+function buildSupabaseMock(
+  overrides: {
+    bookings?: unknown[]
+    bookingsError?: unknown
+    slots?: unknown[]
+    slotsError?: unknown
+  } = {}
+) {
   const {
     bookings = sampleBookings,
     bookingsError = null,
@@ -91,7 +93,7 @@ function buildSupabaseMock(overrides: {
 
       for (const key of Object.keys(chain)) {
         if (typeof chain[key] === 'function' && key !== 'single') {
-          (chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
+          ;(chain[key] as ReturnType<typeof vi.fn>).mockReturnValue(chain)
         }
       }
 
@@ -197,7 +199,7 @@ describe('GET /api/artisan/bookings', () => {
     expect(fromSpy).toHaveBeenCalledWith('bookings')
   })
 
-  it('retourne un tableau vide quand il n\'y a aucun booking', async () => {
+  it("retourne un tableau vide quand il n'y a aucun booking", async () => {
     const supabaseMock = buildSupabaseMock({ bookings: [], slots: [] })
 
     vi.mocked(requireArtisan).mockResolvedValue({

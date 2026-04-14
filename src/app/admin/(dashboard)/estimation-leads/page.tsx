@@ -132,8 +132,18 @@ export default function AdminEstimationLeadsPage() {
 
   const handleExportCSV = () => {
     if (!leads.length) return
-    const headers = ['Date', 'Source', 'Nom', 'Téléphone', 'Email', 'Métier', 'Ville', 'Département', 'Artisan ID']
-    const rows = leads.map(l => [
+    const headers = [
+      'Date',
+      'Source',
+      'Nom',
+      'Téléphone',
+      'Email',
+      'Métier',
+      'Ville',
+      'Département',
+      'Artisan ID',
+    ]
+    const rows = leads.map((l) => [
       formatDate(l.created_at),
       l.source,
       l.nom || '',
@@ -144,7 +154,9 @@ export default function AdminEstimationLeadsPage() {
       l.departement,
       l.artisan_public_id || '',
     ])
-    const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
+    const csv = [headers, ...rows]
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -229,7 +241,10 @@ export default function AdminEstimationLeadsPage() {
             {(['all', 'chat', 'callback'] as const).map((s) => (
               <button
                 key={s}
-                onClick={() => { setSourceFilter(s); setPage(1) }}
+                onClick={() => {
+                  setSourceFilter(s)
+                  setPage(1)
+                }}
                 className={`px-3 py-2 text-sm font-medium transition-colors ${
                   sourceFilter === s
                     ? 'bg-[#E07040] text-white'
@@ -262,7 +277,11 @@ export default function AdminEstimationLeadsPage() {
             {search && (
               <button
                 type="button"
-                onClick={() => { setSearch(''); setSearchInput(''); setPage(1) }}
+                onClick={() => {
+                  setSearch('')
+                  setSearchInput('')
+                  setPage(1)
+                }}
                 className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
               >
                 Effacer
@@ -288,7 +307,9 @@ export default function AdminEstimationLeadsPage() {
         <div className="text-center py-16 text-gray-500">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
           <p className="font-medium">Aucun lead pour le moment</p>
-          <p className="text-sm mt-1">Les leads apparaîtront ici quand les visiteurs utiliseront le widget d'estimation.</p>
+          <p className="text-sm mt-1">
+            Les leads apparaîtront ici quand les visiteurs utiliseront le widget d'estimation.
+          </p>
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -307,7 +328,10 @@ export default function AdminEstimationLeadsPage() {
               </thead>
               <tbody>
                 {leads.map((lead) => (
-                  <tr key={lead.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={lead.id}
+                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                       {formatDate(lead.created_at)}
                     </td>
@@ -320,9 +344,13 @@ export default function AdminEstimationLeadsPage() {
                         }`}
                       >
                         {lead.source === 'chat' ? (
-                          <><MessageSquare className="w-3 h-3" /> Chat</>
+                          <>
+                            <MessageSquare className="w-3 h-3" /> Chat
+                          </>
                         ) : (
-                          <><Phone className="w-3 h-3" /> Rappel</>
+                          <>
+                            <Phone className="w-3 h-3" /> Rappel
+                          </>
                         )}
                       </span>
                     </td>
@@ -331,9 +359,7 @@ export default function AdminEstimationLeadsPage() {
                         {lead.nom || <span className="text-gray-400 italic">Anonyme</span>}
                       </div>
                       <div className="text-gray-500">{formatPhone(lead.telephone)}</div>
-                      {lead.email && (
-                        <div className="text-gray-400 text-xs">{lead.email}</div>
-                      )}
+                      {lead.email && <div className="text-gray-400 text-xs">{lead.email}</div>}
                     </td>
                     <td className="px-4 py-3 text-gray-700">{lead.metier}</td>
                     <td className="px-4 py-3">
@@ -418,7 +444,10 @@ export default function AdminEstimationLeadsPage() {
 
       {/* Conversation Modal */}
       {selectedLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setSelectedLead(null)}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setSelectedLead(null)}
+        >
           <div
             className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -464,7 +493,18 @@ export default function AdminEstimationLeadsPage() {
               <p className="text-xs text-gray-400">
                 {formatDate(selectedLead.created_at)}
                 {selectedLead.page_url && (
-                  <> · <a href={selectedLead.page_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{selectedLead.page_url}</a></>
+                  <>
+                    {' '}
+                    ·{' '}
+                    <a
+                      href={selectedLead.page_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {selectedLead.page_url}
+                    </a>
+                  </>
                 )}
               </p>
               <a

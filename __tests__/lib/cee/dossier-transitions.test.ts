@@ -144,8 +144,13 @@ describe('artisanCanSubmit', () => {
   })
 
   const nonSubmittable: CeeDossierV3Status[] = [
-    'submitted_by_artisan', 'qa_pending', 'qa_approved',
-    'qa_rejected', 'deposited', 'validated_pncee', 'archived',
+    'submitted_by_artisan',
+    'qa_pending',
+    'qa_approved',
+    'qa_rejected',
+    'deposited',
+    'validated_pncee',
+    'archived',
   ]
   for (const s of nonSubmittable) {
     it(`returns false for ${s}`, () => {
@@ -164,8 +169,12 @@ describe('artisanCanEdit', () => {
   })
 
   const nonEditable: CeeDossierV3Status[] = [
-    'submitted_by_artisan', 'qa_pending', 'qa_approved',
-    'deposited', 'validated_pncee', 'archived',
+    'submitted_by_artisan',
+    'qa_pending',
+    'qa_approved',
+    'deposited',
+    'validated_pncee',
+    'archived',
   ]
   for (const s of nonEditable) {
     it(`returns false for ${s}`, () => {
@@ -177,9 +186,18 @@ describe('artisanCanEdit', () => {
 describe('DOSSIER_TRANSITIONS exhaustiveness', () => {
   it('covers all statuses as keys', () => {
     const allStatuses: CeeDossierV3Status[] = [
-      'draft', 'submitted_by_artisan', 'qa_pending', 'qa_approved', 'qa_rejected',
-      'deposited', 'validated_pncee', 'rejected_pncee', 'paid_client',
-      'commission_due', 'commission_paid', 'archived',
+      'draft',
+      'submitted_by_artisan',
+      'qa_pending',
+      'qa_approved',
+      'qa_rejected',
+      'deposited',
+      'validated_pncee',
+      'rejected_pncee',
+      'paid_client',
+      'commission_due',
+      'commission_paid',
+      'archived',
     ]
     for (const s of allStatuses) {
       expect(DOSSIER_TRANSITIONS).toHaveProperty(s)

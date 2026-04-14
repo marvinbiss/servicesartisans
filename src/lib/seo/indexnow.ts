@@ -21,7 +21,7 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
     return { submitted: 0, success: false, error: 'No key or empty URL list' }
   }
 
-  const absoluteUrls = urls.map(u => u.startsWith('http') ? u : `${SITE_URL}${u}`)
+  const absoluteUrls = urls.map((u) => (u.startsWith('http') ? u : `${SITE_URL}${u}`))
 
   let totalSubmitted = 0
 
@@ -61,10 +61,7 @@ export function getProviderAffectedUrls(
   villeSlug: string,
   providerPublicId?: string
 ): string[] {
-  const urls = [
-    `/services/${serviceSlug}/${villeSlug}`,
-    `/villes/${villeSlug}`,
-  ]
+  const urls = [`/services/${serviceSlug}/${villeSlug}`, `/villes/${villeSlug}`]
   if (providerPublicId) {
     urls.push(`/services/${serviceSlug}/${villeSlug}/${providerPublicId}`)
   }

@@ -65,18 +65,20 @@ const ALLOWED_EVENTS = [
 
 const analyticsSchema = z.object({
   event: z.enum(ALLOWED_EVENTS),
-  properties: z.object({
-    artisanId: z.string().uuid().optional(),
-    artisanName: z.string().max(200).optional(),
-    source: z.string().max(50).optional(),
-    url: z.string().max(2000).optional(),
-    referrer: z.string().max(2000).optional(),
-    userAgent: z.string().max(500).optional(),
-    screenSize: z.string().max(20).optional(),
-    timestamp: z.string().optional(),
-    page_path: z.string().max(500).optional(),
-    title: z.string().max(500).optional(),
-  }).passthrough(),
+  properties: z
+    .object({
+      artisanId: z.string().uuid().optional(),
+      artisanName: z.string().max(200).optional(),
+      source: z.string().max(50).optional(),
+      url: z.string().max(2000).optional(),
+      referrer: z.string().max(2000).optional(),
+      userAgent: z.string().max(500).optional(),
+      screenSize: z.string().max(20).optional(),
+      timestamp: z.string().optional(),
+      page_path: z.string().max(500).optional(),
+      title: z.string().max(500).optional(),
+    })
+    .passthrough(),
   sessionId: z.string().max(100).optional(),
   visitorId: z.string().max(100).optional(),
   timestamp: z.string().optional(),
@@ -86,10 +88,7 @@ export async function POST(request: Request) {
   try {
     // Rate limit
     const ip = getClientIp(request.headers)
-    const result = await checkRateLimit(
-      `analytics:${ip}`,
-      RATE_LIMITS.analytics
-    )
+    const result = await checkRateLimit(`analytics:${ip}`, RATE_LIMITS.analytics)
     if (!result.allowed) {
       return new NextResponse(null, { status: 429 })
     }

@@ -18,13 +18,12 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -48,10 +47,7 @@ export async function POST(request: Request) {
       .single()
 
     if (bookingError || !booking) {
-      return NextResponse.json(
-        { error: 'Réservation introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Réservation introuvable' }, { status: 404 })
     }
 
     if (booking.status !== 'confirmed') {
@@ -87,9 +83,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url })
   } catch (error) {
     logger.error('Booking payment error', { error })
-    return NextResponse.json(
-      { error: 'Erreur lors de la création du paiement' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur lors de la création du paiement' }, { status: 500 })
   }
 }

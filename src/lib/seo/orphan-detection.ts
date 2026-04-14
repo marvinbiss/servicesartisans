@@ -17,9 +17,9 @@ import { SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-
 export interface OrphanReport {
   totalPages: number
   linkedPages: number
-  orphanPages: string[]   // URLs with 0 internal links pointing to them
-  weakPages: string[]     // URLs with < 3 internal links
-  depthOver3: string[]    // URLs at depth > 3 from homepage
+  orphanPages: string[] // URLs with 0 internal links pointing to them
+  weakPages: string[] // URLs with < 3 internal links
+  depthOver3: string[] // URLs at depth > 3 from homepage
   maxDepth: number
   generatedAt: string
 }
@@ -31,7 +31,7 @@ export interface RescueLink {
 
 // ── Helpers ─────────────────────────────────────────────────────────────
 
-const serviceSlugs = services.map(s => s.slug)
+const serviceSlugs = services.map((s) => s.slug)
 const tradeSlugs = getTradesSlugs()
 
 /** Population cities used in Tier 1 sitemaps */
@@ -74,9 +74,18 @@ export function buildLinkGraph(): Map<string, Set<string>> {
 
   // Homepage → hub pages
   const hubPaths = [
-    '/services', '/tarifs', '/urgence', '/devis', '/avis',
-    '/blog', '/guides', '/faq', '/barometre', '/departements',
-    '/regions', '/villes',
+    '/services',
+    '/tarifs',
+    '/urgence',
+    '/devis',
+    '/avis',
+    '/blog',
+    '/guides',
+    '/faq',
+    '/barometre',
+    '/departements',
+    '/regions',
+    '/villes',
   ]
   for (const hub of hubPaths) {
     addLink(graph, home, hub)
@@ -208,7 +217,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
       addLink(graph, cityPath, `/services/${svc.slug}/${city.slug}`)
     }
     // Link to department
-    const dept = departements.find(d => d.code === city.departementCode)
+    const dept = departements.find((d) => d.code === city.departementCode)
     if (dept) {
       addLink(graph, cityPath, `/departements/${dept.slug}`)
     }
@@ -224,7 +233,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
   for (const dept of departements) {
     const deptPath = `/departements/${dept.slug}`
     // Dept → cities
-    const deptCities = tier1Cities.filter(c => c.departementCode === dept.code)
+    const deptCities = tier1Cities.filter((c) => c.departementCode === dept.code)
     for (const city of deptCities) {
       addLink(graph, deptPath, `/villes/${city.slug}`)
     }
@@ -233,9 +242,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
       addLink(graph, deptPath, `/departements/${dept.slug}/${svc}`)
     }
     // Dept → parent region
-    const region = regions.find(r =>
-      r.departments.some(rd => rd.code === dept.code)
-    )
+    const region = regions.find((r) => r.departments.some((rd) => rd.code === dept.code))
     if (region) {
       addLink(graph, deptPath, `/regions/${region.slug}`)
     }
@@ -295,10 +302,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
 /**
  * Compute incoming link counts and identify orphan/weak pages.
  */
-export function findOrphans(
-  linkGraph: Map<string, Set<string>>,
-  allPages: string[],
-): OrphanReport {
+export function findOrphans(linkGraph: Map<string, Set<string>>, allPages: string[]): OrphanReport {
   // Build incoming link count map
   const incomingCount = new Map<string, number>()
   for (const page of allPages) {
@@ -387,9 +391,7 @@ export function generateRescueLinks(orphans: string[]): RescueLink[] {
 /**
  * BFS from homepage to compute click depth for every reachable page.
  */
-export function getDepthFromHomepage(
-  linkGraph: Map<string, Set<string>>,
-): Map<string, number> {
+export function getDepthFromHomepage(linkGraph: Map<string, Set<string>>): Map<string, number> {
   const depthMap = new Map<string, number>()
   const queue: string[] = ['/']
   depthMap.set('/', 0)
@@ -423,16 +425,43 @@ export function getAllPagePaths(): string[] {
 
   // Static/hub pages
   const staticPaths = [
-    '/services', '/tarifs', '/urgence', '/devis', '/avis',
-    '/blog', '/guides', '/faq', '/barometre',
-    '/barometre/regions', '/barometre/tarifs', '/comparaison', '/glossaire',
-    '/normes', '/statistiques-artisans-france',
-    '/a-propos', '/contact', '/faq', '/comment-ca-marche',
-    '/notre-processus-de-verification', '/politique-avis', '/mediation',
-    '/garantie', '/outils/calculateur-prix', '/outils/diagnostic',
-    '/carte-artisans', '/artisans', '/avant-apres', '/calendrier-travaux',
-    '/checklist-travaux', '/badge-artisan', '/verifier-artisan', '/widget-prix',
-    '/plan-du-site', '/villes', '/departements', '/regions',
+    '/services',
+    '/tarifs',
+    '/urgence',
+    '/devis',
+    '/avis',
+    '/blog',
+    '/guides',
+    '/faq',
+    '/barometre',
+    '/barometre/regions',
+    '/barometre/tarifs',
+    '/comparaison',
+    '/glossaire',
+    '/normes',
+    '/statistiques-artisans-france',
+    '/a-propos',
+    '/contact',
+    '/faq',
+    '/comment-ca-marche',
+    '/notre-processus-de-verification',
+    '/politique-avis',
+    '/mediation',
+    '/garantie',
+    '/outils/calculateur-prix',
+    '/outils/diagnostic',
+    '/carte-artisans',
+    '/artisans',
+    '/avant-apres',
+    '/calendrier-travaux',
+    '/checklist-travaux',
+    '/badge-artisan',
+    '/verifier-artisan',
+    '/widget-prix',
+    '/plan-du-site',
+    '/villes',
+    '/departements',
+    '/regions',
   ]
   pages.push(...staticPaths)
 

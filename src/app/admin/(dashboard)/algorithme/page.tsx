@@ -14,15 +14,8 @@ import {
   Zap,
   MapPin,
 } from 'lucide-react'
-import type {
-  AlgorithmConfig,
-  MatchingStrategy,
-  SpecialtyMatchMode,
-} from '@/types/algorithm'
-import {
-  MATCHING_STRATEGY_META,
-  SPECIALTY_MATCH_META,
-} from '@/types/algorithm'
+import type { AlgorithmConfig, MatchingStrategy, SpecialtyMatchMode } from '@/types/algorithm'
+import { MATCHING_STRATEGY_META, SPECIALTY_MATCH_META } from '@/types/algorithm'
 
 export default function AdminAlgorithmePage() {
   const [config, setConfig] = useState<AlgorithmConfig | null>(null)
@@ -51,7 +44,9 @@ export default function AdminAlgorithmePage() {
     }
   }, [])
 
-  useEffect(() => { fetchConfig() }, [fetchConfig])
+  useEffect(() => {
+    fetchConfig()
+  }, [fetchConfig])
 
   const handleSave = async () => {
     if (!config) return
@@ -92,7 +87,11 @@ export default function AdminAlgorithmePage() {
   }
 
   const totalWeight = config
-    ? config.weight_rating + config.weight_reviews + config.weight_verified + config.weight_proximity + config.weight_data_quality
+    ? config.weight_rating +
+      config.weight_reviews +
+      config.weight_verified +
+      config.weight_proximity +
+      config.weight_data_quality
     : 0
 
   if (loading) {
@@ -172,7 +171,9 @@ export default function AdminAlgorithmePage() {
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
-                        <p className={`font-medium ${selected ? 'text-blue-700' : 'text-gray-900'}`}>
+                        <p
+                          className={`font-medium ${selected ? 'text-blue-700' : 'text-gray-900'}`}
+                        >
                           {meta.label}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">{meta.description}</p>
@@ -186,7 +187,8 @@ export default function AdminAlgorithmePage() {
                 label="Artisans max par lead"
                 value={config.max_artisans_per_lead}
                 onChange={(v) => update('max_artisans_per_lead', v)}
-                min={1} max={20}
+                min={1}
+                max={20}
                 description="Nombre maximum d'artisans qui reçoivent chaque lead"
               />
 
@@ -194,7 +196,8 @@ export default function AdminAlgorithmePage() {
                 label="Rayon géographique (km)"
                 value={config.geo_radius_km}
                 onChange={(v) => update('geo_radius_km', v)}
-                min={1} max={500}
+                min={1}
+                max={500}
                 description="Rayon par défaut si l'artisan n'a pas de rayon spécifique"
               />
 
@@ -250,8 +253,13 @@ export default function AdminAlgorithmePage() {
           {/* === SCORING === */}
           <Section icon={Sliders} title="Poids du scoring">
             <p className="text-sm text-gray-500 mb-4">
-              Ajustez les poids relatifs du score composite.
-              Total actuel : <span className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}>{totalWeight}</span>/100
+              Ajustez les poids relatifs du score composite. Total actuel :{' '}
+              <span
+                className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}
+              >
+                {totalWeight}
+              </span>
+              /100
             </p>
             <div className="space-y-4">
               <WeightSlider
@@ -294,21 +302,24 @@ export default function AdminAlgorithmePage() {
                 label="Quota journalier"
                 value={config.daily_lead_quota}
                 onChange={(v) => update('daily_lead_quota', v)}
-                min={0} max={1000}
+                min={0}
+                max={1000}
                 description="Max leads par artisan par jour (0 = illimité)"
               />
               <NumberField
                 label="Quota mensuel"
                 value={config.monthly_lead_quota}
                 onChange={(v) => update('monthly_lead_quota', v)}
-                min={0} max={10000}
+                min={0}
+                max={10000}
                 description="Max leads par artisan par mois (0 = illimité)"
               />
               <NumberField
                 label="Cooldown (minutes)"
                 value={config.cooldown_minutes}
                 onChange={(v) => update('cooldown_minutes', v)}
-                min={0} max={1440}
+                min={0}
+                max={1440}
                 description="Temps minimum entre deux leads pour un même artisan"
               />
             </div>
@@ -321,21 +332,24 @@ export default function AdminAlgorithmePage() {
                 label="Expiration lead (heures)"
                 value={config.lead_expiry_hours}
                 onChange={(v) => update('lead_expiry_hours', v)}
-                min={1} max={720}
+                min={1}
+                max={720}
                 description="Durée avant qu'un lead non-vu expire"
               />
               <NumberField
                 label="Expiration devis (heures)"
                 value={config.quote_expiry_hours}
                 onChange={(v) => update('quote_expiry_hours', v)}
-                min={1} max={720}
+                min={1}
+                max={720}
                 description="Durée avant qu'une demande de devis expire"
               />
               <NumberField
                 label="Auto-réassignation (heures)"
                 value={config.auto_reassign_hours}
                 onChange={(v) => update('auto_reassign_hours', v)}
-                min={1} max={720}
+                min={1}
+                max={720}
                 description="Délai avant réassignation automatique à un autre artisan"
               />
             </div>
@@ -348,7 +362,9 @@ export default function AdminAlgorithmePage() {
                 label="Note minimum"
                 value={config.min_rating}
                 onChange={(v) => update('min_rating', v)}
-                min={0} max={5} step={0.5}
+                min={0}
+                max={5}
+                step={0.5}
                 description="Note Google minimum pour recevoir des leads (0 = pas de filtre)"
               />
               <ToggleField
@@ -361,7 +377,8 @@ export default function AdminAlgorithmePage() {
                 label="Exclure inactifs (jours)"
                 value={config.exclude_inactive_days}
                 onChange={(v) => update('exclude_inactive_days', v)}
-                min={0} max={365}
+                min={0}
+                max={365}
                 description="Exclure les artisans sans activité depuis N jours (0 = désactivé)"
               />
             </div>
@@ -414,7 +431,11 @@ export default function AdminAlgorithmePage() {
 
 // === COMPOSANTS UTILITAIRES ===
 
-function Section({ icon: Icon, title, children }: {
+function Section({
+  icon: Icon,
+  title,
+  children,
+}: {
   icon: React.ComponentType<{ className?: string }>
   title: string
   children: React.ReactNode
@@ -430,7 +451,15 @@ function Section({ icon: Icon, title, children }: {
   )
 }
 
-function NumberField({ label, value, onChange, min, max, step, description }: {
+function NumberField({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  description,
+}: {
   label: string
   value: number
   onChange: (v: number) => void
@@ -461,7 +490,12 @@ function NumberField({ label, value, onChange, min, max, step, description }: {
   )
 }
 
-function ToggleField({ label, value, onChange, description }: {
+function ToggleField({
+  label,
+  value,
+  onChange,
+  description,
+}: {
   label: string
   value: boolean
   onChange: (v: boolean) => void
@@ -500,7 +534,12 @@ const SLIDER_COLORS: Record<string, string> = {
   green: 'bg-green-500',
 }
 
-function WeightSlider({ label, value, onChange, color }: {
+function WeightSlider({
+  label,
+  value,
+  onChange,
+  color,
+}: {
   label: string
   value: number
   onChange: (v: number) => void
@@ -551,7 +590,12 @@ const MULTIPLIER_COLORS: Record<string, { bg: string; text: string; border: stri
   red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 }
 
-function MultiplierCard({ label, value, onChange, color }: {
+function MultiplierCard({
+  label,
+  value,
+  onChange,
+  color,
+}: {
   label: string
   value: number
   onChange: (v: number) => void

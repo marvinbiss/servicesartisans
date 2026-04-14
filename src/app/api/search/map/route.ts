@@ -40,7 +40,10 @@ export async function GET(request: NextRequest) {
     const result = mapQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Paramètres géographiques invalides', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Paramètres géographiques invalides', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -51,7 +54,9 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('providers')
-      .select('id, name, slug, specialty, address_city, address_region, latitude, longitude, is_verified, rating_average, review_count')
+      .select(
+        'id, name, slug, specialty, address_city, address_region, latitude, longitude, is_verified, rating_average, review_count'
+      )
       .eq('is_active', true)
       .not('latitude', 'is', null)
       .not('longitude', 'is', null)
@@ -65,7 +70,9 @@ export async function GET(request: NextRequest) {
     if (q) {
       const sanitized = sanitizeSearchQuery(q)
       if (sanitized) {
-        query = query.or(`name.ilike.%${sanitized}%,specialty.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%`)
+        query = query.or(
+          `name.ilike.%${sanitized}%,specialty.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%`
+        )
       }
     }
 

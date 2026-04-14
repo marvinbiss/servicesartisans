@@ -154,7 +154,10 @@ export interface TimelineEntry {
 // Helpers
 // ============================================================
 
-export const EVENT_TYPE_META: Record<LeadEventType, { label: string; color: string; icon: string }> = {
+export const EVENT_TYPE_META: Record<
+  LeadEventType,
+  { label: string; color: string; icon: string }
+> = {
   created: { label: 'Lead créé', color: 'blue', icon: 'Plus' },
   dispatched: { label: 'Dispatché', color: 'indigo', icon: 'Send' },
   viewed: { label: 'Consulté', color: 'yellow', icon: 'Eye' },

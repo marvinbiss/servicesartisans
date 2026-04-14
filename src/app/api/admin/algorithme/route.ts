@@ -11,30 +11,32 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
 
-const algorithmConfigSchema = z.object({
-  matching_strategy: z.enum(['scored', 'round_robin', 'geographic']).optional(),
-  max_artisans_per_lead: z.number().int().min(1).max(20).optional(),
-  geo_radius_km: z.number().int().min(1).max(500).optional(),
-  weight_rating: z.number().int().min(0).max(100).optional(),
-  weight_reviews: z.number().int().min(0).max(100).optional(),
-  weight_verified: z.number().int().min(0).max(100).optional(),
-  weight_proximity: z.number().int().min(0).max(100).optional(),
-  weight_data_quality: z.number().int().min(0).max(100).optional(),
-  cooldown_minutes: z.number().int().min(0).max(1440).optional(),
-  daily_lead_quota: z.number().int().min(0).max(1000).optional(),
-  monthly_lead_quota: z.number().int().min(0).max(30000).optional(),
-  exclude_inactive_days: z.number().int().min(0).max(365).optional(),
-  min_rating: z.number().min(0).max(5).optional(),
-  require_verified_urgent: z.boolean().optional(),
-  specialty_match_mode: z.enum(['exact', 'fuzzy', 'category']).optional(),
-  urgency_low_multiplier: z.number().positive().max(10).optional(),
-  urgency_medium_multiplier: z.number().positive().max(10).optional(),
-  urgency_high_multiplier: z.number().positive().max(10).optional(),
-  urgency_emergency_multiplier: z.number().positive().max(10).optional(),
-  prefer_claimed: z.boolean().optional(),
-  lead_expiry_hours: z.number().int().min(1).max(168).optional(),
-  auto_reassign_hours: z.number().int().min(1).max(168).optional(),
-}).strict()
+const algorithmConfigSchema = z
+  .object({
+    matching_strategy: z.enum(['scored', 'round_robin', 'geographic']).optional(),
+    max_artisans_per_lead: z.number().int().min(1).max(20).optional(),
+    geo_radius_km: z.number().int().min(1).max(500).optional(),
+    weight_rating: z.number().int().min(0).max(100).optional(),
+    weight_reviews: z.number().int().min(0).max(100).optional(),
+    weight_verified: z.number().int().min(0).max(100).optional(),
+    weight_proximity: z.number().int().min(0).max(100).optional(),
+    weight_data_quality: z.number().int().min(0).max(100).optional(),
+    cooldown_minutes: z.number().int().min(0).max(1440).optional(),
+    daily_lead_quota: z.number().int().min(0).max(1000).optional(),
+    monthly_lead_quota: z.number().int().min(0).max(30000).optional(),
+    exclude_inactive_days: z.number().int().min(0).max(365).optional(),
+    min_rating: z.number().min(0).max(5).optional(),
+    require_verified_urgent: z.boolean().optional(),
+    specialty_match_mode: z.enum(['exact', 'fuzzy', 'category']).optional(),
+    urgency_low_multiplier: z.number().positive().max(10).optional(),
+    urgency_medium_multiplier: z.number().positive().max(10).optional(),
+    urgency_high_multiplier: z.number().positive().max(10).optional(),
+    urgency_emergency_multiplier: z.number().positive().max(10).optional(),
+    prefer_claimed: z.boolean().optional(),
+    lead_expiry_hours: z.number().int().min(1).max(168).optional(),
+    auto_reassign_hours: z.number().int().min(1).max(168).optional(),
+  })
+  .strict()
 
 export const dynamic = 'force-dynamic'
 
@@ -49,7 +51,9 @@ export async function GET() {
     // Essayer d'abord le schema app
     const { data, error } = await supabase
       .from('algorithm_config')
-      .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
+      .select(
+        'id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by'
+      )
       .limit(1)
       .single()
 
@@ -90,14 +94,18 @@ export async function PATCH(request: NextRequest) {
     const supabase = createAdminClient()
 
     // Supprimer les champs non-modifiables avant validation
-    const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
+    const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<
+      string,
+      unknown
+    >
 
     // Valider avec Zod
     const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
     if (!parsed.success) {
       return NextResponse.json(
         {
-          success: false, error: { message: 'Données invalides', details: parsed.error.flatten().fieldErrors },
+          success: false,
+          error: { message: 'Données invalides', details: parsed.error.flatten().fieldErrors },
         },
         { status: 400 }
       )
@@ -110,11 +118,7 @@ export async function PATCH(request: NextRequest) {
     updates.updated_at = new Date().toISOString()
 
     // Récupérer l'ID de la config actuelle
-    const { data: current } = await supabase
-      .from('algorithm_config')
-      .select('id')
-      .limit(1)
-      .single()
+    const { data: current } = await supabase.from('algorithm_config').select('id').limit(1).single()
 
     if (!current) {
       // Insert si pas encore de config
@@ -126,7 +130,13 @@ export async function PATCH(request: NextRequest) {
 
       if (error) {
         logger.error('Algorithm config insert error', { message: error.message })
-        return NextResponse.json({ success: false, error: { message: 'Erreur lors de la sauvegarde de la configuration' } }, { status: 500 })
+        return NextResponse.json(
+          {
+            success: false,
+            error: { message: 'Erreur lors de la sauvegarde de la configuration' },
+          },
+          { status: 500 }
+        )
       }
 
       await logAdminAction(
@@ -150,7 +160,10 @@ export async function PATCH(request: NextRequest) {
 
     if (error) {
       logger.error('Algorithm config update error', { message: error.message })
-      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour de la configuration' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la mise à jour de la configuration' } },
+        { status: 500 }
+      )
     }
 
     await logAdminAction(
@@ -164,6 +177,9 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ config: data, action: 'updated' })
   } catch (error) {
     logger.error('Algorithm config PATCH error', error)
-    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
   }
 }

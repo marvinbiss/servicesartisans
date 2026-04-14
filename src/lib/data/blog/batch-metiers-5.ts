@@ -1,11 +1,13 @@
 import type { BlogArticle } from './articles'
 
 export const metiers5Articles: Record<string, BlogArticle> = {
-  "alarme-maison-guide-complet-2026": {
-    title: "Alarme Maison 2026 : Guide Complet pour Protéger Votre Domicile",
-    excerpt: "Systèmes filaires, sans fil, connectés, télésurveillance : comparatif des alarmes maison 2026, prix, normes NF A2P et conseils d'installation par un professionnel.",
-    metaTitle: "Alarme Maison 2026 : Comparatif et Prix",
-    metaDescription: "Comparez alarmes filaires, sans fil et connectées en 2026. Prix, normes NF A2P et conseils d'installation. Obtenez un devis gratuit.",
+  'alarme-maison-guide-complet-2026': {
+    title: 'Alarme Maison 2026 : Guide Complet pour Protéger Votre Domicile',
+    excerpt:
+      "Systèmes filaires, sans fil, connectés, télésurveillance : comparatif des alarmes maison 2026, prix, normes NF A2P et conseils d'installation par un professionnel.",
+    metaTitle: 'Alarme Maison 2026 : Comparatif et Prix',
+    metaDescription:
+      "Comparez alarmes filaires, sans fil et connectées en 2026. Prix, normes NF A2P et conseils d'installation. Obtenez un devis gratuit.",
     content: [
       "En France, un cambriolage a lieu toutes les **90 secondes** selon les chiffres du ministère de l'Intérieur pour 2025. Soit plus de **350 000 effractions** par an, dont 80 % concernent des résidences principales. Face à ce constat, l'installation d'une alarme maison n'est plus un luxe mais une nécessité. Pourtant, le marché regorge d'offres — du kit à 99 € sur Amazon au système professionnel à 5 000 € — et il est difficile de s'y retrouver. Ce guide décrypte les technologies disponibles en 2026, les normes à exiger et les pièges à éviter. Pour une installation dans les règles de l'art, consultez nos [installateurs d'alarmes vérifiés](/services/alarme-securite).",
 
@@ -25,36 +27,62 @@ export const metiers5Articles: Record<string, BlogArticle> = {
 
       "## Assurance habitation et alarme : ce qu'il faut savoir\n\nL'installation d'une alarme certifiée peut vous faire économiser sur votre prime d'assurance habitation. Les réductions varient selon les assureurs :\n\n- Alarme NF A2P sans télésurveillance : **5 à 10 %** de réduction\n- Alarme NF A2P avec télésurveillance APSAD P3 : **10 à 20 %** de réduction\n- Système complet (alarme + vidéo + télésurveillance + serrure A2P) : jusqu'à **25 %** de réduction\n\nAttention : en cas de cambriolage, l'assureur vérifiera que le système était **activé** et en **état de fonctionnement**. Conservez les attestations de maintenance et les rapports de vérification annuelle. Certains contrats imposent l'activation systématique dès que le logement est inoccupé plus de 24 ou 48 heures.\n\nDemandez à votre assureur ses exigences précises avant d'investir, puis comparez les devis d'installateurs certifiés sur [ServicesArtisans](/services/alarme-securite).",
 
-      ":::tip Conseil pro\nFaites réaliser une **étude de vulnérabilité** gratuite par un installateur certifié APSAD avant tout achat. Cette visite technique identifie les failles de sécurité de votre domicile et permet de dimensionner le système au plus juste. Demandez au moins **trois devis** en précisant le nombre de zones à protéger, le type de détecteurs souhaité et le besoin en télésurveillance.\n:::\n\n:::takeaway\n- Exiger la certification **NF A2P Bouclier 2 minimum** pour tout système d'alarme\n- Prévoir un budget de **1 200 à 3 000 €** pour un système sans fil certifié, pose comprise\n- La **levée de doute vidéo** est désormais indispensable pour obtenir l'intervention des forces de l'ordre\n- Vérifier les exigences de votre **assurance habitation** avant d'acheter\n- Faire réaliser une **étude de vulnérabilité** par un professionnel certifié APSAD\n- Planifier une **maintenance annuelle** pour garantir le bon fonctionnement du système\n:::"
+      ":::tip Conseil pro\nFaites réaliser une **étude de vulnérabilité** gratuite par un installateur certifié APSAD avant tout achat. Cette visite technique identifie les failles de sécurité de votre domicile et permet de dimensionner le système au plus juste. Demandez au moins **trois devis** en précisant le nombre de zones à protéger, le type de détecteurs souhaité et le besoin en télésurveillance.\n:::\n\n:::takeaway\n- Exiger la certification **NF A2P Bouclier 2 minimum** pour tout système d'alarme\n- Prévoir un budget de **1 200 à 3 000 €** pour un système sans fil certifié, pose comprise\n- La **levée de doute vidéo** est désormais indispensable pour obtenir l'intervention des forces de l'ordre\n- Vérifier les exigences de votre **assurance habitation** avant d'acheter\n- Faire réaliser une **étude de vulnérabilité** par un professionnel certifié APSAD\n- Planifier une **maintenance annuelle** pour garantir le bon fonctionnement du système\n:::",
     ],
-    image: "/images/blog/alarme-maison-guide.jpg",
+    image: '/images/blog/alarme-maison-guide.jpg',
     author: "L'équipe ServicesArtisans",
-    date: "2026-01-15",
-    readTime: "16 min",
-    category: "Sécurité",
-    tags: ["Alarme", "Sécurité", "Cambriolage", "Télésurveillance", "NF A2P", "Maison"],
+    date: '2026-01-15',
+    readTime: '16 min',
+    category: 'Sécurité',
+    tags: ['Alarme', 'Sécurité', 'Cambriolage', 'Télésurveillance', 'NF A2P', 'Maison'],
     keyTakeaways: [
       "Exiger la certification NF A2P Bouclier 2 minimum pour tout système d'alarme résidentiel",
-      "Budget moyen : 1 200 à 3 000 € pour un système sans fil certifié avec pose professionnelle",
+      'Budget moyen : 1 200 à 3 000 € pour un système sans fil certifié avec pose professionnelle',
       "La levée de doute vidéo est indispensable depuis 2021 pour obtenir l'intervention policière",
       "Une alarme certifiée peut réduire votre prime d'assurance habitation de 10 à 25 %",
-      "Faire réaliser une étude de vulnérabilité APSAD avant tout investissement"
+      'Faire réaliser une étude de vulnérabilité APSAD avant tout investissement',
     ],
     faq: [
-      { question: "Quelle est la meilleure alarme maison en 2026 ?", answer: "Il n'existe pas de meilleure alarme universelle. Le choix dépend de votre logement (maison ou appartement), de votre budget et de votre niveau de risque. Pour une maison individuelle, un système sans fil certifié NF A2P Bouclier 2 avec télésurveillance et levée de doute vidéo offre le meilleur rapport protection/prix. Pour un appartement, un kit connecté de qualité (Ajax, Somfy Protect) peut suffire." },
-      { question: "Combien coûte l'installation d'une alarme maison ?", answer: "Le budget varie de 500 € pour un kit basique auto-installé à 6 000 € pour un système professionnel complet avec vidéosurveillance. Un système sans fil certifié NF A2P avec pose professionnelle coûte en moyenne 1 200 à 2 300 €. Ajoutez 25 à 60 €/mois pour la télésurveillance." },
-      { question: "L'alarme maison est-elle obligatoire ?", answer: "Non, l'installation d'une alarme n'est pas obligatoire pour les particuliers. Cependant, votre contrat d'assurance habitation peut imposer un système de protection certifié comme condition de couverture contre le vol. Vérifiez les clauses de votre contrat." },
-      { question: "Peut-on installer une alarme soi-même ?", answer: "Oui, les kits sans fil connectés se posent facilement. Cependant, pour une protection optimale, une installation professionnelle est recommandée : étude de vulnérabilité, positionnement optimal des détecteurs, certificat de conformité pour l'assurance. L'installateur doit être certifié APSAD I7." },
-      { question: "Quelle est la différence entre alarme et télésurveillance ?", answer: "L'alarme détecte l'intrusion et déclenche une sirène locale. La télésurveillance ajoute un centre de surveillance 24h/24 qui effectue une levée de doute et alerte les forces de l'ordre si nécessaire. Sans télésurveillance, la police ne se déplace plus sur simple déclenchement d'alarme depuis la loi de 2021." },
-      { question: "Les caméras de surveillance sont-elles légales chez soi ?", answer: "Oui, vous pouvez installer des caméras chez vous à condition qu'elles ne filment que votre propriété privée. Filmer la voie publique ou la propriété d'un voisin est interdit (article 226-1 du Code pénal). Si vous employez du personnel à domicile, vous devez les informer de la vidéosurveillance." }
-    ]
+      {
+        question: 'Quelle est la meilleure alarme maison en 2026 ?',
+        answer:
+          "Il n'existe pas de meilleure alarme universelle. Le choix dépend de votre logement (maison ou appartement), de votre budget et de votre niveau de risque. Pour une maison individuelle, un système sans fil certifié NF A2P Bouclier 2 avec télésurveillance et levée de doute vidéo offre le meilleur rapport protection/prix. Pour un appartement, un kit connecté de qualité (Ajax, Somfy Protect) peut suffire.",
+      },
+      {
+        question: "Combien coûte l'installation d'une alarme maison ?",
+        answer:
+          'Le budget varie de 500 € pour un kit basique auto-installé à 6 000 € pour un système professionnel complet avec vidéosurveillance. Un système sans fil certifié NF A2P avec pose professionnelle coûte en moyenne 1 200 à 2 300 €. Ajoutez 25 à 60 €/mois pour la télésurveillance.',
+      },
+      {
+        question: "L'alarme maison est-elle obligatoire ?",
+        answer:
+          "Non, l'installation d'une alarme n'est pas obligatoire pour les particuliers. Cependant, votre contrat d'assurance habitation peut imposer un système de protection certifié comme condition de couverture contre le vol. Vérifiez les clauses de votre contrat.",
+      },
+      {
+        question: 'Peut-on installer une alarme soi-même ?',
+        answer:
+          "Oui, les kits sans fil connectés se posent facilement. Cependant, pour une protection optimale, une installation professionnelle est recommandée : étude de vulnérabilité, positionnement optimal des détecteurs, certificat de conformité pour l'assurance. L'installateur doit être certifié APSAD I7.",
+      },
+      {
+        question: 'Quelle est la différence entre alarme et télésurveillance ?',
+        answer:
+          "L'alarme détecte l'intrusion et déclenche une sirène locale. La télésurveillance ajoute un centre de surveillance 24h/24 qui effectue une levée de doute et alerte les forces de l'ordre si nécessaire. Sans télésurveillance, la police ne se déplace plus sur simple déclenchement d'alarme depuis la loi de 2021.",
+      },
+      {
+        question: 'Les caméras de surveillance sont-elles légales chez soi ?',
+        answer:
+          "Oui, vous pouvez installer des caméras chez vous à condition qu'elles ne filment que votre propriété privée. Filmer la voie publique ou la propriété d'un voisin est interdit (article 226-1 du Code pénal). Si vous employez du personnel à domicile, vous devez les informer de la vidéosurveillance.",
+      },
+    ],
   },
 
-  "protection-cambriolage-securiser-maison-2026": {
-    title: "Protection Cambriolage 2026 : 12 Mesures pour Sécuriser Votre Maison",
-    excerpt: "Serrures, volets, éclairage, habitudes : les 12 mesures anti-cambriolage les plus efficaces en 2026, validées par les statistiques et les experts en sécurité.",
-    metaTitle: "Anti-Cambriolage 2026 : 12 Mesures Efficaces",
-    metaDescription: "Découvrez 12 mesures anti-cambriolage validées par les experts : serrures, volets, éclairage. Protégez votre maison en 2026.",
+  'protection-cambriolage-securiser-maison-2026': {
+    title: 'Protection Cambriolage 2026 : 12 Mesures pour Sécuriser Votre Maison',
+    excerpt:
+      'Serrures, volets, éclairage, habitudes : les 12 mesures anti-cambriolage les plus efficaces en 2026, validées par les statistiques et les experts en sécurité.',
+    metaTitle: 'Anti-Cambriolage 2026 : 12 Mesures Efficaces',
+    metaDescription:
+      'Découvrez 12 mesures anti-cambriolage validées par les experts : serrures, volets, éclairage. Protégez votre maison en 2026.',
     content: [
       "Les chiffres du ministère de l'Intérieur sont sans appel : **233 200 ménages** ont déclaré un cambriolage ou une tentative en 2025, un chiffre en hausse de 4 % par rapport à 2024. Mais derrière ces statistiques nationales se cache une réalité encourageante : **60 % des tentatives de cambriolage échouent** lorsque le logement dispose de protections physiques et électroniques adaptées. Les cambrioleurs sont des opportunistes — ils cherchent la facilité et abandonnent en moyenne après **3 minutes** de tentative infructueuse. Ce guide détaille les 12 mesures les plus efficaces pour transformer votre domicile en forteresse, sans dépenser une fortune. Pour faire appel à un professionnel, consultez nos [serruriers](/services/serrurier) et [installateurs d'alarmes](/services/alarme-securite) vérifiés.",
 
@@ -74,26 +102,46 @@ export const metiers5Articles: Record<string, BlogArticle> = {
 
       "## 11. La porte de garage : le point faible oublié\n\nLa porte de garage est souvent le maillon faible de la sécurité, surtout si elle donne accès à la maison. Recommandations :\n\n- Renforcez le verrouillage avec un verrou supplémentaire certifié.\n- Les portes sectionnelles motorisées avec **autoverrouillage** sont plus sécurisées que les portes basculantes.\n- Si le garage communique avec la maison, traitez la porte intérieure comme une porte d'entrée : serrure A2P et porte renforcée.\n- Installez un détecteur d'ouverture relié à votre système d'alarme.\n\n## 12. Assurance et documentation\n\nEn cas de cambriolage, la qualité de votre documentation détermine la rapidité et le montant de l'indemnisation :\n\n- Conservez les **factures** de tous vos biens de valeur.\n- Réalisez un **inventaire photographique** pièce par pièce, actualisé annuellement.\n- Vérifiez les **plafonds de garantie** de votre contrat (bijoux, œuvres d'art, matériel informatique ont souvent des plafonds spécifiques).\n- Déclarez le vol dans les **2 jours ouvrés** (délai légal) et déposez plainte.\n\n:::warning Attention\nSelon la Fédération Française de l'Assurance, **30 % des victimes de cambriolage** sont sous-indemnisées faute de preuves d'achat suffisantes. Numérisez vos factures et stockez-les sur un cloud sécurisé. Un simple dossier Google Drive ou iCloud avec les photos de vos biens et les scans de factures peut faire la différence entre une indemnisation de 2 000 € et de 15 000 €.\n:::",
 
-      ":::tip Conseil pro\nCombinez les mesures **physiques** (serrure A2P, volets renforcés, éclairage) et **électroniques** (alarme, vidéo, domotique) pour une protection optimale. Les statistiques montrent que la combinaison d'au moins **4 mesures complémentaires** réduit le risque de cambriolage de **90 %**. Commencez par les fondamentaux — porte blindée et serrure A2P — avant d'investir dans l'électronique.\n:::\n\n:::takeaway\n- **80 % des cambrioleurs** entrent par la porte : la serrure A2P est la priorité n°1\n- Combiner **4 mesures minimum** réduit le risque de 90 %\n- Les volets fermés réduisent le risque par **5** : ne partez jamais sans les fermer\n- Budget sécurisation complète maison : **2 000 à 5 000 €** (amortis par la baisse d'assurance)\n- Inscrivez-vous à **Opération Tranquillité Vacances** (gratuit) avant chaque absence prolongée\n- Documentez vos biens avec photos et factures pour garantir l'indemnisation\n:::"
+      ":::tip Conseil pro\nCombinez les mesures **physiques** (serrure A2P, volets renforcés, éclairage) et **électroniques** (alarme, vidéo, domotique) pour une protection optimale. Les statistiques montrent que la combinaison d'au moins **4 mesures complémentaires** réduit le risque de cambriolage de **90 %**. Commencez par les fondamentaux — porte blindée et serrure A2P — avant d'investir dans l'électronique.\n:::\n\n:::takeaway\n- **80 % des cambrioleurs** entrent par la porte : la serrure A2P est la priorité n°1\n- Combiner **4 mesures minimum** réduit le risque de 90 %\n- Les volets fermés réduisent le risque par **5** : ne partez jamais sans les fermer\n- Budget sécurisation complète maison : **2 000 à 5 000 €** (amortis par la baisse d'assurance)\n- Inscrivez-vous à **Opération Tranquillité Vacances** (gratuit) avant chaque absence prolongée\n- Documentez vos biens avec photos et factures pour garantir l'indemnisation\n:::",
     ],
-    image: "/images/blog/protection-cambriolage.jpg",
+    image: '/images/blog/protection-cambriolage.jpg',
     author: "L'équipe ServicesArtisans",
-    date: "2026-01-22",
-    readTime: "18 min",
-    category: "Sécurité",
-    tags: ["Cambriolage", "Sécurité", "Serrure", "Alarme", "Protection", "Maison", "A2P"],
+    date: '2026-01-22',
+    readTime: '18 min',
+    category: 'Sécurité',
+    tags: ['Cambriolage', 'Sécurité', 'Serrure', 'Alarme', 'Protection', 'Maison', 'A2P'],
     keyTakeaways: [
-      "80 % des cambrioleurs entrent par la porte : investir dans une serrure A2P** est la priorité absolue",
-      "Combiner au moins 4 mesures de protection (physiques + électroniques) réduit le risque de cambriolage de 90 %",
+      '80 % des cambrioleurs entrent par la porte : investir dans une serrure A2P** est la priorité absolue',
+      'Combiner au moins 4 mesures de protection (physiques + électroniques) réduit le risque de cambriolage de 90 %',
       "Les volets fermés divisent le risque de cambriolage par 5 selon l'Observatoire National de la Délinquance",
-      "Budget complet pour sécuriser une maison : 2 000 à 5 000 €, amortis par la réduction de prime d'assurance"
+      "Budget complet pour sécuriser une maison : 2 000 à 5 000 €, amortis par la réduction de prime d'assurance",
     ],
     faq: [
-      { question: "Quelles sont les mesures anti-cambriolage les plus efficaces ?", answer: "Selon les statistiques, les trois mesures les plus efficaces sont : une porte blindée avec serrure A2P (bloque 80 % des tentatives par la porte), des volets renforcés fermés (divisent le risque par 5), et un système d'alarme avec télésurveillance (dissuade 95 % des cambrioleurs amateurs). La combinaison des trois offre une protection quasi maximale." },
-      { question: "Combien coûte la sécurisation complète d'une maison ?", answer: "Pour une maison individuelle de 4-5 pièces, comptez 2 000 à 5 000 € pour une protection complète : serrure A2P** (150-300 €), blindage de porte (800-2 000 €), volets renforcés (300-800 € par fenêtre), alarme avec pose (1 200-2 500 €), éclairage extérieur (200-500 €). La télésurveillance ajoute 25 à 60 €/mois." },
-      { question: "Quand les cambriolages ont-ils lieu le plus souvent ?", answer: "Contrairement aux idées reçues, 60 % des cambriolages ont lieu en journée (entre 10h et 17h), lorsque les occupants sont au travail. Les créneaux les plus à risque sont le mardi et le vendredi. Les vacances scolaires et les périodes de fêtes sont les pics d'activité. L'été concentre 30 % des cambriolages annuels." },
-      { question: "L'assurance couvre-t-elle le cambriolage sans alarme ?", answer: "Oui, l'assurance habitation multirisque couvre le vol par effraction même sans alarme. Cependant, certains contrats imposent des mesures de protection minimales (serrure certifiée, volets fermés) comme condition de garantie. Vérifiez les clauses de votre contrat. Une alarme certifiée peut en outre vous faire bénéficier d'une réduction de prime de 10 à 25 %." },
-      { question: "Que faire immédiatement après un cambriolage ?", answer: "1) Ne touchez à rien et quittez les lieux (l'intrus peut encore être présent). 2) Appelez la police/gendarmerie (17). 3) Déposez plainte dans les 24 heures. 4) Déclarez le sinistre à votre assureur dans les 2 jours ouvrés (délai légal). 5) Listez les objets volés ou dégradés avec les factures correspondantes. 6) Faites sécuriser les ouvertures endommagées par un serrurier." }
-    ]
+      {
+        question: 'Quelles sont les mesures anti-cambriolage les plus efficaces ?',
+        answer:
+          "Selon les statistiques, les trois mesures les plus efficaces sont : une porte blindée avec serrure A2P (bloque 80 % des tentatives par la porte), des volets renforcés fermés (divisent le risque par 5), et un système d'alarme avec télésurveillance (dissuade 95 % des cambrioleurs amateurs). La combinaison des trois offre une protection quasi maximale.",
+      },
+      {
+        question: "Combien coûte la sécurisation complète d'une maison ?",
+        answer:
+          'Pour une maison individuelle de 4-5 pièces, comptez 2 000 à 5 000 € pour une protection complète : serrure A2P** (150-300 €), blindage de porte (800-2 000 €), volets renforcés (300-800 € par fenêtre), alarme avec pose (1 200-2 500 €), éclairage extérieur (200-500 €). La télésurveillance ajoute 25 à 60 €/mois.',
+      },
+      {
+        question: 'Quand les cambriolages ont-ils lieu le plus souvent ?',
+        answer:
+          "Contrairement aux idées reçues, 60 % des cambriolages ont lieu en journée (entre 10h et 17h), lorsque les occupants sont au travail. Les créneaux les plus à risque sont le mardi et le vendredi. Les vacances scolaires et les périodes de fêtes sont les pics d'activité. L'été concentre 30 % des cambriolages annuels.",
+      },
+      {
+        question: "L'assurance couvre-t-elle le cambriolage sans alarme ?",
+        answer:
+          "Oui, l'assurance habitation multirisque couvre le vol par effraction même sans alarme. Cependant, certains contrats imposent des mesures de protection minimales (serrure certifiée, volets fermés) comme condition de garantie. Vérifiez les clauses de votre contrat. Une alarme certifiée peut en outre vous faire bénéficier d'une réduction de prime de 10 à 25 %.",
+      },
+      {
+        question: 'Que faire immédiatement après un cambriolage ?',
+        answer:
+          "1) Ne touchez à rien et quittez les lieux (l'intrus peut encore être présent). 2) Appelez la police/gendarmerie (17). 3) Déposez plainte dans les 24 heures. 4) Déclarez le sinistre à votre assureur dans les 2 jours ouvrés (délai légal). 5) Listez les objets volés ou dégradés avec les factures correspondantes. 6) Faites sécuriser les ouvertures endommagées par un serrurier.",
+      },
+    ],
   },
 }

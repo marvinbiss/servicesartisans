@@ -72,7 +72,10 @@ export async function GET(request: NextRequest) {
 
     if (statusFilter) {
       if (!isValidStatus(statusFilter)) {
-        return badRequestResponse('INVALID_STATUS', `status doit être l'un de: ${VALID_STATUSES.join(', ')}`)
+        return badRequestResponse(
+          'INVALID_STATUS',
+          `status doit être l'un de: ${VALID_STATUSES.join(', ')}`
+        )
       }
       query = query.eq('status', statusFilter)
     }

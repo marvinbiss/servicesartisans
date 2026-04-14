@@ -75,9 +75,9 @@ export interface CommuneData {
 
   // Géorisques
   risque_inondation?: boolean
-  risque_argile?: string | null  // 'fort' | 'moyen' | 'faible'
-  zone_sismique?: number | null  // 1-5
-  risque_radon?: number | null   // 1-3
+  risque_argile?: string | null // 'fort' | 'moyen' | 'faible'
+  zone_sismique?: number | null // 1-5
+  risque_radon?: number | null // 1-3
   nb_catnat?: number
   risques_principaux?: string[]
 
@@ -89,22 +89,48 @@ export interface CommuneData {
 // ---------------------------------------------------------------------------
 
 const COMMUNE_COLUMNS = [
-  'code_insee', 'name', 'slug', 'code_postal',
-  'departement_code', 'departement_name', 'region_name',
-  'latitude', 'longitude', 'altitude_moyenne', 'superficie_km2',
-  'population', 'densite_population',
-  'revenu_median', 'prix_m2_moyen', 'nb_logements', 'part_maisons_pct',
-  'climat_zone', 'nb_entreprises_artisanales', 'gentile', 'description',
+  'code_insee',
+  'name',
+  'slug',
+  'code_postal',
+  'departement_code',
+  'departement_name',
+  'region_name',
+  'latitude',
+  'longitude',
+  'altitude_moyenne',
+  'superficie_km2',
+  'population',
+  'densite_population',
+  'revenu_median',
+  'prix_m2_moyen',
+  'nb_logements',
+  'part_maisons_pct',
+  'climat_zone',
+  'nb_entreprises_artisanales',
+  'gentile',
+  'description',
   'provider_count',
-  'nb_artisans_btp', 'nb_artisans_rge',
-  'pct_passoires_dpe', 'nb_dpe_total',
-  'jours_gel_annuels', 'precipitation_annuelle',
-  'mois_travaux_ext_debut', 'mois_travaux_ext_fin',
-  'temperature_moyenne_hiver', 'temperature_moyenne_ete',
-  'nb_transactions_annuelles', 'prix_m2_maison', 'prix_m2_appartement',
+  'nb_artisans_btp',
+  'nb_artisans_rge',
+  'pct_passoires_dpe',
+  'nb_dpe_total',
+  'jours_gel_annuels',
+  'precipitation_annuelle',
+  'mois_travaux_ext_debut',
+  'mois_travaux_ext_fin',
+  'temperature_moyenne_hiver',
+  'temperature_moyenne_ete',
+  'nb_transactions_annuelles',
+  'prix_m2_maison',
+  'prix_m2_appartement',
   'nb_maprimerenov_annuel',
-  'risque_inondation', 'risque_argile', 'zone_sismique', 'risque_radon',
-  'nb_catnat', 'risques_principaux',
+  'risque_inondation',
+  'risque_argile',
+  'zone_sismique',
+  'risque_radon',
+  'nb_catnat',
+  'risques_principaux',
   'enriched_at',
 ].join(',')
 
@@ -155,7 +181,7 @@ export function getCommuneScoreFromData(commune: CommuneData): number {
   const providerCount = commune.provider_count || 0
   const artisanCount = commune.nb_entreprises_artisanales || 0
   const pop = commune.population || 0
-  return (providerCount * 3) + (artisanCount * 2) + (pop / 1000)
+  return providerCount * 3 + artisanCount * 2 + pop / 1000
 }
 
 /**
@@ -217,8 +243,19 @@ export function formatEuro(n: number): string {
 }
 
 const MONTH_NAMES = [
-  '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+  '',
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre',
 ]
 
 export function monthName(m: number): string {
@@ -233,7 +270,7 @@ export function monthName(m: number): string {
 
 export async function getNearbyVilleSlugs(
   originSlug: string,
-  limit: number = 8,
+  limit: number = 8
 ): Promise<{ slug: string; distanceKm: number }[] | null> {
   if (IS_BUILD) return null
 
@@ -274,10 +311,10 @@ async function queryNearby(
   originSlug: string,
   radiusKm: number,
   minPop: number,
-  limit: number,
+  limit: number
 ): Promise<{ slug: string; distanceKm: number }[] | null> {
   const latDelta = radiusKm / 111
-  const lngDelta = radiusKm / (111 * Math.cos(origin.latitude! * Math.PI / 180))
+  const lngDelta = radiusKm / (111 * Math.cos((origin.latitude! * Math.PI) / 180))
 
   let query = supabase
     .from('communes')
@@ -301,16 +338,18 @@ async function queryNearby(
 
   const R = 6371
   return (data as { slug: string; latitude: number; longitude: number; population: number }[])
-    .map(c => {
-      const dLat = (c.latitude - origin.latitude!) * Math.PI / 180
-      const dLng = (c.longitude - origin.longitude!) * Math.PI / 180
-      const a = Math.sin(dLat / 2) ** 2 +
-        Math.cos(origin.latitude! * Math.PI / 180) * Math.cos(c.latitude * Math.PI / 180) *
-        Math.sin(dLng / 2) ** 2
+    .map((c) => {
+      const dLat = ((c.latitude - origin.latitude!) * Math.PI) / 180
+      const dLng = ((c.longitude - origin.longitude!) * Math.PI) / 180
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos((origin.latitude! * Math.PI) / 180) *
+          Math.cos((c.latitude * Math.PI) / 180) *
+          Math.sin(dLng / 2) ** 2
       const distanceKm = R * 2 * Math.asin(Math.sqrt(a))
       return { slug: c.slug, distanceKm }
     })
-    .filter(c => c.distanceKm <= radiusKm)
+    .filter((c) => c.distanceKm <= radiusKm)
     .sort((a, b) => a.distanceKm - b.distanceKm)
     .slice(0, limit)
 }

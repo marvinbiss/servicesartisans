@@ -28,6 +28,7 @@
 ## Routes nouvelles (additives uniquement)
 
 ### API (nouvelles)
+
 - `POST /api/cee/partners/invite-batch`
 - `GET  /api/cee/partners/me`
 - `POST /api/cee/partners/onboarding/iban`
@@ -37,6 +38,7 @@
 - `POST /api/cee/partners/activate`
 
 ### UI (nouvelles)
+
 - `/espace-artisan/cee/onboarding` (wizard)
 - Sous-pages wizard (client components dans le même dossier)
 
@@ -70,12 +72,12 @@ STOP. Remonter le conflit. Ne jamais overwriter un fichier existant avec un nouv
 
 ## Zone additive tolérée (ADD-ONLY)
 
-| Fichier | Action autorisée |
-|---|---|
-| `src/types/admin.ts` | Ajouter clé `cee_partners` dans `AdminPermissions` |
-| `.env.example` | Ajouter 3 vars (`CEE_IBAN_KEY`, `YOUSIGN_API_KEY`, `YOUSIGN_WEBHOOK_SECRET`) |
-| `src/lib/cee/emails.ts` | Ajouter 3 nouveaux exports (`sendCeePartnerInvite`, etc.) |
-| `package.json` | Aucun changement requis (pas de SDK Yousign — HTTP direct via fetch) |
+| Fichier                 | Action autorisée                                                             |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `src/types/admin.ts`    | Ajouter clé `cee_partners` dans `AdminPermissions`                           |
+| `.env.example`          | Ajouter 3 vars (`CEE_IBAN_KEY`, `YOUSIGN_API_KEY`, `YOUSIGN_WEBHOOK_SECRET`) |
+| `src/lib/cee/emails.ts` | Ajouter 3 nouveaux exports (`sendCeePartnerInvite`, etc.)                    |
+| `package.json`          | Aucun changement requis (pas de SDK Yousign — HTTP direct via fetch)         |
 
 ## Baseline à capturer avant merge
 

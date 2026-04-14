@@ -67,9 +67,7 @@ function createChainableBuilder(): Record<string, unknown> {
   }
 
   // Make builder thenable so that `await query` resolves with the result
-  builder.then = (
-    resolve: (v: unknown) => unknown,
-  ) => {
+  builder.then = (resolve: (v: unknown) => unknown) => {
     return resolve({
       data: queryResult.data ?? null,
       error: queryResult.error ?? null,
@@ -90,7 +88,7 @@ vi.mock('@/lib/supabase/admin', () => ({
       throw new Error('Simulated crash')
     }
     return {
-      from: (...args: unknown[]) => mockFromFn(...args as []),
+      from: (...args: unknown[]) => mockFromFn(...(args as [])),
     }
   },
 }))
@@ -98,7 +96,12 @@ vi.mock('@/lib/supabase/admin', () => ({
 // --- Admin auth mock ---
 let mockAuthResult: {
   success: boolean
-  admin?: { id: string; email: string; role: string; permissions: Record<string, Record<string, boolean>> }
+  admin?: {
+    id: string
+    email: string
+    role: string
+    permissions: Record<string, Record<string, boolean>>
+  }
   error?: unknown
 }
 
@@ -106,8 +109,8 @@ const mockRequirePermission = vi.fn(() => Promise.resolve(mockAuthResult))
 const mockLogAdminAction = vi.fn(() => Promise.resolve())
 
 vi.mock('@/lib/admin-auth', () => ({
-  requirePermission: (...args: unknown[]) => mockRequirePermission(...args as []),
-  logAdminAction: (...args: unknown[]) => mockLogAdminAction(...args as []),
+  requirePermission: (...args: unknown[]) => mockRequirePermission(...(args as [])),
+  logAdminAction: (...args: unknown[]) => mockLogAdminAction(...(args as [])),
 }))
 
 // --- Sanitize mock ---
@@ -135,10 +138,7 @@ function makeAdminAuth() {
 function makeUnauthResult() {
   return {
     success: false,
-    error: mockJsonFn(
-      { success: false, error: { message: 'Non autorise' } },
-      { status: 401 },
-    ),
+    error: mockJsonFn({ success: false, error: { message: 'Non autorise' } }, { status: 401 }),
   }
 }
 
@@ -205,7 +205,13 @@ describe('GET /api/admin/reports', () => {
   it('returns reports on success', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
     const result = (await GET(makeGetRequest() as never)) as unknown as {
-      body: { success: boolean; reports: unknown[]; total: number; page: number; totalPages: number }
+      body: {
+        success: boolean
+        reports: unknown[]
+        total: number
+        page: number
+        totalPages: number
+      }
     }
 
     expect(result.body.success).toBe(true)
@@ -219,11 +225,9 @@ describe('GET /api/admin/reports', () => {
     const { GET } = await import('@/app/api/admin/reports/route')
     await GET(makeGetRequest({ status: 'pending' }) as never)
 
-    const eqCalls = builderCalls.filter(c => c.method === 'eq')
+    const eqCalls = builderCalls.filter((c) => c.method === 'eq')
     expect(eqCalls).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ args: ['status', 'pending'] }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ args: ['status', 'pending'] })])
     )
   })
 
@@ -232,11 +236,9 @@ describe('GET /api/admin/reports', () => {
     await GET(makeGetRequest({ targetType: 'review' }) as never)
 
     // target_type column EXISTS in user_reports (migration 004, VARCHAR(50) NOT NULL)
-    const eqCalls = builderCalls.filter(c => c.method === 'eq')
+    const eqCalls = builderCalls.filter((c) => c.method === 'eq')
     expect(eqCalls).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ args: ['target_type', 'review'] }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ args: ['target_type', 'review'] })])
     )
   })
 
@@ -249,7 +251,7 @@ describe('GET /api/admin/reports', () => {
     }
 
     // offset = (2-1)*5 = 5, range(5, 9)
-    const rangeCalls = builderCalls.filter(c => c.method === 'range')
+    const rangeCalls = builderCalls.filter((c) => c.method === 'range')
     expect(rangeCalls.length).toBeGreaterThanOrEqual(1)
     expect(rangeCalls[0].args).toEqual([5, 9])
 
@@ -269,7 +271,11 @@ describe('GET /api/admin/reports', () => {
   })
 
   it('returns empty list on DB error (graceful fallback)', async () => {
-    queryResult = { data: null, error: { code: 'PGRST301', message: 'permission denied' }, count: null }
+    queryResult = {
+      data: null,
+      error: { code: 'PGRST301', message: 'permission denied' },
+      count: null,
+    }
 
     const { GET } = await import('@/app/api/admin/reports/route')
     const result = (await GET(makeGetRequest() as never)) as unknown as {
@@ -304,14 +310,14 @@ describe('GET /api/admin/reports', () => {
     }
 
     // Default page = 1, limit = 20 => range(0, 19)
-    const rangeCalls = builderCalls.filter(c => c.method === 'range')
+    const rangeCalls = builderCalls.filter((c) => c.method === 'range')
     expect(rangeCalls.length).toBeGreaterThanOrEqual(1)
     expect(rangeCalls[0].args).toEqual([0, 19])
 
     expect(result.body.page).toBe(1)
 
     // status='all' and targetType='all' should NOT produce any .eq calls
-    const eqCalls = builderCalls.filter(c => c.method === 'eq')
+    const eqCalls = builderCalls.filter((c) => c.method === 'eq')
     expect(eqCalls).toHaveLength(0)
   })
 
@@ -379,7 +385,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     expect(result.body.message).toBe('Signalement résolu')
 
     // Verify the update call set status = 'reviewed' (correct DB value)
-    const updateCalls = builderCalls.filter(c => c.method === 'update')
+    const updateCalls = builderCalls.filter((c) => c.method === 'update')
     expect(updateCalls.length).toBe(1)
     const updateArg = updateCalls[0].args[0] as Record<string, unknown>
     expect(updateArg.status).toBe('reviewed')
@@ -403,7 +409,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     expect(result.body.message).toBe('Signalement rejeté')
 
     // Verify the update set status = 'dismissed'
-    const updateCalls = builderCalls.filter(c => c.method === 'update')
+    const updateCalls = builderCalls.filter((c) => c.method === 'update')
     expect(updateCalls[0].args[0] as Record<string, unknown>).toMatchObject({ status: 'dismissed' })
   })
 
@@ -469,7 +475,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     const req = makePostRequest({ action: 'dismiss', resolution: 'Not a valid report' })
     await POST(req as never, { params: { id: REPORT_ID } })
 
-    const updateCalls = builderCalls.filter(c => c.method === 'update')
+    const updateCalls = builderCalls.filter((c) => c.method === 'update')
     expect(updateCalls.length).toBe(1)
     const updateArg = updateCalls[0].args[0] as Record<string, unknown>
     expect(updateArg.resolution).toBe('Not a valid report')
@@ -480,7 +486,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     const req = makePostRequest({ action: 'resolve' })
     await POST(req as never, { params: { id: REPORT_ID } })
 
-    const updateCalls = builderCalls.filter(c => c.method === 'update')
+    const updateCalls = builderCalls.filter((c) => c.method === 'update')
     const updateArg = updateCalls[0].args[0] as Record<string, unknown>
     expect(updateArg.reviewed_by).toBe(ADMIN_ID)
     // Also check reviewed_at is an ISO string

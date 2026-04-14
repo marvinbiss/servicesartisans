@@ -37,16 +37,20 @@ export default function RecentProviders({
     }
     let cancelled = false
     fetch(`/api/providers/listing?service=${serviceSlug}&limit=12`)
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
         if (cancelled) return
         if (data?.providers?.length) {
           setProviders(data.providers)
         }
         setIsHydrating(false)
       })
-      .catch(() => { if (!cancelled) setIsHydrating(false) })
-    return () => { cancelled = true }
+      .catch(() => {
+        if (!cancelled) setIsHydrating(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [initialProviders.length, serviceSlug])
 
   if (!isHydrating && providers.length === 0) return null

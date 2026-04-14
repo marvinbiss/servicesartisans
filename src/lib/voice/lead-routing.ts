@@ -59,7 +59,9 @@ export async function createVoiceLead(
   const urgency = (qualData.urgency as string) ?? 'normal'
 
   // Map vertical to French service name
-  const serviceName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'Rénovation énergétique'
+  const serviceName = projectType
+    ? (VERTICAL_SERVICE_MAP[projectType] ?? projectType)
+    : 'Rénovation énergétique'
 
   // ------------------------------------------------------------------
   // 1. Create the devis_request (lead)
@@ -79,7 +81,8 @@ export async function createVoiceLead(
       urgency: validUrgency,
       status: 'pending',
       client_name: callerName,
-      client_email: (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@servicesartisans.fr`,
+      client_email:
+        (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@servicesartisans.fr`,
       client_phone: voiceCall.caller_phone,
     })
     .select('id')
@@ -158,14 +161,12 @@ export async function createVoiceLead(
   // ------------------------------------------------------------------
   // 5. Create lead_assignment
   // ------------------------------------------------------------------
-  const { error: assignError } = await admin
-    .from('lead_assignments')
-    .insert({
-      lead_id: lead.id,
-      provider_id: artisan.id,
-      status: 'pending',
-      source_table: 'devis_requests',
-    })
+  const { error: assignError } = await admin.from('lead_assignments').insert({
+    lead_id: lead.id,
+    provider_id: artisan.id,
+    status: 'pending',
+    source_table: 'devis_requests',
+  })
 
   if (assignError) {
     log.error('Failed to create lead_assignment', assignError)
@@ -203,7 +204,10 @@ export async function createVoiceLead(
     const smsResult = await sendSMS(artisan.phone, smsMessage)
 
     if (smsResult.success) {
-      log.info('Artisan notified via SMS', { artisanId: artisan.id, messageId: smsResult.messageId })
+      log.info('Artisan notified via SMS', {
+        artisanId: artisan.id,
+        messageId: smsResult.messageId,
+      })
     } else {
       log.warn('SMS notification failed', { artisanId: artisan.id, error: smsResult.error })
     }

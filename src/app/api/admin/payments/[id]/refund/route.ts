@@ -13,10 +13,7 @@ const refundSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Traiter un remboursement
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // Verify admin with payments:refund permission
     const authResult = await requirePermission('payments', 'refund')
@@ -36,7 +33,10 @@ export async function POST(
     const result = refundSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
+        {
+          success: false,
+          error: { message: 'Erreur de validation', details: result.error.flatten() },
+        },
         { status: 400 }
       )
     }
@@ -54,19 +54,20 @@ export async function POST(
     } catch (stripeError) {
       logger.error('Stripe refund failed', stripeError)
       return NextResponse.json(
-        { success: false, error: { message: 'Stripe non configuré ou erreur lors du remboursement' } },
+        {
+          success: false,
+          error: { message: 'Stripe non configuré ou erreur lors du remboursement' },
+        },
         { status: 503 }
       )
     }
 
     // Enregistrer dans les logs d'audit
-    await logAdminAction(
-      authResult.admin.id,
-      'payment.refund',
-      'payment',
-      paymentIntentId,
-      { refund_id: refund.id, amount: refund.amount, reason }
-    )
+    await logAdminAction(authResult.admin.id, 'payment.refund', 'payment', paymentIntentId, {
+      refund_id: refund.id,
+      amount: refund.amount,
+      reason,
+    })
 
     return NextResponse.json({
       success: true,

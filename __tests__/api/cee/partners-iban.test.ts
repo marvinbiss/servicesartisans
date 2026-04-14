@@ -94,7 +94,9 @@ beforeEach(async () => {
     data: { id: 'partner-1', status: 'invited' },
     error: null,
   })
-  ;(rpcMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({ error: null })
+  ;(rpcMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({
+    error: null,
+  })
   const rl = await import('@/lib/cee/rate-limit')
   rl._resetRateLimitStoreForTests()
 })
@@ -166,7 +168,9 @@ describe('POST /api/cee/partners/onboarding/iban', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    ;(mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({
+    ;(
+      mockSupabase.auth.getUser as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({
       data: { user: null },
       error: null,
     })
@@ -188,7 +192,9 @@ describe('POST /api/cee/partners/onboarding/iban', () => {
   })
 
   it('returns 404 when user has no partner record', async () => {
-    ;(maybeSingleMock as unknown as { mockResolvedValueOnce: (v: unknown) => void }).mockResolvedValueOnce({ data: null, error: null })
+    ;(
+      maybeSingleMock as unknown as { mockResolvedValueOnce: (v: unknown) => void }
+    ).mockResolvedValueOnce({ data: null, error: null })
     const { POST } = await import('@/app/api/cee/partners/onboarding/iban/route')
     const res = (await POST(makeRequest(VALID_BODY) as never)) as unknown as MockResult
 

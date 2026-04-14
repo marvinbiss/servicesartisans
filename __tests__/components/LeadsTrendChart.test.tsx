@@ -10,7 +10,9 @@ import React from 'react'
 
 vi.mock('recharts', () => ({
   BarChart: ({ children, data }: { children: React.ReactNode; data: unknown[] }) => (
-    <div data-testid="bar-chart" data-count={data?.length ?? 0}>{children}</div>
+    <div data-testid="bar-chart" data-count={data?.length ?? 0}>
+      {children}
+    </div>
   ),
   Bar: ({ dataKey, children }: { dataKey: string; children?: React.ReactNode }) => (
     <div data-testid={`bar-${dataKey}`}>{children}</div>

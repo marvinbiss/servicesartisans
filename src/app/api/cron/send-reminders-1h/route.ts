@@ -6,7 +6,10 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { getNotificationService, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
+import {
+  getNotificationService,
+  type NotificationPayload,
+} from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
 
 // GET /api/cron/send-reminders-1h - Send 1h reminder SMS
@@ -25,10 +28,7 @@ export async function GET(request: Request) {
 
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       logger.warn('[Cron 1h] Unauthorized access attempt')
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
     // Calculate time window: appointments between now+55min and now+65min
@@ -39,19 +39,23 @@ export async function GET(request: Request) {
     const windowStartTime = windowStart.toTimeString().slice(0, 5) // HH:MM
     const windowEndTime = windowEnd.toTimeString().slice(0, 5)
 
-    logger.info(`[Cron 1h] Looking for appointments between ${windowStartTime} and ${windowEndTime}`)
+    logger.info(
+      `[Cron 1h] Looking for appointments between ${windowStartTime} and ${windowEndTime}`
+    )
 
     // Fetch bookings in the time window using scheduled_date (availability_slots has no FK on bookings)
     const { data: bookings, error } = await supabase
       .from('bookings')
-      .select(`
+      .select(
+        `
         id,
         service_name,
         status,
         scheduled_date,
         provider_id,
         client:profiles!client_id(full_name, email, phone_e164)
-      `)
+      `
+      )
       .eq('status', 'confirmed')
       .gte('scheduled_date', windowStart.toISOString())
       .lte('scheduled_date', windowEnd.toISOString())
@@ -79,7 +83,10 @@ export async function GET(request: Request) {
     const { data: sentReminders } = await supabase
       .from('notification_logs')
       .select('booking_id')
-      .in('booking_id', upcomingBookings.map((b) => b.id))
+      .in(
+        'booking_id',
+        upcomingBookings.map((b) => b.id)
+      )
       .eq('type', 'reminder_1h_sms')
       .eq('status', 'sent')
 
@@ -103,7 +110,9 @@ export async function GET(request: Request) {
     }
 
     // Fetch artisan details
-    const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean)))
+    const artisanIds = Array.from(
+      new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean))
+    )
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
@@ -123,11 +132,13 @@ export async function GET(request: Request) {
         clientPhone: client?.phone_e164 || '',
         artisanName: artisan?.full_name || 'Artisan',
         serviceName: booking.service_name || 'Service',
-        date: booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-        }) : '',
+        date: booking.scheduled_date
+          ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+            })
+          : '',
         startTime: '',
         endTime: '',
       }
@@ -135,11 +146,10 @@ export async function GET(request: Request) {
 
     // Send reminders using unified service (SMS only for 1h reminder)
     const notificationService = getNotificationService()
-    const result = await notificationService.sendBatch(
-      'reminder_1h',
-      payloads,
-      { email: false, sms: true }
-    )
+    const result = await notificationService.sendBatch('reminder_1h', payloads, {
+      email: false,
+      sms: true,
+    })
 
     logger.info(`[Cron 1h] Completed: ${result.succeeded} sent, ${result.failed} failed`)
 
@@ -152,9 +162,6 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     logger.error('[Cron 1h] Error in send-reminders-1h:', error)
-    return NextResponse.json(
-      { error: 'Échec de l\'envoi des rappels 1h' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Échec de l'envoi des rappels 1h" }, { status: 500 })
   }
 }

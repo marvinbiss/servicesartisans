@@ -85,11 +85,28 @@ vi.mock('@/lib/cee/dossier-creation', () => ({
     safeParse: (data: unknown) => {
       // Minimal validation: check required fields exist
       const d = data as Record<string, unknown>
-      const required = ['partner_id', 'provider_id', 'operation_code', 'client_code_postal',
-        'client_email_hash', 'montant_ht_cts', 'montant_ttc_cts', 'date_devis',
-        'forfait_id', 'forfait_version', 'prime_cee_cts', 'commission_rate',
-        'client_nom_b64', 'client_prenom_b64', 'client_email_b64', 'client_adresse_b64',
-        'client_commune_insee', 'foyer_personnes', 'revenus_categorie', 'type_travaux']
+      const required = [
+        'partner_id',
+        'provider_id',
+        'operation_code',
+        'client_code_postal',
+        'client_email_hash',
+        'montant_ht_cts',
+        'montant_ttc_cts',
+        'date_devis',
+        'forfait_id',
+        'forfait_version',
+        'prime_cee_cts',
+        'commission_rate',
+        'client_nom_b64',
+        'client_prenom_b64',
+        'client_email_b64',
+        'client_adresse_b64',
+        'client_commune_insee',
+        'foyer_personnes',
+        'revenus_categorie',
+        'type_travaux',
+      ]
       const missing = required.filter((k) => d[k] === undefined)
       if (missing.length > 0) {
         return {
@@ -100,7 +117,8 @@ vi.mock('@/lib/cee/dossier-creation', () => ({
       return { success: true, data: d }
     },
   },
-  createDossier: (...args: unknown[]) => (createDossierMock as (...a: unknown[]) => unknown)(...args),
+  createDossier: (...args: unknown[]) =>
+    (createDossierMock as (...a: unknown[]) => unknown)(...args),
   hashEmailForDossier: (email: string) => `hash:${email}`,
   generateDossierReference: () => 'SAE-202604-001234',
 }))

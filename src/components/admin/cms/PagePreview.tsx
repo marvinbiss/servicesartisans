@@ -17,7 +17,17 @@ interface PagePreviewProps {
   readTime?: string | null
 }
 
-export function PagePreview({ isOpen, onClose, title, contentHtml, structuredData, author, excerpt, featuredImage, readTime }: PagePreviewProps) {
+export function PagePreview({
+  isOpen,
+  onClose,
+  title,
+  contentHtml,
+  structuredData,
+  author,
+  excerpt,
+  featuredImage,
+  readTime,
+}: PagePreviewProps) {
   // Escape key handler
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -33,13 +43,15 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
   const hasStructuredData = structuredData && Object.keys(structuredData).length > 0
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Aperçu de la page" className="fixed inset-0 z-50 overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Aperçu de la page"
+      className="fixed inset-0 z-50 overflow-y-auto"
+    >
       <div className="flex min-h-screen items-start justify-center p-4">
         {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black/50 transition-opacity"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
 
         {/* Modal */}
         <div className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full my-8">
