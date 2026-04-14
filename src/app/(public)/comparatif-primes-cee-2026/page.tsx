@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 
 import CeeCTA from '@/components/cee/CeeCTA'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
@@ -467,6 +468,11 @@ export default function ComparatifPrimesCee2026Page() {
           pour une estimation personnalisée.
         </p>
       </section>
+
+      {/* Simulateur CTA — post-tableau, avant le hero devis */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-2 pb-6">
+        <SimulateurCTA variant="banner" />
+      </div>
 
       {/* CTA hero */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
