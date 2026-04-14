@@ -59,7 +59,7 @@ export type BookingEvent =
   | 'time_on_page'
   | 'page_not_found'
   | 'faq_click'
-  | 'page_not_found'
+  | 'simulateur_cta_click'
   | 'search_query'
   | 'filter_used'
   | 'claim_started'
