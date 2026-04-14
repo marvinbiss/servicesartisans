@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Tests — src/lib/simulateur/callback-pipedrive.ts
  *
@@ -42,14 +43,19 @@ function clearEnv() {
 
 // ── Fetch mock helpers ───────────────────────────────────────────────
 
-type FetchHandler = (url: string, init?: RequestInit) => {
+type FetchHandler = (
+  url: string,
+  init?: RequestInit
+) => {
   ok: boolean
   status?: number
   statusText?: string
   body: unknown
 }
 
-function installFetchMock(handler: FetchHandler): { calls: Array<{ url: string; init?: RequestInit }> } {
+function installFetchMock(handler: FetchHandler): {
+  calls: Array<{ url: string; init?: RequestInit }>
+} {
   const calls: Array<{ url: string; init?: RequestInit }> = []
   const mock = vi.fn(async (url: string, init?: RequestInit) => {
     calls.push({ url, init })
@@ -180,7 +186,7 @@ describe('buildNote HTML escaping (via note POST body)', () => {
     expect(body.content).toContain('&quot;Lundi matin&quot;')
   })
 
-  it("escapes single quotes in remarquesClient", async () => {
+  it('escapes single quotes in remarquesClient', async () => {
     const { calls } = installFetchMock(happyHandler)
     await createCallbackRequest(makePayload({ remarquesClient: "L'après-midi c'est bien" }))
 
@@ -226,7 +232,12 @@ describe('pdFetch HTTP error handling', () => {
   it('non-ok HTTP response → throws with status', async () => {
     installFetchMock((url) => {
       if (url.includes('/persons/search')) {
-        return { ok: false, status: 429, statusText: 'Too Many Requests', body: { success: false, error: 'rate limited' } }
+        return {
+          ok: false,
+          status: 429,
+          statusText: 'Too Many Requests',
+          body: { success: false, error: 'rate limited' },
+        }
       }
       return { ok: true, body: { success: true, data: null } }
     })
@@ -340,7 +351,10 @@ describe('createCallbackRequest — person creation when not found', () => {
         return { ok: true, body: { success: true, data: { id: 555 } } }
       }
       if (url.includes('/deals/search')) {
-        return { ok: true, body: { success: true, data: { items: [{ item: { id: 666, pipeline_id: 42 } }] } } }
+        return {
+          ok: true,
+          body: { success: true, data: { items: [{ item: { id: 666, pipeline_id: 42 } }] } },
+        }
       }
       if (url.includes('/notes') || url.includes('/activities')) {
         return { ok: true, body: { success: true, data: { id: 1 } } }
@@ -425,7 +439,10 @@ describe('createCallbackRequest — note failure is hard error', () => {
         return { ok: true, body: { success: true, data: { items: [{ item: { id: 101 } }] } } }
       }
       if (url.includes('/deals/search')) {
-        return { ok: true, body: { success: true, data: { items: [{ item: { id: 202, pipeline_id: 42 } }] } } }
+        return {
+          ok: true,
+          body: { success: true, data: { items: [{ item: { id: 202, pipeline_id: 42 } }] } },
+        }
       }
       if (url.includes('/notes')) {
         return { ok: false, status: 500, body: { success: false, error: 'note failed' } }
@@ -447,7 +464,10 @@ describe('createCallbackRequest — activity failure is soft warning', () => {
         return { ok: true, body: { success: true, data: { items: [{ item: { id: 101 } }] } } }
       }
       if (url.includes('/deals/search')) {
-        return { ok: true, body: { success: true, data: { items: [{ item: { id: 202, pipeline_id: 42 } }] } } }
+        return {
+          ok: true,
+          body: { success: true, data: { items: [{ item: { id: 202, pipeline_id: 42 } }] } },
+        }
       }
       if (url.includes('/notes')) {
         return { ok: true, body: { success: true, data: { id: 303 } } }

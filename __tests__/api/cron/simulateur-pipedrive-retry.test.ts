@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars */
 /**
  * Tests — /api/cron/simulateur-pipedrive-retry/route.ts
  *
@@ -167,11 +168,15 @@ function setupSupabase(opts: FromSetup) {
       const dc = makeQueryChain({ data: null, error: null })
       deleteChains.push(dc)
       // After delete(), eq() should resolve (it's the terminal)
-      dc.delete = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
+      dc.delete = vi
+        .fn()
+        .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
       // UPDATE chain
       const uc = makeQueryChain({ data: null, error: null })
       failureUpdateChains.push(uc)
-      uc.update = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
+      uc.update = vi
+        .fn()
+        .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
       // Return delete chain by default; caller will choose which to use
       return dc
     }
@@ -183,7 +188,9 @@ function setupSupabase(opts: FromSetup) {
       // estimation UPDATE (pipedrive_deal_id)
       const euc = makeQueryChain({ data: null, error: null })
       estimationUpdateChains.push(euc)
-      euc.update = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
+      euc.update = vi
+        .fn()
+        .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
       return euc
     }
     return makeQueryChain({ data: null, error: null })
@@ -228,7 +235,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — authentication', () => {
 
   it('missing authorization header → 401', async () => {
     setupSupabase({ pending: [] })
-    const req = new Request('http://localhost/api/cron/simulateur-pipedrive-retry', { method: 'GET' })
+    const req = new Request('http://localhost/api/cron/simulateur-pipedrive-retry', {
+      method: 'GET',
+    })
     const res = await callRoute(req)
     expect(res.status).toBe(401)
   })
@@ -286,7 +295,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — submit row', () => {
     mockCreateSimulateurDeal.mockResolvedValue({ personId: 10, dealId: 20 })
 
     const deleteSpy = vi.fn().mockResolvedValue({ data: null, error: null })
-    const updateFailureSpy = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
+    const updateFailureSpy = vi
+      .fn()
+      .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
     const updateEstimationEqSpy = vi.fn().mockResolvedValue({ data: null, error: null })
     const updateEstimationSpy = vi.fn().mockReturnValue({ eq: updateEstimationEqSpy })
 
@@ -346,7 +357,11 @@ describe('GET /api/cron/simulateur-pipedrive-retry — callback row', () => {
           pendingDone = true
           return makeQueryChain({ data: [cbRow], error: null })
         }
-        return { delete: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }) }
+        return {
+          delete: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+        }
       }
       if (table === 'simulateur_estimations') {
         if (!estimationsDone) {
@@ -408,9 +423,7 @@ describe('GET /api/cron/simulateur-pipedrive-retry — callback row', () => {
 
     expect(body.failed).toBe(1)
     expect(body.synced).toBe(0)
-    expect(updateSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ retry_count: 1 })
-    )
+    expect(updateSpy).toHaveBeenCalledWith(expect.objectContaining({ retry_count: 1 }))
   })
 })
 
@@ -468,13 +481,19 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
           return makeQueryChain({ data: rows, error: null })
         }
         callCount++
-        return { delete: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }) }
+        return {
+          delete: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+        }
       }
       if (table === 'simulateur_estimations') {
         return {
           select: vi.fn().mockReturnThis(),
           in: vi.fn().mockResolvedValue({ data: [], error: null }),
-          update: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+          update: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
         }
       }
       return makeQueryChain({ data: null, error: null })
@@ -491,9 +510,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
 
   it('mix success + failure: some deleted, some retry_count++', async () => {
     mockCreateSimulateurDeal
-      .mockResolvedValueOnce({ personId: 1, dealId: 2 })    // row-0 success
-      .mockRejectedValueOnce(new Error('Pipedrive 500'))      // row-1 fails
-      .mockResolvedValueOnce({ personId: 3, dealId: 4 })    // row-2 success
+      .mockResolvedValueOnce({ personId: 1, dealId: 2 }) // row-0 success
+      .mockRejectedValueOnce(new Error('Pipedrive 500')) // row-1 fails
+      .mockResolvedValueOnce({ personId: 3, dealId: 4 }) // row-2 success
 
     const rows = [
       makeSubmitRow({ id: 'row-0', estimation_id: 'est-0' }),
@@ -502,7 +521,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
     ]
 
     let pendingDone = false
-    const updateSpy = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
+    const updateSpy = vi
+      .fn()
+      .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
 
     mockAdminClient.from.mockImplementation((table: string) => {
       if (table === 'simulateur_pipedrive_failures') {
@@ -511,7 +532,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
           return makeQueryChain({ data: rows, error: null })
         }
         return {
-          delete: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+          delete: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
           update: updateSpy,
         }
       }
@@ -519,7 +542,9 @@ describe('GET /api/cron/simulateur-pipedrive-retry — batch processing', () => 
         return {
           select: vi.fn().mockReturnThis(),
           in: vi.fn().mockResolvedValue({ data: [], error: null }),
-          update: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+          update: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
         }
       }
       return makeQueryChain({ data: null, error: null })
@@ -609,13 +634,19 @@ describe('GET /api/cron/simulateur-pipedrive-retry — deadline exceeded', () =>
           pendingDone = true
           return makeQueryChain({ data: rows, error: null })
         }
-        return { delete: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }) }
+        return {
+          delete: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+        }
       }
       if (table === 'simulateur_estimations') {
         return {
           select: vi.fn().mockReturnThis(),
           in: vi.fn().mockResolvedValue({ data: [], error: null }),
-          update: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+          update: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
         }
       }
       return makeQueryChain({ data: null, error: null })
@@ -659,7 +690,11 @@ describe('GET /api/cron/simulateur-pipedrive-retry — N+1 prevention', () => {
           pendingDone = true
           return makeQueryChain({ data: cbRows, error: null })
         }
-        return { delete: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }) }
+        return {
+          delete: vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+        }
       }
       if (table === 'simulateur_estimations') {
         if (!estimationsInDone) {
