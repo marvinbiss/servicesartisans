@@ -62,14 +62,33 @@ const callbackSchema = z.object({
   consentDemarchage: z.boolean().optional().default(false),
 })
 
-function clientIp(req: NextRequest): string {
+/**
+ * Extract client IP from proxy headers. Returns null when no plausible IP is
+ * present — we refuse such requests rather than bucketing them together under
+ * a shared 'unknown' key (round 3 audit: shared bucket = 3/h for all anonymous
+ * traffic → one probe burns the limit for every legitimate user).
+ */
+function clientIp(req: NextRequest): string | null {
   const fwd = req.headers.get('x-forwarded-for')
-  if (fwd) return (fwd.split(',')[0] ?? '').trim()
-  return req.headers.get('x-real-ip') ?? 'unknown'
+  if (fwd) {
+    const first = fwd.split(',')[0]?.trim()
+    if (first && first !== 'unknown') return first
+  }
+  const real = req.headers.get('x-real-ip')?.trim()
+  if (real && real !== 'unknown') return real
+  return null
 }
 
 export async function POST(req: NextRequest) {
   const ip = clientIp(req)
+  if (!ip) {
+    // Vercel edge always sets x-forwarded-for. Absence indicates a direct
+    // socket hit or a misconfigured proxy — not a legitimate client.
+    return NextResponse.json(
+      { error: 'Origine non identifiable' },
+      { status: 400 }
+    )
+  }
   let ipKey: string
   try {
     ipKey = hashIp(ip)
@@ -116,7 +135,7 @@ export async function POST(req: NextRequest) {
   const supabase = createAdminClient()
   const { data: estimation, error: fetchErr } = await supabase
     .from('simulateur_estimations')
-    .select('id, prenom, nom, email, telephone')
+    .select('id, prenom, nom, email, callback_used_at')
     .eq('public_id', publicId)
     .maybeSingle()
 
@@ -137,6 +156,43 @@ export async function POST(req: NextRequest) {
   if (!email) {
     return NextResponse.json(
       { error: 'Email non disponible sur cette estimation' },
+      { status: 409 }
+    )
+  }
+
+  if (estimation.callback_used_at) {
+    // Token single-use defence: the estimation already triggered a callback
+    // successfully. Reject replays (leaked token, multi-tab double-submit).
+    return NextResponse.json(
+      { error: 'Demande de rappel déjà enregistrée pour cette estimation' },
+      { status: 409 }
+    )
+  }
+
+  // Atomic claim: set callback_used_at only if still NULL. Guards against two
+  // concurrent requests both passing the read above. If this UPDATE matches 0
+  // rows, another caller won the race → 409. Done BEFORE Pipedrive so a single
+  // lead never produces duplicate Person/Deal writes.
+  const { data: claimed, error: claimErr } = await supabase
+    .from('simulateur_estimations')
+    .update({ callback_used_at: new Date().toISOString() })
+    .eq('id', estimation.id as string)
+    .is('callback_used_at', null)
+    .select('id')
+    .maybeSingle()
+
+  if (claimErr) {
+    logger.error('simulateur/callback claim update failed', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: claimErr.message,
+    })
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
+
+  if (!claimed) {
+    return NextResponse.json(
+      { error: 'Demande de rappel déjà enregistrée pour cette estimation' },
       { status: 409 }
     )
   }

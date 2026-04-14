@@ -48,7 +48,11 @@ export default async function ResultatPage({ params }: PageParams) {
   const { data, error } = await supabase
     .from('simulateur_estimations')
     .select(
-      'public_id, barometre_version, categorie_anah, parcours, mpr_total, cee_fourchette_bas, cee_fourchette_haut, coup_pouce_estimation, reste_a_charge_bas, reste_a_charge_haut, ecretement_pct, budget_ht, telephone, code_postal, created_at'
+      // `telephone` deliberately omitted: previously embedded in the SSR HTML
+      // via `telephonePrefill` prop → anyone with the publicId could harvest
+      // the phone number without holding the signed callbackToken. Round 3
+      // audit (P2 phone SSR exposure). User re-types the number in the form.
+      'public_id, barometre_version, categorie_anah, parcours, mpr_total, cee_fourchette_bas, cee_fourchette_haut, coup_pouce_estimation, reste_a_charge_bas, reste_a_charge_haut, ecretement_pct, budget_ht, code_postal, created_at'
     )
     .eq('public_id', publicId)
     .maybeSingle()
@@ -66,7 +70,6 @@ export default async function ResultatPage({ params }: PageParams) {
 
   const parcoursSlug = typeof data.parcours === 'string' ? data.parcours : null
   const codePostal = typeof data.code_postal === 'string' ? data.code_postal : null
-  const telephonePrefill = typeof data.telephone === 'string' ? data.telephone : null
   const callbackToken = signToken(data.public_id as string, 3600)
 
   return (
@@ -166,7 +169,6 @@ export default async function ResultatPage({ params }: PageParams) {
         <ResultatActions
           publicId={data.public_id as string}
           callbackToken={callbackToken}
-          telephonePrefill={telephonePrefill}
           parcoursSlug={parcoursSlug}
           codePostal={codePostal}
         />

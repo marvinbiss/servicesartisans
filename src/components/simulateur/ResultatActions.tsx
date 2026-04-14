@@ -8,7 +8,6 @@ import { trackEvent } from '@/lib/analytics/tracking'
 interface Props {
   publicId: string
   callbackToken: string
-  telephonePrefill: string | null
   parcoursSlug: string | null
   codePostal: string | null
 }
@@ -18,7 +17,6 @@ type CallbackStatus = 'idle' | 'success' | 'error'
 export default function ResultatActions({
   publicId,
   callbackToken,
-  telephonePrefill,
   parcoursSlug,
   codePostal,
 }: Props) {
@@ -193,8 +191,8 @@ export default function ResultatActions({
                 name="telephone"
                 type="tel"
                 required
-                defaultValue={telephonePrefill ?? ''}
                 placeholder="06 12 34 56 78"
+                autoComplete="tel"
                 className="w-full px-3 py-2 rounded-lg border border-sand-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 text-sm"
               />
             </div>

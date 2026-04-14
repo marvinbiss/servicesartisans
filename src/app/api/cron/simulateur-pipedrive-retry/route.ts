@@ -28,6 +28,11 @@ export const maxDuration = 60
 
 const BATCH_SIZE = 8
 const DEADLINE_MS = 50_000
+// Worst-case row: 5 sequential pdFetch × 5s timeout = 25s. Refuse to start
+// a row unless that much budget is left — otherwise a slow row can overrun
+// maxDuration=60s, leaving Pipedrive writes uncommitted in the DLQ (DELETE
+// not reached → ghost replays + duplicate Deals next cron).
+const ROW_BUDGET_MS = 25_000
 
 interface FailureRow {
   id: string
@@ -101,8 +106,11 @@ export async function GET(request: Request) {
   }
 
   for (const row of rows) {
-    if (Date.now() - startTs > DEADLINE_MS) {
-      logger.warn('simulateur-pipedrive-retry: deadline reached, stopping batch', {
+    // Pre-check includes worst-case row budget so we never START a row that
+    // could overrun maxDuration. Simple `elapsed > DEADLINE_MS` was too lax.
+    if (Date.now() - startTs + ROW_BUDGET_MS > DEADLINE_MS) {
+      logger.warn('simulateur-pipedrive-retry: row budget exhausted, stopping batch', {
+        elapsed: Date.now() - startTs,
         processed: synced + failed,
         remaining: rows.length - (synced + failed),
       })

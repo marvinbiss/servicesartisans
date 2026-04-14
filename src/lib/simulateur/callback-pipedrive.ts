@@ -70,9 +70,11 @@ async function pdFetch<T>(
       Accept: 'application/json',
       ...(init.headers || {}),
     },
-    // Hard per-call timeout to prevent a single slow Pipedrive call from
-    // consuming the entire 30s maxDuration budget.
-    signal: AbortSignal.timeout(8000),
+    // Hard per-call timeout. 5s keeps worst-case row time (5 sequential
+    // Pipedrive stages: findPerson/createPerson/findDeal/createDeal/note+activity)
+    // under 25s, leaving the cron's DEADLINE_MS budget room for multiple rows
+    // without overrunning maxDuration=60s.
+    signal: AbortSignal.timeout(5000),
   })
   const json = (await res.json().catch(() => ({}))) as PdResponse<T>
   if (!res.ok || !json.success) {
