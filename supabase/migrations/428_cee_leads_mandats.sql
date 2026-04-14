@@ -74,9 +74,43 @@ CREATE INDEX IF NOT EXISTS idx_cee_leads_expires_at  ON public.cee_leads(expires
 CREATE INDEX IF NOT EXISTS idx_cee_leads_email_hash  ON public.cee_leads(email_hash);
 
 -- Dédoublonnage: même email_hash + operation dans 24h glissantes
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_cee_leads_dedup_24h
-  ON public.cee_leads (email_hash, operation_code)
-  WHERE created_at > (now() - INTERVAL '24 hours') AND duplicate_of IS NULL;
+-- Postgres refuse now() dans un index partiel (STABLE, pas IMMUTABLE).
+-- On passe par un trigger BEFORE INSERT qui rejette les doublons < 24h.
+CREATE INDEX IF NOT EXISTS idx_cee_leads_dedup_lookup
+  ON public.cee_leads (email_hash, operation_code, created_at DESC)
+  WHERE duplicate_of IS NULL;
+
+CREATE OR REPLACE FUNCTION public.cee_leads_reject_dedup_24h()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NEW.duplicate_of IS NOT NULL THEN
+    RETURN NEW;
+  END IF;
+  IF NEW.email_hash IS NULL OR NEW.operation_code IS NULL THEN
+    RETURN NEW;
+  END IF;
+  IF EXISTS (
+    SELECT 1 FROM public.cee_leads
+     WHERE email_hash     = NEW.email_hash
+       AND operation_code = NEW.operation_code
+       AND duplicate_of IS NULL
+       AND created_at > (now() - INTERVAL '24 hours')
+       AND id <> NEW.id
+  ) THEN
+    RAISE EXCEPTION 'cee_leads dedup: lead (email_hash=%, operation_code=%) already exists within 24h',
+      NEW.email_hash, NEW.operation_code
+      USING ERRCODE = 'unique_violation';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_cee_leads_dedup_24h ON public.cee_leads;
+CREATE TRIGGER trg_cee_leads_dedup_24h
+  BEFORE INSERT ON public.cee_leads
+  FOR EACH ROW EXECUTE FUNCTION public.cee_leads_reject_dedup_24h();
 
 DROP TRIGGER IF EXISTS trg_cee_leads_updated_at ON public.cee_leads;
 CREATE TRIGGER trg_cee_leads_updated_at
