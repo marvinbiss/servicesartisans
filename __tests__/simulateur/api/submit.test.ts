@@ -11,13 +11,25 @@ process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321'
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-test'
 
 const upsertMock = vi.fn(async () => ({ error: null }))
-const insertMock = vi.fn(async () => ({ error: null }))
+const insertCaptured: Array<Record<string, unknown>> = []
+let insertShouldFail = false
+const insertMock = vi.fn((payload: Record<string, unknown>) => {
+  insertCaptured.push(payload)
+  return {
+    select: (_col: string) => ({
+      single: async () =>
+        insertShouldFail
+          ? { data: null, error: { message: 'insert failed' } }
+          : { data: { id: 'est-uuid-1' }, error: null },
+    }),
+  }
+})
 
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: () => ({
     from: (_table: string) => ({
       upsert: (...args: unknown[]) => upsertMock(...args),
-      insert: (...args: unknown[]) => insertMock(...args),
+      insert: (payload: Record<string, unknown>) => insertMock(payload),
     }),
   }),
 }))
@@ -25,6 +37,11 @@ vi.mock('@/lib/supabase/admin', () => ({
 vi.mock('@/lib/rate-limit', () => ({
   rateLimit: () => ({ success: true, remaining: 99, resetAt: Date.now() + 60_000 }),
   getRateLimitHeaders: () => ({}),
+}))
+
+const runPipedriveHookMock = vi.fn(async () => {})
+vi.mock('@/lib/simulateur/submit-hooks', () => ({
+  runPipedriveHook: (...args: unknown[]) => runPipedriveHookMock(...(args as [never])),
 }))
 
 import { POST } from '@/app/api/simulateur/submit/route'
@@ -69,6 +86,9 @@ describe('POST /api/simulateur/submit', () => {
   beforeEach(() => {
     upsertMock.mockClear()
     insertMock.mockClear()
+    runPipedriveHookMock.mockClear()
+    insertCaptured.length = 0
+    insertShouldFail = false
   })
 
   it('consentRgpd = false → 422', async () => {
@@ -97,5 +117,35 @@ describe('POST /api/simulateur/submit', () => {
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(upsertMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('insert payload inclut budget_ht', async () => {
+    const res = await POST(buildReq(baseBody))
+    expect(res.status).toBe(201)
+    expect(insertCaptured).toHaveLength(1)
+    expect(insertCaptured[0]!.budget_ht).toBe(baseBody.budget.budgetHt)
+  })
+
+  it('runPipedriveHook est appelé après insert réussi', async () => {
+    const res = await POST(buildReq(baseBody))
+    expect(res.status).toBe(201)
+    // Attendre la microtask du fire-and-forget
+    await new Promise((r) => setTimeout(r, 0))
+    expect(runPipedriveHookMock).toHaveBeenCalledTimes(1)
+    const callArg = runPipedriveHookMock.mock.calls[0]![0] as {
+      estimationId: string
+      input: { email: string; publicId: string }
+    }
+    expect(callArg.estimationId).toBe('est-uuid-1')
+    expect(callArg.input.email).toBe('alice@example.com')
+    expect(callArg.input.publicId).toMatch(/^EST-/)
+  })
+
+  it("runPipedriveHook n'est pas appelé si INSERT échoue", async () => {
+    insertShouldFail = true
+    const res = await POST(buildReq(baseBody))
+    expect(res.status).toBe(500)
+    await new Promise((r) => setTimeout(r, 0))
+    expect(runPipedriveHookMock).not.toHaveBeenCalled()
   })
 })

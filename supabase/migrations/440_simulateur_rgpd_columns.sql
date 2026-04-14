@@ -39,13 +39,15 @@ ALTER TABLE public.simulateur_estimations
   ADD COLUMN IF NOT EXISTS rfr_tranche     text,
   ADD COLUMN IF NOT EXISTS anonymized_at   timestamptz,
   ADD COLUMN IF NOT EXISTS deleted_at      timestamptz,
-  ADD COLUMN IF NOT EXISTS consent_rgpd_at timestamptz;
+  ADD COLUMN IF NOT EXISTS consent_rgpd_at timestamptz,
+  ADD COLUMN IF NOT EXISTS budget_ht       numeric(10,2);
 
 COMMENT ON COLUMN public.simulateur_estimations.rfr_exact      IS 'RFR en clair — NULL après 90j (§4 RGPD)';
 COMMENT ON COLUMN public.simulateur_estimations.rfr_tranche    IS 'Tranche 10k arrondie inf (ex: "20000-29999") — conservée pour stats';
 COMMENT ON COLUMN public.simulateur_estimations.anonymized_at  IS 'Horodatage anonymisation coords (cron §4 règle 2)';
 COMMENT ON COLUMN public.simulateur_estimations.deleted_at     IS 'Horodatage demande effacement art. 17 RGPD';
 COMMENT ON COLUMN public.simulateur_estimations.consent_rgpd_at IS 'Horodatage consentement RGPD Step 4';
+COMMENT ON COLUMN public.simulateur_estimations.budget_ht      IS 'Budget HT saisi par le prospect, sert au recompute admin (P5) et à l''écrêtement reproductible';
 
 -- Backfill rfr_exact depuis rfr pour les rows existantes
 UPDATE public.simulateur_estimations

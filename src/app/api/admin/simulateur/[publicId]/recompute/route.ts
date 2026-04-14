@@ -77,19 +77,30 @@ export async function POST(
       sautsDpe: (data.sauts_dpe ?? undefined) as SautsDpe | undefined,
     }
 
-    // Le budget HT n'est pas stocké directement — on reconstitue depuis formule_debug si possible
+    // Budget HT : migration 440 stocke budget_ht directement.
+    // Fallback sur formule_debug pour les estimations antérieures à la migration.
     const budget: Budget = { budgetHt: 0 }
-    const debugBudget = Array.isArray(data.formule_debug)
-      ? (data.formule_debug as Array<{ step: string; inputs?: Record<string, unknown> }>).find(
-          (d) => d.step === 'calcMPRAccompagne' || d.step === 'applyEcretement'
-        )
-      : undefined
-    if (debugBudget?.inputs) {
-      const raw = debugBudget.inputs as Record<string, unknown>
-      const ht = typeof raw.budgetHt === 'number' ? raw.budgetHt : undefined
-      const ttc = typeof raw.budgetTTC === 'number' ? raw.budgetTTC : undefined
-      if (ht) budget.budgetHt = ht
-      else if (ttc) budget.budgetHt = Math.round(ttc / 1.055)
+    const storedBudgetHt =
+      typeof data.budget_ht === 'number'
+        ? data.budget_ht
+        : typeof data.budget_ht === 'string'
+          ? Number(data.budget_ht)
+          : null
+    if (storedBudgetHt != null && Number.isFinite(storedBudgetHt) && storedBudgetHt > 0) {
+      budget.budgetHt = storedBudgetHt
+    } else {
+      const debugBudget = Array.isArray(data.formule_debug)
+        ? (data.formule_debug as Array<{ step: string; inputs?: Record<string, unknown> }>).find(
+            (d) => d.step === 'calcMPRAccompagne' || d.step === 'applyEcretement'
+          )
+        : undefined
+      if (debugBudget?.inputs) {
+        const raw = debugBudget.inputs as Record<string, unknown>
+        const ht = typeof raw.budgetHt === 'number' ? raw.budgetHt : undefined
+        const ttc = typeof raw.budgetTTC === 'number' ? raw.budgetTTC : undefined
+        if (ht) budget.budgetHt = ht
+        else if (ttc) budget.budgetHt = Math.round(ttc / 1.055)
+      }
     }
 
     const result = runSimulation({ situation, projet, budget })

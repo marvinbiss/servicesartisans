@@ -27,6 +27,7 @@ import { hashIp } from '@/lib/simulateur/rgpd/hash-ip'
 import { generatePublicId } from '@/lib/simulateur/utils/public-id'
 import { BAREMES_2026_01, CURRENT_BAREMES_VERSION } from '@/lib/simulateur/baremes'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { runPipedriveHook } from '@/lib/simulateur/submit-hooks'
 import type { Situation } from '@/lib/simulateur/types'
 
 export const runtime = 'nodejs'
@@ -183,17 +184,24 @@ export async function POST(req: NextRequest) {
     consent_rgpd: coordonnees.consentRgpd,
     consent_demarchage: coordonnees.consentDemarchage ?? false,
 
+    // Budget (migration 440 : sert au recompute admin P5)
+    budget_ht: budget.budgetHt,
+
     // Audit
     ip_hash: ipHash,
     user_agent: userAgent,
   }
 
-  const { error: insertErr } = await supabase.from('simulateur_estimations').insert(insertPayload)
+  const { data: inserted, error: insertErr } = await supabase
+    .from('simulateur_estimations')
+    .insert(insertPayload)
+    .select('id')
+    .single()
 
-  if (insertErr) {
+  if (insertErr || !inserted) {
     logger.error('simulateur_estimations insert failed', {
       component: 'api/simulateur/submit',
-      error: insertErr.message,
+      error: insertErr?.message,
       publicId,
     })
     return NextResponse.json({ error: 'Erreur lors de la sauvegarde' }, { status: 500 })
@@ -206,7 +214,36 @@ export async function POST(req: NextRequest) {
     parcours: projet.parcours,
   })
 
-  // TODO P4 : enqueue Pipedrive job avec coordonnees + publicId (fire-and-forget + DLQ)
+  // Fire-and-forget Pipedrive hook — ne bloque jamais la réponse HTTP.
+  // En cas d'échec, la DLQ simulateur_pipedrive_failures est remplie (retry cron).
+  void runPipedriveHook({
+    estimationId: inserted.id as string,
+    input: {
+      publicId,
+      prenom: coordonnees.prenom,
+      nom: coordonnees.nom,
+      email: coordonnees.email,
+      telephone: coordonnees.telephone,
+      estimation: {
+        publicId,
+        categorieAnah: situation.categorie,
+        zoneClimatique: situation.zone,
+        parcours: projet.parcours,
+        gestes: result.gestesRetenus.map((g) => ({ id: g, label: g })) as never,
+        baremeIds: result.baremeIds,
+        mprTotal: result.mprTotal,
+        ceeFourchetteBas: result.ceeFourchetteBas,
+        ceeFourchetteHaut: result.ceeFourchetteHaut,
+        coupPouceEstimation: Math.round((result.cdpEstimationBas + result.cdpEstimationHaut) / 2),
+        resteAChargeBas: result.resteAChargeBas,
+        resteAChargeHaut: result.resteAChargeHaut,
+        barometreVersion: CURRENT_BAREMES_VERSION,
+        codePostal: situation.codePostal,
+        surface: situation.surface,
+        rfr: situation.rfr,
+      } as never,
+    },
+  })
 
   return NextResponse.json({ publicId }, { status: 201, headers: getRateLimitHeaders(rlHour) })
 }
