@@ -575,9 +575,6 @@ export default function ComparatifPrimesCee2026Page() {
           </div>
         </div>
       </section>
-
-      {/* Sticky CTA mobile — simulateur aides rénovation */}
-      <SimulateurCTA variant="sticky-bottom" />
     </main>
   )
 }

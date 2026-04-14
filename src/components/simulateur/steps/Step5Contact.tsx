@@ -51,11 +51,16 @@ export default function Step5Contact({ state, dispatch, onSubmit }: Props) {
 
   return (
     <form onSubmit={onFinish} className="space-y-5" noValidate>
+      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+        <p className="text-sm font-semibold text-emerald-900">
+          ✓ Votre estimation est prête — dernière étape avant affichage
+        </p>
+        <p className="mt-1 text-xs text-emerald-800">
+          Renseignez vos coordonnées pour découvrir votre reste à charge détaillé et recevoir un
+          devis personnalisé d&apos;un artisan RGE qualifié.
+        </p>
+      </div>
       <h3 className="text-lg font-semibold text-slate-900">Étape 5 — Vos coordonnées</h3>
-      <p className="text-sm text-slate-600">
-        Pour recevoir votre estimation détaillée et être mis en relation avec un artisan RGE
-        qualifié.
-      </p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>

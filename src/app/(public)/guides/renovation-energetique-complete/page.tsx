@@ -5,6 +5,7 @@ import JsonLd from '@/components/JsonLd'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import {
   Leaf,
   CheckCircle2,
@@ -853,6 +854,9 @@ export default function RenovationEnergetiqueCompletePage() {
           </div>
         </section>
       </div>
+
+      {/* Sticky CTA mobile — simulateur aides rénovation */}
+      <SimulateurCTA variant="sticky-bottom" />
     </>
   )
 }

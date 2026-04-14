@@ -8,7 +8,8 @@
  * Server Component — pas de 'use client'.
  */
 
-import { Zap, Euro, Leaf } from 'lucide-react'
+import { Zap, Euro, Leaf, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import type { CommuneData } from '@/lib/data/commune-data'
 import { getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import type { CeeOperation } from '@/lib/cee/catalogue'
@@ -280,17 +281,26 @@ export default async function PrimesCEEBlock({
         </p>
       )}
 
-      {/* CTA links — SimulateurCTA inline + guide opération */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-4 pt-4 border-t border-sand-200">
-        <SimulateurCTA variant="inline" serviceSlug={serviceSlug} city={villeName} />
-        {displayedOps.length > 0 && (
-          <a
-            href={`/cee/${displayedOps[0].code.toLowerCase()}/guide`}
-            className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
-          >
-            Guide {displayedOps[0].code}
-          </a>
-        )}
+      {/* CTAs — devis dominant (BOFU intent) + simulateur secondaire + guide tertiaire */}
+      <div className="mt-4 pt-4 border-t border-sand-200 space-y-3">
+        <Link
+          href={`/devis/${serviceSlug}`}
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition"
+        >
+          Devis gratuit {serviceName.toLowerCase()} à {villeName}
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </Link>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <SimulateurCTA variant="inline" serviceSlug={serviceSlug} city={villeName} />
+          {displayedOps.length > 0 && (
+            <a
+              href={`/cee/${displayedOps[0].code.toLowerCase()}/guide`}
+              className="font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+            >
+              Guide {displayedOps[0].code}
+            </a>
+          )}
+        </div>
       </div>
     </section>
   )
