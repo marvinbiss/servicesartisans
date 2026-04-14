@@ -13,6 +13,7 @@ import type { CommuneData } from '@/lib/data/commune-data'
 import { getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import type { CeeOperation } from '@/lib/cee/catalogue'
 import { formatNumber } from '@/lib/data/commune-data'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -279,14 +280,9 @@ export default async function PrimesCEEBlock({
         </p>
       )}
 
-      {/* CTA links */}
-      <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-sand-200">
-        <a
-          href="/simulateur-aides-renovation"
-          className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
-        >
-          Simuler ma prime CEE
-        </a>
+      {/* CTA links — SimulateurCTA inline + guide opération */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-4 pt-4 border-t border-sand-200">
+        <SimulateurCTA variant="inline" serviceSlug={serviceSlug} city={villeName} />
         {displayedOps.length > 0 && (
           <a
             href={`/cee/${displayedOps[0].code.toLowerCase()}/guide`}
