@@ -273,7 +273,7 @@ describe('GET /api/cron/cee-relance — auth', () => {
     const { GET } = await import('@/app/api/cron/cee-relance/route')
     const res = (await GET(makeRequest())) as unknown as MockResult
     expect(res.status).toBe(401)
-    expect(res.body).toMatchObject({ error: 'unauthorized' })
+    expect(res.body).toMatchObject({ error: 'Non autorisé' })
   })
 
   it('returns 401 with wrong bearer token', async () => {
@@ -282,7 +282,7 @@ describe('GET /api/cron/cee-relance — auth', () => {
       makeRequest({ authorization: 'Bearer wrong-token' })
     )) as unknown as MockResult
     expect(res.status).toBe(401)
-    expect(res.body).toMatchObject({ error: 'unauthorized' })
+    expect(res.body).toMatchObject({ error: 'Non autorisé' })
   })
 
   it('returns 401 when CRON_SECRET env var is not configured (fail-closed)', async () => {
