@@ -8,7 +8,7 @@ import { getServiceWeight } from '@/lib/constants/navigation'
 // devis et guides. Distribue le PageRank vers les pages les plus
 // importantes de chaque cluster thematique.
 //
-// ~48 liens totaux : 6 services + 6 villes + 13 régions + 4 pages utiles + 20 top combos.
+// ~49 liens totaux : 6 services + 6 villes + 13 régions + 5 pages utiles + 20 top combos.
 // Liens statiques, pas de DB — safe pour le footer global.
 // ---------------------------------------------------------------------------
 
@@ -66,8 +66,9 @@ export default function FooterClusterLinks() {
     label: `Artisans ${c.name}`,
   }))
 
-  // Pages utiles — 4 liens
+  // Pages utiles — 5 liens
   const utilityLinks: FooterLink[] = [
+    { href: '/simulateur-aides-renovation', label: 'Simulateur aides' },
     { href: '/guides', label: 'Guides travaux' },
     { href: '/barometre', label: 'Baromètre prix' },
     { href: '/comparaison', label: 'Comparatifs' },
