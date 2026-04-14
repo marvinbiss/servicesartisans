@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Calculator, ArrowRight, Sparkles } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 
-export type SimulateurCtaVariant = 'card' | 'banner' | 'inline'
+export type SimulateurCtaVariant = 'card' | 'banner' | 'inline' | 'sticky-bottom'
 
 interface SimulateurCtaProps {
   serviceSlug?: string
@@ -38,6 +38,30 @@ export default function SimulateurCTA({
       serviceSlug: serviceSlug ?? null,
       city: city ?? null,
     })
+  }
+
+  if (variant === 'sticky-bottom') {
+    return (
+      <div
+        role="complementary"
+        aria-label="Simulateur aides rénovation"
+        className={[
+          'fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg',
+          className ?? '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        <Link
+          href={href}
+          onClick={handleClick}
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-emerald-800 font-semibold text-sm hover:bg-emerald-50 transition"
+        >
+          <Calculator className="w-4 h-4" aria-hidden="true" />
+          Simuler mes aides rénovation
+        </Link>
+      </div>
+    )
   }
 
   if (variant === 'banner') {

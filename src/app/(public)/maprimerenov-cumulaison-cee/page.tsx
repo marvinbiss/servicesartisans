@@ -892,6 +892,9 @@ export default function MaprimeRenovCumulCeePage() {
           </div>
         </div>
       </section>
+
+      {/* Sticky CTA mobile — simulateur aides rénovation */}
+      <SimulateurCTA variant="sticky-bottom" />
     </>
   )
 }
