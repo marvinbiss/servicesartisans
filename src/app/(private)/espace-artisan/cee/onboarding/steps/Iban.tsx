@@ -206,6 +206,9 @@ export default function Iban({ partner, onNext, onPartnerRefresh }: IbanProps) {
             type="button"
             variant="ghost"
             onClick={() => setShowModifyForm(true)}
+            disabled={false}
+            aria-label="Modifier l'IBAN enregistré"
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             data-testid="iban-modify-btn"
           >
             Modifier l&apos;IBAN

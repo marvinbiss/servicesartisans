@@ -36,8 +36,17 @@ const IPV4_LITERAL_RE = /^\d{1,3}(\.\d{1,3}){3}$/
 /**
  * Matches IPv6 literals as they appear in a URL host (with or without brackets).
  * The URL parser strips brackets, so we match the raw address.
+ *
+ * Pattern covers:
+ *   - Full form:      x:x:x:x:x:x:x:x  (8 groups of 1-4 hex digits)
+ *   - Compressed:     groups separated by :: (e.g. ::1, fe80::1, 2001:db8::1)
+ *   - IPv4-mapped:    ::ffff:1.2.3.4
+ *
+ * The previous `/^[0-9a-fA-F:]+$/` was too broad — it matched strings like
+ * "cafe:babe" which are not valid IPv6 addresses.
  */
-const IPV6_LITERAL_RE = /^[0-9a-fA-F:]+$/
+const IPV6_LITERAL_RE =
+  /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^(?:[0-9a-fA-F]{1,4}:)*::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|^::(?:[0-9a-fA-F]{1,4}:)*[0-9a-fA-F]{1,4}$|^::$/
 
 /** RFC1918 + loopback + link-local + APIPA octets (first octet rules). */
 const RFC1918_PREFIXES: ReadonlyArray<(ip: string) => boolean> = [

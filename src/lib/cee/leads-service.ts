@@ -203,7 +203,12 @@ export async function createCeeLead(
     .single()
 
   if (error || !data) {
-    // 23505 = unique violation → race avec pré-check, on retry le SELECT
+    // 23505 = unique violation → race avec pré-check, on retry le SELECT.
+    // Note: le retry ne ré-applique PAS le filtre gte('created_at', ...) de 24h
+    // volontairement. Le conflit 23505 est nécessairement récent (la row en conflit
+    // vient d'être insérée dans la même fenêtre de temps), donc la contrainte
+    // temporelle est implicitement satisfaite. Ré-appliquer le filtre ne ferait
+    // qu'ajouter un risque de miss si l'horloge serveur dérive d'une milliseconde.
     if ((error as { code?: string } | null)?.code === '23505') {
       const { data: raced } = await supabase
         .from('cee_leads')
