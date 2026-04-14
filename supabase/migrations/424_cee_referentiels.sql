@@ -19,18 +19,22 @@ CREATE TABLE IF NOT EXISTS public.cee_operations_ref (
   fiche_url          text,
   date_debut         date NOT NULL,
   date_fin           date,
-  actif              boolean GENERATED ALWAYS AS (
-                       CURRENT_DATE >= date_debut
-                       AND (date_fin IS NULL OR CURRENT_DATE <= date_fin)
-                     ) STORED,
   created_at         timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT cee_operations_ref_code_fmt_chk
     CHECK (code ~ '^(BAR|BAT|IND|RES|TRA|AGRI)-[A-Z]{2}-[0-9]{3}$')
 );
 COMMENT ON TABLE  public.cee_operations_ref IS 'Référentiel des opérations CEE standardisées (BAR/BAT/IND/RES/TRA/AGRI-XX-NNN)';
-COMMENT ON COLUMN public.cee_operations_ref.actif IS 'Calculé: CURRENT_DATE dans [date_debut, date_fin]';
 CREATE INDEX IF NOT EXISTS idx_cee_operations_ref_famille ON public.cee_operations_ref(famille);
-CREATE INDEX IF NOT EXISTS idx_cee_operations_ref_actif   ON public.cee_operations_ref(actif) WHERE actif;
+CREATE INDEX IF NOT EXISTS idx_cee_operations_ref_period  ON public.cee_operations_ref(date_debut, date_fin);
+
+-- Vue de compat : expose "actif" calculé à la requête (CURRENT_DATE est STABLE, pas IMMUTABLE,
+-- donc GENERATED STORED impossible — on calcule en lecture via vue).
+CREATE OR REPLACE VIEW public.cee_operations_ref_v AS
+SELECT *,
+       (CURRENT_DATE >= date_debut
+        AND (date_fin IS NULL OR CURRENT_DATE <= date_fin)) AS actif
+FROM public.cee_operations_ref;
+COMMENT ON VIEW public.cee_operations_ref_v IS 'Vue cee_operations_ref + colonne calculée actif (CURRENT_DATE dans [date_debut, date_fin])';
 
 -- ---------------------------------------------------------------------------
 -- 424.2  cee_forfaits — Barèmes kWh cumac + prime forfaitaire (versionnés)
