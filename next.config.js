@@ -371,6 +371,8 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/accueil', destination: '/', permanent: true },
+      // P3 simulateur — ancienne route remplacée par /simulateur-aides-renovation
+      { source: '/simulateur-prime-cee', destination: '/simulateur-aides-renovation', permanent: true },
       // BAR-TH-104 abrogée 01/01/2024 par la DGEC — remplacée par BAR-TH-171 (PAC air/eau haute performance, SCOP ≥ 4).
       // Redirect permanent de toutes les URLs legacy vers la fiche en vigueur.
       { source: '/cee/bar-th-104', destination: '/cee/bar-th-171', permanent: true },
