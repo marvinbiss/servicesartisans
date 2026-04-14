@@ -9,10 +9,16 @@ interface Props {
 
 const GESTES: { id: string; label: string }[] = [
   { id: 'PAC_AIREAU', label: 'Pompe à chaleur air/eau' },
+  { id: 'PAC_GEOTHERMIE', label: 'Pompe à chaleur géothermique' },
   { id: 'CET', label: 'Chauffe-eau thermodynamique' },
+  { id: 'CESI', label: 'Chauffe-eau solaire individuel' },
   { id: 'SSC', label: 'Système solaire combiné' },
   { id: 'BIOMASSE', label: 'Chaudière biomasse' },
+  { id: 'POELE_GRANULES', label: 'Poêle à granulés' },
+  { id: 'POELE_BUCHES', label: 'Poêle à bûches' },
   { id: 'VMC_SF', label: 'VMC simple flux' },
+  { id: 'VMC_2FLUX', label: 'VMC double flux' },
+  { id: 'AUDIT_ENERGETIQUE', label: 'Audit énergétique' },
   { id: 'ISOLATION_MURS', label: 'Isolation des murs' },
   { id: 'ISOLATION_TOITURE', label: 'Isolation de la toiture' },
   { id: 'ISOLATION_PLANCHER', label: 'Isolation du plancher' },

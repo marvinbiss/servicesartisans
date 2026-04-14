@@ -45,13 +45,24 @@ export type SituationInput = z.infer<typeof situationSchema>
 
 const GESTE_IDS = [
   'PAC_AIREAU',
+  'PAC_GEOTHERMIE',
   'CET',
+  'CESI',
   'SSC',
   'BIOMASSE',
+  'POELE_GRANULES',
+  'POELE_BUCHES',
   'VMC_SF',
+  'VMC_2FLUX',
+  'AUDIT_ENERGETIQUE',
   'ISOLATION_MURS',
   'ISOLATION_TOITURE',
   'ISOLATION_PLANCHER',
+  'ISO_TOITURE_RAMPANTS',
+  'ISO_TOITURE_TERRASSE',
+  'ISO_PLANCHERS_BAS',
+  'ITE',
+  'ITI',
   'MENUISERIES',
 ] as const
 
@@ -59,6 +70,11 @@ const ISOLATION_GESTES = new Set<(typeof GESTE_IDS)[number]>([
   'ISOLATION_MURS',
   'ISOLATION_TOITURE',
   'ISOLATION_PLANCHER',
+  'ISO_TOITURE_RAMPANTS',
+  'ISO_TOITURE_TERRASSE',
+  'ISO_PLANCHERS_BAS',
+  'ITE',
+  'ITI',
 ])
 
 // Schéma brut (sans règles cross-field avec la situation)
