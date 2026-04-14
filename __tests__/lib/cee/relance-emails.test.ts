@@ -31,21 +31,23 @@ function assertValidHtml(html: string) {
 /**
  * Verifie le comportement face a un nom contenant du HTML malveillant.
  *
- * ATTENTION : le code source actuel n'escape PAS les inputs HTML.
- * Les template literals interpoles injectent le nom tel quel dans le HTML.
- * C'est acceptable ici car les noms proviennent de la DB (pas d'input user
- * direct dans l'email), mais un escaping serait preferable a terme.
- *
- * Ce test documente le comportement actuel : le nom est present tel quel.
+ * Le code source escape tous les inputs HTML via escapeHtml (format.ts).
+ * On verifie que les balises dangereuses (<script>, <img>) sont bien
+ * converties en entites et n'apparaissent jamais en clair.
  */
 function assertXssBehavior(html: string, maliciousName: string) {
-  // Le nom malveillant (ou son premier mot) est injecte tel quel
-  // car le code source n'escape pas. On verifie que le template
-  // ne crash pas et retourne du HTML structurellement valide.
   assertValidHtml(html)
-  // Le contenu malveillant est present dans le HTML (pas d'escaping)
-  const firstWord = maliciousName.split(' ')[0] || maliciousName
-  expect(html).toContain(firstWord)
+  // Le contenu brut ne doit JAMAIS apparaitre non-escape
+  if (maliciousName.includes('<')) {
+    expect(html).not.toContain(maliciousName)
+  }
+  // Les balises d'attaque doivent etre escapees en entites HTML
+  if (maliciousName.includes('<script>')) {
+    expect(html).toContain('&lt;script&gt;')
+  }
+  if (maliciousName.includes('<img')) {
+    expect(html).toContain('&lt;img')
+  }
 }
 
 // ---------------------------------------------------------------------------
