@@ -25,9 +25,15 @@ export default function ResultatActions({
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
-  const devisHref = parcoursSlug
-    ? `/devis/${parcoursSlug}${codePostal ? `?cp=${codePostal}&source=simulateur&publicId=${publicId}` : `?source=simulateur&publicId=${publicId}`}`
-    : `/devis?source=simulateur&publicId=${publicId}`
+  // parcoursSlug = 'geste' | 'accompagne' (type de parcours MPR), pas un slug
+  // métier. Toute estimation du simulateur correspond à de la rénovation
+  // énergétique — on route donc vers /devis/renovation-energetique (slug valide
+  // dans tradeContent). Le publicId reprécise le contexte.
+  const devisHref = `/devis/renovation-energetique${
+    codePostal
+      ? `?cp=${codePostal}&source=simulateur&publicId=${publicId}&parcours=${parcoursSlug ?? ''}`
+      : `?source=simulateur&publicId=${publicId}&parcours=${parcoursSlug ?? ''}`
+  }`
 
   const handleDevisClick = () => {
     trackEvent('simulateur_cta_click', {

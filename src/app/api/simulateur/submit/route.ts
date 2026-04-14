@@ -180,6 +180,12 @@ export async function POST(req: NextRequest) {
     bareme_ids: result.baremeIds as unknown as Record<string, unknown>[],
     formule_debug: result.formuleDebug as unknown as Record<string, unknown>[],
 
+    // Coordonnées (nullables — anonymisées à 3 ans par cron RGPD, migration 440)
+    prenom: coordonnees.prenom ?? null,
+    nom: coordonnees.nom ?? null,
+    email: coordonnees.email ?? null,
+    telephone: coordonnees.telephone ?? null,
+
     // Consentements
     consent_rgpd: coordonnees.consentRgpd,
     consent_demarchage: coordonnees.consentDemarchage ?? false,
