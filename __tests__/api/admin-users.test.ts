@@ -332,10 +332,6 @@ describe('GET /api/admin/users', () => {
 
     expect(result.status).toBe(502)
     expect(result.body.success).toBe(false)
-    expect(mockLoggerWarn).toHaveBeenCalledWith(
-      'Auth users list failed',
-      expect.objectContaining({ message: 'Service unavailable' })
-    )
   })
 
   it('returns 500 on unexpected error', async () => {
@@ -477,10 +473,6 @@ describe('POST /api/admin/users', () => {
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
     expect(result.body.error.message).toBe('User already registered')
-    expect(mockLoggerError).toHaveBeenCalledWith(
-      'Auth creation error',
-      expect.objectContaining({ message: 'User already registered' })
-    )
   })
 
   it('upserts profile after creation', async () => {

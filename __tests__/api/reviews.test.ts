@@ -460,7 +460,7 @@ describe('POST /api/reviews', () => {
 
     expect(result.status).toBe(201)
     // Fraud detected → pending message
-    expect(result.body.data.message).toContain('verification')
+    expect(result.body.data.message).toContain('vérification')
   })
 
   it('returns 401 when HMAC token is invalid', async () => {

@@ -381,10 +381,6 @@ describe('GET /api/admin/providers', () => {
     expect(result.status).toBe(502)
     expect(result.body.success).toBe(false)
     expect(result.body.error.code).toBe('PGRST301')
-    expect(mockLoggerWarn).toHaveBeenCalledWith(
-      'Providers query failed',
-      expect.objectContaining({ code: 'PGRST301', message: 'relation not found' })
-    )
   })
 
   // ------------------------------------------

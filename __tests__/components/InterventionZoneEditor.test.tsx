@@ -115,9 +115,9 @@ describe('InterventionZoneEditor', () => {
     render(<InterventionZoneEditor value={25} city="Paris" onChange={vi.fn()} />)
 
     const preset25 = screen.getByRole('button', { name: '25 km' })
-    expect(preset25).toHaveClass('bg-blue-600', 'text-white')
+    expect(preset25).toHaveClass('bg-primary-500', 'text-white')
 
     const preset50 = screen.getByRole('button', { name: '50 km' })
-    expect(preset50).toHaveClass('bg-gray-100')
+    expect(preset50).toHaveClass('bg-sand-100')
   })
 })
