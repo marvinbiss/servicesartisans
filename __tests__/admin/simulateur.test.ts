@@ -113,7 +113,7 @@ describe('escapeCsvCell', () => {
   let buildCsv: (rows: Array<Record<string, unknown>>, cols?: Array<{ key: string; label: string }>) => string
 
   beforeEach(async () => {
-    const mod = await import('@/app/api/admin/simulateur/export/route')
+    const mod = await import('@/lib/admin/simulateur-csv')
     escapeCsvCell = mod.escapeCsvCell
     buildCsv = mod.buildCsv
   })
