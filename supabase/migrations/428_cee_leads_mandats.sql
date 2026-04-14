@@ -11,12 +11,12 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS trigger
 LANGUAGE plpgsql
-AS $$
+AS $fn_sua$
 BEGIN
   NEW.updated_at := now();
   RETURN NEW;
 END;
-$$;
+$fn_sua$;
 
 -- ---------------------------------------------------------------------------
 -- 428.1  cee_leads — Funnel simulateur → paiement
@@ -94,7 +94,7 @@ CREATE INDEX IF NOT EXISTS idx_cee_leads_dedup_lookup
 CREATE OR REPLACE FUNCTION public.cee_leads_reject_dedup_24h()
 RETURNS trigger
 LANGUAGE plpgsql
-AS $$
+AS $fn_dedup$
 BEGIN
   IF NEW.duplicate_of IS NOT NULL THEN
     RETURN NEW;
@@ -116,7 +116,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$$;
+$fn_dedup$;
 
 DROP TRIGGER IF EXISTS trg_cee_leads_dedup_24h ON public.cee_leads;
 CREATE TRIGGER trg_cee_leads_dedup_24h
@@ -132,12 +132,12 @@ CREATE TRIGGER trg_cee_leads_updated_at
 CREATE OR REPLACE FUNCTION public.cee_leads_fill_email_hash()
 RETURNS trigger
 LANGUAGE plpgsql
-AS $$
+AS $fn_hash$
 BEGIN
   NEW.email_hash := encode(digest(lower(coalesce(NEW.email,'')), 'sha256'), 'hex');
   RETURN NEW;
 END;
-$$;
+$fn_hash$;
 
 DROP TRIGGER IF EXISTS trg_cee_leads_email_hash ON public.cee_leads;
 CREATE TRIGGER trg_cee_leads_email_hash
@@ -215,10 +215,10 @@ CREATE POLICY cee_mandats_admin_all ON public.cee_mandats
 -- ---------------------------------------------------------------------------
 -- 428.3  FK tardive devis_requests.cee_lead_id → cee_leads(id)
 -- ---------------------------------------------------------------------------
-DO $$ BEGIN
+DO $do_fk$ BEGIN
   ALTER TABLE public.devis_requests
     ADD CONSTRAINT devis_requests_cee_lead_id_fkey
     FOREIGN KEY (cee_lead_id) REFERENCES public.cee_leads(id) ON DELETE SET NULL;
-EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+EXCEPTION WHEN duplicate_object THEN NULL; END $do_fk$;
 
 COMMIT;
