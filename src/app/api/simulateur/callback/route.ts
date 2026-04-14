@@ -84,31 +84,13 @@ export async function POST(req: NextRequest) {
   if (!ip) {
     // Vercel edge always sets x-forwarded-for. Absence indicates a direct
     // socket hit or a misconfigured proxy — not a legitimate client.
-    return NextResponse.json(
-      { error: 'Origine non identifiable' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Origine non identifiable' }, { status: 400 })
   }
   let ipKey: string
   try {
     ipKey = hashIp(ip)
   } catch {
     ipKey = ip
-  }
-
-  const rlHour = await rateLimitDb(`simulateur:callback:h:${ipKey}`, 3, 60 * 60_000)
-  if (!rlHour.success) {
-    return NextResponse.json(
-      { error: 'Trop de demandes de rappel. Réessayez plus tard.' },
-      { status: 429, headers: getRateLimitDbHeaders(rlHour) }
-    )
-  }
-  const rlDay = await rateLimitDb(`simulateur:callback:d:${ipKey}`, 8, 24 * 60 * 60_000)
-  if (!rlDay.success) {
-    return NextResponse.json(
-      { error: 'Quota journalier atteint.' },
-      { status: 429, headers: getRateLimitDbHeaders(rlDay) }
-    )
   }
 
   let body: unknown
@@ -128,8 +110,26 @@ export async function POST(req: NextRequest) {
 
   const { publicId, callbackToken, telephone, preferredSlot, remarquesClient } = parsed.data
 
+  // verifyToken AVANT rateLimitDb : HMAC check est cheap (ns), DB round-trip
+  // coûte ~20ms. Les requêtes non-signées (bots) n'atteignent plus la table
+  // rate_limits — économise du quota DB + brûle moins le limit par IP.
   if (!verifyToken(publicId, callbackToken)) {
     return NextResponse.json({ error: 'Token invalide ou expiré' }, { status: 403 })
+  }
+
+  const rlHour = await rateLimitDb(`simulateur:callback:h:${ipKey}`, 3, 60 * 60_000)
+  if (!rlHour.success) {
+    return NextResponse.json(
+      { error: 'Trop de demandes de rappel. Réessayez plus tard.' },
+      { status: 429, headers: getRateLimitDbHeaders(rlHour) }
+    )
+  }
+  const rlDay = await rateLimitDb(`simulateur:callback:d:${ipKey}`, 8, 24 * 60 * 60_000)
+  if (!rlDay.success) {
+    return NextResponse.json(
+      { error: 'Quota journalier atteint.' },
+      { status: 429, headers: getRateLimitDbHeaders(rlDay) }
+    )
   }
 
   const supabase = createAdminClient()

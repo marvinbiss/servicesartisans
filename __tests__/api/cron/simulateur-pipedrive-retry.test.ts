@@ -245,13 +245,13 @@ afterEach(() => {
 // ======================================================================
 
 describe('GET /api/cron/simulateur-pipedrive-retry — authentication', () => {
-  it('CRON_SECRET not set → 500', async () => {
+  it('CRON_SECRET not set → 401 (no info oracle)', async () => {
     delete process.env.CRON_SECRET
     setupSupabase({ pending: [] })
     const res = await callRoute(buildRequest('anything'))
-    expect(res.status).toBe(500)
-    const body = await res.json()
-    expect(body.error).toContain('CRON_SECRET')
+    // Unconditional 401 : un client ne doit pas distinguer "secret absent"
+    // de "mauvais secret" (500 vs 401 révélerait l'état de config serveur).
+    expect(res.status).toBe(401)
   })
 
   it('missing authorization header → 401', async () => {

@@ -119,8 +119,11 @@ async function pdFetch<T>(
 ): Promise<PdResponse<T>> {
   const sep = path.includes('?') ? '&' : '?'
   const url = `${cfg.baseUrl}${path}${sep}api_token=${encodeURIComponent(cfg.token)}`
+  // 5s timeout : protège le cron (maxDuration 60s, budget 25s/row) d'un appel
+  // Pipedrive bloqué indéfiniment qui écraserait notre deadline.
   const res = await fetch(url, {
     ...init,
+    signal: AbortSignal.timeout(5_000),
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -172,8 +175,7 @@ async function upsertPerson(cfg: SimConfig, input: SimulateurLeadInput): Promise
 
 function computeDealValue(est: SimulateurLeadInput['estimation']): number {
   // Upper bound of aides for the Deal monetary "value"
-  const v =
-    (est.mprTotal || 0) + (est.ceeFourchetteHaut || 0) + (est.coupPouceEstimation || 0)
+  const v = (est.mprTotal || 0) + (est.ceeFourchetteHaut || 0) + (est.coupPouceEstimation || 0)
   return Math.round(v)
 }
 
@@ -182,7 +184,8 @@ async function createDeal(
   personId: number,
   input: SimulateurLeadInput
 ): Promise<number> {
-  const title = `Simulateur aides — ${input.prenom} ${input.nom} (${input.estimation.codePostal})`.trim()
+  const title =
+    `Simulateur aides — ${input.prenom} ${input.nom} (${input.estimation.codePostal})`.trim()
   const body: Record<string, unknown> = {
     title,
     person_id: personId,
@@ -202,23 +205,38 @@ async function createDeal(
 
 // ── Note ───────────────────────────────────────────────────────────
 
+function escapeHtml(s: unknown): string {
+  if (s === null || s === undefined) return '—'
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function buildNoteHtml(input: SimulateurLeadInput): string {
   const est = input.estimation
-  const gestesList = (est.gestes || []).map((g) => `${g.label} (${g.id})`).join(', ') || '—'
-  const baremesList = (est.baremeIds || []).slice(0, 40).join(', ') || '—'
+  const gestesList =
+    (est.gestes || []).map((g) => `${escapeHtml(g.label)} (${escapeHtml(g.id)})`).join(', ') || '—'
+  const baremesList =
+    (est.baremeIds || [])
+      .slice(0, 40)
+      .map((b) => escapeHtml(b))
+      .join(', ') || '—'
   const fmt = (v: number | null | undefined) =>
     typeof v === 'number' && Number.isFinite(v)
       ? `${v.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} €`
       : '—'
 
   return [
-    `<b>Estimation:</b> ${est.publicId}`,
-    `<b>Version barèmes:</b> ${est.barometreVersion}`,
-    `<b>Catégorie ANAH:</b> ${est.categorieAnah}`,
-    `<b>Zone climatique:</b> ${est.zoneClimatique}`,
-    `<b>Parcours:</b> ${est.parcours}`,
-    `<b>Code postal:</b> ${est.codePostal}`,
-    `<b>Surface:</b> ${est.surface} m²`,
+    `<b>Estimation:</b> ${escapeHtml(est.publicId)}`,
+    `<b>Version barèmes:</b> ${escapeHtml(est.barometreVersion)}`,
+    `<b>Catégorie ANAH:</b> ${escapeHtml(est.categorieAnah)}`,
+    `<b>Zone climatique:</b> ${escapeHtml(est.zoneClimatique)}`,
+    `<b>Parcours:</b> ${escapeHtml(est.parcours)}`,
+    `<b>Code postal:</b> ${escapeHtml(est.codePostal)}`,
+    `<b>Surface:</b> ${escapeHtml(est.surface)} m²`,
     `<b>RFR:</b> ${fmt(est.rfr)}`,
     `<b>Gestes:</b> ${gestesList}`,
     `<br/>`,
@@ -231,7 +249,11 @@ function buildNoteHtml(input: SimulateurLeadInput): string {
   ].join('<br/>')
 }
 
-async function addDealNote(cfg: SimConfig, dealId: number, input: SimulateurLeadInput): Promise<void> {
+async function addDealNote(
+  cfg: SimConfig,
+  dealId: number,
+  input: SimulateurLeadInput
+): Promise<void> {
   await pdFetch<unknown>(cfg, '/notes', {
     method: 'POST',
     body: JSON.stringify({ deal_id: dealId, content: buildNoteHtml(input) }),

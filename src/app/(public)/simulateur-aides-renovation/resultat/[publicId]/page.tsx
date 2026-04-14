@@ -70,7 +70,10 @@ export default async function ResultatPage({ params }: PageParams) {
 
   const parcoursSlug = typeof data.parcours === 'string' ? data.parcours : null
   const codePostal = typeof data.code_postal === 'string' ? data.code_postal : null
-  const callbackToken = signToken(data.public_id as string, 3600)
+  // TTL 15min : assez pour remplir le formulaire, court pour limiter l'exposition
+  // en cas de leak (round 4 hardening). Si l'user revient >15min plus tard, la
+  // page se re-render (ISR-ish) et re-signe un token frais.
+  const callbackToken = signToken(data.public_id as string, 900)
 
   return (
     <main className="min-h-screen bg-slate-50">

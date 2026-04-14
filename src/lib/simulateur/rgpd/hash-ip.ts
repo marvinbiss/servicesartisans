@@ -28,15 +28,13 @@ export function hashIp(ip: string): string {
   const salt = process.env[SALT_ENV_VAR]
 
   if (!salt || salt.length === 0) {
-    const isProd = process.env.NODE_ENV === 'production'
-    if (isProd) {
-      logger.warn(
-        `${SALT_ENV_VAR} is missing in production — falling back to unsalted hash. Rotate salt immediately.`,
-        { component: 'simulateur/rgpd/hash-ip' }
-      )
-      // Defensive fallback : hash sans salt plutôt que crash.
-      return createHash('sha256').update(ip).digest('hex')
-    }
+    // Hard throw en tout environnement : un hash non-salé est trivialement
+    // réversible par rainbow-table sur l'espace IPv4 (2^32) et rompt la
+    // pseudonymisation RGPD. Mieux vaut un 500 explicite qu'une fuite
+    // silencieuse.
+    logger.error(`${SALT_ENV_VAR} is missing — refusing to hash IP (RGPD requirement)`, {
+      component: 'simulateur/rgpd/hash-ip',
+    })
     throw new Error(`${SALT_ENV_VAR} must be set to hash IP addresses (RGPD requirement)`)
   }
 

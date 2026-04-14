@@ -42,11 +42,12 @@ interface FailureRow {
 }
 
 export async function GET(request: Request) {
-  if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'CRON_SECRET non configuré' }, { status: 500 })
-  }
+  // Toujours 401 si le header n'est pas valide — qu'il manque OU que CRON_SECRET
+  // soit non-configuré côté serveur. Évite l'info-oracle : un client ne peut pas
+  // distinguer "secret absent" de "mauvais secret" (500 vs 401 révèle l'état).
+  const configured = process.env.CRON_SECRET
   const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!configured || authHeader !== `Bearer ${configured}`) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
@@ -129,11 +130,16 @@ export async function GET(request: Request) {
     const rawPayload = row.payload as { kind?: string } & Record<string, unknown>
     const rawKind = rawPayload?.kind
     if (rawKind !== undefined && rawKind !== 'callback' && rawKind !== 'submit') {
+      // Zombie : kind inconnu (corruption, ancienne version, injection).
+      // On ne peut rien rejouer → DELETE plutôt que laisser la row bloquer
+      // le cron indéfiniment (chaque run la re-voit, re-log, re-consomme le
+      // budget). Mieux vaut perdre 1 lead potentiel que bloquer le batch.
       failed++
-      logger.error('simulateur-pipedrive-retry: unknown kind — skipping', {
+      logger.error('simulateur-pipedrive-retry: unknown kind — deleting zombie', {
         id: row.id,
         kind: rawKind,
       })
+      await supabase.from('simulateur_pipedrive_failures').delete().eq('id', row.id)
       continue
     }
     const kind: 'callback' | 'submit' = rawKind === 'callback' ? 'callback' : 'submit'
