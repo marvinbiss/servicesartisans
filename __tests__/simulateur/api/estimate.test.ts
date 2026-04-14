@@ -12,7 +12,7 @@ process.env.RGPD_IP_SALT = 'test-salt'
 vi.mock('@/lib/rate-limit', () => {
   let calls = 0
   return {
-    rateLimit: vi.fn((key: string, limit: number) => {
+    rateLimit: vi.fn((_key: string, limit: number) => {
       calls += 1
       return {
         success: calls <= limit,

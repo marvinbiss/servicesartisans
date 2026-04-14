@@ -72,7 +72,7 @@ vi.mock('@/lib/supabase/admin', () => ({
 }))
 
 // Capture runSimulation inputs to verify budget reading
-const runSimulationMock = vi.fn(() => ({
+const runSimulationMock = vi.fn((..._args: unknown[]) => ({
   mprTotal: 1000,
   ceeFourchetteBas: 500,
   ceeFourchetteHaut: 800,
@@ -87,7 +87,7 @@ const runSimulationMock = vi.fn(() => ({
 }))
 
 vi.mock('@/lib/simulateur/engine', () => ({
-  runSimulation: (...args: unknown[]) => runSimulationMock(...(args as [never])),
+  runSimulation: (...args: unknown[]) => runSimulationMock(...args),
 }))
 
 function makeRow(overrides: Partial<DataRow> = {}): DataRow {
@@ -137,7 +137,7 @@ describe('POST /api/admin/simulateur/:publicId/recompute — budget_ht priorité
     })
     expect((res as Response).status).toBe(200)
     expect(runSimulationMock).toHaveBeenCalledTimes(1)
-    const arg = runSimulationMock.mock.calls[0]![0] as { budget: { budgetHt: number } }
+    const arg = runSimulationMock.mock.calls[0]?.[0] as { budget: { budgetHt: number } }
     expect(arg.budget.budgetHt).toBe(25_000)
   })
 
@@ -160,7 +160,7 @@ describe('POST /api/admin/simulateur/:publicId/recompute — budget_ht priorité
       params: Promise.resolve({ publicId: 'EST-2026-04-14-abc123' }),
     })
     expect((res as Response).status).toBe(200)
-    const arg = runSimulationMock.mock.calls[0]![0] as { budget: { budgetHt: number } }
+    const arg = runSimulationMock.mock.calls[0]?.[0] as { budget: { budgetHt: number } }
     expect(arg.budget.budgetHt).toBe(20_000)
   })
 

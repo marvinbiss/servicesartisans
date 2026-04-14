@@ -2,7 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/
+const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/i
+
+function normalizePublicId(raw: string): string {
+  return raw.replace(/^est-/i, 'EST-')
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -26,9 +30,10 @@ function fmtEur(n: number | null | undefined): string {
 }
 
 export default async function ResultatPage({ params }: PageParams) {
-  const { publicId } = await params
-  if (!PUBLIC_ID_RE.test(publicId)) notFound()
+  const { publicId: rawPublicId } = await params
+  if (!PUBLIC_ID_RE.test(rawPublicId)) notFound()
 
+  const publicId = normalizePublicId(rawPublicId)
   const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('simulateur_estimations')

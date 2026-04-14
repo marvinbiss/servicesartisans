@@ -2,19 +2,20 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { hashIp } from '@/lib/simulateur/rgpd/hash-ip'
 
 const ORIGINAL_SALT = process.env.RGPD_IP_SALT
-const ORIGINAL_ENV = process.env.NODE_ENV
+const ORIGINAL_ENV = (process.env as Record<string, string | undefined>).NODE_ENV
 
 describe('hashIp', () => {
   beforeEach(() => {
     process.env.RGPD_IP_SALT = 'test-salt-2026'
-    process.env.NODE_ENV = 'test'
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'test'
   })
 
   afterEach(() => {
     if (ORIGINAL_SALT === undefined) delete process.env.RGPD_IP_SALT
     else process.env.RGPD_IP_SALT = ORIGINAL_SALT
-    if (ORIGINAL_ENV === undefined) delete process.env.NODE_ENV
-    else process.env.NODE_ENV = ORIGINAL_ENV
+    if (ORIGINAL_ENV === undefined)
+      delete (process.env as Record<string, string | undefined>).NODE_ENV
+    else (process.env as Record<string, string | undefined>).NODE_ENV = ORIGINAL_ENV
   })
 
   it('produit un hash hex 64 chars', () => {
@@ -47,7 +48,7 @@ describe('hashIp', () => {
 
   it('fallback en production si salt absent', () => {
     delete process.env.RGPD_IP_SALT
-    process.env.NODE_ENV = 'production'
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'production'
     const h = hashIp('81.64.12.5')
     expect(h).toMatch(/^[0-9a-f]{64}$/)
   })

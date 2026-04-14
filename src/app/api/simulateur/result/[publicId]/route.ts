@@ -12,7 +12,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/
+const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/i
+
+function normalizePublicId(raw: string): string {
+  return raw.replace(/^est-/i, 'EST-')
+}
 
 function tranche10k(rfr: number): string {
   const low = Math.floor(rfr / 10_000) * 10_000
@@ -20,12 +24,13 @@ function tranche10k(rfr: number): string {
 }
 
 export async function GET(_req: NextRequest, context: { params: Promise<{ publicId: string }> }) {
-  const { publicId } = await context.params
+  const { publicId: rawPublicId } = await context.params
 
-  if (!PUBLIC_ID_RE.test(publicId)) {
+  if (!PUBLIC_ID_RE.test(rawPublicId)) {
     return NextResponse.json({ error: 'Identifiant invalide' }, { status: 400 })
   }
 
+  const publicId = normalizePublicId(rawPublicId)
   const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('simulateur_estimations')

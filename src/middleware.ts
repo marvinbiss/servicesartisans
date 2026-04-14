@@ -86,8 +86,11 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   // 4. Lowercase normalization — prevent duplicate content from mixed-case URLs
   //    Exclude artisan publicId paths: /services/{service}/{location}/{publicId}
   //    because stable_id contains mixed-case characters (HMAC-SHA256 base64)
+  //    Exclude simulateur result paths: /simulateur-aides-renovation/resultat/EST-YYYY-MM-DD-xxxxxx
+  //    because public_id uses uppercase EST- prefix stored as-is in DB
   const isArtisanPublicIdPath = /^\/services\/[^/]+\/[^/]+\/[^/]+$/.test(pathname)
-  if (!isArtisanPublicIdPath && pathname !== pathname.toLowerCase()) {
+  const isSimulateurResultPath = /^\/simulateur-aides-renovation\/resultat\/[^/]+$/.test(pathname)
+  if (!isArtisanPublicIdPath && !isSimulateurResultPath && pathname !== pathname.toLowerCase()) {
     pathname = pathname.toLowerCase()
     needsRedirect = true
   }

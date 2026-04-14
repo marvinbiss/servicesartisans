@@ -10,7 +10,7 @@ process.env.RGPD_IP_SALT = 'test-salt'
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321'
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-test'
 
-const upsertMock = vi.fn(async () => ({ error: null }))
+const upsertMock = vi.fn(async (..._args: unknown[]) => ({ error: null }))
 const insertCaptured: Array<Record<string, unknown>> = []
 let insertShouldFail = false
 const insertMock = vi.fn((payload: Record<string, unknown>) => {
@@ -39,9 +39,9 @@ vi.mock('@/lib/rate-limit', () => ({
   getRateLimitHeaders: () => ({}),
 }))
 
-const runPipedriveHookMock = vi.fn(async () => {})
+const runPipedriveHookMock = vi.fn(async (..._args: unknown[]) => {})
 vi.mock('@/lib/simulateur/submit-hooks', () => ({
-  runPipedriveHook: (...args: unknown[]) => runPipedriveHookMock(...(args as [never])),
+  runPipedriveHook: (...args: unknown[]) => runPipedriveHookMock(...args),
 }))
 
 import { POST } from '@/app/api/simulateur/submit/route'
@@ -123,7 +123,7 @@ describe('POST /api/simulateur/submit', () => {
     const res = await POST(buildReq(baseBody))
     expect(res.status).toBe(201)
     expect(insertCaptured).toHaveLength(1)
-    expect(insertCaptured[0]!.budget_ht).toBe(baseBody.budget.budgetHt)
+    expect(insertCaptured[0]?.budget_ht).toBe(baseBody.budget.budgetHt)
   })
 
   it('runPipedriveHook est appelé après insert réussi', async () => {
@@ -132,7 +132,7 @@ describe('POST /api/simulateur/submit', () => {
     // Attendre la microtask du fire-and-forget
     await new Promise((r) => setTimeout(r, 0))
     expect(runPipedriveHookMock).toHaveBeenCalledTimes(1)
-    const callArg = runPipedriveHookMock.mock.calls[0]![0] as {
+    const callArg = runPipedriveHookMock.mock.calls[0]?.[0] as {
       estimationId: string
       input: { email: string; publicId: string }
     }
