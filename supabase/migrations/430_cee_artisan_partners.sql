@@ -127,8 +127,8 @@ SELECT
 FROM public.providers p
 WHERE p.is_active = true
   AND p.email IS NOT NULL
-  AND p.is_rge = true
   AND p.rge_qualifications IS NOT NULL
+  AND jsonb_array_length(p.rge_qualifications) > 0
   AND NOT EXISTS (
     SELECT 1 FROM public.cee_artisan_partners cap WHERE cap.provider_id = p.id
   );
