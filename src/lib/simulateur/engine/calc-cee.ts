@@ -103,71 +103,109 @@ export function calcVMCSimpleFlux(
 // ---------- BAR-TH-171 : PAC air/eau (formule variable) ----------
 
 export type EtasClass = 1 | 2
+export type SurfBucketMaison = 'S_LT_70' | 'S_70_90' | 'S_GTE_90'
+export type SurfBucketAppart = 'S_LT_35' | 'S_35_60' | 'S_GTE_60'
 
 /**
- * BAR-TH-171 — formule variable depuis 01/01/2026 (arrêté 15/12/2025).
+ * BAR-TH-171 — table approximative par (zone × type × ETAS × tranche surface).
  *
- * ⚠️ TODO(P1-agent) : INTÉGRER LA TABLE EXACTE du PDF DGEC vA78.4 ici.
+ * ⚠️ APPROXIMATION NON OPPOSABLE — en attendant extraction du PDF DGEC vA78.4
+ * (arrêté 15/12/2025). Point de calibration unique : Argile.ai indique
+ * Maison H1, 80 m² (tranche 70-90), ETAS 142 % (classe 2), remplacement gaz,
+ * Coup de Pouce actif → 458 MWhc. Les valeurs MAISON.H1.ETAS2.S_70_90
+ * ci-dessous sont calées sur ce point. Toutes les autres dérivent par
+ * ratio ordinal (H1 > H2 > H3, ETAS2 > ETAS1, plus grand > plus petit).
  *
- * Implémentation actuelle : APPROXIMATION basée sur
- *   base × facteur_zone × facteur_surface × facteur_etas
- * Objectif : tenir les invariants ordinaux (H1 > H2 > H3, ETAS2 > ETAS1,
- * grande surface > petite) pour que les tests ordinaux passent.
+ * Mode strict : positionner BAR_TH_171_STRICT_MODE=true en prod pour que
+ * cette fonction throw au lieu de renvoyer un approximé — utile tant que
+ * la table exacte n'est pas intégrée.
  *
- * Exemple doc validé (Argile.ai) : Maison H1, 80 m², ETAS2, gaz → ~458 MWhc.
- * La formule ci-dessous donne ≈ 450 MWhc (acceptable comme placeholder).
+ * Les baremeIds portent le suffixe `.APPROX.` pour que le back-office
+ * et l'audit traçabilité sachent identifier ces calculs comme non exacts.
  */
+const BAR_TH_171_MAISON: Record<
+  ZoneClimatique,
+  Record<EtasClass, Record<SurfBucketMaison, number>>
+> = {
+  H1: {
+    1: { S_LT_70: 260_000, S_70_90: 370_000, S_GTE_90: 430_000 },
+    2: { S_LT_70: 320_000, S_70_90: 458_000, S_GTE_90: 540_000 },
+  },
+  H2: {
+    1: { S_LT_70: 215_000, S_70_90: 305_000, S_GTE_90: 360_000 },
+    2: { S_LT_70: 265_000, S_70_90: 378_000, S_GTE_90: 445_000 },
+  },
+  H3: {
+    1: { S_LT_70: 155_000, S_70_90: 220_000, S_GTE_90: 260_000 },
+    2: { S_LT_70: 190_000, S_70_90: 273_000, S_GTE_90: 320_000 },
+  },
+}
+
+const BAR_TH_171_APPART: Record<
+  ZoneClimatique,
+  Record<EtasClass, Record<SurfBucketAppart, number>>
+> = {
+  H1: {
+    1: { S_LT_35: 115_000, S_35_60: 165_000, S_GTE_60: 210_000 },
+    2: { S_LT_35: 140_000, S_35_60: 205_000, S_GTE_60: 260_000 },
+  },
+  H2: {
+    1: { S_LT_35: 95_000, S_35_60: 135_000, S_GTE_60: 175_000 },
+    2: { S_LT_35: 115_000, S_35_60: 170_000, S_GTE_60: 215_000 },
+  },
+  H3: {
+    1: { S_LT_35: 68_000, S_35_60: 98_000, S_GTE_60: 125_000 },
+    2: { S_LT_35: 83_000, S_35_60: 122_000, S_GTE_60: 155_000 },
+  },
+}
+
+function surfBucketMaison(surface: number): SurfBucketMaison {
+  if (surface < 70) return 'S_LT_70'
+  if (surface < 90) return 'S_70_90'
+  return 'S_GTE_90'
+}
+
+function surfBucketAppart(surface: number): SurfBucketAppart {
+  if (surface < 35) return 'S_LT_35'
+  if (surface < 60) return 'S_35_60'
+  return 'S_GTE_60'
+}
+
 export function computeBarTh171(
   zone: ZoneClimatique,
   etasClass: EtasClass,
   surface: number,
   typeLogement: TypeLogement
 ): CeeResult {
-  // Base TABLE_A_REMPLIR — valeurs d'approximation en attendant table DGEC
-  const BASE_MAISON: Record<ZoneClimatique, number> = {
-    H1: 350_000, // placeholder
-    H2: 280_000,
-    H3: 200_000,
-  }
-  const BASE_APPART: Record<ZoneClimatique, number> = {
-    H1: 180_000,
-    H2: 140_000,
-    H3: 100_000,
+  const strict = process.env.BAR_TH_171_STRICT_MODE === 'true'
+  if (strict) {
+    throw new Error(
+      'BAR-TH-171: table exacte PDF DGEC vA78.4 non intégrée, mode strict activé'
+    )
   }
 
-  const base = typeLogement === 'maison' ? BASE_MAISON[zone] : BASE_APPART[zone]
-
-  // Facteur surface : plafonné à 1 dès 90 m² en maison, 60 m² en appart
-  let fSurface: number
-  if (typeLogement === 'maison') {
-    if (surface < 70) fSurface = 0.6
-    else if (surface < 90) fSurface = 0.85
-    else fSurface = 1.0
-  } else {
-    if (surface < 35) fSurface = 0.5
-    else if (surface < 60) fSurface = 0.8
-    else fSurface = 1.0
-  }
-
-  // Facteur ETAS : classe 2 > classe 1
-  const fEtas = etasClass === 2 ? 1.3 : 1.0
-
-  const kwhCumac = Math.round(base * fSurface * fEtas)
-
-  // Surface bucket pour ID
+  let kwhCumac: number
   let surfBucket: string
   if (typeLogement === 'maison') {
-    surfBucket = surface < 70 ? 'S_LT_70' : surface < 90 ? 'S_70_90' : 'S_GTE_90'
+    const bucket = surfBucketMaison(surface)
+    surfBucket = bucket
+    kwhCumac = BAR_TH_171_MAISON[zone][etasClass][bucket]
   } else {
-    surfBucket = surface < 35 ? 'S_LT_35' : surface < 60 ? 'S_35_60' : 'S_GTE_60'
+    const bucket = surfBucketAppart(surface)
+    surfBucket = bucket
+    kwhCumac = BAR_TH_171_APPART[zone][etasClass][bucket]
   }
 
-  const typeKey = typeLogement === 'maison' ? 'MAISON' : 'APPART'
+  // eslint-disable-next-line no-console
+  console.warn?.(
+    `[BAR-TH-171] valeur approximative (${kwhCumac} kWhc) — calibrée sur point Argile.ai, non opposable tant que table PDF DGEC vA78.4 non intégrée`
+  )
 
+  const typeKey = typeLogement === 'maison' ? 'MAISON' : 'APPART'
   return {
     kwhCumac,
     baremeId: asBaremeId(
-      `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.${surfBucket}.2026-01`
+      `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.${surfBucket}.APPROX.2026-01`
     ),
   }
 }
