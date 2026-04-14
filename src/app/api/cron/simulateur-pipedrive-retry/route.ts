@@ -26,7 +26,8 @@ import { createCallbackRequest, type CallbackPayload } from '@/lib/simulateur/ca
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const BATCH_SIZE = 50
+const BATCH_SIZE = 15
+const DEADLINE_MS = 50_000
 
 interface FailureRow {
   id: string
@@ -67,14 +68,49 @@ export async function GET(request: Request) {
   const rows = (pending ?? []) as FailureRow[]
   let synced = 0
   let failed = 0
+  const startTs = Date.now()
 
   for (const row of rows) {
+    if (Date.now() - startTs > DEADLINE_MS) {
+      logger.warn('simulateur-pipedrive-retry: deadline reached, stopping batch', {
+        processed: synced + failed,
+        remaining: rows.length - (synced + failed),
+      })
+      break
+    }
     const rawPayload = row.payload as { kind?: string } & Record<string, unknown>
     const kind = rawPayload?.kind === 'callback' ? 'callback' : 'submit'
     try {
       let dealId: number | string
       if (kind === 'callback') {
-        const cb = rawPayload as unknown as CallbackPayload
+        // Re-hydrate PII from the estimation row (DLQ stores minimal info only)
+        const { data: est, error: estErr } = await supabase
+          .from('simulateur_estimations')
+          .select('prenom, nom, email, public_id')
+          .eq('id', row.estimation_id)
+          .maybeSingle()
+        if (estErr || !est || !est.email) {
+          throw new Error(
+            `Cannot rehydrate callback: estimation ${row.estimation_id} missing or no email`
+          )
+        }
+        const ctx = rawPayload as {
+          telephone?: string
+          preferredSlot?: string | null
+          remarquesClient?: string | null
+        }
+        if (!ctx.telephone) {
+          throw new Error(`Callback DLQ row ${row.id} missing telephone`)
+        }
+        const cb: CallbackPayload = {
+          publicId: (est.public_id as string) ?? '',
+          prenom: (est.prenom as string | null) ?? null,
+          nom: (est.nom as string | null) ?? null,
+          email: est.email as string,
+          telephone: ctx.telephone,
+          preferredSlot: ctx.preferredSlot ?? null,
+          remarquesClient: ctx.remarquesClient ?? null,
+        }
         const result = await createCallbackRequest(cb)
         dealId = result.dealId
       } else {

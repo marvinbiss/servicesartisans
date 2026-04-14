@@ -145,14 +145,24 @@ async function createCallbackDeal(
   return res.data.id
 }
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function buildNote(input: CallbackInput): string {
   const lines = [
     `<b>🔔 RAPPEL CONSEILLER DEMANDÉ</b>`,
-    `<b>Estimation:</b> ${input.publicId}`,
-    `<b>Téléphone:</b> ${input.telephone}`,
+    `<b>Estimation:</b> ${escapeHtml(input.publicId)}`,
+    `<b>Téléphone:</b> ${escapeHtml(input.telephone)}`,
   ]
-  if (input.preferredSlot) lines.push(`<b>Créneau souhaité:</b> ${input.preferredSlot}`)
-  if (input.remarquesClient) lines.push(`<b>Remarques client:</b> ${input.remarquesClient}`)
+  if (input.preferredSlot) lines.push(`<b>Créneau souhaité:</b> ${escapeHtml(input.preferredSlot)}`)
+  if (input.remarquesClient)
+    lines.push(`<b>Remarques client:</b> ${escapeHtml(input.remarquesClient)}`)
   lines.push(`<br/><i>Source: page résultat simulateur — signal chaud</i>`)
   return lines.join('<br/>')
 }
@@ -206,15 +216,24 @@ export async function createCallbackRequest(input: CallbackInput): Promise<Callb
   const dealId =
     (await findOpenDeal(cfg, personId)) ?? (await createCallbackDeal(cfg, personId, input))
 
-  // Note always (persistent record). Activity best-effort.
-  await addDealNote(cfg, dealId, input)
-  await addCallActivity(cfg, dealId, personId, input).catch((err) => {
+  // Note always (persistent record). Activity best-effort. Parallel to cut ~500ms p50.
+  const [noteRes, activityRes] = await Promise.allSettled([
+    addDealNote(cfg, dealId, input),
+    addCallActivity(cfg, dealId, personId, input),
+  ])
+  if (noteRes.status === 'rejected') {
+    throw noteRes.reason instanceof Error ? noteRes.reason : new Error(String(noteRes.reason))
+  }
+  if (activityRes.status === 'rejected') {
     logger.warn('simulateur-callback: activity creation failed, note kept', {
       dealId,
       publicId: input.publicId,
-      err: err instanceof Error ? err.message : String(err),
+      err:
+        activityRes.reason instanceof Error
+          ? activityRes.reason.message
+          : String(activityRes.reason),
     })
-  })
+  }
 
   return { personId, dealId }
 }

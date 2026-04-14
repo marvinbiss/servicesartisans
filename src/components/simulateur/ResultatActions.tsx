@@ -7,6 +7,7 @@ import { trackEvent } from '@/lib/analytics/tracking'
 
 interface Props {
   publicId: string
+  callbackToken: string
   telephonePrefill: string | null
   parcoursSlug: string | null
   codePostal: string | null
@@ -16,6 +17,7 @@ type CallbackStatus = 'idle' | 'success' | 'error'
 
 export default function ResultatActions({
   publicId,
+  callbackToken,
   telephonePrefill,
   parcoursSlug,
   codePostal,
@@ -54,6 +56,7 @@ export default function ResultatActions({
     const fd = new FormData(form)
     const payload = {
       publicId,
+      callbackToken,
       telephone: String(fd.get('telephone') ?? '').trim(),
       preferredSlot: (String(fd.get('preferredSlot') ?? '').trim() || null) as string | null,
       remarquesClient: (String(fd.get('remarquesClient') ?? '').trim() || null) as string | null,

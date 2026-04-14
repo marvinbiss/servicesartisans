@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { signToken } from '@/lib/simulateur/rgpd/signed-token'
 import ResultatActions from '@/components/simulateur/ResultatActions'
 
 const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/i
@@ -66,6 +67,7 @@ export default async function ResultatPage({ params }: PageParams) {
   const parcoursSlug = typeof data.parcours === 'string' ? data.parcours : null
   const codePostal = typeof data.code_postal === 'string' ? data.code_postal : null
   const telephonePrefill = typeof data.telephone === 'string' ? data.telephone : null
+  const callbackToken = signToken(data.public_id as string, 3600)
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -163,6 +165,7 @@ export default async function ResultatPage({ params }: PageParams) {
         {/* 2 paths action */}
         <ResultatActions
           publicId={data.public_id as string}
+          callbackToken={callbackToken}
           telephonePrefill={telephonePrefill}
           parcoursSlug={parcoursSlug}
           codePostal={codePostal}

@@ -23,8 +23,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
-import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
+import { rateLimitDb, getRateLimitDbHeaders } from '@/lib/rate-limit-db'
 import { hashIp } from '@/lib/simulateur/rgpd/hash-ip'
+import { verifyToken } from '@/lib/simulateur/rgpd/signed-token'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   createCallbackRequest,
@@ -34,12 +35,14 @@ import {
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 30
 
 // Téléphone FR strict (aligné Step5Contact : +33 ou 0 + [1-9] + 8 chiffres, espaces tolérés)
 const TEL_FR_RE = /^(?:\+33|0)[1-9](?:\d{8})$/
 
 const callbackSchema = z.object({
   publicId: z.string().min(8).max(64),
+  callbackToken: z.string().min(10).max(256),
   telephone: z
     .string()
     .trim()
@@ -68,18 +71,18 @@ export async function POST(req: NextRequest) {
     ipKey = ip
   }
 
-  const rlHour = rateLimit(`simulateur:callback:h:${ipKey}`, 3, 60 * 60_000)
+  const rlHour = await rateLimitDb(`simulateur:callback:h:${ipKey}`, 3, 60 * 60_000)
   if (!rlHour.success) {
     return NextResponse.json(
       { error: 'Trop de demandes de rappel. Réessayez plus tard.' },
-      { status: 429, headers: getRateLimitHeaders(rlHour) }
+      { status: 429, headers: getRateLimitDbHeaders(rlHour) }
     )
   }
-  const rlDay = rateLimit(`simulateur:callback:d:${ipKey}`, 8, 24 * 60 * 60_000)
+  const rlDay = await rateLimitDb(`simulateur:callback:d:${ipKey}`, 8, 24 * 60 * 60_000)
   if (!rlDay.success) {
     return NextResponse.json(
       { error: 'Quota journalier atteint.' },
-      { status: 429, headers: getRateLimitHeaders(rlDay) }
+      { status: 429, headers: getRateLimitDbHeaders(rlDay) }
     )
   }
 
@@ -98,7 +101,11 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { publicId, telephone, preferredSlot, remarquesClient } = parsed.data
+  const { publicId, callbackToken, telephone, preferredSlot, remarquesClient } = parsed.data
+
+  if (!verifyToken(publicId, callbackToken)) {
+    return NextResponse.json({ error: 'Token invalide ou expiré' }, { status: 403 })
+  }
 
   const supabase = createAdminClient()
   const { data: estimation, error: fetchErr } = await supabase
@@ -166,8 +173,14 @@ export async function POST(req: NextRequest) {
     try {
       await supabase.from('simulateur_pipedrive_failures').insert({
         estimation_id: estimation.id as string,
-        // Discriminator : le cron retry dispatche sur payload.kind
-        payload: { kind: 'callback', ...payload } as unknown as Record<string, unknown>,
+        // No PII in DLQ — only discriminator + callback-specific context.
+        // Cron retry re-hydrates email/prénom/nom from simulateur_estimations.
+        payload: {
+          kind: 'callback',
+          telephone,
+          preferredSlot: preferredSlot ?? null,
+          remarquesClient: remarquesClient ?? null,
+        } as unknown as Record<string, unknown>,
         error: message.slice(0, 2000),
         retry_count: 0,
         next_retry_at: new Date().toISOString(),
@@ -185,6 +198,6 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json(
     { accepted: true },
-    { status: 202, headers: getRateLimitHeaders(rlHour) }
+    { status: 202, headers: getRateLimitDbHeaders(rlHour) }
   )
 }
