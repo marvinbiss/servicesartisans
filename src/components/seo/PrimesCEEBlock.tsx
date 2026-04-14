@@ -282,7 +282,7 @@ export default async function PrimesCEEBlock({
       {/* CTA links */}
       <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-sand-200">
         <a
-          href="/simulateur-prime-cee"
+          href="/simulateur-aides-renovation"
           className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
         >
           Simuler ma prime CEE

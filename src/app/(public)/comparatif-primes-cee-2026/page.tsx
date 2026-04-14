@@ -459,7 +459,7 @@ export default function ComparatifPrimesCee2026Page() {
           Fourchettes indicatives. Les montants réels dépendent de la zone climatique (H1/H2/H3), de
           la surface, du type de logement et du délégataire choisi. Utilisez le{' '}
           <Link
-            href="/simulateur-prime-cee"
+            href="/simulateur-aides-renovation"
             className="text-emerald-700 font-semibold hover:underline"
           >
             simulateur de prime CEE
@@ -548,7 +548,7 @@ export default function ComparatifPrimesCee2026Page() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
-              href="/simulateur-prime-cee"
+              href="/simulateur-aides-renovation"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
             >
               Simuler ma prime

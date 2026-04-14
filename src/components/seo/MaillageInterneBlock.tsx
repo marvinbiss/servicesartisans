@@ -160,7 +160,7 @@ function buildAidesFinancieres(props: MaillageInterneProps): InternalLink[] {
       icon: Euro,
     })
     links.push({
-      href: '/simulateur-prime-cee',
+      href: '/simulateur-aides-renovation',
       label: 'Simulateur de prime CEE',
       icon: Euro,
     })
@@ -169,7 +169,7 @@ function buildAidesFinancieres(props: MaillageInterneProps): InternalLink[] {
   // CEE for devis intent too (lighter)
   if (props.hasCEE && props.currentIntent === 'devis') {
     links.push({
-      href: '/simulateur-prime-cee',
+      href: '/simulateur-aides-renovation',
       label: 'Estimer votre prime CEE',
       icon: Euro,
     })

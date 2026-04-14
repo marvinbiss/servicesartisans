@@ -517,7 +517,7 @@ export default function DevenirPartenaireCeePage() {
               </p>
             </div>
             <Link
-              href="/simulateur-prime-cee"
+              href="/simulateur-aides-renovation"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition whitespace-nowrap"
             >
               Simuler une prime
