@@ -167,7 +167,7 @@ export async function sendLeadAlert(
   // Fetch provider details
   const { data: providers, error } = await supabase
     .from('providers')
-    .select('id, name, email, phone')
+    .select('id, name, email, phone, user_id')
     .in('id', provider_ids)
 
   if (error || !providers) {
@@ -202,17 +202,19 @@ export async function sendLeadAlert(
       results.push({ provider_id: provider.id, channel: 'sms', ...smsResult })
     }
 
-    // Insert in-app notification (graceful fail if table doesn't exist)
-    try {
-      await supabase.from('notifications').insert({
-        provider_id: provider.id,
-        type: 'new_lead',
-        title: `Nouvelle demande de ${service || 'devis'}`,
-        body: `${client_name || 'Un client'} cherche un ${service || 'artisan'} à ${city || 'proximité'}`,
-        link: '/espace-artisan/demandes-recues',
-      })
-    } catch {
-      // notifications table may not exist yet
+    // Insert in-app notification (skip if provider not claimed — no user_id)
+    if (provider.user_id) {
+      try {
+        await supabase.from('notifications').insert({
+          user_id: provider.user_id,
+          type: 'new_lead',
+          title: `Nouvelle demande de ${service || 'devis'}`,
+          message: `${client_name || 'Un client'} cherche un ${service || 'artisan'} à ${city || 'proximité'}`,
+          link: '/espace-artisan/demandes-recues',
+        })
+      } catch {
+        // notifications insert best-effort; FK/RLS errors non-fatal here
+      }
     }
   }
 

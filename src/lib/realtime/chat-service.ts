@@ -17,13 +17,8 @@ export interface ChatMessage {
   file_url?: string
   read_at?: string
   created_at: string
-  reply_to_message_id?: string
-  rich_content?: {
-    mentions?: string[]
-    links?: string[]
-    formatted?: boolean
-  }
-  reply_to?: ChatMessage
+  // NOTE: reply_to_message_id and rich_content were dropped in migration 102
+  // (public.messages schema cleanup). Do not re-introduce without a new migration.
 }
 
 export interface Conversation {
@@ -147,8 +142,6 @@ class ChatService {
     messageType: 'text' | 'image' | 'file' | 'voice' = 'text',
     options?: {
       fileUrl?: string
-      replyToMessageId?: string
-      richContent?: ChatMessage['rich_content']
     }
   ): Promise<ChatMessage | null> {
     const { data, error } = await this.supabase
@@ -160,8 +153,6 @@ class ChatService {
         content,
         message_type: messageType,
         file_url: options?.fileUrl,
-        reply_to_message_id: options?.replyToMessageId,
-        rich_content: options?.richContent,
       })
       .select()
       .single()
@@ -236,8 +227,8 @@ class ChatService {
       .from('messages')
       .select(
         `
-        id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content
-      `
+        id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at
+`
       )
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: false })
@@ -264,7 +255,7 @@ class ChatService {
     const { data, error } = await this.supabase
       .from('messages')
       .select(
-        'id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, reply_to_message_id, rich_content'
+        'id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at'
       )
       .eq('conversation_id', conversationId)
       .ilike('content', `%${query}%`)
