@@ -1,0 +1,16 @@
+{
+  "_comment": "Whitelist for scanner false positives. tables = skip entirely; columns = skip specific {table: [cols]}.",
+  "_phantom_tables_comment": "Tables referenced in code but never created in prod (dead code to clean up in a follow-up).",
+  "tables": ["subscriptions", "avatars", "mv_provider_stats", "seo_ctr_crisis", "seo_striking_distance", "platform_settings", "prospection_contacts_archive", "message_attachments", "admin_users"],
+  "_v2_stale_code_comment": "cee_dossiers/cee_dossier_events : colonnes du schéma V2 (migration 402, droppée par 431). Le code dans src/lib/cee/{dispatcher,justificatifs}.ts, src/app/api/cron/cee-relance/route.ts, src/app/admin/(dashboard)/cee/dashboard/page.tsx et src/app/(private)/espace-artisan/cee/[dossierId]/page.tsx référence toujours l'ancien modèle. Refactor V2→V3 requis dans un sprint dédié (TODO-CEE-V3-REFACTOR).",
+  "columns": {
+    "prospection_conversations": ["prospection_contacts", "prospection_campaigns"],
+    "prospection_campaigns": ["prospection_templates", "prospection_lists"],
+    "services": ["service_id", "city"],
+    "providers": ["service_name", "provider_id", "client_id", "availability_slots"],
+    "availability_slots": ["bookings"],
+    "bookings": ["availability_slots"],
+    "cee_dossiers": ["devis_id", "delegataire_id", "justificatifs", "kwhc_estime", "prime_estimee_eur"],
+    "cee_dossier_events": ["from_status", "to_status", "actor_type"]
+  }
+}
