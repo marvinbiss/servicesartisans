@@ -294,9 +294,9 @@ describe('getArtisanUrl', () => {
     expect(url).toContain('/ville-inconnue/')
   })
 
-  it('should fall back gracefully with missing fields', () => {
+  it('should return empty string when no id/slug available (avoids malformed URL ending in /)', () => {
     const url = getArtisanUrl({})
-    expect(url).toMatch(/^\/services\/artisan\/france\/$/)
+    expect(url).toBe('')
   })
 
   it('should start with /services/', () => {

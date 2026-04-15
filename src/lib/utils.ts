@@ -143,6 +143,7 @@ export function getArtisanUrl(artisan: {
   const locationSlug =
     _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
   const id = artisan.slug || artisan.stable_id || ''
+  if (!id) return ''
   return `/services/${serviceSlug}/${locationSlug}/${id}`
 }
 
@@ -312,7 +313,7 @@ export function reportWebVitals(metric: WebVitalMetric): void {
     }
   } else {
     // Log to console in development
-    console.log(`[Web Vitals] ${metric.name}: ${metric.value} (${metric.rating})`)
+    console.warn(`[Web Vitals] ${metric.name}: ${metric.value} (${metric.rating})`)
   }
 }
 
@@ -322,7 +323,7 @@ export function measurePerformance(name: string): () => void {
   return () => {
     const duration = performance.now() - start
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`)
+      console.warn(`[Performance] ${name}: ${duration.toFixed(2)}ms`)
     }
   }
 }
