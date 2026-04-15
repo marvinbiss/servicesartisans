@@ -565,4 +565,30 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+// --- Sentry wrap -------------------------------------------------------------
+// Only wraps when @sentry/nextjs is importable and an org/project is set.
+// In dev without SENTRY_DSN the SDK init is no-op (see sentry.*.config.ts).
+const { withSentryConfig } = require('@sentry/nextjs')
+
+module.exports = withSentryConfig(nextConfig, {
+  // Org/project pulled from env so credentials stay out of the repo.
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Upload source maps only in CI/Vercel to avoid slowing local builds.
+  silent: !process.env.CI,
+
+  // Hide source maps from the public bundle (uploaded privately to Sentry).
+  hideSourceMaps: true,
+
+  // Tree-shake Sentry debug logger in prod (~30KB saved).
+  disableLogger: true,
+
+  // Route Sentry traffic through our domain to bypass ad-blockers.
+  tunnelRoute: '/monitoring',
+
+  // Only enable upload/wrapping when an auth token is present.
+  // Without it the build still works, you just don't get source maps.
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+})
+
