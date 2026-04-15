@@ -492,3 +492,61 @@ describe('createCallbackRequest — missing config', () => {
     await expect(createCallbackRequest(makePayload())).rejects.toThrow(/not configured/i)
   })
 })
+
+describe('createCallbackRequest — custom fields & phone fallback', () => {
+  it('injects source="callback-simulateur" on NEW deal when PIPEDRIVE_FIELD_SOURCE is set', async () => {
+    process.env.PIPEDRIVE_FIELD_SOURCE = 'cf_source_key'
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search')) {
+        return { ok: true, body: { success: true, data: { items: [{ item: { id: 101 } }] } } }
+      }
+      // No existing deal → forces createCallbackDeal path
+      if (url.includes('/deals/search')) {
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      }
+      if (url.includes('/deals') && !url.includes('search')) {
+        return { ok: true, body: { success: true, data: { id: 999 } } }
+      }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 303 } } }
+      if (url.includes('/activities'))
+        return { ok: true, body: { success: true, data: { id: 404 } } }
+      return { ok: false, body: { success: false } }
+    })
+    await createCallbackRequest(makePayload())
+    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    expect(dealCreate).toBeDefined()
+    const body = JSON.parse(dealCreate!.init!.body as string)
+    expect(body.cf_source_key).toBe('callback-simulateur')
+    delete process.env.PIPEDRIVE_FIELD_SOURCE
+  })
+
+  it('falls back to phone search when email search returns no match', async () => {
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search') && url.includes('fields=email')) {
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      }
+      if (url.includes('/persons/search') && url.includes('fields=phone')) {
+        return { ok: true, body: { success: true, data: { items: [{ item: { id: 8888 } }] } } }
+      }
+      if (url.includes('/persons') && !url.includes('search')) {
+        throw new Error('Should NOT create Person when phone matches')
+      }
+      if (url.includes('/deals/search')) {
+        return {
+          ok: true,
+          body: { success: true, data: { items: [{ item: { id: 202, pipeline_id: 42 } }] } },
+        }
+      }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 303 } } }
+      if (url.includes('/activities'))
+        return { ok: true, body: { success: true, data: { id: 404 } } }
+      return { ok: false, body: { success: false } }
+    })
+    const result = await createCallbackRequest(makePayload())
+    expect(result.personId).toBe(8888)
+    const searches = calls.filter((c) => c.url.includes('/persons/search'))
+    expect(searches).toHaveLength(2)
+    expect(searches[0].url).toContain('fields=email')
+    expect(searches[1].url).toContain('fields=phone')
+  })
+})

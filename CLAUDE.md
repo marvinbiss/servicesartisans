@@ -263,6 +263,33 @@ Variables requises (voir `.env.example`) :
 - **Domaine canonical** : `servicesartisans.fr` (apex, sans `www`). `www.servicesartisans.fr` renvoie un 301 Vercel qui casse les POST : `curl -L` sur un 301 convertit le POST en GET et perd le body → 400 « Données invalides ». **Toujours taper l'apex directement** pour les endpoints API (`/api/revalidate`, `/api/indexnow`, etc.).
 - **CSRF** : `/api/revalidate` exige un header `Origin` (sinon 403 « En-tête Origin requis »). Ajouter `-H "Origin: https://servicesartisans.fr"` sur les curls directs.
 
+---
+
+## Pipedrive CRM — 3 canaux (mise à jour 2026-04-15)
+
+3 intégrations partagent `PIPEDRIVE_API_TOKEN` + `PIPEDRIVE_COMPANY_DOMAIN` mais s'appuient sur **2 pipelines distincts** et se distinguent par le champ custom `source`.
+
+| Canal                      | Pipeline env var                | `source` (via `PIPEDRIVE_FIELD_SOURCE`) | Mode exécution       | DLQ                             |
+| -------------------------- | ------------------------------- | --------------------------------------- | -------------------- | ------------------------------- |
+| `/api/devis`               | `PIPEDRIVE_PIPELINE_ID`         | `"servicesartisans.fr"`                 | timeout race 4s      | `devis_pipedrive_failures`      |
+| `/api/simulateur/submit`   | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"simulateur-aides"`                    | fire-and-forget      | `simulateur_pipedrive_failures` |
+| `/api/simulateur/callback` | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"callback-simulateur"`                 | await inline (~1-2s) | `simulateur_pipedrive_failures` |
+
+### Règles Pipedrive
+
+- **Recherche Person** : email d'abord, fallback phone. Évite les doublons cross-canaux (user qui passe par devis puis simulateur avec email différent).
+- **Custom fields opt-in** : `PIPEDRIVE_FIELD_SOURCE`, `PIPEDRIVE_FIELD_POSTAL_CODE` (partagés par les 3 canaux), `PIPEDRIVE_FIELD_SERVICE/URGENCY/CITY` (devis uniquement).
+- **Filtrage Pipedrive** : utiliser le custom field `source` pour distinguer les canaux dans les vues/rapports (pas le titre du Deal, pas le pipeline seul).
+- **Retry DLQ** : cron toutes les 6h, backoff expo capé à 24h, max 5 tentatives.
+
+### Fichiers
+
+- `src/lib/integrations/pipedrive.ts` — devis
+- `src/lib/simulateur/pipedrive.ts` — simulateur submit
+- `src/lib/simulateur/callback-pipedrive.ts` — simulateur callback
+
+---
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill

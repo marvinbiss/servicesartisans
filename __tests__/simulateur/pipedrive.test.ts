@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Tests — src/lib/simulateur/pipedrive.ts
  * Coverage:
@@ -34,7 +35,12 @@ function mockLead(): SimulateurLeadInput {
       zoneClimatique: 'H1',
       parcours: 'geste',
       gestes: [
-        { id: 'PAC_AIREAU', label: 'PAC air/eau', forfait: 4000, baremeId: asBareme('MPR.PAC_AIREAU.JAUNE.2026-01') },
+        {
+          id: 'PAC_AIREAU',
+          label: 'PAC air/eau',
+          forfait: 4000,
+          baremeId: asBareme('MPR.PAC_AIREAU.JAUNE.2026-01'),
+        },
       ],
       baremeIds: [asBareme('MPR.PAC_AIREAU.JAUNE.2026-01'), asBareme('CEE.BAR-TH-171.H1.2026-01')],
       mprTotal: 4000,
@@ -52,7 +58,10 @@ function mockLead(): SimulateurLeadInput {
 }
 
 type FetchCall = { url: string; init?: RequestInit }
-type FetchHandler = (url: string, init?: RequestInit) => { ok: boolean; status?: number; body: unknown }
+type FetchHandler = (
+  url: string,
+  init?: RequestInit
+) => { ok: boolean; status?: number; body: unknown }
 
 function installFetchMock(handler: FetchHandler): { calls: FetchCall[] } {
   const calls: FetchCall[] = []
@@ -271,5 +280,104 @@ describe('createSimulateurDeal — field mapping & flow', () => {
   it('throws when not configured', async () => {
     delete process.env.PIPEDRIVE_PIPELINE_SIMULATEUR
     await expect(createSimulateurDeal(mockLead())).rejects.toThrow(/not configured/)
+  })
+})
+
+// ── Tests: custom fields (source + postal_code) ────────────────────
+
+describe('createSimulateurDeal — custom fields', () => {
+  it('injects source="simulateur-aides" when PIPEDRIVE_FIELD_SOURCE is set', async () => {
+    process.env.PIPEDRIVE_FIELD_SOURCE = 'cf_source_key'
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search'))
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      if (url.includes('/persons')) return { ok: true, body: { success: true, data: { id: 1 } } }
+      if (url.includes('/deals')) return { ok: true, body: { success: true, data: { id: 2 } } }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 3 } } }
+      return { ok: false, body: { success: false } }
+    })
+    await createSimulateurDeal(mockLead())
+    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealBody = JSON.parse(dealCreate!.init!.body as string)
+    expect(dealBody.cf_source_key).toBe('simulateur-aides')
+  })
+
+  it('injects postal_code from estimation.codePostal when PIPEDRIVE_FIELD_POSTAL_CODE is set', async () => {
+    process.env.PIPEDRIVE_FIELD_POSTAL_CODE = 'cf_cp_key'
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search'))
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      if (url.includes('/persons')) return { ok: true, body: { success: true, data: { id: 1 } } }
+      if (url.includes('/deals')) return { ok: true, body: { success: true, data: { id: 2 } } }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 3 } } }
+      return { ok: false, body: { success: false } }
+    })
+    await createSimulateurDeal(mockLead())
+    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealBody = JSON.parse(dealCreate!.init!.body as string)
+    expect(dealBody.cf_cp_key).toBe('75001')
+  })
+
+  it('omits custom fields when env vars not configured (opt-in)', async () => {
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search'))
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      if (url.includes('/persons')) return { ok: true, body: { success: true, data: { id: 1 } } }
+      if (url.includes('/deals')) return { ok: true, body: { success: true, data: { id: 2 } } }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 3 } } }
+      return { ok: false, body: { success: false } }
+    })
+    await createSimulateurDeal(mockLead())
+    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealBody = JSON.parse(dealCreate!.init!.body as string)
+    // Only base keys — no arbitrary custom field keys
+    expect(Object.keys(dealBody).sort()).toEqual(
+      ['currency', 'person_id', 'pipeline_id', 'stage_id', 'status', 'title', 'value'].sort()
+    )
+  })
+})
+
+// ── Tests: Person search phone fallback ────────────────────────────
+
+describe('upsertPerson — phone fallback for cross-canal dedup', () => {
+  it('falls back to phone search when email search returns no match', async () => {
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search') && url.includes('fields=email')) {
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      }
+      if (url.includes('/persons/search') && url.includes('fields=phone')) {
+        return { ok: true, body: { success: true, data: { items: [{ item: { id: 7777 } }] } } }
+      }
+      if (url.includes('/persons') && !url.includes('search')) {
+        throw new Error('Should NOT create Person when phone matches')
+      }
+      if (url.includes('/deals')) return { ok: true, body: { success: true, data: { id: 2 } } }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 3 } } }
+      return { ok: false, body: { success: false } }
+    })
+    const result = await createSimulateurDeal(mockLead())
+    expect(result.personId).toBe(7777)
+    const searches = calls.filter((c) => c.url.includes('/persons/search'))
+    expect(searches).toHaveLength(2)
+    expect(searches[0].url).toContain('fields=email')
+    expect(searches[1].url).toContain('fields=phone')
+  })
+
+  it('creates new Person when neither email nor phone matches', async () => {
+    const { calls } = installFetchMock((url) => {
+      if (url.includes('/persons/search')) {
+        return { ok: true, body: { success: true, data: { items: [] } } }
+      }
+      if (url.includes('/persons')) return { ok: true, body: { success: true, data: { id: 5555 } } }
+      if (url.includes('/deals')) return { ok: true, body: { success: true, data: { id: 2 } } }
+      if (url.includes('/notes')) return { ok: true, body: { success: true, data: { id: 3 } } }
+      return { ok: false, body: { success: false } }
+    })
+    const result = await createSimulateurDeal(mockLead())
+    expect(result.personId).toBe(5555)
+    const searches = calls.filter((c) => c.url.includes('/persons/search'))
+    expect(searches).toHaveLength(2)
+    const personCreate = calls.find((c) => c.url.includes('/persons?') && c.init?.method === 'POST')
+    expect(personCreate).toBeDefined()
   })
 })

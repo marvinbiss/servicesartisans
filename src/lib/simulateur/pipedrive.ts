@@ -16,6 +16,13 @@
  *   PIPEDRIVE_PIPELINE_SIMULATEUR   — numeric pipeline id for "Simulateur Aides"
  *   PIPEDRIVE_STAGE_SIMULATEUR      — numeric stage id (defaults to 1)
  *
+ * Optional custom field keys (shared with devis integration — same Pipedrive
+ * account). If set, the Deal will carry structured metadata usable in filters:
+ *   PIPEDRIVE_FIELD_SOURCE          — set to "simulateur-aides" here (vs
+ *                                     "servicesartisans.fr" for /api/devis and
+ *                                     "callback-simulateur" for the callback)
+ *   PIPEDRIVE_FIELD_POSTAL_CODE     — mirrors estimation.codePostal
+ *
  * Doc archi: docs/simulateur-architecture.md §6
  */
 
@@ -81,6 +88,10 @@ interface SimConfig {
   baseUrl: string
   pipelineId: number
   stageId: number
+  fields: {
+    source?: string
+    postalCode?: string
+  }
 }
 
 function getSimConfig(): SimConfig | null {
@@ -97,6 +108,10 @@ function getSimConfig(): SimConfig | null {
     baseUrl: `https://${domain}.pipedrive.com/api/v1`,
     pipelineId,
     stageId,
+    fields: {
+      source: process.env.PIPEDRIVE_FIELD_SOURCE,
+      postalCode: process.env.PIPEDRIVE_FIELD_POSTAL_CODE,
+    },
   }
 }
 
@@ -139,20 +154,30 @@ async function pdFetch<T>(
   return json
 }
 
-// ── Person (idempotent by email) ───────────────────────────────────
+// ── Person (idempotent by email, phone fallback) ───────────────────
 
-async function findExistingPersonByEmail(cfg: SimConfig, email: string): Promise<number | null> {
-  if (!email) return null
-  const res = await pdFetch<{ items: Array<{ item: { id: number } }> }>(
-    cfg,
-    `/persons/search?term=${encodeURIComponent(email)}&fields=email&exact_match=true&limit=1`,
-    { method: 'GET' }
-  )
-  return res.data?.items?.[0]?.item.id ?? null
+async function findExistingPerson(
+  cfg: SimConfig,
+  email: string,
+  phone: string
+): Promise<number | null> {
+  // Search email first (primary identity), phone second (cross-canal dedupe
+  // when the same user submits a devis then the simulator with another email).
+  for (const [term, field] of [[email, 'email'] as const, [phone, 'phone'] as const]) {
+    if (!term) continue
+    const res = await pdFetch<{ items: Array<{ item: { id: number } }> }>(
+      cfg,
+      `/persons/search?term=${encodeURIComponent(term)}&fields=${field}&exact_match=true&limit=1`,
+      { method: 'GET' }
+    )
+    const id = res.data?.items?.[0]?.item.id
+    if (id) return id
+  }
+  return null
 }
 
 async function upsertPerson(cfg: SimConfig, input: SimulateurLeadInput): Promise<number> {
-  const existingId = await findExistingPersonByEmail(cfg, input.email)
+  const existingId = await findExistingPerson(cfg, input.email, input.telephone)
   if (existingId) return existingId
 
   const name = `${input.prenom} ${input.nom}`.trim() || input.email
@@ -194,6 +219,11 @@ async function createDeal(
     stage_id: cfg.stageId,
     value: computeDealValue(input.estimation),
     currency: 'EUR',
+  }
+  // Custom fields (only set if configured in env — shared keys with devis).
+  if (cfg.fields.source) body[cfg.fields.source] = 'simulateur-aides'
+  if (cfg.fields.postalCode && input.estimation.codePostal) {
+    body[cfg.fields.postalCode] = input.estimation.codePostal
   }
   const res = await pdFetch<{ id: number }>(cfg, '/deals', {
     method: 'POST',

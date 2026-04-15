@@ -31,6 +31,9 @@ interface CallbackCfg {
   baseUrl: string
   pipelineId: number
   stageId: number
+  fields: {
+    source?: string
+  }
 }
 
 function getConfig(): CallbackCfg | null {
@@ -47,6 +50,9 @@ function getConfig(): CallbackCfg | null {
     baseUrl: `https://${domain}.pipedrive.com/api/v1`,
     pipelineId,
     stageId,
+    fields: {
+      source: process.env.PIPEDRIVE_FIELD_SOURCE,
+    },
   }
 }
 
@@ -85,18 +91,23 @@ async function pdFetch<T>(
   return json
 }
 
-async function findPersonByEmail(cfg: CallbackCfg, email: string): Promise<number | null> {
-  if (!email) return null
-  const res = await pdFetch<{ items: Array<{ item: { id: number } }> }>(
-    cfg,
-    `/persons/search?term=${encodeURIComponent(email)}&fields=email&exact_match=true&limit=1`,
-    { method: 'GET' }
-  )
-  return res.data?.items?.[0]?.item.id ?? null
+async function findPerson(cfg: CallbackCfg, email: string, phone: string): Promise<number | null> {
+  // Email first (primary identity), phone fallback (cross-canal dedupe).
+  for (const [term, field] of [[email, 'email'] as const, [phone, 'phone'] as const]) {
+    if (!term) continue
+    const res = await pdFetch<{ items: Array<{ item: { id: number } }> }>(
+      cfg,
+      `/persons/search?term=${encodeURIComponent(term)}&fields=${field}&exact_match=true&limit=1`,
+      { method: 'GET' }
+    )
+    const id = res.data?.items?.[0]?.item.id
+    if (id) return id
+  }
+  return null
 }
 
 async function upsertPerson(cfg: CallbackCfg, input: CallbackPayload): Promise<number> {
-  const existingId = await findPersonByEmail(cfg, input.email)
+  const existingId = await findPerson(cfg, input.email, input.telephone)
   if (existingId) return existingId
 
   const name = [input.prenom, input.nom].filter(Boolean).join(' ').trim() || input.email
@@ -133,16 +144,18 @@ async function createCallbackDeal(
   const title =
     `[RAPPEL] Simulateur — ${input.prenom ?? ''} ${input.nom ?? ''}`.trim() ||
     `[RAPPEL] ${input.email}`
+  const body: Record<string, unknown> = {
+    title,
+    person_id: personId,
+    status: 'open',
+    pipeline_id: cfg.pipelineId,
+    stage_id: cfg.stageId,
+    currency: 'EUR',
+  }
+  if (cfg.fields.source) body[cfg.fields.source] = 'callback-simulateur'
   const res = await pdFetch<{ id: number }>(cfg, '/deals', {
     method: 'POST',
-    body: JSON.stringify({
-      title,
-      person_id: personId,
-      status: 'open',
-      pipeline_id: cfg.pipelineId,
-      stage_id: cfg.stageId,
-      currency: 'EUR',
-    }),
+    body: JSON.stringify(body),
   })
   if (!res.data?.id) throw new Error('Pipedrive deal creation returned no id')
   return res.data.id
