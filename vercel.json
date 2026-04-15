@@ -1,6 +1,11 @@
 {
   "framework": "nextjs",
   "regions": ["cdg1"],
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--max-old-space-size=8192"
+    }
+  },
   "functions": {
     "src/app/**/*.tsx": {
       "maxDuration": 30

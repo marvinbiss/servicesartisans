@@ -51,10 +51,10 @@ export function computeNextSimRetryAt(attempts: number, now: Date = new Date()):
 export interface SimulateurLeadInput {
   publicId: string
   requestId?: string
-  prenom: string
-  nom: string
-  email: string
-  telephone: string
+  prenom?: string | null
+  nom?: string | null
+  email?: string | null
+  telephone?: string | null
   // Estimation snapshot pour la note
   estimation: Pick<
     Estimation,
@@ -165,8 +165,8 @@ async function pdFetch<T>(
 
 async function findExistingPerson(
   cfg: SimConfig,
-  email: string,
-  phone: string
+  email: string | null | undefined,
+  phone: string | null | undefined
 ): Promise<number | null> {
   // Search email first (primary identity), phone second (cross-canal dedupe
   // when the same user submits a devis then the simulator with another email).
@@ -187,13 +187,17 @@ async function upsertPerson(cfg: SimConfig, input: SimulateurLeadInput): Promise
   const existingId = await findExistingPerson(cfg, input.email, input.telephone)
   if (existingId) return existingId
 
-  const name = `${input.prenom} ${input.nom}`.trim() || input.email
-  const body = {
-    name,
-    email: [{ value: input.email, primary: true, label: 'work' }],
-    ...(input.telephone
-      ? { phone: [{ value: input.telephone, primary: true, label: 'work' }] }
-      : {}),
+  const name =
+    `${input.prenom ?? ''} ${input.nom ?? ''}`.trim() ||
+    input.email ||
+    input.telephone ||
+    input.publicId
+  const body: Record<string, unknown> = { name }
+  if (input.email) {
+    body.email = [{ value: input.email, primary: true, label: 'work' }]
+  }
+  if (input.telephone) {
+    body.phone = [{ value: input.telephone, primary: true, label: 'work' }]
   }
   const res = await pdFetch<{ id: number }>(cfg, '/persons', {
     method: 'POST',
@@ -216,8 +220,9 @@ async function createDeal(
   personId: number,
   input: SimulateurLeadInput
 ): Promise<number> {
-  const title =
-    `Simulateur aides — ${input.prenom} ${input.nom} (${input.estimation.codePostal})`.trim()
+  const displayName =
+    `${input.prenom ?? ''} ${input.nom ?? ''}`.trim() || input.email || input.telephone || 'Lead'
+  const title = `Simulateur aides — ${displayName} (${input.estimation.codePostal})`.trim()
   const body: Record<string, unknown> = {
     title,
     person_id: personId,
@@ -277,6 +282,7 @@ function buildNoteHtml(input: SimulateurLeadInput): string {
 
   return [
     `<b>Estimation:</b> ${escapeHtml(est.publicId)}`,
+    ...(input.requestId ? [`<b>Request ID:</b> ${escapeHtml(input.requestId)}`] : []),
     `<b>Version barèmes:</b> ${escapeHtml(est.barometreVersion)}`,
     `<b>Catégorie ANAH:</b> ${escapeHtml(est.categorieAnah)}`,
     `<b>Zone climatique:</b> ${escapeHtml(est.zoneClimatique)}`,

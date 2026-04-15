@@ -317,9 +317,6 @@ describe('GET /api/cron/simulateur-pipedrive-retry — submit row', () => {
     mockCreateSimulateurDeal.mockResolvedValue({ personId: 10, dealId: 20 })
 
     const deleteSpy = vi.fn().mockResolvedValue({ data: null, error: null })
-    const updateFailureSpy = vi
-      .fn()
-      .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) })
     const updateEstimationEqSpy = vi.fn().mockResolvedValue({ data: null, error: null })
     const updateEstimationSpy = vi.fn().mockReturnValue({ eq: updateEstimationEqSpy })
 
