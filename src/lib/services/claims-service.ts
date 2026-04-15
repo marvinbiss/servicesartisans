@@ -8,6 +8,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
+import { sendClaimApprovedAuthenticatedEmail } from '@/lib/simulateur/emails'
 import crypto from 'crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -654,6 +655,39 @@ export async function approveClaim(
     } catch (emailErr) {
       emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`
       logger.error('Failed to send claim approval email', { claimId, error: emailErr })
+    }
+  } else {
+    // Authenticated claim (artisan already logged in) — pas de recovery link
+    // nécessaire, juste une confirmation email pour qu'il sache que sa fiche
+    // est active. Récupère l'email depuis auth.users (source de vérité).
+    try {
+      const { data: userRes } = await supabase.auth.admin.getUserById(resolvedUserId)
+      const authEmail = userRes?.user?.email?.trim().toLowerCase()
+      if (authEmail) {
+        const emailResult = await sendClaimApprovedAuthenticatedEmail({
+          to: authEmail,
+          name: claim.claimant_name || 'Artisan',
+          providerName: updatedProvider.name || 'Votre fiche',
+        })
+        emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
+        logger.info('Claim approval email (authenticated) sent', {
+          claimId,
+          email: redactEmail(authEmail),
+          emailResult,
+        })
+      } else {
+        emailStatus = 'skipped: no auth email'
+        logger.warn('Authenticated claim approval — auth user has no email', {
+          claimId,
+          userId: resolvedUserId,
+        })
+      }
+    } catch (emailErr) {
+      emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`
+      logger.error('Failed to send claim approval email (authenticated)', {
+        claimId,
+        error: emailErr,
+      })
     }
   }
 

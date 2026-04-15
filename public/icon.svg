@@ -12,26 +12,13 @@
       <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#7c2d12" flood-opacity=".16"/>
     </filter>
   </defs>
-  <!-- Background squircle -->
   <rect x="21" y="21" width="470" height="470" rx="110" fill="url(#bg)"/>
   <rect x="21" y="21" width="470" height="470" rx="110" fill="url(#gl)"/>
   <rect x="21" y="21" width="470" height="470" rx="110" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="2"/>
-  <!-- House mark -->
   <g filter="url(#sh)">
-    <path fill-rule="evenodd" fill="#fff" fill-opacity=".95" d="
-      M256 118
-      L410 256
-      L370 256
-      L370 393
-      L142 393
-      L142 256
-      L102 256
-      Z
-      M224 393
-      V310
-      A32 32 0 0 1 288 310
-      V393
-      Z
-    "/>
+    <text x="256" y="256" text-anchor="middle" dominant-baseline="central"
+          font-family="'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif"
+          font-weight="800" font-size="240" letter-spacing="-8"
+          fill="#fff" fill-opacity=".97">SA</text>
   </g>
 </svg>

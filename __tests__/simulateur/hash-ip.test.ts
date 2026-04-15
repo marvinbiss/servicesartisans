@@ -46,11 +46,12 @@ describe('hashIp', () => {
     expect(() => hashIp('81.64.12.5')).toThrow(/RGPD_IP_SALT/)
   })
 
-  it('fallback en production si salt absent', () => {
+  it('throw aussi en production si salt absent (RGPD hard requirement)', () => {
     delete process.env.RGPD_IP_SALT
     ;(process.env as Record<string, string | undefined>).NODE_ENV = 'production'
-    const h = hashIp('81.64.12.5')
-    expect(h).toMatch(/^[0-9a-f]{64}$/)
+    // Pas de fallback silencieux : un hash non-salé est trivialement réversible
+    // par rainbow-table sur l'espace IPv4. Mieux vaut un 500 qu'une fuite.
+    expect(() => hashIp('81.64.12.5')).toThrow(/RGPD_IP_SALT/)
   })
 
   it('throw si IP vide ou non-string', () => {

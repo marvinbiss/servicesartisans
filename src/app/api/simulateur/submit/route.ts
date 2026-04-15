@@ -28,6 +28,7 @@ import { generatePublicId } from '@/lib/simulateur/utils/public-id'
 import { BAREMES_2026_01, CURRENT_BAREMES_VERSION } from '@/lib/simulateur/baremes'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { runPipedriveHook } from '@/lib/simulateur/submit-hooks'
+import { sendSubmitClientConfirmation, sendSubmitAdminNotification } from '@/lib/simulateur/emails'
 import type { Situation } from '@/lib/simulateur/types'
 
 export const runtime = 'nodejs'
@@ -222,6 +223,50 @@ export async function POST(req: NextRequest) {
     publicId,
     categorie,
     parcours: projet.parcours,
+  })
+
+  // Fire-and-forget emails — ne bloquent jamais la réponse HTTP. Resend a son
+  // propre retry interne (3 tentatives). Si le provider est down, on log et on
+  // continue : le lead existe en DB + Pipedrive, l'équipe peut rappeler.
+  if (coordonnees.email) {
+    void sendSubmitClientConfirmation({
+      to: coordonnees.email,
+      prenom: coordonnees.prenom ?? null,
+      publicId,
+      mprTotal: result.mprTotal,
+      ceeFourchetteBas: result.ceeFourchetteBas,
+      ceeFourchetteHaut: result.ceeFourchetteHaut,
+      coupPouceEstimation: Math.round((result.cdpEstimationBas + result.cdpEstimationHaut) / 2),
+      resteAChargeBas: result.resteAChargeBas,
+      resteAChargeHaut: result.resteAChargeHaut,
+    }).catch((err) => {
+      logger.error('simulateur/submit client email failed', {
+        component: 'api/simulateur/submit',
+        publicId,
+        error: err instanceof Error ? err.message : String(err),
+      })
+    })
+  }
+
+  void sendSubmitAdminNotification({
+    publicId,
+    prenom: coordonnees.prenom ?? null,
+    nom: coordonnees.nom ?? null,
+    email: coordonnees.email ?? null,
+    telephone: coordonnees.telephone ?? null,
+    codePostal: situation.codePostal,
+    parcours: projet.parcours,
+    categorieAnah: situation.categorie,
+    mprTotal: result.mprTotal,
+    ceeFourchetteHaut: result.ceeFourchetteHaut,
+    coupPouceEstimation: Math.round((result.cdpEstimationBas + result.cdpEstimationHaut) / 2),
+    consentDemarchage: coordonnees.consentDemarchage ?? false,
+  }).catch((err) => {
+    logger.error('simulateur/submit admin email failed', {
+      component: 'api/simulateur/submit',
+      publicId,
+      error: err instanceof Error ? err.message : String(err),
+    })
   })
 
   // Fire-and-forget Pipedrive hook — ne bloque jamais la réponse HTTP.

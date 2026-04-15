@@ -32,6 +32,7 @@ import {
   isCallbackPipedriveConfigured,
   type CallbackPayload,
 } from '@/lib/simulateur/callback-pipedrive'
+import { sendCallbackClientConfirmation, sendCallbackAdminAlert } from '@/lib/simulateur/emails'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -207,57 +208,83 @@ export async function POST(req: NextRequest) {
     remarquesClient: remarquesClient ?? null,
   }
 
-  // Pipedrive non configuré → on accepte quand même (env dev/staging)
+  // Pipedrive non configuré → skip uniquement le sync CRM, les emails partent
+  // quand même (env dev/staging : équipe commerciale peut traiter par email).
   if (!isCallbackPipedriveConfigured()) {
-    logger.warn('simulateur/callback Pipedrive not configured — 202 accepted', {
+    logger.warn('simulateur/callback Pipedrive not configured — email-only mode', {
       component: 'api/simulateur/callback',
       publicId,
     })
-    return NextResponse.json({ accepted: true }, { status: 202 })
-  }
-
-  // Await inline : on veut soit success Pipedrive, soit DLQ bien écrit, avant
-  // de répondre. Fire-and-forget n'est pas fiable en Vercel serverless.
-  try {
-    const result = await createCallbackRequest(payload)
-    logger.info('simulateur/callback pipedrive attached', {
-      component: 'api/simulateur/callback',
-      publicId,
-      dealId: result.dealId,
-    })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    logger.error('simulateur/callback pipedrive failed — inserting DLQ', {
-      component: 'api/simulateur/callback',
-      publicId,
-      error: message,
-    })
+  } else {
+    // Await inline : on veut soit success Pipedrive, soit DLQ bien écrit, avant
+    // de répondre. Fire-and-forget n'est pas fiable en Vercel serverless.
     try {
-      await supabase.from('simulateur_pipedrive_failures').insert({
-        estimation_id: estimation.id as string,
-        // No PII in DLQ — only discriminator + callback-specific context.
-        // Cron retry re-hydrates email/prénom/nom from simulateur_estimations.
-        // No PII in DLQ — telephone/email/prénom/nom re-hydrated from
-        // simulateur_estimations at cron replay time via estimation_id.
-        payload: {
-          kind: 'callback',
-          preferredSlot: preferredSlot ?? null,
-          remarquesClient: remarquesClient ?? null,
-        } satisfies CallbackDlqPayload as unknown as Record<string, unknown>,
-        error: message.slice(0, 2000),
-        retry_count: 0,
-        next_retry_at: new Date().toISOString(),
-      })
-    } catch (dlqErr) {
-      // Dernier recours — on log mais on accepte quand même côté UX (l'user
-      // a donné son tel, il peut rappeler). L'incident est visible via logs.
-      logger.error('simulateur/callback DLQ insert failed', {
+      const result = await createCallbackRequest(payload)
+      logger.info('simulateur/callback pipedrive attached', {
         component: 'api/simulateur/callback',
         publicId,
-        error: dlqErr instanceof Error ? dlqErr.message : String(dlqErr),
+        dealId: result.dealId,
       })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      logger.error('simulateur/callback pipedrive failed — inserting DLQ', {
+        component: 'api/simulateur/callback',
+        publicId,
+        error: message,
+      })
+      try {
+        await supabase.from('simulateur_pipedrive_failures').insert({
+          estimation_id: estimation.id as string,
+          payload: {
+            kind: 'callback',
+            preferredSlot: preferredSlot ?? null,
+            remarquesClient: remarquesClient ?? null,
+          } satisfies CallbackDlqPayload as unknown as Record<string, unknown>,
+          error: message.slice(0, 2000),
+          retry_count: 0,
+          next_retry_at: new Date().toISOString(),
+        })
+      } catch (dlqErr) {
+        logger.error('simulateur/callback DLQ insert failed', {
+          component: 'api/simulateur/callback',
+          publicId,
+          error: dlqErr instanceof Error ? dlqErr.message : String(dlqErr),
+        })
+      }
     }
   }
+
+  // Fire-and-forget emails — signal chaud à l'équipe commerciale + accusé client.
+  // Ne bloquent jamais la 202 : le tel est déjà persisté via Pipedrive/DLQ.
+  void sendCallbackClientConfirmation({
+    to: email,
+    prenom: payload.prenom,
+    telephone,
+    preferredSlot: preferredSlot ?? null,
+    publicId,
+  }).catch((err) => {
+    logger.error('simulateur/callback client email failed', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: err instanceof Error ? err.message : String(err),
+    })
+  })
+
+  void sendCallbackAdminAlert({
+    publicId,
+    prenom: payload.prenom,
+    nom: payload.nom,
+    email,
+    telephone,
+    preferredSlot: preferredSlot ?? null,
+    remarquesClient: remarquesClient ?? null,
+  }).catch((err) => {
+    logger.error('simulateur/callback admin email failed', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: err instanceof Error ? err.message : String(err),
+    })
+  })
 
   return NextResponse.json(
     { accepted: true },

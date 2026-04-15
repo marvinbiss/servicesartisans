@@ -3,58 +3,75 @@ const fs = require('fs');
 const path = require('path');
 
 const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
-const iconsDir = path.join(__dirname, '..', 'public', 'icons');
 const publicDir = path.join(__dirname, '..', 'public');
+const iconsDir = path.join(publicDir, 'icons');
 
-// Create a simple blue icon with a white symbol using pure SVG
-const createIconSvg = (size) => `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#2563eb"/>
-  <g fill="white">
-    <circle cx="220" cy="220" r="80" fill="none" stroke="white" stroke-width="40"/>
-    <rect x="280" y="280" width="120" height="40" rx="20" transform="rotate(45 340 300)"/>
-  </g>
-</svg>`;
+// Source = canonical brand SVG. Any rebrand change icon.svg once, re-run this script.
+const sourceSvg = fs.readFileSync(path.join(publicDir, 'icon.svg'));
 
 async function generateIcons() {
-  console.log('Generating PNG icons...');
+  console.log('Generating PNG icons from public/icon.svg...');
 
   for (const size of sizes) {
-    const svgBuffer = Buffer.from(createIconSvg(512));
-    const pngPath = path.join(iconsDir, `icon-${size}x${size}.png`);
-
+    const out = path.join(iconsDir, `icon-${size}x${size}.png`);
     try {
-      await sharp(svgBuffer)
-        .resize(size, size)
-        .png()
-        .toFile(pngPath);
-      console.log(`  ✓ Created: icon-${size}x${size}.png`);
+      await sharp(sourceSvg).resize(size, size).png().toFile(out);
+      console.log(`  ✓ icon-${size}x${size}.png`);
     } catch (err) {
-      console.error(`  ✗ Failed: icon-${size}x${size}.png - ${err.message}`);
+      console.error(`  ✗ icon-${size}x${size}.png — ${err.message}`);
     }
   }
 
-  // Create apple-touch-icon.png
   try {
-    const svgBuffer = Buffer.from(createIconSvg(512));
-    await sharp(svgBuffer)
-      .resize(180, 180)
-      .png()
+    await sharp(sourceSvg).resize(180, 180).png()
       .toFile(path.join(publicDir, 'apple-touch-icon.png'));
-    console.log('  ✓ Created: apple-touch-icon.png');
+    console.log('  ✓ apple-touch-icon.png');
   } catch (err) {
-    console.error(`  ✗ Failed: apple-touch-icon.png - ${err.message}`);
+    console.error(`  ✗ apple-touch-icon.png — ${err.message}`);
   }
 
-  // Create favicon.ico (32x32 PNG as fallback)
   try {
-    const svgBuffer = Buffer.from(createIconSvg(512));
-    await sharp(svgBuffer)
-      .resize(32, 32)
-      .png()
+    await sharp(sourceSvg).resize(32, 32).png()
       .toFile(path.join(publicDir, 'favicon.png'));
-    console.log('  ✓ Created: favicon.png');
+    console.log('  ✓ favicon.png');
   } catch (err) {
-    console.error(`  ✗ Failed: favicon.png - ${err.message}`);
+    console.error(`  ✗ favicon.png — ${err.message}`);
+  }
+
+  // favicon.ico — multi-size (16/32/48) pour Google SERP + browsers historiques
+  try {
+    const icoSizes = [16, 32, 48];
+    const pngBuffers = await Promise.all(
+      icoSizes.map((s) => sharp(sourceSvg).resize(s, s).png().toBuffer())
+    );
+    // Minimal ICO writer: header + dir entries + PNG payloads
+    const header = Buffer.alloc(6);
+    header.writeUInt16LE(0, 0); // reserved
+    header.writeUInt16LE(1, 2); // type = icon
+    header.writeUInt16LE(icoSizes.length, 4);
+
+    const dirEntries = [];
+    let offset = 6 + 16 * icoSizes.length;
+    for (let i = 0; i < icoSizes.length; i++) {
+      const s = icoSizes[i];
+      const buf = pngBuffers[i];
+      const entry = Buffer.alloc(16);
+      entry.writeUInt8(s === 256 ? 0 : s, 0);
+      entry.writeUInt8(s === 256 ? 0 : s, 1);
+      entry.writeUInt8(0, 2);
+      entry.writeUInt8(0, 3);
+      entry.writeUInt16LE(1, 4);
+      entry.writeUInt16LE(32, 6);
+      entry.writeUInt32LE(buf.length, 8);
+      entry.writeUInt32LE(offset, 12);
+      dirEntries.push(entry);
+      offset += buf.length;
+    }
+    const ico = Buffer.concat([header, ...dirEntries, ...pngBuffers]);
+    fs.writeFileSync(path.join(publicDir, 'favicon.ico'), ico);
+    console.log('  ✓ favicon.ico (16/32/48)');
+  } catch (err) {
+    console.error(`  ✗ favicon.ico — ${err.message}`);
   }
 
   console.log('\nDone!');
