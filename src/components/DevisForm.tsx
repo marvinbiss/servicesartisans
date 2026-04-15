@@ -321,13 +321,20 @@ export default function DevisForm({
 
   useEffect(() => {
     if (transition !== 'idle') return
+    // Scroll the form into view immediately so users don't land at the bottom
+    if (typeof window !== 'undefined' && stepContainerRef.current) {
+      const top = stepContainerRef.current.getBoundingClientRect().top + window.scrollY - 16
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
     const timer = setTimeout(() => {
       if (!stepContainerRef.current) return
       const firstInput = stepContainerRef.current.querySelector<HTMLElement>(
         'input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]), select, textarea'
       )
       if (firstInput) {
-        firstInput.focus()
+        // preventScroll avoids the browser jumping to the input and overriding
+        // our scrollTo above.
+        firstInput.focus({ preventScroll: true })
       }
     }, 450)
     return () => clearTimeout(timer)

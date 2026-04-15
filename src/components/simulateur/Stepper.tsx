@@ -161,6 +161,7 @@ export default function Stepper() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const router = useRouter()
   const hydratedRef = useRef(false)
+  const sectionRef = useRef<HTMLElement>(null)
 
   // Hydrate from localStorage once
   useEffect(() => {
@@ -174,6 +175,16 @@ export default function Stepper() {
     if (!hydratedRef.current) return
     save(state)
   }, [state])
+
+  // Scroll to top of the stepper on step change (avoids landing at the bottom)
+  useEffect(() => {
+    if (!hydratedRef.current) return
+    if (typeof window === 'undefined') return
+    const el = sectionRef.current
+    if (!el) return
+    const top = el.getBoundingClientRect().top + window.scrollY - 16
+    window.scrollTo({ top, behavior: 'smooth' })
+  }, [state.step])
 
   async function handleSubmit() {
     dispatch({ type: 'SET_SUBMITTING', value: true })
@@ -243,8 +254,9 @@ export default function Stepper() {
 
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="stepper-title"
-      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 scroll-mt-16"
     >
       <h2 id="stepper-title" className="sr-only">
         Formulaire en 5 étapes
