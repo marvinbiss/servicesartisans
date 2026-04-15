@@ -50,6 +50,7 @@ export function computeNextSimRetryAt(attempts: number, now: Date = new Date()):
 
 export interface SimulateurLeadInput {
   publicId: string
+  requestId?: string
   prenom: string
   nom: string
   email: string
@@ -91,6 +92,9 @@ interface SimConfig {
   fields: {
     source?: string
     postalCode?: string
+    baremeVersion?: string
+    requestId?: string
+    montantTotal?: string
   }
 }
 
@@ -111,6 +115,9 @@ function getSimConfig(): SimConfig | null {
     fields: {
       source: process.env.PIPEDRIVE_FIELD_SOURCE,
       postalCode: process.env.PIPEDRIVE_FIELD_POSTAL_CODE,
+      baremeVersion: process.env.PIPEDRIVE_FIELD_BAREME_VERSION,
+      requestId: process.env.PIPEDRIVE_FIELD_REQUEST_ID,
+      montantTotal: process.env.PIPEDRIVE_FIELD_MONTANT_TOTAL,
     },
   }
 }
@@ -224,6 +231,15 @@ async function createDeal(
   if (cfg.fields.source) body[cfg.fields.source] = 'simulateur-aides'
   if (cfg.fields.postalCode && input.estimation.codePostal) {
     body[cfg.fields.postalCode] = input.estimation.codePostal
+  }
+  if (cfg.fields.baremeVersion && input.estimation.barometreVersion) {
+    body[cfg.fields.baremeVersion] = input.estimation.barometreVersion
+  }
+  if (cfg.fields.requestId && input.requestId) {
+    body[cfg.fields.requestId] = input.requestId
+  }
+  if (cfg.fields.montantTotal) {
+    body[cfg.fields.montantTotal] = computeDealValue(input.estimation)
   }
   const res = await pdFetch<{ id: number }>(cfg, '/deals', {
     method: 'POST',

@@ -10,6 +10,7 @@
  * reconstructible à l'identique même après MAJ barèmes.
  */
 
+import 'server-only'
 import type { CategorieAnah, GesteId, ZoneClimatique, TypeLogement } from '../types'
 
 export const BAREME_VERSION = '2026-01-14'

@@ -64,6 +64,11 @@ interface Estimation {
   consent_rgpd: boolean
   consent_demarchage: boolean
 
+  // Traçabilité plan 20/20 (migration 444)
+  request_id: string | null
+  inputs_hash: string | null
+  consent_text_sha256: string | null
+
   pipedrive_deal_id: string | null
 }
 
@@ -134,9 +139,7 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
     return (
       <div className="p-8">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-700 text-sm">
-            {error?.message ?? 'Estimation introuvable'}
-          </p>
+          <p className="text-red-700 text-sm">{error?.message ?? 'Estimation introuvable'}</p>
         </div>
       </div>
     )
@@ -159,6 +162,32 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
           <p className="text-sm text-gray-500 mt-1">
             Créé le {formatDate(est.created_at)} · Barèmes {est.barometre_version}
           </p>
+          {(est.request_id || est.inputs_hash || est.consent_text_sha256) && (
+            <dl className="mt-2 text-xs text-gray-500 space-y-0.5 font-mono">
+              {est.request_id && (
+                <div>
+                  <dt className="inline text-gray-400">request_id :</dt>{' '}
+                  <dd className="inline">{est.request_id}</dd>
+                </div>
+              )}
+              {est.inputs_hash && (
+                <div>
+                  <dt className="inline text-gray-400">inputs_hash :</dt>{' '}
+                  <dd className="inline" title={est.inputs_hash}>
+                    {est.inputs_hash.slice(0, 16)}…
+                  </dd>
+                </div>
+              )}
+              {est.consent_text_sha256 && (
+                <div>
+                  <dt className="inline text-gray-400">consent :</dt>{' '}
+                  <dd className="inline" title={est.consent_text_sha256}>
+                    {est.consent_text_sha256.slice(0, 24)}…
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
           {est.anonymized_at && (
             <p className="text-xs text-amber-700 mt-1 bg-amber-50 inline-block px-2 py-1 rounded">
               Données anonymisées le {formatDate(est.anonymized_at)}
@@ -192,9 +221,7 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
       {recompute && (
         <div
           className={`rounded-xl border p-4 ${
-            recompute.match
-              ? 'bg-green-50 border-green-200'
-              : 'bg-amber-50 border-amber-200'
+            recompute.match ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'
           }`}
         >
           <div className="flex items-center gap-2 font-medium">
@@ -217,7 +244,11 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
           <details className="mt-3">
             <summary className="text-sm text-gray-600 cursor-pointer">Voir détail</summary>
             <pre className="mt-2 p-3 bg-white rounded text-xs overflow-auto border border-gray-200">
-              {JSON.stringify({ stored: recompute.stored, recomputed: recompute.recomputed }, null, 2)}
+              {JSON.stringify(
+                { stored: recompute.stored, recomputed: recompute.recomputed },
+                null,
+                2
+              )}
             </pre>
           </details>
         </div>
@@ -261,7 +292,10 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
             <p className="text-xs text-gray-500 mb-1">Gestes</p>
             <ul className="text-sm space-y-1">
               {est.gestes.map((g, i) => (
-                <li key={i} className="flex justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+                <li
+                  key={i}
+                  className="flex justify-between gap-2 py-1 border-b border-gray-100 last:border-0"
+                >
                   <span className="text-gray-700">{g.label ?? g.id}</span>
                   <span className="text-gray-400 font-mono text-xs">{g.baremeId ?? g.id}</span>
                 </li>
@@ -286,7 +320,9 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
             </div>
             <div>
               <p className="text-xs text-gray-500">Coup de Pouce</p>
-              <p className="text-xl font-bold text-gray-900">{formatEuro(est.coup_pouce_estimation)}</p>
+              <p className="text-xl font-bold text-gray-900">
+                {formatEuro(est.coup_pouce_estimation)}
+              </p>
             </div>
             <div>
               <p className="text-xs text-gray-500">Écrêtement</p>

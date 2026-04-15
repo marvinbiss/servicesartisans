@@ -20,6 +20,7 @@
  *     Le cron retry dispatche selon kind.
  */
 
+import { randomUUID } from 'node:crypto'
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
@@ -81,6 +82,8 @@ function clientIp(req: NextRequest): string | null {
 }
 
 export async function POST(req: NextRequest) {
+  // request_id propagé Vercel logs ↔ DB ↔ Pipedrive (plan 20/20)
+  const requestId = req.headers.get('x-request-id') ?? randomUUID()
   const ip = clientIp(req)
   if (!ip) {
     // Vercel edge always sets x-forwarded-for. Absence indicates a direct
@@ -287,7 +290,10 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json(
-    { accepted: true },
-    { status: 202, headers: getRateLimitDbHeaders(rlHour) }
+    { accepted: true, requestId },
+    {
+      status: 202,
+      headers: { ...getRateLimitDbHeaders(rlHour), 'x-request-id': requestId },
+    }
   )
 }

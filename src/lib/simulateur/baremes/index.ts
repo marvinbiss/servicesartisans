@@ -15,6 +15,7 @@
  *  - docs/baremes-sources/07-valeurs-officielles-confirmees-2026-04-14.md
  */
 
+import 'server-only'
 import { BAREMES_2026_01, BAREME_VERSION, zoneFromCodePostal, isIdf } from './2026-01'
 import type {
   BaremesSnapshot,

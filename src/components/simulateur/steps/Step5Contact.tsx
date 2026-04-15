@@ -1,6 +1,9 @@
 'use client'
 
+import { CONSENT_TEXTS, CONSENT_VERSION_CURRENT } from '@/lib/simulateur/consent-texts'
 import type { StepperState, StepperDispatch } from '../Stepper'
+
+const CONSENT = CONSENT_TEXTS[CONSENT_VERSION_CURRENT]
 
 interface Props {
   state: StepperState
@@ -140,10 +143,7 @@ export default function Step5Contact({ state, dispatch, onSubmit }: Props) {
             className="mt-1 h-4 w-4"
             required
           />
-          <span>
-            J&apos;accepte le traitement de mes données pour recevoir mon estimation et être
-            recontacté(e) par un artisan RGE partenaire (obligatoire).
-          </span>
+          <span>{CONSENT.rgpd}</span>
         </label>
         <label className="flex items-start gap-2 text-sm text-slate-800">
           <input
@@ -158,9 +158,7 @@ export default function Step5Contact({ state, dispatch, onSubmit }: Props) {
             className="mt-1 h-4 w-4"
             required
           />
-          <span>
-            Je certifie être majeur(e) et titulaire ou mandaté(e) pour le logement concerné.
-          </span>
+          <span>{CONSENT.majorite}</span>
         </label>
         <label className="flex items-start gap-2 text-sm text-slate-800">
           <input
@@ -174,9 +172,7 @@ export default function Step5Contact({ state, dispatch, onSubmit }: Props) {
             }
             className="mt-1 h-4 w-4"
           />
-          <span>
-            J&apos;accepte de recevoir des offres commerciales de ServicesArtisans (optionnel).
-          </span>
+          <span>{CONSENT.demarchage}</span>
         </label>
       </fieldset>
 

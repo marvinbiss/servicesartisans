@@ -15,6 +15,7 @@
  *  - formule_debug persisté (snapshot du pipeline)
  */
 
+import { createHash, randomUUID } from 'node:crypto'
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
@@ -26,6 +27,7 @@ import { zoneFromCodePostal } from '@/lib/simulateur/zones'
 import { hashIp } from '@/lib/simulateur/rgpd/hash-ip'
 import { generatePublicId } from '@/lib/simulateur/utils/public-id'
 import { BAREMES_2026_01, CURRENT_BAREMES_VERSION } from '@/lib/simulateur/baremes'
+import { buildConsentTextCanonical, CONSENT_VERSION_CURRENT } from '@/lib/simulateur/consent-texts'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { runPipedriveHook } from '@/lib/simulateur/submit-hooks'
 import { sendSubmitClientConfirmation, sendSubmitAdminNotification } from '@/lib/simulateur/emails'
@@ -36,6 +38,31 @@ export const dynamic = 'force-dynamic'
 
 const SOURCE_DOC = 'docs/baremes-sources/07-valeurs-officielles-confirmees-2026-04-14.md'
 
+// Texte RGPD versionné affiché à l'utilisateur au Step 4. Toute modification
+// doit être accompagnée d'un nouveau tag de version (v1, v2, ...) — le SHA-256
+// est stocké en DB comme preuve opposable du consentement (CNIL).
+// Texte de consentement réellement affiché au Step 5 — source unique dans
+// src/lib/simulateur/consent-texts.ts pour que UI et hash DB soient alignés.
+// Preuve opposable CNIL : version + SHA-256 stockés en DB.
+const CONSENT_TEXT_CANONICAL = buildConsentTextCanonical(CONSENT_VERSION_CURRENT)
+const CONSENT_TEXT_SHA256 = `${CONSENT_VERSION_CURRENT}:${createHash('sha256')
+  .update(CONSENT_TEXT_CANONICAL, 'utf8')
+  .digest('hex')}`
+
+function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== 'object') return JSON.stringify(value)
+  if (Array.isArray(value)) return '[' + value.map(canonicalJson).join(',') + ']'
+  const entries = Object.entries(value as Record<string, unknown>)
+    .filter(([, v]) => v !== undefined)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+  return '{' + entries.map(([k, v]) => JSON.stringify(k) + ':' + canonicalJson(v)).join(',') + '}'
+}
+
+function computeInputsHash(situation: unknown, projet: unknown, budget: unknown): string {
+  const canonical = canonicalJson({ situation, projet, budget })
+  return createHash('sha256').update(canonical, 'utf8').digest('hex')
+}
+
 function clientIp(req: NextRequest): string {
   const fwd = req.headers.get('x-forwarded-for')
   if (fwd) return (fwd.split(',')[0] ?? '').trim()
@@ -43,6 +70,8 @@ function clientIp(req: NextRequest): string {
 }
 
 export async function POST(req: NextRequest) {
+  // request_id propagé Vercel logs ↔ DB ↔ Pipedrive ↔ admin (plan 20/20)
+  const requestId = req.headers.get('x-request-id') ?? randomUUID()
   const ip = clientIp(req)
   let ipKey: string
   try {
@@ -100,15 +129,23 @@ export async function POST(req: NextRequest) {
     categorie,
   }
 
+  // Hash sur l'input brut user (avant enrichissement zone/categorie) pour
+  // idempotence pure : mêmes champs saisis → même hash, indépendant du classifier.
+  const inputsHash = computeInputsHash(situationInput, projet, budget)
+
   let result
   try {
     result = runSimulation({ situation, projet, budget })
   } catch (err) {
     logger.error('simulateur/submit runSimulation failed', {
       component: 'api/simulateur/submit',
+      requestId,
       error: err instanceof Error ? err.message : String(err),
     })
-    return NextResponse.json({ error: 'Erreur lors du calcul' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Erreur lors du calcul' },
+      { status: 500, headers: { 'x-request-id': requestId } }
+    )
   }
 
   const publicId = generatePublicId()
@@ -181,8 +218,10 @@ export async function POST(req: NextRequest) {
     reste_a_charge_haut: result.resteAChargeHaut,
 
     // Traçabilité
-    bareme_ids: result.baremeIds as unknown as Record<string, unknown>[],
-    formule_debug: result.formuleDebug as unknown as Record<string, unknown>[],
+    bareme_ids: (result.baremeIds ?? []) as unknown as Record<string, unknown>[],
+    // formule_debug est NOT NULL depuis migration 444. Fallback array vide si
+    // le pipeline retourne jamais undefined (défense en profondeur).
+    formule_debug: (result.formuleDebug ?? []) as unknown as Record<string, unknown>[],
 
     // Coordonnées (nullables — anonymisées à 3 ans par cron RGPD, migration 440)
     prenom: coordonnees.prenom ?? null,
@@ -197,6 +236,11 @@ export async function POST(req: NextRequest) {
 
     // Budget (migration 440 : sert au recompute admin P5)
     budget_ht: budget.budgetHt,
+
+    // Traçabilité (plan 20/20 — migration 444)
+    request_id: requestId,
+    inputs_hash: inputsHash,
+    consent_text_sha256: CONSENT_TEXT_SHA256,
 
     // Audit
     ip_hash: ipHash,
@@ -220,7 +264,9 @@ export async function POST(req: NextRequest) {
 
   logger.info('simulateur estimation created', {
     component: 'api/simulateur/submit',
+    requestId,
     publicId,
+    inputsHash,
     categorie,
     parcours: projet.parcours,
   })
@@ -275,6 +321,7 @@ export async function POST(req: NextRequest) {
     estimationId: inserted.id as string,
     input: {
       publicId,
+      requestId,
       prenom: coordonnees.prenom,
       nom: coordonnees.nom,
       email: coordonnees.email,
@@ -300,5 +347,11 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  return NextResponse.json({ publicId }, { status: 201, headers: getRateLimitDbHeaders(rlHour) })
+  return NextResponse.json(
+    { publicId, requestId },
+    {
+      status: 201,
+      headers: { ...getRateLimitDbHeaders(rlHour), 'x-request-id': requestId },
+    }
+  )
 }
