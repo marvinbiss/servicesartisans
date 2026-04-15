@@ -272,11 +272,11 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
             aria-hidden="true"
           >
-            Trouvez un artisan de confiance près de chez vous
+            Recevez 3 devis d&apos;artisans vérifiés aujourd&apos;hui
           </h2>
 
           <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            Comparez les profils et obtenez un devis gratuit — sans engagement
+            Gratuit, sans frais. Réponse artisan en 24-48h.
           </p>
 
           {/* Primary CTA — high contrast, impossible to miss */}
@@ -286,7 +286,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-1 animate-pulse-subtle"
             >
               <ClipboardList className="w-6 h-6" />
-              Obtenir mon devis gratuit
+              Obtenir mes 3 devis gratuits — en 2 min
             </Link>
             {/* Trust micro-copy directly under CTA */}
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
@@ -307,7 +307,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               className="inline-flex items-center gap-1.5 text-sm font-medium text-charcoal-500 hover:text-primary-400 transition-colors"
             >
               <Zap className="w-4 h-4" />
-              Besoin urgent ? Cliquez ici
+              Urgent ? Réponse en 24h garantie
             </Link>
           </div>
 
@@ -358,7 +358,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)' }}
                 >
-                  Tous les corps de métier
+                  50+ corps de métier — Trouvez le bon artisan en 2 min
                 </h2>
               </div>
               <Link
@@ -414,7 +414,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                 style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
               >
-                Simple, rapide, fiable.
+                Devis gratuit en 2 min — 48h réponse garantie — 100% artisans vérifiés
               </h2>
             </div>
 

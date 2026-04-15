@@ -13,7 +13,8 @@ const SEASONAL_MESSAGES: Record<string, { icon: typeof Calendar; message: string
     // Spring: high season for outdoor work
     'spring-default': {
       icon: Sun,
-      message: 'Haute saison travaux — les carnets des artisans se remplissent vite au printemps',
+      message:
+        'Haute saison BTP : les artisans se remplissent rapidement. Demandez maintenant pour avril.',
       color: 'text-amber-700 bg-amber-50 border-amber-200',
     },
     // Summer: renovation season

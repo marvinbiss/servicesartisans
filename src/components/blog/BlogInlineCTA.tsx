@@ -49,7 +49,7 @@ export default function BlogInlineCTA({ service, ville }: BlogInlineCTAProps) {
               }}
               className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors whitespace-nowrap text-sm shadow-sm"
             >
-              Demander mes devis
+              Obtenir 3 devis — 100% gratuit
               <ChevronRight className="w-4 h-4" />
             </Link>
             <button

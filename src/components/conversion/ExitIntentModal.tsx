@@ -210,7 +210,7 @@ export default function ExitIntentModal() {
             Avant de partir...
           </h2>
           <p className="text-charcoal-600 mb-6">
-            Devis gratuit d&apos;artisans vérifiés près de chez vous — sans engagement
+            3 devis gratuits d&apos;artisans SIREN vérifiés — 100% sans engagement, aucune CB
           </p>
 
           {/* What they lose */}
@@ -246,7 +246,7 @@ export default function ExitIntentModal() {
             onClick={handleResume}
             className="w-full bg-primary-400 hover:bg-primary-500 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200"
           >
-            Obtenir mes devis gratuits
+            Récupérez 3 devis vérifiés avant de partir
           </button>
 
           {/* Phone alternative */}

@@ -30,6 +30,7 @@ import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 
 import {
   getBreadcrumbSchema,
@@ -955,6 +956,16 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           service={serviceSlug}
           ville={location.name}
           variant="hero"
+        />
+      </div>
+
+      {/* Mini-simulateur 1-champ CP — capture lead via angle "aides" (complément du CTA devis) */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2">
+        <MiniSimulateurInline
+          service={service.name.toLowerCase()}
+          ville={location.name}
+          source="services_slug_ville"
+          variant="card"
         />
       </div>
 

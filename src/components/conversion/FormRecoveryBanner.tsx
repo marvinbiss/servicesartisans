@@ -104,14 +104,14 @@ export default function FormRecoveryBanner() {
               <RotateCcw className="w-4 h-4 text-primary-500" />
             </div>
             <p className="text-sm text-charcoal-700">
-              Vous aviez commencé une demande de devis
+              Vous aviez presque fini !
               {summary && (
                 <>
                   {' '}
                   <span className="font-semibold text-charcoal-900">({summary})</span>
                 </>
-              )}
-              . Reprendre ?
+              )}{' '}
+              30 sec pour valider.
             </p>
           </div>
 

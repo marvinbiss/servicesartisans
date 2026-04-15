@@ -30,7 +30,7 @@ export default function StickyMobileCTA({
   serviceSlug,
   cityName,
   citySlug,
-  ctaText = 'Demander un devis gratuit',
+  ctaText = 'Demandez votre devis maintenant',
   providerCount,
   artisanPhone,
   artisanName,
