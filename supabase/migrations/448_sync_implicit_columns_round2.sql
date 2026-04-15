@@ -90,16 +90,13 @@ CREATE INDEX IF NOT EXISTS idx_analytics_events_user_id
   WHERE user_id IS NOT NULL;
 
 -- -----------------------------------------------------------------------------
--- Table : public.user_preferences — created_at
+-- Table : public.user_preferences — created_at (SKIPPED)
 -- -----------------------------------------------------------------------------
--- 004_video_documents_admin.sql ligne 182 déclare seulement `updated_at`. Le
--- code gdpr-service.ts:438 sélectionne `created_at`. Ajout nullable (ou défaut
--- NOW() pour les futures lignes).
-ALTER TABLE public.user_preferences
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
-
-COMMENT ON COLUMN public.user_preferences.created_at IS
-  'Horodatage de création de la préférence user. Référencé par l''export GDPR.';
+-- La table user_preferences n'existe pas en prod (droppée via migration non
+-- trackée). Le SQL editor Supabase splitte mal les DO $$ ... $$ blocks, donc
+-- le guard IF EXISTS échoue. Block retiré : si la table revient un jour, le
+-- drift sera re-détecté par schema-drift-check.ts et une nouvelle migration
+-- sera créée.
 
 -- -----------------------------------------------------------------------------
 -- Table : public.bookings — notes
@@ -194,7 +191,6 @@ COMMENT ON COLUMN public.quotes.items IS
 --   * reviews.author_email (6 refs), reviews.source, reviews.is_verified
 --   * providers.website (3 refs), providers.is_rge (2 refs)
 --   * analytics_events.user_id
---   * user_preferences.created_at
 --   * bookings.notes
 --   * services.parent_id, meta_title, meta_description, updated_at
 --   * quotes.booking_id, client_id, items
