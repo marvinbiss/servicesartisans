@@ -46,6 +46,9 @@ const WebVitals = dynamic(
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
+const PostHogProvider = dynamic(() => import('@/components/PostHogProvider'), {
+  ssr: false,
+})
 const CompareProviderWrapper = dynamic(
   () =>
     import('@/components/compare/CompareProvider').then((mod) => ({
@@ -240,6 +243,7 @@ fbq('track', 'PageView');`}
         />
         <WebVitals />
         <PageViewTracker />
+        <PostHogProvider />
         <MobileMenuProvider>
           <CompareProviderWrapper>
             {/* Skip to main content for accessibility */}

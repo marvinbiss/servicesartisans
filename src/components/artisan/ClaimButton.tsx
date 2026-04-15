@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, Loader2, X, CheckCircle, AlertCircle } from 'lucide-react'
 import { trackEvent, type BookingEvent } from '@/lib/analytics/tracking'
+import { capture, EVENT } from '@/lib/analytics/posthog'
 
 interface ClaimButtonProps {
   providerId: string
@@ -131,6 +132,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       }
 
       trackEvent('claim_submitted' as BookingEvent, { providerId, providerName })
+      capture(EVENT.ARTISAN_CLAIM_SUCCEEDED, { providerId, providerName })
       setSuccess(true)
     } catch {
       setError('Erreur de connexion au serveur')
@@ -164,6 +166,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
       <button
         onClick={() => {
           trackEvent('claim_started' as BookingEvent, { providerId, providerName })
+          capture(EVENT.ARTISAN_CLAIM_STARTED, { providerId, providerName })
           setShowModal(true)
         }}
         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"

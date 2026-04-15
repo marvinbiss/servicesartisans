@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { isValidFrenchPhone } from '@/lib/validation/phone'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { capture, EVENT } from '@/lib/analytics/posthog'
 import { useDevisForm, urgencyOptions, initialDevisFormData } from '@/hooks/useDevisForm'
 import type { DevisFormData } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
@@ -272,6 +273,15 @@ export default function DevisForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Track funnel entry once per mount
+  useEffect(() => {
+    capture(EVENT.DEVIS_STARTED, {
+      prefilled: isPrefilled,
+      service: form.formData.service || '',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleDismiss = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY)
     form.resetForm()
@@ -466,9 +476,18 @@ export default function DevisForm({
         service: form.formData.service || '',
         source: 'devis_form',
       })
+      capture(EVENT.DEVIS_STEP_COMPLETED, {
+        step: 1,
+        service: form.formData.service || '',
+        ville: form.formData.ville || '',
+      })
       animateToStep(2, 'forward')
     } else if (form.step === 2 && validateStep2Extended()) {
       form.trackAbandon(form.formData.email.trim())
+      capture(EVENT.DEVIS_STEP_COMPLETED, {
+        step: 2,
+        service: form.formData.service || '',
+      })
       animateToStep(3, 'forward')
     }
   }
@@ -509,6 +528,16 @@ export default function DevisForm({
         source: 'devis_form',
         value: 45,
         currency: 'EUR',
+      })
+      capture(EVENT.DEVIS_SUBMITTED, {
+        service: form.formData.service || '',
+        ville: form.formData.ville || '',
+        urgence: form.formData.urgence || '',
+      })
+    } else {
+      capture(EVENT.DEVIS_FAILED, {
+        service: form.formData.service || '',
+        error: form.submitError,
       })
     }
   }

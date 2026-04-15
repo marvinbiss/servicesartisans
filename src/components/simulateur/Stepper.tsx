@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { capture, EVENT } from '@/lib/analytics/posthog'
 import Step1Situation from './steps/Step1Situation'
 import Step2Revenus from './steps/Step2Revenus'
 import Step3Projet from './steps/Step3Projet'
@@ -163,11 +164,12 @@ export default function Stepper() {
   const hydratedRef = useRef(false)
   const sectionRef = useRef<HTMLElement>(null)
 
-  // Hydrate from localStorage once
+  // Hydrate from localStorage once + track funnel entry
   useEffect(() => {
     const loaded = load()
     if (loaded) dispatch({ type: 'HYDRATE', value: loaded })
     hydratedRef.current = true
+    capture(EVENT.SIMULATEUR_STARTED, { resumed: Boolean(loaded) })
   }, [])
 
   // Persist on changes after hydrate
@@ -177,13 +179,16 @@ export default function Stepper() {
   }, [state])
 
   // Scroll to top of the stepper on step change (avoids landing at the bottom)
+  // + track funnel step progression.
   useEffect(() => {
     if (!hydratedRef.current) return
     if (typeof window === 'undefined') return
     const el = sectionRef.current
-    if (!el) return
-    const top = el.getBoundingClientRect().top + window.scrollY - 16
-    window.scrollTo({ top, behavior: 'smooth' })
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 16
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+    capture(EVENT.SIMULATEUR_STEP_COMPLETED, { step: state.step })
   }, [state.step])
 
   async function handleSubmit() {
@@ -240,6 +245,11 @@ export default function Stepper() {
       if (typeof window !== 'undefined') {
         window.localStorage.removeItem(LS_KEY)
       }
+      capture(EVENT.SIMULATEUR_SUBMITTED, {
+        parcours: state.projet.parcours,
+        gestes_count: state.projet.gestes.length,
+        code_postal: state.situation.codePostal,
+      })
       router.push(`/simulateur-aides-renovation/resultat/${publicId}`)
     } catch (err) {
       dispatch({

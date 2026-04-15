@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, Heart, Phone } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import { capture, EVENT } from '@/lib/analytics/posthog'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -146,7 +147,14 @@ export default function HeaderClient({
       const params = new URLSearchParams()
       if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
       if (locationQuery.trim()) params.set('location', locationQuery.trim())
-      if (params.toString()) router.push(`/recherche?${params.toString()}`)
+      if (params.toString()) {
+        capture(EVENT.SEARCH_PERFORMED, {
+          service: serviceQuery.trim() || null,
+          city: locationQuery.trim() || null,
+          source: 'header',
+        })
+        router.push(`/recherche?${params.toString()}`)
+      }
     },
     [serviceQuery, locationQuery, router]
   )

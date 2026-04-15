@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { services, villesLight, type Ville } from '@/lib/data/france-light'
+import { capture, EVENT } from '@/lib/analytics/posthog'
 
 // Full villes loaded on demand (lazy — only when user types)
 let _allVilles: Ville[] | null = null
@@ -146,6 +147,11 @@ export function ClayHeroSearch() {
     e.preventDefault()
     const slug = selectedServiceSlug || serviceSuggestions[0]?.slug
     const citySlug = selectedCitySlug || citySuggestions[0]?.slug
+    capture(EVENT.SEARCH_PERFORMED, {
+      service: slug || service || null,
+      city: citySlug || ville || null,
+      source: 'hero',
+    })
     if (slug && citySlug) {
       router.push(`/services/${slug}/${citySlug}`)
     } else if (slug) {
