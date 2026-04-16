@@ -74,6 +74,31 @@ export async function POST(req: NextRequest) {
 
   try {
     const result = runSimulation({ situation, projet, budget })
+    // Construire la liste des hypothèses pour transparence UI
+    const hypotheses: string[] = []
+
+    // Budget estimé
+    hypotheses.push(`Budget travaux estimé à ${new Intl.NumberFormat('fr-FR').format(budget.budgetHt)} € HT (coûts moyens par geste)`)
+
+    // Surface isolation estimée
+    const ceeSteps = result.formuleDebug.filter((s) => s.step === 'applyNonCumul')
+    const aidesCee = (ceeSteps[0]?.inputs?.aides as Array<{ code: string }>) ?? []
+    const hasIsolation = aidesCee.some((a) => a.code?.startsWith('BAR-EN'))
+    if (hasIsolation) {
+      hypotheses.push('Surfaces d\'isolation estimées à partir de votre surface habitable (ratio standard DTU)')
+    }
+
+    // PAC ETAS
+    const hasPac = result.gestesRetenus.includes('PAC_AIREAU')
+    if (hasPac && projet.parcours === 'geste') {
+      hypotheses.push('Performance PAC : ETAS classe 2 (> 140%) supposée — la classe 1 donnerait ~17% de CEE en moins')
+    }
+
+    // Prix CEE
+    if (result.ceeFourchetteBas > 0 || result.ceeFourchetteHaut > 0 || result.ceeAmpleur > 0) {
+      hypotheses.push('Prix CEE : cotation Emmy indicative (8,5–15 €/MWhc), cours variable')
+    }
+
     return NextResponse.json(
       {
         categorieAnah: result.categorieAnah,
@@ -82,8 +107,10 @@ export async function POST(req: NextRequest) {
         mprTotal: result.mprTotal,
         ceeFourchetteBas: result.ceeFourchetteBas,
         ceeFourchetteHaut: result.ceeFourchetteHaut,
+        ceeAmpleur: result.ceeAmpleur,
         cdpEstimationBas: result.cdpEstimationBas,
         cdpEstimationHaut: result.cdpEstimationHaut,
+        marPriseEnCharge: result.marPriseEnCharge,
         totalAidesBas: result.totalAidesBas,
         totalAidesHaut: result.totalAidesHaut,
         resteAChargeBas: result.resteAChargeBas,
@@ -94,6 +121,10 @@ export async function POST(req: NextRequest) {
         gestesRejetes: result.gestesRejetes,
         exclusion: result.exclusion,
         zoneWarning: zoneRes.warning,
+        ecoPtz: result.ecoPtz,
+        par: result.par,
+        baremeIds: result.baremeIds,
+        hypotheses,
       },
       { headers: getRateLimitHeaders(rl) }
     )

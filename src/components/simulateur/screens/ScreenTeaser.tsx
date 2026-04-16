@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { motion, useSpring, useTransform } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, ChevronDown, Info } from 'lucide-react'
 
 interface Props {
   estimatePayload: Record<string, unknown>
@@ -30,6 +30,9 @@ export default function ScreenTeaser({ estimatePayload, equipementActuel, parcou
   const [totalBas, setTotalBas] = useState(0)
   const [totalHaut, setTotalHaut] = useState(0)
   const [mprAccompagne, setMprAccompagne] = useState(false)
+  const [hypotheses, setHypotheses] = useState<string[]>([])
+  const [baremeCount, setBaremeCount] = useState(0)
+  const [showHypotheses, setShowHypotheses] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fetchedRef = useRef(false)
 
@@ -62,6 +65,12 @@ export default function ScreenTeaser({ estimatePayload, equipementActuel, parcou
         setTotalHaut(Math.max(haut, 0))
         if (parcours === 'accompagne' && (data.mprTotal ?? 0) > 0) {
           setMprAccompagne(true)
+        }
+        if (Array.isArray(data.hypotheses)) {
+          setHypotheses(data.hypotheses)
+        }
+        if (Array.isArray(data.baremeIds)) {
+          setBaremeCount(data.baremeIds.length)
         }
       } catch {
         setError('Erreur réseau')
@@ -132,6 +141,35 @@ export default function ScreenTeaser({ estimatePayload, equipementActuel, parcou
             )}
             <p>Barèmes MaPrimeRénov&apos; et CEE en vigueur au 1er janvier 2026. Estimation indicative, non contractuelle.</p>
           </div>
+
+          {/* Hypothèses de calcul — transparence scientifique */}
+          {hypotheses.length > 0 && (
+            <div className="mx-auto mt-3 max-w-sm">
+              <button
+                type="button"
+                onClick={() => setShowHypotheses(!showHypotheses)}
+                className="flex w-full items-center justify-center gap-1.5 text-xs text-charcoal-400 transition hover:text-charcoal-600"
+              >
+                <Info className="h-3.5 w-3.5" />
+                <span>{baremeCount} barèmes consultés — {hypotheses.length} hypothèse{hypotheses.length > 1 ? 's' : ''} de calcul</span>
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showHypotheses ? 'rotate-180' : ''}`} />
+              </button>
+              {showHypotheses && (
+                <motion.ul
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-2 space-y-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-left text-xs text-charcoal-500"
+                >
+                  {hypotheses.map((h, i) => (
+                    <li key={i} className="flex gap-1.5">
+                      <span className="mt-0.5 shrink-0 text-charcoal-300">•</span>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </div>
+          )}
 
           <div className="mx-auto mt-6 max-w-xs">
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
