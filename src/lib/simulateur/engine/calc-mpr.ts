@@ -173,31 +173,24 @@ export interface MprAccompagneResult {
 /**
  * Calcule MPR parcours accompagné.
  *
- * Taux :
- * - Bleu : 60→80 % selon gain DPE (2 sauts = 60 %, 3 sauts = 70 %, ≥4 sauts = 80 %)
- * - Jaune : 40→60 % selon gain DPE (2 sauts = 40 %, 3 sauts = 50 %, ≥4 sauts = 60 %)
- * - Violet : 45 % (constant)
- * - Rose : 10 % (constant)
+ * Taux flat par catégorie ANAH (arrêté ANAH 01/01/2026) :
+ * - Bleu : 80 %
+ * - Jaune : 60 %
+ * - Violet : 45 %
+ * - Rose : 10 %
  *
- * Le taux est appliqué au budget HT **plafonné** par sauts DPE
- * (MPRA.publicodes `projet.travaux.plafonnés`).
+ * Plafond dépenses éligibles HT :
+ * - 2 sauts DPE : 30 000 €
+ * - 3+ sauts DPE : 40 000 €
+ *
+ * Le taux est appliqué au budget HT **plafonné** par sauts DPE.
  */
 export function calcMPRAccompagne(
   budgetHt: number,
   categorie: CategorieAnah,
   sautsDpe: SautsDpe
 ): MprAccompagneResult {
-  const conf = MPR_ACCOMPAGNE[categorie]
-  let taux = conf.min
-
-  if (categorie === 'bleu' || categorie === 'jaune') {
-    // Interpolation linéaire sur 2..4 sauts
-    if (sautsDpe >= 4) taux = conf.max
-    else if (sautsDpe === 3) taux = (conf.min + conf.max) / 2
-    else taux = conf.min
-  } else {
-    taux = conf.min // violet/rose : min = max
-  }
+  const taux = MPR_ACCOMPAGNE[categorie]
 
   // Plafond de dépenses éligibles selon le nombre de sauts DPE
   const plafondKey = sautsDpe >= 4 ? 4 : sautsDpe

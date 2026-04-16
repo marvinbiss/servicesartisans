@@ -73,21 +73,16 @@ export const ECRETEMENT_ACCOMPAGNE: Record<CategorieAnah, number> = {
 // 3. MPR parcours accompagné (doc 07 §3)
 // =============================================================================
 
-export interface MprAccompagneTaux {
-  min: number
-  max: number
-}
-
 /**
- * Taux MPR parcours accompagné : % du HT travaux.
- * Bleu/Jaune : variable selon sauts DPE.
- * Violet/Rose : taux unique (min === max).
+ * Taux MPR parcours accompagné : % flat du HT travaux plafonné.
+ * Pas de variation par sauts DPE — taux unique par catégorie ANAH.
+ * Source : arrêté ANAH 01/01/2026, MPRA.publicodes.
  */
-export const MPR_ACCOMPAGNE: Record<CategorieAnah, MprAccompagneTaux> = {
-  bleu: { min: 0.6, max: 0.8 },
-  jaune: { min: 0.4, max: 0.6 },
-  violet: { min: 0.45, max: 0.45 },
-  rose: { min: 0.1, max: 0.1 },
+export const MPR_ACCOMPAGNE: Record<CategorieAnah, number> = {
+  bleu: 0.80,
+  jaune: 0.60,
+  violet: 0.45,
+  rose: 0.10,
 }
 
 // =============================================================================
@@ -99,9 +94,9 @@ export const MPR_ACCOMPAGNE: Record<CategorieAnah, MprAccompagneTaux> = {
  * Source : arrêté ANAH 2026, MPRA.publicodes `projet.travaux.plafonnés`.
  */
 export const MPR_ACCOMPAGNE_PLAFOND_HT: Record<SautsDpe, number> = {
-  2: 40_000,
-  3: 55_000,
-  4: 70_000,
+  2: 30_000, // arrêté ANAH 2026 — 2 classes
+  3: 40_000, // arrêté ANAH 2026 — 3+ classes
+  4: 40_000, // arrêté ANAH 2026 — 3+ classes (même plafond)
 }
 
 // =============================================================================
@@ -267,7 +262,7 @@ export const MPR_GESTE_PAC_AIREAU: Record<CategorieAnah, number> = {
   bleu: 5000,
   jaune: 4000,
   violet: 3000,
-  rose: 1000,
+  rose: 0, // Non éligible parcours geste (arrêté 29/12/2025 art. 5)
 }
 
 export const MPR_GESTE_PLAFOND_DEPENSES = 12000
@@ -308,8 +303,8 @@ export const MPR_GESTE_POELE_GRANULES: Record<CategorieAnah, number> = {
 
 /** ⚠️ Valeurs à confirmer contre l'arrêté officiel 2026 (baremeId `.UNCONFIRMED.`). */
 export const MPR_GESTE_POELE_BUCHES: Record<CategorieAnah, number> = {
-  bleu: 1000,
-  jaune: 800,
+  bleu: 1250, // arrêté 29/12/2025 art. 5 — confirmé service-public.gouv.fr
+  jaune: 1000,
   violet: 500,
   rose: 0,
 }
@@ -849,7 +844,7 @@ export interface BaremesSnapshot {
     readonly accompagne: Readonly<Record<CategorieAnah, number>>
   }
 
-  readonly mprAccompagne: Readonly<Record<CategorieAnah, MprAccompagneTaux>>
+  readonly mprAccompagne: Readonly<Record<CategorieAnah, number>>
 
   readonly mprGeste: {
     readonly PAC_AIREAU: {

@@ -29,10 +29,11 @@ Bareme version : `2026-01` (fichier `src/lib/simulateur/baremes/2026-01.ts`)
 - **URL** : https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000050370002
 - **Fichier bareme** : `MPR_ACCOMPAGNE`, `MPR_ACCOMPAGNE_PLAFOND_HT`
 - **Notes** :
-  - Taux bleu/jaune : interpolation lineaire 2→4 sauts DPE (60%→80% / 40%→60%)
-  - Taux violet : 45% constant, rose : 10% constant
-  - Plafonds HT : 40K (2 sauts), 55K (3 sauts), 70K (4+ sauts)
-- **Statut** : CONFIRME
+  - Taux flat par categorie ANAH (arrete ANAH 01/01/2026) :
+    bleu 80%, jaune 60%, violet 45%, rose 10%
+  - Pas de variation par sauts DPE — le taux est unique par categorie
+  - Plafonds HT : 30K (2 sauts), 40K (3+ sauts)
+- **Statut** : CORRIGE V3 (2026-04-16) — suppression interpolation inventee, plafonds corriges
 
 ## 2. CEE — Fiches standardisees
 

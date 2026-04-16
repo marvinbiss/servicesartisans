@@ -68,9 +68,9 @@ describe('calcMPRGeste — nouveaux forfaits parcours geste (doc 01 §70-120)', 
     expect(r.total).toBe(1250)
     expect(r.breakdown[0].baremeId).toBe('MPR.POELE_GRANULES.BLEU.2026-01')
   })
-  it('POELE_BUCHES Bleu = 1000 avec baremeId UNCONFIRMED', () => {
+  it('POELE_BUCHES Bleu = 1250 avec baremeId UNCONFIRMED', () => {
     const r = calcMPRGeste(['POELE_BUCHES'], 'bleu')
-    expect(r.total).toBe(1000)
+    expect(r.total).toBe(1250)
     expect(r.breakdown[0].baremeId).toMatch(/\.UNCONFIRMED\./)
   })
   it('VMC_2FLUX Bleu = 2500', () => {
@@ -122,38 +122,56 @@ describe('calcMPRGeste — gestes NEEDS_SURFACE (isolation €/m²)', () => {
   })
 })
 
-describe('calcMPRAccompagne — taux selon catégorie + sauts DPE', () => {
-  it('Bleu 2 sauts = 60 % (plafonné à 40K HT)', () => {
+describe('calcMPRAccompagne — taux flat par catégorie (arrêté ANAH 2026)', () => {
+  it('Bleu 2 sauts = 80 % (plafonné à 30K HT)', () => {
     const r = calcMPRAccompagne(100000, 'bleu', 2)
-    expect(r.taux).toBe(0.6)
-    // plafond HT 2 sauts = 40000, donc 40000 * 0.6 = 24000
+    expect(r.taux).toBe(0.80)
+    // plafond HT 2 sauts = 30000, donc 30000 * 0.80 = 24000
     expect(r.total).toBe(24000)
+    expect(r.budgetPlafonne).toBe(30000)
+    expect(r.plafondHt).toBe(30000)
+  })
+  it('Bleu 3 sauts = 80 % (plafonné à 40K HT)', () => {
+    const r = calcMPRAccompagne(100000, 'bleu', 3)
+    expect(r.taux).toBe(0.80)
+    // plafond HT 3 sauts = 40000, donc 40000 * 0.80 = 32000
+    expect(r.total).toBe(32000)
     expect(r.budgetPlafonne).toBe(40000)
   })
-  it('Bleu 4 sauts = 80 %', () => {
+  it('Bleu 4 sauts = 80 % (plafonné à 40K HT)', () => {
     const r = calcMPRAccompagne(100000, 'bleu', 4)
-    expect(r.taux).toBe(0.8)
+    expect(r.taux).toBe(0.80)
+    expect(r.total).toBe(32000)
+    expect(r.budgetPlafonne).toBe(40000)
   })
-  it('Jaune 3 sauts = 50 %', () => {
+  it('Jaune 3 sauts = 60 % (plafonné à 40K HT)', () => {
     const r = calcMPRAccompagne(100000, 'jaune', 3)
-    expect(r.taux).toBe(0.5)
+    expect(r.taux).toBe(0.60)
+    // 40000 * 0.60 = 24000
+    expect(r.total).toBe(24000)
   })
-  it('Violet = 45 % (constant, plafonné à 70K HT)', () => {
+  it('Violet = 45 % (plafonné à 40K HT pour 4 sauts)', () => {
     const r = calcMPRAccompagne(100000, 'violet', 4)
     expect(r.taux).toBe(0.45)
-    // plafond HT 4 sauts = 70000, donc 70000 * 0.45 = 31500
-    expect(r.total).toBe(31500)
-    expect(r.budgetPlafonne).toBe(70000)
+    // plafond HT 4 sauts = 40000, donc 40000 * 0.45 = 18000
+    expect(r.total).toBe(18000)
+    expect(r.budgetPlafonne).toBe(40000)
   })
-  it('Rose = 10 % (constant, plafonné à 70K HT)', () => {
+  it('Rose = 10 % (plafonné à 40K HT pour 4 sauts)', () => {
     const r = calcMPRAccompagne(100000, 'rose', 4)
-    expect(r.taux).toBe(0.1)
-    // plafond HT 4 sauts = 70000, donc 70000 * 0.1 = 7000
-    expect(r.total).toBe(7000)
-    expect(r.budgetPlafonne).toBe(70000)
+    expect(r.taux).toBe(0.10)
+    // plafond HT 4 sauts = 40000, donc 40000 * 0.10 = 4000
+    expect(r.total).toBe(4000)
+    expect(r.budgetPlafonne).toBe(40000)
   })
   it('baremeId format correct (inclut sauts DPE)', () => {
     const r = calcMPRAccompagne(50000, 'violet', 3)
     expect(r.baremeId).toBe('MPR.ACCOMPAGNE.VIOLET.3SAUTS.2026-01')
+  })
+  it('Budget inférieur au plafond → budgetPlafonne = budgetHt', () => {
+    const r = calcMPRAccompagne(20000, 'bleu', 2)
+    expect(r.budgetPlafonne).toBe(20000)
+    // 20000 * 0.80 = 16000
+    expect(r.total).toBe(16000)
   })
 })

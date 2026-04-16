@@ -40,7 +40,7 @@ describe('pipeline — Cas 1 : Maison H1 Jaune + PAC geste + budget 15000', () =
 })
 
 describe('pipeline — Cas 2 : Maison H2 Bleu + accompagné 3 sauts + 50000', () => {
-  it('MPR taux milieu (70 %), pas de CEE, plafond 100 %', () => {
+  it('MPR taux flat 80 %, plafond 40K, écrêtement 100 %', () => {
     const input: SimulationInput = {
       situation: baseSituation({
         zone: 'H2',
@@ -63,8 +63,7 @@ describe('pipeline — Cas 2 : Maison H2 Bleu + accompagné 3 sauts + 50000', ()
     const r = runSimulation(input)
     expect(r.categorieAnah).toBe('bleu')
     expect(r.ecretementPct).toBe(1.0)
-    // Taux bleu 3 sauts = 70 % → 35000 MPR avant écrêtement
-    // Écrêtement 100 % = budget TTC, donc pas d'écrêtement
+    // Taux bleu flat = 80 %, plafond 3 sauts = 40K → 40000 * 0.80 = 32000
     expect(r.mprTotal).toBeGreaterThan(0)
     // Pas de CEE en parcours accompagné
     expect(r.ceeFourchetteBas).toBe(0)
@@ -232,7 +231,7 @@ describe('pipeline — Cas 8 : Isolation geste → CEE BAR-EN calculé', () => {
 })
 
 describe('pipeline — Cas 9 : Violet + accompagné → écrêtement 80 %', () => {
-  it('écrêtement à 80 % pour violet accompagné', () => {
+  it('écrêtement à 80 % pour violet accompagné, plafond 30K (2 sauts)', () => {
     const input: SimulationInput = {
       situation: baseSituation({
         rfr: 55000,
@@ -252,7 +251,8 @@ describe('pipeline — Cas 9 : Violet + accompagné → écrêtement 80 %', () =
     const r = runSimulation(input)
     expect(r.categorieAnah).toBe('violet')
     expect(r.ecretementPct).toBe(0.8)
-    // MPR accompagné violet = 45 % fixe
+    // MPR accompagné violet = 45 % fixe, plafond 2 sauts = 30K
+    // min(35000, 30000) * 0.45 = 13500
     expect(r.mprTotal).toBeGreaterThan(0)
     // Totalité des aides ≤ 80 % du budget TTC
     const budgetTTC = Math.round(35000 * 1.055)
