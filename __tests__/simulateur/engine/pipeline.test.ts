@@ -424,6 +424,27 @@ describe('pipeline — MAR plafonné à 2000€ TTC', () => {
   })
 })
 
+describe('pipeline — Fourchette CEE élargie par incertitude surface', () => {
+  it('Isolation murs → fourchette CEE plus large que sans incertitude', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans', surface: 100 }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['ISOLATION_MURS'],
+        coupDePouce: false,
+        equipementActuel: 'gaz',
+      },
+      budget: { budgetHt: 20000 },
+    }
+    const r = runSimulation(input)
+    // La fourchette CEE doit être élargie (bas < haut)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(r.ceeFourchetteBas)
+    // Et les deux doivent être > 0
+    expect(r.ceeFourchetteBas).toBeGreaterThan(0)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
+  })
+})
+
 describe('pipeline — Écrêtement limite', () => {
   it('Budget très bas → écrêtement plafonne les aides', () => {
     const input: SimulationInput = {

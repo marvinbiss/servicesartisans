@@ -45,5 +45,43 @@ describe('applyNonCumul — paires interdites', () => {
   it('liste vide → pas d exclusion', () => {
     const r = applyNonCumul([])
     expect(r.retenues).toEqual([])
+    expect(r.uncertainCombinations).toEqual([])
+  })
+})
+
+describe('applyNonCumul — combinaisons incertaines (NON_CUMUL_UNCERTAIN)', () => {
+  it('BAR-TH-112 + BAR-TH-101 = incertain (ni blacklist ni safe)', () => {
+    const r = applyNonCumul([
+      { code: 'BAR-TH-112', montant: 500 },
+      { code: 'BAR-TH-101', montant: 200 },
+    ])
+    expect(r.retenues).toHaveLength(2) // pas exclus, juste tagué
+    expect(r.uncertainCombinations).toContain('BAR-TH-112 + BAR-TH-101')
+  })
+  it('BAR-EN-101 + BAR-EN-102 = safe (combinaison connue)', () => {
+    const r = applyNonCumul([
+      { code: 'BAR-EN-101', montant: 1000 },
+      { code: 'BAR-EN-102', montant: 2000 },
+    ])
+    expect(r.uncertainCombinations).toEqual([])
+  })
+  it('BAR-TH-171 + BAR-EN-101 = safe', () => {
+    const r = applyNonCumul([
+      { code: 'BAR-TH-171', montant: 3000 },
+      { code: 'BAR-EN-101', montant: 1500 },
+    ])
+    expect(r.uncertainCombinations).toEqual([])
+  })
+  it('3 fiches dont 1 paire incertaine', () => {
+    const r = applyNonCumul([
+      { code: 'BAR-TH-125', montant: 400 },
+      { code: 'BAR-TH-112', montant: 500 },
+      { code: 'BAR-EN-101', montant: 1000 },
+    ])
+    // BAR-TH-125 + BAR-EN-101 = safe
+    // BAR-TH-125 + BAR-TH-112 = incertain
+    // BAR-TH-112 + BAR-EN-101 = incertain
+    expect(r.uncertainCombinations.length).toBeGreaterThanOrEqual(1)
+    expect(r.exclusions).toEqual([]) // rien n'est exclu, juste tagué
   })
 })

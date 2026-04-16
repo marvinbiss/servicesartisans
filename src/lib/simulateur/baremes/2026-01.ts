@@ -571,23 +571,37 @@ export const BAR_EN_103_META = {
 }
 
 /**
- * Ratios de surface isolée estimée par rapport à la surface habitable.
- * Utilisé quand le stepper simplifié ne collecte pas la surface isolée exacte.
+ * Fourchettes de surface isolée estimée par rapport à la surface habitable.
+ * Le simulateur ne collecte pas la surface isolée exacte → on propage
+ * l'incertitude dans la fourchette CEE (bas=ratio min, haut=ratio max).
+ *
  * Sources : DTU, estimations professionnelles, retours terrain.
+ * Impact : sur isolation murs + toiture, l'écart peut atteindre 2 000–6 000 €.
  */
-export const SURFACE_ISOLEE_RATIOS: Record<string, number> = {
-  /** Murs : périmètre × hauteur ≈ 2.5× surface au sol (maison R+0 typique) */
-  ISOLATION_MURS: 2.5,
-  ITE: 2.5,
-  ITI: 2.5,
-  /** Toiture : ≈ 1.1× surface au sol (pente ~15-30°) */
-  ISOLATION_TOITURE: 1.1,
-  ISO_TOITURE_RAMPANTS: 1.1,
-  /** Toiture terrasse : ≈ surface au sol */
-  ISO_TOITURE_TERRASSE: 1.0,
-  /** Plancher bas : ≈ surface au sol */
-  ISOLATION_PLANCHER: 1.0,
-  ISO_PLANCHERS_BAS: 1.0,
+export interface SurfaceRatioRange {
+  min: number
+  mid: number
+  max: number
+}
+
+export const SURFACE_ISOLEE_RATIOS: Record<string, SurfaceRatioRange> = {
+  /** Murs : plain-pied ≈ 2.0×, R+1 ≈ 2.5×, immeuble/mitoyenneté ≈ 3.0× */
+  ISOLATION_MURS: { min: 2.0, mid: 2.5, max: 3.0 },
+  ITE: { min: 2.0, mid: 2.5, max: 3.0 },
+  ITI: { min: 2.0, mid: 2.5, max: 3.0 },
+  /** Toiture : terrasse 1.0×, pente faible 1.1×, pente forte 1.3× */
+  ISOLATION_TOITURE: { min: 1.0, mid: 1.1, max: 1.3 },
+  ISO_TOITURE_RAMPANTS: { min: 1.0, mid: 1.1, max: 1.3 },
+  /** Toiture terrasse : ≈ surface au sol (faible incertitude) */
+  ISO_TOITURE_TERRASSE: { min: 0.9, mid: 1.0, max: 1.05 },
+  /** Plancher bas : ≈ surface au sol (faible incertitude) */
+  ISOLATION_PLANCHER: { min: 0.9, mid: 1.0, max: 1.05 },
+  ISO_PLANCHERS_BAS: { min: 0.9, mid: 1.0, max: 1.05 },
+}
+
+/** Compat — ratio médian pour les usages qui n'ont besoin que d'un seul chiffre. */
+export function surfaceRatioMid(geste: string): number {
+  return SURFACE_ISOLEE_RATIOS[geste]?.mid ?? 1.0
 }
 
 // ---- BAR-TH-125 — VMC double flux (kWhc par logement) ----

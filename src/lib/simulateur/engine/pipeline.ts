@@ -38,7 +38,7 @@ import {
   calcCeeAmpleur,
   calcMarPriseEnCharge,
 } from './calc-cee'
-import { SURFACE_ISOLEE_RATIOS } from '../baremes/2026-01'
+import { SURFACE_ISOLEE_RATIOS, type SurfaceRatioRange } from '../baremes/2026-01'
 import { calcCoupDePouce, calcCdpRenovAmpleur } from './calc-cdp'
 import { calcEcoPtz, calcPar } from './calc-prets'
 import { calcMprCopro, calcDenormandie, calcTaxeFonciere } from './calc-complementaires'
@@ -288,32 +288,54 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         g === 'ISO_TOITURE_RAMPANTS' || g === 'ISO_TOITURE_TERRASSE' || g === 'ISO_PLANCHERS_BAS' ||
         g === 'ITE' || g === 'ITI'
       ) {
-        // BAR-EN-101/102/103 : surface isolée estimée via ratio sur surface habitable
-        const ratio = SURFACE_ISOLEE_RATIOS[g] ?? 1.0
-        const surfaceEstimee = Math.round(situation.surface * ratio)
+        // BAR-EN-101/102/103 : surface isolée estimée via fourchette de ratios
+        // L'incertitude sur la surface est propagée dans la fourchette CEE
+        const ratioRange: SurfaceRatioRange = SURFACE_ISOLEE_RATIOS[g] ?? { min: 1.0, mid: 1.0, max: 1.0 }
+        const surfaceBas = Math.round(situation.surface * ratioRange.min)
+        const surfaceMid = Math.round(situation.surface * ratioRange.mid)
+        const surfaceHaut = Math.round(situation.surface * ratioRange.max)
         const energie = equipToEnergie(projet.equipementActuel)
 
-        let rIso: { kwhCumac: number; baremeId: BaremeId }
-        let ficheIso: string
-        if (g === 'ISOLATION_MURS' || g === 'ITE' || g === 'ITI') {
-          rIso = calcBarEn102(situation.zone, surfaceEstimee, energie)
-          ficheIso = 'BAR-EN-102'
-        } else if (g === 'ISOLATION_TOITURE' || g === 'ISO_TOITURE_RAMPANTS') {
-          rIso = calcBarEn101(situation.zone, surfaceEstimee, energie)
-          ficheIso = 'BAR-EN-101'
-        } else {
-          // plancher bas, toiture terrasse
-          rIso = calcBarEn103(situation.zone, surfaceEstimee)
-          ficheIso = 'BAR-EN-103'
+        const calcIso = (surface: number) => {
+          if (g === 'ISOLATION_MURS' || g === 'ITE' || g === 'ITI') {
+            return { r: calcBarEn102(situation.zone, surface, energie), fiche: 'BAR-EN-102' }
+          } else if (g === 'ISOLATION_TOITURE' || g === 'ISO_TOITURE_RAMPANTS') {
+            return { r: calcBarEn101(situation.zone, surface, energie), fiche: 'BAR-EN-101' }
+          } else {
+            return { r: calcBarEn103(situation.zone, surface), fiche: 'BAR-EN-103' }
+          }
         }
 
-        const frIso = fourchettePrime(rIso.kwhCumac)
+        const isoMid = calcIso(surfaceMid)
+        const isoBas = calcIso(surfaceBas)
+        const isoHaut = calcIso(surfaceHaut)
+
+        // Fourchette CEE = prix(kWhc_bas_surface) .. prix(kWhc_haut_surface)
+        const frBas = fourchettePrime(isoBas.r.kwhCumac)
+        const frHaut = fourchettePrime(isoHaut.r.kwhCumac)
+        const frMid = fourchettePrime(isoMid.r.kwhCumac)
+
+        // La fourchette finale combine incertitude surface + incertitude prix
+        const fourchetteCombinee = {
+          bas: frBas.bas, // prix bas × surface basse
+          haut: frHaut.haut, // prix haut × surface haute
+        }
+
         aidesCee.push({
-          code: ficheIso,
-          montant: Math.round((frIso.bas + frIso.haut) / 2),
-          meta: { kwhc: rIso.kwhCumac, baremeId: rIso.baremeId, fourchette: frIso, geste: g, surfaceEstimee, ratio },
+          code: isoMid.fiche,
+          montant: Math.round((frMid.bas + frMid.haut) / 2),
+          meta: {
+            kwhc: isoMid.r.kwhCumac,
+            baremeId: isoMid.r.baremeId,
+            fourchette: fourchetteCombinee,
+            geste: g,
+            surfaceEstimee: surfaceMid,
+            surfaceRange: { bas: surfaceBas, haut: surfaceHaut },
+            ratioRange,
+            assumption: 'SURFACE_ESTIMATED',
+          },
         })
-        baremeIds.push(rIso.baremeId)
+        baremeIds.push(isoMid.r.baremeId)
       } else if (g === 'VMC_2FLUX') {
         const r = calcBarTh125(situation.zone)
         const fr = fourchettePrime(r.kwhCumac)
@@ -356,8 +378,15 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     debug.push({
       step: 'applyNonCumul',
       inputs: { aides: aidesCee.map((a) => ({ code: a.code, montant: a.montant })) },
-      outputs: { retenues: nc.retenues.map((r) => r.code), exclusions: nc.exclusions },
+      outputs: {
+        retenues: nc.retenues.map((r) => r.code),
+        exclusions: nc.exclusions,
+        uncertainCombinations: nc.uncertainCombinations,
+      },
       baremeIds: [],
+      notes: nc.uncertainCombinations.length > 0
+        ? `${nc.uncertainCombinations.length} combinaison(s) non explicitement documentée(s) : ${nc.uncertainCombinations.join(', ')}`
+        : undefined,
     })
     // Recalcul fourchette sur aides retenues
     for (const aide of nc.retenues) {
