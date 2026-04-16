@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
+import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const RGE_STALE_WARN_DAYS = 7
@@ -191,6 +192,7 @@ export async function GET(request: Request) {
 
       const rgeFreshness = await checkRgeFreshness()
 
+      await pingHeartbeat('sitemap-health')
       return NextResponse.json({
         healthy: allOk,
         checked: results.length,

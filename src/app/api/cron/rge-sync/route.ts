@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import * as Sentry from '@sentry/nextjs'
 import { syncRgeFromAdeme } from '@/lib/rge/sync'
 import { logger } from '@/lib/logger'
+import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 
 /**
  * Weekly cron: sync RGE certifications from ADEME API into providers table.
@@ -73,6 +74,7 @@ export async function GET(request: Request) {
           extra: { ...result },
         })
 
+        await pingHeartbeat('rge-sync')
         return NextResponse.json({
           success: true,
           ...result,

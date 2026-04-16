@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { SITE_URL } from '@/lib/seo/config'
+import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { services, villes } from '@/lib/data/france'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { submitToIndexNow } from '@/lib/seo/indexnow'
@@ -402,6 +403,7 @@ export async function GET(request: Request) {
       // ── Submit directly via IndexNow API ────────────────────────────────
       const result = await submitToIndexNow(uniqueUrls)
 
+      await pingHeartbeat('indexnow-submit')
       return NextResponse.json({
         ...result,
         urlCount: uniqueUrls.length,

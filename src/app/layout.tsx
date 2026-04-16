@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
@@ -252,6 +253,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <ServiceWorkerRegistration />
             <CapacitorInit />
             <CookieConsent />
+            <SpeedInsights />
           </CompareProviderWrapper>
         </MobileMenuProvider>
       </body>

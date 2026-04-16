@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
+import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   isPipedriveConfigured,
@@ -85,6 +86,7 @@ export async function GET(request: Request) {
       }
 
       logger.info('pipedrive-retry: done', { total: ids.length, synced, failed })
+      await pingHeartbeat('pipedrive-retry')
       return NextResponse.json({ total: ids.length, synced, failed })
     },
     {
