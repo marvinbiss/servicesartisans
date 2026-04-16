@@ -26,6 +26,10 @@ import {
   calcBarTh143,
   calcVMCSimpleFlux,
   computeBarTh171,
+  calcBarTh125,
+  calcBarTh112,
+  calcBarTh101,
+  calcPacGeoFallback,
   calcBarEn101,
   calcBarEn102,
   calcBarEn103,
@@ -310,20 +314,42 @@ export function runSimulation(input: SimulationInput): SimulationResult {
           meta: { kwhc: rIso.kwhCumac, baremeId: rIso.baremeId, fourchette: frIso, geste: g, surfaceEstimee, ratio },
         })
         baremeIds.push(rIso.baremeId)
-      } else if (g === 'VMC_2FLUX' || g === 'POELE_GRANULES' || g === 'POELE_BUCHES' || g === 'CESI' || g === 'PAC_GEOTHERMIE') {
-        // STUB: fiches CEE non encore implémentées. Montant CEE = 0€ avec trace.
-        const ficheMap: Record<string, string> = {
-          VMC_2FLUX: 'BAR-TH-125', POELE_GRANULES: 'BAR-TH-112', POELE_BUCHES: 'BAR-TH-112',
-          CESI: 'BAR-TH-101', PAC_GEOTHERMIE: 'BAR-TH-104',
-        }
-        const fiche = ficheMap[g] ?? 'BAR-TH-UNKNOWN'
-        const stubBaremeId = asBaremeId(`CEE.${fiche}.STUB.NON_IMPLEMENTE.2026-01`)
+      } else if (g === 'VMC_2FLUX') {
+        const r = calcBarTh125(situation.zone)
+        const fr = fourchettePrime(r.kwhCumac)
         aidesCee.push({
-          code: fiche,
-          montant: 0,
-          meta: { kwhc: 0, baremeId: stubBaremeId, fourchette: { bas: 0, haut: 0 }, geste: g, stub: true },
+          code: 'BAR-TH-125',
+          montant: Math.round((fr.bas + fr.haut) / 2),
+          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
         })
-        baremeIds.push(stubBaremeId)
+        baremeIds.push(r.baremeId)
+      } else if (g === 'POELE_GRANULES' || g === 'POELE_BUCHES') {
+        const r = calcBarTh112(situation.zone)
+        const fr = fourchettePrime(r.kwhCumac)
+        aidesCee.push({
+          code: 'BAR-TH-112',
+          montant: Math.round((fr.bas + fr.haut) / 2),
+          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+        })
+        baremeIds.push(r.baremeId)
+      } else if (g === 'CESI') {
+        const r = calcBarTh101(situation.zone)
+        const fr = fourchettePrime(r.kwhCumac)
+        aidesCee.push({
+          code: 'BAR-TH-101',
+          montant: Math.round((fr.bas + fr.haut) / 2),
+          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+        })
+        baremeIds.push(r.baremeId)
+      } else if (g === 'PAC_GEOTHERMIE') {
+        const r = calcPacGeoFallback(situation.zone, situation.surface, situation.typeLogement)
+        const fr = fourchettePrime(r.kwhCumac)
+        aidesCee.push({
+          code: 'PAC-GEO-FALLBACK',
+          montant: Math.round((fr.bas + fr.haut) / 2),
+          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+        })
+        baremeIds.push(r.baremeId)
       }
     }
     const nc = applyNonCumul(aidesCee)

@@ -590,6 +590,75 @@ export const SURFACE_ISOLEE_RATIOS: Record<string, number> = {
   ISO_PLANCHERS_BAS: 1.0,
 }
 
+// ---- BAR-TH-125 — VMC double flux (kWhc par logement) ----
+// Source : fiche BAR-TH-125 vA52-4 (DGEC). Durée de vie 17 ans.
+// Valeurs conservatrices pour maison individuelle, type B caisson BC.
+// certainty: LOW — pas de formule variable vérifiée, utiliser comme fallback.
+export const BAR_TH_125: Record<ZoneClimatique, number> = {
+  H1: 63_400,
+  H2: 52_100,
+  H3: 34_800,
+}
+
+export const BAR_TH_125_META = {
+  fiche: 'BAR-TH-125' as const,
+  version: 'vA52-4',
+  dureeDeVieAns: 17,
+  certainty: 'LOW' as const,
+  source: 'fallback_estimation' as const,
+  note: 'Valeurs maison individuelle, type B caisson basse conso. Fiche officielle non entièrement modélisée.',
+}
+
+// ---- BAR-TH-112 — Poêle biomasse individuel (granulés + bûches) ----
+// Source : fiche BAR-TH-112 vA43-1 (DGEC). Durée de vie 12 ans.
+// kWhc forfaitaire par zone, maison individuelle.
+// certainty: LOW — valeurs approximatives, fiche simplifiée.
+export const BAR_TH_112: Record<ZoneClimatique, number> = {
+  H1: 77_900,
+  H2: 63_900,
+  H3: 42_700,
+}
+
+export const BAR_TH_112_META = {
+  fiche: 'BAR-TH-112' as const,
+  version: 'vA43-1',
+  dureeDeVieAns: 12,
+  certainty: 'LOW' as const,
+  source: 'fallback_estimation' as const,
+  note: 'Valeurs maison individuelle. Couvre poêles granulés et bûches (même fiche).',
+}
+
+// ---- BAR-TH-101 — CESI (Chauffe-Eau Solaire Individuel) ----
+// Source : fiche BAR-TH-101 vA28-3 (DGEC). Durée de vie 20 ans.
+// kWhc forfaitaire par zone, maison individuelle.
+// certainty: LOW — valeurs approximatives.
+export const BAR_TH_101: Record<ZoneClimatique, number> = {
+  H1: 19_800,
+  H2: 16_300,
+  H3: 10_900,
+}
+
+export const BAR_TH_101_META = {
+  fiche: 'BAR-TH-101' as const,
+  version: 'vA28-3',
+  dureeDeVieAns: 20,
+  certainty: 'LOW' as const,
+  source: 'fallback_estimation' as const,
+  note: 'Valeurs maison individuelle, capteur solaire standard.',
+}
+
+// ---- PAC géothermie — Fallback conservateur ----
+// Pas de fiche BAR-TH-172 publique modélisable. Estimation basée sur
+// BAR-TH-171 (PAC air/eau) × 1.3 (ratio géo/air/eau typique profession).
+// certainty: LOW — ratio estimé, pas de source réglementaire directe.
+export const PAC_GEO_FALLBACK_RATIO = 1.3
+
+export const PAC_GEO_FALLBACK_META = {
+  note: 'Pas de fiche CEE publique applicable. Fallback = BAR-TH-171 × 1.3.',
+  certainty: 'LOW' as const,
+  source: 'fallback_estimation' as const,
+}
+
 // =============================================================================
 // Prix EMMY kWhc (doc 07 §11.2)
 // =============================================================================

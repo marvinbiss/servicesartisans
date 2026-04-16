@@ -18,6 +18,10 @@ import {
   BAR_TH_171_COEFF_SURFACE_MAISON,
   BAR_TH_171_COEFF_SURFACE_APPART,
   BAR_TH_171_COEFF_ZONE,
+  BAR_TH_125,
+  BAR_TH_112,
+  BAR_TH_101,
+  PAC_GEO_FALLBACK_RATIO,
   BAR_EN_101,
   BAR_EN_102,
   BAR_EN_103,
@@ -154,6 +158,72 @@ export function computeBarTh171(
     baremeId: asBaremeId(
       `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.S${Math.round(surface)}.2026-01`
     ),
+  }
+}
+
+// ---------- BAR-TH-125 : VMC double flux (fallback conservateur) ----------
+
+/**
+ * BAR-TH-125 — VMC double flux individuelle.
+ * Fallback : kWhc forfaitaire par zone (maison, type B caisson BC).
+ * certainty: LOW — fiche non entièrement modélisée.
+ */
+export function calcBarTh125(zone: ZoneClimatique): CeeResult {
+  const kwhCumac = BAR_TH_125[zone]
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-TH-125.${zone}.FALLBACK.2026-01`),
+  }
+}
+
+// ---------- BAR-TH-112 : Poêle biomasse (granulés / bûches) ----------
+
+/**
+ * BAR-TH-112 — Poêle biomasse individuel (granulés + bûches).
+ * Fallback : kWhc forfaitaire par zone (maison individuelle).
+ * certainty: LOW — fiche simplifiée.
+ */
+export function calcBarTh112(zone: ZoneClimatique): CeeResult {
+  const kwhCumac = BAR_TH_112[zone]
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-TH-112.${zone}.FALLBACK.2026-01`),
+  }
+}
+
+// ---------- BAR-TH-101 : CESI ----------
+
+/**
+ * BAR-TH-101 — Chauffe-Eau Solaire Individuel.
+ * Fallback : kWhc forfaitaire par zone (maison individuelle).
+ * certainty: LOW — fiche simplifiée.
+ */
+export function calcBarTh101(zone: ZoneClimatique): CeeResult {
+  const kwhCumac = BAR_TH_101[zone]
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-TH-101.${zone}.FALLBACK.2026-01`),
+  }
+}
+
+// ---------- PAC géothermie — Fallback via BAR-TH-171 × ratio ----------
+
+/**
+ * PAC géothermie — Pas de fiche CEE publique applicable.
+ * Fallback = BAR-TH-171 (PAC air/eau) × 1.3.
+ * certainty: LOW.
+ */
+export function calcPacGeoFallback(
+  zone: ZoneClimatique,
+  surface: number,
+  typeLogement: TypeLogement
+): CeeResult {
+  const base171 = computeBarTh171(zone, 2, surface, typeLogement)
+  const kwhCumac = Math.round(base171.kwhCumac * PAC_GEO_FALLBACK_RATIO)
+  const typeKey = typeLogement === 'maison' ? 'MAISON' : 'APPART'
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.PAC_GEO.${zone}.${typeKey}.FALLBACK.2026-01`),
   }
 }
 

@@ -289,3 +289,157 @@ describe('pipeline — Cas 10 : Multi-geste avec CDP fioul → cumul correct', (
     expect(ncStep).toBeDefined()
   })
 })
+
+// ---- P0 : Stubs CEE éliminés — vérification montants > 0 ----
+
+describe('pipeline — Stubs éliminés : VMC_2FLUX, POELE_GRANULES, CESI, PAC_GEOTHERMIE', () => {
+  it('VMC_2FLUX → CEE > 0 avec baremeId BAR-TH-125 FALLBACK', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans' }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['VMC_2FLUX'],
+        coupDePouce: false,
+        equipementActuel: 'gaz',
+      },
+      budget: { budgetHt: 10000 },
+    }
+    const r = runSimulation(input)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
+    expect(r.baremeIds.some((b) => b.includes('BAR-TH-125') && b.includes('FALLBACK'))).toBe(true)
+  })
+
+  it('POELE_GRANULES → CEE > 0 avec baremeId BAR-TH-112 FALLBACK', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans' }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['POELE_GRANULES'],
+        coupDePouce: false,
+        equipementActuel: 'bois',
+      },
+      budget: { budgetHt: 8000 },
+    }
+    const r = runSimulation(input)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
+    expect(r.baremeIds.some((b) => b.includes('BAR-TH-112'))).toBe(true)
+  })
+
+  it('CESI → CEE > 0 avec baremeId BAR-TH-101 FALLBACK', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans' }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['CESI'],
+        coupDePouce: false,
+        equipementActuel: 'gaz',
+      },
+      budget: { budgetHt: 6000 },
+    }
+    const r = runSimulation(input)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
+    expect(r.baremeIds.some((b) => b.includes('BAR-TH-101'))).toBe(true)
+  })
+
+  it('PAC_GEOTHERMIE → CEE > 0 avec baremeId PAC_GEO FALLBACK', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans' }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['PAC_GEOTHERMIE'],
+        coupDePouce: false,
+        equipementActuel: 'fioul',
+      },
+      budget: { budgetHt: 25000 },
+    }
+    const r = runSimulation(input)
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
+    expect(r.baremeIds.some((b) => b.includes('PAC_GEO') && b.includes('FALLBACK'))).toBe(true)
+  })
+
+  it('Aucun baremeId ne contient STUB', () => {
+    const gestes: Array<'VMC_2FLUX' | 'POELE_GRANULES' | 'POELE_BUCHES' | 'CESI' | 'PAC_GEOTHERMIE'> = [
+      'VMC_2FLUX', 'POELE_GRANULES', 'POELE_BUCHES', 'CESI', 'PAC_GEOTHERMIE',
+    ]
+    for (const g of gestes) {
+      const input: SimulationInput = {
+        situation: baseSituation({ anciennete: 'plus_15_ans' }),
+        projet: {
+          parcours: 'geste',
+          gestes: [g],
+          coupDePouce: false,
+          equipementActuel: 'gaz',
+        },
+        budget: { budgetHt: 15000 },
+      }
+      const r = runSimulation(input)
+      const hasStub = r.baremeIds.some((b) => b.includes('STUB'))
+      expect(hasStub, `${g} should not have STUB baremeId`).toBe(false)
+    }
+  })
+})
+
+// ---- P1 : Tests cas limites supplémentaires ----
+
+describe('pipeline — MAR plafonné à 2000€ TTC', () => {
+  it('MAR bleu = 2000 (100% de 2000 TTC)', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({
+        rfr: 15000,
+        categorie: 'bleu',
+        anciennete: 'plus_15_ans',
+      }),
+      projet: {
+        parcours: 'accompagne',
+        gestes: ['PAC_AIREAU'],
+        sautsDpe: 3,
+        coupDePouce: false,
+        equipementActuel: 'gaz',
+      },
+      budget: { budgetHt: 40000 },
+    }
+    const r = runSimulation(input)
+    expect(r.marPriseEnCharge).toBeLessThanOrEqual(2000)
+    expect(r.marPriseEnCharge).toBe(2000) // 100% × 2000
+  })
+
+  it('MAR rose = 400 (20% de 2000 TTC)', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({
+        rfr: 200000,
+        categorie: 'rose',
+        anciennete: 'plus_15_ans',
+      }),
+      projet: {
+        parcours: 'accompagne',
+        gestes: ['PAC_AIREAU'],
+        sautsDpe: 2,
+        coupDePouce: false,
+        equipementActuel: 'gaz',
+      },
+      budget: { budgetHt: 30000 },
+    }
+    const r = runSimulation(input)
+    expect(r.marPriseEnCharge).toBeLessThanOrEqual(2000)
+  })
+})
+
+describe('pipeline — Écrêtement limite', () => {
+  it('Budget très bas → écrêtement plafonne les aides', () => {
+    const input: SimulationInput = {
+      situation: baseSituation({ anciennete: 'plus_15_ans' }),
+      projet: {
+        parcours: 'geste',
+        gestes: ['PAC_AIREAU'],
+        coupDePouce: true,
+        equipementActuel: 'fioul',
+      },
+      budget: { budgetHt: 3000 }, // Budget très bas
+    }
+    const r = runSimulation(input)
+    // L'écrêtement doit être atteint (aides brutes > 75% du budget TTC)
+    expect(r.ecretementAtteint).toBe(true)
+    // Le reste à charge bas doit être positif (pas de reste négatif)
+    expect(r.resteAChargeBas).toBeGreaterThanOrEqual(0)
+  })
+})

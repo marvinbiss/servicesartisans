@@ -5,6 +5,10 @@ import {
   calcBarTh143,
   calcVMCSimpleFlux,
   computeBarTh171,
+  calcBarTh125,
+  calcBarTh112,
+  calcBarTh101,
+  calcPacGeoFallback,
   fourchettePrime,
   calcCEEFiche,
 } from '@/lib/simulateur/engine/calc-cee'
@@ -111,6 +115,51 @@ describe('fourchettePrime — env vars', () => {
   })
 })
 
+describe('BAR-TH-125 VMC double flux (fallback)', () => {
+  it('H1=63400, H2=52100, H3=34800', () => {
+    expect(calcBarTh125('H1').kwhCumac).toBe(63400)
+    expect(calcBarTh125('H2').kwhCumac).toBe(52100)
+    expect(calcBarTh125('H3').kwhCumac).toBe(34800)
+  })
+  it('baremeId contient FALLBACK', () => {
+    expect(calcBarTh125('H1').baremeId).toMatch(/FALLBACK/)
+  })
+})
+
+describe('BAR-TH-112 poêle biomasse (fallback)', () => {
+  it('H1=77900, H2=63900, H3=42700', () => {
+    expect(calcBarTh112('H1').kwhCumac).toBe(77900)
+    expect(calcBarTh112('H2').kwhCumac).toBe(63900)
+    expect(calcBarTh112('H3').kwhCumac).toBe(42700)
+  })
+  it('baremeId contient FALLBACK', () => {
+    expect(calcBarTh112('H2').baremeId).toMatch(/FALLBACK/)
+  })
+})
+
+describe('BAR-TH-101 CESI (fallback)', () => {
+  it('H1=19800, H2=16300, H3=10900', () => {
+    expect(calcBarTh101('H1').kwhCumac).toBe(19800)
+    expect(calcBarTh101('H2').kwhCumac).toBe(16300)
+    expect(calcBarTh101('H3').kwhCumac).toBe(10900)
+  })
+  it('baremeId contient FALLBACK', () => {
+    expect(calcBarTh101('H3').baremeId).toMatch(/FALLBACK/)
+  })
+})
+
+describe('PAC géothermie fallback (BAR-TH-171 × 1.3)', () => {
+  it('kWhc > PAC air/eau pour mêmes params', () => {
+    const geo = calcPacGeoFallback('H1', 100, 'maison')
+    const air = computeBarTh171('H1', 2, 100, 'maison')
+    expect(geo.kwhCumac).toBeGreaterThan(air.kwhCumac)
+    expect(geo.kwhCumac).toBe(Math.round(air.kwhCumac * 1.3))
+  })
+  it('baremeId contient PAC_GEO et FALLBACK', () => {
+    expect(calcPacGeoFallback('H2', 80, 'maison').baremeId).toMatch(/PAC_GEO.*FALLBACK/)
+  })
+})
+
 describe('calcCEEFiche dispatcher', () => {
   it('dispatche BAR-TH-148', () => {
     const r = calcCEEFiche('BAR-TH-148', { typeLogement: 'maison' })
@@ -118,5 +167,37 @@ describe('calcCEEFiche dispatcher', () => {
   })
   it('throw si params manquants', () => {
     expect(() => calcCEEFiche('BAR-TH-127', {})).toThrow()
+  })
+})
+
+// ---- P1 : Tests cas limites ----
+
+describe('Cas limites — surfaces extrêmes', () => {
+  it('BAR-TH-171 surface 15m² → coeff 0.5 (plus petit bucket)', () => {
+    const r = computeBarTh171('H1', 2, 15, 'maison')
+    // 109200 × 0.5 × 1.2 = 65520
+    expect(r.kwhCumac).toBe(65520)
+  })
+  it('BAR-TH-171 surface 400m² → coeff 1.0 (dernier bucket)', () => {
+    const r = computeBarTh171('H1', 2, 400, 'maison')
+    // 109200 × 1.0 × 1.2 = 131040
+    expect(r.kwhCumac).toBe(131040)
+  })
+  it('VMC simple flux surface 10m² → facteur 0.3', () => {
+    const r = calcVMCSimpleFlux('H1', 10, 'B_caisson_BC')
+    expect(r.kwhCumac).toBe(Math.round(31600 * 0.3))
+  })
+})
+
+describe('Cas limites — fourchettePrime valeurs extrêmes', () => {
+  it('kWhc = 0 → prime 0/0', () => {
+    const fr = fourchettePrime(0)
+    expect(fr.bas).toBe(0)
+    expect(fr.haut).toBe(0)
+  })
+  it('kWhc très élevé → prime proportionnelle', () => {
+    const fr = fourchettePrime(500_000)
+    expect(fr.bas).toBeGreaterThan(0)
+    expect(fr.haut).toBeGreaterThan(fr.bas)
   })
 })
