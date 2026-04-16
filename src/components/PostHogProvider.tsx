@@ -60,7 +60,13 @@ export default function PostHogProvider() {
 
     // React to consent changes (the CookieConsent component dispatches a
     // custom event when the user updates their preferences).
-    const handler = () => initIfReady()
+    const handler = () => {
+      if (hasAnalyticsConsent()) {
+        initIfReady()
+      } else if (posthog.__loaded) {
+        posthog.opt_out_capturing()
+      }
+    }
     window.addEventListener('cookie-preferences-updated', handler)
     window.addEventListener('storage', handler)
     return () => {

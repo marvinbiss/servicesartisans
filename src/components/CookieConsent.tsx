@@ -85,6 +85,9 @@ export default function CookieConsent() {
   const saveConsent = async (prefs: CookiePreferences) => {
     localStorage.setItem(COOKIE_CONSENT_KEY, new Date().toISOString())
     localStorage.setItem(COOKIE_PREFERENCES_KEY, JSON.stringify(prefs))
+    // Notify same-tab listeners (PostHogProvider, etc.) — the native `storage`
+    // event only fires cross-tab, so we need a custom event for in-page updates.
+    window.dispatchEvent(new Event('cookie-preferences-updated'))
     setIsVisible(false)
 
     // Save to server for GDPR compliance
@@ -98,8 +101,8 @@ export default function CookieConsent() {
           userAgent: navigator.userAgent,
         }),
       })
-    } catch (error) {
-      console.error('Failed to save consent to server:', error)
+    } catch {
+      // silent — consent is already persisted in localStorage
     }
 
     // Apply preferences

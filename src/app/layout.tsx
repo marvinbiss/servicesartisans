@@ -52,6 +52,9 @@ const PostHogProvider = dynamic(() => import('@/components/PostHogProvider'), {
 const AuthTracker = dynamic(() => import('@/components/AuthTracker'), {
   ssr: false,
 })
+const ConsentGatedScripts = dynamic(() => import('@/components/ConsentGatedScripts'), {
+  ssr: false,
+})
 const CompareProviderWrapper = dynamic(
   () =>
     import('@/components/compare/CompareProvider').then((mod) => ({
@@ -220,30 +223,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {/* Meta Pixel — chargé après consentement analytics (RGPD) */}
-        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
-          <Script id="meta-pixel" strategy="lazyOnload">
-            {`!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
-fbq('track', 'PageView');`}
-          </Script>
-        )}
-        {/* Contentsquare UX Analytics — deferred until idle or 5s fallback */}
-        <Script id="contentsquare-deferred" strategy="lazyOnload">
-          {`(function(){function l(){if(l.d)return;l.d=1;var s=document.createElement('script');s.src='https://t.contentsquare.net/uxa/8da7eeef2dab8.js';s.async=true;document.head.appendChild(s)}if(typeof requestIdleCallback==='function'){requestIdleCallback(l,{timeout:5000})}else{setTimeout(l,5000)}})();`}
-        </Script>
+        {/* Meta Pixel + Contentsquare — gated by consent (RGPD) via ConsentGatedScripts */}
         {/* GA4 gtag.js — loaded after GTM for event forwarding to GA4 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}`}
           strategy="afterInteractive"
         />
+        <ConsentGatedScripts />
         <WebVitals />
         <PageViewTracker />
         <PostHogProvider />
