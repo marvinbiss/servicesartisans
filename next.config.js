@@ -28,6 +28,7 @@ const nextConfig = {
   staticPageGenerationTimeout: 600,
 
   experimental: {
+    instrumentationHook: true,
     optimizePackageImports: [
       'lucide-react',
       '@supabase/supabase-js',
