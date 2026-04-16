@@ -49,6 +49,9 @@ const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
 const PostHogProvider = dynamic(() => import('@/components/PostHogProvider'), {
   ssr: false,
 })
+const AuthTracker = dynamic(() => import('@/components/AuthTracker'), {
+  ssr: false,
+})
 const CompareProviderWrapper = dynamic(
   () =>
     import('@/components/compare/CompareProvider').then((mod) => ({
@@ -244,6 +247,7 @@ fbq('track', 'PageView');`}
         <WebVitals />
         <PageViewTracker />
         <PostHogProvider />
+        <AuthTracker />
         <MobileMenuProvider>
           <CompareProviderWrapper>
             {/* Skip to main content for accessibility */}
