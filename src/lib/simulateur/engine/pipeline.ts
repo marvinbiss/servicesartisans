@@ -43,7 +43,7 @@ import { calcCoupDePouce, calcCdpRenovAmpleur } from './calc-cdp'
 import { calcEcoPtz, calcPar } from './calc-prets'
 import { calcMprCopro, calcDenormandie, calcTaxeFonciere } from './calc-complementaires'
 import type { MprCoproResult, DenormandieResult, TaxeFonciereResult } from './calc-complementaires'
-import { applyNonCumul, type AideCalculee } from './non-cumul'
+import { applyNonCumul, type AideCalculee, type UncertainPair } from './non-cumul'
 import { applyEcretement } from './ecretement'
 import { calcResteACharge } from './reste-a-charge'
 
@@ -132,6 +132,10 @@ export interface SimulationResult {
   uncertainCombinations: string[]
   /** Facteur de décote appliqué au CEE bas pour incertitude non-cumul (0–0.40). */
   uncertaintyDiscount: number
+  /** Niveau de confiance global de l'estimation. */
+  confidenceLevel: 'high' | 'medium' | 'low'
+  /** Message lisible expliquant le niveau de confiance. */
+  confidenceMessage: string
 
   /** Lead fioul = high priority (remplacement chaudière fioul, valeur 5x). */
   leadPriority: 'high' | 'normal'
@@ -199,6 +203,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       formuleDebug: debug,
       uncertainCombinations: [],
       uncertaintyDiscount: 0,
+      confidenceLevel: 'high',
+      confidenceMessage: 'Aucun geste éligible — pas d\'incertitude de calcul.',
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
       necessiteMAR: false, // no aids → no MAR needed
@@ -243,6 +249,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   let ceeBas = 0
   let ceeHaut = 0
   let uncertainCombinations: string[] = []
+  let uncertainPairs: UncertainPair[] = []
   if (projet.parcours === 'geste') {
     for (const g of retenus) {
       if (g === 'CET') {
@@ -384,6 +391,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     }
     const nc = applyNonCumul(aidesCee)
     uncertainCombinations = nc.uncertainCombinations
+    uncertainPairs = nc.uncertainPairs
     debug.push({
       step: 'applyNonCumul',
       inputs: { aides: aidesCee.map((a) => ({ code: a.code, montant: a.montant })) },
@@ -537,15 +545,24 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   const ceeHautEffectif = projet.parcours === 'geste' ? ceeHautFinal : ceeAmpleurFinal
 
   // Quand des combinaisons CEE sont incertaines (NON_CUMUL_UNCERTAIN),
-  // appliquer un facteur de sécurité asymétrique sur les bornes du total.
+  // appliquer un facteur de sécurité PONDÉRÉ PAR RISQUE sur les bornes.
   // ⚠️ MODÈLE INTERNE — pas une règle réglementaire.
-  // Bas : -15% par paire incertaine (cap 40%) — risque d'exclusion rétroactive.
-  // Haut : -5% par paire incertaine (cap 15%) — le scénario optimiste reste possible mais pas garanti.
-  const ncUncertainCount = projet.parcours === 'geste'
-    ? uncertainCombinations.length
+  //
+  // Pondération par paire :
+  //   HIGH   (même usage thermique) → bas -20%, haut -8%
+  //   MEDIUM (usage proche)         → bas -10%, haut -4%
+  //   LOW    (usages distincts)     → bas -5%,  haut -2%
+  const RISK_WEIGHTS_BAS = { HIGH: 0.20, MEDIUM: 0.10, LOW: 0.05 } as const
+  const RISK_WEIGHTS_HAUT = { HIGH: 0.08, MEDIUM: 0.04, LOW: 0.02 } as const
+
+  const rawDiscountBas = projet.parcours === 'geste'
+    ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_BAS[p.risk], 0)
     : 0
-  const uncertaintyDiscountBas = Math.min(ncUncertainCount * 0.15, 0.40)
-  const uncertaintyDiscountHaut = Math.min(ncUncertainCount * 0.05, 0.15)
+  const rawDiscountHaut = projet.parcours === 'geste'
+    ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_HAUT[p.risk], 0)
+    : 0
+  const uncertaintyDiscountBas = Math.min(rawDiscountBas, 0.40)
+  const uncertaintyDiscountHaut = Math.min(rawDiscountHaut, 0.15)
   const uncertaintyDiscount = uncertaintyDiscountBas // exposé au client (décote principale)
   const ceeBasAjuste = Math.round(ceeBasEffectif * (1 - uncertaintyDiscountBas))
   const ceeHautAjuste = Math.round(ceeHautEffectif * (1 - uncertaintyDiscountHaut))
@@ -554,10 +571,12 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   const totalHaut = mprFinal + ceeHautAjuste + cdpHautFinal + marFinal
   const rac = calcResteACharge(budgetTTC, { bas: totalBas, haut: totalHaut })
 
-  if (ncUncertainCount > 0) {
+  if (uncertainPairs.length > 0) {
     debug.push({
       step: 'nonCumulUncertaintyDiscount',
-      inputs: { ncUncertainCount, uncertainCombinations },
+      inputs: {
+        pairs: uncertainPairs.map((p) => ({ label: p.label, risk: p.risk })),
+      },
       outputs: {
         discountBas: uncertaintyDiscountBas,
         discountHaut: uncertaintyDiscountHaut,
@@ -567,7 +586,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         ceeHautApres: ceeHautAjuste,
       },
       baremeIds: [asBaremeId('NON_CUMUL_ESTIMATED_DISCOUNT.INTERNAL.2026-01')],
-      notes: 'Modèle interne de décote — pas une règle réglementaire. Asymétrie assumée : le bas intègre le risque d\'exclusion, le haut une probabilité résiduelle.',
+      notes: 'Modèle interne pondéré par risque — pas une règle réglementaire. HIGH=même usage thermique, MEDIUM=usage proche, LOW=usages distincts.',
     })
   }
 
@@ -634,6 +653,21 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     })
   }
 
+  // --- 10. Niveau de confiance global ---
+  // Facteurs dégradants : incertitude non-cumul, fiches LOW certainty, fourchette large
+  const hasLowCertaintyFiches = aidesCee.some((a) => a.meta?.certainty === 'LOW')
+  const fourchettePct = totalHaut > 0 ? (totalHaut - totalBas) / totalHaut : 0
+  let confidenceLevel: 'high' | 'medium' | 'low' = 'high'
+  let confidenceMessage = 'Estimation fiable — barèmes officiels 2026, cumul vérifié.'
+
+  if (uncertainPairs.some((p) => p.risk === 'HIGH') || uncertaintyDiscountBas >= 0.30) {
+    confidenceLevel = 'low'
+    confidenceMessage = 'Estimation indicative — cumul CEE incertain sur des gestes à usage similaire. Le montant réel peut varier significativement après instruction du dossier.'
+  } else if (uncertainPairs.length > 0 || hasLowCertaintyFiches || fourchettePct > 0.35) {
+    confidenceLevel = 'medium'
+    confidenceMessage = 'Estimation prudente — certaines hypothèses (surfaces, cumul CEE) élargissent la fourchette. Les montants définitifs dépendront du métré et de l\'instruction.'
+  }
+
   return {
     categorieAnah: categorie,
     gestesRetenus: retenus,
@@ -667,6 +701,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     formuleDebug: debug,
     uncertainCombinations,
     uncertaintyDiscount,
+    confidenceLevel,
+    confidenceMessage,
     exclusion: ec.exclusionMessage,
     leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
     necessiteMAR: projet.parcours === 'accompagne' && mprFinal > 0,

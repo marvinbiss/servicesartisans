@@ -101,10 +101,9 @@ export async function POST(req: NextRequest) {
 
     // Non-cumul incertain — combinaisons CEE ni explicitement autorisées ni interdites
     if (result.uncertainCombinations.length > 0) {
-      const paires = result.uncertainCombinations.join(', ')
       const pctBas = Math.round(result.uncertaintyDiscount * 100)
       hypotheses.push(
-        `Non-cumul CEE incertain : ${paires}. Fourchette ajustée par précaution (bas −${pctBas}%, haut −${Math.round(pctBas / 3)}%). Modèle interne, pas une règle officielle — le cumul réel dépend de l'instruction du dossier.`
+        `Non-cumul CEE incertain : ${result.uncertainCombinations.join(', ')}. Fourchette ajustée par précaution (−${pctBas}% sur le bas). Modèle interne, pas une règle officielle — le cumul réel dépend de l'instruction du dossier.`
       )
     }
 
@@ -138,6 +137,8 @@ export async function POST(req: NextRequest) {
         exclusion: result.exclusion,
         uncertainCombinations: result.uncertainCombinations,
         uncertaintyDiscount: result.uncertaintyDiscount,
+        confidenceLevel: result.confidenceLevel,
+        confidenceMessage: result.confidenceMessage,
         zoneWarning: zoneRes.warning,
         ecoPtz: result.ecoPtz,
         par: result.par,

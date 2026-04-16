@@ -30,11 +30,21 @@ export interface NonCumulExclusion {
   raison: string
 }
 
+export type UncertainRiskLevel = 'HIGH' | 'MEDIUM' | 'LOW'
+
+export interface UncertainPair {
+  label: string
+  codes: [string, string]
+  risk: UncertainRiskLevel
+}
+
 export interface NonCumulResult {
   retenues: AideCalculee[]
   exclusions: NonCumulExclusion[]
   /** Combinaisons non explicitement documentées — risque de sur-cumul. */
   uncertainCombinations: string[]
+  /** Combinaisons incertaines enrichies avec niveau de risque. */
+  uncertainPairs: UncertainPair[]
 }
 
 /** Paires explicitement autorisées (pas de non-cumul connu). */
@@ -56,12 +66,42 @@ function isPaireKnown(a: string, b: string, list: ReadonlyArray<readonly [string
 }
 
 /**
+ * Matrice de risque pour les paires incertaines.
+ * HIGH : même usage thermique (chauffage ↔ chauffage, ECS ↔ ECS) — conflit probable.
+ * MEDIUM : usages proches ou chevauchement partiel.
+ * LOW : usages distincts (ventilation ↔ isolation, etc.) — quasi aucun risque réel.
+ *
+ * Codage par préfixe fonctionnel pour couvrir les combinaisons futures.
+ */
+const HIGH_RISK_PREFIXES: ReadonlyArray<readonly [string, string]> = [
+  ['BAR-TH-143', 'BAR-TH-171'], // SSC ↔ PAC (chauffage+ECS vs chauffage+ECS)
+  ['BAR-TH-143', 'BAR-TH-148'], // SSC ↔ CET (ECS solaire vs ECS thermo)
+  ['BAR-TH-113', 'BAR-TH-171'], // biomasse ↔ PAC (chauffage vs chauffage)
+  ['BAR-TH-112', 'BAR-TH-171'], // poêle ↔ PAC (chauffage vs chauffage)
+  ['BAR-TH-112', 'BAR-TH-113'], // poêle ↔ chaudière biomasse
+  ['BAR-TH-101', 'BAR-TH-148'], // CESI ↔ CET (ECS solaire vs ECS thermo)
+]
+
+const MEDIUM_RISK_PREFIXES: ReadonlyArray<readonly [string, string]> = [
+  ['BAR-TH-112', 'BAR-TH-143'], // poêle ↔ SSC (appoint vs principal)
+  ['BAR-TH-101', 'BAR-TH-171'], // CESI ↔ PAC (ECS solaire vs PAC qui fait ECS)
+  ['BAR-TH-125', 'BAR-TH-127'], // VMC double flux ↔ VMC simple flux
+]
+
+function classifyRisk(a: string, b: string): UncertainRiskLevel {
+  if (isPaireKnown(a, b, HIGH_RISK_PREFIXES)) return 'HIGH'
+  if (isPaireKnown(a, b, MEDIUM_RISK_PREFIXES)) return 'MEDIUM'
+  return 'LOW'
+}
+
+/**
  * Applique la matrice de non-cumul + détecte les combinaisons ambiguës.
  */
 export function applyNonCumul(aides: AideCalculee[]): NonCumulResult {
   const exclusions: NonCumulExclusion[] = []
   const excluded = new Set<string>()
   const uncertainCombinations: string[] = []
+  const uncertainPairs: UncertainPair[] = []
 
   // 1. Exclure les paires explicitement incompatibles
   for (const [a, b] of CEE_NON_CUMUL_PAIRES) {
@@ -96,14 +136,16 @@ export function applyNonCumul(aides: AideCalculee[]): NonCumulResult {
       const isBlacklisted = isPaireKnown(a, b, CEE_NON_CUMUL_PAIRES)
       const isSafe = isPaireKnown(a, b, KNOWN_SAFE_PAIRES)
       if (!isBlacklisted && !isSafe) {
+        const risk = classifyRisk(a, b)
         uncertainCombinations.push(`${a} + ${b}`)
+        uncertainPairs.push({ label: `${a} + ${b}`, codes: [a, b], risk })
         logger.info(
-          `Non-cumul incertain : ${a} + ${b} — ni interdit ni explicitement autorisé.`,
-          { action: 'applyNonCumul', tag: 'NON_CUMUL_UNCERTAIN' }
+          `Non-cumul incertain : ${a} + ${b} — risque ${risk} — ni interdit ni explicitement autorisé.`,
+          { action: 'applyNonCumul', tag: 'NON_CUMUL_UNCERTAIN', risk }
         )
       }
     }
   }
 
-  return { retenues, exclusions, uncertainCombinations }
+  return { retenues, exclusions, uncertainCombinations, uncertainPairs }
 }
