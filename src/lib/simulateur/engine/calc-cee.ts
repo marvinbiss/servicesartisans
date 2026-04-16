@@ -4,7 +4,7 @@
  * Source : docs/baremes-sources/07-*.md §6, §11
  */
 
-import type { BaremeId, TypeLogement, ZoneClimatique } from '../types'
+import type { BaremeId, EquipementActuel, TypeLogement, ZoneClimatique } from '../types'
 import { asBaremeId } from '../types'
 import type { CategorieAnah, SautsDpe } from '../types'
 import {
@@ -14,6 +14,13 @@ import {
   BAR_TH_127_INDIV_BASE,
   BAR_TH_127_SURFACE_FACTEURS,
   BAR_TH_127_FACTEUR_R_INDIV,
+  BAR_TH_171_MONTANT_BASE,
+  BAR_TH_171_COEFF_SURFACE_MAISON,
+  BAR_TH_171_COEFF_SURFACE_APPART,
+  BAR_TH_171_COEFF_ZONE,
+  BAR_EN_101,
+  BAR_EN_102,
+  BAR_EN_103,
   CEE_PRIX_CLASSIQUE_DEFAULT,
   CEE_PRIX_PRECARITE_DEFAULT,
   CEE_AMPLEUR_BASE,
@@ -22,6 +29,7 @@ import {
   MAR_PLAFOND_TTC,
   MAR_COUT_MOYEN_TTC,
   type VmcRType,
+  type EnergieChauffage,
 } from '../baremes/2026-01'
 
 export interface CeeResult {
@@ -106,113 +114,106 @@ export function calcVMCSimpleFlux(
   }
 }
 
-// ---------- BAR-TH-171 : PAC air/eau (formule variable) ----------
+// ---------- BAR-TH-171 : PAC air/eau (formule officielle vA78.4) ----------
 
 export type EtasClass = 1 | 2
-export type SurfBucketMaison = 'S_LT_70' | 'S_70_90' | 'S_GTE_90'
-export type SurfBucketAppart = 'S_LT_35' | 'S_35_60' | 'S_GTE_60'
 
 /**
- * BAR-TH-171 — table approximative par (zone × type × ETAS × tranche surface).
+ * BAR-TH-171 — Formule officielle vA78.4 (arrêté 15/12/2025).
+ * kWhc = montant_de_base × coefficient_surface × coefficient_zone
  *
- * ⚠️ APPROXIMATION NON OPPOSABLE — en attendant extraction du PDF DGEC vA78.4
- * (arrêté 15/12/2025). Point de calibration unique : Argile.ai indique
- * Maison H1, 80 m² (tranche 70-90), ETAS 142 % (classe 2), remplacement gaz,
- * Coup de Pouce actif → 458 MWhc. Les valeurs MAISON.H1.ETAS2.S_70_90
- * ci-dessous sont calées sur ce point. Toutes les autres dérivent par
- * ratio ordinal (H1 > H2 > H3, ETAS2 > ETAS1, plus grand > plus petit).
- *
- * Mode strict : positionner BAR_TH_171_STRICT_MODE=true en prod pour que
- * cette fonction throw au lieu de renvoyer un approximé — utile tant que
- * la table exacte n'est pas intégrée.
- *
- * Les baremeIds portent le suffixe `.APPROX.` pour que le back-office
- * et l'audit traçabilité sachent identifier ces calculs comme non exacts.
+ * Source : fiche BAR-TH-171 vA78.4 (PDF DGEC), Legifrance JORFTEXT000053043176
+ * Validé par cross-check : maison H1, 80m², ETAS2 → 109200 × 0.7 × 1.2 = 91 728 kWhc
+ * Avec Coup de Pouce ×5 = 458 640 kWhc ≈ 458 MWhc (point Argile.ai)
  */
-const BAR_TH_171_MAISON: Record<
-  ZoneClimatique,
-  Record<EtasClass, Record<SurfBucketMaison, number>>
-> = {
-  H1: {
-    1: { S_LT_70: 260_000, S_70_90: 370_000, S_GTE_90: 430_000 },
-    2: { S_LT_70: 320_000, S_70_90: 458_000, S_GTE_90: 540_000 },
-  },
-  H2: {
-    1: { S_LT_70: 215_000, S_70_90: 305_000, S_GTE_90: 360_000 },
-    2: { S_LT_70: 265_000, S_70_90: 378_000, S_GTE_90: 445_000 },
-  },
-  H3: {
-    1: { S_LT_70: 155_000, S_70_90: 220_000, S_GTE_90: 260_000 },
-    2: { S_LT_70: 190_000, S_70_90: 273_000, S_GTE_90: 320_000 },
-  },
-}
-
-const BAR_TH_171_APPART: Record<
-  ZoneClimatique,
-  Record<EtasClass, Record<SurfBucketAppart, number>>
-> = {
-  H1: {
-    1: { S_LT_35: 115_000, S_35_60: 165_000, S_GTE_60: 210_000 },
-    2: { S_LT_35: 140_000, S_35_60: 205_000, S_GTE_60: 260_000 },
-  },
-  H2: {
-    1: { S_LT_35: 95_000, S_35_60: 135_000, S_GTE_60: 175_000 },
-    2: { S_LT_35: 115_000, S_35_60: 170_000, S_GTE_60: 215_000 },
-  },
-  H3: {
-    1: { S_LT_35: 68_000, S_35_60: 98_000, S_GTE_60: 125_000 },
-    2: { S_LT_35: 83_000, S_35_60: 122_000, S_GTE_60: 155_000 },
-  },
-}
-
-function surfBucketMaison(surface: number): SurfBucketMaison {
-  if (surface < 70) return 'S_LT_70'
-  if (surface < 90) return 'S_70_90'
-  return 'S_GTE_90'
-}
-
-function surfBucketAppart(surface: number): SurfBucketAppart {
-  if (surface < 35) return 'S_LT_35'
-  if (surface < 60) return 'S_35_60'
-  return 'S_GTE_60'
-}
-
 export function computeBarTh171(
   zone: ZoneClimatique,
   etasClass: EtasClass,
   surface: number,
   typeLogement: TypeLogement
 ): CeeResult {
-  const strict = process.env.BAR_TH_171_STRICT_MODE === 'true'
-  if (strict) {
-    throw new Error(
-      'BAR-TH-171: table exacte PDF DGEC vA78.4 non intégrée, mode strict activé'
-    )
+  const base = BAR_TH_171_MONTANT_BASE[typeLogement][etasClass]
+  const coeffZone = BAR_TH_171_COEFF_ZONE[zone]
+
+  const surfBuckets = typeLogement === 'maison'
+    ? BAR_TH_171_COEFF_SURFACE_MAISON
+    : BAR_TH_171_COEFF_SURFACE_APPART
+  let coeffSurface = 1.0
+  for (const bucket of surfBuckets) {
+    if (surface < bucket.max) {
+      coeffSurface = bucket.facteur
+      break
+    }
   }
 
-  let kwhCumac: number
-  let surfBucket: string
-  if (typeLogement === 'maison') {
-    const bucket = surfBucketMaison(surface)
-    surfBucket = bucket
-    kwhCumac = BAR_TH_171_MAISON[zone][etasClass][bucket]
-  } else {
-    const bucket = surfBucketAppart(surface)
-    surfBucket = bucket
-    kwhCumac = BAR_TH_171_APPART[zone][etasClass][bucket]
-  }
-
-  // eslint-disable-next-line no-console
-  console.warn?.(
-    `[BAR-TH-171] valeur approximative (${kwhCumac} kWhc) — calibrée sur point Argile.ai, non opposable tant que table PDF DGEC vA78.4 non intégrée`
-  )
+  const kwhCumac = Math.round(base * coeffSurface * coeffZone)
 
   const typeKey = typeLogement === 'maison' ? 'MAISON' : 'APPART'
   return {
     kwhCumac,
     baremeId: asBaremeId(
-      `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.${surfBucket}.APPROX.2026-01`
+      `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.S${Math.round(surface)}.2026-01`
     ),
+  }
+}
+
+// ---------- BAR-EN-101 : Isolation combles / toitures ----------
+
+export function equipToEnergie(equip: EquipementActuel): EnergieChauffage {
+  return equip === 'elec' ? 'electricite' : 'combustible'
+}
+
+/**
+ * BAR-EN-101 — kWhc = forfait_par_m² × surface_isolée
+ * Source : fiche BAR-EN-101 vA64-6 (01/01/2025)
+ */
+export function calcBarEn101(
+  zone: ZoneClimatique,
+  surfaceIsolee: number,
+  energie: EnergieChauffage
+): CeeResult {
+  const kwhParM2 = BAR_EN_101[zone][energie]
+  const kwhCumac = Math.round(kwhParM2 * surfaceIsolee)
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-EN-101.${zone}.${energie.toUpperCase()}.S${Math.round(surfaceIsolee)}.2026-01`),
+  }
+}
+
+// ---------- BAR-EN-102 : Isolation des murs ----------
+
+/**
+ * BAR-EN-102 — kWhc = forfait_par_m² × surface_isolée
+ * Source : fiche BAR-EN-102 vA39-5
+ */
+export function calcBarEn102(
+  zone: ZoneClimatique,
+  surfaceIsolee: number,
+  energie: EnergieChauffage
+): CeeResult {
+  const kwhParM2 = BAR_EN_102[zone][energie]
+  const kwhCumac = Math.round(kwhParM2 * surfaceIsolee)
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-EN-102.${zone}.${energie.toUpperCase()}.S${Math.round(surfaceIsolee)}.2026-01`),
+  }
+}
+
+// ---------- BAR-EN-103 : Isolation plancher bas ----------
+
+/**
+ * BAR-EN-103 — kWhc = forfait_par_m² × surface_isolée
+ * Source : fiche BAR-EN-103 vA39-5 (pas de distinction énergie)
+ */
+export function calcBarEn103(
+  zone: ZoneClimatique,
+  surfaceIsolee: number
+): CeeResult {
+  const kwhParM2 = BAR_EN_103[zone]
+  const kwhCumac = Math.round(kwhParM2 * surfaceIsolee)
+  return {
+    kwhCumac,
+    baremeId: asBaremeId(`CEE.BAR-EN-103.${zone}.S${Math.round(surfaceIsolee)}.2026-01`),
   }
 }
 
@@ -279,14 +280,18 @@ export function calcMarPriseEnCharge(categorie: CategorieAnah): MarResult {
 
 // ---------- Dispatcher par ficheId (utile pour pipeline) ----------
 
-export type CeeFicheId = 'BAR-TH-148' | 'BAR-TH-113' | 'BAR-TH-143' | 'BAR-TH-127' | 'BAR-TH-171'
+export type CeeFicheId =
+  | 'BAR-TH-148' | 'BAR-TH-113' | 'BAR-TH-143' | 'BAR-TH-127' | 'BAR-TH-171'
+  | 'BAR-EN-101' | 'BAR-EN-102' | 'BAR-EN-103'
 
 export interface CeeFicheParams {
   zone?: ZoneClimatique
   typeLogement?: TypeLogement
   surface?: number
+  surfaceIsolee?: number
   rType?: VmcRType
   etasClass?: EtasClass
+  energie?: EnergieChauffage
 }
 
 export function calcCEEFiche(ficheId: CeeFicheId, params: CeeFicheParams): CeeResult {
@@ -306,14 +311,24 @@ export function calcCEEFiche(ficheId: CeeFicheId, params: CeeFicheParams): CeeRe
       }
       return calcVMCSimpleFlux(params.zone, params.surface, params.rType)
     case 'BAR-TH-171':
-      if (
-        !params.zone ||
-        !params.etasClass ||
-        params.surface === undefined ||
-        !params.typeLogement
-      ) {
+      if (!params.zone || !params.etasClass || params.surface === undefined || !params.typeLogement) {
         throw new Error('BAR-TH-171 requiert zone, etasClass, surface, typeLogement')
       }
       return computeBarTh171(params.zone, params.etasClass, params.surface, params.typeLogement)
+    case 'BAR-EN-101':
+      if (!params.zone || params.surfaceIsolee === undefined || !params.energie) {
+        throw new Error('BAR-EN-101 requiert zone, surfaceIsolee, energie')
+      }
+      return calcBarEn101(params.zone, params.surfaceIsolee, params.energie)
+    case 'BAR-EN-102':
+      if (!params.zone || params.surfaceIsolee === undefined || !params.energie) {
+        throw new Error('BAR-EN-102 requiert zone, surfaceIsolee, energie')
+      }
+      return calcBarEn102(params.zone, params.surfaceIsolee, params.energie)
+    case 'BAR-EN-103':
+      if (!params.zone || params.surfaceIsolee === undefined) {
+        throw new Error('BAR-EN-103 requiert zone, surfaceIsolee')
+      }
+      return calcBarEn103(params.zone, params.surfaceIsolee)
   }
 }

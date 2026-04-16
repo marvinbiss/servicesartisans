@@ -59,23 +59,55 @@ Bareme version : `2026-01` (fichier `src/lib/simulateur/baremes/2026-01.ts`)
 
 ### BAR-TH-171 (PAC air/eau)
 
-- **Source** : Fiche BAR-TH-171 v. A78.4 (arrete 15/12/2025)
-- **Notes** : Table exacte PDF non encore extraite. Valeurs APPROXIMATIVES calibrees sur un unique point Argile.ai (maison H1, 80m2, ETAS 142%, classe 2 → 458 MWhc).
-- **Statut** : APPROXIMATION — baremeId suffixe `.APPROX.`
+- **Source** : Fiche BAR-TH-171 v. A78.4 (arrete 15/12/2025), Legifrance JORFTEXT000053043176
+- **URL PDF** : https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-171%20vA78.4%20%C3%A0%20compter%20du%2001-01-2026.pdf
+- **Formule** : kWhc = montant_de_base x coeff_surface x coeff_zone
+  - Montants de base : maison ETAS1=90900, ETAS2=109200 / appart ETAS1=48700, ETAS2=58900
+  - Coeff surface maison : <70m2=0.5, 70-90m2=0.7, >=90m2=1.0
+  - Coeff surface appart : <35m2=0.5, 35-60m2=0.7, >=60m2=1.0
+  - Coeff zone : H1=1.2, H2=1.0, H3=0.7
+- **Validation** : maison H1, 80m2, ETAS2 → 109200 x 0.7 x 1.2 = 91728 kWhc (x5 CdP = 458640 ≈ 458 MWhc Argile.ai)
+- **Statut** : CONFIRME (formule officielle implementee, remplace l'approximation)
+
+### BAR-EN-101 (Isolation combles/toitures)
+
+- **Source** : Fiche BAR-EN-101 v. A64-6 (01/01/2025)
+- **URL PDF** : https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-101%20vA64-6.pdf
+- **Formule** : kWhc = forfait_par_m2 x surface_isolee
+- **Valeurs** : H1: 2300/1500, H2: 1900/1200, H3: 1300/800 (combustible/electrique)
+- **R min** : combles perdus >= 7, rampants >= 6 m2.K/W
+- **Notes** : Surface isolee estimee via ratio 1.1x surface habitable (stepper simplifie)
+- **Statut** : CONFIRME (valeurs officielles, surface ESTIMEE)
+
+### BAR-EN-102 (Isolation murs)
+
+- **Source** : Fiche BAR-EN-102 v. A39-5
+- **URL** : https://calculateur-cee.ademe.fr/pdf/display/20/BAR-EN-102
+- **Formule** : kWhc = forfait_par_m2 x surface_isolee
+- **Valeurs** : H1: 3800/2400, H2: 3100/2000, H3: 2100/1300 (combustible/electrique)
+- **R min** : >= 3.7 m2.K/W
+- **Notes** : Surface isolee estimee via ratio 2.5x surface habitable (perimetre x hauteur)
+- **Statut** : CONFIRME (valeurs officielles, surface ESTIMEE)
+
+### BAR-EN-103 (Isolation plancher bas)
+
+- **Source** : Fiche BAR-EN-103 v. A39-5
+- **URL PDF** : https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-103%20vA39-5.pdf
+- **Formule** : kWhc = forfait_par_m2 x surface_isolee (pas de distinction energie)
+- **Valeurs** : H1: 1600, H2: 1300, H3: 900
+- **R min** : >= 3 m2.K/W
+- **Statut** : CONFIRME (valeurs officielles, surface ESTIMEE)
 
 ### Fiches NON IMPLEMENTEES (STUB dans le pipeline)
 
 | Fiche | Geste | Raison du STUB |
 |-------|-------|----------------|
-| BAR-EN-101 | ISOLATION_TOITURE | Surface isolee necessaire |
-| BAR-EN-102 | ISOLATION_MURS, ITE, ITI | Surface isolee necessaire |
-| BAR-EN-103 | ISOLATION_PLANCHER, ISO_PLANCHERS_BAS, ISO_TOITURE_TERRASSE | Surface isolee necessaire |
 | BAR-TH-125 | VMC_2FLUX | Non implemente |
 | BAR-TH-112 | POELE_GRANULES, POELE_BUCHES | Non implemente |
 | BAR-TH-101 | CESI | Non implemente |
 | BAR-TH-104 | PAC_GEOTHERMIE | Non implemente |
 
-**Tous les STUBs retournent 0 EUR CEE avec un baremeId explicite** (`CEE.{fiche}.STUB.{raison}.2026-01`) pour tracabilite.
+**Les STUBs restants retournent 0 EUR CEE avec un baremeId explicite** (`CEE.{fiche}.STUB.NON_IMPLEMENTE.2026-01`).
 
 ## 3. Prix CEE (conversion kWhc → EUR)
 

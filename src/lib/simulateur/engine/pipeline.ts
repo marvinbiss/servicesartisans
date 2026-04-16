@@ -26,10 +26,15 @@ import {
   calcBarTh143,
   calcVMCSimpleFlux,
   computeBarTh171,
+  calcBarEn101,
+  calcBarEn102,
+  calcBarEn103,
+  equipToEnergie,
   fourchettePrime,
   calcCeeAmpleur,
   calcMarPriseEnCharge,
 } from './calc-cee'
+import { SURFACE_ISOLEE_RATIOS } from '../baremes/2026-01'
 import { calcCoupDePouce, calcCdpRenovAmpleur } from './calc-cdp'
 import { calcEcoPtz, calcPar } from './calc-prets'
 import { calcMprCopro, calcDenormandie, calcTaxeFonciere } from './calc-complementaires'
@@ -279,21 +284,32 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         g === 'ISO_TOITURE_RAMPANTS' || g === 'ISO_TOITURE_TERRASSE' || g === 'ISO_PLANCHERS_BAS' ||
         g === 'ITE' || g === 'ITI'
       ) {
-        // STUB: fiches BAR-EN-101/102/103/104 nécessitent surface isolée exacte
-        // (non disponible dans le stepper simplifié). Montant CEE = 0€ avec trace.
-        const ficheMap: Record<string, string> = {
-          ISOLATION_MURS: 'BAR-EN-102', ITE: 'BAR-EN-102', ITI: 'BAR-EN-102',
-          ISOLATION_TOITURE: 'BAR-EN-101', ISO_TOITURE_RAMPANTS: 'BAR-EN-101', ISO_TOITURE_TERRASSE: 'BAR-EN-103',
-          ISOLATION_PLANCHER: 'BAR-EN-103', ISO_PLANCHERS_BAS: 'BAR-EN-103',
+        // BAR-EN-101/102/103 : surface isolée estimée via ratio sur surface habitable
+        const ratio = SURFACE_ISOLEE_RATIOS[g] ?? 1.0
+        const surfaceEstimee = Math.round(situation.surface * ratio)
+        const energie = equipToEnergie(projet.equipementActuel)
+
+        let rIso: { kwhCumac: number; baremeId: BaremeId }
+        let ficheIso: string
+        if (g === 'ISOLATION_MURS' || g === 'ITE' || g === 'ITI') {
+          rIso = calcBarEn102(situation.zone, surfaceEstimee, energie)
+          ficheIso = 'BAR-EN-102'
+        } else if (g === 'ISOLATION_TOITURE' || g === 'ISO_TOITURE_RAMPANTS') {
+          rIso = calcBarEn101(situation.zone, surfaceEstimee, energie)
+          ficheIso = 'BAR-EN-101'
+        } else {
+          // plancher bas, toiture terrasse
+          rIso = calcBarEn103(situation.zone, surfaceEstimee)
+          ficheIso = 'BAR-EN-103'
         }
-        const fiche = ficheMap[g] ?? 'BAR-EN-UNKNOWN'
-        const stubBaremeId = asBaremeId(`CEE.${fiche}.STUB.SURFACE_MANQUANTE.2026-01`)
+
+        const frIso = fourchettePrime(rIso.kwhCumac)
         aidesCee.push({
-          code: fiche,
-          montant: 0,
-          meta: { kwhc: 0, baremeId: stubBaremeId, fourchette: { bas: 0, haut: 0 }, geste: g, stub: true },
+          code: ficheIso,
+          montant: Math.round((frIso.bas + frIso.haut) / 2),
+          meta: { kwhc: rIso.kwhCumac, baremeId: rIso.baremeId, fourchette: frIso, geste: g, surfaceEstimee, ratio },
         })
-        baremeIds.push(stubBaremeId)
+        baremeIds.push(rIso.baremeId)
       } else if (g === 'VMC_2FLUX' || g === 'POELE_GRANULES' || g === 'POELE_BUCHES' || g === 'CESI' || g === 'PAC_GEOTHERMIE') {
         // STUB: fiches CEE non encore implémentées. Montant CEE = 0€ avec trace.
         const ficheMap: Record<string, string> = {

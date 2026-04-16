@@ -495,7 +495,104 @@ export const BAR_TH_171_META = {
     numeroEprelObligatoireDepuis: '2026-01-01',
   },
   nonCumul: ['BAR-TH-148', 'BAR-TH-143'] as const,
-  note: 'Forfait calculé via computeBarTh171(zone, etasClass, surface, typeLogement). Table exacte PDF DGEC vA78.4 à intégrer dans le moteur de calcul.',
+  note: 'Forfait = montant_de_base × coeff_surface × coeff_zone. Source : fiche BAR-TH-171 vA78.4 (arrêté 15/12/2025).',
+}
+
+/**
+ * BAR-TH-171 — Formule officielle vA78.4 (01/01/2026).
+ * kWhc = montant_de_base × coefficient_surface × coefficient_zone
+ * Source : PDF DGEC BAR-TH-171 vA78.4, arrêté 15/12/2025 (Legifrance JORFTEXT000053043176)
+ */
+export const BAR_TH_171_MONTANT_BASE: Record<TypeLogement, Record<1 | 2, number>> = {
+  maison: { 1: 90_900, 2: 109_200 },
+  appartement: { 1: 48_700, 2: 58_900 },
+}
+
+export const BAR_TH_171_COEFF_SURFACE_MAISON: SurfaceFactorBucket[] = [
+  { max: 70, facteur: 0.5 },
+  { max: 90, facteur: 0.7 },
+  { max: Infinity, facteur: 1.0 },
+]
+
+export const BAR_TH_171_COEFF_SURFACE_APPART: SurfaceFactorBucket[] = [
+  { max: 35, facteur: 0.5 },
+  { max: 60, facteur: 0.7 },
+  { max: Infinity, facteur: 1.0 },
+]
+
+export const BAR_TH_171_COEFF_ZONE: Record<ZoneClimatique, number> = {
+  H1: 1.2,
+  H2: 1.0,
+  H3: 0.7,
+}
+
+// ---- BAR-EN-101 — Isolation combles ou toitures (kWhc/m² isolé) ----
+// Source : fiche BAR-EN-101 vA64-6 (01/01/2025), docs/baremes-sources/02-cee-fiches-standard-2026.md
+export type EnergieChauffage = 'combustible' | 'electricite'
+
+export const BAR_EN_101: Record<ZoneClimatique, Record<EnergieChauffage, number>> = {
+  H1: { combustible: 2_300, electricite: 1_500 },
+  H2: { combustible: 1_900, electricite: 1_200 },
+  H3: { combustible: 1_300, electricite: 800 },
+}
+
+export const BAR_EN_101_META = {
+  fiche: 'BAR-EN-101' as const,
+  version: 'vA64-6',
+  dureeDeVieAns: 30,
+  rMinComblesPerdus: 7.0,
+  rMinRampants: 6.0,
+}
+
+// ---- BAR-EN-102 — Isolation des murs (kWhc/m² isolé) ----
+// Source : fiche BAR-EN-102 vA39-5, docs/baremes-sources/02-cee-fiches-standard-2026.md
+export const BAR_EN_102: Record<ZoneClimatique, Record<EnergieChauffage, number>> = {
+  H1: { combustible: 3_800, electricite: 2_400 },
+  H2: { combustible: 3_100, electricite: 2_000 },
+  H3: { combustible: 2_100, electricite: 1_300 },
+}
+
+export const BAR_EN_102_META = {
+  fiche: 'BAR-EN-102' as const,
+  version: 'vA39-5',
+  dureeDeVieAns: 30,
+  rMin: 3.7,
+}
+
+// ---- BAR-EN-103 — Isolation plancher bas (kWhc/m² isolé) ----
+// Source : fiche BAR-EN-103 vA39-5, docs/baremes-sources/02-cee-fiches-standard-2026.md
+// Pas de distinction énergie de chauffage.
+export const BAR_EN_103: Record<ZoneClimatique, number> = {
+  H1: 1_600,
+  H2: 1_300,
+  H3: 900,
+}
+
+export const BAR_EN_103_META = {
+  fiche: 'BAR-EN-103' as const,
+  version: 'vA39-5',
+  dureeDeVieAns: 30,
+  rMin: 3.0,
+}
+
+/**
+ * Ratios de surface isolée estimée par rapport à la surface habitable.
+ * Utilisé quand le stepper simplifié ne collecte pas la surface isolée exacte.
+ * Sources : DTU, estimations professionnelles, retours terrain.
+ */
+export const SURFACE_ISOLEE_RATIOS: Record<string, number> = {
+  /** Murs : périmètre × hauteur ≈ 2.5× surface au sol (maison R+0 typique) */
+  ISOLATION_MURS: 2.5,
+  ITE: 2.5,
+  ITI: 2.5,
+  /** Toiture : ≈ 1.1× surface au sol (pente ~15-30°) */
+  ISOLATION_TOITURE: 1.1,
+  ISO_TOITURE_RAMPANTS: 1.1,
+  /** Toiture terrasse : ≈ surface au sol */
+  ISO_TOITURE_TERRASSE: 1.0,
+  /** Plancher bas : ≈ surface au sol */
+  ISOLATION_PLANCHER: 1.0,
+  ISO_PLANCHERS_BAS: 1.0,
 }
 
 // =============================================================================

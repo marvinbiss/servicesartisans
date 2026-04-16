@@ -207,8 +207,8 @@ describe('pipeline — Cas 7 : Moins de 2 ans → exclusion totale', () => {
   })
 })
 
-describe('pipeline — Cas 8 : Isolation geste → CEE STUB tracé', () => {
-  it('isolation murs/toiture produit des baremeIds STUB', () => {
+describe('pipeline — Cas 8 : Isolation geste → CEE BAR-EN calculé', () => {
+  it('isolation murs/toiture produit des CEE réels via BAR-EN-101/102', () => {
     const input: SimulationInput = {
       situation: baseSituation({ anciennete: 'plus_15_ans' }),
       projet: {
@@ -220,14 +220,14 @@ describe('pipeline — Cas 8 : Isolation geste → CEE STUB tracé', () => {
       budget: { budgetHt: 20000 },
     }
     const r = runSimulation(input)
-    // Les gestes sont retenus mais les CEE sont des stubs
     expect(r.gestesRetenus).toEqual(expect.arrayContaining(['ISOLATION_MURS', 'ISOLATION_TOITURE']))
-    // Les baremeIds contiennent des STUB
-    const stubIds = r.baremeIds.filter((b) => b.includes('STUB'))
-    expect(stubIds.length).toBeGreaterThanOrEqual(2)
-    // Le CEE fourchette est 0 car stubs
-    expect(r.ceeFourchetteBas).toBe(0)
-    expect(r.ceeFourchetteHaut).toBe(0)
+    // Les baremeIds contiennent BAR-EN (pas des STUBs)
+    const barEnIds = r.baremeIds.filter((b) => b.includes('BAR-EN'))
+    expect(barEnIds.length).toBeGreaterThanOrEqual(2)
+    expect(barEnIds.some((b) => b.includes('BAR-EN-102'))).toBe(true) // murs
+    expect(barEnIds.some((b) => b.includes('BAR-EN-101'))).toBe(true) // toiture
+    // CEE fourchette > 0 maintenant
+    expect(r.ceeFourchetteHaut).toBeGreaterThan(0)
   })
 })
 

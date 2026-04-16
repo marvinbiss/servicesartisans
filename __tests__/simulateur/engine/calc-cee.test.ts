@@ -73,9 +73,14 @@ describe('BAR-TH-171 — invariants ordinaux', () => {
     const s2 = computeBarTh171('H1', 2, 100, 'maison').kwhCumac
     expect(s2).toBeGreaterThan(s1)
   })
-  it('baremeId contient zone, type, etas, surfBucket', () => {
+  it('baremeId contient zone, type, etas, surface', () => {
     const r = computeBarTh171('H2', 1, 80, 'maison')
-    expect(r.baremeId).toMatch(/BAR-TH-171.H2.MAISON.ETAS1.S_70_90/)
+    expect(r.baremeId).toMatch(/BAR-TH-171\.H2\.MAISON\.ETAS1\.S80/)
+  })
+  it('formule = base × coeffSurface × coeffZone', () => {
+    // Maison, ETAS2, 80m² (coeff 0.7), H1 (coeff 1.2) → 109200 × 0.7 × 1.2 = 91728
+    const r = computeBarTh171('H1', 2, 80, 'maison')
+    expect(r.kwhCumac).toBe(91728)
   })
 })
 
