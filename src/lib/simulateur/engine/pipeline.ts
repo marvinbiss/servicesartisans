@@ -128,6 +128,11 @@ export interface SimulationResult {
   /** Message d'erreur utilisateur si exclusion totale (Rose + geste, tous gestes rejetés). */
   exclusion?: string
 
+  /** Combinaisons CEE incertaines (ni blacklistées ni safe). */
+  uncertainCombinations: string[]
+  /** Facteur de décote appliqué au CEE bas pour incertitude non-cumul (0–0.40). */
+  uncertaintyDiscount: number
+
   /** Lead fioul = high priority (remplacement chaudière fioul, valeur 5x). */
   leadPriority: 'high' | 'normal'
   /** Parcours accompagné avec MPR > 0 → nécessite un Mon Accompagnateur Rénov'. */
@@ -192,6 +197,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       complementaires: {},
       baremeIds,
       formuleDebug: debug,
+      uncertainCombinations: [],
+      uncertaintyDiscount: 0,
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
       necessiteMAR: false, // no aids → no MAR needed
@@ -235,6 +242,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   const aidesCee: AideCalculee[] = []
   let ceeBas = 0
   let ceeHaut = 0
+  let uncertainCombinations: string[] = []
   if (projet.parcours === 'geste') {
     for (const g of retenus) {
       if (g === 'CET') {
@@ -375,6 +383,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       }
     }
     const nc = applyNonCumul(aidesCee)
+    uncertainCombinations = nc.uncertainCombinations
     debug.push({
       step: 'applyNonCumul',
       inputs: { aides: aidesCee.map((a) => ({ code: a.code, montant: a.montant })) },
@@ -526,7 +535,17 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   // En parcours accompagné : CEE ampleur remplace la fourchette CEE fiches
   const ceeBasEffectif = projet.parcours === 'geste' ? ceeBasFinal : ceeAmpleurFinal
   const ceeHautEffectif = projet.parcours === 'geste' ? ceeHautFinal : ceeAmpleurFinal
-  const totalBas = mprFinal + ceeBasEffectif + cdpBasFinal + marFinal
+
+  // Quand des combinaisons CEE sont incertaines (NON_CUMUL_UNCERTAIN),
+  // appliquer un facteur de sécurité sur la borne basse du total.
+  // Risque : une fiche pourrait être rétroactivement exclue → réduire le bas de 15% par paire incertaine.
+  const ncUncertainCount = projet.parcours === 'geste'
+    ? uncertainCombinations.length
+    : 0
+  const uncertaintyDiscount = Math.min(ncUncertainCount * 0.15, 0.40) // cap 40%
+  const ceeBasAjuste = Math.round(ceeBasEffectif * (1 - uncertaintyDiscount))
+
+  const totalBas = mprFinal + ceeBasAjuste + cdpBasFinal + marFinal
   const totalHaut = mprFinal + ceeHautEffectif + cdpHautFinal + marFinal
   const rac = calcResteACharge(budgetTTC, { bas: totalBas, haut: totalHaut })
   debug.push({
@@ -623,6 +642,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     complementaires,
     baremeIds,
     formuleDebug: debug,
+    uncertainCombinations,
+    uncertaintyDiscount,
     exclusion: ec.exclusionMessage,
     leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
     necessiteMAR: projet.parcours === 'accompagne' && mprFinal > 0,

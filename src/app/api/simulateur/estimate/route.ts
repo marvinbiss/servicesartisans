@@ -99,6 +99,22 @@ export async function POST(req: NextRequest) {
       hypotheses.push('Prix CEE : cotation Emmy indicative (8,5–15 €/MWhc), cours variable')
     }
 
+    // Non-cumul incertain — combinaisons CEE ni explicitement autorisées ni interdites
+    if (result.uncertainCombinations.length > 0) {
+      const paires = result.uncertainCombinations.join(', ')
+      const pct = Math.round(result.uncertaintyDiscount * 100)
+      hypotheses.push(
+        `Non-cumul CEE incertain : ${paires}. La fourchette basse est réduite de ${pct}% par précaution (risque d'exclusion rétroactive).`
+      )
+    }
+
+    // Surface isolation — fourchette élargie par ratio DTU
+    if (hasIsolation && result.ceeFourchetteBas !== result.ceeFourchetteHaut) {
+      hypotheses.push(
+        'La fourchette CEE isolation intègre l\'incertitude sur les surfaces réelles (ratio min/max DTU). Le montant réel dépend du métré chantier.'
+      )
+    }
+
     return NextResponse.json(
       {
         categorieAnah: result.categorieAnah,
@@ -120,6 +136,8 @@ export async function POST(req: NextRequest) {
         gestesRetenus: result.gestesRetenus,
         gestesRejetes: result.gestesRejetes,
         exclusion: result.exclusion,
+        uncertainCombinations: result.uncertainCombinations,
+        uncertaintyDiscount: result.uncertaintyDiscount,
         zoneWarning: zoneRes.warning,
         ecoPtz: result.ecoPtz,
         par: result.par,
