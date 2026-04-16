@@ -558,6 +558,10 @@ const nextConfig = {
       { source: '/sitemap.xml', destination: '/api/sitemap-index' },
       // Provider sitemaps served dynamically (DB-dependent, can't pre-render at build time)
       { source: '/sitemap/providers-:id.xml', destination: '/api/sitemap-providers?id=:id' },
+      // PostHog reverse proxy — bypasses ad-blockers (~30% of traffic blocked otherwise)
+      { source: '/ingest/static/:path*', destination: 'https://eu-assets.i.posthog.com/static/:path*' },
+      { source: '/ingest/:path*', destination: 'https://eu.i.posthog.com/:path*' },
+      { source: '/ingest/decide', destination: 'https://eu.i.posthog.com/decide' },
     ]
   },
 
