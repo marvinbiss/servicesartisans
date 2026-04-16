@@ -97,6 +97,43 @@ export default function Step1Situation({ state, dispatch }: Props) {
         </div>
       </fieldset>
 
+      {s.typeLogement === 'appartement' && (
+        <fieldset>
+          <legend className="mb-2 block text-sm font-medium text-slate-800">
+            Logement en copropriété ?
+          </legend>
+          <div className="flex gap-3">
+            {[
+              { v: true, l: 'Oui' },
+              { v: false, l: 'Non' },
+            ].map(({ v, l }) => (
+              <label
+                key={`copro-${String(v)}`}
+                className={`flex-1 cursor-pointer rounded-md border p-3 text-sm ${
+                  s.copropriete === v
+                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
+                    : 'border-slate-300 hover:border-slate-400'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="copropriete"
+                  checked={s.copropriete === v}
+                  onChange={() =>
+                    dispatch({
+                      type: 'SET_SITUATION',
+                      patch: { copropriete: v },
+                    })
+                  }
+                  className="sr-only"
+                />
+                {l}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
       <div>
         <label htmlFor="anciennete" className="mb-1 block text-sm font-medium text-slate-800">
           Ancienneté du logement

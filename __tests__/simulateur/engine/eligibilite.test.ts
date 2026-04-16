@@ -37,11 +37,21 @@ describe('eligibilite — règles globales', () => {
   it('résidence non principale + parcours accompagné → tous rejetés', () => {
     const r = filtrerGestesEligibles(
       ['PAC_AIREAU'],
-      baseSituation({ residencePrincipale: false }),
+      baseSituation({ residencePrincipale: false, anciennete: 'plus_15_ans' }),
       'accompagne'
     )
     expect(r.retenus).toEqual([])
     expect(r.rejets[0].raison).toMatch(/résidence principale/)
+  })
+
+  it('ancienneté < 15 ans + parcours accompagné → tous rejetés', () => {
+    const r = filtrerGestesEligibles(
+      ['PAC_AIREAU'],
+      baseSituation({ anciennete: '2_a_15_ans' }),
+      'accompagne'
+    )
+    expect(r.retenus).toEqual([])
+    expect(r.rejets[0].raison).toMatch(/15 ans/)
   })
 })
 

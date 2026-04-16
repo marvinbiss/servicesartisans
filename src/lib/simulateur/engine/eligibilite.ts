@@ -43,6 +43,18 @@ export function filtrerGestesEligibles(
     return { retenus, rejets }
   }
 
+  // Règle globale : parcours accompagné exige logement ≥ 15 ans (MPRA.publicodes)
+  if (parcours === 'accompagne' && situation.anciennete !== 'plus_15_ans') {
+    for (const g of gestes) {
+      rejets.push({
+        geste: g,
+        raison:
+          'Parcours accompagné (rénovation d\'ampleur) exige un logement de plus de 15 ans.',
+      })
+    }
+    return { retenus, rejets }
+  }
+
   // Règle globale : Rose + parcours geste → tout rejeté
   if (situation.categorie === 'rose' && parcours === 'geste') {
     for (const g of gestes) {

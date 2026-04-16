@@ -26,8 +26,13 @@ import {
   calcVMCSimpleFlux,
   computeBarTh171,
   fourchettePrime,
+  calcCeeAmpleur,
+  calcMarPriseEnCharge,
 } from './calc-cee'
 import { calcCoupDePouce, calcCdpRenovAmpleur } from './calc-cdp'
+import { calcEcoPtz, calcPar } from './calc-prets'
+import { calcMprCopro, calcDenormandie, calcTaxeFonciere } from './calc-complementaires'
+import type { MprCoproResult, DenormandieResult, TaxeFonciereResult } from './calc-complementaires'
 import { applyNonCumul, type AideCalculee } from './non-cumul'
 import { applyEcretement } from './ecretement'
 import { calcResteACharge } from './reste-a-charge'
@@ -41,6 +46,23 @@ export interface SimulationInput {
   budget: Budget
   /** TVA supposée pour conversion HT→TTC si non fournie. Default 5.5 %. */
   tvaRate?: number
+  /** Inputs optionnels pour aides complémentaires (Denormandie, taxe foncière, copro). */
+  complementaires?: {
+    /** Gain énergétique estimé en % (copropriété). */
+    gainEnergetiquePct?: number
+    /** Sortie passoire énergétique F/G (copropriété). */
+    sortiePassoire?: boolean
+    /** Copropriété fragile (copropriété). */
+    coproFragile?: boolean
+    /** Durée d'engagement locatif Denormandie. */
+    denormandieDuree?: 6 | 9 | 12
+    /** Montant total investissement Denormandie (achat + travaux). */
+    denormandieInvestissement?: number
+    /** Taxe foncière annuelle actuelle (pour estimer l'exonération). */
+    taxeFonciereAnnuelle?: number
+    /** Taux d'exonération taxe foncière (50% ou 100%, selon commune). */
+    taxeFonciereTaux?: 0.5 | 1.0
+  }
 }
 
 export interface SimulationResult {
@@ -49,10 +71,18 @@ export interface SimulationResult {
   gestesRejetes: { geste: GesteId; raison: string }[]
 
   mprTotal: number
+  /** Budget HT plafonné (parcours accompagné uniquement). */
+  mprBudgetPlafonne?: number
+  /** Plafond HT applicable (parcours accompagné uniquement). */
+  mprPlafondHt?: number
   ceeFourchetteBas: number
   ceeFourchetteHaut: number
+  /** CEE rénovation d'ampleur (parcours accompagné uniquement). */
+  ceeAmpleur: number
   cdpEstimationBas: number
   cdpEstimationHaut: number
+  /** Prise en charge MAR par l'État (parcours accompagné uniquement). */
+  marPriseEnCharge: number
 
   totalAidesBas: number
   totalAidesHaut: number
@@ -62,6 +92,25 @@ export interface SimulationResult {
 
   resteAChargeBas: number
   resteAChargeHaut: number
+
+  /** Éco-PTZ — prêt à taux zéro (non inclus dans écrêtement). */
+  ecoPtz: {
+    eligible: boolean
+    montantMax: number
+    dureeMaxAns: number
+  }
+  /** PAR+ — Prêt Avance Rénovation, bleu/jaune uniquement (non inclus dans écrêtement). */
+  par: {
+    eligible: boolean
+    montantMax: number
+  }
+
+  /** Aides complémentaires informatives (hors écrêtement). */
+  complementaires: {
+    mprCopro?: MprCoproResult
+    denormandie?: DenormandieResult
+    taxeFonciere?: TaxeFonciereResult
+  }
 
   baremeIds: BaremeId[]
   formuleDebug: FormuleDebug[]
@@ -113,14 +162,19 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       mprTotal: 0,
       ceeFourchetteBas: 0,
       ceeFourchetteHaut: 0,
+      ceeAmpleur: 0,
       cdpEstimationBas: 0,
       cdpEstimationHaut: 0,
+      marPriseEnCharge: 0,
       totalAidesBas: 0,
       totalAidesHaut: 0,
       ecretementPct: 0,
       ecretementAtteint: true,
       resteAChargeBas: budgetTTC,
       resteAChargeHaut: budgetTTC,
+      ecoPtz: { eligible: false, montantMax: 0, dureeMaxAns: 0 },
+      par: { eligible: false, montantMax: 0 },
+      complementaires: {},
       baremeIds,
       formuleDebug: debug,
       exclusion,
@@ -130,6 +184,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   // --- 3. MPR ---
   let mprTotal = 0
   let mprBaremeIds: BaremeId[] = []
+  let mprAccompagneRes: ReturnType<typeof calcMPRAccompagne> | undefined
   if (projet.parcours === 'geste') {
     const mprRes = calcMPRGeste(retenus, categorie)
     mprTotal = mprRes.total
@@ -142,13 +197,18 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     })
   } else {
     const sautsDpe = projet.sautsDpe ?? 2
-    const mprRes = calcMPRAccompagne(budget.budgetHt, categorie, sautsDpe)
-    mprTotal = mprRes.total
-    mprBaremeIds = [mprRes.baremeId]
+    mprAccompagneRes = calcMPRAccompagne(budget.budgetHt, categorie, sautsDpe)
+    mprTotal = mprAccompagneRes.total
+    mprBaremeIds = [mprAccompagneRes.baremeId]
     debug.push({
       step: 'calcMPRAccompagne',
       inputs: { budgetHt: budget.budgetHt, categorie, sautsDpe },
-      outputs: { total: mprRes.total, taux: mprRes.taux },
+      outputs: {
+        total: mprAccompagneRes.total,
+        taux: mprAccompagneRes.taux,
+        budgetPlafonne: mprAccompagneRes.budgetPlafonne,
+        plafondHt: mprAccompagneRes.plafondHt,
+      },
       baremeIds: mprBaremeIds,
     })
   }
@@ -253,11 +313,63 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     }
   }
 
+  // --- 5b. CEE rénovation d'ampleur (parcours accompagné uniquement) ---
+  let ceeAmpleurMontant = 0
+  if (projet.parcours === 'accompagne') {
+    const sautsDpe = projet.sautsDpe ?? 2
+    const ceeAmp = calcCeeAmpleur(sautsDpe, situation.surface)
+    ceeAmpleurMontant = ceeAmp.montant
+    baremeIds.push(ceeAmp.baremeId)
+    debug.push({
+      step: 'calcCeeAmpleur',
+      inputs: { sautsDpe, surface: situation.surface },
+      outputs: { montant: ceeAmp.montant, base: ceeAmp.base, facteurSurface: ceeAmp.facteurSurface },
+      baremeIds: [ceeAmp.baremeId],
+    })
+  }
+
+  // --- 5c. Prise en charge MAR (parcours accompagné uniquement) ---
+  let marMontant = 0
+  if (projet.parcours === 'accompagne') {
+    const marRes = calcMarPriseEnCharge(categorie)
+    marMontant = marRes.montant
+    baremeIds.push(marRes.baremeId)
+    debug.push({
+      step: 'calcMarPriseEnCharge',
+      inputs: { categorie },
+      outputs: { montant: marRes.montant, taux: marRes.taux },
+      baremeIds: [marRes.baremeId],
+    })
+  }
+
+  // --- 5d. Prêts (éco-PTZ + PAR) — informatifs, hors écrêtement ---
+  const ecoPtzRes = calcEcoPtz(projet.parcours, retenus.length)
+  baremeIds.push(ecoPtzRes.baremeId)
+  debug.push({
+    step: 'calcEcoPtz',
+    inputs: { parcours: projet.parcours, nbGestes: retenus.length, sautsDpe: projet.sautsDpe },
+    outputs: { eligible: ecoPtzRes.eligible, montantMax: ecoPtzRes.montantMax, workType: ecoPtzRes.workType },
+    baremeIds: [ecoPtzRes.baremeId],
+  })
+
+  const parRes = calcPar(categorie, projet.parcours, retenus.length)
+  baremeIds.push(parRes.baremeId)
+  debug.push({
+    step: 'calcPar',
+    inputs: { categorie, parcours: projet.parcours, nbGestes: retenus.length },
+    outputs: { eligible: parRes.eligible, montantMax: parRes.montantMax },
+    baremeIds: [parRes.baremeId],
+  })
+
   // --- 6. Agrégation pré-écrêtement ---
+  const ceeTotal = projet.parcours === 'geste'
+    ? Math.round((ceeBas + ceeHaut) / 2)
+    : ceeAmpleurMontant
   const toutesAides: AideCalculee[] = [
     { code: 'MPR', montant: mprTotal, label: "MaPrimeRénov'" },
-    { code: 'CEE_TOTAL', montant: Math.round((ceeBas + ceeHaut) / 2), label: 'CEE' },
+    { code: 'CEE_TOTAL', montant: ceeTotal, label: 'CEE' },
     { code: 'CDP', montant: Math.round((cdpBas + cdpHaut) / 2), label: 'Coup de Pouce' },
+    { code: 'MAR', montant: marMontant, label: 'Prise en charge MAR' },
   ]
 
   // --- 7. Écrêtement ---
@@ -283,12 +395,17 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   const mprFinal = Math.round(mprTotal * ratio)
   const ceeBasFinal = Math.round(ceeBas * ratio)
   const ceeHautFinal = Math.round(ceeHaut * ratio)
+  const ceeAmpleurFinal = Math.round(ceeAmpleurMontant * ratio)
   const cdpBasFinal = Math.round(cdpBas * ratio)
   const cdpHautFinal = Math.round(cdpHaut * ratio)
+  const marFinal = Math.round(marMontant * ratio)
 
   // --- 8. Reste à charge ---
-  const totalBas = mprFinal + ceeBasFinal + cdpBasFinal
-  const totalHaut = mprFinal + ceeHautFinal + cdpHautFinal
+  // En parcours accompagné : CEE ampleur remplace la fourchette CEE fiches
+  const ceeBasEffectif = projet.parcours === 'geste' ? ceeBasFinal : ceeAmpleurFinal
+  const ceeHautEffectif = projet.parcours === 'geste' ? ceeHautFinal : ceeAmpleurFinal
+  const totalBas = mprFinal + ceeBasEffectif + cdpBasFinal + marFinal
+  const totalHaut = mprFinal + ceeHautEffectif + cdpHautFinal + marFinal
   const rac = calcResteACharge(budgetTTC, { bas: totalBas, haut: totalHaut })
   debug.push({
     step: 'calcResteACharge',
@@ -297,21 +414,91 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     baremeIds: [],
   })
 
+  // --- 9. Aides complémentaires (informatives, hors écrêtement) ---
+  const comp = input.complementaires ?? {}
+  const complementaires: SimulationResult['complementaires'] = {}
+
+  // MPR Copropriété
+  if (situation.copropriete && comp.gainEnergetiquePct) {
+    const nbLogements = 1 // simulateur individuel : quote-part d'un copropriétaire
+    const budgetHtParLogement = budget.budgetHt / nbLogements
+    const coproRes = calcMprCopro(budgetHtParLogement, categorie, comp.gainEnergetiquePct, {
+      sortiePassoire: comp.sortiePassoire,
+      coproFragile: comp.coproFragile,
+    })
+    complementaires.mprCopro = coproRes
+    baremeIds.push(coproRes.baremeId)
+    debug.push({
+      step: 'calcMprCopro',
+      inputs: { budgetHtParLogement, categorie, gainPct: comp.gainEnergetiquePct },
+      outputs: { totalEstime: coproRes.totalEstime, tauxBase: coproRes.tauxBase },
+      baremeIds: [coproRes.baremeId],
+    })
+  }
+
+  // Denormandie (investisseur locatif uniquement)
+  if (situation.investisseurLocatif && comp.denormandieInvestissement && comp.denormandieDuree) {
+    const denoRes = calcDenormandie(
+      comp.denormandieInvestissement,
+      situation.surface,
+      comp.denormandieDuree
+    )
+    complementaires.denormandie = denoRes
+    baremeIds.push(denoRes.baremeId)
+    debug.push({
+      step: 'calcDenormandie',
+      inputs: { investissement: comp.denormandieInvestissement, surface: situation.surface, duree: comp.denormandieDuree },
+      outputs: { reductionTotale: denoRes.reductionImpotTotale, reductionAnnuelle: denoRes.reductionImpotAnnuelle },
+      baremeIds: [denoRes.baremeId],
+    })
+  }
+
+  // Taxe foncière (si dépenses suffisantes)
+  const tfRes = calcTaxeFonciere(
+    budgetTTC,
+    comp.taxeFonciereAnnuelle,
+    comp.taxeFonciereTaux ?? 0.5
+  )
+  if (tfRes.eligible) {
+    complementaires.taxeFonciere = tfRes
+    baremeIds.push(tfRes.baremeId)
+    debug.push({
+      step: 'calcTaxeFonciere',
+      inputs: { depenses: budgetTTC, tfAnnuelle: comp.taxeFonciereAnnuelle },
+      outputs: { eligible: true, exonerationAnnuelle: tfRes.exonerationEstimeeAnnuelle },
+      baremeIds: [tfRes.baremeId],
+    })
+  }
+
   return {
     categorieAnah: categorie,
     gestesRetenus: retenus,
     gestesRejetes: rejets,
     mprTotal: mprFinal,
+    mprBudgetPlafonne: mprAccompagneRes?.budgetPlafonne,
+    mprPlafondHt: mprAccompagneRes?.plafondHt,
     ceeFourchetteBas: ceeBasFinal,
     ceeFourchetteHaut: ceeHautFinal,
+    ceeAmpleur: ceeAmpleurFinal,
     cdpEstimationBas: cdpBasFinal,
     cdpEstimationHaut: cdpHautFinal,
+    marPriseEnCharge: marFinal,
     totalAidesBas: totalBas,
     totalAidesHaut: totalHaut,
     ecretementPct: ec.plafondPct,
     ecretementAtteint: ec.plafondAtteint,
     resteAChargeBas: rac.bas,
     resteAChargeHaut: rac.haut,
+    ecoPtz: {
+      eligible: ecoPtzRes.eligible,
+      montantMax: ecoPtzRes.montantMax,
+      dureeMaxAns: ecoPtzRes.dureeMaxAns,
+    },
+    par: {
+      eligible: parRes.eligible,
+      montantMax: parRes.montantMax,
+    },
+    complementaires,
     baremeIds,
     formuleDebug: debug,
     exclusion: ec.exclusionMessage,

@@ -20,6 +20,7 @@ export interface StepperState {
     surface?: number
     codePostal?: string
     foyer?: number
+    copropriete?: boolean
   }
   revenus: {
     rfr?: number
@@ -204,6 +205,7 @@ export default function Stepper() {
         codePostal: state.situation.codePostal,
         foyer: state.situation.foyer,
         rfr: state.revenus.rfr,
+        copropriete: state.situation.copropriete ?? false,
       },
       projet: {
         parcours: state.projet.parcours,

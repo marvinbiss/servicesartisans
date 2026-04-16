@@ -6,6 +6,7 @@
 
 import type { BaremeId, TypeLogement, ZoneClimatique } from '../types'
 import { asBaremeId } from '../types'
+import type { CategorieAnah, SautsDpe } from '../types'
 import {
   BAR_TH_148,
   BAR_TH_113,
@@ -15,6 +16,11 @@ import {
   BAR_TH_127_FACTEUR_R_INDIV,
   CEE_PRIX_CLASSIQUE_DEFAULT,
   CEE_PRIX_PRECARITE_DEFAULT,
+  CEE_AMPLEUR_BASE,
+  CEE_AMPLEUR_SURFACE_FACTEURS,
+  MAR_PRISE_EN_CHARGE,
+  MAR_PLAFOND_TTC,
+  MAR_COUT_MOYEN_TTC,
   type VmcRType,
 } from '../baremes/2026-01'
 
@@ -207,6 +213,67 @@ export function computeBarTh171(
     baremeId: asBaremeId(
       `CEE.BAR-TH-171.${zone}.${typeKey}.ETAS${etasClass}.${surfBucket}.APPROX.2026-01`
     ),
+  }
+}
+
+// ---------- CEE rénovation d'ampleur (parcours accompagné) ----------
+
+export interface CeeAmpleurResult {
+  montant: number
+  base: number
+  facteurSurface: number
+  baremeId: BaremeId
+}
+
+/**
+ * CEE rénovation d'ampleur — parcours accompagné.
+ * Source : CEE.publicodes `CEE . rénovation d'ampleur`.
+ *
+ * Montant = base(sauts) × facteur correctif(surface).
+ */
+export function calcCeeAmpleur(sautsDpe: SautsDpe, surface: number): CeeAmpleurResult {
+  const sautsKey = sautsDpe >= 4 ? 4 : sautsDpe
+  const base = CEE_AMPLEUR_BASE[sautsKey as SautsDpe]
+
+  let facteurSurface = 1.0
+  for (const bucket of CEE_AMPLEUR_SURFACE_FACTEURS) {
+    if (surface < bucket.max) {
+      facteurSurface = bucket.facteur
+      break
+    }
+  }
+
+  const montant = Math.round(base * facteurSurface)
+  return {
+    montant,
+    base,
+    facteurSurface,
+    baremeId: asBaremeId(`CEE.AMPLEUR.${sautsKey}SAUTS.S${Math.round(surface)}.2026-01`),
+  }
+}
+
+// ---------- Prise en charge MAR ----------
+
+export interface MarResult {
+  montant: number
+  taux: number
+  baremeId: BaremeId
+}
+
+/**
+ * Prise en charge de Mon Accompagnateur Rénov' par l'État.
+ * Source : MPRA.publicodes `MPR . accompagnée . prise en charge MAR`.
+ *
+ * Taux × min(coût moyen, plafond TTC).
+ */
+export function calcMarPriseEnCharge(categorie: CategorieAnah): MarResult {
+  const taux = MAR_PRISE_EN_CHARGE[categorie]
+  const coutMAR = Math.min(MAR_COUT_MOYEN_TTC, MAR_PLAFOND_TTC)
+  const montant = Math.round(coutMAR * taux)
+  return {
+    montant,
+    taux,
+    baremeId: asBaremeId(`MAR.${categorie.toUpperCase()}.2026-01`),
   }
 }
 

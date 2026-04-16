@@ -61,6 +61,10 @@ export interface Situation {
   foyer: number // 1..6 ; 6 signifie 6+
   rfr: number // euros
   categorie: CategorieAnah
+  /** Logement en copropriété (MPR Copro). */
+  copropriete?: boolean
+  /** Investisseur locatif (Denormandie). */
+  investisseurLocatif?: boolean
 }
 
 // ---------- Step 2 — Projet ----------

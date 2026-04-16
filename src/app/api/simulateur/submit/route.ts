@@ -114,6 +114,8 @@ export async function POST(req: NextRequest) {
     zone: zoneRes.zone,
     idf: zoneRes.idf,
     categorie,
+    copropriete: situationInput.copropriete ?? false,
+    investisseurLocatif: situationInput.investisseurLocatif ?? false,
   }
 
   // Hash sur l'input brut user (avant enrichissement zone/categorie) pour
@@ -197,12 +199,29 @@ export async function POST(req: NextRequest) {
 
     // Résultats
     mpr_total: result.mprTotal,
+    mpr_budget_plafonne: result.mprBudgetPlafonne ?? null,
+    mpr_plafond_ht: result.mprPlafondHt ?? null,
     cee_fourchette_bas: result.ceeFourchetteBas,
     cee_fourchette_haut: result.ceeFourchetteHaut,
+    cee_ampleur: result.ceeAmpleur,
     coup_pouce_estimation: Math.round((result.cdpEstimationBas + result.cdpEstimationHaut) / 2),
+    mar_prise_en_charge: result.marPriseEnCharge,
     ecretement_pct: result.ecretementPct,
     reste_a_charge_bas: result.resteAChargeBas,
     reste_a_charge_haut: result.resteAChargeHaut,
+    total_aides_bas: result.totalAidesBas,
+    total_aides_haut: result.totalAidesHaut,
+
+    // Prêts (informatifs)
+    eco_ptz_eligible: result.ecoPtz.eligible,
+    eco_ptz_montant_max: result.ecoPtz.montantMax,
+    eco_ptz_duree_max_ans: result.ecoPtz.dureeMaxAns,
+    par_eligible: result.par.eligible,
+    par_montant_max: result.par.montantMax,
+
+    // Complémentaires
+    complementaires: result.complementaires as unknown as Record<string, unknown>,
+    copropriete: situation.copropriete ?? false,
 
     // Traçabilité
     bareme_ids: (result.baremeIds ?? []) as unknown as Record<string, unknown>[],
@@ -211,10 +230,10 @@ export async function POST(req: NextRequest) {
     formule_debug: (result.formuleDebug ?? []) as unknown as Record<string, unknown>[],
 
     // Coordonnées (nullables — anonymisées à 3 ans par cron RGPD, migration 440)
-    prenom: coordonnees.prenom ?? null,
-    nom: coordonnees.nom ?? null,
-    email: coordonnees.email ?? null,
-    telephone: coordonnees.telephone ?? null,
+    prenom: coordonnees.prenom || null,
+    nom: coordonnees.nom || null,
+    email: coordonnees.email || null,
+    telephone: coordonnees.telephone || null,
 
     // Consentements
     consent_rgpd: coordonnees.consentRgpd,

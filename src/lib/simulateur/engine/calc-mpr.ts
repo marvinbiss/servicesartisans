@@ -25,6 +25,7 @@ import {
   MPR_GESTE_NEEDS_SURFACE,
   MPR_ACCOMPAGNE,
   MPR_GESTE_PLAFOND_DEPENSES,
+  MPR_ACCOMPAGNE_PLAFOND_HT,
 } from '../baremes/2026-01'
 import { logger } from '@/lib/logger'
 
@@ -162,6 +163,10 @@ export { MPR_GESTE_PLAFOND_DEPENSES }
 export interface MprAccompagneResult {
   total: number
   taux: number
+  /** Budget HT après application du plafond par sauts DPE. */
+  budgetPlafonne: number
+  /** Plafond HT applicable selon sauts DPE. */
+  plafondHt: number
   baremeId: BaremeId
 }
 
@@ -174,7 +179,8 @@ export interface MprAccompagneResult {
  * - Violet : 45 % (constant)
  * - Rose : 10 % (constant)
  *
- * Le taux est appliqué au budget HT.
+ * Le taux est appliqué au budget HT **plafonné** par sauts DPE
+ * (MPRA.publicodes `projet.travaux.plafonnés`).
  */
 export function calcMPRAccompagne(
   budgetHt: number,
@@ -193,10 +199,17 @@ export function calcMPRAccompagne(
     taux = conf.min // violet/rose : min = max
   }
 
-  const total = Math.round(budgetHt * taux)
+  // Plafond de dépenses éligibles selon le nombre de sauts DPE
+  const plafondKey = sautsDpe >= 4 ? 4 : sautsDpe
+  const plafondHt = MPR_ACCOMPAGNE_PLAFOND_HT[plafondKey as SautsDpe]
+  const budgetPlafonne = Math.min(budgetHt, plafondHt)
+
+  const total = Math.round(budgetPlafonne * taux)
   return {
     total,
     taux,
-    baremeId: asBaremeId(`MPR.ACCOMPAGNE.${categorieUpper(categorie)}.2026-01`),
+    budgetPlafonne,
+    plafondHt,
+    baremeId: asBaremeId(`MPR.ACCOMPAGNE.${categorieUpper(categorie)}.${sautsDpe}SAUTS.2026-01`),
   }
 }

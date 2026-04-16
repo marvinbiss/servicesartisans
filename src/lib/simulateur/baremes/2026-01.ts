@@ -11,7 +11,7 @@
  */
 
 import 'server-only'
-import type { CategorieAnah, GesteId, ZoneClimatique, TypeLogement } from '../types'
+import type { CategorieAnah, GesteId, SautsDpe, ZoneClimatique, TypeLogement } from '../types'
 
 export const BAREME_VERSION = '2026-01-14'
 
@@ -89,6 +89,175 @@ export const MPR_ACCOMPAGNE: Record<CategorieAnah, MprAccompagneTaux> = {
   violet: { min: 0.45, max: 0.45 },
   rose: { min: 0.1, max: 0.1 },
 }
+
+// =============================================================================
+// 4. Plafonds dépenses MPR accompagné (MPRA.publicodes, ANAH 2026)
+// =============================================================================
+
+/**
+ * Plafond de dépenses éligibles HT par sauts DPE — parcours accompagné.
+ * Source : arrêté ANAH 2026, MPRA.publicodes `projet.travaux.plafonnés`.
+ */
+export const MPR_ACCOMPAGNE_PLAFOND_HT: Record<SautsDpe, number> = {
+  2: 40_000,
+  3: 55_000,
+  4: 70_000,
+}
+
+// =============================================================================
+// 4b. CEE rénovation d'ampleur (CEE.publicodes, parcours accompagné)
+// =============================================================================
+
+/**
+ * Montants de base CEE rénovation d'ampleur (hors coefficient surface).
+ * Source : CEE.publicodes `CEE . rénovation d'ampleur . montant non corrigé`.
+ */
+export const CEE_AMPLEUR_BASE: Record<SautsDpe, number> = {
+  2: 4_700,
+  3: 5_800,
+  4: 7_400,
+}
+
+/**
+ * Coefficient correcteur surface pour CEE ampleur.
+ * Source : CEE.publicodes `CEE . rénovation d'ampleur . facteur correctif`.
+ */
+export const CEE_AMPLEUR_SURFACE_FACTEURS: SurfaceFactorBucket[] = [
+  { max: 35, facteur: 0.4 },
+  { max: 60, facteur: 0.5 },
+  { max: 90, facteur: 0.8 },
+  { max: 110, facteur: 1.0 },
+  { max: 130, facteur: 1.2 },
+  { max: Infinity, facteur: 1.3 },
+]
+
+// =============================================================================
+// 4c. Prise en charge MAR (MPRA.publicodes)
+// =============================================================================
+
+/**
+ * Taux de prise en charge de l'accompagnement MAR par catégorie ANAH.
+ * Plafonné à 2 000 € TTC (4 000 € si ménage précaire — non modélisé).
+ * Source : MPRA.publicodes `MPR . accompagnée . prise en charge MAR`.
+ */
+export const MAR_PRISE_EN_CHARGE: Record<CategorieAnah, number> = {
+  bleu: 1.0,
+  jaune: 0.8,
+  violet: 0.4,
+  rose: 0.2,
+}
+
+export const MAR_PLAFOND_TTC = 2_000
+export const MAR_COUT_MOYEN_TTC = 2_000
+
+// =============================================================================
+// 4d. Éco-PTZ (éco-prêt à taux zéro) — service-public.gouv.fr
+// Prolongé jusqu'au 31/12/2027. Pas de condition de revenus.
+// =============================================================================
+
+export type EcoPtzWorkType = '1_action_vitrees' | '1_action_autre' | '2_actions' | '3_actions' | 'renovation_globale' | 'assainissement'
+
+export const ECO_PTZ_PLAFONDS: Record<EcoPtzWorkType, number> = {
+  '1_action_vitrees': 7_000,
+  '1_action_autre': 15_000,
+  '2_actions': 25_000,
+  '3_actions': 30_000,
+  'renovation_globale': 50_000,
+  'assainissement': 10_000,
+}
+
+/** Durée max remboursement en années. */
+export const ECO_PTZ_DUREE_MAX: Record<EcoPtzWorkType, number> = {
+  '1_action_vitrees': 15,
+  '1_action_autre': 15,
+  '2_actions': 15,
+  '3_actions': 15,
+  'renovation_globale': 20,
+  'assainissement': 15,
+}
+
+/** Plafond cumulé éco-PTZ (complémentaire dans les 5 ans). */
+export const ECO_PTZ_PLAFOND_CUMULE = 50_000
+
+// =============================================================================
+// 4e. PAR+ (Prêt Avance Rénovation) — bleu/jaune uniquement
+// Remboursement au moment de la mutation (vente/succession).
+// =============================================================================
+
+/** Catégories éligibles au PAR+. */
+export const PAR_CATEGORIES_ELIGIBLES: CategorieAnah[] = ['bleu', 'jaune']
+
+/** Taux 0 % garanti par l'État pendant 10 ans, puis taux contractuel. */
+export const PAR_DUREE_TAUX_ZERO_ANS = 10
+
+/** Plafonds PAR identiques à éco-PTZ. */
+export const PAR_PLAFONDS = ECO_PTZ_PLAFONDS
+
+// =============================================================================
+// 4f. MPR Copropriété (service-public.gouv.fr, france-renov.gouv.fr)
+// =============================================================================
+
+/** Taux de subvention selon le gain énergétique atteint. */
+export const MPR_COPRO_TAUX: { seuil: number; taux: number }[] = [
+  { seuil: 50, taux: 0.45 },
+  { seuil: 35, taux: 0.30 },
+]
+
+/** Plafond de dépenses éligibles HT par logement. */
+export const MPR_COPRO_PLAFOND_HT_PAR_LOGEMENT = 25_000
+
+/** Bonus sortie passoire (DPE F/G → A-D) : +10% des dépenses éligibles. */
+export const MPR_COPRO_BONUS_PASSOIRE_PCT = 0.10
+
+/** Bonus copropriété fragile (impayés ≥ 8% ou zone NPNRU) : +20% des dépenses éligibles. */
+export const MPR_COPRO_BONUS_FRAGILE_PCT = 0.20
+
+/** Complément individuel par ménage modeste/très modeste. */
+export const MPR_COPRO_COMPLEMENT_INDIVIDUEL: Partial<Record<CategorieAnah, number>> = {
+  bleu: 3_000,
+  jaune: 1_500,
+}
+
+// =============================================================================
+// 4g. Denormandie (investissement locatif, CGI art. 199 novovicies)
+// Prolongé jusqu'au 31/12/2027.
+// =============================================================================
+
+export type DenormandieDuree = 6 | 9 | 12
+
+/** Taux de réduction d'impôt par durée d'engagement locatif (métropole). */
+export const DENORMANDIE_TAUX: Record<DenormandieDuree, number> = {
+  6: 0.12,
+  9: 0.18,
+  12: 0.21,
+}
+
+/** Plafond d'investissement annuel. */
+export const DENORMANDIE_PLAFOND_INVESTISSEMENT = 300_000
+
+/** Plafond €/m² de surface habitable. */
+export const DENORMANDIE_PLAFOND_M2 = 5_500
+
+/** Part minimale des travaux dans le coût total (25%). */
+export const DENORMANDIE_PART_TRAVAUX_MIN = 0.25
+
+// =============================================================================
+// 4h. Exonération taxe foncière (décision communale)
+// Logement achevé avant 01/01/1989, seuil 10K€.
+// =============================================================================
+
+/** Seuils de dépenses pour bénéficier de l'exonération. */
+export const TAXE_FONCIERE_SEUIL_1AN = 10_000
+export const TAXE_FONCIERE_SEUIL_3ANS = 15_000
+
+/** Durée d'exonération en années. */
+export const TAXE_FONCIERE_DUREE_ANS = 3
+
+/** Taux possibles selon délibération communale. */
+export const TAXE_FONCIERE_TAUX_POSSIBLES = [0.50, 1.00] as const
+
+/** Année de construction max pour éligibilité. */
+export const TAXE_FONCIERE_ANNEE_CONSTRUCTION_MAX = 1989
 
 // =============================================================================
 // 5. MPR parcours geste — PAC air/eau (doc 07 §5)

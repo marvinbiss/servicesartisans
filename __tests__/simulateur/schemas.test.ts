@@ -42,8 +42,11 @@ describe('situationSchema', () => {
     expect(situationSchema.safeParse({ ...valid, foyer: 11 }).success).toBe(false)
   })
 
-  it('rejette RFR <= 0', () => {
-    expect(situationSchema.safeParse({ ...valid, rfr: 0 }).success).toBe(false)
+  it('accepte RFR = 0 (foyer non imposable)', () => {
+    expect(situationSchema.safeParse({ ...valid, rfr: 0 }).success).toBe(true)
+  })
+
+  it('rejette RFR < 0', () => {
     expect(situationSchema.safeParse({ ...valid, rfr: -1000 }).success).toBe(false)
   })
 })

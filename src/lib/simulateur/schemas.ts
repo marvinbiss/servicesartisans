@@ -36,7 +36,9 @@ export const situationSchema = z.object({
   rfr: z
     .number({ error: 'Revenu fiscal de référence requis' })
     .int()
-    .positive('Le RFR doit être strictement positif'),
+    .nonnegative('Le RFR ne peut pas être négatif'),
+  copropriete: z.boolean().optional().default(false),
+  investisseurLocatif: z.boolean().optional().default(false),
 })
 
 export type SituationInput = z.infer<typeof situationSchema>
@@ -145,9 +147,12 @@ export type BudgetInput = z.infer<typeof budgetSchema>
 
 export const coordonneesSchema = z.object({
   prenom: z.string().trim().min(1, 'Prénom requis').max(100),
-  nom: z.string().trim().min(1, 'Nom requis').max(100),
+  nom: z.string().trim().max(100).optional().default(''),
   email: z.string().trim().toLowerCase().email('Adresse email invalide').max(254),
-  telephone: z.string().trim().regex(TELEPHONE_FR_E164, 'Téléphone invalide (format FR attendu)'),
+  telephone: z
+    .union([z.string().trim().regex(TELEPHONE_FR_E164, 'Téléphone invalide (format FR attendu)'), z.literal('')])
+    .optional()
+    .default(''),
   consentRgpd: z.literal(true, {
     error: 'Le consentement RGPD est obligatoire',
   }),
