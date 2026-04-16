@@ -537,17 +537,40 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   const ceeHautEffectif = projet.parcours === 'geste' ? ceeHautFinal : ceeAmpleurFinal
 
   // Quand des combinaisons CEE sont incertaines (NON_CUMUL_UNCERTAIN),
-  // appliquer un facteur de sécurité sur la borne basse du total.
-  // Risque : une fiche pourrait être rétroactivement exclue → réduire le bas de 15% par paire incertaine.
+  // appliquer un facteur de sécurité asymétrique sur les bornes du total.
+  // ⚠️ MODÈLE INTERNE — pas une règle réglementaire.
+  // Bas : -15% par paire incertaine (cap 40%) — risque d'exclusion rétroactive.
+  // Haut : -5% par paire incertaine (cap 15%) — le scénario optimiste reste possible mais pas garanti.
   const ncUncertainCount = projet.parcours === 'geste'
     ? uncertainCombinations.length
     : 0
-  const uncertaintyDiscount = Math.min(ncUncertainCount * 0.15, 0.40) // cap 40%
-  const ceeBasAjuste = Math.round(ceeBasEffectif * (1 - uncertaintyDiscount))
+  const uncertaintyDiscountBas = Math.min(ncUncertainCount * 0.15, 0.40)
+  const uncertaintyDiscountHaut = Math.min(ncUncertainCount * 0.05, 0.15)
+  const uncertaintyDiscount = uncertaintyDiscountBas // exposé au client (décote principale)
+  const ceeBasAjuste = Math.round(ceeBasEffectif * (1 - uncertaintyDiscountBas))
+  const ceeHautAjuste = Math.round(ceeHautEffectif * (1 - uncertaintyDiscountHaut))
 
   const totalBas = mprFinal + ceeBasAjuste + cdpBasFinal + marFinal
-  const totalHaut = mprFinal + ceeHautEffectif + cdpHautFinal + marFinal
+  const totalHaut = mprFinal + ceeHautAjuste + cdpHautFinal + marFinal
   const rac = calcResteACharge(budgetTTC, { bas: totalBas, haut: totalHaut })
+
+  if (ncUncertainCount > 0) {
+    debug.push({
+      step: 'nonCumulUncertaintyDiscount',
+      inputs: { ncUncertainCount, uncertainCombinations },
+      outputs: {
+        discountBas: uncertaintyDiscountBas,
+        discountHaut: uncertaintyDiscountHaut,
+        ceeBasAvant: ceeBasEffectif,
+        ceeBasApres: ceeBasAjuste,
+        ceeHautAvant: ceeHautEffectif,
+        ceeHautApres: ceeHautAjuste,
+      },
+      baremeIds: [asBaremeId('NON_CUMUL_ESTIMATED_DISCOUNT.INTERNAL.2026-01')],
+      notes: 'Modèle interne de décote — pas une règle réglementaire. Asymétrie assumée : le bas intègre le risque d\'exclusion, le haut une probabilité résiduelle.',
+    })
+  }
+
   debug.push({
     step: 'calcResteACharge',
     inputs: { budgetTTC, totalBas, totalHaut },
