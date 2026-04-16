@@ -123,10 +123,12 @@ describe('calcMPRGeste — gestes NEEDS_SURFACE (isolation €/m²)', () => {
 })
 
 describe('calcMPRAccompagne — taux selon catégorie + sauts DPE', () => {
-  it('Bleu 2 sauts = 60 %', () => {
+  it('Bleu 2 sauts = 60 % (plafonné à 40K HT)', () => {
     const r = calcMPRAccompagne(100000, 'bleu', 2)
     expect(r.taux).toBe(0.6)
-    expect(r.total).toBe(60000)
+    // plafond HT 2 sauts = 40000, donc 40000 * 0.6 = 24000
+    expect(r.total).toBe(24000)
+    expect(r.budgetPlafonne).toBe(40000)
   })
   it('Bleu 4 sauts = 80 %', () => {
     const r = calcMPRAccompagne(100000, 'bleu', 4)
@@ -136,18 +138,22 @@ describe('calcMPRAccompagne — taux selon catégorie + sauts DPE', () => {
     const r = calcMPRAccompagne(100000, 'jaune', 3)
     expect(r.taux).toBe(0.5)
   })
-  it('Violet = 45 % (constant)', () => {
+  it('Violet = 45 % (constant, plafonné à 70K HT)', () => {
     const r = calcMPRAccompagne(100000, 'violet', 4)
     expect(r.taux).toBe(0.45)
-    expect(r.total).toBe(45000)
+    // plafond HT 4 sauts = 70000, donc 70000 * 0.45 = 31500
+    expect(r.total).toBe(31500)
+    expect(r.budgetPlafonne).toBe(70000)
   })
-  it('Rose = 10 % (constant)', () => {
+  it('Rose = 10 % (constant, plafonné à 70K HT)', () => {
     const r = calcMPRAccompagne(100000, 'rose', 4)
     expect(r.taux).toBe(0.1)
-    expect(r.total).toBe(10000)
+    // plafond HT 4 sauts = 70000, donc 70000 * 0.1 = 7000
+    expect(r.total).toBe(7000)
+    expect(r.budgetPlafonne).toBe(70000)
   })
-  it('baremeId format correct', () => {
+  it('baremeId format correct (inclut sauts DPE)', () => {
     const r = calcMPRAccompagne(50000, 'violet', 3)
-    expect(r.baremeId).toBe('MPR.ACCOMPAGNE.VIOLET.2026-01')
+    expect(r.baremeId).toBe('MPR.ACCOMPAGNE.VIOLET.3SAUTS.2026-01')
   })
 })

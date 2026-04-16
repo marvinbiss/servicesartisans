@@ -1,21 +1,22 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Home, Key, Clock, CalendarCheck } from 'lucide-react'
+import { Home, Key, Clock, CalendarCheck, Sparkles } from 'lucide-react'
 import CardButton from './CardButton'
 import ScreenTitle from './ScreenTitle'
+import type { Anciennete } from '@/lib/simulateur/types'
 
 interface Props {
   residencePrincipale?: boolean
-  anciennetePlus15?: boolean
+  anciennete?: Anciennete
   onChangeResidence: (v: boolean) => void
-  onChangeAnciennete: (v: boolean) => void
+  onChangeAnciennete: (v: Anciennete) => void
   onComplete: () => void
 }
 
 export default function ScreenEligibilite({
   residencePrincipale,
-  anciennetePlus15,
+  anciennete,
   onChangeResidence,
   onChangeAnciennete,
   onComplete,
@@ -23,21 +24,21 @@ export default function ScreenEligibilite({
   const pendingRef = useRef(false)
 
   useEffect(() => {
-    if (residencePrincipale !== undefined && anciennetePlus15 !== undefined && pendingRef.current) {
+    if (residencePrincipale !== undefined && anciennete !== undefined && pendingRef.current) {
       const t = setTimeout(() => {
         pendingRef.current = false
         onComplete()
       }, 300)
       return () => clearTimeout(t)
     }
-  }, [residencePrincipale, anciennetePlus15, onComplete])
+  }, [residencePrincipale, anciennete, onComplete])
 
   function selectResidence(v: boolean) {
     pendingRef.current = true
     onChangeResidence(v)
   }
 
-  function selectAnciennete(v: boolean) {
+  function selectAnciennete(v: Anciennete) {
     pendingRef.current = true
     onChangeAnciennete(v)
   }
@@ -69,26 +70,38 @@ export default function ScreenEligibilite({
         </CardButton>
       </div>
 
-      {/* Ancienneté */}
+      {/* Ancienneté — 3 niveaux */}
       <p className="mb-3 mt-5 text-center text-sm font-medium text-charcoal-700">
-        Votre logement a plus de 15 ans ?
+        Quel âge a votre logement ?
       </p>
-      <div className="grid grid-cols-2 gap-4">
-        <CardButton selected={anciennetePlus15 === true} onClick={() => selectAnciennete(true)}>
-          <div className="flex flex-col items-center gap-2 py-3">
-            <Clock className="h-8 w-8 text-emerald-600" />
-            <span className="text-base font-semibold text-charcoal-900">Oui</span>
-            <span className="text-xs text-charcoal-500">Construit avant 2011</span>
+      <div className="grid grid-cols-3 gap-3">
+        <CardButton selected={anciennete === 'plus_15_ans'} onClick={() => selectAnciennete('plus_15_ans')}>
+          <div className="flex flex-col items-center gap-1.5 py-3">
+            <Clock className="h-7 w-7 text-emerald-600" />
+            <span className="text-sm font-semibold text-charcoal-900">+ de 15 ans</span>
+            <span className="text-xs text-charcoal-500">Avant 2011</span>
           </div>
         </CardButton>
-        <CardButton selected={anciennetePlus15 === false} onClick={() => selectAnciennete(false)}>
-          <div className="flex flex-col items-center gap-2 py-3">
-            <CalendarCheck className="h-8 w-8 text-slate-500" />
-            <span className="text-base font-semibold text-charcoal-900">Non</span>
-            <span className="text-xs text-charcoal-500">Plus récent</span>
+        <CardButton selected={anciennete === '2_a_15_ans'} onClick={() => selectAnciennete('2_a_15_ans')}>
+          <div className="flex flex-col items-center gap-1.5 py-3">
+            <CalendarCheck className="h-7 w-7 text-emerald-600" />
+            <span className="text-sm font-semibold text-charcoal-900">2 à 15 ans</span>
+            <span className="text-xs text-charcoal-500">2011–2024</span>
+          </div>
+        </CardButton>
+        <CardButton selected={anciennete === 'moins_2_ans'} onClick={() => selectAnciennete('moins_2_ans')}>
+          <div className="flex flex-col items-center gap-1.5 py-3">
+            <Sparkles className="h-7 w-7 text-slate-400" />
+            <span className="text-sm font-semibold text-charcoal-900">- de 2 ans</span>
+            <span className="text-xs text-charcoal-500">Neuf / récent</span>
           </div>
         </CardButton>
       </div>
+      {anciennete === 'moins_2_ans' && (
+        <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-center text-xs text-amber-800">
+          Les logements de moins de 2 ans ne sont pas éligibles à la plupart des aides à la rénovation énergétique.
+        </p>
+      )}
     </div>
   )
 }

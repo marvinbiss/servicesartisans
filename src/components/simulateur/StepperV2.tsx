@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { capture, EVENT } from '@/lib/analytics/posthog'
 import { deduceSimulationParams, type Objectif, type SurfaceTranche } from '@/lib/simulateur/deduction'
 import { deptFromCodePostal } from '@/lib/simulateur/zones'
-import type { CategorieAnah } from '@/lib/simulateur/types'
+import type { Anciennete, CategorieAnah, SautsDpe } from '@/lib/simulateur/types'
 
 import ScreenTransition from './screens/ScreenTransition'
 import ScreenLogement from './screens/ScreenLogement'
@@ -14,6 +14,7 @@ import ScreenEligibilite from './screens/ScreenEligibilite'
 import ScreenFoyer from './screens/ScreenFoyer'
 import ScreenRevenus from './screens/ScreenRevenus'
 import ScreenObjectif from './screens/ScreenObjectif'
+import ScreenDpe from './screens/ScreenDpe'
 import ScreenEquipement from './screens/ScreenEquipement'
 import ScreenTeaser from './screens/ScreenTeaser'
 import ScreenContact from './screens/ScreenContact'
@@ -27,6 +28,7 @@ type ScreenId =
   | 'foyer'
   | 'revenus'
   | 'objectif'
+  | 'dpe'
   | 'equipement'
   | 'teaser'
   | 'contact'
@@ -38,11 +40,12 @@ interface State {
   idf: boolean
   surfaceTranche?: SurfaceTranche
   residencePrincipale?: boolean
-  anciennetePlus15?: boolean
+  anciennete?: Anciennete
   foyer?: number
   revenuCategorie?: CategorieAnah
   rfrMilieu?: number
   objectif?: Objectif
+  sautsDpe?: SautsDpe
   equipementActuel?: 'gaz' | 'fioul' | 'elec' | 'autre'
   prenom: string
   telephone: string
@@ -87,31 +90,47 @@ const SCREEN_ORDER: ScreenId[] = [
   'foyer',
   'revenus',
   'objectif',
+  'dpe',
   'equipement',
   'teaser',
   'contact',
 ]
 
+/**
+ * Navigation conditionnelle :
+ * - 'equipement' : seulement si objectif === 'chauffage'
+ * - 'dpe' : seulement si objectif === 'renovation_complete' (parcours accompagné)
+ */
 function nextScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
-  if (state.screen === 'objectif' && state.objectif !== 'chauffage') {
-    return 'teaser' // skip equipement
+  if (state.screen === 'objectif') {
+    if (state.objectif === 'chauffage') return 'equipement' // skip dpe
+    if (state.objectif === 'renovation_complete') return 'dpe' // show dpe
+    return 'teaser' // isolation: skip dpe + equipement
   }
+  if (state.screen === 'dpe') return 'teaser' // after dpe, go to teaser
+  if (state.screen === 'equipement') return 'teaser'
   return SCREEN_ORDER[Math.min(idx + 1, SCREEN_ORDER.length - 1)]
 }
 
 function prevScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
-  if (state.screen === 'teaser' && state.objectif !== 'chauffage') {
-    return 'objectif' // skip equipement
+  if (state.screen === 'teaser') {
+    if (state.objectif === 'chauffage') return 'equipement'
+    if (state.objectif === 'renovation_complete') return 'dpe'
+    return 'objectif' // isolation
   }
+  if (state.screen === 'dpe') return 'objectif'
+  if (state.screen === 'equipement') return 'objectif'
   return SCREEN_ORDER[Math.max(idx - 1, 0)]
 }
 
 function screenIndex(screen: ScreenId, objectif?: Objectif): { current: number; total: number } {
-  const order = SCREEN_ORDER.filter(
-    (s) => s !== 'equipement' || objectif === 'chauffage'
-  )
+  const order = SCREEN_ORDER.filter((s) => {
+    if (s === 'equipement') return objectif === 'chauffage'
+    if (s === 'dpe') return objectif === 'renovation_complete'
+    return true
+  })
   return { current: order.indexOf(screen) + 1, total: order.length }
 }
 
@@ -231,7 +250,7 @@ export default function StepperV2() {
       situation: {
         typeLogement: state.typeLogement ?? 'maison',
         residencePrincipale: state.residencePrincipale ?? true,
-        anciennete: state.anciennetePlus15 === false ? '2_a_15_ans' as const : 'plus_15_ans' as const,
+        anciennete: state.anciennete ?? 'plus_15_ans' as const,
         surface: deduced.surface,
         codePostal: state.codePostal || '75001',
         foyer: state.foyer ?? 1,
@@ -240,7 +259,7 @@ export default function StepperV2() {
       projet: {
         parcours: deduced.parcours,
         gestes: deduced.gestes,
-        sautsDpe: deduced.sautsDpe,
+        sautsDpe: state.sautsDpe ?? deduced.sautsDpe,
         coupDePouce: deduced.coupDePouce,
         equipementActuel: deduced.equipementActuel,
       },
@@ -251,8 +270,9 @@ export default function StepperV2() {
     state.surfaceTranche,
     state.revenuCategorie,
     state.residencePrincipale,
-    state.anciennetePlus15,
+    state.anciennete,
     state.equipementActuel,
+    state.sautsDpe,
     state.typeLogement,
     state.codePostal,
     state.foyer,
@@ -374,9 +394,9 @@ export default function StepperV2() {
         {state.screen === 'eligibilite' && (
           <ScreenEligibilite
             residencePrincipale={state.residencePrincipale}
-            anciennetePlus15={state.anciennetePlus15}
+            anciennete={state.anciennete}
             onChangeResidence={(v) => dispatch({ type: 'SET', field: 'residencePrincipale', value: v })}
-            onChangeAnciennete={(v) => dispatch({ type: 'SET', field: 'anciennetePlus15', value: v })}
+            onChangeAnciennete={(v) => dispatch({ type: 'SET', field: 'anciennete', value: v })}
             onComplete={() => dispatch({ type: 'NEXT_SCREEN' })}
           />
         )}
@@ -404,6 +424,12 @@ export default function StepperV2() {
             onSelect={(v) => autoAdvance('objectif', v)}
           />
         )}
+        {state.screen === 'dpe' && (
+          <ScreenDpe
+            value={state.sautsDpe}
+            onSelect={(v) => autoAdvance('sautsDpe', v)}
+          />
+        )}
         {state.screen === 'equipement' && (
           <ScreenEquipement
             value={state.equipementActuel}
@@ -415,6 +441,7 @@ export default function StepperV2() {
             estimatePayload={estimatePayload}
             equipementActuel={state.equipementActuel}
             parcours={estimatePayload.projet && typeof estimatePayload.projet === 'object' ? (estimatePayload.projet as Record<string, unknown>).parcours as string : undefined}
+            budgetHt={estimatePayload.budget && typeof estimatePayload.budget === 'object' ? (estimatePayload.budget as Record<string, unknown>).budgetHt as number : undefined}
             onNext={() => dispatch({ type: 'NEXT_SCREEN' })}
           />
         )}

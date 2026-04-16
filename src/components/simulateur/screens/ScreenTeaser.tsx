@@ -8,6 +8,7 @@ interface Props {
   estimatePayload: Record<string, unknown>
   equipementActuel?: string
   parcours?: string
+  budgetHt?: number
   onNext: () => void
 }
 
@@ -24,7 +25,7 @@ function AnimatedNumber({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>
 }
 
-export default function ScreenTeaser({ estimatePayload, equipementActuel, parcours, onNext }: Props) {
+export default function ScreenTeaser({ estimatePayload, equipementActuel, parcours, budgetHt, onNext }: Props) {
   const [loading, setLoading] = useState(true)
   const [totalBas, setTotalBas] = useState(0)
   const [totalHaut, setTotalHaut] = useState(0)
@@ -120,9 +121,17 @@ export default function ScreenTeaser({ estimatePayload, equipementActuel, parcou
           )}
           {mprAccompagne && (
             <div className="mx-auto mt-4 max-w-xs rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-left text-sm text-blue-800">
-              <span className="font-semibold">Mon Accompagnateur Rénov&apos;</span> — Votre projet nécessite un accompagnateur agréé. Nous en avons dans votre secteur.
+              <span className="font-semibold">Mon Accompagnateur Rénov&apos;</span> — Un accompagnateur agréé est obligatoire pour ce parcours. Nous pouvons vous orienter vers un MAR dans votre secteur.
             </div>
           )}
+
+          {/* Transparence : budget estimé + source barème */}
+          <div className="mx-auto mt-4 max-w-xs space-y-1 text-xs text-charcoal-400">
+            {budgetHt != null && budgetHt > 0 && (
+              <p>Estimation basée sur un budget travaux de {new Intl.NumberFormat('fr-FR').format(budgetHt)} € HT</p>
+            )}
+            <p>Barèmes MaPrimeRénov&apos; et CEE en vigueur au 1er janvier 2026. Estimation indicative, non contractuelle.</p>
+          </div>
 
           <div className="mx-auto mt-6 max-w-xs">
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">

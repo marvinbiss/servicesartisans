@@ -23,6 +23,7 @@ import { calcMPRGeste, calcMPRAccompagne } from './calc-mpr'
 import {
   calcBarTh148,
   calcBarTh113,
+  calcBarTh143,
   calcVMCSimpleFlux,
   computeBarTh171,
   fourchettePrime,
@@ -184,7 +185,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       formuleDebug: debug,
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
-      necessiteMAR: projet.parcours === 'accompagne',
+      necessiteMAR: false, // no aids → no MAR needed
     }
   }
 
@@ -254,6 +255,15 @@ export function runSimulation(input: SimulationInput): SimulationResult {
           meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g },
         })
         baremeIds.push(r.baremeId)
+      } else if (g === 'SSC' && situation.typeLogement === 'maison') {
+        const r = calcBarTh143(situation.zone)
+        const fr = fourchettePrime(r.kwhCumac)
+        aidesCee.push({
+          code: 'BAR-TH-143',
+          montant: Math.round((fr.bas + fr.haut) / 2),
+          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g },
+        })
+        baremeIds.push(r.baremeId)
       } else if (g === 'PAC_AIREAU') {
         // Utilise BAR-TH-171 (formule variable, placeholder)
         const r = computeBarTh171(situation.zone, 2, situation.surface, situation.typeLogement)
@@ -264,6 +274,40 @@ export function runSimulation(input: SimulationInput): SimulationResult {
           meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g },
         })
         baremeIds.push(r.baremeId)
+      } else if (
+        g === 'ISOLATION_MURS' || g === 'ISOLATION_TOITURE' || g === 'ISOLATION_PLANCHER' ||
+        g === 'ISO_TOITURE_RAMPANTS' || g === 'ISO_TOITURE_TERRASSE' || g === 'ISO_PLANCHERS_BAS' ||
+        g === 'ITE' || g === 'ITI'
+      ) {
+        // STUB: fiches BAR-EN-101/102/103/104 nécessitent surface isolée exacte
+        // (non disponible dans le stepper simplifié). Montant CEE = 0€ avec trace.
+        const ficheMap: Record<string, string> = {
+          ISOLATION_MURS: 'BAR-EN-102', ITE: 'BAR-EN-102', ITI: 'BAR-EN-102',
+          ISOLATION_TOITURE: 'BAR-EN-101', ISO_TOITURE_RAMPANTS: 'BAR-EN-101', ISO_TOITURE_TERRASSE: 'BAR-EN-103',
+          ISOLATION_PLANCHER: 'BAR-EN-103', ISO_PLANCHERS_BAS: 'BAR-EN-103',
+        }
+        const fiche = ficheMap[g] ?? 'BAR-EN-UNKNOWN'
+        const stubBaremeId = asBaremeId(`CEE.${fiche}.STUB.SURFACE_MANQUANTE.2026-01`)
+        aidesCee.push({
+          code: fiche,
+          montant: 0,
+          meta: { kwhc: 0, baremeId: stubBaremeId, fourchette: { bas: 0, haut: 0 }, geste: g, stub: true },
+        })
+        baremeIds.push(stubBaremeId)
+      } else if (g === 'VMC_2FLUX' || g === 'POELE_GRANULES' || g === 'POELE_BUCHES' || g === 'CESI' || g === 'PAC_GEOTHERMIE') {
+        // STUB: fiches CEE non encore implémentées. Montant CEE = 0€ avec trace.
+        const ficheMap: Record<string, string> = {
+          VMC_2FLUX: 'BAR-TH-125', POELE_GRANULES: 'BAR-TH-112', POELE_BUCHES: 'BAR-TH-112',
+          CESI: 'BAR-TH-101', PAC_GEOTHERMIE: 'BAR-TH-104',
+        }
+        const fiche = ficheMap[g] ?? 'BAR-TH-UNKNOWN'
+        const stubBaremeId = asBaremeId(`CEE.${fiche}.STUB.NON_IMPLEMENTE.2026-01`)
+        aidesCee.push({
+          code: fiche,
+          montant: 0,
+          meta: { kwhc: 0, baremeId: stubBaremeId, fourchette: { bas: 0, haut: 0 }, geste: g, stub: true },
+        })
+        baremeIds.push(stubBaremeId)
       }
     }
     const nc = applyNonCumul(aidesCee)
