@@ -8,8 +8,19 @@ if (SENTRY_DSN) {
     dsn: SENTRY_DSN,
     environment: process.env.NODE_ENV,
 
-    // Performance Monitoring
-    tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+    // Performance Monitoring — dynamic sampling: errors always, noisy routes low, rest 10% in prod
+    tracesSampler: (ctx) => {
+      if (ctx.parentSampled !== undefined) return ctx.parentSampled
+      const name = typeof ctx.name === 'string' ? ctx.name : ''
+      if (
+        name.includes('/api/cron/') ||
+        name.includes('/sitemap') ||
+        name.includes('/monitoring')
+      ) {
+        return 0.01
+      }
+      return process.env.NODE_ENV === 'production' ? 0.1 : 1.0
+    },
 
     // Session Replay — lazy-loaded to save ~70KB from initial bundle
     replaysSessionSampleRate: 0.01,
@@ -26,9 +37,29 @@ if (SENTRY_DSN) {
       }),
     ],
 
-    // Filter errors
+    // Noise filter — common browser errors that are not actionable
+    ignoreErrors: [
+      'ResizeObserver loop limit exceeded',
+      'ResizeObserver loop completed with undelivered notifications',
+      'Non-Error promise rejection captured',
+      'Network request failed',
+      'Failed to fetch',
+      'NetworkError when attempting to fetch resource',
+      'Load failed',
+      'AbortError',
+      'cancelled',
+      'The operation was aborted',
+    ],
+
+    // Drop anything originating from browser extensions
+    denyUrls: [
+      /^chrome-extension:\/\//i,
+      /^moz-extension:\/\//i,
+      /^safari-extension:\/\//i,
+      /^safari-web-extension:\/\//i,
+    ],
+
     beforeSend(event) {
-      // Don't send events for browser extensions
       if (
         event.exception?.values?.[0]?.stacktrace?.frames?.some((frame) =>
           frame.filename?.includes('extension')

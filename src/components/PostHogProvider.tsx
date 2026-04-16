@@ -37,6 +37,12 @@ function initIfReady(): void {
     capture_pageleave: true,
     autocapture: true,
     persistence: 'localStorage+cookie',
+    // Only create Person profiles for identified users — saves ~70% MTU quota
+    // on anonymous visitors while keeping funnel analytics fully functional.
+    person_profiles: 'identified_only',
+    // Defense in depth: respect browser Do-Not-Track headers in addition to
+    // our RGPD consent gate above.
+    respect_dnt: true,
     session_recording: {
       maskAllInputs: true,
       maskTextSelector: '[data-ph-mask]',
