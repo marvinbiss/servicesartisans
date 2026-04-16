@@ -17,7 +17,7 @@
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
-import { captureMessage } from '@/lib/monitoring/sentry'
+import * as Sentry from '@sentry/nextjs'
 
 // ----------------------------------------------------------------------------
 // Types
@@ -210,12 +210,15 @@ export async function getRgeHealthMetrics(client: AnySupabaseClient): Promise<Rg
   for (const alert of alerts) {
     if (alert.severity === 'critical') {
       try {
-        captureMessage(`[rge-health] ${alert.message}`, 'error', {
-          subsystem: 'rge-sync',
-          severity: alert.severity,
-          code: alert.code,
-          value: alert.value,
-          threshold: alert.threshold,
+        Sentry.captureMessage(`[rge-health] ${alert.message}`, {
+          level: 'error',
+          extra: {
+            subsystem: 'rge-sync',
+            severity: alert.severity,
+            code: alert.code,
+            value: alert.value,
+            threshold: alert.threshold,
+          },
         })
       } catch (err) {
         // Sentry doit jamais casser le monitoring

@@ -7,6 +7,7 @@ if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: process.env.NODE_ENV,
+    release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
 
     // Performance Monitoring — dynamic sampling: errors always, noisy routes low, rest 10% in prod
     tracesSampler: (ctx) => {
@@ -49,6 +50,9 @@ if (SENTRY_DSN) {
       'AbortError',
       'cancelled',
       'The operation was aborted',
+      'ChunkLoadError',
+      'Loading chunk',
+      'SecurityError',
     ],
 
     // Drop anything originating from browser extensions

@@ -18,7 +18,7 @@
 
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { captureError } from '@/lib/monitoring/sentry'
+import * as Sentry from '@sentry/nextjs'
 
 // ── DLQ / retry config ─────────────────────────────────────────────
 // Exponential backoff schedule (seconds): 30s, 2min, 8min, 32min, 2h.
@@ -322,10 +322,10 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
       update.pipedrive_dead_letter_at = nowIso
       update.pipedrive_next_retry_at = null
       // Alert on terminal failure — a human needs to look at this lead
-      captureError(err instanceof Error ? err : new Error(message), {
-        level: 'error',
-        tags: { integration: 'pipedrive', dead_letter: 'true' },
-        extra: { devisId, attempts: nextAttempts },
+      Sentry.withScope((scope) => {
+        scope.setTags({ integration: 'pipedrive', dead_letter: 'true' })
+        scope.setExtras({ devisId, attempts: nextAttempts })
+        Sentry.captureException(err instanceof Error ? err : new Error(message))
       })
     } else {
       update.pipedrive_next_retry_at = computeNextRetryAt(nextAttempts).toISOString()

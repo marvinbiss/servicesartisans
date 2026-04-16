@@ -14,6 +14,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -146,42 +147,51 @@ async function applyRule3(supabase: SupabaseAdmin, cutoff: string): Promise<numb
 }
 
 export async function GET(request: Request) {
-  if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'CRON_SECRET non configuré' }, { status: 500 })
-  }
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  return await Sentry.withMonitor(
+    'cron-rgpd-anonymize',
+    async () => {
+      if (!process.env.CRON_SECRET) {
+        return NextResponse.json({ error: 'CRON_SECRET non configuré' }, { status: 500 })
+      }
+      const authHeader = request.headers.get('authorization')
+      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      }
 
-  const now = Date.now()
-  const cutoff90 = new Date(now - DAYS_90).toISOString()
-  const cutoff3y = new Date(now - YEARS_3).toISOString()
-  const cutoff6m = new Date(now - MONTHS_6).toISOString()
+      const now = Date.now()
+      const cutoff90 = new Date(now - DAYS_90).toISOString()
+      const cutoff3y = new Date(now - YEARS_3).toISOString()
+      const cutoff6m = new Date(now - MONTHS_6).toISOString()
 
-  const supabase = createAdminClient()
+      const supabase = createAdminClient()
 
-  try {
-    const rule1 = await applyRule1(supabase, cutoff90)
-    const rule2 = await applyRule2(supabase, cutoff3y)
-    const rule3 = await applyRule3(supabase, cutoff6m)
+      try {
+        const rule1 = await applyRule1(supabase, cutoff90)
+        const rule2 = await applyRule2(supabase, cutoff3y)
+        const rule3 = await applyRule3(supabase, cutoff6m)
 
-    logger.info('rgpd-anonymize: done', {
-      component: 'cron/rgpd-anonymize',
-      rule1_rfr_nulled: rule1,
-      rule2_coords_anonymized: rule2,
-      rule3_ip_hash_nulled: rule3,
-    })
+        logger.info('rgpd-anonymize: done', {
+          component: 'cron/rgpd-anonymize',
+          rule1_rfr_nulled: rule1,
+          rule2_coords_anonymized: rule2,
+          rule3_ip_hash_nulled: rule3,
+        })
 
-    return NextResponse.json({
-      ok: true,
-      rule1_rfr_nulled: rule1,
-      rule2_coords_anonymized: rule2,
-      rule3_ip_hash_nulled: rule3,
-    })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'unknown error'
-    logger.error('rgpd-anonymize: failed', err, { component: 'cron/rgpd-anonymize' })
-    return NextResponse.json({ error: message }, { status: 500 })
-  }
+        return NextResponse.json({
+          ok: true,
+          rule1_rfr_nulled: rule1,
+          rule2_coords_anonymized: rule2,
+          rule3_ip_hash_nulled: rule3,
+        })
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'unknown error'
+        logger.error('rgpd-anonymize: failed', err, { component: 'cron/rgpd-anonymize' })
+        Sentry.captureException(err, { tags: { cron: 'rgpd-anonymize' } })
+        return NextResponse.json({ error: message }, { status: 500 })
+      }
+    },
+    {
+      schedule: { type: 'crontab', value: '0 3 * * *' },
+    }
+  )
 }

@@ -17,9 +17,11 @@ export default function AuthTracker() {
         const userType = session.user.user_metadata?.user_type as string | undefined
 
         Sentry.setUser({ id, email: email ?? undefined })
+        Sentry.setTag('user_type', userType || 'unknown')
         identify(id, { email, user_type: userType })
       } else {
         Sentry.setUser(null)
+        Sentry.setTag('user_type', 'anonymous')
         reset()
       }
     })

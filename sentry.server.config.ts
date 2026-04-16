@@ -7,6 +7,7 @@ if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: process.env.NODE_ENV,
+    release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
 
     // Performance Monitoring — dynamic sampling: noisy crons low, rest 10% in prod
     tracesSampler: (ctx) => {
@@ -29,10 +30,22 @@ if (SENTRY_DSN) {
     enabled: process.env.NODE_ENV === 'production',
 
     // Server-specific integrations
-    integrations: [Sentry.httpIntegration()],
+    integrations: [
+      Sentry.httpIntegration(),
+      Sentry.captureConsoleIntegration({ levels: ['error'] }),
+    ],
 
     // Noise filter — expected errors that are not actionable
-    ignoreErrors: ['NotFoundError', 'NEXT_NOT_FOUND', 'NEXT_REDIRECT', 'AbortError'],
+    ignoreErrors: [
+      'NotFoundError',
+      'NEXT_NOT_FOUND',
+      'NEXT_REDIRECT',
+      'AbortError',
+      'ECONNREFUSED',
+      'ECONNRESET',
+      'ETIMEDOUT',
+      'fetch failed',
+    ],
 
     beforeSend(event) {
       if (event.exception?.values?.[0]?.type === 'NotFoundError') {

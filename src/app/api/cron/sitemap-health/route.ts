@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -88,96 +89,124 @@ async function checkRgeFreshness(): Promise<RgeFreshness> {
  * Alerts via structured logging (visible in Vercel logs).
  */
 export async function GET(request: Request) {
-  if (!process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
-  }
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
+  return await Sentry.withMonitor(
+    'cron-sitemap-health',
+    async () => {
+      if (!process.env.CRON_SECRET) {
+        return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
+      }
+      const authHeader = request.headers.get('authorization')
+      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      }
 
-  // Fetch sitemap index to get all child sitemaps
-  const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, {
-    cache: 'no-store',
-    signal: AbortSignal.timeout(15000),
-  })
-  if (!indexRes.ok) {
-    console.error('[sitemap-health] CRITICAL: sitemap index returned', indexRes.status)
-    return NextResponse.json(
-      { error: "Échec de l'index sitemap", status: indexRes.status },
-      { status: 500 }
-    )
-  }
-
-  const indexXml = await indexRes.text()
-  const locRegex = /<loc>(.*?)<\/loc>/g
-  const sitemapUrls: string[] = []
-  let match
-  while ((match = locRegex.exec(indexXml)) !== null) {
-    sitemapUrls.push(match[1])
-  }
-
-  // Check each child sitemap
-  const results: { url: string; status: number; urls: number; ok: boolean }[] = []
-  const failures: string[] = []
-
-  // Check in parallel batches of 5 to avoid overwhelming the server
-  for (let i = 0; i < sitemapUrls.length; i += 5) {
-    const batch = sitemapUrls.slice(i, i + 5)
-    const batchResults = await Promise.all(
-      batch.map(async (url) => {
-        try {
-          const res = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
-          const text = res.ok ? await res.text() : ''
-          const urlCount = (text.match(/<url>/g) || []).length
-          const ok = res.ok && urlCount > 0
-          if (!ok) failures.push(url)
-          return { url, status: res.status, urls: urlCount, ok }
-        } catch {
-          failures.push(url)
-          return { url, status: 0, urls: 0, ok: false }
-        }
+      // Fetch sitemap index to get all child sitemaps
+      const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(15000),
       })
-    )
-    results.push(...batchResults)
-  }
+      if (!indexRes.ok) {
+        logger.error('[sitemap-health] CRITICAL: sitemap index returned', undefined, {
+          status: indexRes.status,
+        })
+        Sentry.captureMessage('Sitemap index unhealthy', {
+          level: 'error',
+          extra: { status: indexRes.status },
+        })
+        return NextResponse.json(
+          { error: "Échec de l'index sitemap", status: indexRes.status },
+          { status: 500 }
+        )
+      }
 
-  // Also check special sitemaps
-  for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
-    try {
-      const res = await fetch(special, { cache: 'no-store', signal: AbortSignal.timeout(15000) })
-      // news-sitemap can legitimately be empty (0 articles in last 48h)
-      const ok = res.ok
-      if (!ok) failures.push(special)
-      results.push({ url: special, status: res.status, urls: 0, ok })
-    } catch {
-      failures.push(special)
-      results.push({ url: special, status: 0, urls: 0, ok: false })
-    }
-  }
+      const indexXml = await indexRes.text()
+      const locRegex = /<loc>(.*?)<\/loc>/g
+      const sitemapUrls: string[] = []
+      let match
+      while ((match = locRegex.exec(indexXml)) !== null) {
+        sitemapUrls.push(match[1])
+      }
 
-  const totalUrls = results.reduce((sum, r) => sum + r.urls, 0)
-  const allOk = failures.length === 0
+      // Check each child sitemap
+      const results: { url: string; status: number; urls: number; ok: boolean }[] = []
+      const failures: string[] = []
 
-  if (!allOk) {
-    console.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed:`, failures)
-  } else {
-    console.warn(`[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`)
-  }
+      // Check in parallel batches of 5 to avoid overwhelming the server
+      for (let i = 0; i < sitemapUrls.length; i += 5) {
+        const batch = sitemapUrls.slice(i, i + 5)
+        const batchResults = await Promise.all(
+          batch.map(async (url) => {
+            try {
+              const res = await fetch(url, {
+                cache: 'no-store',
+                signal: AbortSignal.timeout(15000),
+              })
+              const text = res.ok ? await res.text() : ''
+              const urlCount = (text.match(/<url>/g) || []).length
+              const ok = res.ok && urlCount > 0
+              if (!ok) failures.push(url)
+              return { url, status: res.status, urls: urlCount, ok }
+            } catch {
+              failures.push(url)
+              return { url, status: 0, urls: 0, ok: false }
+            }
+          })
+        )
+        results.push(...batchResults)
+      }
 
-  const rgeFreshness = await checkRgeFreshness()
+      // Also check special sitemaps
+      for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
+        try {
+          const res = await fetch(special, {
+            cache: 'no-store',
+            signal: AbortSignal.timeout(15000),
+          })
+          // news-sitemap can legitimately be empty (0 articles in last 48h)
+          const ok = res.ok
+          if (!ok) failures.push(special)
+          results.push({ url: special, status: res.status, urls: 0, ok })
+        } catch {
+          failures.push(special)
+          results.push({ url: special, status: 0, urls: 0, ok: false })
+        }
+      }
 
-  return NextResponse.json({
-    healthy: allOk,
-    checked: results.length,
-    totalUrls,
-    failures: failures.length > 0 ? failures : undefined,
-    rge: {
-      healthy: rgeFreshness.ok,
-      lastSyncedAt: rgeFreshness.lastSyncedAt,
-      daysStale: rgeFreshness.daysStale,
-      severity: rgeFreshness.severity,
+      const totalUrls = results.reduce((sum, r) => sum + r.urls, 0)
+      const allOk = failures.length === 0
+
+      if (!allOk) {
+        logger.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed`, undefined, {
+          failures,
+        })
+        Sentry.captureMessage(`Sitemap health: ${failures.length} sitemaps failed`, {
+          level: 'warning',
+          extra: { failures },
+        })
+      } else {
+        logger.info(
+          `[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`
+        )
+      }
+
+      const rgeFreshness = await checkRgeFreshness()
+
+      return NextResponse.json({
+        healthy: allOk,
+        checked: results.length,
+        totalUrls,
+        failures: failures.length > 0 ? failures : undefined,
+        rge: {
+          healthy: rgeFreshness.ok,
+          lastSyncedAt: rgeFreshness.lastSyncedAt,
+          daysStale: rgeFreshness.daysStale,
+          severity: rgeFreshness.severity,
+        },
+        timestamp: new Date().toISOString(),
+      })
     },
-    timestamp: new Date().toISOString(),
-  })
+    {
+      schedule: { type: 'crontab', value: '0 6 * * *' },
+    }
+  )
 }
