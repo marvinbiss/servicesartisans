@@ -45,6 +45,7 @@ interface State {
   objectif?: Objectif
   equipementActuel?: 'gaz' | 'fioul' | 'elec' | 'autre'
   prenom: string
+  telephone: string
   email: string
   consentRgpd: boolean
   consentMajorite: boolean
@@ -59,6 +60,7 @@ const INITIAL_STATE: State = {
   codePostal: '',
   idf: false,
   prenom: '',
+  telephone: '',
   email: '',
   consentRgpd: false,
   consentMajorite: false,
@@ -268,7 +270,7 @@ export default function StepperV2() {
         prenom: state.prenom,
         nom: '',
         email: state.email,
-        telephone: '',
+        telephone: state.telephone,
         consentRgpd: state.consentRgpd,
         consentMajorite: state.consentMajorite,
         consentDemarchage: state.consentDemarchage,
@@ -417,12 +419,14 @@ export default function StepperV2() {
         {state.screen === 'contact' && (
           <ScreenContact
             prenom={state.prenom}
+            telephone={state.telephone}
             email={state.email}
             consentRgpd={state.consentRgpd}
             consentMajorite={state.consentMajorite}
             consentDemarchage={state.consentDemarchage}
             submitting={state.submitting}
             onChangePrenom={(v) => dispatch({ type: 'SET', field: 'prenom', value: v })}
+            onChangeTelephone={(v) => dispatch({ type: 'SET', field: 'telephone', value: v })}
             onChangeEmail={(v) => dispatch({ type: 'SET', field: 'email', value: v })}
             onChangeConsent={(rgpd, majorite) => {
               dispatch({ type: 'SET', field: 'consentRgpd', value: rgpd })

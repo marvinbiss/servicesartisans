@@ -8,12 +8,14 @@ const CONSENT = CONSENT_TEXTS[CONSENT_VERSION_CURRENT]
 
 interface Props {
   prenom: string
+  telephone: string
   email: string
   consentRgpd: boolean
   consentMajorite: boolean
   consentDemarchage: boolean
   submitting: boolean
   onChangePrenom: (v: string) => void
+  onChangeTelephone: (v: string) => void
   onChangeEmail: (v: string) => void
   onChangeConsent: (rgpd: boolean, majorite: boolean) => void
   onChangeDemarchage: (v: boolean) => void
@@ -21,15 +23,18 @@ interface Props {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const TEL_FR_RE = /^(?:\+33|0)[1-9]\d{8}$/
 
 export default function ScreenContact({
   prenom,
+  telephone,
   email,
   consentRgpd,
   consentMajorite,
   consentDemarchage,
   submitting,
   onChangePrenom,
+  onChangeTelephone,
   onChangeEmail,
   onChangeConsent,
   onChangeDemarchage,
@@ -41,6 +46,10 @@ export default function ScreenContact({
     e.preventDefault()
     if (!prenom.trim()) {
       setError('Votre prénom est requis')
+      return
+    }
+    if (!TEL_FR_RE.test(telephone.replace(/\s/g, ''))) {
+      setError('Numéro de téléphone invalide (format français attendu)')
       return
     }
     if (!EMAIL_RE.test(email)) {
@@ -70,6 +79,16 @@ export default function ScreenContact({
             placeholder="Votre prénom"
             value={prenom}
             onChange={(e) => onChangePrenom(e.target.value)}
+            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+        <div>
+          <input
+            type="tel"
+            autoComplete="tel"
+            placeholder="Votre téléphone"
+            value={telephone}
+            onChange={(e) => onChangeTelephone(e.target.value)}
             className="w-full rounded-xl border-2 border-slate-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
         </div>
