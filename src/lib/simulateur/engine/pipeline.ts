@@ -136,6 +136,12 @@ export interface SimulationResult {
   confidenceLevel: 'high' | 'medium' | 'low'
   /** Message lisible expliquant le niveau de confiance. */
   confidenceMessage: string
+  /** Décomposition du signal de confiance par axe d'incertitude. */
+  confidenceBreakdown: {
+    cee: 'high' | 'medium' | 'low'
+    surface: 'high' | 'medium' | 'low'
+    nonCumul: 'high' | 'medium' | 'low'
+  }
 
   /** Lead fioul = high priority (remplacement chaudière fioul, valeur 5x). */
   leadPriority: 'high' | 'normal'
@@ -205,6 +211,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       uncertaintyDiscount: 0,
       confidenceLevel: 'high',
       confidenceMessage: 'Aucun geste éligible — pas d\'incertitude de calcul.',
+      confidenceBreakdown: { cee: 'high', surface: 'high', nonCumul: 'high' },
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
       necessiteMAR: false, // no aids → no MAR needed
@@ -576,6 +583,9 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       step: 'nonCumulUncertaintyDiscount',
       inputs: {
         pairs: uncertainPairs.map((p) => ({ label: p.label, risk: p.risk })),
+        assumption: 'NON_CUMUL_RISK_MODEL_INTERNAL',
+        source: 'heuristic_model_v1',
+        riskWeights: { HIGH: '20/8%', MEDIUM: '10/4%', LOW: '5/2%' },
       },
       outputs: {
         discountBas: uncertaintyDiscountBas,
@@ -585,8 +595,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         ceeHautAvant: ceeHautEffectif,
         ceeHautApres: ceeHautAjuste,
       },
-      baremeIds: [asBaremeId('NON_CUMUL_ESTIMATED_DISCOUNT.INTERNAL.2026-01')],
-      notes: 'Modèle interne pondéré par risque — pas une règle réglementaire. HIGH=même usage thermique, MEDIUM=usage proche, LOW=usages distincts.',
+      baremeIds: [asBaremeId('NON_CUMUL_ESTIMATED_DISCOUNT.INTERNAL.V1.2026-01')],
+      notes: 'Modèle heuristique interne v1 — PAS une règle réglementaire. Pondération par usage thermique : HIGH=même usage (PAC↔SSC), MEDIUM=usage proche (CESI↔PAC), LOW=usages distincts (VMC↔isolation). Les coefficients sont calibrés par prudence, pas par source officielle.',
     })
   }
 
@@ -653,20 +663,44 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     })
   }
 
-  // --- 10. Niveau de confiance global ---
-  // Facteurs dégradants : incertitude non-cumul, fiches LOW certainty, fourchette large
+  // --- 10. Niveau de confiance — décomposé par axe ---
+  // Chaque axe est évalué indépendamment, le global = worst of all.
   const hasLowCertaintyFiches = aidesCee.some((a) => a.meta?.certainty === 'LOW')
-  const fourchettePct = totalHaut > 0 ? (totalHaut - totalBas) / totalHaut : 0
-  let confidenceLevel: 'high' | 'medium' | 'low' = 'high'
-  let confidenceMessage = 'Estimation fiable — barèmes officiels 2026, cumul vérifié.'
+  const ceeFourchettePct = ceeHautAjuste > 0 ? (ceeHautAjuste - ceeBasAjuste) / ceeHautAjuste : 0
 
-  if (uncertainPairs.some((p) => p.risk === 'HIGH') || uncertaintyDiscountBas >= 0.30) {
-    confidenceLevel = 'low'
-    confidenceMessage = 'Estimation indicative — cumul CEE incertain sur des gestes à usage similaire. Le montant réel peut varier significativement après instruction du dossier.'
-  } else if (uncertainPairs.length > 0 || hasLowCertaintyFiches || fourchettePct > 0.35) {
-    confidenceLevel = 'medium'
-    confidenceMessage = 'Estimation prudente — certaines hypothèses (surfaces, cumul CEE) élargissent la fourchette. Les montants définitifs dépendront du métré et de l\'instruction.'
+  // Axe CEE : fiches fallback (certainty LOW) ou fourchette CEE large
+  const confidenceCee: 'high' | 'medium' | 'low' =
+    hasLowCertaintyFiches && ceeFourchettePct > 0.40 ? 'low'
+    : hasLowCertaintyFiches || ceeFourchettePct > 0.25 ? 'medium'
+    : 'high'
+
+  // Axe Surface : fourchette globale élargie par ratios DTU
+  const fourchettePct = totalHaut > 0 ? (totalHaut - totalBas) / totalHaut : 0
+  const hasIsolationGeste = aidesCee.some((a) => a.code.startsWith('BAR-EN'))
+  const confidenceSurface: 'high' | 'medium' | 'low' =
+    hasIsolationGeste && fourchettePct > 0.35 ? 'low'
+    : hasIsolationGeste ? 'medium'
+    : 'high'
+
+  // Axe Non-cumul : pondéré par risque des paires incertaines
+  const confidenceNonCumul: 'high' | 'medium' | 'low' =
+    uncertainPairs.some((p) => p.risk === 'HIGH') || uncertaintyDiscountBas >= 0.30 ? 'low'
+    : uncertainPairs.length > 0 ? 'medium'
+    : 'high'
+
+  const confidenceBreakdown = { cee: confidenceCee, surface: confidenceSurface, nonCumul: confidenceNonCumul }
+
+  // Global = worst of the 3 axes
+  const levels = [confidenceCee, confidenceSurface, confidenceNonCumul]
+  const confidenceLevel: 'high' | 'medium' | 'low' =
+    levels.includes('low') ? 'low' : levels.includes('medium') ? 'medium' : 'high'
+
+  const confidenceMessages: Record<'high' | 'medium' | 'low', string> = {
+    high: 'Estimation fiable — barèmes officiels 2026, cumul vérifié.',
+    medium: 'Estimation prudente — certaines hypothèses (surfaces, cumul CEE) élargissent la fourchette. Les montants définitifs dépendront du métré et de l\'instruction.',
+    low: 'Estimation indicative — des incertitudes significatives (cumul CEE, surfaces) impactent la fourchette. Le montant réel peut varier après instruction du dossier.',
   }
+  const confidenceMessage = confidenceMessages[confidenceLevel]
 
   return {
     categorieAnah: categorie,
@@ -703,6 +737,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     uncertaintyDiscount,
     confidenceLevel,
     confidenceMessage,
+    confidenceBreakdown,
     exclusion: ec.exclusionMessage,
     leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
     necessiteMAR: projet.parcours === 'accompagne' && mprFinal > 0,

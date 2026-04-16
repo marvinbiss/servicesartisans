@@ -139,6 +139,7 @@ export async function POST(req: NextRequest) {
         uncertaintyDiscount: result.uncertaintyDiscount,
         confidenceLevel: result.confidenceLevel,
         confidenceMessage: result.confidenceMessage,
+        confidenceBreakdown: result.confidenceBreakdown,
         zoneWarning: zoneRes.warning,
         ecoPtz: result.ecoPtz,
         par: result.par,
