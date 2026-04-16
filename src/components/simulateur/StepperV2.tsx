@@ -413,6 +413,8 @@ export default function StepperV2() {
         {state.screen === 'teaser' && estimatePayload && (
           <ScreenTeaser
             estimatePayload={estimatePayload}
+            equipementActuel={state.equipementActuel}
+            parcours={estimatePayload.projet && typeof estimatePayload.projet === 'object' ? (estimatePayload.projet as Record<string, unknown>).parcours as string : undefined}
             onNext={() => dispatch({ type: 'NEXT_SCREEN' })}
           />
         )}

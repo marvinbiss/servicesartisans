@@ -6,6 +6,8 @@ import { Sparkles } from 'lucide-react'
 
 interface Props {
   estimatePayload: Record<string, unknown>
+  equipementActuel?: string
+  parcours?: string
   onNext: () => void
 }
 
@@ -22,10 +24,11 @@ function AnimatedNumber({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>
 }
 
-export default function ScreenTeaser({ estimatePayload, onNext }: Props) {
+export default function ScreenTeaser({ estimatePayload, equipementActuel, parcours, onNext }: Props) {
   const [loading, setLoading] = useState(true)
   const [totalBas, setTotalBas] = useState(0)
   const [totalHaut, setTotalHaut] = useState(0)
+  const [mprAccompagne, setMprAccompagne] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fetchedRef = useRef(false)
 
@@ -56,6 +59,9 @@ export default function ScreenTeaser({ estimatePayload, onNext }: Props) {
           (data.cdpEstimationHaut ?? 0)
         setTotalBas(Math.max(bas, 0))
         setTotalHaut(Math.max(haut, 0))
+        if (parcours === 'accompagne' && (data.mprTotal ?? 0) > 0) {
+          setMprAccompagne(true)
+        }
       } catch {
         setError('Erreur réseau')
       } finally {
@@ -105,6 +111,17 @@ export default function ScreenTeaser({ estimatePayload, onNext }: Props) {
               Fourchette : {new Intl.NumberFormat('fr-FR').format(totalBas)} –{' '}
               {new Intl.NumberFormat('fr-FR').format(totalHaut)} €
             </p>
+          )}
+
+          {equipementActuel === 'fioul' && (
+            <div className="mx-auto mt-4 max-w-xs rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-left text-sm text-amber-800">
+              <span className="font-semibold">Coup de Pouce Fioul</span> — Votre logement est éligible à une aide majorée pour le remplacement de votre chaudière fioul.
+            </div>
+          )}
+          {mprAccompagne && (
+            <div className="mx-auto mt-4 max-w-xs rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-left text-sm text-blue-800">
+              <span className="font-semibold">Mon Accompagnateur Rénov&apos;</span> — Votre projet nécessite un accompagnateur agréé. Nous en avons dans votre secteur.
+            </div>
           )}
 
           <div className="mx-auto mt-6 max-w-xs">

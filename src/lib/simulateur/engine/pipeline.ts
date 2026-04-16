@@ -117,6 +117,11 @@ export interface SimulationResult {
 
   /** Message d'erreur utilisateur si exclusion totale (Rose + geste, tous gestes rejetés). */
   exclusion?: string
+
+  /** Lead fioul = high priority (remplacement chaudière fioul, valeur 5x). */
+  leadPriority: 'high' | 'normal'
+  /** Parcours accompagné avec MPR > 0 → nécessite un Mon Accompagnateur Rénov'. */
+  necessiteMAR: boolean
 }
 
 export function runSimulation(input: SimulationInput): SimulationResult {
@@ -178,6 +183,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       baremeIds,
       formuleDebug: debug,
       exclusion,
+      leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
+      necessiteMAR: projet.parcours === 'accompagne',
     }
   }
 
@@ -502,5 +509,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     baremeIds,
     formuleDebug: debug,
     exclusion: ec.exclusionMessage,
+    leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
+    necessiteMAR: projet.parcours === 'accompagne' && mprFinal > 0,
   }
 }

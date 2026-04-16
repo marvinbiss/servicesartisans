@@ -248,6 +248,10 @@ export async function POST(req: NextRequest) {
     inputs_hash: inputsHash,
     consent_text_sha256: CONSENT_TEXT_SHA256,
 
+    // Scoring & routing
+    lead_priority: result.leadPriority,
+    necessite_mar: result.necessiteMAR,
+
     // Audit
     ip_hash: ipHash,
     user_agent: userAgent,
@@ -349,6 +353,8 @@ export async function POST(req: NextRequest) {
         codePostal: situation.codePostal,
         surface: situation.surface,
         rfr: situation.rfr,
+        leadPriority: result.leadPriority,
+        necessiteMAR: result.necessiteMAR,
       } as never,
     },
   })

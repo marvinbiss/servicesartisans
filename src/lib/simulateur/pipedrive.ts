@@ -246,6 +246,18 @@ async function createDeal(
   if (cfg.fields.montantTotal) {
     body[cfg.fields.montantTotal] = computeDealValue(input.estimation)
   }
+  // Tags pour scoring et routing
+  const tags: string[] = []
+  if ((input.estimation as Record<string, unknown>).leadPriority === 'high') {
+    tags.push('FIOUL-PRIORITAIRE')
+  }
+  if ((input.estimation as Record<string, unknown>).necessiteMAR === true) {
+    tags.push('NECESSITE-MAR')
+  }
+  if (tags.length > 0) {
+    body.label = tags.join(', ')
+  }
+
   const res = await pdFetch<{ id: number }>(cfg, '/deals', {
     method: 'POST',
     body: JSON.stringify(body),
@@ -296,6 +308,13 @@ function buildNoteHtml(input: SimulateurLeadInput): string {
     `<b>CEE:</b> ${fmt(est.ceeFourchetteBas)} — ${fmt(est.ceeFourchetteHaut)}`,
     `<b>Coup de Pouce:</b> ${fmt(est.coupPouceEstimation)}`,
     `<b>Reste à charge:</b> ${fmt(est.resteAChargeBas)} — ${fmt(est.resteAChargeHaut)}`,
+    `<br/>`,
+    ...((est as Record<string, unknown>).leadPriority === 'high'
+      ? [`<b>🔴 LEAD PRIORITAIRE — Fioul</b> (valeur 5x, à traiter en priorité)`]
+      : []),
+    ...((est as Record<string, unknown>).necessiteMAR === true
+      ? [`<b>🏠 Nécessite MAR</b> — Router vers Mon Accompagnateur Rénov' partenaire`]
+      : []),
     `<br/>`,
     `<b>Barèmes consultés:</b> ${baremesList}`,
   ].join('<br/>')
