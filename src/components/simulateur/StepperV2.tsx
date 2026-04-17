@@ -16,6 +16,8 @@ import ScreenRevenus from './screens/ScreenRevenus'
 import ScreenObjectif from './screens/ScreenObjectif'
 import ScreenDpe from './screens/ScreenDpe'
 import ScreenEquipement from './screens/ScreenEquipement'
+import ScreenUrgence from './screens/ScreenUrgence'
+import ScreenAgeChaudiere from './screens/ScreenAgeChaudiere'
 import ScreenTeaser from './screens/ScreenTeaser'
 import ScreenContact from './screens/ScreenContact'
 
@@ -28,8 +30,10 @@ type ScreenId =
   | 'foyer'
   | 'revenus'
   | 'objectif'
+  | 'urgence'
   | 'dpe'
   | 'equipement'
+  | 'age_chaudiere'
   | 'teaser'
   | 'contact'
 
@@ -47,6 +51,8 @@ interface State {
   objectif?: Objectif
   sautsDpe?: SautsDpe
   equipementActuel?: 'gaz' | 'fioul' | 'elec' | 'autre'
+  urgenceProjet?: 'urgent_panne' | 'sous_3_mois' | 'sous_6_mois' | 'je_me_renseigne'
+  ageChaudiere?: 'moins_5_ans' | '5_10_ans' | '10_15_ans' | 'plus_15_ans' | 'en_panne'
   prenom: string
   telephone: string
   email: string
@@ -90,44 +96,53 @@ const SCREEN_ORDER: ScreenId[] = [
   'foyer',
   'revenus',
   'objectif',
+  'urgence',
   'dpe',
   'equipement',
+  'age_chaudiere',
   'teaser',
   'contact',
 ]
 
 /**
  * Navigation conditionnelle :
- * - 'equipement' : seulement si objectif === 'chauffage'
+ * - 'urgence' : toujours montré après objectif
  * - 'dpe' : seulement si objectif === 'renovation_complete' (parcours accompagné)
+ * - 'equipement' : seulement si objectif === 'chauffage'
+ * - 'age_chaudiere' : seulement si objectif === 'chauffage' (après equipement)
  */
 function nextScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
-  if (state.screen === 'objectif') {
-    if (state.objectif === 'chauffage') return 'equipement' // skip dpe
-    if (state.objectif === 'renovation_complete') return 'dpe' // show dpe
-    return 'teaser' // isolation: skip dpe + equipement
+  if (state.screen === 'objectif') return 'urgence'
+  if (state.screen === 'urgence') {
+    if (state.objectif === 'chauffage') return 'equipement'
+    if (state.objectif === 'renovation_complete') return 'dpe'
+    return 'teaser'
   }
-  if (state.screen === 'dpe') return 'teaser' // after dpe, go to teaser
-  if (state.screen === 'equipement') return 'teaser'
+  if (state.screen === 'dpe') return 'teaser'
+  if (state.screen === 'equipement') return 'age_chaudiere'
+  if (state.screen === 'age_chaudiere') return 'teaser'
   return SCREEN_ORDER[Math.min(idx + 1, SCREEN_ORDER.length - 1)]
 }
 
 function prevScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
   if (state.screen === 'teaser') {
-    if (state.objectif === 'chauffage') return 'equipement'
+    if (state.objectif === 'chauffage') return 'age_chaudiere'
     if (state.objectif === 'renovation_complete') return 'dpe'
-    return 'objectif' // isolation
+    return 'urgence'
   }
-  if (state.screen === 'dpe') return 'objectif'
-  if (state.screen === 'equipement') return 'objectif'
+  if (state.screen === 'age_chaudiere') return 'equipement'
+  if (state.screen === 'dpe') return 'urgence'
+  if (state.screen === 'equipement') return 'urgence'
+  if (state.screen === 'urgence') return 'objectif'
   return SCREEN_ORDER[Math.max(idx - 1, 0)]
 }
 
 function screenIndex(screen: ScreenId, objectif?: Objectif): { current: number; total: number } {
   const order = SCREEN_ORDER.filter((s) => {
     if (s === 'equipement') return objectif === 'chauffage'
+    if (s === 'age_chaudiere') return objectif === 'chauffage'
     if (s === 'dpe') return objectif === 'renovation_complete'
     return true
   })
@@ -284,6 +299,7 @@ export default function StepperV2() {
     if (!estimatePayload) return
     dispatch({ type: 'SET_SUBMITTING', value: true })
 
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
     const payload = {
       ...estimatePayload,
       coordonnees: {
@@ -294,6 +310,18 @@ export default function StepperV2() {
         consentRgpd: state.consentRgpd,
         consentMajorite: state.consentMajorite,
         consentDemarchage: state.consentDemarchage,
+      },
+      attribution: {
+        utm_source: params?.get('utm_source') || undefined,
+        utm_medium: params?.get('utm_medium') || undefined,
+        utm_campaign: params?.get('utm_campaign') || undefined,
+        utm_term: params?.get('utm_term') || undefined,
+        utm_content: params?.get('utm_content') || undefined,
+        referrer: typeof document !== 'undefined' ? document.referrer?.slice(0, 500) || undefined : undefined,
+      },
+      scoring: {
+        urgenceProjet: state.urgenceProjet || undefined,
+        ageChaudiere: state.ageChaudiere || undefined,
       },
     }
 
@@ -430,10 +458,22 @@ export default function StepperV2() {
             onSelect={(v) => autoAdvance('sautsDpe', v)}
           />
         )}
+        {state.screen === 'urgence' && (
+          <ScreenUrgence
+            value={state.urgenceProjet}
+            onSelect={(v) => autoAdvance('urgenceProjet', v)}
+          />
+        )}
         {state.screen === 'equipement' && (
           <ScreenEquipement
             value={state.equipementActuel}
             onSelect={(v) => autoAdvance('equipementActuel', v)}
+          />
+        )}
+        {state.screen === 'age_chaudiere' && (
+          <ScreenAgeChaudiere
+            value={state.ageChaudiere}
+            onSelect={(v) => autoAdvance('ageChaudiere', v)}
           />
         )}
         {state.screen === 'teaser' && estimatePayload && (

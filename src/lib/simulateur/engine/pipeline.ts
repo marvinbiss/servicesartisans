@@ -8,6 +8,7 @@
  */
 
 import type {
+  AgeChaudiere,
   BaremeId,
   Budget,
   CategorieAnah,
@@ -15,6 +16,7 @@ import type {
   GesteId,
   Projet,
   Situation,
+  UrgenceProjet,
 } from '../types'
 import { asBaremeId } from '../types'
 import { classifierCategorieAnah } from './classifier'
@@ -46,6 +48,7 @@ import type { MprCoproResult, DenormandieResult, TaxeFonciereResult } from './ca
 import { applyNonCumul, type AideCalculee, type UncertainPair } from './non-cumul'
 import { applyEcretement } from './ecretement'
 import { calcResteACharge } from './reste-a-charge'
+import { computeLeadScore, type LeadSegment } from './lead-scoring'
 
 // ---------- Input / Output ----------
 // (BUDGET_GESTE_FALLBACK réservé pour refactor futur — non utilisé)
@@ -73,6 +76,9 @@ export interface SimulationInput {
     /** Taux d'exonération taxe foncière (50% ou 100%, selon commune). */
     taxeFonciereTaux?: 0.5 | 1.0
   }
+  /** Signaux scoring Phase 2 (optionnels, envoyés par le stepper). */
+  urgenceProjet?: UrgenceProjet | null
+  ageChaudiere?: AgeChaudiere | null
 }
 
 export interface SimulationResult {
@@ -147,6 +153,11 @@ export interface SimulationResult {
   leadPriority: 'high' | 'normal'
   /** Parcours accompagné avec MPR > 0 → nécessite un Mon Accompagnateur Rénov'. */
   necessiteMAR: boolean
+
+  /** Score commercial /100 — calculé par lead-scoring.ts. */
+  leadScore: number
+  /** Segment commercial : hot (>=70) / warm (40-69) / cold (<40). */
+  leadSegment: LeadSegment
 }
 
 export function runSimulation(input: SimulationInput): SimulationResult {
@@ -215,6 +226,16 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
       necessiteMAR: false, // no aids → no MAR needed
+      ...computeLeadScore({
+        equipementActuel: projet.equipementActuel,
+        categorieAnah: categorie,
+        parcours: projet.parcours,
+        totalAidesHaut: 0,
+        confidenceLevel: 'high',
+        uncertaintyDiscount: 0,
+        urgenceProjet: input.urgenceProjet,
+        ageChaudiere: input.ageChaudiere,
+      }),
     }
   }
 
@@ -741,5 +762,15 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     exclusion: ec.exclusionMessage,
     leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
     necessiteMAR: projet.parcours === 'accompagne' && mprFinal > 0,
+    ...computeLeadScore({
+      equipementActuel: projet.equipementActuel,
+      categorieAnah: categorie,
+      parcours: projet.parcours,
+      totalAidesHaut: totalHaut,
+      confidenceLevel,
+      uncertaintyDiscount,
+      urgenceProjet: input.urgenceProjet,
+      ageChaudiere: input.ageChaudiere,
+    }),
   }
 }

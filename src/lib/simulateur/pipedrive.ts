@@ -74,7 +74,15 @@ export interface SimulateurLeadInput {
     | 'codePostal'
     | 'surface'
     | 'rfr'
-  >
+  > & {
+    leadPriority?: 'high' | 'normal'
+    necessiteMAR?: boolean
+    leadScore?: number
+    leadSegment?: 'hot' | 'warm' | 'cold'
+    confidenceLevel?: 'high' | 'medium' | 'low'
+    urgenceProjet?: string | null
+    ageChaudiere?: string | null
+  }
 }
 
 export interface SimulateurSyncResult {
@@ -95,6 +103,9 @@ interface SimConfig {
     baremeVersion?: string
     requestId?: string
     montantTotal?: string
+    leadScore?: string
+    leadSegment?: string
+    confidenceLevel?: string
   }
 }
 
@@ -118,6 +129,9 @@ function getSimConfig(): SimConfig | null {
       baremeVersion: process.env.PIPEDRIVE_FIELD_BAREME_VERSION,
       requestId: process.env.PIPEDRIVE_FIELD_REQUEST_ID,
       montantTotal: process.env.PIPEDRIVE_FIELD_MONTANT_TOTAL,
+      leadScore: process.env.PIPEDRIVE_FIELD_LEAD_SCORE,
+      leadSegment: process.env.PIPEDRIVE_FIELD_LEAD_SEGMENT,
+      confidenceLevel: process.env.PIPEDRIVE_FIELD_CONFIDENCE_LEVEL,
     },
   }
 }
@@ -246,13 +260,26 @@ async function createDeal(
   if (cfg.fields.montantTotal) {
     body[cfg.fields.montantTotal] = computeDealValue(input.estimation)
   }
+  if (cfg.fields.leadScore && input.estimation.leadScore != null) {
+    body[cfg.fields.leadScore] = input.estimation.leadScore
+  }
+  if (cfg.fields.leadSegment && input.estimation.leadSegment) {
+    body[cfg.fields.leadSegment] = input.estimation.leadSegment.toUpperCase()
+  }
+  if (cfg.fields.confidenceLevel && input.estimation.confidenceLevel) {
+    body[cfg.fields.confidenceLevel] = input.estimation.confidenceLevel
+  }
   // Tags pour scoring et routing
   const tags: string[] = []
-  if ((input.estimation as Record<string, unknown>).leadPriority === 'high') {
+  if (input.estimation.leadPriority === 'high') {
     tags.push('FIOUL-PRIORITAIRE')
   }
-  if ((input.estimation as Record<string, unknown>).necessiteMAR === true) {
+  if (input.estimation.necessiteMAR === true) {
     tags.push('NECESSITE-MAR')
+  }
+  const segment = input.estimation.leadSegment
+  if (segment) {
+    tags.push(segment.toUpperCase())
   }
   if (tags.length > 0) {
     body.label = tags.join(', ')
@@ -309,10 +336,14 @@ function buildNoteHtml(input: SimulateurLeadInput): string {
     `<b>Coup de Pouce:</b> ${fmt(est.coupPouceEstimation)}`,
     `<b>Reste à charge:</b> ${fmt(est.resteAChargeBas)} — ${fmt(est.resteAChargeHaut)}`,
     `<br/>`,
-    ...((est as Record<string, unknown>).leadPriority === 'high'
+    `<b>Score commercial:</b> ${est.leadScore ?? '—'}/100 — Segment <b>${(est.leadSegment ?? '—').toUpperCase()}</b>`,
+    `<b>Confiance estimation:</b> ${escapeHtml(est.confidenceLevel ?? '—')}`,
+    ...(est.urgenceProjet ? [`<b>Urgence projet:</b> ${escapeHtml(est.urgenceProjet)}`] : []),
+    ...(est.ageChaudiere ? [`<b>Âge chaudière:</b> ${escapeHtml(est.ageChaudiere)}`] : []),
+    ...(est.leadPriority === 'high'
       ? [`<b>🔴 LEAD PRIORITAIRE — Fioul</b> (valeur 5x, à traiter en priorité)`]
       : []),
-    ...((est as Record<string, unknown>).necessiteMAR === true
+    ...(est.necessiteMAR === true
       ? [`<b>🏠 Nécessite MAR</b> — Router vers Mon Accompagnateur Rénov' partenaire`]
       : []),
     `<br/>`,

@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { situation: situationInput, projet, budget, coordonnees } = parsed.data
+  const { situation: situationInput, projet, budget, coordonnees, attribution, scoring } = parsed.data
 
   // Double-check RGPD (schéma impose déjà literal true, mais défense en profondeur)
   if (coordonnees.consentRgpd !== true) {
@@ -124,7 +124,13 @@ export async function POST(req: NextRequest) {
 
   let result
   try {
-    result = runSimulation({ situation, projet, budget })
+    result = runSimulation({
+      situation,
+      projet,
+      budget,
+      urgenceProjet: scoring?.urgenceProjet,
+      ageChaudiere: scoring?.ageChaudiere,
+    })
   } catch (err) {
     logger.error('simulateur/submit runSimulation failed', {
       component: 'api/simulateur/submit',
@@ -248,9 +254,27 @@ export async function POST(req: NextRequest) {
     inputs_hash: inputsHash,
     consent_text_sha256: CONSENT_TEXT_SHA256,
 
+    // Scoring Phase 2 — signaux UI
+    urgence_projet: scoring?.urgenceProjet || null,
+    age_chaudiere: scoring?.ageChaudiere || null,
+
     // Scoring & routing
     lead_priority: result.leadPriority,
     necessite_mar: result.necessiteMAR,
+    lead_score: result.leadScore,
+    lead_segment: result.leadSegment,
+
+    // Confiance (calculé par pipeline, maintenant persisté)
+    confidence_level: result.confidenceLevel,
+    confidence_breakdown: result.confidenceBreakdown as unknown as Record<string, unknown>,
+
+    // Attribution marketing (UTM + referrer)
+    utm_source: attribution?.utm_source || null,
+    utm_medium: attribution?.utm_medium || null,
+    utm_campaign: attribution?.utm_campaign || null,
+    utm_term: attribution?.utm_term || null,
+    utm_content: attribution?.utm_content || null,
+    referrer: (attribution?.referrer ?? req.headers.get('referer'))?.slice(0, 500) || null,
 
     // Audit
     ip_hash: ipHash,
@@ -355,6 +379,11 @@ export async function POST(req: NextRequest) {
         rfr: situation.rfr,
         leadPriority: result.leadPriority,
         necessiteMAR: result.necessiteMAR,
+        leadScore: result.leadScore,
+        leadSegment: result.leadSegment,
+        confidenceLevel: result.confidenceLevel,
+        urgenceProjet: scoring?.urgenceProjet || null,
+        ageChaudiere: scoring?.ageChaudiere || null,
       } as never,
     },
   })

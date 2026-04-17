@@ -17,6 +17,10 @@ export type Anciennete = 'moins_2_ans' | '2_a_15_ans' | 'plus_15_ans'
 
 export type EquipementActuel = 'gaz' | 'fioul' | 'charbon' | 'elec' | 'bois' | 'autre'
 
+export type UrgenceProjet = 'urgent_panne' | 'sous_3_mois' | 'sous_6_mois' | 'je_me_renseigne'
+
+export type AgeChaudiere = 'moins_5_ans' | '5_10_ans' | '10_15_ans' | 'plus_15_ans' | 'en_panne'
+
 export type AuditStatus = 'oui' | 'non' | 'prevu'
 
 export type SautsDpe = 2 | 3 | 4

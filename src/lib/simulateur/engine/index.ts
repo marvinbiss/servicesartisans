@@ -13,6 +13,7 @@ export * from './calc-complementaires'
 export * from './non-cumul'
 export * from './ecretement'
 export * from './reste-a-charge'
+export * from './lead-scoring'
 export * from './pipeline'
 
 // Re-export convenience types for CEE ampleur + MAR + prêts
