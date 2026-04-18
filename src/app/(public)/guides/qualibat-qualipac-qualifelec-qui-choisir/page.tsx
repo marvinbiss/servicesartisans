@@ -258,7 +258,7 @@ export default function QualificationsRgePage() {
         {/* Tableau comparatif rapide */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Tableau comparatif rapide
+            Qualibat, QualiPAC ou Qualifelec&nbsp;: quel comparatif rapide&nbsp;?
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 overflow-x-auto">
             <table className="w-full text-sm min-w-[700px]">
@@ -320,7 +320,7 @@ export default function QualificationsRgePage() {
         {/* Détail par qualification */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            Le détail de chaque qualification
+            Quel est le détail de chaque qualification RGE (Qualibat, QualiPAC, Qualifelec)&nbsp;?
           </h2>
           <div className="space-y-6">
             {qualifs.map((q) => {
@@ -389,7 +389,7 @@ export default function QualificationsRgePage() {
           <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading flex items-center gap-3">
               <Search className="w-8 h-8" />
-              Comment vérifier la qualification d&apos;un artisan
+              Comment vérifier la qualification RGE d&apos;un artisan&nbsp;?
             </h2>
             <p className="text-green-50 leading-relaxed mb-4">
               {

@@ -134,6 +134,91 @@ async function getLatestProviderDate(
 }
 
 /**
+ * Compute the most recent modification date nationally for a given service.
+ *
+ * Point lookup used by national-level pSEO pages (e.g. /tarifs/[service],
+ * /services/[service]) that don't have a department dimension.
+ *
+ * Sources queried in parallel:
+ * 1. MAX(providers.updated_at) for this specialty (active only)
+ * 2. MAX(reviews.created_at) from review_stats_by_service materialized view, fallback to direct
+ *
+ * Fail-open : returns null if no data or on any error.
+ */
+export async function getDynamicLastModifiedByService(serviceSlug: string): Promise<string | null> {
+  if (IS_BUILD) return null
+
+  const cacheKey = `dynamic-lastmod-service:${serviceSlug}`
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      const supabase = safeAdminClient()
+      if (!supabase) return null
+
+      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+      if (!specialties || specialties.length === 0) return null
+
+      const [providerDate, reviewDate] = await Promise.all([
+        getLatestProviderDateNational(supabase, specialties),
+        getLatestReviewDateNational(supabase, specialties),
+      ])
+
+      let maxDate: Date | null = null
+      for (const d of [providerDate, reviewDate]) {
+        if (!d) continue
+        const parsed = new Date(d)
+        if (Number.isNaN(parsed.getTime())) continue
+        if (!maxDate || parsed > maxDate) maxDate = parsed
+      }
+      return maxDate ? maxDate.toISOString() : null
+    },
+    CACHE_TTL.stats
+  )
+}
+
+async function getLatestProviderDateNational(
+  supabase: ReturnType<typeof safeAdminClient>,
+  specialties: string[]
+): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from('providers')
+      .select('updated_at')
+      .in('specialty', specialties)
+      .eq('is_active', true)
+      .not('updated_at', 'is', null)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .single()
+    if (error || !data) return null
+    return data.updated_at as string | null
+  } catch {
+    return null
+  }
+}
+
+async function getLatestReviewDateNational(
+  supabase: ReturnType<typeof safeAdminClient>,
+  specialties: string[]
+): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from('review_stats_by_dept')
+      .select('latest_review_at')
+      .in('specialty_slug', specialties)
+      .not('latest_review_at', 'is', null)
+      .order('latest_review_at', { ascending: false })
+      .limit(1)
+      .single()
+    if (error || !data) return null
+    return data.latest_review_at as string | null
+  } catch {
+    return null
+  }
+}
+
+/**
  * Latest devis_request created_at for this service×department.
  * Uses postal_code prefix to match the department.
  */

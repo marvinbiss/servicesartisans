@@ -430,7 +430,7 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="flex items-center gap-3 mb-5">
             <Wallet className="w-7 h-7 text-emerald-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
-              Les aides pour financer l'audit énergétique
+              Quelles aides permettent de financer un audit énergétique en 2026&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-6">
@@ -511,7 +511,7 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="flex items-center gap-3 mb-5">
             <Scale className="w-7 h-7 text-emerald-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
-              Est-ce rentable&nbsp;? Analyse honnête
+              Un audit énergétique est-il rentable en 2026&nbsp;? Analyse honnête
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
@@ -576,7 +576,7 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="flex items-center gap-3 mb-5">
             <ClipboardList className="w-7 h-7 text-emerald-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
-              Comment choisir son auditeur&nbsp;?
+              Comment choisir un auditeur énergétique qualifié RGE&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-6">

@@ -45,6 +45,7 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
+import { getDynamicLastModifiedByService } from '@/lib/seo/dynamic-lastmod'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
@@ -255,6 +256,10 @@ export default async function ServicePage({ params }: PageProps) {
     service = { name: staticSvc.name, slug: staticSvc.slug }
   }
 
+  // Real freshness signal (MAX provider.updated_at + latest review nationally).
+  // Fail-open : absence > fausse date.
+  const lastModified = await getDynamicLastModifiedByService(serviceSlug).catch(() => null)
+
   // Always use static cities — faster, no DB latency, consistent 2267 cities
   topCities = getStaticCities()
 
@@ -387,7 +392,11 @@ export default async function ServicePage({ params }: PageProps) {
             {service.description ||
               `Trouvez des ${service.name.toLowerCase()}s qualifiés près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
-          <LastUpdated label="Données artisans mises à jour le" className="text-sand-500 mt-3" />
+          <LastUpdated
+            label="Données artisans mises à jour le"
+            date={lastModified}
+            className="text-sand-500 mt-3"
+          />
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">

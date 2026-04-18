@@ -310,7 +310,7 @@ export default function FraudeRgeVerifierPage() {
               <AlertTriangle className="w-5 h-5 text-amber-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              L’ampleur du problème
+              Quelle est l’ampleur de la fraude RGE en France&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
@@ -340,7 +340,7 @@ export default function FraudeRgeVerifierPage() {
       {/* 5 méthodes de vérification */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-          Les 5 méthodes pour vérifier qu’un artisan est vraiment RGE
+          Comment vérifier qu’un artisan est vraiment RGE&nbsp;? (5 méthodes officielles)
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
           Ces cinq vérifications sont cumulatives&nbsp;: chacune filtre un type d’arnaque différent.
@@ -386,7 +386,7 @@ export default function FraudeRgeVerifierPage() {
               <Flag className="w-5 h-5 text-red-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Les 7 drapeaux rouges à repérer
+              Quels sont les 7 signaux d’alerte d’une fraude RGE&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-8">

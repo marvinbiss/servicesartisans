@@ -1,312 +1,78 @@
-# CLAUDE.md — ServicesArtisans
+# ServicesArtisans
 
-## Projet
-
-Annuaire d'artisans français. Next.js 14 App Router, TypeScript strict, Tailwind CSS, Supabase (auth + DB + storage), déployé sur Vercel.
-
-**Site en français** — les accents sont critiques pour la crédibilité du site.
-
----
+Annuaire d'artisans français. Next.js 14 App Router, TypeScript strict, Tailwind CSS, Supabase (auth + DB + storage), Vercel.
+**Site en français** — les accents sont critiques.
 
 ## Commandes
 
 ```bash
-npm run dev          # Serveur de développement
-npm run build        # Build Next.js (3 749+ pages pré-rendues) — OBLIGATOIRE avant push
+npm run dev          # Dev server
+npm run build        # Build — OBLIGATOIRE avant push
 npm run lint         # ESLint
-npx vitest run       # Tests unitaires (~600 tests, 16 fichiers)
+npx vitest run       # Tests unitaires (~600 tests)
 npm run test         # Tests Playwright (e2e)
 ```
 
-### Avant chaque deploy
+Avant chaque deploy: `npm run build` en local. Jamais de build cassé sur Vercel.
 
-1. **TOUJOURS** lancer `npm run build` en local AVANT de commit/push
-2. Si le build casse → corriger AVANT de push — **jamais de build cassé sur Vercel**
-3. Lancer `npx vitest run` si des fichiers de logique/API ont été modifiés
+## Schema Supabase — CRITIQUE
 
----
+**JAMAIS écrire de requêtes Supabase sans vérifier les colonnes dans `supabase/migrations/`.**
 
-## Architecture
-
-```
-src/
-├── app/
-│   ├── (auth)/           # /connexion, /inscription, /auth/callback
-│   ├── (public)/         # Pages publiques (services, blog, FAQ, contact, carrières)
-│   ├── (private)/        # /espace-artisan, /espace-client, /devis
-│   ├── admin/            # Dashboard admin (/admin/connexion, /admin/(dashboard)/*)
-│   └── api/              # API routes
-│       ├── admin/        # Admin endpoints (claims, providers, users, stats, reports)
-│       ├── artisan/      # Artisan endpoints (claim, provider)
-│       ├── auth/         # Auth endpoints (oauth)
-│       ├── client/       # Client endpoints (profile)
-│       └── ...
-├── components/
-│   ├── admin/            # Composants admin (sidebar, tables, modals)
-│   ├── artisan/          # ArtisanPageClient, ClaimButton, etc.
-│   ├── artisan-dashboard/# Dashboard artisan
-│   ├── chat/             # Messagerie
-│   ├── ui/               # Composants UI réutilisables
-│   ├── home/             # Sections homepage
-│   ├── forms/            # Formulaires
-│   ├── maps/             # Cartes Leaflet
-│   └── ...
-├── lib/
-│   ├── supabase/         # server.ts, admin.ts, middleware.ts
-│   ├── admin-auth.ts     # requirePermission() pour les endpoints admin
-│   ├── logger.ts         # Logger structuré
-│   └── ...
-├── types/                # Types TypeScript (admin.ts, etc.)
-└── test/                 # Setup Vitest
-__tests__/                # Tests unitaires (api/, components/, hooks/, lib/, services/, validations/)
-supabase/migrations/      # 47 fichiers de migration SQL
-```
-
----
-
-## Schema Supabase — Règle CRITIQUE
-
-**JAMAIS écrire de requêtes Supabase sans vérifier que les colonnes/tables existent dans les migrations.**
-
-- Vérifier les colonnes dans `supabase/migrations/` avant tout `.select('col')` ou `.eq('col', val)`
-- TypeScript **NE PEUT PAS** détecter les noms de colonnes incorrects dans les chaînes `.select('col')`
-- Vérifier les FK avant les joins : utiliser `provider:provider_id(id, name)` (nom de colonne), pas `provider:providers(id, name)` (nom de table supposé)
-- Vérifier les `DROP COLUMN` dans les migrations récentes avant de référencer une colonne
+- TypeScript NE PEUT PAS détecter les noms de colonnes incorrects dans `.select('col')`
+- Joins FK: utiliser `provider:provider_id(id, name)` (nom de colonne), pas `provider:providers(id, name)`
+- Vérifier les DROP COLUMN dans les migrations récentes
 
 ### Tables principales
 
-| Table                  | Colonnes clés                                                                                                                                  | Notes                                                                                              |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `profiles`             | id, email, full_name, is_admin, role, user_type, phone_e164, average_rating, review_count                                                      | `user_type` = 'client' ou 'artisan'                                                                |
-| `providers`            | id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_region, user_id, claimed_at, claimed_by | `name` (PAS company_name), colonnes dropped ci-dessous                                             |
-| `provider_claims`      | id, provider_id, user_id, siret_provided, status, rejection_reason, reviewed_by, reviewed_at, created_at                                       | status IN ('pending', 'approved', 'rejected')                                                      |
-| `bookings`             | artisan_id, provider_id, client_id, status, scheduled_date, slot_id                                                                            | `artisan_id` = auth.uid() (FK profiles), `provider_id` = FK providers. Les deux colonnes existent. |
-| `audit_logs`           | user_id → auth.users, action, resource_type, resource_id, old_value, new_value, metadata                                                       | FK vers auth.users (PAS profiles)                                                                  |
-| `user_reports`         | reviewed_by, reviewed_at, resolution                                                                                                           | PAS resolved_by, resolved_at, resolution_notes                                                     |
-| `prospection_contacts` | company_name, ...                                                                                                                              | Distinct de providers.name                                                                         |
+| Table             | Colonnes clés                                                                                                                                  | Notes                                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `profiles`        | id, email, full_name, is_admin, role, user_type, phone_e164, average_rating, review_count                                                      | `user_type` = 'client' ou 'artisan'           |
+| `providers`       | id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_region, user_id, claimed_at, claimed_by | `name` (PAS company_name)                     |
+| `provider_claims` | id, provider_id, user_id, siret_provided, status, rejection_reason                                                                             | status IN ('pending', 'approved', 'rejected') |
+| `bookings`        | artisan_id, provider_id, client_id, status, scheduled_date, slot_id                                                                            | artisan_id = auth.uid() FK profiles           |
+| `audit_logs`      | user_id, action, resource_type, resource_id, old_value, new_value, metadata                                                                    | FK vers auth.users (PAS profiles)             |
 
-### Colonnes SUPPRIMEES de `providers`
+**Colonnes SUPPRIMEES de providers** — ne jamais référencer:
+`is_premium`, `trust_badge`, `trust_score`, `company_name`, `hourly_rate_min`, `hourly_rate_max`, `emergency_available`, `certifications`, `insurance`, `payment_methods`, `languages`, `avatar_url`
 
-Ne jamais référencer : `is_premium`, `trust_badge`, `trust_score`, `company_name`, `hourly_rate_min`, `hourly_rate_max`, `emergency_available`, `certifications`, `insurance`, `payment_methods`, `languages`, `avatar_url`
+## Conventions
 
-### Tables INEXISTANTES
-
-- `subscriptions` — n'existe PAS dans le schema public
-
----
-
-## TypeScript
-
-- **Strict mode** activé : `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
-- Toujours nettoyer les imports inutilisés après chaque refactoring — le build échouera sinon
-- Toujours vérifier les types des props/interfaces des composants existants avant de les utiliser (lire le fichier d'abord)
-- Path alias : `@/*` → `./src/*`
-
----
-
-## Conventions de code
-
-- **Pas d'over-engineering** : solution minimale qui fonctionne
-- **Polices** : Inter (body) + Plus Jakarta Sans (headings) via `next/font/google`
-- **Icônes** : `lucide-react` (v0.294)
-- **Validation** : `zod` pour tous les schemas d'API
-- **State management** : `swr` pour le data fetching
-- **Admin auth** : `requirePermission('resource', 'read'|'write')` de `@/lib/admin-auth`
-- **Admin DB** : `createAdminClient()` de `@/lib/supabase/admin` pour bypass RLS (service_role)
-- **Client DB** : `createClient()` de `@/lib/supabase/server` (respecte RLS)
-- **Logger** : `logger.info/warn/error()` de `@/lib/logger` — ne pas utiliser `console.log` en production
-
----
-
-## Dark Mode — Désactivé
-
-Le site est **light-only**. Le dark mode a été nettoyé le 2026-03-26 :
-
-- `ThemeProvider` et `ThemeToggle` supprimés (étaient du code mort, jamais montés)
-- Variables CSS `.dark {}` supprimées de `globals.css`
-- Classes `dark:*` supprimées de tous les composants publics (search, reviews, home, UI)
-- `darkMode: 'class'` conservé dans `tailwind.config.js` pour empêcher Tailwind d'auto-appliquer les dark: variants via media query
-- `colorScheme: 'light'` dans le viewport du root layout
-- Il reste des `dark:` classes dans `src/components/chat/*` (9 fichiers privés) — inertes, non prioritaires
-- **Ne PAS ajouter de nouvelles classes `dark:*`** dans les composants publics
-
----
+- Path alias: `@/*` → `./src/*`
+- Polices: Inter (body) + Plus Jakarta Sans (headings) via `next/font/google`
+- Icônes: `lucide-react` (v0.294)
+- Validation: `zod` pour tous les schemas d'API
+- Data fetching: `swr`
+- Admin auth: `requirePermission('resource', 'read'|'write')` de `@/lib/admin-auth`
+- Admin DB: `createAdminClient()` de `@/lib/supabase/admin` (bypass RLS)
+- Client DB: `createClient()` de `@/lib/supabase/server` (respecte RLS)
+- Logger: `logger.info/warn/error()` de `@/lib/logger` — pas de `console.log` en prod
+- Dark mode: DESACTIVE. Ne PAS ajouter de classes `dark:*`
 
 ## Auth
 
-- **OAuth Google** activé (Supabase provider)
-- **Facebook** : désactivé (pas fiable, pas utilisé)
-- **Flow OAuth** : `signInWithOAuth()` → callback `/auth/callback` → création profil si premier login → redirect intelligent (`/espace-artisan` ou `/espace-client` selon `user_type`)
-- **Middleware** : protège `/espace-client`, `/espace-artisan` — redirige vers `/connexion` si non connecté, redirige entre espaces selon `user_type`
+OAuth Google (Supabase provider). Flow: `signInWithOAuth()` → `/auth/callback` → profil auto → redirect selon `user_type`.
+Middleware protège `/espace-client`, `/espace-artisan`.
 
----
+## Revendication fiche artisan
 
-## Revendication de fiche artisan
+Page artisan → "Revendiquez cette fiche" → SIRET (14 chiffres) → vérif vs base → `provider_claims` pending → admin approuve/rejette → `providers.user_id` assigné.
 
-Flow complet :
+## Pipedrive CRM — 3 canaux
 
-1. Page artisan publique → bouton "Revendiquez cette fiche" (si non revendiquée)
-2. Artisan entre son SIRET (14 chiffres)
-3. API vérifie le SIRET vs celui en base → si match, crée un `provider_claims` avec status `pending`
-4. Admin valide dans `/admin/revendications` → approuve ou rejette
-5. Si approuvé : `providers.user_id` assigné, `profiles.user_type` → 'artisan'
+| Canal                      | Pipeline                        | `source`                | Mode            |
+| -------------------------- | ------------------------------- | ----------------------- | --------------- |
+| `/api/devis`               | `PIPEDRIVE_PIPELINE_ID`         | `"servicesartisans.fr"` | timeout 4s      |
+| `/api/simulateur/submit`   | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"simulateur-aides"`    | fire-and-forget |
+| `/api/simulateur/callback` | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"callback-simulateur"` | await ~1-2s     |
 
----
+Recherche Person: email d'abord, fallback phone. Retry DLQ: cron 6h, backoff expo, max 5 tentatives.
 
-## Tests
+## HTTP vers prod
 
-- **Framework** : Vitest avec jsdom
-- **Config** : `vitest.config.ts`
-- **Fichiers** : `src/**/*.test.{ts,tsx}` et `__tests__/**/*.test.{ts,tsx}`
-- **Setup** : `src/test/setup.ts`
-- Tests isolés (pas de dépendances Supabase réelles — schemas répliqués localement)
-
----
+Domaine canonical: `servicesartisans.fr` (apex, sans www). Le www → 301 qui casse les POST.
+`/api/revalidate` exige header `Origin: https://servicesartisans.fr`.
 
 ## SEO
 
-Plan de domination SEO complet dans `SEO-DOMINATION-PLAN.md` à la racine du projet.
-
-- Cible : 1.5M+ pages via 47 métiers x 13 680 lieux x 5 intents
-- Lire ce fichier avant tout travail SEO
-
-### Sitemap
-
-Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + news).
-
-| Fichier                                  | Rôle                                                          |
-| ---------------------------------------- | ------------------------------------------------------------- |
-| `src/app/sitemap.ts`                     | Génération des 17 sitemaps statiques via `generateSitemaps()` |
-| `src/app/api/sitemap-index/route.ts`     | Index `/sitemap.xml` (workaround Next.js 14.2)                |
-| `src/app/api/sitemap-providers/route.ts` | Sitemaps providers dynamiques (DB, `maxDuration=60`)          |
-| `src/app/image-sitemap.xml/route.ts`     | Sitemap images Google                                         |
-| `src/app/news-sitemap.xml/route.ts`      | Sitemap Google News (articles < 48h)                          |
-| `src/app/robots.ts`                      | robots.txt dynamique (déclare les 3 sitemaps)                 |
-
-**Constantes clés** (source unique : `src/lib/seo/sitemap-config.ts`, importée par `sitemap.ts` et `sitemap-index/route.ts`) :
-
-- `SITEMAP_CITY_COUNT = 2_267` — full scale : toutes les villes françaises 5K+ hab (~1.4M URLs)
-- `STATIC_BATCH = 10_000` — taille batch pages d'intention
-- `LARGE_BATCH = 25_000` — taille batch service×ville et dept×service
-- `PROVIDER_BATCH_SIZE = 5_000` — taille batch providers
-- `MAX_PROVIDER_SITEMAPS = 20` — cap pour éviter les sitemaps fantômes
-
-**Rewrites** (`next.config.js`) :
-
-- `/sitemap.xml` → `/api/sitemap-index`
-- `/sitemap/providers-:id.xml` → `/api/sitemap-providers?id=:id`
-
-**Stratégie noindex** : Toutes les pages publiques utilisent **fail-open** (`providerCount = 1` par défaut). Si la DB est down ou pendant le build, les pages restent indexées. L'ISR corrige avec la vraie valeur.
-
-**Migration 348** : Index couvrant `idx_providers_sitemap_v2` — sert la requête provider sitemap entièrement depuis l'index (zero heap fetch).
-
-**Stratégie lastmod** (mise à jour 2026-03-22) :
-
-- `STATIC_DATE = '2025-11-01'` — pages statiques/hub dont le contenu ne change pas (honnête)
-- **Pages géo** (villes, départements, régions) — lastmod = `MAX(providers.updated_at)` dans la zone. Si aucun provider → lastmod omis
-- **Pages service hub** (`/services/{slug}`, `/tarifs/{slug}`, `/urgence/{slug}`) — lastmod = dernier provider modifié pour ce service. Fallback `STATIC_DATE`
-- **Pages avis** (`/avis/{slug}`) — lastmod = date du dernier avis publié pour ce service
-- **Pages dept×service, region×service, baromètre** — lastmod = dernier provider modifié dans la zone×service
-- **Pages pSEO service×ville** (services×ville, devis×ville, urgence×ville, tarifs×ville) — lastmod = dernier provider modifié dans le département×service (via `byDeptServiceSlug` dérivé de `byDeptService`). Si aucun → lastmod omis (honnête)
-- **Pages composition statique** (problemes×ville) — pas de lastmod (composition template, pas de vrai changement)
-- **Requêtes DB** centralisées dans `src/lib/seo/lastmod-queries.ts` — 7 requêtes batch en parallèle, lazy-loaded une seule fois
-- **Fail-safe** : si Supabase indisponible au build → toutes les maps vides → lastmod omis (jamais de faux lastmod)
-
-### IndexNow
-
-- Clé : via `INDEXNOW_API_KEY` env var, fallback `d438ef72ba5465680fecf42737f316b4` (fichier de vérification dans `/public/`)
-- `POST /api/indexnow` — soumission d'URLs à Bing/Yandex
-- Cron quotidien `/api/cron/indexnow-submit` — soumet ~2500 URLs/jour avec rotation sur 3 jours (5 intents × 30 villes)
-  - Pages prioritaires (homepage, /services, /blog, /tarifs) — toujours
-  - 46 services hub (/services/{slug} + /tarifs/{slug}) — rotation 1/3 par jour
-  - Service × 10 villes top (/services/{slug}/{city}) — rotation 1/3 par jour
-  - Devis pSEO (/devis/{slug}/{city}) × 30 villes — rotation 1/3 par jour
-  - Tarifs pSEO (/tarifs/{slug}/{city}) × 30 villes — rotation 1/3 par jour
-  - Urgence pSEO (/urgence/{slug}/{city}) × 30 villes — rotation 1/3 par jour
-  - Avis pSEO (/avis/{slug}/{city}) × 10 villes top — rotation 1/3 par jour
-  - Articles prix (blog/prix-\*) — rotation quotidienne
-  - Articles récents (<48h) — toujours
-  - Guides — dimanche uniquement
-  - Providers hub pages — dynamique (nouveaux providers dernières 24h)
-  - Warning log si le nombre d'URLs dépasse MAX_URLS_PER_DAY (truncation visible dans Vercel logs)
-
-### Monitoring
-
-- Cron quotidien `/api/cron/sitemap-health` — vérifie les 39 sitemaps (HTTP 200 + XML valide)
-- Logs structurés visibles dans Vercel → onglet Logs
-
-### Règles SEO critiques
-
-- **Jamais** mettre une page noindex dans le sitemap (contradiction)
-- **Jamais** de canonical conditionnel — toujours self-referencing
-- **Toujours** `escapeXml()` sur les données dynamiques dans les sitemaps XML
-- **Toujours** `stale-while-revalidate=86400` sur les cache headers des sitemaps
-- **Hub pages géo** (villes, départements, régions) : **toujours indexées** — contenu riche même avec 0 providers
-- Pages avec noindex intentionnel : `/accessibilite`, `/carrieres`, `/cgv`, `/confidentialite`, `/mentions-legales`, `/partenaires`, `/presse`, `/mes-favoris`, `/plan-du-site`
-
----
-
-## Environnement
-
-Variables requises (voir `.env.example`) :
-
-- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ADMIN_EMAILS` (liste séparée par virgules)
-- `CRON_SECRET` (authentification des crons Vercel, dont sitemap-health et indexnow-submit)
-- Variables Stripe, Resend, Twilio, etc. selon les features
-
----
-
-## Appels HTTP vers prod
-
-- **Domaine canonical** : `servicesartisans.fr` (apex, sans `www`). `www.servicesartisans.fr` renvoie un 301 Vercel qui casse les POST : `curl -L` sur un 301 convertit le POST en GET et perd le body → 400 « Données invalides ». **Toujours taper l'apex directement** pour les endpoints API (`/api/revalidate`, `/api/indexnow`, etc.).
-- **CSRF** : `/api/revalidate` exige un header `Origin` (sinon 403 « En-tête Origin requis »). Ajouter `-H "Origin: https://servicesartisans.fr"` sur les curls directs.
-
----
-
-## Pipedrive CRM — 3 canaux (mise à jour 2026-04-15)
-
-3 intégrations partagent `PIPEDRIVE_API_TOKEN` + `PIPEDRIVE_COMPANY_DOMAIN` mais s'appuient sur **2 pipelines distincts** et se distinguent par le champ custom `source`.
-
-| Canal                      | Pipeline env var                | `source` (via `PIPEDRIVE_FIELD_SOURCE`) | Mode exécution       | DLQ                             |
-| -------------------------- | ------------------------------- | --------------------------------------- | -------------------- | ------------------------------- |
-| `/api/devis`               | `PIPEDRIVE_PIPELINE_ID`         | `"servicesartisans.fr"`                 | timeout race 4s      | `devis_pipedrive_failures`      |
-| `/api/simulateur/submit`   | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"simulateur-aides"`                    | fire-and-forget      | `simulateur_pipedrive_failures` |
-| `/api/simulateur/callback` | `PIPEDRIVE_PIPELINE_SIMULATEUR` | `"callback-simulateur"`                 | await inline (~1-2s) | `simulateur_pipedrive_failures` |
-
-### Règles Pipedrive
-
-- **Recherche Person** : email d'abord, fallback phone. Évite les doublons cross-canaux (user qui passe par devis puis simulateur avec email différent).
-- **Custom fields opt-in** : `PIPEDRIVE_FIELD_SOURCE`, `PIPEDRIVE_FIELD_POSTAL_CODE` (partagés par les 3 canaux), `PIPEDRIVE_FIELD_SERVICE/URGENCY/CITY` (devis uniquement).
-- **Filtrage Pipedrive** : utiliser le custom field `source` pour distinguer les canaux dans les vues/rapports (pas le titre du Deal, pas le pipeline seul).
-- **Retry DLQ** : cron toutes les 6h, backoff expo capé à 24h, max 5 tentatives.
-
-### Fichiers
-
-- `src/lib/integrations/pipedrive.ts` — devis
-- `src/lib/simulateur/pipedrive.ts` — simulateur submit
-- `src/lib/simulateur/callback-pipedrive.ts` — simulateur callback
-
----
-
-## Skill routing
-
-When the user's request matches an available skill, ALWAYS invoke it using the Skill
-tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
-The skill has specialized workflows that produce better results than ad-hoc answers.
-
-Key routing rules:
-
-- Product ideas, "is this worth building", brainstorming → invoke office-hours
-- Bugs, errors, "why is this broken", 500 errors → invoke investigate
-- Ship, deploy, push, create PR → invoke ship
-- QA, test the site, find bugs → invoke qa
-- Code review, check my diff → invoke review
-- Update docs after shipping → invoke document-release
-- Weekly retro → invoke retro
-- Design system, brand → invoke design-consultation
-- Visual audit, design polish → invoke design-review
-- Architecture review → invoke plan-eng-review
-- Save progress, checkpoint, resume → invoke checkpoint
-- Code quality, health check → invoke health
+Utiliser `/sa-seo` pour la référence complète (sitemap, IndexNow, lastmod, noindex).

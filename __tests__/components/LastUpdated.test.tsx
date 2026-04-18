@@ -1,7 +1,9 @@
 /**
  * Tests for LastUpdated component.
  *
- * Focus : comportement fail-open du parsing de date + format français.
+ * Contrat fail-closed : le composant NE DOIT JAMAIS inventer une date de
+ * fraîcheur. Si la date est absente/invalide, il ne rend rien.
+ * Source : developers.google.com/search/docs/fundamentals/creating-helpful-content
  */
 
 import { describe, it, expect } from 'vitest'
@@ -14,9 +16,7 @@ describe('LastUpdated', () => {
   it('formats an ISO string in French', () => {
     render(<LastUpdated label="Données vérifiées le" date="2026-04-10" />)
     expect(screen.getByText(/Données vérifiées le/)).toBeInTheDocument()
-    // Date affichée dans la langue FR hardcodée (jour mois année).
     expect(screen.getByText(/10 avril 2026/)).toBeInTheDocument()
-    // L'attribut datetime utilise la forme ISO YYYY-MM-DD
     const timeEl = screen.getByText(/10 avril 2026/)
     expect(timeEl.tagName.toLowerCase()).toBe('time')
     expect(timeEl.getAttribute('datetime')).toBe('2026-04-10')
@@ -28,19 +28,22 @@ describe('LastUpdated', () => {
     expect(screen.getByText(/15 janvier 2026/)).toBeInTheDocument()
   })
 
-  it('falls back to current date when `date` prop is null', () => {
-    render(<LastUpdated label="MAJ" date={null} />)
-    // Ne doit jamais afficher "Invalid Date" — contrat fail-open strict.
-    expect(screen.queryByText(/Invalid Date/)).not.toBeInTheDocument()
-    // L'année courante doit apparaître (ou future via mocks de temps).
-    const yearNow = new Date().getFullYear()
-    expect(screen.getByText(new RegExp(String(yearNow)))).toBeInTheDocument()
+  it('renders nothing when `date` prop is null', () => {
+    const { container } = render(<LastUpdated label="MAJ" date={null} />)
+    expect(container).toBeEmptyDOMElement()
+    expect(screen.queryByText(/MAJ/)).not.toBeInTheDocument()
   })
 
-  it('falls back gracefully on an unparseable string', () => {
-    render(<LastUpdated label="MAJ" date="not-a-date" />)
+  it('renders nothing when `date` prop is undefined', () => {
+    const { container } = render(<LastUpdated label="MAJ" />)
+    expect(container).toBeEmptyDOMElement()
+    expect(screen.queryByText(/MAJ/)).not.toBeInTheDocument()
+  })
+
+  it('renders nothing when `date` prop is unparseable', () => {
+    const { container } = render(<LastUpdated label="MAJ" date="not-a-date" />)
+    expect(container).toBeEmptyDOMElement()
     expect(screen.queryByText(/Invalid Date/)).not.toBeInTheDocument()
-    const yearNow = new Date().getFullYear()
-    expect(screen.getByText(new RegExp(String(yearNow)))).toBeInTheDocument()
+    expect(screen.queryByText(/MAJ/)).not.toBeInTheDocument()
   })
 })

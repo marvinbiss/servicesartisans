@@ -7,11 +7,12 @@ interface LastUpdatedProps {
   className?: string
   /**
    * Date à afficher. Accepte un `Date`, une string ISO ou `null`/`undefined`.
-   * Si absente, invalide ou null → fallback sur la date de rendu serveur
-   * (comportement historique).
+   * Si absente, invalide ou null → le composant retourne `null` (ne rend rien).
    *
-   * Fail-open strict : ne jamais afficher "Invalid Date" — on retombe toujours
-   * sur `new Date()` si la valeur est inexploitable.
+   * Fail-closed strict : ne JAMAIS inventer une date de fraîcheur.
+   * Google classe "changer la date des pages pour les faire paraître fraîches"
+   * comme signal search-engine-first (helpful content).
+   * Source : developers.google.com/search/docs/fundamentals/creating-helpful-content
    */
   date?: Date | string | null
 }
@@ -47,15 +48,11 @@ function formatDateFR(date: Date): string {
 }
 
 /**
- * Server component — displays the ISR generation date for freshness signals.
+ * Server component — displays a real freshness date when available, or nothing.
  * Uses <time datetime="..."> for SEO structured data.
  *
- * La date est calculée au moment du rendu serveur (build ou ISR revalidation).
- * Elle ne cause PAS de mismatch d'hydratation car c'est un Server Component pur.
- */
-/**
- * Convertit une entrée hétérogène en Date valide, ou null si impossible.
- * Centralise la logique fail-open pour ne jamais propager une Invalid Date.
+ * Fail-closed : renvoie `null` si la date est absente/invalide. L'absence est
+ * neutre pour Google ; une fausse date est activement trompeuse.
  */
 function toValidDate(input: Date | string | null | undefined): Date | null {
   if (input == null) return null
@@ -69,8 +66,9 @@ export default function LastUpdated({
   className,
   date,
 }: LastUpdatedProps) {
-  // Fail-open : si `date` est invalide ou absente, on retombe sur `new Date()`.
-  const resolved = toValidDate(date) ?? new Date()
+  const resolved = toValidDate(date)
+  if (!resolved) return null
+
   const formatted = formatDateFR(resolved)
   const iso = resolved.toISOString().split('T')[0]
 

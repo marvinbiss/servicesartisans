@@ -294,13 +294,16 @@ export default function MandataireVsDirectPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-            Les 3 rôles du circuit CEE
+            Qui sont les 3 acteurs du dispositif CEE&nbsp;: obligé, délégataire, mandataire&nbsp;?
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
-            Trois acteurs, trois responsabilités réglementaires très différentes. Les définitions
-            ci-dessous s’appuient sur les articles L221-1 à L221-12 et R221-1 à R221-27 du code de
-            l’énergie, ainsi que sur l’arrêté du 22 décembre 2014 modifié qui définit les opérations
-            standardisées.
+            Le dispositif des Certificats d’Économies d’Énergie (CEE) fait intervenir trois acteurs
+            aux responsabilités réglementaires très distinctes&nbsp;: les obligés (vendeurs
+            d’énergie soumis à quota), les délégataires (sociétés agréées qui dépôsent les dossiers
+            au PNCEE pour le compte des obligés) et les mandataires (intermédiaires mandatés par un
+            délégataire pour collecter les dossiers en amont). Les définitions ci-dessous s’appuient
+            sur les articles L221-1 à L221-12 et R221-1 à R221-27 du code de l’énergie, ainsi que
+            sur l’arrêté du 22 décembre 2014 modifié qui définit les opérations standardisées.
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -380,15 +383,17 @@ export default function MandataireVsDirectPage() {
             <Users className="w-5 h-5 text-primary-600" />
           </div>
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Quel impact pour le particulier&nbsp;?
+            Quel impact le choix d’un mandataire ou d’un délégataire CEE a-t-il pour un
+            particulier&nbsp;?
           </h2>
         </div>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          En pratique, le particulier qui fait isoler ses combles ou remplacer sa chaudière ne voit
-          pas de différence fondamentale selon le type d’acteur qu’il a en face de lui. Les barèmes
-          forfaitaires des opérations standardisées sont fixés par arrêté et publiés au Journal
-          officiel&nbsp;: le gain énergétique calculé (en kWh cumac) est le même quel que soit le
-          circuit emprunté.
+          Pour un particulier qui engage des travaux d’économies d’énergie éligibles au dispositif
+          CEE (isolation, chaudière, pompe à chaleur…), le circuit choisi — passer directement par
+          un délégataire ou par un mandataire intermédiaire — n’a pas d’incidence sur le calcul
+          technique de la prime. Les barèmes forfaitaires des opérations standardisées sont fixés
+          par arrêté et publiés au Journal officiel&nbsp;: le gain énergétique calculé (en kWh
+          cumac) est le même quel que soit le circuit emprunté.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
           Ce qui varie, c’est le <strong>prix de rachat</strong> de ce cumac — donc le montant de
@@ -419,11 +424,13 @@ export default function MandataireVsDirectPage() {
               <Wrench className="w-5 h-5 text-emerald-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Quel impact pour l’artisan&nbsp;?
+              Quel impact le choix d’un mandataire ou d’un délégataire CEE a-t-il pour un artisan
+              RGE&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Pour un artisan RGE, le choix du partenaire CEE est opérationnel avant d’être
+            Pour un artisan qualifié RGE qui réalise des travaux éligibles au dispositif CEE, le
+            choix du partenaire — mandataire ou délégataire direct — est opérationnel avant d’être
             commercial. Trois critères font la différence au quotidien&nbsp;: la facilité
             d’instruction des dossiers, le délai de versement de la prime au client final, et la
             qualité du contrôle qualité imposé avant dépôt au PNCEE.

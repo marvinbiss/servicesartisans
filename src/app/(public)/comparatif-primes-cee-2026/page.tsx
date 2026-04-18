@@ -277,7 +277,7 @@ export default function ComparatifPrimesCee2026Page() {
         <div className="flex items-center gap-2 mb-6">
           <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Ce qui change en P6 (2026-2030)
+            Qu'est-ce qui change dans le dispositif CEE en P6 (2026-2030) ?
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
@@ -339,7 +339,7 @@ export default function ComparatifPrimesCee2026Page() {
           <div className="flex items-center gap-2 mb-6">
             <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Les 4 acteurs majeurs
+              Qui sont les 4 acteurs majeurs du marché des primes CEE en 2026 ?
             </h2>
           </div>
           <div className="space-y-6">
@@ -416,7 +416,7 @@ export default function ComparatifPrimesCee2026Page() {
         <div className="flex items-center gap-2 mb-6">
           <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Montants indicatifs par opération (P6, 2026)
+            Quels sont les montants indicatifs CEE par opération en 2026 (P6) ?
           </h2>
         </div>
         <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">

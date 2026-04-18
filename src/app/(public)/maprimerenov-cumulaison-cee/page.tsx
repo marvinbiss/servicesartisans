@@ -377,7 +377,7 @@ export default function MaprimeRenovCumulCeePage() {
       {/* 1. Principe */}
       <section id="principe" className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-          1. Principe du cumul en 2026
+          1. Quel est le principe du cumul MaPrimeRénov' + CEE en 2026 ?
         </h2>
         <p className="text-charcoal-700 leading-relaxed mb-4">
           MaPrimeRénov’ et les Certificats d’Économies d’Énergie (CEE) sont deux dispositifs d’aide
@@ -458,7 +458,7 @@ export default function MaprimeRenovCumulCeePage() {
       <section id="parcours" className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            2. Les deux voies MaPrimeRénov’ 2026
+            2. Quelles sont les deux voies MaPrimeRénov’ en 2026 ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-6">
             Depuis la réforme de 2024, MaPrimeRénov’ distingue deux parcours distincts, qui ne
@@ -530,7 +530,7 @@ export default function MaprimeRenovCumulCeePage() {
       {/* 3. Tableau familles */}
       <section id="tableau" className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-4">
-          3. Règles de cumul par famille de travaux
+          3. Quelles sont les règles de cumul MaPrimeRénov’ + CEE par famille de travaux ?
         </h2>
         <p className="text-charcoal-700 leading-relaxed mb-8 max-w-3xl">
           Le tableau ci-dessous synthétise la compatibilité des deux aides pour les 14 familles de
@@ -605,7 +605,7 @@ export default function MaprimeRenovCumulCeePage() {
       <section id="plafonds" className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            4. Plafonds de cumul et reste à charge minimum
+            4. Quels sont les plafonds de cumul et le reste à charge minimum ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-4">
             Le cumul MaPrimeRénov’ + CEE n’est pas illimité. Deux plafonds se combinent&nbsp;: un

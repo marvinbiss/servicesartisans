@@ -27,8 +27,12 @@ import type { RgeGuideSlug } from '@/lib/rge/qualification-matcher'
 
 /**
  * Date de dernière mise à jour éditoriale du catalogue CEE (barèmes kWh cumac,
- * bonifications précarité, MaPrimeRénov' 2026, tarifs). Bump manuellement à
- * chaque révision trimestrielle des montants.
+ * bonifications précarité, MaPrimeRénov' 2026, tarifs).
+ *
+ * ⚠️  NE BUMP QUE si le CONTENU de ce fichier change réellement (barème, taux,
+ * montant, abrogation, nouvelle opération). Un bump cosmétique sans diff de
+ * contenu = fausse fraîcheur = drapeau rouge Google helpful content.
+ * Source : developers.google.com/search/docs/fundamentals/creating-helpful-content
  *
  * TODO : à brancher sur une future table `cee_operations.updated_at` dès que
  * le catalogue sera persisté en DB (sync DGEC automatisée).

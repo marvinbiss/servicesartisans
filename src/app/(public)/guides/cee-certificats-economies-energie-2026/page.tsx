@@ -243,7 +243,7 @@ export default function CEE2026Page() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-              Le mécanisme des CEE, en deux minutes
+              Comment fonctionne le mécanisme des CEE en 2 minutes&nbsp;?
             </h2>
             <div className="prose prose-lg max-w-none text-charcoal-700">
               <p>
@@ -268,7 +268,7 @@ export default function CEE2026Page() {
         {/* Acteurs */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            Les 4 acteurs du dispositif
+            Qui sont les 4 acteurs du dispositif CEE&nbsp;?
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {acteurs.map((a) => {
@@ -294,7 +294,7 @@ export default function CEE2026Page() {
         {/* Opérations les plus primées */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Les opérations les plus primées en 2026
+            Quelles sont les opérations CEE les plus primées en 2026&nbsp;?
           </h2>
           <p className="text-charcoal-700 mb-6 leading-relaxed">
             {
@@ -331,7 +331,7 @@ export default function CEE2026Page() {
         {/* Coups de pouce */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Les « coups de pouce » 2026
+            Quels sont les Coups de pouce CEE actifs en 2026&nbsp;?
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
@@ -386,7 +386,7 @@ export default function CEE2026Page() {
         {/* Démarche */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            La démarche pas à pas
+            Comment obtenir une prime CEE en 2026&nbsp;? (démarche pas à pas)
           </h2>
           <ol className="space-y-4">
             {etapes.map((e) => (

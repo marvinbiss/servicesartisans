@@ -259,7 +259,7 @@ export default function IsolationIteItiPage() {
         {/* Tableau comparatif */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Comparatif détaillé ITE vs ITI
+            Quel est le comparatif détaillé ITE vs ITI&nbsp;?
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 overflow-x-auto">
             <table className="w-full text-sm min-w-[700px]">
@@ -286,7 +286,7 @@ export default function IsolationIteItiPage() {
         {/* Matériaux */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Les matériaux isolants
+            Quels matériaux isolants choisir pour une ITE ou une ITI&nbsp;?
           </h2>
           <p className="text-charcoal-700 mb-6 leading-relaxed">
             {
@@ -318,7 +318,7 @@ export default function IsolationIteItiPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              Les aides isolation 2026
+              Quelles sont les aides à l&apos;isolation en 2026&nbsp;?
             </h2>
             <div className="space-y-4 text-green-50 leading-relaxed">
               <p>
@@ -353,7 +353,7 @@ export default function IsolationIteItiPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading flex items-center gap-3">
             <ShieldCheck className="w-8 h-8 text-green-600" />
-            Qualibat RGE : l&apos;obligation pour toucher les aides
+            Pourquoi Qualibat RGE est-il obligatoire pour les aides isolation&nbsp;?
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8">
             <p className="text-charcoal-700 mb-4 leading-relaxed">

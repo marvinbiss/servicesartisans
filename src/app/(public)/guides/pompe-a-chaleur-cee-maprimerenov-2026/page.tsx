@@ -202,7 +202,7 @@ export default function PacAidesCumulablesPage() {
         {/* Types de PAC */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            Les 4 grandes familles de pompes à chaleur
+            Quelles sont les 4 grandes familles de pompes à chaleur en 2026&nbsp;?
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {typesPac.map((t) => {
@@ -237,7 +237,7 @@ export default function PacAidesCumulablesPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-              MaPrimeRénov&apos; 2026 pour les PAC
+              Quelles sont les aides MaPrimeRénov&apos; 2026 pour les pompes à chaleur&nbsp;?
             </h2>
             <div className="prose prose-lg max-w-none text-charcoal-700">
               <p>
@@ -263,7 +263,8 @@ export default function PacAidesCumulablesPage() {
         <section className="max-w-5xl mx-auto px-4 py-10">
           <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
-              Coup de pouce Chauffage CEE 2026
+              Qu&apos;est-ce que le Coup de pouce Chauffage CEE 2026 pour les pompes à
+              chaleur&nbsp;?
             </h2>
             <p className="text-green-50 leading-relaxed mb-4">
               {
@@ -297,7 +298,8 @@ export default function PacAidesCumulablesPage() {
         {/* Critères d'éligibilité */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 font-heading">
-            Les critères d&apos;éligibilité techniques
+            Quels sont les critères techniques d&apos;éligibilité des pompes à chaleur aux aides
+            2026&nbsp;?
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8">
             <ul className="space-y-3">
@@ -350,7 +352,7 @@ export default function PacAidesCumulablesPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 md:p-10">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-4 font-heading flex items-center gap-3">
               <ShieldCheck className="w-8 h-8 text-green-600" />
-              Choisir un artisan QualiPAC
+              Comment choisir un artisan QualiPAC pour sa pompe à chaleur&nbsp;?
             </h2>
             <p className="text-charcoal-700 mb-4 leading-relaxed">
               {

@@ -321,13 +321,16 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Les organismes qualificateurs RGE
+              Quels organismes délivrent la qualification RGE en France&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-600 mb-8 max-w-3xl leading-relaxed">
-            Le choix de l’organisme dépend de votre activité principale. Un même artisan peut
-            cumuler plusieurs qualifications auprès de plusieurs organismes pour couvrir l’ensemble
-            de ses métiers.
+            Quatre grandes familles d’organismes accrédités par le COFRAC délivrent la mention RGE
+            en France&nbsp;: Qualit’EnR (énergies renouvelables), Qualibat (corps de métier du
+            bâtiment), Qualifelec (électrotechnique et photovoltaïque) et Céquami/CertiBat/OPQIBI
+            (audits et bureaux d’études). Le choix de l’organisme dépend de l’activité principale de
+            l’artisan&nbsp;; un même professionnel peut cumuler plusieurs qualifications auprès de
+            plusieurs organismes pour couvrir l’ensemble de ses métiers.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {ORGANISMES.map((org) => {
@@ -383,7 +386,7 @@ export default function CommentDevenirRgePage() {
         <div className="flex items-center gap-2 mb-6">
           <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Les 5 étapes pour obtenir votre qualification RGE
+            Comment obtenir la qualification RGE en 5 étapes&nbsp;?
           </h2>
         </div>
         <ol className="space-y-5">
@@ -412,13 +415,15 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Combien ça coûte vraiment&nbsp;?
+              Combien coûte vraiment l’obtention d’une qualification RGE&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-600 mb-6 max-w-3xl leading-relaxed">
-            Les coûts varient selon l’organisme, le nombre de qualifications demandées et la taille
-            de l’entreprise. Voici un ordre de grandeur basé sur les barèmes publics des organismes
-            à date&nbsp;:
+            Le coût total d’une qualification RGE varie selon l’organisme qualificateur choisi, le
+            nombre de qualifications demandées et la taille de l’entreprise. Il comprend des frais
+            d’étude du dossier, des frais annuels de maintien de la qualification, et le coût des
+            audits de chantier réalisés en cours de cycle. Voici un ordre de grandeur basé sur les
+            barèmes publics des organismes à date&nbsp;:
           </p>
           <div className="overflow-hidden rounded-2xl border border-charcoal-200 bg-white">
             <table className="w-full text-sm">
@@ -453,15 +458,17 @@ export default function CommentDevenirRgePage() {
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-            Combien ça rapporte concrètement&nbsp;?
+            Combien rapporte la qualification RGE pour un artisan&nbsp;?
           </h2>
         </div>
         <div className="prose prose-slate max-w-none text-charcoal-700 leading-relaxed">
           <p>
-            La logique est simple et mécanique&nbsp;: la mention RGE est une{' '}
-            <strong>condition réglementaire</strong> pour que le client final puisse bénéficier de
-            MaPrimeRénov’, des Certificats d’Économies d’Énergie (CEE) et de l’éco-prêt à taux zéro.
-            Sans RGE, le client paie l’intégralité du devis sans aide publique.
+            Le retour sur investissement d’une qualification RGE repose sur une logique simple et
+            mécanique&nbsp;: la mention RGE est une <strong>condition réglementaire</strong> pour
+            que le client final puisse bénéficier de MaPrimeRénov’, des Certificats d’Économies
+            d’Énergie (CEE) et de l’éco-prêt à taux zéro. Sans RGE, le client paie l’intégralité du
+            devis sans aide publique — l’artisan non-qualifié est donc mécaniquement exclu des
+            appels d’offres subventionnés.
           </p>
           <p>
             En pratique, cela signifie qu’un artisan non-RGE est{' '}
@@ -493,7 +500,7 @@ export default function CommentDevenirRgePage() {
           <div className="flex items-center gap-2 mb-6">
             <AlertTriangle className="w-5 h-5 text-amber-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
-              Pièges à éviter
+              Quels pièges éviter lors de l’obtention de la qualification RGE&nbsp;?
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

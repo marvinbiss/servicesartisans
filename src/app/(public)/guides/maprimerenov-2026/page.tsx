@@ -595,8 +595,13 @@ export default function MaPrimeRenov2026Page() {
           {/* Section: Les deux parcours */}
           <section id="parcours" className="mb-16 scroll-mt-20">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-6">
-              Les deux parcours en 2026
+              Quels sont les deux parcours MaPrimeRénov&apos; en 2026&nbsp;?
             </h2>
+            <p className="text-charcoal-600 mb-6 leading-relaxed">
+              {
+                "MaPrimeRénov' 2026 propose deux parcours distincts selon l'ampleur du projet : le parcours accompagné, conçu pour les rénovations globales avec un gain minimum de 2 classes DPE et un accompagnateur Rénov' (MAR) obligatoire, et le parcours par geste, destiné aux interventions ciblées sur le chauffage, l'eau chaude sanitaire et la ventilation. Depuis 2025, l'isolation seule n'est plus éligible au parcours par geste."
+              }
+            </p>
 
             {/* Parcours accompagné */}
             <div className="bg-white rounded-xl border-2 border-green-200 p-6 md:p-8 mb-6">
@@ -740,11 +745,11 @@ export default function MaPrimeRenov2026Page() {
           {/* Section: Barèmes de revenus */}
           <section id="baremes" className="mb-16 scroll-mt-20">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-6">
-              Barèmes de revenus 2026
+              Quels sont les barèmes de revenus MaPrimeRénov&apos; 2026&nbsp;?
             </h2>
             <p className="text-charcoal-600 mb-6">
               {
-                "Les plafonds de revenus déterminent votre catégorie (très modestes, modestes, intermédiaires, supérieurs) et donc le montant de votre aide. Les revenus pris en compte sont le revenu fiscal de référence (RFR) de l'année N-1."
+                "Les barèmes MaPrimeRénov' 2026 classent les ménages en quatre catégories (très modestes, modestes, intermédiaires, supérieurs) qui déterminent le taux de financement et le plafond d'aide. Les revenus pris en compte sont le revenu fiscal de référence (RFR) de l'année N-1, avec des plafonds différenciés selon la composition du foyer et la localisation (Île-de-France ou Province)."
               }
             </p>
 
@@ -867,8 +872,13 @@ export default function MaPrimeRenov2026Page() {
           {/* Section: Travaux éligibles */}
           <section id="travaux" className="mb-16 scroll-mt-20">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-6">
-              Travaux éligibles
+              Quels travaux sont éligibles à MaPrimeRénov&apos; en 2026&nbsp;?
             </h2>
+            <p className="text-charcoal-600 mb-6 leading-relaxed">
+              {
+                "Les travaux éligibles à MaPrimeRénov' 2026 couvrent le chauffage (pompes à chaleur, chaudières biomasse, systèmes solaires combinés), l'eau chaude sanitaire (chauffe-eau solaire, thermodynamique), la ventilation (VMC double flux) et, dans le cadre du parcours accompagné uniquement, l'isolation (murs, toiture, planchers) et les menuiseries. Chaque catégorie de travaux doit être réalisée par un artisan qualifié RGE pour être financée."
+              }
+            </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {travauxEligibles.map((travail) => (
                 <div
@@ -915,8 +925,13 @@ export default function MaPrimeRenov2026Page() {
           {/* Section: Démarches */}
           <section id="demarches" className="mb-16 scroll-mt-20">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-6">
-              Comment faire sa demande ?
+              Comment faire sa demande MaPrimeRénov&apos; en 2026&nbsp;?
             </h2>
+            <p className="text-charcoal-600 mb-6 leading-relaxed">
+              {
+                "La demande MaPrimeRénov' se fait en ligne sur maprimerenov.gouv.fr avant le démarrage des travaux. Elle suppose la création d'un compte personnel, la sélection d'un artisan qualifié RGE, le dépôt d'un devis détaillé et l'attente de l'accusé de réception de l'ANAH. Tout chantier démarré avant ce feu vert sera refusé."
+              }
+            </p>
             <div className="space-y-4">
               {etapesDemande.map((etape) => (
                 <div
@@ -957,11 +972,11 @@ export default function MaPrimeRenov2026Page() {
           {/* Section: Cumul */}
           <section id="cumul" className="mb-16 scroll-mt-20">
             <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-6">
-              Cumul avec d'autres aides
+              Avec quelles autres aides peut-on cumuler MaPrimeRénov&apos;&nbsp;?
             </h2>
             <p className="text-charcoal-600 mb-6">
               {
-                "MaPrimeRénov' est cumulable avec plusieurs autres dispositifs, ce qui permet de réduire considérablement votre reste à charge. Voici les principales aides complémentaires :"
+                "MaPrimeRénov' est cumulable avec plusieurs autres dispositifs d'aide à la rénovation énergétique — CEE (Certificats d'Économies d'Énergie), éco-prêt à taux zéro, TVA à taux réduit, aides locales et aides Action Logement — ce qui permet de réduire considérablement le reste à charge. Voici les principales aides complémentaires :"
               }
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

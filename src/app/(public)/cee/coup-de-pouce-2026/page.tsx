@@ -371,7 +371,7 @@ export default function CoupDePouce2026Page() {
       {/* Chartes actives 2026 */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
-          Chartes Coup de pouce actives en 2026
+          Quelles chartes Coup de pouce CEE sont actives en 2026&nbsp;?
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-4 leading-relaxed">
           Le tableau ci-dessous recense les chartes en vigueur ou historiquement publiées. Le statut
@@ -452,7 +452,7 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            Comment bénéficier du Coup de pouce&nbsp;?
+            Comment bénéficier d’un Coup de pouce CEE en 2026&nbsp;?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-6">
             Le parcours est strict et l’ordre des étapes est
@@ -542,7 +542,7 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
-            Évolutions 2026 par rapport aux années précédentes
+            Quelles sont les évolutions 2026 du Coup de pouce CEE&nbsp;?
           </h2>
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
@@ -591,7 +591,7 @@ export default function CoupDePouce2026Page() {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6 flex items-center gap-3">
           <AlertTriangle className="w-7 h-7 text-amber-600" />
-          Pièges et arnaques fréquentes
+          Quels pièges et arnaques éviter sur le Coup de pouce CEE&nbsp;?
         </h2>
         <div className="space-y-5">
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">

@@ -285,7 +285,7 @@ export default function AidesRenovation2026Page() {
         {/* Tableau récapitulatif */}
         <section className="max-w-6xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            Tableau récapitulatif des aides 2026
+            Quel est le tableau récapitulatif des aides à la rénovation en 2026 ?
           </h2>
 
           {/* Desktop table */}
@@ -377,7 +377,7 @@ export default function AidesRenovation2026Page() {
         <section className="max-w-6xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading flex items-center gap-3">
             <Layers className="w-8 h-8 text-primary-500" />
-            Comment cumuler les aides ?
+            Comment cumuler les aides à la rénovation énergétique en 2026 ?
           </h2>
           <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8">
             <div className="grid md:grid-cols-4 gap-6">
@@ -436,7 +436,7 @@ export default function AidesRenovation2026Page() {
         <section className="max-w-6xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading flex items-center gap-3">
             <Calculator className="w-8 h-8 text-primary-500" />
-            Exemple chiffré : rénovation globale
+            Exemple chiffré d'une rénovation globale subventionnée en 2026
           </h2>
           <div className="bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-8 md:p-10 text-white">
             <p className="text-primary-100 mb-6 text-lg">
@@ -486,7 +486,7 @@ export default function AidesRenovation2026Page() {
         {/* Conditions d'éligibilité */}
         <section className="max-w-6xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 font-heading">
-            {"Conditions d'éligibilité communes"}
+            {"Quelles sont les conditions d'éligibilité communes aux aides rénovation 2026 ?"}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
