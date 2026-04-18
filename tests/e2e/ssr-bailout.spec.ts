@@ -8,7 +8,7 @@ const TESTIMONY_URLS = [
   '/',
   '/services/plombier/paris',
   '/services/electricien/lyon',
-  '/services/chauffagiste-rge/marseille',
+  '/services/chauffagiste/marseille',
   '/guides/maprimerenov-2026',
   '/artisans-rge/paris',
   '/simulateur-aides-renovation',
