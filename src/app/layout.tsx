@@ -205,6 +205,15 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
         {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
+
+        {/* Ahrefs Web Analytics — cookieless, no PII, no RGPD consent required. Provides organic keyword data not available in GA4 */}
+        <link rel="preconnect" href="https://analytics.ahrefs.com" />
+        <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key={process.env.NEXT_PUBLIC_AHREFS_KEY || '7v7CALgW88hGzteEMS+bAQ'}
+          strategy="afterInteractive"
+        />
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
         {/* Google Tag Manager — afterInteractive: loads after hydration, before idle (captures early interactions) */}
