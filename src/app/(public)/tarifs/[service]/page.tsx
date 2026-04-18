@@ -28,6 +28,7 @@ import { getDefaultAuthor } from '@/lib/data/team'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
+import { getDynamicLastModifiedByService } from '@/lib/seo/dynamic-lastmod'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
@@ -86,6 +87,7 @@ export async function generateMetadata({
   if (!trade) return {}
 
   // SEO overrides for high-impression pages (GSC CTR optimization)
+  // Format: question + 2026 + CTA. Covers top high-volume services from GSC.
   const metaOverrides: Record<string, { title: string; description: string }> = {
     electricien: {
       title: 'Combien coûte un électricien en 2026 ? Grille + Devis Gratuit',
@@ -96,6 +98,46 @@ export async function generateMetadata({
       title: 'Combien coûte un plombier en 2026 ? Prix + Devis Gratuit',
       description:
         'Tous les tarifs plombier 2026 : intervention urgente, installation sanitaire, chauffe-eau. Comparez et recevez un devis gratuit sans engagement.',
+    },
+    chauffagiste: {
+      title: 'Tarif chauffagiste 2026 : combien ça coûte ? + Devis Gratuit',
+      description:
+        'Prix chauffagiste 2026 : installation chaudière, entretien, dépannage. Comparez les devis gratuits et choisissez un artisan qualifié RGE.',
+    },
+    menuisier: {
+      title: 'Combien coûte un menuisier en 2026 ? Prix + Devis Gratuit',
+      description:
+        'Tarifs menuisier 2026 : portes, fenêtres, escaliers, agencement. Grille complète + devis gratuit sans engagement en 2 min.',
+    },
+    'peintre-en-batiment': {
+      title: 'Prix peintre en bâtiment 2026 : tarif au m² + Devis Gratuit',
+      description:
+        'Tarifs peintre 2026 : prix au m², rafraîchissement, rénovation complète. Comparez les devis gratuits et obtenez un résultat impeccable.',
+    },
+    serrurier: {
+      title: 'Tarif serrurier 2026 : prix urgence + dépannage + Devis',
+      description:
+        'Prix serrurier 2026 : ouverture de porte, changement de serrure, blindage. Comparez les devis gratuits 24h/24 et évitez les arnaques.',
+    },
+    couvreur: {
+      title: 'Combien coûte un couvreur en 2026 ? Prix + Devis Gratuit',
+      description:
+        'Tarifs couvreur 2026 : réfection toiture, isolation, démoussage. Comparez les devis gratuits et choisissez un artisan qualifié et assuré.',
+    },
+    macon: {
+      title: 'Tarif maçon 2026 : prix au m² + prestations + Devis Gratuit',
+      description:
+        'Prix maçon 2026 : gros œuvre, extension, rénovation. Grille tarifaire complète par prestation + devis gratuit en 2 min.',
+    },
+    carreleur: {
+      title: 'Prix carreleur 2026 : tarif au m² + pose + Devis Gratuit',
+      description:
+        'Tarifs carreleur 2026 : pose carrelage sol, mur, faïence. Comparez les devis gratuits et obtenez un travail soigné par un artisan qualifié.',
+    },
+    'pompe-a-chaleur': {
+      title: 'Prix pompe à chaleur 2026 : aides + tarifs + Devis Gratuit',
+      description:
+        'Coût pompe à chaleur 2026 : air-eau, air-air, géothermie. Aides CEE + MaPrimeRénov calculées. Devis gratuit chez artisan RGE.',
     },
   }
 
@@ -205,6 +247,8 @@ export default async function TarifsServicePage({
 
   const trade = tradeContent[service]
   if (!trade) notFound()
+
+  const lastModified = await getDynamicLastModifiedByService(service)
 
   const author = getDefaultAuthor()
 
@@ -397,6 +441,7 @@ export default async function TarifsServicePage({
             </p>
             <LastUpdated
               label="Tarifs vérifiés et mis à jour le"
+              date={lastModified}
               className="justify-center text-sand-500 mb-4"
             />
             <p className="text-sm text-sand-500">

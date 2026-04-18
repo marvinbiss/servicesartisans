@@ -31,6 +31,7 @@ import { getRegionPreposition } from '@/lib/geo-strings'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
+import { getReviewStatsByDept } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -448,12 +449,25 @@ export async function generateMetadata({
   const villeData = getVilleBySlug(ville)
   if (!problem || !villeData) notFound()
 
+  // Sprint 2 CTR — short prefix + 2026 modifier (tight title budget)
+  const reviewStats = await getReviewStatsByDept(
+    problem.primaryService,
+    villeData.departement
+  ).catch(() => null)
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats ? `${reviewStats.avg_rating.toFixed(1)}★ · ` : ''
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? ` Note ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis clients.`
+      : ''
+
   const titleHash = Math.abs(hashCode(`probleme-ville-title-${probleme}-${ville}`))
   const titleTemplates = [
-    `${problem.name} ${villeData.name} — Solutions`,
-    `${problem.name} à ${villeData.name} : coûts`,
-    `${problem.name} ${villeData.name} — Artisans`,
-    `${problem.name} ${villeData.name} — Diagnostic`,
+    `${reviewPrefix}${problem.name} ${villeData.name} 2026 — Solutions`,
+    `${reviewPrefix}${problem.name} à ${villeData.name} 2026 : coûts`,
+    `${reviewPrefix}${problem.name} ${villeData.name} — Artisans 24h`,
+    `${reviewPrefix}${problem.name} ${villeData.name} 2026 — Diagnostic`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
@@ -461,7 +475,7 @@ export async function generateMetadata({
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 
-  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} €. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.`
+  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} €. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.${descReviewSnippet}`
 
   return {
     title,

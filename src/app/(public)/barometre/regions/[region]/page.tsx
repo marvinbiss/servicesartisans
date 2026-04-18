@@ -44,8 +44,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getBarometreRegionBySlug(regionSlug)
   if (!region) return { title: 'Région non trouvée' }
 
-  const title = `Artisans ${getRegionPreposition(region.name)} — Baromètre et statistiques`
-  const description = `Baromètre des artisans ${getRegionPreposition(region.name)} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Données actualisées ${SITE_NAME}.`
+  const title = `Baromètre Artisans ${region.name} 2026 — Stats + Prix`
+  const description = `Baromètre 2026 des artisans ${getRegionPreposition(region.name)} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Données actualisées ${SITE_NAME}.`
   const canonicalUrl = `${SITE_URL}/barometre/regions/${regionSlug}`
 
   return {

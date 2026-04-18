@@ -205,51 +205,67 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const svcLower = serviceName.toLowerCase()
   const naturalTerm = getNaturalTerm(serviceSlug)
 
+  // Sprint 2 CTR Attack — inject review social proof into title/desc when threshold met.
+  // Fail-open: if DB hiccups or no reviews, fall through to existing templates.
+  const reviewStats =
+    departmentName || departmentCode
+      ? await getReviewStatsByDept(serviceSlug, departmentName || departmentCode).catch(() => null)
+      : null
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats
+      ? `${reviewStats.avg_rating.toFixed(1)}★ (${reviewStats.review_count} avis) · `
+      : ''
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? ` Note ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis clients.`
+      : ''
+
   // Unified SEO seed for title + H1 coherence (same seed used in both generateMetadata and page render)
   const seoHash = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
 
   const seoPairs = hasProviders
     ? [
         {
-          title: `${serviceName} ${locationName} 2026 — Devis Gratuit`,
+          title: `${reviewPrefix}${serviceName} ${locationName} 2026 — Devis Gratuit`,
           h1: `${serviceName} à ${locationName}`,
         },
         {
-          title: `${serviceName} à ${locationName} : ${providerCount} Pros + Devis`,
+          title: `${reviewPrefix}${serviceName} à ${locationName} : ${providerCount} Pros + Devis`,
           h1: `${serviceName} à ${locationName} : pros vérifiés`,
         },
         {
-          title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
+          title: `${reviewPrefix}${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
           h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés`,
         },
         {
-          title: `${serviceName} ${locationName} 2026 : ${providerCount} Artisans`,
+          title: `${reviewPrefix}${serviceName} ${locationName} 2026 : ${providerCount} Artisans`,
           h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
         },
         {
-          title: `${serviceName} à ${locationName} — Devis Gratuit 2026`,
+          title: `${reviewPrefix}${serviceName} à ${locationName} — Devis Gratuit 2026`,
           h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
         },
       ]
     : [
         {
-          title: `${serviceName} ${locationName} 2026 — Devis Gratuit`,
+          title: `${reviewPrefix}${serviceName} ${locationName} 2026 — Devis Gratuit`,
           h1: `${serviceName} à ${locationName}`,
         },
         {
-          title: `${serviceName} à ${locationName} : Devis Gratuit 2026`,
+          title: `${reviewPrefix}${serviceName} à ${locationName} : Devis Gratuit 2026`,
           h1: `${serviceName} à ${locationName} : pros vérifiés`,
         },
         {
-          title: `${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
+          title: `${reviewPrefix}${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
           h1: `${serviceName} à ${locationName} — Artisans qualifiés`,
         },
         {
-          title: `${serviceName} à ${locationName} — Artisans 2026`,
+          title: `${reviewPrefix}${serviceName} à ${locationName} — Artisans 2026`,
           h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
         },
         {
-          title: `${serviceName} ${locationName} : Devis Gratuit 2026`,
+          title: `${reviewPrefix}${serviceName} ${locationName} : Devis Gratuit 2026`,
           h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
         },
       ]
@@ -267,18 +283,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const deptLabel = departmentName || departmentCode
   const descTemplates = hasProviders
     ? [
-        `Trouvez un ${svcLower} à ${locationName}. ${providerCount} artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit en 2 min.`,
-        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. ${priceTag}/h` : ''}. Comparez et demandez un devis gratuit.`,
-        `${serviceName} à ${locationName} : ${providerCount} pros vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit, sans engagement.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${priceTag ? `, ${priceTag}/h` : ''}. Devis gratuit et réponse rapide.`,
-        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés${priceTag ? `. Prix : ${priceTag}` : ''}. Devis gratuit.`,
+        `Trouvez un ${svcLower} à ${locationName}. ${providerCount} artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit en 2 min.${descReviewSnippet}`,
+        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. ${priceTag}/h` : ''}. Comparez et demandez un devis gratuit.${descReviewSnippet}`,
+        `${serviceName} à ${locationName} : ${providerCount} pros vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit, sans engagement.${descReviewSnippet}`,
+        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${priceTag ? `, ${priceTag}/h` : ''}. Devis gratuit et réponse rapide.${descReviewSnippet}`,
+        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés${priceTag ? `. Prix : ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
       ]
     : [
-        `Trouvez un ${svcLower} à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. Tarifs : ${priceTag}` : ''}. Devis gratuit en 2 min.`,
-        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.`,
-        `Besoin d'un ${svcLower} à ${locationName} ? Artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit.`,
-        `${serviceName} à ${locationName}${priceTag ? `. ${priceTag}/h` : ''}. Professionnels vérifiés SIREN. Devis gratuit.`,
-        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.`,
+        `Trouvez un ${svcLower} à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. Tarifs : ${priceTag}` : ''}. Devis gratuit en 2 min.${descReviewSnippet}`,
+        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
+        `Besoin d'un ${svcLower} à ${locationName} ? Artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
+        `${serviceName} à ${locationName}${priceTag ? `. ${priceTag}/h` : ''}. Professionnels vérifiés SIREN. Devis gratuit.${descReviewSnippet}`,
+        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -342,7 +358,8 @@ function generateJsonLd(
   _providers: unknown[],
   serviceSlug: string,
   locationSlug: string,
-  communeData: Awaited<ReturnType<typeof getCommuneBySlug>> | null
+  communeData: Awaited<ReturnType<typeof getCommuneBySlug>> | null,
+  dynamicLastMod: string | null
 ) {
   const svcLower = service.name.toLowerCase()
   const trade = getTradeContent(serviceSlug)
@@ -383,7 +400,8 @@ function generateJsonLd(
     },
     ...(trade ? { priceRange: `${trade.priceRange.min}€–${trade.priceRange.max}€` } : {}),
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    dateModified: new Date().toISOString().split('T')[0],
+    // Fail-closed : on omet dateModified si pas de vraie data — pas de fausse fraîcheur.
+    ...(dynamicLastMod ? { dateModified: dynamicLastMod.split('T')[0] } : {}),
   }
 
   const serviceSchema = {
@@ -439,7 +457,7 @@ function generateJsonLd(
           },
         }
       : {}),
-    dateModified: new Date().toISOString().split('T')[0],
+    ...(dynamicLastMod ? { dateModified: dynamicLastMod.split('T')[0] } : {}),
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -617,7 +635,8 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     providers || [],
     serviceSlug,
     locationSlug,
-    communeData
+    communeData,
+    dynamicLastMod
   )
 
   // Generate unique SEO content per service+location combo (doorway-page mitigation)

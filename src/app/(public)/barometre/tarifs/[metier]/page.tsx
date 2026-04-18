@@ -42,9 +42,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const stats = await getStatsByMetier(metierSlug)
   const count = stats?.nb_artisans ?? 0
   const countStr = count > 0 ? `${count.toLocaleString('fr-FR')} ` : ''
+  const noteStr = stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}★ · ` : ''
 
-  const title = `${metier.label} en France — ${countStr}artisans, stats et avis`
-  const description = `Baromètre ${metier.label.toLowerCase()} : ${countStr}artisans référencés en France, note moyenne ${stats?.note_moyenne?.toFixed(1) ?? '--'}/5, ${(stats?.nb_avis ?? 0).toLocaleString('fr-FR')} avis. Statistiques par ville et département.`
+  const title = `${noteStr}${metier.label} France 2026 — ${countStr}artisans + stats`
+  const description = `Baromètre ${metier.label.toLowerCase()} 2026 : ${countStr}artisans référencés en France, note moyenne ${stats?.note_moyenne?.toFixed(1) ?? '--'}/5, ${(stats?.nb_avis ?? 0).toLocaleString('fr-FR')} avis vérifiés. Statistiques par ville et département.`
   const canonicalUrl = `${SITE_URL}/barometre/tarifs/${metierSlug}`
 
   return {

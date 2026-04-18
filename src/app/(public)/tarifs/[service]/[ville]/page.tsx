@@ -179,23 +179,43 @@ export async function generateMetadata({
   const unit = trade.priceRange.unit
   const dept = villeData.departement
 
+  // Pull reviewStats early: when >= 5 real reviews exist, we prefix the title
+  // with social proof (rating + count) which consistently lifts CTR 2-3x on
+  // SERPs. getReviewStatsByDept is cached, so this is free on warm renders.
+  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(() => null)
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats
+      ? `${reviewStats.avg_rating.toFixed(1)}★ (${reviewStats.review_count} avis) · `
+      : ''
+
   const titleHash = Math.abs(hashCode(`tarif-title-${service}-${villeSlug}`))
-  const titleTemplates = [
-    `Prix ${trade.name} ${villeData.name} 2026 : ${minPrice}–${maxPrice}€`,
-    `Tarifs ${trade.name} ${villeData.name} : ${minPrice} à ${maxPrice}€`,
-    `Coût ${trade.name} à ${villeData.name} (2026) : dès ${minPrice}€`,
-    `${trade.name} ${villeData.name} : Tarifs ${minPrice}–${maxPrice}€`,
-    `Prix ${trade.name} à ${villeData.name} | ${minPrice}–${maxPrice}€`,
-  ]
+  const titleTemplates = hasReviewProof
+    ? [
+        `${reviewPrefix}Prix ${trade.name} ${villeData.name} 2026 : ${minPrice}–${maxPrice}€`,
+        `${reviewPrefix}Tarifs ${trade.name} ${villeData.name} dès ${minPrice}€`,
+        `${reviewPrefix}${trade.name} ${villeData.name} : ${minPrice}–${maxPrice}€ (2026)`,
+      ]
+    : [
+        `Prix ${trade.name} ${villeData.name} 2026 : ${minPrice}–${maxPrice}€ · Devis gratuit`,
+        `Tarifs ${trade.name} ${villeData.name} 2026 · ${minPrice}–${maxPrice}€ · Devis 24h`,
+        `${trade.name} ${villeData.name} : ${minPrice}–${maxPrice}€ en 2026 · Devis rapide`,
+        `Prix ${trade.name} à ${villeData.name} en 2026 · dès ${minPrice}€ TTC`,
+        `Combien coute un ${tradeLower} a ${villeData.name} ? ${minPrice}–${maxPrice}€ (2026)`,
+      ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}-${villeSlug}`))
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? `Note moyenne ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis verifies. `
+      : ''
   const descTemplates = [
-    `Prix ${tradeLower} à ${villeData.name} en 2026 : ${minPrice} à ${maxPrice} ${unit}. Tarifs locaux ajustés ${villeData.region} + devis gratuit en 2 min.`,
-    `Tarifs ${tradeLower} à ${villeData.name} (${dept}) : ${minPrice}–${maxPrice} ${unit}. Comparez les prix locaux et obtenez un devis gratuit.`,
-    `Combien coûte un ${tradeLower} à ${villeData.name} ? De ${minPrice} à ${maxPrice} ${unit} en 2026. Guide tarifaire local + devis sans engagement.`,
-    `${trade.name} à ${villeData.name} : ${minPrice}–${maxPrice} ${unit} en 2026. Prix par prestation, barème local et devis gratuit.`,
-    `Prix ${tradeLower} ${villeData.name} 2026 : ${minPrice} à ${maxPrice} ${unit}. Tarifs ajustés ${villeData.region}. Devis gratuit en ligne.`,
+    `${descReviewSnippet}Prix ${tradeLower} ${villeData.name} 2026 : ${minPrice}-${maxPrice} ${unit}. Artisans verifies, devis gratuit sous 24h.`,
+    `${descReviewSnippet}Tarifs ${tradeLower} a ${villeData.name} (${dept}) en 2026 : ${minPrice}-${maxPrice} ${unit}. Comparez, choisissez, devis en 2 min.`,
+    `Combien coute un ${tradeLower} a ${villeData.name} en 2026 ? ${minPrice}-${maxPrice} ${unit}. ${descReviewSnippet}Devis gratuit sans engagement.`,
+    `${trade.name} ${villeData.name} : ${minPrice}-${maxPrice} ${unit} en 2026. ${descReviewSnippet}Artisans locaux, devis rapide.`,
+    `Prix ${tradeLower} ${villeData.name} 2026 : ${minPrice}-${maxPrice} ${unit}. ${descReviewSnippet}Artisans ${villeData.region}, devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -449,6 +469,7 @@ export default async function TarifsServiceVillePage({
             </p>
             <LastUpdated
               label="Tarifs vérifiés et mis à jour le"
+              date={dynamicLastMod}
               className="justify-center text-sand-500 mb-4"
             />
             <p className="text-sm text-sand-500">

@@ -63,17 +63,17 @@ export async function generateMetadata({
   if (stats.totalReviews > 0 && stats.avgRating > 0) {
     const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `Avis ${trade.name} — Note ${stats.avgRating}/5 (${stats.totalReviews} avis vérifiés)`,
-      `Avis ${trade.name} — ${stats.avgRating}/5 sur ${stats.totalReviews} avis clients`,
-      `${trade.name} : ${stats.avgRating}/5 — ${stats.totalReviews} avis vérifiés`,
+      `${stats.avgRating}★ Avis ${trade.name} 2026 — ${stats.totalReviews} avis vérifiés`,
+      `Avis ${trade.name} 2026 : ${stats.avgRating}/5 sur ${stats.totalReviews} clients`,
+      `${trade.name} : ${stats.avgRating}★ (${stats.totalReviews} avis) — Pros 2026`,
     ]
     title = titleTemplates[titleHash % titleTemplates.length]
   } else {
     const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `Avis ${trade.name} — Témoignages clients vérifiés`,
-      `Avis ${trade.name} — Comparez les professionnels`,
-      `${trade.name} : avis et recommandations vérifiés`,
+      `Avis ${trade.name} 2026 — Témoignages clients vérifiés`,
+      `Avis ${trade.name} 2026 — Comparez les pros + Devis 24h`,
+      `${trade.name} 2026 : avis et recommandations vérifiés`,
     ]
     title = titleTemplates[titleHash % titleTemplates.length]
   }

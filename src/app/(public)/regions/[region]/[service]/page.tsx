@@ -69,11 +69,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${serviceSlug}`))
   const titleTemplates = [
-    `${trade.name} ${region.name} — Devis Gratuit`,
-    `${trade.name} ${region.name} — Annuaire`,
-    `${trade.name} ${getRegionPreposition(region.name)} : artisans`,
-    `${trade.name} ${region.name} — Tarifs et devis`,
-    `${trade.name} ${region.name} : comparez`,
+    `${trade.name} ${region.name} 2026 — Devis Gratuit 24h`,
+    `${trade.name} ${region.name} 2026 — ${deptCount} départements`,
+    `${trade.name} ${getRegionPreposition(region.name)} 2026 : pros vérifiés`,
+    `${trade.name} ${region.name} 2026 — Tarifs + Devis Gratuit`,
+    `${trade.name} ${region.name} 2026 : comparez les pros`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

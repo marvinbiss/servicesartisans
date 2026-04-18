@@ -247,24 +247,37 @@ export async function generateMetadata({
 
   const priceTag = `dès ${minPrice}${trade.priceRange.unit === '€/h' ? '€/h' : '€'}`
 
+  // Sprint 2 CTR Attack — fetch dept review stats once for both metadata + noindex gate.
+  // Fail-open: null stats => no proof prefix + hasReviews defaults to true (keep indexed).
+  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(() => null)
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats
+      ? `${reviewStats.avg_rating.toFixed(1)}★ (${reviewStats.review_count} avis) · `
+      : ''
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? ` Note ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis vérifiés.`
+      : ''
+
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
-    `Avis ${trade.name} ${villeData.name} 2026 — Notes & Tarifs ${priceTag}`,
-    `Avis ${tradeLower} à ${villeData.name} — Comparez les pros 2026`,
-    `Avis ${tradeLower} ${villeData.name} 2026 : notes, tarifs ${priceTag}`,
-    `Avis ${trade.name} ${villeData.name} — Top artisans vérifiés 2026`,
-    `Avis ${tradeLower} ${villeData.name} 2026 — Classement & prix ${priceTag}`,
+    `${reviewPrefix}Avis ${trade.name} ${villeData.name} 2026 — Tarifs ${priceTag}`,
+    `${reviewPrefix}Avis ${tradeLower} à ${villeData.name} — Pros vérifiés 2026`,
+    `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Tarifs ${priceTag}`,
+    `${reviewPrefix}Avis ${trade.name} ${villeData.name} — Top artisans 2026`,
+    `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Prix ${priceTag}`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
   const dept = villeData.departement
   const descTemplates = [
-    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`,
-    `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.`,
-    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}–${maxPrice} ${trade.priceRange.unit}). Guide 2026.`,
-    `${tradeLower.charAt(0).toUpperCase() + tradeLower.slice(1)}s de confiance à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.`,
-    `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.`,
+    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.${descReviewSnippet}`,
+    `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.${descReviewSnippet}`,
+    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}–${maxPrice} ${trade.priceRange.unit}). Guide 2026.${descReviewSnippet}`,
+    `${tradeLower.charAt(0).toUpperCase() + tradeLower.slice(1)}s de confiance à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.${descReviewSnippet}`,
+    `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.${descReviewSnippet}`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -276,17 +289,8 @@ export async function generateMetadata({
   // shouldNoindex requires BOTH 0 providers AND hasUniqueData===false to noindex.
   // Reviews ARE the unique data for /avis/ pages, so hasUniqueData = hasReviews.
   const hasProviders = await hasProvidersByServiceAndLocation(service, ville)
-  // Quick review existence check via the same getTopProviders+getRecentReviews pattern
-  // would be too heavy for metadata. Instead, check review_stats for this dept.
-  const deptName = villeData.departement
-  let hasReviews = true // fail-open default
-  try {
-    const stats = await getReviewStatsByDept(service, deptName)
-    hasReviews = (stats?.review_count ?? 0) > 0
-  } catch {
-    // fail-open: assume reviews exist if DB is down
-    hasReviews = true
-  }
+  // Reuse reviewStats fetched above for CTR prefix — fail-open: null => indexed.
+  const hasReviews = reviewStats === null ? true : (reviewStats.review_count ?? 0) > 0
   const noindex = shouldNoindex(`/avis/${service}/${ville}`, {
     providerCount: hasProviders ? 1 : 0,
     hasUniqueData: hasReviews,
@@ -616,6 +620,7 @@ export default async function AvisServiceVillePage({
             </p>
             <LastUpdated
               label="Avis vérifiés le"
+              date={dynamicLastMod}
               className="justify-center text-charcoal-900 mb-4"
             />
             <div className="flex flex-wrap justify-center gap-3 mt-8">

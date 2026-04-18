@@ -23,9 +23,9 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 export const metadata: Metadata = {
-  title: 'Avis Artisans Vérifiés — Choisir un Pro',
+  title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
   description:
-    'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+    'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
   alternates: {
     canonical: `${SITE_URL}/avis`,
   },
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis Artisans Vérifiés — Choisir un Pro',
+    title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis Artisans Vérifiés — Choisir un Pro',
+    title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

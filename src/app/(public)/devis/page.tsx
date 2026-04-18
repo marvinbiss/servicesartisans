@@ -15,9 +15,9 @@ import { villes, services } from '@/lib/data/france'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Devis Artisan Gratuit — Comparez les Offres',
+  title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
   description:
-    'Demandez un devis artisan gratuit : plombier, électricien, serrurier et 50 métiers. 100% gratuit, sans engagement.',
+    'Demandez un devis artisan gratuit 2026 : plombier, électricien, serrurier et 50 métiers. Réponse sous 24h, 3 offres, 100% gratuit, sans engagement.',
   alternates: {
     canonical: `${SITE_URL}/devis`,
   },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Devis Artisan Gratuit — Comparez les Offres',
+    title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
     description:
       'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
     url: `${SITE_URL}/devis`,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Devis Artisan Gratuit — Comparez les Offres',
+    title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
     description:
       'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
     images: [`${SITE_URL}/opengraph-image`],

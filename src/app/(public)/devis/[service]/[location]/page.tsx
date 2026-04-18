@@ -157,23 +157,33 @@ export async function generateMetadata({
 
   const dept = villeData.departement
 
+  // Sprint 2 CTR — fail-open review prefix
+  const reviewStats = await getReviewStatsByDept(service, dept).catch(() => null)
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats ? `${reviewStats.avg_rating.toFixed(1)}★ · ` : ''
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? ` Note ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis clients.`
+      : ''
+
   const titleHash = Math.abs(hashCode(`devis-loc-title-${service}-${location}`))
   const titleTemplates = [
-    `Devis ${tradeLower} ${villeData.name} — Gratuit`,
-    `Devis ${tradeLower} ${villeData.name} 2026`,
-    `Devis ${tradeLower} ${villeData.name} : comparez`,
-    `Devis ${tradeLower} à ${villeData.name} — Gratuit`,
-    `Devis ${tradeLower} ${villeData.name} : 3 offres`,
+    `${reviewPrefix}Devis ${tradeLower} ${villeData.name} 2026 — Gratuit 24h`,
+    `${reviewPrefix}Devis ${tradeLower} ${villeData.name} 2026 — 3 offres`,
+    `${reviewPrefix}Devis ${tradeLower} ${villeData.name} : comparez 2026`,
+    `${reviewPrefix}Devis ${tradeLower} à ${villeData.name} — Réponse 24h`,
+    `${reviewPrefix}Devis ${tradeLower} ${villeData.name} 2026 — 3 pros`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`devis-loc-desc-${service}-${location}`))
   const descTemplates = [
-    `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`,
-    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse rapide.`,
-    `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
-    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez un artisan de confiance. Gratuit.`,
-    `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés ${getDeptPreposition(dept)}.`,
+    `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.${descReviewSnippet}`,
+    `Demandez un devis ${tradeLower} à ${villeData.name} (${dept}). Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Réponse rapide.${descReviewSnippet}`,
+    `${trade.name} à ${villeData.name} : obtenez un devis gratuit et comparez les artisans vérifiés. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.${descReviewSnippet}`,
+    `Devis ${tradeLower} ${villeData.name} : comparez les prix (${minPrice}–${maxPrice} ${trade.priceRange.unit}) et choisissez un artisan de confiance. Gratuit.${descReviewSnippet}`,
+    `Besoin d'un ${tradeLower} à ${villeData.name} ? Devis gratuit d'artisans vérifiés ${getDeptPreposition(dept)}.${descReviewSnippet}`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 

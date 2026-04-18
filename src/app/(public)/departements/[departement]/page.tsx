@@ -61,12 +61,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const artisanCount = await getProviderCountByDepartment(dept.name)
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
+  const countPrefix = artisanCount >= 50 ? `${formatProviderCount(artisanCount)} ` : ''
   const titleTemplates = [
-    `Artisans ${dept.name} (${dept.code}) — Devis`,
-    `Artisan ${dept.name} — Devis Gratuit`,
-    `${dept.name} : artisans qualifiés — Devis`,
-    `Artisans ${dept.name} — Comparez les pros`,
-    `${dept.name} (${dept.code}) — Annuaire artisans`,
+    `${countPrefix}Artisans ${dept.name} (${dept.code}) 2026 — Devis gratuit`,
+    `Artisan ${dept.name} 2026 — Devis gratuit 24h`,
+    `${dept.name} : ${countPrefix}artisans qualifiés — Devis 2026`,
+    `Artisans ${dept.name} 2026 — Comparez ${countPrefix || 'les pros'}`,
+    `${dept.name} (${dept.code}) — Annuaire ${countPrefix}artisans 2026`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 

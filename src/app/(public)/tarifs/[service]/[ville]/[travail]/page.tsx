@@ -19,6 +19,8 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionalMultiplier } from '@/lib/seo/location-content'
+import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
+import { getReviewStatsByDept } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -107,15 +109,25 @@ export async function generateMetadata({
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
 
+  // Sprint 2 CTR — review prefix (fail-open if DB down).
+  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(() => null)
+  const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
+  const reviewPrefix =
+    hasReviewProof && reviewStats ? `${reviewStats.avg_rating.toFixed(1)}★ · ` : ''
+  const descReviewSnippet =
+    hasReviewProof && reviewStats
+      ? ` Note ${reviewStats.avg_rating.toFixed(1)}/5 sur ${reviewStats.review_count} avis vérifiés ${villeData.departement}.`
+      : ''
+
   const taskLower = currentTask.name.toLowerCase()
   const title = truncateTitle(
     priceRange
-      ? `${currentTask.name} ${villeData.name} : ${priceRange.low}–${priceRange.high}€ (2026)`
-      : `Prix ${taskLower} à ${villeData.name} — Tarifs 2026`
+      ? `${reviewPrefix}${currentTask.name} ${villeData.name} : ${priceRange.low}–${priceRange.high}€ (2026)`
+      : `${reviewPrefix}Prix ${taskLower} à ${villeData.name} — Tarifs 2026`
   )
   const description = priceRange
-    ? `${currentTask.name} à ${villeData.name} en 2026 : ${priceRange.low} à ${priceRange.high} €. Tarif local ajusté + devis gratuit ${trade.name.toLowerCase()} en 2 min.`
-    : `Prix ${taskLower} à ${villeData.name} en 2026. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié. Devis gratuit.`
+    ? `${currentTask.name} à ${villeData.name} en 2026 : ${priceRange.low} à ${priceRange.high} €. Tarif local ajusté + devis gratuit ${trade.name.toLowerCase()} en 2 min.${descReviewSnippet}`
+    : `Prix ${taskLower} à ${villeData.name} en 2026. Comparez les tarifs et trouvez un ${trade.name.toLowerCase()} qualifié. Devis gratuit.${descReviewSnippet}`
   const canonicalUrl = `${SITE_URL}/tarifs/${service}/${villeSlug}/${travail}`
 
   return {
@@ -169,6 +181,10 @@ export default async function TarifsServiceTravailVillePage({
   } catch {
     // Graceful fallback — page works without commune data
   }
+
+  const lastModified = await getDynamicLastModified(service, villeData.departementCode).catch(
+    () => null
+  )
 
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)
@@ -282,6 +298,7 @@ export default async function TarifsServiceTravailVillePage({
             )}
             <LastUpdated
               label="Tarifs vérifiés et mis à jour le"
+              date={lastModified}
               className="justify-center text-charcoal-900 mb-4"
             />
             <p className="text-sm text-charcoal-900">
