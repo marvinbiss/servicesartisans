@@ -1,3 +1,4 @@
+import type { ComponentType, ReactNode } from 'react'
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
@@ -6,6 +7,7 @@ import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { CompareProviderWrapper as CompareProviderWrapperStatic } from '@/components/compare/CompareProvider'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -56,13 +58,24 @@ const AuthTracker = dynamic(() => import('@/components/AuthTracker'), {
 const ConsentGatedScripts = dynamic(() => import('@/components/ConsentGatedScripts'), {
   ssr: false,
 })
-const CompareProviderWrapper = dynamic(
+// Kill switch: NEXT_PUBLIC_DISABLE_COMPARE_SSR must be UNSET in normal production.
+// Set it to 'true' on Vercel ONLY to trigger an emergency rollback to CSR-only
+// (~60-90s via env var + redeploy). Build-time inlined, so it requires a redeploy
+// to flip — not a runtime flag. Trade-off: CompareProvider is imported twice
+// (main bundle + dynamic chunk ~3KB) to keep rollback path instant.
+// CompareProvider is SSR-safe (useState([]) initial, no window/document access),
+// but wraps Header + main + Footer — previous ssr:false hid the entire tree from Googlebot.
+const CompareProviderWrapperDynamic = dynamic(
   () =>
     import('@/components/compare/CompareProvider').then((mod) => ({
       default: mod.CompareProviderWrapper,
     })),
   { ssr: false }
 )
+const CompareProviderWrapper: ComponentType<{ children: ReactNode }> =
+  process.env.NEXT_PUBLIC_DISABLE_COMPARE_SSR === 'true'
+    ? CompareProviderWrapperDynamic
+    : CompareProviderWrapperStatic
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
