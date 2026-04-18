@@ -153,12 +153,26 @@ function truncateTitle(title: string, maxLen = 58): string {
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
+// Lightweight metadata returned when the slug is invalid or unknown.
+// Calling notFound() in generateMetadata renders the not-found.tsx body with
+// the DEFAULT (homepage) title — we want an explicit noindex/nofollow signal
+// instead. The page component still calls notFound() to propagate the render
+// status. Note: Next.js 14.2 returns HTTP 200 for ISR routes with
+// dynamicParams=true even when notFound() fires (soft 404) — mitigated by
+// the robots:noindex below so Google de-indexes these paths.
+// Upstream: https://github.com/vercel/next.js/issues/69103
+const NOT_FOUND_METADATA: Metadata = {
+  title: 'Page non trouvée — ServicesArtisans',
+  description: "Cette combinaison service/ville n'existe pas dans notre annuaire.",
+  robots: { index: false, follow: false },
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug } = await params
 
-  // Early reject: invalid slugs
+  // Early reject: invalid slugs → noindex metadata, page will issue HTTP 404
   if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
-    notFound()
+    return NOT_FOUND_METADATA
   }
 
   let serviceName = ''
@@ -198,7 +212,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!serviceName || !locationName) {
-    notFound()
+    return NOT_FOUND_METADATA
   }
 
   const hasProviders = providerCount > 0
