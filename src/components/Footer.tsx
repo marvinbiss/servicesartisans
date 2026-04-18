@@ -17,11 +17,7 @@ import { companyIdentity } from '@/lib/config/company-identity'
 import { formatPhoneForTel } from '@/lib/validation/phone'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import FooterClusterLinks from '@/components/seo/FooterClusterLinks'
-import dynamic from 'next/dynamic'
-
-const DynamicFooterLinks = dynamic(() => import('@/components/seo/DynamicFooterLinks'), {
-  ssr: false,
-})
+import DynamicFooterLinks from '@/components/seo/DynamicFooterLinks'
 
 // Navigation links — money pages & essential hubs only (link equity optimization)
 const navigationLinks = [
