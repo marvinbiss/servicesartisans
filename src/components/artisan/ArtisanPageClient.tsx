@@ -320,7 +320,6 @@ export default function ArtisanPageClient({
                 validUntil={artisan.rge_valid_until}
                 rgeServiceSlug={artisan.specialty_slug}
                 artisanId={artisanId}
-                citySlug={artisan.city_slug || (artisan.city ? slugify(artisan.city) : undefined)}
                 departementSlug={
                   artisan.department
                     ? artisan.department

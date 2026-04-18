@@ -2,13 +2,9 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Award, ArrowRight, FileText, ShieldCheck, Sparkles } from 'lucide-react'
+import { Award, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
 
-import {
-  matchQualifications,
-  type RgeCategory,
-  type RgeGuideSlug,
-} from '@/lib/rge/qualification-matcher'
+import { matchQualifications, type RgeGuideSlug } from '@/lib/rge/qualification-matcher'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 // Allowlist inlinée (duplique RGE_ALLOWED_SERVICES de `service-city-listings.ts`)
@@ -67,77 +63,6 @@ interface Props {
   rgeServiceSlug?: string
   /** ID de l'artisan (pour tracking) */
   artisanId?: string
-  /** Slug de la ville de l'artisan (pour construire l'URL /devis/[service]/[location]) */
-  citySlug?: string
-}
-
-/**
- * Allowlist des slugs de service acceptés par `/devis/[service]/[location]`.
- * Doit rester alignée avec `getTradesSlugs()` de `@/lib/data/trade-content`.
- */
-const DEVIS_SERVICE_ALLOWLIST: ReadonlySet<string> = new Set([
-  'plombier',
-  'electricien',
-  'serrurier',
-  'chauffagiste',
-  'peintre-en-batiment',
-  'menuisier',
-  'carreleur',
-  'couvreur',
-  'macon',
-  'jardinier',
-  'vitrier',
-  'climaticien',
-  'cuisiniste',
-  'solier',
-  'nettoyage',
-  'terrassier',
-  'charpentier',
-  'zingueur',
-  'etancheiste',
-  'facadier',
-  'platrier',
-  'metallier',
-  'ferronnier',
-  'poseur-de-parquet',
-  'miroitier',
-  'storiste',
-  'salle-de-bain',
-  'architecte-interieur',
-  'decorateur',
-  'domoticien',
-  'pompe-a-chaleur',
-  'panneaux-solaires',
-  'isolation-thermique',
-  'renovation-energetique',
-  'borne-recharge',
-  'ramoneur',
-  'paysagiste',
-  'pisciniste',
-  'alarme-securite',
-  'antenniste',
-  'ascensoriste',
-  'diagnostiqueur',
-  'geometre',
-  'desinsectisation',
-  'deratisation',
-  'demenageur',
-])
-
-/**
- * Mapping catégorie RGE détectée → slug de service /devis le plus pertinent.
- * Utilisé en fallback quand le service RGE courant n'est pas dans l'allowlist.
- */
-const CATEGORY_TO_DEVIS_SLUG: Record<RgeCategory, string> = {
-  pac: 'pompe-a-chaleur',
-  photovoltaique: 'panneaux-solaires',
-  isolation: 'isolation-thermique',
-  menuiserie: 'menuisier',
-  'solaire-thermique': 'renovation-energetique',
-  bois: 'chauffagiste',
-  ventilation: 'renovation-energetique',
-  'chaudiere-condensation': 'chauffagiste',
-  'audit-energetique': 'renovation-energetique',
 }
 
 const GUIDE_META: Record<RgeGuideSlug, { name: string; organisme: string; description: string }> = {
@@ -226,7 +151,6 @@ export function ArtisanRgeEnrichedSection({
   departementSlug,
   rgeServiceSlug,
   artisanId,
-  citySlug,
 }: Props) {
   const hasAnyQualification = !!(qualifications && qualifications.length > 0)
   const match = matchQualifications(qualifications ?? null, organismes ?? null)
@@ -267,38 +191,7 @@ export function ArtisanRgeEnrichedSection({
   const canLinkToDept =
     !!departementSlug && !!rgeServiceSlug && RGE_ALLOWED_SERVICE_SLUGS.has(rgeServiceSlug)
 
-  // ── CTA devis contextualisé ─────────────────────────────────────────
-  // 1. On privilégie le service RGE courant (specialty_slug) s'il est
-  //    dans l'allowlist `/devis/[service]/[location]`.
-  // 2. Sinon on déduit un service "dominant" depuis la première catégorie
-  //    RGE détectée (ex: pac → pompe-a-chaleur).
-  // 3. Si on a en plus un `citySlug` → URL /devis/[service]/[location]
-  //    (pré-remplissage natif via le formulaire pSEO).
-  // 4. Sinon fallback query params `/devis?service=X&operation=Y` —
-  //    DevisForm lit ces params et pré-remplit le service.
-  const dominantCategory = match.categories[0]
-  const dominantOperation = match.ceeOpCodes[0] ?? null
-  let devisServiceSlug: string | null = null
-  if (rgeServiceSlug && DEVIS_SERVICE_ALLOWLIST.has(rgeServiceSlug)) {
-    devisServiceSlug = rgeServiceSlug
-  } else if (dominantCategory) {
-    const candidate = CATEGORY_TO_DEVIS_SLUG[dominantCategory]
-    if (DEVIS_SERVICE_ALLOWLIST.has(candidate)) devisServiceSlug = candidate
-  }
-
-  let devisHref: string
-  if (devisServiceSlug && citySlug) {
-    devisHref = `/devis/${devisServiceSlug}/${citySlug}`
-  } else {
-    const params = new URLSearchParams()
-    if (devisServiceSlug) params.set('service', devisServiceSlug)
-    if (dominantOperation) params.set('operation', dominantOperation)
-    const qs = params.toString()
-    devisHref = qs ? `/devis?${qs}` : '/devis'
-  }
-
-  // Handlers de tracking pour chaque type de lien.
-  const handleClick = (target: 'guide' | 'cee' | 'devis' | 'footer', slug: string) => {
+  const handleClick = (target: 'guide' | 'cee' | 'footer', slug: string) => {
     trackEvent('rge_section_click', {
       artisanId: artisanId ?? null,
       target,
@@ -419,33 +312,6 @@ export function ArtisanRgeEnrichedSection({
           </p>
         </div>
       )}
-
-      {/* CTA devis contextualisé — chemin direct du lecteur vers un devis
-          pré-rempli selon les qualifs détectées + la ville de l'artisan. */}
-      <div className="px-6 pt-6">
-        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-          <div className="flex-1 min-w-0">
-            <div className="font-heading font-extrabold text-charcoal-900 text-base leading-tight">
-              {fallback
-                ? 'Un projet de rénovation énergétique ?'
-                : 'Obtenez un devis pour ces travaux éligibles aux aides'}
-            </div>
-            <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">
-              Devis gratuit, 100 % sans engagement. Les primes CEE et MaPrimeRénov’ sont cumulables.
-            </p>
-          </div>
-          <Link
-            href={devisHref}
-            data-testid="rge-cta-devis"
-            onClick={() => handleClick('devis', devisServiceSlug ?? 'default')}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-3 text-sm shadow-sm transition whitespace-nowrap"
-          >
-            <FileText className="w-4 h-4" aria-hidden="true" />
-            Demander un devis
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
 
       {/* Footer — trust + cross-links */}
       <div className="px-6 py-5 mt-6 bg-sand-50 border-t border-charcoal-100 text-sm text-charcoal-600">
