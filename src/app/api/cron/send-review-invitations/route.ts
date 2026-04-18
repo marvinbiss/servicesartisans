@@ -154,7 +154,7 @@ export async function GET(request: Request) {
     // Previous token_hash is overwritten on retry (the old email link stops working,
     // which is the desired behaviour for retry semantics).
     const { plaintext, hash } = createInvitationToken()
-    const reviewUrl = `${SITE_URL}/donner-avis/${plaintext}`
+    const reviewUrl = `${SITE_URL}/invitation-avis/${plaintext}`
 
     const template = buildReviewEmail({
       clientName: invitation.client_name ?? '',
