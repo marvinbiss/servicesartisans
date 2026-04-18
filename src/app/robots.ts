@@ -166,9 +166,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: PRIVATE_DISALLOW,
       },
       // Block aggressive SEO scrapers (consume resources, no SEO benefit)
+      // AhrefsBot unblocked 2026-04-18 — needed for Site Explorer Internal Links
+      // data and continuous SEO monitoring on our own domain.
       {
         userAgent: [
-          'AhrefsBot',
           'SemrushBot',
           'MJ12bot',
           'DotBot',
