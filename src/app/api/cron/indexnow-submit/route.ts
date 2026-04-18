@@ -279,6 +279,7 @@ export async function GET(request: Request) {
           .from('providers')
           .select('specialty, address_city')
           .eq('is_active', true)
+          .eq('noindex', false)
           .gte('created_at', yesterday)
           .limit(200)
 
