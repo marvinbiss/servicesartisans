@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "playwright test",
+    "test:ssr-guard": "playwright test tests/e2e/ssr-bailout.spec.ts --project=chromium",
     "test:unit": "vitest",
     "test:coverage": "vitest --coverage",
     "test:ui": "playwright test --ui",
