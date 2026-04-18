@@ -206,6 +206,12 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
 
+        {/* Ahrefs Site Audit ownership verification — static HTML only (Ahrefs does not render JS) */}
+        <meta
+          name="ahrefs-site-verification"
+          content="28cb425a7c89d8ef2e0f1e28a2d156c95c0a4e13b752a97aca555611ba44749a"
+        />
+
         {/* Ahrefs Web Analytics — cookieless, no PII, no RGPD consent required. Must render in <head> (Ahrefs crawler verification requirement) */}
         <link rel="preconnect" href="https://analytics.ahrefs.com" />
         <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
