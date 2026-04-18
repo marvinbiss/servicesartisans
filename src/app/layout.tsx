@@ -206,13 +206,13 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
 
-        {/* Ahrefs Web Analytics — cookieless, no PII, no RGPD consent required. Provides organic keyword data not available in GA4 */}
+        {/* Ahrefs Web Analytics — cookieless, no PII, no RGPD consent required. Must render in <head> (Ahrefs crawler verification requirement) */}
         <link rel="preconnect" href="https://analytics.ahrefs.com" />
         <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
-        <Script
+        <script
+          async
           src="https://analytics.ahrefs.com/analytics.js"
           data-key={process.env.NEXT_PUBLIC_AHREFS_KEY || '7v7CALgW88hGzteEMS+bAQ'}
-          strategy="afterInteractive"
         />
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
