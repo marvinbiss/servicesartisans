@@ -37,6 +37,10 @@
       "schedule": "*/15 * * * *"
     },
     {
+      "path": "/api/cron/send-review-invitations",
+      "schedule": "*/15 * * * *"
+    },
+    {
       "path": "/api/cron/calculate-trust-badges",
       "schedule": "0 2 * * *"
     },

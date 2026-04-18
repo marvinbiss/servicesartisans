@@ -21,6 +21,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import { EventTimeline } from '@/components/dashboard/EventTimeline'
+import ExclusivityProofBadge from '@/components/artisan-dashboard/ExclusivityProofBadge'
 import { URGENCY_META, STATUS_META, type Lead } from '@/types/leads'
 import type { LeadEventType } from '@/types/leads'
 
@@ -239,6 +240,9 @@ export default function LeadDetailPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Main content */}
               <div className="lg:col-span-2 space-y-6">
+                {/* Exclusivity proof — DGCCRF-proof badge */}
+                <ExclusivityProofBadge assignmentId={assignment.id} />
+
                 {/* Lead header card */}
                 <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
                   <div className="px-6 py-4 bg-sand-50 border-b border-sand-200">

@@ -11,6 +11,7 @@ import { logLeadEvent } from '@/lib/dashboard/events'
 import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
 import { qualifyDevisForCee } from '@/lib/cee/qualify'
 import { runCeeDispatchFireAndForget } from '@/lib/cee/dispatcher-integration'
+import { createInvitationForDevis } from '@/lib/reviews/invitations'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -259,6 +260,17 @@ export async function processDevis(
 
   // --- Send emails (best-effort) ---
   await sendDevisEmails(data, serviceName, lead.id)
+
+  // --- Schedule review invitation (fire-and-forget) ---
+  if (data.email && assignedProviders.length > 0) {
+    createInvitationForDevis({
+      devisRequestId: lead.id,
+      clientEmail: data.email,
+      clientName: data.nom || null,
+      serviceName,
+      providerId: assignedProviders[0] ?? null,
+    }).catch((err) => logger.error('[review_invitations] schedule failed', err))
+  }
 
   return {
     success: true,
