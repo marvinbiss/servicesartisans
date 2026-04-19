@@ -40,6 +40,12 @@ import {
   Siren,
   SunDim,
   Layers,
+  Warehouse,
+  Umbrella,
+  Bell,
+  Droplets,
+  FileSearch,
+  Landmark,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -1122,6 +1128,60 @@ const guides = [
       '25-180 € TTC/m² posé stratifié/contrecollé/massif. DTU 51.1. Pose clouée/collée/flottante.',
     href: '/guides/parquet-massif-pose-prix-m2',
     icon: Layers,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Véranda : prix au m² 2026',
+    description:
+      '1 200-3 000 € TTC/m² posée alu/bois/acier. PC si >20 m². RT2012 si >50 m² chauffée. Taxe aménagement.',
+    href: '/guides/veranda-prix-pose-m2',
+    icon: Warehouse,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Pergola bioclimatique',
+    description:
+      '350-900 € TTC/m² posée alu lames orientables. DP si >5 m². Biossun, Gibus, Renson. Domotique + LED.',
+    href: '/guides/pergola-bioclimatique-prix-m2',
+    icon: Umbrella,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Interphone / visiophone',
+    description:
+      '200-1 500 € TTC installé filaire/radio/IP. Copropriété 350-900 €/logement. RGPD caméra obligatoire.',
+    href: '/guides/interphone-visiophone-installation-prix',
+    icon: Bell,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Adoucisseur d’eau',
+    description:
+      '1 000-3 500 € TTC posé volumétrique. ACS + NF obligatoires. Entretien sel 80-150 €/an + régénération.',
+    href: '/guides/adoucisseur-eau-prix-pose',
+    icon: Droplets,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Expertise bâtiment : prix',
+    description:
+      '400-5 000 € HT selon mission. Pré-achat, malfaçon, judiciaire (art. 232 CPC). CNEAF, CIBTP.',
+    href: '/guides/expertise-batiment-prix-quand-faire-appel',
+    icon: FileSearch,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Crédit travaux : comparer',
+    description:
+      'Éco-PTZ 0 % jusqu’à 50 000 €. Prêt affecté L312-55. TAEG 3-9 %. FICP + assurance emprunteur.',
+    href: '/guides/credit-travaux-pret-personnel-comparatif',
+    icon: Landmark,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
