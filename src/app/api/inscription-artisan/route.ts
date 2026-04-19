@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -17,6 +18,16 @@ function escapeHtml(str: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#x27;')
+}
+
+function normalizeSiret(raw: string): string {
+  return raw.replace(/\D/g, '')
+}
+
+function extractIp(request: Request): string {
+  const forwardedFor = request.headers.get('x-forwarded-for')
+  const ip = forwardedFor?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown'
+  return ip
 }
 
 const getResend = () => getResendClient()
@@ -61,6 +72,56 @@ export async function POST(request: Request) {
 
     const data = validation.data
     const metierFinal = data.metier === 'Autre' ? data.autreMetier : data.metier
+
+    // Anti-double-claim: block registration attempts on SIRETs already owned
+    // by a legitimate artisan account. We only block when a provider row
+    // exists AND claimed_at IS NOT NULL. Missing row or null claimed_at =
+    // fall through to normal email flow. Lookup errors = fail-open (log and
+    // continue) so we never block genuine users because of a DB hiccup.
+    const normalizedSiret = normalizeSiret(data.siret)
+    if (/^\d{14}$/.test(normalizedSiret)) {
+      try {
+        const supabase = createAdminClient()
+        const { data: provider, error: providerError } = await supabase
+          .from('providers')
+          .select('id, slug, claimed_at')
+          .eq('siret', normalizedSiret)
+          .maybeSingle()
+
+        if (providerError) {
+          logger.warn('[inscription-artisan] provider lookup failed (fail-open)', {
+            siretPrefix: normalizedSiret.slice(0, 9) + '*****',
+            error: providerError.message,
+          })
+        } else if (provider && provider.claimed_at) {
+          logger.warn('[inscription-artisan] double-claim attempt blocked', {
+            siretPrefix: normalizedSiret.slice(0, 9) + '*****',
+            providerId: provider.id,
+            ip: extractIp(request),
+          })
+          return NextResponse.json(
+            {
+              success: false,
+              error: {
+                code: 'ALREADY_CLAIMED',
+                message:
+                  'Cette fiche est déjà revendiquée par un compte artisan. Connectez-vous, utilisez « Mot de passe oublié », ou contactez le support si vous êtes le propriétaire légitime.',
+                providerSlug: provider.slug,
+                providerUrl: provider.slug ? `/artisan/${provider.slug}` : null,
+                loginUrl: '/connexion',
+                passwordResetUrl: '/mot-de-passe-oublie',
+              },
+            },
+            { status: 409 }
+          )
+        }
+      } catch (lookupErr) {
+        logger.warn('[inscription-artisan] provider lookup threw (fail-open)', {
+          siretPrefix: normalizedSiret.slice(0, 9) + '*****',
+          error: lookupErr instanceof Error ? lookupErr.message : 'unknown',
+        })
+      }
+    }
 
     // Send both emails in parallel (neither should crash the signup)
     const emailResults = await Promise.allSettled([
