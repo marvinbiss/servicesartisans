@@ -400,7 +400,7 @@ export default function DevisBottomSheet({
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
                         Votre e-mail{' '}
                         <span className="text-charcoal-400 font-normal">
-                          — pour recevoir vos devis
+                          — pour recevoir vos devis (optionnel)
                         </span>
                       </label>
                       <input
@@ -431,7 +431,8 @@ export default function DevisBottomSheet({
 
                     <div>
                       <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                        Quand souhaitez-vous les travaux ?
+                        Quand souhaitez-vous les travaux ?{' '}
+                        <span className="text-charcoal-400 font-normal">(optionnel)</span>
                       </label>
                       <div className="grid grid-cols-3 gap-2">
                         {urgencyOptions.map((opt) => (

@@ -232,21 +232,22 @@ describe('useDevisForm — validateStep1', () => {
 // Validation — Step 2
 // ===========================================================================
 
-describe('useDevisForm — validateStep2', () => {
-  it('fails when email is empty', () => {
+describe('useDevisForm — validateStep2 (7→4 obligatoires : email + urgence optionnels)', () => {
+  it('passes when email and urgence are empty (both optional)', () => {
     const { result } = renderDevisForm()
     let valid = false
     act(() => {
       valid = result.current.validateStep2()
     })
-    expect(valid).toBe(false)
-    expect(result.current.errors.email).toBe('Votre e-mail est requis')
+    expect(valid).toBe(true)
+    expect(result.current.errors.email).toBeUndefined()
+    expect(result.current.errors.urgence).toBeUndefined()
   })
 
-  it('fails when email is invalid', () => {
+  it('fails when email is provided but invalid', () => {
     const { result } = renderDevisForm({
       source: 'test',
-      initialData: { email: 'not-an-email', urgence: 'semaine' },
+      initialData: { email: 'not-an-email' },
     })
     let valid = false
     act(() => {
@@ -256,7 +257,7 @@ describe('useDevisForm — validateStep2', () => {
     expect(result.current.errors.email).toBe('E-mail invalide')
   })
 
-  it('fails when urgence is empty', () => {
+  it('passes when email valid + urgence empty', () => {
     const { result } = renderDevisForm({
       source: 'test',
       initialData: { email: 'test@example.com' },
@@ -265,8 +266,7 @@ describe('useDevisForm — validateStep2', () => {
     act(() => {
       valid = result.current.validateStep2()
     })
-    expect(valid).toBe(false)
-    expect(result.current.errors.urgence).toBe('Choisissez un délai')
+    expect(valid).toBe(true)
   })
 
   it('passes with valid email and urgence', () => {
@@ -367,18 +367,23 @@ describe('useDevisForm — computed validity flags', () => {
     expect(result.current.isStep1Valid).toBe(true)
   })
 
-  it('isStep2Valid requires valid email and urgence', () => {
+  it('isStep2Valid is true when email and urgence are empty (optional)', () => {
+    const { result } = renderDevisForm()
+    expect(result.current.isStep2Valid).toBe(true)
+  })
+
+  it('isStep2Valid is true with valid email', () => {
     const { result } = renderDevisForm({
       source: 'test',
-      initialData: { email: 'a@b.com', urgence: 'semaine' },
+      initialData: { email: 'a@b.com' },
     })
     expect(result.current.isStep2Valid).toBe(true)
   })
 
-  it('isStep2Valid is false with invalid email', () => {
+  it('isStep2Valid is false with provided but invalid email', () => {
     const { result } = renderDevisForm({
       source: 'test',
-      initialData: { email: 'bad', urgence: 'semaine' },
+      initialData: { email: 'bad' },
     })
     expect(result.current.isStep2Valid).toBe(false)
   })
@@ -431,13 +436,24 @@ describe('useDevisForm — validateAndNext', () => {
     expect(result.current.step).toBe(3)
   })
 
-  it('stays on step 2 when invalid', () => {
+  it('advances from step 2 to step 3 when email/urgence empty (optional)', () => {
     const { result } = renderDevisForm({
       source: 'test',
       initialStep: 2,
     })
     act(() => result.current.validateAndNext())
+    expect(result.current.step).toBe(3)
+  })
+
+  it('stays on step 2 when email provided but invalid', () => {
+    const { result } = renderDevisForm({
+      source: 'test',
+      initialStep: 2,
+      initialData: { email: 'bad-email' },
+    })
+    act(() => result.current.validateAndNext())
     expect(result.current.step).toBe(2)
+    expect(result.current.errors.email).toBe('E-mail invalide')
   })
 })
 

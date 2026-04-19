@@ -190,17 +190,16 @@ export function useDevisForm(options: UseDevisFormOptions) {
     return Object.keys(newErrors).length === 0
   }, [formData.service, formData.ville])
 
+  // 7→4 obligatoires : email + urgence sont optionnels. On valide le format
+  // uniquement si l'utilisateur a rempli l'email.
   const validateStep2 = useCallback((): boolean => {
     const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
-    if (!formData.email.trim()) {
-      newErrors.email = 'Votre e-mail est requis'
-    } else if (!isEmailValid(formData.email)) {
+    if (formData.email.trim() && !isEmailValid(formData.email)) {
       newErrors.email = 'E-mail invalide'
     }
-    if (!formData.urgence) newErrors.urgence = 'Choisissez un délai'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
-  }, [formData.email, formData.urgence])
+  }, [formData.email])
 
   const validateStep3 = useCallback((): boolean => {
     const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
@@ -222,7 +221,7 @@ export function useDevisForm(options: UseDevisFormOptions) {
       if (validateStep1()) setStep(2)
     } else if (step === 2) {
       if (validateStep2()) {
-        trackAbandon(formData.email.trim())
+        if (formData.email.trim()) trackAbandon(formData.email.trim())
         setStep(3)
       }
     }
@@ -301,7 +300,8 @@ export function useDevisForm(options: UseDevisFormOptions) {
   )
 
   const isStep1Valid = !!formData.service && !!formData.ville
-  const isStep2Valid = !!formData.email.trim() && isEmailValid(formData.email) && !!formData.urgence
+  // Step 2 est toujours valide (champs optionnels) sauf si l'email rempli est invalide.
+  const isStep2Valid = !formData.email.trim() || isEmailValid(formData.email)
   const isStep3Valid =
     !!formData.nom.trim() &&
     !!formData.telephone.trim() &&

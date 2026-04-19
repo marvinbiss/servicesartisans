@@ -82,8 +82,8 @@ const stepTitles = [
     subtitle: 'Choisissez le métier et indiquez votre ville.',
   },
   {
-    title: 'Parlez-nous de votre projet',
-    subtitle: 'Plus on en sait, meilleurs seront les devis.',
+    title: 'Parlez-nous de votre projet (optionnel)',
+    subtitle: 'Ces infos aident les artisans à préparer un meilleur devis — vous pouvez passer.',
   },
   {
     title: 'Dernière étape — comment vous joindre ?',
@@ -421,14 +421,13 @@ export default function DevisForm({
     return Object.keys(newErrors).length === 0
   }
 
+  // 7→4 obligatoires : email + urgence sont optionnels sur cette étape. On
+  // valide seulement le format si l'utilisateur a rempli l'email.
   const validateStep2Extended = (): boolean => {
     const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
-    if (!form.formData.email.trim()) {
-      newErrors.email = 'Veuillez entrer votre adresse e-mail'
-    } else if (!form.isEmailValid(form.formData.email.trim())) {
+    if (form.formData.email.trim() && !form.isEmailValid(form.formData.email.trim())) {
       newErrors.email = 'Veuillez entrer une adresse e-mail valide (ex : nom@exemple.fr)'
     }
-    if (!form.formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (
       form.formData.description.trim().length > 0 &&
       form.formData.description.trim().length < 5
@@ -542,10 +541,10 @@ export default function DevisForm({
     }
   }
 
+  // Step 2 = optionnelle. Toujours valide sauf email rempli et invalide, ou
+  // description < 5 caractères si saisie.
   const isStep2Valid =
-    !!form.formData.email.trim() &&
-    form.isEmailValid(form.formData.email) &&
-    !!form.formData.urgence &&
+    (!form.formData.email.trim() || form.isEmailValid(form.formData.email)) &&
     (form.formData.description.trim().length === 0 || form.formData.description.trim().length >= 5)
 
   const getFieldState = (field: keyof DevisFormData): 'idle' | 'valid' | 'error' => {
@@ -867,8 +866,9 @@ export default function DevisForm({
               <div>
                 <label htmlFor="email" className={labelClass}>
                   Votre e-mail{' '}
-                  <span className="text-charcoal-400 font-normal">— pour recevoir vos devis</span>{' '}
-                  <span className="text-red-500">*</span>
+                  <span className="text-charcoal-400 font-normal">
+                    — pour recevoir vos devis (optionnel)
+                  </span>
                 </label>
                 <div className="relative">
                   <input
@@ -914,7 +914,7 @@ export default function DevisForm({
 
               <div>
                 <label className={labelClass}>
-                  Délai souhaité <span className="text-red-500">*</span>
+                  Délai souhaité <span className="text-charcoal-400 font-normal">(optionnel)</span>
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {urgencyOptions.map((opt) => (
