@@ -72,6 +72,7 @@ type CliArgs = {
   retryFailed: boolean
   model: string
   verbose: boolean
+  rpm: number // max calls per minute across ALL workers (tpm safety)
 }
 
 type RunStats = {
@@ -116,6 +117,9 @@ function parseArgs(argv: string[]): CliArgs {
     retryFailed: false,
     model: DEFAULT_MODEL,
     verbose: false,
+    // Anthropic Haiku 4.5 Tier 1: ~50K TPM input. At ~1200 tok/req, cap at ~40
+    // RPM to stay comfortably under the limit. Override via --rpm if tier is higher.
+    rpm: 40,
   }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
@@ -153,6 +157,12 @@ function parseArgs(argv: string[]): CliArgs {
       case '--model':
         args.model = String(argv[++i])
         break
+      case '--rpm':
+        args.rpm = Number(argv[++i])
+        if (!Number.isFinite(args.rpm) || args.rpm <= 0) {
+          throw new Error('--rpm requires a positive integer')
+        }
+        break
       default:
         throw new Error(`Unknown flag: ${a}`)
     }
@@ -161,6 +171,22 @@ function parseArgs(argv: string[]): CliArgs {
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
+
+// Simple global rate limiter shared by all concurrent workers. Enforces a
+// minimum inter-call interval so combined request rate stays <= rpm.
+class RateLimiter {
+  private nextSlot = 0
+  private readonly intervalMs: number
+  constructor(rpm: number) {
+    this.intervalMs = Math.max(1, Math.floor(60_000 / rpm))
+  }
+  async acquire(): Promise<void> {
+    const now = Date.now()
+    const wait = Math.max(0, this.nextSlot - now)
+    this.nextSlot = Math.max(now, this.nextSlot) + this.intervalMs
+    if (wait > 0) await sleep(wait)
+  }
+}
 
 const now = (): string => new Date().toISOString()
 
@@ -414,7 +440,8 @@ async function processOne(
   ctx: ProviderContext,
   providerId: string,
   args: CliArgs,
-  stats: RunStats
+  stats: RunStats,
+  limiter: RateLimiter
 ): Promise<void> {
   const prompt = buildRgeDescriptionPrompt(ctx)
 
@@ -435,6 +462,7 @@ async function processOne(
     throw new Error('ANTHROPIC_API_KEY required (or use --dry-run)')
   }
 
+  await limiter.acquire()
   const gen = await callAnthropic(apiKey, args.model, prompt)
   if (!gen.text) {
     throw new Error('Empty response from Anthropic')
@@ -537,6 +565,9 @@ async function main(): Promise<void> {
     startedAt: Date.now(),
   }
 
+  const limiter = new RateLimiter(args.rpm)
+  console.log(`[descriptions] rate limit: ${args.rpm} rpm`)
+
   // Batch loop: fetch ProviderContext by batch, then generate concurrently.
   for (let offset = 0; offset < targetIds.length; offset += args.batchSize) {
     const slice = targetIds.slice(offset, offset + args.batchSize)
@@ -552,7 +583,7 @@ async function main(): Promise<void> {
 
     await runConcurrent(units, args.concurrency, async (u) => {
       try {
-        await processOne(apiKey, u.ctx, u.id, args, stats)
+        await processOne(apiKey, u.ctx, u.id, args, stats, limiter)
       } catch (err) {
         stats.errors++
         const msg = err instanceof Error ? err.message : String(err)

@@ -25,11 +25,15 @@ dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import {
-  buildProviderUrls,
-  submitUrlsWithRetry,
-  type ProviderSeoRefreshEvent,
-} from '@/lib/seo/provider-seo-refresh'
+import { buildProviderUrls, type ProviderSeoRefreshEvent } from '@/lib/seo/provider-seo-refresh'
+// NOTE: indexnow.ts reads INDEXNOW_API_KEY at module load. Static imports are
+// hoisted above dotenv.config, so we lazy-load it after env is populated.
+type IndexNowModule = typeof import('@/lib/seo/indexnow')
+let indexnowMod: IndexNowModule | null = null
+const getIndexNow = async (): Promise<IndexNowModule> => {
+  if (!indexnowMod) indexnowMod = await import('@/lib/seo/indexnow')
+  return indexnowMod
+}
 
 type CliArgs = {
   dryRun: boolean
@@ -145,7 +149,8 @@ async function publishOne(
   draft: DraftRow,
   provider: ProviderRow | undefined,
   args: CliArgs,
-  stats: Stats
+  stats: Stats,
+  collectUrl: (u: string) => void
 ): Promise<void> {
   const supabase = createAdminClient()
 
@@ -197,16 +202,7 @@ async function publishOne(
       slug: provider.slug,
       stable_id: provider.stable_id,
     }
-    const urls = buildProviderUrls(event)
-    if (urls.length > 0) {
-      try {
-        const res = await submitUrlsWithRetry(urls, 'provider_activated')
-        if (res.success) stats.indexnowOk++
-        else stats.indexnowFail++
-      } catch {
-        stats.indexnowFail++
-      }
-    }
+    for (const u of buildProviderUrls(event)) collectUrl(u)
   }
 }
 
@@ -258,9 +254,32 @@ async function main(): Promise<void> {
     startedAt: Date.now(),
   }
 
+  // Collect all affected URLs and submit them in a single IndexNow call
+  // (one big batch of up to 10 000 URLs, vs 60+ parallel small calls which
+  // get rate-limited per-IP by the IndexNow endpoint).
+  const indexnowUrls = new Set<string>()
+  const collectUrl = (u: string): void => {
+    indexnowUrls.add(u)
+  }
+
   await runConcurrent(drafts, args.concurrency, async (draft) => {
-    await publishOne(draft, providerIndex.get(draft.provider_id), args, stats)
+    await publishOne(draft, providerIndex.get(draft.provider_id), args, stats, collectUrl)
   })
+
+  if (args.indexnow && !args.dryRun && indexnowUrls.size > 0) {
+    const urlList = Array.from(indexnowUrls)
+    const { submitToIndexNow } = await getIndexNow()
+    const res = await submitToIndexNow(urlList)
+    if (res.success) {
+      stats.indexnowOk = res.submitted
+    } else {
+      stats.indexnowFail = urlList.length
+      logger.warn('[publish-descriptions] batched IndexNow push failed', {
+        urls_count: urlList.length,
+        error: res.error,
+      })
+    }
+  }
 
   const elapsed = (Date.now() - stats.startedAt) / 1000
   console.log(

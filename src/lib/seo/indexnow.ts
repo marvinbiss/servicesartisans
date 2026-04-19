@@ -1,7 +1,11 @@
 import { SITE_URL } from '@/lib/seo/config'
 
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
-const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY
+
+// Read at call-time so scripts that dotenv.config() after static-import
+// transitively loading this module still pick up the key. Module-load read
+// caused "No key or empty URL list" in publish-descriptions.ts.
+const getIndexNowKey = (): string | undefined => process.env.INDEXNOW_API_KEY
 
 const BATCH_SIZE = 10_000
 
@@ -17,7 +21,8 @@ interface IndexNowResult {
  * Should only be called server-side (API routes, cron jobs).
  */
 export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> {
-  if (!INDEXNOW_KEY || urls.length === 0) {
+  const indexnowKey = getIndexNowKey()
+  if (!indexnowKey || urls.length === 0) {
     return { submitted: 0, success: false, error: 'No key or empty URL list' }
   }
 
@@ -34,8 +39,8 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify({
           host: new URL(SITE_URL).hostname,
-          key: INDEXNOW_KEY,
-          keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
+          key: indexnowKey,
+          keyLocation: `${SITE_URL}/${indexnowKey}.txt`,
           urlList: batch,
         }),
       })
