@@ -899,6 +899,60 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Chantier abandonné : recours',
+    description:
+      'LRAR 15 j, résiliation torts, substitution art. 1222, liquidation. Récupérer acompte 80 %.',
+    href: '/guides/chantier-abandonne-artisan-recours',
+    icon: ShieldAlert,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Retenue de garantie 5 %',
+    description:
+      'Loi 1971, consignation CDC obligatoire, caution bancaire alternative, libération 1 an après réception.',
+    href: '/guides/retenue-garantie-5-pourcent',
+    icon: Scale,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Mon Accompagnateur Rénov’',
+    description:
+      'Obligatoire MPR Parcours Accompagné 2024. Agrément Anah, coût 600-2 500 € financés 100 % revenus modestes.',
+    href: '/guides/mon-accompagnateur-renov-obligatoire',
+    icon: Users,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Monter un dossier CEE',
+    description:
+      '7 étapes : comparer 3 offres, signer AVANT devis (critique), RGE, dépôt 6 mois, prime 2-8 k€.',
+    href: '/guides/cee-monter-dossier-etapes',
+    icon: Award,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Réception travaux : PV, checklist',
+    description:
+      'PV = acte juridique, déclenche GPA/biennale/décennale. Checklist 30 points, réserves, modèle NF P03-001.',
+    href: '/guides/reception-travaux-pv-checklist',
+    icon: FileCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Tableau électrique aux normes',
+    description:
+      'NF C 15-100 2023, différentiels 30 mA type A, parafoudre, Consuel Q14, prix 600-6 000 €.',
+    href: '/guides/tableau-electrique-aux-normes-2026',
+    icon: Zap,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [
