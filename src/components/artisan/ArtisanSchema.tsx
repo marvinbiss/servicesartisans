@@ -230,6 +230,57 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         })(),
       }),
 
+    // RGE certifications — EducationalOccupationalCredential per qualification.
+    // Dedupe par code (un artisan peut avoir plusieurs entrées pour la même
+    // qualif avec dates différentes — on garde la plus récente par date_fin).
+    ...(() => {
+      const rge = artisan.rge_qualifications
+      if (!Array.isArray(rge) || rge.length === 0) return {}
+      const now = Date.now()
+      const active = rge.filter((q) => {
+        if (!q?.date_fin) return false
+        const end = Date.parse(q.date_fin)
+        return Number.isFinite(end) && end > now
+      })
+      if (active.length === 0) return {}
+      // Dedupe par code, garder la plus longue validité
+      const byCode = new Map<string, (typeof active)[number]>()
+      for (const q of active) {
+        const existing = byCode.get(q.code)
+        if (!existing || Date.parse(q.date_fin) > Date.parse(existing.date_fin)) {
+          byCode.set(q.code, q)
+        }
+      }
+      const credentials = Array.from(byCode.values()).map((q) => ({
+        '@type': 'EducationalOccupationalCredential',
+        name: q.nom,
+        identifier: q.code,
+        credentialCategory: "RGE (Reconnu Garant de l'Environnement)",
+        recognizedBy: {
+          '@type': 'Organization',
+          name: q.organisme,
+        },
+        validFrom: q.date_debut || undefined,
+        validThrough: q.date_fin,
+        ...(q.url ? { url: q.url } : {}),
+      }))
+      return { hasCredential: credentials }
+    })(),
+
+    // Organismes RGE ayant délivré au moins une qualification active —
+    // memberOf pour renforcer le signal de rattachement officiel (Qualibat,
+    // Qualit'EnR, Qualifelec, OPQIBI, Certibat).
+    ...(() => {
+      const organismes = artisan.rge_organismes
+      if (!Array.isArray(organismes) || organismes.length === 0) return {}
+      return {
+        memberOf: organismes.map((name) => ({
+          '@type': 'Organization',
+          name,
+        })),
+      }
+    })(),
+
     // Quote request action for rich results
     potentialAction: {
       '@type': 'CommunicateAction',
