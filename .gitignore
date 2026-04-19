@@ -62,5 +62,16 @@ test-webhook.txt
 trigger-vercel-deploy.txt
 *.debug.html
 *.bak
+*.backup-*
 .gstack/
 src/lib/data/images-generated/_progress.json
+
+# Home-dir leak (accidental git track of ~/ on Windows)
+~/
+
+# Local diagnostic dumps
+Diag/
+
+# Claude Code local config (skills, settings — not shared)
+.claude/settings.json
+.claude/skills/
