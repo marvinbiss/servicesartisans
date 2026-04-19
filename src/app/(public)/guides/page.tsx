@@ -735,6 +735,60 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Taxe d’aménagement 2026',
+    description:
+      '1 036 €/m² hors IDF, 1 174 € IDF. Taux communaux, exonérations, paiement en 2 fois. Calcul détaillé.',
+    href: '/guides/taxe-amenagement-calcul-2026',
+    icon: Calculator,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'VMC obligatoire maison neuve',
+    description:
+      'Arrêté 1982 + RE2020. Simple flux auto/hygro B, double flux thermodynamique. Débits, entretien DTU 68.3.',
+    href: '/guides/vmc-obligatoire-maison-neuve',
+    icon: Wind,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Assurance habitation et travaux',
+    description:
+      'Déclaration à l’assureur, MRH pendant chantier, Dommages-Ouvrage obligatoire gros travaux, décennale.',
+    href: '/guides/assurance-habitation-travaux',
+    icon: ShieldCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Garantie parfait achèvement 1 an',
+    description:
+      'Art. 1792-6 Code civil. Couvre TOUS désordres signalés 1 an. Procédure LRAR, PV réception obligatoire.',
+    href: '/guides/garantie-parfait-achevement',
+    icon: ShieldCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'QualiPAC : signification et obtention',
+    description:
+      'Qualification RGE pompe à chaleur. 4 modules, obligatoire aides MPR + CEE. Vérifier sur qualit-enr.org.',
+    href: '/guides/qualipac-signification-obtenir',
+    icon: Award,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Infiltration fenêtre PVC pluie',
+    description:
+      '5 causes classiques, test arrosage, joint EPDM, garantie décennale si pose défectueuse <10 ans.',
+    href: '/guides/infiltration-fenetre-pvc',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [

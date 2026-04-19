@@ -487,6 +487,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'amenagement-combles-perdus-prix',
       'artisan-rge',
       'assurance-dommage-ouvrage',
+      'assurance-habitation-travaux',
       'budget-renovation',
       'chaudiere-gaz-vs-granules',
       'chaudiere-ne-chauffe-plus',
@@ -507,8 +508,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'fissures-maison-inquietantes',
       'fuite-eau-que-faire',
       'garantie-decennale',
+      'garantie-parfait-achevement',
       'humidite-mur-interieur-solution',
       'infiltration-eau-toiture-diagnostic',
+      'infiltration-fenetre-pvc',
       'installation-pompe-chaleur-etapes',
       'isolation-combles',
       'isolation-exterieure-vs-interieure',
@@ -540,6 +543,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'prix-ravalement-facade-maison',
       'prix-renovation-maison-100m2',
       'prix-renovation-salle-bain-4m2',
+      'qualipac-signification-obtenir',
       'refuser-devis-artisan-signe',
       'remontee-capillaire-mur-solution',
       'remplacement-fenetres-aides-2026',
@@ -549,9 +553,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'renovation-salle-de-bain',
       'renovation-toiture',
       'surelevation-toiture-prix',
+      'taxe-amenagement-calcul-2026',
       'travaux-copropriete',
       'trouver-artisan',
       'verifier-siret-artisan',
+      'vmc-obligatoire-maison-neuve',
     ]
     // Guides — STATIC_DATE: editorial content, updated manually when revised
     const guidePages: MetadataRoute.Sitemap = guideSlugs.map((slug) => ({
