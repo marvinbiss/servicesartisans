@@ -199,20 +199,35 @@ export async function GET(request: NextRequest) {
 
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
+    const { logger } = await import('@/lib/logger')
     const supabase = createAdminClient()
 
-    const { data: allProviders, error } = await supabase
-      .from('providers')
-      .select('id, name, slug, stable_id, specialty, address_city, updated_at')
-      .eq('is_active', true)
-      .eq('noindex', false)
-      .order('updated_at', { ascending: false })
-      .order('id', { ascending: false })
-      .range(offset, offset + PROVIDER_BATCH_SIZE - 1)
+    // Single-call RPC to bypass PostgREST max-rows pagination AND guarantee an
+    // atomic snapshot (no race window between sub-batches).
+    // Requires migration 457 (get_provider_sitemap + idx_providers_sitemap).
+    // If rawFetched < PROVIDER_BATCH_SIZE unexpectedly, inspect Max rows in
+    // Supabase → API settings (must stay ≥ PROVIDER_BATCH_SIZE).
+    const t0 = Date.now()
+    const { data: rpcRows, error } = await supabase.rpc('get_provider_sitemap', {
+      p_offset: offset,
+      p_limit: PROVIDER_BATCH_SIZE,
+    })
 
     if (error) throw error
+    const fetchMs = Date.now() - t0
 
-    const urls = (allProviders || [])
+    type Row = {
+      id: string
+      name: string | null
+      slug: string | null
+      stable_id: string | null
+      specialty: string | null
+      address_city: string | null
+      updated_at: string | null
+    }
+    const allProviders = (rpcRows as Row[] | null) ?? []
+
+    const urls = allProviders
       .filter((p): p is typeof p & { name: string; specialty: string; address_city: string } =>
         Boolean(p.name?.trim() && p.specialty?.trim() && p.address_city?.trim())
       )
@@ -245,6 +260,13 @@ export async function GET(request: NextRequest) {
         return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}<changefreq>monthly</changefreq><priority>0.3</priority></url>`
       })
       .filter((entry): entry is string => entry !== null)
+
+    logger.info('sitemap-providers emitted', {
+      batchIndex,
+      rawFetched: allProviders.length,
+      urlsEmitted: urls.length,
+      fetchMs,
+    })
 
     const xml = [
       '<?xml version="1.0" encoding="UTF-8"?>',
