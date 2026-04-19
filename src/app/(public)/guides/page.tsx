@@ -25,6 +25,9 @@ import {
   Wind,
   Snowflake,
   Award,
+  Droplet,
+  Flame,
+  Key,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -306,6 +309,276 @@ const guides = [
       'Matériaux (PVC, bois, alu, mixte), types de vitrage, pose en rénovation vs dépose totale, prix et aides financières (MaPrimeRénov, CEE, TVA 5,5%).',
     href: '/guides/renovation-fenetres',
     icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Vérifier le SIRET d’un artisan en 2026',
+    description:
+      'Méthode officielle en 3 minutes via l’Annuaire des Entreprises (INSEE Sirene) : activité, état actif, code NAF, date de création, signaux d’alerte.',
+    href: '/guides/verifier-siret-artisan',
+    icon: Search,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Comparer 3 devis d’artisans : méthode complète',
+    description:
+      'Grille de lecture ligne par ligne, écarts acceptables, signaux d’alerte, clauses qui changent tout et négociation efficace. Tableau d’exemple inclus.',
+    href: '/guides/comparer-3-devis-artisans',
+    icon: Scale,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Délai de rétractation d’un devis d’artisan',
+    description:
+      '14 jours après démarchage ou signature à domicile (art. L221-18). Conditions, procédure, modèle de lettre, sanctions en cas de refus.',
+    href: '/guides/delai-retractation-devis-artisan',
+    icon: Scale,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Comment choisir un artisan RGE en 2026',
+    description:
+      'Qualification par geste (QualiPAC, Qualibat 7131, Qualifelec IRVE…), vérification ADEME, pièges fraude et check-list avant signature.',
+    href: '/guides/comment-choisir-artisan-rge',
+    icon: ShieldCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Refuser un devis d’artisan déjà signé : vos 4 options',
+    description:
+      'Rétractation 14 jours, vice du consentement, inexécution, accord amiable : conditions, preuves, coûts et modèle de lettre.',
+    href: '/guides/refuser-devis-artisan-signe',
+    icon: Scale,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Comment demander un devis de travaux',
+    description:
+      'Rédiger un cahier des charges clair, obtenir 3 réponses comparables sous 7 jours, photos, mentions à exiger et modèle e-mail.',
+    href: '/guides/comment-faire-devis-travaux',
+    icon: Hammer,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Labels et qualifications des artisans',
+    description:
+      'Tableau comparatif RGE, Qualibat, Qualifelec, Qualit’EnR, Professionnel Gaz, Handibat : autorité, gestes couverts, où vérifier.',
+    href: '/guides/labels-qualifications-artisans',
+    icon: Award,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Humidité sur un mur intérieur : solutions',
+    description:
+      '4 causes (condensation, infiltration, remontées capillaires, fuite), diagnostic visuel, traitements efficaces et prix 2026.',
+    href: '/guides/humidite-mur-interieur-solution',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Moisissure mur chambre : traitement',
+    description:
+      'Risques sanitaires, nettoyage EPI, traitement définitif (ventilation, isolation, humidité). Protocole pas à pas.',
+    href: '/guides/moisissure-mur-chambre-traitement',
+    icon: Leaf,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Odeur de canalisation : 4 causes, vrais remèdes',
+    description:
+      'Siphon asséché, évent bouché, graisse, canalisation fissurée : diagnostic, DIY sans risque, quand appeler un plombier.',
+    href: '/guides/odeur-canalisation-remede',
+    icon: Hammer,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix rénovation maison 100 m² en 2026',
+    description:
+      'Budget par niveau (rafraîchissement, moyenne, complète, lourde) : 30 000 à 400 000 €. Détail par poste et aides 2026.',
+    href: '/guides/prix-renovation-maison-100m2',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix d’une pompe à chaleur air-eau installée',
+    description:
+      '10 000 à 18 000 € TTC selon puissance. Aides MaPrimeRénov’ + CEE jusqu’à 9 000 €. Grille par kW et profil revenus.',
+    href: '/guides/prix-pompe-chaleur-air-eau-installee',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix changement fenêtres double vitrage',
+    description:
+      '450 à 1 800 € par fenêtre posée selon matériau (PVC, alu, bois, mixte). Aides MaPrimeRénov’ + CEE cumulables.',
+    href: '/guides/prix-changement-fenetres-double-vitrage',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix électricien à l’heure en 2026',
+    description:
+      '45 à 75 €/h en journée, 90-150 €/h en urgence. Forfaits dépannage, tableau, IRVE. Arnaques à éviter.',
+    href: '/guides/prix-electricien-heure-2026',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix isolation combles 100 m²',
+    description:
+      'Soufflage (20-35 €/m²), panneaux (45-70 €/m²), sarking (120-250 €/m²). Aides 2026 jusqu’à 4 500 €.',
+    href: '/guides/prix-isolation-combles-100m2',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix pose carrelage au m²',
+    description:
+      'Pose droite 30-50 €/m², diagonale 45-70 €/m², motifs 60-120 €/m². Fourniture + préparation incluses.',
+    href: '/guides/prix-carrelage-pose-m2',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix installation chaudière gaz en 2026',
+    description:
+      '3 500 à 7 500 € installée (condensation). Fin de MaPrimeRénov’ chaudière gaz, comparaison avec PAC.',
+    href: '/guides/prix-installation-chaudiere-gaz',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix ravalement façade maison',
+    description:
+      '40 à 100 €/m² selon technique. Avec ITE : 150-250 €/m² éligible MaPrimeRénov’. Obligation légale 10 ans.',
+    href: '/guides/prix-ravalement-facade-maison',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix rénovation salle de bain 4 m²',
+    description:
+      'Rafraîchissement 2 500-5 000 €, rénovation complète 6 000-12 000 €, haut de gamme 12 000-20 000 €. Détail par poste.',
+    href: '/guides/prix-renovation-salle-bain-4m2',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prix peinture appartement 50 m²',
+    description:
+      '1 500 à 4 500 € TTC tout compris selon état des supports. Prix au m², choix de peinture, préparation.',
+    href: '/guides/prix-peinture-appartement-50m2',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Coup de pouce chauffage 2026',
+    description:
+      'Primes CEE bonifiées pour remplacement chaudière fioul/gaz : pompe à chaleur, chaudière biomasse, raccordement réseau chaleur.',
+    href: '/guides/coup-de-pouce-chauffage-2026',
+    icon: Flame,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Prime pompe à chaleur locataire',
+    description:
+      'Les locataires peuvent-ils obtenir des aides pour une pompe à chaleur ? Démarches, rôle du propriétaire, éligibilité 2026.',
+    href: '/guides/prime-pompe-chaleur-locataire',
+    icon: Snowflake,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'MaPrimeRénov’ copropriété',
+    description:
+      'Dispositif MaPrimeRénov’ Copropriétés : 25-45 % de travaux collectifs. Démarche syndic, vote AG, bonification.',
+    href: '/guides/maprimerenov-copropriete',
+    icon: Building2,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Aide isolation maison propriétaire',
+    description:
+      'MaPrimeRénov’, CEE, éco-PTZ : les aides cumulables pour isoler combles, murs, planchers. Montants 2026 par zone.',
+    href: '/guides/aide-isolation-maison-proprietaire',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Éco-PTZ 2026',
+    description:
+      'Éco-prêt à taux zéro : jusqu’à 50 000 € sans intérêts, 13 banques partenaires, cumul MaPrimeRénov’ + CEE.',
+    href: '/guides/eco-pret-taux-zero-2026',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Plafonds MaPrimeRénov’ revenus 2026',
+    description:
+      'Barème officiel 2026 : Bleu / Jaune / Violet / Rose, par nombre de personnes, IDF et hors IDF.',
+    href: '/guides/plafond-maprimerenov-revenus-2026',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Fuite d’eau : que faire',
+    description:
+      'Gestes d’urgence : couper l’eau, identifier la source, contacter plombier, déclarer à l’assurance.',
+    href: '/guides/fuite-eau-que-faire',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Panne électrique générale : conduite à tenir',
+    description:
+      'Distinguer panne Enedis d’un problème interne, vérifier disjoncteur, différentiel, isoler le circuit.',
+    href: '/guides/panne-electrique-generale-conduite',
+    icon: Zap,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Porte claquée : prix serrurier',
+    description:
+      'Tarifs honnêtes 2026, méthodes sans casse, éviter arnaques serrurier 24h/7j. Assistance habitation.',
+    href: '/guides/porte-claquee-serrurier-prix',
+    icon: Key,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Chaudière ne chauffe plus',
+    description:
+      'Diagnostic pression, codes erreur, coûts dépannage, contrat d’entretien, arbitrage réparation/remplacement.',
+    href: '/guides/chaudiere-ne-chauffe-plus',
+    icon: Flame,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
