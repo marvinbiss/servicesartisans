@@ -30,6 +30,10 @@ import {
   Key,
   Wrench,
   ClipboardCheck,
+  Blinds,
+  Cpu,
+  Trees,
+  LandPlot,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -1004,6 +1008,60 @@ const guides = [
       '8 000-22 000 € 3-9 kWc posés. Prime autoconso 80-380 €/kWc + revente EDF OA 0,13 €/kWh 20 ans.',
     href: '/guides/panneau-solaire-prix-rentabilite',
     icon: Leaf,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Clim réversible : prix et pose',
+    description:
+      '1 800-8 500 € TTC posée mono/multi-split. COP 3,5-4,5. CEE 100-300 €. F-gaz + QualiPAC obligatoires.',
+    href: '/guides/climatisation-reversible-prix-pose',
+    icon: Wind,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Poêle à granulés : aides 2026',
+    description:
+      '3 500-6 500 € TTC posé. MaPrimeRénov 1 500-3 000 € + CEE 800-1 200 €. Qualibois + Flamme Verte 7★.',
+    href: '/guides/poele-granules-aides-2026',
+    icon: Flame,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Volet roulant motorisé',
+    description:
+      '550-1 400 € TTC posé. Filaire / radio / solaire. TVA 10 %. Pose par électricien qualifié NF C 15-100.',
+    href: '/guides/volet-roulant-motorise-prix',
+    icon: Blinds,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Domotique : smart home 2026',
+    description:
+      '5 000-9 000 € maison 100 m² Zigbee/Matter, 12 000-18 000 € KNX filaire. Qualifelec DOM recommandé.',
+    href: '/guides/domotique-installation-smart-home',
+    icon: Cpu,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Terrasse bois / composite',
+    description:
+      '80-250 € TTC/m² posée. Pin autoclave, douglas, exotique, composite. DTU 51.4. DP si >5 m² ou surélevée.',
+    href: '/guides/terrasse-bois-composite-prix-m2',
+    icon: Trees,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Clôture jardin : règles 2026',
+    description:
+      'Hauteur 2,60/3,20 m (art. 663 Code civil), DP si PLU, mitoyenneté, prix 20-600 €/ml selon type.',
+    href: '/guides/cloture-jardin-reglementation',
+    icon: LandPlot,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },

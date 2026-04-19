@@ -500,6 +500,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'chaudiere-ne-chauffe-plus',
       'chauffe-eau-thermodynamique-prix',
       'classe-energie-f-interdite-2028',
+      'climatisation-reversible-prix-pose',
+      'cloture-jardin-reglementation',
       'comment-choisir-artisan-rge',
       'comment-faire-devis-travaux',
       'comparer-3-devis-artisans',
@@ -513,6 +515,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'devis-travaux',
       'diagnostics-immobiliers',
       'diagnostics-vente-obligatoires',
+      'domotique-installation-smart-home',
       'dpe-mauvais-que-faire',
       'dtu-plomberie-normes',
       'eco-pret-taux-zero-2026',
@@ -548,6 +551,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'perte-rge-consequences',
       'plafond-maprimerenov-revenus-2026',
       'plombier-tarif-horaire-2026',
+      'poele-granules-aides-2026',
       'pont-thermique-maison-traitement',
       'pompe-a-chaleur',
       'porte-claquee-serrurier-prix',
@@ -577,11 +581,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'surelevation-toiture-prix',
       'tableau-electrique-aux-normes-2026',
       'taxe-amenagement-calcul-2026',
+      'terrasse-bois-composite-prix-m2',
       'travaux-copropriete',
       'trouver-artisan',
       'tva-5-5-travaux-conditions',
       'verifier-siret-artisan',
       'vmc-obligatoire-maison-neuve',
+      'volet-roulant-motorise-prix',
     ]
     // Guides — STATIC_DATE: editorial content, updated manually when revised
     const guidePages: MetadataRoute.Sitemap = guideSlugs.map((slug) => ({
