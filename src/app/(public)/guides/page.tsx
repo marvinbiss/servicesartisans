@@ -953,6 +953,60 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Faux devis : détecter, signaler',
+    description:
+      '10 signaux, usurpation RGE 60 %, vérif SIRET + RGE + décennale 10 min, signaler DGCCRF.',
+    href: '/guides/faux-devis-detecter-signaler',
+    icon: ShieldAlert,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Devis et facture : mentions',
+    description:
+      'Devis obligatoire >150 €, facture >1 500 €. 12 + 15 mentions obligatoires. Sanctions 75 000 €.',
+    href: '/guides/devis-facture-mentions-obligatoires',
+    icon: FileText,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Chauffe-eau thermodynamique',
+    description:
+      '2 200-4 500 € posé 200-300L, COP 2,5-3,8. Aides MPR + CEE + TVA 5,5 %, amortissement 4-8 ans.',
+    href: '/guides/chauffe-eau-thermodynamique-prix',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Chaudière fioul interdite',
+    description:
+      'Décret 2022-8. Existante OK, remplacement identique interdit. PAC/granulés, aides majorées Coup de pouce.',
+    href: '/guides/chaudiere-fioul-interdite-2026',
+    icon: Flame,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Borne recharge IRVE',
+    description:
+      '1 200-3 500 € posée 7/11 kW. Crédit d’impôt 75 % plafonné 500 €. Qualifelec IRVE obligatoire dès 3,7 kW.',
+    href: '/guides/borne-recharge-irve-obligation',
+    icon: Zap,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Panneau solaire : prix 2026',
+    description:
+      '8 000-22 000 € 3-9 kWc posés. Prime autoconso 80-380 €/kWc + revente EDF OA 0,13 €/kWh 20 ans.',
+    href: '/guides/panneau-solaire-prix-rentabilite',
+    icon: Leaf,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [
