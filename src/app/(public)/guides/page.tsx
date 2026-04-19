@@ -681,6 +681,60 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Fissures maison : inquiétantes ?',
+    description:
+      '3 niveaux de gravité, RGA sécheresse, expertise BE, assurance CatNat, micropieux 8-25 k€.',
+    href: '/guides/fissures-maison-inquietantes',
+    icon: ShieldAlert,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Condensation fenêtres : 5 causes',
+    description:
+      'Humidité, VMC, pont thermique, simple vitrage, joints. Solutions du geste gratuit à VMC hygro B.',
+    href: '/guides/condensation-fenetres-causes',
+    icon: Wind,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Infiltration toiture : diagnostic',
+    description:
+      '7 causes classiques, méthode pro, prix réparation couvreur 200-4 500 €, assurance dégât des eaux.',
+    href: '/guides/infiltration-eau-toiture-diagnostic',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Remontée capillaire mur : solution',
+    description:
+      'Diagnostic salpêtre, injection résine 30-60 €/ml, méfiance méthodes miracles, entreprise RGE.',
+    href: '/guides/remontee-capillaire-mur-solution',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Isolation phonique mur appartement',
+    description:
+      'Loi masse-ressort-masse, contre-cloison pro 80-180 €/m², +20 dB. Affaiblissement vs perception.',
+    href: '/guides/isolation-phonique-mur-appartement',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Pont thermique : traitement',
+    description:
+      'Dalles, refends, nez de plancher. 10-30 % déperditions ITI. ITE ou rupteurs en neuf. Caméra thermique.',
+    href: '/guides/pont-thermique-maison-traitement',
+    icon: Snowflake,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [
