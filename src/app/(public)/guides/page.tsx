@@ -582,6 +582,105 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Installation pompe à chaleur : 7 étapes',
+    description:
+      'De l’audit à la mise en service : 6-14 semaines. Artisan RGE QualiPAC, aides MaPrimeRénov’ 2026 jusqu’à 11 000 €.',
+    href: '/guides/installation-pompe-chaleur-etapes',
+    icon: Snowflake,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Isolation extérieure vs intérieure',
+    description:
+      'ITE vs ITI : comparatif prix, performance, ponts thermiques, surface perdue, aides 2026, autorisations.',
+    href: '/guides/isolation-exterieure-vs-interieure',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Chaudière gaz vs granulés',
+    description:
+      'Comparatif coût, rendement, aides 2026. Gaz 3,5-6,5 k€ vs granulés 14-22 k€. Aides rééquilibrent.',
+    href: '/guides/chaudiere-gaz-vs-granules',
+    icon: Flame,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Remplacement fenêtres : aides 2026',
+    description:
+      'MPR parcours accompagné 40-100 €/fenêtre, CEE, TVA 5,5 %, éco-PTZ. Uw ≤1,3 W/m²·K obligatoire.',
+    href: '/guides/remplacement-fenetres-aides-2026',
+    icon: Wind,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Ouverture mur porteur : prix',
+    description:
+      '1 500-6 000 € TTC selon portée. Étude structure béton obligatoire 400-900 €. Démarches copropriété détaillées.',
+    href: '/guides/ouverture-mur-porteur-prix',
+    icon: Hammer,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Aménagement combles perdus : prix',
+    description:
+      '900-1 800 €/m² TTC selon faisabilité. Hauteur, pente, charpente, fermettes, DP/PC, isolation.',
+    href: '/guides/amenagement-combles-perdus-prix',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'DPE mauvais (E, F, G) : que faire',
+    description:
+      'Calendrier interdictions location 2025-2034, travaux prioritaires, aides cumulables, décote vente.',
+    href: '/guides/dpe-mauvais-que-faire',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Passoire thermique : rénovation',
+    description:
+      '5,2 M de passoires en France. Rénovation obligatoire 2025-2034, exceptions ABF, coût et aides.',
+    href: '/guides/passoire-thermique-renovation',
+    icon: Snowflake,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Classe F interdite location 2028',
+    description:
+      '1,3 M logements F loués concernés. Calendrier, dérogations, travaux pour atteindre E ou D.',
+    href: '/guides/classe-energie-f-interdite-2028',
+    icon: Snowflake,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'MaPrimeRénov’ parcours accompagné',
+    description:
+      'Aide jusqu’à 63 000 € avec gain ≥2 classes DPE. Mon Accompagnateur Rénov’ obligatoire, barème 2026.',
+    href: '/guides/maprimerenov-parcours-accompagne',
+    icon: Users,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Surélévation toiture : prix',
+    description:
+      '2 000-3 500 €/m² TTC bois. PC obligatoire, archi si >150 m². Bois vs béton, faisabilité PLU.',
+    href: '/guides/surelevation-toiture-prix',
+    icon: Home,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [
