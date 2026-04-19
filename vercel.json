@@ -135,6 +135,10 @@
     {
       "path": "/api/cron/cee-dossier-transitions",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/noindex-sweep",
+      "schedule": "30 3 * * *"
     }
   ]
 }
