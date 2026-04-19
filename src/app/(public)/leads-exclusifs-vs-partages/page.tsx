@@ -322,28 +322,22 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Abonnement Habitatpresto&nbsp;: <strong>144&nbsp;€/mois</strong>
+                  Abonnement typique&nbsp;: <strong>100-150&nbsp;€/mois</strong>
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
-                <span>20 leads reçus par mois (partagés à 5)</span>
+                <span>20 leads reçus par mois (partagés à 5 artisans)</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
                 <span>
-                  Taux de conversion&nbsp;: 8&nbsp;% → <strong>1,6 chantier/mois</strong>
+                  Conversion plus basse : chaque lead doit être rappelé avant les 4 concurrents
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-charcoal-400 mt-0.5">&bull;</span>
-                <span>
-                  Coût par chantier signé&nbsp;: <strong className="text-red-600">90&nbsp;€</strong>
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-charcoal-400 mt-0.5">&bull;</span>
-                <span>+ temps perdu en rappels concurrentiels sur les 18 leads non-convertis</span>
+                <span>+ temps perdu en rappels concurrentiels sur les leads non-convertis</span>
               </li>
             </ul>
           </div>
@@ -360,33 +354,30 @@ export default function LeadsExclusifsVsPartagesPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
                 <span>
-                  Coût&nbsp;: <strong>0&nbsp;€/mois</strong> (ServicesArtisans, phase lancement)
+                  Coût&nbsp;: <strong>0&nbsp;€/mois</strong> (ServicesArtisans, phase de lancement)
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>8 leads exclusifs par mois (moins de volume, meilleure qualité)</span>
+                <span>Moins de volume, meilleure qualité (pas de course au rappel)</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>
-                  Taux de conversion&nbsp;: 25&nbsp;% → <strong>2 chantiers/mois</strong>
-                </span>
+                <span>Chaque lead est à vous, sans concurrence interne sur la même demande</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>
-                  Coût par chantier signé&nbsp;:{' '}
-                  <strong className="text-emerald-700">0&nbsp;€</strong>
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-500 mt-0.5">&bull;</span>
-                <span>+ temps libéré pour faire les chantiers (pas de course au rappel)</span>
+                <span>+ temps libéré pour faire les chantiers</span>
               </li>
             </ul>
           </div>
         </div>
+        <p className="max-w-5xl mx-auto px-4 sm:px-6 mt-6 text-xs text-charcoal-500 italic">
+          Scénarios qualitatifs à titre d&apos;illustration. Les volumes, coûts et taux de
+          conversion réels varient selon la zone, le métier, la saisonnalité et la politique
+          tarifaire des plateformes (phase de lancement ServicesArtisans en avril 2026 — conditions
+          commerciales évolutives). Aucun engagement de résultat n&apos;est donné ici.
+        </p>
       </section>
 
       {/* ============================================================ */}

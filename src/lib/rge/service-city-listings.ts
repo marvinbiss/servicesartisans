@@ -327,3 +327,93 @@ export async function getRgeProvidersByServiceAndDepartement(
     { skipNull: true }
   )
 }
+
+/**
+ * RGE count (service × ville) — variante stricte pour la stratégie 410.
+ *
+ * Contrairement à `getRgeProvidersByServiceAndCity` qui fail-open silencieux
+ * (retourne count=0 en cas d'erreur DB), cette variante renvoie un
+ * discriminant explicite : `ok=true` si le count a pu être établi (y compris
+ * 0 légitime), `ok=false` si une erreur transitoire s'est produite.
+ *
+ * Usage côté page : si `ok=false` → ne pas notFound(), fallback indexable.
+ *
+ * Pendant le build (IS_BUILD), retourne `{ ok: true, count: 1 }` pour rester
+ * aligné avec la politique fail-open générale (évite de 404 toutes les pages
+ * pré-rendues au build sans DB).
+ */
+export async function getRgeCountByServiceAndCityStrict(
+  serviceSlug: string,
+  villeSlug: string
+): Promise<{ ok: true; count: number } | { ok: false }> {
+  if (IS_BUILD) return { ok: true, count: 1 }
+
+  if (!isRgeAllowedService(serviceSlug)) return { ok: true, count: 0 }
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return { ok: true, count: 0 }
+
+  const ville = getVilleBySlug(villeSlug)
+  if (!ville) return { ok: true, count: 0 }
+
+  const cityValues = getCityValues(ville.name, ville.departementCode)
+  const today = new Date().toISOString().slice(0, 10)
+
+  try {
+    const { count, error } = await supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .in('specialty', specialties)
+      .in('address_city', cityValues)
+      .eq('is_active', true)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', today)
+
+    if (error) throw error
+    return { ok: true, count: count ?? 0 }
+  } catch (err) {
+    logger.warn(
+      `[getRgeCountByServiceAndCityStrict] transient error for ${serviceSlug}/${villeSlug}`,
+      { error: err instanceof Error ? err.message : err }
+    )
+    return { ok: false }
+  }
+}
+
+/**
+ * Variante stricte pour le couple (service, département).
+ * Même sémantique que `getRgeCountByServiceAndCityStrict`.
+ */
+export async function getRgeCountByServiceAndDepartementStrict(
+  serviceSlug: string,
+  departementName: string
+): Promise<{ ok: true; count: number } | { ok: false }> {
+  if (IS_BUILD) return { ok: true, count: 1 }
+
+  if (!isRgeAllowedService(serviceSlug)) return { ok: true, count: 0 }
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return { ok: true, count: 0 }
+
+  const today = new Date().toISOString().slice(0, 10)
+
+  try {
+    const { count, error } = await supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .in('specialty', specialties)
+      .eq('address_department', departementName)
+      .eq('is_active', true)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', today)
+
+    if (error) throw error
+    return { ok: true, count: count ?? 0 }
+  } catch (err) {
+    logger.warn(
+      `[getRgeCountByServiceAndDepartementStrict] transient error for ${serviceSlug}/${departementName}`,
+      { error: err instanceof Error ? err.message : err }
+    )
+    return { ok: false }
+  }
+}

@@ -55,6 +55,7 @@ import {
   getPersonSchema,
   getInsuranceProductSchema,
   getFinancialProductSchema,
+  getGovernmentServiceSchema,
   getLoanOrCreditSchema,
   getDetailedPricingSchema,
 } from '@/lib/seo/jsonld'
@@ -661,6 +662,96 @@ describe('getFinancialProductSchema', () => {
     expect(schema.annualPercentageRate).toBe(0)
     expect(schema.interestRate).toBe(0)
     expect(schema.amount).toBe('50000')
+  })
+})
+
+// ---------- getGovernmentServiceSchema ----------
+describe('getGovernmentServiceSchema', () => {
+  it('returns GovernmentService type with required fields', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: "Certificats d'économies d'énergie",
+      url: 'https://servicesartisans.fr/cee',
+    })
+    expect(schema['@type']).toBe('GovernmentService')
+    expect(schema.name).toBe('CEE')
+    expect(schema.url).toBe('https://servicesartisans.fr/cee')
+  })
+
+  it('defaults serviceOperator to DGEC when not provided', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+    })
+    const operator = schema.serviceOperator as Record<string, unknown>
+    expect(operator['@type']).toBe('GovernmentOrganization')
+    expect(operator.name).toContain('DGEC')
+  })
+
+  it('defaults serviceType to Financial Assistance', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+    })
+    expect(schema.serviceType).toBe('Financial Assistance')
+  })
+
+  it('includes temporalCoverage when provided (P6 2026-2030)', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+      temporalCoverage: '2026-01-01/2030-12-31',
+    })
+    expect(schema.temporalCoverage).toBe('2026-01-01/2030-12-31')
+  })
+
+  it('includes sameAs with official authorities when provided', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+      sameAs: [
+        'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+        'https://www.service-public.fr/particuliers/vosdroits/F342',
+      ],
+    })
+    expect(schema.sameAs).toHaveLength(2)
+  })
+
+  it('omits sameAs when not provided', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+    })
+    expect(schema.sameAs).toBeUndefined()
+  })
+
+  it('includes audience as Audience object when provided', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+      audience: 'Propriétaires en France',
+    })
+    expect(schema.audience).toBeDefined()
+    const audience = schema.audience as Record<string, unknown>
+    expect(audience['@type']).toBe('Audience')
+    expect(audience.audienceType).toBe('Propriétaires en France')
+  })
+
+  it('sets areaServed to France', () => {
+    const schema = getGovernmentServiceSchema({
+      name: 'CEE',
+      description: 'Desc',
+      url: '/cee',
+    })
+    const area = schema.areaServed as Record<string, unknown>
+    expect(area['@type']).toBe('Country')
+    expect(area.name).toBe('France')
   })
 })
 

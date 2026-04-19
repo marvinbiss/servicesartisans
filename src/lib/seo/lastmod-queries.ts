@@ -426,6 +426,257 @@ export async function getQualifiedServiceCityCombos(): Promise<QualifiedCombos |
   }
 }
 
+// ─── Query: Qualified RGE service×ville and service×dept combos ────────
+
+/**
+ * Returns two sets for RGE sitemap pruning:
+ *   - `rgeServiceCity`: `${serviceSlug}::${villeSlug}` combos with ≥1 active RGE provider
+ *   - `rgeServiceDept`: `${serviceSlug}::${deptSlug}` combos with ≥1 active RGE provider
+ *
+ * "Qualified" = specialty maps to an RGE-allowed service AND provider is
+ * active AND `rge_valid_until >= today` (same filter as
+ * `getRgeProvidersByServiceAndCity`).
+ *
+ * Fail-open: returns `{ rgeServiceCity: null, rgeServiceDept: null }` on any
+ * error. Callers MUST treat `null` as "include everything" to avoid accidental
+ * mass pruning on DB blips. Aligns with the `qualifiedCombos` contract used by
+ * devis/urgence/tarifs sitemaps.
+ */
+export interface RgeQualifiedCombos {
+  rgeServiceCity: Set<string> | null
+  rgeServiceDept: Set<string> | null
+}
+
+export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
+  const supabase = safeAdminClient()
+  if (!supabase) return { rgeServiceCity: null, rgeServiceDept: null }
+
+  // Lazy-load the allowlist + service-to-specialty mapping. Importing at the
+  // top of this file would create a cycle (service-city-listings depends on
+  // @/lib/supabase which is mocked in tests of this file).
+  let RGE_ALLOWED_SERVICES: readonly string[] = []
+  let SERVICE_TO_SPECIALTIES: Record<string, string[]> = {}
+  try {
+    const rgeMod = await import('@/lib/rge/service-city-listings')
+    RGE_ALLOWED_SERVICES = rgeMod.RGE_ALLOWED_SERVICES
+    const supaMod = await import('@/lib/supabase')
+    SERVICE_TO_SPECIALTIES = supaMod.SERVICE_TO_SPECIALTIES
+  } catch {
+    return { rgeServiceCity: null, rgeServiceDept: null }
+  }
+
+  // Reverse lookup: specialty → RGE service slugs (keep only RGE-allowed).
+  const specialtyToRgeSlugs = new Map<string, string[]>()
+  for (const slug of RGE_ALLOWED_SERVICES) {
+    const specs = SERVICE_TO_SPECIALTIES[slug] || [slug]
+    for (const sp of specs) {
+      const norm = normalizeKey(sp)
+      const existing = specialtyToRgeSlugs.get(norm)
+      if (existing) {
+        if (!existing.includes(slug)) existing.push(slug)
+      } else {
+        specialtyToRgeSlugs.set(norm, [slug])
+      }
+    }
+  }
+
+  const cityToSlug = new Map<string, string>()
+  for (const v of villes) {
+    cityToSlug.set(normalizeKey(v.name), v.slug)
+  }
+
+  try {
+    const rgeServiceCity: Set<string> = new Set()
+    const rgeServiceDept: Set<string> = new Set()
+    const today = new Date().toISOString().slice(0, 10)
+    const pageSize = 1000
+    let from = 0
+    // Cap defensively: ~60k unique RGE SIRET today per memory, ~10× safety.
+    const maxRows = 600_000
+
+    while (from < maxRows) {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('specialty, address_city, address_department')
+        .eq('is_active', true)
+        .eq('noindex', false)
+        .not('specialty', 'is', null)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', today)
+        .range(from, from + pageSize - 1)
+
+      if (error) {
+        // Fail-open on any query error.
+        return { rgeServiceCity: null, rgeServiceDept: null }
+      }
+      if (!data || data.length === 0) break
+
+      for (const row of data) {
+        const specialty = row.specialty as string | null
+        const city = row.address_city as string | null
+        const dept = row.address_department as string | null
+        if (!specialty) continue
+
+        const svcSlugs = specialtyToRgeSlugs.get(normalizeKey(specialty))
+        if (!svcSlugs || svcSlugs.length === 0) continue
+
+        // City combo — strip arrondissement suffix so Paris/Lyon/Marseille map.
+        if (city) {
+          const cityKey = normalizeKey(city)
+            .replace(/\s+\d+\s*(er|e|eme|ieme)?\s*(arr|arrondissement)?\.?\s*$/, '')
+            .trim()
+          const villeSlug = cityToSlug.get(cityKey)
+          if (villeSlug) {
+            for (const svcSlug of svcSlugs) {
+              rgeServiceCity.add(`${svcSlug}::${villeSlug}`)
+            }
+          }
+        }
+
+        // Dept combo — normalize department name (matches departements[].slug
+        // via separate lookup built by the caller since dept slug ≠ name).
+        if (dept) {
+          const deptKey = normalizeKey(dept)
+          for (const svcSlug of svcSlugs) {
+            rgeServiceDept.add(`${svcSlug}::${deptKey}`)
+          }
+        }
+      }
+
+      if (data.length < pageSize) break
+      from += pageSize
+    }
+
+    return { rgeServiceCity, rgeServiceDept }
+  } catch {
+    return { rgeServiceCity: null, rgeServiceDept: null }
+  }
+}
+
+// ─── Query: Qualified CEE operation×ville combos ───────────────────────
+
+/**
+ * Returns a Set<`${operationCode}::${villeSlug}`> of CEE combos with ≥1
+ * active RGE provider whose specialty is eligible for that operation.
+ *
+ * Eligibility rule matches `getCeeProvidersByOperationAndCity`:
+ *   - provider.specialty ∈ resolveSpecialtiesForOperation(operation.services_slugs)
+ *   - provider.is_active
+ *   - provider.rge_valid_until >= today (⇒ rge_qualifications NOT NULL)
+ *
+ * Fail-open: returns `null` on any error or missing dep. Callers treat `null`
+ * as "include everything".
+ */
+export async function getQualifiedCeeCombos(
+  operationCodes: readonly string[]
+): Promise<Set<string> | null> {
+  const supabase = safeAdminClient()
+  if (!supabase || operationCodes.length === 0) return null
+
+  let SERVICE_TO_SPECIALTIES: Record<string, string[]> = {}
+  let getCeeOperationByCode: (code: string) => Promise<{ services_slugs: string[] } | null>
+  try {
+    const supaMod = await import('@/lib/supabase')
+    SERVICE_TO_SPECIALTIES = supaMod.SERVICE_TO_SPECIALTIES
+    const catMod = await import('@/lib/cee/catalogue')
+    getCeeOperationByCode = catMod.getCeeOperationByCode as typeof getCeeOperationByCode
+  } catch {
+    return null
+  }
+
+  // Resolve each operation's candidate specialties once (same logic as
+  // lib/cee/listings.ts::resolveSpecialtiesForOperation).
+  const opToSpecialties = new Map<string, Set<string>>()
+  for (const code of operationCodes) {
+    try {
+      const op = await getCeeOperationByCode(code)
+      if (!op) continue
+      const set = new Set<string>()
+      for (const slug of op.services_slugs || []) {
+        const mapped = SERVICE_TO_SPECIALTIES[slug]
+        if (mapped && mapped.length > 0) {
+          for (const s of mapped) set.add(normalizeKey(s))
+        } else {
+          set.add(normalizeKey(slug))
+        }
+      }
+      if (set.size > 0) opToSpecialties.set(code, set)
+    } catch {
+      // Skip this op on error; fail-open at the op level rather than nuking all.
+      continue
+    }
+  }
+
+  if (opToSpecialties.size === 0) return null
+
+  // Reverse map: specialty → [op codes] for O(1) lookup during the scan.
+  const specialtyToOps = new Map<string, string[]>()
+  for (const [code, specSet] of Array.from(opToSpecialties.entries())) {
+    for (const spec of Array.from(specSet)) {
+      const existing = specialtyToOps.get(spec)
+      if (existing) {
+        if (!existing.includes(code)) existing.push(code)
+      } else {
+        specialtyToOps.set(spec, [code])
+      }
+    }
+  }
+
+  const cityToSlug = new Map<string, string>()
+  for (const v of villes) {
+    cityToSlug.set(normalizeKey(v.name), v.slug)
+  }
+
+  try {
+    const combos: Set<string> = new Set()
+    const today = new Date().toISOString().slice(0, 10)
+    const pageSize = 1000
+    let from = 0
+    const maxRows = 600_000
+
+    while (from < maxRows) {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('specialty, address_city')
+        .eq('is_active', true)
+        .eq('noindex', false)
+        .not('specialty', 'is', null)
+        .not('address_city', 'is', null)
+        .gte('rge_valid_until', today)
+        .range(from, from + pageSize - 1)
+
+      if (error) return null
+      if (!data || data.length === 0) break
+
+      for (const row of data) {
+        const specialty = row.specialty as string | null
+        const city = row.address_city as string | null
+        if (!specialty || !city) continue
+
+        const ops = specialtyToOps.get(normalizeKey(specialty))
+        if (!ops || ops.length === 0) continue
+
+        const cityKey = normalizeKey(city)
+          .replace(/\s+\d+\s*(er|e|eme|ieme)?\s*(arr|arrondissement)?\.?\s*$/, '')
+          .trim()
+        const villeSlug = cityToSlug.get(cityKey)
+        if (!villeSlug) continue
+
+        for (const op of ops) {
+          combos.add(`${op}::${villeSlug}`)
+        }
+      }
+
+      if (data.length < pageSize) break
+      from += pageSize
+    }
+
+    return combos
+  } catch {
+    return null
+  }
+}
+
 // ─── Aggregated fetch: all lastmod data in parallel ─────────────────────
 
 export interface SitemapLastmodData {
@@ -439,6 +690,12 @@ export interface SitemapLastmodData {
   /** Map<"deptName::serviceSlug", YYYY-MM-DD> — resolved from byDeptService via SERVICE_TO_SPECIALTIES */
   byDeptServiceSlug: LastmodMap
   qualifiedCombos: QualifiedCombos | null
+  /** Set<"serviceSlug::villeSlug"> of RGE combos with ≥1 active RGE provider. null = include all (DB blip). */
+  rgeQualifiedServiceCity: Set<string> | null
+  /** Set<"serviceSlug::normalizedDeptName"> of RGE combos by department. null = include all. */
+  rgeQualifiedServiceDept: Set<string> | null
+  /** Set<"operationCode::villeSlug"> of CEE combos with ≥1 eligible provider. null = include all. */
+  ceeQualifiedOperationCity: Set<string> | null
 }
 
 // ─── Derivation: dept×serviceSlug from dept×specialty ──────────────────
@@ -495,6 +752,35 @@ function deriveDeptServiceSlugMap(byDeptService: LastmodMap): LastmodMap {
 }
 
 /**
+ * CEE operation codes consumed by the sitemap. Kept in sync with
+ * `CEE_OPERATION_CODES` in src/app/sitemap.ts. Duplicated here to avoid an
+ * import cycle (sitemap.ts already imports from this module).
+ */
+const CEE_OPERATION_CODES_FOR_SITEMAP: readonly string[] = [
+  'bar-en-101',
+  'bar-en-102',
+  'bar-en-103',
+  'bar-en-104',
+  'bar-en-108',
+  'bar-th-112',
+  'bar-th-113',
+  'bar-th-125',
+  'bar-th-127',
+  'bar-th-129',
+  'bar-th-143',
+  'bar-th-148',
+  'bar-th-159',
+  'bar-th-161',
+  'bar-th-171',
+  'bar-th-172',
+  'bar-th-173',
+  'bar-th-174',
+  'bar-th-175',
+  'bar-th-177',
+  'bar-se-104',
+] as const
+
+/**
  * Fetch all lastmod data in parallel. Call once at the start of sitemap generation.
  * If Supabase is unavailable, all maps will be empty (= no lastmod = honest).
  */
@@ -508,6 +794,8 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     byRegionService,
     reviewByService,
     qualifiedCombos,
+    rgeCombos,
+    ceeQualifiedOperationCity,
   ] = await Promise.all([
     getLastmodByCity(),
     getLastmodByDepartment(),
@@ -517,6 +805,8 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     getLastmodByRegionService(),
     getLastReviewByService(),
     getQualifiedServiceCityCombos(),
+    getQualifiedRgeCombos(),
+    getQualifiedCeeCombos(CEE_OPERATION_CODES_FOR_SITEMAP),
   ])
 
   // Derive dept×serviceSlug map from the raw dept×specialty data (no extra DB call)
@@ -532,5 +822,8 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     reviewByService,
     byDeptServiceSlug,
     qualifiedCombos,
+    rgeQualifiedServiceCity: rgeCombos.rgeServiceCity,
+    rgeQualifiedServiceDept: rgeCombos.rgeServiceDept,
+    ceeQualifiedOperationCity,
   }
 }

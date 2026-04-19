@@ -1181,13 +1181,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
-  // 14 services énergétiques × 500 villes = 7 000 URLs → tient dans un
-  // single sitemap (< STATIC_BATCH). lastmod omis.
+  // 14 services énergétiques × 500 villes = 7 000 URLs max → pruned to combos
+  // with ≥1 active RGE provider (Vague 1.3 sitemap purge). Fail-open: if the
+  // DB query errors out, `rgeQualifiedServiceCity === null` ⇒ emit everything
+  // (current behaviour). Noindex fail-open côté route reste filet de secours.
   if (id === 'rge-service-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const { rgeQualifiedServiceCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const ville of phase1Cities) {
+        if (rgeQualifiedServiceCity && !rgeQualifiedServiceCity.has(`${svc}::${ville.slug}`)) {
+          continue
+        }
         result.push({
           url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
           changeFrequency: 'weekly',
@@ -1199,12 +1205,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × department listings (/rge/[service]/departement/[dept])
-  // 14 services énergétiques × 101 départements = 1 414 URLs. Tier 2 SEO,
-  // pages noindex fail-open si 0 provider. Priority 0.55 (sous les villes).
+  // 14 services énergétiques × 101 départements = 1 414 URLs max → pruned
+  // to combos with ≥1 active RGE provider. Fail-open identique.
   if (id === 'rge-service-dept') {
+    const { rgeQualifiedServiceDept } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const dept of departements) {
+        const deptKey = normalizeName(dept.name)
+        if (rgeQualifiedServiceDept && !rgeQualifiedServiceDept.has(`${svc}::${deptKey}`)) {
+          continue
+        }
         result.push({
           url: `${SITE_URL}/rge/${svc}/departement/${dept.slug}`,
           changeFrequency: 'weekly',
@@ -1240,13 +1251,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── CEE operation × city pSEO (/cee/[op]/[ville]) ───────────────────
-  // 19 op\u00e9rations × top 500 villes = 9 500 URLs. Tier 2. lastmod omis
-  // (pages ISR derived from DB, pas de vrai changement template).
+  // 19 op\u00e9rations × top 500 villes = 9 500 URLs max → pruned aux combos
+  // avec ≥1 artisan éligible (Vague 1.3). Fail-open si DB blip.
   if (id === 'cee-operation-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const { ceeQualifiedOperationCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const code of CEE_OPERATION_CODES) {
       for (const ville of phase1Cities) {
+        if (ceeQualifiedOperationCity && !ceeQualifiedOperationCity.has(`${code}::${ville.slug}`)) {
+          continue
+        }
         result.push({
           url: `${SITE_URL}/cee/${code}/${ville.slug}`,
           changeFrequency: 'weekly',

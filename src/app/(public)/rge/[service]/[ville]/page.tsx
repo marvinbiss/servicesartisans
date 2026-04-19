@@ -12,6 +12,7 @@ import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndCity,
+  getRgeCountByServiceAndCityStrict,
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
 } from '@/lib/rge/service-city-listings'
@@ -87,9 +88,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const serviceName = service?.name || serviceSlug
   const villeName = location.name
 
-  // Count RGE providers to decide noindex
-  const { count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, { limit: 1 })
-  const isNoindex = count === 0
+  // Vague 1.1 — stratégie 410 : count=0 confirmé → notFound() côté page
+  // (robots:noindex ici pour les ISR paths non-prerendered à cause du bug
+  // Next.js 14.2 #69103 qui renvoie 200 sur notFound()+dynamicParams).
+  // Fail-open strict : si DB transitoire KO (ok=false), on garde la page
+  // indexable, ISR corrigera au prochain revalidate.
+  const countStrict = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
+  const isNoindex = countStrict.ok && countStrict.count === 0
 
   const rawTitle = `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`
   const title = truncateTitle(rawTitle)
@@ -149,6 +154,16 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {
     limit: 50,
   })
+
+  // Vague 1.1 — 410 strategy : quand on confirme 0 providers via la variante
+  // stricte (discrimine count=0 légitime d'une erreur transitoire), on déclenche
+  // notFound() pour que Google oublie la page. Sur ISR+dynamicParams=true
+  // (Next.js 14.2 bug #69103), cela rend not-found.tsx en HTTP 200 avec
+  // robots:noindex,nofollow via la metadata du layout racine — même effet
+  // d'oubli qu'un vrai 410 côté Google. Les routes pré-rendues retournent
+  // un vrai 404. La migration Next.js 15 les fera toutes passer en 404 réel.
+  const confirmedEmpty = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
+  if (confirmedEmpty.ok && confirmedEmpty.count === 0 && count === 0) notFound()
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
   const pageUrl = `${SITE_URL}${path}`

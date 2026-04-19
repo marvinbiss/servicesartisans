@@ -16,7 +16,12 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
 
@@ -247,10 +252,39 @@ export default function CoupDePouce2026Page() {
   const articleSchema = getArticleSchema()
   const faqSchema = getFAQSchema(FAQ)
 
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: 'Coup de pouce CEE 2026',
+    description:
+      "Bonifications contractuelles des primes CEE instituées par arrêté au titre de l'article L221-7 du code de l'énergie : charte Chauffage résidentiel individuel (arrêté 25 mars 2020 modifié), charte Rénovation d'ampleur maison individuelle et appartement (arrêté 8 octobre 2020 modifié, prolongé par l'arrêté 7 janvier 2026), charte Rénovation performante de bâtiment résidentiel collectif et charte Chauffage des bâtiments collectifs et tertiaires.",
+    url: PAGE_URL,
+    serviceType: 'Bonification CEE à la rénovation énergétique',
+    audience:
+      'Propriétaires occupants et bailleurs de résidence principale (maison individuelle et appartement), syndics de copropriété, bailleurs sociaux, gestionnaires de bâtiments tertiaires',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/coup-pouce-chauffage',
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://france-renov.gouv.fr/aides/cee',
+      'https://www.legifrance.gouv.fr/',
+    ],
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: 'Prime Coup de pouce CEE bonifiée',
+    description:
+      "Prime CEE majorée par un coefficient multiplicateur fixé par arrêté (ordre de grandeur : ×5 sur le volume CEE pour une PAC ou une chaudière biomasse chez un ménage modeste, ×2 pour un système solaire combiné). Depuis 2022, aucun montant plancher en euros n'est imposé par arrêté : chaque signataire fixe son propre barème. La prime est versée par l'obligé ou le délégataire signataire de la charte au bénéficiaire final.",
+    url: PAGE_URL,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Aucun frais à la charge du bénéficiaire pour bénéficier de la bonification. L'engagement auprès du signataire doit impérativement précéder la signature du devis sous peine de rejet du dossier au PNCEE. Cumul possible avec MaPrimeRénov' dans la limite du reste à charge minimum imposé par les décrets applicables.",
+  })
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb

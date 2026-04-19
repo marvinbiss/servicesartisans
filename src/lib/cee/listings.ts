@@ -205,6 +205,57 @@ export async function getCeeProviderCountByOperationAndCity(
   )
 }
 
+/**
+ * CEE count strict (opération × ville) — variante pour la stratégie 410.
+ *
+ * Contrairement à `getCeeProviderCountByOperationAndCity` qui fail-open
+ * silencieux (retourne 0 sur erreur DB), cette variante renvoie un
+ * discriminant explicite : `ok=true` si le count a pu être établi, `ok=false`
+ * si une erreur transitoire s'est produite.
+ *
+ * Usage côté page : si `ok=false` → ne pas notFound(), fallback indexable.
+ *
+ * Pendant le build (IS_BUILD), retourne `{ ok: true, count: 1 }` (fail-open
+ * aligné avec la politique générale).
+ */
+export async function getCeeCountByOperationAndCityStrict(
+  operationCode: string,
+  villeSlug: string
+): Promise<{ ok: true; count: number } | { ok: false }> {
+  if (IS_BUILD) return { ok: true, count: 1 }
+
+  const ville = getVilleBySlug(villeSlug)
+  if (!ville) return { ok: true, count: 0 }
+
+  const operation = await getCeeOperationByCode(operationCode).catch(() => null)
+  if (!operation) return { ok: true, count: 0 }
+
+  const specialties = resolveSpecialtiesForOperation(operation.services_slugs)
+  if (specialties.length === 0) return { ok: true, count: 0 }
+
+  const cityValues = getCityValues(ville.name, ville.departementCode)
+  const today = new Date().toISOString().slice(0, 10)
+
+  try {
+    const { count, error } = await supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .in('specialty', specialties)
+      .in('address_city', cityValues)
+      .eq('is_active', true)
+      .gte('rge_valid_until', today)
+
+    if (error) throw error
+    return { ok: true, count: count ?? 0 }
+  } catch (err) {
+    logger.warn(
+      `[getCeeCountByOperationAndCityStrict] transient error for ${operationCode}/${villeSlug}`,
+      { error: err instanceof Error ? err.message : err }
+    )
+    return { ok: false }
+  }
+}
+
 export interface CeeTopCity {
   slug: string
   name: string

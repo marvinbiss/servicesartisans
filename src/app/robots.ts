@@ -30,11 +30,32 @@ const PRIVATE_DISALLOW = [
   '/*?*q=',
   '/*?*redirect=',
   '/*?*tag=',
+  '/*?*ref=',
+  // UTM tracking parameters (Google Analytics / generic campaigns)
   '/*?*utm_source=',
   '/*?*utm_medium=',
   '/*?*utm_campaign=',
+  '/*?*utm_term=',
+  '/*?*utm_content=',
+  '/*?*utm_id=',
+  // Ad network click IDs — always duplicates of canonical landing pages
   '/*?*fbclid=',
   '/*?*gclid=',
+  '/*?*gbraid=',
+  '/*?*wbraid=',
+  '/*?*dclid=',
+  '/*?*msclkid=',
+  '/*?*yclid=',
+  '/*?*twclid=',
+  '/*?*li_fat_id=',
+  // Email marketing tracking (Mailchimp, Klaviyo, generic)
+  '/*?*mc_cid=',
+  '/*?*mc_eid=',
+  // Analytics session/client IDs
+  '/*?*_ga=',
+  '/*?*_gl=',
+  // Instagram share IDs
+  '/*?*igshid=',
 ]
 
 export default function robots(): MetadataRoute.Robots {

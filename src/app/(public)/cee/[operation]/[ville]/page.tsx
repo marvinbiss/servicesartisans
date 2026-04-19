@@ -8,7 +8,12 @@ import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
 import { villes as staticVilles, getVilleBySlug } from '@/lib/data/france'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getItemListSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 import { getArtisanUrl } from '@/lib/utils'
 import { SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import {
@@ -227,6 +232,34 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     },
   }
 
+  const officialSources: string[] = [
+    'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+    'https://france-renov.gouv.fr/aides/cee',
+  ]
+  if (operation.url_fiche_officielle) officialSources.unshift(operation.url_fiche_officielle)
+
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: `Prime CEE ${operation.code} — ${operation.nom} à ${villeName}`,
+    description: `Opération CEE ${operation.code} disponible à ${villeName}. Aide financière obligatoire versée par les vendeurs d'énergie (loi POPE 2005, période P6 2026-2030) pour les travaux ${operation.nom.toLowerCase()}.`,
+    url: `${SITE_URL}${path}`,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience: operation.precarite_eligible
+      ? 'Propriétaires et locataires, bonification pour ménages en précarité énergétique'
+      : 'Propriétaires et locataires de logements résidentiels',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: officialSources,
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: `Prime CEE ${operation.code} à ${villeName}`,
+    description:
+      `Montant de prime ${operation.nom} à ${villeName} variable selon la zone climatique, la surface ou la puissance installée, le profil de revenus et le cours du MWh cumac. ${operation.classique_eligible ? 'Tous ménages éligibles.' : ''}${operation.precarite_eligible ? ' Bonification précarité disponible.' : ''}`.trim(),
+    url: `${SITE_URL}${path}`,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
+  })
+
   const enrichedParagraphs = buildCeeOperationCityParagraphs(operation, ville)
   const faqItems = buildCeeOperationCityFaq(operation, ville, count)
   const faqSchema = buildCeeFaqJsonLd(faqItems)
@@ -252,6 +285,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
       <JsonLd data={breadcrumbSchema} />
       {itemListSchema && <JsonLd data={itemListSchema} />}
       <JsonLd data={collectionSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -375,8 +410,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               </div>
             )}
           </dl>
-          {operation.url_fiche_officielle && (
-            <p className="mt-5 text-sm">
+          <div className="mt-5 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
+            <Link
+              href={`/cee/${urlCode}/guide`}
+              className="text-emerald-700 font-semibold underline hover:text-emerald-900"
+            >
+              Guide complet {operation.code} — étapes, montants, pièces justificatives →
+            </Link>
+            {operation.url_fiche_officielle && (
               <a
                 href={operation.url_fiche_officielle}
                 target="_blank"
@@ -385,8 +426,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               >
                 Consulter la fiche officielle DGEC {operation.code} →
               </a>
-            </p>
-          )}
+            )}
+          </div>
         </section>
 
         {/* FAQ */}

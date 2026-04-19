@@ -22,7 +22,13 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCollectionPageSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 import {
   getCeeOperationsByDomaine,
   CEE_DOMAINE_ORDER,
@@ -84,7 +90,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 export const metadata: Metadata = {
   title: 'Primes CEE 2026 : certificats d’\u00e9conomies d’\u00e9nergie',
   description:
-    'Catalogue des 19 opérations CEE résidentielles couvertes. Qualifications RGE requises, cumul MaPrimeRénov’, villes couvertes. Mandataire CEE agré\u00e9.',
+    'Catalogue des 19 opérations CEE résidentielles couvertes. Qualifications RGE requises, cumul MaPrimeRénov’, villes couvertes. Plateforme de rénovation énergétique avec gestion des primes simplifiée.',
   alternates: getAlternates('/cee'),
   openGraph: {
     locale: 'fr_FR',
@@ -127,17 +133,44 @@ export default async function CeeHubPage() {
   const collectionSchema = getCollectionPageSchema({
     name: 'Primes CEE 2026 : catalogue des opérations standardisées',
     description:
-      'Catalogue complet des opérations standardisées CEE résidentielles, couvertes par ServicesArtisans en tant que mandataire CEE. Période P6 à compter du 1er janvier 2026.',
+      'Catalogue complet des opérations standardisées CEE résidentielles couvertes par ServicesArtisans, plateforme de rénovation énergétique avec gestion des primes. Période P6 à compter du 1er janvier 2026.',
     url: PAGE_PATH,
     itemCount: totalOps,
   })
 
   const faqSchema = getFAQSchema(FAQ)
 
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: "Certificats d'Économies d'Énergie (CEE)",
+    description:
+      "Dispositif obligatoire créé par la loi POPE de 2005 : les vendeurs d'énergie (EDF, Engie, TotalEnergies) financent des travaux d'économies d'énergie chez les particuliers et entreprises. Période P6 (2026-2030) : 1 050 TWhc/an dont 280 TWhc précarité énergétique.",
+    url: PAGE_URL,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience: 'Propriétaires et locataires de logements résidentiels en France',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://www.service-public.fr/particuliers/vosdroits/F342',
+      'https://france-renov.gouv.fr/aides/cee',
+    ],
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: 'Prime CEE résidentielle',
+    description:
+      "Prime versée aux particuliers pour les travaux d'économies d'énergie éligibles (isolation, chauffage, ventilation). Montant variable selon l'opération, la zone climatique, le profil de revenus (classique ou précarité) et le cours du MWh cumac.",
+    url: PAGE_URL,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée directement par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
+  })
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={collectionSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Primes CEE' }]} />

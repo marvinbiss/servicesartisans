@@ -63,6 +63,8 @@ import {
   getLastmodByRegionService,
   getLastReviewByService,
   getQualifiedServiceCityCombos,
+  getQualifiedRgeCombos,
+  getQualifiedCeeCombos,
   fetchAllLastmodData,
 } from '@/lib/seo/lastmod-queries'
 
@@ -443,6 +445,57 @@ describe('getQualifiedServiceCityCombos', () => {
     const combos = await getQualifiedServiceCityCombos()
     expect(combos).not.toBeNull()
     expect(combos!.size).toBe(0)
+  })
+})
+
+// ===========================================================================
+// getQualifiedRgeCombos — Vague 1.3 sitemap purge
+// ===========================================================================
+
+describe('getQualifiedRgeCombos', () => {
+  it('returns null on supabase unavailable (fail-open)', async () => {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    vi.mocked(createAdminClient).mockImplementationOnce(() => {
+      throw new Error('no env')
+    })
+
+    const combos = await getQualifiedRgeCombos()
+    expect(combos.rgeServiceCity).toBeNull()
+    expect(combos.rgeServiceDept).toBeNull()
+  })
+
+  it('returns null on query error (fail-open)', async () => {
+    const builder = createChainBuilder()
+    builder.range = vi.fn().mockResolvedValue({
+      data: null,
+      error: { message: 'DB error' },
+    })
+    mockFrom.mockReturnValue(builder)
+
+    const combos = await getQualifiedRgeCombos()
+    expect(combos.rgeServiceCity).toBeNull()
+    expect(combos.rgeServiceDept).toBeNull()
+  })
+})
+
+// ===========================================================================
+// getQualifiedCeeCombos — Vague 1.3 sitemap purge
+// ===========================================================================
+
+describe('getQualifiedCeeCombos', () => {
+  it('returns null on supabase unavailable (fail-open)', async () => {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    vi.mocked(createAdminClient).mockImplementationOnce(() => {
+      throw new Error('no env')
+    })
+
+    const combos = await getQualifiedCeeCombos(['bar-th-171'])
+    expect(combos).toBeNull()
+  })
+
+  it('returns null when operation codes list is empty', async () => {
+    const combos = await getQualifiedCeeCombos([])
+    expect(combos).toBeNull()
   })
 })
 

@@ -17,7 +17,12 @@ import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
 
@@ -241,10 +246,38 @@ export default function ComparatifPrimesCee2026Page() {
     description: 'Comparatif indépendant des 4 principaux acteurs CEE en 2026.',
   }
 
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: "Certificats d'Économies d'Énergie (CEE) — Période 6 (2026-2030)",
+    description:
+      "Dispositif obligatoire créé par la loi POPE de 2005, codifié aux articles L221-1 à L221-12 du code de l'énergie. Les vendeurs d'énergie (obligés) doivent justifier d'un volume de CEE sous peine de pénalité libératoire versée au Trésor public. La 6e période (P6) couvre le 1er janvier 2026 au 31 décembre 2030 avec une obligation de 1 050 TWhc/an dont 280 TWhc de précarité énergétique.",
+    url: `${SITE_URL}${path}`,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience:
+      'Propriétaires et locataires de logements résidentiels, copropriétés, bailleurs sociaux, entreprises et collectivités',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://www.service-public.fr/particuliers/vosdroits/F342',
+      'https://france-renov.gouv.fr/aides/cee',
+    ],
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: 'Prime CEE résidentielle',
+    description:
+      "Prime versée au bénéficiaire final pour les travaux d'économies d'énergie éligibles aux opérations standardisées (BAR-TH, BAR-EN). Le montant n'est pas réglementé en euros depuis 2022 — chaque délégataire ou obligé fixe son barème sur la base du cours du MWh cumac, de la zone climatique (H1/H2/H3) et du profil du ménage (classique ou précarité énergétique).",
+    url: `${SITE_URL}${path}`,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée par l'obligé ou le délégataire, financée par les vendeurs d'énergie dans le cadre de leur obligation triennale. Pas de frais facturés au bénéficiaire pour l'instruction du dossier CEE standard. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ dans la limite de 100 % du coût TTC des travaux.",
+  })
+
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Comparatif 2026' }]} />

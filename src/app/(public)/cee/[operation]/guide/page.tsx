@@ -7,7 +7,11 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 import { getCeeOperationByCode } from '@/lib/cee/catalogue'
 import { CEE_OPERATIONS_WITH_GUIDE, getCeeOperationGuide } from '@/lib/cee/operation-guides-content'
 import { getRgeQualificationGuide } from '@/lib/rge/qualification-guides-content'
@@ -111,10 +115,39 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
     })),
   }
 
+  const officialSources: string[] = [
+    'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+    'https://france-renov.gouv.fr/aides/cee',
+  ]
+  if (operation?.url_fiche_officielle) officialSources.unshift(operation.url_fiche_officielle)
+
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: `Prime CEE ${opCode}${operation ? ` — ${operation.nom}` : ''} : guide pas à pas`,
+    description: `Guide complet du dépôt de dossier pour l'opération CEE ${opCode}. Étapes, pièces justificatives, délais et recours. Aide obligatoire versée par les vendeurs d'énergie (loi POPE 2005, période P6 2026-2030).`,
+    url: `${SITE_URL}${path}`,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience: 'Propriétaires et locataires de logements résidentiels',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: officialSources,
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: `Prime CEE ${opCode}`,
+    description: operation
+      ? `Montant variable selon la zone climatique, la surface ou la puissance installée, le profil de revenus et le cours du MWh cumac. ${operation.classique_eligible ? 'Tous ménages éligibles.' : ''}${operation.precarite_eligible ? ' Bonification précarité disponible.' : ''}`.trim()
+      : `Prime CEE ${opCode} — montant variable selon les conditions officielles DGEC.`,
+    url: `${SITE_URL}${path}`,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
+  })
+
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       <JsonLd data={faqSchema} />
 
       <Breadcrumb

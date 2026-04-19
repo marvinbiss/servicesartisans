@@ -19,7 +19,12 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
 
@@ -135,7 +140,7 @@ const ROLES: Array<{
     revenue:
       "Un mandataire se rémunère soit par une commission payée par le délégataire / l'obligé sur les CEE effectivement validés, soit par un service facturé au bénéficiaire (montage, accompagnement, contrôle qualité). La marge est plus étroite que celle d'un délégataire, mais le capital requis et le risque réglementaire sont également inférieurs.",
     examples:
-      "De nombreuses sociétés de rénovation énergétique, plateformes d'intermédiation et bureaux d'études fonctionnent comme mandataires sans être elles-mêmes délégataires. C'est le statut vers lequel ServicesArtisans se positionne à compter de 2026 dans le cadre de son pivot CEE.",
+      "De nombreuses sociétés de rénovation énergétique, plateformes d'intermédiation et bureaux d'études fonctionnent comme mandataires sans être elles-mêmes délégataires. ServicesArtisans se positionne en 2026 comme plateforme de rénovation énergétique avec gestion des primes pour le compte des particuliers.",
     limits:
       "Le mandataire dépend entièrement de la capacité du délégataire partenaire à accepter ses dossiers et à les valoriser. Il ne maîtrise ni le cours du CEE, ni le délai de versement de la prime, ni l'arbitrage final sur un dossier limite. Sa crédibilité repose sur la qualité de ses process et sur la solidité des partenariats qu'il a noués en amont.",
   },
@@ -217,10 +222,39 @@ export default function MandataireVsDirectPage() {
   const articleSchema = getArticleSchema()
   const faqSchema = getFAQSchema(FAQ)
 
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: "Dispositif des Certificats d'Économies d'Énergie (CEE)",
+    description:
+      "Dispositif obligatoire créé par la loi POPE du 13 juillet 2005, codifié aux articles L221-1 à L221-12 et R221-1 à R221-27 du code de l'énergie. L'État impose aux vendeurs d'énergie un volume d'économies d'énergie à justifier au PNCEE (Pôle national des certificats d'économies d'énergie) sous peine de pénalité libératoire. Trois rôles structurent le circuit : obligés, délégataires, mandataires.",
+    url: PAGE_URL,
+    serviceType: "Dispositif réglementaire d'économies d'énergie",
+    audience:
+      'Propriétaires et locataires de logements résidentiels, copropriétés, bailleurs sociaux, entreprises, collectivités et artisans RGE',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://www.service-public.fr/particuliers/vosdroits/F342',
+      'https://france-renov.gouv.fr/aides/cee',
+      'https://www.legifrance.gouv.fr/',
+    ],
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: 'Prime CEE versée au bénéficiaire final',
+    description:
+      "Prime financée par l'obligé (vendeur d'énergie) pour s'acquitter de son obligation triennale et versée au bénéficiaire final. Le montant en euros n'est pas réglementé depuis 2022 : seul le forfait kWh cumac de l'opération est fixé par arrêté. Chaque délégataire ou mandataire fixe librement son barème. Pour les opérations Coup de pouce, la charte signée par le délégataire impose en revanche des coefficients de bonification.",
+    url: PAGE_URL,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "La prime est in fine financée par l'obligé, que le dossier passe par un délégataire ou par un mandataire. Le mandataire peut se rémunérer soit par commission sur les CEE validés, soit par un service facturé au bénéficiaire (montage, accompagnement, contrôle qualité). Toute rémunération doit être divulguée clairement au bénéficiaire dans le contrat de mandat conformément à l'arrêté du 4 septembre 2014 modifié.",
+  })
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb

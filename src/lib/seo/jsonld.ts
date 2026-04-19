@@ -525,6 +525,59 @@ export function getFinancialProductSchema(params: {
   }
 }
 
+// Schema.org GovernmentService (for official French aid pages: MaPrimeRénov, CEE, Eco-PTZ).
+// YMYL signal — tells Google this is an official government programme, not marketing copy.
+export function getGovernmentServiceSchema(params: {
+  name: string
+  description: string
+  url: string
+  serviceType?: string
+  /** Optional DGEC/ANAH/Service-public.fr official URLs authoritative for the programme. */
+  sameAs?: string[]
+  /** Official public body that regulates the programme. Defaults to DGEC (CEE). */
+  serviceOperator?: {
+    name: string
+    url: string
+  }
+  /** Eligibility requirements summary (free text). */
+  audience?: string
+  /** Temporal coverage (ex: "2026-01-01/2030-12-31" for P6 CEE). */
+  temporalCoverage?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'GovernmentService',
+    name: params.name,
+    description: params.description,
+    url: params.url,
+    serviceType: params.serviceType || 'Financial Assistance',
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+    ...(params.audience && {
+      audience: {
+        '@type': 'Audience',
+        audienceType: params.audience,
+      },
+    }),
+    ...(params.temporalCoverage && { temporalCoverage: params.temporalCoverage }),
+    serviceOperator: {
+      '@type': 'GovernmentOrganization',
+      name: params.serviceOperator?.name || "Direction générale de l'énergie et du climat (DGEC)",
+      url:
+        params.serviceOperator?.url ||
+        'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+    },
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    ...(params.sameAs && params.sameAs.length > 0 && { sameAs: params.sameAs }),
+  }
+}
+
 // Schema.org LoanOrCredit (for loan/credit pages: éco-PTZ, prêt travaux)
 export function getLoanOrCreditSchema(params: {
   name: string

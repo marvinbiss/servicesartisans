@@ -7,7 +7,11 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 import {
@@ -168,10 +172,40 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
   }
 
+  const officialSources: string[] = [
+    'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+    'https://france-renov.gouv.fr/aides/cee',
+  ]
+  if (operation.url_fiche_officielle) officialSources.unshift(operation.url_fiche_officielle)
+
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: `Prime CEE ${operation.code} — ${operation.nom}`,
+    description: `Opération standardisée ${operation.code} du catalogue DGEC. Aide financière obligatoire versée par les vendeurs d'énergie (loi POPE 2005, période P6 2026-2030) pour les travaux ${operation.nom.toLowerCase()}.`,
+    url: `${SITE_URL}${path}`,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience: operation.precarite_eligible
+      ? 'Propriétaires et locataires, bonification pour ménages en précarité énergétique'
+      : 'Propriétaires et locataires de logements résidentiels',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: officialSources,
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: `Prime CEE ${operation.code}`,
+    description:
+      `Montant de prime ${operation.nom} variable selon la zone climatique, la surface ou la puissance installée, le profil de revenus (classique ou précarité) et le cours du MWh cumac. ${operation.classique_eligible ? 'Tous ménages éligibles.' : ''}${operation.precarite_eligible ? ' Bonification précarité disponible.' : ''}${operation.coup_de_pouce ? ' Coup de pouce actif.' : ''}`.trim(),
+    url: `${SITE_URL}${path}`,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
+  })
+
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: operation.nom }]} />
 

@@ -12,6 +12,7 @@ import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndDepartement,
+  getRgeCountByServiceAndDepartementStrict,
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
   RGE_ALLOWED_SERVICES,
@@ -56,10 +57,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const service = await getServiceBySlug(serviceSlug).catch(() => null)
   const serviceName = service?.name || serviceSlug
 
-  const { count } = await getRgeProvidersByServiceAndDepartement(serviceSlug, dept.name, {
-    limit: 1,
-  })
-  const isNoindex = count === 0
+  // Vague 1.1 — stratégie 410 fail-open : count=0 confirmé → noindex dans les
+  // metadata ; erreur transitoire → on reste indexable (ISR corrige).
+  const countStrict = await getRgeCountByServiceAndDepartementStrict(serviceSlug, dept.name)
+  const isNoindex = countStrict.ok && countStrict.count === 0
 
   const title = truncateTitle(`${serviceName} RGE ${dept.name} (${dept.code}) — MaPrimeRénov’`)
   const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE ${getDeptPreposition(dept.name)} (${dept.code}). Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Données ADEME.`
