@@ -445,6 +445,7 @@ export async function approveClaim(
               email: claimEmail,
               full_name: claim.claimant_name || '',
               role: 'artisan',
+              user_type: 'artisan',
               created_at: now,
               updated_at: now,
             },
@@ -485,6 +486,7 @@ export async function approveClaim(
             email: claimEmail,
             full_name: claim.claimant_name || '',
             role: 'artisan',
+            user_type: 'artisan',
             created_at: now,
             updated_at: now,
           },
@@ -577,7 +579,11 @@ export async function approveClaim(
     }
   }
 
-  // 3. Set profiles.role = 'artisan'
+  // 3. Set profiles.role = 'artisan' AND profiles.user_type = 'artisan'
+  //    NB: `role` pilote l'auth dashboard/middleware; `user_type` pilote la
+  //    RLS publique (migration 379) + filtres admin + MobileBottomNav. Les
+  //    deux colonnes doivent rester synchrones pour éviter qu'une fiche
+  //    revendiquée devienne invisible côté public ou mal routée côté app.
   const { data: currentProfile } = await supabase
     .from('profiles')
     .select('role')
@@ -588,7 +594,7 @@ export async function approveClaim(
   if (!currentProfile || !protectedRoles.includes(currentProfile.role)) {
     const { error: roleError } = await supabase
       .from('profiles')
-      .update({ role: 'artisan', updated_at: now })
+      .update({ role: 'artisan', user_type: 'artisan', updated_at: now })
       .eq('id', resolvedUserId)
 
     if (roleError) {
@@ -603,11 +609,25 @@ export async function approveClaim(
         status: 500,
       }
     }
+  } else {
+    // Protected role (admin/moderator) — ne touche pas à role mais garantit
+    // que user_type reflète la revendication (sinon RLS publique cassée).
+    const { error: userTypeError } = await supabase
+      .from('profiles')
+      .update({ user_type: 'artisan', updated_at: now })
+      .eq('id', resolvedUserId)
+    if (userTypeError) {
+      logger.warn('Failed to align user_type for protected-role user', {
+        claimId,
+        userId: resolvedUserId,
+        error: userTypeError,
+      })
+    }
   }
 
-  // 4. Mark user as artisan in auth metadata
+  // 4. Mark user as artisan in auth metadata (both flags for consistency)
   await supabase.auth.admin.updateUserById(resolvedUserId, {
-    user_metadata: { is_artisan: true },
+    user_metadata: { is_artisan: true, user_type: 'artisan' },
   })
 
   // 5. For anonymous claims: generate recovery link + send email
