@@ -261,7 +261,10 @@ export async function GET(request: NextRequest) {
       })
       .filter((entry): entry is string => entry !== null)
 
-    logger.info('sitemap-providers emitted', {
+    // warn level is intentional: production logger suppresses info, and this
+    // metric must stay visible so a regression (e.g. db-max-rows reverted to
+    // 1000) surfaces in Vercel runtime logs without a dashboard lookup.
+    logger.warn('[metric] sitemap-providers emitted', {
       batchIndex,
       rawFetched: allProviders.length,
       urlsEmitted: urls.length,
