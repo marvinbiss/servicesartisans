@@ -436,6 +436,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly',
         priority: 0.5,
       },
+      // Pillar hub rénovation énergétique — YMYL, E-E-A-T, aides 2026.
+      // lastmod bump manuellement quand les barèmes/aides évoluent.
+      {
+        url: `${SITE_URL}/renovation-energetique`,
+        lastModified: '2026-04-19',
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      },
       {
         url: `${SITE_URL}/artisans`,
         lastModified: STATIC_DATE,
