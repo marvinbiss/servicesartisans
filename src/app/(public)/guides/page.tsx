@@ -28,6 +28,8 @@ import {
   Droplet,
   Flame,
   Key,
+  Wrench,
+  ClipboardCheck,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -785,6 +787,60 @@ const guides = [
     description:
       '5 causes classiques, test arrosage, joint EPDM, garantie décennale si pose défectueuse <10 ans.',
     href: '/guides/infiltration-fenetre-pvc',
+    icon: Droplet,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Perte RGE : conséquences 2026',
+    description:
+      '5 motifs, suspension vs retrait, perte 30-60 % CA, procédure contestation 2 mois, reconduction.',
+    href: '/guides/perte-rge-consequences',
+    icon: ShieldAlert,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Contrôle RGE : fréquence et audit',
+    description:
+      'Audit initial + 1-3 chantiers par cycle 4 ans. Déroulé visite 2-4h, points vérifiés, sanctions.',
+    href: '/guides/controle-rge-frequence',
+    icon: ClipboardCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Annuaire RGE : vérifier officiel',
+    description:
+      'France-Rénov’ + ADEME DATA + Qualit’EnR + Qualibat. Méthode 3 min, détecter usurpation logo RGE.',
+    href: '/guides/annuaire-rge-verifier-officiel',
+    icon: Search,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'DTU plomberie : normes 2026',
+    description:
+      'NF DTU 60.1 / 60.11 / 65.10. Diamètres cuivre, pression 3 bars max, isolation, garantie décennale.',
+    href: '/guides/dtu-plomberie-normes',
+    icon: Wrench,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Diagnostics vente obligatoires',
+    description:
+      'DPE, amiante, plomb, termites, gaz, électricité, ERP, Carrez, assainissement, mérule. Validités + prix.',
+    href: '/guides/diagnostics-vente-obligatoires',
+    icon: FileCheck,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Dégât des eaux : voisin',
+    description:
+      'Convention IRSI 2020, constat amiable, déclaration 5 j, responsabilités locataire/bailleur/syndic.',
+    href: '/guides/degat-eaux-responsabilites-voisin',
     icon: Droplet,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
