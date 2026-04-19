@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import {
   Mail,
   Phone,
@@ -60,6 +61,25 @@ export default function InscriptionArtisanPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [stepError, setStepError] = useState('')
+  const searchParams = useSearchParams()
+
+  // Prefill from /devenir-partenaire-cee SIRET lookup (querystring).
+  // Ne touche pas un champ déjà saisi manuellement (ordre useEffect → setState
+  // initial uniquement).
+  useEffect(() => {
+    const siret = searchParams?.get('siret') ?? ''
+    const name = searchParams?.get('name') ?? ''
+    const city = searchParams?.get('city') ?? ''
+    const postalCode = searchParams?.get('postal_code') ?? ''
+    if (!siret && !name && !city && !postalCode) return
+    setFormData((prev) => ({
+      ...prev,
+      siret: prev.siret || siret.replace(/\D/g, '').slice(0, 14),
+      entreprise: prev.entreprise || name,
+      ville: prev.ville || city,
+      codePostal: prev.codePostal || postalCode,
+    }))
+  }, [searchParams])
 
   const validateStep = (currentStep: number): boolean => {
     setStepError('')

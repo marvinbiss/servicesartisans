@@ -20,6 +20,10 @@
  * Idempotence : en mode CIBLÉ, le WHERE filtre sur p.noindex <> s.noindex_before,
  * donc relancer le script après un run complet remonte 0 rows.
  */
+import * as path from 'path'
+import * as dotenv from 'dotenv'
+dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+
 import { Client } from 'pg'
 
 function buildPgUrl(): string {

@@ -369,9 +369,8 @@ export default function DevisConfirmation({
                 Bonne nouvelle&nbsp;: vos travaux sont éligibles à une prime CEE&nbsp;!
               </p>
               <p className={`text-emerald-800 mt-1 ${compact ? 'text-[11px]' : 'text-xs'}`}>
-                En tant que mandataire CEE, nous nous occupons de toutes les démarches pour
-                récupérer votre prime Certificats d&apos;Économies d&apos;Énergie. Aucune paperasse
-                supplémentaire pour vous.
+                Notre équipe prend en charge les démarches pour récupérer votre prime Certificats
+                d&apos;Économies d&apos;Énergie. Aucune paperasse supplémentaire pour vous.
               </p>
             </div>
           </div>
@@ -412,6 +411,30 @@ export default function DevisConfirmation({
               ))}
             </ul>
           </div>
+
+          {/* CTA — voir le guide de l'opération CEE principale */}
+          {ceeOperationCodes.length > 0 && (
+            <div className={`mt-3 pt-3 border-t border-emerald-100`}>
+              <Link
+                href={`/cee/${ceeOperationCodes[0].toLowerCase()}/guide?source=devis-confirmation`}
+                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors ${compact ? 'text-xs w-full' : 'text-sm'}`}
+              >
+                Voir les étapes de votre dossier CEE
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              {ceeOperationCodes.length > 1 && (
+                <p className={`mt-2 text-emerald-700 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+                  + {ceeOperationCodes.length - 1} autre
+                  {ceeOperationCodes.length - 1 > 1 ? 's' : ''} opération
+                  {ceeOperationCodes.length - 1 > 1 ? 's' : ''} éligible
+                  {ceeOperationCodes.length - 1 > 1 ? 's' : ''} —{' '}
+                  <Link href="/cee" className="underline font-semibold hover:text-emerald-900">
+                    voir toutes les primes CEE
+                  </Link>
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Texte rassurant */}
           <p

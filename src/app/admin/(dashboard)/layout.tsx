@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
@@ -7,6 +8,13 @@ import { AdminSidebar } from '@/components/admin/sidebar'
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
   .split(',')
   .filter((email) => email.trim().length > 0)
+
+// Defense-in-depth noindex — duplicates /admin/layout.tsx to survive any
+// route-group metadata propagation issue and protect sensitive KPIs exposed
+// on /admin/(dashboard)/cee/dashboard, analytics, leads, etc.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true, noarchive: true },
+}
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   // Verify user is authenticated

@@ -17,6 +17,10 @@
  * Flags CLI :
  *   --dry-run : n'exécute aucun UPDATE, remonte uniquement les counts via SELECT
  */
+import * as path from 'path'
+import * as dotenv from 'dotenv'
+dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
+
 import { Client } from 'pg'
 
 function buildPgUrl(): string {

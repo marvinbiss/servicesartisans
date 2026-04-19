@@ -878,6 +878,52 @@ export async function getProviderCountByServiceAndLocation(
 }
 
 /**
+ * Variante stricte de `getProviderCountByServiceAndLocation` : renvoie un
+ * discriminant `ok` pour distinguer un count=0 légitime d'une erreur DB
+ * transitoire. Utilisée par la stratégie SEO 410 (fail-open sur erreur).
+ *
+ * Build time : `{ ok: true, count: 1 }` (fail-open comme la version safe).
+ */
+export async function getProviderCountByServiceAndLocationStrict(
+  serviceSlug: string,
+  locationSlug: string,
+  { rgeOnly = false }: { rgeOnly?: boolean } = {}
+): Promise<{ ok: true; count: number } | { ok: false }> {
+  if (IS_BUILD) return { ok: true, count: 1 }
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return { ok: true, count: 0 }
+
+  const ville = getVilleBySlugImport(locationSlug)
+  const cityName = ville?.name
+  if (!cityName) return { ok: true, count: 0 }
+
+  const cityValues = getCityValues(cityName, ville?.departementCode)
+
+  try {
+    let query = supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .in('specialty', specialties)
+      .in('address_city', cityValues)
+      .eq('is_active', true)
+    if (rgeOnly) {
+      const todayIso = new Date().toISOString().slice(0, 10)
+      query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+    }
+    const { count, error } = await query
+    if (error) throw error
+    return { ok: true, count: count ?? 0 }
+  } catch (err) {
+    logger.warn(
+      `[getProviderCountByServiceAndLocationStrict] transient error for ${serviceSlug}/${locationSlug}${rgeOnly ? ':rge' : ''}`,
+      { error: err instanceof Error ? err.message : err }
+    )
+    return { ok: false }
+  }
+}
+
+/**
  * Return the count of RGE-certified providers for a service+location combo.
  * Counts providers where `rge_qualifications` is not null AND `rge_valid_until`
  * is still valid (>= today). Uses head:true + count:exact for lightweight query.
