@@ -46,6 +46,11 @@ import {
   Droplets,
   FileSearch,
   Landmark,
+  Gavel,
+  Construction,
+  Waves,
+  Thermometer,
+  HardHat,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -1182,6 +1187,51 @@ const guides = [
       'Éco-PTZ 0 % jusqu’à 50 000 €. Prêt affecté L312-55. TAEG 3-9 %. FICP + assurance emprunteur.',
     href: '/guides/credit-travaux-pret-personnel-comparatif',
     icon: Landmark,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Vice caché immobilier',
+    description:
+      '4 conditions art. 1641 Code civil. Délai action 2 ans dès découverte. Rédhibitoire ou estimatoire.',
+    href: '/guides/vice-cache-immobilier-recours',
+    icon: Gavel,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Cloison placo : prix au m²',
+    description:
+      '40-90 € TTC/m² posée BA13/BA13H/BA13F. DTU 25.41. Plaquiste Qualibat 4131. Acoustique Rw 45-60 dB.',
+    href: '/guides/cloison-placo-prix-pose-m2',
+    icon: Construction,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Assainissement individuel',
+    description:
+      '6 500-12 500 € TTC posé fosse/filtre/micro-station. SPANC contrôle 4-10 ans. Éco-PTZ 10 000 €.',
+    href: '/guides/assainissement-individuel-fosse-septique',
+    icon: Waves,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Radiateur électrique inertie',
+    description:
+      '350-1 400 € TTC posé fluide/fonte/céramique. NF C 15-100. Pilotage connecté CEE 200-400 €.',
+    href: '/guides/radiateur-electrique-inertie-prix',
+    icon: Thermometer,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Amiante : désamiantage',
+    description:
+      'SS3 80-200 €/m², SS4 30-80 €/m². DTA + DAPP + DAAT obligatoires. Sanctions 75 000 € + 2 ans prison.',
+    href: '/guides/amiante-desamiantage-prix-obligation',
+    icon: HardHat,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
