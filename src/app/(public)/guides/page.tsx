@@ -845,6 +845,60 @@ const guides = [
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
+  {
+    title: 'Malfaçons travaux : recours',
+    description:
+      'LRAR, expertise amiable vs judiciaire, référé, médiation conso. Prescription GPA/biennale/décennale.',
+    href: '/guides/malfacons-travaux-recours',
+    icon: ShieldAlert,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Acompte artisan : plafond légal',
+    description:
+      'Pas de plafond légal mais usages 20-40 %. Arrhes vs acompte, récupération si défaillance, sécurité.',
+    href: '/guides/acompte-artisan-legal-maximum',
+    icon: Euro,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'TVA 5,5 % travaux : conditions',
+    description:
+      'Logement >2 ans + rénovation performante + RGE + attestation Cerfa 1301-SD. Cumul MPR/CEE.',
+    href: '/guides/tva-5-5-travaux-conditions',
+    icon: Calculator,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Plombier tarif horaire 2026',
+    description:
+      '50-80 €/h journée, 90-180 €/h urgence nuit. Forfaits dépannage + 8 signaux d’arnaque à éviter.',
+    href: '/guides/plombier-tarif-horaire-2026',
+    icon: Wrench,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Audit énergétique : prix 2026',
+    description:
+      '800-2 500 € TTC selon bien. MPR audit 300-500 €. Obligatoire vente F/G depuis 2023. RGE Études.',
+    href: '/guides/audit-energetique-prix-aides',
+    icon: Leaf,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Serrurier : arnaques tarifs',
+    description:
+      '60-120 € ouverture porte claquée. 9 signaux d’arnaque (Google Ads 60 % frauduleux). Payer par carte.',
+    href: '/guides/serrurier-arnaques-tarifs-honnetes',
+    icon: Key,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
 ]
 
 const relatedPages = [

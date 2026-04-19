@@ -482,6 +482,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     // Guide pages
     const guideSlugs = [
+      'acompte-artisan-legal-maximum',
       'aide-isolation-maison-proprietaire',
       'aides-renovation-2026',
       'amenagement-combles-perdus-prix',
@@ -489,6 +490,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'artisan-rge',
       'assurance-dommage-ouvrage',
       'assurance-habitation-travaux',
+      'audit-energetique-prix-aides',
       'budget-renovation',
       'chaudiere-gaz-vs-granules',
       'chaudiere-ne-chauffe-plus',
@@ -523,6 +525,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'isolation-phonique-mur-appartement',
       'isolation-thermique',
       'labels-qualifications-artisans',
+      'malfacons-travaux-recours',
       'maprimerenov-2026',
       'maprimerenov-copropriete',
       'maprimerenov-parcours-accompagne',
@@ -535,6 +538,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'permis-construire',
       'perte-rge-consequences',
       'plafond-maprimerenov-revenus-2026',
+      'plombier-tarif-horaire-2026',
       'pont-thermique-maison-traitement',
       'pompe-a-chaleur',
       'porte-claquee-serrurier-prix',
@@ -558,10 +562,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'renovation-fenetres',
       'renovation-salle-de-bain',
       'renovation-toiture',
+      'serrurier-arnaques-tarifs-honnetes',
       'surelevation-toiture-prix',
       'taxe-amenagement-calcul-2026',
       'travaux-copropriete',
       'trouver-artisan',
+      'tva-5-5-travaux-conditions',
       'verifier-siret-artisan',
       'vmc-obligatoire-maison-neuve',
     ]
