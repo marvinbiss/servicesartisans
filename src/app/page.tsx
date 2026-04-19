@@ -13,6 +13,7 @@ import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 import { TOP_SERVICES, TOP_CITIES } from '@/lib/seo/top-pages'
 import TrustBar from '@/components/conversion/TrustBar'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
@@ -141,6 +142,16 @@ export default async function HomePage() {
       <section className="py-6 bg-white">
         <div className="max-w-4xl mx-auto px-4">
           <SocialProofBanner variant="card" />
+        </div>
+      </section>
+
+      {/* ─── SIMULATEUR AIDES RÉNOVATION (MASTER-PLAN-00 Sprint 1 — ICE 648)
+          Surfacer le simulateur officiel en homepage : amplifie la conversion
+          sur le trafic pSEO (villes/services) et capte l'intent "aides
+          rénovation énergétique" directement dès l'entrée. */}
+      <section className="py-10 bg-white border-t border-sand-200">
+        <div className="max-w-4xl mx-auto px-4">
+          <SimulateurCTA variant="banner" />
         </div>
       </section>
 
