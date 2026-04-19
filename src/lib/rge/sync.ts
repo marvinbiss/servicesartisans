@@ -148,6 +148,39 @@ function isValidDate(iso: string | undefined): iso is string {
 }
 
 /**
+ * Strips characters PostgreSQL rejects inside a JSONB value.
+ *
+ * PostgreSQL's JSONB type forbids U+0000 (null byte) — unlike the JSON spec —
+ * and rejects unpaired UTF-16 surrogates. When such a char sneaks into the
+ * payload of `rge_stage_rows(payload jsonb)`, the INSERT fails with
+ * `22P05 unsupported Unicode escape sequence` and the whole batch is aborted.
+ *
+ * Observed in production 2026-04 on the full ADEME dataset (~88k SIRET): one
+ * row ~offset 54000 carries a stray control char in `nom_qualification` or
+ * `url_qualification`, killing the sync at 88%.
+ *
+ * This helper removes:
+ *  - U+0000 (null byte) — forbidden in JSONB
+ *  - Other C0 control chars (0x01-0x08, 0x0B, 0x0C, 0x0E-0x1F) — unsafe in JSON strings
+ *  - Lone surrogates (U+D800-U+DFFF not part of a valid pair) — invalid UTF-8
+ * Preserves \t (0x09), \n (0x0A), \r (0x0D) which are legal in JSON.
+ */
+function stripJsonbUnsafe(raw: string): string {
+  if (!raw) return raw
+  // eslint-disable-next-line no-control-regex -- intentional: strip control chars that break JSONB
+  let out = raw.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+  // Remove any UTF-16 surrogate that is not part of a valid pair.
+  out = out.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '')
+  return out
+}
+
+function sanitizeJsonbString(raw: string | null | undefined): string | null {
+  if (raw == null) return null
+  const cleaned = stripJsonbUnsafe(String(raw))
+  return cleaned.length > 0 ? cleaned : null
+}
+
+/**
  * Normalise un numéro de téléphone français brut ADEME → format E.164-ish (0XXXXXXXXX).
  * Retourne null si le résultat ne fait pas 10 chiffres.
  */
@@ -262,15 +295,27 @@ export function aggregateBySiret(
       continue
     }
 
+    // Strip JSONB-hostile chars (null bytes, lone surrogates, C0 controls) from
+    // every string field that will end up inside the JSONB payload sent to
+    // rge_stage_rows(). Required since PostgreSQL JSONB rejects \u0000 —
+    // ADEME dataset has been observed to carry stray control chars (2026-04).
+    const qualCode = sanitizeJsonbString(row.code_qualification)
+    const qualNom = sanitizeJsonbString(row.nom_qualification)
+    const qualOrganisme = sanitizeJsonbString(row.organisme)
+    if (!qualCode || !qualNom || !qualOrganisme) {
+      skipped++
+      continue
+    }
+
     const qual: RgeQualification = {
-      code: row.code_qualification,
-      nom: row.nom_qualification,
-      organisme: row.organisme,
-      domaine: row.domaine || null,
-      meta_domaine: row.meta_domaine || null,
+      code: qualCode,
+      nom: qualNom,
+      organisme: qualOrganisme,
+      domaine: sanitizeJsonbString(row.domaine),
+      meta_domaine: sanitizeJsonbString(row.meta_domaine),
       date_debut: dateDebutRaw.slice(0, 10),
       date_fin: dateFin,
-      url: row.url_qualification || null,
+      url: sanitizeJsonbString(row.url_qualification),
     }
 
     const phone = normalizePhone(row.telephone)
