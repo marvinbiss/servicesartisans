@@ -3,7 +3,11 @@
 import { useEffect, useReducer, useRef, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { capture, EVENT } from '@/lib/analytics/posthog'
-import { deduceSimulationParams, type Objectif, type SurfaceTranche } from '@/lib/simulateur/deduction'
+import {
+  deduceSimulationParams,
+  type Objectif,
+  type SurfaceTranche,
+} from '@/lib/simulateur/deduction'
 import { deptFromCodePostal } from '@/lib/simulateur/zones'
 import type { Anciennete, CategorieAnah, SautsDpe } from '@/lib/simulateur/types'
 
@@ -18,6 +22,7 @@ import ScreenDpe from './screens/ScreenDpe'
 import ScreenEquipement from './screens/ScreenEquipement'
 import ScreenUrgence from './screens/ScreenUrgence'
 import ScreenAgeChaudiere from './screens/ScreenAgeChaudiere'
+import ScreenSurfaceIsolation from './screens/ScreenSurfaceIsolation'
 import ScreenTeaser from './screens/ScreenTeaser'
 import ScreenContact from './screens/ScreenContact'
 
@@ -34,6 +39,7 @@ type ScreenId =
   | 'dpe'
   | 'equipement'
   | 'age_chaudiere'
+  | 'surface_isolation'
   | 'teaser'
   | 'contact'
 
@@ -53,6 +59,7 @@ interface State {
   equipementActuel?: 'gaz' | 'fioul' | 'elec' | 'autre'
   urgenceProjet?: 'urgent_panne' | 'sous_3_mois' | 'sous_6_mois' | 'je_me_renseigne'
   ageChaudiere?: 'moins_5_ans' | '5_10_ans' | '10_15_ans' | 'plus_15_ans' | 'en_panne'
+  surfaceIsolationToiture?: number
   prenom: string
   telephone: string
   email: string
@@ -100,9 +107,14 @@ const SCREEN_ORDER: ScreenId[] = [
   'dpe',
   'equipement',
   'age_chaudiere',
+  'surface_isolation',
   'teaser',
   'contact',
 ]
+
+function objectifHasIsolation(objectif?: Objectif): boolean {
+  return objectif === 'isolation' || objectif === 'renovation_complete'
+}
 
 /**
  * Navigation conditionnelle :
@@ -110,6 +122,7 @@ const SCREEN_ORDER: ScreenId[] = [
  * - 'dpe' : seulement si objectif === 'renovation_complete' (parcours accompagné)
  * - 'equipement' : seulement si objectif === 'chauffage'
  * - 'age_chaudiere' : seulement si objectif === 'chauffage' (après equipement)
+ * - 'surface_isolation' : seulement si objectif inclut isolation (toiture €/m² ANAH 2026)
  */
 function nextScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
@@ -117,20 +130,27 @@ function nextScreen(state: State): ScreenId {
   if (state.screen === 'urgence') {
     if (state.objectif === 'chauffage') return 'equipement'
     if (state.objectif === 'renovation_complete') return 'dpe'
+    if (state.objectif === 'isolation') return 'surface_isolation'
     return 'teaser'
   }
-  if (state.screen === 'dpe') return 'teaser'
+  if (state.screen === 'dpe') {
+    return objectifHasIsolation(state.objectif) ? 'surface_isolation' : 'teaser'
+  }
   if (state.screen === 'equipement') return 'age_chaudiere'
   if (state.screen === 'age_chaudiere') return 'teaser'
+  if (state.screen === 'surface_isolation') return 'teaser'
   return SCREEN_ORDER[Math.min(idx + 1, SCREEN_ORDER.length - 1)]
 }
 
 function prevScreen(state: State): ScreenId {
   const idx = SCREEN_ORDER.indexOf(state.screen)
   if (state.screen === 'teaser') {
+    if (objectifHasIsolation(state.objectif)) return 'surface_isolation'
     if (state.objectif === 'chauffage') return 'age_chaudiere'
-    if (state.objectif === 'renovation_complete') return 'dpe'
     return 'urgence'
+  }
+  if (state.screen === 'surface_isolation') {
+    return state.objectif === 'renovation_complete' ? 'dpe' : 'urgence'
   }
   if (state.screen === 'age_chaudiere') return 'equipement'
   if (state.screen === 'dpe') return 'urgence'
@@ -144,6 +164,7 @@ function screenIndex(screen: ScreenId, objectif?: Objectif): { current: number; 
     if (s === 'equipement') return objectif === 'chauffage'
     if (s === 'age_chaudiere') return objectif === 'chauffage'
     if (s === 'dpe') return objectif === 'renovation_complete'
+    if (s === 'surface_isolation') return objectifHasIsolation(objectif)
     return true
   })
   return { current: order.indexOf(screen) + 1, total: order.length }
@@ -207,7 +228,9 @@ function saveState(state: State) {
   if (typeof window === 'undefined') return
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify({ savedAt: Date.now(), state }))
-  } catch { /* quota */ }
+  } catch {
+    /* quota */
+  }
 }
 
 // ---------- Component ----------
@@ -244,13 +267,10 @@ export default function StepperV2() {
   }, [state.screen])
 
   // Auto-advance helper (300ms delay for visual feedback)
-  const autoAdvance = useCallback(
-    (field: string, value: unknown) => {
-      dispatch({ type: 'SET', field, value })
-      setTimeout(() => dispatch({ type: 'NEXT_SCREEN' }), 300)
-    },
-    []
-  )
+  const autoAdvance = useCallback((field: string, value: unknown) => {
+    dispatch({ type: 'SET', field, value })
+    setTimeout(() => dispatch({ type: 'NEXT_SCREEN' }), 300)
+  }, [])
 
   // Build estimate payload for teaser
   const estimatePayload = useMemo(() => {
@@ -261,11 +281,19 @@ export default function StepperV2() {
       residencePrincipale: state.residencePrincipale ?? true,
       equipementActuel: state.equipementActuel,
     })
+    // MaPrimeRénov' isolation 2026 : €/m² pour toiture rampants/terrasse.
+    // On fournit la surface toiture saisie par l'utilisateur (ou fallback
+    // = surface habitable, approximation maison 1 niveau + combles).
+    const surfacesIsolation_m2 = objectifHasIsolation(state.objectif)
+      ? {
+          ISOLATION_TOITURE: state.surfaceIsolationToiture ?? deduced.surface,
+        }
+      : undefined
     return {
       situation: {
         typeLogement: state.typeLogement ?? 'maison',
         residencePrincipale: state.residencePrincipale ?? true,
-        anciennete: state.anciennete ?? 'plus_15_ans' as const,
+        anciennete: state.anciennete ?? ('plus_15_ans' as const),
         surface: deduced.surface,
         codePostal: state.codePostal || '75001',
         foyer: state.foyer ?? 1,
@@ -277,6 +305,7 @@ export default function StepperV2() {
         sautsDpe: state.sautsDpe ?? deduced.sautsDpe,
         coupDePouce: deduced.coupDePouce,
         equipementActuel: deduced.equipementActuel,
+        ...(surfacesIsolation_m2 ? { surfacesIsolation_m2 } : {}),
       },
       budget: { budgetHt: deduced.budgetHt },
     }
@@ -292,6 +321,7 @@ export default function StepperV2() {
     state.codePostal,
     state.foyer,
     state.rfrMilieu,
+    state.surfaceIsolationToiture,
   ])
 
   // Submit
@@ -299,7 +329,8 @@ export default function StepperV2() {
     if (!estimatePayload) return
     dispatch({ type: 'SET_SUBMITTING', value: true })
 
-    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    const params =
+      typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
     const payload = {
       ...estimatePayload,
       coordonnees: {
@@ -317,7 +348,10 @@ export default function StepperV2() {
         utm_campaign: params?.get('utm_campaign') || undefined,
         utm_term: params?.get('utm_term') || undefined,
         utm_content: params?.get('utm_content') || undefined,
-        referrer: typeof document !== 'undefined' ? document.referrer?.slice(0, 500) || undefined : undefined,
+        referrer:
+          typeof document !== 'undefined'
+            ? document.referrer?.slice(0, 500) || undefined
+            : undefined,
       },
       scoring: {
         urgenceProjet: state.urgenceProjet || undefined,
@@ -335,9 +369,10 @@ export default function StepperV2() {
         const err = await res.json().catch(() => ({}))
         dispatch({
           type: 'SET_ERROR',
-          value: typeof (err as { error?: unknown }).error === 'string'
-            ? (err as { error: string }).error
-            : 'Erreur lors de la soumission',
+          value:
+            typeof (err as { error?: unknown }).error === 'string'
+              ? (err as { error: string }).error
+              : 'Erreur lors de la soumission',
         })
         dispatch({ type: 'SET_SUBMITTING', value: false })
         return
@@ -377,7 +412,9 @@ export default function StepperV2() {
       {state.screen !== 'teaser' && (
         <div className="mb-6">
           <div className="flex items-center justify-between text-xs text-charcoal-500">
-            <span>{current}/{total}</span>
+            <span>
+              {current}/{total}
+            </span>
             <span>{progressPct}%</span>
           </div>
           <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
@@ -391,7 +428,10 @@ export default function StepperV2() {
 
       {/* Error */}
       {state.error && (
-        <div role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+        <div
+          role="alert"
+          className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+        >
           {state.error}
         </div>
       )}
@@ -423,16 +463,15 @@ export default function StepperV2() {
           <ScreenEligibilite
             residencePrincipale={state.residencePrincipale}
             anciennete={state.anciennete}
-            onChangeResidence={(v) => dispatch({ type: 'SET', field: 'residencePrincipale', value: v })}
+            onChangeResidence={(v) =>
+              dispatch({ type: 'SET', field: 'residencePrincipale', value: v })
+            }
             onChangeAnciennete={(v) => dispatch({ type: 'SET', field: 'anciennete', value: v })}
             onComplete={() => dispatch({ type: 'NEXT_SCREEN' })}
           />
         )}
         {state.screen === 'foyer' && (
-          <ScreenFoyer
-            value={state.foyer}
-            onSelect={(v) => autoAdvance('foyer', v)}
-          />
+          <ScreenFoyer value={state.foyer} onSelect={(v) => autoAdvance('foyer', v)} />
         )}
         {state.screen === 'revenus' && (
           <ScreenRevenus
@@ -447,16 +486,10 @@ export default function StepperV2() {
           />
         )}
         {state.screen === 'objectif' && (
-          <ScreenObjectif
-            value={state.objectif}
-            onSelect={(v) => autoAdvance('objectif', v)}
-          />
+          <ScreenObjectif value={state.objectif} onSelect={(v) => autoAdvance('objectif', v)} />
         )}
         {state.screen === 'dpe' && (
-          <ScreenDpe
-            value={state.sautsDpe}
-            onSelect={(v) => autoAdvance('sautsDpe', v)}
-          />
+          <ScreenDpe value={state.sautsDpe} onSelect={(v) => autoAdvance('sautsDpe', v)} />
         )}
         {state.screen === 'urgence' && (
           <ScreenUrgence
@@ -476,12 +509,32 @@ export default function StepperV2() {
             onSelect={(v) => autoAdvance('ageChaudiere', v)}
           />
         )}
+        {state.screen === 'surface_isolation' && (
+          <ScreenSurfaceIsolation
+            value={state.surfaceIsolationToiture}
+            surfaceLogement={
+              state.surfaceTranche
+                ? { lt50: 35, '50_100': 75, '100_150': 125, gt150: 175 }[state.surfaceTranche]
+                : 75
+            }
+            onChange={(v) => dispatch({ type: 'SET', field: 'surfaceIsolationToiture', value: v })}
+            onNext={() => dispatch({ type: 'NEXT_SCREEN' })}
+          />
+        )}
         {state.screen === 'teaser' && estimatePayload && (
           <ScreenTeaser
             estimatePayload={estimatePayload}
             equipementActuel={state.equipementActuel}
-            parcours={estimatePayload.projet && typeof estimatePayload.projet === 'object' ? (estimatePayload.projet as Record<string, unknown>).parcours as string : undefined}
-            budgetHt={estimatePayload.budget && typeof estimatePayload.budget === 'object' ? (estimatePayload.budget as Record<string, unknown>).budgetHt as number : undefined}
+            parcours={
+              estimatePayload.projet && typeof estimatePayload.projet === 'object'
+                ? ((estimatePayload.projet as Record<string, unknown>).parcours as string)
+                : undefined
+            }
+            budgetHt={
+              estimatePayload.budget && typeof estimatePayload.budget === 'object'
+                ? ((estimatePayload.budget as Record<string, unknown>).budgetHt as number)
+                : undefined
+            }
             onNext={() => dispatch({ type: 'NEXT_SCREEN' })}
           />
         )}
@@ -501,7 +554,9 @@ export default function StepperV2() {
               dispatch({ type: 'SET', field: 'consentRgpd', value: rgpd })
               dispatch({ type: 'SET', field: 'consentMajorite', value: majorite })
             }}
-            onChangeDemarchage={(v) => dispatch({ type: 'SET', field: 'consentDemarchage', value: v })}
+            onChangeDemarchage={(v) =>
+              dispatch({ type: 'SET', field: 'consentDemarchage', value: v })
+            }
             onSubmit={handleSubmit}
           />
         )}
