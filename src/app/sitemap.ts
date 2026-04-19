@@ -742,6 +742,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
+    // /aides/[dept]/maprimerenov — 101 metropolitan + DOM-TOM dept pages.
+    // ISR (revalidate 86400), pre-rendered top 20 at build. Priority 0.75:
+    // targeted long-tail MPR intent per department.
+    const { departements: deptList } = await import('@/lib/data/france')
+    const aidesDeptMprPages: MetadataRoute.Sitemap = deptList.map((d) => ({
+      url: `${SITE_URL}/aides/${d.slug}/maprimerenov`,
+      lastModified: '2026-04-19',
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    }))
+
     return [
       ...homepage,
       ...hubPages,
@@ -756,6 +767,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       ...servicePages,
       ...urgencePages,
       ...tarifsPages,
+      ...aidesDeptMprPages,
     ]
   }
 
