@@ -34,6 +34,12 @@ import {
   Cpu,
   Trees,
   LandPlot,
+  PaintBucket,
+  Fan,
+  DoorOpen,
+  Siren,
+  SunDim,
+  Layers,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -1062,6 +1068,60 @@ const guides = [
       'Hauteur 2,60/3,20 m (art. 663 Code civil), DP si PLU, mitoyenneté, prix 20-600 €/ml selon type.',
     href: '/guides/cloture-jardin-reglementation',
     icon: LandPlot,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Ravalement façade : obligation',
+    description:
+      'Décennale art. L132-3 CCH dans 4 400 communes. Amende 3 750 €. Prix 30-240 €/m² selon technique.',
+    href: '/guides/ravalement-facade-obligation-10-ans',
+    icon: PaintBucket,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'VMC double flux : prix',
+    description:
+      '4 500-12 000 € TTC posée. MaPrimeRénov 1 500-4 000 € + CEE 800-2 000 €. Rendement 85-95 %.',
+    href: '/guides/ventilation-double-flux-prix',
+    icon: Fan,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Portail motorisé : prix, pose',
+    description:
+      '1 500-6 500 € TTC posé battant/coulissant. NF EN 13241. DP mairie. Menuisier + électricien BR.',
+    href: '/guides/portail-motorise-prix-pose',
+    icon: DoorOpen,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Alarme maison : prix 2026',
+    description:
+      '150-2 500 € TTC installée. Télésurveillance 25-50 €/mois. NF EN 50131-1 grade 2. Réduc assurance 5-15 %.',
+    href: '/guides/alarme-maison-installation-prix',
+    icon: Siren,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Velux : prix et pose',
+    description:
+      '900-2 500 € TTC posé bois/PU/motorisé/solaire. DP mairie. DTU 40.29. TVA 5,5 % si bouquet isolation.',
+    href: '/guides/velux-installation-prix',
+    icon: SunDim,
+    badge: 'Nouveau',
+    badgeColor: 'bg-primary-100 text-primary-800',
+  },
+  {
+    title: 'Parquet massif : prix au m²',
+    description:
+      '25-180 € TTC/m² posé stratifié/contrecollé/massif. DTU 51.1. Pose clouée/collée/flottante.',
+    href: '/guides/parquet-massif-pose-prix-m2',
+    icon: Layers,
     badge: 'Nouveau',
     badgeColor: 'bg-primary-100 text-primary-800',
   },
