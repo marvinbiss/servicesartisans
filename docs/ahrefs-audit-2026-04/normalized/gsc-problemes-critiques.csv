@@ -1,0 +1,12 @@
+Raison,Source,Validation,Pages
+"Exclue par la balise ""noindex""",Site Web,Échec,33307
+Page avec redirection,Site Web,Non commencé,456
+Autre page avec balise canonique correcte,Site Web,Non commencé,209
+Erreur serveur (5xx),Site Web,Non commencé,196
+Bloquée par le fichier robots.txt,Site Web,Non commencé,128
+Introuvable (404),Site Web,Non commencé,78
+Page en double sans URL canonique sélectionnée par l'utilisateur,Site Web,Non commencé,32
+Soft 404,Site Web,Non commencé,6
+"Détectée, actuellement non indexée",Systèmes Google,Non commencé,408517
+"Explorée, actuellement non indexée",Systèmes Google,Non commencé,13662
+Page en double : Google n'a pas choisi la même URL canonique que l'utilisateur,Systèmes Google,Non commencé,1369

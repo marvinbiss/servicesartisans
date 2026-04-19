@@ -76,3 +76,98 @@ Domaine canonical: `servicesartisans.fr` (apex, sans www). Le www → 301 qui ca
 ## SEO
 
 Utiliser `/sa-seo` pour la référence complète (sitemap, IndexNow, lastmod, noindex).
+
+### Pillar #2 — Rénovation Énergétique (2026)
+
+Angle stratégique : capturer le marché rénovation énergétique France (300-500K vol/mois accessibles). Voir `docs/ahrefs-audit-2026-04/STRATEGIE-RENOVATION-ENERGETIQUE.md`.
+
+**USP** : RGE certifiés (via API france-renov.gouv.fr) + SIREN officiel + éligibilité MaPrimeRénov' (simulateur déjà en prod).
+
+**Architecture** :
+
+- Hub `/renovation-energetique/` (aides, travaux, diagnostic, passoires)
+- Pages services RGE par ville : `/services/chauffagiste-rge/[ville]`, `/services/pompe-a-chaleur/[ville]`
+- Pages aides territoire : `/aides/[dept]/maprimerenov`
+- Blog `/blog/prix-*-2026` (pattern gagnant : article climaticien attire backlinks)
+
+**DB** : ajouter `providers.rge_qualifications text[]` + `rge_verified_at` + `rge_expires_at`. 11 nouveaux services (pompe-a-chaleur, isolation-combles, audit-energetique, etc).
+
+**E-E-A-T obligatoire** (YMYL aide financière) : montants MaPrimeRénov' à jour, lien france-renov.gouv.fr, auteur identifié, Schema.org `Service` + `GovernmentService` + `FinancialProduct`.
+
+**Prérequis** : fix bailout SSR avant tout.
+
+### Règles Google officielles (synthèse 26 parties — source : Google Search Central 2026-04)
+
+**Pipeline** : découverte → crawl → indexation → diffusion (3 étapes séparées, indexation non garantie). Mobile-first : Google indexe principalement la version mobile.
+
+**E-E-A-T** : Experience, Expertise, Authoritativeness, **Trustworthiness** (primordiale). People-first content, auteurs identifiés. YMYL (santé/finance/sécurité) = E-E-A-T critique.
+
+**Contenu IA** : OK pour recherche + structure. NON-OK : génération massive sans valeur = spam (sections 4.6.5 et 4.6.6 des guidelines évaluateurs). Transparence recommandée.
+
+**Liens Google explore** : uniquement `<a href="URI">` standard. **Ignore** : `routerLink`, `<span href>`, `onclick`, `javascript:`. Achat liens = spam = pénalité Penguin.
+
+**Rel attributs** : `nofollow` (source douteuse), `sponsored` (lien payé, OBLIGATOIRE), `ugc` (contenu utilisateur).
+
+**robots.txt** :
+
+- Racine UTF-8, max 500 Kio, cache 24h
+- **Bloquer crawl ≠ bloquer indexation** (URL peut rester dans SERP sans extrait)
+- Pour vraie désindexation : `noindex` meta ou mot de passe
+- `crawl-delay` NON accepté par Google
+- AdsBot ignore `*` (nommer explicitement)
+- Codes 5xx sur robots.txt → cache 30j puis "pas de robots.txt"
+
+**Redirects** :
+
+- **301** = permanent (signal fort) | **302** = temp (signal faible) | **410** = gone (oubli rapide) | **404** = not found
+- Max **10 sauts** suivis
+- Éviter chaînes (gaspille budget crawl)
+
+**Soft 404** = code 200 avec page vide/erreur → **INTERDIT** (gaspille budget, pas indexé). Cause fréquente : JS non chargé, bailout SSR, DB down. **Correctif** : retourner 404/410 pour vraies pages supprimées.
+
+**Sitemaps** :
+
+- Indispensable si >500 pages OU site récent OU rich media
+- Max 50 000 URLs ou 50 MB / sitemap (sinon sitemap index, max 500)
+- URLs **absolues + canoniques uniquement**
+- `<lastmod>` = date modification **importante** (pas copyright)
+- News : max 1000 articles, <2 jours
+
+**Budget crawl** (applicable à ServicesArtisans : 408K URLs en queue "détectée non indexée") :
+
+- **Capacité × Besoin** = budget
+- `noindex` consomme du budget (Google crawl pour voir balise) → préférer **410** pour pages supprimées
+- **404/410** = Google oublie, `noindex` = Google reste en mémoire + re-crawl
+- Éliminer soft 404 priorité
+- **ETag + If-None-Match** + 304 Not Modified = économie budget
+
+**Robots Google à connaître** :
+
+- `Googlebot` (mobile + desktop, majorité crawls = Smartphone)
+- `Googlebot-Image`, `Googlebot-News`
+- `Google-InspectionTool` (GSC URL Inspection)
+- `Google-Extended` (IA training Gemini) — **AUCUN impact ranking recherche**
+- `GoogleOther` (R&D) — aucun impact
+- `AdsBot-Google` (ignore `*`)
+- Validation anti-spoofing : DNS inverse → `crawl-*.googlebot.com`
+
+**Codes HTTP clés** :
+
+- 200 indexable | 304 cache | 301 signal fort | 302 faible
+- 410 > 404 pour oubli rapide
+- 500/503/429 → crawl réduit (max 1-2j)
+
+**Navigation à facettes** (crawl traps) :
+
+- Fragments `#filter=x` → Google ignore (préféré)
+- robots.txt pour bloquer patterns
+- rel="canonical" vers version non-filtrée
+- Retourner **404** si combinaison 0 résultat (jamais soft 404)
+
+**URLs** :
+
+- IETF STD 66, pas de fragments pour contenu
+- Descriptives, langue audience, tirets `-` (jamais `_`)
+- Paramètres standards `?key=value&`
+
+Synthèse complète dans memory `google-seo-essentials-2026.md`.

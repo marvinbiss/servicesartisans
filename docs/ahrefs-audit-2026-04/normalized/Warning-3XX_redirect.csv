@@ -1,0 +1,6 @@
+"﻿""PR""",URL,Title,Content type,Is rendered page,HTTP status code,Organic traffic,Redirect URL,Redirect URL code,Redirect chain URLs,Redirect chain URLs codes,Is redirect loop,No. of all inlinks,No. of redirect inlinks,First found at
+10,https://www.servicesartisans.fr/,,text/plain,false,301,0,https://servicesartisans.fr/,200,https://servicesartisans.fr/,200,false,1,1,
+0,https://servicesartisans.fr/simulateur-prime-cee,,text/plain,false,308,0,https://servicesartisans.fr/simulateur-aides-renovation,,https://servicesartisans.fr/simulateur-aides-renovation,,false,0,0,
+0,http://servicesartisans.fr/,,text/plain,false,308,0,https://servicesartisans.fr/,200,https://servicesartisans.fr/,200,false,0,0,
+0,https://servicesartisans.fr/blog/maprimer%C3%A9nov-2026-conditions-montants,,text/plain,false,301,0,https://servicesartisans.fr/blog/maprimer%C3%A9nov-2026-conditions-montants,301,,,,0,0,
+0,http://www.servicesartisans.fr/,,text/plain,false,308,0,https://www.servicesartisans.fr/,301,https://www.servicesartisans.fr/https://servicesartisans.fr/,301200,false,0,0,

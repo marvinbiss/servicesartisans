@@ -1,0 +1,54 @@
+# ----------------------------------------
+# Événements: Nom de l'événement
+# Compte : Servicesartisans 
+# Propriété : Servicesartisans
+# ----------------------------------------
+# 
+# Tous les utilisateurs
+# Date de début : 20260319
+# Date de fin : 20260417
+Nom de l'événement,Nombre d'événements,Nombre total d'utilisateurs,Nombre d'événements par utilisateur actif,Revenu total
+page_view,5144,2110,2.451858913250715,0
+user_engagement,4449,2063,2.1565681047018903,0
+TTFB,3170,1679,1.9027611044417767,0
+LCP,3064,1827,1.6770662287903668,0
+FCP,2986,1634,1.829656862745098,0
+FID,2842,1827,1.5555555555555556,0
+session_start,2395,2106,1.1437440305635147,0
+INP,2230,1263,1.765637371338084,0
+first_visit,2083,2076,1.0033718689788054,0
+artisan_profile_view,1325,987,1.3451776649746192,0
+CLS,1274,709,1.7968970380818055,0
+scroll,312,265,1.1773584905660377,0
+exit_intent_shown,196,186,1.053763440860215,0
+time_on_page,161,76,2.1184210526315788,0
+form_start,97,69,1.4057971014492754,0
+form_started,78,50,1.56,0
+phone_click,54,41,1.3170731707317074,0
+scroll_depth,47,32,1.46875,0
+rge_section_view,41,18,2.2777777777777777,0
+artisan_listing_click,27,21,1.2857142857142858,0
+page_not_found,17,8,2.125,0
+chat_opened,16,11,1.4545454545454546,0
+devis_submitted,15,15,1,0
+unclaimed_devis_click,13,11,1.1818181818181819,0
+artisan_devis_click,11,8,1.375,0
+phone_reveal,11,8,1.375,0
+header_devis_click,10,7,1.4285714285714286,0
+claim_started,8,6,1.3333333333333333,0
+chat_message_sent,7,2,3.5,0
+form_completed,7,7,1,0
+rge_badge_click,7,3,2.3333333333333335,0
+cee_qualification_shown,4,4,1,0
+click,4,3,1.3333333333333333,0
+cee_comparator_shown,3,3,1,0
+rge_section_click,3,2,1.5,0
+simulateur_cta_click,3,2,1.5,0
+cee_card_shown,2,2,1,0
+chat_lead_form_shown,2,2,1,0
+claim_submitted,2,2,1,0
+cee_cta_clicked,1,1,1,0
+estimation_lead_submitted,1,1,1,0
+exit_intent_devis_click,1,1,1,0
+inline_form_started,1,1,1,0
+inline_form_step1,1,1,1,0

@@ -1,0 +1,2 @@
+"﻿""Link type""",Is nofollow,Source URL,Source HTTP status code,Target URL,Target HTTP status code,Anchor,Hreflang attribute,Target final redirect URL,Target final redirect HTTP status code,Target final redirect no-crawl reason,Is source noindex,Is source canonical,Is final redirect internal,Is final redirect indexable
+Sitemap URL,false,https://servicesartisans.fr/sitemap/static.xml,200,https://servicesartisans.fr/simulateur-prime-cee,308,,,https://servicesartisans.fr/simulateur-aides-renovation,,Internal pages crawl limit reached,false,true,true,false

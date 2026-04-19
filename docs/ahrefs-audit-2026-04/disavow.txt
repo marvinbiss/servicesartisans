@@ -1,0 +1,137 @@
+# Disavow file for servicesartisans.fr
+# Generated 2026-04-18 from Ahrefs backlinks export
+# Source: 50/64 backlinks flagged as spam by Ahrefs
+# Pattern: PBN classics (.shop, .icu, .top, .party, .fyi, .xyz)
+# Upload via: Google Search Console > Tools > Disavow links
+
+# DR=50 nofollow count=1
+domain:analyticshaven.top
+
+# DR=49 nofollow count=1
+domain:atomizelink.icu
+
+# DR=8 nofollow count=1
+domain:backlinker.shop
+
+# DR=10 nofollow count=1
+domain:backlinks-seorank.com
+
+# DR=0 DOFOLLOW count=1
+domain:bestwebstats.com
+
+# DR=34 DOFOLLOW count=1
+domain:bmwyng.com
+
+# DR=8 DOFOLLOW count=1
+domain:booksreadr.org
+
+# DR=53 nofollow count=1
+domain:bye.fyi
+
+# DR=50 nofollow count=1
+domain:creativeposts.top
+
+# DR=9 nofollow count=1
+domain:cybertoolbox.shop
+
+# DR=48 nofollow count=1
+domain:dailymusings.top
+
+# DR=9 nofollow count=1
+domain:digitalgearshop.shop
+
+# DR=0 DOFOLLOW count=1
+domain:egyptiandirectory.com
+
+# DR=72 nofollow count=1
+domain:fiverr-seo-for-business-growth.site
+
+# DR=19 DOFOLLOW count=2
+domain:getwebsiteworth.com
+
+# DR=0 DOFOLLOW count=1
+domain:globalecommerce.org
+
+# DR=72 nofollow count=1
+domain:grow-your.website
+
+# DR=37 DOFOLLOW count=1
+domain:hzdlpq.com
+
+# DR=0 DOFOLLOW count=1
+domain:indians.cc
+
+# DR=76 nofollow count=1
+domain:itxoft-reliable-seo-services.site
+
+# DR=37 DOFOLLOW count=1
+domain:kgzxkf.com
+
+# DR=24 DOFOLLOW count=1
+domain:kompromat100.info
+
+# DR=0 DOFOLLOW count=1
+domain:linksnatcher.com
+
+# DR=36 DOFOLLOW count=2
+domain:nettools.guru
+
+# DR=48 nofollow count=1
+domain:optimizeflow.top
+
+# DR=3 DOFOLLOW count=2
+domain:pagesearch.net
+
+# DR=72 nofollow count=1
+domain:primeseo.xyz
+
+# DR=0 DOFOLLOW count=1
+domain:pudhe.com
+
+# DR=37 DOFOLLOW count=1
+domain:qhtycw.com
+
+# DR=9 nofollow count=1
+domain:quantumwares.shop
+
+# DR=53 nofollow count=1
+domain:quero.party
+
+# DR=76 nofollow count=1
+domain:rank-your.website
+
+# DR=33 nofollow count=1
+domain:rankongoogle.agency
+
+# DR=15 nofollow count=1
+domain:rankpilot.shop
+
+# DR=0 DOFOLLOW count=2
+domain:runningwebsites.net
+
+# DR=54 nofollow count=2
+domain:sarys.co.uk
+
+# DR=50 nofollow count=1
+domain:seoagency.sale
+
+# DR=60 nofollow count=1
+domain:seodaro.com
+
+# DR=33 DOFOLLOW count=1
+domain:sitescooponline.com
+
+# DR=9 nofollow count=1
+domain:technomarkethq.shop
+
+# DR=0 DOFOLLOW count=2
+domain:tunca.org
+
+# DR=0 DOFOLLOW count=1
+domain:wallpapers.pro
+
+# DR=0 DOFOLLOW count=1
+domain:way2check.cv
+
+# DR=71 nofollow count=1
+domain:zoldexlinks.shop
