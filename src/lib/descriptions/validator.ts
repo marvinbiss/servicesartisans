@@ -15,7 +15,7 @@
 
 import type { ProviderContext } from './prompts/rge-description-v1'
 
-export const RUBRIC_VERSION = 'rge-rubric-v1.0'
+export const RUBRIC_VERSION = 'rge-rubric-v1.1'
 
 export type DescriptionScore = {
   dim1_originality: number
@@ -113,7 +113,14 @@ const scoreOriginality = (text: string): { score: number; flag?: DescriptionFlag
 
 /**
  * D3 — Information density: named entities (city, region, specialty,
- * qualifications, meta-domains) per word. Target: >= 1 NE per 25 words.
+ * qualifications, meta-domains) mentioned in the description. Target:
+ * the LLM should surface most of the available context entities.
+ *
+ * The SPEC wants "1 NE per 25 words", but when a provider has only 4-5
+ * candidate entities total, that target is mathematically unreachable for
+ * a 250+ word description. We therefore cap expectations at the smaller of
+ * (words/25, pool_size), yielding a coverage ratio against what the LLM
+ * COULD have grounded on.
  */
 const scoreDensity = (
   text: string,
@@ -126,18 +133,22 @@ const scoreDensity = (
     ...ctx.rge_qualifications,
     ...ctx.ademe_categories,
     ...ctx.ademe_meta_domains,
-  ]
-  const matched = candidates.filter((c) => c && containsNormalized(text, c)).length
+  ].filter((c): c is string => !!c && c.trim().length > 0)
+
+  const pool = candidates.length || 1
+  const matched = candidates.filter((c) => containsNormalized(text, c)).length
   const words = countWords(text) || 1
-  const ratio = matched / (words / 25)
-  const score = clamp(ratio * 7)
-  if (matched < 3) {
+  const expected = Math.min(words / 25, pool)
+  const ratio = matched / Math.max(1, expected)
+  const score = clamp(ratio * 10)
+
+  if (matched < Math.min(3, pool)) {
     return {
       score,
       flag: {
         dimension: 'dim3_density',
         severity: 'warn',
-        message: `Only ${matched} named entities from context appear in the description.`,
+        message: `Only ${matched}/${pool} named entities from context appear in the description.`,
       },
     }
   }
@@ -172,6 +183,9 @@ const scoreEeat = (
   }
 
   // Hallucinated certification check: common RGE label tokens not in context.
+  // NOTE: "rge" itself is a generic umbrella term that appears in every valid
+  // description ("certifié RGE"), and also as substring of "énergétique" after
+  // accent normalisation — excluded here to avoid systematic false positives.
   const knownLabels = [
     'qualibat',
     'qualifelec',
@@ -179,7 +193,9 @@ const scoreEeat = (
     'qualitenr',
     'qualipac',
     'qualibois',
-    'rge',
+    'qualipv',
+    'qualisol',
+    'qualipac',
   ]
   const allowedInText = ctx.rge_qualifications.map(normalize).join(' ')
   const normalizedText = normalize(text)

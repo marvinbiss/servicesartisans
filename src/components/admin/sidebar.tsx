@@ -53,6 +53,7 @@ const nav = [
   { name: 'Paiements', href: '/admin/paiements', icon: CreditCard },
   { name: 'Services', href: '/admin/services', icon: Grid },
   { name: 'Contenu', href: '/admin/contenu', icon: FileEdit },
+  { name: 'Descriptions RGE', href: '/admin/descriptions', icon: FileEdit },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
