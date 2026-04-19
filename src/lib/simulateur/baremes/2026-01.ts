@@ -79,10 +79,10 @@ export const ECRETEMENT_ACCOMPAGNE: Record<CategorieAnah, number> = {
  * Source : arrêté ANAH 01/01/2026, MPRA.publicodes.
  */
 export const MPR_ACCOMPAGNE: Record<CategorieAnah, number> = {
-  bleu: 0.80,
-  jaune: 0.60,
+  bleu: 0.8,
+  jaune: 0.6,
   violet: 0.45,
-  rose: 0.10,
+  rose: 0.1,
 }
 
 // =============================================================================
@@ -150,15 +150,21 @@ export const MAR_COUT_MOYEN_TTC = 2_000
 // Prolongé jusqu'au 31/12/2027. Pas de condition de revenus.
 // =============================================================================
 
-export type EcoPtzWorkType = '1_action_vitrees' | '1_action_autre' | '2_actions' | '3_actions' | 'renovation_globale' | 'assainissement'
+export type EcoPtzWorkType =
+  | '1_action_vitrees'
+  | '1_action_autre'
+  | '2_actions'
+  | '3_actions'
+  | 'renovation_globale'
+  | 'assainissement'
 
 export const ECO_PTZ_PLAFONDS: Record<EcoPtzWorkType, number> = {
   '1_action_vitrees': 7_000,
   '1_action_autre': 15_000,
   '2_actions': 25_000,
   '3_actions': 30_000,
-  'renovation_globale': 50_000,
-  'assainissement': 10_000,
+  renovation_globale: 50_000,
+  assainissement: 10_000,
 }
 
 /** Durée max remboursement en années. */
@@ -167,8 +173,8 @@ export const ECO_PTZ_DUREE_MAX: Record<EcoPtzWorkType, number> = {
   '1_action_autre': 15,
   '2_actions': 15,
   '3_actions': 15,
-  'renovation_globale': 20,
-  'assainissement': 15,
+  renovation_globale: 20,
+  assainissement: 15,
 }
 
 /** Plafond cumulé éco-PTZ (complémentaire dans les 5 ans). */
@@ -195,17 +201,17 @@ export const PAR_PLAFONDS = ECO_PTZ_PLAFONDS
 /** Taux de subvention selon le gain énergétique atteint. */
 export const MPR_COPRO_TAUX: { seuil: number; taux: number }[] = [
   { seuil: 50, taux: 0.45 },
-  { seuil: 35, taux: 0.30 },
+  { seuil: 35, taux: 0.3 },
 ]
 
 /** Plafond de dépenses éligibles HT par logement. */
 export const MPR_COPRO_PLAFOND_HT_PAR_LOGEMENT = 25_000
 
 /** Bonus sortie passoire (DPE F/G → A-D) : +10% des dépenses éligibles. */
-export const MPR_COPRO_BONUS_PASSOIRE_PCT = 0.10
+export const MPR_COPRO_BONUS_PASSOIRE_PCT = 0.1
 
 /** Bonus copropriété fragile (impayés ≥ 8% ou zone NPNRU) : +20% des dépenses éligibles. */
-export const MPR_COPRO_BONUS_FRAGILE_PCT = 0.20
+export const MPR_COPRO_BONUS_FRAGILE_PCT = 0.2
 
 /** Complément individuel par ménage modeste/très modeste. */
 export const MPR_COPRO_COMPLEMENT_INDIVIDUEL: Partial<Record<CategorieAnah, number>> = {
@@ -249,7 +255,7 @@ export const TAXE_FONCIERE_SEUIL_3ANS = 15_000
 export const TAXE_FONCIERE_DUREE_ANS = 3
 
 /** Taux possibles selon délibération communale. */
-export const TAXE_FONCIERE_TAUX_POSSIBLES = [0.50, 1.00] as const
+export const TAXE_FONCIERE_TAUX_POSSIBLES = [0.5, 1.0] as const
 
 /** Année de construction max pour éligibilité. */
 export const TAXE_FONCIERE_ANNEE_CONSTRUCTION_MAX = 1989
@@ -327,21 +333,111 @@ export const MPR_GESTE_AUDIT_ENERGETIQUE: Record<CategorieAnah, number> = {
 export const MPR_GESTE_UNCONFIRMED = ['CESI', 'POELE_BUCHES'] as const
 
 /**
- * Gestes nécessitant un input `surfaceIsolation_m2` pour calculer le forfait (€/m²).
- * TODO: ajouter input surfaceIsolation_m2 au stepper + calcul barème €/m² par catégorie.
+ * Gestes nécessitant un input `surfaceIsolation_m2` pour calculer le forfait (€/m²)
+ * en parcours par geste MPR 2026.
+ *
+ * Source : PDF ANAH "Les aides financières en 2026" (février 2026, pp.13-17),
+ * tableau "Aide pour les ménages aux ressources très modestes / modestes /
+ * intermédiaires / supérieures" pour l'isolation thermique.
+ *
+ * Seuls 2 gestes d'isolation restent éligibles au parcours geste en 2026
+ * avec un forfait €/m². Tous les autres gestes d'isolation basculent dans
+ * `MPR_GESTE_SUPPRIMES` (rénovation d'ampleur requise).
  */
 export const MPR_GESTE_NEEDS_SURFACE = [
   'ISO_TOITURE_RAMPANTS',
   'ISO_TOITURE_TERRASSE',
-  'ISO_PLANCHERS_BAS',
+  // ISOLATION_TOITURE est un alias legacy ambigu : on le traite comme un
+  // "rampants de toiture" par défaut (cas le plus fréquent en résidentiel).
+  // Le front devrait idéalement faire préciser à l'utilisateur.
+  'ISOLATION_TOITURE',
 ] as const
 
 /**
- * Gestes dont le forfait MPR monogeste est SUPPRIMÉ depuis 01/01/2026.
- * - BIOMASSE : supprimée (CEE seuls actifs)
- * - ITE / ITI : supprimés du parcours geste (doc 01 §70-120)
+ * Barème €/m² par geste d'isolation et catégorie ANAH (parcours par geste 2026).
+ *
+ * ## Source
+ *
+ * PDF ANAH "Les aides financières en 2026" — édition février 2026.
+ * https://www.anah.gouv.fr/sites/default/files/2026-02/Anah-FR-Guide_des_aides_Fev2026_WEB_20260224.pdf
+ *
+ * Extrait page 16 (tableau MPR parcours par geste — Isolation thermique) :
+ *
+ * | Geste                                         | Très modestes | Modestes | Intermédiaires | Supérieurs    |
+ * | --------------------------------------------- | ------------- | -------- | -------------- | ------------- |
+ * | Isolation rampants de toiture / plafonds combles | 25 €/m²    | 20 €/m² | 15 €/m²       | non éligible |
+ * | Isolation toitures-terrasses                  | 75 €/m²      | 60 €/m² | 40 €/m²       | non éligible |
+ *
+ * Page 17 (plafonds de dépense éligible — utilisés pour l'écrêtement, PAS
+ * pour le calcul du forfait) :
+ *
+ * - Rampants/combles   : 75 €/m²
+ * - Toitures-terrasses : 180 €/m²
+ *
+ * ## Mapping catégorie ANAH → barème code
+ *
+ * - bleu   = "très modestes"
+ * - jaune  = "modestes"
+ * - violet = "intermédiaires"
+ * - rose   = "supérieurs" (non éligible à l'isolation en parcours geste)
+ *
+ * ## Règle de recalibrage
+ *
+ * Toute modification des valeurs doit s'accompagner d'un bump de
+ * `BAREME_VERSION` (créer un nouveau fichier `2026-XX.ts` plutôt qu'écraser
+ * celui-ci) + mise à jour de `docs/baremes-sources/07-*.md`.
  */
-export const MPR_GESTE_SUPPRIMES: GesteId[] = ['BIOMASSE', 'ITE', 'ITI']
+export const MPR_ISOLATION_EUROS_PAR_M2: Partial<
+  Record<(typeof MPR_GESTE_NEEDS_SURFACE)[number], Record<CategorieAnah, number | null>>
+> = {
+  ISO_TOITURE_RAMPANTS: { bleu: 25, jaune: 20, violet: 15, rose: null },
+  ISO_TOITURE_TERRASSE: { bleu: 75, jaune: 60, violet: 40, rose: null },
+  // Alias legacy → mappé sur les rampants (cas le plus fréquent)
+  ISOLATION_TOITURE: { bleu: 25, jaune: 20, violet: 15, rose: null },
+}
+
+/**
+ * Plafonds de dépense éligible €/m² — utilisés par l'écrêtement (NON par le
+ * calcul direct du forfait). Source : PDF ANAH p.17.
+ */
+export const MPR_ISOLATION_PLAFOND_DEPENSE_PAR_M2: Record<
+  (typeof MPR_GESTE_NEEDS_SURFACE)[number],
+  number
+> = {
+  ISO_TOITURE_RAMPANTS: 75,
+  ISO_TOITURE_TERRASSE: 180,
+  ISOLATION_TOITURE: 75,
+}
+
+/**
+ * Gestes dont le forfait MPR monogeste est SUPPRIMÉ depuis 01/01/2026.
+ *
+ * Sources (vérifié sur PDF ANAH "Les aides financières en 2026", février 2026,
+ * pp.13-17) :
+ *  > "A partir du 1er janvier 2026, l'isolation des murs et les chaudières
+ *  >  biomasse ne sont plus financés." (p.13)
+ *
+ * Le tableau des forfaits parcours geste (p.16) ne liste QUE :
+ *   1. Isolation rampants de toiture / plafonds de combles
+ *   2. Isolation toitures-terrasses
+ *   3. Isolation parois vitrées (fenêtres) — forfait par équipement
+ *
+ * L'isolation des planchers bas n'apparaît qu'en rénovation d'ampleur (p.20),
+ * PAS en parcours par geste 2026.
+ *
+ * - BIOMASSE : supprimée (CEE seuls actifs, Coup de Pouce ×5 remplacement fioul/gaz)
+ * - ITE / ITI / ISOLATION_MURS : supprimés depuis 01/01/2026
+ * - ISO_PLANCHERS_BAS / ISOLATION_PLANCHER : non éligibles au parcours geste 2026
+ *   (disponibles uniquement en rénovation d'ampleur)
+ */
+export const MPR_GESTE_SUPPRIMES: GesteId[] = [
+  'BIOMASSE',
+  'ITE',
+  'ITI',
+  'ISOLATION_MURS',
+  'ISO_PLANCHERS_BAS',
+  'ISOLATION_PLANCHER',
+]
 
 // =============================================================================
 // 6. Fiches CEE (doc 07 §6)

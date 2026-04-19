@@ -80,6 +80,13 @@ export interface Projet {
   sautsDpe?: SautsDpe // si parcours accompagne
   coupDePouce: boolean
   equipementActuel: EquipementActuel
+  /**
+   * Surfaces à isoler, m² par geste d'isolation.
+   * Alimente le calcul MPR €/m² pour les NEEDS_SURFACE (cf. `MPR_GESTE_NEEDS_SURFACE`).
+   * Les valeurs manquantes déclenchent un stub (`MPR.<geste>.<cat>.NEEDS_SURFACE.*`).
+   * Min 1 m², max 1 000 m² par geste — garde-fou contre les saisies aberrantes.
+   */
+  surfacesIsolation_m2?: Partial<Record<GesteId, number>>
 }
 
 // ---------- Step 3 — Budget ----------

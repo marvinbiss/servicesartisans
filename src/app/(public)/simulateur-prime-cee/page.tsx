@@ -4,7 +4,12 @@ import JsonLd from '@/components/JsonLd'
 import CeeCTA from '@/components/cee/CeeCTA'
 import CeeSimulator from '@/components/cee/CeeSimulator'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+  getGovernmentServiceSchema,
+} from '@/lib/seo/jsonld'
 import { services } from '@/lib/data/france-light'
 
 export const revalidate = 86400
@@ -83,12 +88,53 @@ export default function SimulateurPrimeCeePage() {
 
   const faqSchema = getFAQSchema(FAQ)
 
+  const governmentServiceSchema = getGovernmentServiceSchema({
+    name: "Certificats d'Économies d'Énergie (CEE) — simulateur",
+    description:
+      "Simulation du montant indicatif de la prime CEE (Certificats d'Économies d'Énergie), dispositif créé par la loi POPE de 2005 et codifié aux articles L221-1 à L221-12 du code de l'énergie. Période P6 : 1er janvier 2026 au 31 décembre 2030.",
+    url: PAGE_URL,
+    serviceType: 'Aide financière à la rénovation énergétique',
+    audience: 'Propriétaires et locataires de logements résidentiels en France',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://www.service-public.fr/particuliers/vosdroits/F342',
+      'https://france-renov.gouv.fr/aides/cee',
+    ],
+  })
+
+  const financialProductSchema = getFinancialProductSchema({
+    name: 'Prime CEE résidentielle',
+    description:
+      "Prime financière versée aux particuliers pour les travaux d'économies d'énergie éligibles (isolation, chauffage, ventilation, eau chaude sanitaire). Montant variable selon l'opération, la zone climatique (H1/H2/H3), le profil de revenus (classique ou précarité énergétique) et le cours du MWh cumac au jour du devis.",
+    url: PAGE_URL,
+    category: 'Government Grant',
+    feesAndCommissionsSpecification:
+      "Prime versée directement par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire pour la simulation. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ dans la limite de 100 % du coût TTC des travaux.",
+  })
+
+  const webApplicationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Simulateur prime CEE',
+    url: PAGE_URL,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    description:
+      "Calcul gratuit du montant indicatif de la prime CEE par type de travaux et code postal, sur la base des fiches d'opérations standardisées publiées au Bulletin officiel du ministère chargé de l'énergie.",
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+    inLanguage: 'fr-FR',
+  }
+
   // Projection minimale pour le client component
   const serviceOptions = services.map((s) => ({ slug: s.slug, name: s.name }))
 
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={governmentServiceSchema} />
+      <JsonLd data={financialProductSchema} />
+      <JsonLd data={webApplicationSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb

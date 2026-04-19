@@ -31,6 +31,8 @@ export interface StepperState {
     sautsDpe?: 2 | 3 | 4
     coupDePouce: boolean
     equipementActuel?: 'gaz' | 'fioul' | 'charbon' | 'elec' | 'bois' | 'autre'
+    /** Surfaces isolation (m²) indexées par GesteId, si geste NEEDS_SURFACE coché. */
+    surfacesIsolation_m2?: Record<string, number>
   }
   budget: {
     budgetHt?: number
@@ -213,6 +215,7 @@ export default function Stepper() {
         sautsDpe: state.projet.sautsDpe,
         coupDePouce: state.projet.coupDePouce,
         equipementActuel: state.projet.equipementActuel,
+        surfacesIsolation_m2: state.projet.surfacesIsolation_m2,
       },
       budget: { budgetHt: state.budget.budgetHt },
       coordonnees: {

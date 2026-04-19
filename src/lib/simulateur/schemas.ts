@@ -87,6 +87,17 @@ const projetBaseSchema = z.object({
   sautsDpe: z.union([z.literal(2), z.literal(3), z.literal(4)]).optional(),
   coupDePouce: z.boolean(),
   equipementActuel: z.enum(['gaz', 'fioul', 'charbon', 'elec', 'bois', 'autre']),
+  /**
+   * Surfaces à isoler (m²), indexées par GesteId d'isolation.
+   * Saisie par l'utilisateur quand au moins un geste NEEDS_SURFACE est coché.
+   * Accepte 1..1000 m² ; en dehors de cette plage on considère l'input invalide.
+   */
+  surfacesIsolation_m2: z
+    .record(
+      z.enum(GESTE_IDS),
+      z.number().int().min(1, 'Surface minimale 1 m²').max(1000, 'Surface maximale 1 000 m²')
+    )
+    .optional(),
 })
 
 export const projetSchema = projetBaseSchema.superRefine((data, ctx) => {
@@ -150,7 +161,10 @@ export const coordonneesSchema = z.object({
   nom: z.string().trim().max(100).optional().default(''),
   email: z.string().trim().toLowerCase().email('Adresse email invalide').max(254),
   telephone: z
-    .union([z.string().trim().regex(TELEPHONE_FR_E164, 'Téléphone invalide (format FR attendu)'), z.literal('')])
+    .union([
+      z.string().trim().regex(TELEPHONE_FR_E164, 'Téléphone invalide (format FR attendu)'),
+      z.literal(''),
+    ])
     .optional()
     .default(''),
   consentRgpd: z.literal(true, {

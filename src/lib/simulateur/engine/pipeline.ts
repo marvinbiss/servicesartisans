@@ -221,7 +221,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
       uncertainCombinations: [],
       uncertaintyDiscount: 0,
       confidenceLevel: 'high',
-      confidenceMessage: 'Aucun geste éligible — pas d\'incertitude de calcul.',
+      confidenceMessage: "Aucun geste éligible — pas d'incertitude de calcul.",
       confidenceBreakdown: { cee: 'high', surface: 'high', nonCumul: 'high' },
       exclusion,
       leadPriority: projet.equipementActuel === 'fioul' ? 'high' : 'normal',
@@ -244,12 +244,12 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   let mprBaremeIds: BaremeId[] = []
   let mprAccompagneRes: ReturnType<typeof calcMPRAccompagne> | undefined
   if (projet.parcours === 'geste') {
-    const mprRes = calcMPRGeste(retenus, categorie)
+    const mprRes = calcMPRGeste(retenus, categorie, projet.surfacesIsolation_m2)
     mprTotal = mprRes.total
     mprBaremeIds = mprRes.breakdown.map((b) => b.baremeId)
     debug.push({
       step: 'calcMPRGeste',
-      inputs: { retenus, categorie },
+      inputs: { retenus, categorie, surfacesIsolation_m2: projet.surfacesIsolation_m2 ?? null },
       outputs: { total: mprRes.total, breakdown: mprRes.breakdown },
       baremeIds: mprBaremeIds,
     })
@@ -327,13 +327,22 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         })
         baremeIds.push(r.baremeId)
       } else if (
-        g === 'ISOLATION_MURS' || g === 'ISOLATION_TOITURE' || g === 'ISOLATION_PLANCHER' ||
-        g === 'ISO_TOITURE_RAMPANTS' || g === 'ISO_TOITURE_TERRASSE' || g === 'ISO_PLANCHERS_BAS' ||
-        g === 'ITE' || g === 'ITI'
+        g === 'ISOLATION_MURS' ||
+        g === 'ISOLATION_TOITURE' ||
+        g === 'ISOLATION_PLANCHER' ||
+        g === 'ISO_TOITURE_RAMPANTS' ||
+        g === 'ISO_TOITURE_TERRASSE' ||
+        g === 'ISO_PLANCHERS_BAS' ||
+        g === 'ITE' ||
+        g === 'ITI'
       ) {
         // BAR-EN-101/102/103 : surface isolée estimée via fourchette de ratios
         // L'incertitude sur la surface est propagée dans la fourchette CEE
-        const ratioRange: SurfaceRatioRange = SURFACE_ISOLEE_RATIOS[g] ?? { min: 1.0, mid: 1.0, max: 1.0 }
+        const ratioRange: SurfaceRatioRange = SURFACE_ISOLEE_RATIOS[g] ?? {
+          min: 1.0,
+          mid: 1.0,
+          max: 1.0,
+        }
         const surfaceBas = Math.round(situation.surface * ratioRange.min)
         const surfaceMid = Math.round(situation.surface * ratioRange.mid)
         const surfaceHaut = Math.round(situation.surface * ratioRange.max)
@@ -385,7 +394,13 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         aidesCee.push({
           code: 'BAR-TH-125',
           montant: Math.round((fr.bas + fr.haut) / 2),
-          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+          meta: {
+            kwhc: r.kwhCumac,
+            baremeId: r.baremeId,
+            fourchette: fr,
+            geste: g,
+            certainty: 'LOW',
+          },
         })
         baremeIds.push(r.baremeId)
       } else if (g === 'POELE_GRANULES' || g === 'POELE_BUCHES') {
@@ -394,7 +409,13 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         aidesCee.push({
           code: 'BAR-TH-112',
           montant: Math.round((fr.bas + fr.haut) / 2),
-          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+          meta: {
+            kwhc: r.kwhCumac,
+            baremeId: r.baremeId,
+            fourchette: fr,
+            geste: g,
+            certainty: 'LOW',
+          },
         })
         baremeIds.push(r.baremeId)
       } else if (g === 'CESI') {
@@ -403,7 +424,13 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         aidesCee.push({
           code: 'BAR-TH-101',
           montant: Math.round((fr.bas + fr.haut) / 2),
-          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+          meta: {
+            kwhc: r.kwhCumac,
+            baremeId: r.baremeId,
+            fourchette: fr,
+            geste: g,
+            certainty: 'LOW',
+          },
         })
         baremeIds.push(r.baremeId)
       } else if (g === 'PAC_GEOTHERMIE') {
@@ -412,7 +439,13 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         aidesCee.push({
           code: 'PAC-GEO-FALLBACK',
           montant: Math.round((fr.bas + fr.haut) / 2),
-          meta: { kwhc: r.kwhCumac, baremeId: r.baremeId, fourchette: fr, geste: g, certainty: 'LOW' },
+          meta: {
+            kwhc: r.kwhCumac,
+            baremeId: r.baremeId,
+            fourchette: fr,
+            geste: g,
+            certainty: 'LOW',
+          },
         })
         baremeIds.push(r.baremeId)
       }
@@ -429,9 +462,10 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         uncertainCombinations: nc.uncertainCombinations,
       },
       baremeIds: [],
-      notes: nc.uncertainCombinations.length > 0
-        ? `${nc.uncertainCombinations.length} combinaison(s) non explicitement documentée(s) : ${nc.uncertainCombinations.join(', ')}`
-        : undefined,
+      notes:
+        nc.uncertainCombinations.length > 0
+          ? `${nc.uncertainCombinations.length} combinaison(s) non explicitement documentée(s) : ${nc.uncertainCombinations.join(', ')}`
+          : undefined,
     })
     // Recalcul fourchette sur aides retenues
     for (const aide of nc.retenues) {
@@ -490,7 +524,11 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     debug.push({
       step: 'calcCeeAmpleur',
       inputs: { sautsDpe, surface: situation.surface },
-      outputs: { montant: ceeAmp.montant, base: ceeAmp.base, facteurSurface: ceeAmp.facteurSurface },
+      outputs: {
+        montant: ceeAmp.montant,
+        base: ceeAmp.base,
+        facteurSurface: ceeAmp.facteurSurface,
+      },
       baremeIds: [ceeAmp.baremeId],
     })
   }
@@ -515,7 +553,11 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   debug.push({
     step: 'calcEcoPtz',
     inputs: { parcours: projet.parcours, nbGestes: retenus.length, sautsDpe: projet.sautsDpe },
-    outputs: { eligible: ecoPtzRes.eligible, montantMax: ecoPtzRes.montantMax, workType: ecoPtzRes.workType },
+    outputs: {
+      eligible: ecoPtzRes.eligible,
+      montantMax: ecoPtzRes.montantMax,
+      workType: ecoPtzRes.workType,
+    },
     baremeIds: [ecoPtzRes.baremeId],
   })
 
@@ -529,9 +571,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   })
 
   // --- 6. Agrégation pré-écrêtement ---
-  const ceeTotal = projet.parcours === 'geste'
-    ? Math.round((ceeBas + ceeHaut) / 2)
-    : ceeAmpleurMontant
+  const ceeTotal =
+    projet.parcours === 'geste' ? Math.round((ceeBas + ceeHaut) / 2) : ceeAmpleurMontant
   const toutesAides: AideCalculee[] = [
     { code: 'MPR', montant: mprTotal, label: "MaPrimeRénov'" },
     { code: 'CEE_TOTAL', montant: ceeTotal, label: 'CEE' },
@@ -580,16 +621,18 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   //   HIGH   (même usage thermique) → bas -20%, haut -8%
   //   MEDIUM (usage proche)         → bas -10%, haut -4%
   //   LOW    (usages distincts)     → bas -5%,  haut -2%
-  const RISK_WEIGHTS_BAS = { HIGH: 0.20, MEDIUM: 0.10, LOW: 0.05 } as const
+  const RISK_WEIGHTS_BAS = { HIGH: 0.2, MEDIUM: 0.1, LOW: 0.05 } as const
   const RISK_WEIGHTS_HAUT = { HIGH: 0.08, MEDIUM: 0.04, LOW: 0.02 } as const
 
-  const rawDiscountBas = projet.parcours === 'geste'
-    ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_BAS[p.risk], 0)
-    : 0
-  const rawDiscountHaut = projet.parcours === 'geste'
-    ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_HAUT[p.risk], 0)
-    : 0
-  const uncertaintyDiscountBas = Math.min(rawDiscountBas, 0.40)
+  const rawDiscountBas =
+    projet.parcours === 'geste'
+      ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_BAS[p.risk], 0)
+      : 0
+  const rawDiscountHaut =
+    projet.parcours === 'geste'
+      ? uncertainPairs.reduce((sum, p) => sum + RISK_WEIGHTS_HAUT[p.risk], 0)
+      : 0
+  const uncertaintyDiscountBas = Math.min(rawDiscountBas, 0.4)
   const uncertaintyDiscountHaut = Math.min(rawDiscountHaut, 0.15)
   const uncertaintyDiscount = uncertaintyDiscountBas // exposé au client (décote principale)
   const ceeBasAjuste = Math.round(ceeBasEffectif * (1 - uncertaintyDiscountBas))
@@ -617,7 +660,8 @@ export function runSimulation(input: SimulationInput): SimulationResult {
         ceeHautApres: ceeHautAjuste,
       },
       baremeIds: [asBaremeId('NON_CUMUL_ESTIMATED_DISCOUNT.INTERNAL.V1.2026-01')],
-      notes: 'Modèle heuristique interne v1 — PAS une règle réglementaire. Pondération par usage thermique : HIGH=même usage (PAC↔SSC), MEDIUM=usage proche (CESI↔PAC), LOW=usages distincts (VMC↔isolation). Les coefficients sont calibrés par prudence, pas par source officielle.',
+      notes:
+        'Modèle heuristique interne v1 — PAS une règle réglementaire. Pondération par usage thermique : HIGH=même usage (PAC↔SSC), MEDIUM=usage proche (CESI↔PAC), LOW=usages distincts (VMC↔isolation). Les coefficients sont calibrés par prudence, pas par source officielle.',
     })
   }
 
@@ -661,18 +705,21 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     baremeIds.push(denoRes.baremeId)
     debug.push({
       step: 'calcDenormandie',
-      inputs: { investissement: comp.denormandieInvestissement, surface: situation.surface, duree: comp.denormandieDuree },
-      outputs: { reductionTotale: denoRes.reductionImpotTotale, reductionAnnuelle: denoRes.reductionImpotAnnuelle },
+      inputs: {
+        investissement: comp.denormandieInvestissement,
+        surface: situation.surface,
+        duree: comp.denormandieDuree,
+      },
+      outputs: {
+        reductionTotale: denoRes.reductionImpotTotale,
+        reductionAnnuelle: denoRes.reductionImpotAnnuelle,
+      },
       baremeIds: [denoRes.baremeId],
     })
   }
 
   // Taxe foncière (si dépenses suffisantes)
-  const tfRes = calcTaxeFonciere(
-    budgetTTC,
-    comp.taxeFonciereAnnuelle,
-    comp.taxeFonciereTaux ?? 0.5
-  )
+  const tfRes = calcTaxeFonciere(budgetTTC, comp.taxeFonciereAnnuelle, comp.taxeFonciereTaux ?? 0.5)
   if (tfRes.eligible) {
     complementaires.taxeFonciere = tfRes
     baremeIds.push(tfRes.baremeId)
@@ -691,34 +738,44 @@ export function runSimulation(input: SimulationInput): SimulationResult {
 
   // Axe CEE : fiches fallback (certainty LOW) ou fourchette CEE large
   const confidenceCee: 'high' | 'medium' | 'low' =
-    hasLowCertaintyFiches && ceeFourchettePct > 0.40 ? 'low'
-    : hasLowCertaintyFiches || ceeFourchettePct > 0.25 ? 'medium'
-    : 'high'
+    hasLowCertaintyFiches && ceeFourchettePct > 0.4
+      ? 'low'
+      : hasLowCertaintyFiches || ceeFourchettePct > 0.25
+        ? 'medium'
+        : 'high'
 
   // Axe Surface : fourchette globale élargie par ratios DTU
   const fourchettePct = totalHaut > 0 ? (totalHaut - totalBas) / totalHaut : 0
   const hasIsolationGeste = aidesCee.some((a) => a.code.startsWith('BAR-EN'))
   const confidenceSurface: 'high' | 'medium' | 'low' =
-    hasIsolationGeste && fourchettePct > 0.35 ? 'low'
-    : hasIsolationGeste ? 'medium'
-    : 'high'
+    hasIsolationGeste && fourchettePct > 0.35 ? 'low' : hasIsolationGeste ? 'medium' : 'high'
 
   // Axe Non-cumul : pondéré par risque des paires incertaines
   const confidenceNonCumul: 'high' | 'medium' | 'low' =
-    uncertainPairs.some((p) => p.risk === 'HIGH') || uncertaintyDiscountBas >= 0.30 ? 'low'
-    : uncertainPairs.length > 0 ? 'medium'
-    : 'high'
+    uncertainPairs.some((p) => p.risk === 'HIGH') || uncertaintyDiscountBas >= 0.3
+      ? 'low'
+      : uncertainPairs.length > 0
+        ? 'medium'
+        : 'high'
 
-  const confidenceBreakdown = { cee: confidenceCee, surface: confidenceSurface, nonCumul: confidenceNonCumul }
+  const confidenceBreakdown = {
+    cee: confidenceCee,
+    surface: confidenceSurface,
+    nonCumul: confidenceNonCumul,
+  }
 
   // Global = worst of the 3 axes
   const levels = [confidenceCee, confidenceSurface, confidenceNonCumul]
-  const confidenceLevel: 'high' | 'medium' | 'low' =
-    levels.includes('low') ? 'low' : levels.includes('medium') ? 'medium' : 'high'
+  const confidenceLevel: 'high' | 'medium' | 'low' = levels.includes('low')
+    ? 'low'
+    : levels.includes('medium')
+      ? 'medium'
+      : 'high'
 
   const confidenceMessages: Record<'high' | 'medium' | 'low', string> = {
     high: 'Estimation fiable — barèmes officiels 2026, cumul vérifié.',
-    medium: 'Estimation prudente — certaines hypothèses (surfaces, cumul CEE) élargissent la fourchette. Les montants définitifs dépendront du métré et de l\'instruction.',
+    medium:
+      "Estimation prudente — certaines hypothèses (surfaces, cumul CEE) élargissent la fourchette. Les montants définitifs dépendront du métré et de l'instruction.",
     low: 'Estimation indicative — des incertitudes significatives (cumul CEE, surfaces) impactent la fourchette. Le montant réel peut varier après instruction du dossier.',
   }
   const confidenceMessage = confidenceMessages[confidenceLevel]

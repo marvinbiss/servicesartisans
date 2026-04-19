@@ -39,6 +39,18 @@ const EQUIPEMENTS: {
 
 const ISOLATION = new Set(['ISOLATION_MURS', 'ISOLATION_TOITURE', 'ISOLATION_PLANCHER'])
 
+// Gestes d'isolation encore éligibles au parcours geste MPR en 2026 avec
+// un forfait €/m² — cf. MPR_GESTE_NEEDS_SURFACE dans baremes/2026-01.ts.
+// Supprimés parcours geste 2026 (non inclus ici) : ITE, ITI, ISOLATION_MURS,
+// ISO_PLANCHERS_BAS, ISOLATION_PLANCHER, BIOMASSE.
+const NEEDS_SURFACE = new Set(['ISO_TOITURE_RAMPANTS', 'ISO_TOITURE_TERRASSE', 'ISOLATION_TOITURE'])
+
+const SURFACE_LABELS: Record<string, string> = {
+  ISOLATION_TOITURE: 'Surface de toiture à isoler',
+  ISO_TOITURE_RAMPANTS: 'Surface de rampants de toiture',
+  ISO_TOITURE_TERRASSE: 'Surface de toiture terrasse',
+}
+
 export default function Step3Projet({ state, dispatch }: Props) {
   const p = state.projet
 
@@ -78,7 +90,36 @@ export default function Step3Projet({ state, dispatch }: Props) {
       dispatch({ type: 'SET_ERROR', value: 'Sélectionnez l’équipement actuel.' })
       return
     }
+    // Validation surfaces isolation : si un geste NEEDS_SURFACE est coché,
+    // une valeur numérique entre 1 et 1000 m² doit être renseignée.
+    const surfacesMissing = p.gestes.filter(
+      (g) =>
+        NEEDS_SURFACE.has(g) &&
+        (p.surfacesIsolation_m2?.[g] === undefined ||
+          p.surfacesIsolation_m2[g] === null ||
+          !Number.isFinite(p.surfacesIsolation_m2[g]) ||
+          (p.surfacesIsolation_m2[g] as number) < 1 ||
+          (p.surfacesIsolation_m2[g] as number) > 1000)
+    )
+    if (surfacesMissing.length > 0) {
+      dispatch({
+        type: 'SET_ERROR',
+        value: 'Renseignez une surface (1 à 1 000 m²) pour chaque geste d’isolation sélectionné.',
+      })
+      return
+    }
     dispatch({ type: 'NEXT' })
+  }
+
+  function updateSurface(geste: string, value: string) {
+    const parsed = value === '' ? undefined : Number.parseInt(value, 10)
+    const next = { ...(p.surfacesIsolation_m2 ?? {}) }
+    if (parsed === undefined || Number.isNaN(parsed)) {
+      delete next[geste]
+    } else {
+      next[geste] = parsed
+    }
+    dispatch({ type: 'SET_PROJET', patch: { surfacesIsolation_m2: next } })
   }
 
   return (
@@ -139,6 +180,52 @@ export default function Step3Projet({ state, dispatch }: Props) {
           })}
         </div>
       </fieldset>
+
+      {p.gestes.some((g) => NEEDS_SURFACE.has(g)) ? (
+        <fieldset className="rounded-md border border-amber-200 bg-amber-50 p-4">
+          <legend className="px-1 text-sm font-medium text-amber-900">Surface à isoler (m²)</legend>
+          <p className="mb-3 text-xs text-amber-800">
+            Pour chaque geste d'isolation, indiquez la surface concernée (entre 1 et 1 000 m²).
+            Cette valeur sert au calcul €/m² MaPrimeRénov'.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {p.gestes
+              .filter((g) => NEEDS_SURFACE.has(g))
+              .map((g) => {
+                const fieldId = `surface-${g}`
+                const current = p.surfacesIsolation_m2?.[g]
+                return (
+                  <div key={g}>
+                    <label
+                      htmlFor={fieldId}
+                      className="mb-1 block text-xs font-medium text-amber-900"
+                    >
+                      {SURFACE_LABELS[g] ?? g}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        id={fieldId}
+                        type="number"
+                        inputMode="numeric"
+                        min={1}
+                        max={1000}
+                        step={1}
+                        value={current ?? ''}
+                        onChange={(e) => updateSurface(g, e.target.value)}
+                        placeholder="Ex : 80"
+                        className="w-full rounded-md border border-amber-300 bg-white p-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        aria-describedby={`${fieldId}-unit`}
+                      />
+                      <span id={`${fieldId}-unit`} className="text-xs text-amber-900">
+                        m²
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+          </div>
+        </fieldset>
+      ) : null}
 
       {p.parcours === 'accompagne' ? (
         <div>

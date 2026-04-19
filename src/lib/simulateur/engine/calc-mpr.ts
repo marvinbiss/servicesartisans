@@ -23,6 +23,7 @@ import {
   MPR_GESTE_SUPPRIMES,
   MPR_GESTE_UNCONFIRMED,
   MPR_GESTE_NEEDS_SURFACE,
+  MPR_ISOLATION_EUROS_PAR_M2,
   MPR_ACCOMPAGNE,
   MPR_GESTE_PLAFOND_DEPENSES,
   MPR_ACCOMPAGNE_PLAFOND_HT,
@@ -72,16 +73,22 @@ function categorieUpper(cat: CategorieAnah): string {
  * Règles (doc 01 §70-120, sources economie.gouv.fr / service-public.gouv.fr) :
  * - Rose → forfait = 0 systématiquement (non éligible parcours geste)
  * - SUPPRIMES (BIOMASSE, ITE, ITI) → 0 €, baremeId `.SUPPRIME.`, warning loggué
- * - NEEDS_SURFACE (ISO_TOITURE_*, ISO_PLANCHERS_BAS) → 0 €, baremeId `.NEEDS_SURFACE.`,
- *   warning loggué (TODO : input `surfaceIsolation_m2` requis)
+ * - NEEDS_SURFACE (ISO_TOITURE_*, ISO_PLANCHERS_BAS, ITE, ITI…) :
+ *     - si surface fournie ET barème €/m² renseigné → surface × euros/m²,
+ *       baremeId `MPR.<geste>.<cat>.PAR_M2.2026-01`
+ *     - si surface absente → 0 €, baremeId `.NEEDS_SURFACE.`
+ *     - si barème €/m² non encore sourcé officiellement → 0 €, baremeId
+ *       `.NEEDS_OFFICIAL_BAREME.` (source arrêté à renseigner dans baremes/)
  * - UNCONFIRMED (CESI, POELE_BUCHES) → forfait appliqué, baremeId `.UNCONFIRMED.`
- *   (back-office sait que la valeur est à confirmer par arrêté)
  * - Autres gestes avec forfait défini (PAC_AIREAU, PAC_GEOTHERMIE, CET, POELE_GRANULES,
  *   VMC_2FLUX, AUDIT_ENERGETIQUE) → forfait standard, baremeId `2026-01`
- * - Gestes inconnus (ex: SSC, MENUISERIES, VMC_SF, ISOLATION_MURS/TOITURE/PLANCHER legacy)
- *   → 0 €, baremeId `.STUB.` (à implémenter)
+ * - Gestes inconnus (ex: SSC, MENUISERIES, VMC_SF) → 0 €, baremeId `.STUB.` (à implémenter)
  */
-export function calcMPRGeste(gestes: GesteId[], categorie: CategorieAnah): MprGesteResult {
+export function calcMPRGeste(
+  gestes: GesteId[],
+  categorie: CategorieAnah,
+  surfacesIsolation_m2?: Partial<Record<GesteId, number>>
+): MprGesteResult {
   const breakdown: MprGesteBreakdownItem[] = []
   let total = 0
   const catU = categorieUpper(categorie)
@@ -111,20 +118,68 @@ export function calcMPRGeste(gestes: GesteId[], categorie: CategorieAnah): MprGe
       continue
     }
 
-    // 3. Gestes nécessitant une surface d'isolation (€/m²) — non implémenté
+    // 3. Gestes nécessitant une surface d'isolation (€/m²)
     if (isNeedsSurface(g)) {
-      logger.warn(
-        `MPR geste ${g} nécessite un input 'surfaceIsolation_m2' non disponible — forfait 0 appliqué.`,
-        {
-          action: 'calcMPRGeste',
+      const surface = surfacesIsolation_m2?.[g]
+      // Pas de surface saisie → on flag l'estimation comme incomplète pour ce geste
+      if (surface === undefined || surface === null || surface <= 0) {
+        logger.warn(
+          `MPR geste ${g} : input 'surfaceIsolation_m2' manquant — forfait 0 appliqué, prompt utilisateur requis.`,
+          { action: 'calcMPRGeste', geste: g }
+        )
+        breakdown.push({
           geste: g,
-          todo: 'Ajouter input surfaceIsolation_m2 + barème €/m² par catégorie',
-        }
-      )
+          forfait: 0,
+          baremeId: asBaremeId(`MPR.${g}.${catU}.NEEDS_SURFACE.2026-01`),
+        })
+        continue
+      }
+      // Surface fournie → on cherche le barème €/m² officiel
+      const baremeParM2 = MPR_ISOLATION_EUROS_PAR_M2[g]
+      if (baremeParM2 === undefined) {
+        // Le barème n'est pas encore intégré depuis une source officielle
+        logger.warn(
+          `MPR geste ${g} : barème €/m² non encore sourcé depuis l'arrêté officiel — forfait 0 appliqué.`,
+          { action: 'calcMPRGeste', geste: g, categorie, surface }
+        )
+        breakdown.push({
+          geste: g,
+          forfait: 0,
+          baremeId: asBaremeId(`MPR.${g}.${catU}.NEEDS_OFFICIAL_BAREME.2026-01`),
+        })
+        continue
+      }
+      const eurosParM2 = baremeParM2[categorie]
+      if (eurosParM2 === null) {
+        // La catégorie est explicitement déclarée non éligible (ex: rose en iso)
+        // — source ANAH 2026 confirme "non éligible" pour les revenus supérieurs
+        breakdown.push({
+          geste: g,
+          forfait: 0,
+          baremeId: asBaremeId(`MPR.${g}.${catU}.NON_ELIGIBLE.2026-01`),
+        })
+        continue
+      }
+      if (eurosParM2 === undefined) {
+        // Valeur manquante pour cette catégorie (bug de catalogue)
+        logger.warn(
+          `MPR geste ${g} catégorie ${categorie} : valeur €/m² absente — forfait 0 appliqué.`,
+          { action: 'calcMPRGeste', geste: g, categorie }
+        )
+        breakdown.push({
+          geste: g,
+          forfait: 0,
+          baremeId: asBaremeId(`MPR.${g}.${catU}.NEEDS_OFFICIAL_BAREME.2026-01`),
+        })
+        continue
+      }
+      // Calcul nominal : surface × euros/m², arrondi à l'euro inférieur
+      const forfait = Math.floor(surface * eurosParM2)
+      total += forfait
       breakdown.push({
         geste: g,
-        forfait: 0,
-        baremeId: asBaremeId(`MPR.${g}.${catU}.NEEDS_SURFACE.2026-01`),
+        forfait,
+        baremeId: asBaremeId(`MPR.${g}.${catU}.PAR_M2.2026-01`),
       })
       continue
     }
