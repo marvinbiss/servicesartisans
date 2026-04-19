@@ -79,6 +79,10 @@ export type BookingEvent =
   | 'cee_cta_clicked'
   | 'cee_dispatch_routed'
   | 'cee_dispatch_fallback'
+  // Partner (mandataire CEE) funnel — artisan recruitment
+  | 'cee_partner_landing_view'
+  | 'cee_partner_cta_click'
+  | 'cee_partner_dashboard_preview_view'
   // RGE enriched section on artisan profile
   | 'rge_section_view'
   | 'rge_section_click'
@@ -452,6 +456,38 @@ export const CeeTracking = {
   },
   ctaClick: (props: CeeCtaClickProps) => {
     trackEvent('cee_cta_click', props as unknown as Record<string, unknown>)
+  },
+}
+
+export type CeePartnerCtaSurface =
+  | 'hero'
+  | 'final_cta'
+  | 'dashboard_preview'
+  | 'operations_list'
+  | 'simulator_teaser'
+  | 'header'
+  | 'comparison_table'
+
+export interface CeePartnerLandingViewProps {
+  source?: string
+  referrer?: string
+}
+
+export interface CeePartnerCtaClickProps {
+  surface: CeePartnerCtaSurface
+  target: string
+  cta_label?: string
+}
+
+export const CeePartnerTracking = {
+  landingView: (props: CeePartnerLandingViewProps = {}) => {
+    trackEvent('cee_partner_landing_view', props as unknown as Record<string, unknown>)
+  },
+  ctaClick: (props: CeePartnerCtaClickProps) => {
+    trackEvent('cee_partner_cta_click', props as unknown as Record<string, unknown>)
+  },
+  dashboardPreviewView: () => {
+    trackEvent('cee_partner_dashboard_preview_view', {})
   },
 }
 

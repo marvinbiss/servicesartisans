@@ -13,10 +13,21 @@ import {
   Target,
   BarChart3,
   Phone,
+  LayoutDashboard,
+  FolderOpen,
+  GraduationCap,
+  LineChart,
 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import PartnerRevenuSimulator from '@/components/cee/PartnerRevenuSimulator'
+import PartnerSiretLookup from '@/components/cee/PartnerSiretLookup'
+import {
+  PartnerCtaLink,
+  PartnerCtaPhone,
+  PartnerLandingTracker,
+} from '@/components/cee/PartnerTracking'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 
@@ -252,19 +263,71 @@ export default function DevenirPartenaireCeePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
+    '@id': `${SITE_URL}${path}#webpage`,
     name: 'Devenir partenaire CEE — ServicesArtisans',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     description:
       'Programme partenaire CEE pour artisans RGE : leads exclusifs, gestion des primes énergie, zéro engagement.',
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
+    mainEntity: { '@id': `${SITE_URL}${path}#partner-program` },
+  }
+
+  // Service schema décrivant le programme partenaire CEE.
+  // N'utilise pas GovernmentService : SA n'est pas une autorité publique.
+  // Utilise Service + Offer (commission 0 € en phase de lancement).
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${SITE_URL}${path}#partner-program`,
+    name: 'Programme partenaire CEE ServicesArtisans',
+    serviceType: 'Programme partenaire pour artisans RGE',
+    description:
+      "Programme partenaire pour artisans RGE : réception de leads exclusifs (1 demande = 1 artisan), gestion des dossiers de primes Certificats d'Économies d'Énergie (CEE), fiche pro enrichie avec qualifications RGE vérifiées ADEME.",
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: 'ServicesArtisans',
+    },
+    areaServed: { '@type': 'Country', name: 'France' },
+    audience: {
+      '@type': 'BusinessAudience',
+      name: 'Artisans du bâtiment qualifiés RGE',
+      audienceType:
+        "Entreprises artisanales du bâtiment disposant d'une qualification RGE active (Qualibat, Qualit'EnR, Qualifelec ou équivalent accrédité COFRAC) et d'une assurance décennale à jour.",
+    },
+    category: 'Intermédiation entre particuliers et artisans RGE',
+    offers: {
+      '@type': 'Offer',
+      '@id': `${SITE_URL}${path}#launch-offer`,
+      name: 'Phase de lancement — 0 € de commission',
+      description:
+        "Pendant la phase de lancement : 0 € d'abonnement, 0 € de commission sur les primes CEE gérées, zéro engagement, résiliable à tout moment.",
+      price: '0',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      eligibleCustomerType: 'https://schema.org/Business',
+      category: 'FreeTrial',
+      url: `${SITE_URL}${path}#inscription-rapide`,
+    },
+    termsOfService: `${SITE_URL}/cgv`,
+    isRelatedTo: [
+      {
+        '@type': 'GovernmentService',
+        name: "Certificats d'Économies d'Énergie (CEE)",
+        url: 'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      },
+    ],
   }
 
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
+      <JsonLd data={serviceSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
+
+      <PartnerLandingTracker source="devenir-partenaire-cee" trackDashboardPreview />
 
       <Breadcrumb
         items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Devenir partenaire CEE' }]}
@@ -287,20 +350,24 @@ export default function DevenirPartenaireCeePage() {
             concentrez sur le chantier. <strong>0&nbsp;€ pendant la phase de lancement.</strong>
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/inscription"
+            <PartnerCtaLink
+              href="#inscription-rapide"
+              surface="hero"
+              ctaLabel="Rejoindre le programme"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-500 transition"
             >
               Rejoindre le programme
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <a
+            </PartnerCtaLink>
+            <PartnerCtaPhone
               href="tel:+33756872787"
+              surface="hero"
+              ctaLabel="Nous appeler"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-emerald-400/30 text-emerald-100 font-semibold hover:bg-emerald-800/40 transition"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />
               Nous appeler
-            </a>
+            </PartnerCtaPhone>
           </div>
 
           {/* Stats */}
@@ -380,6 +447,104 @@ export default function DevenirPartenaireCeePage() {
             })}
           </div>
         </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/*  INSCRIPTION RAPIDE — SIRET ADEME                             */}
+      {/* ============================================================ */}
+      <PartnerSiretLookup />
+
+      {/* ============================================================ */}
+      {/*  APERÇU DASHBOARD ARTISAN CEE                                 */}
+      {/* ============================================================ */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <div className="flex items-center gap-2 mb-3">
+          <LayoutDashboard className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
+            Votre espace artisan CEE, tout en un seul endroit
+          </h2>
+        </div>
+        <p className="text-charcoal-600 mb-8 max-w-3xl leading-relaxed">
+          Après inscription, vous accédez à un tableau de bord complet pour suivre vos dossiers, vos
+          commissions et votre formation. Pas d'appels téléphoniques, pas d'e-mails perdus. Tout est
+          centralisé, horodaté, traçable.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <article className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-3">
+              <FolderOpen className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            </div>
+            <h3 className="font-heading font-bold text-lg text-charcoal-900 mb-2">
+              Dossiers CEE en temps réel
+            </h3>
+            <ul className="text-sm text-charcoal-600 leading-relaxed space-y-1.5">
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Création d'un dossier en 2 minutes</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Upload des pièces (photos, facture, attestation)</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Suivi étape par étape jusqu'au paiement</span>
+              </li>
+            </ul>
+          </article>
+
+          <article className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-3">
+              <LineChart className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            </div>
+            <h3 className="font-heading font-bold text-lg text-charcoal-900 mb-2">
+              Commissions transparentes
+            </h3>
+            <ul className="text-sm text-charcoal-600 leading-relaxed space-y-1.5">
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Montant prime + commission affiché dès validation</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Historique complet des virements reçus</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Export comptable mensuel disponible</span>
+              </li>
+            </ul>
+          </article>
+
+          <article className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-3">
+              <GraduationCap className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            </div>
+            <h3 className="font-heading font-bold text-lg text-charcoal-900 mb-2">
+              Formation CEE intégrée
+            </h3>
+            <ul className="text-sm text-charcoal-600 leading-relaxed space-y-1.5">
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Fiches opérations BAR-TH, BAR-EN à jour</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Check-list pièces justificatives par opération</span>
+              </li>
+              <li className="flex gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span>Protocole photos EXIF géolocalisées (loi 30 juin 2025)</span>
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <p className="text-sm text-charcoal-500 mt-6 max-w-3xl">
+          Accès complet après validation de votre profil RGE. L'onboarding guide vos 3 premiers
+          dossiers pour garantir 0 rejet délégataire.
+        </p>
       </section>
 
       {/* ============================================================ */}
@@ -497,33 +662,27 @@ export default function DevenirPartenaireCeePage() {
       </section>
 
       {/* ============================================================ */}
-      {/*  SIMULATEUR DE REVENUS (teaser)                               */}
+      {/*  SIMULATEUR DE REVENUS (interactif)                           */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-r from-emerald-50 to-emerald-100/60 border-y border-emerald-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center">
-              <Euro className="w-7 h-7 text-white" aria-hidden="true" />
-            </div>
-            <div className="flex-1">
-              <h2 className="font-heading text-2xl font-extrabold text-charcoal-900 mb-2">
-                Combien pouvez-vous gagner en primes CEE&nbsp;?
-              </h2>
-              <p className="text-charcoal-600 leading-relaxed max-w-2xl">
-                Exemple&nbsp;: un chauffagiste RGE qui installe 4 pompes à chaleur par mois peut
-                générer <strong>10&nbsp;000 à 20&nbsp;000&nbsp;€/mois</strong> de primes CEE pour
-                ses clients, tout en améliorant son taux de conversion. Le simulateur de revenus
-                artisan arrive bientôt.
-              </p>
-            </div>
-            <Link
-              href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition whitespace-nowrap"
-            >
-              Simuler une prime
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-          </div>
+      <PartnerRevenuSimulator />
+
+      {/* Lien complément vers le simulateur prime "côté client" */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 pb-12">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-5 bg-sand-50 border border-charcoal-200 rounded-2xl">
+          <p className="text-sm text-charcoal-700 leading-relaxed">
+            Besoin d'estimer la prime d'un chantier spécifique (PAC, isolation…) ? Le simulateur
+            «&nbsp;côté client&nbsp;» calcule la prime exacte selon ménage, zone climatique et
+            surface.
+          </p>
+          <PartnerCtaLink
+            href="/simulateur-aides-renovation"
+            surface="simulator_teaser"
+            ctaLabel="Simuler une prime par chantier"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm shadow hover:bg-emerald-700 transition whitespace-nowrap"
+          >
+            Simuler une prime par chantier
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </PartnerCtaLink>
         </div>
       </section>
 
@@ -565,25 +724,31 @@ export default function DevenirPartenaireCeePage() {
             vérifiées automatiquement via la base ADEME.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link
+            <PartnerCtaLink
               href="/inscription"
+              surface="final_cta"
+              ctaLabel="Rejoindre le programme"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
             >
               Rejoindre le programme
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-            <Link
+            </PartnerCtaLink>
+            <PartnerCtaLink
               href="/cee"
+              surface="final_cta"
+              ctaLabel="Découvrir les primes CEE"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
               Découvrir les primes CEE
-            </Link>
-            <Link
+            </PartnerCtaLink>
+            <PartnerCtaLink
               href="/rge/comment-devenir-rge"
+              surface="final_cta"
+              ctaLabel="Obtenir la qualification RGE"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
             >
               Obtenir la qualification RGE
-            </Link>
+            </PartnerCtaLink>
           </div>
         </div>
       </section>
