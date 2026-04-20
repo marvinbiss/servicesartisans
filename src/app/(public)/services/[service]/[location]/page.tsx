@@ -61,6 +61,16 @@ import {
   getRegionalMultiplier,
 } from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
+import {
+  getServiceIntent,
+  getIntentTitleVariants,
+  getIntentH1Variants,
+  getIntentMetaDescription,
+  shouldRenderRenovationBlocks,
+  shouldRenderUrgencyBlock,
+} from '@/lib/seo/service-intents'
+import UrgencyBlock from '@/components/seo/UrgencyBlock'
+import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import { getPageContent } from '@/lib/cms'
 import { shouldNoindex } from '@/lib/seo/pruning'
 import { logger } from '@/lib/logger'
@@ -215,10 +225,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return NOT_FOUND_METADATA
   }
 
-  const hasProviders = providerCount > 0
-  const svcLower = serviceName.toLowerCase()
-  const naturalTerm = getNaturalTerm(serviceSlug)
-
   // Sprint 2 CTR Attack — inject review social proof into title/desc when threshold met.
   // Fail-open: if DB hiccups or no reviews, fall through to existing templates.
   const reviewStats =
@@ -238,79 +244,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Unified SEO seed for title + H1 coherence (same seed used in both generateMetadata and page render)
   const seoHash = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
 
-  const seoPairs = hasProviders
-    ? [
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName} 2026 — Devis Gratuit`,
-          h1: `${serviceName} à ${locationName}`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} à ${locationName} : ${providerCount} Pros + Devis`,
-          h1: `${serviceName} à ${locationName} : pros vérifiés`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
-          h1: `${serviceName} à ${locationName} — ${providerCount} pros référencés`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName} 2026 : ${providerCount} Artisans`,
-          h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} à ${locationName} — Devis Gratuit 2026`,
-          h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
-        },
-      ]
-    : [
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName} 2026 — Devis Gratuit`,
-          h1: `${serviceName} à ${locationName}`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} à ${locationName} : Devis Gratuit 2026`,
-          h1: `${serviceName} à ${locationName} : pros vérifiés`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Devis 2026`,
-          h1: `${serviceName} à ${locationName} — Artisans qualifiés`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} à ${locationName} — Artisans 2026`,
-          h1: `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
-        },
-        {
-          title: `${reviewPrefix}${serviceName} ${locationName} : Devis Gratuit 2026`,
-          h1: `${naturalTerm.plural.charAt(0).toUpperCase() + naturalTerm.plural.slice(1)} de confiance à ${locationName}`,
-        },
-      ]
+  // Intent-aware title variants — urgence / renovation / travaux registers.
+  // See `docs/service-intents-playbook.md` for taxonomy decision rationale.
+  const intent = getServiceIntent(serviceSlug)
+  const titleVariants = getIntentTitleVariants(intent, {
+    serviceName,
+    locationName,
+    providerCount,
+    reviewPrefix,
+    year: 2026,
+    departmentCode: departmentCode || null,
+  })
 
-  const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
+  const title = truncateTitle(titleVariants[seoHash % titleVariants.length])
 
-  // Resolve trade content early for price range in descriptions
+  // Resolve trade content early — still used to drive the noindex heuristic
+  // (a page with no providers but with trade content is still useful).
   const tradeContent = getTradeContent(serviceSlug)
-  const priceTag = tradeContent
-    ? `${tradeContent.priceRange.min}€–${tradeContent.priceRange.max}€`
-    : ''
 
-  // Unique meta descriptions with provider count, price range, department and CTA
-  const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
-  const deptLabel = departmentName || departmentCode
-  const descTemplates = hasProviders
-    ? [
-        `Trouvez un ${svcLower} à ${locationName}. ${providerCount} artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit en 2 min.${descReviewSnippet}`,
-        `${providerCount} ${svcLower}s vérifiés à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. ${priceTag}/h` : ''}. Comparez et demandez un devis gratuit.${descReviewSnippet}`,
-        `${serviceName} à ${locationName} : ${providerCount} pros vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit, sans engagement.${descReviewSnippet}`,
-        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés${priceTag ? `, ${priceTag}/h` : ''}. Devis gratuit et réponse rapide.${descReviewSnippet}`,
-        `${locationName}${departmentCode ? ` (${departmentCode})` : ''} : ${providerCount} ${svcLower}s vérifiés${priceTag ? `. Prix : ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
-      ]
-    : [
-        `Trouvez un ${svcLower} à ${locationName}${deptLabel ? ` (${deptLabel})` : ''}${priceTag ? `. Tarifs : ${priceTag}` : ''}. Devis gratuit en 2 min.${descReviewSnippet}`,
-        `${serviceName} à ${locationName}${departmentCode ? ` (${departmentCode})` : ''} : artisans vérifiés SIREN${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
-        `Besoin d'un ${svcLower} à ${locationName} ? Artisans vérifiés${priceTag ? `, tarifs de ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
-        `${serviceName} à ${locationName}${priceTag ? `. ${priceTag}/h` : ''}. Professionnels vérifiés SIREN. Devis gratuit.${descReviewSnippet}`,
-        `${locationName}${deptLabel ? ` (${deptLabel})` : ''} : trouvez un ${svcLower} de confiance${priceTag ? `, ${priceTag}` : ''}. Devis gratuit.${descReviewSnippet}`,
-      ]
-  const description = descTemplates[descHash % descTemplates.length]
+  // Intent-aware meta description — urgence / renovation / travaux registers.
+  // The CTR review snippet (`Note X/5 sur Y avis`) is appended regardless of
+  // intent to preserve social proof, when the threshold (≥5 avis) is met.
+  const baseDescription = getIntentMetaDescription(intent, {
+    serviceName,
+    locationName,
+    providerCount,
+    year: 2026,
+  })
+  const description = `${baseDescription}${descReviewSnippet}`
 
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
   // Only fetch commune data when providerCount is 0 (the only case where hasUniqueData matters)
@@ -747,26 +708,21 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   const nearbyCities = getNearbyCities(locationSlug, 6)
   const deptCities: { slug: string; name: string }[] = [] // Removed: duplicated by DeepPageLinks module 3
 
-  // H1 uses same seed as title for coherence (seo- prefix)
+  // H1 uses same seed as title for coherence (seo- prefix). Intent-aware
+  // variants — matches the title register set in generateMetadata.
   const providerCount = totalProviderCount
   const seoHashH1 = Math.abs(hashCode(`seo-${serviceSlug}-${locationSlug}`))
   const naturalTermH1 = getNaturalTerm(serviceSlug)
-  const hasProvidersH1 = providerCount > 0
-  const h1Variants = hasProvidersH1
-    ? [
-        `${service.name} à ${location.name}`,
-        `${service.name} à ${location.name} : pros vérifiés`,
-        `${service.name} à ${location.name} — ${providerCount} pros référencés`,
-        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
-      ]
-    : [
-        `${service.name} à ${location.name}`,
-        `${service.name} à ${location.name} : pros vérifiés`,
-        `${service.name} à ${location.name} — Artisans qualifiés`,
-        `${service.name} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`,
-        `${naturalTermH1.plural.charAt(0).toUpperCase() + naturalTermH1.plural.slice(1)} de confiance à ${location.name}`,
-      ]
+  const pageIntent = getServiceIntent(serviceSlug)
+  const renderRenovationBlocks = shouldRenderRenovationBlocks(pageIntent)
+  const renderUrgencyBlock = shouldRenderUrgencyBlock(pageIntent)
+  const h1Variants = getIntentH1Variants(pageIntent, {
+    serviceName: service.name,
+    locationName: location.name,
+    providerCount,
+    departmentCode: location.department_code || null,
+    pluralTerm: naturalTermH1.plural,
+  })
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
   // Enriched FAQ schema from schema-enrichment (supplements existing faqSchema)
@@ -992,15 +948,31 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         />
       </div>
 
-      {/* Mini-simulateur 1-champ CP — capture lead via angle "aides" (complément du CTA devis) */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2">
-        <MiniSimulateurInline
-          service={service.name.toLowerCase()}
-          ville={location.name}
-          source="services_slug_ville"
-          variant="card"
+      {/* UrgencyBlock — services d'intent URGENCE uniquement (plombier, serrurier, …).
+           Remplace visuellement le mini-simulateur aides qui était off-intent ici. */}
+      {renderUrgencyBlock && (
+        <UrgencyBlock
+          serviceName={service.name}
+          villeName={location.name}
+          providerCount={totalProviderCount}
+          averageResponseTime={trade?.averageResponseTime ?? null}
+          emergencyInfo={trade?.emergencyInfo ?? null}
+          callbackAnchor="#callback-request"
         />
-      </div>
+      )}
+
+      {/* Mini-simulateur aides — services d'intent RÉNOVATION uniquement (chauffagiste,
+           PAC, isolation, …). Off-intent sur dépannage : dilue CTR + People-first 2026. */}
+      {renderRenovationBlocks && (
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2">
+          <MiniSimulateurInline
+            service={service.name.toLowerCase()}
+            ville={location.name}
+            source="services_slug_ville"
+            variant="card"
+          />
+        </div>
+      )}
 
       {/* Page Content */}
       <ServiceLocationPageClient
@@ -1100,11 +1072,15 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           villeName={location.name}
         />
 
-        <ContexteDPEBlock
-          communeData={communeData}
-          serviceName={service.name}
-          villeName={location.name}
-        />
+        {/* ContexteDPE — rénovation énergétique uniquement. Hors-sujet sur
+            intent urgence/travaux : DPE = signal YMYL projet, pas dépannage. */}
+        {renderRenovationBlocks && (
+          <ContexteDPEBlock
+            communeData={communeData}
+            serviceName={service.name}
+            villeName={location.name}
+          />
+        )}
 
         <BarometrePrixBlock
           serviceSlug={serviceSlug}
@@ -1116,19 +1092,23 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
           densite={communeData?.densite_population}
         />
 
-        <CalendrierSaisonnierBlock
-          serviceSlug={serviceSlug}
-          serviceName={service.name}
-          villeName={location.name}
-          climatZone={communeData?.climat_zone ?? null}
-          joursGelAnnuels={communeData?.jours_gel_annuels}
-          precipitationAnnuelle={communeData?.precipitation_annuelle}
-          temperatureMoyenneHiver={communeData?.temperature_moyenne_hiver}
-          temperatureMoyenneEte={communeData?.temperature_moyenne_ete}
-          moisTravauxExtDebut={communeData?.mois_travaux_ext_debut}
-          moisTravauxExtFin={communeData?.mois_travaux_ext_fin}
-          altitudeMoyenne={communeData?.altitude_moyenne}
-        />
+        {/* Calendrier saisonnier — rénovation uniquement : pertinent pour les
+            travaux planifiés (ITE, PAC, toiture), hors-sujet pour urgence/travaux classiques. */}
+        {renderRenovationBlocks && (
+          <CalendrierSaisonnierBlock
+            serviceSlug={serviceSlug}
+            serviceName={service.name}
+            villeName={location.name}
+            climatZone={communeData?.climat_zone ?? null}
+            joursGelAnnuels={communeData?.jours_gel_annuels}
+            precipitationAnnuelle={communeData?.precipitation_annuelle}
+            temperatureMoyenneHiver={communeData?.temperature_moyenne_hiver}
+            temperatureMoyenneEte={communeData?.temperature_moyenne_ete}
+            moisTravauxExtDebut={communeData?.mois_travaux_ext_debut}
+            moisTravauxExtFin={communeData?.mois_travaux_ext_fin}
+            altitudeMoyenne={communeData?.altitude_moyenne}
+          />
+        )}
 
         <CommuneContextBlock
           communeData={communeData}
@@ -1138,12 +1118,17 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
         <ComparatifsBlock serviceSlug={serviceSlug} serviceName={service.name} />
 
-        <PrimesCEEBlock
-          serviceSlug={serviceSlug}
-          serviceName={service.name}
-          villeName={location.name}
-          communeData={communeData}
-        />
+        {/* Primes CEE / MaPrimeRénov' — rénovation uniquement. Le CEE
+            n'existe pas pour du dépannage ni des travaux classiques (peinture,
+            carrelage, déco). Afficher ailleurs = faux signal YMYL. */}
+        {renderRenovationBlocks && (
+          <PrimesCEEBlock
+            serviceSlug={serviceSlug}
+            serviceName={service.name}
+            villeName={location.name}
+            communeData={communeData}
+          />
+        )}
 
         <MaillageInterneBlock
           serviceSlug={serviceSlug}
@@ -1157,6 +1142,19 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         />
       </div>
       {/* --- end pSEO enrichment blocks --- */}
+
+      {/* Cross-intent reroute — 1 lien contextuel vers sibling d'intent différent
+           (ex. plombier URGENCE → chauffagiste RÉNOVATION). Capte le volume
+           adjacent sans polluer le registre de la page courante. */}
+      <ServiceIntentReroute
+        serviceSlug={serviceSlug}
+        villeSlug={locationSlug}
+        villeName={location.name}
+        resolveServiceName={(slug) => {
+          const svc = staticServicesList.find((s) => s.slug === slug)
+          return svc ? svc.name : null
+        }}
+      />
 
       {/* --- Vague 3: social proof, freshness, UGC, AEO --- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1212,7 +1210,10 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       </div>
       {/* --- end Vague 3 --- */}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+      <div
+        id="callback-request"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8 scroll-mt-24"
+      >
         <CallbackRequest serviceSlug={serviceSlug} cityName={location.name} />
       </div>
 
