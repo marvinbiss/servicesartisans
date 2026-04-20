@@ -11,7 +11,22 @@
  * rubric and the grounding / YMYL constraints this prompt enforces.
  */
 
-export const PROMPT_VERSION = 'rge-description-v1.0'
+export const PROMPT_VERSION = 'rge-description-v1.1'
+
+/**
+ * Optional INSEE-sourced E-E-A-T signals surfaced when available
+ * (see migration 459 + scripts/enrich-providers-insee.ts). Absent =
+ * pipeline falls back to v1.0 behaviour with no extra facts cited.
+ */
+export type InseeContext = {
+  date_creation: string | null
+  age_years: number | null
+  tranche_effectif_label: string | null
+  activite_principale_naf: string | null
+  etat_administratif: string | null
+  nombre_etablissements: number | null
+  liste_rge_codes_count: number | null
+}
 
 export type ProviderContext = {
   name: string
@@ -25,6 +40,7 @@ export type ProviderContext = {
   ademe_categories: string[]
   ademe_meta_domains: string[]
   baseline_text: string | null
+  insee?: InseeContext | null
 }
 
 const formatList = (items: string[]): string => {
@@ -40,6 +56,33 @@ const formatClaim = (claimed_at: string | null): string => {
   return `Profile claimed by the artisan on ${claimed_at}. You may reference publicly listed information only.`
 }
 
+const formatInseeContext = (insee: InseeContext | null | undefined): string => {
+  if (!insee) return '(not available)'
+  const lines: string[] = []
+  if (insee.date_creation) {
+    const age = insee.age_years !== null ? ` (≈ ${insee.age_years} ans d'ancienneté)` : ''
+    lines.push(`- Date de création officielle : ${insee.date_creation}${age}`)
+  }
+  if (insee.tranche_effectif_label) {
+    lines.push(`- Effectif déclaré INSEE : ${insee.tranche_effectif_label}`)
+  }
+  if (insee.activite_principale_naf) {
+    lines.push(`- Code NAF principal : ${insee.activite_principale_naf}`)
+  }
+  if (insee.nombre_etablissements && insee.nombre_etablissements > 1) {
+    lines.push(`- Nombre d'établissements : ${insee.nombre_etablissements}`)
+  }
+  if (insee.liste_rge_codes_count && insee.liste_rge_codes_count > 0) {
+    lines.push(
+      `- ${insee.liste_rge_codes_count} qualification(s) RGE recensée(s) au registre officiel`
+    )
+  }
+  if (insee.etat_administratif === 'A') {
+    lines.push(`- Entreprise active au registre INSEE`)
+  }
+  return lines.length === 0 ? '(not available)' : lines.join('\n')
+}
+
 export const buildRgeDescriptionPrompt = (provider: ProviderContext): string => {
   const {
     name,
@@ -52,6 +95,7 @@ export const buildRgeDescriptionPrompt = (provider: ProviderContext): string => 
     ademe_categories,
     ademe_meta_domains,
     baseline_text,
+    insee,
   } = provider
 
   return `# Role
@@ -87,7 +131,8 @@ If a fact is missing, omit it. Never fill a gap with a plausible guess.
 2. Specialty / craft focus (single clear sentence).
 3. RGE qualifications held, each named explicitly, with the validity end date (\`rge_valid_until\`).
 4. ADEME recognised categories and meta-domains when they add specificity.
-5. One closing sentence, practical, stating the local intervention area and indicating that the reader can request a quote via ServicesArtisans (the directory). Do not give a phone number or email.
+5. When the "Registre officiel INSEE" block is available, fold at least one objective signal from it into the narrative (e.g. official creation year, salaried headcount band, multi-establishment presence). This is the Experience / Authoritativeness pillar of E-E-A-T and must stay strictly factual — no superlatives, no "plus de X ans d'expérience" boilerplate, just the bare datum from the registry.
+6. One closing sentence, practical, stating the local intervention area and indicating that the reader can request a quote via ServicesArtisans (the directory). Do not give a phone number or email.
 
 # Provider context
 
@@ -102,6 +147,9 @@ ADEME categories:
 ${formatList(ademe_categories)}
 ADEME meta-domains:
 ${formatList(ademe_meta_domains)}
+
+Registre officiel INSEE / Sirene (data.gouv.fr — source of truth for Experience & Authority signals) :
+${formatInseeContext(insee)}
 
 Claim status: ${formatClaim(claimed_at)}
 

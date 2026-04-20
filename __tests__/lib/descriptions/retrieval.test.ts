@@ -20,6 +20,23 @@ let lastIdsQueried: string[] | null = null
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: () => ({
     from: (table: string) => {
+      if (table === 'provider_insee_enrichment' || table === 'communes') {
+        // Tests don't exercise enrichment/commune joins — return empty.
+        return {
+          select() {
+            return this
+          },
+          in(_col: string, _ids: string[]) {
+            return this
+          },
+          returns<T = unknown[]>() {
+            return {
+              then: (resolve: (v: { data: T; error: null }) => unknown) =>
+                resolve({ data: [] as unknown as T, error: null }),
+            }
+          },
+        }
+      }
       if (table !== 'providers') throw new Error(`unexpected table ${table}`)
       const stub = {
         _id: null as string | null,

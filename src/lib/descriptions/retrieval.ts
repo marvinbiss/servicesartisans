@@ -18,7 +18,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { cleanAdemeText } from '@/lib/ademe/text'
-import type { ProviderContext } from '@/lib/descriptions/prompts/rge-description-v1'
+import { yearsSinceIso } from '@/lib/insee/recherche-entreprises'
+import type { InseeContext, ProviderContext } from '@/lib/descriptions/prompts/rge-description-v1'
 
 export { cleanAdemeText }
 
@@ -55,6 +56,29 @@ type CommuneLookupRow = {
   name: string
   region_name: string | null
   departement_name: string | null
+}
+
+type InseeEnrichmentRow = {
+  provider_id: string
+  date_creation: string | null
+  tranche_effectif_label: string | null
+  activite_principale_naf: string | null
+  etat_administratif: string | null
+  nombre_etablissements: number | null
+  liste_rge_codes: string[] | null
+}
+
+const inseeRowToContext = (row: InseeEnrichmentRow | undefined): InseeContext | null => {
+  if (!row) return null
+  return {
+    date_creation: row.date_creation,
+    age_years: yearsSinceIso(row.date_creation),
+    tranche_effectif_label: row.tranche_effectif_label,
+    activite_principale_naf: row.activite_principale_naf,
+    etat_administratif: row.etat_administratif,
+    nombre_etablissements: row.nombre_etablissements,
+    liste_rge_codes_count: row.liste_rge_codes?.length ?? null,
+  }
 }
 
 // ADEME accent helpers live in `@/lib/ademe/text` (pure, client-safe); they
@@ -141,7 +165,8 @@ const pickDominantSpecialty = (categories: string[], metaDomains: string[]): str
 
 const rowToContext = (
   row: ProviderRow,
-  communeByInsee: Map<string, CommuneLookupRow>
+  communeByInsee: Map<string, CommuneLookupRow>,
+  inseeByProvider?: Map<string, InseeEnrichmentRow>
 ): ProviderContext | null => {
   if (!row.name || !row.slug) return null
 
@@ -171,6 +196,8 @@ const rowToContext = (
     ? dbSpecialty
     : pickDominantSpecialty(ademe_categories, ademe_meta_domains) || dbSpecialty
 
+  const insee = inseeRowToContext(inseeByProvider?.get(row.id))
+
   return {
     name: row.name,
     slug: row.slug,
@@ -183,6 +210,7 @@ const rowToContext = (
     ademe_categories,
     ademe_meta_domains,
     baseline_text: truncate(row.description, BASELINE_MAX_CHARS),
+    insee,
   }
 }
 
@@ -218,6 +246,35 @@ async function fetchCommunesByInsee(
   return out
 }
 
+async function fetchInseeEnrichments(
+  supabase: ReturnType<typeof createAdminClient>,
+  providerIds: string[]
+): Promise<Map<string, InseeEnrichmentRow>> {
+  const out = new Map<string, InseeEnrichmentRow>()
+  if (providerIds.length === 0) return out
+  const CHUNK = 200
+  for (let i = 0; i < providerIds.length; i += CHUNK) {
+    const slice = providerIds.slice(i, i + CHUNK)
+    const { data, error } = await supabase
+      .from('provider_insee_enrichment')
+      .select(
+        'provider_id, date_creation, tranche_effectif_label, activite_principale_naf, etat_administratif, nombre_etablissements, liste_rge_codes'
+      )
+      .in('provider_id', slice)
+      .returns<InseeEnrichmentRow[]>()
+    if (error) {
+      // Migration 459 may not be applied yet — don't crash the pipeline,
+      // just skip enrichment gracefully.
+      logger.warn('[descriptions/retrieval] insee enrichment fetch failed', {
+        error: error.message,
+      })
+      return out
+    }
+    for (const r of data ?? []) out.set(r.provider_id, r)
+  }
+  return out
+}
+
 export async function fetchProviderContext(providerId: string): Promise<ProviderContext | null> {
   const supabase = createAdminClient()
   const today = new Date().toISOString().slice(0, 10)
@@ -237,7 +294,8 @@ export async function fetchProviderContext(providerId: string): Promise<Provider
 
   if (!data || !isEligible(data, today)) return null
   const communeByInsee = await fetchCommunesByInsee(supabase, [data.address_city ?? ''])
-  return rowToContext(data, communeByInsee)
+  const inseeByProvider = await fetchInseeEnrichments(supabase, [providerId])
+  return rowToContext(data, communeByInsee, inseeByProvider)
 }
 
 export async function fetchProviderContextsBatch(
@@ -276,9 +334,13 @@ export async function fetchProviderContextsBatch(
     supabase,
     eligibleRows.map((r) => r.address_city ?? '')
   )
+  const inseeByProvider = await fetchInseeEnrichments(
+    supabase,
+    eligibleRows.map((r) => r.id)
+  )
 
   for (const row of eligibleRows) {
-    const ctx = rowToContext(row, communeByInsee)
+    const ctx = rowToContext(row, communeByInsee, inseeByProvider)
     if (ctx) out.set(row.id, ctx)
   }
 
