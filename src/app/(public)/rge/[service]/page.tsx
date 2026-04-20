@@ -123,10 +123,33 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(content.faq)
 
+  // ItemList Schema.org — indexe les 12 top villes pour ce service RGE.
+  // Aide Google à émettre un carrousel SERP sur les requêtes parentes (ex :
+  // "artisan RGE pompe à chaleur"). Les ListItem pointent vers des URLs
+  // (type URL), Google choisit la présentation appropriée.
+  const itemListSchema =
+    topCities.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: content.h1,
+          description: content.lede,
+          url: `${SITE_URL}${pagePath}`,
+          numberOfItems: topCities.length,
+          itemListElement: topCities.map((city, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: `${content.h1} à ${city.name}`,
+            url: `${SITE_URL}/rge/${serviceSlug}/${city.slug}`,
+          })),
+        }
+      : null
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={collectionSchema} />
+      {itemListSchema && <JsonLd data={itemListSchema} />}
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb items={breadcrumbItems} />

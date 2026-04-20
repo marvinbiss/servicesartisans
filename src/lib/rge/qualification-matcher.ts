@@ -72,8 +72,12 @@ const CEE_CODES_WITH_GUIDE: readonly string[] = [
   // BAR-TH-104 abrogée 01/01/2024 → remplacée par BAR-TH-171
   // BAR-TH-106 abrogée 01/01/2024 — chaudières gaz/fioul plus éligibles CEE
   'BAR-TH-171',
+  'BAR-TH-172',
+  'BAR-TH-174',
   'BAR-TH-129',
+  'BAR-TH-143',
   'BAR-TH-148',
+  'BAR-TH-159',
   'BAR-TH-112',
   'BAR-TH-113',
   'BAR-TH-125',
@@ -81,22 +85,23 @@ const CEE_CODES_WITH_GUIDE: readonly string[] = [
   'BAR-EN-102',
   'BAR-EN-103',
   'BAR-EN-104',
+  'BAR-EN-108',
 ] as const
 
 /** Catégorie → codes CEE débloqués (filtrés à ceux qui ont un guide) */
 const CATEGORY_TO_CEE: Record<RgeCategory, string[]> = {
-  pac: ['BAR-TH-171', 'BAR-TH-129', 'BAR-TH-148'],
+  pac: ['BAR-TH-171', 'BAR-TH-172', 'BAR-TH-129', 'BAR-TH-148', 'BAR-TH-159'],
   bois: ['BAR-TH-112', 'BAR-TH-113'],
-  // Solaire thermique : BAR-TH-101 (CESI) et BAR-TH-143 (SSC) existent au JO
-  // mais n'ont pas encore de guide interne dans CEE_CODES_WITH_GUIDE.
-  'solaire-thermique': [],
+  // Solaire thermique — BAR-TH-143 (SSC) a un guide publié. CESI couvert
+  // par qualif QualiSol sans fiche CEE dédiée à ce jour.
+  'solaire-thermique': ['BAR-TH-143'],
   // PV pur non éligible CEE P6 en résidentiel : aucun BAR-EN/BAR-TH au JO ne
   // couvre le photovoltaïque pur. Les aides sont hors CEE (prime
   // autoconsommation EDF OA, TVA 10%, exonération IR partielle). Ne pas
   // inventer d'opération ici — tableau vide = comportement correct.
   photovoltaique: [],
-  isolation: ['BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103'],
-  menuiserie: ['BAR-EN-104'],
+  isolation: ['BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103', 'BAR-TH-174'],
+  menuiserie: ['BAR-EN-104', 'BAR-EN-108'],
   ventilation: ['BAR-TH-125'],
   'audit-energetique': [],
   // Catégorie obsolète depuis abrogation BAR-TH-106 (01/01/2024). Les

@@ -134,13 +134,17 @@ async function fetchProviderIndexForUrls(ids: string[]): Promise<Map<string, Pro
   const map = new Map<string, ProviderRow>()
   if (ids.length === 0) return map
   const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('providers')
-    .select('id, slug, stable_id, specialty, address_city')
-    .in('id', ids)
-  if (error) throw new Error(`fetchProviderIndex: ${error.message}`)
-  for (const row of data ?? []) {
-    map.set(row.id as string, row as ProviderRow)
+  const PAGE = 200
+  for (let i = 0; i < ids.length; i += PAGE) {
+    const slice = ids.slice(i, i + PAGE)
+    const { data, error } = await supabase
+      .from('providers')
+      .select('id, slug, stable_id, specialty, address_city')
+      .in('id', slice)
+    if (error) throw new Error(`fetchProviderIndex (offset ${i}): ${error.message}`)
+    for (const row of data ?? []) {
+      map.set(row.id as string, row as ProviderRow)
+    }
   }
   return map
 }

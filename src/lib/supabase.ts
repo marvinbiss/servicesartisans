@@ -656,11 +656,11 @@ export async function getProvidersByServiceAndLocation(
             .in('specialty', specialties)
             .eq('address_postal_code', postalCode)
             .eq('is_active', true)
-            .eq('noindex', false)
           if (rgeOnly) {
             query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
           }
           const { data, error } = await query
+            .order('rge_valid_until', { ascending: false, nullsFirst: false })
             .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
@@ -681,12 +681,12 @@ export async function getProvidersByServiceAndLocation(
             .in('specialty', specialties)
             .in('address_city', cityValues)
             .eq('is_active', true)
-            .eq('noindex', false)
           if (rgeOnly) {
             primary = primary.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
           }
           const { data: direct, error: directError } = await primary
-            // STRICT RULE: providers with phone always rank above those without
+            // RGE certified ranked first (Option C), then phone, verified, name.
+            .order('rge_valid_until', { ascending: false, nullsFirst: false })
             .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
@@ -750,7 +750,6 @@ export async function getProvidersByServiceAndDepartment(
             .in('specialty', specialties)
             .eq('address_department', departmentName)
             .eq('is_active', true)
-            .eq('noindex', false)
 
           if (rgeOnly) {
             query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
@@ -988,7 +987,7 @@ export async function getProvidersByLocation(locationSlug: string) {
             .select(PROVIDER_LIST_SELECT)
             .in('address_city', cityValues)
             .eq('is_active', true)
-            .eq('noindex', false)
+            .order('rge_valid_until', { ascending: false, nullsFirst: false })
             .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
@@ -1021,7 +1020,7 @@ export async function getAllProviders() {
             .from('providers')
             .select(PROVIDER_LIST_SELECT)
             .eq('is_active', true)
-            .eq('noindex', false)
+            .order('rge_valid_until', { ascending: false, nullsFirst: false })
             .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
@@ -1054,7 +1053,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .eq('is_active', true)
-          .eq('noindex', false)
+          .order('rge_valid_until', { ascending: false, nullsFirst: false })
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .limit(effectiveLimit)

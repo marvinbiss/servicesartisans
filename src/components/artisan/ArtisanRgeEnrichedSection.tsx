@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Award, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
 
 import { matchQualifications, type RgeGuideSlug } from '@/lib/rge/qualification-matcher'
+import { CEE_SHORT_LABELS } from '@/lib/cee/shared-labels'
 import { trackEvent } from '@/lib/analytics/tracking'
 
 // Allowlist inlinée (duplique RGE_ALLOWED_SERVICES de `service-city-listings.ts`)
@@ -116,21 +117,6 @@ const GUIDE_META: Record<RgeGuideSlug, { name: string; organisme: string; descri
     description:
       'Installation de bornes de recharge pour véhicules électriques (IRVE P1 et P2) en résidentiel et tertiaire.',
   },
-}
-
-const CEE_SHORT_LABELS: Record<string, string> = {
-  'BAR-TH-171': 'Pompe à chaleur air/eau haute performance',
-  'BAR-TH-172': 'PAC eau/eau haute performance',
-  'BAR-TH-112': 'Appareil indépendant de chauffage au bois',
-  'BAR-TH-113': 'Chaudière biomasse individuelle',
-  'BAR-TH-125': 'Ventilation mécanique double flux',
-  'BAR-TH-129': 'Pompe à chaleur air/air',
-  'BAR-TH-148': 'Chauffe-eau thermodynamique',
-  'BAR-TH-174': 'Rénovation d’ampleur maison individuelle',
-  'BAR-EN-101': 'Isolation des combles ou toitures',
-  'BAR-EN-102': 'Isolation des murs',
-  'BAR-EN-103': 'Isolation des planchers bas',
-  'BAR-EN-104': 'Fenêtres ou baies vitrées',
 }
 
 function formatDate(iso: string | null | undefined): string | null {

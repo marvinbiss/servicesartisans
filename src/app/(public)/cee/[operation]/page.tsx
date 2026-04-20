@@ -20,7 +20,24 @@ import {
   type RgeAllowedService,
 } from '@/lib/rge/service-city-listings'
 import { hasCeeOperationGuide, CEE_CATALOG_UPDATED_AT } from '@/lib/cee/operation-guides-content'
+import { services as servicesCatalog } from '@/lib/data/france-light'
 import LastUpdated from '@/components/seo/LastUpdated'
+
+// Map slug → display name (e.g. "chauffagiste" → "Chauffagiste", "pompe-a-chaleur"
+// → "Pompe à chaleur"). Utilise le catalogue des services si présent, fallback
+// sur le label qualif pour les services spécialisés absents du catalogue grand
+// public (renovation-energetique, etc.).
+const SERVICE_DISPLAY_NAME: Record<string, string> = {
+  ...Object.fromEntries(servicesCatalog.map((s) => [s.slug, s.name])),
+  'pompe-a-chaleur': 'Pompe à chaleur',
+  'panneaux-solaires': 'Panneaux solaires',
+  'isolation-thermique': 'Isolation thermique',
+  'renovation-energetique': 'Rénovation énergétique',
+  zingueur: 'Zingueur',
+  facadier: 'Façadier',
+  platrier: 'Plâtrier',
+  ramoneur: 'Ramoneur',
+}
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -359,6 +376,17 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {rgeServices.map((slug) => {
               const meta = RGE_QUALIFICATION_LABELS[slug]
+              // Anchor text : "Artisans RGE [Service]" — nom propre du
+              // catalogue, pluriel naturel, accents préservés. Beaucoup plus
+              // propre que `slug.replace(/-/g, ' ')` (ex: "pompe a chaleur"
+              // perdait l'accent) et que `meta.specifics` truncated (coupait
+              // mi-phrase sur 5 métiers sur 14).
+              const displayName =
+                SERVICE_DISPLAY_NAME[slug] ??
+                slug
+                  .split('-')
+                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(' ')
               return (
                 <Link
                   key={slug}
@@ -370,8 +398,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition capitalize">
-                      {slug.replace(/-/g, ' ')}
+                    <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                      Artisans RGE {displayName.toLowerCase()}
                     </div>
                     {meta && (
                       <div className="text-xs text-charcoal-900 mt-0.5">

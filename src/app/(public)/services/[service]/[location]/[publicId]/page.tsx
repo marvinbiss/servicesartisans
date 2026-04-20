@@ -136,12 +136,31 @@ function convertToArtisan(
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
 
-  // Generate description if missing or too short (WITHOUT fake ratings)
+  // Generate description if missing or too short (WITHOUT fake ratings).
+  //
+  // Priorité (ordre) :
+  //   1. existingDesc en DB (contenu éditorial LLM ou saisi par l'artisan)
+  //   2. Si provider RGE sans description publiée : bloc factuel ADEME-grounded
+  //      (pas de texte boilerplate hallucinant à la Helpful Content Update).
+  //      Les ~3 700 judged_fail en attente de Sonnet regen tombent ici.
+  //   3. Fallback générique (derniers cas : non-RGE sans description).
   const existingDesc = provider.description || provider.bio
+  const hasRgeQualifs =
+    Array.isArray(provider.rge_qualifications) && provider.rge_qualifications.length > 0
   const description =
     existingDesc && existingDesc.length > 50
       ? existingDesc
-      : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
+      : hasRgeQualifs
+        ? generateRgeMinimalDescription(
+            name,
+            city || 'leur région',
+            provider.rge_qualifications as Array<{
+              nom?: string | null
+              organisme?: string | null
+            }>,
+            provider.rge_valid_until ?? null
+          )
+        : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
 
   // Only show member_since if it's a meaningful past year.
   // Providers imported in the current year (e.g. 2026 bulk import) would show
@@ -217,6 +236,65 @@ function convertToArtisan(
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
     // Will be removed when each sub-component migrates to v2 Artisan type
   }
+}
+
+// RGE-grounded minimal description — fallback pour les providers RGE dont
+// la description LLM n'a pas encore été publiée (judged_fail en attente
+// Sonnet regen, ou batch pas encore traité).
+//
+// Pourquoi cette fonction existe : avant 2026-04-20 le seul fallback était
+// `generateDescription()` qui crache un texte boilerplate auto-généré
+// (même structure intro + CTA + "Informations basées sur..."). Pour Google
+// Helpful Content Update (sections 4.6.5 et 4.6.6 des guidelines
+// évaluateurs), ce pattern = AI-generated scale content = spam signal.
+//
+// Ce qu'on fait à la place : ancrer exclusivement sur les données ADEME
+// réelles (qualifications nominatives, date de validité, organismes
+// certificateurs). Le contenu varie naturellement d'une fiche à l'autre
+// car les qualifications varient d'un artisan RGE à l'autre (pas de
+// template uniforme). Zéro hallucination, zéro superlatif.
+function generateRgeMinimalDescription(
+  name: string,
+  city: string,
+  qualifications: Array<{ nom?: string | null; organisme?: string | null }>,
+  validUntil: string | null
+): string {
+  const qualNames = qualifications
+    .map((q) => (q?.nom ?? '').trim())
+    .filter((n) => n.length > 0)
+    .slice(0, 5)
+  const organismes = Array.from(
+    new Set(qualifications.map((q) => (q?.organisme ?? '').trim()).filter((o) => o.length > 0))
+  ).slice(0, 3)
+  const validUntilFr = (() => {
+    if (!validUntil) return null
+    const d = new Date(validUntil)
+    if (Number.isNaN(d.getTime())) return null
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+  })()
+
+  const parts: string[] = []
+  parts.push(
+    `${name} est un artisan certifié RGE (Reconnu Garant de l'Environnement) basé à ${city}.`
+  )
+  if (qualNames.length > 0) {
+    parts.push(`Qualifications RGE actives : ${qualNames.join(' ; ')}.`)
+  }
+  if (organismes.length > 0) {
+    parts.push(
+      `Certification${organismes.length > 1 ? 's délivrées' : ' délivrée'} par ${organismes.join(', ')}.`
+    )
+  }
+  if (validUntilFr) {
+    parts.push(`Validité confirmée jusqu'au ${validUntilFr}.`)
+  }
+  parts.push(
+    `Cette qualification RGE permet aux clients de ${name} de solliciter les dispositifs d'aide publique à la rénovation énergétique, notamment MaPrimeRénov' et les Certificats d'Économies d'Énergie (CEE), sous réserve d'éligibilité.`
+  )
+  parts.push(
+    `Les données de qualification proviennent de l'annuaire officiel ADEME publié sur france-renov.gouv.fr, synchronisé chaque semaine.`
+  )
+  return parts.join(' ')
 }
 
 // Generate a rich, unique description based on all available provider data
@@ -312,6 +390,9 @@ interface SimilarProviderRow {
   review_count: number | null
   address_city: string | null
   is_verified: boolean | null
+  // Requis pour propager rel="nofollow" dans ArtisanSimilar et concentrer
+  // le PageRank sur les fiches RGE visibles (noindex=false).
+  noindex: boolean | null
 }
 
 /** Row shape from the reviews query */
@@ -335,7 +416,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
     let query = supabase
       .from('providers')
       .select(
-        'id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone'
+        'id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone, noindex'
       )
       .eq('is_active', true)
       .neq('id', providerId)
@@ -367,6 +448,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
         reviews: p.review_count || 0,
         city: resolved.address_city || '',
         is_verified: p.is_verified || false,
+        noindex: p.noindex ?? false,
       }
     })
   } catch {

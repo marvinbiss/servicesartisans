@@ -25,6 +25,13 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
   })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
+  // Concentrer le PageRank sur les 46K fiches RGE visibles (noindex=false).
+  // Les 920K fiches non-RGE (noindex=true) restent cliquables pour l'UX mais
+  // sont exclues du flux PageRank via rel="nofollow". Source : Google Search
+  // Central — rel="nofollow" indique "source douteuse" / "ne pas transmettre
+  // d'autorité". Ici : fiches sans signal de qualité RGE vérifiable.
+  const shouldNofollow = provider.noindex === true
+  const linkRel = shouldNofollow ? 'nofollow' : undefined
 
   return (
     <div
@@ -44,6 +51,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
       {/* Mobile: full-card tappable overlay link */}
       <Link
         href={providerUrl}
+        rel={linkRel}
         className="absolute inset-0 z-10 md:hidden"
         aria-label={`Voir le profil de ${provider.name}`}
         onClick={() =>
@@ -64,6 +72,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
         {/* Avatar / Initials */}
         <Link
           href={providerUrl}
+          rel={linkRel}
           className="flex-shrink-0"
           onClick={() =>
             trackEvent('artisan_listing_click', {
@@ -90,6 +99,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           <div className="flex items-center gap-2">
             <Link
               href={providerUrl}
+              rel={linkRel}
               className="font-heading text-lg font-bold text-charcoal-900 hover:text-primary-500 transition-colors duration-200 truncate"
               onClick={() =>
                 trackEvent('artisan_listing_click', {
@@ -188,12 +198,14 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           <>
             <Link
               href={`${providerUrl}#devis`}
+              rel={linkRel}
               className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
             >
               Demander un devis
             </Link>
             <Link
               href={providerUrl}
+              rel={linkRel}
               className="hidden md:flex items-center justify-center gap-1 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
             >
               Voir le profil
@@ -202,6 +214,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
         ) : (
           <Link
             href={providerUrl}
+            rel={linkRel}
             className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             Voir le profil

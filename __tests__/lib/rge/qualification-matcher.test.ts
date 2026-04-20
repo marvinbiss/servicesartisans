@@ -85,8 +85,8 @@ describe('matchQualifications — catégories principales', () => {
     const res = matchQualifications([q({ nom: 'QualiSol CESI', organisme: 'Qualit\u2019ENR' })], [])
     expect(res.categories).toContain('solaire-thermique')
     expect(res.guideSlugs).toContain('qualisol')
-    // CEE vide pour solaire thermique (pas de guide CEE mappé)
-    expect(res.ceeOpCodes).toEqual([])
+    // BAR-TH-143 (SSC) est mappé depuis 2026-04-20 (ajout guide éditorial)
+    expect(res.ceeOpCodes).toContain('BAR-TH-143')
   })
 
   it('détecte photovoltaïque depuis "Panneaux Solaires Photovoltaïques"', () => {
@@ -316,8 +316,12 @@ describe('matchQualifications — filtrage CEE_CODES_WITH_GUIDE', () => {
   it('ne retourne que des codes CEE ayant un guide interne', () => {
     const allowlist = new Set([
       'BAR-TH-171',
+      'BAR-TH-172',
+      'BAR-TH-174',
       'BAR-TH-129',
+      'BAR-TH-143',
       'BAR-TH-148',
+      'BAR-TH-159',
       'BAR-TH-112',
       'BAR-TH-113',
       'BAR-TH-125',
@@ -325,6 +329,7 @@ describe('matchQualifications — filtrage CEE_CODES_WITH_GUIDE', () => {
       'BAR-EN-102',
       'BAR-EN-103',
       'BAR-EN-104',
+      'BAR-EN-108',
     ])
     const res = matchQualifications(
       [

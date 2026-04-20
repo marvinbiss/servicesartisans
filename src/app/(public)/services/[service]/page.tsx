@@ -334,6 +334,28 @@ export default async function ServicePage({ params }: PageProps) {
       })
     : null
 
+  // ItemList Schema.org — top 12 villes pour ce service. Augmente les
+  // chances d'émission d'un carrousel SERP sur les requêtes métier
+  // génériques ("plombier", "électricien"…). Les ListItem pointent vers
+  // les pages /services/[svc]/[ville] (liste d'artisans de la ville).
+  const itemListSchema =
+    topCities.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: `${service.name} en France — top villes`,
+          description: `Top ${Math.min(topCities.length, 12)} villes françaises avec des ${service.name.toLowerCase()}s disponibles.`,
+          url: `${SITE_URL}/services/${serviceSlug}`,
+          numberOfItems: Math.min(topCities.length, 12),
+          itemListElement: topCities.slice(0, 12).map((city, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: `${service.name} à ${city.name}`,
+            url: `${SITE_URL}/services/${serviceSlug}/${city.slug}`,
+          })),
+        }
+      : null
+
   return (
     <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
@@ -343,6 +365,7 @@ export default async function ServicePage({ params }: PageProps) {
           speakableSchema,
           ...(faqSchema ? [faqSchema] : []),
           ...(pricingSchema ? [pricingSchema] : []),
+          ...(itemListSchema ? [itemListSchema] : []),
         ]}
       />
 

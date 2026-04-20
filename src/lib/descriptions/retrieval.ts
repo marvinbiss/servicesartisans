@@ -303,20 +303,29 @@ export async function fetchProviderContextsBatch(
   const supabase = createAdminClient()
   const today = new Date().toISOString().slice(0, 10)
 
-  const { data, error } = await supabase
-    .from('providers')
-    .select(SELECT_COLUMNS)
-    .in('id', providerIds)
-    .returns<ProviderRow[]>()
+  // Cloudflare rejects PostgREST URLs >~8 KiB, so .in('id', [10000 uuids])
+  // triggers 414. Chunk the fetch in pages of 200.
+  const PAGE = 200
+  const allRows: ProviderRow[] = []
+  for (let i = 0; i < providerIds.length; i += PAGE) {
+    const slice = providerIds.slice(i, i + PAGE)
+    const { data, error } = await supabase
+      .from('providers')
+      .select(SELECT_COLUMNS)
+      .in('id', slice)
+      .returns<ProviderRow[]>()
 
-  if (error) {
-    logger.error('[descriptions/retrieval] fetchProviderContextsBatch failed', error, {
-      count: providerIds.length,
-    })
-    return out
+    if (error) {
+      logger.error('[descriptions/retrieval] fetchProviderContextsBatch failed', error, {
+        count: slice.length,
+        offset: i,
+      })
+      continue
+    }
+    if (data) allRows.push(...data)
   }
 
-  const eligibleRows = (data ?? []).filter((r) => isEligible(r, today))
+  const eligibleRows = allRows.filter((r) => isEligible(r, today))
   const communeByInsee = await fetchCommunesByInsee(
     supabase,
     eligibleRows.map((r) => r.address_city ?? '')

@@ -24,6 +24,13 @@ interface SimilarArtisan {
   reviews: number
   city: string
   is_verified?: boolean
+  /**
+   * True si la fiche a `providers.noindex=true` (920K artisans non-RGE).
+   * Utilisé pour émettre `rel="nofollow"` et concentrer le PageRank sur
+   * les 46K fiches RGE visibles (noindex=false). Absent/false = pas de
+   * nofollow (comportement par défaut).
+   */
+  noindex?: boolean
 }
 
 interface ArtisanSimilarProps {
@@ -145,6 +152,7 @@ export function ArtisanSimilar({
                 specialty: item.specialty,
                 city: item.city,
               })}
+              rel={item.noindex === true ? 'nofollow' : undefined}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
               <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
