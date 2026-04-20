@@ -7,6 +7,7 @@ import { dispatchLead } from './dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 import { cleanPhone } from '@/lib/validation/phone'
+import { createInvitationForDevis } from '@/lib/reviews/invitations'
 
 const leadSchema = z.object({
   providerId: z.string().min(1).optional(),
@@ -91,6 +92,16 @@ export async function submitLead(
 
     // Log 'created' event — triggers "Demande bien reçue" notification to client
     logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
+
+    // Schedule review invitation (fire-and-forget) — feeds the reviews flywheel.
+    // Cron `/api/cron/send-review-invitations` picks up due invitations and sends the email.
+    createInvitationForDevis({
+      devisRequestId: inserted.id,
+      clientEmail: data.email,
+      clientName: data.name,
+      serviceName: data.serviceName,
+      providerId: data.providerId ?? null,
+    }).catch((err) => logger.error('[review_invitations] schedule failed', err))
 
     // Determine whether to use direct dispatch or algorithmic dispatch.
     // If a providerId was given, verify the provider exists and is active.
