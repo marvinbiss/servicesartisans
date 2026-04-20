@@ -2,6 +2,7 @@
 
 import { Leaf } from 'lucide-react'
 import { RgeTracking, type RgeBadgeClickProps } from '@/lib/analytics/tracking'
+import { cleanAdemeText } from '@/lib/ademe/text'
 
 /**
  * RgeBadge — affiche le badge "Certifié RGE" pour les artisans revendiqués
@@ -71,7 +72,8 @@ export default function RgeBadge({
   if (validUntil < today) return null
 
   const count = qualifications.length
-  const organismesLabel = organismes && organismes.length > 0 ? organismes.join(', ') : '—'
+  const organismesLabel =
+    organismes && organismes.length > 0 ? organismes.map(cleanAdemeText).join(', ') : '—'
 
   if (compact) {
     // Pastille compacte pour ProviderCard / listings — pas de dropdown, juste un pill statique.
@@ -81,7 +83,9 @@ export default function RgeBadge({
       `Valide jusqu'au ${formatDate(validUntil)}`,
       `Organisme${(organismes?.length ?? 0) > 1 ? 's' : ''} : ${organismesLabel}`,
       '',
-      ...qualifications.slice(0, 5).map((q) => `• ${q.nom} (${q.organisme})`),
+      ...qualifications
+        .slice(0, 5)
+        .map((q) => `• ${cleanAdemeText(q.nom)} (${cleanAdemeText(q.organisme)})`),
       qualifications.length > 5
         ? `… +${qualifications.length - 5} autre${qualifications.length - 5 > 1 ? 's' : ''}`
         : '',
@@ -169,10 +173,16 @@ export default function RgeBadge({
                 aria-hidden="true"
               />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-charcoal-900 truncate">{q.nom}</div>
+                <div className="font-medium text-charcoal-900 truncate">
+                  {cleanAdemeText(q.nom)}
+                </div>
                 <div className="text-xs text-charcoal-500">
-                  {q.organisme}
-                  {q.meta_domaine ? ` — ${q.meta_domaine}` : q.domaine ? ` — ${q.domaine}` : ''}
+                  {cleanAdemeText(q.organisme)}
+                  {q.meta_domaine
+                    ? ` — ${cleanAdemeText(q.meta_domaine)}`
+                    : q.domaine
+                      ? ` — ${cleanAdemeText(q.domaine)}`
+                      : ''}
                 </div>
                 <div className="text-xs text-charcoal-400">
                   Jusqu&apos;au {formatDate(q.date_fin)}

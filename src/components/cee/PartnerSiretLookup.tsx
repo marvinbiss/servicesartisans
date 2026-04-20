@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { AlertCircle, ArrowRight, BadgeCheck, CheckCircle2, Loader2, Search } from 'lucide-react'
 
 import { CeePartnerTracking } from '@/lib/analytics/tracking'
+import { cleanAdemeText } from '@/lib/ademe/text'
 
 type RgeQualification = {
   code: string
@@ -237,8 +238,9 @@ export default function PartnerSiretLookup() {
                 <ul className="space-y-1.5">
                   {state.data.rge.qualifications.slice(0, 5).map((q) => (
                     <li key={`${q.code}-${q.organisme}`} className="text-xs text-emerald-900">
-                      <span className="font-mono font-semibold">{q.code}</span> — {q.nom}{' '}
-                      <span className="text-emerald-700">({q.organisme})</span>
+                      <span className="font-mono font-semibold">{q.code}</span> —{' '}
+                      {cleanAdemeText(q.nom)}{' '}
+                      <span className="text-emerald-700">({cleanAdemeText(q.organisme)})</span>
                     </li>
                   ))}
                   {state.data.rge.qualifications.length > 5 && (

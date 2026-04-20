@@ -3,6 +3,7 @@ import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { slugify, getArtisanUrl } from '@/lib/utils'
 import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
+import { cleanAdemeText } from '@/lib/ademe/text'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -253,12 +254,12 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       }
       const credentials = Array.from(byCode.values()).map((q) => ({
         '@type': 'EducationalOccupationalCredential',
-        name: q.nom,
+        name: cleanAdemeText(q.nom),
         identifier: q.code,
         credentialCategory: "RGE (Reconnu Garant de l'Environnement)",
         recognizedBy: {
           '@type': 'Organization',
-          name: q.organisme,
+          name: cleanAdemeText(q.organisme),
         },
         validFrom: q.date_debut || undefined,
         validThrough: q.date_fin,
@@ -276,7 +277,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       return {
         memberOf: organismes.map((name) => ({
           '@type': 'Organization',
-          name,
+          name: cleanAdemeText(name),
         })),
       }
     })(),

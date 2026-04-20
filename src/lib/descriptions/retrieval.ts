@@ -17,7 +17,10 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { cleanAdemeText } from '@/lib/ademe/text'
 import type { ProviderContext } from '@/lib/descriptions/prompts/rge-description-v1'
+
+export { cleanAdemeText }
 
 const BASELINE_MAX_CHARS = 2000
 
@@ -54,70 +57,8 @@ type CommuneLookupRow = {
   departement_name: string | null
 }
 
-// ADEME RGE data has systematic accent drops and collapsed whitespace
-// (e.g. "pompe  chaleur" instead of "pompe à chaleur", "arothermique" instead
-// of "aérothermique"). We restore them at retrieval time so the LLM receives
-// clean French context and the D4 validator (containsNormalized) can still
-// match qualifications the LLM rewrites with proper accents.
-// Only transformations that add missing accents — never normalise case.
-// The replacement RHS must differ from LHS by accent/character restoration
-// (not just case), otherwise dedupe loses the original casing.
-// JS regex \b is ASCII-only even with /u. We build a Unicode-aware "word
-// boundary" via negative lookaround on \p{L} so that "é" counts as a letter
-// and already-correct words ("énergies") aren't re-accented into "éénergies".
-const W_BEFORE = '(?<!\\p{L})'
-const W_AFTER = '(?!\\p{L})'
-const uw = (body: string, flags = 'gu'): RegExp => new RegExp(W_BEFORE + body + W_AFTER, flags)
-
-const ACCENT_FIXES: Array<[RegExp, string]> = [
-  [uw('arothermique'), 'aérothermique'],
-  [uw('Arothermique'), 'Aérothermique'],
-  [uw('gothermique'), 'géothermique'],
-  [uw('Gothermique'), 'Géothermique'],
-  [uw('photovoltaque'), 'photovoltaïque'],
-  [uw('Photovoltaque'), 'Photovoltaïque'],
-  [uw('gnrateur'), 'générateur'],
-  [uw('Gnrateur'), 'Générateur'],
-  [uw('chaudire'), 'chaudière'],
-  [uw('chaudires'), 'chaudières'],
-  [uw('Chaudire'), 'Chaudière'],
-  [uw('fentre'), 'fenêtre'],
-  [uw('fentres'), 'fenêtres'],
-  [uw('Fentre'), 'Fenêtre'],
-  [uw('pole'), 'poêle'],
-  [uw('poles'), 'poêles'],
-  [uw('indpendant'), 'indépendant'],
-  [uw('indpendants'), 'indépendants'],
-  [uw('rseau'), 'réseau'],
-  [uw('Rseau'), 'Réseau'],
-  [uw('nergie'), 'énergie'],
-  [uw('nergies'), 'énergies'],
-  [uw('nergetique'), 'énergétique'],
-  [uw('nergetiques'), 'énergétiques'],
-  [uw('Energie'), 'Énergie'],
-  [uw('Energetique'), 'Énergétique'],
-  [uw('quipement'), 'équipement'],
-  [uw('quipements'), 'équipements'],
-  [uw('Quipement'), 'Équipement'],
-  [uw('intrieur'), 'intérieur'],
-  [uw('extrieur'), 'extérieur'],
-  [uw('amnagement'), 'aménagement'],
-  // Pattern: "pompe  chaleur" (double space where "à" was dropped)
-  [new RegExp('(?<!\\p{L})(pompe)\\s{2}(chaleur)(?!\\p{L})', 'giu'), '$1 à $2'],
-  // Collapse residual multi-spaces AFTER the above restorations.
-  [/\s{2,}/g, ' '],
-]
-
-/**
- * Restaure les accents droppés par ADEME ("arothermique" → "aérothermique",
- * "pompe  chaleur" → "pompe à chaleur", etc). Pur, zéro I/O, réutilisable
- * côté rendu SSR pour nettoyer les labels bruts avant affichage public.
- */
-export const cleanAdemeText = (raw: string): string => {
-  let out = raw
-  for (const [re, rep] of ACCENT_FIXES) out = out.replace(re, rep)
-  return out.trim()
-}
+// ADEME accent helpers live in `@/lib/ademe/text` (pure, client-safe); they
+// are re-exported at the top of this module for existing callers.
 
 const dedupeTrimmed = (values: Array<string | null | undefined>, clean = false): string[] => {
   const seen = new Set<string>()
