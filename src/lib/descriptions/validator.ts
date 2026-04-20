@@ -15,7 +15,7 @@
 
 import type { ProviderContext } from './prompts/rge-description-v1'
 
-export const RUBRIC_VERSION = 'rge-rubric-v1.1'
+export const RUBRIC_VERSION = 'rge-rubric-v1.2'
 
 export type DescriptionScore = {
   dim1_originality: number
@@ -256,24 +256,68 @@ const scoreYmyl = (text: string): { score: number; flag?: DescriptionFlag } => {
 }
 
 /**
- * D6 — SEO semantic coverage: city AND region mentioned.
+ * D6 — SEO semantic coverage (v1.2): robust detection of 3 anchors :
+ *   - city (verbatim)
+ *   - region (verbatim OR common abbreviation — IDF, PACA, AuRA, ...)
+ *   - specialty (tokens ≥4 chars, at least one significant token matched)
+ *
+ * Score scale 0→10 : 0 anchors=0, 1=4, 2=7, 3=10 (no more 3.3 ceiling).
  */
+const REGION_VARIANTS: Record<string, readonly string[]> = {
+  'ile-de-france': ['idf', 'région parisienne', 'bassin parisien'],
+  'auvergne-rhone-alpes': ['aura', 'ara', 'rhône-alpes'],
+  'nouvelle-aquitaine': ['aquitaine'],
+  'provence-alpes-cote-d-azur': ['paca', 'côte d azur', 'cote d azur'],
+  'hauts-de-france': ['hdf', 'nord pas de calais', 'nord-pas-de-calais'],
+  'grand-est': ['alsace', 'lorraine', 'champagne'],
+  'bourgogne-franche-comte': ['bfc', 'bourgogne', 'franche-comté', 'franche comte'],
+  'centre-val-de-loire': ['cvl', 'centre'],
+  'pays-de-la-loire': ['ligérien', 'pays ligérien'],
+  bretagne: ['breton', 'breizh'],
+  normandie: ['normand'],
+  occitanie: ['languedoc', 'midi-pyrénées', 'midi pyrenees'],
+  corse: ['corsica'],
+}
+
+const regionMatches = (text: string, region: string): boolean => {
+  if (!region || region.trim().length === 0) return false
+  if (containsNormalized(text, region)) return true
+  const slug = normalize(region).replace(/\s+/g, '-')
+  const variants = REGION_VARIANTS[slug] ?? []
+  const normalized = normalize(text)
+  return variants.some((v) => normalized.includes(normalize(v)))
+}
+
+const specialtyMatches = (text: string, specialty: string): boolean => {
+  if (!specialty || specialty.trim().length === 0) return false
+  if (containsNormalized(text, specialty)) return true
+  const tokens = normalize(specialty)
+    .split(/[^a-z0-9]+/)
+    .filter((t) => t.length >= 4)
+  if (tokens.length === 0) return false
+  const normalized = normalize(text)
+  const matched = tokens.filter((t) => normalized.includes(t)).length
+  const needed = Math.max(1, Math.ceil(tokens.length / 2))
+  return matched >= needed
+}
+
 const scoreSeo = (
   text: string,
   ctx: ProviderContext
 ): { score: number; flag?: DescriptionFlag } => {
   const hasCity = containsNormalized(text, ctx.address_city)
-  const hasRegion = containsNormalized(text, ctx.address_region)
-  const hasSpecialty = containsNormalized(text, ctx.specialty)
+  const hasRegion = regionMatches(text, ctx.address_region)
+  const hasSpecialty = specialtyMatches(text, ctx.specialty)
   const hits = [hasCity, hasRegion, hasSpecialty].filter(Boolean).length
-  const score = clamp(hits * 3.3)
+  const SCALE: readonly number[] = [0, 4, 7, 10]
+  const score = SCALE[hits] ?? 10
   if (hits < 2) {
     return {
       score,
       flag: {
         dimension: 'dim6_seo',
         severity: 'warn',
-        message: 'Missing geo/specialty anchors (expected city + region + specialty).',
+        message: `Missing geo/specialty anchors (${hits}/3 matched: city=${hasCity} region=${hasRegion} specialty=${hasSpecialty}).`,
       },
     }
   }
@@ -335,7 +379,71 @@ const scoreIntent = (text: string): { score: number; flag?: DescriptionFlag } =>
 }
 
 // TODO(D2): MinHash Jaccard LSH against corpus — requires cross-document state.
-// TODO(D9): QRG conformity — requires Opus L2 judge against QRG 2026 rubric.
+
+/**
+ * D9 — QRG 2026 conformity (local heuristic, v1.2).
+ *
+ * Quality Rater Guidelines 2026 (section 4) frame quality through E-E-A-T.
+ * We proxy the 4 pillars with deterministic signals present in the text :
+ *   - Experience     : year mentioned OR "depuis" / "fondée" / "créée"
+ *   - Expertise      : ≥1 RGE qualification from context verbatim in text
+ *   - Authoritativeness : mention of a known French certifying body
+ *                         (qualibat, qualifelec, qualit'enr, ademe, anah, ...)
+ *   - Trustworthiness : absence of forbidden superlatives
+ *                       ("meilleur", "leader", "n°1", "expert n°1", ...)
+ *
+ * Score = 2.5 points per pillar satisfied. Full Opus L2 judge remains
+ * possible later, but this heuristic already differentiates providers
+ * instead of the previous 5.0 placeholder that applied to everyone.
+ */
+const QRG_AUTHORITY_KEYWORDS: readonly string[] = [
+  'qualibat',
+  'qualifelec',
+  'qualitenr',
+  "qualit'enr",
+  'qualipac',
+  'qualibois',
+  'qualipv',
+  'qualisol',
+  'ademe',
+  'anah',
+  'france renov',
+  'france-renov',
+  'afnor',
+]
+
+const QRG_SUPERLATIVE_REGEX =
+  /\b(meilleur|leader\b|num[ée]ro\s*1|n[°o]\s*1|expert\s+n[°o]\s*1|le\s+plus\s+\w+|incontournable|r[ée]f[ée]rence\s+absolue)\b/i
+
+const QRG_EXPERIENCE_REGEX =
+  /(\b(?:19|20)\d{2}\b|depuis\s+(?:plus\s+de\s+)?\d|fond[ée]e?\s+en|cr[ée]{1,2}e?\s+en|install[ée]e?\s+depuis)/i
+
+const scoreQrg = (
+  text: string,
+  ctx: ProviderContext
+): { score: number; flag?: DescriptionFlag } => {
+  const normalized = normalize(text)
+  const hasExperience = QRG_EXPERIENCE_REGEX.test(text)
+  const hasExpertise =
+    ctx.rge_qualifications.length === 0
+      ? true
+      : ctx.rge_qualifications.some((q) => containsNormalized(text, q))
+  const hasAuthority = QRG_AUTHORITY_KEYWORDS.some((k) => normalized.includes(normalize(k)))
+  const hasTrust = !QRG_SUPERLATIVE_REGEX.test(text)
+  const pillars = [hasExperience, hasExpertise, hasAuthority, hasTrust].filter(Boolean).length
+  const score = clamp(pillars * 2.5)
+  if (pillars < 3) {
+    return {
+      score,
+      flag: {
+        dimension: 'dim9_qrg',
+        severity: 'warn',
+        message: `QRG pillars ${pillars}/4 (exp=${hasExperience} expert=${hasExpertise} auth=${hasAuthority} trust=${hasTrust}).`,
+      },
+    }
+  }
+  return { score }
+}
 
 export const validateDescription = (text: string, context: ProviderContext): DescriptionScore => {
   const flags: DescriptionFlag[] = []
@@ -358,11 +466,13 @@ export const validateDescription = (text: string, context: ProviderContext): Des
   push(d7.flag)
   const d8 = scoreIntent(text)
   push(d8.flag)
+  const d9 = scoreQrg(text, context)
+  push(d9.flag)
 
-  // Neutral placeholder for not-yet-implemented dims. 5.0 means "unknown";
-  // when the batch runner adds real scoring it will overwrite these.
+  // Neutral placeholder for D2 (variability/MinHash Jaccard) until the batch
+  // runner adds cross-document originality scoring.
   const d2Score = 5.0
-  const d9Score = 5.0
+  const d9Score = d9.score
 
   const scores: Omit<DescriptionScore, 'overall' | 'verdict' | 'flags'> = {
     dim1_originality: round1(d1.score),

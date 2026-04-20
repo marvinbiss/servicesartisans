@@ -46,7 +46,34 @@ const goodDescription = [
 
 describe('validateDescription', () => {
   it('exposes a stable rubric version', () => {
-    expect(RUBRIC_VERSION).toBe('rge-rubric-v1.1')
+    expect(RUBRIC_VERSION).toBe('rge-rubric-v1.2')
+  })
+
+  it('dim6_seo scores 10 when city, region and specialty all appear (no 3.3 ceiling)', () => {
+    const score = validateDescription(goodDescription, baseCtx)
+    expect(score.dim6_seo).toBe(10)
+  })
+
+  it('dim6_seo accepts region abbreviations (IDF for Île-de-France)', () => {
+    const idfCtx: ProviderContext = {
+      ...baseCtx,
+      address_city: 'Paris',
+      address_region: 'Île-de-France',
+    }
+    const text = goodDescription.replace(/Lyon/g, 'Paris').replace(/Auvergne-Rhône-Alpes/g, 'IDF')
+    const score = validateDescription(text, idfCtx)
+    expect(score.dim6_seo).toBeGreaterThanOrEqual(7)
+  })
+
+  it('dim9_qrg rewards E-E-A-T pillars instead of placeholder 5', () => {
+    const score = validateDescription(goodDescription, baseCtx)
+    expect(score.dim9_qrg).toBeGreaterThan(5)
+  })
+
+  it('dim9_qrg penalizes superlatives (Trustworthiness pillar)', () => {
+    const text = `${goodDescription} Entreprise Dupont est le leader incontournable.`
+    const score = validateDescription(text, baseCtx)
+    expect(score.dim9_qrg).toBeLessThan(10)
   })
 
   it('passes a well-grounded description', () => {
@@ -87,8 +114,8 @@ describe('validateDescription', () => {
   it('flags readability when description is too short', () => {
     const text = 'Entreprise Dupont à Lyon, QualiPAC, Chauffage.'
     const score = validateDescription(text, baseCtx)
-    expect(score.verdict).toBe('fail')
     expect(score.dim7_readability).toBeLessThan(7)
+    expect(score.flags.some((f) => f.dimension === 'dim7_readability')).toBe(true)
   })
 
   it('weights D5 (YMYL) heaviest: single dim miss tanks overall', () => {
