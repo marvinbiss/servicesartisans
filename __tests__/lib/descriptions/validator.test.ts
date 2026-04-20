@@ -46,7 +46,7 @@ const goodDescription = [
 
 describe('validateDescription', () => {
   it('exposes a stable rubric version', () => {
-    expect(RUBRIC_VERSION).toBe('rge-rubric-v1.2')
+    expect(RUBRIC_VERSION).toBe('rge-rubric-v1.3')
   })
 
   it('dim6_seo scores 10 when city, region and specialty all appear (no 3.3 ceiling)', () => {
@@ -63,6 +63,16 @@ describe('validateDescription', () => {
     const text = goodDescription.replace(/Lyon/g, 'Paris').replace(/Auvergne-Rhône-Alpes/g, 'IDF')
     const score = validateDescription(text, idfCtx)
     expect(score.dim6_seo).toBeGreaterThanOrEqual(7)
+  })
+
+  it('dim2_variability placeholder sits at pass threshold (v1.3 neutrality fix)', () => {
+    // Prior to v1.3, d2Score was hardcoded to 5.0 which, at weight=1.0/11.2,
+    // silently dragged every overall by ~0.22 points — enough to fail drafts
+    // otherwise at 7.5. v1.3 lifts the placeholder to 7.5 so the unimplemented
+    // MinHash Jaccard scorer contributes zero net bias until a real score
+    // replaces it.
+    const score = validateDescription(goodDescription, baseCtx)
+    expect(score.dim2_variability).toBe(7.5)
   })
 
   it('dim9_qrg rewards E-E-A-T pillars instead of placeholder 5', () => {

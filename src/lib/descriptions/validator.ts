@@ -15,7 +15,7 @@
 
 import type { ProviderContext } from './prompts/rge-description-v1'
 
-export const RUBRIC_VERSION = 'rge-rubric-v1.2'
+export const RUBRIC_VERSION = 'rge-rubric-v1.3'
 
 export type DescriptionScore = {
   dim1_originality: number
@@ -470,8 +470,11 @@ export const validateDescription = (text: string, context: ProviderContext): Des
   push(d9.flag)
 
   // Neutral placeholder for D2 (variability/MinHash Jaccard) until the batch
-  // runner adds cross-document originality scoring.
-  const d2Score = 5.0
+  // runner adds cross-document originality scoring. v1.3: lifted from 5.0 →
+  // 7.5 so an unimplemented scorer no longer silently fails otherwise-valid
+  // drafts. The value equals PASS_THRESHOLD so D2 contributes zero net bias
+  // to the weighted overall.
+  const d2Score = 7.5
   const d9Score = d9.score
 
   const scores: Omit<DescriptionScore, 'overall' | 'verdict' | 'flags'> = {
