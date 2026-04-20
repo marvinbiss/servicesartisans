@@ -77,10 +77,7 @@ export async function dispatchLead(leadId: string, opts?: DispatchOptions): Prom
       }
     }
 
-    // Migration 391 (p_cee_eligible) is not yet applied in prod; call signature
-    // matches migration 363 until 391 ships. Attempt 9-param first (post-391),
-    // fall back to 8-param (363) if PostgREST reports signature mismatch.
-    const basePayload = {
+    const { data, error } = await supabase.rpc('dispatch_lead', {
       p_lead_id: leadId,
       p_service_name: opts?.serviceName || null,
       p_city: opts?.city || null,
@@ -89,19 +86,8 @@ export async function dispatchLead(leadId: string, opts?: DispatchOptions): Prom
       p_latitude: latitude,
       p_longitude: longitude,
       p_source_table: opts?.sourceTable || 'devis_requests',
-    }
-
-    let { data, error } = await supabase.rpc('dispatch_lead', {
-      ...basePayload,
       p_cee_eligible: opts?.ceeEligible ?? false,
     })
-
-    if (error && error.code === 'PGRST202') {
-      logger.warn('dispatch_lead 391 signature missing, falling back to 363', { leadId })
-      const retry = await supabase.rpc('dispatch_lead', basePayload)
-      data = retry.data
-      error = retry.error
-    }
 
     if (error) {
       logger.error('Dispatch error', error)
