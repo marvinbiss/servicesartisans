@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Award, ExternalLink } from 'lucide-react'
+import { BookOpen, ExternalLink } from 'lucide-react'
 import { authors, getAuthorByName, type Author } from '@/lib/data/authors'
 
 type Props = {
@@ -72,13 +72,11 @@ export default function FlagshipAuthorCard({
           </Link>
           <p className="text-sm text-sand-600 mb-3">{author.role}</p>
           <p className="text-sm text-sand-700 mb-3">{author.bio}</p>
-          {author.certifications.length > 0 && (
-            <p className="text-xs text-sand-600 flex items-center gap-1.5 flex-wrap">
-              <Award className="w-3.5 h-3.5" aria-hidden />
-              <span>Certifications&nbsp;:</span>
-              <span className="font-medium">{author.certifications.join(' · ')}</span>
-            </p>
-          )}
+          <p className="text-xs text-sand-600 flex items-center gap-1.5 flex-wrap">
+            <BookOpen className="w-3.5 h-3.5" aria-hidden />
+            <span>Bases rédactionnelles&nbsp;:</span>
+            <span className="text-sand-700">{author.credentialsBasis}</span>
+          </p>
           {reviewer && reviewer.slug !== author.slug && (
             <p className="text-xs text-sand-600 mt-1">
               Relu par{' '}
@@ -100,12 +98,20 @@ export default function FlagshipAuthorCard({
               </>
             )}
           </p>
-          <Link
-            href={`/equipe/${author.slug}`}
-            className="inline-flex items-center gap-1 text-xs text-primary-700 hover:underline mt-3"
-          >
-            Voir le profil complet <ExternalLink className="w-3 h-3" aria-hidden />
-          </Link>
+          <div className="flex items-center gap-4 mt-3">
+            <Link
+              href={`/equipe/${author.slug}`}
+              className="inline-flex items-center gap-1 text-xs text-primary-700 hover:underline"
+            >
+              Profil & méthodologie <ExternalLink className="w-3 h-3" aria-hidden />
+            </Link>
+            <Link
+              href="/equipe#process-editorial"
+              className="inline-flex items-center gap-1 text-xs text-primary-700 hover:underline"
+            >
+              Notre process éditorial <ExternalLink className="w-3 h-3" aria-hidden />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

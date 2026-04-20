@@ -30,21 +30,11 @@ function buildPersonNode(profile: Author) {
       '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
     },
-    hasCredential: profile.certifications.map((cert) => ({
-      '@type': 'EducationalOccupationalCredential' as const,
-      credentialCategory: 'certification',
-      name: cert,
-    })),
-    ...(profile.yearsExperience > 0 && {
-      hasOccupation: {
-        '@type': 'Occupation' as const,
-        name: profile.role,
-        experienceRequirements: `${profile.yearsExperience}+ ans d'expérience`,
-      },
-    }),
-    ...(profile.social?.linkedin && {
-      sameAs: [profile.social.linkedin],
-    }),
+    // Intentionally no hasCredential / sameAs : staff writers do not hold
+    // the RGE/Qualibat/Qualifelec/OPQTECC certifications of the artisans
+    // their guides cite. Claiming them would be fraud under Google QRG.
+    // E-E-A-T signals here : worksFor (Organization authority) + knowsAbout
+    // (topic areas, verifiable via articles attributed to the author).
   }
 }
 

@@ -1207,35 +1207,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
                             </span>
                           ))}
                         </div>
-                        {/* Certifications */}
-                        <div className="flex flex-wrap gap-1.5 mb-3">
-                          {authorProfile.certifications.map((cert) => (
-                            <span
-                              key={cert}
-                              className="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-medium flex items-center gap-1"
-                            >
-                              <svg
-                                className="w-3 h-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2.5}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
-                              {cert}
-                            </span>
-                          ))}
-                        </div>
                         {/* Experience + link */}
                         <div className="flex flex-wrap items-center gap-4 text-xs text-charcoal-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
-                            {authorProfile.yearsExperience} ans d'expérience
+                            {authorProfile.yearsExperience} ans sur le sujet
                           </span>
                           <Link
                             href={`/blog?author=${encodeURIComponent(article.author.toLowerCase())}`}

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, Clock, ArrowRight } from 'lucide-react'
+import { Clock, ArrowRight, FileText, Search, Users, RefreshCw } from 'lucide-react'
 import { authors } from '@/lib/data/authors'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -8,14 +8,14 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: "Notre équipe d'experts | ServicesArtisans",
+  title: 'Notre équipe éditoriale | ServicesArtisans',
   description:
-    "Découvrez l'équipe éditoriale de ServicesArtisans : journalistes spécialisés, experts certifiés en bâtiment, rénovation et habitat. +80 ans d'expérience cumulée.",
+    "L'équipe éditoriale de ServicesArtisans : rédacteurs spécialisés rénovation, aides publiques et bâtiment. Process éditorial transparent, sources officielles, relecture par des artisans RGE actifs.",
   alternates: getAlternates('/equipe'),
   openGraph: {
-    title: "Notre équipe d'experts | ServicesArtisans",
+    title: 'Notre équipe éditoriale | ServicesArtisans',
     description:
-      "Découvrez l'équipe éditoriale de ServicesArtisans : journalistes spécialisés, experts certifiés en bâtiment, rénovation et habitat.",
+      'Rédacteurs spécialisés + relecture par des artisans RGE actifs. Sources officielles, mise à jour régulière.',
     url: `${SITE_URL}/equipe`,
     type: 'website',
   },
@@ -41,15 +41,95 @@ export default function EquipePage() {
 
           <header className="mb-12 text-center">
             <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
-              Notre équipe d&apos;experts
+              Notre équipe éditoriale
             </h1>
             <p className="text-charcoal-600 text-lg max-w-2xl mx-auto leading-relaxed">
-              Chez ServicesArtisans, chaque article est rédigé et vérifié par des professionnels du
-              bâtiment et de l&apos;habitat. Notre équipe cumule plus de 80 ans d&apos;expérience
-              terrain et détient des certifications reconnues (RGE, Qualibat, Qualifelec, OPQTECC).
+              Chez ServicesArtisans, les guides sont rédigés par des rédacteurs spécialisés sur leur
+              domaine et relus par des artisans RGE actifs de notre réseau. Les informations
+              techniques et les barèmes d&apos;aides proviennent exclusivement de sources
+              officielles.
             </p>
           </header>
 
+          <section
+            id="process-editorial"
+            className="bg-white rounded-xl border border-sand-200 p-6 md:p-8 mb-12 scroll-mt-24"
+          >
+            <h2 className="font-heading text-xl md:text-2xl font-semibold text-charcoal-900 mb-6">
+              Notre process éditorial
+            </h2>
+            <ol className="grid gap-5 md:grid-cols-2">
+              <li className="flex gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center shrink-0">
+                  <Search className="w-5 h-5" aria-hidden />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
+                    1. Sources officielles uniquement
+                  </h3>
+                  <p className="text-sm text-charcoal-600 leading-relaxed">
+                    ADEME, service-public.fr, France Rénov&apos;, ANAH, Journal Officiel, DTU /
+                    CSTB, Consuel. Chaque donnée technique ou financière citée est référencée.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center shrink-0">
+                  <FileText className="w-5 h-5" aria-hidden />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
+                    2. Rédaction spécialisée
+                  </h3>
+                  <p className="text-sm text-charcoal-600 leading-relaxed">
+                    Un rédacteur dédié par grand domaine (plomberie, électricité, rénovation
+                    énergétique, aides). Il ne donne pas d&apos;avis technique personnel —
+                    uniquement de la vulgarisation sourcée.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center shrink-0">
+                  <Users className="w-5 h-5" aria-hidden />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
+                    3. Relecture artisan RGE
+                  </h3>
+                  <p className="text-sm text-charcoal-600 leading-relaxed">
+                    Chaque guide technique est relu par un artisan RGE actif du réseau, choisi pour
+                    sa qualification sur la thématique (QualiPAC, Qualifelec, Qualibat&hellip;).
+                    Objectif&nbsp;: pas d&apos;erreur terrain.
+                  </p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center shrink-0">
+                  <RefreshCw className="w-5 h-5" aria-hidden />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-charcoal-900 mb-1">
+                    4. Mise à jour suivie
+                  </h3>
+                  <p className="text-sm text-charcoal-600 leading-relaxed">
+                    Barèmes d&apos;aides, DTU, obligations réglementaires&nbsp;: revue à chaque
+                    évolution officielle. La date de dernière mise à jour est indiquée sur chaque
+                    guide.
+                  </p>
+                </div>
+              </li>
+            </ol>
+            <p className="text-xs text-charcoal-500 mt-6 leading-relaxed">
+              <strong>Important.</strong> Nos rédacteurs ne sont pas des artisans certifiés RGE,
+              Qualibat, Qualifelec ou OPQTECC — ces qualifications appartiennent aux professionnels
+              qui réalisent les travaux. Les guides informent et sourcent, ils ne remplacent pas
+              l&apos;étude personnalisée d&apos;un artisan RGE pour votre projet.
+            </p>
+          </section>
+
+          <h2 className="font-heading text-xl md:text-2xl font-semibold text-charcoal-900 mb-4">
+            Les rédacteurs
+          </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {allAuthors.map((author) => (
               <Link
@@ -65,9 +145,9 @@ export default function EquipePage() {
                       .join('')}
                   </div>
                   <div>
-                    <h2 className="font-heading font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-heading font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
                       {author.name}
-                    </h2>
+                    </h3>
                     <p className="text-sm text-charcoal-500">{author.role}</p>
                   </div>
                 </div>
@@ -79,12 +159,7 @@ export default function EquipePage() {
                 <div className="flex items-center gap-4 text-xs text-charcoal-500 mb-4">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
-                    {author.yearsExperience} ans d&apos;exp.
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Award className="w-3.5 h-3.5" />
-                    {author.certifications.length} certification
-                    {author.certifications.length > 1 ? 's' : ''}
+                    {author.yearsExperience} ans sur le sujet
                   </span>
                 </div>
 
@@ -100,7 +175,7 @@ export default function EquipePage() {
                 </div>
 
                 <span className="text-sm text-primary-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Voir le profil
+                  Voir la méthodologie
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </Link>

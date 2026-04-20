@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Award, Clock, ExternalLink, BookOpen, Tag } from 'lucide-react'
+import { Clock, BookOpen, Tag, ShieldCheck, ListChecks } from 'lucide-react'
 import { authors, type Author } from '@/lib/data/authors'
 import { allArticles } from '@/lib/data/blog/articles'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
@@ -91,50 +91,51 @@ export default async function AuthorPage({ params }: PageProps) {
                 <div className="flex items-center gap-4 text-sm text-charcoal-500">
                   <span className="flex items-center gap-1.5">
                     <Clock className="w-4 h-4" />
-                    {author.yearsExperience} ans d&apos;expérience
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Award className="w-4 h-4" />
-                    {author.certifications.length} certification
-                    {author.certifications.length > 1 ? 's' : ''}
+                    {author.yearsExperience} ans sur le sujet
                   </span>
                 </div>
               </div>
             </div>
 
             <p className="text-charcoal-700 leading-relaxed mt-6">{author.bio}</p>
-
-            {author.social?.linkedin && (
-              <a
-                href={author.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-4 text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Profil LinkedIn
-              </a>
-            )}
           </header>
 
-          {/* Certifications */}
-          {author.certifications.length > 0 && (
+          {/* Credentials basis — honest framing */}
+          <section className="bg-white rounded-xl border border-sand-200 p-6 md:p-8 mb-8">
+            <h2 className="font-heading text-lg font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-primary-600" />
+              Bases rédactionnelles
+            </h2>
+            <p className="text-charcoal-700 leading-relaxed text-sm">{author.credentialsBasis}</p>
+            <p className="text-xs text-charcoal-500 mt-3">
+              {author.name.split(' ')[0]} n&apos;est pas un artisan certifié RGE, Qualibat ou
+              Qualifelec&nbsp;— ces qualifications appartiennent aux professionnels qui exécutent
+              les travaux cités dans ses guides.
+            </p>
+          </section>
+
+          {/* Methodology */}
+          {author.methodology.length > 0 && (
             <section className="bg-white rounded-xl border border-sand-200 p-6 md:p-8 mb-8">
               <h2 className="font-heading text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                <Award className="w-5 h-5 text-primary-600" />
-                Certifications et accréditations
+                <ListChecks className="w-5 h-5 text-primary-600" />
+                Méthodologie éditoriale
               </h2>
-              <div className="flex flex-wrap gap-2">
-                {author.certifications.map((cert) => (
-                  <span
-                    key={cert}
-                    className="inline-flex items-center gap-1.5 bg-primary-50 text-primary-700 px-3 py-1.5 rounded-lg text-sm font-medium border border-primary-100"
-                  >
-                    <Award className="w-3.5 h-3.5" />
-                    {cert}
-                  </span>
+              <ul className="space-y-2">
+                {author.methodology.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm text-charcoal-700 leading-relaxed">
+                    <span aria-hidden className="text-primary-600 font-bold shrink-0 w-4">
+                      ·
+                    </span>
+                    <span>{item}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
+              <p className="text-xs text-charcoal-500 mt-4">
+                <Link href="/equipe#process-editorial" className="text-primary-700 hover:underline">
+                  Voir le process éditorial complet
+                </Link>
+              </p>
             </section>
           )}
 

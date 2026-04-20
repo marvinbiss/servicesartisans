@@ -56,21 +56,8 @@ export function getBlogArticleSchema(
             '@id': `${SITE_URL}#organization`,
             name: 'ServicesArtisans',
           },
-          hasCredential: authorProfile.certifications.map((cert) => ({
-            '@type': 'EducationalOccupationalCredential' as const,
-            credentialCategory: 'certification',
-            name: cert,
-          })),
-          ...(authorProfile.yearsExperience > 0 && {
-            hasOccupation: {
-              '@type': 'Occupation' as const,
-              name: authorProfile.role,
-              experienceRequirements: `${authorProfile.yearsExperience}+ ans d'expérience`,
-            },
-          }),
-          ...(authorProfile.social?.linkedin && {
-            sameAs: [authorProfile.social.linkedin],
-          }),
+          // No hasCredential / sameAs : see flagship-schema.ts for rationale.
+          // Staff writers are not the RGE-certified artisans their articles cite.
         }
       }
       return {

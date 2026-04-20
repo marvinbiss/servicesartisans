@@ -1101,17 +1101,29 @@ export function getArticleSpeakableSchema(params: {
   }
 }
 
-// Schema.org Person — for blog authors and team members (E-E-A-T signal)
+// Schema.org Person — editorial staff writers.
+//
+// Intentionally omits hasCredential and sameAs. Staff writers at
+// ServicesArtisans are not RGE / Qualibat / Qualifelec / OPQTECC
+// certified professionals ; those credentials belong to the artisans
+// they cite, not the editorial team. Claiming them on Person schema
+// would be fraud under Google Quality Rater Guidelines (section 2.5)
+// and risk Helpful Content Update demotion across the full guides cluster.
+//
+// worksFor + knowsAbout are the two E-E-A-T signals we can defend :
+//   - worksFor points at the ServicesArtisans Organization node, which
+//     itself carries the platform's authority signals (domain, reviews,
+//     sameAs to social accounts).
+//   - knowsAbout = topic areas the author writes about, verifiable by
+//     crawling the articles attributed to them.
 export function getPersonSchema(author: {
   name: string
   slug: string
   role: string
   bio: string
   expertise: string[]
-  certifications: string[]
   yearsExperience: number
   image?: string
-  social?: { linkedin?: string }
 }) {
   return {
     '@context': 'https://schema.org',
@@ -1127,21 +1139,5 @@ export function getPersonSchema(author: {
       '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
     },
-    ...(author.certifications.length > 0 && {
-      hasCredential: author.certifications.map((cert) => ({
-        '@type': 'EducationalOccupationalCredential',
-        name: cert,
-      })),
-    }),
-    ...(author.yearsExperience > 0 && {
-      hasOccupation: {
-        '@type': 'Occupation',
-        name: author.role,
-        experienceRequirements: `${author.yearsExperience}+ ans d'expérience`,
-      },
-    }),
-    ...(author.social?.linkedin && {
-      sameAs: [author.social.linkedin],
-    }),
   }
 }

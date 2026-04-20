@@ -825,48 +825,46 @@ describe('getEnrichedLocalServiceSchema', () => {
 
 // ---------- getPersonSchema ----------
 describe('getPersonSchema', () => {
-  it('returns Person type with E-E-A-T signals', () => {
+  it('returns Person type with defensible E-E-A-T signals', () => {
     const schema = getPersonSchema({
       name: 'Jean Dupont',
       slug: 'jean-dupont',
-      role: 'Expert BTP',
+      role: 'Rédacteur spécialisé plomberie',
       bio: 'Bio text',
       expertise: ['Plomberie', 'Chauffage'],
-      certifications: ['RGE'],
       yearsExperience: 15,
     })
     expect(schema['@type']).toBe('Person')
     expect(schema.name).toBe('Jean Dupont')
     expect(schema.knowsAbout).toEqual(['Plomberie', 'Chauffage'])
-    expect(schema.hasCredential).toBeDefined()
-    expect(schema.hasOccupation).toBeDefined()
+    expect(schema.worksFor).toBeDefined()
   })
 
-  it('omits credentials when empty', () => {
+  it('never emits hasCredential for editorial staff (fraud prevention)', () => {
+    // Staff writers are not RGE/Qualibat/Qualifelec/OPQTECC certified ;
+    // those credentials belong to the artisans they cite. The schema
+    // must not claim them on the Person node.
     const schema = getPersonSchema({
       name: 'Marie Martin',
       slug: 'marie-martin',
-      role: 'Redacteur',
+      role: 'Rédactrice',
       bio: 'Bio',
       expertise: [],
-      certifications: [],
       yearsExperience: 0,
     })
-    expect(schema.hasCredential).toBeUndefined()
-    expect(schema.hasOccupation).toBeUndefined()
+    expect('hasCredential' in schema).toBe(false)
+    expect('hasOccupation' in schema).toBe(false)
   })
 
-  it('includes sameAs when linkedin is provided', () => {
+  it('never emits sameAs (no fake LinkedIn profiles for staff writers)', () => {
     const schema = getPersonSchema({
       name: 'Jean',
       slug: 'jean',
-      role: 'Expert',
+      role: 'Rédacteur',
       bio: 'Bio',
       expertise: [],
-      certifications: [],
       yearsExperience: 5,
-      social: { linkedin: 'https://linkedin.com/in/jean' },
     })
-    expect(schema.sameAs).toEqual(['https://linkedin.com/in/jean'])
+    expect('sameAs' in schema).toBe(false)
   })
 })
