@@ -28,13 +28,21 @@ type Args = {
   limit: number | null
   target: 'judged_fail' | 'all'
   concurrency: number
+  skipExisting: boolean
 }
 
 const parseArgs = (argv: string[]): Args => {
-  const out: Args = { dryRun: false, limit: null, target: 'judged_fail', concurrency: 5 }
+  const out: Args = {
+    dryRun: false,
+    limit: null,
+    target: 'judged_fail',
+    concurrency: 5,
+    skipExisting: false,
+  }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--dry-run') out.dryRun = true
+    else if (a === '--skip-existing') out.skipExisting = true
     else if (a === '--limit') {
       out.limit = Number(argv[++i])
       if (!Number.isFinite(out.limit) || out.limit! <= 0) {
@@ -52,6 +60,29 @@ const parseArgs = (argv: string[]): Args => {
         throw new Error('--concurrency must be 1..10')
       }
     } else throw new Error(`Unknown flag: ${a}`)
+  }
+  return out
+}
+
+async function fetchExistingEnrichmentIds(): Promise<Set<string>> {
+  const supabase = createAdminClient()
+  const out = new Set<string>()
+  const PAGE = 1000
+  let cursor: string | null = null
+  for (;;) {
+    let q = supabase
+      .from('provider_insee_enrichment')
+      .select('provider_id')
+      .order('provider_id', { ascending: true })
+      .limit(PAGE)
+    if (cursor !== null) q = q.gt('provider_id', cursor)
+    const { data, error } = await q
+    if (error) throw new Error(`fetchExistingEnrichmentIds: ${error.message}`)
+    const rows = data ?? []
+    if (rows.length === 0) break
+    for (const r of rows) out.add(r.provider_id as string)
+    cursor = rows[rows.length - 1].provider_id as string
+    if (rows.length < PAGE) break
   }
   return out
 }
@@ -162,11 +193,13 @@ async function processOne(
     )
     if (error) {
       logger.warn('[enrich-insee] upsert failed', { providerId: cand.id, error: error.message })
+      console.error(`  ERR upsert ${cand.id.slice(0, 8)} ${cand.siret}: ${error.message}`)
       return { ok: false, skipped: false, error: error.message }
     }
     return { ok: true, skipped: false }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
+    console.error(`  ERR fetch ${cand.id.slice(0, 8)} ${cand.siret}: ${msg}`)
     return { ok: false, skipped: false, error: msg }
   }
 }
@@ -177,7 +210,13 @@ async function main() {
     `[enrich-insee] target=${args.target} dryRun=${args.dryRun} limit=${args.limit ?? 'none'} concurrency=${args.concurrency}`
   )
 
-  const candidates = await fetchCandidates(args.target)
+  let candidates = await fetchCandidates(args.target)
+  if (args.skipExisting) {
+    const existing = await fetchExistingEnrichmentIds()
+    const before = candidates.length
+    candidates = candidates.filter((c) => !existing.has(c.id))
+    console.log(`[enrich-insee] skipped ${before - candidates.length} already enriched`)
+  }
   const scope = args.limit ? candidates.slice(0, args.limit) : candidates
   console.log(`[enrich-insee] candidates=${candidates.length} scope=${scope.length}`)
   if (scope.length === 0) {

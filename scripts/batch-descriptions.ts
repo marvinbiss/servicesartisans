@@ -324,18 +324,23 @@ async function buildBatchRequests(
     params: {
       model: string
       max_tokens: number
-      temperature: number
+      temperature?: number
       messages: Array<{ role: 'user'; content: string }>
     }
   }>
 > {
   const contexts = await fetchProviderContextsBatch(providerIds)
+  // Opus 4.7 and later reject `temperature` as deprecated. We omit it for
+  // any model whose id starts with `claude-opus-4-7` or later Opus variants,
+  // and keep it (0.6) for Haiku / Sonnet bulk generation where the sampling
+  // variance still matters.
+  const supportsTemperature = !/^claude-opus-4-7/i.test(model)
   const out: Array<{
     custom_id: string
     params: {
       model: string
       max_tokens: number
-      temperature: number
+      temperature?: number
       messages: Array<{ role: 'user'; content: string }>
     }
   }> = []
@@ -343,15 +348,18 @@ async function buildBatchRequests(
     const ctx = contexts.get(id)
     if (!ctx) continue
     const prompt = buildRgeDescriptionPrompt(ctx)
-    out.push({
-      custom_id: id,
-      params: {
-        model,
-        max_tokens: MAX_TOKENS_OUTPUT,
-        temperature: TEMPERATURE,
-        messages: [{ role: 'user', content: prompt }],
-      },
-    })
+    const params: {
+      model: string
+      max_tokens: number
+      temperature?: number
+      messages: Array<{ role: 'user'; content: string }>
+    } = {
+      model,
+      max_tokens: MAX_TOKENS_OUTPUT,
+      messages: [{ role: 'user', content: prompt }],
+    }
+    if (supportsTemperature) params.temperature = TEMPERATURE
+    out.push({ custom_id: id, params })
   }
   return out
 }
