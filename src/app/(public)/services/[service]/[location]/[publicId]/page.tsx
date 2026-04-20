@@ -19,6 +19,7 @@ import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
 import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
+import { cleanAdemeText } from '@/lib/descriptions/retrieval'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
 interface ProviderRecord {
@@ -259,12 +260,20 @@ function generateRgeMinimalDescription(
   qualifications: Array<{ nom?: string | null; organisme?: string | null }>,
   validUntil: string | null
 ): string {
+  // Les labels bruts ADEME arrivent avec des accents droppés ("gnrateur
+  // photovoltaque", "pompe  chaleur"). cleanAdemeText restaure les accents
+  // avant affichage public — sinon Google et utilisateur voient du texte
+  // cassé alors que la donnée est correcte.
   const qualNames = qualifications
-    .map((q) => (q?.nom ?? '').trim())
+    .map((q) => cleanAdemeText((q?.nom ?? '').trim()))
     .filter((n) => n.length > 0)
     .slice(0, 5)
   const organismes = Array.from(
-    new Set(qualifications.map((q) => (q?.organisme ?? '').trim()).filter((o) => o.length > 0))
+    new Set(
+      qualifications
+        .map((q) => cleanAdemeText((q?.organisme ?? '').trim()))
+        .filter((o) => o.length > 0)
+    )
   ).slice(0, 3)
   const validUntilFr = (() => {
     if (!validUntil) return null

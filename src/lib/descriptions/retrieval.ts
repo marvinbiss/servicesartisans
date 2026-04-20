@@ -108,7 +108,12 @@ const ACCENT_FIXES: Array<[RegExp, string]> = [
   [/\s{2,}/g, ' '],
 ]
 
-const cleanAdemeText = (raw: string): string => {
+/**
+ * Restaure les accents droppés par ADEME ("arothermique" → "aérothermique",
+ * "pompe  chaleur" → "pompe à chaleur", etc). Pur, zéro I/O, réutilisable
+ * côté rendu SSR pour nettoyer les labels bruts avant affichage public.
+ */
+export const cleanAdemeText = (raw: string): string => {
   let out = raw
   for (const [re, rep] of ACCENT_FIXES) out = out.replace(re, rep)
   return out.trim()
