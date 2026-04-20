@@ -92,8 +92,11 @@ const projetBaseSchema = z.object({
    * Saisie par l'utilisateur quand au moins un geste NEEDS_SURFACE est coché.
    * Accepte 1..1000 m² ; en dehors de cette plage on considère l'input invalide.
    */
+  // Zod v4 z.record with enum keys is EXACT (all keys required). We need a
+  // partial record because the UI only fills the geste(s) actually selected —
+  // typically just ISOLATION_TOITURE. Use partialRecord to allow missing keys.
   surfacesIsolation_m2: z
-    .record(
+    .partialRecord(
       z.enum(GESTE_IDS),
       z.number().int().min(1, 'Surface minimale 1 m²').max(1000, 'Surface maximale 1 000 m²')
     )
