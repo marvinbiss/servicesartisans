@@ -174,7 +174,7 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             <a
               href="https://data.ademe.fr/datasets/liste-des-entreprises-rge-2"
               target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="noopener noreferrer"
               className="underline decoration-emerald-300 underline-offset-2 hover:text-white inline-flex items-center gap-1"
             >
               « liste-des-entreprises-rge-2 »

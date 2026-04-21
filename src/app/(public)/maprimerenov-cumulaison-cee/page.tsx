@@ -770,7 +770,7 @@ export default function MaprimeRenovCumulCeePage() {
                 <a
                   href="https://france-renov.gouv.fr"
                   target="_blank"
-                  rel="noopener noreferrer nofollow"
+                  rel="noopener noreferrer"
                   className="font-semibold underline"
                 >
                   france-renov.gouv.fr

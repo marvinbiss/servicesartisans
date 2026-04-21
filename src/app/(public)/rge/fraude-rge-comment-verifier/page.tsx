@@ -654,7 +654,7 @@ export default function FraudeRgeVerifierPage() {
             <a
               href="https://france-renov.gouv.fr/annuaire-rge"
               target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
             >
               <ExternalLink className="w-5 h-5" aria-hidden="true" />

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
   alternates: getAlternates(`/plan-du-site`),
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
   openGraph: {
     title: 'Plan du site',
     description:
