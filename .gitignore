@@ -75,3 +75,5 @@ Diag/
 # Claude Code local config (skills, settings — not shared)
 .claude/settings.json
 .claude/skills/
+scripts/.enrich-top40-progress.json
+docs/supply-activation-2026-04-20/
