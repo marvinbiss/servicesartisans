@@ -1,2 +1,4 @@
 #!/usr/bin/env sh
+node scripts/check-migration-unique.mjs || exit 1
+node scripts/audit-rls-coverage.mjs --strict || exit 1
 npx lint-staged

@@ -24,3 +24,29 @@ jobs:
 
       - name: Build artifacts check
         run: bash scripts/ci/check-build-artifacts.sh
+
+      - name: Migration prefix uniqueness
+        run: node scripts/check-migration-unique.mjs
+
+      - name: RLS coverage (zero gaps allowed)
+        run: node scripts/audit-rls-coverage.mjs --strict
+
+  tests:
+    name: TypeScript + Vitest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Vitest
+        run: npx vitest run --reporter=dot
