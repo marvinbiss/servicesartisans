@@ -34,6 +34,9 @@ jobs:
       - name: Canonicals coverage (zero indexable dynamic page without canonical)
         run: node scripts/audit-canonicals.mjs --strict
 
+      - name: Revalidate coverage (zero indexable page with static-by-default behavior)
+        run: node scripts/audit-revalidate.mjs --strict
+
   tests:
     name: TypeScript + Vitest
     runs-on: ubuntu-latest

@@ -7,6 +7,12 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getTradesSlugs, getTradeContent } from '@/lib/data/trade-content'
+import { REVALIDATE } from '@/lib/cache'
+
+// Page éditoriale statique (widget embed + docs) — contenu TradeContent
+// change rarement. ISR 24h suffit et évite le static par défaut qui resterait
+// figé jusqu'au prochain deploy.
+export const revalidate = REVALIDATE.staticPages
 
 // ---------------------------------------------------------------------------
 // Metadata
