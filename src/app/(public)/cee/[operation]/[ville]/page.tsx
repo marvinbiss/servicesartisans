@@ -37,6 +37,7 @@ import {
   RGE_QUALIFICATION_LABELS,
   type RgeAllowedService,
 } from '@/lib/rge/service-city-listings'
+import { getRgeServicesForCeeOp } from '@/lib/rge/service-guides-map'
 
 // ISR quotidien — le catalogue bouge rarement, les providers RGE sont
 // resynchronisés hebdo côté ADEME.
@@ -276,8 +277,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
   const domaineLabel = CEE_DOMAINE_LABELS[operation.domaine]?.label || operation.domaine
 
-  const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
-    (slug): slug is RgeAllowedService => (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
+  // Primary source: DB seed (migration 383). Fallback: static mapping
+  // CEE_CODE_TO_RGE_SERVICES — extended post-seed with 5 new codes (BAR-TH-172,
+  // BAR-TH-174, BAR-TH-143, BAR-TH-159, BAR-EN-108). Dedup and filter to allowed.
+  const dbSlugs = operation.services_slugs ?? []
+  const helperSlugs = dbSlugs.length === 0 ? getRgeServicesForCeeOp(operation.code) : []
+  const mergedSlugs = Array.from(new Set<string>([...dbSlugs, ...helperSlugs]))
+  const rgeServices: RgeAllowedService[] = mergedSlugs.filter((slug): slug is RgeAllowedService =>
+    (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
   )
 
   return (
@@ -474,13 +481,16 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-2">
               {rgeServices.map((slug) => {
                 const meta = RGE_QUALIFICATION_LABELS[slug]
+                const trade = slug.replace(/-/g, ' ')
                 return (
                   <Link
                     key={slug}
                     href={`/rge/${slug}/${villeSlug}`}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50 text-sm text-emerald-800 hover:border-emerald-400 hover:bg-emerald-100 transition"
                   >
-                    <span className="font-semibold capitalize">{slug.replace(/-/g, ' ')}</span>
+                    <span className="font-semibold capitalize">
+                      Artisans RGE {trade} à {villeName}
+                    </span>
                     {meta && (
                       <span className="text-xs text-emerald-600">&middot; {meta.label}</span>
                     )}

@@ -95,14 +95,23 @@ import dynamic from 'next/dynamic'
 import IntentNavBar from '@/components/seo/IntentNavBar'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+// SSR activé pour ces 4 composants de conversion : le bail-out ssr:false
+// masquait le corps de page à Googlebot (HTML quasi-vide → soft 404 risk).
+// Un loading skeleton minimal est rendu côté serveur pour préserver LCP.
+const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), {
+  loading: () => <div className="min-h-[180px] bg-sand-50 rounded-lg" aria-hidden="true" />,
+})
 
-const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), {
+  loading: () => <div className="min-h-[120px] bg-sand-50 rounded-lg" aria-hidden="true" />,
+})
 
-const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), { ssr: false })
+const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), {
+  loading: () => <div className="min-h-[160px] bg-sand-50 rounded-lg" aria-hidden="true" />,
+})
 
 const InlineTestimonial = dynamic(() => import('@/components/conversion/InlineTestimonial'), {
-  ssr: false,
+  loading: () => <div className="min-h-[100px] bg-sand-50 rounded-lg" aria-hidden="true" />,
 })
 
 // Safely escape JSON for script tags to prevent XSS

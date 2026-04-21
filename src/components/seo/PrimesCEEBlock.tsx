@@ -292,14 +292,15 @@ export default async function PrimesCEEBlock({
         </Link>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <SimulateurCTA variant="inline" serviceSlug={serviceSlug} city={villeName} />
-          {displayedOps.length > 0 && (
+          {displayedOps.slice(0, 3).map((op) => (
             <a
-              href={`/cee/${displayedOps[0].code.toLowerCase()}/guide`}
+              key={op.code}
+              href={`/cee/${op.code.toLowerCase()}/guide`}
               className="font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
             >
-              Guide {displayedOps[0].code}
+              Guide {op.code}
             </a>
-          )}
+          ))}
         </div>
       </div>
     </section>

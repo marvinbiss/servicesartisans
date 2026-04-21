@@ -24,6 +24,8 @@ const navigationLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Tarifs', href: '/tarifs' },
   { name: 'Devis gratuit', href: '/devis' },
+  { name: 'Rénovation énergétique', href: '/renovation-energetique' },
+  { name: 'Artisans RGE', href: '/rge' },
   { name: 'Départements', href: '/departements' },
   { name: 'Villes', href: '/villes' },
   { name: 'Blog', href: '/blog' },

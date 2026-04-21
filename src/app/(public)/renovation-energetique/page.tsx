@@ -28,6 +28,28 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
+import { CEE_SHORT_LABELS } from '@/lib/cee/shared-labels'
+
+// Labels humains pour les services RGE (aligné avec services catalogue).
+// Maintenu localement pour éviter une dépendance DB côté hub SSG.
+const RGE_SERVICE_LABELS: Record<(typeof RGE_ALLOWED_SERVICES)[number], string> = {
+  'pompe-a-chaleur': 'Pompe à chaleur',
+  'panneaux-solaires': 'Panneaux solaires',
+  'isolation-thermique': 'Isolation thermique',
+  chauffagiste: 'Chauffagiste',
+  electricien: 'Électricien',
+  'renovation-energetique': 'Rénovation énergétique',
+  menuisier: 'Menuisier',
+  couvreur: 'Couvreur',
+  plombier: 'Plombier',
+  climaticien: 'Climaticien',
+  ramoneur: 'Ramoneur',
+  zingueur: 'Zingueur',
+  facadier: 'Façadier',
+  platrier: 'Plâtrier',
+}
 
 export const revalidate = 86400
 
@@ -430,6 +452,66 @@ export default function RenovationEnergetiqueHub() {
         </div>
       </section>
 
+      {/* Maillage interne RGE × CEE — hub sculpting */}
+      <section className="bg-white py-12 md:py-16 border-t border-charcoal-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
+            Artisans RGE par métier
+          </h2>
+          <p className="text-charcoal-600 mb-6 max-w-3xl">
+            Accédez aux artisans RGE qualifiés pour chaque type de travaux. Chaque page métier liste
+            les certifications requises, les opérations CEE éligibles, et les artisans actifs.
+          </p>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-12">
+            {RGE_ALLOWED_SERVICES.map((slug, idx) => {
+              const label = RGE_SERVICE_LABELS[slug]
+              // Anchor diversification — cycle through 3 phrasings to avoid
+              // doorway-like template repetition flagged by Google spam models.
+              const variant = idx % 3
+              const anchor =
+                variant === 0
+                  ? `Artisans RGE ${label}`
+                  : variant === 1
+                    ? `Trouver un ${label.toLowerCase()} RGE`
+                    : `${label} certifié RGE`
+              return (
+                <li key={slug}>
+                  <Link
+                    href={`/rge/${slug}`}
+                    className="block px-4 py-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 transition text-sm font-semibold text-emerald-900"
+                  >
+                    {anchor}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+
+          <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
+            Guides Primes CEE par opération
+          </h2>
+          <p className="text-charcoal-600 mb-6 max-w-3xl">
+            Détail des barèmes, éligibilité et cumul d&apos;aides pour chaque opération CEE active
+            en 2026 (Période P6). Guides rédigés à partir des arrêtés JORF et du catalogue ADEME.
+          </p>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {CEE_OPERATIONS_WITH_GUIDE.map((code) => (
+              <li key={code}>
+                <Link
+                  href={`/cee/${code.toLowerCase()}/guide`}
+                  className="block px-4 py-3 rounded-xl border border-primary-200 bg-primary-50 hover:bg-primary-100 hover:border-primary-400 transition text-sm"
+                >
+                  <span className="font-bold text-primary-900">{code}</span>
+                  <span className="text-charcoal-700 ml-2">
+                    {CEE_SHORT_LABELS[code] ?? 'Opération CEE'}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="bg-charcoal-50 py-12 md:py-16 border-t border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -476,7 +558,7 @@ export default function RenovationEnergetiqueHub() {
               <a
                 href="https://france-renov.gouv.fr/"
                 target="_blank"
-                rel="noopener noreferrer nofollow"
+                rel="noopener noreferrer"
                 className="hover:text-emerald-700 underline underline-offset-2"
               >
                 France Rénov&apos; — service public de la rénovation

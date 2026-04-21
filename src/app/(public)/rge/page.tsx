@@ -31,6 +31,8 @@ import {
   RGE_QUALIFICATION_LABELS,
   type RgeAllowedService,
 } from '@/lib/rge/service-city-listings'
+import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
+import { CEE_SHORT_LABELS } from '@/lib/cee/shared-labels'
 
 // ISR — révalidation quotidienne. Les stats nationales RGE évoluent au rythme
 // de la sync ADEME hebdomadaire, 24h est un bon compromis crawl/fraîcheur.
@@ -614,6 +616,32 @@ export default async function RgeHubPage() {
             </div>
           </Link>
         </div>
+      </section>
+
+      {/* Primes CEE par opération — maillage RGE → CEE spécifiques */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14 border-t border-charcoal-100">
+        <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
+          Primes CEE accessibles aux artisans RGE
+        </h2>
+        <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
+          Chaque opération CEE active en 2026 exige une qualification RGE spécifique. Consultez le
+          guide officiel par opération : barème, plafonds, cumul MaPrimeRénov&apos;, procédure.
+        </p>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          {CEE_OPERATIONS_WITH_GUIDE.map((code) => (
+            <li key={code}>
+              <Link
+                href={`/cee/${code.toLowerCase()}/guide`}
+                className="block px-4 py-3 rounded-xl border border-emerald-200 bg-white hover:border-emerald-400 hover:bg-emerald-50 transition text-sm"
+              >
+                <span className="font-bold text-emerald-900">{code}</span>
+                <span className="text-charcoal-700 ml-2">
+                  {CEE_SHORT_LABELS[code] ?? 'Opération CEE'}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* CTAs finaux */}

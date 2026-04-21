@@ -20,6 +20,7 @@ import type { Service, Location } from '@/types'
 import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import { cleanAdemeText } from '@/lib/descriptions/retrieval'
+import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
 interface ProviderRecord {
@@ -894,6 +895,50 @@ export default async function ProviderPage({ params }: PageProps) {
         departmentName={location?.department_name}
         departmentCode={location?.department_code}
       />
+
+      {/* Primes CEE éligibles — maillage RGE→CEE, affiché uniquement si l'artisan
+          a des qualifications RGE qui permettent au client de toucher des aides. */}
+      {(() => {
+        const artisanHasRgeQualifs =
+          Array.isArray(provider.rge_qualifications) && provider.rge_qualifications.length > 0
+        if (!artisanHasRgeQualifs) return null
+        const ceeOps = getCeeOpsForRgeService(serviceSlug).slice(0, 6)
+        if (!ceeOps.length) return null
+        return (
+          <section className="py-8 bg-emerald-50/40 border-t border-emerald-200/60">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-2">
+                Primes CEE éligibles avec {artisan.business_name}
+              </h2>
+              <p className="text-sm text-charcoal-600 mb-5 max-w-3xl">
+                Votre artisan RGE vous permet de cumuler ces primes CEE 2026 avec MaPrimeRénov' et
+                la TVA 5,5 % — cliquez pour consulter le guide et le barème officiel.
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {ceeOps.map((op) => (
+                  <li key={op.code}>
+                    <Link
+                      href={`/cee/${op.code.toLowerCase()}/guide`}
+                      className="inline-flex items-center gap-2 rounded-lg border border-emerald-300 bg-white hover:border-emerald-500 hover:bg-emerald-100 transition px-3 py-2 text-sm"
+                    >
+                      <span className="font-bold text-emerald-900">{op.code}</span>
+                      <span className="text-charcoal-700">{op.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4">
+                <Link
+                  href={`/rge/${serviceSlug}`}
+                  className="text-sm font-semibold text-emerald-700 hover:text-emerald-900 underline underline-offset-2"
+                >
+                  Tous les artisans RGE {(service?.name || artisan.specialty).toLowerCase()} →
+                </Link>
+              </div>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

@@ -346,7 +346,7 @@ export default async function CeeHubPage() {
                         </div>
                       )}
                       <div className="text-sm font-semibold text-emerald-700 mt-3 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                        Détails <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                        Barème {op.code} <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </div>
                     </Link>
                   ))}
