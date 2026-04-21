@@ -720,8 +720,24 @@ export default async function BlogArticlePage({ params }: PageProps) {
     excerpt: article.excerpt,
   })
 
-  // HowTo schema for "comment-choisir-*" articles — extract steps from H2 headings
-  const howToSchema = slug.startsWith('comment-choisir-')
+  // HowTo schema for step-based articles — extracted from H2 headings.
+  // Triggered for slugs that naturally map to procedural/pricing content
+  // (target: zero-click rank 5-7 pages per GSC analysis 2026-04-20).
+  const PROCEDURAL_PREFIXES = ['comment-choisir-', 'prix-', 'refaire-', 'renovation-']
+  const PROCEDURAL_SUFFIXES = ['-par-ou-commencer', '-normes', '-obligations', '-guide-2026']
+  const PROCEDURAL_ALLOWLIST = new Set([
+    'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026',
+    'accessibilite-pmr-logement-normes',
+    'reglementation-ravalement-facade-obligations',
+    'amiante-plomb-diagnostic-avant-travaux',
+    'arnaques-artisans-reconnaitre-eviter-recours',
+  ])
+  const howToTrigger =
+    PROCEDURAL_ALLOWLIST.has(slug) ||
+    PROCEDURAL_PREFIXES.some((p) => slug.startsWith(p)) ||
+    PROCEDURAL_SUFFIXES.some((s) => slug.endsWith(s)) ||
+    slug.includes('-guide-')
+  const howToSchema = howToTrigger
     ? (() => {
         const h2Blocks = blocks.filter((b): b is H2Block => b.type === 'h2')
         if (h2Blocks.length < 2) return null
