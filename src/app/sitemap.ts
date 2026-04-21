@@ -333,6 +333,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.5,
       },
+      {
+        url: `${SITE_URL}/barometre/rge`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
       // /recherche removed — 301-redirects to /services (next.config.js). Including redirected URLs
       // in sitemaps wastes crawl budget and sends conflicting signals to Google.
       {
@@ -672,6 +678,27 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.8,
     }))
 
+    // "Autour de moi" — 10 high-volume services with browser geolocation UX
+    // linked to the 30 top French cities. Pilier 3.C of CEO strategy.
+    const AROUND_ME_SERVICES = [
+      'plombier',
+      'electricien',
+      'serrurier',
+      'chauffagiste',
+      'peintre-en-batiment',
+      'menuisier',
+      'macon',
+      'couvreur',
+      'carreleur',
+      'jardinier',
+    ] as const
+    const aroundMePages: MetadataRoute.Sitemap = AROUND_ME_SERVICES.map((slug) => ({
+      url: `${SITE_URL}/services/${slug}/autour-de-moi`,
+      lastModified: byService.get(slug) || STATIC_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+
     const emergencySlugs = Object.keys(tradeContent)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
@@ -765,6 +792,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       ...blogTagPages,
       ...servicesIndex,
       ...servicePages,
+      ...aroundMePages,
       ...urgencePages,
       ...tarifsPages,
       ...aidesDeptMprPages,

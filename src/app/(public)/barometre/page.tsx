@@ -498,7 +498,21 @@ export default async function BarometrePage() {
         {/* NAVIGATION */}
         {/* ================================================================ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link
+              href="/barometre/rge"
+              className="flex items-center gap-4 bg-white rounded-xl border border-emerald-200 p-6 hover:shadow-md transition-shadow group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-semibold text-charcoal-900 group-hover:text-emerald-700">
+                  Baromètre RGE
+                </p>
+                <p className="text-sm text-charcoal-500">Artisans certifiés ADEME</p>
+              </div>
+            </Link>
             <Link
               href="/barometre/tarifs"
               className="flex items-center gap-4 bg-white rounded-xl border border-sand-300 p-6 hover:shadow-md transition-shadow group"

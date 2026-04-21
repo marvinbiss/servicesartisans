@@ -129,6 +129,10 @@
       "schedule": "0 2 * * 0"
     },
     {
+      "path": "/api/cron/barometre-rge",
+      "schedule": "0 3 1 * *"
+    },
+    {
       "path": "/api/cron/purge-prospection",
       "schedule": "0 3 1 * *"
     },

@@ -95,12 +95,77 @@ export async function GET() {
       <pre><code>curl "${SITE_URL}/api/v1/stats?region=ile-de-france"</code></pre>
     </div>
 
+    <h2 id="rge">API RGE — Vérification officielle</h2>
+    <p>Données synchronisées chaque semaine depuis le répertoire ADEME / annuaire-entreprises RGE officiel.
+    Source faisant foi pour les qualifications RGE (Reconnu Garant de l'Environnement) nécessaires à l'éligibilité MaPrimeRénov' et aux CEE.</p>
+
+    <div class="endpoint">
+      <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/rge/lookup</span></p>
+      <p>Vérifie le statut RGE d'une entreprise par SIRET ou SIREN. Retourne la liste des qualifications, leurs organismes et dates de validité.</p>
+      <h3>Paramètres</h3>
+      <table>
+        <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
+        <tr><td><code>siret</code></td><td>string</td><td>Non*</td><td>SIRET 14 chiffres</td></tr>
+        <tr><td><code>siren</code></td><td>string</td><td>Non*</td><td>SIREN 9 chiffres</td></tr>
+      </table>
+      <p>* Un des deux est requis. Le SIRET prime sur le SIREN si les deux sont fournis.</p>
+      <h3>Réponse — champ <code>rge_status</code></h3>
+      <ul style="margin-left:1.5rem;margin-bottom:1rem;color:#475569;font-size:0.875rem;">
+        <li><code>rge_active</code> — qualifications RGE en cours de validité</li>
+        <li><code>rge_expired</code> — qualifications expirées (date_fin dépassée)</li>
+        <li><code>not_rge</code> — entreprise connue, aucune qualification RGE</li>
+        <li><code>not_found</code> — entreprise non référencée dans notre base</li>
+      </ul>
+      <h3>Exemple</h3>
+      <pre><code>curl "${SITE_URL}/api/v1/rge/lookup?siret=83001931100026"</code></pre>
+      <pre><code>{
+  "identifier": "83001931100026",
+  "identifier_type": "siret",
+  "found": true,
+  "siret": "83001931100026",
+  "siren": "830019311",
+  "name": "...",
+  "address_city": "Lyon",
+  "address_postal_code": "69003",
+  "specialty": "chauffagiste",
+  "rge_status": "rge_active",
+  "rge_valid_until": "2027-03-15",
+  "rge_organismes": ["Qualit'EnR", "Qualibat"],
+  "rge_qualifications": [
+    { "code": "QualiPAC", "nom": "Pompe à chaleur", "organisme": "Qualit'EnR", "date_debut": "2024-04-01", "date_fin": "2027-03-31" }
+  ],
+  "public_url": "${SITE_URL}/services/chauffagiste/lyon/...",
+  "source": "ADEME annuaire-entreprises RGE officiel (sync hebdo)"
+}</code></pre>
+    </div>
+
+    <div class="endpoint">
+      <p><span class="badge badge-get">GET</span> <span class="endpoint-url">/api/v1/rge/search</span></p>
+      <p>Recherche des artisans RGE actifs (date de fin &gt; aujourd'hui). Jusqu'à 50 résultats par requête, triés par validité décroissante.</p>
+      <h3>Paramètres</h3>
+      <table>
+        <tr><th>Param</th><th>Type</th><th>Requis</th><th>Description</th></tr>
+        <tr><td><code>q</code></td><td>string</td><td>Non*</td><td>Recherche partielle dans le nom (max 100 car.)</td></tr>
+        <tr><td><code>city</code></td><td>string</td><td>Non*</td><td>Ville — match exact insensible casse</td></tr>
+        <tr><td><code>qualification</code></td><td>string</td><td>Non*</td><td>Code RGE (ex: <code>QualiPAC</code>, <code>RGE</code>, <code>Qualibat</code>)</td></tr>
+        <tr><td><code>specialty</code></td><td>string</td><td>Non*</td><td>Slug métier (ex: <code>pompe-a-chaleur</code>)</td></tr>
+        <tr><td><code>limit</code></td><td>integer</td><td>Non</td><td>1–50, défaut 20</td></tr>
+        <tr><td><code>offset</code></td><td>integer</td><td>Non</td><td>Pagination, défaut 0</td></tr>
+      </table>
+      <p>* Au moins un filtre (<code>q</code>, <code>city</code>, <code>qualification</code> ou <code>specialty</code>) est requis.</p>
+      <h3>Exemples</h3>
+      <pre><code>curl "${SITE_URL}/api/v1/rge/search?city=lyon&qualification=QualiPAC&limit=20"
+curl "${SITE_URL}/api/v1/rge/search?q=RENOV&city=marseille"
+curl "${SITE_URL}/api/v1/rge/search?specialty=pompe-a-chaleur&limit=50"</code></pre>
+    </div>
+
     <h2>Cache</h2>
     <p>Les réponses sont mises en cache pendant 1 heure avec un <code>stale-while-revalidate</code> de 24 heures.
     Les données sont agrégées quotidiennement depuis notre base de 940 000+ artisans.</p>
 
     <h2>Limitations</h2>
     <p>Pas de clé API requise. Rate limit : 60 requêtes/minute par IP. Usage commercial : nous contacter.</p>
+    <p>API RGE : max 50 résultats par requête, données rafraîchies chaque semaine depuis la source ADEME.</p>
 
     <h2>Métiers disponibles</h2>
     <p><code>plombier</code>, <code>electricien</code>, <code>serrurier</code>, <code>chauffagiste</code>,
