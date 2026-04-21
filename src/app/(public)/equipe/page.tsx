@@ -7,6 +7,8 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Notre équipe éditoriale | ServicesArtisans',
   description:
