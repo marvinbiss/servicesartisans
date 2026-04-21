@@ -211,7 +211,8 @@ describe('Notifications V1 — logLeadEvent Integration', () => {
   })
 
   it('logLeadEvent returns event ID from insert', () => {
-    expect(eventsCode).toContain(".select('id').single()")
+    // Accepte .select('id').single() sur une ligne OU multi-lignes (formatage Prettier).
+    expect(eventsCode).toMatch(/\.select\((['"])id\1\)\s*\.single\(\)/)
   })
 })
 

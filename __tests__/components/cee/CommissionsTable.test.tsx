@@ -107,15 +107,21 @@ describe('CommissionsTable -- export CSV', () => {
       createObjectURL: vi.fn(() => 'blob:mock'),
       revokeObjectURL: vi.fn(),
     })
-    const origCreate = document.createElement.bind(document)
-    vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+    // Capture la ref brute du prototype AVANT vi.spyOn, sinon l'appel
+    // `origCreate(tag)` depuis la mockImplementation retombe sur le spy
+    // lui-même (stack overflow).
+    const origCreate = Document.prototype.createElement
+    vi.spyOn(document, 'createElement').mockImplementation(((
+      tag: string,
+      options?: ElementCreationOptions
+    ) => {
       if (tag === 'a') {
-        const a = origCreate('a')
+        const a = origCreate.call(document, 'a', options)
         vi.spyOn(a, 'click').mockImplementation(() => {})
         return a
       }
-      return origCreate(tag)
-    })
+      return origCreate.call(document, tag, options)
+    }) as typeof document.createElement)
   })
 
   it('affiche le bouton export', () => {

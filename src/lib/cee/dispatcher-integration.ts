@@ -134,20 +134,24 @@ export async function runCeeDispatchFireAndForget(
         dossierId: outcome.dossierId,
       })
 
-      // --- Analytics event serveur (fire-and-forget) ---
-      supabase
-        .from('analytics_events')
-        .insert({
-          event_type: 'cee_dispatch_routed',
-          metadata: {
-            devisId,
-            operationCode: outcome.operationCode,
-            kwhcEstime: outcome.primeEstimate?.kwhc_max ?? null,
-            primeEstimee: outcome.primeEstimate?.euros_classique_max ?? null,
-          },
-          created_at: new Date().toISOString(),
-        })
-        .then(({ error: analyticsErr }) => {
+      // --- Analytics event serveur (fire-and-forget, fail-open strict) ---
+      // Doit rester isolé : si la table n'existe pas ou RLS refuse, on log et
+      // on continue — l'outcome cee_routed est déjà persisté.
+      // `supabase.from(...).insert(...)` renvoie un PostgrestBuilder (PromiseLike
+      // non-standard). On wrappe dans un IIFE async pour garder un vrai
+      // Promise<void> et pouvoir .catch proprement.
+      void (async () => {
+        try {
+          const { error: analyticsErr } = await supabase.from('analytics_events').insert({
+            event_type: 'cee_dispatch_routed',
+            metadata: {
+              devisId,
+              operationCode: outcome.operationCode,
+              kwhcEstime: outcome.primeEstimate?.kwhc_max ?? null,
+              primeEstimee: outcome.primeEstimate?.euros_classique_max ?? null,
+            },
+            created_at: new Date().toISOString(),
+          })
           if (analyticsErr) {
             logger.warn('cee-dispatch: échec insert analytics cee_dispatch_routed', {
               action: 'cee-analytics',
@@ -155,7 +159,14 @@ export async function runCeeDispatchFireAndForget(
               error: analyticsErr.message,
             })
           }
-        })
+        } catch (err) {
+          logger.warn('cee-dispatch: exception analytics routed', {
+            action: 'cee-analytics',
+            devisId,
+            error: err instanceof Error ? err.message : String(err),
+          })
+        }
+      })()
 
       // --- Email éligibilité CEE au client (fire-and-forget) ---
       if (input.clientEmail) {
@@ -201,18 +212,17 @@ export async function runCeeDispatchFireAndForget(
         reason: outcome.reason,
       })
 
-      // --- Analytics event serveur (fire-and-forget) ---
-      supabase
-        .from('analytics_events')
-        .insert({
-          event_type: 'cee_dispatch_fallback',
-          metadata: {
-            devisId,
-            reason: outcome.reason,
-          },
-          created_at: new Date().toISOString(),
-        })
-        .then(({ error: analyticsErr }) => {
+      // --- Analytics event serveur (fire-and-forget, fail-open strict) ---
+      void (async () => {
+        try {
+          const { error: analyticsErr } = await supabase.from('analytics_events').insert({
+            event_type: 'cee_dispatch_fallback',
+            metadata: {
+              devisId,
+              reason: outcome.reason,
+            },
+            created_at: new Date().toISOString(),
+          })
           if (analyticsErr) {
             logger.warn('cee-dispatch: échec insert analytics cee_dispatch_fallback', {
               action: 'cee-analytics',
@@ -220,7 +230,14 @@ export async function runCeeDispatchFireAndForget(
               error: analyticsErr.message,
             })
           }
-        })
+        } catch (err) {
+          logger.warn('cee-dispatch: exception analytics fallback', {
+            action: 'cee-analytics',
+            devisId,
+            error: err instanceof Error ? err.message : String(err),
+          })
+        }
+      })()
     } else {
       // outcome.kind === 'error'
       logger.warn('cee-dispatch: erreur dispatcher, soft-fail', {

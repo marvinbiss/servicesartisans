@@ -69,8 +69,10 @@ describe('DossierTimeline', () => {
     const ol = screen.getByTestId('timeline-vertical-line')
     expect(ol).toBeInTheDocument()
     const className = ol.getAttribute('class') ?? ''
-    // Les 3 classes critiques du pseudo-élément vertical doivent être compilées
-    expect(className).toContain('before:bg-gray-200')
+    // Les 3 classes critiques du pseudo-élément vertical doivent être compilées.
+    // `before:bg-sand-300` est la teinte design system ServicesArtisans (sand)
+    // pas le gris générique Tailwind — cf. `tailwind.config.ts`.
+    expect(className).toContain('before:bg-sand-300')
     expect(className).toContain('before:w-px')
     expect(className).toContain('before:h-[calc(100%-0.5rem)]')
   })

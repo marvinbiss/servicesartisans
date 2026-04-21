@@ -57,31 +57,44 @@ interface UpdateCall {
 
 /**
  * Mock Supabase client minimaliste : capture les updates sur `devis_requests`
- * pour vérifier la persistance du `cee_dossier_id`.
+ * pour vérifier la persistance du `cee_dossier_id`. Le mock accepte aussi
+ * `analytics_events` en no-op — c'est un side-effect fire-and-forget qui ne
+ * doit pas faire échouer le dispatcher, on vérifie juste qu'il ne touche pas
+ * au devis lui-même via `devisUpdateCalls`.
  */
 function makeMockSupabase(updateError: string | null = null) {
   const updateCalls: UpdateCall[] = []
+  const devisFromCalls = vi.fn()
+  const analyticsFromCalls = vi.fn()
 
   const fromFn = vi.fn((table: string) => {
-    if (table !== 'devis_requests') {
-      throw new Error(`Unexpected table in test: ${table}`)
+    if (table === 'devis_requests') {
+      devisFromCalls(table)
+      return {
+        update: (payload: Record<string, unknown>) => ({
+          eq: (eqColumn: string, eqValue: unknown) => {
+            updateCalls.push({ payload, eqColumn, eqValue })
+            return Promise.resolve({
+              error: updateError ? { message: updateError } : null,
+            })
+          },
+        }),
+      }
     }
-    return {
-      update: (payload: Record<string, unknown>) => ({
-        eq: (eqColumn: string, eqValue: unknown) => {
-          updateCalls.push({ payload, eqColumn, eqValue })
-          return Promise.resolve({
-            error: updateError ? { message: updateError } : null,
-          })
-        },
-      }),
+    if (table === 'analytics_events') {
+      analyticsFromCalls(table)
+      return {
+        insert: () => Promise.resolve({ error: null }),
+      }
     }
+    throw new Error(`Unexpected table in test: ${table}`)
   })
 
   return {
     client: { from: fromFn } as never,
     updateCalls,
-    fromFn,
+    fromFn: devisFromCalls,
+    analyticsFromCalls,
   }
 }
 

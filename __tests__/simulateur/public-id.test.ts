@@ -19,13 +19,17 @@ describe('generatePublicId', () => {
     expect(id.startsWith('EST-2026-01-05-')).toBe(true)
   })
 
-  it('génère 10 000 IDs sans collision', () => {
+  it('génère 10 000 IDs quasi sans collision (P(collision) ~2% → on tolère 3)', () => {
+    // Birthday paradox : 10 000² / (2 × 36^6) ≈ 0.023 collisions attendues
+    // → probabilité d'au moins 1 collision ≈ 2.3%, d'au moins 3 ≈ <0.01%.
+    // Tolérer 3 collisions garde la détection de bugs RNG systémiques (seed
+    // fixe, entropie cassée → uniqueness < 95%) sans flaky test en CI.
     const fixed = new Date('2026-04-14T12:00:00Z')
     const set = new Set<string>()
     for (let i = 0; i < 10_000; i++) {
       set.add(generatePublicId(fixed))
     }
-    expect(set.size).toBe(10_000)
+    expect(set.size).toBeGreaterThanOrEqual(9_997)
   })
 
   it('suffixe uniquement en minuscules alphanum', () => {

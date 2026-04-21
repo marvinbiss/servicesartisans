@@ -104,6 +104,9 @@ export default function FormationHub({
 
   const allWatched = watchedIds.size >= VIDEO_MODULES.length
   const isAlreadyCertified = !!certifiedAt && !needsRecycling
+  // Indicates a previous certification exists (even expired) — used to change
+  // the start-quiz CTA label from "Démarrer" to "Repasser".
+  const hasPreviousCertification = !!certifiedAt
 
   function markWatched(id: string) {
     setWatchedIds((prev) => new Set([...Array.from(prev), id]))
@@ -169,10 +172,12 @@ export default function FormationHub({
         </div>
       )}
 
-      {/* Alerte recyclage */}
+      {/* Notice recyclage — rôle `status` (info persistante) et non `alert`
+          pour ne pas entrer en collision sémantique avec l'erreur transiente
+          du quiz (role="alert" assertive) et respecter WCAG 2.1 4.1.3. */}
       {needsRecycling && certifiedAt && (
         <div
-          role="alert"
+          role="status"
           aria-live="polite"
           className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4"
         >
@@ -314,7 +319,7 @@ export default function FormationHub({
         </h2>
 
         {/* Blocage si vidéos non regardées (sauf si déjà certifié) */}
-        {!allWatched && !isAlreadyCertified && quizState.kind === 'idle' && (
+        {!allWatched && !hasPreviousCertification && quizState.kind === 'idle' && (
           <div className="rounded-xl border border-sand-200 bg-white p-6 text-center">
             <Lock className="mx-auto h-8 w-8 text-charcoal-400" aria-hidden="true" />
             <p className="mt-3 text-sm font-medium text-charcoal-700">
@@ -328,8 +333,9 @@ export default function FormationHub({
           </div>
         )}
 
-        {/* Bouton démarrer */}
-        {(allWatched || isAlreadyCertified) && quizState.kind === 'idle' && (
+        {/* Bouton démarrer — déblocage sur vidéos regardées OU certification existante
+            (recyclage : on ne réimpose pas les vidéos déjà vues au cycle précédent) */}
+        {(allWatched || hasPreviousCertification) && quizState.kind === 'idle' && (
           <div className="rounded-xl border border-sand-300 bg-white p-6 text-center">
             <p className="text-sm text-charcoal-600">
               {isAlreadyCertified
@@ -344,7 +350,7 @@ export default function FormationHub({
               onClick={startQuiz}
               className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 active:translate-y-0"
             >
-              {isAlreadyCertified ? (
+              {hasPreviousCertification ? (
                 <>
                   <RefreshCw className="h-4 w-4" aria-hidden="true" />
                   Repasser le quiz

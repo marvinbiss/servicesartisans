@@ -42,7 +42,8 @@ describe('FormationHub -- alerte recyclage', () => {
       <FormationHub {...BASE_PROPS} certifiedAt="2025-01-01T00:00:00Z" needsRecycling={true} />
     )
     expect(screen.getByText(/Recyclage annuel requis/i)).toBeInTheDocument()
-    expect(screen.getByRole('alert')).toBeInTheDocument()
+    // Notice persistante → role="status" (pas "alert", réservé aux erreurs transientes).
+    expect(screen.getByRole('status')).toBeInTheDocument()
   })
 
   it('ne rend pas alerte si needsRecycling=false', () => {

@@ -17,19 +17,33 @@ import {
   CEE_PRICE_CLASSIQUE_EUR_PER_MWHC,
   CEE_PRICE_PRECARITE_EUR_PER_MWHC,
 } from '@/lib/cee/enrich'
+import { invalidateCeePricesCache } from '@/lib/cee/market-prices'
 
 interface MockResponse {
   data: unknown
   error: { message: string } | null
 }
 
+/**
+ * Tables qui NE consomment PAS le queue global. Elles reçoivent un empty
+ * fallback pour laisser le code tomber sur ses constantes par défaut.
+ *
+ * `cee_market_prices` est interrogée en parallèle des delegataires (via
+ * `Promise.all`) — si on la laisse consommer la queue, l'ordre des réponses
+ * part en vrille et les delegataires catchAll sont silencieusement shifted.
+ */
+const BYPASS_TABLES = new Set(['cee_market_prices'])
+
 function createMockClient(responses: MockResponse[]) {
   let callIndex = 0
   const fromCalls: string[] = []
 
-  const buildChain = () => {
-    const next: MockResponse = responses[callIndex] ?? { data: [], error: null }
-    callIndex++
+  const buildChain = (table: string) => {
+    const bypass = BYPASS_TABLES.has(table)
+    const next: MockResponse = bypass
+      ? { data: [], error: null }
+      : (responses[callIndex] ?? { data: [], error: null })
+    if (!bypass) callIndex++
 
     const chain: Record<string, unknown> = {}
     const methods = ['select', 'eq', 'contains', 'overlaps', 'in', 'order', 'range', 'limit']
@@ -46,7 +60,7 @@ function createMockClient(responses: MockResponse[]) {
   const client = {
     from: vi.fn((table: string) => {
       fromCalls.push(table)
-      return buildChain()
+      return buildChain(table)
     }),
   } as unknown as Parameters<typeof enrichCeeQualification>[0]
   ;(client as unknown as { __fromCalls: string[] }).__fromCalls = fromCalls
@@ -123,7 +137,10 @@ const DELEG_EFFY = {
 // ---------------------------------------------------------------------------
 
 describe('enrichCeeQualification — happy path', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('enrichit avec zone H1 (Paris) : forfaits filtrés + estimation € + délégataires', async () => {
     const client = createMockClient([
@@ -206,7 +223,10 @@ describe('enrichCeeQualification — happy path', () => {
 })
 
 describe('enrichCeeQualification — scalar forfait fallback', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('utilise forfait_base_kwhc quand forfaits_table est null', async () => {
     const client = createMockClient([
@@ -246,7 +266,10 @@ describe('enrichCeeQualification — scalar forfait fallback', () => {
 })
 
 describe('enrichCeeQualification — non éligible', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('retourne eligible=false quand aucun code ne match, sans charger les détails', async () => {
     const client = createMockClient([{ data: [], error: null }])
@@ -261,7 +284,10 @@ describe('enrichCeeQualification — non éligible', () => {
 })
 
 describe('enrichCeeQualification — legacy shape tolerance', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   // Legacy shape tolerance — prod utilise bare array depuis migration 400.
   // Ce test garantit que la tolérance existe (fail-safe) mais ne valide PAS
@@ -302,7 +328,10 @@ describe('enrichCeeQualification — legacy shape tolerance', () => {
 })
 
 describe('enrichCeeQualification — zone honnête sur forfait non-zoné (Bug #5)', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('forfait scalaire avec code postal fourni → zone=null (pas de zone applicable)', async () => {
     const client = createMockClient([
@@ -398,7 +427,10 @@ describe('enrichCeeQualification — zone honnête sur forfait non-zoné (Bug #5
 })
 
 describe('enrichCeeQualification — batch délégataires (fix N+1)', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('2 codes → EXACTEMENT 2 queries cee_delegataires (pas 2×N)', async () => {
     // Fixtures minimales pour 2 codes distincts.
@@ -476,7 +508,10 @@ describe('enrichCeeQualification — batch délégataires (fix N+1)', () => {
 })
 
 describe('enrichCeeQualification — fail-open sur erreur DB', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    invalidateCeePricesCache()
+  })
 
   it('retourne items vides mais garde codes quand le fetch enrichi échoue', async () => {
     const client = createMockClient([
