@@ -1,6 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { logger } from '@/lib/logger'
 
 // Schema pour revalidation single path (rétrocompatible)
 const revalidateSingleSchema = z.object({
@@ -66,7 +67,12 @@ export async function POST(request: NextRequest) {
       if (revalidated.length > 0) {
         import('@/lib/seo/indexnow')
           .then(({ submitToIndexNow }) => submitToIndexNow(revalidated))
-          .catch(() => {})
+          .catch((err) =>
+            logger.warn('[revalidate] IndexNow submit failed', {
+              count: revalidated.length,
+              error: err,
+            })
+          )
       }
 
       return NextResponse.json({
@@ -107,7 +113,7 @@ export async function POST(request: NextRequest) {
     // Notifier IndexNow (fire-and-forget)
     import('@/lib/seo/indexnow')
       .then(({ submitToIndexNow }) => submitToIndexNow([path]))
-      .catch(() => {})
+      .catch((err) => logger.warn('[revalidate] IndexNow submit failed', { path, error: err }))
 
     return NextResponse.json({
       revalidated: true,
