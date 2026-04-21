@@ -23,8 +23,11 @@ if (SENTRY_DSN) {
       return process.env.NODE_ENV === 'production' ? 0.1 : 1.0
     },
 
-    // Session Replay — lazy-loaded to save ~70KB from initial bundle
-    replaysSessionSampleRate: 0.01,
+    // Session Replay — lazy-loaded to save ~70KB from initial bundle.
+    // Budget cap : 0.5% en prod par défaut pour éviter l'explosion facturation
+    // si un incident devient viral. Override via NEXT_PUBLIC_SENTRY_REPLAY_RATE
+    // (par exemple `0.1` pendant une session de debug) sans redeploy.
+    replaysSessionSampleRate: Number(process.env.NEXT_PUBLIC_SENTRY_REPLAY_RATE ?? 0.005),
     replaysOnErrorSampleRate: 1.0,
 
     // Only enable in production

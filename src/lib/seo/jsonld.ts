@@ -128,7 +128,8 @@ export function getServiceSchema(service: {
 }
 
 // Schema.org BreadcrumbList — Google-compliant format
-// Last item = current page (no `item`), others use WebPage object with @id
+// Last item = current page (no `item`). Others emit `item` as a canonical URL
+// string (simplest form accepté par Google/Schema.org, cf tests compliance).
 export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     '@context': 'https://schema.org',
@@ -139,9 +140,7 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
         '@type': 'ListItem',
         position: index + 1,
         name: item.name,
-        ...(!isLast && {
-          item: `${SITE_URL}${item.url}`,
-        }),
+        ...(!isLast && { item: `${SITE_URL}${item.url}` }),
       }
     }),
   }
@@ -248,6 +247,7 @@ export function getPlaceSchema(city: {
   return {
     '@context': 'https://schema.org',
     '@type': 'City',
+    '@id': `${SITE_URL}/villes/${city.slug}#place`,
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
@@ -942,6 +942,7 @@ export function getEnrichedPlaceSchema(city: {
   return {
     '@context': 'https://schema.org',
     '@type': 'City',
+    '@id': `${SITE_URL}/villes/${city.slug}#place`,
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
     ...(city.image ? { image: city.image } : {}),
@@ -1124,16 +1125,42 @@ export function getPersonSchema(author: {
   expertise: string[]
   yearsExperience: number
   image?: string
+  /** Editorial methodology — becomes `skills` in the Person schema. */
+  methodology?: string[]
+  /** Background + ongoing monitoring — becomes `hasOccupation.experienceRequirements`. */
+  credentialsBasis?: string
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': `${SITE_URL}/equipe/${author.slug}#person`,
+    url: `${SITE_URL}/equipe/${author.slug}`,
     name: author.name,
     jobTitle: author.role,
     description: author.bio,
     knowsAbout: author.expertise,
     ...(author.image && { image: `${SITE_URL}${author.image}` }),
+    ...(author.methodology &&
+      author.methodology.length > 0 && {
+        skills: author.methodology,
+      }),
+    // E-E-A-T honesty : on n'émet `hasOccupation` que s'il y a au moins
+    // un signal substantiel (expérience OU credentialsBasis). Pour staff
+    // purement éditorial, pas d'Occupation — évite les claims non
+    // défendables (cf commit 8618f552, honest authors audit).
+    ...((author.yearsExperience > 0 || author.credentialsBasis) && {
+      hasOccupation: {
+        '@type': 'Occupation',
+        name: author.role,
+        occupationLocation: {
+          '@type': 'Country',
+          name: 'France',
+        },
+        experienceRequirements: author.credentialsBasis
+          ? `${author.yearsExperience} ans — ${author.credentialsBasis}`
+          : `${author.yearsExperience} ans`,
+      },
+    }),
     worksFor: {
       '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
