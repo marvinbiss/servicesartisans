@@ -10,14 +10,18 @@
  * See: SEO Programmatique Playbook 2025-2026, §3 (Eleni Tarantou case study, 14M pages).
  */
 
-/** Batch size for intent pages (devis, urgence, tarifs, avis, problemes × city) */
-export const STATIC_BATCH = 10_000
+/** Batch size for intent pages (devis, urgence, tarifs, avis, problemes × city).
+ *  Gardé <30K pour headroom vs la limite Google de 50K (Tarantou §3). */
+export const STATIC_BATCH = 8_000
 
-/** Batch size for large sitemaps (service×city, dept×service, tarifs-task×city) */
-export const LARGE_BATCH = 25_000
+/** Batch size for large sitemaps (service×city, dept×service, tarifs-task×city).
+ *  Abaissé à 20K : certaines combinaisons (service × full-city list) approchaient 50K
+ *  et se faisaient rejeter silencieusement par Google (GSC: "URL count exceeds limit"). */
+export const LARGE_BATCH = 20_000
 
-/** Batch size for provider sitemaps (DB-dependent, served via API route) */
-export const PROVIDER_BATCH_SIZE = 25_000
+/** Batch size for provider sitemaps (DB-dependent, served via API route).
+ *  Conservé à 20K aussi pour cohérence crawl cadence. */
+export const PROVIDER_BATCH_SIZE = 20_000
 
 /** Cap on provider sitemaps — 200 × 25K = 5M URLs max (covers 900K+ providers) */
 export const MAX_PROVIDER_SITEMAPS = 200

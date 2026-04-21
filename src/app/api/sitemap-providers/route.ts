@@ -3,10 +3,9 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes } from '@/lib/data/france'
 import { tradeContent } from '@/lib/data/trade-content'
 import inseeCommunes from '@/lib/data/insee-communes.json'
+import { PROVIDER_BATCH_SIZE } from '@/lib/seo/sitemap-config'
 
 export const maxDuration = 60
-
-const PROVIDER_BATCH_SIZE = 25_000
 
 /** Escape XML special characters in sitemap URLs to prevent invalid XML */
 function escapeXml(s: string): string {

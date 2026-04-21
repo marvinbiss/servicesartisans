@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
+import 'server-only'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * Client Supabase avec la clé service_role
@@ -9,8 +10,17 @@ import { createClient } from '@supabase/supabase-js'
  * this client.  Without this, internal HEAD/GET requests from PostgREST
  * are treated as uncacheable and force every page into dynamic SSR
  * (perpetual x-vercel-cache: MISS).
+ *
+ * Singleton : le client admin n'a pas d'état par requête (pas de cookies),
+ * donc on le réutilise entre invocations pour économiser la création d'objet
+ * et le setup du wrapper fetch. `server-only` garantit qu'il ne fuit pas
+ * dans un bundle client.
  */
-export function createAdminClient() {
+let cachedAdminClient: SupabaseClient | null = null
+
+export function createAdminClient(): SupabaseClient {
+  if (cachedAdminClient) return cachedAdminClient
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
@@ -18,7 +28,7 @@ export function createAdminClient() {
     throw new Error('Supabase admin env vars missing')
   }
 
-  return createClient(supabaseUrl, supabaseServiceKey, {
+  cachedAdminClient = createClient(supabaseUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
@@ -32,4 +42,5 @@ export function createAdminClient() {
       },
     },
   })
+  return cachedAdminClient
 }

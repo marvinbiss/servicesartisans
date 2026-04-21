@@ -12,8 +12,8 @@ import {
 describe('sitemap-config constants', () => {
   // ---------- STATIC_BATCH ----------
   describe('STATIC_BATCH', () => {
-    it('equals 10,000', () => {
-      expect(STATIC_BATCH).toBe(10_000)
+    it('equals 8,000 (headroom sous la limite Google 50K)', () => {
+      expect(STATIC_BATCH).toBe(8_000)
     })
 
     it('is a positive integer', () => {
@@ -28,8 +28,8 @@ describe('sitemap-config constants', () => {
 
   // ---------- LARGE_BATCH ----------
   describe('LARGE_BATCH', () => {
-    it('equals 25,000', () => {
-      expect(LARGE_BATCH).toBe(25_000)
+    it('equals 20,000 (headroom vs 50K)', () => {
+      expect(LARGE_BATCH).toBe(20_000)
     })
 
     it('is larger than STATIC_BATCH', () => {
@@ -47,8 +47,8 @@ describe('sitemap-config constants', () => {
 
   // ---------- PROVIDER_BATCH_SIZE ----------
   describe('PROVIDER_BATCH_SIZE', () => {
-    it('equals 25,000', () => {
-      expect(PROVIDER_BATCH_SIZE).toBe(25_000)
+    it('equals 20,000', () => {
+      expect(PROVIDER_BATCH_SIZE).toBe(20_000)
     })
 
     it('is a positive integer', () => {
