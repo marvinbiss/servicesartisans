@@ -162,6 +162,12 @@ interface DevisFormProps {
   prefilledCity?: string
   prefilledCityPostal?: string
   prefilledOperation?: string
+  /**
+   * CRO lever Pilier 2.D — skip the optional step 2 when the service/city are
+   * already prefilled, so the user reaches the contact step in one click.
+   * They can still expand the optional questions via the "plus de détails" toggle.
+   */
+  minimalMode?: boolean
 }
 
 export default function DevisForm({
@@ -169,8 +175,10 @@ export default function DevisForm({
   prefilledCity,
   prefilledCityPostal,
   prefilledOperation,
+  minimalMode = false,
 }: DevisFormProps = {}) {
   const isPrefilled = !!(prefilledService && prefilledCity)
+  const isMinimal = minimalMode && isPrefilled
   const validPrefilledService =
     prefilledService && services.some((s) => s.slug === prefilledService)
       ? prefilledService
@@ -202,11 +210,13 @@ export default function DevisForm({
         ? { ...(savedState?.formData || {}), service: validPrefilledService }
         : savedState?.formData || {}
 
-  const resolvedInitialStep: 1 | 2 | 3 = isPrefilled
-    ? 2
-    : hasSavedProgress
-      ? 1
-      : ((savedState?.step || 1) as 1 | 2 | 3)
+  const resolvedInitialStep: 1 | 2 | 3 = isMinimal
+    ? 3
+    : isPrefilled
+      ? 2
+      : hasSavedProgress
+        ? 1
+        : ((savedState?.step || 1) as 1 | 2 | 3)
 
   const [ceeEligible, setCeeEligible] = useState(false)
   const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
@@ -493,11 +503,21 @@ export default function DevisForm({
 
   const handlePrev = () => {
     if (form.step === 2) {
+      if (isMinimal) {
+        animateToStep(3, 'forward')
+        return
+      }
       if (isPrefilled) return
       animateToStep(1, 'backward')
     } else if (form.step === 3) {
+      if (isMinimal) return
       animateToStep(2, 'backward')
     }
+  }
+
+  const toggleDetails = () => {
+    if (form.step === 3) animateToStep(2, 'backward')
+    else animateToStep(3, 'forward')
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -683,7 +703,7 @@ export default function DevisForm({
         {prefilledOperation && (
           <input type="hidden" name="sourceOperation" value={prefilledOperation} />
         )}
-        <ProgressBar currentStep={form.step} />
+        {!isMinimal && <ProgressBar currentStep={form.step} />}
 
         <div className="sr-only" aria-live="assertive" aria-atomic="true">
           Étape {form.step} sur 3
@@ -1078,20 +1098,20 @@ export default function DevisForm({
               </div>
 
               <div className="flex gap-3">
-                {!isPrefilled && (
+                {(!isPrefilled || isMinimal) && (
                   <button
                     type="button"
                     onClick={handlePrev}
                     className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Précédent
+                    <ArrowLeft className="w-4 h-4" /> {isMinimal ? 'Retour' : 'Précédent'}
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={handleNext}
                   disabled={!isStep2Valid}
-                  className={`${isPrefilled ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
+                  className={`${isPrefilled && !isMinimal ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                     isStep2Valid
                       ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
                       : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
@@ -1249,14 +1269,25 @@ export default function DevisForm({
               </div>
 
               <div className="flex gap-3 items-center">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  disabled={form.submitting}
-                  className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300 disabled:opacity-50"
-                >
-                  <ArrowLeft className="w-4 h-4" /> Précédent
-                </button>
+                {isMinimal ? (
+                  <button
+                    type="button"
+                    onClick={toggleDetails}
+                    disabled={form.submitting}
+                    className="hidden sm:inline-flex items-center justify-center gap-2 text-charcoal-500 hover:text-primary-600 hover:bg-sand-100 font-medium px-4 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 text-sm whitespace-nowrap"
+                  >
+                    + de détails
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    disabled={form.submitting}
+                    className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-4 rounded-xl transition-all duration-300 disabled:opacity-50"
+                  >
+                    <ArrowLeft className="w-4 h-4" /> Précédent
+                  </button>
+                )}
                 <button
                   type="submit"
                   disabled={form.submitting || !form.isStep3Valid}

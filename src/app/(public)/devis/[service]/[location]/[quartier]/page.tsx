@@ -283,6 +283,7 @@ export default async function DevisQuartierPage({
           prefilledService={service}
           prefilledCity={ville.name}
           prefilledCityPostal={ville.codePostal}
+          minimalMode
         />
       </section>
 

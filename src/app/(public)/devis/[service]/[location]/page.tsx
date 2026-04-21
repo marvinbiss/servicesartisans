@@ -680,6 +680,7 @@ export default async function DevisServiceLocationPage({
                 prefilledService={service}
                 prefilledCity={villeData.name}
                 prefilledCityPostal={villeData.codePostal}
+                minimalMode
               />
             </div>
 
