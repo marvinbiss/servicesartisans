@@ -1,0 +1,101 @@
+# Zombie /services/[s]/[v] URLs identified 2026-04-20
+# Criteria: impressions ≤ 2 AND 0 providers AND no commune enrichment AND not in top40
+# Total: 47
+
+# --- URL LIST FOR INDEXNOW ---
+https://servicesartisans.fr/services/geometre/sada
+https://servicesartisans.fr/services/electricien/paray-vieille-poste
+https://servicesartisans.fr/services/etancheiste/montoir-de-bretagne
+https://servicesartisans.fr/services/electricien/neuilly-plaisance
+https://servicesartisans.fr/services/chauffagiste/thionville
+https://servicesartisans.fr/services/ramoneur/hyeres
+https://servicesartisans.fr/services/jardinier/le-robert
+https://servicesartisans.fr/services/terrassier/montlucon
+https://servicesartisans.fr/services/menuisier/le-lorrain
+https://servicesartisans.fr/services/menuisier/grigny-sur-rhone
+https://servicesartisans.fr/services/solier/schiltigheim
+https://servicesartisans.fr/services/ramoneur/le-tampon
+https://servicesartisans.fr/services/climaticien/mtsamboro
+https://servicesartisans.fr/services/platrier/bourgoin-jallieu
+https://servicesartisans.fr/services/architecte-interieur/le-robert
+https://servicesartisans.fr/services/jardinier/mahina
+https://servicesartisans.fr/services/carreleur/chaumont
+https://servicesartisans.fr/services/electricien/hyeres
+https://servicesartisans.fr/services/menuisier/caluire-et-cuire
+https://servicesartisans.fr/services/macon/royan
+https://servicesartisans.fr/services/solier/agen
+https://servicesartisans.fr/services/jardinier/pirae
+https://servicesartisans.fr/services/cuisiniste/aulnay-sous-bois
+https://servicesartisans.fr/services/carreleur/ales
+https://servicesartisans.fr/services/peintre-en-batiment/chartres
+https://servicesartisans.fr/services/electricien/dammarie-les-lys
+https://servicesartisans.fr/services/peintre-en-batiment/chaumont
+https://servicesartisans.fr/services/macon/blois
+https://servicesartisans.fr/services/plombier/chalons-en-champagne
+https://servicesartisans.fr/services/menuisier/perigueux
+https://servicesartisans.fr/services/menuisier/gap
+https://servicesartisans.fr/services/electricien/saint-lo
+https://servicesartisans.fr/services/couvreur/morsang-sur-orge
+https://servicesartisans.fr/services/carreleur/grasse
+https://servicesartisans.fr/services/climaticien/la-seyne-sur-mer
+https://servicesartisans.fr/services/macon/tignieu-jameyzieu
+https://servicesartisans.fr/services/chauffagiste/frejus
+https://servicesartisans.fr/services/electricien/manosque
+https://servicesartisans.fr/services/terrassier/les-mureaux
+https://servicesartisans.fr/services/storiste/morsang-sur-orge
+https://servicesartisans.fr/services/menuisier/nerac
+https://servicesartisans.fr/services/plombier/chaumont
+https://servicesartisans.fr/services/peintre-en-batiment/riom
+https://servicesartisans.fr/services/electricien/saintes
+https://servicesartisans.fr/services/menuisier/romainville
+https://servicesartisans.fr/services/geometre/bauvin
+https://servicesartisans.fr/services/menuisier/valbonne
+
+# --- DETAIL ---
+/services/geometre/sada  impr=19 reason=zero_providers_no_enrichment
+/services/electricien/paray-vieille-poste  impr=17 reason=zero_providers_no_enrichment
+/services/etancheiste/montoir-de-bretagne  impr=12 reason=zero_providers_no_enrichment
+/services/electricien/neuilly-plaisance  impr=11 reason=zero_providers_no_enrichment
+/services/chauffagiste/thionville  impr=19 reason=zero_providers_no_enrichment
+/services/ramoneur/hyeres  impr=19 reason=zero_providers_no_enrichment
+/services/jardinier/le-robert  impr=16 reason=zero_providers_no_enrichment
+/services/terrassier/montlucon  impr=13 reason=zero_providers_no_enrichment
+/services/menuisier/le-lorrain  impr=12 reason=zero_providers_no_enrichment
+/services/menuisier/grigny-sur-rhone  impr=12 reason=zero_providers_no_enrichment
+/services/solier/schiltigheim  impr=11 reason=zero_providers_no_enrichment
+/services/ramoneur/le-tampon  impr=10 reason=zero_providers_no_enrichment
+/services/climaticien/mtsamboro  impr=9 reason=zero_providers_no_enrichment
+/services/platrier/bourgoin-jallieu  impr=20 reason=zero_providers_no_enrichment
+/services/architecte-interieur/le-robert  impr=20 reason=zero_providers_no_enrichment
+/services/jardinier/mahina  impr=19 reason=zero_providers_no_enrichment
+/services/carreleur/chaumont  impr=18 reason=zero_providers_no_enrichment
+/services/electricien/hyeres  impr=17 reason=zero_providers_no_enrichment
+/services/menuisier/caluire-et-cuire  impr=17 reason=zero_providers_no_enrichment
+/services/macon/royan  impr=17 reason=zero_providers_no_enrichment
+/services/solier/agen  impr=15 reason=zero_providers_no_enrichment
+/services/jardinier/pirae  impr=15 reason=zero_providers_no_enrichment
+/services/cuisiniste/aulnay-sous-bois  impr=15 reason=zero_providers_no_enrichment
+/services/carreleur/ales  impr=15 reason=zero_providers_no_enrichment
+/services/peintre-en-batiment/chartres  impr=15 reason=zero_providers_no_enrichment
+/services/electricien/dammarie-les-lys  impr=15 reason=zero_providers_no_enrichment
+/services/peintre-en-batiment/chaumont  impr=14 reason=zero_providers_no_enrichment
+/services/macon/blois  impr=14 reason=zero_providers_no_enrichment
+/services/plombier/chalons-en-champagne  impr=14 reason=zero_providers_no_enrichment
+/services/menuisier/perigueux  impr=13 reason=zero_providers_no_enrichment
+/services/menuisier/gap  impr=12 reason=zero_providers_no_enrichment
+/services/electricien/saint-lo  impr=12 reason=zero_providers_no_enrichment
+/services/couvreur/morsang-sur-orge  impr=12 reason=zero_providers_no_enrichment
+/services/carreleur/grasse  impr=11 reason=zero_providers_no_enrichment
+/services/climaticien/la-seyne-sur-mer  impr=11 reason=zero_providers_no_enrichment
+/services/macon/tignieu-jameyzieu  impr=11 reason=zero_providers_no_enrichment
+/services/chauffagiste/frejus  impr=10 reason=zero_providers_no_enrichment
+/services/electricien/manosque  impr=10 reason=zero_providers_no_enrichment
+/services/terrassier/les-mureaux  impr=9 reason=zero_providers_no_enrichment
+/services/storiste/morsang-sur-orge  impr=8 reason=zero_providers_no_enrichment
+/services/menuisier/nerac  impr=8 reason=zero_providers_no_enrichment
+/services/plombier/chaumont  impr=8 reason=zero_providers_no_enrichment
+/services/peintre-en-batiment/riom  impr=8 reason=zero_providers_no_enrichment
+/services/electricien/saintes  impr=7 reason=zero_providers_no_enrichment
+/services/menuisier/romainville  impr=7 reason=zero_providers_no_enrichment
+/services/geometre/bauvin  impr=6 reason=zero_providers_no_enrichment
+/services/menuisier/valbonne  impr=6 reason=zero_providers_no_enrichment

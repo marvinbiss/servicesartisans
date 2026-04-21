@@ -1,0 +1,96 @@
+# Disavow generated 2026-04-20 — ServicesArtisans
+# Source: docs/ahrefs-audit-2026-04/normalized/ahrefs-backlinks.csv
+# Rules: Ahrefs spam flag, low DR + long anchor, zero traffic PBN pattern,
+#        SEO spam keywords, dubious TLD link farms
+# Review before uploading to Google Search Console Disavow Tool.
+
+# links=2 avgDR=1.5 reasons=flagged_spam
+domain:runningwebsites.net
+# links=2 avgDR=3.0 reasons=flagged_spam
+domain:pagesearch.net
+# links=2 avgDR=19.0 reasons=flagged_spam
+domain:getwebsiteworth.com
+# links=2 avgDR=54.0 reasons=flagged_spam
+domain:sarys.co.uk
+# links=2 avgDR=1.1 reasons=flagged_spam
+domain:tunca.org
+# links=2 avgDR=36.0 reasons=flagged_spam
+domain:nettools.guru
+# links=1 avgDR=72.0 reasons=flagged_spam,seo_spam_pattern
+domain:primeseo.xyz
+# links=1 avgDR=37.0 reasons=flagged_spam
+domain:qhtycw.com
+# links=1 avgDR=53.0 reasons=flagged_spam
+domain:bye.fyi
+# links=1 avgDR=3.4 reasons=flagged_spam
+domain:way2check.cv
+# links=1 avgDR=50.0 reasons=flagged_spam,seo_spam_pattern
+domain:seoagency.sale
+# links=1 avgDR=9.0 reasons=flagged_spam,seo_spam_pattern
+domain:technomarkethq.shop
+# links=1 avgDR=4.6 reasons=flagged_spam
+domain:egyptiandirectory.com
+# links=1 avgDR=0.9 reasons=flagged_spam
+domain:linksnatcher.com
+# links=1 avgDR=50.0 reasons=flagged_spam
+domain:creativeposts.top
+# links=1 avgDR=76.0 reasons=flagged_spam,seo_spam_pattern
+domain:itxoft-reliable-seo-services.site
+# links=1 avgDR=24.0 reasons=flagged_spam
+domain:kompromat100.info
+# links=1 avgDR=0.0 reasons=low_dr_long_anchor,seo_spam_pattern
+domain:rent-a-shop.shop
+# links=1 avgDR=50.0 reasons=flagged_spam
+domain:analyticshaven.top
+# links=1 avgDR=1.8 reasons=flagged_spam
+domain:bestwebstats.com
+# links=1 avgDR=33.0 reasons=flagged_spam,seo_spam_pattern
+domain:rankongoogle.agency
+# links=1 avgDR=33.0 reasons=flagged_spam
+domain:sitescooponline.com
+# links=1 avgDR=53.0 reasons=flagged_spam
+domain:quero.party
+# links=1 avgDR=37.0 reasons=flagged_spam
+domain:hzdlpq.com
+# links=1 avgDR=9.0 reasons=flagged_spam,seo_spam_pattern
+domain:cybertoolbox.shop
+# links=1 avgDR=1.7 reasons=flagged_spam
+domain:indians.cc
+# links=1 avgDR=9.0 reasons=flagged_spam,seo_spam_pattern
+domain:digitalgearshop.shop
+# links=1 avgDR=4.7 reasons=flagged_spam
+domain:globalecommerce.org
+# links=1 avgDR=71.0 reasons=flagged_spam,seo_spam_pattern
+domain:zoldexlinks.shop
+# links=1 avgDR=72.0 reasons=flagged_spam,seo_spam_pattern
+domain:grow-your.website
+# links=1 avgDR=10.0 reasons=flagged_spam,seo_spam_pattern
+domain:backlinks-seorank.com
+# links=1 avgDR=76.0 reasons=flagged_spam
+domain:rank-your.website
+# links=1 avgDR=48.0 reasons=flagged_spam
+domain:optimizeflow.top
+# links=1 avgDR=15.0 reasons=flagged_spam
+domain:rankpilot.shop
+# links=1 avgDR=37.0 reasons=flagged_spam
+domain:kgzxkf.com
+# links=1 avgDR=60.0 reasons=flagged_spam,seo_spam_pattern
+domain:seodaro.com
+# links=1 avgDR=9.0 reasons=flagged_spam,seo_spam_pattern
+domain:quantumwares.shop
+# links=1 avgDR=8.0 reasons=flagged_spam,seo_spam_pattern
+domain:backlinker.shop
+# links=1 avgDR=8.0 reasons=flagged_spam
+domain:booksreadr.org
+# links=1 avgDR=48.0 reasons=flagged_spam
+domain:dailymusings.top
+# links=1 avgDR=72.0 reasons=flagged_spam,seo_spam_pattern
+domain:fiverr-seo-for-business-growth.site
+# links=1 avgDR=1.7 reasons=flagged_spam
+domain:wallpapers.pro
+# links=1 avgDR=4.2 reasons=flagged_spam
+domain:pudhe.com
+# links=1 avgDR=49.0 reasons=flagged_spam
+domain:atomizelink.icu
+# links=1 avgDR=34.0 reasons=flagged_spam
+domain:bmwyng.com
