@@ -9,6 +9,7 @@ import {
 } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { isSafeRedirectPath } from '@/lib/safe-redirect'
+import { evaluateGonePath, goneResponseHeaders, GONE_RESPONSE_BODY } from '@/lib/seo/gone-paths'
 
 /**
  * Middleware v3 — performance-optimized
@@ -119,6 +120,25 @@ async function logGooglebotCrawl(url: string, userAgent: string) {
 
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl
+
+  // Soft 404 permanent solve (bug Next.js 14.2 #69103) — DOIT passer avant
+  // toute autre logique. Les routes ISR avec `dynamicParams: true` + `notFound()`
+  // retournent HTTP 200 en 14.2 ; on intercepte en amont sur les slugs
+  // structurellement invalides et on retourne un vrai HTTP 410 Gone au CDN.
+  // Validation purement statique (zéro I/O), voir `@/lib/seo/gone-paths`.
+  //
+  // GET/HEAD uniquement — on ne veut pas casser d'éventuels webhook /cee/xxx
+  // qui passeraient par middleware en POST (aucun en prod aujourd'hui, mais
+  // défense en profondeur).
+  if (request.method === 'GET' || request.method === 'HEAD') {
+    const goneDecision = evaluateGonePath(pathname)
+    if (goneDecision.gone) {
+      return new NextResponse(GONE_RESPONSE_BODY, {
+        status: 410,
+        headers: goneResponseHeaders(),
+      })
+    }
+  }
 
   // Redirect /tarifs-artisans → /tarifs (301 permanent, cached at CDN edge)
   if (pathname.startsWith('/tarifs-artisans')) {
