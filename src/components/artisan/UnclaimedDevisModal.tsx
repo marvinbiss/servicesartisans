@@ -457,20 +457,34 @@ export function UnclaimedDevisModal({
                         </h3>
                         <input
                           type="tel"
+                          inputMode="numeric"
+                          autoComplete="tel-national"
+                          maxLength={14}
                           value={telephone}
                           onChange={(e) => {
-                            setTelephone(e.target.value)
+                            // Live formatting : garde max 10 chiffres, affiche "06 12 34 56 78".
+                            const digits = e.target.value.replace(/\D/g, '').slice(0, 10)
+                            const formatted = digits.replace(
+                              /^(\d{2})(\d{2})?(\d{2})?(\d{2})?(\d{2})?$/,
+                              (_, a, b, c, d, f) => [a, b, c, d, f].filter(Boolean).join(' ')
+                            )
+                            setTelephone(formatted)
                             setPhoneError('')
                           }}
                           placeholder="06 12 34 56 78"
                           aria-required="true"
                           aria-invalid={!!phoneError}
+                          aria-describedby={phoneError ? 'phone-error' : undefined}
                           className={`w-full rounded-xl border bg-sand-50 px-4 py-3.5 text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all duration-200 text-base ${
                             phoneError ? 'border-red-400' : 'border-sand-300'
                           }`}
                         />
                         {phoneError && (
-                          <p className="text-red-500 text-xs mt-1.5" role="alert">
+                          <p
+                            id="phone-error"
+                            className="text-red-700 text-sm mt-1.5 font-medium"
+                            role="alert"
+                          >
                             {phoneError}
                           </p>
                         )}

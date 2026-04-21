@@ -91,7 +91,9 @@ export async function submitLead(
     }
 
     // Log 'created' event — triggers "Demande bien reçue" notification to client
-    logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
+    logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch((err) =>
+      logger.warn('[lead] logLeadEvent created failed', { leadId: inserted.id, error: err })
+    )
 
     // Schedule review invitation (fire-and-forget) — feeds the reviews flywheel.
     // Cron `/api/cron/send-review-invitations` picks up due invitations and sends the email.
@@ -125,7 +127,12 @@ export async function submitLead(
           source_table: 'devis_requests',
         })
         if (!assignError) {
-          logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch(() => {})
+          logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch((err) =>
+            logger.warn('[lead] logLeadEvent dispatched failed', {
+              leadId: inserted.id,
+              error: err,
+            })
+          )
         }
       }
     }

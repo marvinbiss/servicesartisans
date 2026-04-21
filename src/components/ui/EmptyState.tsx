@@ -88,14 +88,14 @@ export function EmptyState({
             (secondaryAction.href ? (
               <Link
                 href={secondaryAction.href}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-sand-300 text-charcoal-700 px-6 py-3 rounded-xl font-semibold hover:bg-sand-50 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-charcoal-400 text-charcoal-900 px-6 py-3 rounded-xl font-semibold hover:bg-sand-100 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2 transition-colors"
               >
                 {secondaryAction.label}
               </Link>
             ) : (
               <button
                 onClick={secondaryAction.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-sand-300 text-charcoal-700 px-6 py-3 rounded-xl font-semibold hover:bg-sand-50 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-charcoal-400 text-charcoal-900 px-6 py-3 rounded-xl font-semibold hover:bg-sand-100 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2 transition-colors"
               >
                 {secondaryAction.label}
               </button>

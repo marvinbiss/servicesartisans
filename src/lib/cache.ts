@@ -1,10 +1,19 @@
 import { CacheService } from '@/lib/cache/redis-client'
+import { logger } from '@/lib/logger'
 
 // L1: in-memory (fast path, même invocation Lambda)
 const memoryCache = new Map<string, { data: unknown; expiry: number }>()
 
 // L2: Redis (partagé entre toutes les instances Vercel)
 const redisCache = new CacheService('sa:cache:')
+
+// Si Redis est down, on ne peut pas bloquer la requête — mais un total silence
+// nous a déjà coûté cher (audit CEO 2026-04-21). On log en warn avec la clé
+// concernée pour diagnostiquer sans poluer avec des stacks complètes.
+function logRedisFailure(op: 'set' | 'del', key: string, err: unknown): void {
+  const message = err instanceof Error ? err.message : String(err)
+  logger.warn(`[cache] Redis ${op} failed`, { key, error: message })
+}
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
@@ -62,7 +71,7 @@ export async function getCachedData<T>(
 
   if (!shouldSkip) {
     // Write to both layers (fire-and-forget Redis to not block the response)
-    redisCache.set(key, data, ttl).catch(() => {})
+    redisCache.set(key, data, ttl).catch((err) => logRedisFailure('set', key, err))
     memoryCache.set(key, { data, expiry: Date.now() + Math.min(ttl, 60) * 1000 })
   }
 
@@ -75,12 +84,12 @@ export async function getCachedData<T>(
 export function invalidateCache(keyOrPattern: string | RegExp): void {
   if (typeof keyOrPattern === 'string') {
     memoryCache.delete(keyOrPattern)
-    redisCache.delete(keyOrPattern).catch(() => {})
+    redisCache.delete(keyOrPattern).catch((err) => logRedisFailure('del', keyOrPattern, err))
   } else {
     for (const key of Array.from(memoryCache.keys())) {
       if (keyOrPattern.test(key)) {
         memoryCache.delete(key)
-        redisCache.delete(key).catch(() => {})
+        redisCache.delete(key).catch((err) => logRedisFailure('del', key, err))
       }
     }
   }
