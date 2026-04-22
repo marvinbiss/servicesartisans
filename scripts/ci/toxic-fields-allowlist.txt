@@ -32,3 +32,14 @@ src/hooks/useProvider.ts
 # Legacy SIRENE clients
 src/lib/sirene/client-open.ts
 src/lib/sirene/client.ts
+
+# DPIA/RGPD audit page — référence textuelle explicite à la suppression
+# de trust_score (pas une utilisation, mais un commentaire user-visible
+# qui documente la conformité). Pas de cleanup possible ni souhaitable.
+src/app/admin/(dashboard)/dpia/page.tsx
+
+# Supabase types auto-générés : référence un param d'RPC legacy
+# (p_trust_badge) qui existe toujours côté DB. Régénéré automatiquement
+# par `supabase gen types` — modifier à la main serait écrasé au
+# prochain sync. Cleanup = dropper l'RPC côté DB.
+src/types/database.ts

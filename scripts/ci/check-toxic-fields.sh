@@ -10,9 +10,11 @@ VIOLATIONS=()
 ALLOWLIST_FILE="scripts/ci/toxic-fields-allowlist.txt"
 
 # Load allowlist into an associative array for fast lookup
+# Tolère les line terminators CRLF (fichier édité sous Windows) en strippant \r.
 declare -A ALLOWED
 if [ -f "$ALLOWLIST_FILE" ]; then
-  while IFS= read -r entry; do
+  while IFS= read -r entry || [ -n "$entry" ]; do
+    entry="${entry%$'\r'}"
     # Skip empty lines and comments
     [[ -z "$entry" || "$entry" == \#* ]] && continue
     ALLOWED["$entry"]=1
