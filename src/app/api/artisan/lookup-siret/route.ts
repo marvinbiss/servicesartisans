@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { checkRateLimit } from '@/lib/rate-limiter'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -79,14 +79,10 @@ export async function GET(request: NextRequest) {
   // Rate limiting FIRST — runs before any validation so spammers don't
   // consume Zod/Supabase cycles. Public endpoint exposing PII → must be
   // throttled aggressively against scraping. 20 req/min/IP.
-  const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    request.headers.get('cf-connecting-ip') ||
-    'unknown'
-  const rl = await checkRateLimit(`lookup-siret:${ip}`, { window: 60_000, max: 20 })
+  const ip = getClientIp(request.headers)
+  const rl = await checkRateLimit(`lookup-siret:${ip}`, { window: 60_000, max: 20, failOpen: true })
   if (!rl.allowed) {
-    return jsonResponse<LookupError>(
+    return NextResponse.json<LookupError>(
       {
         success: false,
         error: {
@@ -94,7 +90,13 @@ export async function GET(request: NextRequest) {
           message: 'Trop de requêtes. Réessayez dans une minute.',
         },
       },
-      429
+      {
+        status: 429,
+        headers: {
+          ...SECURITY_HEADERS,
+          'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)),
+        },
+      }
     )
   }
 

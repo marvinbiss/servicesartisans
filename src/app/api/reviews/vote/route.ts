@@ -37,7 +37,11 @@ export async function POST(request: Request) {
   try {
     // Rate limiting: 10 votes per hour per IP
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`review-vote:${ip}`, { window: 3_600_000, max: 10 })
+    const rl = await checkRateLimit(`review-vote:${ip}`, {
+      window: 3_600_000,
+      max: 10,
+      failOpen: true,
+    })
     if (!rl.allowed) {
       return NextResponse.json(
         { success: false, error: { message: 'Trop de votes, veuillez réessayer plus tard' } },

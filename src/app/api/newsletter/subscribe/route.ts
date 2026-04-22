@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 1 request per 10 min per IP)
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 600_000, max: 1 })
+    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 600_000, max: 1, failOpen: true })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },

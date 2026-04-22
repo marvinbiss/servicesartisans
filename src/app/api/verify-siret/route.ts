@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { getClientIp } from '@/lib/rate-limiter'
 import {
   validateSiretInput,
   validateSirenInput,
@@ -51,8 +52,7 @@ if (typeof setInterval !== 'undefined') {
 
 export async function GET(request: NextRequest) {
   // Rate limiting
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded?.split(',')[0]?.trim() || 'unknown'
+  const ip = getClientIp(request.headers)
 
   if (isRateLimited(ip)) {
     return NextResponse.json(

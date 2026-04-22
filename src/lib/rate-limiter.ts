@@ -51,6 +51,14 @@ class UpstashRateLimiter {
     })
 
     if (!response.ok) {
+      // Distinguer 401/403 (token invalide) des autres erreurs : un token
+      // expiré côté Vercel est une cause fréquente de rate-limit cassé et
+      // mérite un log dédié pour être repérable dans les logs prod.
+      if (response.status === 401 || response.status === 403) {
+        logger.error(
+          `[UpstashRateLimiter] Upstash returned ${response.status} — UPSTASH_REDIS_REST_TOKEN may be invalid/expired. Verify Vercel Project Settings → Environment Variables.`
+        )
+      }
       throw new Error(`Redis error: ${response.status}`)
     }
 
@@ -92,16 +100,23 @@ class UpstashRateLimiter {
 
       return { allowed, remaining, resetTime }
     } catch (error) {
-      logger.error('Redis rate limit error:', error)
+      // Log structuré pour repérer dans Vercel : cause exacte + bucket + flag.
+      // CONTEXTE 2026-04-22 : Upstash a été ajouté hier, avant UPSTASH_* n'existait
+      // pas et hasRedis=false faisait tomber sur MemoryRateLimiter (pas d'erreur
+      // possible). Avec Upstash actif, tout hoquet réseau/token/quota bascule ici.
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      logger.error('[UpstashRateLimiter] Redis unavailable', {
+        key,
+        failOpen: config.failOpen === true,
+        error: errorMessage,
+      })
 
       // Fail-close by default: deny requests when Redis is unavailable.
       // Only fall back to allowing requests when failOpen is explicitly true.
       if (config.failOpen === true) {
-        logger.warn('Rate limiter: Redis unavailable, failOpen=true — using in-memory fallback')
         return memoryLimiter.checkRateLimit(`fallback:${key}`, config)
       }
 
-      logger.warn('Rate limiter: Redis unavailable, failOpen=false — denying request (fail-close)')
       return {
         allowed: false,
         remaining: 0,
@@ -182,19 +197,19 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 //   - `failOpen` absent (fail-close) réservé aux endpoints sensibles :
 //     brute-force auth, paiements, formulaires anti-spam.
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { window: 60 * 1000, max: 10 }, // 10/min auth sensible (password reset, 2FA, signup) — fail-close strict
+  auth: { window: 60 * 1000, max: 10, failOpen: true }, // 10/min auth sensible (password reset, 2FA, signup) — fail-open pour aligner avec le handler, sinon le middleware bloque en 429 lors d'un glitch Redis même avec handler failOpen
   signin: { window: 60 * 1000, max: 30, failOpen: true }, // 30/min signin — ne doit JAMAIS bloquer l'admin en cas de glitch Redis
   api: { window: 60 * 1000, max: 60, failOpen: true }, // 60/min API générale — fail-open pour ne pas casser la navigation
   booking: { window: 60 * 1000, max: 30, failOpen: true }, // 30/min bookings — business-critical
   payment: { window: 60 * 1000, max: 10 }, // 10/min payments — fail-close strict (anti-fraude)
   reviews: { window: 60 * 1000, max: 5, failOpen: true }, // 5/min reviews — UX (spam géré côté modération)
   devis: { window: 60 * 1000, max: 10, failOpen: true }, // 10/min devis — BUSINESS-CRITICAL, ne doit JAMAIS bloquer
-  contact: { window: 300 * 1000, max: 3 }, // 3/5min contact — anti-spam strict (fail-close OK, volume faible)
+  contact: { window: 300 * 1000, max: 3, failOpen: true }, // 3/5min contact — fail-open aligné avec le handler (incident 2026-04-22 : middleware 429 en Redis glitch)
   upload: { window: 60 * 1000, max: 20, failOpen: true }, // 20/min uploads — UX
   search: { window: 60 * 1000, max: 100, failOpen: true }, // 100/min search — UX navigation
   gdpr: { window: 300 * 1000, max: 5 }, // 5/5min GDPR — fail-close (données sensibles)
-  newsletter: { window: 300 * 1000, max: 3 }, // 3/5min newsletter — anti-spam strict (envoi email)
-  inscription: { window: 300 * 1000, max: 3 }, // 3/5min inscription — anti-spam strict (envoi email)
+  newsletter: { window: 300 * 1000, max: 3, failOpen: true }, // 3/5min newsletter — fail-open aligné avec le handler (anti-spam reste assuré par double-opt-in + Resend quotas)
+  inscription: { window: 300 * 1000, max: 3, failOpen: true }, // 3/5min inscription — fail-open aligné avec le handler
   ai: { window: 60 * 1000, max: 10 }, // 10/min AI — fail-close (coûts API tiers)
   ceeEstimate: { window: 60 * 1000, max: 20, failOpen: true }, // 20 requests per minute for CEE prime estimate — fail open so tunnel devis always works
   estimation: { window: 60 * 1000, max: 15, failOpen: true }, // 15 messages per minute for estimation chat — fail open so widget always works
@@ -320,15 +335,32 @@ export async function checkRateLimit(
 }
 
 /**
- * Utility to extract IP from request headers
+ * Utility to extract IP from request headers.
+ *
+ * Si aucun header IP n'est présent (XFF/Real-IP/CF-Connecting-IP absents —
+ * rare sur Vercel mais possible derrière un proxy mal configuré), on dérive
+ * un fingerprint léger (UA + Accept-Language) plutôt que de retourner un
+ * bucket `'unknown'` partagé par TOUS les clients anonymes — ce qui causait
+ * un DoS accidentel où un seul crawler épuisait le quota pour tout le
+ * trafic sans IP.
  */
 export function getClientIp(headers: Headers): string {
-  return (
+  const ip =
     headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     headers.get('x-real-ip') ||
-    headers.get('cf-connecting-ip') || // Cloudflare
-    'unknown'
-  )
+    headers.get('cf-connecting-ip') // Cloudflare
+  if (ip) return ip
+
+  const ua = headers.get('user-agent') ?? ''
+  const al = headers.get('accept-language') ?? ''
+  return `anon:${hashString(`${ua}|${al}`)}`
+}
+
+// djb2 — non-crypto, edge-runtime safe (pas de dépendance Web Crypto).
+function hashString(s: string): string {
+  let h = 5381
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h) ^ s.charCodeAt(i)
+  return (h >>> 0).toString(36)
 }
 
 export default {

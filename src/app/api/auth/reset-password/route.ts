@@ -22,7 +22,11 @@ export async function POST(request: Request) {
   try {
     // Rate limiting (3 requests per 15 min per IP)
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`reset-password:${ip}`, { window: 900_000, max: 3 })
+    const rl = await checkRateLimit(`reset-password:${ip}`, {
+      window: 900_000,
+      max: 3,
+      failOpen: true,
+    })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de demandes de réinitialisation, veuillez réessayer plus tard' },

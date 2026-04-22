@@ -123,9 +123,16 @@ describe('getClientIp', () => {
     expect(getClientIp(headers)).toBe('10.0.0.9')
   })
 
-  it('returns unknown when no IP header present', () => {
-    const headers = new Headers()
-    expect(getClientIp(headers)).toBe('unknown')
+  it('returns a per-fingerprint anon bucket when no IP header present', () => {
+    // Sans headers IP : on NE doit PAS retourner 'unknown' (bucket partagé).
+    // Deux clients distincts (UA différent) doivent tomber dans des buckets
+    // différents pour éviter qu'un bot épuise le quota de tous les anonymes.
+    const empty = getClientIp(new Headers())
+    expect(empty.startsWith('anon:')).toBe(true)
+
+    const ua1 = getClientIp(new Headers({ 'user-agent': 'Mozilla/5.0 ClientA' }))
+    const ua2 = getClientIp(new Headers({ 'user-agent': 'Mozilla/5.0 ClientB' }))
+    expect(ua1).not.toBe(ua2)
   })
 
   it('prefers x-forwarded-for over x-real-ip', () => {

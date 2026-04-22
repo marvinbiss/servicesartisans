@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { checkRateLimit } from '@/lib/rate-limiter'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { createRemovalRequest } from '@/lib/services/claims-service'
 
@@ -22,11 +22,7 @@ const removalSchema = z.object({
 export async function POST(request: Request) {
   try {
     // Rate limiting: 3 requests per hour per IP
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('x-real-ip') ||
-      request.headers.get('cf-connecting-ip') ||
-      'unknown'
+    const ip = getClientIp(request.headers)
     const rl = await checkRateLimit(`removal:${ip}`, { window: 3_600_000, max: 3 })
     if (!rl.allowed) {
       return NextResponse.json(

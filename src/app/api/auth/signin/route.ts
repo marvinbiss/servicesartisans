@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   try {
     // Rate limiting (10 requests per 5 min per IP)
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`signin:${ip}`, { window: 300_000, max: 10 })
+    const rl = await checkRateLimit(`signin:${ip}`, { window: 300_000, max: 10, failOpen: true })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de tentatives de connexion, veuillez réessayer plus tard' },

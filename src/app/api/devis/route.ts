@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   try {
     // Rate limiting (public endpoint — 10 requests per minute per IP)
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`devis:${ip}`, { window: 60_000, max: 10 })
+    const rl = await checkRateLimit(`devis:${ip}`, { window: 60_000, max: 10, failOpen: true })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },

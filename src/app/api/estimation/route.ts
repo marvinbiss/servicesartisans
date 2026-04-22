@@ -10,6 +10,7 @@ import { getCachedData } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
+import { getClientIp } from '@/lib/rate-limiter'
 import { headers } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
@@ -138,10 +139,7 @@ export async function POST(request: NextRequest) {
   try {
     // 0. Rate limiting (5 requests per minute per IP — strict for this paid API endpoint)
     const headersList = await headers()
-    const ip =
-      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      headersList.get('x-real-ip') ||
-      'unknown'
+    const ip = getClientIp(headersList)
     const rateLimitResult = rateLimit(ip, 5, 60_000)
 
     if (!rateLimitResult.success) {

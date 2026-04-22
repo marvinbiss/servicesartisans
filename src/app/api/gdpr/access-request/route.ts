@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { checkRateLimit } from '@/lib/rate-limiter'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { accessRequestSchema, createAccessRequest } from '@/lib/services/gdpr-service'
 
 export const dynamic = 'force-dynamic'
@@ -14,11 +14,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     // Rate limiting: 3 requests per hour per IP
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('x-real-ip') ||
-      request.headers.get('cf-connecting-ip') ||
-      'unknown'
+    const ip = getClientIp(request.headers)
     const rl = await checkRateLimit(`gdpr-access:${ip}`, { window: 3_600_000, max: 3 })
     if (!rl.allowed) {
       return NextResponse.json(

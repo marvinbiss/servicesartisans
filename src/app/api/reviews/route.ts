@@ -191,7 +191,7 @@ export async function POST(request: Request) {
   try {
     // Rate limiting
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`reviews:${ip}`, { window: 60_000, max: 5 })
+    const rl = await checkRateLimit(`reviews:${ip}`, { window: 60_000, max: 5, failOpen: true })
     if (!rl.allowed) {
       return NextResponse.json(
         createErrorResponse(

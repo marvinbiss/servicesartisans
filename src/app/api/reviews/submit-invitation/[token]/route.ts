@@ -30,6 +30,7 @@ export async function POST(request: Request, { params }: { params: { token: stri
   const rl = await checkRateLimit(`review-invite:${ip}:${token.slice(0, 16)}`, {
     window: 60_000,
     max: 5,
+    failOpen: true,
   })
   if (!rl.allowed) {
     return NextResponse.json(
