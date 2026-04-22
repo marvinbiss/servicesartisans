@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getNationalStats, getTopMetiers, getTopVilles } from '@/lib/barometre/queries'
@@ -131,9 +132,48 @@ export default async function BarometrePage() {
     ],
   }
 
+  // Article schema — transforme le hub en contenu de référence citable. Permet
+  // d'apparaître en Top Stories Google sur les requêtes "baromètre artisans
+  // France 2026" et fournit les métadonnées requises pour les citations
+  // journalistes (CC-BY 4.0 déjà déclaré via datasetSchema.license).
+  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Baromètre des Artisans en France 2026 — ${stats.totalArtisans.toLocaleString('fr-FR')} professionnels analysés`,
+    description: `Étude agrégée ${SITE_NAME} : notes moyennes, vérification SIREN, répartition métier et géographique des artisans du bâtiment en France.`,
+    url: `${SITE_URL}/barometre`,
+    datePublished: lastUpdated,
+    dateModified: lastUpdated,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${SITE_URL}/opengraph-image`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+    mainEntity: { '@id': `${SITE_URL}/barometre#dataset` },
+  }
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema, datasetSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, datasetSchema, articleSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={lastUpdated}
+          dateModified={lastUpdated}
+        />
+      </div>
 
       <div className="min-h-screen bg-sand-50">
         {/* ================================================================ */}

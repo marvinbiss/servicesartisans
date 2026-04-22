@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, Users, Star, Building2, ArrowRight, BarChart3, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -137,9 +138,56 @@ export default async function BarometreRegionPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(faqItems)
 
+  // Dataset + Article : baromètre régional = data propriétaire citable.
+  // CC-BY 4.0 permet aux journalistes de citer avec backlink.
+  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const regionCanonicalUrl = `${SITE_URL}/barometre/regions/${regionSlug}`
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: `Baromètre des Artisans ${getRegionPreposition(region.name)} — 2026`,
+    description: `Statistiques agrégées de ${totalArtisans.toLocaleString('fr-FR')} artisans ${getRegionPreposition(region.name)} : répartition métier, volumétrie, notes moyennes.`,
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    temporalCoverage: '2026',
+    spatialCoverage: { '@type': 'AdministrativeArea', name: region.name },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+  }
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Baromètre des Artisans ${getRegionPreposition(region.name)} — 2026`,
+    description: `Étude agrégée ${SITE_NAME} sur ${totalArtisans.toLocaleString('fr-FR')} artisans ${getRegionPreposition(region.name)} : métiers les plus représentés, densité territoriale.`,
+    url: regionCanonicalUrl,
+    datePublished: lastUpdated,
+    dateModified: lastUpdated,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${SITE_URL}/opengraph-image`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+  }
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, datasetSchema, articleSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={lastUpdated}
+          dateModified={lastUpdated}
+        />
+      </div>
 
       <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}

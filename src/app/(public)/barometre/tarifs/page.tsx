@@ -3,8 +3,9 @@ import Link from 'next/link'
 import { BarChart3, Star, Users, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getTopMetiers } from '@/lib/barometre/queries'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 
@@ -44,9 +45,56 @@ export default async function BarometreTarifsPage() {
     { name: 'Métiers', url: '/barometre/tarifs' },
   ])
 
+  // Dataset + Article schemas : baromètre tarifs = data propriétaire
+  // citable (CC-BY 4.0). Rend la page éligible à Top Stories et aux
+  // backlinks journalistes sur les requêtes "statistiques artisans métier".
+  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Statistiques par métier — Artisans France 2026',
+    description: `Statistiques agrégées par métier du bâtiment en France : volumes, notes moyennes, taux de vérification SIREN sur ${metiers.length} corps de métier.`,
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    temporalCoverage: '2026',
+    spatialCoverage: { '@type': 'Place', name: 'France' },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+  }
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Baromètre des Artisans par métier — France 2026',
+    description: `Analyse comparée ${SITE_NAME} des corps de métier du bâtiment en France : volumétrie, notes moyennes, répartition géographique.`,
+    url: canonicalUrl,
+    datePublished: lastUpdated,
+    dateModified: lastUpdated,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${SITE_URL}/opengraph-image`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+  }
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, datasetSchema, articleSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={lastUpdated}
+          dateModified={lastUpdated}
+        />
+      </div>
 
       <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Star, Users, Shield, MapPin, ArrowRight, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { BAROMETRE_METIERS, getBarometreMetierBySlug, TOP_VILLES } from '@/lib/barometre/constants'
@@ -132,9 +133,62 @@ export default async function BarometreMetierPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(faqItems)
 
+  // Dataset + Article schemas — data propriétaire par métier citable par
+  // journalistes. CC-BY 4.0 + publisher + image = éligible Top Stories.
+  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const canonicalUrlPage = `${SITE_URL}/barometre/tarifs/${metierSlug}`
+  const totalArtisans = stats?.nb_artisans ?? 0
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: `Statistiques ${metier.label} — France 2026`,
+    description: `Baromètre ${metier.label.toLowerCase()} 2026 : ${totalArtisans.toLocaleString('fr-FR')} artisans référencés, note moyenne, avis vérifiés, répartition géographique.`,
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    temporalCoverage: '2026',
+    spatialCoverage: { '@type': 'Place', name: 'France' },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    variableMeasured: [
+      { '@type': 'PropertyValue', name: "Nombre d'artisans", unitText: 'count' },
+      { '@type': 'PropertyValue', name: 'Note moyenne', unitText: 'rating (1-5)' },
+      { '@type': 'PropertyValue', name: "Nombre d'avis", unitText: 'count' },
+    ],
+  }
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Baromètre ${metier.label} — France 2026`,
+    description: `Analyse ${SITE_NAME} du métier de ${metier.label.toLowerCase()} en France : ${totalArtisans.toLocaleString('fr-FR')} professionnels, notes moyennes, top villes.`,
+    url: canonicalUrlPage,
+    datePublished: lastUpdated,
+    dateModified: lastUpdated,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${SITE_URL}/opengraph-image`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+  }
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, datasetSchema, articleSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={lastUpdated}
+          dateModified={lastUpdated}
+        />
+      </div>
 
       <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}
