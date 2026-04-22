@@ -19,6 +19,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import FunnelBlock from '@/components/artisan-dashboard/FunnelBlock'
 import NextActionsBlock from '@/components/artisan-dashboard/NextActionsBlock'
+import PerformanceTrendBlock from '@/components/artisan-dashboard/PerformanceTrendBlock'
 import ProfileCompleteness from '@/components/artisan-dashboard/ProfileCompleteness'
 import ReputationBlock from '@/components/artisan-dashboard/ReputationBlock'
 import RgeStatusBlock from '@/components/artisan-dashboard/RgeStatusBlock'
@@ -438,6 +439,9 @@ export default function DashboardArtisanPage() {
                 </div>
               )}
             </section>
+
+            {/* 30-day sparklines — tendance vs "current + %change" des stats cards */}
+            <PerformanceTrendBlock />
 
             {/* RGE status — critical cliff signal, first above Reputation */}
             <RgeStatusBlock />
