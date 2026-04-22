@@ -239,12 +239,13 @@ export default function CommentDevenirRgePage() {
     ],
   }
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]
+  if (howToSchema) jsonLdItems.push(howToSchema as Record<string, unknown>)
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      {howToSchema && <JsonLd data={howToSchema} />}
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Comment devenir RGE' }]}

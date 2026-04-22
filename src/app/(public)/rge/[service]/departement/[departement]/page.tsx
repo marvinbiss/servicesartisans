@@ -158,9 +158,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={itemListSchema} />
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={[breadcrumbSchema, itemListSchema, collectionSchema]} />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Breadcrumb

@@ -209,11 +209,12 @@ export default async function RgeHubPage() {
 
   const faqSchema = getFAQSchema(FAQ)
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={breadcrumbItems} />
 

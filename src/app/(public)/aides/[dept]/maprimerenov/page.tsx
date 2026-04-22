@@ -254,14 +254,14 @@ export default async function MprDeptPage({ params }: PageProps) {
 
   const topVilles = (dept.villes || []).slice(0, 3)
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, mprSchema, mprProductSchema]
+  if (placeSchema) jsonLdItems.push(placeSchema as Record<string, unknown>)
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  if (howToSchema) jsonLdItems.push(howToSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={mprSchema} />
-      <JsonLd data={mprProductSchema} />
-      {placeSchema && <JsonLd data={placeSchema} />}
-      {faqSchema && <JsonLd data={faqSchema} />}
-      {howToSchema && <JsonLd data={howToSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[

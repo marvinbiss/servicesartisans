@@ -194,11 +194,12 @@ export default function LeadsExclusifsVsPartagesPage() {
       'Comparatif objectif entre leads exclusifs et leads partagés. Coût réel, taux de conversion, ROI pour les artisans.',
   }
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Leads exclusifs vs partagés' }]} />
 

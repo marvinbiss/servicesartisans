@@ -229,11 +229,12 @@ export default function FraudeRgeVerifierPage() {
   const articleSchema = getArticleSchema()
   const faqSchema = getFAQSchema(FAQ)
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[

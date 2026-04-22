@@ -146,12 +146,13 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
         }
       : null
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
+  if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      {itemListSchema && <JsonLd data={itemListSchema} />}
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={breadcrumbItems} />
 

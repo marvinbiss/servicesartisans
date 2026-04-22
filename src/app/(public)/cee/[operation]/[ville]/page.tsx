@@ -295,14 +295,18 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
   )
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema]
+  if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
+  jsonLdItems.push(
+    collectionSchema as Record<string, unknown>,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>
+  )
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      {itemListSchema && <JsonLd data={itemListSchema} />}
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Breadcrumb

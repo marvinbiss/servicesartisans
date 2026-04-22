@@ -302,9 +302,13 @@ export default function MaprimeRenovCumulCeePage() {
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd
+        data={
+          faqSchema
+            ? [breadcrumbSchema, articleSchema, faqSchema]
+            : [breadcrumbSchema, articleSchema]
+        }
+      />
 
       <Breadcrumb
         items={[

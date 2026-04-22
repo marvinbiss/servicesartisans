@@ -281,13 +281,17 @@ export default function CoupDePouce2026Page() {
       "Aucun frais à la charge du bénéficiaire pour bénéficier de la bonification. L'engagement auprès du signataire doit impérativement précéder la signature du devis sous peine de rejet du dossier au PNCEE. Cumul possible avec MaPrimeRénov' dans la limite du reste à charge minimum imposé par les décrets applicables.",
   })
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    articleSchema,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[

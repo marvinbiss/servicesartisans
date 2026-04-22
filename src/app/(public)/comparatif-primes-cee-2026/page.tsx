@@ -274,13 +274,17 @@ export default function ComparatifPrimesCee2026Page() {
       "Prime versée par l'obligé ou le délégataire, financée par les vendeurs d'énergie dans le cadre de leur obligation triennale. Pas de frais facturés au bénéficiaire pour l'instruction du dossier CEE standard. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ dans la limite de 100 % du coût TTC des travaux.",
   })
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    articleSchema,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Comparatif 2026' }]} />
 

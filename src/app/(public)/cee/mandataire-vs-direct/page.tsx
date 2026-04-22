@@ -251,13 +251,17 @@ export default function MandataireVsDirectPage() {
       "La prime est in fine financée par l'obligé, que le dossier passe par un délégataire ou par un mandataire. Le mandataire peut se rémunérer soit par commission sur les CEE validés, soit par un service facturé au bénéficiaire (montage, accompagnement, contrôle qualité). Toute rémunération doit être divulguée clairement au bénéficiaire dans le contrat de mandat conformément à l'arrêté du 4 septembre 2014 modifié.",
   })
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    articleSchema,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[

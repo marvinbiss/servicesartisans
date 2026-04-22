@@ -125,11 +125,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     },
   ])
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumb, itemList]
+  if (faq) jsonLdItems.push(faq as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumb} />
-      <JsonLd data={itemList} />
-      {faq && <JsonLd data={faq} />}
+      <JsonLd data={jsonLdItems} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <Breadcrumb

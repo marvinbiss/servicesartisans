@@ -320,12 +320,12 @@ export default function DevenirPartenaireCeePage() {
     ],
   }
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema, serviceSchema]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={serviceSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <PartnerLandingTracker source="devenir-partenaire-cee" trackDashboardPreview />
 

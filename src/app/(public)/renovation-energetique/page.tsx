@@ -289,14 +289,18 @@ export default function RenovationEnergetiqueHub() {
     }
   )
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    collectionSchema,
+    mprSchema as Record<string, unknown>,
+    mprProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  if (howToSchema) jsonLdItems.push(howToSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={mprSchema} />
-      <JsonLd data={mprProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
-      {howToSchema && <JsonLd data={howToSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Rénovation énergétique' }]} />
 

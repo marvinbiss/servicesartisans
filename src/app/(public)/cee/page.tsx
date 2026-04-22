@@ -165,13 +165,17 @@ export default async function CeeHubPage() {
       "Prime versée directement par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
   })
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    collectionSchema,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Primes CEE' }]} />
 

@@ -149,11 +149,15 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      <JsonLd data={faqSchema} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          articleSchema,
+          governmentServiceSchema,
+          financialProductSchema,
+          faqSchema,
+        ]}
+      />
 
       <Breadcrumb
         items={[

@@ -260,13 +260,17 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   ]
   const faqSchema = getFAQSchema(faqItems)
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    articleSchema,
+    governmentServiceSchema as Record<string, unknown>,
+    financialProductSchema as Record<string, unknown>,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: operation.nom }]} />
 

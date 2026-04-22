@@ -178,9 +178,7 @@ export default async function BarometreRgePage() {
 
   return (
     <>
-      <JsonLd data={getBreadcrumbSchema(breadcrumbs)} />
-      <JsonLd data={datasetSchema} />
-      <JsonLd data={articleSchema} />
+      <JsonLd data={[getBreadcrumbSchema(breadcrumbs), datasetSchema, articleSchema]} />
 
       <div className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-5xl px-6 py-10">

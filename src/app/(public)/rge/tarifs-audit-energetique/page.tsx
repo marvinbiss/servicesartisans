@@ -165,11 +165,12 @@ export default function TarifsAuditEnergetiquePage() {
     ],
   }
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]
+  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb
         items={[

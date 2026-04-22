@@ -139,13 +139,14 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
         })
       : null
 
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
+  if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
+  jsonLdItems.push(faqSchema as Record<string, unknown>)
+
   return (
     <>
       {shouldNoindex && <meta name="robots" content="noindex, follow" />}
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      {itemListSchema && <JsonLd data={itemListSchema} />}
-      <JsonLd data={faqSchema} />
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={breadcrumbItems} />
 

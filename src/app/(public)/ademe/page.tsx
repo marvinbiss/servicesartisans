@@ -115,12 +115,16 @@ export default async function AdemePage() {
   const organizationSchema = getOrganizationSchema()
   const faqSchema = getFAQSchema(FAQ)
 
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    collectionSchema,
+    organizationSchema,
+  ]
+  if (faqSchema) jsonLdItems.push(faqSchema)
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={organizationSchema} />
-      {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={breadcrumbItems} />
 
