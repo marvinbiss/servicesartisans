@@ -171,22 +171,31 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
   return memoryLimiter
 }
 
-// Rate limit configurations per route type
+// Rate limit configurations per route type.
+//
+// POLITIQUE failOpen (2026-04-22) :
+//   - `failOpen: true` pour les endpoints user-facing critiques : si Redis
+//     Upstash a un glitch (latence, panne transient, rate limit Upstash propre),
+//     on bascule sur le memoryLimiter au lieu de bloquer tout le business.
+//     Sans ce flag, UpstashRateLimiter.checkRateLimit fail-CLOSE → toutes les
+//     requêtes renvoient "Trop de requêtes" (incident 2026-04-22).
+//   - `failOpen` absent (fail-close) réservé aux endpoints sensibles :
+//     brute-force auth, paiements, formulaires anti-spam.
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { window: 60 * 1000, max: 10 }, // 10 requests per minute for sensitive auth (password reset, 2FA, signup)
-  signin: { window: 60 * 1000, max: 30 }, // 30 req/min pour /api/auth/signin (retries normaux bad-password, reloads onglets, hot-reload dev)
-  api: { window: 60 * 1000, max: 60 }, // 60 requests per minute for general API
-  booking: { window: 60 * 1000, max: 30 }, // 30 requests per minute for bookings
-  payment: { window: 60 * 1000, max: 10 }, // 10 requests per minute for payments
-  reviews: { window: 60 * 1000, max: 5 }, // 5 requests per minute for reviews
-  devis: { window: 60 * 1000, max: 10 }, // 10 requests per minute for quotes
-  contact: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for contact
-  upload: { window: 60 * 1000, max: 20 }, // 20 uploads per minute
-  search: { window: 60 * 1000, max: 100 }, // 100 searches per minute
-  gdpr: { window: 300 * 1000, max: 5 }, // 5 requests per 5 minutes for GDPR export/delete
-  newsletter: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for newsletter (sends email)
-  inscription: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for artisan registration (sends emails)
-  ai: { window: 60 * 1000, max: 10 }, // 10 requests per minute for AI generation (expensive)
+  auth: { window: 60 * 1000, max: 10 }, // 10/min auth sensible (password reset, 2FA, signup) — fail-close strict
+  signin: { window: 60 * 1000, max: 30, failOpen: true }, // 30/min signin — ne doit JAMAIS bloquer l'admin en cas de glitch Redis
+  api: { window: 60 * 1000, max: 60, failOpen: true }, // 60/min API générale — fail-open pour ne pas casser la navigation
+  booking: { window: 60 * 1000, max: 30, failOpen: true }, // 30/min bookings — business-critical
+  payment: { window: 60 * 1000, max: 10 }, // 10/min payments — fail-close strict (anti-fraude)
+  reviews: { window: 60 * 1000, max: 5, failOpen: true }, // 5/min reviews — UX (spam géré côté modération)
+  devis: { window: 60 * 1000, max: 10, failOpen: true }, // 10/min devis — BUSINESS-CRITICAL, ne doit JAMAIS bloquer
+  contact: { window: 300 * 1000, max: 3 }, // 3/5min contact — anti-spam strict (fail-close OK, volume faible)
+  upload: { window: 60 * 1000, max: 20, failOpen: true }, // 20/min uploads — UX
+  search: { window: 60 * 1000, max: 100, failOpen: true }, // 100/min search — UX navigation
+  gdpr: { window: 300 * 1000, max: 5 }, // 5/5min GDPR — fail-close (données sensibles)
+  newsletter: { window: 300 * 1000, max: 3 }, // 3/5min newsletter — anti-spam strict (envoi email)
+  inscription: { window: 300 * 1000, max: 3 }, // 3/5min inscription — anti-spam strict (envoi email)
+  ai: { window: 60 * 1000, max: 10 }, // 10/min AI — fail-close (coûts API tiers)
   ceeEstimate: { window: 60 * 1000, max: 20, failOpen: true }, // 20 requests per minute for CEE prime estimate — fail open so tunnel devis always works
   estimation: { window: 60 * 1000, max: 15, failOpen: true }, // 15 messages per minute for estimation chat — fail open so widget always works
   estimationLead: { window: 300 * 1000, max: 3, failOpen: true }, // 3 leads per 5 minutes for estimation lead capture — fail open
