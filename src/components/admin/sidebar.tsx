@@ -28,6 +28,7 @@ import {
   FileEdit,
   BadgeCheck,
   BarChart3,
+  Activity,
   ClipboardList,
   ShieldAlert,
   Menu,
@@ -37,6 +38,7 @@ import {
 const nav = [
   { name: 'Tableau de bord', href: '/admin', icon: LayoutDashboard },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+  { name: 'Métriques CEO', href: '/admin/metrics', icon: Activity },
   { name: 'Système', href: '/admin/systeme', icon: Gauge },
   { name: 'Demandes', href: '/admin/leads', icon: FileText },
   { name: 'Leads Estimation', href: '/admin/estimation-leads', icon: MessageSquare },
