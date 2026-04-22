@@ -173,7 +173,8 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
 
 // Rate limit configurations per route type
 export const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  auth: { window: 60 * 1000, max: 10 }, // 10 requests per minute for auth
+  auth: { window: 60 * 1000, max: 10 }, // 10 requests per minute for sensitive auth (password reset, 2FA, signup)
+  signin: { window: 60 * 1000, max: 30 }, // 30 req/min pour /api/auth/signin (retries normaux bad-password, reloads onglets, hot-reload dev)
   api: { window: 60 * 1000, max: 60 }, // 60 requests per minute for general API
   booking: { window: 60 * 1000, max: 30 }, // 30 requests per minute for bookings
   payment: { window: 60 * 1000, max: 10 }, // 10 requests per minute for payments
@@ -205,7 +206,12 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
  * e.g. /api/admin/prospection/ai must match before /api/admin
  */
 export function getRateLimitConfig(pathname: string): RateLimitConfig {
-  // Auth — signin, signup, password reset, 2FA, OAuth
+  // Auth signin — plus permissif que le bucket "auth" générique (password
+  // reset, 2FA, signup). Un admin qui se trompe de mot de passe 2-3 fois
+  // + reload ne doit pas être bloqué 1 minute.
+  if (pathname.startsWith('/api/auth/signin')) return RATE_LIMITS.signin
+
+  // Auth — password reset, 2FA, OAuth, signup (plus sensibles)
   if (pathname.startsWith('/api/auth')) return RATE_LIMITS.auth
 
   // Payments — Stripe checkout, portal, webhook
