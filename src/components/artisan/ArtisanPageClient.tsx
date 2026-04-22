@@ -153,6 +153,7 @@ interface ArtisanPageClientProps {
   similarArtisans?: SimilarArtisan[]
   isClaimed?: boolean
   hasSiret?: boolean
+  hasVerifiedDescription?: boolean
 }
 
 export default function ArtisanPageClient({
@@ -162,6 +163,7 @@ export default function ArtisanPageClient({
   similarArtisans,
   isClaimed = false,
   hasSiret = false,
+  hasVerifiedDescription = false,
 }: ArtisanPageClientProps) {
   const artisan = initialArtisan
   const reviews = initialReviews
@@ -359,8 +361,11 @@ export default function ArtisanPageClient({
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews reviews={reviews} />
               </section>
-              {/* 6. About — details for those doing due diligence (hidden for unclaimed: auto-generated descriptions) */}
-              {isClaimed && (
+              {/* 6. About — affiché si : claim, OU description vérifiée (DB-stored LLM
+                  ≈50K RGE rubric v1.3, ou rendu ADEME-grounded via generateRgeMinimalDescription).
+                  Cachée pour les fiches sans source vérifiée (fallback generateDescription
+                  boilerplate = HCU-flaggable). */}
+              {(isClaimed || hasVerifiedDescription) && (
                 <section aria-label="À propos">
                   <ArtisanAbout artisan={artisan} />
                 </section>

@@ -839,6 +839,20 @@ async function renderProviderPage({ params }: PageProps) {
 
   const isClaimed = !!provider.user_id
 
+  // La section "À propos" était historiquement masquée pour les fiches non-claim
+  // pour éviter d'exposer des descriptions auto-générées boilerplate (cf.
+  // generateDescription — HCU-flaggable). Depuis 2026-04-19 (pipeline rubric v1.3)
+  // ~50K fiches RGE ont une description LLM ADEME-grounded stockée en DB.
+  // On déverrouille la section uniquement si la source est "vérifiée" :
+  //   - description stockée en DB (pipeline LLM ou admin-written) >50 chars, OU
+  //   - provider RGE (→ rendu = generateRgeMinimalDescription, ADEME-grounded).
+  // Les fiches sans aucun des deux (~920K non-RGE non-claim non-enrichies) gardent
+  // la section cachée pour ne pas exposer le fallback generateDescription.
+  const hasRgeQualifs =
+    Array.isArray(provider.rge_qualifications) && provider.rge_qualifications.length > 0
+  const hasStoredDescription = !!(provider.description && provider.description.length > 50)
+  const hasVerifiedDescription = hasStoredDescription || hasRgeQualifs
+
   return (
     <>
       {/* Preload hints */}
@@ -854,6 +868,7 @@ async function renderProviderPage({ params }: PageProps) {
         similarArtisans={similarArtisans}
         isClaimed={isClaimed}
         hasSiret={!!provider.siret}
+        hasVerifiedDescription={hasVerifiedDescription}
       />
 
       {/* ─── DEVIS CTA BANNER — only for claimed profiles ───── */}
