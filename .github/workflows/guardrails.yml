@@ -58,6 +58,9 @@ jobs:
       - name: Dynamic meta (worst-case description length on pSEO pages)
         run: node scripts/audit-dynamic-meta.mjs --strict
 
+      - name: Redirects (no chains, no page.tsx conflicts, no self-redirects)
+        run: node scripts/audit-redirects.mjs --strict
+
       - name: OpenGraph coverage (title/description/url on every indexable page)
         run: node scripts/audit-opengraph.mjs --strict
 

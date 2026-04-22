@@ -492,6 +492,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.4,
       },
       {
+        url: `${SITE_URL}/recherche`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
+      {
         url: `${SITE_URL}/widget-prix`,
         lastModified: STATIC_DATE,
         changeFrequency: 'yearly',

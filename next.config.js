@@ -481,7 +481,6 @@ const nextConfig = {
       { source: '/france', destination: '/services', permanent: true },
       { source: '/carte', destination: '/services', permanent: true },
       { source: '/carte-liste', destination: '/services', permanent: true },
-      { source: '/recherche', destination: '/services', permanent: true },
       { source: '/pro/:path*', destination: '/espace-artisan', permanent: true },
       { source: '/services/artisan/:path*', destination: '/services', permanent: true },
       { source: '/metiers', destination: '/services', permanent: true },
