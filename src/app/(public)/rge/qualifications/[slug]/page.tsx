@@ -120,6 +120,9 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    '@id': `${SITE_URL}/rge/qualifications/${slug}#faq`,
+    url: `${SITE_URL}/rge/qualifications/${slug}`,
+    name: `FAQ — ${guide.name}`,
     mainEntity: guide.faq.map((item) => ({
       '@type': 'Question',
       name: item.question,
@@ -129,9 +132,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={articleSchema} />
-      <JsonLd data={faqSchema} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema]} />
 
       <Breadcrumb
         items={[

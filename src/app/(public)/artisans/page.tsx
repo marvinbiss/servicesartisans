@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
@@ -104,9 +104,37 @@ export default async function ArtisansPage() {
     { name: 'Artisans', url: '/artisans' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment sont sélectionnés les artisans référencés ?',
+      answer:
+        "Les artisans sont collectés à partir des données publiques SIRENE (INSEE) avec un code NAF bâtiment (41-43). Chaque fiche est vérifiée SIRET, enrichie des qualifications RGE officielles (via france-renov.gouv.fr, sync hebdo) et des avis clients vérifiés. Les fiches en cessation d'activité sont automatiquement masquées.",
+    },
+    {
+      question: 'Comment savoir si un artisan est qualifié RGE ?',
+      answer:
+        "Chaque fiche artisan affiche les qualifications RGE en cours de validité (QualiPAC, QualiBois, Qualibat, Qualifelec, QualiSol, QualiPV), leur numéro, leur domaine et leur date d'expiration. Ces données proviennent de la base officielle ADEME et sont synchronisées chaque semaine.",
+    },
+    {
+      question: 'Les avis sont-ils vraiment authentiques ?',
+      answer:
+        "Oui. Seuls les clients ayant fait une demande de devis via notre plateforme peuvent laisser un avis, après la fin du chantier. Nous utilisons un token HMAC signé lié à l'identifiant du devis pour empêcher la fabrication d'avis fictifs. Les avis suspects sont modérés et retirés.",
+    },
+    {
+      question: 'Comment contacter un artisan ?',
+      answer:
+        "Depuis chaque fiche, vous pouvez demander un devis gratuit en précisant votre besoin, votre ville et vos coordonnées. L'artisan vous recontacte sous 24 à 48 h ouvrées. Pour les urgences, utilisez la ligne d'assistance téléphonique dédiée. Nous ne partageons jamais votre demande avec plusieurs artisans en parallèle.",
+    },
+    {
+      question: 'Un artisan peut-il modifier ou revendiquer sa fiche ?',
+      answer:
+        "Oui. Un artisan avec un SIRET actif peut revendiquer sa fiche gratuitement : création de compte, vérification SIRET via provider_claims, modification des informations (description, photos, horaires, zones d'intervention). La revendication est validée par notre équipe admin sous 48 h.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
