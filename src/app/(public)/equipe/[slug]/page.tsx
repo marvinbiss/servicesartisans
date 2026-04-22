@@ -6,7 +6,7 @@ import { authors, type Author } from '@/lib/data/authors'
 import { allArticles } from '@/lib/data/blog/articles'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getPersonSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getPersonSchema, getBreadcrumbSchema, getProfilePageSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 
 export const revalidate = 3600
@@ -68,11 +68,32 @@ export default async function AuthorPage({ params }: PageProps) {
     { name: author.name, url: `/equipe/${slug}` },
   ])
 
+  const canonicalUrl = `${SITE_URL}/equipe/${slug}`
+  // dateCreated = date of author's first article (stable anchor for the profile),
+  // dateModified = date of most recent article (invalidates stale ProfilePage cache).
+  // Fallback to current month ISO when the author has no articles yet — avoids
+  // emitting a missing signal Google flags as invalid ProfilePage schema.
+  const fallbackIso = new Date().toISOString().slice(0, 10)
+  const articleDates = articles.map((a) => a.date).filter(Boolean)
+  const dateCreated = articleDates[articleDates.length - 1] || fallbackIso
+  const dateModified = articleDates[0] || fallbackIso
+  const profilePageSchema = getProfilePageSchema({
+    person: personSchema,
+    canonicalUrl,
+    dateCreated,
+    dateModified,
+    articles: articles.slice(0, 30).map((a) => ({
+      url: `${SITE_URL}/blog/${a.slug}`,
+      title: a.title,
+      datePublished: a.date,
+    })),
+  })
+
   const breadcrumbItems = [{ label: 'Notre équipe', href: '/equipe' }, { label: author.name }]
 
   return (
     <>
-      <JsonLd data={[personSchema, breadcrumbSchema]} />
+      <JsonLd data={[profilePageSchema, breadcrumbSchema]} />
 
       <div className="bg-sand-50 min-h-screen">
         <div className="max-w-3xl mx-auto px-4 py-8">

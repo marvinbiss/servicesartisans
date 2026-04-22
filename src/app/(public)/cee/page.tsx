@@ -130,12 +130,21 @@ export default async function CeeHubPage() {
     { name: 'Primes CEE', url: PAGE_PATH },
   ])
 
+  const ceeParts = Object.values(grouped)
+    .flat()
+    .slice(0, 40)
+    .map((op) => ({
+      url: `/cee/${op.code.toLowerCase()}`,
+      name: op.nom || op.code,
+    }))
+
   const collectionSchema = getCollectionPageSchema({
     name: 'Primes CEE 2026 : catalogue des opérations standardisées',
     description:
       'Catalogue complet des opérations standardisées CEE résidentielles couvertes par ServicesArtisans, plateforme de rénovation énergétique avec gestion des primes. Période P6 à compter du 1er janvier 2026.',
     url: PAGE_PATH,
     itemCount: totalOps,
+    parts: ceeParts,
   })
 
   const faqSchema = getFAQSchema(FAQ, {

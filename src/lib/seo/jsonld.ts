@@ -21,21 +21,75 @@ export function getOrganizationSchema() {
     },
     description:
       "Annuaire d'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.",
+    slogan: companyIdentity.tagline,
+    // Verifiable topic entities — each knowsAbout item is a Thing node linked
+    // to the canonical Wikipedia page via sameAs. Google's entity graph uses
+    // these links to disambiguate topics and attach authority scoring.
     knowsAbout: [
-      'Artisanat du bâtiment',
-      'Plomberie',
-      'Électricité',
-      'Chauffage',
-      'Menuiserie',
-      'Maçonnerie',
-      'Couverture',
-      'Carrelage',
-      'Peinture',
-      'Serrurerie',
-      'Climatisation',
-      'Rénovation énergétique',
-      'Dépannage à domicile',
+      {
+        '@type': 'Thing',
+        name: 'Artisanat du bâtiment',
+        sameAs: 'https://fr.wikipedia.org/wiki/Artisanat_en_France',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Rénovation énergétique',
+        sameAs: 'https://fr.wikipedia.org/wiki/R%C3%A9novation_%C3%A9nerg%C3%A9tique',
+      },
+      {
+        '@type': 'Thing',
+        name: 'MaPrimeRénov',
+        sameAs: 'https://fr.wikipedia.org/wiki/MaPrimeR%C3%A9nov%27',
+      },
+      {
+        '@type': 'Thing',
+        name: "Certificats d'Économies d'Énergie",
+        sameAs: 'https://fr.wikipedia.org/wiki/Certificat_d%27%C3%A9conomies_d%27%C3%A9nergie',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Reconnu Garant de l’Environnement',
+        sameAs: 'https://fr.wikipedia.org/wiki/Reconnu_garant_de_l%27environnement',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Plomberie',
+        sameAs: 'https://fr.wikipedia.org/wiki/Plomberie',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Installation électrique',
+        sameAs: 'https://fr.wikipedia.org/wiki/Installation_%C3%A9lectrique',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Chauffage',
+        sameAs: 'https://fr.wikipedia.org/wiki/Chauffage',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Menuiserie',
+        sameAs: 'https://fr.wikipedia.org/wiki/Menuiserie',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Maçonnerie',
+        sameAs: 'https://fr.wikipedia.org/wiki/Ma%C3%A7onnerie',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Isolation thermique',
+        sameAs: 'https://fr.wikipedia.org/wiki/Isolation_thermique_du_b%C3%A2timent',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Pompe à chaleur',
+        sameAs: 'https://fr.wikipedia.org/wiki/Pompe_%C3%A0_chaleur',
+      },
     ],
+    publishingPrinciples: `${SITE_URL}/methodologie`,
+    ethicsPolicy: `${SITE_URL}/methodologie`,
+    correctionsPolicy: `${SITE_URL}/methodologie`,
     ...(socialLinks.length > 0 && {
       sameAs: [
         ...socialLinks,
@@ -148,6 +202,56 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
 
 // FAQPage schema — Google restricted rich results display (Aug 2023) to gov/health sites,
 // but the schema remains valid and is used by Bing, DuckDuckGo, Yahoo, and Google AI Overviews.
+// Schema.org QAPage — single-question pattern for user-submitted Q&A surfaces.
+// Distinct from FAQPage (multiple questions on a topic). Use for pages built
+// around ONE primary question with ONE canonical acceptedAnswer and optional
+// longer suggestedAnswers. Google Q&A rich result requires @type QAPage + the
+// nested Question with `answerCount` + acceptedAnswer OR suggestedAnswer[].
+// Ref: https://developers.google.com/search/docs/appearance/structured-data/qapage
+export function getQAPageSchema(params: {
+  pageUrl: string
+  question: string
+  acceptedAnswerText: string
+  suggestedAnswerTexts?: string[]
+  upvoteCount?: number
+  dateCreated?: string
+  name?: string
+}): Record<string, unknown> {
+  const suggested = params.suggestedAnswerTexts || []
+  const mainEntity: Record<string, unknown> = {
+    '@type': 'Question',
+    name: params.question,
+    text: params.question,
+    answerCount: 1 + suggested.length,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: params.acceptedAnswerText,
+      url: `${params.pageUrl}#accepted-answer`,
+      ...(params.upvoteCount !== undefined && { upvoteCount: params.upvoteCount }),
+    },
+  }
+  if (suggested.length > 0) {
+    mainEntity.suggestedAnswer = suggested.map((answerText, i) => ({
+      '@type': 'Answer',
+      text: answerText,
+      url: `${params.pageUrl}#suggested-${i + 1}`,
+    }))
+  }
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'QAPage',
+    '@id': `${params.pageUrl}#qapage`,
+    url: params.pageUrl,
+    ...(params.name && { name: params.name }),
+    ...(params.dateCreated && { dateCreated: params.dateCreated }),
+    mainEntity,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]', '.question-short-answer'],
+    },
+  }
+}
+
 export function getFAQSchema(
   faqs: { question: string; answer: string }[],
   options?: {
@@ -319,20 +423,39 @@ export function getCollectionPageSchema(params: {
   description: string
   url: string
   itemCount: number
-}) {
-  return {
+  /** Direct sub-pages of this hub. Emits `hasPart[]` so Google can walk the
+   * hub→leaf graph natively. Each entry becomes a WebPage node with @id. */
+  parts?: { url: string; name: string }[]
+}): Record<string, unknown> {
+  const fullUrl = `${SITE_URL}${params.url}`
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    '@id': `${fullUrl}#collection`,
     name: params.name,
     description: params.description,
-    url: `${SITE_URL}${params.url}`,
+    url: fullUrl,
     numberOfItems: params.itemCount,
     isPartOf: {
       '@type': 'WebSite',
+      '@id': `${SITE_URL}#website`,
       name: SITE_NAME,
       url: SITE_URL,
     },
   }
+  if (params.parts && params.parts.length > 0) {
+    schema.hasPart = params.parts.map((p) => {
+      const partUrl = p.url.startsWith('http') ? p.url : `${SITE_URL}${p.url}`
+      return {
+        '@type': 'WebPage',
+        '@id': `${partUrl}#webpage`,
+        url: partUrl,
+        name: p.name,
+        isPartOf: { '@id': `${fullUrl}#collection` },
+      }
+    })
+  }
+  return schema
 }
 
 // Schema.org Service with pricing (for tarifs pages — NOT Product)
@@ -1207,4 +1330,36 @@ export function getPersonSchema(author: {
       name: SITE_NAME,
     },
   }
+}
+
+// Schema.org ProfilePage — Google's 2024+ canonical pattern for author pages.
+// Wraps the Person node as `mainEntity`, exposes dateCreated + dateModified
+// (required signals for ProfilePage rich result), and lists authored articles
+// via `hasPart` so Google can link the profile to the body of editorial work
+// (powerful E-E-A-T signal : verifiable topic authority through output).
+export function getProfilePageSchema(params: {
+  person: Record<string, unknown>
+  canonicalUrl: string
+  dateCreated: string
+  dateModified: string
+  articles?: { url: string; title: string; datePublished: string }[]
+}): Record<string, unknown> {
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    '@id': `${params.canonicalUrl}#profilepage`,
+    url: params.canonicalUrl,
+    dateCreated: params.dateCreated,
+    dateModified: params.dateModified,
+    mainEntity: params.person,
+  }
+  if (params.articles && params.articles.length > 0) {
+    schema.hasPart = params.articles.map((a) => ({
+      '@type': 'Article',
+      url: a.url,
+      headline: a.title,
+      datePublished: a.datePublished,
+    }))
+  }
+  return schema
 }

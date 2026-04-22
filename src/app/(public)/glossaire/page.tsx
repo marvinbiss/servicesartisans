@@ -131,18 +131,32 @@ export default function GlossairePage() {
     ],
   }
 
+  const definedTermSetId = `${PAGE_URL}#termset`
   const definedTermSetSchema = {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
+    '@id': definedTermSetId,
     name: 'Glossaire du bâtiment',
     description:
       'Glossaire complet des termes techniques du bâtiment et de la rénovation pour les particuliers.',
     url: PAGE_URL,
+    inLanguage: 'fr-FR',
+    numberOfItems: glossaireTerms.length,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}#website`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     hasDefinedTerm: glossaireTerms.map((t) => ({
       '@type': 'DefinedTerm',
+      '@id': `${PAGE_URL}#terme-${t.slug}`,
       name: t.term,
+      termCode: t.slug,
       description: t.definition,
-      inDefinedTermSet: PAGE_URL,
+      url: `${PAGE_URL}#terme-${t.slug}`,
+      inDefinedTermSet: { '@id': definedTermSetId },
+      ...(t.category && { additionalType: t.category }),
     })),
   }
 

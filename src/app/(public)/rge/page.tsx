@@ -199,12 +199,18 @@ export default async function RgeHubPage() {
     { name: 'Artisans RGE', url: PAGE_PATH },
   ])
 
+  const rgeParts = RGE_ALLOWED_SERVICES.map((service) => ({
+    url: `/rge/${service}`,
+    name: `Artisans RGE ${service.replace(/-/g, ' ')}`,
+  }))
+
   const collectionSchema = getCollectionPageSchema({
     name: 'Artisans RGE certifiés en France',
     description:
       'Annuaire national des artisans titulaires d’une qualification RGE active, sourcé depuis le référentiel ADEME. Éligibles MaPrimeRénov’, CEE et TVA réduite à 5,5 %.',
     url: PAGE_PATH,
     itemCount: totalActive,
+    parts: rgeParts,
   })
 
   const faqSchema = getFAQSchema(FAQ, {

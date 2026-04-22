@@ -94,6 +94,8 @@ const ALLOWED_TYPES = new Set([
   'LoanOrCredit',
   // Collections
   'CollectionPage',
+  'ProfilePage',
+  'QAPage',
   'ItemList',
   'SearchAction',
   'EntryPoint',

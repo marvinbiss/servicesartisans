@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { CheckCircle, ArrowRight, ArrowLeft, BookOpen, Euro, Calculator } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getQAPageSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from '@/lib/data/questions'
 import RelatedHubs from '@/components/seo/RelatedHubs'
@@ -78,11 +78,17 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
     { name: question.question, url: `/questions/${question.slug}` },
   ])
 
-  const faqSchema = getFAQSchema([{ question: question.question, answer: question.shortAnswer }])
+  const qaPageSchema = getQAPageSchema({
+    pageUrl: `${SITE_URL}/questions/${question.slug}`,
+    question: question.question,
+    acceptedAnswerText: question.shortAnswer,
+    suggestedAnswerTexts: question.detailedAnswer,
+    name: question.question,
+  })
 
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, qaPageSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-sand-50 border-b">
