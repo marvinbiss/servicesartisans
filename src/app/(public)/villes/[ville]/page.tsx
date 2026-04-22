@@ -26,6 +26,8 @@ import {
   getEnrichedPlaceSchema,
   getCityServicesListSchema,
 } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
+import { getProvidersByLocation } from '@/lib/supabase'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   villes,
@@ -149,11 +151,12 @@ export default async function VillePage({ params }: PageProps) {
   const dept = getDepartementByCode(ville.departementCode)
   const deptSlug = dept?.slug
 
-  // Fetch commune enrichment data + comptage RGE local en parallèle.
-  // Fail-open : si la DB RGE timeout, on retourne 0 et on n'affiche pas le bandeau.
-  const [commune, rgeCount] = await Promise.all([
+  // Fetch commune enrichment data + comptage RGE local + providers ville
+  // pour alimenter aggregateRating. Parallèle + fail-open.
+  const [commune, rgeCount, villeProviders] = await Promise.all([
     getCommuneBySlug(villeSlug),
     getRgeProviderCountByCity(villeSlug).catch(() => 0),
+    getProvidersByLocation(villeSlug).catch(() => []),
   ])
 
   // Generate unique SEO content
@@ -195,9 +198,37 @@ export default async function VillePage({ params }: PageProps) {
     services: orderedServices.slice(0, 20).map((s) => ({ name: s.name, slug: s.slug })),
   })
 
+  // AggregateRating city-level : moyenne pondérée des providers de la ville
+  // tous services confondus. Déclenche les étoiles SERP sur /villes/[ville]
+  // (haute valeur : requêtes "artisans paris").
+  const aggregateRating = buildAggregateRatingFromProviders(villeProviders)
+  const cityAggregateSchema = aggregateRating
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: `Artisans à ${ville.name}`,
+        url: `${SITE_URL}/villes/${ville.slug}`,
+        areaServed: { '@type': 'City', name: ville.name },
+        provider: {
+          '@type': 'Organization',
+          name: 'ServicesArtisans',
+          url: SITE_URL,
+        },
+        aggregateRating,
+      }
+    : null
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[placeSchema, breadcrumbSchema, faqSchema, servicesListSchema]} />
+      <JsonLd
+        data={[
+          placeSchema,
+          breadcrumbSchema,
+          faqSchema,
+          servicesListSchema,
+          ...(cityAggregateSchema ? [cityAggregateSchema] : []),
+        ]}
+      />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

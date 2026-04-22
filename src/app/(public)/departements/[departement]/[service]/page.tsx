@@ -19,6 +19,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
+import { getReviewStatsByDept } from '@/lib/supabase'
 import {
   departements,
   getDepartementBySlug,
@@ -191,9 +192,44 @@ export default async function DeptServicePage({ params }: PageProps) {
     category: trade.name,
   })
 
+  // AggregateRating dept-level : les stats agrégées existent déjà dans la
+  // materialized view review_stats_by_dept. Émettre ici débloque les étoiles
+  // SERP sur ~5 000 pages /departements/[dept]/[service] à fort volume
+  // ("plombier paris 75", "electricien hauts-de-seine"...).
+  const reviewStats = await getReviewStatsByDept(serviceSlug, dept.code).catch(() => null)
+  const aggregateRatingSchema =
+    reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: `${trade.name} ${getDeptPreposition(dept.name)}`,
+          url: `${SITE_URL}/departements/${deptSlug}/${serviceSlug}`,
+          areaServed: { '@type': 'AdministrativeArea', name: dept.name },
+          provider: {
+            '@type': 'Organization',
+            name: 'ServicesArtisans',
+            url: SITE_URL,
+          },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Number(reviewStats.avg_rating).toFixed(1),
+            reviewCount: String(reviewStats.review_count),
+            bestRating: '5',
+            worstRating: '1',
+          },
+        }
+      : null
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          serviceSchema,
+          ...(aggregateRatingSchema ? [aggregateRatingSchema] : []),
+        ]}
+      />
 
       {/* ─── DARK HERO ──────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
