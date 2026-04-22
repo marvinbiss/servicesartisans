@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Taxe d’aménagement 2026 : calcul, valeur forfaitaire, exonérations'
+const TITLE = 'Taxe d’aménagement 2026 : calcul'
 const DESCRIPTION =
   'Taxe d’aménagement 2026 : valeur forfaitaire 1 036 €/m² (hors IDF), 1 174 € IDF. Taux communal, départemental, régional, exonérations, paiement.'
 

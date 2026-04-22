@@ -12,7 +12,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Notre équipe éditoriale | ServicesArtisans',
   description:
-    "L'équipe éditoriale de ServicesArtisans : rédacteurs spécialisés rénovation, aides publiques et bâtiment. Process éditorial transparent, sources officielles, relecture par des artisans RGE actifs.",
+    "Découvrez l'équipe éditoriale ServicesArtisans : rédacteurs rénovation, aides publiques et bâtiment. Sources officielles, relecture artisans RGE.",
   alternates: getAlternates('/equipe'),
   openGraph: {
     title: 'Notre équipe éditoriale | ServicesArtisans',

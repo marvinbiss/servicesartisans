@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Alarme maison : prix, installation, télésurveillance 2026'
+const TITLE = 'Alarme maison 2026 : prix, pose'
 const DESCRIPTION =
-  'Alarme maison 2026 : prix 300-2 500 € TTC installée kit DIY ou pro, télésurveillance 25-50 €/mois, NF EN 50131-1 grade 2, APSAD, réduction assurance 5-15 %, déclaration CNIL si caméras.'
+  'Alarme maison 2026 : 300-2 500 € TTC installée, télésurveillance 25-50 €/mois, NF EN 50131-1 grade 2, réduction assurance 5-15 %. Devis gratuit.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

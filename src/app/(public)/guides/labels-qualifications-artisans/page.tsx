@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Labels et qualifications des artisans en 2026 : le guide'
+const TITLE = 'Labels et qualifications artisans 2026'
 const DESCRIPTION =
-  'Tous les labels et qualifications artisans : RGE, Qualibat, Qualifelec, QualiPAC, Qualibois, Professionnel du Gaz, Handibat. Quelle qualification pour quel chantier, comment vérifier.'
+  'Comparez les labels artisans 2026 : RGE, Qualibat, Qualifelec, QualiPAC, Qualibois, Pro du Gaz, Handibat. Quelle qualif pour quel chantier et comment vérifier.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

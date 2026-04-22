@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Remontée capillaire mur : solution durable 2026'
+const TITLE = 'Remontée capillaire : solutions 2026'
 const DESCRIPTION =
   'Remontée capillaire mur : diagnostic, solution durable (injection résine, drainage, électro-osmose), coût, pièges, entreprises RGE.'
 

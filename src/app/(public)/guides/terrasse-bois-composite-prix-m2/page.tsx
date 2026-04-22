@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'thomas-bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Terrasse bois ou composite : prix au m², pose 2026'
+const TITLE = 'Terrasse bois/composite : prix m² 2026'
 const DESCRIPTION =
-  'Terrasse bois/composite 2026 : prix 80-250 € TTC/m² posée, pin autoclave/exotique/composite, structure lambourdes aluminium, DTU 51.4, déclaration préalable >5 m² ou surélevée.'
+  'Terrasse bois/composite 2026 : 80-250 € TTC/m² posée, pin autoclave, exotique, composite, DTU 51.4, déclaration préalable >5 m².'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

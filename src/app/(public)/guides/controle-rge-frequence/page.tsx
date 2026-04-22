@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Contrôle RGE : fréquence, audit chantier, déroulé 2026'
+const TITLE = 'Contrôle RGE 2026 : fréquence et déroulé'
 const DESCRIPTION =
   'Contrôle RGE : audit initial + 1-3 chantiers par cycle de 4 ans + contrôles inopinés. Déroulé visite, points vérifiés, résultats, sanctions possibles.'
 

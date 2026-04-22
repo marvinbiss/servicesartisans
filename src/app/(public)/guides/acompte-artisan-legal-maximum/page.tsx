@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Acompte artisan : plafond légal, règles, risques 2026'
+const TITLE = 'Acompte artisan 2026 : plafond légal'
 const DESCRIPTION =
   'Acompte artisan : pas de plafond légal mais usages professionnels 30-40 %. Arrhes vs acompte, garanties, récupération, modèle clause devis, prescription.'
 

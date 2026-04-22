@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Retenue de garantie 5 % : loi, clause, libération 2026'
+const TITLE = 'Retenue de garantie 5 % : règles 2026'
 const DESCRIPTION =
   'Retenue de garantie 5 % : loi 16 juillet 1971, clause type devis, consignation Caisse des Dépôts, libération 1 an après réception, caution bancaire alternative.'
 

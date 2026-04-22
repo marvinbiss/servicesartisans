@@ -17,8 +17,8 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
-  description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Tarifs réels + devis gratuit.`,
+  title: `Blog Travaux 2026 : prix et guides artisans`,
+  description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Devis gratuit.`,
   alternates: getAlternates('/blog'),
   openGraph: {
     title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,

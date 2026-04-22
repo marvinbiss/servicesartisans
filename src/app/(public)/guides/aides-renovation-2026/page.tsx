@@ -31,7 +31,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Aides Rénovation Énergétique 2026 — Guide Complet',
   description:
-    "Guide complet des aides à la rénovation énergétique en 2026 : MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %, chèque énergie, aides locales. Montants, conditions et cumul des aides.",
+    "Découvrez les aides rénovation énergétique 2026 : MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %, chèque énergie. Montants, conditions et cumul.",
   alternates: getAlternates('/guides/aides-renovation-2026'),
   openGraph: {
     title: 'Toutes les Aides à la Rénovation Énergétique en 2026',

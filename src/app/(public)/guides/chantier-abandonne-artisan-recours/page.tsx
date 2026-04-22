@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Chantier abandonné par l’artisan : recours, procédure 2026'
+const TITLE = 'Chantier abandonné : recours artisan 2026'
 const DESCRIPTION =
   'Chantier abandonné : mise en demeure 15 j, résiliation aux torts, substitution autre artisan, dommages-intérêts. Récupération acompte, liquidation judiciaire.'
 

@@ -17,7 +17,7 @@ const canonicalUrl = `${SITE_URL}/barometre/regions`
 export const metadata: Metadata = {
   title: `Baromètre par région — Artisans en France`,
   description:
-    "Explorez les statistiques des artisans par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie et les 13 régions métropolitaines. Indices de prix, nombre d'artisans et tendances.",
+    'Découvrez les statistiques des artisans par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie. Indices de prix, volumes et tendances 2026.',
   alternates: getAlternates('/barometre/regions'),
   robots: { index: true, follow: true },
   openGraph: {

@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Comment demander un devis de travaux en 2026 : méthode complète'
+const TITLE = 'Demander un devis de travaux en 2026'
 const DESCRIPTION =
-  'Rédiger une demande de devis claire, obtenir 3 réponses sérieuses et comparables sous 7 jours. Cahier des charges, photos, mentions à exiger et modèle de demande.'
+  'Obtenez 3 devis travaux sérieux sous 7 jours : cahier des charges, photos, mentions à exiger et modèle de demande prêt à envoyer. Méthode 2026.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Isolation phonique mur appartement : solutions et prix 2026'
+const TITLE = 'Isolation phonique mur appart : prix 2026'
 const DESCRIPTION =
   'Isolation phonique mur appartement : contre-cloison masse-ressort-masse, plaques acoustiques, liège, budget 80-180 €/m² TTC. Solutions efficaces 2026.'
 

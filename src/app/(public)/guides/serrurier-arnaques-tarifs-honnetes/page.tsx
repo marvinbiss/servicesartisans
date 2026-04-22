@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Serrurier arnaques : tarifs honnêtes 2026, recours, prévention'
+const TITLE = 'Serrurier arnaques : vrais tarifs 2026'
 const DESCRIPTION =
   'Serrurier arnaques : 60-120 € ouverture sans casse, 250-600 € serrure HS. Détecter Google Ads frauduleux, refuser devis abusif, recours DGCCRF, prévention.'
 

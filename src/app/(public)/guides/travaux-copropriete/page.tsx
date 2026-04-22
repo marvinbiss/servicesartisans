@@ -27,7 +27,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Travaux en Copropriété : Règles et Démarches 2026',
   description:
-    'Guide complet des travaux en copropriété : parties communes vs privatives, vote en assemblée générale, majorités requises, autorisations et gros travaux obligatoires.',
+    'Guide travaux copropriété 2026 : parties communes vs privatives, vote AG, majorités requises, autorisations et gros travaux obligatoires.',
   alternates: getAlternates('/guides/travaux-copropriete'),
   openGraph: {
     title: 'Travaux en Copropriété : Règles et Démarches 2026',

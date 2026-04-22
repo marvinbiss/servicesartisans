@@ -27,9 +27,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Délai de rétractation d’un devis d’artisan en 2026'
+const TITLE = 'Délai rétractation devis artisan 2026'
 const DESCRIPTION =
-  'Délai de rétractation devis artisan : 14 jours pour un démarchage à domicile, aucun droit pour un devis signé à l’agence. Lettre recommandée type, exceptions, sanctions.'
+  'Délai de rétractation devis artisan : 14 jours en démarchage à domicile, aucun droit en agence. Lettre recommandée type, exceptions, sanctions.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

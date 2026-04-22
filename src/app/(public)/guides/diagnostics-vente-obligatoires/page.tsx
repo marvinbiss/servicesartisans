@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Diagnostics immobiliers vente obligatoires 2026 : DDT complet'
+const TITLE = 'Diagnostics vente obligatoires 2026 : DDT'
 const DESCRIPTION =
   'Diagnostics obligatoires vente 2026 : DPE, amiante, plomb, termites, gaz, électricité, ERP, Carrez, assainissement, mérule. Validités, prix, sanctions.'
 

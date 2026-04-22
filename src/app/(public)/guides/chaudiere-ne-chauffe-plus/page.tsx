@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chaudière ne chauffe plus : diagnostic et dépannage 2026'
+const TITLE = 'Chaudière en panne : diagnostic et dépannage'
 const DESCRIPTION =
   'Chaudière en panne : diagnostic gaz / fioul / électrique, codes erreur fréquents, prix dépannage chauffagiste, contrat d’entretien obligatoire. Guide 2026.'
 

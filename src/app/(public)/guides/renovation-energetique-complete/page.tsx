@@ -31,7 +31,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rénovation Énergétique : Guide Complet pour Votre Maison',
   description:
-    "Guide complet rénovation énergétique 2026 : isolation, chauffage, ventilation, fenêtres. Toutes les aides (MaPrimeRénov, CEE, éco-PTZ) et l'ordre optimal des travaux.",
+    'Guide rénovation énergétique 2026 : isolation, chauffage, ventilation, fenêtres. Aides MaPrimeRénov, CEE, éco-PTZ et ordre optimal des travaux.',
   alternates: getAlternates('/guides/renovation-energetique-complete'),
   openGraph: {
     title: 'Rénovation Énergétique : Guide Complet pour Votre Maison',

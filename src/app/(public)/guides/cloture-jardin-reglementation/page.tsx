@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'thomas-bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Clôture jardin : hauteur, réglementation, prix 2026'
+const TITLE = 'Clôture jardin 2026 : règles et prix au m'
 const DESCRIPTION =
-  'Clôture jardin 2026 : règles hauteur (2,60 m &lt;50 000 hab, 3,20 m au-delà, art. 663 Code civil), déclaration préalable si PLU, mitoyenneté, prix grillage/panneaux/mur 20-200 €/m.'
+  'Clôture jardin 2026 : règles de hauteur (art. 663 Code civil), déclaration préalable si PLU, mitoyenneté, prix grillage/panneaux/mur 20-200 €/m.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

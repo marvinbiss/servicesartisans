@@ -34,7 +34,7 @@ const MODIFIED = '2026-04-09'
 export const metadata: Metadata = {
   title: 'Coup de pouce CEE 2026 : chartes actives et bonifications',
   description:
-    "Panorama neutre et sourcé des chartes Coup de pouce CEE actives en 2026 : chauffage résidentiel individuel, rénovation d'ampleur (MI et appartement), rénovation performante collectif, chauffage bâtiments collectifs et tertiaires. Cadre juridique, opérations concernées, parcours, cumul MaPrimeRénov' et pièges à éviter.",
+    "Découvrez les chartes Coup de pouce CEE actives en 2026 : chauffage, rénovation d'ampleur, collectif et tertiaire. Cadre juridique, cumul MaPrimeRénov', pièges.",
   alternates: getAlternates(PAGE_PATH),
   robots: {
     index: true,

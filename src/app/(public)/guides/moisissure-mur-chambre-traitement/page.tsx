@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Moisissure mur chambre : traitement durable et priorité sanitaire'
+const TITLE = 'Moisissure mur chambre : traitement 2026'
 const DESCRIPTION =
-  'Moisissure sur un mur de chambre : risques sanitaires, nettoyage immédiat, traitement définitif (ventilation, isolation, humidité). Protocole pas à pas et budgets 2026.'
+  'Traitez la moisissure sur un mur de chambre : risques santé, nettoyage immédiat, solution durable (ventilation, isolation). Protocole et budgets 2026.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

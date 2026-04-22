@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Coup de pouce Chauffage 2026 : montants et conditions'
+const TITLE = 'Coup de pouce Chauffage 2026 : montants'
 const DESCRIPTION =
-  'Coup de pouce Chauffage 2026 : prime CEE jusqu’à 5 000 € pour remplacement chaudière fioul, gaz ou charbon par PAC ou biomasse. Montants par profil, cumul avec MaPrimeRénov’.'
+  'Coup de pouce Chauffage 2026 : prime CEE jusqu’à 5 000 € pour remplacer chaudière fioul/gaz/charbon par PAC ou biomasse. Cumul MaPrimeRénov’.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

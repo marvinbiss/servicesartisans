@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Interphone / visiophone : prix, installation 2026'
+const TITLE = 'Interphone et visiophone : prix 2026'
 const DESCRIPTION =
-  'Interphone et visiophone 2026 : prix 200-1 500 € TTC installé, filaire/radio/IP connecté, copropriété 350-900 €/logement, installation électricien NF C 15-100, RGPD caméra, garantie biennale.'
+  'Prix interphone / visiophone 2026 : 200-1 500 € TTC posé (filaire, radio, IP). Copropriété 350-900 €/logement, pose NF C 15-100, garantie biennale.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

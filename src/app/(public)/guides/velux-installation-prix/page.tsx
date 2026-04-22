@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'thomas-bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Velux : prix, pose, aides fenêtre de toit 2026'
+const TITLE = 'Velux : prix, pose, aides 2026'
 const DESCRIPTION =
-  'Velux 2026 : prix 900-2 500 € TTC posé par fenêtre de toit, MaPrimeRénov’ exclue seul, TVA 10 % RP >2 ans, déclaration préalable mairie, DTU 43.4 ou 40.29, pose couvreur obligatoire.'
+  'Velux 2026 : 900-2 500 € TTC posé par fenêtre de toit, TVA 10 % RP >2 ans, déclaration préalable mairie, DTU 43.4, pose couvreur.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

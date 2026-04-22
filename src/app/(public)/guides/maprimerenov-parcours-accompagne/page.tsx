@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'MaPrimeRénov’ parcours accompagné 2026 : conditions, montants, MAR'
+const TITLE = 'MaPrimeRénov’ parcours accompagné 2026'
 const DESCRIPTION =
   'MaPrimeRénov’ parcours accompagné 2026 : obligation Mon Accompagnateur Rénov’, audit énergétique, gain ≥2 classes DPE, montants par profil jusqu’à 63 000 €.'
 

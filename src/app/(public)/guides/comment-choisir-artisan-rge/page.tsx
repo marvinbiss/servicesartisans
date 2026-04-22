@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Comment choisir un artisan RGE en 2026 : méthode et pièges'
+const TITLE = 'Choisir un artisan RGE en 2026 : méthode'
 const DESCRIPTION =
-  'Méthode complète pour choisir un artisan RGE fiable : vérification ADEME, qualification par geste (QualiPAC, Qualibat, Qualifelec, QualiSol), signaux d’alerte et comparaison de devis.'
+  'Choisir un artisan RGE fiable en 2026 : vérification ADEME, qualifs QualiPAC/Qualibat/Qualifelec/QualiSol, signaux d’alerte et comparaison de devis.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -28,7 +28,7 @@ export const revalidate = 86400 // CDN cache: 24 h (ISR)
 export const metadata: Metadata = {
   title: 'Glossaire du bâtiment — 150+ termes expliqués simplement',
   description:
-    'Glossaire complet du bâtiment et de la rénovation : 150+ termes techniques expliqués simplement pour les particuliers. Gros œuvre, plomberie, électricité, isolation, menuiserie et plus.',
+    'Découvrez 150+ termes du bâtiment expliqués simplement : gros œuvre, plomberie, électricité, isolation, menuiserie. Comprenez vos devis artisans.',
   alternates: getAlternates('/glossaire'),
   openGraph: {
     title: 'Glossaire du bâtiment — 150+ termes expliqués',

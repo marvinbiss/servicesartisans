@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Dégât des eaux voisin : responsabilités, procédure, indemnisation 2026'
+const TITLE = 'Dégât des eaux voisin : recours 2026'
 const DESCRIPTION =
   'Dégât des eaux voisin : convention IRSI 2020, constat amiable, expertise, responsabilité locataire/propriétaire. Délais assurance, recours, franchise.'
 

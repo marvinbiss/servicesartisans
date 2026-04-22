@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'TVA 5,5 % travaux : conditions, travaux éligibles 2026'
+const TITLE = 'TVA 5,5 % travaux : conditions 2026'
 const DESCRIPTION =
   'TVA 5,5 % : logement >2 ans + rénovation énergétique performante. Attestation simplifiée Cerfa 13948, travaux éligibles, pièces fiches. Erreur = redressement.'
 

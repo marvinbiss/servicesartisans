@@ -24,9 +24,9 @@ const PAGE_URL = `${SITE_URL}/guides/assurance-dommage-ouvrage`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Assurance Dommage-Ouvrage : Est-ce Obligatoire ? (2026)',
+  title: 'Assurance dommage-ouvrage 2026 : obligatoire ?',
   description:
-    "Tout savoir sur l'assurance dommage-ouvrage : obligation légale, coût moyen (1 à 5 % du chantier), comment souscrire, délais d'indemnisation et conséquences en cas d'absence.",
+    "Découvrez l'assurance dommage-ouvrage 2026 : obligation légale, coût 1-5 % du chantier, souscription, indemnisation 90 jours et sanctions en cas d'absence.",
   alternates: getAlternates('/guides/assurance-dommage-ouvrage'),
   openGraph: {
     title: 'Assurance Dommage-Ouvrage : Est-ce Obligatoire ?',

@@ -35,7 +35,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rénovation Cuisine : Guide Complet des Étapes et Prix 2026',
   description:
-    'Guide complet rénovation cuisine 2026 : étapes de conception à la pose, prix par poste (meubles, plan de travail, électroménager), budget total et erreurs à éviter.',
+    'Guide rénovation cuisine 2026 : étapes conception à pose, prix par poste (meubles, plan de travail, électroménager), budget et erreurs à éviter.',
   alternates: getAlternates('/guides/renovation-cuisine'),
   openGraph: {
     title: 'Rénovation Cuisine : Guide Complet des Étapes et Prix 2026',

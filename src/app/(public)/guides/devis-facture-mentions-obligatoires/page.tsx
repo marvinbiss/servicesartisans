@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Devis et facture : mentions obligatoires 2026, sanctions'
+const TITLE = 'Devis et facture : mentions obligatoires 2026'
 const DESCRIPTION =
   'Devis travaux >150 € obligatoire. Facture >1 500 € obligatoire. Mentions art. R111-3 Code conso + art. 289 CGI. Sanctions absence. Modèles.'
 

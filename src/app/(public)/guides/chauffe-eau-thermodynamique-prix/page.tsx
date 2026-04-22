@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chauffe-eau thermodynamique : prix, aides, installation 2026'
+const TITLE = 'Chauffe-eau thermodynamique 2026 : prix'
 const DESCRIPTION =
   'Chauffe-eau thermodynamique 2026 : 2 200-4 500 € TTC posé, COP 2,5-3,8. MaPrimeRénov’ 400-1 200 €, CEE 150-600 €, TVA 5,5 %. Comparatif vs électrique.'
 

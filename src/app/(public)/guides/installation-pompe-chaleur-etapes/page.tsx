@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Installation pompe à chaleur : 7 étapes détaillées 2026'
+const TITLE = 'Installation pompe à chaleur : 7 étapes'
 const DESCRIPTION =
   'Installation pompe à chaleur : étude énergétique, dimensionnement, choix air-eau vs air-air, pose, mise en service, aides MaPrimeRénov’ 2026.'
 

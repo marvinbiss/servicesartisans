@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Annuaire RGE officiel : vérifier un artisan (3 min, 2026)'
+const TITLE = 'Annuaire RGE officiel : vérifier 2026'
 const DESCRIPTION =
-  'Vérifier un artisan RGE : annuaire France-Rénov’, ADEME DATA, Qualit’EnR, Qualibat. Recherche par SIRET / code postal / métier. Indispensable avant signature devis.'
+  'Vérifier un artisan RGE 2026 : annuaire France-Rénov’, ADEME, Qualit’EnR, Qualibat. Recherche SIRET / code postal. Indispensable avant devis.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

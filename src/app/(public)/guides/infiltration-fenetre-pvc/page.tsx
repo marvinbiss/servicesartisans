@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Infiltration fenêtre PVC sous la pluie : causes et solutions'
+const TITLE = 'Infiltration fenêtre PVC : causes, solutions'
 const DESCRIPTION =
-  'Infiltration fenêtre PVC : joints dégradés, pente appui, pose défectueuse, micro-ventilation bloquée. Solutions DIY, recours décennale, prix.'
+  'Diagnostiquez une infiltration de fenêtre PVC : joints, pente appui, pose, micro-ventilation. Solutions DIY, recours décennale, prix 2026.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

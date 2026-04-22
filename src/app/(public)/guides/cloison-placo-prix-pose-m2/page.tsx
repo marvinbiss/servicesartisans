@@ -22,7 +22,7 @@ export const revalidate = 86400
 
 const TITLE = 'Cloison placo : prix au m², pose 2026'
 const DESCRIPTION =
-  'Cloison placo 2026 : prix 40-90 € TTC/m² posée (plaques + rails + isolation + finition), DTU 25.41, hydrofuge pièces humides, ignifuge chaudière, isolation acoustique 38-60 dB, plaquiste Qualibat.'
+  'Cloison placo 2026 : prix 40-90 € TTC/m² posée (plaques, rails, isolation, finition), DTU 25.41, hydrofuge, ignifuge, plaquiste Qualibat.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

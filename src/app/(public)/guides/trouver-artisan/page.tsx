@@ -27,7 +27,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Comment Trouver un Artisan de Confiance en 2026',
   description:
-    'Guide complet pour trouver un artisan fiable : vérifications SIRET, décennale, RGE, comparaison de devis, labels et certifications, droits du client et recours en cas de problème.',
+    'Guide pour trouver un artisan fiable : vérifications SIRET, décennale, RGE, comparaison devis, labels, droits client et recours.',
   alternates: getAlternates('/guides/trouver-artisan'),
   openGraph: {
     title: 'Comment Trouver un Artisan de Confiance en 2026',

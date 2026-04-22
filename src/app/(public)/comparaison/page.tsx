@@ -30,7 +30,7 @@ export const revalidate = false
 export const metadata: Metadata = {
   title: 'Comparatifs Travaux 2026 : 30 Guides pour Choisir',
   description:
-    '30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages, inconvénients et verdict pour chaque solution.',
+    '30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages et verdict pour chaque solution.',
   alternates: getAlternates('/comparaison'),
   openGraph: {
     title: 'Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir',

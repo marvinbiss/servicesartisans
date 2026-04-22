@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Audit énergétique : prix, aides, obligation 2026'
+const TITLE = 'Audit énergétique 2026 : prix et aides'
 const DESCRIPTION =
   'Audit énergétique 2026 : 800-1 600 € selon surface, MaPrimeRénov’ 300-500 €, obligatoire vente F/G dès 2023. Auditeur qualifié, livrable, scénarios.'
 

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Assurance habitation et travaux : ce qu’elle couvre vraiment 2026'
+const TITLE = 'Assurance habitation travaux : couverture 2026'
 const DESCRIPTION =
   'Assurance habitation et travaux : déclaration préalable, augmentation temporaire de prime, couverture pendant chantier, dommages-ouvrage, RC travaux.'
 

@@ -39,7 +39,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rénovation Salle de Bain : Étapes, Prix et Conseils 2026',
   description:
-    'Guide complet rénovation salle de bain 2026 : étapes clés, prix par poste (douche italienne, carrelage, plomberie), budget total, erreurs à éviter et aides financières.',
+    'Guide rénovation salle de bain 2026 : étapes clés, prix par poste (douche italienne, carrelage, plomberie), budget, erreurs et aides.',
   alternates: getAlternates('/guides/renovation-salle-de-bain'),
   openGraph: {
     title: 'Rénovation Salle de Bain : Étapes, Prix et Conseils 2026',

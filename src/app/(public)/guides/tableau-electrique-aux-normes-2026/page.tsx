@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Tableau électrique aux normes 2026 : NF C 15-100, prix, mise à jour'
+const TITLE = 'Tableau électrique norme 2026 : prix'
 const DESCRIPTION =
   'Tableau électrique aux normes 2026 : NF C 15-100, différentiels 30 mA type A/AC, disjoncteurs, parafoudre zone 1. Prix 800-2 500 €, Consuel, étapes.'
 

@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Domotique : installation smart home, prix, protocoles 2026'
+const TITLE = 'Domotique 2026 : installation et prix'
 const DESCRIPTION =
-  'Domotique 2026 : prix 2 500-15 000 € TTC selon protocole (KNX filaire, Zigbee/Z-Wave/Matter radio), pose par électricien domoticien, maison 100 m² complète 5 000-9 000 €, NF C 15-100 obligatoire.'
+  'Domotique 2026 : prix 2 500-15 000 € TTC selon protocole (KNX, Zigbee, Z-Wave, Matter), pose par électricien domoticien, NF C 15-100.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -12,7 +12,7 @@ const canonicalUrl = `${SITE_URL}/badge-artisan`
 
 export const metadata: Metadata = {
   title: `Badge Artisan Vérifié — Votre certification`,
-  description: `Générez votre badge "Artisan Vérifié" ${SITE_NAME} et intégrez-le sur votre site web. Renforcez votre crédibilité, obtenez des backlinks SEO et attirez plus de clients. Gratuit et sans engagement.`,
+  description: `Générez votre badge "Artisan Vérifié" ${SITE_NAME} et intégrez-le sur votre site web. Crédibilité, backlinks SEO et nouveaux clients. Gratuit.`,
   alternates: getAlternates('/badge-artisan'),
   openGraph: {
     locale: 'fr_FR',

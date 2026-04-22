@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chaudière gaz vs granulés : comparatif coût et aides 2026'
+const TITLE = 'Chaudière gaz vs granulés : comparatif 2026'
 const DESCRIPTION =
   'Chaudière gaz condensation vs granulés bois : prix installation, coût combustible, aides 2026, entretien, rendement. Comparatif détaillé par un chauffagiste.'
 

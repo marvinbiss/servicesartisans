@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Surélévation toiture prix 2026 + faisabilité technique PLU'
+const TITLE = 'Surélévation toiture : prix 2026 + PLU'
 const DESCRIPTION =
-  'Surélévation maison : 2 000-3 500 €/m² TTC selon structure bois, béton ou métallique. Permis de construire, PLU, étude structure, architecte obligatoire >150 m².'
+  'Surélévation maison : 2 000-3 500 €/m² TTC (bois, béton, métal). Permis, PLU, étude structure, architecte obligatoire >150 m².'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

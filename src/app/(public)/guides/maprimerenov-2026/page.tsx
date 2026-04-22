@@ -52,7 +52,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'MaPrimeRénov 2026 : Montants, Conditions et Guide',
   description:
-    "Guide complet MaPrimeRénov 2026 : montants jusqu'à 70 000 €, conditions d'éligibilité, barèmes de revenus, parcours accompagné et par geste. Tout pour obtenir votre aide à la rénovation énergétique.",
+    "Guide MaPrimeRénov' 2026 : montants jusqu'à 70 000 €, conditions, barèmes revenus, parcours accompagné. Obtenez votre aide rénovation énergétique.",
   keywords: [
     'MaPrimeRénov 2026',
     'aide rénovation énergétique',

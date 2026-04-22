@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'jean-pierre-duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Adoucisseur d’eau : prix, pose, entretien 2026'
+const TITLE = 'Adoucisseur d’eau 2026 : prix, pose'
 const DESCRIPTION =
-  'Adoucisseur 2026 : prix 1 000-3 500 € TTC posé volumétrique 15-25 L, obligation >25°f TH dureté, CSTB marque NF, entretien sel 80-150 €/an, régénération automatique.'
+  'Adoucisseur 2026 : prix 1 000-3 500 € TTC posé, volumétrique 15-25 L, marque NF, entretien sel 80-150 €/an. Comparez les devis gratuits.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

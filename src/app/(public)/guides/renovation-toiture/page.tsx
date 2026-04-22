@@ -29,7 +29,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rénovation Toiture : Travaux et Prix 2026',
   description:
-    "Guide complet rénovation toiture 2026 : signes d'usure, types de couverture (tuile, ardoise, zinc), prix (60-200€/m²), isolation, charpente et aides financières.",
+    "Guide rénovation toiture 2026 : signes d'usure, couverture (tuile, ardoise, zinc), prix 60-200€/m², isolation, charpente, aides.",
   alternates: getAlternates('/guides/renovation-toiture'),
   openGraph: {
     title: 'Rénovation Toiture : Travaux et Prix 2026',

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Mon Accompagnateur Rénov’ : obligation, rôle, coût 2026'
+const TITLE = 'Mon Accompagnateur Rénov’ : coût 2026'
 const DESCRIPTION =
   'Mon Accompagnateur Rénov’ obligatoire pour MaPrimeRénov’ parcours accompagné >5 000 €. Rôle, agrément Anah, coût 600-2 000 €, choisir un MAR, check-list.'
 

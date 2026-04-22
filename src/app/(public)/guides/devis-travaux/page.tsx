@@ -25,9 +25,9 @@ const PAGE_URL = `${SITE_URL}/guides/devis-travaux`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Devis Travaux : Guide Complet pour Bien Comparer (2026)',
+  title: 'Devis Travaux 2026 : guide pour bien comparer',
   description:
-    'Comment obtenir et comparer des devis travaux : mentions obligatoires, nombre de devis à demander, négociation, pièges à éviter et conseils pour choisir le bon artisan.',
+    'Obtenez et comparez vos devis travaux 2026 : mentions obligatoires, 3 devis gratuits, négociation, pièges à éviter et choix du bon artisan.',
   alternates: getAlternates('/guides/devis-travaux'),
   openGraph: {
     title: 'Devis Travaux : Guide Complet pour Bien Comparer',

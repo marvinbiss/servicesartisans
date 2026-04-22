@@ -28,9 +28,9 @@ const PAGE_URL = `${SITE_URL}/guides/budget-renovation`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?',
+  title: 'Budget Rénovation 2026 : prix travaux au m²',
   description:
-    "Prix au m² par type de rénovation, budget par pièce, aides financières (MaPrimeRénov', CEE, éco-PTZ), conseils pour établir un budget réaliste et financer vos travaux en 2026.",
+    "Découvrez le budget rénovation 2026 : prix au m² par pièce, aides MaPrimeRénov', CEE, éco-PTZ, conseils pour financer vos travaux au juste prix.",
   alternates: getAlternates('/guides/budget-renovation'),
   openGraph: {
     title: 'Budget Rénovation : Combien Coûtent vos Travaux en 2026 ?',

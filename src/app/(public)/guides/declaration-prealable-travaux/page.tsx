@@ -28,7 +28,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Déclaration Préalable de Travaux : Guide 2026',
   description:
-    'Guide complet déclaration préalable de travaux 2026 : quand est-elle nécessaire (5-20m², façade, clôture, piscine), formulaire Cerfa 13703, délai d’instruction d’un mois et accord tacite.',
+    'Déclaration préalable de travaux 2026 : cas concernés (5-20 m², façade, clôture, piscine), Cerfa 13703, délai 1 mois et accord tacite.',
   keywords: [
     'déclaration préalable de travaux',
     'déclaration préalable travaux 2026',

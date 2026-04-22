@@ -27,9 +27,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Comparer 3 devis d’artisans : méthode pour ne pas se tromper en 2026'
+const TITLE = 'Comparer 3 devis d’artisans en 2026'
 const DESCRIPTION =
-  'Comment comparer 3 devis de travaux sans se faire avoir : grille de lecture ligne par ligne, écarts acceptables, signaux d’alerte, clauses qui changent tout et négociation efficace.'
+  'Comparez 3 devis travaux sans se faire avoir : grille de lecture ligne par ligne, écarts acceptables, signaux d’alerte et négociation efficace.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

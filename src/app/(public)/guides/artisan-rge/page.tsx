@@ -26,9 +26,9 @@ const PAGE_URL = `${SITE_URL}/guides/artisan-rge`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisan RGE : Trouver un Pro Certifié (2026)',
+  title: 'Artisan RGE 2026 : trouver un pro certifié',
   description:
-    "Tout savoir sur la certification RGE (Reconnu Garant de l'Environnement) : comment vérifier un artisan RGE, les qualifications Qualibat, QualiPAC, QualiSol et comment bénéficier des aides MaPrimeRénov'.",
+    "Découvrez comment vérifier un artisan RGE : qualifications Qualibat, QualiPAC, QualiSol et accès aux aides MaPrimeRénov' 2026. Guide complet.",
   alternates: getAlternates('/guides/artisan-rge'),
   openGraph: {
     title: 'Artisan RGE : Vérifier et Trouver un Professionnel Certifié',

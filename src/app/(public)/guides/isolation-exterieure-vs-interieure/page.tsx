@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Isolation extérieure vs intérieure : prix, performance, aides 2026'
+const TITLE = 'ITE vs ITI : prix, performance, aides 2026'
 const DESCRIPTION =
   'ITE vs ITI : comparatif prix au m², performance thermique, ponts thermiques, surface perdue, aides 2026, contraintes copropriété et urbanisme.'
 

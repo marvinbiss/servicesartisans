@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Remplacement fenêtres : toutes les aides 2026 (MPR, CEE, TVA)'
+const TITLE = 'Fenêtres : aides 2026 (MPR, CEE, TVA)'
 const DESCRIPTION =
   'Remplacement fenêtres 2026 : MaPrimeRénov’ (40-100 €/fenêtre), CEE, TVA 5,5 %, éco-PTZ. Uw et Sw requis, contraintes ABF, artisans RGE.'
 

@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Aide isolation maison propriétaire en 2026 : montants par poste'
+const TITLE = 'Aide isolation maison 2026 : propriétaire'
 const DESCRIPTION =
-  'Aides isolation 2026 pour propriétaire : MaPrimeRénov’, CEE, TVA 5,5 %, éco-PTZ. Cumul jusqu’à 45 €/m² pour ITE, 25-45 €/m² pour combles. Conditions et démarches.'
+  'Aides isolation 2026 propriétaire : MaPrimeRénov’, CEE, TVA 5,5 %, éco-PTZ. Jusqu’à 45 €/m² ITE, 25-45 €/m² combles. Devis gratuits.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

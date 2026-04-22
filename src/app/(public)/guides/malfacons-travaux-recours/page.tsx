@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Malfaçons travaux : recours, procédure, expertise 2026'
+const TITLE = 'Malfaçons travaux : recours 2026'
 const DESCRIPTION =
   'Malfaçons travaux : procédure amiable (LRAR, mise en demeure), expertise amiable vs judiciaire, référé, décennale. Délais prescription, jurisprudence 2026.'
 

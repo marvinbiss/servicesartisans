@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'MaPrimeRénov’ Copropriétés en 2026 : conditions et montants'
+const TITLE = 'MaPrimeRénov’ Copropriétés 2026'
 const DESCRIPTION =
-  'MaPrimeRénov’ Copropriétés 2026 : aide collective jusqu’à 25 000 € / logement selon gain énergétique. Parcours obligatoire, vote AG, Accompagnateur Rénov’ et calendrier.'
+  'MaPrimeRénov’ Copropriétés 2026 : aide collective jusqu’à 25 000 €/logement, vote AG, Accompagnateur Rénov’ obligatoire, conditions et calendrier.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

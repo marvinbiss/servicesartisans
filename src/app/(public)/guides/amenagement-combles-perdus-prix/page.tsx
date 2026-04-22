@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Aménagement combles perdus prix 2026 : pente, DP, isolation'
+const TITLE = 'Aménagement combles perdus prix 2026'
 const DESCRIPTION =
   'Aménagement combles perdus : 900-1 800 €/m² TTC selon faisabilité. Hauteur, pente, charpente à modifier, DP/PC, isolation, surélévation, aides 2026.'
 
