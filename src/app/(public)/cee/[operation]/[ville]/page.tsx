@@ -14,6 +14,7 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { getArtisanUrl } from '@/lib/utils'
 import { SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import {
@@ -217,6 +218,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         })
       : null
 
+  // Aggregate rating page-level : moyenne pondérée des providers listés.
+  // Null si aucun review réel (évite rich-snippet abuse). Sinon, déclenche
+  // les étoiles SERP sur les URLs /cee/[operation]/[ville] éligibles.
+  const aggregateRating = buildAggregateRatingFromProviders(providers)
+
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -231,6 +237,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         name: 'ServicesArtisans',
         url: SITE_URL,
       },
+      ...(aggregateRating && { aggregateRating }),
     },
   }
 

@@ -21,6 +21,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -980,7 +981,11 @@ export default async function UrgenceServiceVillePage({
     cssSelectors: ['.speakable-summary', '.speakable-faq'],
   })
 
-  // AggregateRating schema (only if review data available)
+  // AggregateRating schema
+  //   - Source primaire : reviewStats dept-level (plus stable)
+  //   - Fallback : moyenne pondérée des providers listés si dept vide. Étend
+  //     les étoiles SERP à ~60K pages urgence dès qu'un artisan local a des
+  //     reviews.
   const aggregateRatingSchema = reviewStats
     ? generateAggregateRatingSchema({
         serviceName: trade.name,
@@ -990,7 +995,23 @@ export default async function UrgenceServiceVillePage({
         serviceSlug: service,
         villeSlug,
       })
-    : null
+    : (() => {
+        const providerAgg = buildAggregateRatingFromProviders(providers)
+        if (!providerAgg) return null
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: `${trade.name} en urgence à ${villeData.name}`,
+          url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+          areaServed: { '@type': 'City', name: villeData.name },
+          provider: {
+            '@type': 'Organization',
+            name: 'ServicesArtisans',
+            url: SITE_URL,
+          },
+          aggregateRating: providerAgg,
+        }
+      })()
 
   return (
     <div className="min-h-screen bg-sand-50">

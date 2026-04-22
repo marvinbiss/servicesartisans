@@ -37,6 +37,7 @@ import {
   getItemListSchema,
   getEnrichedLocalServiceSchema,
 } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
@@ -745,7 +746,13 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   )
   if (enrichedFaqSchema) jsonLdSchemas.push(enrichedFaqSchema)
 
-  // Aggregate rating schema (only from first-party review stats, not scraped data)
+  // Aggregate rating schema.
+  // Source 1 (préférée) : stats dept-level via getReviewStatsByDept → couvre
+  // tout un département, plus stable statistiquement.
+  // Source 2 (fallback) : agrégation pondérée des providers listés sur la
+  // page actuelle si les stats dept sont absentes. Permet aux premières
+  // villes avec des artisans à reviews de porter des étoiles SERP sans
+  // attendre la masse critique dept.
   if (reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0) {
     const aggRatingSchema = generateAggregateRatingSchema({
       serviceName: service.name,
@@ -756,6 +763,23 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       villeSlug: locationSlug,
     })
     if (aggRatingSchema) jsonLdSchemas.push(aggRatingSchema)
+  } else {
+    const providerAgg = buildAggregateRatingFromProviders(providers)
+    if (providerAgg) {
+      jsonLdSchemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: `${service.name} à ${location.name}`,
+        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+        areaServed: { '@type': 'City', name: location.name },
+        provider: {
+          '@type': 'Organization',
+          name: 'ServicesArtisans',
+          url: SITE_URL,
+        },
+        aggregateRating: providerAgg,
+      })
+    }
   }
 
   // ItemList schema for top providers (enriched version)

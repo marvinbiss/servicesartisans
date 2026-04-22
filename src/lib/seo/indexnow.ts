@@ -59,14 +59,25 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
 
 /**
  * Build the list of affected URLs when a provider changes.
- * Notifies: the provider page, the service+ville hub page, and the city page.
+ * Inclut TOUS les templates pSEO qui consomment rating_average / review_count
+ * pour émettre Schema.org aggregateRating (étoiles SERP). Étendu 2026-04-22
+ * pour couvrir rge, cee, tarifs, urgence, devis, avis — l'omission rendait
+ * le recrawl Google 5× plus lent sur ces pages.
  */
 export function getProviderAffectedUrls(
   serviceSlug: string,
   villeSlug: string,
   providerPublicId?: string
 ): string[] {
-  const urls = [`/services/${serviceSlug}/${villeSlug}`, `/villes/${villeSlug}`]
+  const urls = [
+    `/services/${serviceSlug}/${villeSlug}`,
+    `/avis/${serviceSlug}/${villeSlug}`,
+    `/tarifs/${serviceSlug}/${villeSlug}`,
+    `/urgence/${serviceSlug}/${villeSlug}`,
+    `/devis/${serviceSlug}/${villeSlug}`,
+    `/rge/${serviceSlug}/${villeSlug}`,
+    `/villes/${villeSlug}`,
+  ]
   if (providerPublicId) {
     urls.push(`/services/${serviceSlug}/${villeSlug}/${providerPublicId}`)
   }

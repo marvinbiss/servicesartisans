@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
+import { submitToIndexNow } from '@/lib/seo/indexnow'
 import type { SupabaseClientType } from '@/types'
 
 // ---------------------------------------------------------------------------
@@ -222,22 +223,56 @@ export async function revalidateReviewPaths(
       .eq('id', providerId)
       .single()
 
-    if (providerData) {
-      const serviceSlug = slugify(providerData.specialty || 'artisan')
-      const locationSlug = slugify(providerData.address_city || 'france')
-      const publicId = providerData.slug || providerData.stable_id
+    if (!providerData) return
 
-      if (publicId) {
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-      }
-      revalidatePath(`/avis/${serviceSlug}/${locationSlug}`, 'page')
-      revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
+    const serviceSlug = slugify(providerData.specialty || 'artisan')
+    const locationSlug = slugify(providerData.address_city || 'france')
+    const publicId = providerData.slug || providerData.stable_id
 
-      logger.info('Revalidated paths after review submission', {
-        providerId,
-        reviewId,
-      })
+    // Tous les templates pSEO qui consomment rating_average / review_count
+    // et émettent Schema.org aggregateRating. Revalidate + IndexNow pour
+    // que Google repush les étoiles SERP en 24-48h au lieu de 2-3 semaines
+    // de recrawl naturel.
+    const listingPaths = [
+      `/services/${serviceSlug}/${locationSlug}`,
+      `/avis/${serviceSlug}/${locationSlug}`,
+      `/tarifs/${serviceSlug}/${locationSlug}`,
+      `/urgence/${serviceSlug}/${locationSlug}`,
+      `/devis/${serviceSlug}/${locationSlug}`,
+      `/rge/${serviceSlug}/${locationSlug}`,
+    ]
+    const pathsToRevalidate = [...listingPaths]
+    if (publicId) {
+      pathsToRevalidate.push(`/services/${serviceSlug}/${locationSlug}/${publicId}`)
     }
+
+    for (const p of pathsToRevalidate) {
+      try {
+        revalidatePath(p, 'page')
+      } catch (e) {
+        // Un template absent (ex: /rge pour un service non-RGE) ne doit
+        // pas casser la revalidation des autres. Next.js throw si le path
+        // ne matche aucune route.
+        logger.warn(`Revalidate skipped for ${p}`, {
+          error: e instanceof Error ? e.message : String(e),
+        })
+      }
+    }
+
+    // IndexNow push fire-and-forget : pas dans le chemin critique du
+    // submit review, mais accélère fortement l'apparition des étoiles
+    // en SERP. L'endpoint IndexNow accepte jusqu'à 10K URLs par batch.
+    submitToIndexNow(pathsToRevalidate).catch((e) =>
+      logger.warn('IndexNow push failed after review submission', {
+        error: e instanceof Error ? e.message : String(e),
+      })
+    )
+
+    logger.info('Revalidated paths after review submission', {
+      providerId,
+      reviewId,
+      paths: pathsToRevalidate.length,
+    })
   } catch (revalError) {
     logger.error('Revalidation failed after review submission:', revalError)
   }

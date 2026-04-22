@@ -9,6 +9,7 @@ import { getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { villes as staticVilles } from '@/lib/data/france'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndCity,
@@ -191,6 +192,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     })),
   })
 
+  // Aggregate rating page-level : moyenne pondérée des providers listés qui
+  // ont de vrais reviews. Si aucun review réel → null, pas d'étoiles SERP
+  // (évite rich-snippet abuse). Sinon → étoiles visibles en SERP sur
+  // toutes les 50K+ URLs /rge/[service]/[ville] éligibles.
+  const aggregateRating = buildAggregateRatingFromProviders(providers)
+
   // Collection LocalBusiness (schema.org ItemList ne porte pas areaServed)
   const collectionSchema = {
     '@context': 'https://schema.org',
@@ -206,6 +213,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         name: 'ServicesArtisans',
         url: SITE_URL,
       },
+      ...(aggregateRating && { aggregateRating }),
     },
   }
 

@@ -15,6 +15,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
@@ -604,7 +605,27 @@ export default async function DevisServiceLocationPage({
                   villeSlug: location,
                 }),
               ].filter(Boolean)
-            : []),
+            : (() => {
+                // Fallback provider-based : si pas de stats dept, agrège les
+                // ratings des providers listés sur la page.
+                const providerAgg = buildAggregateRatingFromProviders(providers)
+                if (!providerAgg) return []
+                return [
+                  {
+                    '@context': 'https://schema.org',
+                    '@type': 'Service',
+                    name: `${trade.name} à ${villeData.name}`,
+                    url: `${SITE_URL}/devis/${service}/${location}`,
+                    areaServed: { '@type': 'City', name: villeData.name },
+                    provider: {
+                      '@type': 'Organization',
+                      name: 'ServicesArtisans',
+                      url: SITE_URL,
+                    },
+                    aggregateRating: providerAgg,
+                  },
+                ]
+              })()),
         ]}
       />
 

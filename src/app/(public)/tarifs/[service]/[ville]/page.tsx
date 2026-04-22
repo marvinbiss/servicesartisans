@@ -15,6 +15,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
@@ -387,7 +388,11 @@ export default async function TarifsServiceVillePage({
     cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
   })
 
-  // AggregateRating schema (only if review data available)
+  // AggregateRating schema
+  //   - Source primaire : reviewStats dept-level (plus stable statistiquement)
+  //   - Fallback : moyenne pondérée des providers listés sur la page si dept
+  //     n'a pas encore de stats. Permet aux étoiles SERP d'apparaître sur
+  //     ~60K pages tarifs dès qu'un artisan local a des reviews réels.
   const aggregateRatingSchema = reviewStats
     ? generateAggregateRatingSchema({
         serviceName: trade.name,
@@ -397,7 +402,23 @@ export default async function TarifsServiceVillePage({
         serviceSlug: service,
         villeSlug,
       })
-    : null
+    : (() => {
+        const providerAgg = buildAggregateRatingFromProviders(providers)
+        if (!providerAgg) return null
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: `${trade.name} à ${villeData.name}`,
+          url: `${SITE_URL}/tarifs/${service}/${villeSlug}`,
+          areaServed: { '@type': 'City', name: villeData.name },
+          provider: {
+            '@type': 'Organization',
+            name: 'ServicesArtisans',
+            url: SITE_URL,
+          },
+          aggregateRating: providerAgg,
+        }
+      })()
 
   const relatedCities = getNearbyCities(villeSlug, 6)
 
