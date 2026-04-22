@@ -18,6 +18,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import FunnelBlock from '@/components/artisan-dashboard/FunnelBlock'
+import NextActionsBlock from '@/components/artisan-dashboard/NextActionsBlock'
 import ProfileCompleteness from '@/components/artisan-dashboard/ProfileCompleteness'
 import ReputationBlock from '@/components/artisan-dashboard/ReputationBlock'
 import RgeStatusBlock from '@/components/artisan-dashboard/RgeStatusBlock'
@@ -413,6 +414,9 @@ export default function DashboardArtisanPage() {
             {data?.stats?.portfolioPhotoCount !== undefined && (
               <PhotoUploadBanner photoCount={data.stats.portfolioPhotoCount} />
             )}
+
+            {/* Next actions — priority inbox consolidant RGE + leads + avis + profil */}
+            <NextActionsBlock />
 
             {/* Stats Section */}
             <section aria-label="Statistiques" aria-live="polite">
