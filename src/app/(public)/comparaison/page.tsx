@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import dynamic from 'next/dynamic'
@@ -86,9 +86,52 @@ export default function ComparaisonPage() {
     { name: 'Comparatifs', url: '/comparaison' },
   ])
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Comparatifs Travaux 2026',
+    url: `${SITE_URL}/comparaison`,
+    description: `${comparisons.length} comparatifs détaillés pour choisir la solution adaptée à vos travaux.`,
+    numberOfItems: comparisons.length,
+    hasPart: comparisons.slice(0, 10).map((c) => ({
+      '@type': 'Article',
+      name: c.title,
+      url: `${SITE_URL}/comparaison/${c.slug}`,
+      description: c.metaDescription,
+    })),
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment choisir entre deux solutions de travaux ?',
+      answer:
+        "Comparez 4 critères : coût global (achat + pose + entretien sur 10 ans), performance (thermique, acoustique, durabilité), éligibilité aux aides (MaPrimeRénov', CEE), contraintes de mise en œuvre (accessibilité, délai, compatibilité avec votre logement). Nos comparatifs chiffrent chaque solution pour un même cas d'usage.",
+    },
+    {
+      question: 'Pompe à chaleur ou chaudière gaz à condensation ?',
+      answer:
+        "En rénovation, la PAC air/eau est généralement gagnante : elle est 3 à 4 fois plus efficace (COP 3-4), bénéficie de MaPrimeRénov' + prime CEE, et la réglementation RE2020 pousse à la sortie du gaz. La chaudière gaz reste pertinente si votre logement est très mal isolé ou si vous êtes propriétaire d'un ancien en attente d'isolation complète.",
+    },
+    {
+      question: 'Quelle est la différence entre isolation par l’intérieur et par l’extérieur ?',
+      answer:
+        "L'isolation par l'extérieur (ITE) supprime les ponts thermiques, conserve l'inertie du bâti et n'empiète pas sur la surface habitable (800-1500 €/m² + ravalement inclus). L'isolation par l'intérieur (ITI) est moins chère (80-120 €/m²) mais crée des ponts thermiques et réduit la surface. L'ITE est la référence en rénovation globale.",
+    },
+    {
+      question: 'Les comparatifs prennent-ils en compte les aides 2026 ?',
+      answer:
+        "Oui, chaque comparatif intègre les aides en vigueur : MaPrimeRénov' (par revenu et gestes), primes CEE (standard + bonification précarité), éco-PTZ, TVA à 5,5 %, aides locales. Les montants sont actualisés à chaque évolution réglementaire et la date de dernière mise à jour est affichée en bas d'article.",
+    },
+    {
+      question: 'Comment obtenir un devis après avoir choisi une solution ?',
+      answer:
+        "Depuis chaque comparatif, vous pouvez demander un devis gratuit auprès d'artisans qualifiés (RGE si travaux d'économie d'énergie). Le devis est exclusif : un seul artisan reçoit votre demande, pas de mise en concurrence sauvage. La réponse intervient en 24 à 48 h ouvrées.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <div className="min-h-screen bg-sand-50">
         {/* Header */}

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { calendrierTravaux } from '@/lib/data/calendrier-travaux'
 import {
   Calendar,
@@ -124,9 +125,37 @@ export default function CalendrierTravauxPage() {
     ],
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Quel est le meilleur mois pour faire ses travaux ?',
+      answer:
+        "Le printemps (mars-mai) et le début d'automne (septembre-octobre) sont les périodes idéales pour la plupart des travaux : températures douces, humidité maîtrisée, disponibilité des artisans raisonnable. Évitez juillet-août (vacances, prix majorés) et le cœur de l'hiver (gel, mauvaise tenue des enduits).",
+    },
+    {
+      question: 'Quand refaire sa toiture ou son ravalement ?',
+      answer:
+        'Toiture et ravalement de façade se réalisent idéalement entre avril et octobre, avec une préférence pour mai-juin et septembre-octobre. Il faut des températures nocturnes supérieures à 5 °C, une humidité modérée et une absence de gel pour une prise correcte des mortiers et enduits.',
+    },
+    {
+      question: 'Quels travaux d’hiver privilégier ?',
+      answer:
+        "L'hiver (décembre-février) est parfait pour les travaux d'intérieur : peinture, pose de parquet, rénovation cuisine/salle de bain, plâtrerie, électricité, plomberie. C'est aussi la meilleure période pour faire réaliser un devis : les artisans ont plus de disponibilité et négocient plus volontiers.",
+    },
+    {
+      question: 'Quand planifier des travaux d’isolation ?',
+      answer:
+        "L'isolation des combles, des murs (ITE) et des planchers est à programmer entre avril et octobre. Pour bénéficier des aides (MaPrimeRénov', CEE) avant l'hiver, signez votre devis en mars-avril : les dossiers se traitent en 4-8 semaines et les chantiers s'enchaînent jusqu'à novembre.",
+    },
+    {
+      question: 'Combien de temps à l’avance faut-il contacter un artisan ?',
+      answer:
+        "Prévoyez 1 à 2 mois d'avance pour des travaux de 1-2 semaines, 3 à 6 mois pour une rénovation complète ou toiture. En haute saison (avril-juin, septembre), les carnets de commandes sont remplis : anticipez dès février-mars pour sécuriser une équipe RGE reconnue.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-amber-50/60 to-white">
         {/* Breadcrumb */}

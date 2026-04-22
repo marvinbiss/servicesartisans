@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { MapPin, ArrowRight, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { BAROMETRE_REGIONS } from '@/lib/barometre/constants'
 import { regionalIndices } from '@/lib/data/barometre'
@@ -42,9 +43,94 @@ export default function BarometreRegionsPage() {
     { name: 'Régions', url: '/barometre/regions' },
   ])
 
+  const lastUpdated = new Date().toISOString().slice(0, 10)
+
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Indices régionaux des prix artisans — France 2026',
+    description:
+      'Indices de prix par région métropolitaine (base 100 = moyenne nationale) calculés sur les devis réels transmis par notre réseau d’artisans sur l’année en cours.',
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    temporalCoverage: '2026',
+    spatialCoverage: { '@type': 'Country', name: 'France' },
+    inLanguage: 'fr',
+    url: canonicalUrl,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+    variableMeasured: [
+      'Indice régional de prix (base 100)',
+      'Nombre de départements',
+      'Nombre d’artisans référencés',
+    ],
+  }
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Baromètre des prix artisans par région — France 2026',
+    description:
+      'Analyse comparée des prix des artisans du bâtiment par région : indices base 100, volumétrie et tendances 2026.',
+    url: canonicalUrl,
+    datePublished: lastUpdated,
+    dateModified: lastUpdated,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${SITE_URL}/opengraph-image`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Que représente l’indice régional des prix ?',
+      answer:
+        "L'indice régional des prix est calculé en base 100, où 100 correspond à la moyenne nationale. Un indice de 120 signifie que les prix de la région sont 20 % supérieurs à la moyenne française, tandis qu'un indice de 95 signifie 5 % en dessous.",
+    },
+    {
+      question: 'Comment sont calculés ces indices ?',
+      answer:
+        "Les indices sont calculés à partir des devis signés transmis par notre réseau d'artisans et pondérés par la volumétrie de chaque métier. Les données sont mises à jour tous les trimestres à partir d'un échantillon glissant de 12 mois.",
+    },
+    {
+      question: 'Quelle région de France a les prix les plus élevés ?',
+      answer:
+        "L'Île-de-France, la Côte d'Azur (PACA) et l'Auvergne-Rhône-Alpes (zones urbaines denses, tension immobilière) présentent historiquement les indices les plus élevés. À l'inverse, l'Occitanie intérieure, la Bourgogne-Franche-Comté et certaines régions rurales affichent des indices en dessous de la moyenne.",
+    },
+    {
+      question: 'Les indices tiennent-ils compte de l’inflation ?',
+      answer:
+        "Oui. L'indice est calculé sur les prix courants (TTC), ce qui intègre mécaniquement l'inflation des matériaux et de la main-d'œuvre. Pour comparer les évolutions entre régions, nous publions également les taux d'évolution trimestriels corrigés de l'inflation nationale.",
+    },
+    {
+      question: 'Puis-je réutiliser ces indices dans un article ?',
+      answer:
+        'Oui, avec mention de la source « Baromètre ServicesArtisans » et lien vers cette page. Les données du baromètre sont publiées sous licence Creative Commons BY 4.0 ; le service presse fournit sur demande des visuels haute définition et analyses complémentaires.',
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, datasetSchema, articleSchema, faqSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={lastUpdated}
+          dateModified={lastUpdated}
+        />
+      </div>
 
       <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}

@@ -16,7 +16,8 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { DEPARTMENTS, DEPT_TO_REGION } from '@/lib/geography'
 import { DEPT_ARTISAN_COUNTS } from '@/lib/data/dept-artisan-counts'
@@ -275,10 +276,44 @@ function getStudySchema() {
     temporalCoverage: '2026',
     inLanguage: 'fr',
     isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['#key-findings', '#methodology'],
     },
+  }
+}
+
+function getDatasetSchema(totalArtisans: number, totalBtp: number, rankingsCount: number) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Densité artisanale par département — France 2026',
+    description: `Jeu de données des ${totalArtisans.toLocaleString('fr-FR')} entreprises artisanales (dont ${totalBtp.toLocaleString('fr-FR')} BTP) réparties dans ${rankingsCount} départements français. Densité / 10 000 habitants, classement, régions.`,
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    datePublished: '2026-03-28',
+    dateModified: '2026-03-28',
+    spatialCoverage: { '@type': 'Country', name: 'France' },
+    temporalCoverage: '2026',
+    inLanguage: 'fr',
+    keywords: [
+      'artisans',
+      'BTP',
+      'densité artisanale',
+      'déserts artisanaux',
+      'SIREN',
+      'France',
+      'départements',
+    ],
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+    url: canonicalUrl,
+    variableMeasured: [
+      'Nombre d’entreprises artisanales',
+      'Nombre d’artisans BTP',
+      'Densité artisanale / 10 000 habitants',
+    ],
   }
 }
 
@@ -301,9 +336,47 @@ export default function DesertsArtisanauxPage() {
     { name: 'Déserts artisanaux', url: '/etudes/deserts-artisanaux' },
   ])
 
+  const datasetSchema = getDatasetSchema(stats.totalArtisans, stats.totalBtp, rankings.length)
+
+  const faqSchema = getFAQSchema([
+    {
+      question: "Qu'est-ce qu'un désert artisanal ?",
+      answer: `Un désert artisanal est un département dont la densité artisanale (nombre d'entreprises artisanales pour 10 000 habitants) est inférieure à 70 % de la moyenne nationale, soit moins de ${(stats.avgDensity * 0.7).toFixed(1)} artisans / 10 000 habitants dans notre étude 2026.`,
+    },
+    {
+      question: 'Quel est le département le plus en manque d’artisans ?',
+      answer: `Selon notre étude, le département le plus sous-doté est ${deserts[0]?.name ?? ''} (${deserts[0]?.code ?? ''}) avec ${deserts[0]?.density ?? 0} artisans pour 10 000 habitants, contre ${bestServed[0]?.density ?? 0} dans le mieux doté (${bestServed[0]?.name ?? ''}).`,
+    },
+    {
+      question: 'Comment la densité artisanale a-t-elle été calculée ?',
+      answer:
+        "Densité = (nombre d'entreprises artisanales / population du département) × 10 000. Sources : registre SIREN/SIRET (INSEE, base Sirene) pour les entreprises et INSEE populations légales 2024 (millésime 2021) pour la démographie.",
+    },
+    {
+      question: 'Quels métiers du BTP sont les plus en tension ?',
+      answer:
+        "Selon la CAPEB et la FFB (2024-2025), les couvreurs (72 % d'entreprises en difficulté de recrutement), étanchéistes (68 %), charpentiers (65 %) et maçons (63 %) sont les métiers les plus en tension en France.",
+    },
+    {
+      question: 'Peut-on réutiliser les données de cette étude ?',
+      answer:
+        "Oui. Les données de l'étude « Déserts artisanaux en France 2026 » sont publiées sous licence Creative Commons BY 4.0, avec mention de la source ServicesArtisans et lien vers la page d'étude. Un espace presse dédié permet aux journalistes de demander des visuels et analyses complémentaires.",
+    },
+  ])
+
+  const publishedDate = '2026-03-28'
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[getStudySchema(), breadcrumbSchema]} />
+      <JsonLd data={[getStudySchema(), datasetSchema, breadcrumbSchema, faqSchema]} />
+      <div className="sr-only">
+        <ArticleMeta
+          author="ServicesArtisans"
+          authorHref="/equipe"
+          datePublished={publishedDate}
+          dateModified={publishedDate}
+        />
+      </div>
 
       {/* Hero */}
       <section className="bg-white border-b">

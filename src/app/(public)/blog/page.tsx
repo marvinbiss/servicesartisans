@@ -7,7 +7,7 @@ import { allArticlesMeta, allCategories } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { allBlogTags } from '@/lib/data/blog/tags'
@@ -100,6 +100,33 @@ export default async function BlogPage({ searchParams }: PageProps) {
     { name: 'Blog', url: '/blog' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'À quelle fréquence le blog ServicesArtisans est-il mis à jour ?',
+      answer: `Nous publions en moyenne 3 à 5 nouveaux articles par semaine. Le blog compte actuellement ${allArticlesMeta.length} guides couvrant les prix des travaux 2026, les aides à la rénovation (MaPrimeRénov', CEE), les fiches métier et les actualités du bâtiment.`,
+    },
+    {
+      question: 'Qui rédige les articles du blog ?',
+      answer:
+        "Les articles sont rédigés par l'équipe éditoriale ServicesArtisans et, pour les guides techniques, revus par des artisans partenaires et des experts du bâtiment. Chaque article mentionne son auteur, sa date de publication et sa date de dernière mise à jour.",
+    },
+    {
+      question: 'Les prix indiqués sont-ils fiables ?',
+      answer:
+        "Oui. Les fourchettes de prix sont mises à jour chaque année à partir des devis réels transmis par notre réseau d'artisans et croisées avec les données publiques (INSEE, CAPEB, FFB). Chaque guide prix précise les hypothèses retenues (métrés, gamme de matériaux, région, TVA).",
+    },
+    {
+      question: 'Comment trouver un article sur un sujet précis ?',
+      answer:
+        'Vous pouvez filtrer par catégorie (Tarifs, Guides, Aides & Subventions, Rénovation, Fiches métier...) ou explorer par tag depuis la page blog. Un moteur de recherche interne permet aussi de retrouver un sujet par mot-clé.',
+    },
+    {
+      question: 'Puis-je citer un article ou reprendre un chiffre ?',
+      answer:
+        "Oui, la citation avec lien vers l'article source est autorisée et encouragée. Pour toute reprise intégrale (infographie, données d'étude), contactez notre service presse. Nos études propriétaires (baromètre, déserts artisanaux) sont publiées sous licence Creative Commons BY 4.0.",
+    },
+  ])
+
   // Category article counts for the cross-link section — top 8 by article count
   const categoryCounts = blogCategories
     .map((c) => ({
@@ -136,7 +163,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   return (
     <>
-      <JsonLd data={[collectionSchema, breadcrumbSchema]} />
+      <JsonLd data={[collectionSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Server-rendered hero with H1 — visible to crawlers */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

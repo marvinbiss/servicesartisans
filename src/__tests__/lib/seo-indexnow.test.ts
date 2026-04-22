@@ -167,18 +167,25 @@ describe('getProviderAffectedUrls', () => {
   it('generates correct URL patterns for a provider', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris')
     expect(urls).toContain('/services/plomberie/paris')
+    expect(urls).toContain('/avis/plomberie/paris')
+    expect(urls).toContain('/tarifs/plomberie/paris')
+    expect(urls).toContain('/urgence/plomberie/paris')
+    expect(urls).toContain('/devis/plomberie/paris')
+    expect(urls).toContain('/rge/plomberie/paris')
     expect(urls).toContain('/villes/paris')
   })
 
   it('includes provider page when publicId is provided', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris', 'abc-123')
     expect(urls).toContain('/services/plomberie/paris/abc-123')
-    expect(urls).toHaveLength(3)
+    // 7 pSEO templates + 1 provider detail page
+    expect(urls).toHaveLength(8)
   })
 
   it('excludes provider page when no publicId', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris')
-    expect(urls).toHaveLength(2)
+    // 7 pSEO templates : services, avis, tarifs, urgence, devis, rge, villes
+    expect(urls).toHaveLength(7)
   })
 
   it('handles different service/city slug combinations', () => {

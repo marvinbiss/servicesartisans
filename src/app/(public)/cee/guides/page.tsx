@@ -6,7 +6,7 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { CEE_OPERATION_GUIDES, CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 
 export const revalidate = 86400
@@ -66,10 +66,37 @@ export default function CeeGuidesIndexPage() {
     }),
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: "Qu'est-ce qu'une prime CEE en 2026 ?",
+      answer:
+        "La prime CEE (Certificat d'Économies d'Énergie) est une aide financière versée par les fournisseurs d'énergie (obligés) pour encourager la rénovation énergétique des logements. Elle est cumulable avec MaPrimeRénov' et s'applique à 19 opérations standardisées résidentielles (isolation, chauffage, ECS, ventilation, services).",
+    },
+    {
+      question: "Qui peut bénéficier d'une prime CEE résidentielle ?",
+      answer:
+        "Tout propriétaire occupant, bailleur ou locataire d'un logement achevé depuis plus de 2 ans peut demander une prime CEE pour les travaux éligibles. Le montant de base est identique pour tous ; une bonification « précarité énergétique » (BAR-TH modeste / très modeste) double voire triple le montant pour les ménages sous plafonds ANAH.",
+    },
+    {
+      question: 'Quelles qualifications RGE sont obligatoires ?',
+      answer:
+        "L'artisan doit détenir la qualification RGE correspondant à la famille de travaux : Qualibat 8621/8622/8731 pour les PAC, Qualibat 7141 pour isolation des combles, Qualibois Module Air pour les poêles à bois, Qualibat 8731 pour les chaudières biomasse. La qualification doit être valide le jour de la signature du devis.",
+    },
+    {
+      question: "Peut-on cumuler prime CEE et MaPrimeRénov' ?",
+      answer:
+        "Oui, la prime CEE et MaPrimeRénov' sont cumulables. Toutefois, depuis 2024, le cumul est encadré : l'aide totale ne peut dépasser 90 % du coût TTC des travaux pour les ménages très modestes, 75 % pour les modestes, 60 % pour les intermédiaires et 40 % pour les supérieurs. Un audit énergétique peut être requis pour les rénovations d'ampleur.",
+    },
+    {
+      question: 'Quel est le délai pour déposer un dossier CEE ?',
+      answer:
+        "La prime CEE doit être signée AVANT le devis. L'artisan (ou le mandataire) dépose le dossier auprès d'un obligé après la fin des travaux : facture, attestation sur l'honneur signée, photos et justificatifs RGE. Le versement intervient en général sous 4 à 8 semaines après validation du dossier par l'obligé.",
+    },
+  ])
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Guides' }]} />
 

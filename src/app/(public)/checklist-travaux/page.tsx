@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getHowToSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
@@ -422,9 +422,37 @@ export default function ChecklistTravauxPage() {
     }
   )
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Que doit absolument contenir un devis avant de signer ?',
+      answer:
+        "Un devis complet mentionne : identité et SIRET de l'artisan, descriptif détaillé des travaux et matériaux, quantités, prix unitaires et total HT/TTC, taux de TVA applicable, délai d'exécution, acomptes, conditions de paiement, mention des garanties (biennale, décennale + attestation d'assurance), date et signature. Tout devis supérieur à 1 500 € engage l'artisan : gardez-en un exemplaire signé.",
+    },
+    {
+      question: "Quels documents demander obligatoirement à l'artisan ?",
+      answer:
+        "Avant signature : extrait K-bis ou attestation SIRET (moins de 3 mois), attestation d'assurance responsabilité civile et décennale (en cours de validité), qualifications RGE si vous sollicitez MaPrimeRénov' ou CEE, références sur chantiers similaires. Vérifiez la validité RGE sur france-renov.gouv.fr.",
+    },
+    {
+      question: 'Faut-il déclarer les travaux en mairie ?',
+      answer:
+        "Oui pour : extension > 5 m², ravalement de façade, modification de l'aspect extérieur, piscine > 10 m², abri de jardin > 5 m². La déclaration préalable est obligatoire pour 5-20 m² (40 m² en zone urbaine PLU), le permis de construire au-delà. Une construction sans autorisation expose à une amende et à une démolition.",
+    },
+    {
+      question: 'Comment réceptionner ses travaux sans se faire avoir ?',
+      answer:
+        "Réalisez une visite contradictoire avec l'artisan, liste en main : conformité au devis, finitions, fonctionnement des équipements, propreté du chantier. Signez un PV de réception avec ou sans réserves. En cas de défaut, vous disposez de 8 jours pour notifier des réserves complémentaires, puis des garanties légales (parfait achèvement 1 an, biennale 2 ans, décennale 10 ans).",
+    },
+    {
+      question: 'Quelles aides solliciter avant de démarrer ?',
+      answer:
+        "MaPrimeRénov' (via maprimerenov.gouv.fr), primes CEE (cumulables avec MPR), éco-PTZ (prêt à taux zéro jusqu'à 50 000 €), TVA à 5,5 % pour les travaux de rénovation énergétique, aides des collectivités locales. Toutes ces aides exigent un artisan RGE et un devis signé après l'acceptation de la demande.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
       {howToSchema && <JsonLd data={howToSchema} />}
 
       <div className="min-h-screen bg-sand-50">
