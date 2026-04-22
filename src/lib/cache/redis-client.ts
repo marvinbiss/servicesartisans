@@ -8,8 +8,14 @@ const REST_URL = process.env.UPSTASH_REDIS_REST_URL
 const REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
 const isAvailable = Boolean(REST_URL && REST_TOKEN)
 
+// Skip Redis during `next build` : cache:'no-store' fetch in generateStaticParams
+// throws DynamicServerUsage, et un token mal configuré côté Vercel ferait planter
+// le build entier avec HTTP 401. Cache miss → fetcher (Supabase) → OK.
+const IS_BUILD_PHASE = process.env.NEXT_PHASE === 'phase-production-build'
+
 async function redisCommand<T = unknown>(command: (string | number)[]): Promise<T | null> {
   if (!isAvailable) return null
+  if (IS_BUILD_PHASE) return null
   try {
     const res = await fetch(REST_URL as string, {
       method: 'POST',
@@ -18,7 +24,6 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(command),
-      // Crucial for Next.js: bypass fetch cache so Redis is always fresh
       cache: 'no-store',
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
