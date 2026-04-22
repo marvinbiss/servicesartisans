@@ -1,8 +1,9 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Activity, TrendingUp, TrendingDown, Minus, AlertCircle, Loader2 } from 'lucide-react'
+import { Activity, TrendingUp, TrendingDown, Minus, AlertCircle } from 'lucide-react'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
+import { pctDelta, formatPctDelta } from '@/lib/metrics/delta'
 
 type Snapshot = {
   id: number
@@ -41,13 +42,6 @@ type MetricsPayload = {
   baselineDate: string
   series: Snapshot[]
   days: number
-}
-
-function pct(current: number | null | undefined, baseline: number | null | undefined): string {
-  if (current == null || baseline == null || baseline === 0) return '—'
-  const delta = ((current - baseline) / baseline) * 100
-  const sign = delta >= 0 ? '+' : ''
-  return `${sign}${delta.toFixed(1)}%`
 }
 
 function deltaColor(
@@ -110,7 +104,7 @@ function MetricCard({
         className={`flex items-center gap-1.5 text-sm font-medium ${deltaColor(current ?? null, baseline ?? null)}`}
       >
         {deltaIcon(current ?? null, baseline ?? null)}
-        <span>{pct(current ?? null, baseline ?? null)}</span>
+        <span>{formatPctDelta(pctDelta(current, baseline))}</span>
         <span className="text-charcoal-400 text-xs">vs J0</span>
       </div>
       {target && <div className="text-xs text-charcoal-500 mt-2">🎯 {target}</div>}
@@ -118,8 +112,40 @@ function MetricCard({
   )
 }
 
+function MetricsSkeleton() {
+  return (
+    <div
+      className="space-y-6"
+      role="status"
+      aria-busy="true"
+      aria-label="Chargement des métriques CEO"
+    >
+      <div>
+        <div className="h-7 w-64 bg-sand-200 rounded animate-pulse mb-2" />
+        <div className="h-4 w-80 bg-sand-100 rounded animate-pulse" />
+      </div>
+      {Array.from({ length: 6 }).map((_, section) => (
+        <section key={section}>
+          <div className="h-3 w-24 bg-sand-200 rounded animate-pulse mb-3" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-sand-200 p-5 space-y-2">
+                <div className="h-3 w-20 bg-sand-100 rounded animate-pulse" />
+                <div className="h-7 w-24 bg-sand-200 rounded animate-pulse" />
+                <div className="h-3 w-16 bg-sand-100 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}
+
 export default function MetricsPage() {
-  const { data, error, isLoading } = useAdminFetch<MetricsPayload>('/api/admin/metrics?days=30')
+  const { data, error, isLoading, mutate } = useAdminFetch<MetricsPayload>(
+    '/api/admin/metrics?days=30'
+  )
 
   const sortedSeries = useMemo(() => {
     if (!data?.series) return []
@@ -127,23 +153,28 @@ export default function MetricsPage() {
   }, [data])
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-6 h-6 text-primary-600 animate-spin" />
-      </div>
-    )
+    return <MetricsSkeleton />
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-        <div>
+      <div
+        className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3"
+        role="alert"
+      >
+        <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" aria-hidden />
+        <div className="flex-1">
           <p className="font-medium text-red-900">Erreur de chargement</p>
           <p className="text-sm text-red-700">
             {error instanceof Error ? error.message : String(error)}
           </p>
         </div>
+        <button
+          onClick={() => mutate()}
+          className="text-sm font-medium text-red-700 hover:text-red-900 underline focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+        >
+          Réessayer
+        </button>
       </div>
     )
   }
@@ -154,7 +185,7 @@ export default function MetricsPage() {
   if (!latest) {
     return (
       <div className="bg-white rounded-xl border border-sand-200 p-8 text-center">
-        <Activity className="w-8 h-8 text-charcoal-400 mx-auto mb-3" />
+        <Activity className="w-8 h-8 text-charcoal-400 mx-auto mb-3" aria-hidden />
         <p className="text-charcoal-700 font-medium">Aucun snapshot disponible.</p>
         <p className="text-sm text-charcoal-500 mt-2">
           Lance{' '}
@@ -168,7 +199,7 @@ export default function MetricsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="main" aria-label="Métriques CEO">
       <header>
         <h1 className="text-2xl font-bold text-charcoal-900 mb-1">Métriques CEO — S1 baseline</h1>
         <p className="text-sm text-charcoal-500">

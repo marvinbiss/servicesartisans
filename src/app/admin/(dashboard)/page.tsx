@@ -200,7 +200,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="text-center py-2">
                 <p className="text-2xl sm:text-4xl font-bold text-gray-900">
-                  {data?.stats?.averageRating ?? 0}
+                  {(data?.stats?.averageRating ?? 0).toFixed(1)}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">Note moyenne</p>
                 <div className="flex justify-center mt-2">

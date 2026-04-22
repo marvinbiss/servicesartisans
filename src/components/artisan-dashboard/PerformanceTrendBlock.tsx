@@ -2,6 +2,7 @@
 
 import useSWR from 'swr'
 import { Eye, Phone, PhoneCall, FileText, TrendingUp, TrendingDown } from 'lucide-react'
+import { splitHalfDelta } from '@/lib/metrics/delta'
 
 type DayPoint = { day: string; count: number }
 
@@ -27,19 +28,8 @@ const fetcher = (url: string): Promise<TrendsPayload> =>
     return r.json()
   })
 
-function splitHalves(series: DayPoint[]): { first: number; second: number } {
-  if (series.length === 0) return { first: 0, second: 0 }
-  const mid = Math.floor(series.length / 2)
-  const first = series.slice(0, mid).reduce((s, p) => s + p.count, 0)
-  const second = series.slice(mid).reduce((s, p) => s + p.count, 0)
-  return { first, second }
-}
-
 function computeDeltaPct(series: DayPoint[]): number | null {
-  const { first, second } = splitHalves(series)
-  if (first === 0 && second === 0) return null
-  if (first === 0) return 100
-  return Math.round(((second - first) / first) * 100)
+  return splitHalfDelta(series.map((p) => p.count))
 }
 
 function Sparkline({
