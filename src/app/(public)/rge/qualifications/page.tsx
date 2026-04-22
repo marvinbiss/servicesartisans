@@ -5,7 +5,7 @@ import { Award, ArrowRight, ShieldCheck } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   RGE_QUALIFICATION_GUIDES,
   RGE_QUALIFICATIONS_WITH_GUIDE,
@@ -67,10 +67,37 @@ export default async function RgeQualificationsHubPage() {
     }),
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: "Qu'est-ce qu'une qualification RGE ?",
+      answer:
+        "RGE (Reconnu Garant de l'Environnement) est un signe de qualité délivré par des organismes accrédités (Qualibat, Qualit'EnR, Qualifelec, Cequami) et reconnu par l'État pour les travaux de rénovation énergétique. Un artisan RGE doit justifier de compétences techniques, d'assurances valides et d'un audit sur chantier.",
+    },
+    {
+      question: 'Quelles qualifications RGE pour quels travaux ?',
+      answer:
+        "QualiPAC pour les pompes à chaleur, QualiBois Air (poêles) et QualiBois Eau (chaudières biomasse), QualiSol pour le solaire thermique, QualiPV pour le photovoltaïque, Qualifelec Mention ENR pour l'électricité liée aux EnR et IRVE, Qualibat 7141 pour l'isolation des combles, 7131/8722 pour l'ITE. Chaque prime CEE ou MaPrimeRénov' exige une qualification précise.",
+    },
+    {
+      question: "L'artisan RGE est-il obligatoire pour toucher MaPrimeRénov' ?",
+      answer:
+        "Oui. Le recours à un artisan RGE est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE, de l'éco-PTZ et de la TVA réduite à 5,5 % sur les travaux d'économie d'énergie. La qualification doit être valide le jour de la signature du devis. La liste officielle est consultable sur france-renov.gouv.fr.",
+    },
+    {
+      question: 'Comment vérifier qu’un artisan est réellement RGE ?',
+      answer:
+        "Vérifiez sur france-renov.gouv.fr en saisissant le nom ou le SIRET de l'entreprise. Notre annuaire est synchronisé hebdomadairement avec la base officielle ADEME : chaque fiche RGE affiche la qualification exacte, sa date de validité et l'organisme certificateur.",
+    },
+    {
+      question: 'Que faire si l’artisan perd sa qualification entre signature et travaux ?',
+      answer:
+        "Si la qualification RGE expire entre la signature du devis et la fin des travaux, les aides peuvent être refusées. Demandez à l'artisan une attestation de renouvellement en cours et privilégiez les entreprises dont la qualification est valide au moins 6 mois après la fin prévue du chantier.",
+    },
+  ])
+
   return (
     <main className="min-h-screen bg-white">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <Breadcrumb items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Qualifications' }]} />
 

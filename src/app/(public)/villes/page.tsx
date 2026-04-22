@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Building2, Users, ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { villes, regions, departements, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
@@ -70,28 +72,52 @@ export default async function VillesIndexPage() {
     )
   }
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Artisans par ville en France',
+    description: `Annuaire d'artisans référencés dans ${villes.length} villes de France.`,
+    url: `${SITE_URL}/villes`,
+    numberOfItems: villes.length,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Villes' },
+      ],
+    },
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Combien de villes sont couvertes par ServicesArtisans ?',
+      answer: `Notre annuaire couvre ${villes.length} communes de France métropolitaine et d'outre-mer, dans ${regions.length} régions et ${departements.length} départements. Chaque page ville liste les artisans référencés par corps de métier.`,
+    },
+    {
+      question: 'Ma commune n’apparaît pas : que faire ?',
+      answer:
+        "Si votre commune n'est pas listée, nous affichons les artisans du département ou des villes limitrophes. Vous pouvez également faire une demande de devis classique en précisant votre code postal : les artisans du secteur géographique recevront votre demande (déplacement souvent gratuit dans un rayon de 30-50 km).",
+    },
+    {
+      question: 'Les artisans proposés interviennent-ils uniquement dans la ville ?',
+      answer:
+        "Non. Les artisans référencés sur une page ville interviennent typiquement dans toute la zone de chalandise (commune + communes limitrophes + département dans certains cas). Le rayon d'intervention exact est précisé sur chaque fiche artisan.",
+    },
+    {
+      question: 'Comment sont choisies les villes principales mises en avant ?',
+      answer:
+        "Les villes mises en avant dans chaque région sont triées par volume d'artisans référencés et par volumétrie de recherches des utilisateurs. Les métropoles régionales (Paris, Lyon, Marseille, Toulouse, Bordeaux, Nantes, Lille, Strasbourg, Nice, Montpellier) sont systématiquement visibles.",
+    },
+    {
+      question: 'Puis-je filtrer les artisans par note ou par RGE ?',
+      answer:
+        "Oui. Depuis chaque page métier + ville (ex : /services/plombier/lyon), vous pouvez filtrer par note moyenne, nombre d'avis et qualification RGE. Les artisans avec une qualification RGE valide sont mis en avant pour les travaux d'économie d'énergie.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'CollectionPage',
-            name: 'Artisans par ville en France',
-            description: `Annuaire d'artisans référencés dans ${villes.length} villes de France.`,
-            url: `${SITE_URL}/villes`,
-            numberOfItems: villes.length,
-            breadcrumb: {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-                { '@type': 'ListItem', position: 2, name: 'Villes' },
-              ],
-            },
-          }),
-        }}
-      />
+      <JsonLd data={[collectionPageSchema, faqSchema]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

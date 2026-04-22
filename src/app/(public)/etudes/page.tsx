@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { BarChart3, ArrowRight, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 
 const canonicalUrl = `${SITE_URL}/etudes`
@@ -58,9 +58,54 @@ export default function EtudesPage() {
     { name: 'Études', url: '/etudes' },
   ])
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Études et données ServicesArtisans',
+    url: canonicalUrl,
+    description:
+      'Index des études propriétaires ServicesArtisans sur l’artisanat en France (densité, tensions, prix, qualifications RGE).',
+    numberOfItems: studies.length,
+    hasPart: studies.map((s) => ({
+      '@type': 'Report',
+      name: s.title,
+      url: `${SITE_URL}/etudes/${s.slug}`,
+      description: s.description,
+    })),
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Qui publie ces études ?',
+      answer: `Toutes les études sont publiées par la rédaction de ${SITE_NAME} à partir des données officielles (SIREN/Sirene INSEE, base ADEME france-renov.gouv.fr, CAPEB, FFB, CMA) croisées avec les données internes de notre réseau d'artisans. Chaque étude mentionne ses sources, sa méthodologie et ses limites.`,
+    },
+    {
+      question: 'À quelle fréquence les données sont-elles mises à jour ?',
+      answer:
+        'Les études structurelles (déserts artisanaux, densité) sont actualisées annuellement avec les dernières données INSEE. Les études conjoncturelles (indices de prix, tensions métiers) sont rafraîchies chaque trimestre. La date de publication et la date de dernière mise à jour sont indiquées en tête de chaque étude.',
+    },
+    {
+      question: 'Puis-je citer ces études dans un article ou un rapport ?',
+      answer:
+        "Oui. Nos études sont publiées sous licence Creative Commons BY 4.0 : vous pouvez reprendre les données, citations et graphiques en mentionnant la source « ServicesArtisans » et en incluant un lien vers la page d'étude. Pour les médias, notre service presse fournit visuels haute définition et analyses complémentaires.",
+    },
+    {
+      question: 'Les données brutes sont-elles téléchargeables ?',
+      answer:
+        "Certaines séries sont exposées via notre API publique (/api/v1/rge/*), d'autres sont disponibles sous forme de tableaux HTML réutilisables. Pour une demande de dataset spécifique (CSV, JSON), contactez presse@servicesartisans.fr.",
+    },
+    {
+      question: 'Comment suggérer un sujet d’étude ?',
+      answer:
+        "Journalistes, chercheurs et élus peuvent suggérer un axe d'étude via notre espace presse. Nous priorisons les sujets d'intérêt général (tensions métiers, déserts artisanaux, évolutions des prix) et les analyses territoriales (département, région, métropole).",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

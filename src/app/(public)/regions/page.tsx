@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPin, ArrowRight, Users, Building2, ChevronRight, Globe } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { regions, departements, villes, services, getVillesByDepartement } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
@@ -62,28 +64,52 @@ export default async function RegionsIndexPage() {
 
   const totalDepartments = regions.reduce((acc, r) => acc + r.departments.length, 0)
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Artisans par région en France',
+    description: "Annuaire d'artisans référencés dans les 18 régions françaises.",
+    url: `${SITE_URL}/regions`,
+    numberOfItems: regions.length,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Régions' },
+      ],
+    },
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Combien de régions sont couvertes ?',
+      answer: `L'annuaire couvre les ${regions.length} régions de France, soit ${totalDepartments} départements et ${villes.length} villes. Chaque région dispose d'une page dédiée listant ses départements, villes principales et corps de métier disponibles.`,
+    },
+    {
+      question: 'Les DOM-TOM sont-ils inclus ?',
+      answer:
+        "Oui. Les cinq régions d'outre-mer (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) sont intégrées à l'annuaire, avec les départements et artisans référencés localement. La couverture est cependant moins dense qu'en métropole en raison du nombre plus limité d'artisans ayant rejoint notre réseau.",
+    },
+    {
+      question: 'Quelle région compte le plus d’artisans ?',
+      answer:
+        "L'Île-de-France, Auvergne-Rhône-Alpes et Provence-Alpes-Côte d'Azur sont les trois régions les plus densément couvertes en volume d'artisans référencés. Ces régions concentrent à la fois la plus forte demande de rénovation et les plus grands bassins d'emploi BTP.",
+    },
+    {
+      question: 'Peut-on comparer les prix entre régions ?',
+      answer:
+        'Oui. Notre baromètre régional (/barometre/regions) publie un indice de prix (base 100 = moyenne nationale) par région et par corps de métier, actualisé trimestriellement à partir des devis signés de notre réseau. Les données sont publiées sous licence Creative Commons BY 4.0.',
+    },
+    {
+      question: 'Comment un artisan peut-il référencer sa région ?',
+      answer:
+        "Un artisan ayant un SIRET actif peut revendiquer sa fiche ou ajouter son entreprise depuis /devenir-partenaire. Nous vérifions l'identité (SIREN INSEE), les qualifications RGE (via france-renov.gouv.fr) et la zone d'intervention déclarée. La fiche est ensuite visible dans toutes les villes couvertes par le rayon d'intervention.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'CollectionPage',
-            name: 'Artisans par région en France',
-            description: "Annuaire d'artisans référencés dans les 18 régions françaises.",
-            url: `${SITE_URL}/regions`,
-            numberOfItems: regions.length,
-            breadcrumb: {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-                { '@type': 'ListItem', position: 2, name: 'Régions' },
-              ],
-            },
-          }),
-        }}
-      />
+      <JsonLd data={[collectionPageSchema, faqSchema]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

@@ -48,7 +48,12 @@ import {
   Truck,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
-import { getOrganizationSchema, getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import {
+  getOrganizationSchema,
+  getBreadcrumbSchema,
+  getItemListSchema,
+  getFAQSchema,
+} from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
@@ -523,10 +528,37 @@ export default async function ServicesPage() {
     })),
   })
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment trouver un artisan qualifié pour mes travaux ?',
+      answer: `Sélectionnez votre métier parmi les ${allServiceItems.length} corps de métier référencés, puis votre ville ou département. Chaque artisan est vérifié SIREN auprès de l'INSEE et sa qualification RGE (si applicable) est synchronisée hebdomadairement avec la base officielle ADEME france-renov.gouv.fr.`,
+    },
+    {
+      question: 'Les artisans sont-ils vraiment vérifiés ?',
+      answer:
+        "Oui. Chaque fiche artisan est liée à un SIRET actif vérifié auprès de l'INSEE (base Sirene). Pour les travaux d'économie d'énergie, nous affichons également la qualification RGE (QualiPAC, QualiBois, Qualibat, Qualifelec) issue de la base officielle ADEME. Les fiches avec SIRET inactif ou en cessation sont automatiquement masquées.",
+    },
+    {
+      question: 'Dois-je payer pour obtenir un devis ?',
+      answer:
+        'Non, la demande de devis est 100 % gratuite et sans engagement. Vous remplissez un formulaire précisant votre besoin (métier, ville, type de travaux, budget). Votre demande est transmise à un seul artisan : nous ne partageons jamais votre projet entre plusieurs professionnels.',
+    },
+    {
+      question: 'Combien de temps pour recevoir une réponse ?',
+      answer:
+        "Nos artisans partenaires s'engagent à répondre sous 24 à 48 heures ouvrées. Pour les urgences (plomberie, électricité, serrurerie, vitrerie), utilisez la section dédiée : les artisans en garde répondent en moyenne en 30 minutes à 2 heures.",
+    },
+    {
+      question: 'Que faire en cas de litige avec un artisan ?',
+      answer:
+        "En cas de désaccord avec un artisan, privilégiez d'abord la discussion écrite (mail recommandé) détaillant les points litigieux. Si le dialogue échoue, vous pouvez saisir gratuitement le médiateur de la consommation du bâtiment. Notre équipe peut vous orienter vers les recours adaptés et suspendre la fiche artisan si les faits sont avérés.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
-      <JsonLd data={[breadcrumbSchema, organizationSchema, itemListSchema]} />
+      <JsonLd data={[breadcrumbSchema, organizationSchema, itemListSchema, faqSchema]} />
 
       {/* Premium Hero — Charcoal + Terracotta */}
       <section className="relative bg-gradient-hero text-white py-20 overflow-hidden">

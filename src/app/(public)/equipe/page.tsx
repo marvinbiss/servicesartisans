@@ -4,7 +4,7 @@ import { Clock, ArrowRight, FileText, Search, Users, RefreshCw } from 'lucide-re
 import { authors } from '@/lib/data/authors'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const revalidate = 3600
@@ -33,9 +33,56 @@ export default function EquipePage() {
     { name: 'Notre équipe', url: `${SITE_URL}/equipe` },
   ])
 
+  const aboutPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'Notre équipe éditoriale — ServicesArtisans',
+    url: `${SITE_URL}/equipe`,
+    description:
+      "Présentation de l'équipe éditoriale ServicesArtisans : rédacteurs spécialisés, process éditorial en 4 étapes, relecture artisan RGE.",
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      employee: allAuthors.map((a) => ({
+        '@type': 'Person',
+        name: a.name,
+        url: `${SITE_URL}/equipe/${a.slug}`,
+        jobTitle: a.role,
+      })),
+    },
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Qui rédige les guides ServicesArtisans ?',
+      answer: `Nos ${allAuthors.length} rédacteurs internes, chacun spécialisé sur un domaine (rénovation énergétique, aides publiques, gros œuvre, second œuvre). Ils ne sont pas artisans certifiés RGE ; ils assurent uniquement la vulgarisation et le sourcing officiel. Leur biographie, méthodologie et années d'expérience sont publiées sur /equipe.`,
+    },
+    {
+      question: 'Les articles sont-ils relus par des professionnels ?',
+      answer:
+        "Oui. Chaque guide technique est relu par un artisan RGE actif de notre réseau, choisi pour sa qualification sur la thématique (QualiPAC pour les PAC, Qualifelec pour l'électricité, Qualibat pour l'isolation). Cette double validation rédaction + terrain est un garde-fou contre les erreurs techniques.",
+    },
+    {
+      question: 'Quelles sources utilisez-vous ?',
+      answer:
+        "Uniquement des sources officielles : ADEME, service-public.fr, France Rénov', ANAH, Journal Officiel, DTU/CSTB, CONSUEL, INSEE, CAPEB, FFB. Nous référençons chaque donnée technique ou financière citée. Nous n'utilisons ni contenu scrapé ni générateurs IA non supervisés.",
+    },
+    {
+      question: 'À quelle fréquence les guides sont-ils mis à jour ?',
+      answer:
+        "Les barèmes (MaPrimeRénov', CEE), les DTU et les obligations réglementaires sont revus à chaque évolution officielle (typiquement arrêté trimestriel). La date de dernière mise à jour est indiquée sur chaque guide. Pour les YMYL (aides financières, sécurité), nous privilégions la fraîcheur à la fréquence de publication.",
+    },
+    {
+      question: 'Peut-on contacter un rédacteur ?',
+      answer:
+        "Oui, chaque rédacteur a une page dédiée listant ses articles et sa méthodologie. Pour les médias ou pour un échange éditorial, utilisez notre espace presse. Nous ne proposons pas de conseil technique personnalisé par courriel — orientez-vous vers un devis d'artisan RGE pour votre projet.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, aboutPageSchema, faqSchema]} />
 
       <div className="bg-sand-50 min-h-screen">
         <div className="max-w-5xl mx-auto px-4 py-8">

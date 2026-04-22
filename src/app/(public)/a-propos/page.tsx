@@ -6,7 +6,7 @@ import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
-import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getOrganizationSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
@@ -309,9 +309,36 @@ export default async function AProposPage() {
     { name: 'À propos', url: '/a-propos' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Qui est ServicesArtisans ?',
+      answer: `${companyIdentity.legalName} édite la plateforme ServicesArtisans, annuaire national d'artisans du bâtiment fondé sur les données ouvertes SIRENE (INSEE) et la base ADEME france-renov.gouv.fr. Notre objectif : offrir aux particuliers un annuaire 100 % gratuit, transparent et vérifiable.`,
+    },
+    {
+      question: "L'utilisation du service est-elle payante ?",
+      answer:
+        "Non, le service est 100 % gratuit pour les particuliers : consultation de l'annuaire, demande de devis, consultation des avis. Les artisans peuvent revendiquer leur fiche gratuitement ; certaines options (mise en avant, accès à l'espace Pro) peuvent être payantes côté professionnel.",
+    },
+    {
+      question: 'Comment les artisans sont-ils collectés ?',
+      answer:
+        "Les artisans sont référencés à partir des données publiques SIRENE (INSEE) avec le code NAF bâtiment puis enrichis avec les qualifications RGE officielles (synchronisation hebdomadaire avec la base ADEME). Les fiches en cessation d'activité sont automatiquement masquées.",
+    },
+    {
+      question: 'Les leads sont-ils exclusifs ?',
+      answer:
+        "Oui. C'est un engagement non-négociable : 1 demande de devis = 1 artisan, jamais partagé. C'est ce qui différencie ServicesArtisans des plateformes comme Travaux.com ou Habitatpresto où votre demande est envoyée à 3-5 artisans simultanément.",
+    },
+    {
+      question: 'Comment signaler une erreur ou une fiche suspecte ?',
+      answer:
+        "Chaque fiche artisan comporte un lien de signalement. Vous pouvez également contacter notre équipe via /contact. Nous traitons les signalements sous 48 h ouvrées, avec suspension immédiate de la fiche en cas de doute sérieux sur l'identité ou les qualifications.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[orgSchema, breadcrumbSchema]} />
+      <JsonLd data={[orgSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
