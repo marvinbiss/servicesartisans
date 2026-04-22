@@ -9,6 +9,7 @@ node scripts/audit-hreflang.mjs --strict || exit 1
 node scripts/audit-jsonld.mjs --strict || exit 1
 node scripts/audit-orphan-pages.mjs --strict || exit 1
 node scripts/audit-meta-quality.mjs --strict || exit 1
+node scripts/audit-dynamic-meta.mjs --strict || exit 1
 node scripts/audit-opengraph.mjs --strict || exit 1
 node scripts/audit-breadcrumbs.mjs --strict || exit 1
 node scripts/audit-image-alt.mjs --strict || exit 1

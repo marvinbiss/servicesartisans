@@ -70,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const active = snap ? snap.total_rge_active.toLocaleString('fr-FR') : '50 000+'
   return {
     title: `Baromètre RGE ${month} — ${active} artisans certifiés en France`,
-    description: `Statistiques officielles ${month} : ${active} artisans RGE actifs en France, top régions, top qualifications (QualiPAC, Qualibat, RGE Éco-Artisan…). Source ADEME.`,
+    description: `Statistiques ${month} : ${active} artisans RGE actifs en France, top régions, qualifications (QualiPAC, Qualibat). Source ADEME.`,
     alternates: getAlternates('/barometre/rge'),
     robots: {
       index: true,

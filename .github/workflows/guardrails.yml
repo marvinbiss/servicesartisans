@@ -55,6 +55,9 @@ jobs:
       - name: Meta quality (no missing/duplicate title or description)
         run: node scripts/audit-meta-quality.mjs --strict
 
+      - name: Dynamic meta (worst-case description length on pSEO pages)
+        run: node scripts/audit-dynamic-meta.mjs --strict
+
       - name: OpenGraph coverage (title/description/url on every indexable page)
         run: node scripts/audit-opengraph.mjs --strict
 
