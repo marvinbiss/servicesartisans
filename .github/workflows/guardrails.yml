@@ -61,6 +61,12 @@ jobs:
       - name: Redirects (no chains, no page.tsx conflicts, no self-redirects)
         run: node scripts/audit-redirects.mjs --strict
 
+      - name: Noindex ↔ Sitemap consistency (no noindex/redirect in sitemap)
+        run: node scripts/audit-noindex-sitemap.mjs --strict
+
+      - name: Internal links 404 (no dead internal href in src/)
+        run: node scripts/audit-internal-links-404.mjs --strict
+
       - name: OpenGraph coverage (title/description/url on every indexable page)
         run: node scripts/audit-opengraph.mjs --strict
 
