@@ -9,6 +9,7 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
+  getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
@@ -227,12 +228,45 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       "Prime versée par l'obligé ou le délégataire. Pas de frais à la charge du bénéficiaire. Cumulable avec MaPrimeRénov', TVA 5,5 % et éco-PTZ.",
   })
 
+  // FAQ dynamique par opération CEE — rich snippet FAQ en SERP sur requêtes
+  // type "prime CEE [operation] 2026". Questions générées depuis les metadata
+  // catalogue DGEC : éligibilité (classique/précarité), qualification RGE,
+  // cumul aides, coup de pouce, versement.
+  const faqItems = [
+    {
+      question: `Qui peut bénéficier de la prime CEE ${operation.nom} (${operation.code}) ?`,
+      answer:
+        `Tous les propriétaires et locataires de logements résidentiels en France sont éligibles à la prime CEE ${operation.code}, sans condition de revenu de base. ${operation.precarite_eligible ? "Les ménages en situation de précarité énergétique (selon grille Anah) bénéficient d'une bonification pouvant doubler le montant." : ''} Les travaux doivent être réalisés par un artisan RGE certifié pour la qualification exigée par l'opération.`.trim(),
+    },
+    {
+      question: `Quelle qualification RGE pour la prime CEE ${operation.code} ?`,
+      answer: `L'artisan doit détenir une qualification RGE active à la date de signature du devis. Selon la nature des travaux ${operation.nom.toLowerCase()}, les certifications attendues sont Qualibat, QualiPAC, QualiBois ou Qualit'EnR selon le geste. Vérification possible sur france-renov.gouv.fr avec le SIREN de l'artisan. Une qualification expirée entre le devis et le chantier rend l'aide non-éligible.`,
+    },
+    {
+      question: `Peut-on cumuler la prime CEE ${operation.code} avec MaPrimeRénov' ?`,
+      answer:
+        "Oui, la prime CEE se cumule avec MaPrimeRénov' (Anah), la TVA 5,5 % et l'éco-PTZ, dans la limite de 100 % du coût TTC des travaux. Le cumul est rarement plafonnant sauf pour les ménages très modestes sur des opérations fortement bonifiées. Chaque aide a ses propres conditions : MPR nécessite un dépôt de dossier AVANT signature du devis, la CEE accepte un dépôt jusqu'à 6 mois après la fin des travaux.",
+    },
+    {
+      question: `Quel est le montant de la prime CEE ${operation.nom} en 2026 ?`,
+      answer:
+        `Le montant dépend de 3 variables : la zone climatique (H1/H2/H3), le volume d'énergie économisée (kWh cumac) et le cours du marché CEE (P6 ~7,5 € / MWh cumac en 2026). ${operation.coup_de_pouce ? "Cette opération bénéficie d'un 'Coup de pouce' avec bonification supplémentaire." : ''} Utilisez le simulateur ServicesArtisans pour obtenir une estimation personnalisée en fonction de votre logement.`.trim(),
+    },
+    {
+      question: `Comment toucher la prime CEE ${operation.code} ?`,
+      answer:
+        "1) Choisir l'obligé ou le délégataire AVANT signature du devis (EDF, Engie, TotalEnergies, Sonergia, etc.). 2) Faire signer la convention de mandat. 3) Artisan RGE réalise les travaux. 4) Déposer la facture dans les 6 mois. 5) Versement par virement en 2 à 8 semaines. Choix possible entre prime en euros, chèque bancaire ou bon d'achat selon l'obligé.",
+    },
+  ]
+  const faqSchema = getFAQSchema(faqItems)
+
   return (
     <main className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={articleSchema} />
       <JsonLd data={governmentServiceSchema} />
       <JsonLd data={financialProductSchema} />
+      {faqSchema && <JsonLd data={faqSchema} />}
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: operation.nom }]} />
 

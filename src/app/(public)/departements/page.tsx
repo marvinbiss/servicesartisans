@@ -2,7 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Building2, MapPin, Users, ChevronRight, Map } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import JsonLd from '@/components/JsonLd'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { departements, regions, villes, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -57,9 +59,43 @@ export default async function DepartementsIndexPage() {
     getProviderCount(),
   ])
 
+  // JSON-LD : breadcrumb + CollectionPage + FAQ (cible rich snippet "People
+  // also ask" sur requêtes "artisans département france").
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Départements', url: '/departements' },
+  ])
+  const collectionPageSchema = getCollectionPageSchema({
+    name: `Artisans par département — 101 départements français`,
+    description: `Annuaire de ${formatProviderCount(artisanCount)} artisans référencés dans les 101 départements métropolitains et d'outre-mer.`,
+    url: '/departements',
+    itemCount: departements.length,
+  })
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment trouver un artisan dans mon département ?',
+      answer: `Sélectionnez votre département dans la liste ci-dessus (classement par région). La page départementale liste les artisans par métier (plombier, électricien, chauffagiste, menuisier...) avec leurs coordonnées, certifications RGE et avis vérifiés. ${SITE_NAME} synchronise quotidiennement les bases SIRENE et ADEME pour garantir l'exactitude des données.`,
+    },
+    {
+      question: "Combien d'artisans sont référencés sur ServicesArtisans ?",
+      answer: `${formatProviderCount(artisanCount)} artisans actifs sont référencés dans les 101 départements français métropolitains et d'outre-mer. Toutes les entreprises sont vérifiées via leur numéro SIRET à l'INSEE et, pour celles certifiées RGE, via la base officielle de l'ADEME (france-renov.gouv.fr).`,
+    },
+    {
+      question: 'Les artisans sont-ils certifiés RGE ?',
+      answer: `Environ 50 000 artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement). Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier + RGE pour trouver un artisan éligible aux aides.`,
+    },
+    {
+      question: "Les départements d'outre-mer sont-ils couverts ?",
+      answer: `Oui, les 5 DROM (Guadeloupe 971, Martinique 972, Guyane 973, La Réunion 974, Mayotte 976) sont couverts avec un annuaire d'artisans locaux. Les barèmes d'aides (MaPrimeRénov', CEE) sont adaptés aux spécificités ultramarines : zones climatiques C1/C2/C3 distinctes, plafonds de ressources majorés.`,
+    },
+  ])
+
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-sand-50">
+        <JsonLd
+          data={[breadcrumbSchema, collectionPageSchema, ...(faqSchema ? [faqSchema] : [])]}
+        />
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
@@ -78,26 +114,7 @@ export default async function DepartementsIndexPage() {
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'CollectionPage',
-            name: 'Artisans par département en France',
-            description: "Annuaire d'artisans référencés dans les 101 départements français.",
-            url: `${SITE_URL}/departements`,
-            numberOfItems: departements.length,
-            breadcrumb: {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-                { '@type': 'ListItem', position: 2, name: 'Départements' },
-              ],
-            },
-          }),
-        }}
-      />
+      <JsonLd data={[breadcrumbSchema, collectionPageSchema, ...(faqSchema ? [faqSchema] : [])]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
