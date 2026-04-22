@@ -17,7 +17,10 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import FunnelBlock from '@/components/artisan-dashboard/FunnelBlock'
 import ProfileCompleteness from '@/components/artisan-dashboard/ProfileCompleteness'
+import ReputationBlock from '@/components/artisan-dashboard/ReputationBlock'
+import RgeStatusBlock from '@/components/artisan-dashboard/RgeStatusBlock'
 import { StatCard } from '@/components/dashboard/StatCard'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
 import { getArtisanUrl } from '@/lib/utils'
@@ -431,6 +434,15 @@ export default function DashboardArtisanPage() {
                 </div>
               )}
             </section>
+
+            {/* RGE status — critical cliff signal, first above Reputation */}
+            <RgeStatusBlock />
+
+            {/* Reputation block — flywheel visibility (S3 supply-side) */}
+            <ReputationBlock />
+
+            {/* Lead conversion funnel — rend le signal dispatch visible (migrations 461+462) */}
+            <FunnelBlock />
 
             {/* Two-column layout: Demandes + Profile widget */}
             <div className={showProfileWidget ? 'grid lg:grid-cols-3 gap-8' : ''}>
