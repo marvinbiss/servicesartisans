@@ -98,6 +98,16 @@ export function getBlogArticleSchema(
       { '@type': 'Thing', name: article.category },
       ...article.tags.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),
     ],
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: [
+        'h1',
+        '[data-speakable="true"]',
+        '.article-excerpt',
+        '.faq-question',
+        '.faq-answer',
+      ],
+    },
   })
 
   // FAQPage schema is generated separately in the blog page component via getFAQSchema()

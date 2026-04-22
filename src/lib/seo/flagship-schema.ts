@@ -14,6 +14,12 @@ export type FlagshipArticleInput = {
   section: string
   keywords: string[]
   image?: string
+  /** Custom CSS selectors for SpeakableSpecification. Defaults target
+   * h1 + [data-speakable] + .flagship-lede + .faq-question + .faq-answer. */
+  speakableCssSelectors?: string[]
+  /** Opt out of Speakable if a guide should not be surfaced to voice
+   * (e.g., highly procedural content where voice cards misread steps). */
+  disableSpeakable?: boolean
 }
 
 function buildPersonNode(profile: Author): Record<string, unknown> {
@@ -80,9 +86,10 @@ export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<st
 
   const reviewerProfile = input.reviewerName ? getAuthorByName(input.reviewerName) : undefined
 
-  return {
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonical}#article`,
     headline: input.title,
     description: input.description,
     image: articleImage,
@@ -114,4 +121,17 @@ export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<st
       ...input.keywords.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),
     ],
   }
+  if (!input.disableSpeakable) {
+    schema.speakable = {
+      '@type': 'SpeakableSpecification',
+      cssSelector: input.speakableCssSelectors || [
+        'h1',
+        '[data-speakable="true"]',
+        '.flagship-lede',
+        '.faq-question',
+        '.faq-answer',
+      ],
+    }
+  }
+  return schema
 }
