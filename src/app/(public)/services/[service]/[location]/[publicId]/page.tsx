@@ -638,52 +638,55 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         : ''
     const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}${ratingStr}`)
 
-    // Build rich meta description (~150-160 chars) for optimal Google SERP display
-    // Structure: Nom, métier à ville — détails (note, avis, zone). Devis gratuit.
+    // Build meta description. Prefer AI-enriched description (≈50K RGE fiches,
+    // rubric v1.3) for E-E-A-T boost : l'entête commence systématiquement par
+    // "{NAME}, basée à {CITY}…" qui matche parfaitement les requêtes SERP brand+ville.
+    // Fallback template pour les ~920K providers sans description enrichie.
     const svcLower = serviceName.toLowerCase()
     const rating = provider.rating_average ? Number(provider.rating_average) : 0
     const reviewCount = provider.review_count || 0
 
-    // Core: "Jean Dupont, plombier à Lyon"
-    let desc = `${displayName}, ${svcLower} à ${realCity}`
-
-    // Add availability / intervention details
-    if (provider.available_24h) {
-      desc += ' — Intervention 7j/7'
-    } else if (provider.intervention_radius_km && provider.intervention_radius_km > 0) {
-      desc += ` — Intervention dans un rayon de ${provider.intervention_radius_km} km`
+    const enriched = provider.description?.replace(/\s+/g, ' ').trim() || ''
+    let description: string
+    if (enriched.length >= 120) {
+      // Coupe propre sur la frontière mot. Google SERP affiche ~155 chars desktop.
+      description =
+        enriched.length > 155 ? enriched.slice(0, 155).replace(/\s+\S*$/, '') + '…' : enriched
     } else {
-      desc += ` et ses environs`
+      // Core: "Jean Dupont, plombier à Lyon"
+      let desc = `${displayName}, ${svcLower} à ${realCity}`
+
+      if (provider.available_24h) {
+        desc += ' — Intervention 7j/7'
+      } else if (provider.intervention_radius_km && provider.intervention_radius_km > 0) {
+        desc += ` — Intervention dans un rayon de ${provider.intervention_radius_km} km`
+      } else {
+        desc += ` et ses environs`
+      }
+      desc += '.'
+
+      if (rating >= 1 && reviewCount > 0) {
+        desc += ` Note ${rating.toFixed(1)}/5 sur ${reviewCount} avis.`
+      } else if (rating >= 1) {
+        desc += ` Note ${rating.toFixed(1)}/5.`
+      }
+
+      if (provider.siret) {
+        desc += ' SIRET vérifié.'
+      }
+
+      if (provider.is_verified && !provider.siret) {
+        desc += ' Artisan vérifié.'
+      }
+
+      desc += ' Devis gratuit en ligne.'
+
+      if (desc.length < 140) {
+        desc += ` Comparez les ${svcLower}s à ${realCity} et demandez un devis personnalisé sans engagement.`
+      }
+
+      description = desc.length > 160 ? desc.slice(0, 159).replace(/\s+\S*$/, '') + '…' : desc
     }
-    desc += '.'
-
-    // Add rating + review count if available
-    if (rating >= 1 && reviewCount > 0) {
-      desc += ` Note ${rating.toFixed(1)}/5 sur ${reviewCount} avis.`
-    } else if (rating >= 1) {
-      desc += ` Note ${rating.toFixed(1)}/5.`
-    }
-
-    // Add SIRET verified if available
-    if (provider.siret) {
-      desc += ' SIRET vérifié.'
-    }
-
-    // Add verified badge if applicable (and no SIRET already shown)
-    if (provider.is_verified && !provider.siret) {
-      desc += ' Artisan vérifié.'
-    }
-
-    // Always end with CTA
-    desc += ' Devis gratuit en ligne.'
-
-    // If description is still short (<140 chars), pad with service-specific context
-    if (desc.length < 140) {
-      desc += ` Comparez les ${svcLower}s à ${realCity} et demandez un devis personnalisé sans engagement.`
-    }
-
-    // Trim to 160 chars max (clean word boundary)
-    const description = desc.length > 160 ? desc.slice(0, 159).replace(/\s+\S*$/, '') + '…' : desc
 
     // Noindex only if provider is explicitly flagged by admin.
     // Non-canonical URLs are handled by redirect() in the page component + alternates.canonical.
