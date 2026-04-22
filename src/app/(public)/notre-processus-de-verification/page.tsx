@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FileCheck, Shield, Lock, Eye, AlertTriangle, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
@@ -129,9 +129,37 @@ export default async function NotreProcessusDeVerificationPage() {
     { name: 'Notre processus de vérification', url: '/notre-processus-de-verification' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Quels documents sont contrôlés lors de l’inscription d’un artisan ?',
+      answer:
+        "Nous contrôlons : le numéro SIRET via l'API SIRENE officielle (INSEE), le code NAF cohérent avec le métier déclaré, l'attestation d'assurance responsabilité civile professionnelle en cours de validité, l'attestation de garantie décennale pour les métiers concernés, les qualifications RGE le cas échéant (via la base ADEME).",
+    },
+    {
+      question: 'À quelle fréquence les vérifications sont-elles renouvelées ?',
+      answer:
+        "Les données SIRENE sont contrôlées mensuellement (cessation d'activité, radiation). Les qualifications RGE sont synchronisées toutes les semaines avec la base officielle ADEME. Une alerte remonte immédiatement pour tout changement critique et la fiche est désactivée sous 24 h en cas de perte d'éligibilité.",
+    },
+    {
+      question: 'Que se passe-t-il si un artisan perd sa qualification RGE ?',
+      answer:
+        "La fiche perd automatiquement son badge RGE et n'apparaît plus dans les résultats filtrés 'RGE uniquement'. L'artisan peut re-déposer sa qualification une fois renouvelée. Pour les travaux en cours au moment de la perte de qualification, le client est invité à demander une attestation de renouvellement avant la fin du chantier.",
+    },
+    {
+      question: 'Comment signaler une fiche suspecte ?',
+      answer:
+        "Chaque fiche artisan comporte un bouton « Signaler » permettant d'alerter notre équipe modération (identité douteuse, SIRET incorrect, activité suspectée d'être frauduleuse). Le signalement est traité sous 48 h ouvrées avec suspension immédiate de la fiche en cas de doute sérieux.",
+    },
+    {
+      question: "Quels contrôles s'appliquent aux avis clients ?",
+      answer:
+        "Seuls les clients ayant fait une demande de devis sur la plateforme peuvent laisser un avis. Nous utilisons un token HMAC signé lié à l'identifiant du devis pour prévenir la fabrication d'avis fictifs. La modération avant publication détecte les avis diffamatoires, faux avis (positifs ou négatifs), spam et conflits d'intérêts.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, howToSchema, faqSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

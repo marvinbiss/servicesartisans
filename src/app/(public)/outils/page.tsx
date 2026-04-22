@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Calculator, Stethoscope, ArrowRight, Wrench, Euro, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
@@ -115,9 +115,37 @@ export default function OutilsPage() {
     })),
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Les outils sont-ils gratuits ?',
+      answer:
+        "Oui, tous les outils proposés sur ServicesArtisans sont 100 % gratuits, sans inscription et sans engagement. Le calculateur de prix et le diagnostic vous permettent d'obtenir une estimation immédiate sans créer de compte.",
+    },
+    {
+      question: 'Les estimations du calculateur sont-elles fiables ?',
+      answer:
+        "Les fourchettes de prix sont calculées à partir des devis réels transmis par notre réseau d'artisans et actualisées chaque année. Elles tiennent compte de la région, du type de bâti et du niveau de gamme. Le prix final dépend de la visite technique de l'artisan et des spécificités de votre chantier.",
+    },
+    {
+      question: 'Le diagnostic remplace-t-il un devis d’artisan ?',
+      answer:
+        "Non. Le diagnostic vous oriente vers le bon corps de métier (plombier, électricien, serrurier, etc.) mais ne remplace pas l'expertise terrain d'un artisan. Il ne pose pas de diagnostic technique réglementaire (DPE, audit énergétique, diagnostic amiante) — pour ces cas, faites appel à un diagnostiqueur certifié.",
+    },
+    {
+      question: 'Puis-je sauvegarder ou partager mes résultats ?',
+      answer:
+        "Oui. Vous pouvez imprimer ou télécharger un récapitulatif PDF de votre estimation. Vous pouvez aussi transformer directement votre estimation en demande de devis auprès d'un artisan qualifié de votre secteur — toujours gratuitement.",
+    },
+    {
+      question: 'Quels autres outils sont en préparation ?',
+      answer:
+        "Nous préparons : simulateur MaPrimeRénov' complet (déjà en ligne sur /simulateur-aides-renovation), calendrier de travaux mois par mois (/calendrier-travaux), checklist avant travaux (/checklist-travaux) et comparateur de solutions (/comparaison). Envoyez-nous vos suggestions d'outils via /contact.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, itemListSchema]} />
+      <JsonLd data={[breadcrumbSchema, itemListSchema, faqSchema]} />
 
       <div className="min-h-screen bg-sand-50">
         {/* Breadcrumb */}

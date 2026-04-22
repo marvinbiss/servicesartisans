@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const revalidate = 3600
@@ -118,9 +118,36 @@ export default function SourcesPage() {
     { name: 'Sources de données', url: `${SITE_URL}${path}` },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: "D'où proviennent les données affichées sur ServicesArtisans ?",
+      answer: `Toutes nos données sont issues de sources officielles publiques : INSEE (démographie, SIRENE), ADEME (RGE, DPE, MaPrimeRénov'), DVF Etalab (valeurs foncières), Open-Meteo (météo), Géorisques (risques naturels), SDES (statistiques environnementales). ${SOURCES.length} sources principales sont détaillées ci-dessus avec leur licence et leur usage.`,
+    },
+    {
+      question: 'Les données sont-elles à jour ?',
+      answer:
+        'Les fréquences de mise à jour varient selon la source : SIRENE et RGE sont synchronisés chaque semaine, DPE chaque mois, DVF tous les 6 mois (publication DGFiP), INSEE une à deux fois par an. La date de dernière synchronisation est indiquée sur chaque dataset dérivé (baromètre, études, /barometre/rge).',
+    },
+    {
+      question: 'Puis-je réutiliser vos données ?',
+      answer:
+        "Les données sources (INSEE, ADEME, DVF...) sont sous Licence Ouverte Etalab 2.0 et peuvent être réutilisées avec attribution. Nos études propriétaires et datasets dérivés sont publiés sous Creative Commons BY 4.0 : vous pouvez les citer et les reprendre avec mention de la source « ServicesArtisans » et lien vers la page d'origine.",
+    },
+    {
+      question: 'Comment vérifier la fiabilité d’un chiffre cité ?',
+      answer:
+        "Chaque étude ou guide comporte une section Méthodologie listant les sources utilisées, les définitions retenues et les limites. Vous pouvez remonter directement à la source officielle via les liens cliquables. Pour toute demande d'éclaircissement, contactez notre équipe éditoriale via /contact.",
+    },
+    {
+      question: 'Utilisez-vous des données non-officielles ou scrapées ?',
+      answer:
+        "Non. Nous n'utilisons jamais de données scrapées ou issues de sources non-officielles. Notre politique est stricte : uniquement des données publiques sous licence ouverte + des données internes collectées avec consentement (devis signés via notre plateforme). Cela garantit la traçabilité et la légalité de tous nos usages.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       <div className="bg-sand-50 min-h-screen">
         <div className="max-w-5xl mx-auto px-4 py-8">

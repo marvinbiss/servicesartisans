@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const revalidate = 3600
@@ -101,9 +101,37 @@ export default function MethodologiePage() {
     { name: 'Notre méthodologie', url: `${SITE_URL}${path}` },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment sont calculés les prix affichés ?',
+      answer:
+        "Les fourchettes de prix proviennent de données de marché réelles : prix de référence nationaux, bases professionnelles (CAPEB, FFB, observatoires des prix) et devis réels signés via notre plateforme. Nous appliquons des multiplicateurs départementaux pour refléter les écarts régionaux et affichons toujours une fourchette basse/haute. En l'absence de données fiables, nous préférons ne pas afficher de prix plutôt qu'une estimation douteuse.",
+    },
+    {
+      question: 'Comment sont vérifiés les artisans référencés ?',
+      answer:
+        "Vérification SIRET via l'API SIRENE officielle (entreprise active, NAF cohérent avec le métier), sync hebdomadaire avec la base ADEME pour les qualifications RGE, demande d'attestation décennale à la revendication. Les artisans ne peuvent pas acheter leur position dans les résultats : le classement est basé sur des critères objectifs (localisation, qualifications, note moyenne, nombre d'avis).",
+    },
+    {
+      question: 'Les avis peuvent-ils être supprimés à la demande d’un artisan ?',
+      answer:
+        "Non. Un avis négatif factuel et respectueux n'est jamais supprimé à la demande de l'artisan concerné. Seuls les avis diffamatoires, injurieux, faux (positifs comme négatifs), ou en conflit d'intérêt peuvent être retirés après modération. L'artisan peut toujours publier une réponse publique sous l'avis.",
+    },
+    {
+      question: 'Qui rédige le contenu éditorial ?',
+      answer:
+        "Nos rédacteurs internes (voir /equipe) rédigent les guides à partir de sources exclusivement officielles : ADEME, service-public.fr, France Rénov', ANAH, Journal Officiel, DTU/CSTB, INSEE, CAPEB, FFB. Chaque guide technique est relu par un artisan RGE actif de notre réseau. Nous n'utilisons ni contenu scrapé ni générateur IA non supervisé.",
+    },
+    {
+      question: 'Peut-on auditer votre méthodologie ?',
+      answer:
+        "Oui. Nos études sont publiées sous licence Creative Commons BY 4.0 avec sources, définitions et limites explicites. Notre pipeline de vérification des artisans est documenté sur /notre-processus-de-verification. Pour un audit indépendant ou une demande d'accès détaillée, contactez notre équipe éditoriale via /contact.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       <div className="bg-sand-50 min-h-screen">
         <div className="max-w-5xl mx-auto px-4 py-8">

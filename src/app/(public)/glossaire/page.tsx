@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { glossaireTerms, glossaireCategories } from '@/lib/data/glossaire'
 import {
   BookOpen,
@@ -165,9 +166,35 @@ export default function GlossairePage() {
     {} as Record<string, typeof glossaireTerms>
   )
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Pourquoi avoir un glossaire du bâtiment ?',
+      answer: `Les devis d'artisans utilisent un vocabulaire technique précis (DTU, ITE, VMC, DPE, PAC, planéité, ragréage…). Notre glossaire de ${glossaireTerms.length} termes explique chaque mot en français courant, avec des exemples concrets, pour vous aider à lire un devis, comparer deux solutions et éviter les malentendus avec l'artisan.`,
+    },
+    {
+      question: 'Comment est organisé le glossaire ?',
+      answer: `Le glossaire est organisé par catégorie (gros œuvre, charpente, plomberie, électricité, isolation, menuiserie, revêtements, administratif & juridique) et par ordre alphabétique. Chaque terme renvoie vers les guides et fiches métier associés pour approfondir.`,
+    },
+    {
+      question: 'Les définitions sont-elles validées par des professionnels ?',
+      answer:
+        'Oui. Chaque définition est rédigée par notre équipe éditoriale à partir des DTU (Documents Techniques Unifiés), des normes CSTB et des glossaires CAPEB / FFB, puis relue par un artisan du réseau spécialiste de la thématique. Nous préférons renvoyer au DTU officiel plutôt que simplifier au point de devenir inexact.',
+    },
+    {
+      question: 'Un terme manque — comment le suggérer ?',
+      answer:
+        "Vous pouvez suggérer un terme manquant via notre formulaire de contact. Nous priorisons les termes fréquents dans les devis particuliers, les termes réglementaires (décennale, biennale, DPE) et les termes liés aux aides (MaPrimeRénov', CEE, Coup de pouce).",
+    },
+    {
+      question: 'Puis-je réutiliser ce glossaire ?',
+      answer:
+        'Oui, avec attribution. Vous pouvez citer ou reprendre des définitions en mentionnant la source « Glossaire du bâtiment — ServicesArtisans » et en incluant un lien vers la page concernée. Pour une reprise intégrale (dataset), contactez notre service presse.',
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, definedTermSetSchema]} />
+      <JsonLd data={[breadcrumbSchema, definedTermSetSchema, faqSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-primary-50/60 to-white">
         {/* Breadcrumb */}

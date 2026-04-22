@@ -10,6 +10,8 @@ import {
   Star,
   MessageCircle,
 } from 'lucide-react'
+import JsonLd from '@/components/JsonLd'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
@@ -96,12 +98,37 @@ export default function GarantiePage() {
     ],
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment sont vérifiés les artisans ?',
+      answer:
+        "Chaque artisan est vérifié via les données officielles SIREN/SIRET (INSEE, base Sirene) : entreprise en activité, NAF cohérent avec le métier déclaré. Pour les travaux d'économie d'énergie, la qualification RGE est contrôlée chaque semaine via la base ADEME (france-renov.gouv.fr). Les fiches en cessation d'activité sont automatiquement désactivées.",
+    },
+    {
+      question: 'Le devis est-il vraiment 100 % gratuit ?',
+      answer:
+        "Oui. Particulier comme entreprise, vous ne payez jamais pour obtenir un devis sur ServicesArtisans. L'artisan peut vous facturer un déplacement en urgence ou une étude technique approfondie, mais le devis en lui-même est toujours gratuit et sans engagement.",
+    },
+    {
+      question: 'Mes données sont-elles protégées ?',
+      answer:
+        "Oui. Vos informations personnelles ne sont transmises qu'à l'artisan que vous sollicitez (1 demande = 1 artisan, jamais partagé). Nous sommes conformes au RGPD, hébergés en Europe, avec un DPO joignable à dpo@servicesartisans.fr. Vous pouvez exercer vos droits d'accès, rectification, suppression et opposition à tout moment.",
+    },
+    {
+      question: 'Que se passe-t-il en cas de litige avec un artisan ?',
+      answer:
+        "En cas de désaccord : d'abord le dialogue écrit (mail daté détaillant le litige), puis la médiation gratuite auprès du médiateur de la consommation du bâtiment (obligatoire pour tout litige < 5 000 €). Notre équipe peut également suspendre la fiche artisan en cas de faits avérés et vous orienter vers les recours adaptés (tribunal judiciaire, assurance protection juridique).",
+    },
+    {
+      question: 'Quelles garanties légales couvrent mes travaux ?',
+      answer:
+        "Trois garanties légales s'appliquent à tout artisan : la garantie de parfait achèvement (1 an, tous défauts signalés à la réception), la garantie biennale (2 ans, équipements dissociables : chaudière, volets, plomberie), la garantie décennale (10 ans, gros œuvre et éléments indissociables). L'attestation d'assurance décennale doit figurer sur le devis.",
+    },
+  ])
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm text-charcoal-500">
