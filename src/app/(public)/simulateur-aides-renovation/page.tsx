@@ -5,6 +5,7 @@ import {
   getBreadcrumbSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getFAQSchema,
 } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
@@ -81,12 +82,45 @@ export default function SimulateurAidesRenovationPage() {
       "Simulation gratuite, sans engagement. Versement des aides sous réserve d'éligibilité : logement de plus de 2 ans (CEE) ou de 15 ans (MaPrimeRénov'), artisan RGE à la date de signature du devis, respect du parcours administratif (engagement CEE AVANT signature du devis).",
   })
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Quelles aides à la rénovation puis-je cumuler en 2026 ?',
+      answer:
+        "En 2026, vous pouvez cumuler MaPrimeRénov' (ANAH), les primes CEE (standard ou bonification précarité), le Coup de pouce pour certains gestes (isolation, chauffage biomasse, PAC), l'Éco-PTZ (jusqu'à 50 000 € à taux zéro) et la TVA réduite à 5,5 %. Le total des aides ne peut toutefois dépasser 90 % du coût TTC des travaux pour les ménages très modestes, 75 % pour les modestes, 60 % pour les intermédiaires et 40 % pour les supérieurs.",
+    },
+    {
+      question: 'Le simulateur est-il gratuit et sans engagement ?',
+      answer:
+        "Oui, 100 % gratuit et anonyme. Vous pouvez obtenir une estimation de vos aides sans créer de compte. Si vous souhaitez un accompagnement (pré-qualification de votre éligibilité, devis d'artisan RGE, gestion du dossier MaPrimeRénov' ou CEE), vous pouvez ensuite nous laisser vos coordonnées — sans obligation.",
+    },
+    {
+      question: 'Les montants affichés sont-ils les montants définitifs ?',
+      answer:
+        "Les montants proposés sont des estimations basées sur les barèmes officiels 2026 (arrêtés ANAH, fiches d'opérations standardisées CEE, charte Coup de pouce). Le montant effectif est confirmé après : étude technique par un artisan RGE, dépôt du dossier complet (devis, attestations, justificatifs de revenus) et instruction par l'ANAH ou l'obligé CEE.",
+    },
+    {
+      question: "Quand dois-je faire la demande d'aides par rapport aux travaux ?",
+      answer:
+        "Obligatoirement AVANT la signature du devis. La règle est stricte : pour MaPrimeRénov', vous devez déposer le dossier sur maprimerenov.gouv.fr et attendre la notification de recevabilité ; pour les primes CEE, l'offre de prime doit être acceptée avant le devis de l'artisan. Tout dépôt après signature entraîne un refus automatique.",
+    },
+    {
+      question: 'Dois-je obligatoirement passer par un artisan RGE ?',
+      answer:
+        "Oui. Pour bénéficier de MaPrimeRénov', des primes CEE, de l'Éco-PTZ et de la TVA à 5,5 %, l'artisan doit être titulaire d'une qualification RGE (Reconnu Garant de l'Environnement) correspondant à la famille de travaux (QualiPAC pour les PAC, QualiBois pour le bois, Qualibat 7141 pour l'isolation des combles, etc.). La qualification doit être valide à la date de signature du devis.",
+    },
+  ])
+
   return (
     <main className="min-h-screen bg-slate-50">
-      <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={governmentServiceSchema} />
-      <JsonLd data={financialProductSchema} />
-      <JsonLd data={webApplicationSchema} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          governmentServiceSchema,
+          financialProductSchema,
+          webApplicationSchema,
+          faqSchema,
+        ]}
+      />
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
         <header className="mb-8 text-center sm:mb-12">
           <h1 className="text-3xl font-extrabold tracking-tight text-charcoal-900 sm:text-4xl">

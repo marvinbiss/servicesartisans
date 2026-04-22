@@ -779,6 +779,54 @@ export default async function UrgencePage() {
                     closes: '23:59',
                   },
                 })),
+                {
+                  '@type': 'FAQPage',
+                  '@id': `${SITE_URL}/urgence#faq`,
+                  url: `${SITE_URL}/urgence`,
+                  name: 'FAQ — Urgence artisan soir & week-end',
+                  mainEntity: [
+                    {
+                      '@type': 'Question',
+                      name: "Combien coûte une intervention d'urgence ?",
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: "Les tarifs d'urgence incluent un forfait de déplacement (50-90 € en journée, 90-180 € en soirée/nuit/week-end) auquel s'ajoute le temps d'intervention (60-120 €/h). Une ouverture de porte simple coûte 80-200 € en journée, jusqu'à 400 € la nuit. Exigez toujours un devis signé AVANT intervention pour les interventions non-vitales.",
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: "Quel est le délai d'intervention réel ?",
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: "Les délais d'intervention varient selon la disponibilité locale, l'heure et le type d'urgence : comptez typiquement 30 minutes à 2 heures pour une urgence plomberie/serrurerie en semaine et en zone urbaine, 1 à 4 heures la nuit ou le week-end. En zone rurale, le délai peut être plus long.",
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'Dois-je payer le déplacement si je refuse le devis ?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: "Oui. En urgence, un forfait de déplacement (variable selon l'artisan et l'heure) est généralement facturé même si vous refusez le devis. Demandez le montant à l'avance par téléphone et préférez les artisans qui annoncent clairement leur barème.",
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'Mon assurance habitation couvre-t-elle l’intervention ?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: "Pour un dégât des eaux, fuite ou sinistre couvert, votre assurance multirisque habitation peut prendre en charge l'intervention (franchise éventuelle). Appelez votre assureur AVANT d'appeler un artisan : il peut mobiliser un réseau agréé et garantir le remboursement. Conservez facture + photos.",
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'Quand appeler le 18 ou le 112 plutôt qu’un artisan ?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: "Composez le 18 (pompiers) ou le 112 pour toute urgence vitale ou risque immédiat : fuite de gaz avérée, incendie, odeur de brûlé prononcée, personne bloquée, inondation importante. Pour les urgences non-vitales (serrure cassée, fuite maîtrisée, panne de courant localisée), un artisan d'astreinte est adapté.",
+                      },
+                    },
+                  ],
+                },
               ],
             },
             null,
