@@ -20,7 +20,7 @@ const AUTHOR_SLUG = 'claire-dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Crédit travaux 2026 : comparatif et éco-PTZ'
+const TITLE = 'Crédit travaux 2026 : éco-PTZ comparé'
 const DESCRIPTION =
   'Crédit travaux 2026 : comparatif prêt personnel, éco-PTZ 0 % jusqu’à 30 000 €, prêt immobilier, TAEG 3-9 %, durée 12-120 mois, FICP.'
 

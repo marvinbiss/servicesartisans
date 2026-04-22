@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix ravalement façade maison en 2026 : grille complète'
+const TITLE = 'Prix ravalement façade maison 2026'
 const DESCRIPTION =
-  'Prix ravalement façade maison en 2026 : 40 à 100 €/m² selon technique (nettoyage, enduit, bardage). Obligation légale tous les 10 ans dans certaines communes. Aides et exemple chiffré.'
+  'Prix ravalement façade maison 2026 : 40-100 €/m² (nettoyage, enduit, bardage). Obligation légale 10 ans, aides ITE, exemple chiffré maison 100 m².'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

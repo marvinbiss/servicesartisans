@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix rénovation salle de bain 4 m² en 2026 : budget complet'
+const TITLE = 'Prix rénovation salle de bain 4 m² 2026'
 const DESCRIPTION =
-  'Budget rénovation salle de bain 4 m² en 2026 : rafraîchissement 2 500-5 000 €, rénovation complète 6 000-12 000 €, haut de gamme 12 000-20 000 €. Détail par poste et aides.'
+  'Budget SDB 4 m² 2026 : rafraîchissement 2 500-5 000 €, complète 6 000-12 000 €, haut de gamme 12 000-20 000 €. Détail par poste et aides.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

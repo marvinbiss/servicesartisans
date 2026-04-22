@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Volet roulant motorisé : prix, pose, aides 2026'
+const TITLE = 'Volet roulant motorisé : prix 2026'
 const DESCRIPTION =
-  'Volet roulant motorisé 2026 : prix 550-1 400 € TTC posé par baie, alu/PVC, filaire/radio/solaire, TVA 10 %, CEE possible couplé isolation, installation électricien qualifié obligatoire.'
+  'Volet roulant motorisé 2026 : prix 550-1 400 € TTC/baie, alu/PVC, filaire/radio/solaire, TVA 10 %, CEE couplé isolation, électricien qualifié.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -11,7 +11,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 const PAGE_PATH = '/simulateur-aides-renovation'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 
-const TITLE = "Simulateur aides rénovation énergétique 2026 — MaPrimeRénov', CEE, Coup de Pouce"
+const TITLE = 'Simulateur aides rénovation énergétique 2026'
 const DESCRIPTION =
   "Estimez gratuitement vos aides rénovation énergétique en 45 secondes : MaPrimeRénov', CEE, Coup de Pouce, Éco-PTZ. Barèmes officiels 2026."
 

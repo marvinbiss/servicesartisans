@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix installation chaudière gaz en 2026 : le point complet'
+const TITLE = 'Prix installation chaudière gaz 2026'
 const DESCRIPTION =
-  'Prix installation chaudière gaz à condensation en 2026 : 3 500 à 7 500 € TTC installée. Fin de MaPrimeRénov’ chaudière gaz, coût entretien obligatoire, comparaison avec PAC.'
+  'Prix chaudière gaz à condensation 2026 : 3 500-7 500 € TTC installée. Fin MaPrimeRénov’ chaudière gaz, entretien obligatoire, comparaison PAC.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

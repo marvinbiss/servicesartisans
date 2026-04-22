@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Humidité sur un mur intérieur : identifier la cause et la bonne solution'
+const TITLE = 'Humidité mur intérieur : solutions 2026'
 const DESCRIPTION =
-  'Humidité sur mur intérieur : 4 causes possibles (condensation, infiltration, remontées capillaires, fuite), diagnostic visuel, traitements efficaces et prix 2026.'
+  'Humidité mur intérieur : 4 causes (condensation, infiltration, remontées capillaires, fuite), diagnostic visuel, traitements et prix 2026.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

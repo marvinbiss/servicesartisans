@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Borne de recharge IRVE 2026 : prix et aides'
+const TITLE = 'Borne IRVE 2026 : prix, pose et aides'
 const DESCRIPTION =
   'Borne IRVE 2026 : obligation tertiaire >20 places, prix 1 200-3 500 € TTC maison, crédit d’impôt 75 % plafonné 500 €, pose Qualifelec IRVE.'
 

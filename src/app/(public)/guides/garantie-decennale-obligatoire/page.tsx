@@ -19,10 +19,9 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE =
-  'Garantie décennale obligatoire : pour quels artisans, quels travaux, quelles exceptions'
+const TITLE = 'Garantie décennale obligatoire 2026'
 const DESCRIPTION =
-  "Garantie décennale obligatoire : liste des artisans concernés, ouvrages couverts (loi Spinetta), comment vérifier l'attestation, recours en cas de sinistre et exceptions 2026."
+  "Garantie décennale obligatoire 2026 : artisans concernés, ouvrages couverts (loi Spinetta), vérifier l'attestation, recours et exceptions."
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

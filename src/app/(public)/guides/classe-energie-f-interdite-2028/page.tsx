@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Classe énergie F : interdite location 2028'
+const TITLE = 'Classe énergie F : interdite 2028'
 const DESCRIPTION =
   'Logements F : interdiction location au 1er janvier 2028. Impact, dérogations, sanctions, travaux à faire, aides 2026 pour atteindre E ou D.'
 

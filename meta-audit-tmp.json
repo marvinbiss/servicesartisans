@@ -1,0 +1,1787 @@
+{
+  "pages_scanned_static": 193,
+  "pages_skipped_dynamic": 36,
+  "pages_with_issues": 139,
+  "duplicate_titles": 0,
+  "duplicate_descriptions": 0,
+  "issues": [
+    {
+      "route": "/guides/aides-renovation-2026",
+      "file": "src/app/(public)/guides/aides-renovation-2026/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 173
+        }
+      ]
+    },
+    {
+      "route": "/guides/alarme-maison-installation-prix",
+      "file": "src/app/(public)/guides/alarme-maison-installation-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 185
+        }
+      ]
+    },
+    {
+      "route": "/guides/amenagement-combles-perdus-prix",
+      "file": "src/app/(public)/guides/amenagement-combles-perdus-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 78
+        }
+      ]
+    },
+    {
+      "route": "/guides/amiante-desamiantage-prix-obligation",
+      "file": "src/app/(public)/guides/amiante-desamiantage-prix-obligation/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 65
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 193
+        }
+      ]
+    },
+    {
+      "route": "/guides/annuaire-rge-verifier-officiel",
+      "file": "src/app/(public)/guides/annuaire-rge-verifier-officiel/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 164
+        }
+      ]
+    },
+    {
+      "route": "/guides/artisan-rge",
+      "file": "src/app/(public)/guides/artisan-rge/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 202
+        }
+      ]
+    },
+    {
+      "route": "/guides/assainissement-individuel-fosse-septique",
+      "file": "src/app/(public)/guides/assainissement-individuel-fosse-septique/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 82
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 202
+        }
+      ]
+    },
+    {
+      "route": "/guides/assurance-dommage-ouvrage",
+      "file": "src/app/(public)/guides/assurance-dommage-ouvrage/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 174
+        }
+      ]
+    },
+    {
+      "route": "/guides/assurance-habitation-travaux",
+      "file": "src/app/(public)/guides/assurance-habitation-travaux/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 84
+        }
+      ]
+    },
+    {
+      "route": "/guides/audit-energetique-prix-aides",
+      "file": "src/app/(public)/guides/audit-energetique-prix-aides/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 67
+        }
+      ]
+    },
+    {
+      "route": "/guides/borne-recharge-irve-obligation",
+      "file": "src/app/(public)/guides/borne-recharge-irve-obligation/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/budget-renovation",
+      "file": "src/app/(public)/guides/budget-renovation/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 175
+        }
+      ]
+    },
+    {
+      "route": "/guides/cee-monter-dossier-etapes",
+      "file": "src/app/(public)/guides/cee-monter-dossier-etapes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        }
+      ]
+    },
+    {
+      "route": "/guides/chantier-abandonne-artisan-recours",
+      "file": "src/app/(public)/guides/chantier-abandonne-artisan-recours/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 77
+        }
+      ]
+    },
+    {
+      "route": "/guides/chaudiere-fioul-interdite-2026",
+      "file": "src/app/(public)/guides/chaudiere-fioul-interdite-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 83
+        }
+      ]
+    },
+    {
+      "route": "/guides/chaudiere-gaz-vs-granules",
+      "file": "src/app/(public)/guides/chaudiere-gaz-vs-granules/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        }
+      ]
+    },
+    {
+      "route": "/guides/chaudiere-ne-chauffe-plus",
+      "file": "src/app/(public)/guides/chaudiere-ne-chauffe-plus/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        }
+      ]
+    },
+    {
+      "route": "/guides/chauffe-eau-thermodynamique-prix",
+      "file": "src/app/(public)/guides/chauffe-eau-thermodynamique-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 79
+        }
+      ]
+    },
+    {
+      "route": "/guides/classe-energie-f-interdite-2028",
+      "file": "src/app/(public)/guides/classe-energie-f-interdite-2028/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        }
+      ]
+    },
+    {
+      "route": "/guides/climatisation-reversible-prix-pose",
+      "file": "src/app/(public)/guides/climatisation-reversible-prix-pose/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 68
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 188
+        }
+      ]
+    },
+    {
+      "route": "/guides/cloison-placo-prix-pose-m2",
+      "file": "src/app/(public)/guides/cloison-placo-prix-pose-m2/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 196
+        }
+      ]
+    },
+    {
+      "route": "/guides/cloture-jardin-reglementation",
+      "file": "src/app/(public)/guides/cloture-jardin-reglementation/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 70
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 180
+        }
+      ]
+    },
+    {
+      "route": "/guides/comment-choisir-artisan-rge",
+      "file": "src/app/(public)/guides/comment-choisir-artisan-rge/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 77
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 183
+        }
+      ]
+    },
+    {
+      "route": "/guides/comment-faire-devis-travaux",
+      "file": "src/app/(public)/guides/comment-faire-devis-travaux/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 82
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 162
+        }
+      ]
+    },
+    {
+      "route": "/guides/comparer-3-devis-artisans",
+      "file": "src/app/(public)/guides/comparer-3-devis-artisans/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 87
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 181
+        }
+      ]
+    },
+    {
+      "route": "/guides/condensation-fenetres-causes",
+      "file": "src/app/(public)/guides/condensation-fenetres-causes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 78
+        }
+      ]
+    },
+    {
+      "route": "/guides/controle-rge-frequence",
+      "file": "src/app/(public)/guides/controle-rge-frequence/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        }
+      ]
+    },
+    {
+      "route": "/guides/coup-de-pouce-chauffage-2026",
+      "file": "src/app/(public)/guides/coup-de-pouce-chauffage-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 174
+        }
+      ]
+    },
+    {
+      "route": "/guides/credit-travaux-pret-personnel-comparatif",
+      "file": "src/app/(public)/guides/credit-travaux-pret-personnel-comparatif/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 182
+        }
+      ]
+    },
+    {
+      "route": "/guides/declaration-prealable-travaux",
+      "file": "src/app/(public)/guides/declaration-prealable-travaux/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 187
+        }
+      ]
+    },
+    {
+      "route": "/guides/degat-eaux-responsabilites-voisin",
+      "file": "src/app/(public)/guides/degat-eaux-responsabilites-voisin/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 89
+        }
+      ]
+    },
+    {
+      "route": "/guides/delai-retractation-devis-artisan",
+      "file": "src/app/(public)/guides/delai-retractation-devis-artisan/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 69
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 169
+        }
+      ]
+    },
+    {
+      "route": "/guides/devis-facture-mentions-obligatoires",
+      "file": "src/app/(public)/guides/devis-facture-mentions-obligatoires/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        }
+      ]
+    },
+    {
+      "route": "/guides/devis-travaux",
+      "file": "src/app/(public)/guides/devis-travaux/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/diagnostics-vente-obligatoires",
+      "file": "src/app/(public)/guides/diagnostics-vente-obligatoires/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/domotique-installation-smart-home",
+      "file": "src/app/(public)/guides/domotique-installation-smart-home/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 77
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 195
+        }
+      ]
+    },
+    {
+      "route": "/guides/dpe-mauvais-que-faire",
+      "file": "src/app/(public)/guides/dpe-mauvais-que-faire/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 62
+        }
+      ]
+    },
+    {
+      "route": "/guides/dtu-plomberie-normes",
+      "file": "src/app/(public)/guides/dtu-plomberie-normes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/eco-pret-taux-zero-2026",
+      "file": "src/app/(public)/guides/eco-pret-taux-zero-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 85
+        }
+      ]
+    },
+    {
+      "route": "/guides/eviter-arnaques-artisan",
+      "file": "src/app/(public)/guides/eviter-arnaques-artisan/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 172
+        }
+      ]
+    },
+    {
+      "route": "/guides/expertise-batiment-prix-quand-faire-appel",
+      "file": "src/app/(public)/guides/expertise-batiment-prix-quand-faire-appel/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 68
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 183
+        }
+      ]
+    },
+    {
+      "route": "/guides/extension-maison",
+      "file": "src/app/(public)/guides/extension-maison/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/faux-devis-detecter-signaler",
+      "file": "src/app/(public)/guides/faux-devis-detecter-signaler/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        }
+      ]
+    },
+    {
+      "route": "/guides/fissures-maison-inquietantes",
+      "file": "src/app/(public)/guides/fissures-maison-inquietantes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 79
+        }
+      ]
+    },
+    {
+      "route": "/guides/fuite-eau-que-faire",
+      "file": "src/app/(public)/guides/fuite-eau-que-faire/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        }
+      ]
+    },
+    {
+      "route": "/guides/garantie-decennale",
+      "file": "src/app/(public)/guides/garantie-decennale/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 175
+        }
+      ]
+    },
+    {
+      "route": "/guides/garantie-decennale-obligatoire",
+      "file": "src/app/(public)/guides/garantie-decennale-obligatoire/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 106
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 175
+        }
+      ]
+    },
+    {
+      "route": "/guides/garantie-parfait-achevement",
+      "file": "src/app/(public)/guides/garantie-parfait-achevement/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 84
+        }
+      ]
+    },
+    {
+      "route": "/guides/humidite-mur-interieur-solution",
+      "file": "src/app/(public)/guides/humidite-mur-interieur-solution/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 91
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 162
+        }
+      ]
+    },
+    {
+      "route": "/guides/infiltration-eau-toiture-diagnostic",
+      "file": "src/app/(public)/guides/infiltration-eau-toiture-diagnostic/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        }
+      ]
+    },
+    {
+      "route": "/guides/infiltration-fenetre-pvc",
+      "file": "src/app/(public)/guides/infiltration-fenetre-pvc/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 79
+        }
+      ]
+    },
+    {
+      "route": "/guides/installation-pompe-chaleur-etapes",
+      "file": "src/app/(public)/guides/installation-pompe-chaleur-etapes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        }
+      ]
+    },
+    {
+      "route": "/guides/interphone-visiophone-installation-prix",
+      "file": "src/app/(public)/guides/interphone-visiophone-installation-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 68
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 191
+        }
+      ]
+    },
+    {
+      "route": "/guides/isolation-exterieure-vs-interieure",
+      "file": "src/app/(public)/guides/isolation-exterieure-vs-interieure/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 85
+        }
+      ]
+    },
+    {
+      "route": "/guides/isolation-phonique-mur-appartement",
+      "file": "src/app/(public)/guides/isolation-phonique-mur-appartement/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 78
+        }
+      ]
+    },
+    {
+      "route": "/guides/labels-qualifications-artisans",
+      "file": "src/app/(public)/guides/labels-qualifications-artisans/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 183
+        }
+      ]
+    },
+    {
+      "route": "/guides/malfacons-travaux-recours",
+      "file": "src/app/(public)/guides/malfacons-travaux-recours/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        }
+      ]
+    },
+    {
+      "route": "/guides/maprimerenov-2026",
+      "file": "src/app/(public)/guides/maprimerenov-2026/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 198
+        }
+      ]
+    },
+    {
+      "route": "/guides/maprimerenov-copropriete",
+      "file": "src/app/(public)/guides/maprimerenov-copropriete/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 78
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 169
+        }
+      ]
+    },
+    {
+      "route": "/guides/maprimerenov-parcours-accompagne",
+      "file": "src/app/(public)/guides/maprimerenov-parcours-accompagne/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 85
+        }
+      ]
+    },
+    {
+      "route": "/guides/moisissure-mur-chambre-traitement",
+      "file": "src/app/(public)/guides/moisissure-mur-chambre-traitement/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 84
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/mon-accompagnateur-renov-obligatoire",
+      "file": "src/app/(public)/guides/mon-accompagnateur-renov-obligatoire/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        }
+      ]
+    },
+    {
+      "route": "/guides/normes-electriques",
+      "file": "src/app/(public)/guides/normes-electriques/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 182
+        }
+      ]
+    },
+    {
+      "route": "/guides/odeur-canalisation-remede",
+      "file": "src/app/(public)/guides/odeur-canalisation-remede/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 171
+        }
+      ]
+    },
+    {
+      "route": "/guides/ouverture-mur-porteur-prix",
+      "file": "src/app/(public)/guides/ouverture-mur-porteur-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/panne-electrique-generale-conduite",
+      "file": "src/app/(public)/guides/panne-electrique-generale-conduite/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 84
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 162
+        }
+      ]
+    },
+    {
+      "route": "/guides/panneau-solaire-prix-rentabilite",
+      "file": "src/app/(public)/guides/panneau-solaire-prix-rentabilite/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 66
+        }
+      ]
+    },
+    {
+      "route": "/guides/parquet-massif-pose-prix-m2",
+      "file": "src/app/(public)/guides/parquet-massif-pose-prix-m2/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 170
+        }
+      ]
+    },
+    {
+      "route": "/guides/passoire-thermique-renovation",
+      "file": "src/app/(public)/guides/passoire-thermique-renovation/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        }
+      ]
+    },
+    {
+      "route": "/guides/pergola-bioclimatique-prix-m2",
+      "file": "src/app/(public)/guides/pergola-bioclimatique-prix-m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 64
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 192
+        }
+      ]
+    },
+    {
+      "route": "/guides/permis-construire",
+      "file": "src/app/(public)/guides/permis-construire/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 185
+        }
+      ]
+    },
+    {
+      "route": "/guides/perte-rge-consequences",
+      "file": "src/app/(public)/guides/perte-rge-consequences/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 85
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 170
+        }
+      ]
+    },
+    {
+      "route": "/guides/plafond-maprimerenov-revenus-2026",
+      "file": "src/app/(public)/guides/plafond-maprimerenov-revenus-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/plombier-tarif-horaire-2026",
+      "file": "src/app/(public)/guides/plombier-tarif-horaire-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/poele-granules-aides-2026",
+      "file": "src/app/(public)/guides/poele-granules-aides-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 68
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 183
+        }
+      ]
+    },
+    {
+      "route": "/guides/pompe-a-chaleur",
+      "file": "src/app/(public)/guides/pompe-a-chaleur/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 173
+        }
+      ]
+    },
+    {
+      "route": "/guides/pont-thermique-maison-traitement",
+      "file": "src/app/(public)/guides/pont-thermique-maison-traitement/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 71
+        }
+      ]
+    },
+    {
+      "route": "/guides/portail-motorise-prix-pose",
+      "file": "src/app/(public)/guides/portail-motorise-prix-pose/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 64
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 174
+        }
+      ]
+    },
+    {
+      "route": "/guides/porte-claquee-serrurier-prix",
+      "file": "src/app/(public)/guides/porte-claquee-serrurier-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        }
+      ]
+    },
+    {
+      "route": "/guides/prime-pompe-chaleur-locataire",
+      "file": "src/app/(public)/guides/prime-pompe-chaleur-locataire/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 89
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 161
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-carrelage-pose-m2",
+      "file": "src/app/(public)/guides/prix-carrelage-pose-m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 167
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-changement-fenetres-double-vitrage",
+      "file": "src/app/(public)/guides/prix-changement-fenetres-double-vitrage/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 87
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 172
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-electricien-heure-2026",
+      "file": "src/app/(public)/guides/prix-electricien-heure-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 82
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 169
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-installation-chaudiere-gaz",
+      "file": "src/app/(public)/guides/prix-installation-chaudiere-gaz/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 77
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 173
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-isolation-combles-100m2",
+      "file": "src/app/(public)/guides/prix-isolation-combles-100m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 171
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-peinture-appartement-50m2",
+      "file": "src/app/(public)/guides/prix-peinture-appartement-50m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 91
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-pompe-chaleur-air-eau-installee",
+      "file": "src/app/(public)/guides/prix-pompe-chaleur-air-eau-installee/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 71
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 176
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-ravalement-facade-maison",
+      "file": "src/app/(public)/guides/prix-ravalement-facade-maison/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 74
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 184
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-renovation-maison-100m2",
+      "file": "src/app/(public)/guides/prix-renovation-maison-100m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 195
+        }
+      ]
+    },
+    {
+      "route": "/guides/prix-renovation-salle-bain-4m2",
+      "file": "src/app/(public)/guides/prix-renovation-salle-bain-4m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 78
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 172
+        }
+      ]
+    },
+    {
+      "route": "/guides/qualibat-qualipac-qualifelec-qui-choisir",
+      "file": "src/app/(public)/guides/qualibat-qualipac-qualifelec-qui-choisir/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 62
+        }
+      ]
+    },
+    {
+      "route": "/guides/qualipac-signification-obtenir",
+      "file": "src/app/(public)/guides/qualipac-signification-obtenir/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 84
+        }
+      ]
+    },
+    {
+      "route": "/guides/radiateur-electrique-inertie-prix",
+      "file": "src/app/(public)/guides/radiateur-electrique-inertie-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 67
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 197
+        }
+      ]
+    },
+    {
+      "route": "/guides/ravalement-facade-obligation-10-ans",
+      "file": "src/app/(public)/guides/ravalement-facade-obligation-10-ans/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 79
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 181
+        }
+      ]
+    },
+    {
+      "route": "/guides/reception-travaux-pv-checklist",
+      "file": "src/app/(public)/guides/reception-travaux-pv-checklist/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 67
+        }
+      ]
+    },
+    {
+      "route": "/guides/refuser-devis-artisan-signe",
+      "file": "src/app/(public)/guides/refuser-devis-artisan-signe/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/remontee-capillaire-mur-solution",
+      "file": "src/app/(public)/guides/remontee-capillaire-mur-solution/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 66
+        }
+      ]
+    },
+    {
+      "route": "/guides/remplacement-fenetres-aides-2026",
+      "file": "src/app/(public)/guides/remplacement-fenetres-aides-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/guides/renovation-cuisine",
+      "file": "src/app/(public)/guides/renovation-cuisine/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 164
+        }
+      ]
+    },
+    {
+      "route": "/guides/renovation-energetique-complete",
+      "file": "src/app/(public)/guides/renovation-energetique-complete/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 166
+        }
+      ]
+    },
+    {
+      "route": "/guides/renovation-salle-de-bain",
+      "file": "src/app/(public)/guides/renovation-salle-de-bain/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 168
+        }
+      ]
+    },
+    {
+      "route": "/guides/renovation-toiture",
+      "file": "src/app/(public)/guides/renovation-toiture/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 161
+        }
+      ]
+    },
+    {
+      "route": "/guides/retenue-garantie-5-pourcent",
+      "file": "src/app/(public)/guides/retenue-garantie-5-pourcent/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        }
+      ]
+    },
+    {
+      "route": "/guides/serrurier-arnaques-tarifs-honnetes",
+      "file": "src/app/(public)/guides/serrurier-arnaques-tarifs-honnetes/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 81
+        }
+      ]
+    },
+    {
+      "route": "/guides/surelevation-toiture-prix",
+      "file": "src/app/(public)/guides/surelevation-toiture-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 77
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 161
+        }
+      ]
+    },
+    {
+      "route": "/guides/tableau-electrique-aux-normes-2026",
+      "file": "src/app/(public)/guides/tableau-electrique-aux-normes-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 86
+        }
+      ]
+    },
+    {
+      "route": "/guides/taxe-amenagement-calcul-2026",
+      "file": "src/app/(public)/guides/taxe-amenagement-calcul-2026/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 85
+        }
+      ]
+    },
+    {
+      "route": "/guides/terrasse-bois-composite-prix-m2",
+      "file": "src/app/(public)/guides/terrasse-bois-composite-prix-m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 69
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 176
+        }
+      ]
+    },
+    {
+      "route": "/guides/travaux-copropriete",
+      "file": "src/app/(public)/guides/travaux-copropriete/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 166
+        }
+      ]
+    },
+    {
+      "route": "/guides/trouver-artisan",
+      "file": "src/app/(public)/guides/trouver-artisan/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 179
+        }
+      ]
+    },
+    {
+      "route": "/guides/tva-5-5-travaux-conditions",
+      "file": "src/app/(public)/guides/tva-5-5-travaux-conditions/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 73
+        }
+      ]
+    },
+    {
+      "route": "/guides/velux-installation-prix",
+      "file": "src/app/(public)/guides/velux-installation-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 65
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 182
+        }
+      ]
+    },
+    {
+      "route": "/guides/ventilation-double-flux-prix",
+      "file": "src/app/(public)/guides/ventilation-double-flux-prix/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 190
+        }
+      ]
+    },
+    {
+      "route": "/guides/veranda-prix-pose-m2",
+      "file": "src/app/(public)/guides/veranda-prix-pose-m2/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 61
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 179
+        }
+      ]
+    },
+    {
+      "route": "/guides/verifier-siret-artisan",
+      "file": "src/app/(public)/guides/verifier-siret-artisan/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 65
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 199
+        }
+      ]
+    },
+    {
+      "route": "/guides/vice-cache-immobilier-recours",
+      "file": "src/app/(public)/guides/vice-cache-immobilier-recours/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 62
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 194
+        }
+      ]
+    },
+    {
+      "route": "/guides/vmc-obligatoire-maison-neuve",
+      "file": "src/app/(public)/guides/vmc-obligatoire-maison-neuve/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 75
+        }
+      ]
+    },
+    {
+      "route": "/guides/volet-roulant-motorise-prix",
+      "file": "src/app/(public)/guides/volet-roulant-motorise-prix/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 66
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 185
+        }
+      ]
+    },
+    {
+      "route": "/leads-exclusifs-vs-partages",
+      "file": "src/app/(public)/leads-exclusifs-vs-partages/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        }
+      ]
+    },
+    {
+      "route": "/maprimerenov-cumulaison-cee",
+      "file": "src/app/(public)/maprimerenov-cumulaison-cee/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 164
+        }
+      ]
+    },
+    {
+      "route": "/methodologie",
+      "file": "src/app/(public)/methodologie/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 164
+        }
+      ]
+    },
+    {
+      "route": "/outils/calculateur-prix",
+      "file": "src/app/(public)/outils/calculateur-prix/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 194
+        }
+      ]
+    },
+    {
+      "route": "/plan-du-site",
+      "file": "src/app/(public)/plan-du-site/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_short",
+          "length": 12
+        }
+      ]
+    },
+    {
+      "route": "/problemes",
+      "file": "src/app/(public)/problemes/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 196
+        }
+      ]
+    },
+    {
+      "route": "/recherche",
+      "file": "src/app/(public)/recherche/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 167
+        }
+      ]
+    },
+    {
+      "route": "/renovation-energetique",
+      "file": "src/app/(public)/renovation-energetique/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 171
+        }
+      ]
+    },
+    {
+      "route": "/rge/comment-devenir-rge",
+      "file": "src/app/(public)/rge/comment-devenir-rge/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 197
+        }
+      ]
+    },
+    {
+      "route": "/rge/fraude-rge-comment-verifier",
+      "file": "src/app/(public)/rge/fraude-rge-comment-verifier/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 67
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 248
+        }
+      ]
+    },
+    {
+      "route": "/rge",
+      "file": "src/app/(public)/rge/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 169
+        }
+      ]
+    },
+    {
+      "route": "/rge/qualifications",
+      "file": "src/app/(public)/rge/qualifications/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 71
+        }
+      ]
+    },
+    {
+      "route": "/rge/sources",
+      "file": "src/app/(public)/rge/sources/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 175
+        }
+      ]
+    },
+    {
+      "route": "/rge/tarifs-audit-energetique",
+      "file": "src/app/(public)/rge/tarifs-audit-energetique/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 72
+        },
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 176
+        }
+      ]
+    },
+    {
+      "route": "/services",
+      "file": "src/app/(public)/services/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 190
+        }
+      ]
+    },
+    {
+      "route": "/simulateur-aides-renovation",
+      "file": "src/app/(public)/simulateur-aides-renovation/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 80
+        }
+      ]
+    },
+    {
+      "route": "/simulateur-prime-cee",
+      "file": "src/app/(public)/simulateur-prime-cee/page.tsx",
+      "issues": [
+        {
+          "field": "title",
+          "issue": "too_long",
+          "length": 76
+        }
+      ]
+    },
+    {
+      "route": "/sources",
+      "file": "src/app/(public)/sources/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 165
+        }
+      ]
+    },
+    {
+      "route": "/statistiques-artisans-france",
+      "file": "src/app/(public)/statistiques-artisans-france/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 236
+        }
+      ]
+    },
+    {
+      "route": "/verifier-artisan",
+      "file": "src/app/(public)/verifier-artisan/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 170
+        }
+      ]
+    },
+    {
+      "route": "/widget-prix",
+      "file": "src/app/(public)/widget-prix/page.tsx",
+      "issues": [
+        {
+          "field": "description",
+          "issue": "too_long",
+          "length": 170
+        }
+      ]
+    }
+  ],
+  "duplicates": {
+    "titles": [],
+    "descriptions": []
+  }
+}

@@ -28,7 +28,7 @@ const path = '/rge/comment-devenir-rge'
 export const metadata: Metadata = {
   title: 'Comment devenir artisan RGE en 2026 ? Guide complet',
   description:
-    "Guide factuel pour obtenir la qualification RGE : organismes (Qualit'EnR, Qualibat, Qualifelec), 5 étapes, coûts, formation, audit de chantier probatoire, cadre légal (arrêté du 1er décembre 2015).",
+    "Obtenir la qualification RGE : organismes (Qualit'EnR, Qualibat, Qualifelec), 5 étapes, coûts, formation, audit chantier, cadre légal 2015.",
   robots: {
     index: true,
     follow: true,

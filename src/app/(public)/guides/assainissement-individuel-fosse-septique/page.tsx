@@ -20,7 +20,7 @@ const AUTHOR_SLUG = 'jean-pierre-duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Fosse septique : prix et contrôle SPANC 2026'
+const TITLE = 'Fosse septique 2026 : prix et SPANC'
 const DESCRIPTION =
   'Assainissement non collectif 2026 : fosse toutes eaux 6 500-12 500 € TTC, micro-station 7 500-12 000 €, contrôle SPANC obligatoire, mise aux normes 4 ans.'
 

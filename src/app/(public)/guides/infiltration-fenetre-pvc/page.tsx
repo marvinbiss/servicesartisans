@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Infiltration fenêtre PVC : causes, solutions'
+const TITLE = 'Fuite fenêtre PVC : causes & solutions'
 const DESCRIPTION =
   'Diagnostiquez une infiltration de fenêtre PVC : joints, pente appui, pose, micro-ventilation. Solutions DIY, recours décennale, prix 2026.'
 

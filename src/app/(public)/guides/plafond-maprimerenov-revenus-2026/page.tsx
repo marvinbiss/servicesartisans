@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Plafonds MaPrimeRénov’ 2026 : barème de revenus par catégorie'
+const TITLE = 'Plafonds MaPrimeRénov’ 2026 : revenus'
 const DESCRIPTION =
   'Plafonds de revenus MaPrimeRénov’ 2026 : barème officiel Bleu / Jaune / Violet / Rose, par nombre de personnes et zone Île-de-France ou hors Île-de-France.'
 

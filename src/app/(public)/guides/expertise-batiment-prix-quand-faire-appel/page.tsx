@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'sophie-martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Expertise bâtiment : prix, quand faire appel 2026'
+const TITLE = 'Expertise bâtiment 2026 : prix et recours'
 const DESCRIPTION =
-  'Expert bâtiment 2026 : prix 400-2 500 € HT selon mission, avant achat 500-900 €, malfaçon 600-1 500 €, expertise judiciaire 2 000-5 000 €, délai 2-6 semaines, CNEAF ou CIBTP certifié.'
+  'Expert bâtiment 2026 : prix 400-2 500 € HT, avant achat 500-900 €, malfaçon 600-1 500 €, judiciaire 2 000-5 000 €, CNEAF ou CIBTP certifié.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

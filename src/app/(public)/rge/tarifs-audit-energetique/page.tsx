@@ -100,9 +100,9 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Tarifs audit énergétique 2026 : prix, aides et retour sur investissement',
+  title: 'Tarifs audit énergétique 2026 : prix, aides, ROI',
   description:
-    "Combien coûte un audit énergétique réglementaire en 2026 ? Fourchettes de prix, forfait MaPrimeRénov' audit, aides cumulables, rentabilité, choix de l'auditeur et FAQ complète.",
+    "Combien coûte un audit énergétique réglementaire 2026 ? Prix, forfait MaPrimeRénov' audit, aides cumulables, rentabilité, choix auditeur, FAQ.",
   alternates: getAlternates(PAGE_PATH),
   openGraph: {
     locale: 'fr_FR',

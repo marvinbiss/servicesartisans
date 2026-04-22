@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix rénovation maison 100 m² en 2026 : budget par niveau'
+const TITLE = 'Prix rénovation maison 100 m² 2026'
 const DESCRIPTION =
-  'Budget rénovation maison 100 m² en 2026 : rafraîchissement (300-600 €/m²), rénovation moyenne (700-1 200 €/m²), rénovation complète (1 200-2 500 €/m²). Prix par poste, aides et exemples chiffrés.'
+  'Budget rénovation maison 100 m² 2026 : rafraîchissement 300-600 €/m², moyenne 700-1 200 €/m², complète 1 200-2 500 €/m². Prix par poste, aides.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

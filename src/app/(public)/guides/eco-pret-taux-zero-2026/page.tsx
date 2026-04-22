@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Éco-PTZ 2026 : éco-prêt à taux zéro pour la rénovation énergétique'
+const TITLE = 'Éco-PTZ 2026 : éco-prêt à taux zéro'
 const DESCRIPTION =
   'Éco-prêt à taux zéro 2026 : prêt jusqu’à 50 000 € sans intérêt pour rénovation énergétique. Conditions, plafonds par geste, banques, cumul avec MaPrimeRénov’.'
 

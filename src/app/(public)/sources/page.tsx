@@ -25,7 +25,7 @@ const path = '/sources'
 export const metadata: Metadata = {
   title: 'Sources de données officielles | ServicesArtisans',
   description:
-    'Toutes les sources de données officielles utilisées par ServicesArtisans : INSEE, ADEME, SIRENE, DVF Etalab, Open-Meteo, Géorisques, SDES. Transparence et fiabilité.',
+    'Sources de données officielles de ServicesArtisans : INSEE, ADEME, SIRENE, DVF Etalab, Open-Meteo, Géorisques, SDES. Transparence, fiabilité.',
   alternates: getAlternates(path),
   openGraph: {
     title: 'Sources de données officielles | ServicesArtisans',

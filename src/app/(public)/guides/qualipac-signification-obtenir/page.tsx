@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'QualiPAC signification : obtenir la qualification pompe à chaleur'
+const TITLE = 'QualiPAC : signification et obtention'
 const DESCRIPTION =
   'QualiPAC : signification, conditions, audit Qualit’EnR, durée 4 ans, prix 800-1 400 €, obligatoire pour MaPrimeRénov’ pompe à chaleur.'
 

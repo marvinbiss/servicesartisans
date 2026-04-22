@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Plombier tarif horaire 2026 : prix journée, urgence, forfaits'
+const TITLE = 'Plombier tarif horaire 2026'
 const DESCRIPTION =
   'Plombier tarif horaire 2026 : 50-80 €/h journée, 90-180 €/h nuit/urgence. Forfaits dépannage, prix par tâche, arnaques à éviter, critères honnêtes.'
 

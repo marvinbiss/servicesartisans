@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Faux devis artisan : détecter, signaler, recours 2026'
+const TITLE = 'Faux devis artisan : détecter et signaler'
 const DESCRIPTION =
   'Faux devis artisan : 10 signaux d’alerte, vérifications SIRET + RC pro + décennale, signalement DGCCRF, recours pénal. Protéger vos travaux et aides.'
 

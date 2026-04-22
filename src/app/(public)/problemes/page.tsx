@@ -26,7 +26,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Problèmes Courants — Solutions',
   description:
-    'Identifiez votre problème (fuite d’eau, panne électrique, serrure bloquée…) et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans référencés.',
+    'Identifiez votre problème (fuite, panne électrique, serrure bloquée) et trouvez la solution. Diagnostic gratuit + mise en relation artisans.',
   alternates: getAlternates(`/problemes`),
   openGraph: {
     locale: 'fr_FR',

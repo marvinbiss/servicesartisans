@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Odeur de canalisation : 4 causes et les vrais remèdes en 2026'
+const TITLE = 'Odeur canalisation : causes et remèdes'
 const DESCRIPTION =
-  'Odeur d’égout dans la maison : 4 causes typiques (siphon sec, évent bouché, graisse, canalisation cassée) et remèdes par cause. Diagnostic, DIY, quand appeler un plombier.'
+  'Éliminez l’odeur d’égout : 4 causes (siphon sec, évent bouché, graisse, canalisation cassée) et remèdes. Diagnostic, DIY, quand appeler un plombier.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

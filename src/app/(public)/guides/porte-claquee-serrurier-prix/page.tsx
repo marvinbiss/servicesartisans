@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Porte claquée : prix serrurier 2026 et arnaques à éviter'
+const TITLE = 'Porte claquée : prix serrurier 2026'
 const DESCRIPTION =
   'Porte claquée : prix serrurier 2026 selon type de porte, heure et urgence. Comment éviter les arnaques serrurier (500-3000 €), méthode sans casse, garanties.'
 

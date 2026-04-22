@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Panneau solaire : prix, aides, rentabilité 2026'
+const TITLE = 'Panneau solaire : prix, rentabilité 2026'
 const DESCRIPTION =
   'Panneau solaire 2026 : 8 000-18 000 € TTC installé 3-9 kWc. Aide autoconsommation 80-380 €/kWc + revente EDF OA. Rentabilité 10-14 ans, QualiPV RGE.'
 

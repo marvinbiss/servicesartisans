@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Passoire thermique : rénovation obligatoire, aides 2026'
+const TITLE = 'Passoire thermique : aides 2026'
 const DESCRIPTION =
   'Passoire thermique F ou G : rénovation énergétique obligatoire 2025-2034, aides MaPrimeRénov’, audit obligatoire, coût moyen, sortie de passoire.'
 

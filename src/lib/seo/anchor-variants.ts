@@ -1,4 +1,4 @@
-import { hashCode } from '@/lib/seo/location-content'
+import { hashCode } from '@/lib/seo/hash'
 
 // ---------------------------------------------------------------------------
 // Varied anchor text system for internal links

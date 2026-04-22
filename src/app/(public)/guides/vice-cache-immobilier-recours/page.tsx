@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'sophie-martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Vice caché immobilier : recours, délai 2026'
+const TITLE = 'Vice caché immobilier : recours 2026'
 const DESCRIPTION =
-  'Vice caché immobilier 2026 : art. 1641 Code civil, 4 conditions (antériorité, gravité, caché, non connu), délai action 2 ans découverte (art. 1648), recours = action rédhibitoire ou estimatoire.'
+  'Vice caché immobilier 2026 : art. 1641, 4 conditions (antérieur, grave, caché, inconnu), délai 2 ans découverte, action rédhibitoire ou estimatoire.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

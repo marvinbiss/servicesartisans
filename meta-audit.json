@@ -1,0 +1,12 @@
+{
+  "pages_scanned_static": 193,
+  "pages_skipped_dynamic": 36,
+  "pages_with_issues": 0,
+  "duplicate_titles": 0,
+  "duplicate_descriptions": 0,
+  "issues": [],
+  "duplicates": {
+    "titles": [],
+    "descriptions": []
+  }
+}

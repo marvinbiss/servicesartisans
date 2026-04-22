@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Dossier CEE 2026 : 7 étapes, pièces, délais'
+const TITLE = 'Dossier CEE 2026 : 7 étapes et pièces'
 const DESCRIPTION =
   'Monter dossier CEE 2026 : signature AVANT devis, pièces obligatoires, délai 6-12 mois, obligés vs mandataires, cumul MPR, fraude à éviter.'
 

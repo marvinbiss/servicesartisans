@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Infiltration eau toiture : diagnostic et réparations 2026'
+const TITLE = 'Infiltration toiture : diagnostic 2026'
 const DESCRIPTION =
   'Infiltration toiture : diagnostic origine (tuile cassée, faîtage, solin, cheminée), coût réparation, assurance, responsabilité locataire/propriétaire.'
 

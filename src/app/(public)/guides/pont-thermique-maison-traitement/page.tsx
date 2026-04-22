@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Pont thermique maison : traitement et solutions 2026'
+const TITLE = 'Pont thermique : traitement & fix 2026'
 const DESCRIPTION =
   'Pont thermique : définition, localisation (dalle, refend, nez plancher), impact DPE, traitement ITE vs ITI, rupteurs thermiques, coût.'
 

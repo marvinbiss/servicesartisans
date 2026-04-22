@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Radiateur électrique à inertie : prix, pose 2026'
+const TITLE = 'Radiateur inertie : prix, pose 2026'
 const DESCRIPTION =
-  'Radiateur inertie 2026 : prix 350-1 400 € TTC posé (fluide, fonte, céramique), puissance 750-2 000 W, pilotage Wifi NF EN 60335, installation électricien qualifié, CEE pilotage chauffage 200-400 €.'
+  'Radiateur inertie 2026 : prix 350-1 400 € posé (fluide, fonte, céramique), 750-2 000 W, pilotage Wifi, électricien qualifié, CEE 200-400 €.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

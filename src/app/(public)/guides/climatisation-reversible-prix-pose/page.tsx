@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Climatisation réversible 2026 : prix et pose'
+const TITLE = 'Climatisation réversible 2026 : prix'
 const AUTHOR_SLUG = 'jean-pierre-duval'
 const DESCRIPTION =
   'Climatisation réversible 2026 : prix 1 800-8 500 € TTC mono/multi-split, COP 3,5-4,5, aides CEE 100-300 €, pose RGE QualiPAC obligatoire pour prime.'

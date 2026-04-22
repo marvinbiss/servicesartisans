@@ -19,11 +19,11 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Perte de qualification RGE : conséquences, procédure, recours 2026'
+const TITLE = 'Perte RGE : conséquences, recours 2026'
 const AUTHORS_CITY_FALLBACK = ''
 void AUTHORS_CITY_FALLBACK
 const DESCRIPTION =
-  'Perte RGE : motifs (non-conformité, fraude, contrôle négatif), conséquences (perte chantiers, aides), procédure Qualit’EnR / Qualibat, délai recours 2 mois, reconduction.'
+  'Perte RGE : motifs (non-conformité, fraude, contrôle négatif), conséquences (perte chantiers, aides), procédure Qualit’EnR/Qualibat, recours 2 mois.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -66,7 +66,7 @@ export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
   title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
-  description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
+  description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur. Artisans vérifiés SIREN, devis gratuit.`,
   alternates: getAlternates('/services'),
   openGraph: {
     title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
+    description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur. Artisans vérifiés SIREN, devis gratuit.`,
   },
 }
 

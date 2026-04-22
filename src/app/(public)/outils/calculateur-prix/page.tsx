@@ -12,7 +12,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
   description:
-    'Estimez le coût de vos travaux en quelques clics : prix plombier, tarif électricien, coût serrurier, devis peintre et tous les métiers du bâtiment. Calculateur gratuit avec prix actualisés 2026.',
+    'Estimez vos travaux en un clic : plombier, électricien, serrurier, peintre et tous métiers du bâtiment. Calculateur gratuit, prix 2026 actualisés.',
   alternates: getAlternates('/outils/calculateur-prix'),
   robots: {
     index: true,

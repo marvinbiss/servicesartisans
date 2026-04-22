@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Isabelle Renault'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix peinture appartement 50 m² en 2026 : combien coûte la remise à neuf'
+const TITLE = 'Prix peinture appartement 50 m² 2026'
 const DESCRIPTION =
   'Prix peinture appartement 50 m² en 2026 : 1 500 à 4 500 € TTC tout compris selon état des supports. Prix au m², choix de peinture, préparation, main-d’œuvre.'
 

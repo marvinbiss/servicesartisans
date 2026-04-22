@@ -26,7 +26,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Garantie Décennale : Tout Comprendre en 2026',
   description:
-    "Tout savoir sur la garantie décennale : définition, durée de 10 ans, travaux couverts, exclusions, comment vérifier l'attestation d'un artisan et que faire en cas de sinistre.",
+    "Découvrez la garantie décennale 2026 : durée 10 ans, travaux couverts, exclusions, vérifier l'attestation artisan et recours en cas de sinistre.",
   alternates: getAlternates('/guides/garantie-decennale'),
   openGraph: {
     title: 'Garantie Décennale : Tout Comprendre en 2026',

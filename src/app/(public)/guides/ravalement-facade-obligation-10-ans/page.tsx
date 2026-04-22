@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'sophie-martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Ravalement façade : obligation 10 ans, délai, sanctions 2026'
+const TITLE = 'Ravalement façade : obligation 10 ans'
 const DESCRIPTION =
-  'Ravalement façade : obligation décennale (art. L132-3 CCH) applicable dans 4 400 communes concernées, arrêté mairie fixe délai 6-12 mois, sanction 3 750 € amende + travaux d’office.'
+  'Ravalement façade : obligation décennale art. L132-3 CCH dans 4 400 communes, arrêté mairie délai 6-12 mois, amende 3 750 € + travaux d’office.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

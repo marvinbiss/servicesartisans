@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'jean-pierre-duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Poêle à granulés : prix, aides, MaPrimeRénov 2026'
+const TITLE = 'Poêle à granulés : prix, aides MPR 2026'
 const DESCRIPTION =
-  'Poêle à granulés 2026 : prix 3 500-6 500 € TTC posé, MaPrimeRénov’ 1 500-3 000 €, CEE 800-1 200 €, TVA 5,5 %, installation Qualibois RGE, label Flamme Verte 7★ obligatoire pour aides.'
+  'Poêle à granulés 2026 : prix 3 500-6 500 € posé, MaPrimeRénov’ 1 500-3 000 €, CEE 800-1 200 €, TVA 5,5 %, Qualibois RGE, Flamme Verte 7★.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

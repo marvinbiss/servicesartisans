@@ -12,7 +12,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Plan du site',
+  title: 'Plan du site — ServicesArtisans',
   description:
     'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
   alternates: getAlternates(`/plan-du-site`),

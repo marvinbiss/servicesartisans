@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Fuite d’eau : que faire en urgence ? Guide plombier 2026'
+const TITLE = 'Fuite d’eau : que faire ? Guide plombier'
 const DESCRIPTION =
   'Fuite d’eau : les 5 gestes d’urgence, diagnostic visible vs caché, coûts de réparation, prise en charge assurance dégât des eaux. Guide plombier 2026.'
 

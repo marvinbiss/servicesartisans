@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chaudière fioul interdite 2026 : remplacer'
+const TITLE = 'Chaudière fioul interdite 2026'
 const DESCRIPTION =
   'Chaudière fioul interdite neuf/remplacement 2022 (décret 2022-8). Réparation OK si existante. Remplacement PAC/biomasse, aides majorées Coup de pouce.'
 

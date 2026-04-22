@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix isolation combles 100 m² en 2026 : grille et aides'
+const TITLE = 'Prix isolation combles 100 m² 2026'
 const DESCRIPTION =
-  'Prix isolation combles 100 m² en 2026 : 2 000 à 8 000 € TTC selon technique (soufflage, panneaux, sarking). Aides MaPrimeRénov’ + CEE jusqu’à 4 500 €. Grille par matériau.'
+  'Prix isolation combles 100 m² 2026 : 2 000-8 000 € TTC (soufflage, panneaux, sarking). MaPrimeRénov’ + CEE jusqu’à 4 500 €. Grille par matériau.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Fissures maison inquiétantes : diagnostic par un expert 2026'
+const TITLE = 'Fissures maison : diagnostic expert 2026'
 const DESCRIPTION =
   'Fissures maison : microfissure, horizontale, verticale, en escalier. Diagnostic structurel, assurance catastrophe naturelle, coût expertise et travaux.'
 

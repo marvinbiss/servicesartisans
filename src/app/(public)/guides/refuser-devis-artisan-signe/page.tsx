@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Refuser un devis signé : 4 recours en 2026'
+const TITLE = 'Refuser un devis signé : 4 recours 2026'
 const DESCRIPTION =
   'Peut-on annuler un devis signé ? Rétractation 14 jours, vice du consentement, inexécution, accord amiable : les 4 voies, leurs conditions et modèles de lettre.'
 

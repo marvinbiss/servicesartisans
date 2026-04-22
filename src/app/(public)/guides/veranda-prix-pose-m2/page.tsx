@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'thomas-bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Véranda : prix au m², pose, urbanisme 2026'
+const TITLE = 'Véranda : prix m², pose, urbanisme 2026'
 const DESCRIPTION =
-  'Véranda 2026 : prix 1 200-3 000 € TTC/m² posée alu, véranda 20 m² = 24 000-60 000 €, permis construire >20 m² ou hauteur >4 m, RT2012 neuve, taxe aménagement, isolation thermique.'
+  'Véranda 2026 : 1 200-3 000 € TTC/m² posée alu, 20 m² = 24 000-60 000 €, permis construire >20 m², RT2012, taxe aménagement.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

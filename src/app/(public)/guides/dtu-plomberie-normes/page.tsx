@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'DTU plomberie : normes, pose, eau chaude/froide (2026)'
+const TITLE = 'DTU plomberie 2026 : normes et pose'
 const DESCRIPTION =
-  'DTU plomberie : NF DTU 60.1 (canalisations eau), 60.11 (cuivre), 65.10 (chauffage eau chaude). Diamètres, distances, obligations installateur, responsabilité décennale.'
+  'DTU plomberie : NF DTU 60.1 (eau), 60.11 (cuivre), 65.10 (chauffage). Diamètres, distances, obligations installateur, responsabilité décennale.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

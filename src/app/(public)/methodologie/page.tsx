@@ -22,7 +22,7 @@ const path = '/methodologie'
 export const metadata: Metadata = {
   title: 'Notre méthodologie | ServicesArtisans',
   description:
-    'Comment ServicesArtisans vérifie les artisans, calcule les prix, modère les avis et rédige son contenu. Méthodologie transparente basée sur des sources officielles.',
+    'Comment ServicesArtisans vérifie les artisans, calcule prix, modère avis et rédige le contenu. Méthodologie transparente, sources officielles.',
   alternates: getAlternates(path),
   openGraph: {
     title: 'Notre méthodologie | ServicesArtisans',

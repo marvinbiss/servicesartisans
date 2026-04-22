@@ -18,7 +18,7 @@ export const revalidate = 86400
 const path = '/rge/qualifications'
 
 export const metadata: Metadata = {
-  title: 'Qualifications RGE — QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV',
+  title: 'Qualifications RGE — QualiPAC, QualiBois, QualiPV',
   description:
     'Comprendre les qualifications RGE officielles : QualiPAC, QualiSol, QualiBois Air/Eau, Qualifelec et QualiPV. Périmètre, primes débloquées et vérification.',
   robots: {

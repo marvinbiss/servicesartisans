@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'thomas-bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Pergola bioclimatique : prix au m², pose 2026'
+const TITLE = 'Pergola bioclimatique : prix 2026'
 const DESCRIPTION =
-  'Pergola bioclimatique 2026 : prix 350-900 € TTC/m² alu motorisée lames orientables, pergola adossée 20 m² = 7 000-18 000 €, DP mairie obligatoire, Qualibat 3751 recommandé, garantie décennale.'
+  'Pergola bioclimatique 2026 : 350-900 €/m² alu motorisée lames orientables, adossée 20 m² = 7 000-18 000 €, DP mairie, Qualibat 3751, décennale.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

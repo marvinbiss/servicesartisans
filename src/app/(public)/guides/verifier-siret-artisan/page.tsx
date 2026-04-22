@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Comment vérifier le SIRET d’un artisan en 2026'
+const TITLE = 'Vérifier SIRET artisan : méthode 2026'
 const DESCRIPTION =
-  'Vérifier le SIRET d’un artisan en 3 minutes : méthode officielle via Annuaire des Entreprises, INSEE Sirene et Infogreffe. Repérez activité réelle, statut actif, date de création et signaux d’alerte.'
+  'Vérifier SIRET artisan en 3 min : Annuaire Entreprises, INSEE Sirene, Infogreffe. Activité, statut actif, date de création, signaux d’alerte.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

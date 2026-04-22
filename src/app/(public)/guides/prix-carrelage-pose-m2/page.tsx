@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix pose carrelage au m² en 2026 : la grille complète'
+const TITLE = 'Prix pose carrelage au m² 2026'
 const DESCRIPTION =
-  'Prix pose carrelage au m² en 2026 : 30 à 80 €/m² pose simple, 50 à 120 €/m² motif complexe. Prix fourniture + pose + préparation du support. Grille par type et format.'
+  'Prix pose carrelage au m² 2026 : 30-80 €/m² pose simple, 50-120 €/m² motif complexe. Fourniture + pose + préparation. Grille par type et format.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

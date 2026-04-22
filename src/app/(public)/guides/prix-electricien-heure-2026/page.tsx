@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix électricien à l’heure en 2026 : tarifs moyens et dépannage'
+const TITLE = 'Prix électricien à l’heure 2026'
 const DESCRIPTION =
-  'Tarif électricien à l’heure en 2026 : 45 à 75 €/h en journée, 90 à 150 €/h en urgence nuit/dimanche. Prix moyen dépannage, déplacement, forfaits interventions courantes.'
+  'Tarif électricien à l’heure 2026 : 45-75 €/h en journée, 90-150 €/h urgence nuit/dimanche. Prix dépannage, déplacement, forfaits courants.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

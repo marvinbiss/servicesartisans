@@ -185,7 +185,7 @@ const variationMoyenne = getVariationMoyenne()
 // ---------------------------------------------------------------------------
 
 const pageTitle = 'Statistiques Artisans France 2026 : Chiffres Clés'
-const pageDescription = `${(totalArtisans / 1000).toFixed(0)}k+ artisans référencés. Chiffres clés du marché artisanal français : répartition géographique, tarifs moyens, rénovation énergétique, emploi et tendances 2026. Sources : CMA, INSEE, ADEME, CAPEB, FFB.`
+const pageDescription = `${(totalArtisans / 1000).toFixed(0)}k+ artisans référencés. Chiffres clés du marché artisanal France : répartition géo, tarifs moyens, rénovation, emploi 2026.`
 const pageUrl = `${SITE_URL}/statistiques-artisans-france`
 
 export const metadata: Metadata = {

@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Prix d’une pompe à chaleur air-eau installée en 2026'
+const TITLE = 'Prix PAC air-eau installée 2026'
 const DESCRIPTION =
-  'Prix d’une pompe à chaleur air-eau installée : 10 000 à 18 000 € TTC hors aides selon puissance, modèle et installation. Aides MaPrimeRénov’ + CEE jusqu’à 9 000 €. Grille 2026.'
+  'Prix PAC air-eau installée 2026 : 10 000-18 000 € TTC hors aides selon puissance et modèle. MaPrimeRénov’ + CEE jusqu’à 9 000 €. Grille complète.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

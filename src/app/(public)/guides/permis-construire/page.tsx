@@ -32,7 +32,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Permis de Construire : Quand est-il Obligatoire ?',
   description:
-    'Guide complet permis de construire 2026 : quand est-il obligatoire (>20m², >40m² en zone PLU), documents requis, délais, coûts et cas spéciaux. Toutes les informations pour vos travaux.',
+    'Guide permis de construire 2026 : obligation (>20 m², >40 m² zone PLU), documents requis, délais, coûts, cas spéciaux. Tout pour vos travaux.',
   keywords: [
     'permis de construire',
     'permis de construire 2026',

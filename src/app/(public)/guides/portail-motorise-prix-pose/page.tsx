@@ -20,9 +20,9 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Portail motorisé : prix, pose, normes NF 2026'
+const TITLE = 'Portail motorisé : prix, pose NF 2026'
 const DESCRIPTION =
-  'Portail motorisé 2026 : prix 1 500-6 500 € TTC posé battant/coulissant alu ou PVC, norme NF EN 13241 obligatoire, déclaration préalable mairie, garantie biennale + décennale.'
+  'Portail motorisé 2026 : 1 500-6 500 € posé battant/coulissant alu ou PVC, norme NF EN 13241, déclaration préalable mairie, biennale + décennale.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -25,7 +25,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Extension de Maison : Démarches, Prix et Conseils 2026',
   description:
-    "Guide complet extension de maison 2026 : types d'extensions (latérale, surélévation, véranda), démarches administratives, prix au m² (800-2500€), matériaux et artisans.",
+    'Extension de maison 2026 : types (latérale, surélévation, véranda), démarches DP ou permis, prix au m² 800-2 500 €, matériaux et artisans.',
   alternates: getAlternates('/guides/extension-maison'),
   openGraph: {
     title: 'Extension de Maison : Démarches, Prix et Conseils 2026',

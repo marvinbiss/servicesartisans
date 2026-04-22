@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Condensation fenêtres : 5 causes et solutions'
+const TITLE = 'Condensation fenêtres : 5 causes'
 const DESCRIPTION =
   'Condensation sur fenêtres intérieur : causes (humidité, VMC, pont thermique, SV, joint), solutions (aération, VMC, DV, déshumidificateur).'
 

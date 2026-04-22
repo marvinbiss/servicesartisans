@@ -30,7 +30,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
   description:
-    "Les 10 arnaques les plus fréquentes avec les artisans du bâtiment : démarchage abusif, faux RGE, devis gonflés. Signaux d'alerte, vérifications et recours en cas de fraude.",
+    "Découvrez les 10 arnaques artisans du bâtiment : démarchage abusif, faux RGE, devis gonflés. Signaux d'alerte, vérifications et recours.",
   alternates: getAlternates('/guides/eviter-arnaques-artisan'),
   openGraph: {
     title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",

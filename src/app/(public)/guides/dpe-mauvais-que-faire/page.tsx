@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'DPE mauvais (E, F, G) : que faire en 2026 ?'
+const TITLE = 'DPE E, F, G : que faire en 2026 ?'
 const DESCRIPTION =
   'DPE E, F ou G : calendrier interdictions location 2025-2034, travaux à entreprendre, aides MPR, audit énergétique obligatoire, décote vente estimée.'
 

@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Panne électrique générale : la conduite à tenir (diagnostic 2026)'
+const TITLE = 'Panne électrique : diagnostic & fix 2026'
 const DESCRIPTION =
-  'Panne électrique générale : distinguer une panne Enedis d’un problème interne, vérifier disjoncteur, différentiel, appeler le bon contact. Guide électricien 2026.'
+  'Panne électrique générale : distinguer Enedis ou problème interne, vérifier disjoncteur, différentiel, appeler le bon contact. Guide 2026.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Garantie parfait achèvement (GPA) 1 an : recours et mise en œuvre'
+const TITLE = 'Garantie parfait achèvement (GPA) 1 an'
 const DESCRIPTION =
   'Garantie parfait achèvement 1 an : art. 1792-6 Code civil. Couvre tous désordres signalés en réception ou dans l’année. Procédure LRAR, recours juge.'
 

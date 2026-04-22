@@ -19,9 +19,9 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 export const revalidate = 86400
 
-const TITLE = 'Prime pompe à chaleur pour un locataire : qui touche, qui paye en 2026'
+const TITLE = 'Prime PAC locataire 2026 : qui touche'
 const DESCRIPTION =
-  'Prime PAC pour un locataire en 2026 : seul le propriétaire peut être bénéficiaire MaPrimeRénov’ + CEE. Règles, exceptions, montage tripartite, logements sociaux.'
+  'Prime PAC locataire 2026 : seul le propriétaire peut toucher MaPrimeRénov’ + CEE. Règles, exceptions, montage tripartite, logements sociaux.'
 
 export const metadata: Metadata = {
   title: `${TITLE} | ${SITE_NAME}`,

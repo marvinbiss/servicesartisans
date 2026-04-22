@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 export const revalidate = 86400
 
-const TITLE = 'Réception travaux : PV, réserves, checklist 2026'
+const TITLE = 'Réception travaux : PV, checklist 2026'
 const DESCRIPTION =
   'Réception travaux : PV obligatoire, réserves précises, checklist 30 points. Déclenche GPA 1 an, biennale 2 ans, décennale 10 ans. Modèle PV inclus.'
 

@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'VMC obligatoire maison neuve : RE2020, types, coûts 2026'
+const TITLE = 'VMC obligatoire neuf : RE2020, coûts 2026'
 const DESCRIPTION =
   'VMC obligatoire neuf : arrêté 24 mars 1982 + RE2020. Simple flux auto, hygro B, double flux, coûts pose, maintenance obligatoire DTU 68.3.'
 

@@ -29,7 +29,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Norme NF C 15-100 : Guide Électricité Maison',
   description:
-    'Guide complet norme NF C 15-100 : nombre de prises par pièce, protection des circuits, zones salle de bain, mise aux normes obligatoire, coûts de rénovation électrique et diagnostic.',
+    'Guide norme NF C 15-100 : prises par pièce, protection circuits, zones salle de bain, mise aux normes, coûts rénovation électrique et diagnostic 2026.',
   keywords: [
     'norme NF C 15-100',
     'normes électriques',

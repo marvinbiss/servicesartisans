@@ -38,7 +38,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Pompe à Chaleur : Prix, Aides et Installation 2026',
   description:
-    'Guide pompe à chaleur 2026 : types (air-eau, air-air, géothermique), prix (3 000-30 000€), aides MaPrimeRénov’ jusqu’à 11 000€, installation et entretien par un artisan RGE.',
+    'Guide pompe à chaleur 2026 : air-eau, air-air, géothermique. Prix 3 000-30 000 €, MaPrimeRénov’ jusqu’à 11 000 €, installation artisan RGE.',
   alternates: getAlternates('/guides/pompe-a-chaleur'),
   openGraph: {
     title: 'Pompe à Chaleur : Prix, Aides et Installation 2026',

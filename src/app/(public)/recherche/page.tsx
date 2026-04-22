@@ -14,7 +14,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel',
   description:
-    "Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d'artisans référencés dans toute la France.",
+    "Recherchez un artisan qualifié près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit. Des milliers d'artisans référencés en France.",
   alternates: getAlternates(`/recherche`),
   openGraph: {
     title: 'Rechercher un artisan — Trouvez le bon professionnel',

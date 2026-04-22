@@ -19,7 +19,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 export const revalidate = 86400
 
-const TITLE = 'Ouverture mur porteur prix 2026 + étude structure obligatoire'
+const TITLE = 'Ouvrir un mur porteur : prix, étude 2026'
 const DESCRIPTION =
   'Ouverture mur porteur : 1 500-6 000 € TTC selon portée + IPN/HEA. Étude béton obligatoire 400-900 €. Démarches copropriété. Guide architecte 2026.'
 
