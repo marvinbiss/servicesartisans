@@ -23,6 +23,7 @@ vi.mock('@/lib/rate-limiter', () => ({
     remaining: 19,
     resetTime: Date.now() + 60_000,
   }),
+  getClientIp: vi.fn().mockReturnValue('127.0.0.1'),
 }))
 
 import { GET } from '@/app/api/artisan/lookup-siret/route'
@@ -175,9 +176,9 @@ describe('GET /api/artisan/lookup-siret — rate limiting', () => {
 
   it('utilise la clé lookup-siret:${ip} avec la fenêtre 60s / max 20', async () => {
     await GET(buildRequest('73282932000074'))
-    expect(checkRateLimit).toHaveBeenCalledWith(expect.stringMatching(/^lookup-siret:/), {
-      window: 60_000,
-      max: 20,
-    })
+    expect(checkRateLimit).toHaveBeenCalledWith(
+      expect.stringMatching(/^lookup-siret:/),
+      expect.objectContaining({ window: 60_000, max: 20 })
+    )
   })
 })
