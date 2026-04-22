@@ -15,6 +15,7 @@ import {
 import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
@@ -208,6 +209,7 @@ function getArticleSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Coup de pouce CEE 2026 : chartes actives et bonifications',
     description:
       "Panorama neutre et sourcé des chartes Coup de pouce CEE actives en 2026 : chauffage résidentiel individuel, rénovation d'ampleur, rénovation performante collectif, chauffage collectif et tertiaire. Cadre juridique, parcours bénéficiaire et cumul MaPrimeRénov'.",
@@ -307,6 +309,12 @@ export default function CoupDePouce2026Page() {
           <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
             Coup de pouce CEE 2026&nbsp;: chartes actives et bonifications
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished={PUBLISHED}
+            dateModified={MODIFIED}
+            className="justify-start mt-2 text-emerald-50/80"
+          />
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
             Les chartes «&nbsp;Coup de pouce&nbsp;» bonifient certaines primes CEE d’une opération
             standardisée. Ce guide recense les chartes actives en 2026, leur cadre juridique, les

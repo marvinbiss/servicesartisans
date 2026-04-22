@@ -353,6 +353,11 @@ export function generateAggregateRatingSchema(options: {
     '@type': 'LocalBusiness',
     name: `${serviceName} à ${villeName} — ${SITE_NAME}`,
     url: `${SITE_URL}/services/${serviceSlug}/${villeSlug}`,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: villeName,
+      addressCountry: 'FR',
+    },
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: avgRating,

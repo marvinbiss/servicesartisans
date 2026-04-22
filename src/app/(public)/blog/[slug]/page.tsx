@@ -12,7 +12,7 @@ import {
   Tag,
   ChevronRight,
 } from 'lucide-react'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
 import {
   getBreadcrumbSchema,
@@ -85,9 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: {
-      canonical: `${SITE_URL}/blog/${slug}`,
-    },
+    alternates: getAlternates('/blog/${slug}'),
     openGraph: {
       title,
       description,

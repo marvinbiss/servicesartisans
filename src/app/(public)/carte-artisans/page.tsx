@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getOrganizationSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
 import { services } from '@/lib/data/france'
 import RelatedHubs from '@/components/seo/RelatedHubs'
@@ -30,9 +30,7 @@ export const metadata: Metadata = {
   title: 'Carte des artisans en France',
   description:
     'Visualisez la couverture des artisans référencés en France dans 101 départements. Trouvez un artisan près de chez vous.',
-  alternates: {
-    canonical: `${SITE_URL}/carte-artisans`,
-  },
+  alternates: getAlternates('/carte-artisans'),
   robots: {
     index: true,
     follow: true,

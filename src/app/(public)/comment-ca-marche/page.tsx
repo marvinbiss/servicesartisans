@@ -17,7 +17,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
 import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
@@ -26,9 +26,7 @@ export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan',
   description:
     'Recherchez, comparez et contactez un artisan en 3 étapes. Des milliers de professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
-  alternates: {
-    canonical: `${SITE_URL}/comment-ca-marche`,
-  },
+  alternates: getAlternates('/comment-ca-marche'),
   robots: {
     index: true,
     follow: true,

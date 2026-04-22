@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import VerifierClient from './VerifierClient'
 import dynamic from 'next/dynamic'
@@ -23,9 +23,7 @@ export const metadata: Metadata = {
     'artisan de confiance',
     'vérification artisan gratuit',
   ],
-  alternates: {
-    canonical: `${SITE_URL}/verifier-artisan`,
-  },
+  alternates: getAlternates('/verifier-artisan'),
   openGraph: {
     title: 'Vérifier un Artisan — SIRET, RGE, Fiabilité',
     description:

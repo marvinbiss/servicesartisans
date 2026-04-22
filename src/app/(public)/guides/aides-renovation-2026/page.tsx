@@ -22,6 +22,7 @@ import {
   Accessibility,
   Layers,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/aides-renovation-2026`
 
@@ -196,6 +197,7 @@ export default function AidesRenovation2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Toutes les Aides à la Rénovation Énergétique en 2026',
     description:
       "Guide complet des aides financières pour la rénovation énergétique en 2026 : MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %, chèque énergie.",
@@ -275,6 +277,12 @@ export default function AidesRenovation2026Page() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             {'Toutes les Aides à la Rénovation Énergétique en 2026'}
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-01-15"
+            dateModified="2026-03-10"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "MaPrimeRénov', CEE, éco-PTZ, TVA à 5,5 %, chèque énergie, aides locales… Retrouvez toutes les aides disponibles, leurs montants, conditions d'éligibilité et comment les cumuler."

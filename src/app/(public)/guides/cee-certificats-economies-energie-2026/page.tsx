@@ -22,6 +22,7 @@ import {
   Users,
   Factory,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/cee-certificats-economies-energie-2026`
 
@@ -202,6 +203,7 @@ export default function CEE2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: "Certificats d'Économies d'Énergie (CEE) 2026 : guide complet",
     description:
       "Mécanisme CEE, obligés et délégataires, opérations coup de pouce 2026, éligibilité RGE, démarche et cumul MaPrimeRénov'.",
@@ -232,6 +234,12 @@ export default function CEE2026Page() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Certificats d&apos;Économies d&apos;Énergie (CEE) 2026 : le guide complet
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "Mécanisme, acteurs, opérations les plus primées, coups de pouce 2026, éligibilité RGE, démarche pas à pas et cumul MaPrimeRénov' : tout pour comprendre et activer les CEE."

@@ -4,7 +4,7 @@ import { FileCheck, Shield, Lock, Eye, AlertTriangle, ArrowRight } from 'lucide-
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -15,9 +15,7 @@ export const metadata: Metadata = {
   title: 'Notre processus de vérification des artisans',
   description:
     "Découvrez comment ServicesArtisans vérifie chaque artisan : contrôle SIRET via l'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.",
-  alternates: {
-    canonical: `${SITE_URL}/notre-processus-de-verification`,
-  },
+  alternates: getAlternates('/notre-processus-de-verification'),
   robots: {
     index: true,
     follow: true,

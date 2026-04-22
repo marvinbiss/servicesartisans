@@ -69,7 +69,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
         <span>
           J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en
           relation avec des artisans partenaires. Voir notre{' '}
-          <a href="/confidentialite" target="_blank" className="underline">
+          <a href="/confidentialite" target="_blank" rel="noopener" className="underline">
             politique de confidentialité
           </a>
           .

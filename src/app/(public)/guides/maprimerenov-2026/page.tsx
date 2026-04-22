@@ -40,7 +40,8 @@ import {
   getFinancialProductSchema,
   getLoanOrCreditSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -63,9 +64,7 @@ export const metadata: Metadata = {
     'parcours accompagné',
     'rénovation globale',
   ],
-  alternates: {
-    canonical: `${SITE_URL}/guides/maprimerenov-2026`,
-  },
+  alternates: getAlternates('/guides/maprimerenov-2026'),
   robots: {
     index: true,
     follow: true,
@@ -517,6 +516,12 @@ export default function MaPrimeRenov2026Page() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 font-heading leading-tight">
               {"MaPrimeRénov' 2026 : Guide Complet des Aides à la Rénovation Énergétique"}
             </h1>
+            <ArticleMeta
+              author="ServicesArtisans"
+              datePublished="2026-01-15"
+              dateModified="2026-03-10"
+              className="justify-center mt-4"
+            />
             <p className="mt-4 text-xl text-charcoal-600 max-w-3xl">
               {"Jusqu'à "}
               <span className="font-semibold text-green-700">90 % de vos travaux financés</span>

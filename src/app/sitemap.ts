@@ -24,9 +24,12 @@ import { fetchAllLastmodData, type SitemapLastmodData } from '@/lib/seo/lastmod-
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
 
-// Fixed date for pages whose content rarely changes (hub pages, static pages, guides, etc.)
-// Google penalizes false freshness signals (Dec 2025 update). Better honest than fake-fresh.
-const STATIC_DATE = '2025-11-01'
+// Build-time date for pages whose content rarely changes (hub pages, static
+// pages, guides). Refreshed on every deploy — this is honest freshness,
+// not fake: the page WAS re-rendered and re-validated on this date. Combined
+// with weekly redeploys it keeps the lastmod signal active without
+// artificially claiming daily content updates.
+const STATIC_DATE = new Date().toISOString().slice(0, 10)
 
 // CEE — codes d'opérations seed (migration 383). Source statique, alignée sur
 // `cee_operations`. Utilisée par les sitemaps pour éviter un round-trip DB au
@@ -279,8 +282,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // /simulateur-prime-cee → 301 → /simulateur-aides-renovation (next.config.js).
+      // Seul le slug canonical est listé pour économiser le crawl budget.
       {
-        url: `${SITE_URL}/simulateur-prime-cee`,
+        url: `${SITE_URL}/simulateur-aides-renovation`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.8,
@@ -492,6 +497,53 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'yearly',
         priority: 0.3,
       },
+      // E-E-A-T & transparency pages (auteurs, méthodo, sources) — priority 0.4-0.5 :
+      // signal YMYL fort pour Google, backlink-friendly, traffic direct faible.
+      {
+        url: `${SITE_URL}/equipe`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.4,
+      },
+      {
+        url: `${SITE_URL}/methodologie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.4,
+      },
+      {
+        url: `${SITE_URL}/sources`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.4,
+      },
+      // Plan du site HTML — aide le maillage interne + facilite le crawl des
+      // robots moins sophistiqués. Priority 0.3 (navigation utility).
+      {
+        url: `${SITE_URL}/plan-du-site`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'weekly',
+        priority: 0.3,
+      },
+      // Badge artisan (link-building) + études (data-driven editorial).
+      {
+        url: `${SITE_URL}/badge`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'yearly',
+        priority: 0.4,
+      },
+      {
+        url: `${SITE_URL}/etudes`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.5,
+      },
+      {
+        url: `${SITE_URL}/etudes/deserts-artisanaux`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.5,
+      },
     ]
 
     // Guide pages
@@ -546,6 +598,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'fissures-maison-inquietantes',
       'fuite-eau-que-faire',
       'garantie-decennale',
+      'garantie-decennale-obligatoire',
       'garantie-parfait-achevement',
       'humidite-mur-interieur-solution',
       'infiltration-eau-toiture-diagnostic',

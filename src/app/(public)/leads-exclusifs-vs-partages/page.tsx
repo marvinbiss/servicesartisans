@@ -18,6 +18,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
 
@@ -181,6 +182,7 @@ export default function LeadsExclusifsVsPartagesPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Leads exclusifs vs leads partagés : comparatif pour artisans du bâtiment',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
@@ -214,6 +216,12 @@ export default function LeadsExclusifsVsPartagesPage() {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Leads exclusifs vs leads partagés&nbsp;: le vrai coût pour un artisan
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-12"
+            dateModified="2026-04-12"
+            className="justify-center mt-4"
+          />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Vous payez des leads. Mais combien vous coûte vraiment un chantier signé&nbsp;?
             Comparatif objectif avec les chiffres réels des principales plateformes.

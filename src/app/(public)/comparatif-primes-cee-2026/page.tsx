@@ -23,6 +23,7 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
 
@@ -236,6 +237,7 @@ export default function ComparatifPrimesCee2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Comparatif primes CEE 2026 : Effy, Hellio, Sonergia, PrimesEnergie',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
@@ -296,6 +298,12 @@ export default function ComparatifPrimesCee2026Page() {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Comparatif primes CEE 2026&nbsp;: qui verse le plus&nbsp;? Qui paie le plus vite&nbsp;?
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-12"
+            dateModified="2026-04-12"
+            className="justify-center mt-4"
+          />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Analyse indépendante des 4 principaux acteurs du marché CEE en France. Montants, délais
             de paiement, avis clients, modèle économique. Données vérifiées avril 2026.

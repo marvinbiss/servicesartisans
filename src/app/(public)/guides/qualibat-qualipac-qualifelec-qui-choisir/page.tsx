@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   Search,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/qualibat-qualipac-qualifelec-qui-choisir`
 
@@ -217,6 +218,7 @@ export default function QualificationsRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline:
       'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir selon vos travaux ?',
     description:
@@ -248,6 +250,12 @@ export default function QualificationsRgePage() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir ?
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               'Derrière le label RGE se cachent une dizaine de qualifications distinctes, chacune adaptée à un type de travaux précis. Ce guide vous aide à exiger la bonne mention sur votre devis.'

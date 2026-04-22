@@ -18,6 +18,7 @@ import {
 import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
@@ -178,6 +179,7 @@ function getArticleSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Obligé, délégataire, mandataire CEE : comprendre les 3 rôles du circuit',
     description:
       "Guide pédagogique neutre sur les 3 acteurs du dispositif des certificats d'économies d'énergie : obligé, délégataire et mandataire. Définitions juridiques, obligations PNCEE, modèle économique et impact pour les particuliers et les artisans.",
@@ -277,6 +279,12 @@ export default function MandataireVsDirectPage() {
           <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
             Obligé, délégataire, mandataire CEE&nbsp;: comprendre les 3 rôles du circuit
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished={PUBLISHED}
+            dateModified={MODIFIED}
+            className="justify-start mt-2 text-emerald-50/80"
+          />
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
             Qui achète les certificats d’économies d’énergie&nbsp;? Qui dépose les dossiers au
             PNCEE&nbsp;? Qui se contente de monter le dossier pour le compte du bénéficiaire&nbsp;?

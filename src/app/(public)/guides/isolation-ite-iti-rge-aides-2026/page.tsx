@@ -17,6 +17,7 @@ import {
   Ruler,
   AlertTriangle,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/isolation-ite-iti-rge-aides-2026`
 
@@ -183,6 +184,7 @@ export default function IsolationIteItiPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides cumulables',
     description:
       "Différences, matériaux, coûts, MaPrimeRénov' Isolation, Coup de pouce CEE et obligation Qualibat RGE en 2026.",
@@ -213,6 +215,12 @@ export default function IsolationIteItiPage() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides cumulables
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "ITE par l'extérieur ou ITI par l'intérieur ? Matériaux, coûts au m², MaPrimeRénov' Isolation, Coup de pouce CEE et obligation Qualibat RGE — toutes les clés pour trancher en 2026."

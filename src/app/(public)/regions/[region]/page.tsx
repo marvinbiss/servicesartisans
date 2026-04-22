@@ -627,8 +627,9 @@ export default async function RegionPage({ params }: PageProps) {
                         <Link
                           href={`/services/${service.slug}/${city.slug}`}
                           className="text-sm text-primary-500 hover:text-primary-800 transition-colors"
+                          aria-label={`${service.name} ${city.name}`}
                         >
-                          Voir
+                          {service.name} {city.name}
                         </Link>
                       </td>
                     ))}

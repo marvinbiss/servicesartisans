@@ -6,9 +6,9 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 const PAGE_PATH = '/simulateur-aides-renovation'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://servicesartisans.fr'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 
 const TITLE = "Simulateur aides rénovation énergétique 2026 — MaPrimeRénov', CEE, Coup de Pouce"
@@ -18,7 +18,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: PAGE_URL },
+  alternates: getAlternates(PAGE_PATH),
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,

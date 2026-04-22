@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Shield, Award, MapPin, ExternalLink, BookOpen, Database } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -161,6 +162,7 @@ export default async function BarometreRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: `Baromètre RGE ${monthLabel} — ${nf(snap.total_rge_active)} artisans certifiés en France`,
     datePublished: snap.captured_at,
     dateModified: snap.captured_at,
@@ -196,6 +198,12 @@ export default async function BarometreRgePage() {
             <h1 className="mt-4 text-4xl font-extrabold text-slate-900">
               Baromètre RGE {monthLabel}
             </h1>
+            <ArticleMeta
+              author="ServicesArtisans"
+              datePublished={snap.captured_at}
+              dateModified={snap.captured_at}
+              className="mt-3"
+            />
             <p className="mt-3 text-lg text-slate-600">
               {nf(snap.total_rge_active)} artisans RGE actifs en France, suivis chaque mois depuis
               le répertoire ADEME. Les chiffres qui comptent pour MaPrimeRénov', les CEE et la

@@ -55,7 +55,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
 export const revalidate = 86400
@@ -64,9 +64,7 @@ export const metadata: Metadata = {
   title: 'Guides Pratiques pour vos Travaux | ServicesArtisans',
   description:
     'Guides complets pour vos travaux : aides financières, rénovation énergétique, MaPrimeRénov 2026, conseils artisans. Informations fiables et à jour.',
-  alternates: {
-    canonical: `${SITE_URL}/guides`,
-  },
+  alternates: getAlternates('/guides'),
   openGraph: {
     title: 'Guides Pratiques pour vos Travaux',
     description:

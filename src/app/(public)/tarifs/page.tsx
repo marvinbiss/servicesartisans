@@ -13,7 +13,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services, villes } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
@@ -34,9 +34,7 @@ export const metadata: Metadata = {
   title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
   description:
     'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
-  alternates: {
-    canonical: `${SITE_URL}/tarifs`,
-  },
+  alternates: getAlternates('/tarifs'),
   robots: {
     index: true,
     follow: true,

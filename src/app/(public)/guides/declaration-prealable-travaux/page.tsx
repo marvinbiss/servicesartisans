@@ -17,7 +17,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -40,9 +40,7 @@ export const metadata: Metadata = {
     'autorisation urbanisme',
     'accord tacite déclaration préalable',
   ],
-  alternates: {
-    canonical: `${SITE_URL}/guides/declaration-prealable-travaux`,
-  },
+  alternates: getAlternates('/guides/declaration-prealable-travaux'),
   robots: {
     index: true,
     follow: true,

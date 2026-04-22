@@ -13,7 +13,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getHowToSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
 export const revalidate = 86400
@@ -22,9 +22,7 @@ export const metadata: Metadata = {
   title: 'Checklist Avant Travaux 2026 : 60 Points Clés',
   description:
     'Checklist complète avant de commencer vos travaux : budget, devis, autorisations, préparation chantier, suivi, réception. 60 points de contrôle essentiels.',
-  alternates: {
-    canonical: `${SITE_URL}/checklist-travaux`,
-  },
+  alternates: getAlternates('/checklist-travaux'),
   openGraph: {
     title: 'Checklist Avant Travaux 2026 : 60 Points de Contrôle',
     description:

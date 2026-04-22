@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { allArticlesMeta, allCategories } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
@@ -19,9 +19,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
   description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Tarifs réels + devis gratuit.`,
-  alternates: {
-    canonical: `${SITE_URL}/blog`,
-  },
+  alternates: getAlternates('/blog'),
   openGraph: {
     title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
     description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,

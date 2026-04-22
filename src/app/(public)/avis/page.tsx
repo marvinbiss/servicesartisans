@@ -4,7 +4,7 @@ import { Star, Shield, Users, Search, CheckCircle, ChevronDown, ChevronRight } f
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -26,9 +26,7 @@ export const metadata: Metadata = {
   title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
   description:
     'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
-  alternates: {
-    canonical: `${SITE_URL}/avis`,
-  },
+  alternates: getAlternates('/avis'),
   robots: {
     index: true,
     follow: true,

@@ -413,6 +413,12 @@ export function getComparisonReviewSchema(params: {
     description: params.description,
     url: params.url,
     author: { '@type': 'Organization', name: SITE_NAME },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: 5,
+      bestRating: 5,
+      worstRating: 1,
+    },
     itemReviewed: {
       '@type': 'Service',
       name: params.title,

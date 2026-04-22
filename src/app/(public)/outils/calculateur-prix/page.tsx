@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services } from '@/lib/data/france'
 import CalculateurClient from './CalculateurClient'
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
   description:
     'Estimez le coût de vos travaux en quelques clics : prix plombier, tarif électricien, coût serrurier, devis peintre et tous les métiers du bâtiment. Calculateur gratuit avec prix actualisés 2026.',
-  alternates: {
-    canonical: `${SITE_URL}/outils/calculateur-prix`,
-  },
+  alternates: getAlternates('/outils/calculateur-prix'),
   robots: {
     index: true,
     follow: true,

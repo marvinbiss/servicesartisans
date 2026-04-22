@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 import { getPageContent } from '@/lib/cms'
@@ -18,9 +18,7 @@ export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
   description:
     'Demandez un devis artisan gratuit 2026 : plombier, électricien, serrurier et 50 métiers. Réponse sous 24h, 3 offres, 100% gratuit, sans engagement.',
-  alternates: {
-    canonical: `${SITE_URL}/devis`,
-  },
+  alternates: getAlternates('/devis'),
   robots: {
     index: true,
     follow: true,

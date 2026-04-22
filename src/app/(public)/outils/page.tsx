@@ -4,7 +4,7 @@ import { Calculator, Stethoscope, ArrowRight, Wrench, Euro, HelpCircle } from 'l
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
 export const revalidate = 86400
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   title: 'Outils Gratuits pour vos Travaux | ServicesArtisans',
   description:
     'Outils gratuits pour estimer vos travaux : calculateur de prix artisan, diagnostic pour trouver le bon professionnel. Simples, rapides et sans inscription.',
-  alternates: {
-    canonical: `${SITE_URL}/outils`,
-  },
+  alternates: getAlternates('/outils'),
   openGraph: {
     title: 'Outils Gratuits pour vos Travaux',
     description:

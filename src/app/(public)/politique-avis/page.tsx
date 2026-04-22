@@ -4,7 +4,7 @@ import { MessageSquare, Shield, UserCheck, Trash2, Calculator, ArrowRight } from
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -15,9 +15,7 @@ export const metadata: Metadata = {
   title: 'Politique de gestion des avis',
   description:
     'Notre politique de gestion des avis : qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes sur ServicesArtisans.',
-  alternates: {
-    canonical: `${SITE_URL}/politique-avis`,
-  },
+  alternates: getAlternates('/politique-avis'),
   robots: {
     index: true,
     follow: true,

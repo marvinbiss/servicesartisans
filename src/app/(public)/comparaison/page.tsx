@@ -13,7 +13,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import dynamic from 'next/dynamic'
 
@@ -31,9 +31,7 @@ export const metadata: Metadata = {
   title: 'Comparatifs Travaux 2026 : 30 Guides pour Choisir',
   description:
     '30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages, inconvénients et verdict pour chaque solution.',
-  alternates: {
-    canonical: `${SITE_URL}/comparaison`,
-  },
+  alternates: getAlternates('/comparaison'),
   openGraph: {
     title: 'Comparatifs Travaux 2026 : 30 Guides pour Bien Choisir',
     description:

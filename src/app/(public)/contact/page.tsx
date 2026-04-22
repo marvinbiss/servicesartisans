@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import ContactPageClient from './ContactPageClient'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
   title: contactTitle,
   description:
     "Contactez l'équipe ServicesArtisans pour toute question sur notre annuaire d'artisans. Formulaire de contact, email et assistance rapide.",
-  alternates: {
-    canonical: `${SITE_URL}/contact`,
-  },
+  alternates: getAlternates('/contact'),
   openGraph: {
     title: contactTitle,
     description:

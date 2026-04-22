@@ -249,7 +249,12 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 </a>
                 {' · '}Estimation non contractuelle
                 {' · '}
-                <a href="/confidentialite" target="_blank" className="hover:text-charcoal-500">
+                <a
+                  href="/confidentialite"
+                  target="_blank"
+                  rel="noopener"
+                  className="hover:text-charcoal-500"
+                >
                   Confidentialité
                 </a>
               </p>

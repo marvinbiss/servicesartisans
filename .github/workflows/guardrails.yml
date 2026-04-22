@@ -37,6 +37,93 @@ jobs:
       - name: Revalidate coverage (zero indexable page with static-by-default behavior)
         run: node scripts/audit-revalidate.mjs --strict
 
+      - name: Robots.ts sitemap coverage (no sitemap URL points to a missing route)
+        run: node scripts/audit-robots-sitemaps.mjs --strict
+
+      - name: Sitemap coverage (no indexable static page missing from sitemap.ts)
+        run: node scripts/audit-sitemap-coverage.mjs --strict
+
+      - name: Hreflang coverage (every indexable page declares fr-FR + x-default)
+        run: node scripts/audit-hreflang.mjs --strict
+
+      - name: JSON-LD coverage (every indexable page includes structured data)
+        run: node scripts/audit-jsonld.mjs --strict
+
+      - name: Orphan pages (every indexable static page has at least one internal link)
+        run: node scripts/audit-orphan-pages.mjs --strict
+
+      - name: Meta quality (no missing/duplicate title or description)
+        run: node scripts/audit-meta-quality.mjs --strict
+
+      - name: OpenGraph coverage (title/description/url on every indexable page)
+        run: node scripts/audit-opengraph.mjs --strict
+
+      - name: Breadcrumb coverage (UI or JSON-LD on every non-root page)
+        run: node scripts/audit-breadcrumbs.mjs --strict
+
+      - name: Image alt coverage (every img/Image declares alt)
+        run: node scripts/audit-image-alt.mjs --strict
+
+      - name: H1 uniqueness (exactly one H1 per indexable page)
+        run: node scripts/audit-h1-uniqueness.mjs --strict
+
+      - name: Anchor text quality (no generic "cliquez ici" / "en savoir plus")
+        run: node scripts/audit-anchor-text.mjs --strict
+
+      - name: Schema.org types (right type per page pattern)
+        run: node scripts/audit-schema-types.mjs --strict
+
+      - name: Internal link depth (every page ≤ 4 clicks from /)
+        run: node scripts/audit-link-depth.mjs --strict
+
+      - name: External links (no http://, no target=_blank without rel=noopener)
+        run: node scripts/audit-external-links.mjs --strict
+
+      - name: URL normalization (no trailing slash / uppercase / double slash)
+        run: node scripts/audit-url-normalization.mjs --strict
+
+      - name: Favicon + viewport + manifest (root meta obligatoires)
+        run: node scripts/audit-favicon-viewport.mjs --strict
+
+      - name: HTML lang attribute (fr / fr-FR on root <html>)
+        run: node scripts/audit-html-lang.mjs --strict
+
+      - name: Heading hierarchy (H1→H2→H3 sans saut de niveau)
+        run: node scripts/audit-heading-hierarchy.mjs --strict
+
+      - name: Content depth (no thin page < 150 words)
+        run: node scripts/audit-content-depth.mjs --strict
+
+      - name: ARIA landmarks (nav/header/footer layout + <main> par page)
+        run: node scripts/audit-aria-landmarks.mjs --strict
+
+      - name: Schema.org required fields (Article needs author+datePublished, etc.)
+        run: node scripts/audit-schema-required-fields.mjs --strict
+
+      - name: Near-duplicate templates (Jaccard shingling ≥ 0.85)
+        run: node scripts/audit-near-duplicates.mjs --strict
+
+      - name: Crawl budget (lastmod freshness + XML Cache-Control)
+        run: node scripts/audit-crawl-budget.mjs --strict
+
+      - name: Core Web Vitals (font-display swap + Image dims + preconnect)
+        run: node scripts/audit-core-web-vitals.mjs --strict
+
+      - name: E-E-A-T DOM signals (byline + date visibles sur Articles)
+        run: node scripts/audit-eeat-dom-signals.mjs --strict
+
+      - name: Crawl traps (dynamic pages empty-state sans notFound/noindex)
+        run: node scripts/audit-crawl-traps.mjs --strict
+
+      - name: Hreflang symmetry (canonical path ↔ file match)
+        run: node scripts/audit-hreflang-symmetry.mjs --strict
+
+      - name: Cocon sémantique (≥ 3 liens internes par page indexable)
+        run: node scripts/audit-cocon-semantique.mjs --strict
+
+      - name: robots.txt directives (AdsBot/APIs-Google/Mediapartners, sitemap)
+        run: node scripts/audit-robots-directives.mjs --strict
+
   tests:
     name: TypeScript + Vitest
     runs-on: ubuntu-latest

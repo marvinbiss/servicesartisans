@@ -11,6 +11,7 @@ import {
   RGE_QUALIFICATIONS_WITH_GUIDE,
   getRgeQualificationGuide,
 } from '@/lib/rge/qualification-guides-content'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
 export const dynamicParams = false
@@ -98,11 +99,14 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: guide.h1,
     description: guide.metaDescription,
     url: `${SITE_URL}${path}`,
     mainEntityOfPage: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
+    datePublished: '2026-01-15',
+    dateModified: new Date().toISOString().slice(0, 10),
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     about: {
@@ -148,6 +152,11 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             {guide.h1}
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-01-15"
+            className="justify-center mt-4"
+          />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
         </div>
       </section>

@@ -18,7 +18,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -41,9 +41,7 @@ export const metadata: Metadata = {
     'zone salle de bain électricité',
     'tableau électrique aux normes',
   ],
-  alternates: {
-    canonical: `${SITE_URL}/guides/normes-electriques`,
-  },
+  alternates: getAlternates('/guides/normes-electriques'),
   robots: {
     index: true,
     follow: true,

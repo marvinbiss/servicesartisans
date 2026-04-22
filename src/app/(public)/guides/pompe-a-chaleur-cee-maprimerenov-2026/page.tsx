@@ -19,6 +19,7 @@ import {
   Snowflake,
   Droplet,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur-cee-maprimerenov-2026`
 
@@ -162,6 +163,7 @@ export default function PacAidesCumulablesPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:
       "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE chauffage, cumul total, exemple chiffré et obligation QualiPAC.",
@@ -192,6 +194,12 @@ export default function PacAidesCumulablesPage() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             Pompe à chaleur 2026 : aides CEE + MaPrimeRénov&apos; cumulables
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE, cumul total possible et exemple chiffré pour financer jusqu'à 80 % de votre projet avec un artisan QualiPAC."

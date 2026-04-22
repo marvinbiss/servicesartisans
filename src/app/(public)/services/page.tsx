@@ -49,7 +49,7 @@ import {
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -67,9 +67,7 @@ export const revalidate = REVALIDATE.services
 export const metadata: Metadata = {
   title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
   description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements. Devis gratuit.`,
-  alternates: {
-    canonical: `${SITE_URL}/services`,
-  },
+  alternates: getAlternates('/services'),
   openGraph: {
     title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
     description: `${staticServicesList.length} métiers du bâtiment. Artisans référencés dans 101 départements. Trouvez un professionnel qualifié, devis gratuit.`,

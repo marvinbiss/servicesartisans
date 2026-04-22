@@ -21,7 +21,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -44,9 +44,7 @@ export const metadata: Metadata = {
     'surface plancher permis de construire',
     'zone PLU permis de construire',
   ],
-  alternates: {
-    canonical: `${SITE_URL}/guides/permis-construire`,
-  },
+  alternates: getAlternates('/guides/permis-construire'),
   robots: {
     index: true,
     follow: true,

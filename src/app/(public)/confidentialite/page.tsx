@@ -296,7 +296,7 @@ export default async function ConfidentialitePage() {
               <li>
                 <strong>Droit d'opposition :</strong> vous opposer à certains traitements (
                 <a href="/droit-opposition" className="text-primary-500 hover:underline">
-                  en savoir plus
+                  exercer votre droit d'opposition
                 </a>
                 )
               </li>
@@ -343,7 +343,7 @@ export default async function ConfidentialitePage() {
               En cas de violation de données, nous appliquons une procédure stricte de notification
               conformément aux articles 33 et 34 du RGPD (
               <a href="/violation-donnees" className="text-primary-500 hover:underline">
-                en savoir plus
+                notre procédure en cas de violation de données
               </a>
               ).
             </p>

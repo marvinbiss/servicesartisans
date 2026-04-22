@@ -17,6 +17,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 
@@ -134,6 +135,7 @@ export default function TarifsAuditEnergetiquePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Tarifs audit énergétique 2026 : prix, aides et retour sur investissement',
     description:
       "Guide de référence sur les tarifs de l'audit énergétique réglementaire en 2026 : fourchettes de prix, forfait MaPrimeRénov' audit, rentabilité et critères de choix d'un auditeur qualifié RGE.",
@@ -189,6 +191,12 @@ export default function TarifsAuditEnergetiquePage() {
           <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
             Tarifs audit énergétique 2026 : prix, aides et retour sur investissement
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished={PUBLISHED_AT}
+            dateModified={UPDATED_AT}
+            className="justify-start mt-2 text-emerald-50/80"
+          />
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
             Depuis le 1er avril 2023, l'audit énergétique est obligatoire pour vendre une maison
             classée F ou G, et depuis le 1er janvier 2025 pour les maisons classées E. Il est aussi

@@ -22,6 +22,7 @@ import {
 import { hasCeeOperationGuide, CEE_CATALOG_UPDATED_AT } from '@/lib/cee/operation-guides-content'
 import { services as servicesCatalog } from '@/lib/data/france-light'
 import LastUpdated from '@/components/seo/LastUpdated'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 // Map slug → display name (e.g. "chauffagiste" → "Chauffagiste", "pompe-a-chaleur"
 // → "Pompe à chaleur"). Utilise le catalogue des services si présent, fallback
@@ -143,6 +144,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <h1 className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4">
             Prime CEE {opCode}
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-01-15"
+            className="justify-center mt-4"
+          />
           <p className="text-charcoal-700">
             Cette opération n’est pas actuellement disponible dans notre catalogue.{' '}
             <Link href="/cee" className="text-emerald-700 underline">
@@ -181,10 +187,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: `Prime CEE ${operation.nom} (${operation.code})`,
     description: `Prime CEE ${operation.nom} : conditions, qualifications RGE, villes couvertes.`,
     url: `${SITE_URL}${path}`,
     mainEntityOfPage: `${SITE_URL}${path}`,
+    datePublished: '2026-01-15',
+    dateModified: new Date().toISOString().slice(0, 10),
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
   }

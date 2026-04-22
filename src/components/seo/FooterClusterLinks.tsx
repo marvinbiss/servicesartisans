@@ -66,13 +66,26 @@ export default function FooterClusterLinks() {
     label: `Artisans ${c.name}`,
   }))
 
-  // Pages utiles — 5 liens
+  // Pages utiles — 7 liens
   const utilityLinks: FooterLink[] = [
     { href: '/simulateur-aides-renovation', label: 'Simulateur aides' },
     { href: '/guides', label: 'Guides travaux' },
     { href: '/barometre', label: 'Baromètre prix' },
     { href: '/comparaison', label: 'Comparatifs' },
     { href: '/urgence', label: 'Artisan urgence' },
+    { href: '/badge', label: 'Badge artisan vérifié' },
+    { href: '/questions', label: 'Questions fréquentes' },
+  ]
+
+  // Transparence E-E-A-T — signal YMYL pour Google + réassurance utilisateur.
+  // Ces pages (méthodologie, sources, études, normes, garantie) sont rarement
+  // visitées mais critiques pour la crédibilité éditoriale + PageRank juice.
+  const trustLinks: FooterLink[] = [
+    { href: '/methodologie', label: 'Notre méthodologie' },
+    { href: '/sources', label: 'Sources officielles' },
+    { href: '/etudes', label: 'Études & données' },
+    { href: '/normes', label: 'Normes applicables' },
+    { href: '/garantie', label: 'Garantie plateforme' },
   ]
 
   // Régions — 13 régions métropolitaines
@@ -210,6 +223,26 @@ export default function FooterClusterLinks() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Transparence E-E-A-T (méthodo, sources, études, normes, garantie) ─── */}
+      <div className="border-b border-charcoal-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h4 className="text-white font-heading font-semibold mb-3 text-xs uppercase tracking-[0.15em]">
+            Transparence & méthodologie
+          </h4>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+            {trustLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { teamMembers, getAllAuthors } from '@/lib/data/team'
@@ -19,9 +19,7 @@ export const metadata: Metadata = {
   title: "À propos de ServicesArtisans — Annuaire d'artisans gratuit",
   description:
     "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.",
-  alternates: {
-    canonical: `${SITE_URL}/a-propos`,
-  },
+  alternates: getAlternates('/a-propos'),
   robots: {
     index: true,
     follow: true,

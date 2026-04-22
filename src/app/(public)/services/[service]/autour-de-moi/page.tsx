@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Shield, Clock } from 'lucide-react'
 
-import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { villes, parsePopulation, type Ville } from '@/lib/data/france'
 import { getServiceBySlug } from '@/lib/supabase'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
@@ -57,13 +57,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const svc = await loadService(service)
   if (!svc) return { title: 'Page introuvable' }
   const name = svc.name
-  const url = `${SITE_URL}/services/${service}/autour-de-moi`
+  const path = `/services/${service}/autour-de-moi`
+  const url = `${SITE_URL}${path}`
   const title = `${name} autour de moi — trouver un ${name.toLowerCase()} proche | ${SITE_NAME}`
   const description = `Trouvez un ${name.toLowerCase()} près de chez vous. Géolocalisation + 30 villes les plus demandées. Devis gratuit 24h, artisans vérifiés SIREN.`
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: getAlternates(path),
     openGraph: { title, description, url, type: 'website' },
     twitter: { card: 'summary_large_image', title, description },
   }

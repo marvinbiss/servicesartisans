@@ -372,7 +372,7 @@ export default function WidgetPage() {
               href="/partenaires"
               className="inline-flex items-center gap-2 bg-primary-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-colors text-lg border border-primary-300"
             >
-              En savoir plus
+              Découvrir le programme partenaires
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

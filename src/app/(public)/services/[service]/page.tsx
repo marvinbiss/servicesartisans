@@ -23,7 +23,7 @@ import {
   getServicePricingSchema,
 } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -183,9 +183,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [serviceImage.src],
     },
-    alternates: {
-      canonical: `${SITE_URL}/services/${serviceSlug}`,
-    },
+    alternates: getAlternates('/services/${serviceSlug}'),
   }
 }
 

@@ -4,7 +4,7 @@ import { MessageCircle, Users, Scale, Clock, Mail, ArrowRight } from 'lucide-rea
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -15,9 +15,7 @@ export const metadata: Metadata = {
   title: 'Médiation et résolution des litiges',
   description:
     'Processus de médiation de ServicesArtisans : réclamation, médiation interne et externe, délais de traitement. Résolution amiable des litiges.',
-  alternates: {
-    canonical: `${SITE_URL}/mediation`,
-  },
+  alternates: getAlternates('/mediation'),
   robots: {
     index: true,
     follow: true,

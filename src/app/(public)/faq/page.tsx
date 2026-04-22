@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { faqItems } from '@/lib/data/faq-data'
 
 import FAQPageClient from './FAQPageClient'
@@ -17,9 +17,7 @@ export const metadata: Metadata = {
   title: faqTitle,
   description:
     "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
-  alternates: {
-    canonical: `${SITE_URL}/faq`,
-  },
+  alternates: getAlternates('/faq'),
   openGraph: {
     title: faqTitle,
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',

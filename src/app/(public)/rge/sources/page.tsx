@@ -14,6 +14,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
 
@@ -139,11 +140,13 @@ export default function RgeSourcesPage() {
   const techArticleSchema = {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Sources et méthodologie RGE — ServicesArtisans',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     author: { '@type': 'Organization', name: 'ServicesArtisans' },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
+    datePublished: '2026-03-01',
     dateModified: '2026-04-09',
     description:
       "Méthodologie de construction de l'annuaire RGE de ServicesArtisans : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, France Rénov’, fréquence de mise à jour et process de vérification.",
@@ -170,6 +173,12 @@ export default function RgeSourcesPage() {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Sources et méthodologie RGE
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-03-01"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             D’où proviennent les données RGE affichées sur ServicesArtisans, à quelle fréquence
             elles sont mises à jour et comment vérifier vous-même la qualification d’un artisan

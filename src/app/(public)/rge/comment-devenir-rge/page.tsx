@@ -19,6 +19,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
 
@@ -220,6 +221,7 @@ export default function CommentDevenirRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Comment devenir artisan RGE en 2026 ?',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
@@ -260,6 +262,12 @@ export default function CommentDevenirRgePage() {
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
             Comment devenir artisan RGE en 2026&nbsp;?
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             Guide factuel et non commercial pour obtenir la qualification Reconnu Garant de
             l’Environnement&nbsp;: quels organismes&nbsp;? quelles étapes&nbsp;? combien ça coûte

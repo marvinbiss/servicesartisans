@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import DiagnosticClient from './DiagnosticClient'
 
 export const revalidate = 86400
@@ -11,9 +11,7 @@ export const metadata: Metadata = {
   title: 'Quel artisan choisir ? Diagnostic gratuit en 30 secondes',
   description:
     'Répondez à 3 questions pour savoir quel artisan vous faut-il. Plombier, électricien, serrurier... Notre outil vous guide vers le bon professionnel.',
-  alternates: {
-    canonical: `${SITE_URL}/outils/diagnostic`,
-  },
+  alternates: getAlternates('/outils/diagnostic'),
   robots: {
     index: true,
     follow: true,

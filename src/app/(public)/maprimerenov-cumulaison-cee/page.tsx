@@ -19,6 +19,7 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 
@@ -269,6 +270,7 @@ export default function MaprimeRenovCumulCeePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Cumul MaPrimeRénov’ et CEE 2026 : règles et plafonds',
     description:
       'Guide de référence sur le cumul MaPrimeRénov’ et Certificats d’Économies d’Énergie en 2026, mis à jour au regard des derniers textes réglementaires.',
@@ -324,6 +326,12 @@ export default function MaprimeRenovCumulCeePage() {
           <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
             Cumul MaPrimeRénov’ et CEE 2026 : règles et plafonds
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished={PUBLISHED_AT}
+            dateModified={UPDATED_AT}
+            className="justify-start mt-2 text-emerald-50/80"
+          />
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
             Peut-on cumuler MaPrimeRénov’ et la prime CEE&nbsp;? Oui, dans la grande majorité des
             cas, et c’est même prévu explicitement par la réglementation. Ce guide détaille les

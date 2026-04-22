@@ -182,6 +182,7 @@ function getArticleSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: 'Fraude RGE : comment vérifier qu’un artisan est vraiment certifié ?',
     description:
       'Guide pratique pour vérifier la certification RGE d’un artisan et éviter les arnaques à la rénovation énergétique. 5 méthodes de vérification, 7 drapeaux rouges, procédure en cas d’arnaque.',

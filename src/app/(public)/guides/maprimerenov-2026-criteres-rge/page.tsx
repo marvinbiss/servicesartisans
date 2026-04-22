@@ -18,6 +18,7 @@ import {
   ClipboardList,
   Users,
 } from 'lucide-react'
+import { ArticleMeta } from '@/components/ArticleMeta'
 
 const PAGE_URL = `${SITE_URL}/guides/maprimerenov-2026-criteres-rge`
 
@@ -202,6 +203,7 @@ export default function MaPrimeRenov2026CriteresRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    image: `${SITE_URL}/opengraph-image`,
     headline: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
     description:
       "Guide complet MaPrimeRénov' 2026 : barèmes par travaux, plafonds de ressources, dossier en 5 étapes, obligation RGE et cumul avec les CEE.",
@@ -232,6 +234,12 @@ export default function MaPrimeRenov2026CriteresRgePage() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
             MaPrimeRénov&apos; 2026 : critères RGE, montants et dossier
           </h1>
+          <ArticleMeta
+            author="ServicesArtisans"
+            datePublished="2026-04-09"
+            dateModified="2026-04-09"
+            className="justify-center mt-4"
+          />
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
               "Conditions RGE, barèmes 2026 par travaux, plafonds de ressources, dossier pas à pas et cumul avec les CEE : tout ce qu'il faut savoir pour sécuriser votre prime en 2026."
