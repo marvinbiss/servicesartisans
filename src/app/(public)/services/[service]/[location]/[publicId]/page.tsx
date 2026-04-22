@@ -193,8 +193,10 @@ function convertToArtisan(
     city_slug: location?.slug || undefined,
     description: description,
     bio: provider.bio || undefined,
-    average_rating: provider.rating_average || provider.average_rating || 0,
-    review_count: provider.review_count || 0,
+    // Supabase retourne les colonnes NUMERIC en string ("3.5") pour préserver
+    // la précision. Coerce via Number() sinon .toFixed() throw dans ArtisanSchema.
+    average_rating: Number(provider.rating_average ?? provider.average_rating ?? 0) || 0,
+    review_count: Number(provider.review_count ?? 0) || 0,
     is_verified: provider.is_verified || false,
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,

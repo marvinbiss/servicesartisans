@@ -40,8 +40,10 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
 
   const artisanUrl = `${baseUrl}${getArtisanUrl(artisan)}`
 
-  // Individual Service Schemas for each service offered
-  const serviceSchemas = artisan.service_prices.map((service, index) => ({
+  // Individual Service Schemas for each service offered.
+  // Defensive : le type déclare ServicePrice[] mais un provider mal importé
+  // peut arriver avec undefined → fallback `[]` pour éviter crash SSR.
+  const serviceSchemas = (artisan.service_prices ?? []).map((service, index) => ({
     '@type': 'Service',
     '@id': `${artisanUrl}#service-${index}`,
     name: service.name,
@@ -189,16 +191,21 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       return links.length > 0 ? { sameAs: links } : {}
     })(),
 
-    // AggregateRating — only when real reviews exist
-    ...(artisan.review_count > 0 && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: artisan.average_rating.toFixed(1),
-        reviewCount: String(artisan.review_count),
-        bestRating: '5',
-        worstRating: '1',
-      },
-    }),
+    // AggregateRating — only when real reviews exist.
+    // Defensive : Number() coerce les NUMERIC Supabase retournés en string
+    // (sinon `.toFixed` throw). Pas de fallback si le rating est manquant
+    // malgré review_count > 0 → on skip l'aggregateRating complet plutôt
+    // que d'émettre ratingValue="0.0" (qui tue le SEO).
+    ...(artisan.review_count > 0 &&
+      Number(artisan.average_rating) > 0 && {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: Number(artisan.average_rating).toFixed(1),
+          reviewCount: String(artisan.review_count),
+          bestRating: '5',
+          worstRating: '1',
+        },
+      }),
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
