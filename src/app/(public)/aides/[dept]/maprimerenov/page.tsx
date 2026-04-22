@@ -24,6 +24,7 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getHowToSchema,
   getPlaceSchema,
 } from '@/lib/seo/jsonld'
 
@@ -209,6 +210,48 @@ export default async function MprDeptPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(faqs)
 
+  // HowTo Schema — parcours MaPrimeRénov' en 7 étapes. Consommé par Bing,
+  // DuckDuckGo et surtout Google AI Overviews (nouveau champ de bataille SEO
+  // 2026). Google a retiré le rich result HowTo classique en 2023 mais l'AIO
+  // s'appuie fortement sur les structured data pour les réponses AI.
+  const howToSchema = getHowToSchema(
+    [
+      {
+        name: 'Vérifier éligibilité',
+        text: `Vérifier que le logement est situé ${getDeptPreposition(dept.name)}, achevé depuis plus de 15 ans et occupé en résidence principale. Identifier la catégorie de revenus (bleu, jaune, violet, rose) via le simulateur officiel.`,
+      },
+      {
+        name: 'Choisir un artisan RGE',
+        text: `Sélectionner un artisan certifié RGE actif à la date de signature du devis. Vérifier la qualification exacte (Qualibat, QualiPAC, QualiBois) sur france-renov.gouv.fr.`,
+      },
+      {
+        name: 'Demander 3 devis',
+        text: `Comparer 3 devis d'artisans RGE pour les mêmes travaux. Chaque devis doit mentionner le numéro de qualification RGE et sa date de validité.`,
+      },
+      {
+        name: 'Créer compte MaPrimeRénov',
+        text: `Créer un compte sur maprimerenov.gouv.fr, déposer le dossier AVANT signature du devis avec RIB, avis d'imposition et devis choisi.`,
+      },
+      {
+        name: 'Attendre accord Anah',
+        text: `L'Anah instruit le dossier en 2 à 8 semaines selon la charge locale. Le courrier d'accord indique le montant prévisionnel de la prime.`,
+      },
+      {
+        name: 'Signer devis et réaliser travaux',
+        text: `Signer le devis APRÈS réception de l'accord Anah. L'artisan RGE réalise les travaux selon les critères techniques de l'aide.`,
+      },
+      {
+        name: 'Demander paiement',
+        text: `À la fin des travaux, déposer la facture sur maprimerenov.gouv.fr. Versement par virement sous 2 à 4 mois. Cumul possible avec primes CEE, TVA 5,5 % et éco-PTZ.`,
+      },
+    ],
+    {
+      name: `Obtenir MaPrimeRénov' ${getDeptPreposition(dept.name)}`,
+      description: `Parcours officiel pour demander MaPrimeRénov' ${getDeptPreposition(dept.name)} (${dept.code}) en 2026 : éligibilité, devis RGE, dossier Anah, travaux et versement.`,
+      totalTime: 'P90D',
+    }
+  )
+
   const topVilles = (dept.villes || []).slice(0, 3)
 
   return (
@@ -218,6 +261,7 @@ export default async function MprDeptPage({ params }: PageProps) {
       <JsonLd data={mprProductSchema} />
       {placeSchema && <JsonLd data={placeSchema} />}
       {faqSchema && <JsonLd data={faqSchema} />}
+      {howToSchema && <JsonLd data={howToSchema} />}
 
       <Breadcrumb
         items={[

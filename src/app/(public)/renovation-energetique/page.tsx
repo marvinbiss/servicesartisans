@@ -27,6 +27,7 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getHowToSchema,
 } from '@/lib/seo/jsonld'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
@@ -250,6 +251,44 @@ export default function RenovationEnergetiqueHub() {
 
   const faqSchema = getFAQSchema(FAQ)
 
+  // HowTo Schema — parcours "je commence une rénovation énergétique" en 6
+  // étapes. Consommé par Google AI Overviews (champ de bataille 2026) : l'AIO
+  // privilégie les structured data pour générer les réponses AI en tête SERP.
+  const howToSchema = getHowToSchema(
+    [
+      {
+        name: 'Faire un audit énergétique',
+        text: "Réaliser un audit énergétique par un diagnostiqueur certifié RGE études (obligatoire pour MaPrimeRénov' parcours accompagné au-delà de 30 000 €). Identifie les postes prioritaires selon la classe DPE.",
+      },
+      {
+        name: 'Simuler les aides cumulables',
+        text: "Utiliser le simulateur ServicesArtisans ou france-renov.gouv.fr pour estimer MaPrimeRénov' + primes CEE + éco-PTZ + TVA 5,5 % selon revenus, zone climatique et travaux.",
+      },
+      {
+        name: 'Choisir 3 artisans RGE',
+        text: "Vérifier la qualification RGE active à la date de signature (Qualibat, QualiPAC, QualiBois selon le geste). L'annuaire ServicesArtisans se synchronise quotidiennement sur la base ADEME.",
+      },
+      {
+        name: 'Déposer dossier AVANT devis',
+        text: "Créer un compte maprimerenov.gouv.fr et déposer le dossier AVANT signature de devis. Joindre 3 devis comparables, RIB, avis d'imposition, attestation RGE.",
+      },
+      {
+        name: 'Attendre accord Anah puis signer',
+        text: "L'Anah instruit en 2 à 8 semaines. Signer le devis uniquement APRÈS réception de l'accord écrit, sinon l'aide est perdue.",
+      },
+      {
+        name: 'Réaliser travaux et encaisser',
+        text: "Travaux réalisés par l'artisan RGE sélectionné. Déposer facture finale sur maprimerenov.gouv.fr. Versement sous 2 à 4 mois. Cumul CEE versé séparément par le mandataire CEE.",
+      },
+    ],
+    {
+      name: 'Rénovation énergétique 2026 : toutes les étapes',
+      description:
+        "Parcours complet pour financer une rénovation énergétique en France en 2026 : audit, simulation des aides cumulables, choix des artisans RGE, dépôt du dossier MaPrimeRénov' et versement.",
+      totalTime: 'P180D',
+    }
+  )
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
@@ -257,6 +296,7 @@ export default function RenovationEnergetiqueHub() {
       <JsonLd data={mprSchema} />
       <JsonLd data={mprProductSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
+      {howToSchema && <JsonLd data={howToSchema} />}
 
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Rénovation énergétique' }]} />
 
