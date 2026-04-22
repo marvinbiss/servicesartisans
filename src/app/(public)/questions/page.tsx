@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ArrowRight, Euro, Search, AlertTriangle, FileText, Wrench, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getCollectionPageSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import { questions, categoryLabels, type QuestionCategory } from '@/lib/data/questions'
@@ -92,6 +92,17 @@ export default function QuestionsHubPage() {
     itemCount: questions.length,
   })
 
+  // Top 10 questions promoted as FAQ schema (People-Also-Ask bait).
+  // Limite à 10 pour éviter payload Schema.org obèse et focaliser Google
+  // sur les questions à plus forte intention transactionnelle.
+  const topQuestions = questions.slice(0, 10)
+  const faqSchema = getFAQSchema(
+    topQuestions.map((q) => ({
+      question: q.question,
+      answer: q.shortAnswer,
+    }))
+  )
+
   // Group questions by category
   const groupedQuestions = (Object.keys(categoryLabels) as QuestionCategory[]).reduce(
     (acc, cat) => {
@@ -106,7 +117,7 @@ export default function QuestionsHubPage() {
 
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, collectionSchema]} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-sand-50 border-b">

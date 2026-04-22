@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import { ArrowRight, Clock, Euro, Users, Sparkles, FileCheck, Search } from 'lucide-react'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
@@ -203,9 +204,51 @@ export default function AvantApresPage() {
     ],
   }
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Galeries Avant / Après — Travaux et rénovations',
+    description: `${transformations.length} projets avant/après avec budget, durée et artisans impliqués.`,
+    url: PAGE_URL,
+    numberOfItems: transformations.length,
+    hasPart: transformations.slice(0, 8).map((t) => ({
+      '@type': 'CreativeWork',
+      name: t.title,
+      description: t.avant,
+    })),
+  }
+
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Combien coûte une rénovation de salle de bain ?',
+      answer:
+        "Une rénovation de salle de bain coûte entre 3 000 et 15 000 € selon la surface et les prestations. Pour une rénovation complète (plomberie, carrelage, sanitaires, électricité) dans une salle de bain de 5-8 m², comptez 8 000 à 15 000 € TTC, soit 800 à 1 500 €/m². Les travaux d'économie d'énergie (VMC hygro B, chauffe-eau thermodynamique) peuvent bénéficier d'une TVA à 5,5 %.",
+    },
+    {
+      question: 'Combien de temps dure une rénovation complète de cuisine ouverte ?',
+      answer:
+        "Compter 4 à 6 semaines pour une cuisine ouverte avec îlot central incluant démolition de mur porteur (avec pose d'IPN et étude béton armé), reprise électricité/plomberie, pose cuisiniste et finitions. Ajouter 2 semaines de délai d'étude structure + 2-3 semaines de commande cuisine avant démarrage.",
+    },
+    {
+      question: 'Faut-il vraiment refaire la toiture tous les 40 ans ?',
+      answer:
+        "Pas systématiquement. Une toiture en tuiles terre cuite bien entretenue peut durer 60-80 ans. On refait une toiture quand : plus de 15 % des tuiles sont cassées ou déplacées, l'écran sous-toiture est détérioré, la charpente est attaquée (capricorne, mérule), ou des fuites persistent après plusieurs réparations ponctuelles. Comptez 15 000 à 30 000 € pour 80-120 m².",
+    },
+    {
+      question: 'L’isolation extérieure (ITE) est-elle rentable ?',
+      answer:
+        "Oui, l'ITE est généralement l'investissement énergétique le plus rentable sur le long terme. Un passage de DPE E à B permet de réduire la facture de chauffage de 50-70 %. Avec MaPrimeRénov', CEE et éco-PTZ, le reste à charge peut tomber à 30-50 % du coût TTC. Retour sur investissement typique : 10-15 ans en individuel, plus rapide en copropriété.",
+    },
+    {
+      question: 'Quels artisans mobiliser pour une extension de maison ?',
+      answer:
+        "Une extension mobilise 5-8 corps de métier : maçon ou charpentier (selon l'ossature bois ou béton), couvreur/zingueur, plombier, électricien, chauffagiste, menuisier (fenêtres), carreleur et peintre. Faites appel à un architecte ou un maître d'œuvre pour coordonner : extension > 20 m² = permis de construire, > 150 m² surface totale = architecte obligatoire.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-primary-50/60 to-white">
         {/* Breadcrumb */}
