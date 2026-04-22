@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import Link from 'next/link'
 import {
   getProviderByStableId,
@@ -727,7 +729,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ProviderPage({ params }: PageProps) {
+export default async function ProviderPage(props: PageProps) {
+  try {
+    return await renderProviderPage(props)
+  } catch (err) {
+    // Re-throw Next.js control-flow signals (redirect / notFound).
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    // Any other unhandled throw on cold ISR render → surface 404 instead
+    // of 500. Next.js retries ISR on subsequent hits; the user's manual
+    // reload ("ça marche au 2e essai") works without seeing a Vercel 500.
+    // The (public)/error.tsx boundary catches render-time errors only;
+    // this guard catches data-fetch throws before the React tree mounts.
+    console.error('[ProviderPage] unhandled error on cold ISR render', err)
+    notFound()
+  }
+}
+
+async function renderProviderPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug, publicId } = await params
 
   // ─── QUARTIER DETECTION ──────────────────────────────────
