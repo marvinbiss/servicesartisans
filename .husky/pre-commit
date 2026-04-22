@@ -13,6 +13,7 @@ node scripts/audit-dynamic-meta.mjs --strict || exit 1
 node scripts/audit-redirects.mjs --strict || exit 1
 node scripts/audit-noindex-sitemap.mjs --strict || exit 1
 node scripts/audit-internal-links-404.mjs --strict || exit 1
+node scripts/audit-jsonld-integrity.mjs --strict || exit 1
 node scripts/audit-opengraph.mjs --strict || exit 1
 node scripts/audit-breadcrumbs.mjs --strict || exit 1
 node scripts/audit-image-alt.mjs --strict || exit 1

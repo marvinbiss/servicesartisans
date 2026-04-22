@@ -67,6 +67,9 @@ jobs:
       - name: Internal links 404 (no dead internal href in src/)
         run: node scripts/audit-internal-links-404.mjs --strict
 
+      - name: JSON-LD integrity (@type allowlist, ISO dates, no hardcoded domain)
+        run: node scripts/audit-jsonld-integrity.mjs --strict
+
       - name: OpenGraph coverage (title/description/url on every indexable page)
         run: node scripts/audit-opengraph.mjs --strict
 
