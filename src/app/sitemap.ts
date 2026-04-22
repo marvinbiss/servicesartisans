@@ -204,12 +204,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly',
         priority: 0.9,
       },
-      {
-        url: `${SITE_URL}/avis`,
-        lastModified: STATIC_DATE,
-        changeFrequency: 'weekly',
-        priority: 0.9,
-      },
+      // /avis listé dans le shard reviews (ligne 1092) avec lastmod
+      // dynamique basé sur reviewByService — éviter le doublon ici.
       {
         url: `${SITE_URL}/blog`,
         lastModified: STATIC_DATE,

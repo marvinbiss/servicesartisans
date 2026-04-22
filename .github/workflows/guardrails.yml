@@ -70,6 +70,9 @@ jobs:
       - name: JSON-LD integrity (@type allowlist, ISO dates, no hardcoded domain)
         run: node scripts/audit-jsonld-integrity.mjs --strict
 
+      - name: Sitemap unicity (no duplicate URLs, trailing slash, query, fragment)
+        run: node scripts/audit-sitemap-unicity.mjs --strict
+
       - name: OpenGraph coverage (title/description/url on every indexable page)
         run: node scripts/audit-opengraph.mjs --strict
 
