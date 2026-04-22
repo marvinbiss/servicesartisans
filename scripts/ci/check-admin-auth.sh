@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Guardrail 1: Every admin API route must call verifyAdmin() or requirePermission()
-# Both functions live in @/lib/admin-auth and enforce authentication.
-# Scans src/app/api/admin/**/route.ts for either invocation.
+# Guardrail 1: Every admin API route must authenticate via one of:
+#   - verifyAdmin() / requirePermission() — admin session
+#   - verify<Provider>Signature() — webhook signature (Twilio HMAC, Resend, etc.)
+# Both mechanisms live in @/lib/admin-auth or @/lib/prospection/webhook-security.
+# Scans src/app/api/admin/**/route.ts for a valid invocation.
 set -euo pipefail
 
 ADMIN_DIR="src/app/api/admin"
@@ -16,7 +18,7 @@ fi
 
 while IFS= read -r file; do
   CHECKED=$((CHECKED + 1))
-  if ! grep -qE 'verifyAdmin|requirePermission' "$file"; then
+  if ! grep -qE 'verifyAdmin|requirePermission|verify[A-Z][A-Za-z]*Signature' "$file"; then
     FAILED_FILES+=("$file")
     EXIT_CODE=1
   fi
