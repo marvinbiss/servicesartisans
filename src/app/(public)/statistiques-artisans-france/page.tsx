@@ -184,7 +184,7 @@ const variationMoyenne = getVariationMoyenne()
 // Metadata
 // ---------------------------------------------------------------------------
 
-const pageTitle = 'Statistiques Artisans France 2026 : Chiffres Clés'
+const pageTitle = 'Statistiques Artisans France 2026'
 const pageDescription = `${(totalArtisans / 1000).toFixed(0)}k+ artisans référencés. Chiffres clés du marché artisanal France : répartition géo, tarifs moyens, rénovation, emploi 2026.`
 const pageUrl = `${SITE_URL}/statistiques-artisans-france`
 

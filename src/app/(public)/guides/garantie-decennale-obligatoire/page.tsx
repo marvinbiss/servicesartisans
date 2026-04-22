@@ -24,7 +24,7 @@ const DESCRIPTION =
   "Garantie décennale obligatoire 2026 : artisans concernés, ouvrages couverts (loi Spinetta), vérifier l'attestation, recours et exceptions."
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

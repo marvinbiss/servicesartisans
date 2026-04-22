@@ -27,7 +27,7 @@ const PAGE_URL = `${SITE_URL}/guides/renovation-fenetres`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Changer ses Fenêtres : Matériaux, Prix et Aides 2026',
+  title: 'Changer ses Fenêtres 2026 : Prix & Aides',
   description:
     "Guide complet remplacement de fenêtres 2026 : matériaux (PVC, bois, alu), types d'ouverture, vitrage, prix (300-1500€), aides MaPrimeRénov et CEE.",
   alternates: getAlternates('/guides/renovation-fenetres'),

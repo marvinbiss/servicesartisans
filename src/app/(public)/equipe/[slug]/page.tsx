@@ -7,7 +7,7 @@ import { allArticles } from '@/lib/data/blog/articles'
 import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPersonSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 
 export const revalidate = 3600
 
@@ -37,13 +37,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!author) return {}
 
   const title = `${author.name} — ${author.role} | ServicesArtisans`
+  const titleRoot = `${author.name} — ${author.role}`
   const description = `${author.bio.slice(0, 155)}...`
 
   return {
-    title,
+    title: titleRoot,
     description,
     alternates: getAlternates(`/equipe/${slug}`),
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       url: `${SITE_URL}/equipe/${slug}`,

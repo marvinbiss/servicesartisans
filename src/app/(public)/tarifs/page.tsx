@@ -31,7 +31,7 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
+  title: 'Tarifs Artisans 2026 : Prix par Métier',
   description:
     'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
   alternates: getAlternates('/tarifs'),
@@ -434,6 +434,26 @@ export default async function TarifsPage() {
                 <Search className="w-5 h-5" />
                 Trouver un artisan
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Section A0: tous les métiers (inlink chaque /tarifs/[service]) */}
+        <section className="py-12 border-t bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
+              Tous les métiers — tarifs 2026
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {services.map((s) => (
+                <Link
+                  key={`tarif-all-${s.slug}`}
+                  href={`/tarifs/${s.slug}`}
+                  className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  Tarifs {s.name.toLowerCase()}
+                </Link>
+              ))}
             </div>
           </div>
         </section>

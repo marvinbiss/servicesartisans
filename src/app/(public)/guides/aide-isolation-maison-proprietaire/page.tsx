@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Aides isolation 2026 propriétaire : MaPrimeRénov’, CEE, TVA 5,5 %, éco-PTZ. Jusqu’à 45 €/m² ITE, 25-45 €/m² combles. Devis gratuits.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

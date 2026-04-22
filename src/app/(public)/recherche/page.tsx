@@ -12,7 +12,7 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Rechercher un artisan — Trouvez le bon professionnel',
+  title: 'Rechercher un artisan qualifié',
   description:
     "Recherchez un artisan qualifié près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit. Des milliers d'artisans référencés en France.",
   alternates: getAlternates(`/recherche`),

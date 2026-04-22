@@ -36,7 +36,7 @@ const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Pompe à Chaleur : Prix, Aides et Installation 2026',
+  title: 'Pompe à Chaleur : Prix et Aides 2026',
   description:
     'Guide pompe à chaleur 2026 : air-eau, air-air, géothermique. Prix 3 000-30 000 €, MaPrimeRénov’ jusqu’à 11 000 €, installation artisan RGE.',
   alternates: getAlternates('/guides/pompe-a-chaleur'),

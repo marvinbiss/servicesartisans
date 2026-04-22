@@ -135,6 +135,30 @@ export function getAlternates(path: string) {
   }
 }
 
+/**
+ * OpenGraph fields that MUST appear on every indexable page.
+ * Ahrefs flags pages as "OG incomplete" when siteName / locale / images
+ * fail to cascade from the root layout — this helper injects them
+ * defensively so scrapers always see the full tag set.
+ *
+ * Usage in generateMetadata():
+ *   openGraph: { ...getOgDefaults(), title, description, url, type: 'article' }
+ */
+export function getOgDefaults() {
+  return {
+    siteName: SITE_NAME,
+    locale: 'fr_FR',
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} — Annuaire des artisans référencés en France`,
+      },
+    ],
+  }
+}
+
 // SEO pour les artisans
 export function getArtisanSEO(
   artisanName: string,

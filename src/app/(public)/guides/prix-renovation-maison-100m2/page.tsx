@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Budget rénovation maison 100 m² 2026 : rafraîchissement 300-600 €/m², moyenne 700-1 200 €/m², complète 1 200-2 500 €/m². Prix par poste, aides.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

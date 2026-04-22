@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import { getComparisonReviewSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -51,6 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: comparison.metaDescription,
     alternates: getAlternates(`/comparaison/${comparison.slug}`),
     openGraph: {
+      ...getOgDefaults(),
       title: comparison.title,
       description: comparison.metaDescription,
       url: pageUrl,

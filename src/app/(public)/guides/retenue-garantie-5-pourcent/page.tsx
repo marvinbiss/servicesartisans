@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Retenue de garantie 5 % : loi 16 juillet 1971, clause type devis, consignation Caisse des Dépôts, libération 1 an après réception, caution bancaire alternative.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

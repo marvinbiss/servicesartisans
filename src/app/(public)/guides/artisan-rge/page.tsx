@@ -26,7 +26,7 @@ const PAGE_URL = `${SITE_URL}/guides/artisan-rge`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisan RGE 2026 : trouver un pro certifié',
+  title: 'Artisan RGE 2026 : trouver un pro',
   description:
     "Découvrez comment vérifier un artisan RGE : qualifications Qualibat, QualiPAC, QualiSol et accès aux aides MaPrimeRénov' 2026. Guide complet.",
   alternates: getAlternates('/guides/artisan-rge'),

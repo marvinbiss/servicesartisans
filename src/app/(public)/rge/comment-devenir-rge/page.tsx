@@ -26,7 +26,7 @@ export const revalidate = 86400
 const path = '/rge/comment-devenir-rge'
 
 export const metadata: Metadata = {
-  title: 'Comment devenir artisan RGE en 2026 ? Guide complet',
+  title: 'Devenir artisan RGE 2026 : guide',
   description:
     "Obtenir la qualification RGE : organismes (Qualit'EnR, Qualibat, Qualifelec), 5 étapes, coûts, formation, audit chantier, cadre légal 2015.",
   robots: {

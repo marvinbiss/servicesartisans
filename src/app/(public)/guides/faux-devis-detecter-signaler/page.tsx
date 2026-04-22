@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Faux devis artisan : 10 signaux d’alerte, vérifications SIRET + RC pro + décennale, signalement DGCCRF, recours pénal. Protéger vos travaux et aides.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

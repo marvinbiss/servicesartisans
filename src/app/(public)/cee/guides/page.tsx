@@ -14,7 +14,7 @@ export const revalidate = 86400
 const path = '/cee/guides'
 
 export const metadata: Metadata = {
-  title: 'Guides primes CEE 2026 — PAC, isolation, poêle, chaudière',
+  title: 'Guides primes CEE 2026 — PAC, isolation',
   description:
     'Guides éditoriaux complets sur les 5 primes CEE résidentielles les plus recherchées : PAC air/eau, isolation combles, plancher, poêle bois, chaudière biomasse.',
   robots: {

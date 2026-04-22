@@ -87,7 +87,7 @@ interface ProviderRecord {
   rge_organismes?: string[] | null
   rge_source_url?: string | null
 }
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
@@ -517,7 +517,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
   }
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -573,6 +573,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       // All service×quartier pages indexed — rich content exists even with few providers
       openGraph: {
+        ...getOgDefaults(),
         title,
         description,
         type: 'website',
@@ -703,6 +704,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             'max-video-preview': -1 as const,
           },
       openGraph: {
+        ...getOgDefaults(),
         title,
         description,
         type: 'profile',

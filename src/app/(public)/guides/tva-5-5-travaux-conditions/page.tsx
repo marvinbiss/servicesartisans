@@ -24,7 +24,7 @@ const DESCRIPTION =
   'TVA 5,5 % : logement >2 ans + rénovation énergétique performante. Attestation simplifiée Cerfa 13948, travaux éligibles, pièces fiches. Erreur = redressement.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -33,7 +33,7 @@ const PAGE_URL = `${SITE_URL}/guides/renovation-cuisine`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Rénovation Cuisine : Guide Complet des Étapes et Prix 2026',
+  title: 'Rénovation Cuisine 2026 : Étapes & Prix',
   description:
     'Guide rénovation cuisine 2026 : étapes conception à pose, prix par poste (meubles, plan de travail, électroménager), budget et erreurs à éviter.',
   alternates: getAlternates('/guides/renovation-cuisine'),

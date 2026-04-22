@@ -50,7 +50,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'MaPrimeRénov 2026 : Montants, Conditions et Guide',
+  title: 'MaPrimeRénov 2026 : Montants',
   description:
     "Guide MaPrimeRénov' 2026 : montants jusqu'à 70 000 €, conditions, barèmes revenus, parcours accompagné. Obtenez votre aide rénovation énergétique.",
   keywords: [

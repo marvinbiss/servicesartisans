@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Portail motorisé 2026 : 1 500-6 500 € posé battant/coulissant alu ou PVC, norme NF EN 13241, déclaration préalable mairie, biennale + décennale.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

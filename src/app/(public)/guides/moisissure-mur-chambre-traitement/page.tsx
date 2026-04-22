@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Traitez la moisissure sur un mur de chambre : risques santé, nettoyage immédiat, solution durable (ventilation, isolation). Protocole et budgets 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

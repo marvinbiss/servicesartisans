@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Pont thermique : définition, localisation (dalle, refend, nez plancher), impact DPE, traitement ITE vs ITI, rupteurs thermiques, coût.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

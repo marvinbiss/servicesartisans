@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Réception travaux : PV obligatoire, réserves précises, checklist 30 points. Déclenche GPA 1 an, biennale 2 ans, décennale 10 ans. Modèle PV inclus.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

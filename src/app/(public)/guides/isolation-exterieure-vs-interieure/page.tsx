@@ -24,7 +24,7 @@ const DESCRIPTION =
   'ITE vs ITI : comparatif prix au m², performance thermique, ponts thermiques, surface perdue, aides 2026, contraintes copropriété et urbanisme.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

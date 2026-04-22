@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Humidité mur intérieur : 4 causes (condensation, infiltration, remontées capillaires, fuite), diagnostic visuel, traitements et prix 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

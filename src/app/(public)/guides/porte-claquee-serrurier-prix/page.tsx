@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Porte claquée : prix serrurier 2026 selon type de porte, heure et urgence. Comment éviter les arnaques serrurier (500-3000 €), méthode sans casse, garanties.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

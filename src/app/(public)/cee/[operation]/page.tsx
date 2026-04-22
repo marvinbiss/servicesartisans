@@ -6,7 +6,7 @@ import { MapPin, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react'
 import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFinancialProductSchema,
@@ -113,6 +113,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         }
       : { index: false, follow: true },
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       type: 'article',

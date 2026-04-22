@@ -33,7 +33,7 @@ const PAGE_URL = `${SITE_URL}/guides/isolation-thermique`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Isolation Thermique : Prix, Matériaux et Aides 2026',
+  title: 'Isolation Thermique : Prix et Aides 2026',
   description:
     "Guide isolation thermique 2026 : ITE (120-280€/m²), ITI (40-130€/m²), combles (20-75€/m²), matériaux, aides MaPrimeRénov' jusqu'à 80% et artisans RGE.",
   alternates: getAlternates('/guides/isolation-thermique'),

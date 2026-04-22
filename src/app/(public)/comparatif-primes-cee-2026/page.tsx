@@ -30,7 +30,7 @@ export const revalidate = 86400
 const path = '/comparatif-primes-cee-2026'
 
 export const metadata: Metadata = {
-  title: 'Primes CEE 2026 : Effy, Hellio, Sonergia, PrimesEnergie',
+  title: 'Primes CEE 2026 : Effy, Hellio, Sonergia',
   description:
     'Comparatif indépendant des 4 principaux acteurs CEE en 2026 : montants, délais de paiement, avis clients, modèle économique. Données vérifiées avril 2026.',
   robots: {

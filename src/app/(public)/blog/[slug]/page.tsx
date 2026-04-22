@@ -12,7 +12,7 @@ import {
   Tag,
   ChevronRight,
 } from 'lucide-react'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getAuthorByName } from '@/lib/data/authors'
 import {
   getBreadcrumbSchema,
@@ -68,7 +68,7 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!article) return { title: 'Article non trouvé' }
 
   const blogImage = getBlogImage(slug, article.category)
-  const title = article.metaTitle ?? truncateTitle(article.title, 60)
+  const title = article.metaTitle ?? truncateTitle(article.title, 41)
   const description = article.metaDescription ?? article.excerpt
 
   return {
@@ -87,6 +87,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: getAlternates('/blog/${slug}'),
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       type: 'article',

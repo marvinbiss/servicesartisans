@@ -24,7 +24,7 @@ const PAGE_URL = `${SITE_URL}/guides/garantie-decennale`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Garantie Décennale : Tout Comprendre en 2026',
+  title: 'Garantie Décennale 2026 : Guide',
   description:
     "Découvrez la garantie décennale 2026 : durée 10 ans, travaux couverts, exclusions, vérifier l'attestation artisan et recours en cas de sinistre.",
   alternates: getAlternates('/guides/garantie-decennale'),

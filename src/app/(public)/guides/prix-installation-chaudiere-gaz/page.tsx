@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix chaudière gaz à condensation 2026 : 3 500-7 500 € TTC installée. Fin MaPrimeRénov’ chaudière gaz, entretien obligatoire, comparaison PAC.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

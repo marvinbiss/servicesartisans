@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Chauffe-eau thermodynamique 2026 : 2 200-4 500 € TTC posé, COP 2,5-3,8. MaPrimeRénov’ 400-1 200 €, CEE 150-600 €, TVA 5,5 %. Comparatif vs électrique.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

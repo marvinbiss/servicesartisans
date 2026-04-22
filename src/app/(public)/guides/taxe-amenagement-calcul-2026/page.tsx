@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Taxe d’aménagement 2026 : valeur forfaitaire 1 036 €/m² (hors IDF), 1 174 € IDF. Taux communal, départemental, régional, exonérations, paiement.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -23,7 +23,7 @@ const PAGE_URL = `${SITE_URL}/guides/extension-maison`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Extension de Maison : Démarches, Prix et Conseils 2026',
+  title: 'Extension Maison : Prix et Démarches 2026',
   description:
     'Extension de maison 2026 : types (latérale, surélévation, véranda), démarches DP ou permis, prix au m² 800-2 500 €, matériaux et artisans.',
   alternates: getAlternates('/guides/extension-maison'),

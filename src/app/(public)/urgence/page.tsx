@@ -34,7 +34,7 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisan Urgence — Dépannage Soir & Week-end',
+  title: 'Artisan Urgence : Dépannage 24/7',
   description:
     'Artisan en urgence : plombier, électricien, serrurier. Dépannage soir et week-end partout en France. Devis gratuit, artisans vérifiés SIREN.',
   alternates: getAlternates(`/urgence`),
@@ -546,6 +546,28 @@ export default async function UrgencePage() {
               Voir tous les services
               <ArrowRight className="w-5 h-5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Section A0: Urgence par métier — all services hub link list */}
+      {/* Garantit un inlink pour chaque /urgence/[service] page
+          (sinon métiers hors top-4 restent orphans dans Ahrefs). */}
+      <section className="py-12 border-t bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
+            Tous les métiers en dépannage d'urgence
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {services.map((s) => (
+              <Link
+                key={`urg-all-${s.slug}`}
+                href={`/urgence/${s.slug}`}
+                className="text-sm text-charcoal-700 hover:text-red-600 bg-sand-50 hover:bg-red-50 border border-sand-200 hover:border-red-200 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                Urgence {s.name.toLowerCase()}
+              </Link>
+            ))}
           </div>
         </div>
       </section>

@@ -9,7 +9,7 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 const canonicalUrl = `${SITE_URL}/etudes`
 
 export const metadata: Metadata = {
-  title: 'Études et données sur l’artisanat en France',
+  title: 'Études et données artisanat France',
   description:
     'Études exclusives sur l’artisanat en France : déserts artisanaux, densité par département, métiers en tension. Données SIREN officielles.',
   alternates: getAlternates('/etudes'),

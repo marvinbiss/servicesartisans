@@ -17,7 +17,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
@@ -59,7 +59,7 @@ const urgencyDotColors = {
   basse: 'bg-green-400',
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -90,6 +90,7 @@ export async function generateMetadata({
     description,
     alternates: getAlternates(`/problemes/${probleme}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

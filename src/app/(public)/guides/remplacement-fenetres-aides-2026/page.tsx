@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Remplacement fenêtres 2026 : MaPrimeRénov’ (40-100 €/fenêtre), CEE, TVA 5,5 %, éco-PTZ. Uw et Sw requis, contraintes ABF, artisans RGE.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

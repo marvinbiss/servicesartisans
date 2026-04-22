@@ -26,7 +26,7 @@ const PAGE_URL = `${SITE_URL}/guides/isolation-combles`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Isolation des Combles : Guide Prix, Techniques et Aides 2026',
+  title: 'Isolation Combles : Prix et Aides 2026',
   description:
     'Guide isolation combles 2026 : combles perdus (20-75 €/m²), combles aménagés (48-265 €/m²), techniques (soufflage, rouleau, sarking), aides et artisans RGE.',
   alternates: getAlternates('/guides/isolation-combles'),

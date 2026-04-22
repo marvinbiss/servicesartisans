@@ -11,7 +11,7 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par Ville — Annuaire par commune en France',
+  title: 'Artisans par Ville — Annuaire France',
   description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
   alternates: getAlternates(`/villes`),
   openGraph: {

@@ -13,7 +13,7 @@ import {
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Garantie ServicesArtisans — Notre engagement qualité',
+  title: 'Garantie — Notre engagement qualité',
   description:
     'Artisans vérifiés, devis gratuits et sans engagement, données protégées. Découvrez les garanties ServicesArtisans pour vos travaux en toute confiance.',
   alternates: getAlternates(`/garantie`),

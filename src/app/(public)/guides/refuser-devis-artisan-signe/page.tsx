@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Peut-on annuler un devis signé ? Rétractation 14 jours, vice du consentement, inexécution, accord amiable : les 4 voies, leurs conditions et modèles de lettre.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix isolation combles 100 m² 2026 : 2 000-8 000 € TTC (soufflage, panneaux, sarking). MaPrimeRénov’ + CEE jusqu’à 4 500 €. Grille par matériau.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -31,7 +31,7 @@ import { slugify } from '@/lib/utils'
 const canonicalUrl = `${SITE_URL}/etudes/deserts-artisanaux`
 
 export const metadata: Metadata = {
-  title: 'Deserts artisanaux en France — Étude 2026 par département',
+  title: 'Déserts artisanaux — Étude 2026',
   description:
     'Carte interactive des déserts artisanaux. Classement des 101 départements par nombre d’artisans pour 10\u202f000 habitants. Données SIREN officielles.',
   alternates: getAlternates('/etudes/deserts-artisanaux'),

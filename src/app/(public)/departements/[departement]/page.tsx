@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   departements,
@@ -47,7 +47,7 @@ interface PageProps {
   params: Promise<{ departement: string }>
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -91,6 +91,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     robots: { index: true, follow: true },
     alternates: getAlternates(`/departements/${deptSlug}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,
@@ -599,6 +600,56 @@ export default async function DepartementPage({ params }: PageProps) {
                 >
                   {d.name} ({d.code})
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── MAILLAGE TERRITORIAL COMPLET ─────────────────── */}
+        {/* Linke chaque combinaison service × ville du département.
+            Objectif : éliminer les "orphan pages" flaggées par Ahrefs
+            (chaque /services/[service]/[ville] du département reçoit
+            au moins un inlink depuis sa page département parente). */}
+        {villesDuDepartement.length > 0 && (
+          <section className="mb-16 border-t border-sand-200 pt-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-sand-100 rounded-xl flex items-center justify-center">
+                <Map className="w-5 h-5 text-charcoal-600" />
+              </div>
+              <div>
+                <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                  Tous les artisans dans les villes du {dept.name}
+                </h2>
+                <p className="text-sm text-charcoal-500">
+                  {villesDuDepartement.length} ville
+                  {villesDuDepartement.length > 1 ? 's' : ''} ×{' '}
+                  {Math.min(orderedServices.length, 12)} métiers
+                </p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {orderedServices.slice(0, 12).map((svc) => (
+                <details
+                  key={`mesh-${svc.slug}`}
+                  className="bg-white rounded-xl border border-sand-200 overflow-hidden"
+                >
+                  <summary className="cursor-pointer px-5 py-3 font-medium text-charcoal-800 hover:bg-sand-50 select-none">
+                    {svc.name} — {villesDuDepartement.length} villes du {dept.name}
+                  </summary>
+                  <div className="px-5 py-4 border-t border-sand-200 bg-sand-50/40">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-sm">
+                      {villesDuDepartement.map((v) => (
+                        <Link
+                          key={`mesh-${svc.slug}-${v.slug}`}
+                          href={`/services/${svc.slug}/${v.slug}`}
+                          className="text-charcoal-600 hover:text-primary-500 underline decoration-dotted underline-offset-2"
+                        >
+                          {svc.name} à {v.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </details>
               ))}
             </div>
           </section>

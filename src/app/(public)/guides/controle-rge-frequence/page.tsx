@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Contrôle RGE : audit initial + 1-3 chantiers par cycle de 4 ans + contrôles inopinés. Déroulé visite, points vérifiés, résultats, sanctions possibles.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

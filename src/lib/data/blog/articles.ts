@@ -63,7 +63,7 @@ export interface BlogArticle {
  */
 const REDIRECTED_SLUGS: ReadonlySet<string> = new Set([
   // batch-seo-boost1 (all 5 removed — file emptied)
-  'maprimerenov-2026-guide-complet-aides-renovation', // G1 → maprimerénov-2026-conditions-montants
+  'maprimerenov-2026-guide-complet-aides-renovation', // G1 → maprimerenov-2026-conditions-montants
   'comment-choisir-artisan-confiance-guide-2026', // G8 → comment-verifier-artisan-avant-engager
   'prix-renovation-maison-2026-budget-complet', // G16 → renovation-maison-prix-m2-2026
   'pompe-a-chaleur-guide-complet-2026', // G9 → prix-pompe-a-chaleur-2026

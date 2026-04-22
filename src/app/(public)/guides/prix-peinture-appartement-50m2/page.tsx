@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix peinture appartement 50 m² en 2026 : 1 500 à 4 500 € TTC tout compris selon état des supports. Prix au m², choix de peinture, préparation, main-d’œuvre.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

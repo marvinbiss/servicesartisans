@@ -12,9 +12,10 @@ import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 const faqTitle = 'FAQ — Questions Artisans et Travaux | ServicesArtisans'
+const faqTitleRoot = 'FAQ — Questions Artisans et Travaux'
 
 export const metadata: Metadata = {
-  title: faqTitle,
+  title: faqTitleRoot,
   description:
     "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
   alternates: getAlternates('/faq'),

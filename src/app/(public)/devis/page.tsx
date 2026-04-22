@@ -15,7 +15,7 @@ import { villes, services } from '@/lib/data/france'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
+  title: 'Devis Artisan Gratuit 2026 — 3 Offres 24h',
   description:
     'Demandez un devis artisan gratuit 2026 : plombier, électricien, serrurier et 50 métiers. Réponse sous 24h, 3 offres, 100% gratuit, sans engagement.',
   alternates: getAlternates('/devis'),

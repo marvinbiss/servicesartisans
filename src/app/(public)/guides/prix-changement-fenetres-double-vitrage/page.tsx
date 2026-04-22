@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix fenêtre double vitrage posée 2026 : 450-1 200 €/unité selon matériau (PVC, alu, bois, mixte). MaPrimeRénov’ + CEE jusqu’à 100 €/fenêtre.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

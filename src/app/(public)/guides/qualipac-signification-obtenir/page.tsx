@@ -24,7 +24,7 @@ const DESCRIPTION =
   'QualiPAC : signification, conditions, audit Qualit’EnR, durée 4 ans, prix 800-1 400 €, obligatoire pour MaPrimeRénov’ pompe à chaleur.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

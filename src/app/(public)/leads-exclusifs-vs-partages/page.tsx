@@ -25,7 +25,7 @@ export const revalidate = 86400
 const path = '/leads-exclusifs-vs-partages'
 
 export const metadata: Metadata = {
-  title: 'Leads exclusifs vs partagés : comparatif artisan',
+  title: 'Leads exclusifs vs partagés : comparatif',
   description:
     'Comparatif objectif entre leads exclusifs et leads partagés pour les artisans. Coût réel, taux de conversion, ROI. Données Habitatpresto, Travaux.com, Effy.',
   robots: {

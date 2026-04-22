@@ -37,7 +37,7 @@ const PAGE_URL = `${SITE_URL}/guides/renovation-salle-de-bain`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Rénovation Salle de Bain : Étapes, Prix et Conseils 2026',
+  title: 'Rénovation Salle de Bain : Prix 2026',
   description:
     'Guide rénovation salle de bain 2026 : étapes clés, prix par poste (douche italienne, carrelage, plomberie), budget, erreurs et aides.',
   alternates: getAlternates('/guides/renovation-salle-de-bain'),

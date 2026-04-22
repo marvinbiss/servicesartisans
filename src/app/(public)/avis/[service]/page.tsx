@@ -14,7 +14,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getAvisHubSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
@@ -97,6 +97,7 @@ export async function generateMetadata({
     description,
     alternates: getAlternates(`/avis/${service}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

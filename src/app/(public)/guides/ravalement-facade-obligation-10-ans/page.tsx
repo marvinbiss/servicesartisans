@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Ravalement façade : obligation décennale art. L132-3 CCH dans 4 400 communes, arrêté mairie délai 6-12 mois, amende 3 750 € + travaux d’office.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

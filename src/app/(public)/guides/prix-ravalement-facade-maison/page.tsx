@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix ravalement façade maison 2026 : 40-100 €/m² (nettoyage, enduit, bardage). Obligation légale 10 ans, aides ITE, exemple chiffré maison 100 m².'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

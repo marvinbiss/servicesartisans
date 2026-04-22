@@ -24,7 +24,7 @@ const PAGE_URL = `${SITE_URL}/guides/assurance-dommage-ouvrage`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Assurance dommage-ouvrage 2026 : obligatoire ?',
+  title: 'Assurance dommage-ouvrage : guide',
   description:
     "Découvrez l'assurance dommage-ouvrage 2026 : obligation légale, coût 1-5 % du chantier, souscription, indemnisation 90 jours et sanctions en cas d'absence.",
   alternates: getAlternates('/guides/assurance-dommage-ouvrage'),

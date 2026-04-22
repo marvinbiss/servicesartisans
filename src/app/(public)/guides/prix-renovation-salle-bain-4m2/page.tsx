@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Budget SDB 4 m² 2026 : rafraîchissement 2 500-5 000 €, complète 6 000-12 000 €, haut de gamme 12 000-20 000 €. Détail par poste et aides.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

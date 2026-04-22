@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Expert bâtiment 2026 : prix 400-2 500 € HT, avant achat 500-900 €, malfaçon 600-1 500 €, judiciaire 2 000-5 000 €, CNEAF ou CIBTP certifié.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

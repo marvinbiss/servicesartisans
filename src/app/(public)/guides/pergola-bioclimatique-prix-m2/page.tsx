@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Pergola bioclimatique 2026 : 350-900 €/m² alu motorisée lames orientables, adossée 20 m² = 7 000-18 000 €, DP mairie, Qualibat 3751, décennale.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

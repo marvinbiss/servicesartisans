@@ -28,7 +28,7 @@ import { comparisons } from '@/lib/data/comparisons'
 export const revalidate = false
 
 export const metadata: Metadata = {
-  title: 'Comparatifs Travaux 2026 : 30 Guides pour Choisir',
+  title: 'Comparatifs Travaux 2026 : 30 Guides',
   description:
     '30 comparatifs détaillés pour vos travaux : pompe à chaleur, isolation, menuiserie, revêtements. Prix 2026, avantages et verdict pour chaque solution.',
   alternates: getAlternates('/comparaison'),

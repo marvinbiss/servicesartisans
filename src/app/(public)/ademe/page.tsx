@@ -67,7 +67,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Données ADEME & sources officielles — Méthodologie RGE',
+  title: 'Données ADEME — Méthodologie RGE',
   description:
     "Source de nos données RGE : référentiel officiel ADEME / France Rénov', synchronisation hebdomadaire. 165 000 qualifications recensées.",
   alternates: getAlternates('/ademe'),

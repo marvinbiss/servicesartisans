@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Surélévation maison : 2 000-3 500 €/m² TTC (bois, béton, métal). Permis, PLU, étude structure, architecte obligatoire >150 m².'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -10,6 +10,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { allBlogTags } from '@/lib/data/blog/tags'
 import BlogPageClient from './BlogPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -17,7 +18,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: `Blog Travaux 2026 : prix et guides artisans`,
+  title: `Blog Travaux 2026 : prix et guides`,
   description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Devis gratuit.`,
   alternates: getAlternates('/blog'),
   openGraph: {
@@ -296,6 +297,32 @@ export default async function BlogPage({ searchParams }: PageProps) {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Crawlable tag archive — server-rendered for SEO.
+          Linke chaque /blog/tag/[slug] pour sortir ces pages du
+          statut "orphan page" remonté par Ahrefs. */}
+      <section className="py-12 bg-sand-50 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6 border-l-4 border-primary-400 pl-4">
+            Explorer par tag
+          </h2>
+          <p className="text-sm text-charcoal-500 mb-6">
+            {allBlogTags.length} tags — cliquez pour filtrer les articles.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {allBlogTags.map((t) => (
+              <Link
+                key={`tag-archive-${t.slug}`}
+                href={`/blog/tag/${t.slug}`}
+                className="text-sm text-charcoal-700 hover:text-primary-600 bg-white hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                {t.label}
+                <span className="ml-1.5 text-xs text-charcoal-400">({t.count})</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </>

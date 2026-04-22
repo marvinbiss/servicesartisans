@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Dégât des eaux voisin : convention IRSI 2020, constat amiable, expertise, responsabilité locataire/propriétaire. Délais assurance, recours, franchise.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

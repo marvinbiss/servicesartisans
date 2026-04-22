@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
 import {
   departements,
@@ -55,7 +55,7 @@ interface PageProps {
   params: Promise<{ departement: string; service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -96,6 +96,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: getAlternates(`/departements/${deptSlug}/${serviceSlug}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

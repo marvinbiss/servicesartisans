@@ -21,7 +21,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
@@ -724,7 +724,7 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -808,6 +808,7 @@ export async function generateMetadata({
     alternates: getAlternates(`/urgence/${service}/${villeSlug}`),
     robots: { index: !noindex, follow: true },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

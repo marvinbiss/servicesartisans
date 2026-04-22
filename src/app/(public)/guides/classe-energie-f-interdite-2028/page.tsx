@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Logements F : interdiction location au 1er janvier 2028. Impact, dérogations, sanctions, travaux à faire, aides 2026 pour atteindre E ou D.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

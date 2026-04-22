@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Obtenir mon devis gratuit | ServicesArtisans',
+  title: 'Obtenir mon devis gratuit',
   description:
     "Demandez un devis gratuit et recevez jusqu'à 3 propositions d'artisans qualifiés près de chez vous. Service 100% gratuit et sans engagement.",
   alternates: {

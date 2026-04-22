@@ -6,7 +6,7 @@ import InvitationReviewForm from './InvitationReviewForm'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Laisser un avis | ServicesArtisans',
+  title: 'Laisser un avis',
   description: 'Partagez votre retour sur votre artisan.',
   robots: { index: false, follow: false },
 }

@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Coup de pouce Chauffage 2026 : prime CEE jusqu’à 5 000 € pour remplacer chaudière fioul/gaz/charbon par PAC ou biomasse. Cumul MaPrimeRénov’.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

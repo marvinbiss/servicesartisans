@@ -6,7 +6,7 @@ import { ShieldCheck, FileCheck2, Percent, ExternalLink, BookOpen } from 'lucide
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import ProviderList from '@/components/ProviderList'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { villes, getVilleBySlug } from '@/lib/data/france'
 import { getArtisanUrl } from '@/lib/utils'
@@ -60,6 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: getAlternates(`/artisans-rge/${ville.slug}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Diagnostiquez une infiltration de fenêtre PVC : joints, pente appui, pose, micro-ventilation. Solutions DIY, recours décennale, prix 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

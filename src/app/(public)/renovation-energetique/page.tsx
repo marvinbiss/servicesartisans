@@ -187,7 +187,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Rénovation énergétique 2026 : aides, travaux, artisans RGE',
+  title: 'Rénovation énergétique 2026 : aides RGE',
   description:
     "Hub rénovation énergétique : MaPrimeRénov' 2026, primes CEE P6, TVA 5,5 %, éco-PTZ. Simulateur officiel, artisans RGE vérifiés via ADEME.",
   alternates: getAlternates(PAGE_PATH),

@@ -15,7 +15,7 @@ import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 const canonicalUrl = `${SITE_URL}/barometre/tarifs`
 
 export const metadata: Metadata = {
-  title: `Statistiques par métier — Baromètre Artisans`,
+  title: `Stats par métier — Baromètre`,
   description:
     'Consultez les statistiques par métier : plombier, électricien, maçon, couvreur. Volumes, notes moyennes et avis par corps de métier en France 2026.',
   alternates: getAlternates('/barometre/tarifs'),

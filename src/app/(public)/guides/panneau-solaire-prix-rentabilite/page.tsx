@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Panneau solaire 2026 : 8 000-18 000 € TTC installé 3-9 kWc. Aide autoconsommation 80-380 €/kWc + revente EDF OA. Rentabilité 10-14 ans, QualiPV RGE.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

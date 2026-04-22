@@ -26,7 +26,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Déclaration Préalable de Travaux : Guide 2026',
+  title: 'Déclaration Préalable Travaux 2026',
   description:
     'Déclaration préalable de travaux 2026 : cas concernés (5-20 m², façade, clôture, piscine), Cerfa 13703, délai 1 mois et accord tacite.',
   keywords: [

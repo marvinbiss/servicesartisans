@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
 import { villes as staticVilles, getVilleBySlug } from '@/lib/data/france'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getItemListSchema,
@@ -140,6 +140,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           'max-video-preview': -1 as const,
         },
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       type: 'website',

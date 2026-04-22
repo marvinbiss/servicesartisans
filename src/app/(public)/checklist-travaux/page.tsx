@@ -19,7 +19,7 @@ import RelatedHubs from '@/components/seo/RelatedHubs'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Checklist Avant Travaux 2026 : 60 Points Clés',
+  title: 'Checklist Travaux 2026 : 60 Points',
   description:
     'Checklist complète avant de commencer vos travaux : budget, devis, autorisations, préparation chantier, suivi, réception. 60 points de contrôle essentiels.',
   alternates: getAlternates('/checklist-travaux'),

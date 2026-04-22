@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Domotique 2026 : prix 2 500-15 000 € TTC selon protocole (KNX, Zigbee, Z-Wave, Matter), pose par électricien domoticien, NF C 15-100.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

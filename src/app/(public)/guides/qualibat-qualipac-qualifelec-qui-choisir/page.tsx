@@ -26,7 +26,7 @@ const PAGE_URL = `${SITE_URL}/guides/qualibat-qualipac-qualifelec-qui-choisir`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Qualibat, QualiPAC, Qualifelec : quelle qualif RGE',
+  title: 'Qualibat, QualiPAC, Qualifelec : RGE',
   description:
     'Comparatif des qualifications RGE 2026 : Qualibat, QualiPAC, QualiSol, QualiPV, Qualifelec, QualiBois. Quelle qualification pour quels travaux ?',
   alternates: getAlternates('/guides/qualibat-qualipac-qualifelec-qui-choisir'),

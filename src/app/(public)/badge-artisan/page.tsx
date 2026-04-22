@@ -11,7 +11,7 @@ const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), {
 const canonicalUrl = `${SITE_URL}/badge-artisan`
 
 export const metadata: Metadata = {
-  title: `Badge Artisan Vérifié — Votre certification`,
+  title: `Badge Artisan Vérifié — Certification`,
   description: `Générez votre badge "Artisan Vérifié" ${SITE_NAME} et intégrez-le sur votre site web. Crédibilité, backlinks SEO et nouveaux clients. Gratuit.`,
   alternates: getAlternates('/badge-artisan'),
   openGraph: {

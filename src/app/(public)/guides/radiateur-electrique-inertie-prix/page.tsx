@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Radiateur inertie 2026 : prix 350-1 400 € posé (fluide, fonte, céramique), 750-2 000 W, pilotage Wifi, électricien qualifié, CEE 200-400 €.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

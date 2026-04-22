@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Vice caché immobilier 2026 : art. 1641, 4 conditions (antérieur, grave, caché, inconnu), délai 2 ans découverte, action rédhibitoire ou estimatoire.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

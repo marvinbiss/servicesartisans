@@ -5,7 +5,7 @@ import { MapPin, Users, Star, Building2, ArrowRight, BarChart3, HelpCircle } fro
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   BAROMETRE_REGIONS,
   getBarometreRegionBySlug,
@@ -54,6 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: getAlternates(`/barometre/regions/${regionSlug}`),
     robots: { index: true, follow: true },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

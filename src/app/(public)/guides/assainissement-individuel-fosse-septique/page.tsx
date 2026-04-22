@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Assainissement non collectif 2026 : fosse toutes eaux 6 500-12 500 € TTC, micro-station 7 500-12 000 €, contrôle SPANC obligatoire, mise aux normes 4 ans.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

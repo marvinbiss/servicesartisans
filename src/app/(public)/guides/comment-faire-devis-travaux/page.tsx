@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Obtenez 3 devis travaux sérieux sous 7 jours : cahier des charges, photos, mentions à exiger et modèle de demande prêt à envoyer. Méthode 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

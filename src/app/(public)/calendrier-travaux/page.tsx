@@ -23,7 +23,7 @@ import RelatedHubs from '@/components/seo/RelatedHubs'
 const PAGE_URL = `${SITE_URL}/calendrier-travaux`
 
 export const metadata: Metadata = {
-  title: 'Calendrier des Travaux 2026 : Guide Mois par Mois',
+  title: 'Calendrier Travaux 2026 : Mois par Mois',
   description:
     'Calendrier saisonnier des travaux : quels travaux faire chaque mois, lesquels éviter. Conseils pratiques pour planifier.',
   alternates: getAlternates('/calendrier-travaux'),

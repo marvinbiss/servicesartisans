@@ -25,7 +25,7 @@ const PAGE_URL = `${SITE_URL}/guides/travaux-copropriete`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Travaux en Copropriété : Règles et Démarches 2026',
+  title: 'Travaux en Copropriété : Règles 2026',
   description:
     'Guide travaux copropriété 2026 : parties communes vs privatives, vote AG, majorités requises, autorisations et gros travaux obligatoires.',
   alternates: getAlternates('/guides/travaux-copropriete'),

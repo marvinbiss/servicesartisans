@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Chantier abandonné : mise en demeure 15 j, résiliation aux torts, substitution autre artisan, dommages-intérêts. Récupération acompte, liquidation judiciaire.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

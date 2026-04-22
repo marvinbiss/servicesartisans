@@ -18,7 +18,7 @@ import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import LastUpdated from '@/components/seo/LastUpdated'
 import { getDepartementBySlug } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
@@ -136,6 +136,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: getAlternates(path),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Euro, ChevronDown, MapPin } from 'lucide-react
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   hashCode,
   getRegionalMultiplier,
@@ -46,7 +46,7 @@ export const revalidate = 86400
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -89,6 +89,7 @@ export async function generateMetadata({
     robots: { index: false, follow: true },
     alternates: getAlternates(`/devis/${service}/${location}/${quartier}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

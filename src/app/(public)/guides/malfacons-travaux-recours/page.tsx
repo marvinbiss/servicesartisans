@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Malfaçons travaux : procédure amiable (LRAR, mise en demeure), expertise amiable vs judiciaire, référé, décennale. Délais prescription, jurisprudence 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

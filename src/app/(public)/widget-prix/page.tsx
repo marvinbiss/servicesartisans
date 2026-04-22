@@ -18,7 +18,7 @@ export const revalidate = REVALIDATE.staticPages
 // Metadata
 // ---------------------------------------------------------------------------
 
-const PAGE_TITLE = `Widget Prix Artisan — Tarifs sur votre site`
+const PAGE_TITLE = `Widget Prix Artisan — Tarifs embarqués`
 const PAGE_DESCRIPTION =
   'Widget gratuit et API JSON pour afficher les prix artisans sur votre site. Plombier, électricien, serrurier — tarifs actualisés par ville.'
 

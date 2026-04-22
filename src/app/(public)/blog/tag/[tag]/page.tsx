@@ -5,37 +5,13 @@ import { notFound } from 'next/navigation'
 import { Calendar, Clock, ArrowRight, ArrowLeft, Tag } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { slugifyTag, allBlogTags as allTags } from '@/lib/data/blog/tags'
 
 export const revalidate = 86400
-
-function slugifyTag(tag: string): string {
-  return tag
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
-}
-
-/** Collect all unique tags with their slugified versions */
-function getAllTags(): { slug: string; label: string }[] {
-  const tagMap = new Map<string, string>()
-  for (const a of allArticlesMeta) {
-    for (const t of a.tags) {
-      const slug = slugifyTag(t)
-      if (!tagMap.has(slug)) tagMap.set(slug, t)
-    }
-  }
-  return Array.from(tagMap.entries())
-    .map(([slug, label]) => ({ slug, label }))
-    .sort((a, b) => a.label.localeCompare(b.label, 'fr'))
-}
-
-const allTags = getAllTags()
 
 // Pre-render all tag pages at build time
 export function generateStaticParams() {
@@ -54,10 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!tagInfo) return { title: 'Tag non trouvé' }
 
   const title = `${tagInfo.label} — Articles & Guides | ServicesArtisans`
+  const titleRoot = `${tagInfo.label} — Articles & Guides`
   const description = `Tous les articles sur ${tagInfo.label.toLowerCase()} : conseils, prix, réglementation et guides pratiques par les experts ServicesArtisans.`
 
   return {
-    title,
+    title: titleRoot,
     description,
     alternates: getAlternates(`/blog/tag/${tagSlug}`),
     robots: {
@@ -67,11 +44,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'max-image-preview': 'large' as const,
     },
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       url: `${SITE_URL}/blog/tag/${tagSlug}`,
       type: 'website',
-      locale: 'fr_FR',
     },
     twitter: {
       card: 'summary_large_image',

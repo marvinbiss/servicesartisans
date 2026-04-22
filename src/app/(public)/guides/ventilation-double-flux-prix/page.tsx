@@ -25,7 +25,7 @@ const DESCRIPTION =
   'VMC double flux 2026 : 4 500-12 000 € TTC posée (100-150 m²), rendement 85-95 %, MaPrimeRénov 1 500-4 000 €, CEE, RGE Qualibat 5411.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

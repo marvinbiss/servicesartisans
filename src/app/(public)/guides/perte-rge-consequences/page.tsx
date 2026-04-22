@@ -26,7 +26,7 @@ const DESCRIPTION =
   'Perte RGE : motifs (non-conformité, fraude, contrôle négatif), conséquences (perte chantiers, aides), procédure Qualit’EnR/Qualibat, recours 2 mois.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

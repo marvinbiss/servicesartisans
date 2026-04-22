@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Infiltration toiture : diagnostic origine (tuile cassée, faîtage, solin, cheminée), coût réparation, assurance, responsabilité locataire/propriétaire.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

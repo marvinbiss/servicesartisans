@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Fuite d’eau : les 5 gestes d’urgence, diagnostic visible vs caché, coûts de réparation, prise en charge assurance dégât des eaux. Guide plombier 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

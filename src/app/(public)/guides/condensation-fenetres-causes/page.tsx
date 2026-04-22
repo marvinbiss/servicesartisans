@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Condensation sur fenêtres intérieur : causes (humidité, VMC, pont thermique, SV, joint), solutions (aération, VMC, DV, déshumidificateur).'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

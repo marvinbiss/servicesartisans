@@ -24,7 +24,7 @@ const DESCRIPTION =
   'DPE E, F ou G : calendrier interdictions location 2025-2034, travaux à entreprendre, aides MPR, audit énergétique obligatoire, décote vente estimée.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

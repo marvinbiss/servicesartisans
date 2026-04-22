@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Crédit travaux 2026 : comparatif prêt personnel, éco-PTZ 0 % jusqu’à 30 000 €, prêt immobilier, TAEG 3-9 %, durée 12-120 mois, FICP.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

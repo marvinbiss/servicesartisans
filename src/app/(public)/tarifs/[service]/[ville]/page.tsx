@@ -15,7 +15,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
@@ -157,7 +157,7 @@ function getSeasonalTip(zone: string | null, serviceName: string): string {
 // ---------------------------------------------------------------------------
 
 /** Truncate title to maxLen chars on a word boundary */
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -237,6 +237,7 @@ export async function generateMetadata({
     alternates: getAlternates(`/tarifs/${service}/${villeSlug}`),
     robots: { index: !noindex, follow: true },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

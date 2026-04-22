@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Poêle à granulés 2026 : prix 3 500-6 500 € posé, MaPrimeRénov’ 1 500-3 000 €, CEE 800-1 200 €, TVA 5,5 %, Qualibois RGE, Flamme Verte 7★.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

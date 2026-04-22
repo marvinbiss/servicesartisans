@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Clôture jardin 2026 : règles de hauteur (art. 663 Code civil), déclaration préalable si PLU, mitoyenneté, prix grillage/panneaux/mur 20-200 €/m.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

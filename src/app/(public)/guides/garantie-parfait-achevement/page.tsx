@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Garantie parfait achèvement 1 an : art. 1792-6 Code civil. Couvre tous désordres signalés en réception ou dans l’année. Procédure LRAR, recours juge.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

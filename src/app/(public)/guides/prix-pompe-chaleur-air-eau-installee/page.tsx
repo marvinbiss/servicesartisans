@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix PAC air-eau installée 2026 : 10 000-18 000 € TTC hors aides selon puissance et modèle. MaPrimeRénov’ + CEE jusqu’à 9 000 €. Grille complète.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

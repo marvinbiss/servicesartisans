@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Isolation phonique mur appartement : contre-cloison masse-ressort-masse, plaques acoustiques, liège, budget 80-180 €/m² TTC. Solutions efficaces 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

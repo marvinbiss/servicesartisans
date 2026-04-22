@@ -30,7 +30,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Permis de Construire : Quand est-il Obligatoire ?',
+  title: 'Permis de Construire : Guide 2026',
   description:
     'Guide permis de construire 2026 : obligation (>20 m², >40 m² zone PLU), documents requis, délais, coûts, cas spéciaux. Tout pour vos travaux.',
   keywords: [

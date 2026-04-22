@@ -236,7 +236,7 @@ function StatusCell({ status }: { status: CumulStatus }) {
 }
 
 export const metadata: Metadata = {
-  title: 'Cumul MaPrimeRénov’ et CEE 2026 : règles, plafonds, tableau',
+  title: 'Cumul MaPrimeRénov’ + CEE 2026 : règles',
   description:
     'Cumul MaPrimeRénov’ et prime CEE 2026 : parcours par geste ou accompagné, tableau par famille de travaux, plafonds, ordre chronologique, FAQ.',
   alternates: getAlternates(PAGE_PATH),

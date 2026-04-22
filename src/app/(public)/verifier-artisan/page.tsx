@@ -10,7 +10,7 @@ const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), {
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Vérifier un Artisan — SIRET, RGE et Fiabilité',
+  title: 'Vérifier un Artisan : SIRET & RGE',
   description:
     'Vérifiez un artisan en 30 secondes. Entrez son SIRET pour confirmer son existence légale, activité et fiabilité. Outil gratuit SIREN officiel.',
   keywords: [

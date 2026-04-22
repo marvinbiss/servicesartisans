@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Climatisation réversible 2026 : prix 1 800-8 500 € TTC mono/multi-split, COP 3,5-4,5, aides CEE 100-300 €, pose RGE QualiPAC obligatoire pour prime.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

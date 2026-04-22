@@ -7,7 +7,7 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
-const contactTitle = "Contactez l'équipe ServicesArtisans — Support & Questions"
+const contactTitle = 'Contact — Support & Questions'
 
 export const metadata: Metadata = {
   title: contactTitle,

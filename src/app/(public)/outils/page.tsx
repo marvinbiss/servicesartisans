@@ -10,7 +10,7 @@ import RelatedHubs from '@/components/seo/RelatedHubs'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Outils Gratuits pour vos Travaux | ServicesArtisans',
+  title: 'Outils Gratuits pour vos Travaux',
   description:
     'Outils gratuits pour estimer vos travaux : calculateur de prix artisan, diagnostic pour trouver le bon professionnel. Simples, rapides et sans inscription.',
   alternates: getAlternates('/outils'),

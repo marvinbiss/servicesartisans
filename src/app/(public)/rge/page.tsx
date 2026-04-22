@@ -155,7 +155,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Artisans RGE certifiés : trouvez un pro près de chez vous',
+  title: 'Artisans RGE certifiés : trouvez un pro',
   description:
     'Annuaire national artisans RGE actifs en France. Données ADEME officielles, mise à jour hebdo. Éligibles MaPrimeRénov’, CEE, TVA 5,5 %.',
   alternates: getAlternates('/rge'),

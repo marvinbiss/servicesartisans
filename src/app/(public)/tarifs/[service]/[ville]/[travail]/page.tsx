@@ -10,7 +10,7 @@ import {
   getServicePricingSchema,
   getSpeakableSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { tradeContent, getTasksForService } from '@/lib/data/trade-content'
 import { getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
@@ -87,7 +87,7 @@ function applyMultiplier(priceText: string, multiplier: number): string {
 // ---------------------------------------------------------------------------
 
 /** Truncate title to maxLen chars on a word boundary */
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -136,6 +136,7 @@ export async function generateMetadata({
     alternates: getAlternates(`/tarifs/${service}/${villeSlug}/${travail}`),
     robots: { index: true, follow: true },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

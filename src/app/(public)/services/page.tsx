@@ -65,7 +65,7 @@ const validServiceSlugs = new Set(staticServicesList.map((s) => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
+  title: 'Tous les Métiers Artisans 2026',
   description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur. Artisans vérifiés SIREN, devis gratuit.`,
   alternates: getAlternates('/services'),
   openGraph: {

@@ -21,7 +21,7 @@ import {
   getServicePricingSchema,
   getDetailedPricingSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
 import { getDefaultAuthor } from '@/lib/data/team'
@@ -70,7 +70,7 @@ export const dynamicParams = true
 export const revalidate = 86400
 
 /** Truncate title to maxLen chars on a word boundary, preserving trailing '?' */
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   const endsWithQuestion = title.trimEnd().endsWith('?')
   const truncated = title.slice(0, maxLen - (endsWithQuestion ? 2 : 1)).replace(/\s+\S*$/, '')
@@ -149,6 +149,7 @@ export async function generateMetadata({
       description: override.description,
       alternates: getAlternates(`/tarifs/${service}`),
       openGraph: {
+        ...getOgDefaults(),
         locale: 'fr_FR',
         title: override.title,
         description: override.description,
@@ -198,6 +199,7 @@ export async function generateMetadata({
     description,
     alternates: getAlternates(`/tarifs/${service}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

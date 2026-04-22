@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Adoucisseur 2026 : prix 1 000-3 500 € TTC posé, volumétrique 15-25 L, marque NF, entretien sel 80-150 €/an. Comparez les devis gratuits.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

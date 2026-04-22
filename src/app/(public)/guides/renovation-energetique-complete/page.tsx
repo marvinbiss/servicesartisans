@@ -29,7 +29,7 @@ const PAGE_URL = `${SITE_URL}/guides/renovation-energetique-complete`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Rénovation Énergétique : Guide Complet pour Votre Maison',
+  title: 'Rénovation Énergétique : Guide Complet',
   description:
     'Guide rénovation énergétique 2026 : isolation, chauffage, ventilation, fenêtres. Aides MaPrimeRénov, CEE, éco-PTZ et ordre optimal des travaux.',
   alternates: getAlternates('/guides/renovation-energetique-complete'),

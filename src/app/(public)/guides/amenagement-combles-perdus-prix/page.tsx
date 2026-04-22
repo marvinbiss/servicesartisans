@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Aménagement combles perdus : 900-1 800 €/m² TTC selon faisabilité. Hauteur, pente, charpente à modifier, DP/PC, isolation, surélévation, aides 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -23,7 +23,7 @@ export const revalidate = 3600
 const path = '/sources'
 
 export const metadata: Metadata = {
-  title: 'Sources de données officielles | ServicesArtisans',
+  title: 'Sources de données officielles',
   description:
     'Sources de données officielles de ServicesArtisans : INSEE, ADEME, SIRENE, DVF Etalab, Open-Meteo, Géorisques, SDES. Transparence, fiabilité.',
   alternates: getAlternates(path),

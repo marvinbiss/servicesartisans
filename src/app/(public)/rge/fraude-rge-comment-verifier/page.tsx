@@ -27,7 +27,7 @@ const PUBLISHED = '2026-04-09'
 const MODIFIED = '2026-04-09'
 
 export const metadata: Metadata = {
-  title: 'Fraude RGE : comment vérifier un artisan certifié',
+  title: 'Fraude RGE : vérifier un artisan certifié',
   description:
     'Vérifier la certification RGE d’un artisan et éviter les arnaques rénovation énergétique : 5 méthodes, 7 drapeaux rouges, sources officielles.',
   alternates: getAlternates(PAGE_PATH),

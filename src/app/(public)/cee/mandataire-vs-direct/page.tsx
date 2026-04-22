@@ -35,7 +35,7 @@ const PUBLISHED = '2026-04-09'
 const MODIFIED = '2026-04-09'
 
 export const metadata: Metadata = {
-  title: 'Obligé, délégataire, mandataire CEE : 3 rôles du circuit',
+  title: 'Obligé, délégataire, mandataire CEE',
   description:
     'Comprenez les 3 acteurs du dispositif CEE : obligé, délégataire et mandataire. Définitions juridiques, obligations PNCEE et impact pour particuliers.',
   alternates: getAlternates(PAGE_PATH),

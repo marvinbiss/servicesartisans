@@ -26,7 +26,7 @@ const PAGE_URL = `${SITE_URL}/glossaire`
 export const revalidate = 86400 // CDN cache: 24 h (ISR)
 
 export const metadata: Metadata = {
-  title: 'Glossaire du bâtiment — 150+ termes expliqués simplement',
+  title: 'Glossaire du bâtiment — 150+ termes',
   description:
     'Découvrez 150+ termes du bâtiment expliqués simplement : gros œuvre, plomberie, électricité, isolation, menuiserie. Comprenez vos devis artisans.',
   alternates: getAlternates('/glossaire'),

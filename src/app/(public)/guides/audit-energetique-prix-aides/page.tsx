@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Audit énergétique 2026 : 800-1 600 € selon surface, MaPrimeRénov’ 300-500 €, obligatoire vente F/G dès 2023. Auditeur qualifié, livrable, scénarios.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

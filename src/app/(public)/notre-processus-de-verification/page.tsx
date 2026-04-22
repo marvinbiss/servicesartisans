@@ -12,7 +12,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Notre processus de vérification des artisans',
+  title: 'Notre processus de vérification',
   description:
     "Découvrez comment ServicesArtisans vérifie chaque artisan : contrôle SIRET via l'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.",
   alternates: getAlternates('/notre-processus-de-verification'),

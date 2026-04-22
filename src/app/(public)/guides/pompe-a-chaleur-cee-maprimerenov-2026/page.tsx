@@ -26,7 +26,7 @@ const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur-cee-maprimerenov-2026`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
+  title: "PAC 2026 : CEE + MaPrimeRénov' cumulables",
   description:
     "Types de PAC, barèmes MaPrimeRénov' 2026, coup de pouce CEE chauffage, cumul total, exemple chiffré et obligation QualiPAC. Guide complet 2026.",
   alternates: getAlternates('/guides/pompe-a-chaleur-cee-maprimerenov-2026'),

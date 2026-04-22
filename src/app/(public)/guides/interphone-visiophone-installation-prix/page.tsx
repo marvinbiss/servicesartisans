@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Prix interphone / visiophone 2026 : 200-1 500 € TTC posé (filaire, radio, IP). Copropriété 350-900 €/logement, pose NF C 15-100, garantie biennale.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import { getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { villes as staticVilles } from '@/lib/data/france'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { getArtisanUrl } from '@/lib/utils'
 import {
@@ -55,7 +55,7 @@ interface PageProps {
 }
 
 /** Tronque un title à ~58 chars pour Google */
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -117,6 +117,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           'max-video-preview': -1 as const,
         },
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       type: 'website',

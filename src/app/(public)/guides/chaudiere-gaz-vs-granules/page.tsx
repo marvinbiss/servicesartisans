@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Chaudière gaz condensation vs granulés bois : prix installation, coût combustible, aides 2026, entretien, rendement. Comparatif détaillé par un chauffagiste.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

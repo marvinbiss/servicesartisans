@@ -3,7 +3,9 @@
  *
  * Valide que l'audit :
  *   1. Retourne du JSON structuré
- *   2. Détecte bien les 7 sitemaps/feeds déclarés dans robots.ts
+ *   2. Détecte les sitemaps déclarés dans robots.ts (≥ 4 depuis le
+ *      retrait des 3 RSS feeds en 2026-04-22 — ils échouaient Ahrefs
+ *      "Invalid representation" car non conformes au protocole sitemaps.org).
  *   3. Résout chaque URL vers un fichier route existant
  *   4. Mode strict exit code correct
  */
@@ -37,10 +39,10 @@ describe('audit-robots-sitemaps — JSON output', () => {
     expect(report).toHaveProperty('details')
   })
 
-  it('au moins 5 sitemaps/feeds déclarés', () => {
+  it('au moins 4 sitemaps/feeds déclarés', () => {
     const { stdout } = runAudit(['--json'])
     const report = JSON.parse(stdout)
-    expect(report.total_sitemaps_declared).toBeGreaterThanOrEqual(5)
+    expect(report.total_sitemaps_declared).toBeGreaterThanOrEqual(4)
   })
 
   it('zéro sitemap manquant (tous résolus vers un fichier route)', () => {

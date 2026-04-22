@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Choisir un artisan RGE fiable en 2026 : vérification ADEME, qualifs QualiPAC/Qualibat/Qualifelec/QualiSol, signaux d’alerte et comparaison de devis.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

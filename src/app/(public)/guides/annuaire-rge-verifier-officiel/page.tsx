@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Vérifier un artisan RGE 2026 : annuaire France-Rénov’, ADEME, Qualit’EnR, Qualibat. Recherche SIRET / code postal. Indispensable avant devis.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

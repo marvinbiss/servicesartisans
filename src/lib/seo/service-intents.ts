@@ -281,14 +281,14 @@ export function getIntentMetaDescription(
     providerCount > 0 ? `${providerCount} artisans vérifiés` : 'Artisans vérifiés'
 
   if (intent === 'urgence') {
-    return `${countFragment} à ${locationName} · Dépannage ${svcLower} 24h/24, intervention sous 2h, devis gratuit ${year}. Avis clients transparents, SIRET vérifié.`
+    return `${countFragment} à ${locationName} · Dépannage ${svcLower} 24h/24 soir & week-end, devis gratuit ${year}. SIRET vérifié, assurance décennale.`
   }
 
   if (intent === 'renovation') {
-    return `${countFragment} à ${locationName} — certifiés RGE ${year}, éligibles MaPrimeRénov\u2019 & CEE. Devis gratuit, aides simulées, artisans vérifiés SIRET.`
+    return `${countFragment} à ${locationName} — certifiés RGE ${year}, éligibles MaPrimeRénov\u2019 & CEE. Devis gratuit, aides simulées, artisans SIRET et garantie décennale.`
   }
 
-  return `Trouvez un ${svcLower} qualifié à ${locationName}. ${countFragment} SIREN, devis gratuit et avis clients transparents en ${year}.`
+  return `Trouvez un ${svcLower} qualifié à ${locationName}. ${countFragment} SIREN, devis gratuit, avis clients transparents et tarifs indicatifs ${year}. Réponse 24h.`
 }
 
 /**

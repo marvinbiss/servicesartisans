@@ -25,7 +25,7 @@ const PAGE_URL = `${SITE_URL}/guides/diagnostics-immobiliers`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Diagnostics Immobiliers Obligatoires : Le Guide Complet',
+  title: 'Diagnostics Immobiliers Obligatoires',
   description:
     'Liste des 10 diagnostics immobiliers obligatoires en 2026 : DPE, amiante, plomb, termites, électricité, gaz. Quand les réaliser, durée de validité et prix.',
   alternates: getAlternates('/guides/diagnostics-immobiliers'),

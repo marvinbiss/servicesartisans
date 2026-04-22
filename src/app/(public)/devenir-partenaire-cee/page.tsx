@@ -36,7 +36,7 @@ export const revalidate = 86400
 const path = '/devenir-partenaire-cee'
 
 export const metadata: Metadata = {
-  title: 'Devenir partenaire CEE — Leads exclusifs artisans RGE',
+  title: 'Partenaire CEE — Leads exclusifs RGE',
   description:
     'Programme partenaire CEE pour artisans RGE : leads exclusifs (1 demande = 1 artisan), gestion des primes énergie, zéro engagement. Inscription gratuite.',
   robots: {

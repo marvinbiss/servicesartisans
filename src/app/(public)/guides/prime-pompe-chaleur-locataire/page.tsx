@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prime PAC locataire 2026 : seul le propriétaire peut toucher MaPrimeRénov’ + CEE. Règles, exceptions, montage tripartite, logements sociaux.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

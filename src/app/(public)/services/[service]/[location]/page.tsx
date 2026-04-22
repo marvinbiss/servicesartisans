@@ -54,7 +54,7 @@ import {
   generateAggregateRatingSchema,
   generateItemListSchema,
 } from '@/lib/seo/schema-enrichment'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   generateLocationContent,
   hashCode,
@@ -166,8 +166,12 @@ interface PageProps {
 // Valid slug: lowercase alphanumeric + hyphens, 2-80 chars, no leading/trailing hyphen
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-/** Truncate title to ~58 chars for Google's display limit */
-function truncateTitle(title: string, maxLen = 58): string {
+/**
+ * Truncate raw title so that, after the root layout template wrap
+ * (`%s | ServicesArtisans` = 19 chars), the rendered HTML title is ≤ 60 chars.
+ * Hence raw ≤ 41. See Google Search Central : "Title links in search results".
+ */
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -311,6 +315,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           'max-video-preview': -1 as const,
         },
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,

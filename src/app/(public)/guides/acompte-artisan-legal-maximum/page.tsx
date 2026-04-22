@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Acompte artisan : pas de plafond légal mais usages professionnels 30-40 %. Arrhes vs acompte, garanties, récupération, modèle clause devis, prescription.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

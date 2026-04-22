@@ -29,7 +29,7 @@ const PAGE_URL = `${SITE_URL}/guides/cee-certificats-economies-energie-2026`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "CEE 2026 : guide complet Certificats d'Économies d'Énergie",
+  title: "CEE 2026 : Certificats d'Économies",
   description:
     "Mécanisme CEE, obligés et délégataires, opérations coup de pouce 2026, éligibilité RGE, démarche et cumul MaPrimeRénov'. Guide complet 2026.",
   alternates: getAlternates('/guides/cee-certificats-economies-energie-2026'),

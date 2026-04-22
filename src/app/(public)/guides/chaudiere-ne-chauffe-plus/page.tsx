@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Chaudière en panne : diagnostic gaz / fioul / électrique, codes erreur fréquents, prix dépannage chauffagiste, contrat d’entretien obligatoire. Guide 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

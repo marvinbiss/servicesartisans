@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Éliminez l’odeur d’égout : 4 causes (siphon sec, évent bouché, graisse, canalisation cassée) et remèdes. Diagnostic, DIY, quand appeler un plombier.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Parquet massif 2026 : 60-180 €/m² posé chêne/hêtre, contrecollé 45-130 €, stratifié 25-60 €, pose clouée/collée/flottante, DTU 51.1, TVA 10 %.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

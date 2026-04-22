@@ -1,7 +1,7 @@
 import type { BlogArticle } from './articles'
 
 export const aides2026Articles: Record<string, BlogArticle> = {
-  'maprimerénov-2026-conditions-montants': {
+  'maprimerenov-2026-conditions-montants': {
     title: "MaPrimeRénov' 2026 : Guide Complet des Conditions et Montants",
     excerpt:
       "MaPrimeRénov' 2026 : barèmes Bleu, Jaune, Violet, Rose, plafonds de travaux, conditions d'éligibilité et démarches. Guide complet pour financer votre rénovation énergétique.",
@@ -74,7 +74,7 @@ export const aides2026Articles: Record<string, BlogArticle> = {
 
       ":::takeaway\n- MaPrimeRénov' 2026 s'adresse à tous les propriétaires, avec 4 barèmes selon les revenus (Bleu, Jaune, Violet, Rose)\n- Les aides vont de **400 € à 11 000 €** par geste pour le chauffage, et de **7 à 75 €/m²** pour l'isolation\n- Le parcours accompagné permet jusqu'à **63 000 €** d'aide pour une rénovation globale ambitieuse\n- L'artisan doit être **certifié RGE** et le dossier déposé **avant** la signature du devis\n- Cumulable avec les CEE, l'éco-PTZ et la TVA réduite à 5,5 %\n:::",
     ],
-    image: '/images/blog/maprimerénov-2026-conditions-montants.webp',
+    image: '/images/blog/maprimerenov-2026-conditions-montants.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-01',
     readTime: '15 min',

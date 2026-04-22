@@ -20,7 +20,7 @@ export const revalidate = 3600
 const path = '/methodologie'
 
 export const metadata: Metadata = {
-  title: 'Notre méthodologie | ServicesArtisans',
+  title: 'Notre méthodologie',
   description:
     'Comment ServicesArtisans vérifie les artisans, calcule prix, modère avis et rédige le contenu. Méthodologie transparente, sources officielles.',
   alternates: getAlternates(path),

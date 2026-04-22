@@ -32,7 +32,7 @@ const DESCRIPTION =
   'Comparez 3 devis travaux sans se faire avoir : grille de lecture ligne par ligne, écarts acceptables, signaux d’alerte et négociation efficace.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

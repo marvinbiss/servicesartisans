@@ -15,8 +15,8 @@ function normalizePublicId(raw: string): string {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Votre estimation aides rénovation | ServicesArtisans',
-  description: 'Retrouvez le détail de votre estimation d\'aides à la rénovation énergétique.',
+  title: 'Votre estimation aides rénovation',
+  description: "Retrouvez le détail de votre estimation d'aides à la rénovation énergétique.",
   robots: { index: false, follow: false },
 }
 
@@ -75,8 +75,8 @@ export default async function ResultatPage({ params }: PageParams) {
   const isAccompagne = parcours === 'accompagne'
 
   // Total aides : utiliser les colonnes si dispo, sinon recalculer
-  const totalBas = safeNum(data.total_aides_bas) || (mprTotal + ceeBas + cdpTotal + marTotal)
-  const totalHaut = safeNum(data.total_aides_haut) || (mprTotal + ceeHaut + cdpTotal + marTotal)
+  const totalBas = safeNum(data.total_aides_bas) || mprTotal + ceeBas + cdpTotal + marTotal
+  const totalHaut = safeNum(data.total_aides_haut) || mprTotal + ceeHaut + cdpTotal + marTotal
   const aidesMid = midpoint(totalBas, totalHaut)
 
   const resteBas = safeNum(data.reste_a_charge_bas)
@@ -97,8 +97,12 @@ export default async function ResultatPage({ params }: PageParams) {
   // Complementaires
   const comp = (data.complementaires ?? {}) as Record<string, unknown>
   const mprCopro = comp.mprCopro as { totalEstime?: number } | undefined
-  const denormandie = comp.denormandie as { reductionImpotAnnuelle?: number; duree?: number } | undefined
-  const taxeFonciere = comp.taxeFonciere as { exonerationEstimeeAnnuelle?: number; dureeAns?: number } | undefined
+  const denormandie = comp.denormandie as
+    | { reductionImpotAnnuelle?: number; duree?: number }
+    | undefined
+  const taxeFonciere = comp.taxeFonciere as
+    | { exonerationEstimeeAnnuelle?: number; dureeAns?: number }
+    | undefined
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -113,7 +117,7 @@ export default async function ResultatPage({ params }: PageParams) {
           <p className="mt-2 text-sm text-charcoal-600">
             Barèmes {data.barometre_version} &middot; Catégorie ANAH{' '}
             <strong className="capitalize">{data.categorie_anah}</strong> &middot; Parcours{' '}
-            <strong>{isAccompagne ? 'Rénovation d\'ampleur' : 'Par geste'}</strong>
+            <strong>{isAccompagne ? "Rénovation d'ampleur" : 'Par geste'}</strong>
           </p>
         </header>
 
@@ -181,14 +185,9 @@ export default async function ResultatPage({ params }: PageParams) {
               <dd className="font-semibold">{fmtEur(mprTotal)}</dd>
             </div>
             <div className="flex items-baseline justify-between">
-              <dt>
-                {isAccompagne ? 'CEE rénovation d\'ampleur' : 'Certificats CEE'}
-              </dt>
+              <dt>{isAccompagne ? "CEE rénovation d'ampleur" : 'Certificats CEE'}</dt>
               <dd className="font-semibold">
-                {isAccompagne
-                  ? fmtEur(ceeAmpleur)
-                  : `${fmtEur(ceeBas)} \u2013 ${fmtEur(ceeHaut)}`
-                }
+                {isAccompagne ? fmtEur(ceeAmpleur) : `${fmtEur(ceeBas)} \u2013 ${fmtEur(ceeHaut)}`}
               </dd>
             </div>
             <div className="flex items-baseline justify-between">
@@ -220,7 +219,8 @@ export default async function ResultatPage({ params }: PageParams) {
               Prêts à taux zéro
             </h2>
             <p className="text-sm text-charcoal-600 mb-3">
-              En complément des aides, vous pouvez financer le reste à charge avec un prêt à taux zéro.
+              En complément des aides, vous pouvez financer le reste à charge avec un prêt à taux
+              zéro.
             </p>
             <dl className="space-y-3 text-charcoal-800">
               {ecoPtzEligible && (
@@ -231,9 +231,7 @@ export default async function ResultatPage({ params }: PageParams) {
                       (remboursement sur {ecoPtzDuree} ans max)
                     </span>
                   </dt>
-                  <dd className="font-semibold text-blue-700">
-                    jusqu&apos;à {fmtEur(ecoPtzMax)}
-                  </dd>
+                  <dd className="font-semibold text-blue-700">jusqu&apos;à {fmtEur(ecoPtzMax)}</dd>
                 </div>
               )}
               {parEligible && (
@@ -244,15 +242,14 @@ export default async function ResultatPage({ params }: PageParams) {
                       (remboursé à la vente/succession)
                     </span>
                   </dt>
-                  <dd className="font-semibold text-blue-700">
-                    jusqu&apos;à {fmtEur(parMax)}
-                  </dd>
+                  <dd className="font-semibold text-blue-700">jusqu&apos;à {fmtEur(parMax)}</dd>
                 </div>
               )}
             </dl>
             <p className="mt-3 flex items-start gap-1.5 text-xs text-charcoal-500">
               <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
-              Pas de conditions de revenus pour l&apos;éco-PTZ. Le PAR+ est réservé aux ménages modestes (bleu/jaune).
+              Pas de conditions de revenus pour l&apos;éco-PTZ. Le PAR+ est réservé aux ménages
+              modestes (bleu/jaune).
             </p>
           </section>
         )}
@@ -304,8 +301,8 @@ export default async function ResultatPage({ params }: PageParams) {
               )}
             </dl>
             <p className="mt-3 text-xs text-charcoal-500">
-              Sous réserve d&apos;éligibilité (zone Denormandie, délibération communale, etc.).
-              Un conseiller peut vous aider à vérifier.
+              Sous réserve d&apos;éligibilité (zone Denormandie, délibération communale, etc.). Un
+              conseiller peut vous aider à vérifier.
             </p>
           </section>
         )}
@@ -316,8 +313,8 @@ export default async function ResultatPage({ params }: PageParams) {
             Prochaine étape : confirmez vos aides avec un devis RGE
           </h2>
           <p className="text-sm text-charcoal-600 mb-4">
-            Pour débloquer vos aides, vous avez besoin d&apos;un devis d&apos;un artisan certifié RGE.
-            Nous vous mettons en relation avec un professionnel qualifié près de chez vous.
+            Pour débloquer vos aides, vous avez besoin d&apos;un devis d&apos;un artisan certifié
+            RGE. Nous vous mettons en relation avec un professionnel qualifié près de chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
@@ -352,8 +349,8 @@ export default async function ResultatPage({ params }: PageParams) {
         {/* Disclaimer */}
         <p className="mt-6 text-xs text-charcoal-400 text-center max-w-2xl mx-auto">
           Estimation indicative non contractuelle basée sur les barèmes en vigueur. Le montant final
-          dépend du devis RGE, de votre avis d&apos;imposition et des conditions spécifiques de votre
-          projet. Les prêts (éco-PTZ, PAR+) sont soumis à accord bancaire.
+          dépend du devis RGE, de votre avis d&apos;imposition et des conditions spécifiques de
+          votre projet. Les prêts (éco-PTZ, PAR+) sont soumis à accord bancaire.
         </p>
       </div>
     </main>

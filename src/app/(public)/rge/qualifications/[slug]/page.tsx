@@ -5,7 +5,7 @@ import { ShieldCheck, CheckCircle2, ExternalLink, ArrowRight, Award } from 'luci
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import {
   RGE_QUALIFICATIONS_WITH_GUIDE,
@@ -66,6 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'max-video-preview': -1 as const,
     },
     openGraph: {
+      ...getOgDefaults(),
       title: guide.metaTitle,
       description: guide.metaDescription,
       type: 'article',

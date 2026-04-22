@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Prix pose carrelage au m² 2026 : 30-80 €/m² pose simple, 50-120 €/m² motif complexe. Fourniture + pose + préparation. Grille par type et format.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

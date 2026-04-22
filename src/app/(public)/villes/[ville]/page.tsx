@@ -26,7 +26,7 @@ import {
   getEnrichedPlaceSchema,
   getCityServicesListSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   villes,
   getVilleBySlug,
@@ -68,7 +68,7 @@ interface PageProps {
   params: Promise<{ ville: string }>
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -113,6 +113,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'max-video-preview': -1,
     },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

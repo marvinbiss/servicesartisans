@@ -24,7 +24,7 @@ const DESCRIPTION =
   'DTU plomberie : NF DTU 60.1 (eau), 60.11 (cuivre), 65.10 (chauffage). Diamètres, distances, obligations installateur, responsabilité décennale.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

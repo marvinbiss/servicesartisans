@@ -10,7 +10,7 @@ import {
   getHowToSchema,
   getUrgencyHubServiceSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
@@ -141,7 +141,7 @@ export function generateStaticParams() {
   return emergencySlugs.map((service) => ({ service }))
 }
 
-function truncateTitle(title: string, maxLen = 58): string {
+function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
@@ -183,6 +183,7 @@ export async function generateMetadata({
     description,
     alternates: getAlternates(`/urgence/${service}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title,
       description,

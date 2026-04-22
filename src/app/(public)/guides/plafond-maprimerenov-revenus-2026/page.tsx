@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Plafonds de revenus MaPrimeRénov’ 2026 : barème officiel Bleu / Jaune / Violet / Rose, par nombre de personnes et zone Île-de-France ou hors Île-de-France.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

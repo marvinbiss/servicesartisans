@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Alarme maison 2026 : 300-2 500 € TTC installée, télésurveillance 25-50 €/mois, NF EN 50131-1 grade 2, réduction assurance 5-15 %. Devis gratuit.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -22,7 +22,7 @@ const PAGE_URL = `${SITE_URL}/normes`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Normes du Bâtiment : DTU, NF et Réglementations Essentielles',
+  title: 'Normes du Bâtiment : DTU, NF, règles',
   description:
     'Guide complet des normes du bâtiment en France : NF C 15-100 (électricité), DTU plomberie, chauffage, isolation RE2020, toiture, fenêtres et accessibilité PMR.',
   alternates: getAlternates('/normes'),

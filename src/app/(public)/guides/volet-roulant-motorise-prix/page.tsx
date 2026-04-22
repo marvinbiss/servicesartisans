@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Volet roulant motorisé 2026 : prix 550-1 400 € TTC/baie, alu/PVC, filaire/radio/solaire, TVA 10 %, CEE couplé isolation, électricien qualifié.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

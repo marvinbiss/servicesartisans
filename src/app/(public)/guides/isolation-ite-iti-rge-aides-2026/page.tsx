@@ -24,7 +24,7 @@ const PAGE_URL = `${SITE_URL}/guides/isolation-ite-iti-rge-aides-2026`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides',
+  title: 'Isolation ITE vs ITI 2026 : RGE et aides',
   description:
     "ITE ou ITI en 2026 : différences, matériaux, prix au m², MaPrimeRénov' Isolation, Coup de pouce CEE et obligation Qualibat RGE. Guide comparatif complet.",
   alternates: getAlternates('/guides/isolation-ite-iti-rge-aides-2026'),

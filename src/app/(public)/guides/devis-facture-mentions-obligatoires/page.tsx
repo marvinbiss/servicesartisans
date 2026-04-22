@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Devis travaux >150 € obligatoire. Facture >1 500 € obligatoire. Mentions art. R111-3 Code conso + art. 289 CGI. Sanctions absence. Modèles.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

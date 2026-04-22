@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Véranda 2026 : 1 200-3 000 € TTC/m² posée alu, 20 m² = 24 000-60 000 €, permis construire >20 m², RT2012, taxe aménagement.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -16,7 +16,7 @@ import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: "À propos de ServicesArtisans — Annuaire d'artisans gratuit",
+  title: "À propos — Annuaire d'artisans gratuit",
   description:
     "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.",
   alternates: getAlternates('/a-propos'),

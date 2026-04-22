@@ -23,7 +23,7 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 export const metadata: Metadata = {
-  title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
+  title: 'Avis Artisans Vérifiés 2026',
   description:
     'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
   alternates: getAlternates('/avis'),

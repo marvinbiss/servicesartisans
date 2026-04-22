@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Tarif électricien à l’heure 2026 : 45-75 €/h en journée, 90-150 €/h urgence nuit/dimanche. Prix dépannage, déplacement, forfaits courants.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

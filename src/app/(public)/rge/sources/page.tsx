@@ -21,7 +21,7 @@ export const revalidate = 86400
 const path = '/rge/sources'
 
 export const metadata: Metadata = {
-  title: 'Sources et méthodologie RGE — annuaire ServicesArtisans',
+  title: 'Sources et méthodologie RGE — annuaire',
   description:
     "Comment nous construisons l'annuaire RGE : sources officielles ADEME, Qualit'EnR, Qualifelec, Qualibat, fréquence maj et process de vérification.",
   robots: {

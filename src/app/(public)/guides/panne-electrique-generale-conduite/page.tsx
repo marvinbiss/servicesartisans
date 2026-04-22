@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Panne électrique générale : distinguer Enedis ou problème interne, vérifier disjoncteur, différentiel, appeler le bon contact. Guide 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

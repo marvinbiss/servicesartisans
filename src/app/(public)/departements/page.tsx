@@ -12,7 +12,7 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par Département — 101 Départements',
+  title: 'Artisans par Département',
   description:
     "Annuaire d'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous. Devis gratuits, sans engagement.",
   alternates: getAlternates(`/departements`),

@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Serrurier arnaques : 60-120 € ouverture sans casse, 250-600 € serrure HS. Détecter Google Ads frauduleux, refuser devis abusif, recours DGCCRF, prévention.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

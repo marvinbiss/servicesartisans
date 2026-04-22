@@ -10,7 +10,7 @@ import CalculateurClient from './CalculateurClient'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Calculateur de prix artisan 2026 — Estimez vos travaux',
+  title: 'Calculateur prix artisan 2026',
   description:
     'Estimez vos travaux en un clic : plombier, électricien, serrurier, peintre et tous métiers du bâtiment. Calculateur gratuit, prix 2026 actualisés.',
   alternates: getAlternates('/outils/calculateur-prix'),

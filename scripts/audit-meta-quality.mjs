@@ -33,6 +33,31 @@ const TITLE_MAX = 60
 const DESC_MIN = 80
 const DESC_MAX = 160
 
+/**
+ * Layout-level title.template — Next.js applique `template.replace('%s', pageTitle)`
+ * à chaque title string (hors `title: { absolute }`). On lit le template depuis
+ * src/app/layout.tsx pour mesurer la VRAIE longueur rendue dans le HTML.
+ *
+ * Exemple :
+ *   layout.tsx  : title: { template: '%s | ServicesArtisans' }
+ *   page.tsx    : title: 'Plombier Lyon 2026'           (21 chars)
+ *   rendu HTML  : '<title>Plombier Lyon 2026 | ServicesArtisans</title>' (40)
+ */
+const TITLE_TEMPLATE = (() => {
+  try {
+    const src = readFileSync('src/app/layout.tsx', 'utf8')
+    const m = src.match(/template:\s*['"`]([^'"`]+)['"`]/)
+    return m ? m[1] : null
+  } catch {
+    return null
+  }
+})()
+
+function applyTemplate(rawTitle) {
+  if (!TITLE_TEMPLATE || !rawTitle) return rawTitle
+  return TITLE_TEMPLATE.replace('%s', rawTitle)
+}
+
 function walk(dir, acc = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry)
@@ -213,12 +238,34 @@ for (const f of pages) {
   if (!meta.title) {
     pageIssues.push({ field: 'title', issue: 'missing' })
   } else {
-    if (meta.title.length < TITLE_MIN)
-      pageIssues.push({ field: 'title', issue: 'too_short', length: meta.title.length })
-    if (meta.title.length > TITLE_MAX)
-      pageIssues.push({ field: 'title', issue: 'too_long', length: meta.title.length })
-    if (!titleMap.has(meta.title)) titleMap.set(meta.title, [])
-    titleMap.get(meta.title).push(route)
+    // Mesure sur le title rendu (après layout template), pas sur le raw.
+    // Détecte aussi la double application de la marque : si meta.title contient
+    // déjà "| ServicesArtisans" ET le template wrapperait encore, le render
+    // final aura "| ServicesArtisans | ServicesArtisans" → bug.
+    const renderedTitle = applyTemplate(meta.title)
+    const hasDoubleSuffix =
+      TITLE_TEMPLATE &&
+      /\| ServicesArtisans/i.test(meta.title) &&
+      !/\bapplied\b/.test(meta.title)
+    if (renderedTitle.length < TITLE_MIN)
+      pageIssues.push({ field: 'title', issue: 'too_short', length: renderedTitle.length })
+    if (renderedTitle.length > TITLE_MAX)
+      pageIssues.push({
+        field: 'title',
+        issue: 'too_long',
+        length: renderedTitle.length,
+        raw: meta.title,
+        rendered: renderedTitle,
+      })
+    if (hasDoubleSuffix)
+      pageIssues.push({
+        field: 'title',
+        issue: 'double_brand_suffix',
+        raw: meta.title,
+        rendered: renderedTitle,
+      })
+    if (!titleMap.has(renderedTitle)) titleMap.set(renderedTitle, [])
+    titleMap.get(renderedTitle).push(route)
   }
 
   if (!meta.description) {

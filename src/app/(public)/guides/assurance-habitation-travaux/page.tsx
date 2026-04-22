@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Assurance habitation et travaux : déclaration préalable, augmentation temporaire de prime, couverture pendant chantier, dommages-ouvrage, RC travaux.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

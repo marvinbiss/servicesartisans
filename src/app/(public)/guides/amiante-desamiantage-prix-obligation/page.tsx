@@ -25,7 +25,7 @@ const DESCRIPTION =
   'Désamiantage 2026 : 30-80 €/m² sous-section 4, 80-200 €/m² sous-section 3 certifiée, DTA obligatoire pré-1997, sanctions 75 000 €. Devis gratuits.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

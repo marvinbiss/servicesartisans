@@ -209,9 +209,10 @@ export default function robots(): MetadataRoute.Robots {
       `${SITE_URL}/sitemap.xml`,
       `${SITE_URL}/image-sitemap.xml`,
       `${SITE_URL}/news-sitemap.xml`,
-      `${SITE_URL}/feed/blog.xml`,
-      `${SITE_URL}/feed/nouveaux-artisans.xml`,
-      `${SITE_URL}/feed/nouvelles-pages.xml`,
+      // 2026-04-22: retiré 3 RSS feeds (/feed/blog.xml, /feed/nouveaux-artisans.xml,
+      // /feed/nouvelles-pages.xml). Ahrefs les flaggait "Invalid representation" :
+      // un Sitemap doit suivre le protocole sitemaps.org (XML <urlset>), pas RSS 2.0.
+      // Les RSS feeds restent exposés via <link rel="alternate"> dans le HTML head.
     ],
   }
 }

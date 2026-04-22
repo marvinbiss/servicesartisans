@@ -24,7 +24,7 @@ const DESCRIPTION =
   'MaPrimeRénov’ Copropriétés 2026 : aide collective jusqu’à 25 000 €/logement, vote AG, Accompagnateur Rénov’ obligatoire, conditions et calendrier.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

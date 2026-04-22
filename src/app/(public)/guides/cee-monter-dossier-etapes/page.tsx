@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Monter dossier CEE 2026 : signature AVANT devis, pièces obligatoires, délai 6-12 mois, obligés vs mandataires, cumul MPR, fraude à éviter.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { GeographicNavigation } from '@/components/InternalLinks'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
 import { ClayHomePage } from '@/components/home/ClayHomePage'
@@ -37,6 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: metaDescription,
     alternates: getAlternates('/'),
     openGraph: {
+      ...getOgDefaults(),
       title: absoluteTitle,
       description: metaDescription,
       type: 'website',

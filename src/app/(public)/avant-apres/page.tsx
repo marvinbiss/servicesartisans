@@ -11,7 +11,7 @@ const PAGE_URL = `${SITE_URL}/avant-apres`
 export const revalidate = false
 
 export const metadata: Metadata = {
-  title: 'Avant/Après Travaux : Galeries de Rénovation',
+  title: 'Avant/Après Travaux : Galeries',
   description:
     'Découvrez 12 rénovations avant/après : salle de bain, cuisine, isolation, toiture, parquet, extension. Budget et durée inclus.',
   alternates: getAlternates('/avant-apres'),

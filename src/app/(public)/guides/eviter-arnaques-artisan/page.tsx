@@ -28,7 +28,7 @@ const PAGE_URL = `${SITE_URL}/guides/eviter-arnaques-artisan`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "Arnaques Artisans : Comment les Repérer et s'en Protéger",
+  title: 'Arnaques Artisans : repérer, se protéger',
   description:
     "Découvrez les 10 arnaques artisans du bâtiment : démarchage abusif, faux RGE, devis gonflés. Signaux d'alerte, vérifications et recours.",
   alternates: getAlternates('/guides/eviter-arnaques-artisan'),

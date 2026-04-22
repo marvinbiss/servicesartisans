@@ -10,7 +10,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Notre équipe éditoriale | ServicesArtisans',
+  title: 'Notre équipe éditoriale',
   description:
     "Découvrez l'équipe éditoriale ServicesArtisans : rédacteurs rénovation, aides publiques et bâtiment. Sources officielles, relecture artisans RGE.",
   alternates: getAlternates('/equipe'),

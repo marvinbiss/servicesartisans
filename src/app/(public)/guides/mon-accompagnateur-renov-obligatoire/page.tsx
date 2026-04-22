@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Mon Accompagnateur Rénov’ obligatoire pour MaPrimeRénov’ parcours accompagné >5 000 €. Rôle, agrément Anah, coût 600-2 000 €, choisir un MAR, check-list.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

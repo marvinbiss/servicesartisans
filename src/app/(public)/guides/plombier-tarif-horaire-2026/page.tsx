@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Plombier tarif horaire 2026 : 50-80 €/h journée, 90-180 €/h nuit/urgence. Forfaits dépannage, prix par tâche, arnaques à éviter, critères honnêtes.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

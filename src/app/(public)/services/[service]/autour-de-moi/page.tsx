@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Shield, Clock } from 'lucide-react'
 
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { villes, parsePopulation, type Ville } from '@/lib/data/france'
 import { getServiceBySlug } from '@/lib/supabase'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
@@ -60,12 +60,19 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const path = `/services/${service}/autour-de-moi`
   const url = `${SITE_URL}${path}`
   const title = `${name} autour de moi — trouver un ${name.toLowerCase()} proche | ${SITE_NAME}`
+  const titleRoot = `${name} autour de moi — trouver un ${name.toLowerCase()} proche`
   const description = `Trouvez un ${name.toLowerCase()} près de chez vous. Géolocalisation + 30 villes les plus demandées. Devis gratuit 24h, artisans vérifiés SIREN.`
   return {
-    title,
+    title: titleRoot,
     description,
     alternates: getAlternates(path),
-    openGraph: { title, description, url, type: 'website' },
+    openGraph: {
+      ...getOgDefaults(),
+      title,
+      description,
+      url,
+      type: 'website',
+    },
     twitter: { card: 'summary_large_image', title, description },
   }
 }

@@ -507,7 +507,10 @@ const nextConfig = {
 
       // --- batch-seo-boost1 (all 5 articles → pillar) ---
       // G1: MaPrimeRénov 2026
-      { source: '/blog/maprimerenov-2026-guide-complet-aides-renovation', destination: '/blog/maprimerénov-2026-conditions-montants', permanent: true },
+      { source: '/blog/maprimerenov-2026-guide-complet-aides-renovation', destination: '/blog/maprimerenov-2026-conditions-montants', permanent: true },
+      // 2026-04-22: retrait des accents dans l'URL (Ahrefs signalait 3XX loop sur slug accentué).
+      // Redirige l'ancien slug accentué vers la version ASCII canonique.
+      { source: '/blog/maprimerénov-2026-conditions-montants', destination: '/blog/maprimerenov-2026-conditions-montants', permanent: true },
       // G8: Choisir/Vérifier Artisan
       { source: '/blog/comment-choisir-artisan-confiance-guide-2026', destination: '/blog/comment-verifier-artisan-avant-engager', permanent: true },
       // G16: Prix Rénovation Maison

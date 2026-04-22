@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Remontée capillaire mur : diagnostic, solution durable (injection résine, drainage, électro-osmose), coût, pièges, entreprises RGE.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

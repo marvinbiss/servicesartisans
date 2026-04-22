@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Passoire thermique F ou G : rénovation énergétique obligatoire 2025-2034, aides MaPrimeRénov’, audit obligatoire, coût moyen, sortie de passoire.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

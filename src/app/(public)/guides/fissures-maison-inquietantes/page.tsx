@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Fissures maison : microfissure, horizontale, verticale, en escalier. Diagnostic structurel, assurance catastrophe naturelle, coût expertise et travaux.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

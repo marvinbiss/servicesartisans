@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Éco-prêt à taux zéro 2026 : prêt jusqu’à 50 000 € sans intérêt pour rénovation énergétique. Conditions, plafonds par geste, banques, cumul avec MaPrimeRénov’.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

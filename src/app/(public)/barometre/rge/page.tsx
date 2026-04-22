@@ -4,7 +4,7 @@ import { Shield, Award, MapPin, ExternalLink, BookOpen, Database } from 'lucide-
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
 
@@ -80,6 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'max-video-preview': -1,
     },
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title: `Baromètre RGE ${month} | ${SITE_NAME}`,
       description: `${active} artisans RGE actifs en France. Source ADEME, mise à jour mensuelle.`,

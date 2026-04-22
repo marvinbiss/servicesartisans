@@ -25,7 +25,7 @@ const PAGE_URL = `${SITE_URL}/guides/maprimerenov-2026-criteres-rge`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
+  title: "MaPrimeRénov' 2026 : critères RGE",
   description:
     "MaPrimeRénov' 2026 décryptée : obligation RGE, barèmes par travaux, plafonds de ressources, dossier en 5 étapes, pièges fréquents et cumul CEE.",
   alternates: getAlternates('/guides/maprimerenov-2026-criteres-rge'),

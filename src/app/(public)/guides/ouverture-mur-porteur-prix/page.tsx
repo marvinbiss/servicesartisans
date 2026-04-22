@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Ouverture mur porteur : 1 500-6 000 € TTC selon portée + IPN/HEA. Étude béton obligatoire 400-900 €. Démarches copropriété. Guide architecte 2026.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

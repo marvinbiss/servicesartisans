@@ -5,7 +5,7 @@ import { CheckCircle, ArrowRight, ArrowLeft, BookOpen, Euro, Calculator } from '
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from '@/lib/data/questions'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import dynamic from 'next/dynamic'
@@ -40,10 +40,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const description = question.shortAnswer
 
   return {
-    title,
+    title: question.question,
     description,
     alternates: getAlternates(`/questions/${question.slug}`),
     openGraph: {
+      ...getOgDefaults(),
       title,
       description,
       type: 'article',

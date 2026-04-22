@@ -15,7 +15,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates } from '@/lib/seo/config'
+import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import {
   RGE_ALLOWED_SERVICES,
@@ -54,6 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: content.metaDescription,
     alternates: getAlternates(`/rge/${service}`),
     openGraph: {
+      ...getOgDefaults(),
       locale: 'fr_FR',
       title: content.metaTitle,
       description: content.metaDescription,

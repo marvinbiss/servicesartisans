@@ -32,7 +32,7 @@ const PUBLISHED = '2026-04-09'
 const MODIFIED = '2026-04-09'
 
 export const metadata: Metadata = {
-  title: 'Coup de pouce CEE 2026 : chartes actives et bonifications',
+  title: 'Coup de pouce CEE 2026 : chartes actives',
   description:
     "Découvrez les chartes Coup de pouce CEE actives en 2026 : chauffage, rénovation d'ampleur, collectif et tertiaire. Cadre juridique, cumul MaPrimeRénov', pièges.",
   alternates: getAlternates(PAGE_PATH),

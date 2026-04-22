@@ -88,7 +88,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Primes CEE 2026 : certificats d’économies d’énergie',
+  title: 'Primes CEE 2026 : économies d’énergie',
   description:
     'Découvrez les 19 opérations CEE résidentielles 2026 : qualifications RGE, cumul MaPrimeRénov’, villes couvertes. Gestion des primes simplifiée.',
   alternates: getAlternates('/cee'),

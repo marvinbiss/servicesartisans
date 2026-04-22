@@ -32,7 +32,7 @@ const DESCRIPTION =
   'Délai de rétractation devis artisan : 14 jours en démarchage à domicile, aucun droit en agence. Lettre recommandée type, exceptions, sanctions.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

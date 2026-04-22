@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Diagnostics obligatoires vente 2026 : DPE, amiante, plomb, termites, gaz, électricité, ERP, Carrez, assainissement, mérule. Validités, prix, sanctions.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {

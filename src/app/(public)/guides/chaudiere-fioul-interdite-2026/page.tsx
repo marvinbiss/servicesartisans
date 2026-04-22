@@ -24,7 +24,7 @@ const DESCRIPTION =
   'Chaudière fioul interdite neuf/remplacement 2022 (décret 2022-8). Réparation OK si existante. Remplacement PAC/biomasse, aides majorées Coup de pouce.'
 
 export const metadata: Metadata = {
-  title: `${TITLE} | ${SITE_NAME}`,
+  title: TITLE,
   description: DESCRIPTION,
   alternates: getAlternates(`/guides/${SLUG}`),
   openGraph: {
