@@ -258,7 +258,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         "1) Choisir l'obligé ou le délégataire AVANT signature du devis (EDF, Engie, TotalEnergies, Sonergia, etc.). 2) Faire signer la convention de mandat. 3) Artisan RGE réalise les travaux. 4) Déposer la facture dans les 6 mois. 5) Versement par virement en 2 à 8 semaines. Choix possible entre prime en euros, chèque bancaire ou bon d'achat selon l'obligé.",
     },
   ]
-  const faqSchema = getFAQSchema(faqItems)
+  const faqSchema = getFAQSchema(faqItems, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: `FAQ — Prime CEE ${operation.code}`,
+    includeSpeakable: true,
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema,

@@ -148,9 +148,23 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
 
 // FAQPage schema — Google restricted rich results display (Aug 2023) to gov/health sites,
 // but the schema remains valid and is used by Bing, DuckDuckGo, Yahoo, and Google AI Overviews.
-export function getFAQSchema(faqs: { question: string; answer: string }[]) {
+export function getFAQSchema(
+  faqs: { question: string; answer: string }[],
+  options?: {
+    /** Canonical URL of the page hosting the FAQ. Enables @id + url. */
+    pageUrl?: string
+    /** Page-local anchor (default "faq"). Becomes `#{anchor}` in @id. */
+    anchor?: string
+    /** Human-readable name for the FAQPage (shows in Google results). */
+    name?: string
+    /** Emit SpeakableSpecification for Google Assistant / AI Overviews voice. */
+    includeSpeakable?: boolean
+    /** Custom CSS selectors for Speakable. Default targets h1 + FAQ questions. */
+    speakableCssSelectors?: string[]
+  }
+): Record<string, unknown> | null {
   if (!faqs || faqs.length === 0) return null
-  return {
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: faqs.map((q) => ({
@@ -162,6 +176,26 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]) {
       },
     })),
   }
+  if (options?.pageUrl) {
+    const anchor = options.anchor || 'faq'
+    schema['@id'] = `${options.pageUrl}#${anchor}`
+    schema.url = options.pageUrl
+  }
+  if (options?.name) {
+    schema.name = options.name
+  }
+  if (options?.includeSpeakable) {
+    schema.speakable = {
+      '@type': 'SpeakableSpecification',
+      cssSelector: options.speakableCssSelectors || [
+        'h1',
+        '[data-speakable="true"]',
+        '.faq-question',
+        '.faq-answer',
+      ],
+    }
+  }
+  return schema
 }
 
 // HowTo schema — Google removed rich result display (Aug 2023) for most sites,

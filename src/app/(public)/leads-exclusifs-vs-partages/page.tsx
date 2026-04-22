@@ -177,7 +177,11 @@ export default function LeadsExclusifsVsPartagesPage() {
     { name: 'Leads exclusifs vs partagés', url: path },
   ])
 
-  const faqSchema = getFAQSchema(FAQS)
+  const faqSchema = getFAQSchema(FAQS, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: 'FAQ — Leads exclusifs vs partagés',
+    includeSpeakable: true,
+  })
 
   const articleSchema = {
     '@context': 'https://schema.org',

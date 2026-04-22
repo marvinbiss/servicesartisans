@@ -249,7 +249,11 @@ export default function RenovationEnergetiqueHub() {
       "Aide directement versée par l'Anah. Pas de frais pour le bénéficiaire. Le Mon Accompagnateur Rénov' en parcours accompagné est rémunéré par l'aide (jusqu'à 2 000 € intégrés dans le plafond).",
   })
 
-  const faqSchema = getFAQSchema(FAQ)
+  const faqSchema = getFAQSchema(FAQ, {
+    pageUrl: `${SITE_URL}/renovation-energetique`,
+    name: 'FAQ — Rénovation énergétique',
+    includeSpeakable: true,
+  })
 
   // HowTo Schema — parcours "je commence une rénovation énergétique" en 6
   // étapes. Consommé par Google AI Overviews (champ de bataille 2026) : l'AIO

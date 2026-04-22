@@ -113,7 +113,11 @@ export default async function AdemePage() {
   })
 
   const organizationSchema = getOrganizationSchema()
-  const faqSchema = getFAQSchema(FAQ)
+  const faqSchema = getFAQSchema(FAQ, {
+    pageUrl: `${SITE_URL}/ademe`,
+    name: 'FAQ — ADEME et Agence de la transition écologique',
+    includeSpeakable: true,
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema,

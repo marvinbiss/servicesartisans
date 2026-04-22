@@ -258,7 +258,11 @@ export default function DevenirPartenaireCeePage() {
     { name: 'Devenir partenaire CEE', url: path },
   ])
 
-  const faqSchema = getFAQSchema(FAQS)
+  const faqSchema = getFAQSchema(FAQS, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: 'FAQ — Devenir partenaire CEE',
+    includeSpeakable: true,
+  })
 
   const articleSchema = {
     '@context': 'https://schema.org',

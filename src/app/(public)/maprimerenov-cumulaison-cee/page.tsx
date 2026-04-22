@@ -265,7 +265,11 @@ export default function MaprimeRenovCumulCeePage() {
     { name: 'Cumul MaPrimeRénov’ et CEE', url: PAGE_PATH },
   ])
 
-  const faqSchema = getFAQSchema(FAQ)
+  const faqSchema = getFAQSchema(FAQ, {
+    pageUrl: `${SITE_URL}${PAGE_PATH}`,
+    name: "FAQ — Cumul MaPrimeRénov' et CEE",
+    includeSpeakable: true,
+  })
 
   const articleSchema = {
     '@context': 'https://schema.org',

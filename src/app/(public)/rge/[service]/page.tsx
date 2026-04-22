@@ -122,7 +122,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
     itemCount: total,
   })
 
-  const faqSchema = getFAQSchema(content.faq)
+  const faqSchema = getFAQSchema(content.faq, {
+    pageUrl: `${SITE_URL}${pagePath}`,
+    name: `FAQ — ${content.h1}`,
+    includeSpeakable: true,
+  })
 
   // ItemList Schema.org — indexe les 12 top villes pour ce service RGE.
   // Aide Google à émettre un carrousel SERP sur les requêtes parentes (ex :

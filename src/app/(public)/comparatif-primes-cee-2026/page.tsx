@@ -232,7 +232,11 @@ export default function ComparatifPrimesCee2026Page() {
     { name: 'Comparatif 2026', url: path },
   ])
 
-  const faqSchema = getFAQSchema(FAQS)
+  const faqSchema = getFAQSchema(FAQS, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: 'FAQ — Comparatif primes CEE 2026',
+    includeSpeakable: true,
+  })
 
   const articleSchema = {
     '@context': 'https://schema.org',

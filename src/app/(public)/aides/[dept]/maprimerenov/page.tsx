@@ -208,7 +208,11 @@ export default async function MprDeptPage({ params }: PageProps) {
     },
   ]
 
-  const faqSchema = getFAQSchema(faqs)
+  const faqSchema = getFAQSchema(faqs, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: `FAQ — MaPrimeRénov' ${dept.name}`,
+    includeSpeakable: true,
+  })
 
   // HowTo Schema — parcours MaPrimeRénov' en 7 étapes. Consommé par Bing,
   // DuckDuckGo et surtout Google AI Overviews (nouveau champ de bataille SEO

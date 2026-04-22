@@ -216,7 +216,11 @@ export default function CommentDevenirRgePage() {
     }
   )
 
-  const faqSchema = getFAQSchema(FAQS)
+  const faqSchema = getFAQSchema(FAQS, {
+    pageUrl: `${SITE_URL}${path}`,
+    name: 'FAQ — Comment devenir artisan RGE',
+    includeSpeakable: true,
+  })
 
   const articleSchema = {
     '@context': 'https://schema.org',

@@ -207,7 +207,11 @@ export default async function RgeHubPage() {
     itemCount: totalActive,
   })
 
-  const faqSchema = getFAQSchema(FAQ)
+  const faqSchema = getFAQSchema(FAQ, {
+    pageUrl: `${SITE_URL}/rge`,
+    name: 'FAQ — Artisans RGE (Reconnu Garant Environnement)',
+    includeSpeakable: true,
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)

@@ -138,7 +138,11 @@ export default async function CeeHubPage() {
     itemCount: totalOps,
   })
 
-  const faqSchema = getFAQSchema(FAQ)
+  const faqSchema = getFAQSchema(FAQ, {
+    pageUrl: `${SITE_URL}/cee`,
+    name: "FAQ — Certificats d'Économies d'Énergie (CEE)",
+    includeSpeakable: true,
+  })
 
   const governmentServiceSchema = getGovernmentServiceSchema({
     name: "Certificats d'Économies d'Énergie (CEE)",

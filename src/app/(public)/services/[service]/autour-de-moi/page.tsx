@@ -106,24 +106,31 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     })),
   })
 
-  const faq = getFAQSchema([
+  const faq = getFAQSchema(
+    [
+      {
+        question: `Comment trouver un ${nameLc} près de chez moi ?`,
+        answer: `Cliquez sur "Trouver un ${nameLc} près de moi" pour détecter automatiquement votre commune, ou choisissez parmi les 30 villes listées sur cette page. Vous serez redirigé·e vers la page dédiée à votre ville avec les artisans vérifiés et les tarifs locaux.`,
+      },
+      {
+        question: `La géolocalisation est-elle obligatoire ?`,
+        answer: `Non. Si vous refusez la localisation, la page affiche les 30 villes françaises avec le plus d'artisans actifs. Vous pouvez aussi demander directement un devis gratuit qui sera adressé aux artisans couvrant votre secteur.`,
+      },
+      {
+        question: `Combien coûte un devis ?`,
+        answer: `Les devis sont 100% gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans vérifiés (SIREN contrôlé) sous 24h.`,
+      },
+      {
+        question: `Combien d'artisans ${nameLc}s référencez-vous ?`,
+        answer: `Plusieurs milliers d'artisans ${nameLc}s actifs en France, couverts par une base SIRENE mise à jour quotidiennement. Chaque fiche affiche l'ancienneté de l'entreprise et les qualifications RGE le cas échéant.`,
+      },
+    ],
     {
-      question: `Comment trouver un ${nameLc} près de chez moi ?`,
-      answer: `Cliquez sur "Trouver un ${nameLc} près de moi" pour détecter automatiquement votre commune, ou choisissez parmi les 30 villes listées sur cette page. Vous serez redirigé·e vers la page dédiée à votre ville avec les artisans vérifiés et les tarifs locaux.`,
-    },
-    {
-      question: `La géolocalisation est-elle obligatoire ?`,
-      answer: `Non. Si vous refusez la localisation, la page affiche les 30 villes françaises avec le plus d'artisans actifs. Vous pouvez aussi demander directement un devis gratuit qui sera adressé aux artisans couvrant votre secteur.`,
-    },
-    {
-      question: `Combien coûte un devis ?`,
-      answer: `Les devis sont 100% gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans vérifiés (SIREN contrôlé) sous 24h.`,
-    },
-    {
-      question: `Combien d'artisans ${nameLc}s référencez-vous ?`,
-      answer: `Plusieurs milliers d'artisans ${nameLc}s actifs en France, couverts par une base SIRENE mise à jour quotidiennement. Chaque fiche affiche l'ancienneté de l'entreprise et les qualifications RGE le cas échéant.`,
-    },
-  ])
+      pageUrl: `${SITE_URL}/services/${service}/autour-de-moi`,
+      name: `FAQ — ${name} autour de moi`,
+      includeSpeakable: true,
+    }
+  )
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumb, itemList]
   if (faq) jsonLdItems.push(faq as Record<string, unknown>)
