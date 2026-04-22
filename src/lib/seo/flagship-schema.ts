@@ -16,17 +16,18 @@ export type FlagshipArticleInput = {
   image?: string
 }
 
-function buildPersonNode(profile: Author) {
-  return {
-    '@type': 'Person' as const,
+function buildPersonNode(profile: Author): Record<string, unknown> {
+  const node: Record<string, unknown> = {
+    '@type': 'Person',
     '@id': `${SITE_URL}/equipe/${profile.slug}#person`,
+    url: `${SITE_URL}/equipe/${profile.slug}`,
     name: profile.name,
     jobTitle: profile.role,
     description: profile.bio,
     image: `${SITE_URL}${profile.image}`,
     knowsAbout: profile.expertise,
     worksFor: {
-      '@type': 'Organization' as const,
+      '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
     },
@@ -34,8 +35,24 @@ function buildPersonNode(profile: Author) {
     // the RGE/Qualibat/Qualifelec/OPQTECC certifications of the artisans
     // their guides cite. Claiming them would be fraud under Google QRG.
     // E-E-A-T signals here : worksFor (Organization authority) + knowsAbout
-    // (topic areas, verifiable via articles attributed to the author).
+    // (topic areas, verifiable via articles attributed to the author) +
+    // skills (editorial methodology) + hasOccupation.experienceRequirements
+    // (yearsExperience + credentialsBasis, both factual and defensible).
   }
+  if (profile.methodology && profile.methodology.length > 0) {
+    node.skills = profile.methodology
+  }
+  if (profile.yearsExperience > 0 || profile.credentialsBasis) {
+    node.hasOccupation = {
+      '@type': 'Occupation',
+      name: profile.role,
+      occupationLocation: { '@type': 'Country', name: 'France' },
+      experienceRequirements: profile.credentialsBasis
+        ? `${profile.yearsExperience} ans — ${profile.credentialsBasis}`
+        : `${profile.yearsExperience} ans`,
+    }
+  }
+  return node
 }
 
 /**

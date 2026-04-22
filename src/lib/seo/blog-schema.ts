@@ -43,22 +43,37 @@ export function getBlogArticleSchema(
       }
       const authorProfile = getAuthorByName(article.author)
       if (authorProfile) {
-        return {
-          '@type': 'Person' as const,
+        const personNode: Record<string, unknown> = {
+          '@type': 'Person',
           '@id': `${SITE_URL}/equipe/${authorProfile.slug}#person`,
+          url: `${SITE_URL}/equipe/${authorProfile.slug}`,
           name: authorProfile.name,
           jobTitle: authorProfile.role,
           description: authorProfile.bio,
           image: `${SITE_URL}${authorProfile.image}`,
           knowsAbout: authorProfile.expertise,
           worksFor: {
-            '@type': 'Organization' as const,
+            '@type': 'Organization',
             '@id': `${SITE_URL}#organization`,
             name: 'ServicesArtisans',
           },
           // No hasCredential / sameAs : see flagship-schema.ts for rationale.
           // Staff writers are not the RGE-certified artisans their articles cite.
         }
+        if (authorProfile.methodology && authorProfile.methodology.length > 0) {
+          personNode.skills = authorProfile.methodology
+        }
+        if (authorProfile.yearsExperience > 0 || authorProfile.credentialsBasis) {
+          personNode.hasOccupation = {
+            '@type': 'Occupation',
+            name: authorProfile.role,
+            occupationLocation: { '@type': 'Country', name: 'France' },
+            experienceRequirements: authorProfile.credentialsBasis
+              ? `${authorProfile.yearsExperience} ans — ${authorProfile.credentialsBasis}`
+              : `${authorProfile.yearsExperience} ans`,
+          }
+        }
+        return personNode
       }
       return {
         '@type': 'Person' as const,
