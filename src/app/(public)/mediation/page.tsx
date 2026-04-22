@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MessageCircle, Users, Scale, Clock, Mail, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
@@ -124,9 +124,36 @@ export default async function MediationPage() {
     { name: 'Médiation', url: '/mediation' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Comment adresser une réclamation à ServicesArtisans ?',
+      answer: `Envoyez un email détaillé à ${companyIdentity.supportEmail} décrivant la situation : nom de l'artisan, dates d'intervention, devis et facture concernés, nature précise du litige et résultat souhaité. Nous accusons réception sous 48 h ouvrées et vous communiquons le numéro de dossier de médiation.`,
+    },
+    {
+      question: 'Quel est le délai de traitement d’une réclamation ?',
+      answer:
+        "Première réponse sous 48 h ouvrées, instruction complète sous 30 jours (pièces, confrontation avec l'artisan, proposition de solution amiable). En cas d'échec de la médiation interne, nous vous orientons vers le médiateur de la consommation du bâtiment (saisine gratuite, délai légal 90 jours).",
+    },
+    {
+      question: 'La médiation est-elle gratuite ?',
+      answer:
+        "Oui. La médiation interne ServicesArtisans est gratuite pour le particulier. La saisine du médiateur de la consommation agréé CMCB (Centre de Médiation de la Consommation du Bâtiment) est également gratuite. Seules les procédures judiciaires (tribunal judiciaire, tribunal de proximité) ont un coût, souvent couvert par l'assurance protection juridique.",
+    },
+    {
+      question: 'Qui est le médiateur de la consommation compétent ?',
+      answer:
+        "Pour les litiges avec un artisan du bâtiment, le médiateur de la consommation est le CMCB (Centre de Médiation de la Consommation du Bâtiment) ou le médiateur désigné par la fédération professionnelle dont relève l'artisan (CAPEB, FFB). Le nom du médiateur doit obligatoirement figurer sur le devis et la facture.",
+    },
+    {
+      question: 'Quels recours si la médiation échoue ?',
+      answer:
+        "En cas d'échec de la médiation, vous pouvez saisir le tribunal de proximité (litiges < 10 000 €) ou le tribunal judiciaire (au-delà). Pensez à activer votre assurance protection juridique qui prend généralement en charge les frais d'avocat et d'expert. Un procès-verbal d'huissier sur les malfaçons renforce votre dossier.",
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

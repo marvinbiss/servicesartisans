@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MessageSquare, Shield, UserCheck, Trash2, Calculator, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 import { getPageContent } from '@/lib/cms'
@@ -132,9 +132,36 @@ export default async function PolitiqueAvisPage() {
     { name: 'Politique de gestion des avis', url: '/politique-avis' },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: 'Qui peut laisser un avis sur ServicesArtisans ?',
+      answer:
+        "Uniquement les utilisateurs ayant effectivement fait appel à un artisan via notre plateforme et disposant d'un compte confirmé. Le dépôt d'avis est lié à une demande de devis ou une prestation associée à l'artisan concerné, ce qui empêche structurellement la fabrication d'avis fictifs.",
+    },
+    {
+      question: 'Comment les avis sont-ils modérés ?',
+      answer:
+        "Chaque avis fait l'objet d'une modération avant publication : détection des contenus diffamatoires, injurieux, discriminatoires, des faux avis (positifs comme négatifs) et des conflits d'intérêts. Les avis restent publiés tant qu'ils sont factuels et respectueux, même s'ils sont négatifs.",
+    },
+    {
+      question: 'Un artisan peut-il supprimer un avis négatif ?',
+      answer:
+        "Non. Un avis négatif factuel et respectueux n'est jamais supprimé à la demande de l'artisan concerné. L'artisan dispose en revanche d'un droit de réponse publique, affichée sous l'avis original. Seuls les avis diffamatoires, frauduleux ou en conflit d'intérêt peuvent être retirés après modération.",
+    },
+    {
+      question: 'Comment la note moyenne est-elle calculée ?',
+      answer:
+        "La note moyenne est la moyenne arithmétique des étoiles (1 à 5) attribuées par les clients dans leurs avis publiés et vérifiés. Les avis non publiés (modération en cours, frauduleux retirés) ne sont pas comptabilisés. Le nombre d'avis et la note moyenne sont remontés en temps réel dès qu'un nouvel avis est validé.",
+    },
+    {
+      question: 'Comment signaler un avis suspect ?',
+      answer: `Chaque avis publié comporte un lien « Signaler » permettant d'alerter notre équipe modération (contenu mensonger, injurieux, conflit d'intérêt). Vous pouvez aussi contacter ${companyIdentity.supportEmail} avec le lien de l'avis concerné. Les signalements sont traités sous 48 h ouvrées.`,
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">

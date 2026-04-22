@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import {
   BookOpen,
   Zap,
@@ -226,9 +227,37 @@ export default function NormesPage() {
     ],
   }
 
+  const faqSchema = getFAQSchema([
+    {
+      question: "Qu'est-ce qu'un DTU et est-il obligatoire ?",
+      answer:
+        "Un DTU (Document Technique Unifié) est un document de référence élaboré par le CSTB qui fixe les règles de l'art pour une technique ou un matériau du bâtiment. Il n'est pas juridiquement obligatoire, mais sa non-application engage la responsabilité professionnelle de l'artisan en cas de sinistre. La garantie décennale se réfère aux DTU pour apprécier les malfaçons.",
+    },
+    {
+      question: 'Qu’impose la norme NF C 15-100 en électricité ?',
+      answer:
+        "La NF C 15-100 fixe les règles d'installation électrique basse tension en résidentiel : nombre minimum de prises par pièce (5 dans le séjour, 3 dans les chambres, 6 dans la cuisine), protection différentielle 30 mA obligatoire, circuits spécialisés (four, plaque, lave-linge), volumes de sécurité en salle de bain (zones 0-1-2), liaison équipotentielle. Un diagnostic électrique est obligatoire à la vente pour les logements > 15 ans.",
+    },
+    {
+      question: "Qu'est-ce que la RE2020 change pour la rénovation ?",
+      answer:
+        "La RE2020 (Réglementation Environnementale 2020) concerne principalement la construction neuve : impact carbone (ACV complète), performance énergétique (Bbio et Cep), confort d'été. En rénovation, elle ne s'applique pas directement mais fixe la trajectoire : les logements F et G deviennent interdits à la location (passoires thermiques, F au 2028, G au 2025, F+G au 2028 en France).",
+    },
+    {
+      question: 'Comment savoir si une installation est aux normes ?',
+      answer:
+        "Demandez une attestation de conformité CONSUEL à la mise en service pour l'électricité neuve, un diagnostic électrique à la vente (ERP), un diagnostic gaz et plomberie pour les installations > 15 ans, un DPE pour la performance énergétique. Un artisan qualifié (RGE, Qualibat, Qualifelec) garantit la conformité aux DTU en vigueur à la date de signature du devis.",
+    },
+    {
+      question: 'Qui contrôle le respect des normes ?',
+      answer:
+        "Contrôles selon la nature des travaux : CONSUEL pour l'attestation électrique neuve, bureaux de contrôle (Apave, Veritas, Socotec, Dekra) pour les ERP et copropriétés, expert d'assurance en cas de sinistre (vérification DTU et règles de l'art), tribunal sur expertise judiciaire en cas de litige. L'artisan doit pouvoir justifier les DTU appliqués dans son devis.",
+    },
+  ])
+
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-primary-50/60 to-white">
         {/* Breadcrumb */}
