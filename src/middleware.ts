@@ -274,7 +274,12 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   }
 
   // Rate limiting for API routes (skip health check — must always respond fast)
-  if (pathname.startsWith('/api/') && pathname !== '/api/health') {
+  // Skip Googlebot + other validated crawlers: GSC reports "Connectivité serveur"
+  // quand Googlebot prend un 429 (incident 2026-04-22 Upstash fail-close, 62.1%
+  // échec exploration). On isole les crawlers officiels du rate-limit user-facing.
+  const uaForRateLimit = request.headers.get('user-agent') || ''
+  const isCrawlerExempt = GOOGLEBOT_RE.test(uaForRateLimit) || /bingbot/i.test(uaForRateLimit)
+  if (pathname.startsWith('/api/') && pathname !== '/api/health' && !isCrawlerExempt) {
     const clientIp = getClientIp(request.headers)
     const rateLimitConfig = getRateLimitConfig(pathname)
     const rateLimitKey = getRateLimitKey(clientIp, pathname)
