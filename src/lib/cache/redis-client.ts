@@ -1,8 +1,14 @@
 /**
  * Upstash Redis Cache Client — REST API (serverless-compatible)
  * Uses same UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN as rate-limiter
+ *
+ * Durabilité (audit 2026-04-23 suite incident Upstash 22/04) :
+ *   1. AbortSignal.timeout sur CHAQUE fetch → jamais de hang qui dégrade les pages publiques
+ *   2. SCAN (cursor-based) au lieu de KEYS (bloquant) pour deletePattern
+ *   3. captureError Sentry throttlé (1/min) → visibilité incidents sans flood
  */
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 
 const REST_URL = process.env.UPSTASH_REDIS_REST_URL
 const REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
@@ -12,6 +18,30 @@ const isAvailable = Boolean(REST_URL && REST_TOKEN)
 // throws DynamicServerUsage, et un token mal configuré côté Vercel ferait planter
 // le build entier avec HTTP 401. Cache miss → fetcher (Supabase) → OK.
 const IS_BUILD_PHASE = process.env.NEXT_PHASE === 'phase-production-build'
+
+// Timeouts Upstash — voir rate-limiter.ts pour la même politique.
+// Un cache-miss SSR doit coûter < 100 ms ; au-delà de 2 s, on préfère re-fetcher
+// Supabase plutôt que de faire attendre Googlebot/un user.
+const UPSTASH_FETCH_TIMEOUT_MS = 2000
+
+// Sentry throttling pour ne pas flooder pendant un incident long.
+const SENTRY_THROTTLE_MS = 60_000
+let lastSentryCapture = 0
+
+function maybeCaptureUpstashError(err: unknown, extras: Record<string, unknown>) {
+  const now = Date.now()
+  if (now - lastSentryCapture < SENTRY_THROTTLE_MS) return
+  lastSentryCapture = now
+  try {
+    captureError(err, {
+      tags: { integration: 'upstash', component: 'cache' },
+      extras,
+      level: 'warning',
+    })
+  } catch {
+    // Sentry failure must never impact the business code path
+  }
+}
 
 async function redisCommand<T = unknown>(command: (string | number)[]): Promise<T | null> {
   if (!isAvailable) return null
@@ -25,12 +55,14 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
       },
       body: JSON.stringify(command),
       cache: 'no-store',
+      signal: AbortSignal.timeout(UPSTASH_FETCH_TIMEOUT_MS),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const json = await res.json()
     return json.result as T
   } catch (err) {
     logger.error('Redis command error', err as Error)
+    maybeCaptureUpstashError(err, { command: command[0] })
     return null
   }
 }
@@ -66,11 +98,60 @@ export class CacheService {
     return (result ?? 0) > 0
   }
 
+  /**
+   * deletePattern via SCAN (cursor-based) au lieu de KEYS.
+   *
+   * KEYS bloque le thread Redis sur tout le keyspace → interdit en prod
+   * (voir https://redis.io/commands/keys). SCAN itère par lots, non-bloquant,
+   * safe pour production.
+   *
+   * Hardening :
+   *   - Limite le nombre d'itérations (SCAN_MAX_ITERATIONS) pour éviter un
+   *     runaway si le pattern matche des millions de clés.
+   *   - Limite le total de clés supprimées pour protéger Upstash.
+   */
   async deletePattern(pattern: string): Promise<number> {
-    const keys = await redisCommand<string[]>(['KEYS', this.k(pattern)])
-    if (!keys || keys.length === 0) return 0
-    const result = await redisCommand<number>(['DEL', ...keys])
-    return result ?? 0
+    const SCAN_COUNT = 500
+    const SCAN_MAX_ITERATIONS = 100 // → 50 000 clés max scannées
+    const MAX_DELETIONS = 10_000
+
+    const matchPattern = this.k(pattern)
+    let cursor = '0'
+    let totalDeleted = 0
+    let iterations = 0
+
+    do {
+      iterations++
+      const result = await redisCommand<[string, string[]]>([
+        'SCAN',
+        cursor,
+        'MATCH',
+        matchPattern,
+        'COUNT',
+        SCAN_COUNT,
+      ])
+      if (!result) break
+      const [nextCursor, keys] = result
+      cursor = nextCursor
+
+      if (keys && keys.length > 0) {
+        const toDelete = keys.slice(0, MAX_DELETIONS - totalDeleted)
+        const deleted = (await redisCommand<number>(['DEL', ...toDelete])) ?? 0
+        totalDeleted += deleted
+        if (totalDeleted >= MAX_DELETIONS) break
+      }
+
+      if (iterations >= SCAN_MAX_ITERATIONS) {
+        logger.warn('deletePattern: SCAN_MAX_ITERATIONS reached', {
+          pattern: matchPattern,
+          iterations,
+          totalDeleted,
+        })
+        break
+      }
+    } while (cursor !== '0')
+
+    return totalDeleted
   }
 
   async getOrSet<T>(key: string, factory: () => Promise<T>, ttlSeconds = 3600): Promise<T> {

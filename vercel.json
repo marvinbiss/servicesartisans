@@ -69,6 +69,10 @@
       "schedule": "0 6 * * *"
     },
     {
+      "path": "/api/cron/redis-health",
+      "schedule": "*/5 * * * *"
+    },
+    {
       "path": "/api/cron/indexnow-submit",
       "schedule": "15 6 * * *"
     },

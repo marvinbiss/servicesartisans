@@ -2,9 +2,17 @@
  * Rate Limiter Service - ServicesArtisans
  * Uses Redis (Upstash) for distributed rate limiting in production
  * Falls back to in-memory for development
+ *
+ * Durabilité (audit 2026-04-23 suite incident Upstash 22/04) :
+ *   1. AbortSignal.timeout(UPSTASH_FETCH_TIMEOUT_MS) sur CHAQUE fetch → jamais de hang
+ *   2. Endpoint Upstash /pipeline → 4 commandes en 1 round-trip (vs 4 séquentielles)
+ *   3. Circuit breaker : N échecs consécutifs → court-circuite Upstash pour X ms
+ *   4. ZADD member unique (now + compteur process) → pas de dédoublonnage silencieux
+ *   5. captureError Sentry throttlé (1/min) → alerting sans flood
  */
 
 import { logger } from './logger'
+import { captureError } from './monitoring/sentry'
 
 // Types
 interface RateLimitConfig {
@@ -27,6 +35,48 @@ const hasRedis = Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTA
 // In-memory fallback store
 const memoryStore = new Map<string, { count: number; resetTime: number }>()
 
+// ─── Durabilité Upstash ───────────────────────────────────────────────────────
+// Timeouts courts : une requête rate-limit doit coûter < 50 ms p50, < 500 ms p99.
+// Au-delà de 2 s, le fetch Upstash dégrade l'UX plus qu'il ne protège.
+const UPSTASH_FETCH_TIMEOUT_MS = 2000
+
+// Circuit breaker : après N échecs consécutifs, on skippe Upstash pendant
+// COOLDOWN_MS → on retombe direct sur memoryLimiter (si failOpen) plutôt que
+// de payer le timeout à chaque requête pendant l'incident.
+const CIRCUIT_BREAKER_THRESHOLD = 3
+const CIRCUIT_BREAKER_COOLDOWN_MS = 30_000
+let consecutiveFailures = 0
+let circuitOpenUntil = 0
+
+// Sentry throttling : pendant un incident Upstash long, on peut générer des
+// milliers d'events → 1 capture / 60 s suffit pour alerter sans flood.
+const SENTRY_THROTTLE_MS = 60_000
+let lastSentryCapture = 0
+
+function maybeCaptureUpstashError(err: unknown, extras: Record<string, unknown>) {
+  const now = Date.now()
+  if (now - lastSentryCapture < SENTRY_THROTTLE_MS) return
+  lastSentryCapture = now
+  try {
+    captureError(err, {
+      tags: { integration: 'upstash', component: 'rate-limiter' },
+      extras,
+      level: 'error',
+    })
+  } catch {
+    // Sentry failure must never impact the business code path
+  }
+}
+
+// ZADD member unique dans la même ms : `${now}:${counter}` au lieu de `${now}`.
+// Sans ça, deux requêtes exact même ms remplacent la même entrée dans le ZSET
+// (ZADD est un SET par member) → under-counting silencieux, rate-limit bypassé.
+let zaddCounter = 0
+function nextZaddMember(now: number): string {
+  zaddCounter = (zaddCounter + 1) % 1_000_000
+  return `${now}:${zaddCounter}`
+}
+
 /**
  * Upstash Redis Rate Limiter
  * Uses REST API for serverless compatibility
@@ -40,20 +90,27 @@ class UpstashRateLimiter {
     this.token = process.env.UPSTASH_REDIS_REST_TOKEN || ''
   }
 
-  private async redisCommand(command: string[]): Promise<unknown> {
-    const response = await fetch(`${this.baseUrl}`, {
+  /**
+   * Single fetch, multiple Redis commands : endpoint Upstash `/pipeline` accepte
+   * un tableau de commandes et renvoie un tableau de résultats. Latence divisée
+   * par ~4 vs appels séquentiels.
+   */
+  private async pipeline(commands: string[][]): Promise<unknown[]> {
+    if (Date.now() < circuitOpenUntil) {
+      throw new Error('Upstash circuit breaker open')
+    }
+
+    const response = await fetch(`${this.baseUrl}/pipeline`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(command),
+      body: JSON.stringify(commands),
+      signal: AbortSignal.timeout(UPSTASH_FETCH_TIMEOUT_MS),
     })
 
     if (!response.ok) {
-      // Distinguer 401/403 (token invalide) des autres erreurs : un token
-      // expiré côté Vercel est une cause fréquente de rate-limit cassé et
-      // mérite un log dédié pour être repérable dans les logs prod.
       if (response.status === 401 || response.status === 403) {
         logger.error(
           `[UpstashRateLimiter] Upstash returned ${response.status} — UPSTASH_REDIS_REST_TOKEN may be invalid/expired. Verify Vercel Project Settings → Environment Variables.`
@@ -62,53 +119,73 @@ class UpstashRateLimiter {
       throw new Error(`Redis error: ${response.status}`)
     }
 
-    const data = await response.json()
-    return data.result
+    const data = (await response.json()) as Array<{ result?: unknown; error?: string }>
+    // Upstash /pipeline peut renvoyer un objet d'erreur par commande sans faire
+    // échouer le HTTP global → on propage la première erreur rencontrée.
+    for (const entry of data) {
+      if (entry?.error) {
+        throw new Error(`Redis pipeline error: ${entry.error}`)
+      }
+    }
+    return data.map((entry) => entry?.result)
   }
 
   async checkRateLimit(key: string, config: RateLimitConfig): Promise<RateLimitResult> {
     const now = Date.now()
     const windowKey = `ratelimit:${key}`
     const windowMs = config.window
+    const member = nextZaddMember(now)
 
     try {
-      // Use sliding window algorithm with Redis
-      // MULTI/EXEC equivalent using pipeline
-      const pipeline = [
-        ['ZADD', windowKey, String(now), String(now)],
+      // Sliding window : ajoute le hit, drop les périmés, compte, renouvelle TTL.
+      const results = await this.pipeline([
+        ['ZADD', windowKey, String(now), member],
         ['ZREMRANGEBYSCORE', windowKey, '0', String(now - windowMs)],
         ['ZCARD', windowKey],
         ['PEXPIRE', windowKey, String(windowMs)],
-      ]
+      ])
 
-      // Execute commands
-      for (const cmd of pipeline.slice(0, 2)) {
-        await this.redisCommand(cmd)
-      }
+      // Succès Upstash → reset circuit breaker
+      consecutiveFailures = 0
 
-      const count = (await this.redisCommand(['ZCARD', windowKey])) as number
-      await this.redisCommand(['PEXPIRE', windowKey, String(windowMs)])
-
+      const count = Number(results[2] ?? 0)
       const allowed = count <= config.max
       const remaining = Math.max(0, config.max - count)
       const resetTime = now + windowMs
 
       if (!allowed) {
-        // Remove the request we just added since it's over limit
-        await this.redisCommand(['ZREM', windowKey, String(now)])
+        // Remove the request we just added since it's over limit — best effort,
+        // un échec ici n'est pas bloquant (TTL nettoie de toute façon).
+        try {
+          await this.pipeline([['ZREM', windowKey, member]])
+        } catch {
+          // silent — TTL PEXPIRE garantit le nettoyage
+        }
       }
 
       return { allowed, remaining, resetTime }
     } catch (error) {
-      // Log structuré pour repérer dans Vercel : cause exacte + bucket + flag.
-      // CONTEXTE 2026-04-22 : Upstash a été ajouté hier, avant UPSTASH_* n'existait
-      // pas et hasRedis=false faisait tomber sur MemoryRateLimiter (pas d'erreur
-      // possible). Avec Upstash actif, tout hoquet réseau/token/quota bascule ici.
+      consecutiveFailures++
+      if (consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD && Date.now() >= circuitOpenUntil) {
+        circuitOpenUntil = Date.now() + CIRCUIT_BREAKER_COOLDOWN_MS
+        logger.error('[UpstashRateLimiter] Circuit breaker opened', undefined, {
+          consecutiveFailures,
+          cooldownMs: CIRCUIT_BREAKER_COOLDOWN_MS,
+        })
+      }
+
       const errorMessage = error instanceof Error ? error.message : String(error)
-      logger.error('[UpstashRateLimiter] Redis unavailable', {
+      logger.error('[UpstashRateLimiter] Redis unavailable', undefined, {
         key,
         failOpen: config.failOpen === true,
         error: errorMessage,
+        consecutiveFailures,
+      })
+
+      maybeCaptureUpstashError(error, {
+        key,
+        failOpen: config.failOpen === true,
+        consecutiveFailures,
       })
 
       // Fail-close by default: deny requests when Redis is unavailable.
@@ -184,6 +261,28 @@ function getRateLimiter(): UpstashRateLimiter | MemoryRateLimiter {
     return upstashLimiter
   }
   return memoryLimiter
+}
+
+/**
+ * Helpers exposés pour tests + cron de santé. Permettent de vérifier l'état
+ * du circuit breaker et de le forcer (test-only).
+ */
+export function _getCircuitBreakerState(): {
+  consecutiveFailures: number
+  circuitOpenUntil: number
+  openNow: boolean
+} {
+  return {
+    consecutiveFailures,
+    circuitOpenUntil,
+    openNow: Date.now() < circuitOpenUntil,
+  }
+}
+
+export function _resetCircuitBreakerForTests(): void {
+  consecutiveFailures = 0
+  circuitOpenUntil = 0
+  lastSentryCapture = 0
 }
 
 // Rate limit configurations per route type.
