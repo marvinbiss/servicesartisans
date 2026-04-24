@@ -445,11 +445,22 @@ export async function getQualifiedServiceCityCombos(): Promise<QualifiedCombos |
 export interface RgeQualifiedCombos {
   rgeServiceCity: Set<string> | null
   rgeServiceDept: Set<string> | null
+  /** Map<"service::villeSlug", YYYY-MM-DD> — latest provider updated_at per combo. null if DB blip. */
+  rgeLastmodServiceCity: Map<string, string> | null
+  /** Map<"service::normalizedDeptName", YYYY-MM-DD> — latest provider updated_at per combo. null if DB blip. */
+  rgeLastmodServiceDept: Map<string, string> | null
 }
 
 export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
   const supabase = safeAdminClient()
-  if (!supabase) return { rgeServiceCity: null, rgeServiceDept: null }
+  if (!supabase) {
+    return {
+      rgeServiceCity: null,
+      rgeServiceDept: null,
+      rgeLastmodServiceCity: null,
+      rgeLastmodServiceDept: null,
+    }
+  }
 
   // Lazy-load the allowlist + service-to-specialty mapping. Importing at the
   // top of this file would create a cycle (service-city-listings depends on
@@ -462,7 +473,12 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
     const supaMod = await import('@/lib/supabase')
     SERVICE_TO_SPECIALTIES = supaMod.SERVICE_TO_SPECIALTIES
   } catch {
-    return { rgeServiceCity: null, rgeServiceDept: null }
+    return {
+      rgeServiceCity: null,
+      rgeServiceDept: null,
+      rgeLastmodServiceCity: null,
+      rgeLastmodServiceDept: null,
+    }
   }
 
   // Reverse lookup: specialty → RGE service slugs (keep only RGE-allowed).
@@ -488,6 +504,8 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
   try {
     const rgeServiceCity: Set<string> = new Set()
     const rgeServiceDept: Set<string> = new Set()
+    const rgeLastmodServiceCity = new Map<string, string>()
+    const rgeLastmodServiceDept = new Map<string, string>()
     const today = new Date().toISOString().slice(0, 10)
     const pageSize = 1000
     let from = 0
@@ -497,7 +515,7 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
     while (from < maxRows) {
       const { data, error } = await supabase
         .from('providers')
-        .select('specialty, address_city, address_department')
+        .select('specialty, address_city, address_department, updated_at')
         .eq('is_active', true)
         .eq('noindex', false)
         .not('specialty', 'is', null)
@@ -507,7 +525,12 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
 
       if (error) {
         // Fail-open on any query error.
-        return { rgeServiceCity: null, rgeServiceDept: null }
+        return {
+          rgeServiceCity: null,
+          rgeServiceDept: null,
+          rgeLastmodServiceCity: null,
+          rgeLastmodServiceDept: null,
+        }
       }
       if (!data || data.length === 0) break
 
@@ -515,6 +538,7 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
         const specialty = row.specialty as string | null
         const city = row.address_city as string | null
         const dept = row.address_department as string | null
+        const updatedAt = toDateStr(row.updated_at as string | null | undefined)
         if (!specialty) continue
 
         const svcSlugs = specialtyToRgeSlugs.get(normalizeKey(specialty))
@@ -528,7 +552,12 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
           const villeSlug = cityToSlug.get(cityKey)
           if (villeSlug) {
             for (const svcSlug of svcSlugs) {
-              rgeServiceCity.add(`${svcSlug}::${villeSlug}`)
+              const key = `${svcSlug}::${villeSlug}`
+              rgeServiceCity.add(key)
+              if (updatedAt) {
+                const prev = rgeLastmodServiceCity.get(key)
+                if (!prev || updatedAt > prev) rgeLastmodServiceCity.set(key, updatedAt)
+              }
             }
           }
         }
@@ -538,7 +567,12 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
         if (dept) {
           const deptKey = normalizeKey(dept)
           for (const svcSlug of svcSlugs) {
-            rgeServiceDept.add(`${svcSlug}::${deptKey}`)
+            const key = `${svcSlug}::${deptKey}`
+            rgeServiceDept.add(key)
+            if (updatedAt) {
+              const prev = rgeLastmodServiceDept.get(key)
+              if (!prev || updatedAt > prev) rgeLastmodServiceDept.set(key, updatedAt)
+            }
           }
         }
       }
@@ -547,9 +581,14 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
       from += pageSize
     }
 
-    return { rgeServiceCity, rgeServiceDept }
+    return { rgeServiceCity, rgeServiceDept, rgeLastmodServiceCity, rgeLastmodServiceDept }
   } catch {
-    return { rgeServiceCity: null, rgeServiceDept: null }
+    return {
+      rgeServiceCity: null,
+      rgeServiceDept: null,
+      rgeLastmodServiceCity: null,
+      rgeLastmodServiceDept: null,
+    }
   }
 }
 
@@ -567,9 +606,16 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
  * Fail-open: returns `null` on any error or missing dep. Callers treat `null`
  * as "include everything".
  */
+export interface CeeQualifiedCombos {
+  /** Set<"operationCode::villeSlug"> of CEE combos with ≥1 eligible provider. */
+  combos: Set<string>
+  /** Map<"operationCode::villeSlug", YYYY-MM-DD> — latest provider updated_at per combo. */
+  lastmod: Map<string, string>
+}
+
 export async function getQualifiedCeeCombos(
   operationCodes: readonly string[]
-): Promise<Set<string> | null> {
+): Promise<CeeQualifiedCombos | null> {
   const supabase = safeAdminClient()
   if (!supabase || operationCodes.length === 0) return null
 
@@ -629,6 +675,7 @@ export async function getQualifiedCeeCombos(
 
   try {
     const combos: Set<string> = new Set()
+    const lastmod = new Map<string, string>()
     const today = new Date().toISOString().slice(0, 10)
     const pageSize = 1000
     let from = 0
@@ -637,7 +684,7 @@ export async function getQualifiedCeeCombos(
     while (from < maxRows) {
       const { data, error } = await supabase
         .from('providers')
-        .select('specialty, address_city')
+        .select('specialty, address_city, updated_at')
         .eq('is_active', true)
         .eq('noindex', false)
         .not('specialty', 'is', null)
@@ -651,6 +698,7 @@ export async function getQualifiedCeeCombos(
       for (const row of data) {
         const specialty = row.specialty as string | null
         const city = row.address_city as string | null
+        const updatedAt = toDateStr(row.updated_at as string | null | undefined)
         if (!specialty || !city) continue
 
         const ops = specialtyToOps.get(normalizeKey(specialty))
@@ -663,7 +711,12 @@ export async function getQualifiedCeeCombos(
         if (!villeSlug) continue
 
         for (const op of ops) {
-          combos.add(`${op}::${villeSlug}`)
+          const key = `${op}::${villeSlug}`
+          combos.add(key)
+          if (updatedAt) {
+            const prev = lastmod.get(key)
+            if (!prev || updatedAt > prev) lastmod.set(key, updatedAt)
+          }
         }
       }
 
@@ -671,7 +724,7 @@ export async function getQualifiedCeeCombos(
       from += pageSize
     }
 
-    return combos
+    return { combos, lastmod }
   } catch {
     return null
   }
@@ -694,8 +747,14 @@ export interface SitemapLastmodData {
   rgeQualifiedServiceCity: Set<string> | null
   /** Set<"serviceSlug::normalizedDeptName"> of RGE combos by department. null = include all. */
   rgeQualifiedServiceDept: Set<string> | null
+  /** Map<"serviceSlug::villeSlug", YYYY-MM-DD> — latest RGE provider updated_at per combo. null on DB blip. */
+  rgeLastmodServiceCity: Map<string, string> | null
+  /** Map<"serviceSlug::normalizedDeptName", YYYY-MM-DD> — latest RGE provider updated_at per combo. null on DB blip. */
+  rgeLastmodServiceDept: Map<string, string> | null
   /** Set<"operationCode::villeSlug"> of CEE combos with ≥1 eligible provider. null = include all. */
   ceeQualifiedOperationCity: Set<string> | null
+  /** Map<"operationCode::villeSlug", YYYY-MM-DD> — latest eligible provider updated_at per combo. null on DB blip. */
+  ceeLastmodOperationCity: Map<string, string> | null
 }
 
 // ─── Derivation: dept×serviceSlug from dept×specialty ──────────────────
@@ -824,6 +883,9 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     qualifiedCombos,
     rgeQualifiedServiceCity: rgeCombos.rgeServiceCity,
     rgeQualifiedServiceDept: rgeCombos.rgeServiceDept,
-    ceeQualifiedOperationCity,
+    rgeLastmodServiceCity: rgeCombos.rgeLastmodServiceCity,
+    rgeLastmodServiceDept: rgeCombos.rgeLastmodServiceDept,
+    ceeQualifiedOperationCity: ceeQualifiedOperationCity ? ceeQualifiedOperationCity.combos : null,
+    ceeLastmodOperationCity: ceeQualifiedOperationCity ? ceeQualifiedOperationCity.lastmod : null,
   }
 }

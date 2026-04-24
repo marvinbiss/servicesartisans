@@ -6,7 +6,34 @@ import { services, villes } from '@/lib/data/france'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { submitToIndexNow } from '@/lib/seo/indexnow'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import { RGE_QUALIFICATIONS_WITH_GUIDE } from '@/lib/rge/qualification-guides-content'
+import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 import { logger } from '@/lib/logger'
+
+/** CEE operation codes — mirrors sitemap.ts:CEE_OPERATION_CODES. Keep in sync. */
+const CEE_OPERATION_CODES: readonly string[] = [
+  'bar-en-101',
+  'bar-en-102',
+  'bar-en-103',
+  'bar-en-104',
+  'bar-en-108',
+  'bar-th-112',
+  'bar-th-113',
+  'bar-th-125',
+  'bar-th-127',
+  'bar-th-129',
+  'bar-th-143',
+  'bar-th-148',
+  'bar-th-159',
+  'bar-th-161',
+  'bar-th-171',
+  'bar-th-172',
+  'bar-th-173',
+  'bar-th-174',
+  'bar-th-175',
+  'bar-th-177',
+  'bar-se-104',
+] as const
 
 const TOP_CITIES = [
   'paris',
@@ -147,6 +174,11 @@ export async function GET(request: Request) {
         guides: 0,
         rgeCity: 0,
         rgeServiceCity: 0,
+        rgeFreshProviders: 0,
+        rgeQualifGuides: 0,
+        ceeOperation: 0,
+        ceeOperationCity: 0,
+        ceeOperationGuide: 0,
       }
 
       // ── 1. Always-submit priority pages ─────────────────────────────────
@@ -357,6 +389,90 @@ export async function GET(request: Request) {
       urls.push(...rgeServiceCityBatch)
       counts.rgeServiceCity = rgeServiceCityBatch.length
 
+      // ── 6c. CEE operation pages — hub + rotation sur top 30 villes + guides
+      // Les pages CEE portent les descriptions fraîches pushées en avril 2026
+      // (46K fiches RGE + opérations CEE) → IndexNow doit les submettre pour
+      // forcer le recrawl Bing/Yandex, Google suivra via le referrer IndexNow.
+      for (const code of CEE_OPERATION_CODES) {
+        urls.push(`${SITE_URL}/cee/${code}`)
+      }
+      counts.ceeOperation = CEE_OPERATION_CODES.length
+
+      // CEE operation × top 30 villes = 19 × 30 = 570 URLs, rotation 1/3 = ~190/jour
+      const allCeeOperationCityUrls: string[] = []
+      const ceeTopCitySlugs = villes.slice(0, 30).map((v) => v.slug)
+      for (const code of CEE_OPERATION_CODES) {
+        for (const citySlug of ceeTopCitySlugs) {
+          allCeeOperationCityUrls.push(`${SITE_URL}/cee/${code}/${citySlug}`)
+        }
+      }
+      const ceeOperationCityBatch = rotateSlice(allCeeOperationCityUrls, bucket)
+      urls.push(...ceeOperationCityBatch)
+      counts.ceeOperationCity = ceeOperationCityBatch.length
+
+      // CEE operation guides — contenu éditorial long, rotation 1/3
+      const ceeGuideUrls = CEE_OPERATIONS_WITH_GUIDE.map(
+        (code) => `${SITE_URL}/cee/${code.toLowerCase()}/guide`
+      )
+      const ceeGuideBatch = rotateSlice(ceeGuideUrls, bucket)
+      urls.push(...ceeGuideBatch)
+      counts.ceeOperationGuide = ceeGuideBatch.length
+
+      // ── 6d. RGE qualifications guides (hub + slugs) ─────────────────────
+      urls.push(`${SITE_URL}/rge/qualifications`)
+      for (const slug of RGE_QUALIFICATIONS_WITH_GUIDE) {
+        urls.push(`${SITE_URL}/rge/qualifications/${slug}`)
+      }
+      counts.rgeQualifGuides = RGE_QUALIFICATIONS_WITH_GUIDE.length + 1
+
+      // ── 6e. RGE providers updated in last 7 days — forces recrawl of the
+      // 46K fiches RGE dont les descriptions E-E-A-T ont été pushées en avril.
+      // URL canonique /services/{serviceSlug}/{locationSlug}/{id} (via getArtisanUrl)
+      // — /artisan/[slug] est robots:noindex + redirect, donc inutile pour IndexNow.
+      try {
+        const { createAdminClient } = await import('@/lib/supabase/admin')
+        const { getArtisanUrl } = await import('@/lib/utils')
+        const supabase = createAdminClient()
+        const sevenDaysAgo = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+        const { data: freshRgeProviders, error: rgeError } = await supabase
+          .from('providers')
+          .select('stable_id, slug, specialty, address_city')
+          .eq('is_active', true)
+          .eq('noindex', false)
+          .not('rge_qualifications', 'is', null)
+          .gte('updated_at', sevenDaysAgo)
+          .not('specialty', 'is', null)
+          .not('address_city', 'is', null)
+          .order('updated_at', { ascending: false })
+          .limit(500)
+
+        if (rgeError) {
+          logger.warn('IndexNow cron: failed to fetch fresh RGE providers', {
+            error: rgeError.message,
+          })
+        } else if (freshRgeProviders && freshRgeProviders.length > 0) {
+          const freshUrls = new Set<string>()
+          for (const p of freshRgeProviders) {
+            const path = getArtisanUrl({
+              slug: p.slug as string | null,
+              stable_id: p.stable_id as string | null,
+              specialty: p.specialty as string | null,
+              city: p.address_city as string | null,
+            })
+            if (path && !path.endsWith('/')) {
+              freshUrls.add(`${SITE_URL}${path}`)
+            }
+          }
+          urls.push(...Array.from(freshUrls))
+          counts.rgeFreshProviders = freshUrls.size
+        }
+      } catch (err) {
+        logger.warn('IndexNow cron: Supabase unavailable for fresh RGE providers', {
+          error: err instanceof Error ? err.message : 'unknown',
+        })
+      }
+
       // ── 7. Guides — once per week (Sundays) ─────────────────────────────
       const isSunday = new Date().getUTCDay() === 0
       if (isSunday) {
@@ -396,6 +512,11 @@ export async function GET(request: Request) {
         guides: counts.guides,
         rgeCity: counts.rgeCity,
         rgeServiceCity: counts.rgeServiceCity,
+        rgeFreshProviders: counts.rgeFreshProviders,
+        rgeQualifGuides: counts.rgeQualifGuides,
+        ceeOperation: counts.ceeOperation,
+        ceeOperationCity: counts.ceeOperationCity,
+        ceeOperationGuide: counts.ceeOperationGuide,
         totalBeforeCap: urls.length,
         totalUnique: uniqueUrls.length,
         capped: wasCapped,

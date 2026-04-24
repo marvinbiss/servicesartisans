@@ -1290,15 +1290,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // (current behaviour). Noindex fail-open côté route reste filet de secours.
   if (id === 'rge-service-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const { rgeQualifiedServiceCity } = await getLastmodData()
+    const { rgeQualifiedServiceCity, rgeLastmodServiceCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const ville of phase1Cities) {
-        if (rgeQualifiedServiceCity && !rgeQualifiedServiceCity.has(`${svc}::${ville.slug}`)) {
+        const key = `${svc}::${ville.slug}`
+        if (rgeQualifiedServiceCity && !rgeQualifiedServiceCity.has(key)) {
           continue
         }
         result.push({
           url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
+          lastModified: rgeLastmodServiceCity?.get(key),
           changeFrequency: 'weekly',
           priority: 0.6,
         })
@@ -1311,16 +1313,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // 14 services énergétiques × 101 départements = 1 414 URLs max → pruned
   // to combos with ≥1 active RGE provider. Fail-open identique.
   if (id === 'rge-service-dept') {
-    const { rgeQualifiedServiceDept } = await getLastmodData()
+    const { rgeQualifiedServiceDept, rgeLastmodServiceDept } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const dept of departements) {
         const deptKey = normalizeName(dept.name)
-        if (rgeQualifiedServiceDept && !rgeQualifiedServiceDept.has(`${svc}::${deptKey}`)) {
+        const mapKey = `${svc}::${deptKey}`
+        if (rgeQualifiedServiceDept && !rgeQualifiedServiceDept.has(mapKey)) {
           continue
         }
         result.push({
           url: `${SITE_URL}/rge/${svc}/departement/${dept.slug}`,
+          lastModified: rgeLastmodServiceDept?.get(mapKey),
           changeFrequency: 'weekly',
           priority: 0.55,
         })
@@ -1358,15 +1362,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // avec ≥1 artisan éligible (Vague 1.3). Fail-open si DB blip.
   if (id === 'cee-operation-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const { ceeQualifiedOperationCity } = await getLastmodData()
+    const { ceeQualifiedOperationCity, ceeLastmodOperationCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const code of CEE_OPERATION_CODES) {
       for (const ville of phase1Cities) {
-        if (ceeQualifiedOperationCity && !ceeQualifiedOperationCity.has(`${code}::${ville.slug}`)) {
+        const key = `${code}::${ville.slug}`
+        if (ceeQualifiedOperationCity && !ceeQualifiedOperationCity.has(key)) {
           continue
         }
         result.push({
           url: `${SITE_URL}/cee/${code}/${ville.slug}`,
+          lastModified: ceeLastmodOperationCity?.get(key),
           changeFrequency: 'weekly',
           priority: 0.6,
         })

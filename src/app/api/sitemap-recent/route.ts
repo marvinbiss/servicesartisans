@@ -180,8 +180,9 @@ export async function GET() {
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      // Short cache: this sitemap changes frequently by definition
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200',
+      // Short cache: this sitemap is the freshness entry-point for Google.
+      // s-maxage=300 (5 min) keeps recrawl lag bounded to ~5 min vs previous 60 min.
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

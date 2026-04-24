@@ -59,7 +59,17 @@ export async function GET() {
       (_, i) => `tarifs-task-cities-${i}`
     ),
     'avis-services',
-    // avis-service-cities-* removed pending reviews schema drift fix.
+    // Reviews schema drift resolved 2026-04-12 (migrations 414-417 + admin
+    // client bascule + canonical type). Shards re-listed here to keep this
+    // index aligned with generateSitemaps() in sitemap.ts.
+    ...Array.from(
+      {
+        length: Math.ceil(
+          (Object.keys(tradeContent).length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH
+        ),
+      },
+      (_, i) => `avis-service-cities-${i}`
+    ),
     'problemes',
     ...Array.from(
       { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
@@ -77,6 +87,7 @@ export async function GET() {
     'rge-service', // /rge/[service] — 14 URLs (hub par métier)
     'rge-qualification', // /rge/qualifications + /rge/qualifications/[slug] — 5 URLs
     'rge-service-city',
+    'rge-service-dept',
     // CEE pSEO — Tier 2 (19 op\u00e9rations × top 500 villes = 9 500 URLs)
     // + hub par op\u00e9ration (19 URLs). Keep in sync with sitemap.ts.
     'cee-operation',
