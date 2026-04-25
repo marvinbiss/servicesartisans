@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   ArrowRight,
   CheckCircle,
@@ -233,7 +235,21 @@ export async function generateMetadata({
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function DevisServiceLocationPage({
+// Top-level error boundary — Audit 2026-04-25 : un throw imprévu doit dégrader
+// vers `notFound()` plutôt qu'un 500 sur Googlebot.
+export default async function DevisServiceLocationPage(props: {
+  params: Promise<{ service: string; location: string }>
+}) {
+  try {
+    return await renderDevisServiceLocationPage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[DevisServiceLocationPage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderDevisServiceLocationPage({
   params,
 }: {
   params: Promise<{ service: string; location: string }>
@@ -244,7 +260,11 @@ export default async function DevisServiceLocationPage({
   const villeData = getVilleBySlug(location)
   if (!trade || !villeData) notFound()
 
-  const commune = await getCommuneBySlug(location)
+  // Audit 2026-04-25 : protégé fail-open pour éviter le 500 quand Supabase
+  // ou Redis hoquette. Le template suppose toujours des défauts non-null
+  // (cf. accès `commune?.field` plus bas). Échec → on rend la page sans
+  // l'enrichissement local, jamais 500.
+  const commune = await getCommuneBySlug(location).catch(() => null)
 
   // Fetch providers for showcase — fallback to département if city has 0
   let providers = await getProvidersByServiceAndLocation(service, location, { limit: 6 }).catch(
@@ -254,7 +274,7 @@ export default async function DevisServiceLocationPage({
   if (providers.length === 0) {
     providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
       limit: 6,
-    })
+    }).catch(() => [] as Awaited<ReturnType<typeof getProvidersByServiceAndDepartment>>)
     isFallback = providers.length > 0
   }
 

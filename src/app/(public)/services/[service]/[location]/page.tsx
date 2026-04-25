@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   getServiceBySlug,
   getLocationBySlug,
@@ -460,7 +462,21 @@ function generateJsonLd(
   return [localBusinessSchema, serviceSchema, breadcrumbSchema]
 }
 
-export default async function ServiceLocationPage({ params, searchParams }: PageProps) {
+// Top-level error boundary — Audit 2026-04-25 : ce template SEO est la page
+// la plus crawlée (459K combinaisons service×ville). Un throw imprévu (Redis
+// hoquet, RLS drift, schema bug) doit dégrader vers `notFound()` plutôt que
+// renvoyer 500 à Googlebot. Reprise du pattern utilisé pour [publicId]/page.tsx.
+export default async function ServiceLocationPage(props: PageProps) {
+  try {
+    return await renderServiceLocationPage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[ServiceLocationPage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
   const resolvedSearchParams = searchParams ? await searchParams : {}
   const rgeOnly = resolvedSearchParams.rge === '1'

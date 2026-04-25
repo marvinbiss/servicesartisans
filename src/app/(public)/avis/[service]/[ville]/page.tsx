@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   ArrowRight,
   CheckCircle,
@@ -336,7 +338,21 @@ export async function generateMetadata({
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function AvisServiceVillePage({
+// Top-level error boundary — Audit 2026-04-25 : un throw imprévu doit dégrader
+// vers `notFound()` plutôt qu'un 500 sur Googlebot.
+export default async function AvisServiceVillePage(props: {
+  params: Promise<{ service: string; ville: string }>
+}) {
+  try {
+    return await renderAvisServiceVillePage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[AvisServiceVillePage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderAvisServiceVillePage({
   params,
 }: {
   params: Promise<{ service: string; ville: string }>
@@ -357,10 +373,16 @@ export default async function AvisServiceVillePage({
 
   // ----- Fetch real data from database -----
   // Cascade: city-level first, fallback to department-level (all active, no review filter)
-  const topProviders = await getTopProviders(villeData.name, service, villeData.departement)
+  // Fail-open : un throw imprévu (timeout Redis, RLS, etc.) ne doit jamais
+  // causer un 500 sur cette page indexée par Googlebot. Audit 2026-04-25.
+  const topProviders = await getTopProviders(villeData.name, service, villeData.departement).catch(
+    () => [] as Awaited<ReturnType<typeof getTopProviders>>
+  )
   // reviews.provider_id references providers.id directly
   const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
-  const reviews = await getRecentReviews(providerIds)
+  const reviews = await getRecentReviews(providerIds).catch(
+    () => [] as Awaited<ReturnType<typeof getRecentReviews>>
+  )
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
   const [reviewStats, topReviewsDept, dynamicLastMod] = await Promise.all([
