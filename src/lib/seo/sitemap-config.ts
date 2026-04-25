@@ -42,3 +42,27 @@ export const MAX_PROVIDER_SITEMAPS = 200
  */
 export const SITEMAP_CITY_COUNT = 2_267
 export const SITEMAP_CITY_COUNT_TIER2 = 500
+
+/**
+ * Compte exact de villes émises pour les sitemaps `service-cities-*` :
+ * top `SITEMAP_CITY_COUNT` (par population) + extras GSC priority qui ne
+ * sont PAS dans le top.
+ *
+ * Audit 2026-04-25 (agent #3 SEO B1) : avant cette constante, `sitemap.ts`
+ * et `sitemap-index/route.ts` calculaient `serviceCitiesBatchCount` sur
+ * `services.length * SITEMAP_CITY_COUNT` alors que le handler émettait
+ * `services.length * mergedCities.length` URLs → ~3 700 URLs prioritaires
+ * GSC sortaient du dernier batch slice et n'étaient jamais émises.
+ *
+ * Source unique pour toute la chaîne sitemap → keep in sync with the
+ * `mergedCities` calculation in `src/app/sitemap.ts:858-869`.
+ */
+import { villes as _villes } from '@/lib/data/france'
+import { GSC_PRIORITY_CITIES as _GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
+
+const _phase1Slugs = new Set(_villes.slice(0, SITEMAP_CITY_COUNT).map((v) => v.slug))
+const _gscExtrasCount = _GSC_PRIORITY_CITIES.filter(
+  (slug) => !_phase1Slugs.has(slug) && _villes.some((v) => v.slug === slug)
+).length
+
+export const SITEMAP_SERVICE_CITIES_COUNT = SITEMAP_CITY_COUNT + _gscExtrasCount

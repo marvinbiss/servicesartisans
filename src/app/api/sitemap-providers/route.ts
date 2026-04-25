@@ -4,6 +4,7 @@ import { services, villes } from '@/lib/data/france'
 import { tradeContent } from '@/lib/data/trade-content'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 import { PROVIDER_BATCH_SIZE } from '@/lib/seo/sitemap-config'
+import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 
 // Audit 2026-04-25 (agent #3 SEO M2) : 60s = ras la limite Vercel free / Pro
 // quand DB lente (RPC peut atteindre 30-50s). On passe à 90s pour absorber le p99
@@ -280,16 +281,20 @@ export async function GET(request: NextRequest) {
       '</urlset>',
     ].join('\n')
 
-    return new NextResponse(xml, {
-      headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
-        // stale-if-error : si la prochaine régen plante (DB blip), Vercel CDN
-        // continue à servir l'ancien shard pendant 24h au lieu de répondre 5xx
-        // à Googlebot → évite "Couldn't fetch sitemap" dans GSC > Sitemaps.
-        'Cache-Control':
-          'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400',
-      },
+    // Latest provider updated_at = driver Last-Modified pour ce shard.
+    const latestUpdate = allProviders.reduce<string | undefined>(
+      (acc, p) => (p.updated_at && (acc === undefined || p.updated_at > acc) ? p.updated_at : acc),
+      undefined
+    )
+
+    const { notModified, responseHeaders } = sitemapHeaders(xml, request, {
+      cacheControl: 'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400',
+      lastModified: latestUpdate ? new Date(latestUpdate) : undefined,
     })
+    if (notModified) {
+      return new NextResponse(null, { status: 304, headers: responseHeaders })
+    }
+    return new NextResponse(xml, { headers: responseHeaders })
   } catch {
     // Return empty but valid sitemap on error
     const xml =

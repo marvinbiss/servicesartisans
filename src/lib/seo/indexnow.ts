@@ -1,4 +1,5 @@
 import { SITE_URL } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
 
@@ -32,6 +33,7 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
 
   for (let i = 0; i < absoluteUrls.length; i += BATCH_SIZE) {
     const batch = absoluteUrls.slice(i, i + BATCH_SIZE)
+    const batchIndex = Math.floor(i / BATCH_SIZE)
 
     try {
       const response = await fetch(INDEXNOW_ENDPOINT, {
@@ -43,14 +45,34 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
           keyLocation: `${SITE_URL}/${indexnowKey}.txt`,
           urlList: batch,
         }),
+        // Audit 2026-04-25 (Vague E-bis) : sans timeout, un IndexNow latent
+        // hang la lambda jusqu'au kill Vercel (jusqu'à 90s sur sitemap-providers,
+        // 30s ailleurs). 7 callers l'utilisent dont crons et review-service
+        // en `await`, donc impact en cascade. 15s = aligné avec /api/indexnow.
+        signal: AbortSignal.timeout(15000),
       })
 
       // IndexNow returns 200, 202, or 204 on success
       if (response.ok || response.status === 202) {
         totalSubmitted += batch.length
+      } else {
+        logger.warn('[indexnow] non-success response', {
+          batchIndex,
+          batchSize: batch.length,
+          status: response.status,
+        })
       }
-    } catch {
-      // Continue with next batch rather than failing entirely
+    } catch (err) {
+      // Continue with next batch rather than failing entirely.
+      // Audit 2026-04-25 (Vague E-ter) : log structuré au lieu de catch
+      // silencieux, pour visibilité sur timeout/network/certificate errors.
+      const isTimeout = err instanceof Error && err.name === 'TimeoutError'
+      logger.warn('[indexnow] batch failed', {
+        batchIndex,
+        batchSize: batch.length,
+        timeout: isTimeout,
+        error: isTimeout ? 'AbortSignal.timeout(15000)' : String(err),
+      })
     }
   }
 

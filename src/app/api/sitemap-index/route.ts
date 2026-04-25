@@ -10,7 +10,9 @@ import {
   MAX_PROVIDER_SITEMAPS,
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
+  SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
+import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
@@ -21,7 +23,7 @@ import {
  *
  * All constants imported from sitemap-config.ts (single source of truth).
  */
-export async function GET() {
+export async function GET(request: Request) {
   const emergencySlugs = Object.keys(tradeContent)
   const tradeSlugs = getTradesSlugs()
   const problemSlugs = getProblemSlugs()
@@ -33,9 +35,13 @@ export async function GET() {
 
   const ids: string[] = [
     'static',
-    // service × city — full scale: 47 services × 2 267 cities
+    // service × city — full scale: 47 services × (2 267 + GSC priority extras).
+    // Audit 2026-04-25 (B1) : on doit utiliser SITEMAP_SERVICE_CITIES_COUNT
+    // (= SITEMAP_CITY_COUNT + extras GSC) pour matcher la longueur réelle
+    // de mergedCities émise par le handler, sinon les ~3 700 URLs prioritaires
+    // GSC sortent du dernier batch slice et ne sont jamais déclarées.
     ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / LARGE_BATCH) },
+      { length: Math.ceil((services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH) },
       (_, i) => `service-cities-${i}`
     ),
     'cities',
@@ -122,10 +128,9 @@ export async function GET() {
     '</sitemapindex>',
   ].join('\n')
 
-  return new NextResponse(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-    },
-  })
+  const { notModified, responseHeaders } = sitemapHeaders(xml, request)
+  if (notModified) {
+    return new NextResponse(null, { status: 304, headers: responseHeaders })
+  }
+  return new NextResponse(xml, { headers: responseHeaders })
 }

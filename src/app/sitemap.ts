@@ -11,6 +11,7 @@ import {
   LARGE_BATCH,
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
+  SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
@@ -93,7 +94,12 @@ export async function generateSitemaps() {
   // Tier 1 (service, devis, tarifs, urgence × ALL cities): contenu le plus riche.
   // Tier 2 (tarifs-tâche, avis, problèmes × top 500 cities): plus template-like.
   // Quartier-level sitemaps removed (too granular, thin content).
-  const serviceCitiesBatchCount = Math.ceil((services.length * SITEMAP_CITY_COUNT) / LARGE_BATCH)
+  // Use SITEMAP_SERVICE_CITIES_COUNT (= SITEMAP_CITY_COUNT + GSC priority extras)
+  // pour matcher la longueur réelle de `mergedCities` ci-dessous, sinon les
+  // ~3 700 URLs GSC priority sortent du dernier batch slice.
+  const serviceCitiesBatchCount = Math.ceil(
+    (services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH
+  )
 
   const emergencySlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()

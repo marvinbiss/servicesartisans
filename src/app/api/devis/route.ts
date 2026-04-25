@@ -11,6 +11,8 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { cleanPhone } from '@/lib/validation/phone'
 import { processDevis } from '@/lib/services/devis-service'
+import { submitToIndexNow, getProviderAffectedUrls } from '@/lib/seo/indexnow'
+import { slugify } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -99,6 +101,25 @@ export async function POST(request: Request) {
             { error: "Erreur lors de l'enregistrement de votre demande. Veuillez réessayer." },
             { status: 500 }
           )
+      }
+    }
+
+    // Audit 2026-04-25 (agent #3 SEO M1) : IndexNow trigger sur /api/devis
+    // pour propager le lastmod des templates pSEO {services,devis,urgence,
+    // avis,tarifs,rge}/{service}/{ville} dans les minutes qui suivent un
+    // lead, au lieu d'attendre le cron 06h15. Fire-and-forget.
+    if (result.success && data.service && data.ville) {
+      const serviceSlug = slugify(data.service)
+      const villeSlug = slugify(data.ville)
+      if (serviceSlug && villeSlug) {
+        const urls = getProviderAffectedUrls(serviceSlug, villeSlug)
+        submitToIndexNow(urls).catch((err) =>
+          logger.warn('[devis] IndexNow submit failed', {
+            service: serviceSlug,
+            ville: villeSlug,
+            error: err,
+          })
+        )
       }
     }
 

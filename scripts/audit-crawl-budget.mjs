@@ -204,8 +204,10 @@ for (const f of XML_ROUTE_CANDIDATES) {
   if (/src\/app\/sitemap\.ts$/.test(f.replace(/\\/g, '/'))) continue
   if (/src\/app\/robots\.ts$/.test(f.replace(/\\/g, '/'))) continue
   // Route handlers doivent explicitement renvoyer Cache-Control: s-maxage=...
-  const hasCache = /Cache-Control['"]?\s*[,:]\s*['"][^'"]*s-maxage\s*=\s*\d+/i.test(src)
-  if (!hasCache) {
+  // OU déléguer au helper sitemapHeaders() qui set le header pour eux.
+  const hasInlineCache = /Cache-Control['"]?\s*[,:]\s*['"][^'"]*s-maxage\s*=\s*\d+/i.test(src)
+  const hasHelper = /\bsitemapHeaders\s*\(/.test(src)
+  if (!hasInlineCache && !hasHelper) {
     missingCache.push({ file: f.replace(/\\/g, '/') })
   }
 }
