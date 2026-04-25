@@ -9,6 +9,7 @@ import { cookies } from 'next/headers'
 import { signInSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -152,6 +153,7 @@ export async function POST(request: Request) {
     return response
   } catch (error) {
     logger.error('Signin error:', error)
+    captureError(error, { tags: { route: 'api/auth/signin', critical: 'true' } })
     return NextResponse.json(
       createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de la connexion'),
       { status: 500 }

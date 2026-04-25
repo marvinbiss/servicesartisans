@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 import { isSafeRedirectPath } from '@/lib/safe-redirect'
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: data.url })
   } catch (error) {
     logger.error('OAuth error', error)
+    captureError(error, { tags: { route: 'api/auth/oauth', critical: 'true' } })
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

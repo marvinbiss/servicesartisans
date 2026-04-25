@@ -27,9 +27,48 @@ function shouldLog(level: LogLevel): boolean {
   return LOG_LEVELS[level] >= LOG_LEVELS[MIN_LOG_LEVEL]
 }
 
+// PII masking — audit 2026-04-25 (security finding MEDIUM): logger contexts
+// throughout the codebase routinely include `email`, `phone`, `phone_e164`,
+// `token`, `password`, `siret`, `ip`, `ipHash`, `authorization` keys. Those
+// values land in Vercel runtime logs (90j retention) and may surface in
+// Sentry breadcrumbs if a later exception is captured in the same request.
+// We mask the values at format time so the dev experience (logging the
+// shape of the data) is preserved while the value never leaks.
+const SENSITIVE_KEY_RE =
+  /^(email|phone|phone_e164|telephone|telephone_e164|token|password|secret|api[_-]?key|authorization|siret|ip|ipHash|ip_hash|user_agent|userAgent)$/i
+
+function maskValue(value: unknown): unknown {
+  if (typeof value !== 'string') return '[REDACTED]'
+  if (value.length === 0) return ''
+  if (value.includes('@')) {
+    const [local, domain] = value.split('@')
+    return `${local.slice(0, 2)}***@${domain ?? ''}`
+  }
+  if (value.length <= 4) return '***'
+  return `${value.slice(0, 2)}***${value.slice(-2)}`
+}
+
+function maskPiiDeep<T>(input: T, depth = 0): T {
+  if (depth > 4 || input == null) return input
+  if (Array.isArray(input)) return input.map((v) => maskPiiDeep(v, depth + 1)) as unknown as T
+  if (typeof input !== 'object') return input
+  const out: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
+    if (SENSITIVE_KEY_RE.test(k)) {
+      out[k] = maskValue(v)
+    } else if (v && typeof v === 'object') {
+      out[k] = maskPiiDeep(v, depth + 1)
+    } else {
+      out[k] = v
+    }
+  }
+  return out as T
+}
+
 function formatMessage(level: LogLevel, message: string, context?: LogContext): string {
   const timestamp = new Date().toISOString()
-  const contextStr = context ? ` ${JSON.stringify(context)}` : ''
+  const safeContext = context ? maskPiiDeep(context) : undefined
+  const contextStr = safeContext ? ` ${JSON.stringify(safeContext)}` : ''
   return `[${timestamp}] [${level.toUpperCase()}] ${message}${contextStr}`
 }
 
@@ -55,12 +94,14 @@ function createLogger(defaultContext?: LogContext): AppLogger {
   const instance: AppLogger = {
     debug(message: string, context?: LogContext): void {
       if (shouldLog('debug')) {
+        // eslint-disable-next-line no-console -- logger implementation
         console.log(formatMessage('debug', message, mergeContext(context)))
       }
     },
 
     info(message: string, context?: LogContext): void {
       if (shouldLog('info')) {
+        // eslint-disable-next-line no-console -- logger implementation
         console.log(formatMessage('info', message, mergeContext(context)))
       }
     },

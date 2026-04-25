@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { z } from 'zod'
 
 // POST request schema
@@ -74,6 +75,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ sessionId: session.id, url: session.url })
   } catch (error) {
     logger.error('Stripe checkout error:', error)
+    captureError(error, { tags: { route: 'api/stripe/create-checkout', critical: 'true' } })
     return NextResponse.json({ error: 'Erreur lors de la création du paiement' }, { status: 500 })
   }
 }

@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { twoFactorAuth } from '@/lib/auth/two-factor'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { z } from 'zod'
 
 const verifySchema = z.object({
@@ -50,6 +51,7 @@ export async function GET() {
     return NextResponse.json({ status })
   } catch (error) {
     logger.error('2FA status error:', error)
+    captureError(error, { tags: { route: 'api/auth/2fa', method: 'GET', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -165,6 +167,7 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     logger.error('2FA error:', error)
+    captureError(error, { tags: { route: 'api/auth/2fa', method: 'POST', critical: 'true' } })
     const message = error instanceof Error ? error.message : 'Erreur serveur'
     return NextResponse.json({ success: false, error: { message } }, { status: 500 })
   }

@@ -13,6 +13,7 @@ import {
   getHttpStatus as _getHttpStatus,
 } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -130,6 +131,7 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     logger.error('Signup error:', error)
+    captureError(error, { tags: { route: 'api/auth/signup', critical: 'true' } })
     return NextResponse.json(
       createErrorResponse(ErrorCode.INTERNAL_ERROR, "Erreur lors de l'inscription"),
       { status: 500 }

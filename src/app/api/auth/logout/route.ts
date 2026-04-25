@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -40,6 +41,7 @@ export async function POST() {
     return response
   } catch (error) {
     logger.error('Logout error', error)
+    captureError(error, { tags: { route: 'api/auth/logout', critical: 'true' } })
     return NextResponse.json(
       {
         success: false,

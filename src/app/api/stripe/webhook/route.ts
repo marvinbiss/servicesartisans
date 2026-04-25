@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   checkWebhookIdempotency,
@@ -75,6 +76,9 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET)
   } catch (error) {
     logger.error('Webhook signature verification failed:', error)
+    captureError(error, {
+      tags: { route: 'api/stripe/webhook', stage: 'signature-verification', critical: 'true' },
+    })
     return NextResponse.json(
       { error: 'Échec de la vérification de signature webhook' },
       { status: 400 }
@@ -128,6 +132,14 @@ export async function POST(request: Request) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Webhook handler error:', error)
+    captureError(error, {
+      tags: {
+        route: 'api/stripe/webhook',
+        stage: 'handler',
+        eventType: event.type,
+        critical: 'true',
+      },
+    })
 
     await markWebhookFailed(event.id, errorMessage)
 

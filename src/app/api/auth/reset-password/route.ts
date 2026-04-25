@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
@@ -70,6 +71,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('Reset password API error', error)
+    captureError(error, { tags: { route: 'api/auth/reset-password', critical: 'true' } })
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
