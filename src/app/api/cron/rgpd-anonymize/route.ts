@@ -17,6 +17,7 @@ import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -154,7 +155,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'CRON_SECRET non configuré' }, { status: 500 })
       }
       const authHeader = request.headers.get('authorization')
-      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      if (!verifyCronSecret(authHeader)) {
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 

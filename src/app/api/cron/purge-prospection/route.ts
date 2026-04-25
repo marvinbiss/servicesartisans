@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /**
  * Monthly cron: Purge RGPD des contacts de prospection
@@ -74,7 +75,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

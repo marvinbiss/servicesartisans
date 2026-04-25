@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { aggregate, type ProviderRow, type Snapshot } from '@/lib/barometre/rge-aggregate'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /**
  * Monthly cron: builds the RGE barometer snapshot from `providers` and
@@ -80,7 +81,7 @@ export async function GET(request: Request) {
       )
     }
     const authHeader = request.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (!verifyCronSecret(authHeader)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 

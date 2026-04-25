@@ -28,21 +28,44 @@ if (SENTRY_DSN) {
     release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
 
     // Performance Monitoring — dynamic sampling.
-    // Crons = 100% : leurs échecs doivent être visibles (P0 pipeline).
-    // Sitemaps/monitoring = 1% : bruit élevé, échantillon suffisant.
-    // Reste = 10% prod, 100% dev.
+    // Audit 2026-04-25 (agent #7 BLOCKER) : la version précédente faisait
+    // 100% sampling sur tous les `/api/cron/*`. Avec ~30 crons (dont
+    // `metrics-snapshot`, `redis-health`, `cee-dossier-transitions` qui
+    // tournent toutes les minutes/heures), c'est >40K transactions/mois sur
+    // le tier Developer (10K/mo séparé du quota events). Quota cramé en
+    // silence. On échantillonne désormais à 0.2 sur les crons heartbeat-style
+    // et 1.0 uniquement sur les crons business-critical.
     tracesSampler: (ctx) => {
       if (ctx.parentSampled !== undefined) return ctx.parentSampled
       const name = typeof ctx.name === 'string' ? ctx.name : ''
-      if (name.includes('/api/cron/')) return 1.0
-      if (name.includes('/sitemap') || name.includes('/monitoring')) {
-        return 0.01
-      }
+
+      // Crons business-critical : 100% — leurs échecs DOIVENT être visibles.
+      const CRITICAL_CRONS = [
+        '/api/cron/pipedrive-retry',
+        '/api/cron/simulateur-pipedrive-retry',
+        '/api/cron/rge-sync',
+        '/api/cron/rgpd-anonymize',
+        '/api/cron/process-gdpr-deletions',
+        '/api/cron/lead-reassign',
+        '/api/cron/send-review-invitations',
+        '/api/cron/cee-dossier-transitions',
+      ]
+      if (CRITICAL_CRONS.some((p) => name.includes(p))) return 1.0
+
+      // Autres crons : 0.2 (sample suffisant pour détecter une régression
+      // sans burner le quota transactions).
+      if (name.includes('/api/cron/')) return 0.2
+
+      // Sitemaps + tunnel Sentry monitoring : très bruyant, 1% suffit.
+      if (name.includes('/sitemap') || name.includes('/monitoring')) return 0.01
+
       return VERCEL_ENV === 'production' ? 0.1 : 1.0
     },
 
-    // Profiling — captures CPU/memory flamegraphs for slow endpoints
-    profilesSampleRate: 0.1,
+    // Profiling — captures CPU/memory flamegraphs for slow endpoints.
+    // Réduit à 0.02 (vs 0.1) après audit 2026-04-25 — quota séparé limité
+    // sur tier Developer.
+    profilesSampleRate: 0.02,
 
     enabled: SENTRY_ENABLED,
 

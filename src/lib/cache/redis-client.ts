@@ -43,9 +43,48 @@ function maybeCaptureUpstashError(err: unknown, extras: Record<string, unknown>)
   }
 }
 
+// Circuit breaker — un token Upstash invalide (HTTP 401) ou un endpoint qui
+// renvoie 5xx en boucle ne se "répare" pas tout seul ; tant qu'il faut
+// régénérer le token côté Upstash + Vercel, chaque cache-miss SSR paye 2s
+// d'AbortSignal pour rien sur 459K pages crawlées par Googlebot.
+//
+// Stratégie : après CIRCUIT_THRESHOLD échecs auth/serveur consécutifs, on
+// ouvre le circuit pour CIRCUIT_OPEN_MS → redisCommand renvoie null sans
+// fetch. À l'expiration, on tente UN ping (half-open) ; succès → reset, échec
+// → re-ouverture pour CIRCUIT_OPEN_MS.
+const CIRCUIT_THRESHOLD = 3
+const CIRCUIT_OPEN_MS = 60_000
+let consecutiveAuthFailures = 0
+let circuitOpenedAt = 0
+
+function isCircuitOpen(): boolean {
+  if (circuitOpenedAt === 0) return false
+  if (Date.now() - circuitOpenedAt < CIRCUIT_OPEN_MS) return true
+  // Half-open : laisse passer la prochaine requête ; reset() ou trip() suivra
+  circuitOpenedAt = 0
+  return false
+}
+
+function tripCircuit(reason: string) {
+  if (circuitOpenedAt === 0) {
+    circuitOpenedAt = Date.now()
+    logger.error('Upstash circuit breaker opened', undefined, {
+      reason,
+      consecutiveAuthFailures,
+      reopenInMs: CIRCUIT_OPEN_MS,
+    })
+  }
+}
+
+function resetCircuit() {
+  consecutiveAuthFailures = 0
+  circuitOpenedAt = 0
+}
+
 async function redisCommand<T = unknown>(command: (string | number)[]): Promise<T | null> {
   if (!isAvailable) return null
   if (IS_BUILD_PHASE) return null
+  if (isCircuitOpen()) return null
   try {
     // Pas de directive de cache. `cache: 'no-store'` ET `next: { revalidate: 0 }`
     // sont équivalents et déclenchent "Dynamic server usage" sur les rendus
@@ -62,8 +101,20 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
       body: JSON.stringify(command),
       signal: AbortSignal.timeout(UPSTASH_FETCH_TIMEOUT_MS),
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    if (!res.ok) {
+      // Auth (401/403) ou server error (5xx) = compte vers le circuit.
+      // 4xx clients (404/410) sont rares pour une commande Redis et ne devraient
+      // pas trip le breaker (ne va pas se résoudre côté ops).
+      if (res.status === 401 || res.status === 403 || res.status >= 500) {
+        consecutiveAuthFailures++
+        if (consecutiveAuthFailures >= CIRCUIT_THRESHOLD) {
+          tripCircuit(`HTTP ${res.status}`)
+        }
+      }
+      throw new Error(`HTTP ${res.status}`)
+    }
     const json = await res.json()
+    if (consecutiveAuthFailures > 0) resetCircuit()
     return json.result as T
   } catch (err) {
     // "Dynamic server usage: no-store fetch" est levée par Next.js patched fetch
@@ -74,8 +125,12 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
     const msg = err instanceof Error ? err.message : String(err)
     if (msg.includes('Dynamic server usage')) return null
 
-    logger.error('Redis command error', err as Error)
-    maybeCaptureUpstashError(err, { command: command[0] })
+    // Quand le circuit est ouvert on a déjà loggé l'incident — ne pas re-logger
+    // chaque appel. tripCircuit() ne logge qu'une fois.
+    if (!isCircuitOpen()) {
+      logger.error('Redis command error', err as Error)
+      maybeCaptureUpstashError(err, { command: command[0] })
+    }
     return null
   }
 }

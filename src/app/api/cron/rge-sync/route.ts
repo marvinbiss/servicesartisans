@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs'
 import { syncRgeFromAdeme } from '@/lib/rge/sync'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /**
  * Weekly cron: sync RGE certifications from ADEME API into providers table.
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
         )
       }
       const authHeader = request.headers.get('authorization')
-      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      if (!verifyCronSecret(authHeader)) {
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 

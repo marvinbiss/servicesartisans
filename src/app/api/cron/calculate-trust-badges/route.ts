@@ -15,6 +15,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,9 +34,7 @@ export async function GET(request: Request) {
     const supabase = createClient(supabaseUrl, serviceRoleKey)
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    if (!verifyCronSecret(authHeader)) {
       logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
       return NextResponse.json(
         { success: false, error: { message: 'Non autorisé' } },

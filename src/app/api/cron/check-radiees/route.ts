@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { getToken } from '@/lib/sirene/client'
 import { SIRENE_CONFIG } from '@/lib/sirene/config'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /**
  * Cron: Vérifie les SIRET en DB via l'API INSEE SIRENE.
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
@@ -60,7 +61,7 @@ export async function GET(request: Request) {
     // Traiter par batch
     for (let i = 0; i < validProviders.length; i += BATCH_SIZE) {
       const batch = validProviders.slice(i, i + BATCH_SIZE)
-      const sirets = batch.map((p) => p.siret!)
+      const sirets = batch.map((p) => p.siret as string)
 
       try {
         // Requête INSEE: chercher ces SIRET
@@ -113,7 +114,7 @@ export async function GET(request: Request) {
 
         // Vérifier chaque provider du batch
         for (const p of batch) {
-          const etat = etatMap.get(p.siret!)
+          const etat = etatMap.get(p.siret as string)
           if (!etat) {
             // SIRET pas dans la réponse = introuvable
             radieIds.push(p.id)

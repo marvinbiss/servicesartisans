@@ -16,6 +16,7 @@ import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { _getCircuitBreakerState } from '@/lib/rate-limiter'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

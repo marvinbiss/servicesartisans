@@ -4,6 +4,7 @@ import { sendEmail } from '@/lib/email/resend'
 import { getAbandonEmail1 } from '@/lib/email/templates/abandon-email-1'
 import { getAbandonEmail2 } from '@/lib/email/templates/abandon-email-2'
 import { getAbandonEmail3 } from '@/lib/email/templates/abandon-email-3'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
   const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

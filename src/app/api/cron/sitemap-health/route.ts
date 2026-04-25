@@ -4,6 +4,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 const RGE_STALE_WARN_DAYS = 7
 const RGE_STALE_CRITICAL_DAYS = 14
@@ -97,7 +98,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
       }
       const authHeader = request.headers.get('authorization')
-      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      if (!verifyCronSecret(authHeader)) {
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 

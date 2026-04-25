@@ -34,8 +34,12 @@ function shouldLog(level: LogLevel): boolean {
 // Sentry breadcrumbs if a later exception is captured in the same request.
 // We mask the values at format time so the dev experience (logging the
 // shape of the data) is preserved while the value never leaks.
+// Audit 2026-04-25 (security agent #9 finding M1) : la liste précédente
+// laissait passer en clair `bearer`, `cookie`, `set-cookie`, `x-api-key`,
+// `csrf`, `signature`, `idempotency_key`, `webhook_secret`, `client_secret`,
+// `refresh_token`, `access_token`, `api_token`, `stripe_key`. Étendue ici.
 const SENSITIVE_KEY_RE =
-  /^(email|phone|phone_e164|telephone|telephone_e164|token|password|secret|api[_-]?key|authorization|siret|ip|ipHash|ip_hash|user_agent|userAgent)$/i
+  /^(email|phone|phone_e164|telephone|telephone_e164|token|password|secret|api[_-]?key|api[_-]?token|authorization|bearer|cookie|set[_-]?cookie|x[_-]?api[_-]?key|csrf|signature|idempotency[_-]?key|webhook[_-]?secret|client[_-]?secret|refresh[_-]?token|access[_-]?token|stripe[_-]?key|siret|ip|ipHash|ip_hash|user_agent|userAgent)$/i
 
 function maskValue(value: unknown): unknown {
   if (typeof value !== 'string') return '[REDACTED]'

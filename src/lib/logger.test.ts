@@ -103,4 +103,34 @@ describe('logger PII masking', () => {
     // Null/undefined produce '[REDACTED]' via maskValue branch
     expect(out).toContain('"phone":"[REDACTED]"')
   })
+
+  it('masks extended sensitive keys (audit 2026-04-25 — agent #9 finding M1)', () => {
+    logger.error('extended', new Error('boom'), {
+      bearer: 'Bearer-eyJhbG-extended-token-here',
+      cookie: 'sessionid=abc123def456789012',
+      'x-api-key': 'k_live_extended_xxxxxxxxxx',
+      csrf: 'csrf-tok-extended-9999',
+      signature: 'sha256=deadbeefcafebabe',
+      idempotency_key: 'idem-key-extended-abcdef',
+      webhook_secret: 'whsec_extendedsecretvalue',
+      client_secret: 'cs_extended_secret_xxxx',
+      refresh_token: 'rt_extendedrefreshtoken',
+      access_token: 'at_extendedaccesstoken',
+      stripe_key: 'sk_live_extendedstripekey',
+      api_token: 'tok_extended_xxxxxxxxxx',
+    })
+    const out = lastErrorOutput()
+    expect(out).not.toContain('Bearer-eyJhbG-extended-token-here')
+    expect(out).not.toContain('sessionid=abc123def456789012')
+    expect(out).not.toContain('k_live_extended_xxxxxxxxxx')
+    expect(out).not.toContain('csrf-tok-extended-9999')
+    expect(out).not.toContain('sha256=deadbeefcafebabe')
+    expect(out).not.toContain('idem-key-extended-abcdef')
+    expect(out).not.toContain('whsec_extendedsecretvalue')
+    expect(out).not.toContain('cs_extended_secret_xxxx')
+    expect(out).not.toContain('rt_extendedrefreshtoken')
+    expect(out).not.toContain('at_extendedaccesstoken')
+    expect(out).not.toContain('sk_live_extendedstripekey')
+    expect(out).not.toContain('tok_extended_xxxxxxxxxx')
+  })
 })

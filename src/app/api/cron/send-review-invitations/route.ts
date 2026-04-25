@@ -18,6 +18,7 @@ import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
 import { createInvitationToken } from '@/lib/reviews/invitation-token'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const BATCH_SIZE = 100
@@ -86,9 +87,7 @@ function buildReviewEmail(input: {
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization')
-  const cronSecret = process.env.CRON_SECRET
-
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
   }
 

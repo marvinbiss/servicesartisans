@@ -9,6 +9,13 @@ const SENTRY_ENABLED =
   VERCEL_ENV === 'preview' ||
   (!VERCEL_ENV && process.env.NODE_ENV === 'production')
 
+// Hotfix expiry — schema-drift filter doit s'auto-désactiver après le 5 mai 2026
+// pour ne plus masquer de vrais bugs `column does not exist` (CVE potentiel :
+// SQL injection probing rendu silencieux par un filtre trop large).
+// Audit 2026-04-25 (agent #7 HIGH) — filtre dupliqué sur l'edge runtime
+// pour ne pas burner le quota si une erreur edge match `column does not exist`.
+const SCHEMA_DRIFT_FILTER_EXPIRY = Date.UTC(2026, 4, 5) // 2026-05-05 00:00 UTC
+
 if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
@@ -30,5 +37,34 @@ if (SENTRY_DSN) {
     },
 
     enabled: SENTRY_ENABLED,
+
+    ignoreErrors: [
+      'NotFoundError',
+      'NEXT_NOT_FOUND',
+      'NEXT_REDIRECT',
+      'AbortError',
+      'fetch failed',
+    ],
+
+    beforeSend(event) {
+      const exc = event.exception?.values?.[0]
+      if (exc?.type === 'NotFoundError') return null
+
+      const msg = typeof exc?.value === 'string' ? exc.value : ''
+      const eventMsg = typeof event.message === 'string' ? event.message : ''
+      const haystack = msg || eventMsg
+
+      if (haystack && Date.now() < SCHEMA_DRIFT_FILTER_EXPIRY) {
+        const isUndefinedColumn =
+          haystack.includes('column ') && haystack.includes(' does not exist')
+        const is42703 = /\b42703\b/.test(haystack)
+        if (isUndefinedColumn || is42703) {
+          event.tags = { ...(event.tags ?? {}), schema_drift_hotfix: 'true', runtime: 'edge' }
+          return null
+        }
+      }
+
+      return event
+    },
   })
 }

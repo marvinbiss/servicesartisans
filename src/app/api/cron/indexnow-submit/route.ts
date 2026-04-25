@@ -9,6 +9,7 @@ import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { RGE_QUALIFICATIONS_WITH_GUIDE } from '@/lib/rge/qualification-guides-content'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /** CEE operation codes — mirrors sitemap.ts:CEE_OPERATION_CODES. Keep in sync. */
 const CEE_OPERATION_CODES: readonly string[] = [
@@ -156,7 +157,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
       }
       const authHeader = request.headers.get('authorization')
-      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      if (!verifyCronSecret(authHeader)) {
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 

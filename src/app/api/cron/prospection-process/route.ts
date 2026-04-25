@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { processBatch, reconcileOrphanedMessages } from '@/lib/prospection/message-queue'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,9 +15,7 @@ export async function GET(request: Request) {
   try {
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    if (!verifyCronSecret(authHeader)) {
       logger.warn('[Cron] Unauthorized access to prospection-process')
       return NextResponse.json(
         { success: false, error: { message: 'Non autorisé' } },

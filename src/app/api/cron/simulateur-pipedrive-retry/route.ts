@@ -14,6 +14,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import {
   createSimulateurDeal,
   isSimulateurPipedriveConfigured,
@@ -45,9 +46,8 @@ export async function GET(request: Request) {
   // Toujours 401 si le header n'est pas valide — qu'il manque OU que CRON_SECRET
   // soit non-configuré côté serveur. Évite l'info-oracle : un client ne peut pas
   // distinguer "secret absent" de "mauvais secret" (500 vs 401 révèle l'état).
-  const configured = process.env.CRON_SECRET
   const authHeader = request.headers.get('authorization')
-  if (!configured || authHeader !== `Bearer ${configured}`) {
+  if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

@@ -5,22 +5,23 @@ import {
   type NotificationPayload,
 } from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 // GET /api/cron/send-reminders - Send reminder emails for tomorrow's bookings
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
+    }
     // Use service role for cron jobs to bypass RLS
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = createClient(supabaseUrl, supabaseKey)
     // Verify cron secret - REQUIRED in production
     const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    if (!verifyCronSecret(authHeader)) {
       logger.warn('[Cron] Unauthorized access attempt to send-reminders')
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
