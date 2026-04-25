@@ -3,10 +3,28 @@ import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
 
+// Hotfix expiry — schema-drift filter doit s'auto-désactiver après le 5 mai 2026
+// pour ne plus masquer de vrais bugs `column does not exist` (CVE potentiel :
+// SQL injection probing rendu silencieux par un filtre trop large). Audit
+// 2026-04-25 (10-agents) a flaggé ce risque comme HIGH.
+const SCHEMA_DRIFT_FILTER_EXPIRY = Date.UTC(2026, 4, 5) // 2026-05-05 00:00 UTC
+
+// Active Sentry sur production ET preview Vercel : avant ce changement,
+// `NODE_ENV === 'production'` couvrait les deux mais désactivait `dev` —
+// VERCEL_ENV donne le bon découpage et garde la visibilité sur les preview
+// deploys (PR review). Audit 2026-04-25 BLOCKER B1.
+const VERCEL_ENV = process.env.VERCEL_ENV
+const SENTRY_ENABLED =
+  VERCEL_ENV === 'production' ||
+  VERCEL_ENV === 'preview' ||
+  // Fallback non-Vercel (auto-hosted, runners CI, tests prod-like) :
+  // l'ancienne logique restée pour ne pas régresser hors Vercel.
+  (!VERCEL_ENV && process.env.NODE_ENV === 'production')
+
 if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    environment: VERCEL_ENV || process.env.NODE_ENV,
     release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
 
     // Performance Monitoring — dynamic sampling.
@@ -20,14 +38,13 @@ if (SENTRY_DSN) {
       if (name.includes('/sitemap') || name.includes('/monitoring')) {
         return 0.01
       }
-      return process.env.NODE_ENV === 'production' ? 0.1 : 1.0
+      return VERCEL_ENV === 'production' ? 0.1 : 1.0
     },
 
     // Profiling — captures CPU/memory flamegraphs for slow endpoints
     profilesSampleRate: 0.1,
 
-    // Only enable in production
-    enabled: process.env.NODE_ENV === 'production',
+    enabled: SENTRY_ENABLED,
 
     // Server-specific integrations.
     // captureConsoleIntegration was REMOVED 2026-04-25 : it forwarded every
@@ -38,8 +55,7 @@ if (SENTRY_DSN) {
     integrations: [Sentry.httpIntegration()],
 
     // Noise filter — expected errors that are not actionable.
-    // Postgres 42703 (column does not exist) is included until the schema
-    // drift hotfix migration 474 has been applied + redeployed everywhere.
+    // PGRST = PostgREST API errors (transient, retried by client SDK).
     ignoreErrors: [
       'NotFoundError',
       'NEXT_NOT_FOUND',
@@ -57,12 +73,23 @@ if (SENTRY_DSN) {
       const exc = event.exception?.values?.[0]
       if (exc?.type === 'NotFoundError') return null
 
-      const msg = exc?.value || event.message || ''
+      const msg = typeof exc?.value === 'string' ? exc.value : ''
+      const eventMsg = typeof event.message === 'string' ? event.message : ''
+      const haystack = msg || eventMsg
 
-      if (typeof msg === 'string') {
-        if (msg.includes('column ') && msg.includes(' does not exist')) return null
-        if (/\b42703\b/.test(msg)) return null
-        if (msg.startsWith('[Cron') && msg.includes('phone_e164')) return null
+      // Filtre schema-drift (migrations 474+) — auto-expire au 2026-05-05.
+      // Tag `schema_drift_hotfix:true` ajouté avant drop pour pouvoir
+      // monitorer la fréquence d'occurrence dans Sentry "Discarded events".
+      if (haystack && Date.now() < SCHEMA_DRIFT_FILTER_EXPIRY) {
+        const isUndefinedColumn =
+          haystack.includes('column ') && haystack.includes(' does not exist')
+        const is42703 = /\b42703\b/.test(haystack)
+        const isPhoneCron = haystack.startsWith('[Cron') && haystack.includes('phone_e164')
+
+        if (isUndefinedColumn || is42703 || isPhoneCron) {
+          event.tags = { ...(event.tags ?? {}), schema_drift_hotfix: 'true' }
+          return null
+        }
       }
 
       return event

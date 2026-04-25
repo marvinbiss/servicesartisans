@@ -3,10 +3,17 @@ import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
 
+// Active Sentry sur production ET preview Vercel (cohérent avec server config).
+const VERCEL_ENV = process.env.NEXT_PUBLIC_VERCEL_ENV
+const SENTRY_ENABLED =
+  VERCEL_ENV === 'production' ||
+  VERCEL_ENV === 'preview' ||
+  (!VERCEL_ENV && process.env.NODE_ENV === 'production')
+
 if (SENTRY_DSN) {
   Sentry.init({
     dsn: SENTRY_DSN,
-    environment: process.env.NODE_ENV,
+    environment: VERCEL_ENV || process.env.NODE_ENV,
     release: process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
 
     // Performance Monitoring — dynamic sampling: errors always, noisy routes low, rest 10% in prod
@@ -30,8 +37,7 @@ if (SENTRY_DSN) {
     replaysSessionSampleRate: Number(process.env.NEXT_PUBLIC_SENTRY_REPLAY_RATE ?? 0.005),
     replaysOnErrorSampleRate: 1.0,
 
-    // Only enable in production
-    enabled: process.env.NODE_ENV === 'production',
+    enabled: SENTRY_ENABLED,
 
     integrations: [
       Sentry.browserTracingIntegration(),
