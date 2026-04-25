@@ -15,7 +15,7 @@
 // les migrations stagées dans le commit courant (mode pre-commit).
 
 import { readdirSync, readFileSync } from 'node:fs'
-import { join, basename } from 'node:path'
+import { join } from 'node:path'
 import { execSync } from 'node:child_process'
 
 if (process.env.SKIP_SEARCH_PATH_AUDIT === '1') {
@@ -28,9 +28,15 @@ const WINDOW_LINES = 60
 const ALLOW_PRAGMA = 'pragma: allow-mutable-search-path'
 const SCAN_ALL = process.argv.includes('--all')
 
+// `files` contient des PATHS relatifs au cwd (ex: "supabase/migrations/474_x.sql"
+// ou "supabase/migrations/rollback/474_x_rollback.sql"). On lit/résout chaque
+// fichier directement sans reconstruire le chemin via basename — sinon les
+// migrations dans `rollback/` ou tout sous-dossier sont mal résolues.
 let files
 if (SCAN_ALL) {
-  files = readdirSync(MIG_DIR).filter((f) => f.endsWith('.sql'))
+  files = readdirSync(MIG_DIR)
+    .filter((f) => f.endsWith('.sql'))
+    .map((f) => `supabase/migrations/${f}`)
 } else {
   let staged = ''
   try {
@@ -45,7 +51,6 @@ if (SCAN_ALL) {
     .split('\n')
     .map((p) => p.trim())
     .filter((p) => p.startsWith('supabase/migrations/') && p.endsWith('.sql'))
-    .map((p) => basename(p))
   if (files.length === 0) {
     console.log('OK. Aucune migration stagée à auditer.')
     process.exit(0)
@@ -55,7 +60,7 @@ if (SCAN_ALL) {
 const violations = []
 
 for (const file of files) {
-  const path = join(MIG_DIR, file)
+  const path = join(process.cwd(), file)
   const text = readFileSync(path, 'utf8')
   const lines = text.split('\n')
 
