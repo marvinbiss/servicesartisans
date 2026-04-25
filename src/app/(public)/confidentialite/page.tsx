@@ -232,6 +232,64 @@ export default async function ConfidentialitePage() {
                     <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
                     <td className="px-4 py-3 text-charcoal-600">Data Privacy Framework, SCCs</td>
                   </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Anthropic PBC</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Génération assistée des descriptions éditoriales d&apos;artisans (modèles
+                      Claude). Aucune donnée personnelle n&apos;est envoyée : uniquement les données
+                      publiques d&apos;annuaire (raison sociale, ville, qualifications RGE).
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">SCCs, no-training opt-out</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Yousign SAS</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Signature électronique qualifiée (eIDAS) des conventions de mandat CEE.
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">France (UE)</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      eIDAS QES, ISO 27001, hébergement UE
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Pipedrive OÜ</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      CRM commercial (suivi des demandes de devis et leads simulateur côté équipe
+                      ServicesArtisans).
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">Estonie (UE)</td>
+                    <td className="px-4 py-3 text-charcoal-600">RGPD natif UE, ISO 27001</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">
+                      Functional Software, Inc. (Sentry)
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Monitoring des erreurs applicatives. Aucune PII envoyée — un filtre côté
+                      logger masque emails, téléphones, IBAN avant transmission.
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">SCCs, SOC2 Type II</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">Upstash Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Cache et rate-limiting Redis (hashes IP éphémères, pas d&apos;identifiant
+                      personnel persistant).
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">UE (eu-west-1)</td>
+                    <td className="px-4 py-3 text-charcoal-600">RGPD, ISO 27001, hébergement UE</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-medium text-charcoal-900">PostHog Inc.</td>
+                    <td className="px-4 py-3 text-charcoal-600">
+                      Analytics produit (clics, parcours). IP anonymisée, opt-out via bandeau
+                      cookies.
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600">États-Unis</td>
+                    <td className="px-4 py-3 text-charcoal-600">SCCs, SOC2 Type II</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

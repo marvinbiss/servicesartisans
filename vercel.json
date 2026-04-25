@@ -45,6 +45,10 @@
       "schedule": "0 4 * * *"
     },
     {
+      "path": "/api/cron/purge-rgpd",
+      "schedule": "0 5 * * *"
+    },
+    {
       "path": "/api/cron/lead-reassign",
       "schedule": "0 */4 * * *"
     },
