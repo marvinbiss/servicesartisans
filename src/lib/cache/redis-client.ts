@@ -61,6 +61,14 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
     const json = await res.json()
     return json.result as T
   } catch (err) {
+    // "Dynamic server usage: no-store fetch" est levée par Next.js patched fetch
+    // quand on appelle Upstash pendant un rendu ISR/SSG. Le `cache: 'no-store'`
+    // ci-dessus marque l'appel comme dynamique → Next.js bail. Le catch retourne
+    // null → le fetcher Supabase prend le relais. C'est attendu et bénin sur
+    // 459K pages crawlées par Googlebot — flood Sentry inutile.
+    const msg = err instanceof Error ? err.message : String(err)
+    if (msg.includes('Dynamic server usage')) return null
+
     logger.error('Redis command error', err as Error)
     maybeCaptureUpstashError(err, { command: command[0] })
     return null
