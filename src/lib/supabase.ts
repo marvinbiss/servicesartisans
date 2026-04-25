@@ -584,7 +584,7 @@ export async function getTopReviewsByDept(
           const { data: reviews, error: revError } = await supabase
             .from('reviews')
             .select(
-              'id, rating, comment, created_at, author_name, provider:provider_id(name, address_city)'
+              'id, rating, content, created_at, author_name, provider:provider_id(name, address_city)'
             )
             .eq('status', 'published')
             .in('provider_id', providerIds)
@@ -601,7 +601,7 @@ export async function getTopReviewsByDept(
             return {
               id: r.id,
               rating: r.rating,
-              comment: r.comment,
+              comment: r.content,
               created_at: r.created_at,
               author_name: r.author_name,
               provider_name: prov?.name ?? 'Artisan',
