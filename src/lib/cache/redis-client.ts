@@ -47,6 +47,12 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
   if (!isAvailable) return null
   if (IS_BUILD_PHASE) return null
   try {
+    // Pas de directive de cache. `cache: 'no-store'` ET `next: { revalidate: 0 }`
+    // sont équivalents et déclenchent "Dynamic server usage" sur les rendus
+    // ISR/SSG (459K pages), ce qui spamme les logs et fait crasher certaines
+    // pages en 500. Pour un POST, Next.js ne cache rien par défaut, donc rien
+    // à opter-out. Cf. src/lib/rate-limiter.ts qui suit le même pattern sans
+    // bug observé depuis l'incident Upstash 22/04.
     const res = await fetch(REST_URL as string, {
       method: 'POST',
       headers: {
@@ -54,7 +60,6 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(command),
-      cache: 'no-store',
       signal: AbortSignal.timeout(UPSTASH_FETCH_TIMEOUT_MS),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
