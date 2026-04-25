@@ -37,15 +37,18 @@ export const maxDuration = 300
 const DEFAULT_AUDIT_LOGS_RETENTION_DAYS = 365
 const DEFAULT_INACTIVE_USERS_RETENTION_DAYS = 1095
 
-// F-quater : Supabase AuthApiError expose `status` (number) et `code` (string).
-// On vérifie d'abord la forme typée du SDK, puis fallback regex pour les
-// wrappers/proxies qui aplatissent l'erreur en string. "no rows" retiré du
-// regex (trop permissif, peut matcher des erreurs PostgREST non-auth).
+// F-quater + G2-bis : Supabase AuthApiError expose `status` (number) et
+// `code` (string). On vérifie d'abord la forme typée du SDK, puis fallback
+// regex sur `message` (que err soit Error ou objet plain Supabase) avant de
+// finir sur String(err). "no rows" retiré du regex (trop permissif).
 function isUserNotFoundError(err: unknown): boolean {
   if (err && typeof err === 'object') {
-    const e = err as { status?: unknown; code?: unknown }
+    const e = err as { status?: unknown; code?: unknown; message?: unknown }
     if (e.status === 404) return true
     if (typeof e.code === 'string' && /user[_ ]?not[_ ]?found/i.test(e.code)) {
+      return true
+    }
+    if (typeof e.message === 'string' && /user[_ ]?not[_ ]?found/i.test(e.message)) {
       return true
     }
   }
