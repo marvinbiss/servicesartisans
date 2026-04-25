@@ -114,8 +114,32 @@ export async function POST(request: Request) {
     })
 
     if (profileError) {
-      logger.error('Profile error:', profileError)
-      // Don't fail completely - user is created, profile can be fixed
+      // Audit 2026-04-25 (agent #4 BLOCKER B1) : auparavant on swallowait
+      // l'erreur d'insertion du profil → user créé en auth.users sans row dans
+      // profiles → orphelin permanent (role='user', redirect mort). Entre
+      // 2026-02-11 et migration 474, la colonne `phone_e164` n'existait pas
+      // côté prod → 100% des signups laissaient un orphelin.
+      // Désormais : rollback du auth user + 500. L'utilisateur peut retenter,
+      // l'admin n'a plus à nettoyer manuellement.
+      logger.error('Profile insert failed — rolling back auth user', profileError)
+      captureError(profileError, {
+        tags: { route: 'api/auth/signup', step: 'profile_insert', critical: 'true' },
+      })
+      try {
+        await supabase.auth.admin.deleteUser(authData.user.id)
+      } catch (rollbackErr) {
+        logger.error('Auth user rollback failed', rollbackErr as Error)
+        captureError(rollbackErr, {
+          tags: { route: 'api/auth/signup', step: 'rollback_failed', critical: 'true' },
+        })
+      }
+      return NextResponse.json(
+        createErrorResponse(
+          ErrorCode.INTERNAL_ERROR,
+          'Erreur création profil. Veuillez réessayer.'
+        ),
+        { status: 500 }
+      )
     }
 
     // Note: Verification email is automatically sent by Supabase auth.admin.createUser

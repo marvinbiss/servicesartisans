@@ -9,6 +9,7 @@ import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
 import { consentPostSchema, updateConsent, getConsentHistory } from '@/lib/services/gdpr-service'
+import { captureError } from '@/lib/monitoring/sentry'
 
 // Lazy initialize to avoid build-time errors
 function getSupabaseAdmin() {
@@ -94,6 +95,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('GDPR consent error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/consent', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: "Erreur lors de l'enregistrement du consentement" } },
       { status: 500 }
@@ -145,6 +147,7 @@ export async function GET(_request: Request) {
     return NextResponse.json({ consents: result.data })
   } catch (error) {
     logger.error('GDPR consent fetch error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/consent', critical: 'true' } })
     return NextResponse.json(
       {
         success: false,

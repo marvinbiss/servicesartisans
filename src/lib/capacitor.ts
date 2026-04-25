@@ -4,6 +4,7 @@ import { Geolocation } from '@capacitor/geolocation'
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { StatusBar, Style } from '@capacitor/status-bar'
+import { logger } from '@/lib/logger'
 
 // Vérifier si on est sur une plateforme native
 export const isNative = () => Capacitor.isNativePlatform()
@@ -44,8 +45,11 @@ export const initPushNotifications = async () => {
 
     // Écouter l'enregistrement
     PushNotifications.addListener('registration', (token) => {
-      if (process.env.NODE_ENV === 'development')
-        console.log('Push registration success, token:', token.value)
+      if (process.env.NODE_ENV === 'development') {
+        // Ne JAMAIS log la valeur du token (APN/FCM ⇒ device pwn si fuite Vercel logs).
+        const masked = token.value ? `${token.value.slice(0, 6)}…${token.value.slice(-4)}` : ''
+        logger.info('Push registration success', { tokenMasked: masked })
+      }
       // Envoyer le token au backend pour l'associer à l'utilisateur
       return token.value
     })
@@ -57,14 +61,16 @@ export const initPushNotifications = async () => {
 
     // Notification reçue en foreground
     PushNotifications.addListener('pushNotificationReceived', (notification) => {
-      if (process.env.NODE_ENV === 'development')
-        console.log('Push notification received:', notification)
+      if (process.env.NODE_ENV === 'development') {
+        logger.info('Push notification received', { notification })
+      }
     })
 
     // Notification cliquée
     PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-      if (process.env.NODE_ENV === 'development')
-        console.log('Push notification action:', notification)
+      if (process.env.NODE_ENV === 'development') {
+        logger.info('Push notification action', { notification })
+      }
     })
   }
 

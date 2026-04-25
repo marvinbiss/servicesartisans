@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { exportPostSchema, requestExport, getExportStatus } from '@/lib/services/gdpr-service'
+import { captureError } from '@/lib/monitoring/sentry'
 
 // POST /api/gdpr/export - Request data export
 export const dynamic = 'force-dynamic'
@@ -64,6 +65,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('GDPR export error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/export', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: "Échec du traitement de la demande d'export" } },
       { status: 500 }
@@ -107,6 +109,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ requests: result.data })
   } catch (error) {
     logger.error('GDPR export status error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/export', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: "Échec de la récupération du statut d'export" } },
       { status: 500 }

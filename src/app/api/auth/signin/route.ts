@@ -11,6 +11,7 @@ import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/err
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { twoFactorAuth } from '@/lib/auth/two-factor'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
@@ -104,6 +105,42 @@ export async function POST(request: Request) {
       return NextResponse.json(
         createErrorResponse(ErrorCode.UNAUTHORIZED, "Échec de l'authentification"),
         { status: 401 }
+      )
+    }
+
+    // Audit 2026-04-25 (agent #4 BLOCKER H6) : avant ce check, signin posait
+    // immédiatement le cookie session après signInWithPassword, ignorant le
+    // flag two_factor_enabled. N'importe qui avec mot de passe entrait, 2FA
+    // désactivé de fait. Si l'utilisateur a 2FA activé, on déconnecte la
+    // session Supabase et on renvoie un signal `requires2FA` au client, qui
+    // doit faire un second round avec le code TOTP via /api/auth/2fa.
+    try {
+      const requiresTwoFactor = await twoFactorAuth.isEnabled(data.user.id)
+      if (requiresTwoFactor) {
+        // Annule la session que signInWithPassword vient d'établir.
+        await supabase.auth.signOut()
+        return NextResponse.json(
+          createSuccessResponse({
+            requires2FA: true,
+            userId: data.user.id,
+            // Pas de tokens. Le client doit appeler /api/auth/2fa/verify avec
+            // le code TOTP, qui re-créera une session si valide.
+          }),
+          { status: 200 }
+        )
+      }
+    } catch (twoFAError) {
+      // Fail-closed sur le check 2FA : un user qui a activé 2FA ne doit
+      // jamais passer si on ne peut pas le vérifier (faux positifs OK,
+      // faux négatifs interdits).
+      logger.error('2FA check failed during signin', twoFAError as Error)
+      captureError(twoFAError, {
+        tags: { route: 'api/auth/signin', step: '2fa_check', critical: 'true' },
+      })
+      await supabase.auth.signOut()
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Vérification 2FA indisponible. Réessayez.'),
+        { status: 503 }
       )
     }
 

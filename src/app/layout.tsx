@@ -226,13 +226,17 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
         />
 
         {/* Ahrefs Web Analytics — cookieless, no PII, no RGPD consent required. Must render in <head> (Ahrefs crawler verification requirement) */}
-        <link rel="preconnect" href="https://analytics.ahrefs.com" />
-        <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
-        <script
-          async
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key={process.env.NEXT_PUBLIC_AHREFS_KEY || '7v7CALgW88hGzteEMS+bAQ'}
-        />
+        {process.env.NEXT_PUBLIC_AHREFS_KEY ? (
+          <>
+            <link rel="preconnect" href="https://analytics.ahrefs.com" />
+            <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
+            <script
+              async
+              src="https://analytics.ahrefs.com/analytics.js"
+              data-key={process.env.NEXT_PUBLIC_AHREFS_KEY}
+            />
+          </>
+        ) : null}
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
         {/* Google Tag Manager — afterInteractive: loads after hydration, before idle (captures early interactions) */}

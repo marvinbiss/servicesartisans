@@ -14,6 +14,7 @@ import {
   cancelDeletion,
   getDeletionStatus,
 } from '@/lib/services/gdpr-service'
+import { captureError } from '@/lib/monitoring/sentry'
 
 // POST /api/gdpr/delete - Request account deletion
 export const dynamic = 'force-dynamic'
@@ -115,6 +116,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     logger.error('GDPR deletion error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/delete', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: 'Échec du traitement de la demande de suppression' } },
       { status: 500 }
@@ -154,6 +156,7 @@ export async function DELETE() {
     })
   } catch (error) {
     logger.error('GDPR cancel deletion error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/delete', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: "Échec de l'annulation de la demande de suppression" } },
       { status: 500 }
@@ -185,6 +188,7 @@ export async function GET() {
     })
   } catch (error) {
     logger.error('GDPR deletion status error:', error)
+    captureError(error, { tags: { route: 'api/gdpr/delete', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: 'Échec de la récupération du statut de suppression' } },
       { status: 500 }

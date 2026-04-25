@@ -8,6 +8,18 @@ import {
   getClientIp,
 } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
+
+// Edge runtime — `node:crypto` is not available. Implements constant-time
+// comparison manually so we don't leak timing info on CRON_SECRET (audit
+// 2026-04-25 agent #9 H1).
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let mismatch = 0
+  for (let i = 0; i < a.length; i++) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return mismatch === 0
+}
 import { isSafeRedirectPath } from '@/lib/safe-redirect'
 import { evaluateGonePath, goneResponseHeaders, GONE_RESPONSE_BODY } from '@/lib/seo/gone-paths'
 
@@ -304,8 +316,27 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         )
       }
     } catch (error) {
-      // Fail open: if rate limiter errors, allow the request through
+      // Audit 2026-04-25 (agent #8 BLOCKER) : auparavant le catch swallowait
+      // toute erreur Upstash et laissait passer la requête, ce qui rendait
+      // de fait fail-open les buckets `payment`, `gdpr`, `ai`, `verify`,
+      // `geocode` (déclarés sans `failOpen: true`). On respecte désormais le
+      // flag explicitement : si le bucket veut fail-close, retourner 503.
       logger.error('Rate limiter error:', error)
+      if (rateLimitConfig.failOpen !== true) {
+        return new NextResponse(
+          JSON.stringify({
+            error: 'Service temporairement indisponible',
+            code: 'RATE_LIMITER_DOWN',
+          }),
+          {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json',
+              'Retry-After': '30',
+            },
+          }
+        )
+      }
     }
   }
 
@@ -332,10 +363,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     const hasBearerToken = authHeader.startsWith('Bearer ')
     const cronSecret =
       request.headers.get('x-cron-secret') || request.nextUrl.searchParams.get('cron_secret')
+    const expectedCronSecret = process.env.CRON_SECRET
     const hasValidCronSecret = !!(
       cronSecret &&
-      process.env.CRON_SECRET &&
-      cronSecret === process.env.CRON_SECRET
+      expectedCronSecret &&
+      constantTimeEqual(cronSecret, expectedCronSecret)
     )
     const isExempted = hasBearerToken || hasValidCronSecret
 
