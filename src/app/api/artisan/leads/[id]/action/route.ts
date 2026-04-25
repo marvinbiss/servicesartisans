@@ -21,6 +21,7 @@ import {
   insertQuote,
   logLeadEvent,
 } from '@/lib/services/leads-service'
+import { dispatchLead } from '@/app/actions/dispatch'
 
 export const dynamic = 'force-dynamic'
 
@@ -171,6 +172,20 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         providerId: provider.id,
         actorId: user.id,
         metadata: { reason: reason || '' },
+      })
+
+      // Audit 2026-04-25 (agent #5 BLOCKER) : auparavant le decline laissait
+      // le lead orphelin — l'index UNIQUE le libérait, mais aucun cron ne
+      // ré-appelait `dispatch_lead`. Avec ~0 artisans qui acceptent
+      // aujourd'hui, chaque decline = lead mort. On déclenche un re-dispatch
+      // immédiat (fire-and-forget : on ne bloque pas la réponse user). Le
+      // cron `lead-reassign` est le filet pour les declines silencieusement
+      // ratés.
+      void dispatchLead(assignment.lead_id).catch((err) => {
+        logger.error('Re-dispatch on decline failed', err as Error, {
+          leadId: assignment.lead_id,
+          excludedProvider: provider.id,
+        })
       })
     }
 

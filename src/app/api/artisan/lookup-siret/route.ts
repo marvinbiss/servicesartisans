@@ -140,7 +140,7 @@ export async function GET(request: NextRequest) {
     const { data: provider, error: providerError } = await supabase
       .from('providers')
       .select(
-        'id, slug, name, siret, address_city, address_region, postal_code, address_street, is_active, claimed_at, rge_qualifications, rge_valid_until'
+        'id, slug, name, siret, address_city, address_region, address_postal_code, address_street, is_active, claimed_at, rge_qualifications, rge_valid_until'
       )
       .eq('siret', siret)
       .maybeSingle()
@@ -161,7 +161,11 @@ export async function GET(request: NextRequest) {
         return new Date(q.date_fin) >= new Date()
       })
 
-      const streetParts = [provider.address_street, provider.postal_code, provider.address_city]
+      const streetParts = [
+        provider.address_street,
+        provider.address_postal_code,
+        provider.address_city,
+      ]
         .filter(Boolean)
         .join(', ')
 
@@ -172,7 +176,7 @@ export async function GET(request: NextRequest) {
           source: 'providers',
           businessName: provider.name ?? null,
           address: streetParts || null,
-          postalCode: provider.postal_code ?? null,
+          postalCode: provider.address_postal_code ?? null,
           city: provider.address_city ?? null,
           isActive: provider.is_active !== false,
           rge: {

@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { z } from 'zod'
@@ -113,7 +114,17 @@ export async function POST(request: Request) {
         : {}),
     })
   } catch (error) {
+    // Audit 2026-04-25 (agent #7 BLOCKER) : /api/devis = canal de conversion #1.
+    // Toute 500 ici = lead perdu = revenue. Doit être visible en Sentry avec
+    // tag `business_impact:lead_loss` pour saved search.
     logger.error('Devis API error', error)
+    captureError(error, {
+      tags: {
+        route: 'api/devis',
+        critical: 'true',
+        business_impact: 'lead_loss',
+      },
+    })
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

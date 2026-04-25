@@ -90,10 +90,14 @@ export default async function ServiceQuartierPage({
     ARRONDISSEMENT_CITIES.includes(locationSlug) && quartierRealData?.codePostal
       ? quartierRealData.codePostal
       : undefined
-  // Throw on failure so ISR keeps stale cache (prevents "disappearing artisans" bug)
+  // Audit 2026-04-25 (agent #6 BLOCKER) : `throw on failure` ne profite plus
+  // de stale ISR (Vercel logs Sentry post-mortem) → 500 brut. Fallback to []
+  // pour laisser la page se rendre dégradée plutôt que 500.
   const providers = (await getProvidersByServiceAndLocation(serviceSlug, locationSlug, {
     postalCode: arrondissementPostalCode,
-  })) as unknown as Provider[]
+  }).catch(
+    () => [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+  )) as unknown as Provider[]
 
   // 4. Generate content
   const trade = getTradeContent(serviceSlug)

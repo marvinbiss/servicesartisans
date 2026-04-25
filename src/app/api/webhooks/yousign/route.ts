@@ -24,6 +24,7 @@ import { updateCeePartnerStatus } from '@/lib/cee/leads-service'
 import { requireEnvProd, serverErrorResponse } from '@/lib/cee/route-helpers'
 import { validateYousignFileUrl } from '@/lib/cee/url-validation'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
@@ -211,6 +212,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logger.error('yousign-webhook: processing failed', error, {
       action: 'yousign-webhook-catch',
+    })
+    captureError(error, {
+      tags: { route: 'api/webhooks/yousign', critical: 'true', integration: 'yousign' },
     })
     return serverErrorResponse('INTERNAL_ERROR', 'Erreur serveur')
   }

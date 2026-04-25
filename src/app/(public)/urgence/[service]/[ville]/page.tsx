@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   Phone,
   Clock,
@@ -837,7 +839,23 @@ export async function generateMetadata({
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function UrgenceServiceVillePage({
+// Top-level error boundary — Audit 2026-04-25 (agent #6 BLOCKER) : ce template
+// est consommé par ~106K pages indexées. Tout throw imprévu (Supabase timeout,
+// commune-data null, RLS hoquet) doit dégrader vers `notFound()` plutôt que
+// renvoyer un 500 brut à Googlebot. Pattern repris depuis services/[s]/[v]/page.tsx.
+export default async function UrgenceServiceVillePage(props: {
+  params: Promise<{ service: string; ville: string }>
+}) {
+  try {
+    return await renderUrgenceServiceVillePage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[UrgenceServiceVillePage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderUrgenceServiceVillePage({
   params,
 }: {
   params: Promise<{ service: string; ville: string }>
@@ -848,7 +866,7 @@ export default async function UrgenceServiceVillePage({
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
 
-  const commune = await getCommuneBySlug(villeSlug)
+  const commune = await getCommuneBySlug(villeSlug).catch(() => null)
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
   const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([

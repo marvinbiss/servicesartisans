@@ -84,7 +84,7 @@ export async function GET() {
       // All reviews for this provider (needed for distribution + avg)
       admin
         .from('reviews')
-        .select('rating, status, response, created_at')
+        .select('rating, status, reply, created_at')
         .eq('provider_id', providerId),
 
       // Latest published review timestamp (for "dernier avis" badge)
@@ -126,7 +126,9 @@ export async function GET() {
 
     const reviewRows = reviewsData.data ?? []
     const publishedRows = reviewRows.filter((r) => r.status === 'published')
-    const pendingResponseRows = publishedRows.filter((r) => !r.response || r.response.trim() === '')
+    const pendingResponseRows = publishedRows.filter(
+      (r) => !r.reply || (typeof r.reply === 'string' && r.reply.trim() === '')
+    )
 
     const distribution: RatingDistribution = { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 }
     for (const r of publishedRows) {

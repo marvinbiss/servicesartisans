@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   MapPin,
   Users,
@@ -142,7 +144,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function VillePage({ params }: PageProps) {
+// Top-level error boundary — Audit 2026-04-25 (agent #6 BLOCKER) : 2 267 pages
+// indexées. Tout throw imprévu doit dégrader vers `notFound()` plutôt que 500.
+export default async function VillePage(props: PageProps) {
+  try {
+    return await renderVillePage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[VillePage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderVillePage({ params }: PageProps) {
   const { ville: villeSlug } = await params
   const ville = getVilleBySlug(villeSlug)
   if (!ville) notFound()
@@ -154,7 +168,7 @@ export default async function VillePage({ params }: PageProps) {
   // Fetch commune enrichment data + comptage RGE local + providers ville
   // pour alimenter aggregateRating. Parallèle + fail-open.
   const [commune, rgeCount, villeProviders] = await Promise.all([
-    getCommuneBySlug(villeSlug),
+    getCommuneBySlug(villeSlug).catch(() => null),
     getRgeProviderCountByCity(villeSlug).catch(() => 0),
     getProvidersByLocation(villeSlug).catch(() => []),
   ])

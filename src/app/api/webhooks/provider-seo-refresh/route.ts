@@ -35,6 +35,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
 import { rateLimitDb } from '@/lib/rate-limit-db'
 import { requireEnvProd } from '@/lib/cee/route-helpers'
 import {
@@ -177,6 +178,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       action: 'provider-seo-refresh-crash',
       provider_id: parsed.provider_id,
       reason: parsed.reason,
+    })
+    captureError(err, {
+      tags: {
+        route: 'api/webhooks/provider-seo-refresh',
+        critical: 'true',
+        integration: 'indexnow',
+      },
     })
   })
 

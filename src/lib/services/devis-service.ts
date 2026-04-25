@@ -287,6 +287,17 @@ export async function processDevis(
 // ---------------------------------------------------------------------------
 
 async function syncWithPipedriveTimeout(leadId: string): Promise<void> {
+  // Audit 2026-04-25 (agent #5 BLOCKER) : auparavant, en cas de timeout 4s,
+  // le `syncDevisRequestToPipedrive` continuait en arrière-plan mais Vercel
+  // pouvait killer la lambda dès que la réponse user était envoyée. Résultat :
+  // le sync n'écrivait jamais `pipedrive_next_retry_at` et le retry cron
+  // (qui filtre `WHERE pipedrive_next_retry_at <= now()`) ne voyait jamais
+  // ces leads → perte silencieuse côté CRM.
+  //
+  // Nouveau comportement : si timeout, on marque immédiatement le lead comme
+  // "à retenter dans 5 min" pour que le retry cron le ramasse. Si le sync
+  // interne réussit derrière (rare mais possible si la lambda survit), il
+  // overwrite avec `pipedrive_synced_at` non-null + `pipedrive_next_retry_at = null`.
   let timeoutHandle: ReturnType<typeof setTimeout> | null = null
   try {
     await Promise.race([
@@ -296,7 +307,26 @@ async function syncWithPipedriveTimeout(leadId: string): Promise<void> {
       }),
     ])
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
     logger.error('Pipedrive sync error', err)
+
+    // Schedule un retry sous 5 min côté DB.
+    if (message.includes('timeout')) {
+      try {
+        const supabase = createAdminClient()
+        const nextRetryAt = new Date(Date.now() + 5 * 60 * 1000).toISOString()
+        await supabase
+          .from('devis_requests')
+          .update({
+            pipedrive_sync_error: message.slice(0, 500),
+            pipedrive_next_retry_at: nextRetryAt,
+          })
+          .eq('id', leadId)
+          .is('pipedrive_deal_id', null) // ne pas écraser si déjà sync
+      } catch (dbErr) {
+        logger.error('Pipedrive timeout DLQ enqueue failed', dbErr as Error, { leadId })
+      }
+    }
   } finally {
     if (timeoutHandle !== null) clearTimeout(timeoutHandle)
   }

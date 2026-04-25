@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   CheckCircle,
   Euro,
@@ -261,7 +263,22 @@ export async function generateMetadata({
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function TarifsServiceVillePage({
+// Top-level error boundary — Audit 2026-04-25 (agent #6 BLOCKER) : ce template
+// est consommé par ~106K pages indexées. Tout throw imprévu doit dégrader
+// vers `notFound()` plutôt que renvoyer un 500 brut à Googlebot.
+export default async function TarifsServiceVillePage(props: {
+  params: Promise<{ service: string; ville: string }>
+}) {
+  try {
+    return await renderTarifsServiceVillePage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[TarifsServiceVillePage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderTarifsServiceVillePage({
   params,
 }: {
   params: Promise<{ service: string; ville: string }>
@@ -276,7 +293,7 @@ export default async function TarifsServiceVillePage({
   // Le comptage RGE n'est fetché que pour les métiers éligibles (allowlist énergie/bâti).
   const rgeEligible = isRgeAllowedService(service)
   const [commune, directProviders, rgeCount] = await Promise.all([
-    getCommuneBySlug(villeSlug),
+    getCommuneBySlug(villeSlug).catch(() => null),
     getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(() => []),
     rgeEligible
       ? getRgeProviderCountByServiceAndLocation(service, villeSlug).catch(() => 0)

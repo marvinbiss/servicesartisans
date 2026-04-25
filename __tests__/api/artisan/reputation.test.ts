@@ -49,7 +49,8 @@ function buildClient(opts: { user?: { id: string } | null; providers?: { id: str
 type ReviewRow = {
   rating: number
   status: string
-  response: string | null
+  // Audit 2026-04-25 : la colonne s'appelle `reply` (pas `response`).
+  reply: string | null
   created_at: string
 }
 type InviteRow = {
@@ -160,11 +161,11 @@ describe('GET /api/artisan/reputation', () => {
 
   it('calcule distribution + avgRating (arrondi 1 décimale) + pendingResponse', async () => {
     const reviews: ReviewRow[] = [
-      { rating: 5, status: 'published', response: 'merci', created_at: '2026-04-01T00:00:00Z' },
-      { rating: 5, status: 'published', response: null, created_at: '2026-04-02T00:00:00Z' },
-      { rating: 4, status: 'published', response: '   ', created_at: '2026-04-03T00:00:00Z' },
-      { rating: 3, status: 'published', response: '', created_at: '2026-04-04T00:00:00Z' },
-      { rating: 2, status: 'pending', response: null, created_at: '2026-04-05T00:00:00Z' }, // non-published → exclus
+      { rating: 5, status: 'published', reply: 'merci', created_at: '2026-04-01T00:00:00Z' },
+      { rating: 5, status: 'published', reply: null, created_at: '2026-04-02T00:00:00Z' },
+      { rating: 4, status: 'published', reply: '   ', created_at: '2026-04-03T00:00:00Z' },
+      { rating: 3, status: 'published', reply: '', created_at: '2026-04-04T00:00:00Z' },
+      { rating: 2, status: 'pending', reply: null, created_at: '2026-04-05T00:00:00Z' }, // non-published → exclus
     ]
     vi.mocked(createClient).mockResolvedValue(buildClient({}) as never)
     vi.mocked(createAdminClient).mockReturnValue(buildAdmin({ reviews }) as never)

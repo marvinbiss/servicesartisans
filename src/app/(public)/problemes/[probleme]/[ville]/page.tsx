@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect'
+import { isNotFoundError } from 'next/dist/client/components/not-found'
 import {
   AlertTriangle,
   ArrowRight,
@@ -511,7 +513,22 @@ export async function generateMetadata({
 // Page component
 // ---------------------------------------------------------------------------
 
-export default async function ProblemeVillePage({
+// Top-level error boundary — Audit 2026-04-25 (agent #6 BLOCKER) : ce template
+// est consommé par ~30K pages indexées. Tout throw imprévu doit dégrader vers
+// `notFound()` plutôt que renvoyer un 500 brut à Googlebot.
+export default async function ProblemeVillePage(props: {
+  params: Promise<{ probleme: string; ville: string }>
+}) {
+  try {
+    return await renderProblemeVillePage(props)
+  } catch (err) {
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    console.error('[ProblemeVillePage] unhandled error on render', err)
+    notFound()
+  }
+}
+
+async function renderProblemeVillePage({
   params,
 }: {
   params: Promise<{ probleme: string; ville: string }>
@@ -526,7 +543,7 @@ export default async function ProblemeVillePage({
   const tradeName = trade?.name ?? problem.primaryService
   const gradient = urgencyGradients[problem.urgencyLevel]
 
-  const commune = await getCommuneBySlug(ville)
+  const commune = await getCommuneBySlug(ville).catch(() => null)
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
