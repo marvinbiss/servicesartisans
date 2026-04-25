@@ -159,10 +159,12 @@ export class UnifiedNotificationService {
   private supabase: ReturnType<typeof createClient>
 
   constructor() {
-    this.supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      throw new Error('Supabase env vars missing for UnifiedNotificationService')
+    }
+    this.supabase = createClient(url, key)
   }
 
   // Send notification with automatic channel selection and retry

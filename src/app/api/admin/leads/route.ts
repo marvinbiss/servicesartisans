@@ -23,8 +23,8 @@ export async function GET(request: Request) {
   try {
     // Verify admin with services:read permission
     const auth = await requirePermission('services', 'read')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (!auth.success || !auth.admin) return auth.error!
+
+    if (!auth.success || !auth.admin) return auth.error
 
     const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)

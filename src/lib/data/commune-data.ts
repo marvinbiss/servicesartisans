@@ -277,6 +277,7 @@ export async function getNearbyVilleSlugs(
   try {
     const origin = await getCommuneBySlug(originSlug)
     if (!origin?.latitude || !origin?.longitude) return null
+    const originWithCoords = origin as CommuneData & { latitude: number; longitude: number }
 
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -289,12 +290,19 @@ export async function getNearbyVilleSlugs(
     ]
 
     for (const { radiusKm, minPop } of tiers) {
-      const results = await queryNearby(supabase, origin, originSlug, radiusKm, minPop, limit)
+      const results = await queryNearby(
+        supabase,
+        originWithCoords,
+        originSlug,
+        radiusKm,
+        minPop,
+        limit
+      )
       if (results && results.length >= limit) return results
     }
 
     // Final fallback: no population filter, 80km
-    const lastTry = await queryNearby(supabase, origin, originSlug, 80, 0, limit)
+    const lastTry = await queryNearby(supabase, originWithCoords, originSlug, 80, 0, limit)
     if (lastTry && lastTry.length > 0) return lastTry
 
     return null
@@ -307,23 +315,23 @@ export async function getNearbyVilleSlugs(
 async function queryNearby(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: any,
-  origin: CommuneData,
+  origin: CommuneData & { latitude: number; longitude: number },
   originSlug: string,
   radiusKm: number,
   minPop: number,
   limit: number
 ): Promise<{ slug: string; distanceKm: number }[] | null> {
   const latDelta = radiusKm / 111
-  const lngDelta = radiusKm / (111 * Math.cos((origin.latitude! * Math.PI) / 180))
+  const lngDelta = radiusKm / (111 * Math.cos((origin.latitude * Math.PI) / 180))
 
   let query = supabase
     .from('communes')
     .select('slug,latitude,longitude,population')
     .eq('is_active', true)
-    .gte('latitude', origin.latitude! - latDelta)
-    .lte('latitude', origin.latitude! + latDelta)
-    .gte('longitude', origin.longitude! - lngDelta)
-    .lte('longitude', origin.longitude! + lngDelta)
+    .gte('latitude', origin.latitude - latDelta)
+    .lte('latitude', origin.latitude + latDelta)
+    .gte('longitude', origin.longitude - lngDelta)
+    .lte('longitude', origin.longitude + lngDelta)
     .neq('slug', originSlug)
     .not('latitude', 'is', null)
     .limit(300)
@@ -339,11 +347,11 @@ async function queryNearby(
   const R = 6371
   return (data as { slug: string; latitude: number; longitude: number; population: number }[])
     .map((c) => {
-      const dLat = ((c.latitude - origin.latitude!) * Math.PI) / 180
-      const dLng = ((c.longitude - origin.longitude!) * Math.PI) / 180
+      const dLat = ((c.latitude - origin.latitude) * Math.PI) / 180
+      const dLng = ((c.longitude - origin.longitude) * Math.PI) / 180
       const a =
         Math.sin(dLat / 2) ** 2 +
-        Math.cos((origin.latitude! * Math.PI) / 180) *
+        Math.cos((origin.latitude * Math.PI) / 180) *
           Math.cos((c.latitude * Math.PI) / 180) *
           Math.sin(dLng / 2) ** 2
       const distanceKm = R * 2 * Math.asin(Math.sqrt(a))

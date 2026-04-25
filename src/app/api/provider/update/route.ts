@@ -7,13 +7,14 @@ export const dynamic = 'force-dynamic'
 
 export const PATCH = createApiHandler(
   async ({ body, user }) => {
+    if (!user) throw new NotFoundError('Utilisateur')
     const supabase = await createClient()
 
     // Get provider for this user
     const { data: provider, error: fetchError } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user.id)
       .single()
 
     if (fetchError || !provider) {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Tests — POST /api/cee/dossiers/[id]/justificatifs
  *

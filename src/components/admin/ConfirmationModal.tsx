@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { X, AlertTriangle, CheckCircle, Info } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -61,6 +61,11 @@ export function ConfirmationModal({
   const [loading, setLoading] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
 
+  const handleClose = useCallback(() => {
+    setConfirmInput('')
+    onClose()
+  }, [onClose])
+
   // Lock body scroll when open
   useEffect(() => {
     if (!isOpen) return
@@ -108,7 +113,7 @@ export function ConfirmationModal({
 
     modal.addEventListener('keydown', handleKeyDown)
     return () => modal.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
+  }, [isOpen, handleClose])
 
   if (!isOpen) return null
 
@@ -128,11 +133,6 @@ export function ConfirmationModal({
       setLoading(false)
       setConfirmInput('')
     }
-  }
-
-  const handleClose = () => {
-    setConfirmInput('')
-    onClose()
   }
 
   return (

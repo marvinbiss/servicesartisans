@@ -884,7 +884,7 @@ describe('processDevis', () => {
     await processDevis(input, null)
 
     expect(insertedData).not.toBeNull()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     expect(insertedData!.service_name).toBe('Peintre en bâtiment')
   })
 

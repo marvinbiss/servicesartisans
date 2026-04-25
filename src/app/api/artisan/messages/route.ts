@@ -102,8 +102,7 @@ export async function GET(request: Request) {
       // Mark messages sent by client as read
       await markMessagesAsRead(supabase, conversationId, 'client')
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return NextResponse.json({ messages, currentUserId: user!.id })
+      return NextResponse.json({ messages, currentUserId: user.id })
     }
 
     // Bug fix: the Supabase JS client does not support .limit() on nested relation

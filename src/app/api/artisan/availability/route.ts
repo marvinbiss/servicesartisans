@@ -52,8 +52,7 @@ export async function GET() {
     const { error, user, supabase } = await requireArtisan()
     if (error) return error
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: slots, error: dbError } = await getAllSlotsForArtisan(supabase, user!.id)
+    const { data: slots, error: dbError } = await getAllSlotsForArtisan(supabase, user.id)
 
     if (dbError) {
       logger.error('Erreur DB GET availability_slots', dbError)
@@ -96,8 +95,8 @@ export async function POST(request: Request) {
     }
 
     const { date, start_time, end_time, is_available } = parsed.data
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const artisanId = user!.id
+
+    const artisanId = user.id
 
     // --- Verification anti-chevauchement ---
     const { data: existing, error: overlapErr } = await getSlotsForDateByArtisan(
@@ -185,8 +184,7 @@ export async function DELETE(request: Request) {
       )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (slot.artisan_id !== user!.id) {
+    if (slot.artisan_id !== user.id) {
       return NextResponse.json(
         { success: false, error: { message: 'Vous ne pouvez pas supprimer ce creneau' } },
         { status: 403 }

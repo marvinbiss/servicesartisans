@@ -31,8 +31,8 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   // Verify admin with services:read permission
   const auth = await requirePermission('services', 'read')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const supabase = createAdminClient()
@@ -65,8 +65,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   // Verify admin with services:write permission
   const auth = await requirePermission('services', 'write')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const body = await request.json()
@@ -156,8 +156,8 @@ export async function POST(request: NextRequest) {
 // DELETE - Supprimer une assignation
 export async function DELETE(request: NextRequest) {
   const auth = await requirePermission('services', 'delete')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const body = await request.json()

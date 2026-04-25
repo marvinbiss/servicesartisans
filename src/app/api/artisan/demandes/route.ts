@@ -40,8 +40,8 @@ export async function GET(request: Request) {
     const { status } = result.data
 
     // Resolve provider for this artisan
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdMaybeSingle(supabase, user!.id)
+
+    const { data: provider } = await getProviderIdMaybeSingle(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(

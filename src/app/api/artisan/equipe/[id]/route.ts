@@ -57,11 +57,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const { name, email, phone, role, color, is_active } = validation.data
 
     // Verify ownership before update
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const { data: existing, error: fetchError } = await getTeamMemberByIdForArtisan(
       supabase,
       params.id,
-      user!.id
+      user.id
     )
 
     if (fetchError || !existing) {
@@ -76,8 +76,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (color !== undefined) updatePayload.color = color
     if (is_active !== undefined) updatePayload.is_active = is_active
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data, error } = await updateTeamMember(supabase, params.id, user!.id, updatePayload)
+    const { data, error } = await updateTeamMember(supabase, params.id, user.id, updatePayload)
 
     if (error) {
       logger.error('Error updating team member:', error)
@@ -110,11 +109,11 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
     }
 
     // Verify ownership before delete
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const { data: existing, error: fetchError } = await getTeamMemberByIdForArtisan(
       supabase,
       params.id,
-      user!.id
+      user.id
     )
 
     if (fetchError || !existing) {
@@ -124,8 +123,7 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
       )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { error } = await deleteTeamMember(supabase, params.id, user!.id)
+    const { error } = await deleteTeamMember(supabase, params.id, user.id)
 
     if (error) {
       logger.error('Error deleting team member:', error)

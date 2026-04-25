@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { ArrowLeft, Mail, Phone, Calendar, Save, Trash2, User, Star, FileText } from 'lucide-react'
 import { UserStatusBadge } from '@/components/admin/StatusBadge'
@@ -33,11 +33,7 @@ export default function AdminUserDetailPage() {
   // Modal states
   const [deleteModal, setDeleteModal] = useState(false)
 
-  useEffect(() => {
-    fetchUser()
-  }, [userId])
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/users/${userId}`)
@@ -54,7 +50,11 @@ export default function AdminUserDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, router])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
   const handleSave = async () => {
     try {

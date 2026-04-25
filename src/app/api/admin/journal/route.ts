@@ -21,8 +21,8 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   // Verify admin with audit:read permission
   const auth = await requirePermission('audit', 'read')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const url = new URL(request.url)

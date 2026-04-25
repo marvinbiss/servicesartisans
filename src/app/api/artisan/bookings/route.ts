@@ -54,8 +54,8 @@ export async function GET(request: Request) {
     // Récupérer les bookings qui ont un slot dans ce mois
     const { data: bookings, error: dbError } = await getArtisanBookingsForMonth(
       supabase,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      user!.id,
+
+      user.id,
       startStr,
       endStr
     )
@@ -100,8 +100,8 @@ export async function GET(request: Request) {
     // ─── Récupérer les créneaux de disponibilité du mois ──────────────
     const { data: availabilitySlots, error: slotsError } = await getAvailableSlotsForArtisanMonth(
       supabase,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      user!.id,
+
+      user.id,
       startStr,
       endStr
     )

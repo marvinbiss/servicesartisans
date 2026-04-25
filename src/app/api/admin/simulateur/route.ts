@@ -28,7 +28,7 @@ const listQuerySchema = z.object({
 
 export async function GET(request: NextRequest) {
   const auth = await requirePermission('simulateur', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const { searchParams } = new URL(request.url)

@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'read')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {

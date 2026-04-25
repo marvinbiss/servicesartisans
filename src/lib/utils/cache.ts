@@ -128,9 +128,10 @@ export class MemoryCache<T = unknown> {
    * Clear all entries
    */
   clear(): void {
-    if (this.onEvict) {
+    const onEvict = this.onEvict
+    if (onEvict) {
       this.cache.forEach((entry, key) => {
-        this.onEvict!(key, entry.value)
+        onEvict(key, entry.value)
       })
     }
     this.cache.clear()

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Tests — Cron CEE dossier transitions (/api/cron/cee-dossier-transitions)
  *

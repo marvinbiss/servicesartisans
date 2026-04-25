@@ -47,30 +47,42 @@ const preferencesSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 function getSupabaseAdmin() {
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceKey) {
+    throw new Error('Supabase admin env vars missing')
+  }
+  return createClient(url, serviceKey)
+}
+
+function getSupabaseSsr(
+  cookieStore: Awaited<ReturnType<typeof cookies>>
+): ReturnType<typeof createServerClient> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !anonKey) {
+    throw new Error('Supabase env vars missing')
+  }
+  return createServerClient(url, anonKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll()
+      },
+      setAll(
+        cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>
+      ) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          cookieStore.set(name, value, options)
+        })
+      },
+    },
+  })
 }
 
 export async function GET() {
   try {
     const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(
-            cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>
-          ) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = getSupabaseSsr(cookieStore)
 
     const {
       data: { user },
@@ -108,24 +120,7 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(
-            cookiesToSet: Array<{ name: string; value: string; options?: Record<string, unknown> }>
-          ) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options)
-            })
-          },
-        },
-      }
-    )
+    const supabase = getSupabaseSsr(cookieStore)
 
     const {
       data: { user },

@@ -16,7 +16,7 @@ export async function GET(
   { params }: { params: Promise<{ publicId: string }> }
 ) {
   const auth = await requirePermission('simulateur', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error
 
   const { publicId } = await params
   if (!/^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/.test(publicId)) {
@@ -42,10 +42,7 @@ export async function GET(
       )
     }
     if (!data) {
-      return NextResponse.json(
-        { success: false, error: 'Estimation introuvable' },
-        { status: 404 }
-      )
+      return NextResponse.json({ success: false, error: 'Estimation introuvable' }, { status: 404 })
     }
 
     return NextResponse.json({ success: true, data })

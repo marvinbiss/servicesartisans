@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'publish')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -31,7 +31,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
       .update({
         status: 'published',
         published_at: new Date().toISOString(),
-        published_by: auth.admin!.id,
+        published_by: auth.admin.id,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -67,7 +67,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.publish', 'cms_page', id, { slug: page.slug })
+    await logAdminAction(auth.admin.id, 'cms_page.publish', 'cms_page', id, { slug: page.slug })
 
     // Revalidate cached paths + invalidate in-memory cache
     revalidatePagePaths(page)
@@ -88,7 +88,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'publish')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -127,7 +127,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.unpublish', 'cms_page', id, { slug: page.slug })
+    await logAdminAction(auth.admin.id, 'cms_page.unpublish', 'cms_page', id, { slug: page.slug })
 
     // Revalidate cached paths using data from before the update
     if (currentPage) {

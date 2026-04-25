@@ -117,10 +117,15 @@ async function getAccessToken(): Promise<string> {
   }
 
   const data = await response.json()
-  accessToken = data.access_token
+  if (!data.access_token) {
+    throw new APIError('INSEE', 'Token response missing access_token', {
+      code: ErrorCode.API_UNAUTHORIZED,
+    })
+  }
+  accessToken = data.access_token as string
   tokenExpiry = now + data.expires_in * 1000
 
-  return accessToken!
+  return accessToken
 }
 
 /**

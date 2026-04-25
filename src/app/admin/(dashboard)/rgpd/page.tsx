@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Lock,
   Download,
@@ -58,18 +58,7 @@ export default function AdminRgpdPage() {
   })
   const [exportingUser, setExportingUser] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchRequests()
-  }, [page, status])
-
-  useEffect(() => {
-    if (toast) {
-      const t = setTimeout(() => setToast(null), 4000)
-      return () => clearTimeout(t)
-    }
-  }, [toast])
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -89,7 +78,18 @@ export default function AdminRgpdPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, status])
+
+  useEffect(() => {
+    fetchRequests()
+  }, [fetchRequests])
+
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 4000)
+      return () => clearTimeout(t)
+    }
+  }, [toast])
 
   const searchUser = async () => {
     if (!searchEmail) return

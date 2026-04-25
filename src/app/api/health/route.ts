@@ -21,7 +21,10 @@ export async function GET() {
     env = (await import('@/lib/env')).env as unknown as Record<string, string | undefined>
     checks.environment = { status: 'healthy' }
   } catch (err) {
-    checks.environment = { status: 'unhealthy' }
+    checks.environment = {
+      status: 'unhealthy',
+      error: err instanceof Error ? err.message : String(err),
+    }
   }
 
   // Check Supabase
@@ -40,7 +43,10 @@ export async function GET() {
       checks.database = { status: 'healthy', latency: dbLatency }
     }
   } catch (err) {
-    checks.database = { status: 'unhealthy' }
+    checks.database = {
+      status: 'unhealthy',
+      error: err instanceof Error ? err.message : String(err),
+    }
   }
 
   // Check Stripe (config only)

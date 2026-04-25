@@ -28,8 +28,7 @@ export async function GET() {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data, error } = await getTeamMembers(supabase, user!.id)
+    const { data, error } = await getTeamMembers(supabase, user.id)
 
     if (error) {
       logger.error('Error fetching team members:', error)
@@ -70,8 +69,7 @@ export async function POST(request: Request) {
     const { name, email, phone, role, color } = validation.data
 
     const { data, error } = await insertTeamMember(supabase, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      artisan_id: user!.id,
+      artisan_id: user.id,
       name,
       email,
       phone: phone ?? null,

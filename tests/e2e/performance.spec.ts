@@ -57,7 +57,7 @@ test.describe('Performance', () => {
       return new Promise((resolve) => {
         const observer = new PerformanceObserver((list) => {
           const entries = list.getEntries()
-          const fcpEntry = entries.find(e => e.name === 'first-contentful-paint')
+          const fcpEntry = entries.find((e) => e.name === 'first-contentful-paint')
           if (fcpEntry) {
             resolve(fcpEntry.startTime)
           }
@@ -145,8 +145,12 @@ test.describe('Core Web Vitals', () => {
         let clsValue = 0
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            if (!(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value
+            const layoutShift = entry as PerformanceEntry & {
+              hadRecentInput?: boolean
+              value?: number
+            }
+            if (!layoutShift.hadRecentInput) {
+              clsValue += layoutShift.value ?? 0
             }
           }
         })

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Tests — src/lib/simulateur/callback-pipedrive.ts
  *

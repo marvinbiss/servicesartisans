@@ -112,7 +112,7 @@ export default function ContactDetailPage() {
     } catch {
       // Non-critical
     }
-  }, [])
+  }, [id])
 
   useEffect(() => {
     fetchContact()

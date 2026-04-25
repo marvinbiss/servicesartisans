@@ -262,9 +262,16 @@ export async function checkDuplicates(contacts: ProspectionContactInsert[]): Pro
 
   // Collect unique emails and phones from the import batch
   const allEmails = Array.from(
-    new Set(contacts.filter((c) => c.email).map((c) => c.email!.toLowerCase()))
+    new Set(
+      contacts
+        .map((c) => c.email)
+        .filter((e): e is string => !!e)
+        .map((e) => e.toLowerCase())
+    )
   )
-  const allPhones = Array.from(new Set(contacts.filter((c) => c.phone).map((c) => c.phone!)))
+  const allPhones = Array.from(
+    new Set(contacts.map((c) => c.phone).filter((p): p is string => !!p))
+  )
 
   const existingByEmail: Record<string, string> = {}
   const existingByPhone: Record<string, string> = {}
@@ -348,12 +355,12 @@ export async function checkDuplicates(contacts: ProspectionContactInsert[]): Pro
       isDuplicate = true
     }
 
-    if (!isDuplicate && phoneSuffix.length === 9 && existingByPhone[phoneSuffix]) {
+    if (!isDuplicate && phone && phoneSuffix.length === 9 && existingByPhone[phoneSuffix]) {
       duplicates.push({
         row: contact.source_row || 0,
         existing_id: existingByPhone[phoneSuffix],
         match_field: 'phone',
-        match_value: phone!,
+        match_value: phone,
       })
       isDuplicate = true
     }

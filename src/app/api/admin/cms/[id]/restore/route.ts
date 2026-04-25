@@ -21,7 +21,7 @@ const restoreSchema = z.object({
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'write')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -87,7 +87,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         title: version.title,
         meta_title: version.meta_title,
         meta_description: version.meta_description,
-        updated_by: auth.admin!.id,
+        updated_by: auth.admin.id,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -103,7 +103,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.restore', 'cms_page', id, {
+    await logAdminAction(auth.admin.id, 'cms_page.restore', 'cms_page', id, {
       version_id,
       title: version.title,
     })

@@ -23,7 +23,16 @@ export default tseslint.config(
     },
     rules: {
       // TypeScript
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
@@ -47,6 +56,15 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    // Test files : non-null assertions sont la norme après expect-not-null
+    // ou après setup de mocks contrôlés. Désactiver la règle dans le scope test
+    // pour ne pas pousser à des `as NonNullable<...>` ou `?? throw` artificiels.
+    files: ['**/__tests__/**', '**/tests/**', '**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
   {

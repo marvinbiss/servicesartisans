@@ -305,7 +305,7 @@ export default function UnclaimedQuoteWizard({
     } finally {
       setSubmitting(false)
     }
-  }, [formData, specialtySlug, citySlug])
+  }, [formData, specialtySlug, citySlug, city, submitting])
 
   // ---- Success state ----
 

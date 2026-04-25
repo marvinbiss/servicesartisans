@@ -152,7 +152,7 @@ export function SocialProofBanner({
 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [animated, stats, devisAnim.play, providerAnim.play])
+  }, [animated, stats, devisAnim, providerAnim])
 
   // Ne rien afficher tant que les données ne sont pas chargées
   if (!loaded) return null

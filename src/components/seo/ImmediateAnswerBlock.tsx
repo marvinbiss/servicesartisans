@@ -110,9 +110,9 @@ export default function ImmediateAnswerBlock({
     })
   }
 
-  if (hasResponseTime) {
+  if (hasResponseTime && trade?.averageResponseTime) {
     // Extract short delay from averageResponseTime (first part before semicolon)
-    const shortDelay = trade!.averageResponseTime.split(';')[0].trim()
+    const shortDelay = trade.averageResponseTime.split(';')[0].trim()
     stats.push({
       key: 'delay',
       icon: <Clock className="w-4 h-4 text-secondary-600" />,
@@ -131,12 +131,12 @@ export default function ImmediateAnswerBlock({
     })
   }
 
-  if (hasRating) {
+  if (hasRating && averageRating != null) {
     stats.push({
       key: 'rating',
       icon: <Star className="w-4 h-4 text-amber-500" />,
       label: 'Note moyenne',
-      value: `${averageRating!.toFixed(1)}/5`,
+      value: `${averageRating.toFixed(1)}/5`,
       sublabel: totalReviews ? `${totalReviews} avis` : undefined,
     })
   }

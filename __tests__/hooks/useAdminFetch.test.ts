@@ -25,7 +25,7 @@ vi.mock('swr', () => ({
 }))
 
 // Must import AFTER the mock is registered so the module executes with our mock
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+
 let adminMutate: typeof import('@/hooks/admin/useAdminFetch').adminMutate
 let useAdminFetch: typeof import('@/hooks/admin/useAdminFetch').useAdminFetch
 let adminFetcher: ((url: string) => Promise<unknown>) | undefined

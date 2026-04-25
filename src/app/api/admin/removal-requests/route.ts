@@ -128,13 +128,9 @@ export async function PATCH(request: NextRequest) {
         message: result.message,
       })
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const result = await rejectRemovalRequest(
-        supabase,
-        requestId,
-        authResult.admin.id,
-        adminNotes!
-      )
+      // action === 'reject' — adminNotes presence already validated above
+      const notes = adminNotes ?? ''
+      const result = await rejectRemovalRequest(supabase, requestId, authResult.admin.id, notes)
 
       if (!result.success) {
         return NextResponse.json(

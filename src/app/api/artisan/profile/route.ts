@@ -40,8 +40,8 @@ export async function GET() {
     if (guardError) return guardError
 
     // Fetch profile with explicit column list (profiles table)
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: profile, error: profileError } = await getProfileById(supabase, user!.id)
+
+    const { data: profile, error: profileError } = await getProfileById(supabase, user.id)
 
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
@@ -52,8 +52,8 @@ export async function GET() {
     }
 
     // Fetch associated provider data
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderForProfile(supabase, user!.id)
+
+    const { data: provider } = await getProviderForProfile(supabase, user.id)
 
     return NextResponse.json(
       { profile, provider },
@@ -98,12 +98,7 @@ export async function PUT(request: Request) {
 
     let profile = null
     if (Object.keys(profileUpdate).length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const { data, error: updateError } = await updateProfileById(
-        supabase,
-        user!.id,
-        profileUpdate
-      )
+      const { data, error: updateError } = await updateProfileById(supabase, user.id, profileUpdate)
 
       if (updateError) {
         logger.error('Error updating profile:', updateError)
@@ -127,10 +122,9 @@ export async function PUT(request: Request) {
 
     let provider = null
     if (Object.keys(providerUpdate).length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const { data, error: providerError } = await updateProviderByUserId(
         supabase,
-        user!.id,
+        user.id,
         providerUpdate
       )
 

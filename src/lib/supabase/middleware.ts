@@ -8,51 +8,55 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !anonKey) {
+    throw new Error(
+      'Supabase env vars missing: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
+    )
+  }
+
+  const supabase = createServerClient(url, anonKey, {
+    cookies: {
+      get(name: string) {
+        return request.cookies.get(name)?.value
       },
-    }
-  )
+      set(name: string, value: string, options: CookieOptions) {
+        request.cookies.set({
+          name,
+          value,
+          ...options,
+        })
+        response = NextResponse.next({
+          request: {
+            headers: request.headers,
+          },
+        })
+        response.cookies.set({
+          name,
+          value,
+          ...options,
+        })
+      },
+      remove(name: string, options: CookieOptions) {
+        request.cookies.set({
+          name,
+          value: '',
+          ...options,
+        })
+        response = NextResponse.next({
+          request: {
+            headers: request.headers,
+          },
+        })
+        response.cookies.set({
+          name,
+          value: '',
+          ...options,
+        })
+      },
+    },
+  })
 
   // Refresh session if expired
   await supabase.auth.getUser()

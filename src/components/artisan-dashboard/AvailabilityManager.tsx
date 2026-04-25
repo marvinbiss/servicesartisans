@@ -116,11 +116,12 @@ function AvailabilityManagerInner() {
     mutate,
   } = useSWR<SlotsResponse>('/api/artisan/availability', fetcher, { revalidateOnFocus: false })
 
-  const slots = data?.slots ?? []
-
   // Only keep future or today slots
   const today = todayISO()
-  const futureSlots = useMemo(() => slots.filter((s) => s.date >= today), [slots, today])
+  const futureSlots = useMemo(() => {
+    const slots = data?.slots ?? []
+    return slots.filter((s) => s.date >= today)
+  }, [data, today])
 
   const grouped = useMemo(() => groupByDate(futureSlots), [futureSlots])
   const sortedDates = useMemo(() => Array.from(grouped.keys()).sort(), [grouped])
@@ -357,7 +358,8 @@ function AvailabilityManagerInner() {
       )}
 
       {sortedDates.map((date) => {
-        const daySlots = grouped.get(date)!
+        const daySlots = grouped.get(date)
+        if (!daySlots) return null
         const d = new Date(date + 'T00:00:00')
         const dayOfWeek = d.getDay()
 

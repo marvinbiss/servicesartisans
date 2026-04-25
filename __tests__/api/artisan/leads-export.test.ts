@@ -64,9 +64,7 @@ function buildSupabaseMock(assignments: unknown[] = [], queryError: unknown = nu
   }
 
   // The chain is thenable — resolves with the query result
-  let callCount = 0
   chain.then = (resolve: (v: unknown) => void) => {
-    callCount++
     // First .from('providers') call -> single(), second .from('lead_assignments') -> data
     resolve({ data: assignments, error: queryError })
     return chain

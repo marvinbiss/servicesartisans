@@ -20,8 +20,7 @@ export async function GET() {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const provider = await getProviderForUser(supabase, user!.id)
+    const provider = await getProviderForUser(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import {
   ArrowLeft,
@@ -60,18 +60,7 @@ export default function AdminArtisanDetailPage() {
   const [suspendModal, setSuspendModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
 
-  useEffect(() => {
-    fetchArtisan()
-  }, [artisanId])
-
-  useEffect(() => {
-    if (toast) {
-      const t = setTimeout(() => setToast(null), 4000)
-      return () => clearTimeout(t)
-    }
-  }, [toast])
-
-  const fetchArtisan = async () => {
+  const fetchArtisan = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/providers/${artisanId}`, {
@@ -93,7 +82,18 @@ export default function AdminArtisanDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [artisanId, router])
+
+  useEffect(() => {
+    fetchArtisan()
+  }, [fetchArtisan])
+
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 4000)
+      return () => clearTimeout(t)
+    }
+  }, [toast])
 
   const handleVerify = async () => {
     try {

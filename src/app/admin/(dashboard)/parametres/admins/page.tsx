@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Shield, UserPlus, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
@@ -36,11 +36,7 @@ export default function AdminsManagementPage() {
   const [newAdmin, setNewAdmin] = useState({ email: '', role: 'admin' as AdminRole })
   const [adding, setAdding] = useState(false)
 
-  useEffect(() => {
-    fetchAdmins()
-  }, [page])
-
-  const fetchAdmins = async () => {
+  const fetchAdmins = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -55,7 +51,11 @@ export default function AdminsManagementPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page])
+
+  useEffect(() => {
+    fetchAdmins()
+  }, [fetchAdmins])
 
   const handleAddAdmin = async () => {
     try {

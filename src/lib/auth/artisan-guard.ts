@@ -1,7 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-export async function requireArtisan() {
+type Provider = { id: string }
+
+type ArtisanGuardResult =
+  | { error: NextResponse; user: null; provider: null; supabase: SupabaseClient }
+  | { error: null; user: User; provider: Provider; supabase: SupabaseClient }
+
+export async function requireArtisan(): Promise<ArtisanGuardResult> {
   const supabase = await createClient()
   const {
     data: { user },

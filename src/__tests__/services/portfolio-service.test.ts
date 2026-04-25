@@ -389,7 +389,7 @@ describe('createPortfolioItem', () => {
     await createPortfolioItem(supabase as never, ARTISAN_ID, makeCreateInput())
 
     expect(insertedData).not.toBeNull()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     expect(insertedData!.display_order).toBe(1)
   })
 })

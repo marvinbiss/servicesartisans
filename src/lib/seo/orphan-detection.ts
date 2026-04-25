@@ -397,8 +397,9 @@ export function getDepthFromHomepage(linkGraph: Map<string, Set<string>>): Map<s
   depthMap.set('/', 0)
 
   while (queue.length > 0) {
-    const current = queue.shift()!
-    const currentDepth = depthMap.get(current)!
+    const current = queue.shift()
+    if (!current) break
+    const currentDepth = depthMap.get(current) ?? 0
     const neighbors = linkGraph.get(current)
 
     if (!neighbors) continue

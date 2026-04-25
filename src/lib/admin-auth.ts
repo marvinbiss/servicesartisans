@@ -28,11 +28,9 @@ export interface AdminUser {
   permissions: AdminPermissions
 }
 
-export interface AdminAuthResult {
-  success: boolean
-  admin?: AdminUser
-  error?: NextResponse
-}
+export type AdminAuthResult =
+  | { success: true; admin: AdminUser; error?: never }
+  | { success: false; error: NextResponse; admin?: never }
 
 /**
  * Validate request origin for CSRF protection.

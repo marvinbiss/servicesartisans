@@ -21,8 +21,8 @@ const querySchema = paginationSchema.extend({
 
 export async function GET(request: NextRequest) {
   const auth = await requirePermission('audit', 'read')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const { searchParams } = new URL(request.url)
@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const auth = await requirePermission('audit', 'write')
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (!auth.success || !auth.admin) return auth.error!
+
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const { id } = await request.json()

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Search, Plus, Edit2, Trash2, Grid } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { StatusBadge } from '@/components/admin/StatusBadge'
@@ -40,11 +40,7 @@ export default function AdminServicesPage() {
   })
   const [formData, setFormData] = useState({ name: '', description: '', icon: '' })
 
-  useEffect(() => {
-    fetchServices()
-  }, [search, showInactive])
-
-  const fetchServices = async () => {
+  const fetchServices = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
@@ -65,7 +61,11 @@ export default function AdminServicesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [search, showInactive])
+
+  useEffect(() => {
+    fetchServices()
+  }, [fetchServices])
 
   const handleSave = async () => {
     try {

@@ -40,8 +40,8 @@ export async function GET() {
     if (guardError) return guardError
 
     // Get provider linked to this user
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
+
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -82,8 +82,8 @@ export async function POST(request: Request) {
     if (guardError) return guardError
 
     // Get provider linked to this user
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
+
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -208,8 +208,7 @@ export async function PUT(request: Request) {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(

@@ -78,8 +78,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (guardError) return guardError
 
   // Récupérer le provider lié à cet utilisateur
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user!.id)
+
+  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
 
   if (providerError || !provider) {
     return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
@@ -144,8 +144,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
   const ext = extensionFromMime(file.type)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const storagePath = `${user!.id}/avatar.${ext}`
+
+  const storagePath = `${user.id}/avatar.${ext}`
 
   const { error: uploadError } = await supabase.storage
     .from('avatars')
@@ -164,8 +164,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const publicUrl = publicUrlData.publicUrl
 
   // Mettre à jour la colonne avatar_url dans providers
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { error: updateError } = await updateProviderAvatarUrl(supabase, user!.id, publicUrl)
+
+  const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, publicUrl)
 
   if (updateError) {
     return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
@@ -184,8 +184,8 @@ export async function DELETE(): Promise<NextResponse> {
   if (guardError) return guardError
 
   // Récupérer le provider et son avatar_url actuel
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user!.id)
+
+  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
 
   if (providerError || !provider) {
     return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
@@ -219,8 +219,8 @@ export async function DELETE(): Promise<NextResponse> {
   }
 
   // Mettre avatar_url à NULL dans providers (uniquement après suppression réussie)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { error: updateError } = await updateProviderAvatarUrl(supabase, user!.id, null)
+
+  const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, null)
 
   if (updateError) {
     return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })

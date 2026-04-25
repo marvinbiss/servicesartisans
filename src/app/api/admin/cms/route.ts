@@ -28,8 +28,8 @@ const listQuerySchema = z.object({
 export async function GET(request: Request) {
   try {
     const auth = await requirePermission('content', 'read')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (!auth.success) return auth.error!
+
+    if (!auth.success) return auth.error
 
     const { searchParams } = new URL(request.url)
     const queryParams = {
@@ -135,8 +135,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const auth = await requirePermission('content', 'write')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (!auth.success) return auth.error!
+
+    if (!auth.success) return auth.error
 
     // Lazy imports — only needed for POST, avoids crashing GET if deps are missing
     const [{ default: DOMPurify }, { createPageSchema, sanitizeTextFields }] = await Promise.all([
@@ -201,8 +201,8 @@ export async function POST(request: Request) {
       .from('cms_pages')
       .insert({
         ...validated,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        created_by: auth.admin!.id,
+
+        created_by: auth.admin.id,
         status: 'draft',
       })
       .select()
@@ -226,8 +226,8 @@ export async function POST(request: Request) {
     }
 
     // Log d'audit
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await logAdminAction(auth.admin!.id, 'cms_page.create', 'cms_page', page.id, {
+
+    await logAdminAction(auth.admin.id, 'cms_page.create', 'cms_page', page.id, {
       slug: validated.slug,
       page_type: validated.page_type,
     })

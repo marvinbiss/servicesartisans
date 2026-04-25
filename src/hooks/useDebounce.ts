@@ -75,8 +75,9 @@ export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
 
         setTimeout(() => {
           inThrottleRef.current = false
-          if (lastArgsRef.current !== args) {
-            callback(...lastArgsRef.current!)
+          const lastArgs = lastArgsRef.current
+          if (lastArgs && lastArgs !== args) {
+            callback(...lastArgs)
           }
         }, limit)
       }

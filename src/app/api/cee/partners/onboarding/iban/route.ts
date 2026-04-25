@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
   try {
     const json = await request.json()
     body = BodySchema.parse(json)
-  } catch (error) {
+  } catch (_error) {
     return badRequestResponse(
       'INVALID_BODY',
       'Données invalides. Vérifiez IBAN, BIC et titulaire du compte.'

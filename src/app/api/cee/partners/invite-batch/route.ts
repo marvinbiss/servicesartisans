@@ -29,8 +29,8 @@ const BodySchema = z.object({
 
 export async function POST(request: NextRequest) {
   const authResult = await requirePermission('cee_partners', 'write')
-  if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+  if (!authResult.success) {
+    return authResult.error
   }
 
   let body: z.infer<typeof BodySchema>

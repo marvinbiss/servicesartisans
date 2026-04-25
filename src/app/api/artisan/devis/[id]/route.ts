@@ -41,8 +41,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
       )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(
@@ -104,8 +103,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { data: provider } = await getProviderIdByUserId(supabase, user!.id)
+    const { data: provider } = await getProviderIdByUserId(supabase, user.id)
 
     if (!provider) {
       return NextResponse.json(

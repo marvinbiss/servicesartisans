@@ -227,10 +227,13 @@ export default function ServiceLocationPageClient({
   let computedLat = location.latitude
   let computedLng = location.longitude
   if (!computedLat || !computedLng) {
-    const withCoords = allProviders.filter((p) => p.latitude && p.longitude)
+    const withCoords = allProviders.filter(
+      (p): p is typeof p & { latitude: number; longitude: number } =>
+        p.latitude != null && p.longitude != null
+    )
     if (withCoords.length > 0) {
-      computedLat = withCoords.reduce((sum, p) => sum + p.latitude!, 0) / withCoords.length
-      computedLng = withCoords.reduce((sum, p) => sum + p.longitude!, 0) / withCoords.length
+      computedLat = withCoords.reduce((sum, p) => sum + p.latitude, 0) / withCoords.length
+      computedLng = withCoords.reduce((sum, p) => sum + p.longitude, 0) / withCoords.length
     }
   }
   const mapCenter: [number, number] = [computedLat || 46.603354, computedLng || 1.888334]

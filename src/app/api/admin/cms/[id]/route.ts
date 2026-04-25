@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'read')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -55,7 +55,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'write')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -140,7 +140,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       .from('cms_pages')
       .update({
         ...validated,
-        updated_by: auth.admin!.id,
+        updated_by: auth.admin.id,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -156,7 +156,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.update', 'cms_page', id, {
+    await logAdminAction(auth.admin.id, 'cms_page.update', 'cms_page', id, {
       slug: page.slug,
       page_type: page.page_type,
     })
@@ -190,7 +190,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const auth = await requirePermission('content', 'delete')
-    if (!auth.success) return auth.error!
+    if (!auth.success) return auth.error
 
     const { id } = await params
     if (!UUID_RE.test(id)) {
@@ -206,7 +206,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
       .from('cms_pages')
       .update({
         is_active: false,
-        updated_by: auth.admin!.id,
+        updated_by: auth.admin.id,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -222,7 +222,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     }
 
     // Log d'audit
-    await logAdminAction(auth.admin!.id, 'cms_page.delete', 'cms_page', id, { slug: page.slug })
+    await logAdminAction(auth.admin.id, 'cms_page.delete', 'cms_page', id, { slug: page.slug })
 
     // Revalidate public paths so the page disappears from the site
     if (page.status === 'published') {

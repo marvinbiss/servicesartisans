@@ -14,8 +14,8 @@ export async function GET() {
   try {
     // Verify admin with settings:read permission (system KPIs)
     const auth = await requirePermission('settings', 'read')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (!auth.success || !auth.admin) return auth.error!
+
+    if (!auth.success || !auth.admin) return auth.error
 
     const result = await getKPIs()
 

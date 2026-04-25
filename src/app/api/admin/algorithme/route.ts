@@ -43,7 +43,7 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   // Verify admin with settings:read permission
   const auth = await requirePermission('settings', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const supabase = createAdminClient()
@@ -87,7 +87,7 @@ export async function GET() {
 export async function PATCH(request: NextRequest) {
   // Verify admin with settings:write permission
   const auth = await requirePermission('settings', 'write')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error
 
   try {
     const body = await request.json()
