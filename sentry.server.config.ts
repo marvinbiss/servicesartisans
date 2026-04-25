@@ -29,13 +29,17 @@ if (SENTRY_DSN) {
     // Only enable in production
     enabled: process.env.NODE_ENV === 'production',
 
-    // Server-specific integrations
-    integrations: [
-      Sentry.httpIntegration(),
-      Sentry.captureConsoleIntegration({ levels: ['error'] }),
-    ],
+    // Server-specific integrations.
+    // captureConsoleIntegration was REMOVED 2026-04-25 : it forwarded every
+    // `logger.error()` to Sentry and burned the entire 5K/mo Developer quota
+    // (98% drop rate in April 2026). Real errors must be reported via
+    // explicit `Sentry.captureException(err)` calls in the catch sites that
+    // matter (cron handlers, payment, auth). Console logs stay in Vercel.
+    integrations: [Sentry.httpIntegration()],
 
-    // Noise filter — expected errors that are not actionable
+    // Noise filter — expected errors that are not actionable.
+    // Postgres 42703 (column does not exist) is included until the schema
+    // drift hotfix migration 474 has been applied + redeployed everywhere.
     ignoreErrors: [
       'NotFoundError',
       'NEXT_NOT_FOUND',
@@ -45,12 +49,22 @@ if (SENTRY_DSN) {
       'ECONNRESET',
       'ETIMEDOUT',
       'fetch failed',
+      'Rate limit exceeded',
+      'PGRST',
     ],
 
     beforeSend(event) {
-      if (event.exception?.values?.[0]?.type === 'NotFoundError') {
-        return null
+      const exc = event.exception?.values?.[0]
+      if (exc?.type === 'NotFoundError') return null
+
+      const msg = exc?.value || event.message || ''
+
+      if (typeof msg === 'string') {
+        if (msg.includes('column ') && msg.includes(' does not exist')) return null
+        if (/\b42703\b/.test(msg)) return null
+        if (msg.startsWith('[Cron') && msg.includes('phone_e164')) return null
       }
+
       return event
     },
   })
