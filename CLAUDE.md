@@ -36,6 +36,20 @@ Avant chaque deploy: `npm run build` en local. Jamais de build cassé sur Vercel
 **Colonnes SUPPRIMEES de providers** — ne jamais référencer:
 `is_premium`, `trust_badge`, `trust_score`, `company_name`, `hourly_rate_min`, `hourly_rate_max`, `emergency_available`, `certifications`, `insurance`, `payment_methods`, `languages`, `avatar_url`
 
+### Migrations — règle search_path (CVE-2018-1058)
+
+Toute `CREATE [OR REPLACE] FUNCTION` dans `public` ou `app` DOIT pinner son `search_path` :
+
+```sql
+CREATE OR REPLACE FUNCTION public.ma_fonction(...)
+RETURNS ... AS $$
+  ...
+$$ LANGUAGE plpgsql
+SET search_path = public, pg_catalog;  -- OBLIGATOIRE
+```
+
+Hook pre-commit `scripts/audit-migration-search-path.mjs` rejette les migrations stagées qui violent la règle. Exception légitime (accès `extensions`/`vault`) : ajouter `-- pragma: allow-mutable-search-path` dans la définition.
+
 ## Conventions
 
 - Path alias: `@/*` → `./src/*`
