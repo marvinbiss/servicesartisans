@@ -115,9 +115,19 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   return null
 }
 
-// Googlebot detection — includes Googlebot, Googlebot-Mobile, Googlebot-Image, AdsBot-Google, etc.
-const GOOGLEBOT_RE =
-  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool/i
+// Bot detection — includes Googlebot, Googlebot-Mobile/Image, AdsBot-Google,
+// Google-InspectionTool (GSC URL inspection), GoogleOther (R&D), Google-CloudVertexBot,
+// Google-Extended (Gemini training), Applebot/Applebot-Extended, Bingbot/Bingbot-2.0,
+// DuckDuckBot, OAI-SearchBot, ChatGPT-User, PerplexityBot, ClaudeBot.
+//
+// Audit 2026-04-25 (agent #1 bis B3) : on n'exempte du rate-limit que les
+// requêtes GET/HEAD pour éviter qu'un attaquant spoof son UA en `Googlebot`
+// pour spammer /api/devis, /api/reviews, /api/simulateur/submit. Le DNS
+// reverse anti-spoofing officiel Google n'est pas possible dans Edge runtime
+// (pas d'accès `node:dns`) — il sera ajouté côté Node runtime sur les routes
+// sensibles si besoin (cf. Vague H).
+const CRAWLER_RE =
+  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|DuckDuckBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot/i
 
 /** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
 async function logGooglebotCrawl(url: string, userAgent: string) {
@@ -290,7 +300,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // quand Googlebot prend un 429 (incident 2026-04-22 Upstash fail-close, 62.1%
   // échec exploration). On isole les crawlers officiels du rate-limit user-facing.
   const uaForRateLimit = request.headers.get('user-agent') || ''
-  const isCrawlerExempt = GOOGLEBOT_RE.test(uaForRateLimit) || /bingbot/i.test(uaForRateLimit)
+  // Crawler exemption ne s'applique QUE sur GET/HEAD pour empêcher un attaquant
+  // de spoofer son UA en `Googlebot` afin de bypasser le rate-limit sur les
+  // mutations (POST /api/devis, /api/reviews, /api/simulateur/submit).
+  const isReadOnlyMethod = request.method === 'GET' || request.method === 'HEAD'
+  const isCrawlerExempt = isReadOnlyMethod && CRAWLER_RE.test(uaForRateLimit)
   if (pathname.startsWith('/api/') && pathname !== '/api/health' && !isCrawlerExempt) {
     const clientIp = getClientIp(request.headers)
     const rateLimitConfig = getRateLimitConfig(pathname)
@@ -524,9 +538,12 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     )
   }
 
-  // Googlebot crawl logging — non-blocking via waitUntil
+  // Googlebot crawl logging — non-blocking via waitUntil. Restreint à
+  // Googlebot stricto sensu (pas tous les crawlers) pour éviter de polluer
+  // googlebot_logs avec Bing/Apple/etc, et limité aux GET/HEAD pour éviter
+  // qu'un attaquant spoofant `Googlebot` flood la table via POST.
   const ua = request.headers.get('user-agent') || ''
-  if (GOOGLEBOT_RE.test(ua)) {
+  if ((request.method === 'GET' || request.method === 'HEAD') && /Googlebot/i.test(ua)) {
     event.waitUntil(logGooglebotCrawl(pathname, ua))
   }
 

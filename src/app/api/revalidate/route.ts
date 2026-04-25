@@ -2,6 +2,8 @@ import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
+import { timingSafeStringEqual } from '@/lib/auth/timing-safe-equal'
+import { readJsonBodyWithCap } from '@/lib/auth/read-body-with-cap'
 
 // Schema pour revalidation single path (rétrocompatible)
 const revalidateSingleSchema = z.object({
@@ -16,6 +18,14 @@ const revalidateBatchSchema = z.object({
 
 const MAX_BATCH_SIZE = 50
 
+// 64 KB = largement suffisant pour un batch de 50 paths × ~200 octets/path
+// (cap théorique ≈ 10 KB). On rejette tout body au-dessus AVANT de le parser
+// pour éviter qu'un attaquant non authentifié puisse DoS la lambda en
+// envoyant un payload massif (le secret n'est vérifié qu'après parse en
+// mode single, sinon Bearer header avant parse en mode batch — mais on doit
+// quand même parser pour discriminer). Defense in depth.
+const MAX_BODY_BYTES = 64 * 1024
+
 export async function POST(request: NextRequest) {
   try {
     if (!process.env.REVALIDATE_SECRET) {
@@ -29,21 +39,26 @@ export async function POST(request: NextRequest) {
     const authHeader = request.headers.get('authorization')
     const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
-    let body: unknown
-    try {
-      body = await request.json()
-    } catch {
-      return NextResponse.json(
-        { success: false, error: { message: 'Données invalides' } },
-        { status: 400 }
-      )
+    // Body cap stream-based : le check `Content-Length` du header est
+    // bypassable via Transfer-Encoding: chunked. On lit le stream octet
+    // par octet et on coupe au premier dépassement.
+    const bodyResult = await readJsonBodyWithCap(request, MAX_BODY_BYTES)
+    if (!bodyResult.ok) {
+      const { status, message } =
+        bodyResult.reason === 'too-large'
+          ? { status: 413, message: 'Body trop volumineux' }
+          : bodyResult.reason === 'timeout'
+            ? { status: 408, message: 'Timeout de lecture du body' }
+            : { status: 400, message: 'Données invalides' }
+      return NextResponse.json({ success: false, error: { message } }, { status })
     }
+    const body: unknown = bodyResult.data
 
     // Mode batch : { paths: [...] } avec Bearer auth
     const batchResult = revalidateBatchSchema.safeParse(body)
     if (batchResult.success) {
       // Auth via Bearer token obligatoire pour le batch
-      if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
+      if (!timingSafeStringEqual(bearerToken, process.env.REVALIDATE_SECRET)) {
         return NextResponse.json(
           { success: false, error: { message: 'Secret invalide' } },
           { status: 401 }
@@ -100,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     const { path, secret } = singleResult.data
 
-    if (secret !== process.env.REVALIDATE_SECRET) {
+    if (!timingSafeStringEqual(secret, process.env.REVALIDATE_SECRET)) {
       return NextResponse.json(
         { success: false, error: { message: 'Secret invalide' } },
         { status: 401 }
@@ -121,13 +136,11 @@ export async function POST(request: NextRequest) {
       now: Date.now(),
     })
   } catch (err) {
+    logger.error('[revalidate] handler error', { error: err })
     return NextResponse.json(
       {
         success: false,
-        error: {
-          message: 'Erreur lors de la revalidation',
-          details: err instanceof Error ? err.message : String(err),
-        },
+        error: { message: 'Erreur lors de la revalidation' },
       },
       { status: 500 }
     )
@@ -147,7 +160,7 @@ export async function GET(request: NextRequest) {
     const authHeader = request.headers.get('authorization')
     const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
 
-    if (!bearerToken || bearerToken !== process.env.REVALIDATE_SECRET) {
+    if (!timingSafeStringEqual(bearerToken, process.env.REVALIDATE_SECRET)) {
       return NextResponse.json(
         { success: false, error: { message: 'Secret invalide' } },
         { status: 401 }
@@ -167,13 +180,11 @@ export async function GET(request: NextRequest) {
       now: Date.now(),
     })
   } catch (err) {
+    logger.error('[revalidate] handler error', { error: err })
     return NextResponse.json(
       {
         success: false,
-        error: {
-          message: 'Erreur lors de la revalidation',
-          details: err instanceof Error ? err.message : String(err),
-        },
+        error: { message: 'Erreur lors de la revalidation' },
       },
       { status: 500 }
     )

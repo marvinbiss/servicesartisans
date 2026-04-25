@@ -5,7 +5,10 @@ import { tradeContent } from '@/lib/data/trade-content'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 import { PROVIDER_BATCH_SIZE } from '@/lib/seo/sitemap-config'
 
-export const maxDuration = 60
+// Audit 2026-04-25 (agent #3 SEO M2) : 60s = ras la limite Vercel free / Pro
+// quand DB lente (RPC peut atteindre 30-50s). On passe à 90s pour absorber le p99
+// sans 5xx → préserve le budget crawl Google sur les shards `/sitemap/providers-*`.
+export const maxDuration = 90
 
 /** Escape XML special characters in sitemap URLs to prevent invalid XML */
 function escapeXml(s: string): string {
@@ -280,7 +283,11 @@ export async function GET(request: NextRequest) {
     return new NextResponse(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        // stale-if-error : si la prochaine régen plante (DB blip), Vercel CDN
+        // continue à servir l'ancien shard pendant 24h au lieu de répondre 5xx
+        // à Googlebot → évite "Couldn't fetch sitemap" dans GSC > Sitemaps.
+        'Cache-Control':
+          'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400',
       },
     })
   } catch {

@@ -1,7 +1,16 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { readJsonBodyWithCap } from '@/lib/auth/read-body-with-cap'
+
+export const dynamic = 'force-dynamic'
 
 const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY
+
+// 10K URLs × ~200 octets ≈ 2 MB cap théorique. On accepte 4 MB pour avoir
+// du headroom. Le cap est imposé en stream-read pour résister à un
+// Transfer-Encoding: chunked sans Content-Length.
+const MAX_BODY_BYTES = 4 * 1024 * 1024
 
 /**
  * POST /api/indexnow — Submit URLs to IndexNow (Bing, Yandex, etc.)
@@ -12,14 +21,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Clé API IndexNow non configurée' }, { status: 500 })
   }
 
-  // Verify this is an internal call (simple auth check)
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!verifyCronSecret(request.headers.get('authorization'))) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
-  const body = await request.json().catch(() => null)
-  const urls: string[] = body?.urls || []
+  const bodyResult = await readJsonBodyWithCap<{ urls?: unknown }>(request, MAX_BODY_BYTES)
+  if (!bodyResult.ok) {
+    const { status, error } =
+      bodyResult.reason === 'too-large'
+        ? { status: 413, error: 'Body trop volumineux' }
+        : bodyResult.reason === 'timeout'
+          ? { status: 408, error: 'Timeout de lecture du body' }
+          : { status: 400, error: 'Données invalides' }
+    return NextResponse.json({ error }, { status })
+  }
+
+  const rawUrls = bodyResult.data?.urls
+  const urls: string[] = Array.isArray(rawUrls)
+    ? rawUrls.filter((u): u is string => typeof u === 'string')
+    : []
 
   if (urls.length === 0) {
     return NextResponse.json({ error: 'Aucune URL fournie' }, { status: 400 })
