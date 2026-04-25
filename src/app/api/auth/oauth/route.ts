@@ -48,8 +48,15 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
+      // G1-B1 : ne pas leak error.message Supabase (révèle "User not found",
+      // "Email rate limit exceeded", etc. → mapping de la surface auth).
+      // L'erreur reste tracée serveur côté logger + Sentry.
       logger.error('OAuth error', error)
-      return NextResponse.json({ error: error.message }, { status: 400 })
+      captureError(error, { tags: { route: 'api/auth/oauth', step: 'signin' } })
+      return NextResponse.json(
+        { error: 'Authentification impossible, vérifiez vos paramètres.' },
+        { status: 400 }
+      )
     }
 
     return NextResponse.json({ url: data.url })

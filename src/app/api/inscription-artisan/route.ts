@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -59,6 +60,25 @@ const artisanSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // G1-B2 : rate limit IP-based avant tout traitement (createAdminClient
+    // + 2 emails Resend = coût élevé, route abusable pour spam DB +
+    // saturation quotas Supabase Auth + flood email artisans@).
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`inscription-artisan:${ip}`, {
+      window: 600_000, // 10 min
+      max: 5,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de demandes, veuillez réessayer plus tard' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input
