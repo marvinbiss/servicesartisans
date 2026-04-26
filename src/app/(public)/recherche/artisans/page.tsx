@@ -33,11 +33,16 @@ export default async function ArtisanSearchPage({ searchParams }: SearchPageProp
   const page = Math.max(parseInt(params.page ?? '1', 10) || 1, 1)
   const offset = (page - 1) * PAGE_SIZE
 
-  const { results, truncatedQuery } = await searchProvidersByName({
+  // Trick limit + 1 pour calculer hasMore proprement sans re-query.
+  // Évite d'afficher "Page suivante" sur une page qui se trouve être pleine
+  // mais qui n'a pas de successeur (audit UI 2026-04-26).
+  const { results: resultsRaw, truncatedQuery } = await searchProvidersByName({
     query: rawQuery,
-    limit: PAGE_SIZE,
+    limit: PAGE_SIZE + 1,
     offset,
   })
+  const hasMore = resultsRaw.length > PAGE_SIZE
+  const results = resultsRaw.slice(0, PAGE_SIZE)
 
   return (
     <div className="min-h-screen bg-sand-50">
@@ -134,7 +139,7 @@ export default async function ArtisanSearchPage({ searchParams }: SearchPageProp
               })}
             </ul>
 
-            {results.length === PAGE_SIZE && (
+            {hasMore && (
               <div className="mt-8 flex justify-center">
                 <Link
                   href={`/recherche/artisans?q=${encodeURIComponent(truncatedQuery)}&page=${page + 1}`}

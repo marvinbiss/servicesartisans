@@ -254,10 +254,13 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
       else if (serviceSlug && !trimmedCity) {
         router.push(`/services/${serviceSlug}`)
       }
-      // Cas C — Service connu, ville inconnue : on tente une recherche par
-      //         nom d'entreprise utilisant la string ville (fallback sain).
+      // Cas C — Service connu, ville inconnue : on droppe la ville inconnue
+      //         et on tombe sur la page service sans ville. Aligné avec
+      //         HeroSearch (cas B). Avant : on perdait le service au profit
+      //         d'une recherche FTS sur la string ville (asymétrie + perte
+      //         d'info utilisateur — audit UI 2026-04-26).
       else if (serviceSlug && trimmedCity) {
-        router.push(`/recherche/artisans?q=${encodeURIComponent(trimmedCity)}`)
+        router.push(`/services/${serviceSlug}`)
       }
       // Cas D — Pas de service mais ville tapée : recherche par nom (l'user
       //         a peut-être tapé un nom d'artisan dans le champ ville).

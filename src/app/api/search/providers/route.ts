@@ -6,7 +6,9 @@
  *     chaîne libre qui ne matche pas un service whitelist.
  *   - Page /recherche/artisans : server-side render via le helper direct.
  *
- * Rate-limit : bucket `search` (100/min, fail-open) — cf. src/lib/rate-limiter.ts.
+ * Rate-limit : appliqué par le middleware Next.js (src/middleware.ts) qui
+ * route `/api/search/*` sur le bucket `search` (100/min, fail-open) —
+ * cf. src/lib/rate-limiter.ts:401-405. Pas d'appel explicite dans le handler.
  * Cache CDN court : 60s s-maxage + 300s SWR (queries répétées par autocomplete).
  */
 
