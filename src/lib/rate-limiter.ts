@@ -329,6 +329,12 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
  * e.g. /api/admin/prospection/ai must match before /api/admin
  */
 export function getRateLimitConfig(pathname: string): RateLimitConfig {
+  // Server Actions Next 14 — appel via POST sur l'URL de page avec header
+  // Next-Action. Pas de pathname /api/* donc on retombe ici via la détection
+  // header dans middleware. RATE_LIMITS.api couvre raisonnablement.
+  // (Gap CVE GHSA-h25m-26qc-wcjf, audit 2026-04-26.)
+  if (pathname.startsWith('/_next/server-action')) return RATE_LIMITS.api
+
   // Auth signin — plus permissif que le bucket "auth" générique (password
   // reset, 2FA, signup). Un admin qui se trompe de mot de passe 2-3 fois
   // + reload ne doit pas être bloqué 1 minute.

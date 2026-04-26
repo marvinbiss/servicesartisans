@@ -305,10 +305,24 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // mutations (POST /api/devis, /api/reviews, /api/simulateur/submit).
   const isReadOnlyMethod = request.method === 'GET' || request.method === 'HEAD'
   const isCrawlerExempt = isReadOnlyMethod && CRAWLER_RE.test(uaForRateLimit)
-  if (pathname.startsWith('/api/') && pathname !== '/api/health' && !isCrawlerExempt) {
+  // Server Actions transitent en POST sur l'URL de la page avec header
+  // `Next-Action: <hash>` (Next 14 App Router). Sans cette détection, elles
+  // échappaient au rate-limit (gap CVE GHSA-h25m-26qc-wcjf, audit 2026-04-26).
+  const isServerAction = request.method === 'POST' && request.headers.has('next-action')
+  if (
+    (pathname.startsWith('/api/') && pathname !== '/api/health' && !isCrawlerExempt) ||
+    isServerAction
+  ) {
     const clientIp = getClientIp(request.headers)
-    const rateLimitConfig = getRateLimitConfig(pathname)
-    const rateLimitKey = getRateLimitKey(clientIp, pathname)
+    // Pour Server Actions, le `pathname` est l'URL de la page (ex. `/devis`),
+    // pas `/api/*`. On force un bucket dédié pour ne pas tomber sur le bucket
+    // `default` (trop permissif) ou un bucket de page non pertinent.
+    const rateLimitConfig = isServerAction
+      ? getRateLimitConfig('/_next/server-action')
+      : getRateLimitConfig(pathname)
+    const rateLimitKey = isServerAction
+      ? getRateLimitKey(clientIp, '/_next/server-action')
+      : getRateLimitKey(clientIp, pathname)
 
     try {
       const result = await checkRateLimit(rateLimitKey, rateLimitConfig)

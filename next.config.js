@@ -658,25 +658,35 @@ const nextConfig = {
 // In dev without SENTRY_DSN the SDK init is no-op (see sentry.*.config.ts).
 const { withSentryConfig } = require('@sentry/nextjs')
 
-module.exports = withSentryConfig(nextConfig, {
-  // Org/project pulled from env so credentials stay out of the repo.
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
+// Skip Sentry webpack plugin entirely in LOCAL builds. Le plugin matérialise
+// les sourcemaps en mémoire pendant le build et contribue au pic OOM (~1.5 GB).
+// On garde le wrap sur Vercel/CI même sans SENTRY_AUTH_TOKEN pour préserver
+// `tunnelRoute: '/monitoring'` (Sentry events sinon ad-blockés en prod).
+// (audit 2026-04-26 — fix OOM build local sans régression prod.)
+const sentryEnabled =
+  process.env.VERCEL === '1' || process.env.CI === 'true'
 
-  // Upload source maps only in CI/Vercel to avoid slowing local builds.
-  silent: !process.env.CI,
+module.exports = sentryEnabled
+  ? withSentryConfig(nextConfig, {
+      // Org/project pulled from env so credentials stay out of the repo.
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
 
-  // Hide source maps from the public bundle (uploaded privately to Sentry).
-  hideSourceMaps: true,
+      // Upload source maps only in CI/Vercel to avoid slowing local builds.
+      silent: !process.env.CI,
 
-  // Tree-shake Sentry debug logger in prod (~30KB saved).
-  disableLogger: true,
+      // Hide source maps from the public bundle (uploaded privately to Sentry).
+      hideSourceMaps: true,
 
-  // Route Sentry traffic through our domain to bypass ad-blockers.
-  tunnelRoute: '/monitoring',
+      // Tree-shake Sentry debug logger in prod (~30KB saved).
+      disableLogger: true,
 
-  // Only enable upload/wrapping when an auth token is present.
-  // Without it the build still works, you just don't get source maps.
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-})
+      // Route Sentry traffic through our domain to bypass ad-blockers.
+      tunnelRoute: '/monitoring',
+
+      // Only enable upload/wrapping when an auth token is present.
+      // Without it the build still works, you just don't get source maps.
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    })
+  : nextConfig
 

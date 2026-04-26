@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "NEXT_BUILD_SKIP_DB=1 next build",
+    "build": "NEXT_BUILD_SKIP_DB=1 NODE_OPTIONS=--max-old-space-size=6144 next build",
+    "build:clean": "rm -f tsconfig.tsbuildinfo .next/cache/.tsbuildinfo && npm run build",
     "start": "next start",
     "lint": "next lint",
     "test": "playwright test",
