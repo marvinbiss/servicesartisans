@@ -19,7 +19,7 @@ export type ProviderSearchResult = {
   address_region: string | null
   is_verified: boolean
   claimed_at: string | null
-  rge_qualifications: string[] | null
+  rge_qualifications: unknown // jsonb array, parsed côté consumer via Array.isArray
   rating_average: number | null
   review_count: number | null
   rank: number

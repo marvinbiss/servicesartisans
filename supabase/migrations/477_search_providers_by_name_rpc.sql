@@ -33,7 +33,7 @@ RETURNS TABLE (
   address_region TEXT,
   is_verified BOOLEAN,
   claimed_at TIMESTAMPTZ,
-  rge_qualifications TEXT[],
+  rge_qualifications JSONB,
   rating_average DECIMAL,
   review_count INTEGER,
   rank REAL
@@ -80,7 +80,11 @@ BEGIN
   ORDER BY
     ts_rank(p.search_vector, _tsq) DESC,
     (p.claimed_at IS NOT NULL)::INT DESC,
-    (COALESCE(array_length(p.rge_qualifications, 1), 0) > 0)::INT DESC,
+    (CASE
+       WHEN p.rge_qualifications IS NOT NULL AND jsonb_typeof(p.rge_qualifications) = 'array'
+         THEN jsonb_array_length(p.rge_qualifications)
+       ELSE 0
+     END > 0)::INT DESC,
     p.rating_average DESC NULLS LAST,
     p.review_count DESC NULLS LAST
   LIMIT GREATEST(LEAST(p_limit, 50), 1)

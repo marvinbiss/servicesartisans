@@ -112,12 +112,13 @@ export default async function ArtisanSearchPage({ searchParams }: SearchPageProp
                                 Fiche revendiquée
                               </span>
                             )}
-                            {r.rge_qualifications && r.rge_qualifications.length > 0 && (
-                              <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-                                <Award className="w-3 h-3" />
-                                RGE
-                              </span>
-                            )}
+                            {Array.isArray(r.rge_qualifications) &&
+                              r.rge_qualifications.length > 0 && (
+                                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                                  <Award className="w-3 h-3" />
+                                  RGE
+                                </span>
+                              )}
                             {r.rating_average !== null && (r.review_count ?? 0) > 0 && (
                               <span className="inline-flex items-center gap-1 text-xs font-medium text-charcoal-700 bg-sand-100 px-2 py-0.5 rounded-full">
                                 <Star className="w-3 h-3 text-amber-500 fill-amber-500" />

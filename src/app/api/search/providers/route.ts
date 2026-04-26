@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
         region: r.address_region,
         isVerified: r.is_verified,
         isClaimed: r.claimed_at !== null,
-        rgeCount: r.rge_qualifications?.length ?? 0,
+        rgeCount: Array.isArray(r.rge_qualifications) ? r.rge_qualifications.length : 0,
         rating: r.rating_average,
         reviewCount: r.review_count ?? 0,
       })),

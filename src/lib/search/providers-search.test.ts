@@ -70,7 +70,7 @@ describe('searchProvidersByName', () => {
           address_region: 'Île-de-France',
           is_verified: true,
           claimed_at: '2026-04-01',
-          rge_qualifications: ['Qualibat 5912'],
+          rge_qualifications: [{ code: 'Qualibat 5912' }],
           rating_average: 4.5,
           review_count: 12,
           rank: 0.81,
