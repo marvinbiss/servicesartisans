@@ -233,17 +233,38 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
     setHighlightedCityIndex(-1)
   }, [])
 
+  // Anti-404 (incident GSC 2026-04-26) : on ne push vers /services/[s]/[v]
+  // que si la ville matche réellement une entrée connue. Sinon on tombe sur
+  // /recherche/artisans?q=... (recherche FTS sur les noms d'entreprises).
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {
       e?.preventDefault()
-      if (!serviceSlug || !cityQuery.trim()) return
+      const trimmedCity = cityQuery.trim()
+      if (!serviceSlug && !trimmedCity) return
 
       const cityMatch = (_allVilles || villesLight).find(
-        (v: Ville) => normalizeText(v.name) === normalizeText(cityQuery.trim())
+        (v: Ville) => normalizeText(v.name) === normalizeText(trimmedCity)
       )
-      const citySlugValue = cityMatch ? cityMatch.slug : cityQuery.trim().toLowerCase()
 
-      router.push(`/services/${serviceSlug}/${citySlugValue}`)
+      // Cas A — Service connu (depuis dropdown whitelist) + ville connue
+      if (serviceSlug && cityMatch) {
+        router.push(`/services/${serviceSlug}/${cityMatch.slug}`)
+      }
+      // Cas B — Service connu, pas de ville
+      else if (serviceSlug && !trimmedCity) {
+        router.push(`/services/${serviceSlug}`)
+      }
+      // Cas C — Service connu, ville inconnue : on tente une recherche par
+      //         nom d'entreprise utilisant la string ville (fallback sain).
+      else if (serviceSlug && trimmedCity) {
+        router.push(`/recherche/artisans?q=${encodeURIComponent(trimmedCity)}`)
+      }
+      // Cas D — Pas de service mais ville tapée : recherche par nom (l'user
+      //         a peut-être tapé un nom d'artisan dans le champ ville).
+      else if (trimmedCity.length >= 2) {
+        router.push(`/recherche/artisans?q=${encodeURIComponent(trimmedCity)}`)
+      }
+
       setShowServiceDropdown(false)
       setShowCityDropdown(false)
       setServiceFilter('')

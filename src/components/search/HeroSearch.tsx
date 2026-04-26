@@ -22,7 +22,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { slugify } from '@/lib/utils'
-import { villesLight, type Ville } from '@/lib/data/france-light'
+import { villesLight, services as allServices, type Ville } from '@/lib/data/france-light'
 
 // Full villes loaded on demand (lazy — only when user types)
 let _allVilles: Ville[] | null = null
@@ -394,31 +394,55 @@ export function HeroSearch() {
   }, [])
 
   // ── Submit ─────────────────────────────────────────────────────────
+  // Anti-404 (incident GSC 2026-04-26) : on ne push vers /services/[s]/[v]
+  // QUE si le service ET la ville matchent une entrée connue. Sinon, fallback
+  // vers /recherche/artisans?q=... qui fait une vraie recherche FTS sur les
+  // noms d'entreprises (RPC search_providers_by_name, migration 477).
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {
       e?.preventDefault()
-      const serviceSlug =
-        services.find((s) => normalizeText(s.name) === normalizeText(query))?.slug || slugify(query)
-      const cityMatch = (_allVilles || villesLight).find(
-        (v) => normalizeText(v.name) === normalizeText(location)
-      )
-      const citySlug = cityMatch?.slug || slugify(location)
 
-      // Save to recent searches
-      if (location.trim()) {
-        addRecentSearch(location.trim())
+      const trimmedQuery = query.trim()
+      const trimmedLocation = location.trim()
+
+      // 1. Validation service contre les 46 services autoritatifs (pas la
+      //    whitelist locale de 10 services populaires affichée dans le dropdown).
+      const matchedService = allServices.find(
+        (s) => normalizeText(s.name) === normalizeText(trimmedQuery)
+      )
+
+      // 2. Validation ville contre le dataset complet (chargé async) ou light.
+      const matchedCity = (_allVilles || villesLight).find(
+        (v) => normalizeText(v.name) === normalizeText(trimmedLocation)
+      )
+
+      // Save to recent searches (toujours, même en fallback)
+      if (trimmedLocation) {
+        addRecentSearch(trimmedLocation)
         setRecentSearches(getRecentSearches())
       }
 
-      if (query && location) {
-        router.push(`/services/${serviceSlug}/${citySlug}`)
-      } else if (query) {
-        router.push(`/services/${serviceSlug}`)
-      } else {
-        router.push(
-          `/recherche?q=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}`
-        )
+      // Cas A — Service connu + ville connue : page service x ville classique
+      if (matchedService && matchedCity) {
+        router.push(`/services/${matchedService.slug}/${matchedCity.slug}`)
+        return
       }
+
+      // Cas B — Service connu, pas de ville (ou ville inconnue) : page service
+      if (matchedService) {
+        router.push(`/services/${matchedService.slug}`)
+        return
+      }
+
+      // Cas C — Pas de service connu mais query texte (probable nom d'entreprise)
+      //         → recherche FTS par nom d'artisan
+      if (trimmedQuery.length >= 2) {
+        router.push(`/recherche/artisans?q=${encodeURIComponent(trimmedQuery)}`)
+        return
+      }
+
+      // Cas D — Que la ville (sans service) : retour vers /recherche neutre
+      router.push(`/recherche?location=${encodeURIComponent(trimmedLocation)}`)
     },
     [query, location, router]
   )
