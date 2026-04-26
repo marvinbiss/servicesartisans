@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   CheckCircle,
   Euro,
@@ -272,7 +273,7 @@ export default async function TarifsServiceVillePage(props: {
   try {
     return await renderTarifsServiceVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
     console.error('[TarifsServiceVillePage] unhandled error on render', err)
     notFound()
   }

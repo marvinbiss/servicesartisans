@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   Phone,
   Clock,
@@ -849,7 +850,7 @@ export default async function UrgenceServiceVillePage(props: {
   try {
     return await renderUrgenceServiceVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
     console.error('[UrgenceServiceVillePage] unhandled error on render', err)
     notFound()
   }

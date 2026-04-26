@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import Link from 'next/link'
 import {
   getProviderByStableId,
@@ -738,8 +739,8 @@ export default async function ProviderPage(props: PageProps) {
   try {
     return await renderProviderPage(props)
   } catch (err) {
-    // Re-throw Next.js control-flow signals (redirect / notFound).
-    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    // Re-throw Next.js control-flow signals (redirect / notFound / dynamic-render bailout).
+    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
     // Any other unhandled throw on cold ISR render → surface 404 instead
     // of 500. Next.js retries ISR on subsequent hits; the user's manual
     // reload ("ça marche au 2e essai") works without seeing a Vercel 500.

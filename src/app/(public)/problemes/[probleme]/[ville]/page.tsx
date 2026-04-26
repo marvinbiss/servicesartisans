@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   AlertTriangle,
   ArrowRight,
@@ -522,7 +523,7 @@ export default async function ProblemeVillePage(props: {
   try {
     return await renderProblemeVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
     console.error('[ProblemeVillePage] unhandled error on render', err)
     notFound()
   }

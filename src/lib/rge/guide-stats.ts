@@ -20,6 +20,24 @@ import { isRgeAllowedService, type RgeAllowedService } from '@/lib/rge/service-c
 
 const CACHE_TTL_6H = 6 * 60 * 60 // 6 hours
 
+// Supabase erreurs PostgREST = `{message, code, details, hint}`. Sans cette
+// sérialisation, `err instanceof Error` est faux et le logger affiche
+// `{message: ""}` (champ existant mais vide), inutile pour debug.
+function serializeSupabaseError(err: unknown): string {
+  if (err instanceof Error) return err.message
+  if (err && typeof err === 'object') {
+    const e = err as { message?: string; code?: string; details?: string; hint?: string }
+    const parts = [e.message, e.code, e.details, e.hint].filter(Boolean)
+    if (parts.length > 0) return parts.join(' | ')
+    try {
+      return JSON.stringify(err)
+    } catch {
+      return '[unserializable error]'
+    }
+  }
+  return String(err)
+}
+
 export interface RgeTopCity {
   slug: string
   name: string
@@ -79,7 +97,7 @@ export async function getRgeNationalStats(): Promise<RgeNationalStats> {
         }
       } catch (err) {
         logger.error('[getRgeNationalStats] FAILED', {
-          error: err instanceof Error ? err.message : err,
+          message: serializeSupabaseError(err),
         })
         return { totalActive: 0, topCities: [] }
       }
@@ -194,7 +212,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
         return { total: count ?? 0, topCities }
       } catch (err) {
         logger.error(`[getRgeServiceStats] FAILED for ${serviceSlug}`, {
-          error: err instanceof Error ? err.message : err,
+          message: serializeSupabaseError(err),
         })
         return { total: 0, topCities: [] }
       }
