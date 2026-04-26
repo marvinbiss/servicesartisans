@@ -15,21 +15,26 @@
  */
 
 /**
- * Audit 2026-04-25 (agent #10 conformité — BLOCKER LCEN art.6, 75 000€ + 1 an).
+ * Audit 2026-04-26 (incident GSC "server connectivity" — root cause).
  *
- * Si `COMPANY_STATUS=launched` (déploiement public B2C), les 4 champs
- * obligatoires LCEN doivent être renseignés (SIRET + legalName + address +
- * directeurPublication) ET valides (SIRET = 14 chiffres, autres > 5 chars).
- * Sinon throw au boot pour empêcher un deploy live avec des mentions
- * légales nulles ou malformées.
+ * Historique :
+ *   - F (2026-04-25) : ajoute throw runtime si COMPANY_STATUS=launched et vars
+ *     légales manquantes. Intent fail-closed LCEN, mais default `'launched'`
+ *     fait throw 500 sur 64% des pages publiques en prod sans vars set →
+ *     incident Google Search Console (5xx storm).
+ *   - G (2026-04-26) : refactor → fail-closed au BUILD-time uniquement,
+ *     fail-OPEN au runtime (log seulement). La conformité LCEN reste assurée
+ *     côté composants : mentions-legales/page.tsx affiche conditionnellement
+ *     ({companyIdentity.legalName && ...}) et seo/jsonld.ts gate le JSON-LD
+ *     via isCompanyRegistered(). Default inversé sur 'pre-launch' (sécurité UX).
  *
- * Pendant la phase pre-launch (SAS pas encore immatriculée) : laisser
- * `COMPANY_STATUS=pre-launch` pour skip ce check.
- *
- * Audit F-bis : le check ne run QU'EN runtime production (lambda live).
- * Pendant `npm run build` (NEXT_PHASE=phase-production-build) ou en dev/test,
- * skip — sinon CI/local crashent quand les vars légales ne sont pas
- * renseignées (cas normal en environnement non-prod).
+ * Comportement final :
+ *   - BUILD prod (NEXT_PHASE=phase-production-build) avec COMPANY_STATUS=launched
+ *     et vars manquantes → throw, deploy bloqué avant la prod.
+ *   - RUNTIME prod avec drift (COMPANY_STATUS changé via dashboard sans rebuild)
+ *     → console.error, on continue. Les pages légales affichent les champs
+ *     présents (le composant skip ce qui est null).
+ *   - DEV / TEST / CI → skip total.
  */
 type LegalCheck = { var: string; validate: (v: string) => boolean; hint: string }
 
@@ -59,26 +64,24 @@ const REQUIRED_LEGAL_VARS: readonly LegalCheck[] = [
   },
 ] as const
 
-// F-quinquies : whitelist explicite plutôt qu'un cast unsafe. Un typo
-// (`COMPANY_STATUS=lauched` sans 'n') tombait silencieusement à `launched`
-// runtime mais le check `=== 'launched'` était false → throw LCEN skipped
-// sans warning → deploy live sans SIRET. On warn et on défaut à `launched`
-// pour fail-closed (mieux throw LCEN qu'un deploy non-conforme).
+// G : default inversé sur 'pre-launch'. La SAS n'est pas immatriculée tant que
+// les 4 vars légales ne sont pas posées en env, donc ce default reflète l'état
+// réel du projet. Pour publier en mode "launched", il faut explicitement set
+// COMPANY_STATUS=launched ET les 4 vars (sinon le build échoue, cf. infra).
 const _statusRaw = process.env.COMPANY_STATUS
-const _status: 'pre-launch' | 'launched' =
-  _statusRaw === 'pre-launch' || _statusRaw === 'launched' ? _statusRaw : 'launched'
+const _status: 'pre-launch' | 'launched' = _statusRaw === 'launched' ? 'launched' : 'pre-launch'
 
 if (_statusRaw && _statusRaw !== 'pre-launch' && _statusRaw !== 'launched') {
   console.warn(
     `[company-identity] COMPANY_STATUS="${_statusRaw}" invalide ` +
-      `(attendu: 'pre-launch' | 'launched'). Fallback sur 'launched' (fail-closed LCEN).`
+      `(attendu: 'pre-launch' | 'launched'). Fallback sur 'pre-launch'.`
   )
 }
 
-const _isRuntimeProd =
-  process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build'
+const _isBuildTime = process.env.NEXT_PHASE === 'phase-production-build'
+const _isRuntimeProd = process.env.NODE_ENV === 'production' && !_isBuildTime
 
-if (_status === 'launched' && _isRuntimeProd) {
+if (_status === 'launched' && (_isBuildTime || _isRuntimeProd)) {
   const issues = REQUIRED_LEGAL_VARS.flatMap(({ var: name, validate, hint }) => {
     const value = process.env[name]
     if (!value) return [`${name} manquant (${hint})`]
@@ -86,11 +89,21 @@ if (_status === 'launched' && _isRuntimeProd) {
     return []
   })
   if (issues.length > 0) {
-    throw new Error(
+    const message =
       `[company-identity] LCEN art.6 violation :\n  - ${issues.join('\n  - ')}\n` +
-        `Soit corriger ces vars en prod, soit passer COMPANY_STATUS=pre-launch ` +
-        `pendant la phase d'immatriculation. Sanction LCEN art.6 : 75 000€ + 1 an.`
-    )
+      `Soit corriger ces vars en prod, soit passer COMPANY_STATUS=pre-launch ` +
+      `pendant la phase d'immatriculation. Sanction LCEN art.6 : 75 000€ + 1 an.`
+
+    if (_isBuildTime) {
+      // Bloque le build prod → impossible de déployer 'launched' sans vars.
+      throw new Error(message)
+    }
+    // Drift runtime (env modifiée via dashboard sans rebuild) : on logue
+    // l'erreur pour Sentry mais on ne crash pas les pages publiques.
+    // La conformité LCEN reste garantie par les composants (mentions-legales
+    // affiche conditionnellement les champs présents, JSON-LD gated par
+    // isCompanyRegistered).
+    console.error(message)
   }
 }
 
