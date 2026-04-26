@@ -38,13 +38,10 @@ if (SENTRY_DSN) {
 
     enabled: SENTRY_ENABLED,
 
-    ignoreErrors: [
-      'NotFoundError',
-      'NEXT_NOT_FOUND',
-      'NEXT_REDIRECT',
-      'AbortError',
-      'fetch failed',
-    ],
+    // Audit 2026-04-26 — 'fetch failed' retiré (cf. sentry.server.config.ts).
+    // L'edge runtime exécute le middleware ; un 'fetch failed' silencieux
+    // peut masquer une panne du rate-limiter Upstash ou d'un upstream.
+    ignoreErrors: ['NotFoundError', 'NEXT_NOT_FOUND', 'NEXT_REDIRECT', 'AbortError'],
 
     beforeSend(event) {
       const exc = event.exception?.values?.[0]

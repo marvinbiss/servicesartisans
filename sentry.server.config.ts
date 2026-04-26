@@ -79,15 +79,19 @@ if (SENTRY_DSN) {
 
     // Noise filter — expected errors that are not actionable.
     // PGRST = PostgREST API errors (transient, retried by client SDK).
+    //
+    // Audit 2026-04-26 — incident GSC : ECONNREFUSED / ECONNRESET / ETIMEDOUT /
+    // 'fetch failed' ont été retirés de cette liste. Les filtrer rendait Sentry
+    // aveugle aux pannes réseau outbound (Supabase, Pipedrive, ADEME) ET aux
+    // timeouts internes — donc à la classe d'erreur que Google Search Console
+    // a flaggée pendant ~13h sans alerte. On accepte un peu plus de bruit
+    // contre une vraie visibilité. Si volume devient ingérable, sampler dans
+    // beforeSend plutôt que masquer.
     ignoreErrors: [
       'NotFoundError',
       'NEXT_NOT_FOUND',
       'NEXT_REDIRECT',
       'AbortError',
-      'ECONNREFUSED',
-      'ECONNRESET',
-      'ETIMEDOUT',
-      'fetch failed',
       'Rate limit exceeded',
       'PGRST',
     ],
