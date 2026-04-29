@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { computeFreshnessReport } from '@/app/api/cron/check-aides-freshness/route'
+import { computeFreshnessReport } from '@/lib/aides/freshness'
 
 const FIXED_NOW = new Date('2026-04-29T12:00:00Z')
 

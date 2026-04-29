@@ -211,20 +211,20 @@ const CSV_HEADER_LINE =
 
 describe('csvEscape — pure function', () => {
   it('returns empty string for null/undefined', async () => {
-    const { csvEscape } = await import('@/app/api/open-data/[dataset]/route')
+    const { csvEscape } = await import('@/lib/open-data/csv-escape')
     expect(csvEscape(null)).toBe('')
     expect(csvEscape(undefined)).toBe('')
   })
 
   it('passes through plain strings/numbers unchanged', async () => {
-    const { csvEscape } = await import('@/app/api/open-data/[dataset]/route')
+    const { csvEscape } = await import('@/lib/open-data/csv-escape')
     expect(csvEscape('Lyon')).toBe('Lyon')
     expect(csvEscape(42)).toBe('42')
     expect(csvEscape(4.5)).toBe('4.5')
   })
 
   it('quotes values with comma / double-quote / newline', async () => {
-    const { csvEscape } = await import('@/app/api/open-data/[dataset]/route')
+    const { csvEscape } = await import('@/lib/open-data/csv-escape')
     expect(csvEscape('a, b')).toBe('"a, b"')
     expect(csvEscape('she said "hi"')).toBe('"she said ""hi"""')
     expect(csvEscape('line1\nline2')).toBe('"line1\nline2"')
@@ -232,7 +232,7 @@ describe('csvEscape — pure function', () => {
   })
 
   it('prefixes Excel formula starts with apostrophe', async () => {
-    const { csvEscape } = await import('@/app/api/open-data/[dataset]/route')
+    const { csvEscape } = await import('@/lib/open-data/csv-escape')
     expect(csvEscape('=A1+B1')).toBe("'=A1+B1")
     expect(csvEscape('+8888888888')).toBe("'+8888888888")
     expect(csvEscape('-1')).toBe("'-1")
@@ -242,7 +242,7 @@ describe('csvEscape — pure function', () => {
   })
 
   it('combines formula prefix + quote when value has both', async () => {
-    const { csvEscape } = await import('@/app/api/open-data/[dataset]/route')
+    const { csvEscape } = await import('@/lib/open-data/csv-escape')
     expect(csvEscape('=HYPERLINK("http://x", x)')).toBe('"\'=HYPERLINK(""http://x"", x)"')
   })
 

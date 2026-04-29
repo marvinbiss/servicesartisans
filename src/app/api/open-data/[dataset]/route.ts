@@ -24,9 +24,10 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { csvEscape } from '@/lib/open-data/csv-escape'
 import { logger } from '@/lib/logger'
 import { SITE_URL } from '@/lib/seo/config'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 // dynamic='force-dynamic' (audit code-reviewer 2026-04-29 P0-1) : `force-static`
 // est incompatible avec createAdminClient() runtime — Next.js 14 éjecte la
@@ -66,30 +67,6 @@ type LocalStatsRow = {
   data_period_start: string | null
   data_period_end: string | null
   generated_at: string | null
-}
-
-/**
- * Échappement CSV conforme RFC 4180 + neutralisation des prefixes de formule
- * Excel/LibreOffice (audit security MEDIUM 2026-04-29 — CSV injection).
- *
- * - `\r`/`\n` détectés → quoté (RFC 4180)
- * - `,` et `"` détectés → quoté
- * - valeur commençant par `=`, `+`, `-`, `@`, `\t`, `\r` → préfixée d'un
- *   apostrophe `'` (Excel/LibreOffice traitent ces préfixes comme formules
- *   actives à l'ouverture du fichier — vecteur d'exécution code local)
- */
-export function csvEscape(value: unknown): string {
-  if (value === null || value === undefined) return ''
-  let s = String(value)
-  // Préfixe formule — neutraliser AVANT le quote pour que l'apostrophe
-  // soit dans la string entre quotes (sinon Excel l'ignore).
-  if (/^[=+\-@\t\r]/.test(s)) {
-    s = `'${s}`
-  }
-  if (s.includes('"') || s.includes(',') || s.includes('\n') || s.includes('\r')) {
-    return `"${s.replace(/"/g, '""')}"`
-  }
-  return s
 }
 
 function rowsToCsv(rows: LocalStatsRow[]): string {
