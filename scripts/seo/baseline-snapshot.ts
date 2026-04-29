@@ -236,7 +236,8 @@ function inScope(p: string, cfg: PilotConfig['filters']): boolean {
   if (p === '/') return true
   for (const inc of cfg.scope_path_prefixes) {
     if (inc === '/') continue
-    if (p === inc || p.startsWith(`${inc}/`)) return true
+    const base = inc.endsWith('/') ? inc.slice(0, -1) : inc
+    if (p === base || p.startsWith(`${base}/`)) return true
   }
   return false
 }
