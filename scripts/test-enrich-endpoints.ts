@@ -4,7 +4,12 @@
  * to identify which endpoints work and which need fixing.
  */
 
-const TEST_INSEE = ['13055', '75056', '69123'] // Marseille, Paris, Lyon
+// Codes INSEE testables : pour Paris/Marseille/Lyon, DVF ne sert pas l'INSEE
+// central (75056/13055/69123) mais uniquement les arrondissements (75101+,
+// 13201+, 69381+). On utilise donc le 1er arrondissement pour avoir un test
+// DVF non faux-négatif. Les autres APIs (FILOSOFI/ADEME/Géorisques/MaPrime)
+// fonctionnent au niveau commune central.
+const TEST_INSEE = ['13201', '75101', '69381'] // Marseille 1er, Paris 1er, Lyon 1er
 const USER_AGENT = 'ServicesArtisans/1.0 (contact@servicesartisans.fr)'
 
 async function fetch_(
@@ -88,24 +93,27 @@ async function main() {
     console.log('  ', fs3.ok ? '✅' : '❌', fs3.summary.slice(0, 250))
 
     // 3. ADEME DPE — dataset canonical (orchestrator post-2026-04-29 fix)
-    console.log('\n--- 3) ADEME DPE: dpe-v2-logements-existants (canonical)')
+    // Vérifié 2026-04-29 : c'est l'id technique `meg-83tjwtg8dyz4vv7h1dqe`
+    // qui répond 200 OK. Le slug humain `dpe-v2-logements-existants` retourne
+    // 404 — anomalie ADEME persistante depuis 2025.
+    console.log('\n--- 3) ADEME DPE: meg-83tjwtg8dyz4vv7h1dqe (canonical)')
     const dpe1 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?qs=${encodeURIComponent(`code_insee_ban:${insee}`)}&size=0`,
-      'ADEME DPE v2 canonical'
+      `https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines?qs=${encodeURIComponent(`code_insee_ban:${insee}`)}&size=0`,
+      'ADEME DPE meg-id'
     )
     console.log('  ', dpe1.ok ? '✅' : '❌', dpe1.summary.slice(0, 250))
 
     console.log('--- 3bis) ADEME DPE: F+G filter (passoires)')
     const dpe2 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?qs=${encodeURIComponent(`code_insee_ban:${insee} AND etiquette_dpe:(F OR G)`)}&size=0`,
+      `https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines?qs=${encodeURIComponent(`code_insee_ban:${insee} AND etiquette_dpe:(F OR G)`)}&size=0`,
       'ADEME DPE F+G'
     )
     console.log('  ', dpe2.ok ? '✅' : '❌', dpe2.summary.slice(0, 250))
 
-    console.log('--- 3ter) ADEME DPE: legacy meg-* dataset (should 404 post 2025-Q4)')
+    console.log('--- 3ter) ADEME DPE: human slug (404 attendu, anomalie ADEME)')
     const dpe3 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines?size=0`,
-      'ADEME DPE legacy'
+      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?size=0`,
+      'ADEME DPE human slug'
     )
     console.log('  ', dpe3.ok ? '✅' : '❌', dpe3.summary.slice(0, 250))
 

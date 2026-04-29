@@ -240,57 +240,18 @@ async function enrichDvf(commune: {
 // ---------------------------------------------------------------------------
 // 2. INSEE FILOSOFI — revenu_median
 // ---------------------------------------------------------------------------
-// Le dataset `filosofi-2019` sur public.opendatasoft.com a été retiré en
-// 2025-11. Migration vers data.economie.gouv.fr + fallback opendatasoft v2
-// `filosofi-2021-revenu-disponible-localise-niveau-communes-cibles` qui
-// expose la même donnée FILOSOFI commune. Ordre = plus récent d'abord.
-const FILOSOFI_SOURCES: Array<{ url: (insee: string) => string; medFields: string[] }> = [
-  {
-    url: (insee: string) =>
-      `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/filosofi-2021/records?where=codgeo%3D%22${insee}%22&limit=1`,
-    medFields: ['med21', 'med20', 'med19', 'disp_med', 'mediane', 'medianvm'],
-  },
-  {
-    url: (insee: string) =>
-      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/filosofi-2021-comm/records?where=codgeo%3D%22${insee}%22&limit=1`,
-    medFields: ['med21', 'disp_med', 'mediane'],
-  },
-  {
-    url: (insee: string) =>
-      `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/filosofi-niveau-communes/records?where=codgeo%3D%22${insee}%22&limit=1`,
-    medFields: ['med21', 'med20', 'med19', 'disp_med', 'mediane'],
-  },
-]
-
+// Vérifié 2026-04-29 : tous les endpoints OpenDataSoft FILOSOFI sont 404
+// (data.economie.gouv.fr/filosofi-2021, public.opendatasoft.com/filosofi-2021-comm,
+// filosofi-niveau-communes). Le portail INSEE n'a plus d'API publique stable
+// depuis 2025-11. Workflow officiel = téléchargement manuel CSV/XLSX puis
+// import via `scripts/import-insee-ademe-csv.ts --filosofi=./filosofi.csv`.
+let _filosofiWarned = false
 async function enrichFilosofi(commune: { code_insee: string; revenu_median: number | null }) {
   if (commune.revenu_median) return false
-  for (const src of FILOSOFI_SOURCES) {
-    const data = await fetchJson<{ results?: Array<Record<string, unknown>> }>(
-      src.url(commune.code_insee)
-    )
-    const r = data?.results?.[0]
-    if (!r) continue
-    let med: number | null = null
-    for (const f of src.medFields) {
-      const v = r[f]
-      if (typeof v === 'number' && Number.isFinite(v) && v > 0) {
-        med = v
-        break
-      }
-      if (typeof v === 'string') {
-        const n = parseFloat(v)
-        if (Number.isFinite(n) && n > 0) {
-          med = n
-          break
-        }
-      }
-    }
-    if (!med) continue
-    await supabase
-      .from('communes')
-      .update({ revenu_median: Math.round(med) })
-      .eq('code_insee', commune.code_insee)
-    return true
+  if (!_filosofiWarned) {
+    console.log('   ℹ️  FILOSOFI: tous les endpoints OpenDataSoft sont 404 (vérifié 2026-04-29).')
+    console.log('       Utiliser : scripts/import-insee-ademe-csv.ts --filosofi=./filosofi.csv')
+    _filosofiWarned = true
   }
   return false
 }
@@ -352,18 +313,18 @@ async function enrichWikipedia(commune: {
 // ---------------------------------------------------------------------------
 // 4. ADEME DPE V2 — pct_passoires_dpe
 // ---------------------------------------------------------------------------
-// Dataset canonical (avril 2026) : `dpe-v2-logements-existants` (DPE rénovés
-// post 07/2021). L'ancien id technique `meg-83tjwtg8dyz4vv7h1dqe` retourne
-// 404 depuis le rebranding ADEME 2025-Q4.
+// Dataset id `meg-83tjwtg8dyz4vv7h1dqe` (DPE Logements existants depuis
+// 07/2021). Vérifié 2026-04-29 : 200 OK, retourne {total, results} pour
+// `qs=code_insee_ban:75056`. Le slug humain `dpe-v2-logements-existants`
+// retourne 404, on garde donc l'id technique.
 // Fields : `code_insee_ban` (5 chars) + `etiquette_dpe` (A..G).
-// qs Lucene : pas d'URL-encoding pour string exact match.
 async function enrichAdemeDpe(commune: {
   code_insee: string
   pct_passoires_dpe: number | null
   nb_dpe_total: number | null
 }) {
   if (commune.pct_passoires_dpe !== null && commune.nb_dpe_total !== null) return false
-  const base = 'https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines'
+  const base = 'https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines'
   const qsTotal = `?size=0&qs=${encodeURIComponent(`code_insee_ban:${commune.code_insee}`)}`
   const total = await fetchJson<{ total?: number }>(base + qsTotal)
   if (!total?.total || total.total === 0) return false
@@ -389,7 +350,6 @@ type GeoRisqueResponse = {
   commune?: { codeInsee?: string; libelle?: string }
   risquesNaturels?: Record<string, GeoRisque> & {
     retraitGonflementArgile?: GeoRisque
-    argile?: GeoRisque
     seisme?: GeoRisque
     inondation?: GeoRisque
     radon?: GeoRisque
@@ -397,28 +357,45 @@ type GeoRisqueResponse = {
   risquesTechnologiques?: Record<string, GeoRisque>
 }
 
-/** Parse a libelleStatutCommune string into a level "faible" | "moyen" | "fort" */
+/** Parse a libelleStatutCommune string into "faible" | "moyen" | "fort".
+ *  Vérifié 2026-04-29 : Géorisques retourne libellés type
+ *  "Risque Existant - important" / "Risque Existant - faible". On mappe
+ *  "important" / "élevé" → "fort" pour conserver une enum stable côté DB. */
 function parseArgileLevel(libelle: string | null | undefined): string | null {
   if (!libelle) return null
   const l = libelle.toLowerCase()
-  if (l.includes('fort')) return 'fort'
-  if (l.includes('moyen')) return 'moyen'
-  if (l.includes('faible')) return 'faible'
+  if (/(important|élevé|eleve|fort)/i.test(l)) return 'fort'
+  if (/moyen/i.test(l)) return 'moyen'
+  if (/faible/i.test(l)) return 'faible'
   return null
 }
 
-/** Parse seisme libelleStatutCommune "Zone 3 / Modérée" → 3 */
+/** Parse séisme libelleStatutCommune.
+ *  Géorisques 2026 ne retourne plus la zone numérique (1-5) dans le rapport
+ *  de risque commune ; le libellé est qualitatif "Risque Existant - faible".
+ *  Mapping qualitatif → zone : très_faible→1, faible→2, moyen→3, important→4. */
 function parseZoneSismique(libelle: string | null | undefined): number | null {
   if (!libelle) return null
   const m = libelle.match(/zone\s+(\d)/i)
-  return m ? parseInt(m[1], 10) : null
+  if (m) return parseInt(m[1], 10)
+  const l = libelle.toLowerCase()
+  if (/(très\s+faible|tres\s+faible|nul)/i.test(l)) return 1
+  if (/(important|élevé|eleve|fort)/i.test(l)) return 4
+  if (/moyen/i.test(l)) return 3
+  if (/faible/i.test(l)) return 2
+  return null
 }
 
-/** Parse radon classe "Catégorie 3" → 3 */
+/** Parse radon classe "Catégorie 3" / "Risque Existant - moyen" → 1-3. */
 function parseRadon(libelle: string | null | undefined): number | null {
   if (!libelle) return null
   const m = libelle.match(/(?:catégorie|classe)\s*(\d)/i)
-  return m ? parseInt(m[1], 10) : null
+  if (m) return parseInt(m[1], 10)
+  const l = libelle.toLowerCase()
+  if (/(important|élevé|eleve|fort)/i.test(l)) return 3
+  if (/moyen/i.test(l)) return 2
+  if (/faible/i.test(l)) return 1
+  return null
 }
 
 // Géorisques expose le rapport-risque via 2 hosts différents selon les
@@ -453,9 +430,8 @@ async function enrichGeorisques(commune: {
   const rn = risk.risquesNaturels
   const update: Record<string, unknown> = {}
 
-  // Argile — clé canonical 2026 : `retraitGonflementArgile` (ancien) ou
-  // `argile` (nouveau format simplifié).
-  const argile = rn.retraitGonflementArgile ?? rn.argile
+  // Argile — clé canonical Géorisques 2026 vérifiée live : `retraitGonflementArgile`.
+  const argile = rn.retraitGonflementArgile
   if (argile?.present || argile?.libelleStatutCommune) {
     const lvl = parseArgileLevel(argile.libelleStatutCommune)
     if (lvl) update.risque_argile = lvl
@@ -483,46 +459,12 @@ async function enrichGeorisques(commune: {
 // ---------------------------------------------------------------------------
 // 6. France Rénov (dept-level, cascaded) — nb_maprimerenov_annuel
 // ---------------------------------------------------------------------------
-// Le dataset `maprimerenov-par-departement` sur public.opendatasoft.com a
-// disparu en 2025-11. Sources viables avril 2026 :
-//   1. data.gouv.fr `base-de-donnees-maprimerenov` (mensuel, à agréger).
-//   2. data.economie.gouv.fr `aides-france-renov-departements`.
-// Champs : `code_departement` ou `dep` + `nb_dossiers` / `nb_primes`.
-// On garde un cache dept-level pour mutualiser les fetches sur les 35 villes.
-const maprimeDeptCache = new Map<string, number>()
-const MAPRIME_SOURCES: Array<{
-  url: (dept: string) => string
-  countFields: string[]
-}> = [
-  {
-    url: (dept: string) =>
-      `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/aides-france-renov-departements/records?where=code_departement%3D%22${dept}%22&limit=1`,
-    countFields: ['nb_primes_2024', 'nb_primes_2023', 'nb_primes', 'nb_dossiers'],
-  },
-  {
-    url: (dept: string) =>
-      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/maprimerenov-departements/records?where=code_departement%3D%22${dept}%22&limit=1`,
-    countFields: ['nb_dossiers_2024', 'nb_dossiers_2023', 'nb_primes', 'nb_dossiers'],
-  },
-]
-
-async function fetchMaPrimeDept(dept: string): Promise<number> {
-  for (const src of MAPRIME_SOURCES) {
-    const data = await fetchJson<{ results?: Array<Record<string, unknown>> }>(src.url(dept))
-    const r = data?.results?.[0]
-    if (!r) continue
-    for (const f of src.countFields) {
-      const v = r[f]
-      if (typeof v === 'number' && Number.isFinite(v) && v > 0) return Math.round(v)
-      if (typeof v === 'string') {
-        const n = parseFloat(v)
-        if (Number.isFinite(n) && n > 0) return Math.round(n)
-      }
-    }
-  }
-  return 0
-}
-
+// Vérifié 2026-04-29 : aides-france-renov-departements + maprimerenov-
+// departements + maprimerenov-par-departement = tous 404. Pas d'API publique
+// stable. Workflow officiel = téléchargement manuel via
+// data.gouv.fr "base-de-donnees-maprimerenov" puis import via
+// `scripts/import-insee-ademe-csv.ts --maprime=./maprime.csv`.
+let _maprimeWarned = false
 async function enrichMaPrimeRenov(commune: {
   code_insee: string
   departement_code: string
@@ -530,30 +472,14 @@ async function enrichMaPrimeRenov(commune: {
   population: number
 }) {
   if (commune.nb_maprimerenov_annuel != null) return false
-  const dept = commune.departement_code
-  let deptCount = maprimeDeptCache.get(dept)
-  if (deptCount === undefined) {
-    deptCount = await fetchMaPrimeDept(dept)
-    maprimeDeptCache.set(dept, deptCount)
+  if (!_maprimeWarned) {
+    console.log(
+      '   ℹ️  MaPrimeRénov: tous les endpoints OpenDataSoft sont 404 (vérifié 2026-04-29).'
+    )
+    console.log('       Utiliser : scripts/import-insee-ademe-csv.ts --maprime=./maprime.csv')
+    _maprimeWarned = true
   }
-  if (!deptCount) return false
-  // Répartir par poids population commune / population dept.
-  const { data: deptPopData } = await supabase
-    .from('communes')
-    .select('population')
-    .eq('departement_code', dept)
-    .eq('is_active', true)
-  const totalPop = (deptPopData || []).reduce(
-    (a, c: { population: number }) => a + (c.population || 0),
-    0
-  )
-  const share = totalPop > 0 && commune.population ? commune.population / totalPop : 0
-  const estimated = Math.max(1, Math.round(deptCount * share))
-  await supabase
-    .from('communes')
-    .update({ nb_maprimerenov_annuel: estimated })
-    .eq('code_insee', commune.code_insee)
-  return true
+  return false
 }
 
 // ---------------------------------------------------------------------------
