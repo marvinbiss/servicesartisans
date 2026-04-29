@@ -338,6 +338,12 @@ const PROVIDER_DETAIL_SELECT = [
   'description',
   'website',
   'email',
+  // Migration 483 — Google Places enrichment (49K fiches via SIRET match).
+  // Source DISTINCTE de rating_average / review_count (first-party plateforme).
+  'google_place_id',
+  'google_rating',
+  'google_user_ratings_total',
+  'google_business_status',
 ].join(',')
 
 /**
