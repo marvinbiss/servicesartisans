@@ -48,6 +48,13 @@ describe('getRateLimitConfig — /api/open-data routing', () => {
     expect(getRateLimitConfig('/api/open-data/local-stats.csv')).not.toBe(RATE_LIMITS.api)
     expect(getRateLimitConfig('/api/open-data/manifest.json')).not.toBe(RATE_LIMITS.api)
   })
+
+  it('does NOT match uppercase /API/OPEN-DATA (case-sensitive routing)', () => {
+    // Le mapping est strictement minuscule. Un client qui envoie une URL
+    // uppercase tombe dans le fallback générique — pas dans openData.
+    expect(getRateLimitConfig('/API/OPEN-DATA')).not.toBe(RATE_LIMITS.openData)
+    expect(getRateLimitConfig('/Api/Open-Data/local-stats.csv')).not.toBe(RATE_LIMITS.openData)
+  })
 })
 
 describe('RATE_LIMITS.openData configuration', () => {
