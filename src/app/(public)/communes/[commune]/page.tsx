@@ -19,7 +19,7 @@ import {
   monthName,
   type CommuneData,
 } from '@/lib/data/commune-data'
-import { getVilleBySlug, services } from '@/lib/data/france'
+import { getVilleBySlug, services, villes as villesData } from '@/lib/data/france'
 
 export const dynamicParams = true
 export const revalidate = 86_400
@@ -505,9 +505,6 @@ function guessNearestStaticVille(commune: CommuneData): string | null {
 function getDepartementCapitalSlug(deptCode: string): string | null {
   // Best-effort : trouve la ville statique la plus peuplée de ce département.
   // Scan O(2 287) — acceptable au runtime ISR (cached 24h).
-  // Lazy import pour éviter cycle.
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { villes: villesData } = require('@/lib/data/france') as typeof import('@/lib/data/france')
   const candidates = villesData.filter((v) => v.departementCode === deptCode)
   if (candidates.length === 0) return null
   const parsePop = (p: string) => parseInt(p.replace(/\s/g, ''), 10) || 0

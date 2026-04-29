@@ -15,7 +15,7 @@ import AideSources from '@/components/aides/AideSources'
 import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
-import { getDepartementBySlug, departements } from '@/lib/data/france'
+import { getDepartementBySlug } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -265,7 +265,3 @@ function buildLocalFaqs(aideName: string, deptName: string, deptCode: string, zo
     },
   ]
 }
-
-// Re-export pour l'audit Sitemap Coverage : la route est dynamic mais
-// les départements valides sont déterministes (101 dans france.ts).
-export const _AUDIT_DEPT_COUNT = departements.length
