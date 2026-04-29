@@ -1,5 +1,7 @@
+import { NextResponse } from 'next/server'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
+import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 
 function escapeXml(s: string): string {
   return s
@@ -10,12 +12,7 @@ function escapeXml(s: string): string {
     .replace(/'/g, '&apos;')
 }
 
-/**
- * Google News Sitemap — includes blog articles from the last 2 days (48 hours).
- * Google News requires articles published within the last 2 days only.
- * Older articles are already covered by the regular blog sitemap.
- */
-export async function GET() {
+export async function GET(request: Request) {
   const now = new Date()
   const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)
 
@@ -45,15 +42,14 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
-  // Last-Modified = date du dernier article récent (Google utilise cet en-tête
-  // pour décider d'un HTTP 304 Not Modified et économiser des ressources côté serveur).
-  const lastModified = recentArticles[0] ? new Date(recentArticles[0].date) : new Date()
+  const lastModified = recentArticles[0] ? new Date(recentArticles[0].date) : undefined
 
-  return new Response(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-      'Last-Modified': lastModified.toUTCString(),
-    },
+  const { notModified, responseHeaders } = sitemapHeaders(xml, request, {
+    cacheControl: 'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400',
+    lastModified,
   })
+  if (notModified) {
+    return new NextResponse(null, { status: 304, headers: responseHeaders })
+  }
+  return new NextResponse(xml, { headers: responseHeaders })
 }

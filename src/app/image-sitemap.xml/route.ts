@@ -1,7 +1,9 @@
+import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { articleSlugs, allArticles } from '@/lib/data/blog/articles'
 import { services } from '@/lib/data/france'
 import { getBlogImage, serviceImages, heroImage, pageImages, cityImages } from '@/lib/data/images'
+import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 
 function escapeXml(s: string): string {
   return s
@@ -33,7 +35,7 @@ ${images.map((img) => imageTag(img.loc, img.title, img.caption)).join('\n')}
  *
  * Contenu : homepage, services, top 20 villes, articles de blog, pages statiques clés.
  */
-export async function GET() {
+export async function GET(request: Request) {
   const urls: string[] = []
 
   // 1. Homepage
@@ -129,8 +131,6 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
-  // Last-Modified = date du dernier article (seul contenu dynamique de ce sitemap).
-  // Google utilise Last-Modified pour décider s'il doit re-fetcher le fichier (HTTP 304).
   const latestDate = articleSlugs.reduce<Date | null>((max, slug) => {
     const d = allArticles[slug]?.updatedDate || allArticles[slug]?.date
     if (!d) return max
@@ -138,11 +138,12 @@ ${urls.join('\n')}
     return max === null || parsed > max ? parsed : max
   }, null)
 
-  return new Response(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400',
-      ...(latestDate ? { 'Last-Modified': latestDate.toUTCString() } : {}),
-    },
+  const { notModified, responseHeaders } = sitemapHeaders(xml, request, {
+    cacheControl: 'public, s-maxage=86400, stale-while-revalidate=86400, stale-if-error=86400',
+    lastModified: latestDate ?? undefined,
   })
+  if (notModified) {
+    return new NextResponse(null, { status: 304, headers: responseHeaders })
+  }
+  return new NextResponse(xml, { headers: responseHeaders })
 }
