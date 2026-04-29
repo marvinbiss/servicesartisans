@@ -4,6 +4,7 @@ import type { LegacyArtisan } from '@/types/legacy'
 import { slugify, getArtisanUrl } from '@/lib/utils'
 import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 import { cleanAdemeText } from '@/lib/ademe/text'
+import { safeJsonStringify } from '@/lib/seo/safe-json'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -371,11 +372,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(combinedSchema, null, 0)
-            .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e'),
-        }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(combinedSchema) }}
       />
     </>
   )

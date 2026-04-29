@@ -9,6 +9,7 @@
 
 import Link from 'next/link'
 import { SITE_URL } from '@/lib/seo/config'
+import { safeJsonStringify } from '@/lib/seo/safe-json'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -145,12 +146,7 @@ export default function StructuredPricingTable({
       {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd)
-            .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e')
-            .replace(/&/g, '\\u0026'),
-        }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
       />
 
       <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2">

@@ -4,6 +4,7 @@ import { services, villes, departements, regions, getQuartiersByVille } from '@/
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { tradeContent } from '@/lib/data/trade-content'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getPageContent } from '@/lib/cms'
@@ -72,7 +73,7 @@ export default async function PlanDuSitePage() {
     <div className="min-h-screen bg-sand-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(breadcrumbSchema) }}
       />
 
       <div className="bg-white border-b">

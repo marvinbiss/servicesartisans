@@ -10,6 +10,7 @@
  */
 
 import { RGE_QUALIFICATION_LABELS } from '@/lib/rge/service-city-listings'
+export { safeJsonStringify } from '@/lib/seo/safe-json'
 
 /**
  * Tronque un title à `maxLen` chars pour Google.
@@ -28,29 +29,7 @@ export function truncateTitle(title: string, maxLen = 60): string {
   return (trimmed.length > 0 ? trimmed : slice) + '…'
 }
 
-/**
- * Sérialise du JSON pour injection dans `<script type="application/ld+json">`.
- * Neutralise :
- *   - `<`, `>`, `&` : XSS via fermeture de balise (audit Sprint 0.1).
- *   - U+2028, U+2029 : line/paragraph separators interprétés comme fins de
- *     ligne par le parser HTML, peuvent casser le script tag (audit Sprint 0.2).
- * Wrappe dans try/catch pour fail-soft sur BigInt / circular references / undefined :
- * retourne `'null'` (Schema.org valid) au lieu de crash le rendu serveur.
- */
-export function safeJsonStringify(data: unknown): string {
-  try {
-    const raw = JSON.stringify(data)
-    if (typeof raw !== 'string') return 'null'
-    return raw
-      .replace(/</g, '\\u003c')
-      .replace(/>/g, '\\u003e')
-      .replace(/&/g, '\\u0026')
-      .replace(/\u2028/g, '\\u2028')
-      .replace(/\u2029/g, '\\u2029')
-  } catch {
-    return 'null'
-  }
-}
+// safeJsonStringify : re-export en haut du fichier depuis @/lib/seo/safe-json
 
 /**
  * Feature flag Sprint 0.1 ULTRA DOMINATION SEO Phase 0.

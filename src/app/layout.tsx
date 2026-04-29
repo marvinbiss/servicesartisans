@@ -10,6 +10,7 @@ import Footer from '@/components/Footer'
 import { CompareProviderWrapper as CompareProviderWrapperStatic } from '@/components/compare/CompareProvider'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
 
@@ -189,10 +190,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
-              .replace(/</g, '\\u003c')
-              .replace(/>/g, '\\u003e')
-              .replace(/&/g, '\\u0026'),
+            __html: safeJsonStringify([getOrganizationSchema(), getWebsiteSchema()]),
           }}
         />
 
