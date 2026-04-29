@@ -4,6 +4,15 @@ import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getIndexableProblemeCombos } from '@/lib/seo/problemes-whitelist'
+import {
+  assertTierPartitionCoverage,
+  getServiceCityPriority,
+  isServiceVilleIndexable,
+} from '@/lib/seo/services-tiers'
+
+// Boot-time guard : si un service est ajouté à france.ts sans MAJ tiers, throw
+// au build pour éviter le silent fallback Tier C en prod.
+assertTierPartitionCoverage()
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
@@ -903,16 +912,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
+      // Phase A V2 #6 stratégie 140K — priority tiered (A=0.9, B=0.7, C=0.4).
+      // Signal Google soft : Tier A recrawlé ×2, Tier C ×0.5 — sans rien couper.
+      const priority = getServiceCityPriority(service.slug)
       for (const ville of mergedCities) {
-        // Service×city — lastmod from latest provider activity in dept×service.
-        // If no data → omitted (honest). Priority 0.8: primary conversion pages.
+        // Phase B (gated par env SA_REDUCE_SERVICES_TIERED=1) : combos hors
+        // allocation tiered exclus du sitemap. Off par défaut, attend filet GSC.
+        if (!isServiceVilleIndexable(service.slug, ville.slug)) continue
+        // lastmod from latest provider activity in dept×service.
+        // If no data → omitted (honest).
         const deptKey = `${normalizeName(ville.departement)}::${service.slug}`
         const lastmod = byDeptServiceSlug.get(deptKey)
         allUrls.push({
           url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
           lastModified: lastmod,
           changeFrequency: 'monthly',
-          priority: 0.8,
+          priority,
         })
       }
     }
