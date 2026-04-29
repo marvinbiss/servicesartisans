@@ -205,18 +205,34 @@ export async function GET(request: NextRequest) {
     const { logger } = await import('@/lib/logger')
     const supabase = createAdminClient()
 
-    // Single-call RPC to bypass PostgREST max-rows pagination AND guarantee an
-    // atomic snapshot (no race window between sub-batches).
-    // Requires migration 457 (get_provider_sitemap + idx_providers_sitemap).
+    // V3 #4 stratégie 140K — try v2 (quality filter description ≥ 200 chars)
+    // first, fallback to v1 (is_active + noindex=false only) if v2 RPC absent
+    // (pré-migration 485). Rolling deploy safe : after migration applied,
+    // sitemap émet ~35K URLs (vs 50K v1).
+    // Requires migration 457 (v1, get_provider_sitemap) ou 485 (v2 + index).
     // If rawFetched < PROVIDER_BATCH_SIZE unexpectedly, inspect Max rows in
     // Supabase → API settings (must stay ≥ PROVIDER_BATCH_SIZE).
     const t0 = Date.now()
-    const { data: rpcRows, error } = await supabase.rpc('get_provider_sitemap', {
-      p_offset: offset,
-      p_limit: PROVIDER_BATCH_SIZE,
-    })
-
-    if (error) throw error
+    let rpcRows: unknown
+    let usedV2 = true
+    {
+      const { data, error } = await supabase.rpc('get_provider_sitemap_v2', {
+        p_offset: offset,
+        p_limit: PROVIDER_BATCH_SIZE,
+      })
+      if (error) {
+        // Fallback v1 if v2 absent (pré-migration 485) or other transient error
+        usedV2 = false
+        const v1 = await supabase.rpc('get_provider_sitemap', {
+          p_offset: offset,
+          p_limit: PROVIDER_BATCH_SIZE,
+        })
+        if (v1.error) throw v1.error
+        rpcRows = v1.data
+      } else {
+        rpcRows = data
+      }
+    }
     const fetchMs = Date.now() - t0
 
     type Row = {
@@ -272,6 +288,7 @@ export async function GET(request: NextRequest) {
       rawFetched: allProviders.length,
       urlsEmitted: urls.length,
       fetchMs,
+      rpcVariant: usedV2 ? 'v2-quality' : 'v1-fallback',
     })
 
     const xml = [
