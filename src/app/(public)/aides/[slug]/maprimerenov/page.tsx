@@ -17,6 +17,7 @@ import JsonLd from '@/components/JsonLd'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import LastUpdated from '@/components/seo/LastUpdated'
 import RelatedAides from '@/components/aides/RelatedAides'
+import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { getCumulableAides } from '@/lib/aides/aides-catalog'
 import {
   CLIMATE_ZONE_IMPACT,
@@ -450,22 +451,9 @@ export default async function MprDeptPage({ params }: PageProps) {
               Annuaire artisans RGE synchronisé ADEME
             </div>
           </div>
-          {/* Security L1 — disclaimer YMYL visible niveau page (était présent
-              uniquement dans le composant AideMontants pour les sous-pages
-              nationales). */}
-          <p className="text-xs text-charcoal-500 mt-3 leading-relaxed">
-            Informations à titre indicatif. Vérifiez les conditions exactes sur{' '}
-            <a
-              href="https://france-renov.gouv.fr/"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="underline hover:text-emerald-700"
-            >
-              france-renov.gouv.fr
-            </a>{' '}
-            ou auprès d&apos;un conseiller France Rénov&apos; (3818, appel non surtaxé) avant
-            signature d&apos;un devis.
-          </p>
+          {/* Security L1 (chantier #6 round 2) — disclaimer YMYL niveau page
+              via composant YmylDisclaimer centralisé. */}
+          <YmylDisclaimer className="mt-3" />
         </div>
       </section>
     </>

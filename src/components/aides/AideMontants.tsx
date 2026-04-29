@@ -1,5 +1,6 @@
 import { Euro } from 'lucide-react'
 
+import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import type { AideMontant } from '@/lib/aides/aides-catalog'
 
 type Props = {
@@ -55,19 +56,7 @@ export default function AideMontants({ aideName, montants }: Props) {
             </tbody>
           </table>
         </div>
-        <p className="mt-4 text-xs text-charcoal-500 leading-relaxed">
-          Informations à titre indicatif. Vérifiez les conditions exactes sur{' '}
-          <a
-            href="https://france-renov.gouv.fr/"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className="underline hover:text-emerald-700"
-          >
-            france-renov.gouv.fr
-          </a>{' '}
-          ou auprès d&apos;un conseiller France Rénov&apos; (3818, appel non surtaxé) avant
-          signature d&apos;un devis.
-        </p>
+        <YmylDisclaimer className="mt-4" />
       </div>
     </section>
   )
