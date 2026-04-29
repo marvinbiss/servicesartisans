@@ -65,80 +65,87 @@ async function main() {
     )
     console.log('  ', dvf3.ok ? '✅' : '❌', dvf3.summary)
 
-    // 2. INSEE FILOSOFI
-    console.log('\n--- 2) INSEE FILOSOFI: opendatasoft filosofi-2019 (currently broken)')
+    // 2. INSEE FILOSOFI — endpoints canoniques avril 2026 (orchestrator)
+    console.log('\n--- 2) INSEE FILOSOFI: data.economie.gouv.fr/filosofi-2021 (canonical)')
     const fs1 = await fetch_(
-      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/filosofi-2019/records?where=codgeo%3D%22${insee}%22&limit=1`,
-      'FILOSOFI opendatasoft'
-    )
-    console.log('  ', fs1.ok ? '✅' : '❌', fs1.summary)
-
-    console.log('--- 2bis) INSEE FILOSOFI: data.gouv.fr records')
-    const fs2 = await fetch_(
-      `https://www.data.gouv.fr/api/1/datasets/?q=filosofi+commune&page_size=3`,
-      'data.gouv.fr catalog'
-    )
-    console.log('  ', fs2.ok ? '✅' : '❌', fs2.summary.slice(0, 200))
-
-    console.log('--- 2ter) INSEE FILOSOFI: data.economie.gouv.fr')
-    const fs3 = await fetch_(
       `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/filosofi-2021/records?where=codgeo%3D%22${insee}%22&limit=1`,
-      'data.economie.gouv.fr'
+      'FILOSOFI data.economie.gouv.fr'
     )
-    console.log('  ', fs3.ok ? '✅' : '❌', fs3.summary.slice(0, 200))
+    console.log('  ', fs1.ok ? '✅' : '❌', fs1.summary.slice(0, 250))
 
-    // 3. ADEME DPE
-    console.log('\n--- 3) ADEME DPE: data-fair v1 (current)')
+    console.log('--- 2bis) INSEE FILOSOFI: opendatasoft filosofi-2021-comm (fallback)')
+    const fs2 = await fetch_(
+      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/filosofi-2021-comm/records?where=codgeo%3D%22${insee}%22&limit=1`,
+      'FILOSOFI opendatasoft v2'
+    )
+    console.log('  ', fs2.ok ? '✅' : '❌', fs2.summary.slice(0, 250))
+
+    console.log('--- 2ter) INSEE FILOSOFI: data.economie.gouv.fr/filosofi-niveau-communes')
+    const fs3 = await fetch_(
+      `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/filosofi-niveau-communes/records?where=codgeo%3D%22${insee}%22&limit=1`,
+      'FILOSOFI niveau-communes'
+    )
+    console.log('  ', fs3.ok ? '✅' : '❌', fs3.summary.slice(0, 250))
+
+    // 3. ADEME DPE — dataset canonical (orchestrator post-2026-04-29 fix)
+    console.log('\n--- 3) ADEME DPE: dpe-v2-logements-existants (canonical)')
     const dpe1 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q_mode=simple&qs=code_insee_ban:%22${insee}%22&size=0`,
-      'ADEME DPE v1'
+      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?qs=${encodeURIComponent(`code_insee_ban:${insee}`)}&size=0`,
+      'ADEME DPE v2 canonical'
     )
     console.log('  ', dpe1.ok ? '✅' : '❌', dpe1.summary.slice(0, 250))
 
-    console.log('--- 3bis) ADEME DPE: recherche simpler')
+    console.log('--- 3bis) ADEME DPE: F+G filter (passoires)')
     const dpe2 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?size=1`,
-      'ADEME DPE no filter'
+      `https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?qs=${encodeURIComponent(`code_insee_ban:${insee} AND etiquette_dpe:(F OR G)`)}&size=0`,
+      'ADEME DPE F+G'
     )
     console.log('  ', dpe2.ok ? '✅' : '❌', dpe2.summary.slice(0, 250))
 
-    // 4. Géorisques
-    console.log('\n--- 4) Géorisques: api v1 gaspar/risques (current)')
+    console.log('--- 3ter) ADEME DPE: legacy meg-* dataset (should 404 post 2025-Q4)')
+    const dpe3 = await fetch_(
+      `https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines?size=0`,
+      'ADEME DPE legacy'
+    )
+    console.log('  ', dpe3.ok ? '✅' : '❌', dpe3.summary.slice(0, 250))
+
+    // 4. Géorisques — orchestrator essaie www. d'abord, apex en fallback
+    console.log('\n--- 4) Géorisques: www. (canonical)')
     const g1 = await fetch_(
-      `https://georisques.gouv.fr/api/v1/gaspar/risques?code_insee=${insee}`,
-      'Géorisques v1'
-    )
-    console.log('  ', g1.ok ? '✅' : '❌', g1.summary.slice(0, 250))
-
-    console.log('--- 4bis) Géorisques: rapport-risques')
-    const g2 = await fetch_(
-      `https://georisques.gouv.fr/api/v1/resultats_rapport_risque?code_insee=${insee}`,
-      'Géorisques rapport_risque'
-    )
-    console.log('  ', g2.ok ? '✅' : '❌', g2.summary.slice(0, 250))
-
-    console.log('--- 4ter) Géorisques: new pop endpoint')
-    const g3 = await fetch_(
       `https://www.georisques.gouv.fr/api/v1/resultats_rapport_risque?code_insee=${insee}`,
       'Géorisques www'
     )
-    console.log('  ', g3.ok ? '✅' : '❌', g3.summary.slice(0, 250))
+    console.log('  ', g1.ok ? '✅' : '❌', g1.summary.slice(0, 250))
 
-    // 5. France Rénov / MaPrimeRénov'
-    console.log('\n--- 5) MaPrimeRénov par département: opendatasoft')
+    console.log('--- 4bis) Géorisques: apex (fallback)')
+    const g2 = await fetch_(
+      `https://georisques.gouv.fr/api/v1/resultats_rapport_risque?code_insee=${insee}`,
+      'Géorisques apex'
+    )
+    console.log('  ', g2.ok ? '✅' : '❌', g2.summary.slice(0, 250))
+
+    // 5. MaPrimeRénov' — orchestrator essaie 2 sources data.economie + opendatasoft
+    console.log('\n--- 5) MaPrimeRénov: data.economie.gouv.fr/aides-france-renov-departements')
     const dept = insee.slice(0, 2)
     const mpr1 = await fetch_(
-      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/maprimerenov-par-departement/records?where=code_departement%3D%22${dept}%22&limit=1`,
-      'MaPrimeRénov par dept'
+      `https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/aides-france-renov-departements/records?where=code_departement%3D%22${dept}%22&limit=1`,
+      'MaPrimeRénov data.economie'
     )
     console.log('  ', mpr1.ok ? '✅' : '❌', mpr1.summary.slice(0, 250))
 
-    console.log('--- 5bis) MaPrimeRénov: ADEME Open Data')
+    console.log('--- 5bis) MaPrimeRénov: opendatasoft maprimerenov-departements')
     const mpr2 = await fetch_(
-      `https://data.ademe.fr/data-fair/api/v1/datasets?q=maprimerenov`,
-      'ADEME catalog search'
+      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/maprimerenov-departements/records?where=code_departement%3D%22${dept}%22&limit=1`,
+      'MaPrimeRénov opendatasoft'
     )
     console.log('  ', mpr2.ok ? '✅' : '❌', mpr2.summary.slice(0, 250))
+
+    console.log('--- 5ter) MaPrimeRénov: data.gouv.fr catalog search')
+    const mpr3 = await fetch_(
+      `https://www.data.gouv.fr/api/1/datasets/?q=maprimerenov+departement&page_size=3`,
+      'data.gouv.fr catalog search'
+    )
+    console.log('  ', mpr3.ok ? '✅' : '❌', mpr3.summary.slice(0, 250))
   }
 }
 main()
