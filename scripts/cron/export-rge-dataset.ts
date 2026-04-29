@@ -385,12 +385,15 @@ export async function exportRgeDataset(opts?: {
 // ---------------------------------------------------------------------------
 
 const isMain = (() => {
+  // WHY: webpack inlines `import.meta.url` to the literal source path at bundle
+  // time, so the previous ESM check always returned true inside the bundled
+  // Next.js route handler — the CLI ran at module load during prerender, hit
+  // Supabase and crashed the build (statement timeout). `process.argv[1]` is a
+  // runtime value that bundlers cannot inline; it equals the entrypoint
+  // script when run via `tsx`/`node` and is `next` (or similar) under Next.js.
   try {
-    // ESM check — when run via tsx/node, import.meta.url ends with this file
-    return (
-      import.meta.url.endsWith('export-rge-dataset.ts') ||
-      import.meta.url.endsWith('export-rge-dataset.js')
-    )
+    const arg1 = process.argv[1] ?? ''
+    return /export-rge-dataset(?:\.ts|\.js|\.mjs|\.cjs)?$/.test(arg1)
   } catch {
     return false
   }
