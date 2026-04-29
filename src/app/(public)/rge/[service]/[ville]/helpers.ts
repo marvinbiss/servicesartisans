@@ -67,3 +67,75 @@ export function buildIntroParagraph(
     : `Les artisans ${serviceName.toLowerCase()} certifiés RGE (Reconnu Garant de l’Environnement) à ${villeName} répondent aux critères officiels d’éco-conditionnalité fixés par l’État.`
   return `${labelPart} Cette certification est indispensable pour bénéficier des aides publiques à la rénovation énergétique : MaPrimeRénov’, Certificats d’Économies d’Énergie (CEE), éco-prêt à taux zéro et TVA réduite à 5,5 %. Sans artisan RGE, aucune de ces aides n’est mobilisable. Tous les professionnels listés ci-dessous à ${villeName} ont une qualification vérifiée et toujours active, sourcée directement depuis le registre officiel ADEME / France Rénov’.`
 }
+
+/**
+ * Bullets TldrBlock pré-FAQ pour `/rge/[service]/[ville]`.
+ *
+ * Distincts d'`EnBrefBox.keyPoints` (qui couvre déjà MaPrimeRénov’ 11 000 €,
+ * CEE + TVA 5,5 %, devis 24h). Ici on cible : note moyenne (avec mention dept
+ * si fallback), Éco-PTZ uniquement (le bullet aides est filtré pour éviter le
+ * double-speakable MaPrimeRénov’ détecté par audit), qualification de
+ * référence, count CEE éligibles, source officielle, devis 2 min.
+ *
+ * Pure function — testable sans DB ni fetch.
+ */
+export type RgeTldrInput = {
+  serviceSlug: string
+  /** PageAggregateRating-like ou null. ratingValue peut être "NaN" en edge case. */
+  aggregateRating?: { ratingValue: string; reviewCount: string } | null
+  fallbackDeptUsed?: boolean
+  departmentName?: string | null
+  eligibleCeeOpsCount?: number
+}
+export function buildRgeTldrBullets(input: RgeTldrInput): string[] {
+  const {
+    serviceSlug,
+    aggregateRating,
+    fallbackDeptUsed = false,
+    departmentName,
+    eligibleCeeOpsCount = 0,
+  } = input
+  const bullets: string[] = []
+
+  // 1) Note moyenne — guard NaN/0 (P1#4) + mention dept si fallback.
+  if (aggregateRating) {
+    const ratingNum = Number.parseFloat(aggregateRating.ratingValue)
+    const reviewNum = Number.parseInt(aggregateRating.reviewCount, 10)
+    if (
+      Number.isFinite(ratingNum) &&
+      ratingNum > 0 &&
+      Number.isFinite(reviewNum) &&
+      reviewNum > 0
+    ) {
+      const deptSuffix =
+        fallbackDeptUsed && departmentName ? ` (département ${departmentName})` : ''
+      bullets.push(
+        `Note moyenne ${ratingNum.toFixed(1)}/5 sur ${reviewNum} avis vérifiés${deptSuffix}`
+      )
+    }
+  }
+
+  // 2) Éco-PTZ — distinct d'EnBrefBox (qui dit MaPrimeRénov + CEE + TVA).
+  bullets.push('Éco-PTZ jusqu’à 50 000 € à taux zéro pour compléter MaPrimeRénov’ et CEE')
+
+  // 3) Qualification de référence — robust à un slug hors-allowlist.
+  const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
+  if (qualif) {
+    bullets.push(`Qualification de référence : ${qualif.label} (${qualif.organisme})`)
+  }
+
+  // 4) Count CEE éligibles — pluriel correct.
+  if (eligibleCeeOpsCount > 0) {
+    bullets.push(
+      `${eligibleCeeOpsCount} opération${eligibleCeeOpsCount > 1 ? 's' : ''} CEE éligible${eligibleCeeOpsCount > 1 ? 's' : ''} pour ce métier`
+    )
+  }
+
+  // 5) Source officielle.
+  bullets.push('Source officielle : data.gouv.fr — ADEME / France Rénov’ (Licence Etalab 2.0)')
+
+  // 6) CTA — toujours présent, distinct du CTA EnBrefBox ("Devis gratuit, réponse 24h").
+  bullets.push('Devis gratuit en 2 minutes, sans engagement')
+
+  return bullets
+}

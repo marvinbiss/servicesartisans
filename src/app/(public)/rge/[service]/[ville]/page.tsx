@@ -9,6 +9,7 @@ import ProviderList from '@/components/ProviderList'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import {
   getServiceBySlug,
   getLocationBySlug,
@@ -49,6 +50,7 @@ import {
   isRgeUpgradeV2,
   currentMonthYearFr,
   buildIntroParagraph,
+  buildRgeTldrBullets,
   safeJsonStringify,
 } from './helpers'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
@@ -412,6 +414,17 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const eligibleCeeOps = upgradeV2 ? getCeeOpsForRgeService(serviceSlug) : []
   const showCeeBlock = upgradeV2 && eligibleCeeOps.length > 0
 
+  // TL;DR pré-FAQ — helper pure-function (testable, branches couvertes).
+  const tldrBullets = upgradeV2
+    ? buildRgeTldrBullets({
+        serviceSlug,
+        aggregateRating,
+        fallbackDeptUsed,
+        departmentName: location.department_name,
+        eligibleCeeOpsCount: eligibleCeeOps.length,
+      })
+    : []
+
   return (
     <main className="min-h-screen bg-white">
       <script
@@ -694,6 +707,15 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
+          </section>
+        )}
+
+        {upgradeV2 && tldrBullets.length > 0 && (
+          <section aria-labelledby="essentiel-rge" className="mb-10">
+            <h2 id="essentiel-rge" className="sr-only">
+              L’essentiel RGE {serviceName.toLowerCase()} à {villeName}
+            </h2>
+            <TldrBlock bullets={tldrBullets} />
           </section>
         )}
 

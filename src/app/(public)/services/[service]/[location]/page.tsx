@@ -34,6 +34,7 @@ import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
+import TldrBlock from '@/components/flagship/TldrBlock'
 
 import {
   getBreadcrumbSchema,
@@ -823,11 +824,15 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     if (enrichedItemList) jsonLdSchemas.push(enrichedItemList)
   }
 
-  // Enriched speakable schema targeting specific CSS classes
+  // Enriched speakable schema targeting specific CSS classes.
+  // - .speakable-summary  → SpeakableAnswerBox (prose summary, 1 node bas de page)
+  // - .speakable-faq      → FAQ section
+  // - [data-speakable]    → TldrBlock + EnBrefBox (bullets / résumés structurés).
+  // Trois sélecteurs disjoints = pas de double-extraction Google Speakable.
   const enrichedSpeakable = generateSpeakableSchema({
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
     title: h1Text,
-    cssSelectors: ['.speakable-summary', '.speakable-faq'],
+    cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
   })
   jsonLdSchemas.push(enrichedSpeakable)
 
@@ -864,6 +869,40 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       providerCount: providers.length,
     })
   )
+
+  // TL;DR bullets — featured-snippet bait + speakable. Reuse data déjà calculé.
+  // Guard NaN sur averageRating (rating_average=0 passe le filtre ratedProviders),
+  // CTA conditionnel (P1#5) pour ne pas afficher TldrBlock avec 1 seul bullet
+  // publicitaire en fallback dept sans trade ni count.
+  const tldrBullets: string[] = []
+  if (totalProviderCount > 0) {
+    tldrBullets.push(
+      `${totalProviderCount} ${service.name.toLowerCase()}${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''} SIREN à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`
+    )
+  }
+  if (averageRating && totalReviews && averageRating > 0 && totalReviews > 0) {
+    tldrBullets.push(`Note moyenne ${averageRating.toFixed(1)}/5 sur ${totalReviews} avis clients`)
+  }
+  if (trade) {
+    const lo = Math.round(trade.priceRange.min * pricingMultiplier)
+    const hi = Math.round(trade.priceRange.max * pricingMultiplier)
+    tldrBullets.push(
+      `Tarif indicatif ${lo}–${hi}€ ${trade.priceRange.unit} en ${new Date().getFullYear()}`
+    )
+    if (trade.averageResponseTime) {
+      tldrBullets.push(`Délai d'intervention moyen : ${trade.averageResponseTime}`)
+    }
+  }
+  if (rgeProviderCount > 0) {
+    tldrBullets.push(
+      `${rgeProviderCount} artisan${rgeProviderCount > 1 ? 's' : ''} RGE certifié${rgeProviderCount > 1 ? 's' : ''} (éligible MaPrimeRénov')`
+    )
+  }
+  // CTA seulement si au moins 1 bullet informatif déjà présent — sinon TldrBlock
+  // se réduirait à 1 bullet publicitaire (audit code-reviewer P1#5).
+  if (tldrBullets.length > 0) {
+    tldrBullets.push('Devis gratuit, sans engagement, en moins de 24h')
+  }
 
   return (
     <>
@@ -917,6 +956,22 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           )}
         </div>
       </div>
+
+      {/* TL;DR — featured-snippet bait, juste sous le H1.
+           Wrapper sans .speakable-summary : la classe est réservée à
+           SpeakableAnswerBox (prose). TldrBlock est capté via [data-speakable="true"]
+           natif → schéma générique enrichedSpeakable cssSelectors couvre les deux. */}
+      {tldrBullets.length > 0 && (
+        <section
+          aria-labelledby="services-tldr-essentiel"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4"
+        >
+          <h2 id="services-tldr-essentiel" className="sr-only">
+            L’essentiel : {service.name.toLowerCase()} à {location.name}
+          </h2>
+          <TldrBlock bullets={tldrBullets} />
+        </section>
+      )}
 
       {/* JSON-LD LocalBusiness schemas for top providers (SEO only, no visual cards
            — the visual listing is handled by ServiceLocationPageClient below to avoid

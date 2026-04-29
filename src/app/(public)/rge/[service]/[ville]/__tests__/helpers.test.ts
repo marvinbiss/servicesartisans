@@ -5,6 +5,7 @@ import {
   currentMonthYearFr,
   safeJsonStringify,
   buildIntroParagraph,
+  buildRgeTldrBullets,
 } from '../helpers'
 
 // ---------------------------------------------------------------------------
@@ -287,5 +288,138 @@ describe('buildIntroParagraph', () => {
   it('isolation-thermique service outputs Qualibat label', () => {
     const result = buildIntroParagraph('Isolation', 'Strasbourg', 'isolation-thermique')
     expect(result).toContain('Qualibat')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// buildRgeTldrBullets — 11 edge cases pré-FAQ TldrBlock
+// ---------------------------------------------------------------------------
+
+describe('buildRgeTldrBullets', () => {
+  it('omits rating bullet when aggregateRating is null', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      aggregateRating: null,
+      eligibleCeeOpsCount: 0,
+    })
+    expect(bullets.some((b) => b.startsWith('Note moyenne'))).toBe(false)
+  })
+
+  it('omits rating bullet when aggregateRating is undefined (field absent)', () => {
+    const bullets = buildRgeTldrBullets({ serviceSlug: 'pompe-a-chaleur' })
+    expect(bullets.some((b) => b.startsWith('Note moyenne'))).toBe(false)
+  })
+
+  it('includes rating + dept suffix when fallbackDeptUsed=true with department_name', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      aggregateRating: { ratingValue: '4.6', reviewCount: '127' },
+      fallbackDeptUsed: true,
+      departmentName: 'Loire-Atlantique',
+      eligibleCeeOpsCount: 2,
+    })
+    const ratingBullet = bullets.find((b) => b.startsWith('Note moyenne'))
+    expect(ratingBullet).toBeDefined()
+    expect(ratingBullet).toContain('4.6/5')
+    expect(ratingBullet).toContain('127 avis')
+    expect(ratingBullet).toContain('Loire-Atlantique')
+  })
+
+  it('omits dept suffix when fallbackDeptUsed=true but department_name is null', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      aggregateRating: { ratingValue: '4.2', reviewCount: '50' },
+      fallbackDeptUsed: true,
+      departmentName: null,
+    })
+    const ratingBullet = bullets.find((b) => b.startsWith('Note moyenne'))
+    expect(ratingBullet).toBeDefined()
+    expect(ratingBullet).not.toContain('département')
+    expect(ratingBullet).not.toContain('(')
+  })
+
+  it('omits qualification bullet when serviceSlug is unknown', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'service-inconnu-xyz',
+    })
+    expect(bullets.some((b) => b.startsWith('Qualification de référence'))).toBe(false)
+  })
+
+  it('includes qualification label + organisme for known service slugs', () => {
+    const bullets = buildRgeTldrBullets({ serviceSlug: 'pompe-a-chaleur' })
+    const qualifBullet = bullets.find((b) => b.startsWith('Qualification de référence'))
+    expect(qualifBullet).toBeDefined()
+    // Couvre les deux organismes RGE possibles selon le métier.
+    expect(qualifBullet).toMatch(/QualiPAC|Qualibat|Qualifelec|Qualit'EnR|Qualibois/)
+  })
+
+  it('omits CEE bullet when eligibleCeeOpsCount=0', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      eligibleCeeOpsCount: 0,
+    })
+    expect(bullets.some((b) => b.includes('opération'))).toBe(false)
+  })
+
+  it('uses singular for eligibleCeeOpsCount=1', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      eligibleCeeOpsCount: 1,
+    })
+    const ceeBullet = bullets.find((b) => b.includes('opération'))
+    expect(ceeBullet).toBe('1 opération CEE éligible pour ce métier')
+  })
+
+  it('uses plural for eligibleCeeOpsCount > 1', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      eligibleCeeOpsCount: 4,
+    })
+    const ceeBullet = bullets.find((b) => b.includes('opération'))
+    expect(ceeBullet).toBe('4 opérations CEE éligibles pour ce métier')
+  })
+
+  it('always includes Eco-PTZ + source data.gouv + CTA bullets', () => {
+    const bullets = buildRgeTldrBullets({ serviceSlug: 'foo' })
+    expect(bullets.some((b) => b.startsWith('Éco-PTZ'))).toBe(true)
+    expect(bullets.some((b) => b.includes('data.gouv.fr'))).toBe(true)
+    expect(bullets.some((b) => b.startsWith('Devis gratuit'))).toBe(true)
+  })
+
+  it('rejects NaN ratingValue (e.g. providers with rating=0)', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      aggregateRating: { ratingValue: 'NaN', reviewCount: '10' },
+    })
+    expect(bullets.some((b) => b.startsWith('Note moyenne'))).toBe(false)
+  })
+
+  it('rejects rating <= 0 or reviewCount <= 0', () => {
+    const cases = [
+      { ratingValue: '0', reviewCount: '5' },
+      { ratingValue: '0.0', reviewCount: '5' },
+      { ratingValue: '4.5', reviewCount: '0' },
+      { ratingValue: '-1', reviewCount: '10' },
+    ]
+    for (const aggregateRating of cases) {
+      const bullets = buildRgeTldrBullets({ serviceSlug: 'pompe-a-chaleur', aggregateRating })
+      expect(bullets.some((b) => b.startsWith('Note moyenne'))).toBe(false)
+    }
+  })
+
+  it('does not duplicate MaPrimeRénov / CEE / TVA values (avoid speakable overlap with EnBrefBox)', () => {
+    const bullets = buildRgeTldrBullets({
+      serviceSlug: 'pompe-a-chaleur',
+      eligibleCeeOpsCount: 3,
+    })
+    // EnBrefBox keyPoints porte déjà : "Éligible MaPrimeRénov’ jusqu'à 11 000 €",
+    // "Cumul CEE + TVA 5,5 % possible". Le TldrBlock ne doit PAS dupliquer ces
+    // valeurs — uniquement Éco-PTZ (montant 50 000 €), distinct.
+    const joined = bullets.join(' | ')
+    expect(joined).toContain('Éco-PTZ')
+    expect(joined).not.toContain('11 000')
+    expect(joined).not.toContain('TVA')
+    expect(joined).not.toContain('5,5')
+    expect(joined).not.toMatch(/Cumul CEE/)
   })
 })

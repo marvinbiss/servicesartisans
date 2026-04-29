@@ -22,7 +22,7 @@ export default function TldrBlock({ title = 'L’essentiel', bullets }: TldrBloc
       </div>
       <ul className="space-y-2 text-sm md:text-base text-primary-950 list-disc pl-5">
         {bullets.map((b, i) => (
-          <li key={i}>{b}</li>
+          <li key={`${i}-${b.slice(0, 32)}`}>{b}</li>
         ))}
       </ul>
     </aside>
