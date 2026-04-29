@@ -17,6 +17,7 @@ import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { ArtisanSchema } from '@/components/artisan/ArtisanSchema'
+import { GoogleReviewsBadge } from '@/components/artisan/GoogleReviewsBadge'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
@@ -89,6 +90,11 @@ interface ProviderRecord {
   rge_valid_until?: string | null
   rge_organismes?: string[] | null
   rge_source_url?: string | null
+  // Google Places enrichment (migration 483).
+  google_place_id?: string | null
+  google_rating?: number | null
+  google_user_ratings_total?: number | null
+  google_business_status?: 'OPERATIONAL' | 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY' | null
 }
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
@@ -240,6 +246,14 @@ function convertToArtisan(
     rge_valid_until: provider.rge_valid_until ?? null,
     rge_organismes: provider.rge_organismes ?? null,
     rge_source_url: provider.rge_source_url ?? null,
+    // Google Places (migration 483) — null par défaut tant que le backfill
+    // n'a pas tourné ou que SIRET=no_match. Le composant <ArtisanSchema>
+    // utilise google_rating en fallback aggregateRating SI first-party=0,
+    // et une UI badge dédiée affiche les avis Google avec un lien explicite.
+    google_place_id: provider.google_place_id ?? null,
+    google_rating: provider.google_rating != null ? Number(provider.google_rating) : null,
+    google_user_ratings_total: provider.google_user_ratings_total ?? 0,
+    google_business_status: provider.google_business_status ?? null,
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
     // Will be removed when each sub-component migrates to v2 Artisan type
   }
@@ -861,6 +875,39 @@ async function renderProviderPage({ params }: PageProps) {
 
       {/* JSON-LD structured data — rendered SERVER-SIDE for immediate bot visibility */}
       <ArtisanSchema artisan={artisan} isClaimed={isClaimed} />
+
+      {/* Google Reviews badge — affiché juste après le schéma, avant le client.
+          Tous les guards (place_id + status OPERATIONAL + rating ≥ 1 + count ≥ 3)
+          calculés en amont pour éviter de rendre le wrapper section vide
+          si seul place_id est présent (audit code-reviewer 2026-04-29 P2#3). */}
+      {(() => {
+        const gRating = Number(artisan.google_rating ?? 0)
+        const gCount = Number(artisan.google_user_ratings_total ?? 0)
+        const showGoogleBadge =
+          !!artisan.google_place_id &&
+          artisan.google_business_status === 'OPERATIONAL' &&
+          Number.isFinite(gRating) &&
+          gRating >= 1 &&
+          gRating <= 5 &&
+          Number.isFinite(gCount) &&
+          gCount >= 3
+        if (!showGoogleBadge) return null
+        return (
+          <section className="bg-white border-b border-sand-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center gap-3">
+              <span className="text-xs uppercase tracking-wider text-charcoal-500">
+                Vérifié sur
+              </span>
+              <GoogleReviewsBadge
+                placeId={artisan.google_place_id}
+                rating={artisan.google_rating}
+                userRatingsTotal={artisan.google_user_ratings_total}
+                businessStatus={artisan.google_business_status}
+              />
+            </div>
+          </section>
+        )
+      })()}
 
       <ArtisanPageClient
         initialArtisan={artisan}

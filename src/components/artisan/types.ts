@@ -82,6 +82,14 @@ export interface Artisan {
   rge_valid_until?: string | null
   rge_organismes?: string[] | null
   rge_source_url?: string | null
+  // Google Places enrichment (migration 483) — DISTINCT de average_rating /
+  // review_count (qui sont first-party plateforme). Source : Places API New,
+  // Find Place via SIRET. Utilisé en fallback aggregateRating Schema.org si
+  // first-party=0 + en bloc UI "avis Google" + sameAs Google Maps.
+  google_place_id?: string | null
+  google_rating?: number | null
+  google_user_ratings_total?: number | null
+  google_business_status?: 'OPERATIONAL' | 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY' | null
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, avatar_url,
   // certifications, insurance, payment_methods, languages, emergency_available,
   // experience_years, employee_count, hourly_rate_min/max here.

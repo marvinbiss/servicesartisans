@@ -189,24 +189,65 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         const siren = artisan.siret.replace(/\s/g, '').slice(0, 9)
         links.push(`https://www.societe.com/societe/${siren}.html`)
       }
+      // Google Maps — preuve d'identité externe forte (E-E-A-T trust signal).
+      // Format officiel Places "place_id only" pour ne pas leak le nom dans
+      // l'URL (Google sait résoudre depuis le seul place_id).
+      if (artisan.google_place_id) {
+        links.push(
+          `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(artisan.google_place_id)}`
+        )
+      }
       return links.length > 0 ? { sameAs: links } : {}
     })(),
 
-    // AggregateRating — only when real reviews exist.
-    // Defensive : Number() coerce les NUMERIC Supabase retournés en string
-    // (sinon `.toFixed` throw). Pas de fallback si le rating est manquant
-    // malgré review_count > 0 → on skip l'aggregateRating complet plutôt
-    // que d'émettre ratingValue="0.0" (qui tue le SEO).
-    ...(artisan.review_count > 0 &&
-      Number(artisan.average_rating) > 0 && {
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: Number(artisan.average_rating).toFixed(1),
-          reviewCount: String(artisan.review_count),
-          bestRating: '5',
-          worstRating: '1',
-        },
-      }),
+    // AggregateRating — priorité first-party (review_count + average_rating
+    // de la plateforme). Fallback Google Places UNIQUEMENT si first-party=0
+    // ET google_rating>0 ET business_status=OPERATIONAL : c'est l'entité
+    // LocalBusiness elle-même qui porte ses avis Google (acceptable Schema.org
+    // policy — distinct du listing page-level qui interdit l'agrégation
+    // cross-source). Defensive : Number() coerce les NUMERIC Supabase string.
+    ...(() => {
+      // Source 1 — first-party reviews (toujours préféré)
+      const reviewCount = Number(artisan.review_count ?? 0)
+      const avgRating = Number(artisan.average_rating ?? 0)
+      if (reviewCount > 0 && avgRating > 0) {
+        return {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: avgRating.toFixed(1),
+            reviewCount: String(reviewCount),
+            bestRating: '5',
+            worstRating: '1',
+          },
+        }
+      }
+      // Source 2 — Google Places fallback. Strict guards : place_id présent,
+      // rating dans [1, 5] (zéro réel = no signal, pas un faux 0★), count>=3
+      // (Google n'affiche pas les ratings <3 reviews, mimer la même barre
+      // pour éviter qu'un AggregateRating soit émis sur une donnée trop fine),
+      // status OPERATIONAL (sinon CLOSED_PERMANENTLY ou CLOSED_TEMPORARILY :
+      // ne pas émettre d'étoiles SERP pour une boîte fermée).
+      const gRating = Number(artisan.google_rating ?? 0)
+      const gCount = Number(artisan.google_user_ratings_total ?? 0)
+      if (
+        artisan.google_place_id &&
+        gRating >= 1 &&
+        gRating <= 5 &&
+        gCount >= 3 &&
+        artisan.google_business_status === 'OPERATIONAL'
+      ) {
+        return {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: gRating.toFixed(1),
+            reviewCount: String(gCount),
+            bestRating: '5',
+            worstRating: '1',
+          },
+        }
+      }
+      return {}
+    })(),
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
