@@ -9,6 +9,7 @@ import { getServiceBySlug } from '@/lib/supabase'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import AroundMeGeolocator from '@/components/seo/AroundMeGeolocator'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
@@ -179,6 +180,21 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               <MapPin className="w-4 h-4 text-primary-500" /> Toute la France
             </span>
           </div>
+        </div>
+      </section>
+
+      {/* Sprint 10x — TldrBlock featured snippets / AI Overviews. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <TldrBlock
+            title={`${name} autour de moi — l'essentiel`}
+            bullets={[
+              `Géolocalisation 1-clic : trouve un ${nameLc} proche de chez vous`,
+              'Artisans vérifiés SIREN officiel + qualifications RGE sync ADEME',
+              'Devis gratuit sous 24h, sans engagement, lead exclusif',
+              '30 villes populaires + couverture nationale 35 000+ communes',
+            ]}
+          />
         </div>
       </section>
 

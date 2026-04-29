@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { MapPin, ArrowRight, Building2, Users, ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { villes, regions, departements, services } from '@/lib/data/france'
@@ -194,6 +195,21 @@ export default async function VillesIndexPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Sprint 10x — TldrBlock featured snippets / AI Overviews. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+          <TldrBlock
+            title="L'essentiel de l'annuaire villes 2026"
+            bullets={[
+              `${villes.length}+ villes couvertes en France métropolitaine et outre-mer`,
+              `${departements.length} départements, ${regions.length} régions — couverture nationale`,
+              'Artisans vérifiés SIREN officiel, qualifications RGE sync ADEME quotidien',
+              'Devis gratuit sous 24h, lead exclusif (1 demande = 1 artisan)',
+            ]}
+          />
         </div>
       </section>
 

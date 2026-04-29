@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -290,6 +291,21 @@ export default async function QuartierPage({ params }: PageProps) {
               <VilleHeroCTA villeName={ville.name} quartierName={quartierName} />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Sprint 10x — TldrBlock featured snippets / AI Overviews. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+          <TldrBlock
+            title={`Artisans à ${quartierName} (${ville.name}) — l'essentiel`}
+            bullets={[
+              `${services.length} corps de métier disponibles dans le quartier ${quartierName}`,
+              `${content.profile.eraLabel}, ${content.profile.densityLabel.toLowerCase()} — typologies bâti adaptées`,
+              'Artisans vérifiés SIREN officiel, RGE sync ADEME quotidien',
+              'Devis gratuit sous 24h, lead exclusif (1 demande = 1 artisan)',
+            ]}
+          />
         </div>
       </section>
 

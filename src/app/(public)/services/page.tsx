@@ -48,6 +48,7 @@ import {
   Truck,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import {
   getOrganizationSchema,
   getBreadcrumbSchema,
@@ -614,6 +615,21 @@ export default async function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Breadcrumb items={[{ label: 'Services' }]} className="mb-4" />
           <GeographicNavigation />
+        </div>
+      </section>
+
+      {/* Sprint 10x — TldrBlock featured snippets / AI Overviews. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+          <TldrBlock
+            title="L'essentiel des services artisans 2026"
+            bullets={[
+              `${staticServicesList.length} métiers du bâtiment couverts (plombier, électricien, chauffagiste, etc.)`,
+              'Artisans vérifiés SIREN officiel + sync ADEME pour qualifications RGE',
+              'Devis gratuit sous 24h, sans engagement, lead exclusif (1 demande = 1 artisan)',
+              'Couverture nationale : 101 départements, 35 000+ communes',
+            ]}
+          />
         </div>
       </section>
 
