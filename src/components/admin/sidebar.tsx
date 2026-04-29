@@ -56,6 +56,7 @@ const nav = [
   { name: 'Services', href: '/admin/services', icon: Grid },
   { name: 'Contenu', href: '/admin/contenu', icon: FileEdit },
   { name: 'Descriptions RGE', href: '/admin/descriptions', icon: FileEdit },
+  { name: 'SEO Foundations', href: '/admin/seo/foundations-impact', icon: BarChart3 },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },

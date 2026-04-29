@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { computeSitemapDiff, persistSitemapRun, type SitemapRun } from '@/lib/seo/sitemap-diff'
 
 const RGE_STALE_WARN_DAYS = 7
 const RGE_STALE_CRITICAL_DAYS = 14
@@ -191,6 +192,41 @@ export async function GET(request: Request) {
         )
       }
 
+      // Bouclier 5 — diff jour-à-jour + persistance fail-safe.
+      // Ne bloque pas le cron principal en cas d'erreur DB.
+      let diffAlerts: Awaited<ReturnType<typeof computeSitemapDiff>> = []
+      try {
+        const supabase = createAdminClient()
+        const sitemapRuns: SitemapRun[] = results.map((r) => ({
+          sitemap_url: r.url,
+          url_count: r.urls,
+          status: r.status,
+          ok: r.ok,
+        }))
+        diffAlerts = await computeSitemapDiff(supabase, sitemapRuns)
+        await persistSitemapRun(supabase, sitemapRuns)
+
+        for (const alert of diffAlerts) {
+          const pct = (alert.delta_pct * 100).toFixed(1)
+          logger.error(
+            `[sitemap-health] ${alert.severity.toUpperCase()} diff ${pct}% on ${alert.sitemap_url}`,
+            undefined,
+            {
+              kind: 'sitemap_diff_alert',
+              ...alert,
+            }
+          )
+          Sentry.captureMessage(`Sitemap diff ${alert.severity}: ${alert.sitemap_url} ${pct}%`, {
+            level: alert.severity === 'critical' ? 'error' : 'warning',
+            extra: { ...alert },
+          })
+        }
+      } catch (err) {
+        logger.warn('[sitemap-health] diff/persist failed (non-blocking)', {
+          error: err instanceof Error ? err.message : String(err),
+        })
+      }
+
       const rgeFreshness = await checkRgeFreshness()
 
       await pingHeartbeat('sitemap-health')
@@ -199,6 +235,7 @@ export async function GET(request: Request) {
         checked: results.length,
         totalUrls,
         failures: failures.length > 0 ? failures : undefined,
+        diffAlerts: diffAlerts.length > 0 ? diffAlerts : undefined,
         rge: {
           healthy: rgeFreshness.ok,
           lastSyncedAt: rgeFreshness.lastSyncedAt,
