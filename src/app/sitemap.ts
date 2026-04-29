@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
-import { tradeContent, getTradesSlugs, parseTask } from '@/lib/data/trade-content'
+import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
@@ -105,14 +105,11 @@ export async function generateSitemaps() {
   const emergencySlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
-  // Tier 2: tarifs-task, avis, problemes use top 500 cities only
-  const totalTaskCount = Object.values(tradeContent).reduce(
-    (sum, t) => sum + t.commonTasks.length,
-    0
-  )
-  const tarifsTaskCitiesBatchCount = Math.ceil(
-    (totalTaskCount * SITEMAP_CITY_COUNT_TIER2) / LARGE_BATCH
-  )
+  // Tier 2: avis, problemes use top 500 cities only.
+  // tarifs-task-cities REMOVED 2026-04-29 (stratégie 140K vague 1) :
+  // 184 500 URLs supprimées via DELETE 410 (cf. evaluateGonePath +
+  // docs/strategy-140k-2026-04-29.md). 0 KW Ahrefs, 0 backlinks, cannibalise
+  // /services/[s]/[v] qui contient déjà ces tâches comme sections.
 
   const sitemaps: { id: string }[] = [
     { id: 'static' },
@@ -133,10 +130,8 @@ export async function generateSitemaps() {
       { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => ({ id: `tarifs-service-cities-${i}` })
     ),
-    // Tier 2: tarifs-tâche, avis, problèmes → top 500 cities
-    ...Array.from({ length: tarifsTaskCitiesBatchCount }, (_, i) => ({
-      id: `tarifs-task-cities-${i}`,
-    })),
+    // Tier 2: avis, problèmes → top 500 cities
+    // tarifs-task-cities REMOVED 2026-04-29 (DELETE 410 — gone-paths.ts).
     { id: 'avis-services' },
     // Reviews schema drift résolu 2026-04-12 (migrations 385+386 + bascule
     // admin client + type canonical src/types/review.ts). Réactivation des
@@ -1086,34 +1081,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs task×city pages (Tier 2: top 500 cities) ────────────
-  if (id.startsWith('tarifs-task-cities-')) {
-    const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
-    const BATCH = LARGE_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const [serviceSlug, trade] of Object.entries(tradeContent)) {
-      for (const task of trade.commonTasks) {
-        const { slug: taskSlug } = parseTask(task)
-        for (const v of phase1Cities) {
-          if (count >= end) break outer
-          if (count >= start)
-            result.push({
-              url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`,
-              changeFrequency: 'monthly',
-              priority: 0.5,
-            })
-          count++
-        }
-      }
-    }
-
-    return result
-  }
+  // ── Tarifs task×city pages — DELETED 2026-04-29 (stratégie 140K vague 1) ──
+  // 184 500 URLs supprimées via DELETE 410. Voir evaluateGonePath()
+  // dans src/lib/seo/gone-paths.ts + docs/strategy-140k-2026-04-29.md.
+  // Le route file src/app/(public)/tarifs/[service]/[ville]/[travail]/page.tsx
+  // est conservé jusqu'au déploiement du middleware mis à jour pour éviter
+  // un build break ; il n'est plus indexé ni servi (middleware retourne 410).
 
   // ── Avis service hub pages ──────────────────────────────────────────
   if (id === 'avis-services') {

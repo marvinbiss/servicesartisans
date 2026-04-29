@@ -28,10 +28,8 @@ export async function GET(request: Request) {
   const tradeSlugs = getTradesSlugs()
   const problemSlugs = getProblemSlugs()
 
-  const totalTaskCount = Object.values(tradeContent).reduce(
-    (sum, t) => sum + t.commonTasks.length,
-    0
-  )
+  // tarifs-task-cities REMOVED 2026-04-29 — see src/app/sitemap.ts
+  // and src/lib/seo/gone-paths.ts. 184K URLs purged via DELETE 410.
 
   const ids: string[] = [
     'static',
@@ -59,11 +57,7 @@ export async function GET(request: Request) {
       { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => `tarifs-service-cities-${i}`
     ),
-    // Tier 2: tarifs-tâche, avis, problèmes → top 500 cities
-    ...Array.from(
-      { length: Math.ceil((totalTaskCount * SITEMAP_CITY_COUNT_TIER2) / LARGE_BATCH) },
-      (_, i) => `tarifs-task-cities-${i}`
-    ),
+    // Tier 2: avis, problèmes → top 500 cities (tarifs-task supprimé 2026-04-29)
     'avis-services',
     // Reviews schema drift resolved 2026-04-12 (migrations 414-417 + admin
     // client bascule + canonical type). Shards re-listed here to keep this

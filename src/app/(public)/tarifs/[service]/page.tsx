@@ -593,6 +593,9 @@ export default async function TarifsServicePage({
             Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes
             de France.
           </p>
+          {/* /tarifs/[s]/[v]/[task] supprimé 2026-04-29 (DELETE 410, stratégie
+              140K vague 1). On lie désormais vers /tarifs/[s]/[v] (parent qui
+              contient déjà le tableau complet des tâches). */}
           <div className="space-y-6">
             {trade.commonTasks.slice(0, 4).map((task) => {
               const taskName = task.split(':')[0].trim()
@@ -604,7 +607,7 @@ export default async function TarifsServicePage({
                     {topCities.slice(0, 4).map((ville) => (
                       <Link
                         key={ville.slug}
-                        href={`/tarifs/${service}/${ville.slug}/${taskSlug}`}
+                        href={`/tarifs/${service}/${ville.slug}`}
                         className="text-xs text-primary-600 hover:text-primary-700 hover:underline bg-white px-3 py-1.5 rounded-lg border border-sand-300 hover:border-primary-300 transition-colors"
                       >
                         Prix {taskName.toLowerCase()} à {ville.name} →

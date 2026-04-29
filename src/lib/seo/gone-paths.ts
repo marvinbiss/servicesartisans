@@ -150,6 +150,7 @@ export interface GonePathDecision {
     | 'rge_service_slug_unknown'
     | 'cee_operation_invalid_format'
     | 'ville_slug_malformed'
+    | 'tarifs_task_deprecated'
 }
 
 function validateVilleSlug(ville: string): GonePathDecision {
@@ -205,6 +206,15 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
   const artisansRgeMatch = /^\/artisans-rge\/([^/]+)\/?$/.exec(pathname)
   if (artisansRgeMatch) {
     return validateVilleSlug(artisansRgeMatch[1])
+  }
+
+  // 5. /tarifs/[service]/[ville]/[travail] — bloc DEPRECATED 2026-04-29
+  //    Stratégie 140K vague 1 : 184 500 URLs cannibalisantes, 0 KW Ahrefs,
+  //    0 backlinks externes recensés. Purge définitive via 410.
+  //    /tarifs/[s] et /tarifs/[s]/[v] (1-2 segments) restent valides.
+  const tarifsTaskMatch = /^\/tarifs\/[^/]+\/[^/]+\/[^/]+\/?$/.exec(pathname)
+  if (tarifsTaskMatch) {
+    return { gone: true, reason: 'tarifs_task_deprecated' }
   }
 
   return { gone: false }

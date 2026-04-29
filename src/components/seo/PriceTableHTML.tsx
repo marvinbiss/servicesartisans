@@ -5,14 +5,13 @@
  * Parse les commonTasks (format "Label : prix" ou "Label: prix") et applique
  * un multiplicateur regional optionnel aux prix numeriques.
  *
- * Si serviceSlug ET locationSlug sont fournis, chaque nom de tache devient un lien
- * vers /tarifs/[service]/[ville]/[taskSlug].
- *
  * Server Component — pas de 'use client'.
+ *
+ * Note 2026-04-29 : ne lie plus vers /tarifs/[s]/[v]/[task] (bloc supprimé en
+ * 410 — stratégie 140K vague 1). Le nom de la tâche est en texte simple.
  */
 
 import Link from 'next/link'
-import { slugifyTask } from '@/lib/data/trade-content'
 
 interface PriceTableHTMLProps {
   tasks: string[] // commonTasks du trade
@@ -62,8 +61,6 @@ export default function PriceTableHTML({
 }: PriceTableHTMLProps) {
   if (!tasks || tasks.length === 0) return null
 
-  const canLink = Boolean(serviceSlug && locationSlug)
-
   const captionText = location
     ? `Tarifs ${serviceName.toLowerCase()} ${location} — 2026`
     : `Tarifs ${serviceName.toLowerCase()} en France — 2026`
@@ -97,23 +94,17 @@ export default function PriceTableHTML({
         <tbody>
           {tasks.map((task, i) => {
             const { name, price } = parseTaskLocal(task, multiplier)
-            const taskSlug = canLink ? slugifyTask(name) : ''
+            // /tarifs/[s]/[v]/[task] supprimé 2026-04-29 (DELETE 410). On affiche
+            // le nom de la tâche en texte simple ; l'utilisateur trouve les
+            // détails via la page parente /tarifs/[s]/[v] qui contient déjà le
+            // tableau complet (cette colonne est purement informative).
             return (
               <tr
                 key={i}
                 className={`hover:bg-primary-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-sand-50/50'}`}
               >
                 <td className="px-5 py-4 text-sm border-t border-sand-200">
-                  {canLink ? (
-                    <Link
-                      href={`/tarifs/${serviceSlug}/${locationSlug}/${taskSlug}`}
-                      className="text-primary-600 hover:text-primary-700 hover:underline"
-                    >
-                      {name}
-                    </Link>
-                  ) : (
-                    <span className="text-charcoal-800">{name}</span>
-                  )}
+                  <span className="text-charcoal-800">{name}</span>
                 </td>
                 <td className="px-5 py-4 text-charcoal-900 text-sm font-medium border-t border-sand-200 text-right whitespace-nowrap">
                   {price}

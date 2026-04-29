@@ -87,6 +87,24 @@ Recherche Person: email d'abord, fallback phone. Retry DLQ: cron 6h, backoff exp
 Domaine canonical: `servicesartisans.fr` (apex, sans www). Le www → 301 qui casse les POST.
 `/api/revalidate` exige header `Origin: https://servicesartisans.fr`.
 
+## Outils externes — Ahrefs API
+
+Token stocké hors repo : `/c/Users/USER/.secrets/ahrefs.env` (40 chars, préfixe `-fUKR_`). **Ne JAMAIS** copier dans `.env*` ni dans le repo.
+
+Usage shell :
+
+```bash
+TOKEN=$(cat /c/Users/USER/.secrets/ahrefs.env | tr -d '\r\n ')
+curl -H "Authorization: Bearer $TOKEN" -H "Accept: application/json" \
+  "https://api.ahrefs.com/v3/<endpoint>"
+```
+
+- Plan : **Advanced** (mensuel) — quota workspace **1 000 000 unités/mois**
+- Reset cycle : 18 du mois (vérifié 2026-04-29 : 292 549 / 1 000 000 utilisés ⇒ ~707K dispo jusqu'au 2026-05-18)
+- Quota par clé : illimité
+- Expiration clé : **2027-04-29**
+- Endpoint santé : `GET /v3/subscription-info/limits-and-usage`
+
 ## SEO
 
 Utiliser `/sa-seo` pour la référence complète (sitemap, IndexNow, lastmod, noindex).

@@ -179,6 +179,46 @@ describe('evaluateGonePath — /artisans-rge/[ville]', () => {
   })
 })
 
+describe('evaluateGonePath — /tarifs/[s]/[v]/[task] (DEPRECATED 2026-04-29)', () => {
+  it('toute URL 4-segments → gone:true tarifs_task_deprecated', () => {
+    expect(evaluateGonePath('/tarifs/plombier/paris/debouchage-de-canalisation')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+    expect(evaluateGonePath('/tarifs/electricien/lyon/installation-tableau')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+  })
+
+  it('même avec service inconnu → gone:true (pattern match avant whitelist)', () => {
+    expect(evaluateGonePath('/tarifs/coiffeur/paris/coupe-homme')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+  })
+
+  it('trailing slash → gone:true', () => {
+    expect(evaluateGonePath('/tarifs/plombier/lyon/fuite-eau/')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+  })
+
+  it('NE matche PAS /tarifs/[s] (1 segment) → gone:false', () => {
+    expect(evaluateGonePath('/tarifs/plombier')).toEqual({ gone: false })
+  })
+
+  it('NE matche PAS /tarifs/[s]/[v] (2 segments) → gone:false', () => {
+    expect(evaluateGonePath('/tarifs/plombier/paris')).toEqual({ gone: false })
+    expect(evaluateGonePath('/tarifs/electricien/lyon')).toEqual({ gone: false })
+  })
+
+  it('NE matche PAS /tarifs (hub) → gone:false', () => {
+    expect(evaluateGonePath('/tarifs')).toEqual({ gone: false })
+  })
+})
+
 describe('evaluateGonePath — routes non-vulnérables (passthrough)', () => {
   it('homepage', () => {
     expect(evaluateGonePath('/')).toEqual({ gone: false })
