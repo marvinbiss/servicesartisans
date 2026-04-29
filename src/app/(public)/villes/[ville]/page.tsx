@@ -48,6 +48,8 @@ import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import CityHubLinks from '@/components/seo/CityHubLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
+import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import { tradeContent } from '@/lib/data/trade-content'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -264,6 +266,24 @@ async function renderVillePage({ params }: PageProps) {
   // pour les ranking factors et compatible Google Assistant. Image obligatoire
   // (Google Article required field) → fallback OG image si pas de cityImage.
   const upgradeV2 = isSeoUpgradeV2()
+  // SnippetBaitSummary — top 10 métiers avec fourchette prix renseignée.
+  // WHY : capture des Featured Snippets sur "tarif <metier> <ville>" en
+  // affichant un tableau structuré <table> par-dessus la grid services.
+  // Données nationales (priceRange identique sur toutes les villes), mais
+  // l'URL contient la ville → Google rattache le snippet au pattern
+  // "tarif/prix <metier> <ville>" via la query intent.
+  const snippetTrades = upgradeV2
+    ? Object.values(tradeContent)
+        .filter((t) => t.priceRange?.min > 0 && t.priceRange?.max > 0)
+        .slice(0, 10)
+        .map((t) => ({
+          name: t.name,
+          slug: t.slug,
+          min: t.priceRange.min,
+          max: t.priceRange.max,
+          unit: t.priceRange.unit,
+        }))
+    : []
   const monthYear = currentMonthYearFr()
   const pageUrl = `${SITE_URL}/villes/${villeSlug}`
   const monthlyAnchor = monthlyAnchorIso()
@@ -495,6 +515,17 @@ async function renderVillePage({ params }: PageProps) {
             averageRating={aggregateRating ? Number(aggregateRating.ratingValue) : undefined}
             totalReviews={aggregateRating ? Number(aggregateRating.reviewCount) : undefined}
           />
+        </div>
+      )}
+
+      {/* SnippetBaitSummary — table prix par métier (Featured Snippets).
+          5 000 surfaces villes × 10 métiers = 50 000 surfaces de capture
+          sur "tarif <metier> <ville>" / "prix <metier> <ville>".
+          Lien interne /tarifs/[trade] depuis chaque ligne renforce le
+          maillage tarifs ↔ villes (PageRank flow). */}
+      {upgradeV2 && snippetTrades.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6">
+          <SnippetBaitSummary trades={snippetTrades} />
         </div>
       )}
 
