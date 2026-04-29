@@ -124,10 +124,9 @@ export async function generateSitemaps() {
       { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => ({ id: `urgence-service-cities-${i}` })
     ),
-    ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => ({ id: `tarifs-service-cities-${i}` })
-    ),
+    // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
+    // /services/[s]/[v]#tarifs avec PriceTableHTML injecté). Hub /tarifs
+    // et /tarifs/[s] (1-2 segments) restent dans sitemap via 'static' bloc.
     // Tier 2: avis, problèmes → top 500 cities
     // tarifs-task-cities REMOVED 2026-04-29 (DELETE 410 — gone-paths.ts).
     { id: 'avis-services' },
@@ -1020,36 +1019,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs service×city pages — all combos, priority boost for qualified ─
-  if (id.startsWith('tarifs-service-cities-')) {
-    const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const svc of services) {
-      for (const v of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start) {
-          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${v.slug}`)
-          const deptKey = `${normalizeName(v.departement)}::${svc.slug}`
-          result.push({
-            url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`,
-            lastModified: byDeptServiceSlug.get(deptKey),
-            changeFrequency: 'monthly',
-            priority: isQualified ? 0.7 : 0.5,
-          })
-        }
-        count++
-      }
-    }
-
-    return result
-  }
+  // ── Tarifs service×city pages — REMOVED 2026-04-29 (V1 #3 stratégie 140K) ──
+  // 104 282 URLs /tarifs/[s]/[v] redirigées 301 → /services/[s]/[v]#tarifs
+  // via next.config.js redirects(). PriceTableHTML + StructuredPricingTable
+  // injectés dans /services/[s]/[location]/_components/SeoContent.tsx pour
+  // préserver les Featured Snippets Google sur le contenu prix.
 
   // ── Tarifs task×city pages — DELETED 2026-04-29 (stratégie 140K vague 1) ──
   // 184 500 URLs supprimées via DELETE 410. Voir evaluateGonePath()

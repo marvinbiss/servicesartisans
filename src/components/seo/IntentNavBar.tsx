@@ -29,7 +29,7 @@ const TABS = [
     intent: 'tarifs' as const,
     label: 'Tarifs',
     icon: Euro,
-    href: (s: string, v: string) => `/tarifs/${s}/${v}`,
+    href: (s: string, v: string) => `/services/${s}/${v}`,
   },
   {
     intent: 'urgence' as const,

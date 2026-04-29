@@ -132,7 +132,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
       const svcCityPath = `/services/${svc}/${city.slug}`
 
       // Cross-intent links (5 intents)
-      addLink(graph, svcCityPath, `/tarifs/${svc}/${city.slug}`)
+      addLink(graph, svcCityPath, `/services/${svc}/${city.slug}`)
       addLink(graph, svcCityPath, `/services/${svc}/${city.slug}`)
       addLink(graph, svcCityPath, `/urgence/${svc}/${city.slug}`)
       addLink(graph, svcCityPath, `/avis/${svc}/${city.slug}`)
@@ -490,7 +490,7 @@ export function getAllPagePaths(): string[] {
   for (const svc of serviceSlugs) {
     for (const city of tier1Cities) {
       pages.push(`/services/${svc}/${city.slug}`)
-      pages.push(`/tarifs/${svc}/${city.slug}`)
+      pages.push(`/services/${svc}/${city.slug}`)
     }
   }
   for (const svc of tradeSlugs) {

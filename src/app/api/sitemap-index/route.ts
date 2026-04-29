@@ -51,10 +51,8 @@ export async function GET(request: Request) {
       { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => `urgence-service-cities-${i}`
     ),
-    ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => `tarifs-service-cities-${i}`
-    ),
+    // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
+    // /services/[s]/[v]#tarifs avec PriceTableHTML injecté dans SeoContent).
     // Tier 2: avis, problèmes → top 500 cities (tarifs-task supprimé 2026-04-29)
     'avis-services',
     // Reviews schema drift resolved 2026-04-12 (migrations 414-417 + admin

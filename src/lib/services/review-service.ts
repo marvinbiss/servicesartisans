@@ -236,7 +236,7 @@ export async function revalidateReviewPaths(
     const listingPaths = [
       `/services/${serviceSlug}/${locationSlug}`,
       `/avis/${serviceSlug}/${locationSlug}`,
-      `/tarifs/${serviceSlug}/${locationSlug}`,
+      `/services/${serviceSlug}/${locationSlug}`,
       `/urgence/${serviceSlug}/${locationSlug}`,
       `/services/${serviceSlug}/${locationSlug}`,
       `/rge/${serviceSlug}/${locationSlug}`,

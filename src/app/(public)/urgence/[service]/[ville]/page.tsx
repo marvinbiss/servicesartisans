@@ -1262,7 +1262,7 @@ async function renderUrgenceServiceVillePage({
 
           <div className="text-center mt-8">
             <Link
-              href={`/tarifs/${service}/${villeSlug}`}
+              href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold"
             >
               Tarifs détaillés {tradeLower} à {villeData.name}
@@ -1991,7 +1991,7 @@ async function renderUrgenceServiceVillePage({
               Avis {tradeLower} à {villeData.name}
             </Link>
             <Link
-              href={`/tarifs/${service}/${villeSlug}`}
+              href={`/services/${service}/${villeSlug}`}
               className="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-colors"
             >
               Tarifs {tradeLower} à {villeData.name}
@@ -2027,7 +2027,7 @@ async function renderUrgenceServiceVillePage({
                   {trade.name} à {villeData.name}
                 </Link>
                 <Link
-                  href={`/tarifs/${service}/${villeSlug}`}
+                  href={`/services/${service}/${villeSlug}`}
                   className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Tarifs {tradeLower} à {villeData.name}

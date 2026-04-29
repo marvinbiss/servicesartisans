@@ -85,7 +85,7 @@ function generateContextualLinks(
 
   // 3. Tarifs link (different intent, same service×city)
   links.push({
-    href: `/tarifs/${serviceSlug}/${villeSlug}`,
+    href: `/services/${serviceSlug}/${villeSlug}`,
     anchor: `tarifs ${serviceName.toLowerCase()} à ${villeName}`,
     prefix: 'Consultez nos',
     suffix: ' pour estimer votre budget.',

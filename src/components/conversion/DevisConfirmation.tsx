@@ -628,7 +628,7 @@ export default function DevisConfirmation({
             </span>
           </Link>
           <Link
-            href={`/tarifs/${service}/${city}`}
+            href={`/services/${service}/${city}`}
             className="flex items-center gap-3 p-3 bg-sand-50 border border-sand-200 rounded-xl hover:bg-sand-100 transition-colors"
           >
             <FileText className="w-4 h-4 text-primary-500 flex-shrink-0" />

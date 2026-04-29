@@ -650,6 +650,18 @@ const nextConfig = {
         destination: '/services/:service/:location',
         permanent: true,
       },
+
+      // ====== Stratégie 140K — vague 1 #3 (2026-04-29) ======
+      // /tarifs/[s]/[v] → /services/[s]/[v]#tarifs (104 282 URLs canonical 301)
+      // Similarité 52.9 % avec /services. PriceTableHTML + StructuredPricingTable
+      // injectés dans /services SeoContent.tsx avant suppression de la route
+      // (zéro perte de contenu Featured Snippet).
+      // Le hub /tarifs et /tarifs/[s] (1-2 segments) restent vivants.
+      {
+        source: '/tarifs/:service/:location',
+        destination: '/services/:service/:location#tarifs',
+        permanent: true,
+      },
     ]
   },
 

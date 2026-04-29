@@ -1262,7 +1262,7 @@ export default async function ServicePage({ params }: PageProps) {
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`tarifs-${city.slug}`}
-                    href={`/tarifs/${serviceSlug}/${city.slug}`}
+                    href={`/services/${serviceSlug}/${city.slug}`}
                     className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
                   >
                     {city.name}

@@ -128,7 +128,7 @@ function getRotatingUrls(slot: number): { category: SlotCategory; urls: string[]
       const urls: string[] = []
       for (const service of services) {
         for (const ville of citySlice) {
-          urls.push(`${SITE_URL}/tarifs/${service.slug}/${ville.slug}`)
+          urls.push(`${SITE_URL}/services/${service.slug}/${ville.slug}`)
         }
       }
       return { category: 'tarifs×ville', urls }

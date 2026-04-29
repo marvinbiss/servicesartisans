@@ -105,7 +105,7 @@ export default function StructuredPricingTable({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${serviceName} à ${villeName}`,
-    url: `${SITE_URL}/tarifs/${serviceSlug}/${villeSlug}`,
+    url: `${SITE_URL}/services/${serviceSlug}/${villeSlug}`,
     provider: {
       '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,

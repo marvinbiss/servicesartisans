@@ -607,7 +607,7 @@ export default async function TarifsServicePage({
                     {topCities.slice(0, 4).map((ville) => (
                       <Link
                         key={ville.slug}
-                        href={`/tarifs/${service}/${ville.slug}`}
+                        href={`/services/${service}/${ville.slug}`}
                         className="text-xs text-primary-600 hover:text-primary-700 hover:underline bg-white px-3 py-1.5 rounded-lg border border-sand-300 hover:border-primary-300 transition-colors"
                       >
                         Prix {taskName.toLowerCase()} à {ville.name} →

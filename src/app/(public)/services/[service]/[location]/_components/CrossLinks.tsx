@@ -286,7 +286,7 @@ export default function CrossLinks({
                               Devis
                             </Link>
                             <Link
-                              href={`/tarifs/${slug}/${locationSlug}`}
+                              href={`/services/${slug}/${locationSlug}`}
                               className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-accent-50 text-charcoal-600 hover:text-accent-700 rounded-lg text-xs font-medium border border-sand-200 hover:border-accent-200 transition-all"
                             >
                               Tarifs

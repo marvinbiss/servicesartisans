@@ -136,7 +136,7 @@ const snippetTarifs: SnippetFn = (ctx) => {
       Si vous cherchez un {ctx.serviceLower} à {ctx.villeName}, sachez que les tarifs varient de{' '}
       {min}&nbsp;€ à {max}&nbsp;€/h.{' '}
       <Link
-        href={`/tarifs/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         Consultez notre grille tarifaire complète
@@ -147,7 +147,7 @@ const snippetTarifs: SnippetFn = (ctx) => {
       Le prix d&#39;un {ctx.serviceLower} à {ctx.villeName} se situe entre {min} et {max}&nbsp;€ de
       l&#39;heure. Retrouvez le détail sur notre page{' '}
       <Link
-        href={`/tarifs/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         tarifs {ctx.serviceLower} à {ctx.villeName}
@@ -157,7 +157,7 @@ const snippetTarifs: SnippetFn = (ctx) => {
     <>
       Pour y voir plus clair sur les coûts, notre{' '}
       <Link
-        href={`/tarifs/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         guide des tarifs {ctx.serviceLower} à {ctx.villeName}

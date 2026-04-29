@@ -1191,7 +1191,7 @@ async function renderProblemeVillePage({
                   {tradeName} urgence à {villeData.name}
                 </Link>
                 <Link
-                  href={`/tarifs/${problem.primaryService}/${ville}`}
+                  href={`/services/${problem.primaryService}/${ville}`}
                   className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Tarifs {tradeName.toLowerCase()} à {villeData.name}

@@ -31,7 +31,7 @@ const ALL_INTENTS: IntentDef[] = [
     key: 'tarifs',
     label: 'Tarifs',
     icon: Euro,
-    href: (s, v) => (v ? `/tarifs/${s}/${v}` : `/tarifs/${s}`),
+    href: (s, v) => (v ? `/services/${s}/${v}` : `/tarifs/${s}`),
   },
   {
     key: 'avis',

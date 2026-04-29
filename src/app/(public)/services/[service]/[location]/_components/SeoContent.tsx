@@ -5,6 +5,8 @@ import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType } from '@/types'
 import type { TradeContent } from '@/lib/data/trade-content'
+import PriceTableHTML from '@/components/seo/PriceTableHTML'
+import StructuredPricingTable from '@/components/seo/StructuredPricingTable'
 
 interface Props {
   locationContent: LocationContent | null
@@ -40,25 +42,34 @@ export default function SeoContent({
                 </h2>
                 <p>{locationContent.introText}</p>
 
-                <h3 className="font-heading text-charcoal-800">
+                <h3 className="font-heading text-charcoal-800" id="tarifs">
                   Tarifs et prix d'un {service.name.toLowerCase()} à {location.name}
                 </h3>
-                <p>
-                  {locationContent.pricingNote}
-                  {trade && (
-                    <>
-                      {' '}
-                      Consultez notre{' '}
-                      <Link
-                        href={`/tarifs/${service.slug}/${locationSlug}`}
-                        className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
-                      >
-                        grille tarifaire {service.name.toLowerCase()} à {location.name}
-                      </Link>{' '}
-                      pour un barème détaillé par prestation.
-                    </>
-                  )}
-                </p>
+                <p>{locationContent.pricingNote}</p>
+                {/* Tarifs intégrés (avant 2026-04-29 cette grille vivait sur
+                    /tarifs/[s]/[v] désormais 301 vers cette page — V1 #3 stratégie 140K) */}
+                {trade && (
+                  <div className="not-prose mt-6 space-y-6">
+                    <PriceTableHTML
+                      tasks={trade.commonTasks}
+                      serviceName={trade.name}
+                      serviceSlug={service.slug}
+                      location={location.name}
+                      locationSlug={locationSlug}
+                      multiplier={pricingMultiplier}
+                      unit={trade.priceRange.unit}
+                    />
+                    <StructuredPricingTable
+                      serviceSlug={service.slug}
+                      serviceName={trade.name}
+                      villeName={location.name}
+                      villeSlug={locationSlug}
+                      tasks={trade.commonTasks}
+                      multiplier={pricingMultiplier}
+                      unit="€"
+                    />
+                  </div>
+                )}
 
                 <h3 className="font-heading text-charcoal-800">
                   Conseils pour vos travaux à {location.name}
@@ -138,14 +149,14 @@ export default function SeoContent({
                         {trade.priceRange.unit}
                       </strong>
                       . Les prix varient selon la complexité des travaux et le professionnel choisi.{' '}
-                      Retrouvez le détail sur notre page{' '}
-                      <Link
-                        href={`/tarifs/${service.slug}/${locationSlug}`}
+                      Voir le{' '}
+                      <a
+                        href="#tarifs"
                         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
                       >
-                        tarifs {service.name.toLowerCase()} à {location.name}
-                      </Link>
-                      .
+                        détail par prestation
+                      </a>{' '}
+                      ci-dessus.
                     </p>
                     {trade.certifications && trade.certifications.length > 0 && (
                       <>

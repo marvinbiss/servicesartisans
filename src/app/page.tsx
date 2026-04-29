@@ -247,7 +247,7 @@ export default async function HomePage() {
               TOP_CITIES.slice(0, 3).map((city) => (
                 <Link
                   key={`tarif-${service.slug}-${city.slug}`}
-                  href={`/tarifs/${service.slug}/${city.slug}`}
+                  href={`/services/${service.slug}/${city.slug}`}
                   className="flex items-center justify-center px-3 py-2.5 text-sm text-charcoal-700 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-xl border border-sand-200 transition-colors text-center"
                 >
                   Tarif {service.name.toLowerCase()} {city.name}

@@ -677,7 +677,7 @@ export default async function DepartementPage({ params }: PageProps) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <Link
-                      href={`/tarifs/${svc.slug}/${villesDuDepartement[0].slug}`}
+                      href={`/services/${svc.slug}/${villesDuDepartement[0].slug}`}
                       className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       <Euro className="w-3.5 h-3.5" /> Tarifs
@@ -941,7 +941,7 @@ export default async function DepartementPage({ params }: PageProps) {
                   {orderedServices.slice(0, 2).map((s) => (
                     <Link
                       key={`tarifs-${s.slug}-${villesDuDepartement[0].slug}`}
-                      href={`/tarifs/${s.slug}/${villesDuDepartement[0].slug}`}
+                      href={`/services/${s.slug}/${villesDuDepartement[0].slug}`}
                       className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors"
                     >
                       <ChevronRight className="w-3 h-3" />

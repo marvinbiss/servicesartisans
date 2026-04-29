@@ -474,7 +474,7 @@ export default async function TarifsPage() {
                     {villes.slice(0, 6).map((ville) => (
                       <Link
                         key={ville.slug}
-                        href={`/tarifs/${service.slug}/${ville.slug}`}
+                        href={`/services/${service.slug}/${ville.slug}`}
                         className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
                       >
                         <ChevronRight className="w-3 h-3" /> {ville.name}

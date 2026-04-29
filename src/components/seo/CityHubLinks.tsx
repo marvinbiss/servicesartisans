@@ -76,7 +76,7 @@ export default function CityHubLinks({
         }),
       },
       {
-        href: `/tarifs/${slug}/${villeSlug}`,
+        href: `/services/${slug}/${villeSlug}`,
         label: getAnchorText({
           serviceSlug: slug,
           serviceName: s.name,

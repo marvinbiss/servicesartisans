@@ -694,7 +694,7 @@ function generateFaq(
     },
     {
       question: `Faut-il un devis avant de faire appel \u00E0 ${m.article} \u00E0 ${v.name} ?`,
-      answer: `Oui, un devis \u00E9crit est obligatoire d\u00E8s que le montant d\u00E9passe 150 \u20AC (article L111-3 du Code de la consommation). \u00C0 ${v.name}, la plupart des ${m.plural} proposent le devis gratuit. V\u00E9rifiez que le devis mentionne le tarif horaire, les fournitures, le d\u00E9placement et la TVA applicable. [Consultez nos tarifs ${v.name}](/tarifs/${m.slug}/${v.slug}).`,
+      answer: `Oui, un devis \u00E9crit est obligatoire d\u00E8s que le montant d\u00E9passe 150 \u20AC (article L111-3 du Code de la consommation). \u00C0 ${v.name}, la plupart des ${m.plural} proposent le devis gratuit. V\u00E9rifiez que le devis mentionne le tarif horaire, les fournitures, le d\u00E9placement et la TVA applicable. [Consultez nos tarifs ${v.name}](/services/${m.slug}/${v.slug}).`,
     },
     {
       question: `${m.prestations[0].nom} \u00E0 ${v.name} : quel budget pr\u00E9voir ?`,
@@ -732,7 +732,7 @@ function liensSection(m: Metier, v: VilleLight): string {
     `## En savoir plus sur les ${m.plural} \u00E0 ${v.name}`,
     '',
     `- [Annuaire des ${m.plural} \u00E0 ${v.name}](/services/${m.slug}/${v.slug}) \u2014 trouvez un professionnel qualifi\u00E9 pr\u00E8s de chez vous`,
-    `- [Tarifs d\u00E9taill\u00E9s ${m.name} ${v.name}](/tarifs/${m.slug}/${v.slug}) \u2014 grille compl\u00E8te des prix par prestation`,
+    `- [Tarifs d\u00E9taill\u00E9s ${m.name} ${v.name}](/services/${m.slug}/${v.slug}) \u2014 grille compl\u00E8te des prix par prestation`,
     `- [Demander un devis ${m.name} \u00E0 ${v.name}](/services/${m.slug}/${v.slug}) \u2014 recevez jusqu\u2019\u00E0 3 devis gratuits en 2 minutes`,
     `- [Comparer les tarifs ${m.plural} en France](/tarifs/${m.slug}) \u2014 grille nationale par prestation`,
   ].join('\n')

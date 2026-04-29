@@ -240,7 +240,7 @@ export async function GET(request: Request) {
       const allTarifsUrls: string[] = []
       for (const service of services) {
         for (const city of EXTENDED_CITIES) {
-          allTarifsUrls.push(`${SITE_URL}/tarifs/${service.slug}/${city}`)
+          allTarifsUrls.push(`${SITE_URL}/services/${service.slug}/${city}`)
         }
       }
       const tarifsBatch = rotateSlice(allTarifsUrls, bucket)
