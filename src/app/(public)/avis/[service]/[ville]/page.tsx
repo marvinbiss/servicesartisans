@@ -67,6 +67,7 @@ import {
   hasProvidersByServiceAndLocation,
 } from '@/lib/supabase'
 import { shouldNoindex } from '@/lib/seo/pruning'
+import { hasDeptProviderFallback } from '@/lib/seo/dept-fallback'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import dynamic from 'next/dynamic'
@@ -294,9 +295,15 @@ export async function generateMetadata({
   const hasProviders = await hasProvidersByServiceAndLocation(service, ville)
   // Reuse reviewStats fetched above for CTR prefix — fail-open: null => indexed.
   const hasReviews = reviewStats === null ? true : (reviewStats.review_count ?? 0) > 0
+  // Bug 4 fix : aligner sur le render qui cascade ville → dept (via
+  // getTopProviders). Quand pas de providers ville mais que le département a
+  // des artisans, la page rend bien un listing utile — ne pas noindex.
+  const hasFallbackDept = hasProviders
+    ? false
+    : await hasDeptProviderFallback(service, villeData.departement)
   const noindex = shouldNoindex(`/avis/${service}/${ville}`, {
     providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: hasReviews,
+    hasUniqueData: hasReviews || hasFallbackDept,
   })
 
   return {

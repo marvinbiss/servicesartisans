@@ -77,6 +77,7 @@ import UrgencyBlock from '@/components/seo/UrgencyBlock'
 import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import { getPageContent } from '@/lib/cms'
 import { shouldNoindex } from '@/lib/seo/pruning'
+import { hasDeptProviderFallback } from '@/lib/seo/dept-fallback'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -293,17 +294,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
   // Only fetch commune data when providerCount is 0 (the only case where hasUniqueData matters)
   let communeExists = false
+  let hasFallbackDept = false
   if (providerCount === 0) {
     try {
       communeExists = !!(await getCommuneBySlug(locationSlug))
     } catch {
       communeExists = false
     }
+    // Align metadata robots with render-time fallback: when local providers
+    // are absent but the department-level fallback yields ≥1 artisan, the
+    // page renders an active listing — must NOT be noindex'd.
+    // See `renderServiceLocationPage` providersResult fallback (page.tsx).
+    hasFallbackDept = await hasDeptProviderFallback(serviceSlug, departmentName)
   }
   const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
     providerCount,
     isQuartierPage: false,
-    hasUniqueData: !!(tradeContent || communeExists),
+    hasUniqueData: !!(tradeContent || communeExists || hasFallbackDept),
   })
 
   return {

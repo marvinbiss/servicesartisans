@@ -733,7 +733,9 @@ export async function getProvidersByServiceAndDepartment(
 
   const limit = options?.limit ?? 6
   const rgeOnly = options?.rgeOnly ?? false
-  const cacheKey = `providers:svc-dept:${serviceSlug}:${departmentName}:${limit}${rgeOnly ? ':rge' : ''}`
+  // encodeURIComponent prevents segment ambiguity from special chars (accents,
+  // hyphens, theoretical colons) in cache keys — see security audit MED finding.
+  const cacheKey = `providers:svc-dept:${serviceSlug}:${encodeURIComponent(departmentName)}:${limit}${rgeOnly ? ':rge' : ''}`
   const todayIso = new Date().toISOString().slice(0, 10)
 
   return getCachedData(

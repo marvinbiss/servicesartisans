@@ -257,7 +257,9 @@ export async function getRgeProvidersByServiceAndDepartement(
   if (!specialties || specialties.length === 0) return { providers: [], count: 0 }
 
   const today = new Date().toISOString().slice(0, 10)
-  const cacheKey = `rge:svc-dept:${serviceSlug}:${departementName}:${limit}:${offset}`
+  // encodeURIComponent prevents segment ambiguity in cache keys (accents,
+  // hyphens, theoretical colons) — see security audit MED finding.
+  const cacheKey = `rge:svc-dept:${serviceSlug}:${encodeURIComponent(departementName)}:${limit}:${offset}`
 
   return getCachedData<RgeServiceCityListing>(
     cacheKey,

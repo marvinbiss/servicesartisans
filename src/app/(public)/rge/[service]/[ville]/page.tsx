@@ -30,6 +30,7 @@ import {
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndCity,
+  getRgeProvidersByServiceAndDepartement,
   getRgeCountByServiceAndCityStrict,
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
@@ -106,8 +107,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Next.js 14.2 #69103 qui renvoie 200 sur notFound()+dynamicParams).
   // Fail-open strict : si DB transitoire KO (ok=false), on garde la page
   // indexable, ISR corrigera au prochain revalidate.
+  // Bug 2 fix : avant de basculer noindex, vérifier si le fallback dept
+  // sauve la page (count_ville=0 mais count_dept≥1 — typique data ADEME
+  // mal alignée sur certaines variantes d'address_city).
   const countStrict = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
-  const isNoindex = countStrict.ok && countStrict.count === 0
+  let hasDeptFallback = false
+  if (countStrict.ok && countStrict.count === 0 && location.department_name) {
+    const deptListing = await getRgeProvidersByServiceAndDepartement(
+      serviceSlug,
+      location.department_name,
+      { limit: 1 }
+    ).catch(() => ({ providers: [], count: 0 }))
+    hasDeptFallback = deptListing.count > 0
+  }
+  const isNoindex = countStrict.ok && countStrict.count === 0 && !hasDeptFallback
 
   // Sprint 0.1 — review prefix injecté en title pour CTR. Le fetch passe par
   // le même cache que la page (mêmes params), donc warm-cache hit → 0 coût DB
@@ -185,9 +198,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   const serviceName = service?.name || serviceSlug
   const villeName = location.name
 
-  const { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {
+  let { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {
     limit: 50,
   })
+  let isFallback = false
 
   // Vague 1.1 — 410 strategy : quand on confirme 0 providers via la variante
   // stricte (discrimine count=0 légitime d'une erreur transitoire), on déclenche
@@ -196,8 +210,29 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // robots:noindex,nofollow via la metadata du layout racine — même effet
   // d'oubli qu'un vrai 410 côté Google. Les routes pré-rendues retournent
   // un vrai 404. La migration Next.js 15 les fera toutes passer en 404 réel.
+  // Bug 2 fix : avant le notFound(), tenter un fallback département. Quand
+  // la data ADEME est mal alignée (variante d'address_city pour les grandes
+  // villes type Paris/Lyon/Marseille), la query ville renvoie 0 mais le
+  // département a bien des artisans. La page reste utile + indexable.
   const confirmedEmpty = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
-  if (confirmedEmpty.ok && confirmedEmpty.count === 0 && count === 0) notFound()
+  if (confirmedEmpty.ok && confirmedEmpty.count === 0 && count === 0) {
+    if (location.department_name) {
+      const deptListing = await getRgeProvidersByServiceAndDepartement(
+        serviceSlug,
+        location.department_name,
+        { limit: 50 }
+      ).catch(() => ({ providers: [], count: 0 }))
+      if (deptListing.count > 0) {
+        providers = deptListing.providers
+        count = deptListing.count
+        isFallback = true
+      } else {
+        notFound()
+      }
+    } else {
+      notFound()
+    }
+  }
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
   const pageUrl = `${SITE_URL}${path}`
@@ -428,9 +463,15 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         {upgradeV2 && (
           <EnBrefBox
-            summary={`Trouvez ${count} ${serviceName.toLowerCase()} certifiés RGE à ${villeName}, éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Devis gratuits sous 24h. Qualifications vérifiées ADEME / France Rénov’.`}
+            summary={
+              isFallback && location.department_name
+                ? `${count} ${serviceName.toLowerCase()} certifiés RGE dans le département ${location.department_name}, intervenant à ${villeName}. Éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Qualifications vérifiées ADEME / France Rénov’.`
+                : `Trouvez ${count} ${serviceName.toLowerCase()} certifiés RGE à ${villeName}, éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Devis gratuits sous 24h. Qualifications vérifiées ADEME / France Rénov’.`
+            }
             keyPoints={[
-              `${count} artisans RGE actifs à ${villeName}`,
+              isFallback && location.department_name
+                ? `${count} artisans RGE actifs dans le département ${location.department_name}`
+                : `${count} artisans RGE actifs à ${villeName}`,
               'Éligible MaPrimeRénov’ jusqu’à 11 000 €',
               'Cumul CEE + TVA 5,5 % possible',
               'Devis gratuit, réponse 24h',
@@ -441,9 +482,16 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
             {upgradeV2 ? (
-              <>
-                {count} {serviceName.toLowerCase()} RGE {villeName} ({monthYear})
-              </>
+              isFallback && location.department_name ? (
+                <>
+                  {serviceName} RGE à {villeName} — département {location.department_name} (
+                  {monthYear})
+                </>
+              ) : (
+                <>
+                  {count} {serviceName.toLowerCase()} RGE {villeName} ({monthYear})
+                </>
+              )
             ) : (
               <>
                 {serviceName} certifié RGE à {villeName}
@@ -451,7 +499,17 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             )}
           </h1>
           <p className="mt-3 text-charcoal-600">
-            {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à {villeName}
+            {isFallback && location.department_name ? (
+              <>
+                {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} dans le
+                département {location.department_name}, intervenant à {villeName}
+              </>
+            ) : (
+              <>
+                {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à{' '}
+                {villeName}
+              </>
+            )}
           </p>
           {upgradeV2 && (
             <p className="mt-2 text-sm text-charcoal-500">
@@ -505,6 +563,19 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             </>
           )}
         </section>
+
+        {isFallback && location.department_name && (
+          <section
+            role="note"
+            className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"
+          >
+            <strong className="font-semibold">À noter&nbsp;:</strong> aucun artisan RGE n&apos;est
+            actuellement référencé directement sur la commune de {villeName}. Nous affichons les{' '}
+            {count} artisan{count > 1 ? 's' : ''} RGE actif{count > 1 ? 's' : ''} dans le
+            département <strong>{location.department_name}</strong>, susceptibles d&apos;intervenir
+            à {villeName}.
+          </section>
+        )}
 
         <section className="mb-12">
           {count === 0 ? (

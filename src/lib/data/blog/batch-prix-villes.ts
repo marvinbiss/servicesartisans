@@ -734,7 +734,7 @@ function liensSection(m: Metier, v: VilleLight): string {
     `- [Annuaire des ${m.plural} \u00E0 ${v.name}](/services/${m.slug}/${v.slug}) \u2014 trouvez un professionnel qualifi\u00E9 pr\u00E8s de chez vous`,
     `- [Tarifs d\u00E9taill\u00E9s ${m.name} ${v.name}](/tarifs/${m.slug}/${v.slug}) \u2014 grille compl\u00E8te des prix par prestation`,
     `- [Demander un devis ${m.name} \u00E0 ${v.name}](/devis/${m.slug}/${v.slug}) \u2014 recevez jusqu\u2019\u00E0 3 devis gratuits en 2 minutes`,
-    `- [Guide complet des prix ${m.name} en France](/blog/prix-${m.slug}-2026) \u2014 comparatif national`,
+    `- [Comparer les tarifs ${m.plural} en France](/tarifs/${m.slug}) \u2014 grille nationale par prestation`,
   ].join('\n')
 }
 
