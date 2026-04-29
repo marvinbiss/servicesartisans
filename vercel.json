@@ -72,6 +72,10 @@
       "schedule": "0 6 * * *"
     },
     {
+      "path": "/api/cron/check-aides-freshness",
+      "schedule": "0 7 * * *"
+    },
+    {
       "path": "/api/cron/redis-health",
       "schedule": "*/5 * * * *"
     },
