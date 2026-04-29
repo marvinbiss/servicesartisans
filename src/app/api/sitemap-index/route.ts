@@ -55,17 +55,9 @@ export async function GET(request: Request) {
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté dans SeoContent).
     // Tier 2: avis, problèmes → top 500 cities (tarifs-task supprimé 2026-04-29)
     'avis-services',
-    // Reviews schema drift resolved 2026-04-12 (migrations 414-417 + admin
-    // client bascule + canonical type). Shards re-listed here to keep this
-    // index aligned with generateSitemaps() in sitemap.ts.
-    ...Array.from(
-      {
-        length: Math.ceil(
-          (Object.keys(tradeContent).length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH
-        ),
-      },
-      (_, i) => `avis-service-cities-${i}`
-    ),
+    // avis-service-cities REMOVED 2026-04-29 (V1 #5 stratégie 140K — pages
+    // noindex tant que <3 avis, retirées du sitemap pour économiser le
+    // crawl budget). Shard `avis-qualified-cities-*` à recréer en V2.
     'problemes',
     ...Array.from(
       { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },

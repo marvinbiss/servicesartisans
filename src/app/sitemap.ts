@@ -127,20 +127,14 @@ export async function generateSitemaps() {
     // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté). Hub /tarifs
     // et /tarifs/[s] (1-2 segments) restent dans sitemap via 'static' bloc.
-    // Tier 2: avis, problèmes → top 500 cities
+    // Tier 2: problèmes → top 500 cities
     // tarifs-task-cities REMOVED 2026-04-29 (DELETE 410 — gone-paths.ts).
     { id: 'avis-services' },
-    // Reviews schema drift résolu 2026-04-12 (migrations 385+386 + bascule
-    // admin client + type canonical src/types/review.ts). Réactivation des
-    // shards /avis/{service}/{ville} dans le sitemap.
-    ...Array.from(
-      {
-        length: Math.ceil(
-          (Object.keys(tradeContent).length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH
-        ),
-      },
-      (_, i) => ({ id: `avis-service-cities-${i}` })
-    ),
+    // avis-service-cities REMOVED 2026-04-29 (V1 #5 stratégie 140K). Pages
+    // restent accessibles via internal links mais noindex tant que <3 avis sur
+    // le combo (cf. metadata robots dans /avis/[service]/[ville]/page.tsx).
+    // Auto re-add quand flywheel produit ≥3 avis sur le combo : créer un
+    // nouveau shard `avis-qualified-cities-*` filtré par DB query (V2 task).
     { id: 'problemes' },
     ...Array.from(
       { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
@@ -1060,31 +1054,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // Réactivées 2026-04-12 après résolution du reviews schema drift
   // (migrations 414_reviews_rls_hardening + 415_reviews_add_missing_columns,
   // bascule POST /api/reviews sur admin client, type canonical review.ts).
-  if (id.startsWith('avis-service-cities-')) {
-    const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const tradeSlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const svc of tradeSlugs) {
-      for (const v of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start)
-          result.push({
-            url: `${SITE_URL}/avis/${svc}/${v.slug}`,
-            changeFrequency: 'monthly',
-            priority: 0.5,
-          })
-        count++
-      }
-    }
-
-    return result
-  }
+  // ── Avis service×city pages — REMOVED 2026-04-29 (V1 #5 stratégie 140K) ──
+  // 23 500 URLs /avis/[s]/[v] retirées du sitemap (les pages restent
+  // accessibles mais noindex tant que <3 avis). Auto re-add via futur shard
+  // `avis-qualified-cities-*` filtré DB quand le flywheel d'invitations
+  // (cron /api/cron/send-review-invitations) produit ≥3 avis sur le combo.
 
   // ── Problemes hub + individual pages ────────────────────────────────
   // Problemes = contenu éditorial statique. Pas de lastmod (honnête).

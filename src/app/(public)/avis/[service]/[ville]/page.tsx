@@ -301,10 +301,23 @@ export async function generateMetadata({
   const hasFallbackDept = hasProviders
     ? false
     : await hasDeptProviderFallback(service, villeData.departement)
-  const noindex = shouldNoindex(`/avis/${service}/${ville}`, {
-    providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: hasReviews || hasFallbackDept,
-  })
+
+  // Stratégie 140K V1 #5 (2026-04-29) : seuil strict 3 avis minimum (au niveau
+  // département, source `getReviewStatsByDept`). Sans social proof minimal,
+  // une page /avis/ est thin content qui dilue le crawl budget. Auto-réversible :
+  // dès que reviewStats.review_count ≥ 3 via le flywheel (cron
+  // /api/cron/send-review-invitations actif depuis 2026-04-18), l'ISR rebuild
+  // retire le tag au prochain crawl Google.
+  // Fail-open : si reviewStats === null (DB blip), on suit l'ancienne règle.
+  const reviewCountStrict = reviewStats?.review_count ?? null
+  const noindexInsufficientSocialProof = reviewCountStrict !== null && reviewCountStrict < 3
+
+  const noindex =
+    noindexInsufficientSocialProof ||
+    shouldNoindex(`/avis/${service}/${ville}`, {
+      providerCount: hasProviders ? 1 : 0,
+      hasUniqueData: hasReviews || hasFallbackDept,
+    })
 
   return {
     title,
