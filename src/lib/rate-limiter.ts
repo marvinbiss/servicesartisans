@@ -319,6 +319,13 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   webhook: { window: 60 * 1000, max: 200, failOpen: true }, // 200/min for external webhooks (Resend, Twilio) — fail open
   cron: { window: 60 * 1000, max: 10, failOpen: true }, // 10/min for cron jobs — fail open so cron runs don't fail
   analytics: { window: 60 * 1000, max: 120, failOpen: true }, // 120/min for analytics beacons — fail open
+  // Open Data — endpoints publics CC-BY/Etalab consommés par data.gouv bot,
+  // crawlers opendata, intégrations tierces (chantier #4 + chantier #3 cold
+  // start DOS protection). Fail-open : data.gouv crawler doit jamais être
+  // bloqué, l'objectif est de freiner un attaquant qui marteleait le RPC
+  // pendant la fenêtre où le CDN n'a pas encore chauffé. 60/min/IP suffit
+  // pour un consommateur légitime, bloque un script naïf à 1 req/sec.
+  openData: { window: 60 * 1000, max: 60, failOpen: true },
   default: { window: 60 * 1000, max: 100 }, // 100 requests per minute default
 }
 
@@ -349,6 +356,9 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
 
   // Cron jobs — Vercel cron triggers, must not be blocked
   if (pathname.startsWith('/api/cron')) return RATE_LIMITS.cron
+
+  // Open Data — public CC-BY/Etalab endpoints (chantier #4 + #3 DOS protection)
+  if (pathname.startsWith('/api/open-data')) return RATE_LIMITS.openData
 
   // VAPI voice webhooks — very high throughput, fail-open
   if (pathname.startsWith('/api/vapi')) return RATE_LIMITS.vapiWebhook
