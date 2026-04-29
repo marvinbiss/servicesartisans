@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import {
@@ -780,6 +781,19 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               />
             </section>
           </Suspense>
+        )}
+
+        {/* SimulateurCTA — bridge funnel RGE → /simulateur-aides-renovation.
+            WHY : la page RGE expose les artisans + les primes CEE éligibles,
+            mais ne dirigeait jamais vers le simulateur agrégé (MaPrimeRénov'
+            + CEE + Coup de pouce + TVA 5,5 %). Audit funnel 2026-04-30 :
+            seul CTA présent était /devis. Le simulateur est l'étape naturelle
+            entre "voir les primes" et "demander un devis" — surtout pour
+            les services renovation-énergétique éligibles (showCeeBlock=true). */}
+        {upgradeV2 && showCeeBlock && (
+          <section className="mb-12">
+            <SimulateurCTA serviceSlug={serviceSlug} city={villeName} variant="banner" />
+          </section>
         )}
 
         <section className="mb-12 py-12 bg-charcoal-950 rounded-2xl text-center text-white">

@@ -317,9 +317,15 @@ export default async function RgeHubPage() {
       </section>
 
       {/* Bénéfices rapide */}
+      {/* Bridge YMYL : RGE conditionne l'accès aux aides → cards cliquables
+          vers /aides/[slug] (E-E-A-T signal + maillage thématique aides ↔ rge,
+          audit maillage 2026-04-30). */}
       <section className="bg-emerald-50/60 border-b border-emerald-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-5">
-          <div className="flex items-start gap-3">
+          <Link
+            href="/aides/maprimerenov"
+            className="flex items-start gap-3 rounded-lg p-3 -m-3 hover:bg-emerald-100/60 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+          >
             <FileCheck2
               className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
               aria-hidden="true"
@@ -330,8 +336,11 @@ export default async function RgeHubPage() {
                 Aide directe de l&apos;Anah, réservée aux travaux réalisés par un artisan RGE actif.
               </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
+          </Link>
+          <Link
+            href="/aides/cee"
+            className="flex items-start gap-3 rounded-lg p-3 -m-3 hover:bg-emerald-100/60 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+          >
             <FileCheck2
               className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
               aria-hidden="true"
@@ -342,8 +351,11 @@ export default async function RgeHubPage() {
                 Versées par les délégataires obligés (Effy, Sonergia, TotalEnergies, EDF).
               </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
+          </Link>
+          <Link
+            href="/aides/tva-5-5"
+            className="flex items-start gap-3 rounded-lg p-3 -m-3 hover:bg-emerald-100/60 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-500 focus-visible:outline-none"
+          >
             <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
               <div className="font-semibold text-charcoal-900">TVA à 5,5 %</div>
@@ -351,7 +363,7 @@ export default async function RgeHubPage() {
                 Taux réduit sur la main-d&apos;œuvre et les matériaux des travaux énergétiques.
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 

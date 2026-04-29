@@ -27,6 +27,7 @@ const navigationLinks = [
   { name: 'Rénovation énergétique', href: '/renovation-energetique' },
   { name: 'Aides 2026', href: '/aides' },
   { name: 'Artisans RGE', href: '/rge' },
+  { name: 'Problèmes & dépannages', href: '/problemes' },
   { name: 'Départements', href: '/departements' },
   { name: 'Villes', href: '/villes' },
   { name: '36 000 communes (open data)', href: '/communes' },

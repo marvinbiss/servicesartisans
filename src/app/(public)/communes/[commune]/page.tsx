@@ -47,13 +47,15 @@ function getCanonicalRedirectTarget(slug: string): string | null {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { commune: slug } = await params
 
+  // WHY: déclenche le 301 dès `generateMetadata` plutôt que de retourner un
+  // metadata `noindex` puis attendre le `permanentRedirect` du render. L'ancien
+  // pattern émettait un `<meta robots="noindex">` qui pouvait être consommé par
+  // Google avant le suivi du 301 → perte de PageRank sur la cible canonical
+  // (audit indexabilité 2026-04-30). Avec `permanentRedirect` ici, Next.js
+  // throw NEXT_REDIRECT immédiatement et la réponse HTTP est 308/301 sans
+  // jamais render le body ni envoyer de meta robots conflictuel.
   const canonical = getCanonicalRedirectTarget(slug)
-  if (canonical) {
-    return {
-      title: 'Redirection',
-      robots: { index: false, follow: true },
-    }
-  }
+  if (canonical) permanentRedirect(canonical)
 
   const commune = await getCommuneBySlug(slug)
   if (!commune) notFound()
