@@ -685,7 +685,7 @@ async function renderProblemeVillePage({
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
-              href={`/devis/${problem.primaryService}/${ville}`}
+              href={`/services/${problem.primaryService}/${ville}`}
               className="inline-flex items-center justify-center gap-3 bg-white text-charcoal-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               Devis gratuit à {villeData.name}
@@ -1173,7 +1173,7 @@ async function renderProblemeVillePage({
                   {problem.name} en France
                 </Link>
                 <Link
-                  href={`/devis/${problem.primaryService}/${ville}`}
+                  href={`/services/${problem.primaryService}/${ville}`}
                   className="block text-sm text-charcoal-600 hover:text-amber-600 py-1"
                 >
                   Devis {tradeName.toLowerCase()} à {villeData.name}

@@ -677,7 +677,7 @@ function generateFaq(
     // --- 3 questions specifiques a la ville ---
     {
       question: `Combien co\u00FBte ${m.article} \u00E0 ${v.name} en 2026 ?`,
-      answer: `En 2026, le tarif horaire d\u2019${m.article} \u00E0 ${v.name} (${v.departement}) se situe entre **${adj(m.tarifMin, coeff)} et ${adj(m.tarifMax, coeff)} ${m.unit}**. Ce tarif est ${coeff > 1.1 ? 'sup\u00E9rieur de ' + Math.round((coeff - 1) * 100) + ' % \u00E0' : 'proche de'} la moyenne nationale. En p\u00E9riph\u00E9rie (${cd.zonesAccessibles[0]}), comptez environ ${Math.round((1 - cd.coeffPeripherie) * 100)} % de moins. [Comparez les devis](/devis/${m.slug}/${v.slug}).`,
+      answer: `En 2026, le tarif horaire d\u2019${m.article} \u00E0 ${v.name} (${v.departement}) se situe entre **${adj(m.tarifMin, coeff)} et ${adj(m.tarifMax, coeff)} ${m.unit}**. Ce tarif est ${coeff > 1.1 ? 'sup\u00E9rieur de ' + Math.round((coeff - 1) * 100) + ' % \u00E0' : 'proche de'} la moyenne nationale. En p\u00E9riph\u00E9rie (${cd.zonesAccessibles[0]}), comptez environ ${Math.round((1 - cd.coeffPeripherie) * 100)} % de moins. [Comparez les devis](/services/${m.slug}/${v.slug}).`,
     },
     {
       question: `O\u00F9 trouver ${m.article} pas cher \u00E0 ${v.name} ?`,
@@ -690,7 +690,7 @@ function generateFaq(
     // --- 2 questions generiques ---
     {
       question: `Quel est le d\u00E9lai pour un ${m.name.toLowerCase()} \u00E0 ${v.name} ?`,
-      answer: `\u00C0 ${v.name}, le d\u00E9lai moyen pour obtenir un rendez-vous avec ${m.article} est de **${cd.delaiMoyen}** pour une intervention planifi\u00E9e. En urgence, la plupart des ${m.plural} interviennent sous 24 \u00E0 48h, avec un suppl\u00E9ment de 30 \u00E0 50 %. [Demandez un devis rapide](/devis/${m.slug}/${v.slug}).`,
+      answer: `\u00C0 ${v.name}, le d\u00E9lai moyen pour obtenir un rendez-vous avec ${m.article} est de **${cd.delaiMoyen}** pour une intervention planifi\u00E9e. En urgence, la plupart des ${m.plural} interviennent sous 24 \u00E0 48h, avec un suppl\u00E9ment de 30 \u00E0 50 %. [Demandez un devis rapide](/services/${m.slug}/${v.slug}).`,
     },
     {
       question: `Faut-il un devis avant de faire appel \u00E0 ${m.article} \u00E0 ${v.name} ?`,
@@ -733,7 +733,7 @@ function liensSection(m: Metier, v: VilleLight): string {
     '',
     `- [Annuaire des ${m.plural} \u00E0 ${v.name}](/services/${m.slug}/${v.slug}) \u2014 trouvez un professionnel qualifi\u00E9 pr\u00E8s de chez vous`,
     `- [Tarifs d\u00E9taill\u00E9s ${m.name} ${v.name}](/tarifs/${m.slug}/${v.slug}) \u2014 grille compl\u00E8te des prix par prestation`,
-    `- [Demander un devis ${m.name} \u00E0 ${v.name}](/devis/${m.slug}/${v.slug}) \u2014 recevez jusqu\u2019\u00E0 3 devis gratuits en 2 minutes`,
+    `- [Demander un devis ${m.name} \u00E0 ${v.name}](/services/${m.slug}/${v.slug}) \u2014 recevez jusqu\u2019\u00E0 3 devis gratuits en 2 minutes`,
     `- [Comparer les tarifs ${m.plural} en France](/tarifs/${m.slug}) \u2014 grille nationale par prestation`,
   ].join('\n')
 }
@@ -800,7 +800,7 @@ function generateArticle(metier: Metier, ville: VilleLight): BlogArticle {
     `## Trouver ${metier.article} \u00E0 ${ville.name}`,
     '',
     `Pour obtenir le meilleur rapport qualit\u00E9-prix \u00E0 ${ville.name}, nous vous recommandons de :`,
-    `1. **Comparer 3 devis** de ${metier.plural} \u00E0 ${ville.name} via notre [plateforme de devis gratuits](/devis/${metier.slug}/${ville.slug})`,
+    `1. **Comparer 3 devis** de ${metier.plural} \u00E0 ${ville.name} via notre [plateforme de devis gratuits](/services/${metier.slug}/${ville.slug})`,
     `2. **V\u00E9rifier les avis** et qualifications (RGE, Qualibat) sur notre [annuaire ${ville.name}](/services/${metier.slug}/${ville.slug})`,
     `3. **Demander un devis d\u00E9taill\u00E9** poste par poste, mat\u00E9riaux inclus`,
     `4. **Privil\u00E9gier un artisan local** qui conna\u00EEt le b\u00E2ti de ${ville.name}`,

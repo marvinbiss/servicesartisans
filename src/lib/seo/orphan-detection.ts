@@ -133,7 +133,7 @@ export function buildLinkGraph(): Map<string, Set<string>> {
 
       // Cross-intent links (5 intents)
       addLink(graph, svcCityPath, `/tarifs/${svc}/${city.slug}`)
-      addLink(graph, svcCityPath, `/devis/${svc}/${city.slug}`)
+      addLink(graph, svcCityPath, `/services/${svc}/${city.slug}`)
       addLink(graph, svcCityPath, `/urgence/${svc}/${city.slug}`)
       addLink(graph, svcCityPath, `/avis/${svc}/${city.slug}`)
 
@@ -489,7 +489,7 @@ export function getAllPagePaths(): string[] {
   // Intent × service × city (Tier 1: devis, urgence, tarifs)
   for (const svc of serviceSlugs) {
     for (const city of tier1Cities) {
-      pages.push(`/devis/${svc}/${city.slug}`)
+      pages.push(`/services/${svc}/${city.slug}`)
       pages.push(`/tarifs/${svc}/${city.slug}`)
     }
   }

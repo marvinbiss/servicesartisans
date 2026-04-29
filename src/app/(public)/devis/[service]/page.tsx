@@ -146,7 +146,7 @@ export default async function DevisServicePage({
         '@type': 'ListItem',
         position: i + 1,
         name: `Devis ${tradeLower} à ${ville.name}`,
-        url: `${SITE_URL}/devis/${service}/${ville.slug}`,
+        url: `${SITE_URL}/services/${service}/${ville.slug}`,
       })),
     },
   }
@@ -408,7 +408,7 @@ export default async function DevisServicePage({
                 {topCities.slice(0, 3).map((v) => (
                   <Link
                     key={v.slug}
-                    href={`/devis/${service}/${v.slug}`}
+                    href={`/services/${service}/${v.slug}`}
                     className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                   >
                     Devis {tradeLower} à {v.name}

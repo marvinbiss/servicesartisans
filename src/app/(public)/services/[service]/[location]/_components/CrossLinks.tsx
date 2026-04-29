@@ -280,7 +280,7 @@ export default function CrossLinks({
                               Artisans
                             </Link>
                             <Link
-                              href={`/devis/${slug}/${locationSlug}`}
+                              href={`/services/${slug}/${locationSlug}`}
                               className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-primary-50 text-charcoal-600 hover:text-primary-600 rounded-lg text-xs font-medium border border-sand-200 hover:border-primary-200 transition-all"
                             >
                               Devis

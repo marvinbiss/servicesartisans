@@ -632,6 +632,24 @@ const nextConfig = {
 
         return redirects // 150 total
       })(),
+
+      // ====== Stratégie 140K — vague 1 #2 (2026-04-29) ======
+      // /devis/[s]/[v] → /services/[s]/[v] (104 282 URLs canonical 301)
+      // Intention commerciale 100 % dupliquée (similarité 50.9 % mesurée).
+      // CTA "demander un devis" déjà présent sur /services. PageRank transmis.
+      // Le hub /devis et /devis/[s] (1-2 segments) restent vivants.
+      // Variante 3-segments /devis/[s]/[v]/[quartier] (5K URLs résiduelles)
+      // également retirée — cannibalisation × profondeur d'URL.
+      {
+        source: '/devis/:service/:location/:quartier',
+        destination: '/services/:service/:location',
+        permanent: true,
+      },
+      {
+        source: '/devis/:service/:location',
+        destination: '/services/:service/:location',
+        permanent: true,
+      },
     ]
   },
 

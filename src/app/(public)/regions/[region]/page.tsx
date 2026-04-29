@@ -812,7 +812,7 @@ export default async function RegionPage({ params }: PageProps) {
                   allServices.slice(0, 3).map((s) => (
                     <Link
                       key={`devis-${s.slug}-${city.slug}`}
-                      href={`/devis/${s.slug}/${city.slug}`}
+                      href={`/services/${s.slug}/${city.slug}`}
                       className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors"
                     >
                       <ChevronRight className="w-3 h-3" />

@@ -1108,7 +1108,7 @@ async function renderUrgenceServiceVillePage({
               <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
-              href={`/devis/${service}/${villeSlug}`}
+              href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Intervention rapide — Devis gratuit
@@ -1748,7 +1748,7 @@ async function renderUrgenceServiceVillePage({
               <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
-              href={`/devis/${service}/${villeSlug}`}
+              href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Intervention rapide — Devis gratuit
@@ -1979,7 +1979,7 @@ async function renderUrgenceServiceVillePage({
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link
-              href={`/devis/${service}/${villeSlug}`}
+              href={`/services/${service}/${villeSlug}`}
               className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors"
             >
               Devis {tradeLower} à {villeData.name}
@@ -2033,7 +2033,7 @@ async function renderUrgenceServiceVillePage({
                   Tarifs {tradeLower} à {villeData.name}
                 </Link>
                 <Link
-                  href={`/devis/${service}/${villeSlug}`}
+                  href={`/services/${service}/${villeSlug}`}
                   className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower} à {villeData.name}

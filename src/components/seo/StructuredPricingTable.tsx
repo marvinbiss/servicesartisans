@@ -247,7 +247,7 @@ export default function StructuredPricingTable({
 
       <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
         <Link
-          href={`/devis/${serviceSlug}/${villeSlug}`}
+          href={`/services/${serviceSlug}/${villeSlug}`}
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
         >
           Obtenir un devis pr{'é'}cis {'à'} {villeName}

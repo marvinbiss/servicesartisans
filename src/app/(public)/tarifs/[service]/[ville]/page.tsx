@@ -541,7 +541,7 @@ async function renderTarifsServiceVillePage({
             </div>
             <div className="mt-8">
               <Link
-                href={`/devis/${service}/${villeSlug}`}
+                href={`/services/${service}/${villeSlug}`}
                 className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
@@ -1122,7 +1122,7 @@ async function renderTarifsServiceVillePage({
                           Artisans
                         </Link>
                         <Link
-                          href={`/devis/${slug}/${villeSlug}`}
+                          href={`/services/${slug}/${villeSlug}`}
                           className="inline-flex items-center px-2.5 py-1 bg-white hover:bg-secondary-50 text-charcoal-600 hover:text-secondary-700 rounded-lg text-xs font-medium border border-sand-300 hover:border-secondary-200 transition-all"
                         >
                           Devis
@@ -1196,7 +1196,7 @@ async function renderTarifsServiceVillePage({
                   {trade.name} {'—'} tous les artisans
                 </Link>
                 <Link
-                  href={`/devis/${service}/${villeSlug}`}
+                  href={`/services/${service}/${villeSlug}`}
                   className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower} {'à'} {villeData.name}

@@ -132,7 +132,7 @@ export async function GET(request: Request) {
           if (!seenDevisCity.has(keyDevis)) {
             seenDevisCity.add(keyDevis)
             urls.push({
-              loc: `${SITE_URL}/devis/${service}/${city}`,
+              loc: `${SITE_URL}/services/${service}/${city}`,
               lastmod,
               changefreq: 'daily',
               priority: '0.7',

@@ -45,10 +45,8 @@ export async function GET(request: Request) {
     'cities',
     'geo',
     'devis-services',
-    ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => `devis-service-cities-${i}`
-    ),
+    // devis-service-cities REMOVED 2026-04-29 (V1 #2 — 301 vers /services/[s]/[v]
+    // via next.config.js redirects()).
     ...Array.from(
       { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => `urgence-service-cities-${i}`

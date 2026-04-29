@@ -96,7 +96,7 @@ export function getProviderAffectedUrls(
     `/avis/${serviceSlug}/${villeSlug}`,
     `/tarifs/${serviceSlug}/${villeSlug}`,
     `/urgence/${serviceSlug}/${villeSlug}`,
-    `/devis/${serviceSlug}/${villeSlug}`,
+    `/services/${serviceSlug}/${villeSlug}`,
     `/rge/${serviceSlug}/${villeSlug}`,
     `/villes/${villeSlug}`,
   ]

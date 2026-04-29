@@ -97,7 +97,7 @@ export default function SeoContent({
                 <p>
                   {locationContent.conclusion} Pour démarrer votre projet,{' '}
                   <Link
-                    href={`/devis/${service.slug}/${locationSlug}`}
+                    href={`/services/${service.slug}/${locationSlug}`}
                     className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
                   >
                     demandez un devis gratuit {service.name.toLowerCase()} à {location.name}
@@ -160,7 +160,7 @@ export default function SeoContent({
                     <p>
                       Pour obtenir un chiffrage précis,{' '}
                       <Link
-                        href={`/devis/${service.slug}/${locationSlug}`}
+                        href={`/services/${service.slug}/${locationSlug}`}
                         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
                       >
                         demandez un devis gratuit {service.name.toLowerCase()} à {location.name}

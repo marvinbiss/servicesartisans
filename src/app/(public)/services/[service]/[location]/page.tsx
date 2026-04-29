@@ -1379,7 +1379,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
               {location.name}.
             </p>
             <Link
-              href={`/devis/${serviceSlug}/${locationSlug}`}
+              href={`/services/${serviceSlug}/${locationSlug}`}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Obtenir mon devis gratuit

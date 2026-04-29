@@ -126,7 +126,7 @@ export default function StickyMobileCTA({
   // Build desktop devis link with pre-filled params
   const devisHref =
     serviceSlug && citySlug
-      ? `/devis/${serviceSlug}/${citySlug}`
+      ? `/services/${serviceSlug}/${citySlug}`
       : serviceSlug
         ? `/devis/${serviceSlug}`
         : '/devis'

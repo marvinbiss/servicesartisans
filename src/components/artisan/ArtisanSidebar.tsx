@@ -17,7 +17,7 @@ function slugify(text: string): string {
 function getDevisUrl(artisan: LegacyArtisan): string {
   const specialtySlug = artisan.specialty ? slugify(artisan.specialty) : 'artisan'
   const citySlug = artisan.city ? slugify(artisan.city) : ''
-  return `/devis/${specialtySlug}/${citySlug}`
+  return `/services/${specialtySlug}/${citySlug}`
 }
 
 interface ArtisanSidebarProps {

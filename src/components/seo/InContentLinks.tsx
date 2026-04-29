@@ -175,7 +175,7 @@ const snippetDevis: SnippetFn = (ctx) => {
     <>
       Pour un devis gratuit et sans engagement,{' '}
       <Link
-        href={`/devis/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         demandez un devis {ctx.serviceLower} à {ctx.villeName}
@@ -185,7 +185,7 @@ const snippetDevis: SnippetFn = (ctx) => {
     <>
       Besoin d&#39;un chiffrage précis ?{' '}
       <Link
-        href={`/devis/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         Obtenez un devis {ctx.serviceLower} gratuit à {ctx.villeName}
@@ -195,7 +195,7 @@ const snippetDevis: SnippetFn = (ctx) => {
     <>
       Comparez les prix en demandant un{' '}
       <Link
-        href={`/devis/${ctx.serviceSlug}/${ctx.villeSlug}`}
+        href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         devis {ctx.serviceLower} à {ctx.villeName}

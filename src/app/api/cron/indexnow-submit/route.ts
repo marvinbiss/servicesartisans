@@ -229,7 +229,7 @@ export async function GET(request: Request) {
       const allDevisUrls: string[] = []
       for (const service of services) {
         for (const city of EXTENDED_CITIES) {
-          allDevisUrls.push(`${SITE_URL}/devis/${service.slug}/${city}`)
+          allDevisUrls.push(`${SITE_URL}/services/${service.slug}/${city}`)
         }
       }
       const devisBatch = rotateSlice(allDevisUrls, bucket)
@@ -353,7 +353,7 @@ export async function GET(request: Request) {
 
             hubPages.add(`${SITE_URL}/services/${serviceSlug}/${citySlug}`)
             // Also notify the devis page for this service+city
-            hubPages.add(`${SITE_URL}/devis/${serviceSlug}/${citySlug}`)
+            hubPages.add(`${SITE_URL}/services/${serviceSlug}/${citySlug}`)
           }
 
           urls.push(...Array.from(hubPages))

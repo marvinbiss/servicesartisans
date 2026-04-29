@@ -66,7 +66,7 @@ export default function CityHubLinks({
     if (!s) return []
     return [
       {
-        href: `/devis/${slug}/${villeSlug}`,
+        href: `/services/${slug}/${villeSlug}`,
         label: getAnchorText({
           serviceSlug: slug,
           serviceName: s.name,

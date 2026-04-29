@@ -933,7 +933,7 @@ async function renderProviderPage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                href={`/devis/${serviceSlug}/${locationSlug}`}
+                href={`/services/${serviceSlug}/${locationSlug}`}
                 className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
               >
                 Obtenir mon devis gratuit

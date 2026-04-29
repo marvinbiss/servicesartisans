@@ -41,7 +41,7 @@ export default function GeoPageCTA({
   const villeSlug = ville ? slugify(ville) : ''
   const devisHref =
     service && villeSlug
-      ? `/devis/${service}/${villeSlug}`
+      ? `/services/${service}/${villeSlug}`
       : service
         ? `/devis/${service}`
         : '/devis'

@@ -450,7 +450,7 @@ export default function ArtisanPageClient({
             onDevisClick={() => {
               const specialtySlug = slugify(artisan.specialty || 'artisan')
               const citySlug = artisan.city ? slugify(artisan.city) : ''
-              window.location.href = `/devis/${specialtySlug}/${citySlug}`
+              window.location.href = `/services/${specialtySlug}/${citySlug}`
             }}
           />
         )}

@@ -55,7 +55,7 @@ const ALL_INTENTS: IntentDef[] = [
     key: 'devis',
     label: 'Devis',
     icon: FileText,
-    href: (s, v) => (v ? `/devis/${s}/${v}` : `/devis/${s}`),
+    href: (s, v) => (v ? `/services/${s}/${v}` : `/devis/${s}`),
   },
 ]
 

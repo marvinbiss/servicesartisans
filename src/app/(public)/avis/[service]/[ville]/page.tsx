@@ -682,7 +682,7 @@ async function renderAvisServiceVillePage({
             </div>
             <div className="mt-8">
               <Link
-                href={`/devis/${service}/${villeSlug}`}
+                href={`/services/${service}/${villeSlug}`}
                 className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
@@ -1653,7 +1653,7 @@ async function renderAvisServiceVillePage({
       <ExitIntentPopup
         sessionKey="sa:exit-avis"
         description="Contactez un artisan bien noté — devis gratuit et sans engagement."
-        ctaHref={`/devis/${service}/${villeSlug}`}
+        ctaHref={`/services/${service}/${villeSlug}`}
       />
     </div>
   )

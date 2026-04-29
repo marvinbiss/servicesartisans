@@ -625,7 +625,7 @@ async function renderVillePage({ params }: PageProps) {
                     Tarifs
                   </Link>
                   <Link
-                    href={`/devis/${service.slug}/${villeSlug}`}
+                    href={`/services/${service.slug}/${villeSlug}`}
                     className="inline-flex items-center gap-1.5 text-sm text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     Devis gratuit

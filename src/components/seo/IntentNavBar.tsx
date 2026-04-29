@@ -23,7 +23,7 @@ const TABS = [
     intent: 'devis' as const,
     label: 'Devis gratuit',
     icon: FileText,
-    href: (s: string, v: string) => `/devis/${s}/${v}`,
+    href: (s: string, v: string) => `/services/${s}/${v}`,
   },
   {
     intent: 'tarifs' as const,

@@ -114,7 +114,7 @@ export default function PriceTableHTML({
                     <Link
                       href={
                         locationSlug
-                          ? `/devis/${serviceSlug}/${locationSlug}`
+                          ? `/services/${serviceSlug}/${locationSlug}`
                           : `/devis/${serviceSlug}`
                       }
                       className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"

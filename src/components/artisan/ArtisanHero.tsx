@@ -180,7 +180,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                           const city = artisan.city?.toLowerCase().replace(/\s+/g, '-') || ''
                           window.location.href =
                             slug && city
-                              ? `/devis/${slug}/${encodeURIComponent(city)}`
+                              ? `/services/${slug}/${encodeURIComponent(city)}`
                               : slug
                                 ? `/devis/${slug}`
                                 : '/devis'

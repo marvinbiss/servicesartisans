@@ -117,11 +117,9 @@ export async function generateSitemaps() {
     { id: 'cities' },
     { id: 'geo' },
     { id: 'devis-services' },
-    // Tier 1: devis, urgence, tarifs → all 2 267 cities
-    ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => ({ id: `devis-service-cities-${i}` })
-    ),
+    // Tier 1: urgence, tarifs → all 2 267 cities
+    // devis-service-cities REMOVED 2026-04-29 (V1 #2 — 301 vers /services/[s]/[v]).
+    // Hub /devis et /devis/[s] (1-2 segments) restent dans sitemap (dans 'devis-services' ci-dessus).
     ...Array.from(
       { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
       (_, i) => ({ id: `urgence-service-cities-${i}` })
@@ -985,38 +983,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
   }
 
-  // ── Devis service×city pages — all combos, priority boost for qualified ─
-  // Pages have hasUniqueData: true (tradeContent + editorial + price tables + FAQ),
-  // so they're always indexed. Include all in sitemap for discovery.
-  if (id.startsWith('devis-service-cities-')) {
-    const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const svc of services) {
-      for (const ville of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start) {
-          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc.slug}::${ville.slug}`)
-          const deptKey = `${normalizeName(ville.departement)}::${svc.slug}`
-          result.push({
-            url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`,
-            lastModified: byDeptServiceSlug.get(deptKey),
-            changeFrequency: 'monthly',
-            priority: isQualified ? 0.7 : 0.5,
-          })
-        }
-        count++
-      }
-    }
-
-    return result
-  }
+  // ── Devis service×city pages — REMOVED 2026-04-29 (V1 #2 stratégie 140K) ──
+  // 104 282 URLs /devis/[s]/[v] redirigées 301 → /services/[s]/[v] via
+  // next.config.js redirects(). Intention 100 % dupliquée (similarité 50.9 %),
+  // CTA devis déjà sur /services. PageRank transmis à la cible canonique.
 
   // ── Urgence service×city pages — all combos, priority boost for qualified ─
   if (id.startsWith('urgence-service-cities-')) {
