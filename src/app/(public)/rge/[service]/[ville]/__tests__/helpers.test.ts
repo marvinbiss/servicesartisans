@@ -44,6 +44,26 @@ describe('truncateTitle', () => {
     expect(result.length).toBeLessThanOrEqual(41)
     expect(result.endsWith('…')).toBe(true)
   })
+
+  it('hard-cuts a single long word without space (audit Sprint 0.2)', () => {
+    // Mot unique de 80 chars : la regex `\s+\S*$` ne matche rien.
+    // Sans guard, on obtenait `…` (1 char) seul. Désormais hard cut + ellipsis.
+    const title = 'a'.repeat(80)
+    const result = truncateTitle(title, 60)
+    expect(result.length).toBeLessThanOrEqual(60)
+    expect(result.length).toBeGreaterThan(1)
+    expect(result.endsWith('…')).toBe(true)
+  })
+
+  it('returns empty string when maxLen is 0 or negative (guard)', () => {
+    expect(truncateTitle('Plombier Lyon', 0)).toBe('')
+    expect(truncateTitle('Plombier Lyon', -5)).toBe('')
+  })
+
+  it('returns empty string when maxLen is exactly 1 (guard)', () => {
+    // maxLen=1 produirait `…` seul → guard retourne string vide
+    expect(truncateTitle('Plombier Lyon', 1)).toBe('')
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -128,6 +148,18 @@ describe('currentMonthYearFr', () => {
     const result = currentMonthYearFr()
     expect(result).toBe('décembre 2026')
   })
+
+  it('uses Europe/Paris timezone (audit Sprint 0.2 — UTC runtime safety)', () => {
+    // 1er mai 2026 à 00:30 UTC = 02:30 heure de Paris (CEST UTC+2) → mai
+    vi.setSystemTime(new Date('2026-05-01T00:30:00Z'))
+    expect(currentMonthYearFr()).toBe('mai 2026')
+  })
+
+  it('returns the Paris-local month for late-night UTC on month boundary', () => {
+    // 30 avril 2026 à 23:00 UTC = 1er mai 01:00 heure Paris → mai
+    vi.setSystemTime(new Date('2026-04-30T23:00:00Z'))
+    expect(currentMonthYearFr()).toBe('mai 2026')
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -173,6 +205,39 @@ describe('safeJsonStringify', () => {
     const result = safeJsonStringify(payload)
     expect(result).not.toContain('</script>')
     expect(result).not.toContain('<script>')
+  })
+
+  it('escapes U+2028 LINE SEPARATOR (audit Sprint 0.2)', () => {
+    // U+2028 termine un littéral string en JS non-strict → peut casser <script>
+    const payload = { val: 'before\u2028after' }
+    const result = safeJsonStringify(payload)
+    expect(result).not.toMatch(/\u2028/)
+    expect(result).toContain('\\u2028')
+  })
+
+  it('escapes U+2029 PARAGRAPH SEPARATOR (audit Sprint 0.2)', () => {
+    const payload = { val: 'before\u2029after' }
+    const result = safeJsonStringify(payload)
+    expect(result).not.toMatch(/\u2029/)
+    expect(result).toContain('\\u2029')
+  })
+
+  it('returns "null" on circular reference instead of throwing (audit Sprint 0.2)', () => {
+    const obj: Record<string, unknown> = { name: 'test' }
+    obj.self = obj
+    const result = safeJsonStringify(obj)
+    expect(result).toBe('null')
+  })
+
+  it('returns "null" on BigInt input instead of throwing', () => {
+    const payload = { siret: BigInt('83001931100026') }
+    const result = safeJsonStringify(payload)
+    expect(result).toBe('null')
+  })
+
+  it('returns "null" on undefined input (JSON.stringify quirk)', () => {
+    const result = safeJsonStringify(undefined)
+    expect(result).toBe('null')
   })
 })
 

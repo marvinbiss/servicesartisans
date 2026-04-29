@@ -18,7 +18,12 @@ import { getServiceBySlug, getProvidersByService, getProviderCountByService } fr
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
-import { isSeoUpgradeV2, currentMonthYearFr } from '@/lib/seo/sprint-helpers'
+import {
+  isSeoUpgradeV2,
+  currentMonthYearFr,
+  truncateTitle,
+  monthlyAnchorIso,
+} from '@/lib/seo/sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
 import { countLabelForSummary, buildEnBrefPoints } from './sprint-helpers'
 import {
@@ -109,11 +114,6 @@ export function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ service: string }>
-}
-
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -382,7 +382,11 @@ export default async function ServicePage({ params }: PageProps) {
   const upgradeV2 = isSeoUpgradeV2()
   const monthYear = currentMonthYearFr()
   const pageUrl = `${SITE_URL}/services/${serviceSlug}`
-  const nowIso = new Date().toISOString()
+  // Audit Sprint 0.2 : `dateModified` doit refléter une vraie date stable
+  // (lastModified DB) avec fallback sur le 1er du mois courant pour éviter
+  // la "fake freshness" si la DB ne retourne rien.
+  const monthlyAnchor = monthlyAnchorIso()
+  const dateModifiedIso = lastModified ?? monthlyAnchor
   const heroImage = getServiceImage(serviceSlug)
   const articleImage = heroImage.src.startsWith('http')
     ? heroImage.src
@@ -394,7 +398,7 @@ export default async function ServicePage({ params }: PageProps) {
         headline: `${service.name} en France — Guide ${monthYear}`,
         image: [articleImage],
         datePublished: '2026-01-01T00:00:00+02:00',
-        dateModified: lastModified ?? nowIso,
+        dateModified: dateModifiedIso,
         author: {
           '@type': 'Organization',
           name: 'la rédaction ServicesArtisans',
@@ -567,12 +571,13 @@ export default async function ServicePage({ params }: PageProps) {
             Auteur :{' '}
             <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span> ·
             Mis à jour le{' '}
-            <time dateTime={nowIso}>
+            <time dateTime={dateModifiedIso}>
               {new Intl.DateTimeFormat('fr-FR', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
-              }).format(new Date(nowIso))}
+                timeZone: 'Europe/Paris',
+              }).format(new Date(dateModifiedIso))}
             </time>
           </p>
         </div>

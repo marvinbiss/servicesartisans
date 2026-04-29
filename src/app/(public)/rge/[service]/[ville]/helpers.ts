@@ -11,24 +11,45 @@
 
 import { RGE_QUALIFICATION_LABELS } from '@/lib/rge/service-city-listings'
 
-/** Tronque un title à ~60 chars pour Google (Sprint 0.1 : 41 → 60). */
+/**
+ * Tronque un title à `maxLen` chars pour Google.
+ * - Coupe sur frontière de mot quand possible.
+ * - Garantit qu'un mot unique sans espace ne soit pas réduit à `…` seul
+ *   (audit Sprint 0.2 : `\s+\S*$` ne matche rien sur un seul mot long → fallback hard cut).
+ * - Guard contre maxLen ≤ 1 (retourne string vide).
+ */
 export function truncateTitle(title: string, maxLen = 60): string {
+  if (maxLen <= 1) return ''
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+  const slice = title.slice(0, maxLen - 1)
+  const trimmed = slice.replace(/\s+\S*$/, '')
+  // Si le trim coupe tout (mot unique), on garde le slice brut pour ne pas
+  // produire un title de 1 char ("…") inutilisable.
+  return (trimmed.length > 0 ? trimmed : slice) + '…'
 }
 
 /**
- * Sérialise du JSON pour injection dans une balise `<script type="application/ld+json">`
- * en neutralisant les caractères qui pourraient casser la balise et permettre
- * une XSS : `<`, `>`, `&` (cf. audit security Sprint 0.1).
- *
- * Aligné sur le helper interne de `src/components/JsonLd.tsx`.
+ * Sérialise du JSON pour injection dans `<script type="application/ld+json">`.
+ * Neutralise :
+ *   - `<`, `>`, `&` : XSS via fermeture de balise (audit Sprint 0.1).
+ *   - U+2028, U+2029 : line/paragraph separators interprétés comme fins de
+ *     ligne par le parser HTML, peuvent casser le script tag (audit Sprint 0.2).
+ * Wrappe dans try/catch pour fail-soft sur BigInt / circular references / undefined :
+ * retourne `'null'` (Schema.org valid) au lieu de crash le rendu serveur.
  */
 export function safeJsonStringify(data: unknown): string {
-  return JSON.stringify(data)
-    .replace(/</g, '\\u003c')
-    .replace(/>/g, '\\u003e')
-    .replace(/&/g, '\\u0026')
+  try {
+    const raw = JSON.stringify(data)
+    if (typeof raw !== 'string') return 'null'
+    return raw
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029')
+  } catch {
+    return 'null'
+  }
 }
 
 /**
@@ -41,9 +62,18 @@ export function isRgeUpgradeV2(): boolean {
   return process.env.RGE_UPGRADE_V2 !== 'false'
 }
 
-/** "avril 2026" — date dynamique pour H1 + headline Article. */
+/**
+ * "avril 2026" — date dynamique pour H1 + headline Article.
+ * timeZone forcé à Europe/Paris : sur un runtime UTC (Vercel) le 1er du mois
+ * entre 00h00 et 02h00 UTC, le mois affiché serait celui d'avant pour les
+ * utilisateurs français. Audit Sprint 0.2.
+ */
 export function currentMonthYearFr(): string {
-  return new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(new Date())
+  return new Intl.DateTimeFormat('fr-FR', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/Paris',
+  }).format(new Date())
 }
 
 /** Contenu de l'intro métier-spécifique (100-150 mots) */

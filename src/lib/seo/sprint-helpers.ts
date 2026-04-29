@@ -17,3 +17,13 @@ export {
   isRgeUpgradeV2 as isSeoUpgradeV2,
   currentMonthYearFr,
 } from '@/app/(public)/rge/[service]/[ville]/helpers'
+
+/**
+ * Anchor mensuel pour `dateModified` JSON-LD : 1er du mois courant en UTC.
+ * Évite la "fake freshness" (Google déclasse les pages qui s'auto-update
+ * quotidiennement sans nouveau contenu). Audit Sprint 0.2.
+ */
+export function monthlyAnchorIso(): string {
+  const d = new Date()
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)).toISOString()
+}

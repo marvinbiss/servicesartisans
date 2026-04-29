@@ -155,4 +155,19 @@ describe('baseline-snapshot E2E', () => {
     expect(content).toContain('Total clicks')
     expect(content).toContain('Total impressions')
   })
+
+  it('survives a CSV with an empty path field (audit Sprint 0.2)', () => {
+    // Régression : si une ligne CSV a un path vide, normalizeRow doit la
+    // skipper sans crash. inScope() est désormais null/empty-safe.
+    const fixtureWithBadRow = `path,clicks,impressions,ctr,position,date_start,date_end
+/rge/pompe-a-chaleur/lyon,42,1850,0.0227,12.4,2026-04-01,2026-04-28
+,5,200,0.025,22.0,2026-04-01,2026-04-28
+/aides/cee,3,150,0.02,30.0,2026-04-01,2026-04-28
+`
+    writeFileSync(fixtureCsvPath, fixtureWithBadRow, 'utf-8')
+    expect(() => runScript()).not.toThrow()
+    const content = readFileSync(outCsvPath, 'utf-8')
+    expect(content).toContain('/rge/pompe-a-chaleur/lyon')
+    expect(content).toContain('/aides/cee')
+  })
 })

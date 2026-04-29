@@ -57,7 +57,13 @@ import RelatedArticles from '@/components/seo/RelatedArticles'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
-import { isSeoUpgradeV2, currentMonthYearFr } from '@/lib/seo/sprint-helpers'
+import {
+  isSeoUpgradeV2,
+  currentMonthYearFr,
+  truncateTitle,
+  monthlyAnchorIso,
+} from '@/lib/seo/sprint-helpers'
+import { logger } from '@/lib/logger'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 
@@ -74,11 +80,6 @@ export const revalidate = 86400
 
 interface PageProps {
   params: Promise<{ ville: string }>
-}
-
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -178,7 +179,7 @@ export default async function VillePage(props: PageProps) {
     return await renderVillePage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[VillePage] unhandled error on render', err)
+    logger.error('[VillePage] unhandled error on render', { error: err })
     notFound()
   }
 }
@@ -265,13 +266,7 @@ async function renderVillePage({ params }: PageProps) {
   const upgradeV2 = isSeoUpgradeV2()
   const monthYear = currentMonthYearFr()
   const pageUrl = `${SITE_URL}/villes/${villeSlug}`
-  // dateModified figé au 1er du mois courant : évite la "fake freshness"
-  // (Google détecte les pages qui s'auto-update quotidiennement sans nouveau
-  // contenu et déclasse). Snapshot mensuel = signal honnête.
-  const monthlyAnchor = (() => {
-    const d = new Date()
-    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)).toISOString()
-  })()
+  const monthlyAnchor = monthlyAnchorIso()
   const articleImage = cityImage?.src
     ? cityImage.src.startsWith('http')
       ? cityImage.src

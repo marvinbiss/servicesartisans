@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import {
   truncateTitle,
   safeJsonStringify,
   isSeoUpgradeV2,
   currentMonthYearFr,
+  monthlyAnchorIso,
 } from '../sprint-helpers'
 
 // ---------------------------------------------------------------------------
@@ -58,6 +59,41 @@ describe('sprint-helpers re-exports', () => {
     it('returns true for any other string', () => {
       process.env.RGE_UPGRADE_V2 = '0'
       expect(isSeoUpgradeV2()).toBe(true)
+    })
+  })
+
+  describe('monthlyAnchorIso (Sprint 0.2 — fake-freshness fix)', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('returns the 1st of the current month at UTC midnight', () => {
+      vi.setSystemTime(new Date('2026-04-29T15:30:00Z'))
+      expect(monthlyAnchorIso()).toBe('2026-04-01T00:00:00.000Z')
+    })
+
+    it('is stable across the month (does not change with revalidate)', () => {
+      vi.setSystemTime(new Date('2026-04-01T00:00:00Z'))
+      const a = monthlyAnchorIso()
+      vi.setSystemTime(new Date('2026-04-30T23:59:59Z'))
+      const b = monthlyAnchorIso()
+      expect(a).toBe(b)
+    })
+
+    it('rolls over to the next month on the 1st', () => {
+      vi.setSystemTime(new Date('2026-05-01T00:00:00Z'))
+      expect(monthlyAnchorIso()).toBe('2026-05-01T00:00:00.000Z')
+    })
+
+    it('rolls over end-of-year correctly', () => {
+      vi.setSystemTime(new Date('2026-12-15T12:00:00Z'))
+      expect(monthlyAnchorIso()).toBe('2026-12-01T00:00:00.000Z')
+      vi.setSystemTime(new Date('2027-01-01T00:00:00Z'))
+      expect(monthlyAnchorIso()).toBe('2027-01-01T00:00:00.000Z')
     })
   })
 })

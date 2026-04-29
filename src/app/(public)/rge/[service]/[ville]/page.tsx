@@ -278,15 +278,23 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
   // Sprint 0.1 — Article + Speakable + dateModified : signal de fraîcheur
   // pour les ranking factors YMYL et compatible Google Assistant.
+  // Audit Sprint 0.2 : `service` peut être null (DB KO + slug allowlisté) →
+  // fallback sur `serviceSlug` pour ne pas produire `/og-rge-null.jpg`.
+  // dateModified : snapshot mensuel pour éviter "fake freshness" (Google
+  // déclasse les pages qui s'auto-update quotidiennement sans nouveau contenu).
   const monthYear = currentMonthYearFr()
+  const monthlyAnchor = (() => {
+    const d = new Date()
+    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)).toISOString()
+  })()
   const articleSchema = upgradeV2
     ? {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: `${count} ${serviceName} RGE à ${villeName} — Guide ${monthYear}`,
-        image: [`${SITE_URL}/og-rge-${service}.jpg`, `${SITE_URL}/og-default.jpg`],
+        image: [`${SITE_URL}/og-rge-${serviceSlug}.jpg`, `${SITE_URL}/og-default.jpg`],
         datePublished: providers[0]?.created_at ?? '2026-01-01T00:00:00+02:00',
-        dateModified: new Date().toISOString(),
+        dateModified: monthlyAnchor,
         author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
         publisher: {
           '@type': 'Organization',
@@ -453,11 +461,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span>
               {' · '}
               Mis à jour le{' '}
-              <time dateTime={new Date().toISOString().slice(0, 10)}>
-                {new Date().toLocaleDateString('fr-FR', {
+              <time dateTime={monthlyAnchor.slice(0, 10)}>
+                {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
+                  timeZone: 'Europe/Paris',
                 })}
               </time>
             </p>
@@ -573,7 +582,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <li>
               <Link
                 href="/guides/artisan-rge"
-                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               >
                 <div className="font-semibold text-charcoal-900">
                   Guide&nbsp;: comprendre la certification RGE
@@ -585,7 +594,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               <li>
                 <Link
                   href={`/guides/${serviceSlug}`}
-                  className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                  className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 >
                   <div className="font-semibold text-charcoal-900">
                     Guide métier&nbsp;: {serviceName.toLowerCase()}

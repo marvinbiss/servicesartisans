@@ -24,6 +24,16 @@ describe('countLabelForSummary', () => {
   it('never crashes on negative count and falls back', () => {
     expect(countLabelForSummary(-1)).toBe('des centaines de')
   })
+
+  it('falls back on NaN (audit Sprint 0.2)', () => {
+    expect(countLabelForSummary(NaN)).toBe('des centaines de')
+  })
+
+  it('falls back on Infinity (audit Sprint 0.2)', () => {
+    // Sans guard, Math.floor(Infinity / 100) * 100 = Infinity → "plus de Infinity+"
+    expect(countLabelForSummary(Infinity)).toBe('des centaines de')
+    expect(countLabelForSummary(-Infinity)).toBe('des centaines de')
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -81,5 +91,18 @@ describe('buildEnBrefPoints', () => {
       villesCount: 100,
     })
     expect(points.some((p) => p.includes('Fourchette de prix'))).toBe(false)
+  })
+
+  it('reorders inverted min/max (audit Sprint 0.2)', () => {
+    // Si la DB renvoie min=90 max=60 par erreur, on réordonne pour éviter
+    // "Fourchette de prix : 90–60 €/h" en SERP.
+    const points = buildEnBrefPoints({
+      serviceName: 'Plombier',
+      providerCount: 10,
+      trade: { priceRange: { min: 90, max: 60, unit: '€/h' } },
+      villesCount: 100,
+    })
+    expect(points.some((p) => p.includes('60–90 €/h'))).toBe(true)
+    expect(points.some((p) => p.includes('90–60'))).toBe(false)
   })
 })

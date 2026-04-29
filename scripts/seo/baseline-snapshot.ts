@@ -229,7 +229,8 @@ function isIsoDate(s: string): boolean {
  * Keep rows whose path starts with a scope prefix and not with an exclude
  * prefix. The homepage `/` is matched explicitly.
  */
-function inScope(p: string, cfg: PilotConfig['filters']): boolean {
+function inScope(p: string | null | undefined, cfg: PilotConfig['filters']): boolean {
+  if (typeof p !== 'string' || p.length === 0) return false
   for (const ex of cfg.exclude_path_prefixes) {
     if (p.startsWith(ex)) return false
   }
