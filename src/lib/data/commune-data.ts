@@ -135,10 +135,56 @@ const COMMUNE_COLUMNS = [
 ].join(',')
 
 // ---------------------------------------------------------------------------
-// Fetch commune data by slug (cached 24h)
+// Build-time guard partagé — null DB tant que NEXT_BUILD_SKIP_DB=1 sans URL.
 // ---------------------------------------------------------------------------
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
+
+// ---------------------------------------------------------------------------
+// Fetch all active commune slugs (sitemap V3 #1 — stratégie 140K)
+// ---------------------------------------------------------------------------
+
+/**
+ * Retourne tous les slugs de communes actives (cap configurable, défaut 36 000).
+ * Utilisé par le sitemap pour émettre `/communes/[slug]`. Graceful fallback
+ * sur tableau vide si la table est absente ou la DB indisponible.
+ *
+ * Note RLS : la table est lue via `createAdminClient()` (bypass RLS) côté
+ * server-only car le sitemap tourne au build/ISR avec le service-role.
+ *
+ * Pagination : Supabase PostgREST cap par défaut max-rows=1000. On batch
+ * jusqu'à 36 000 (~36 rounds) pour récupérer tous les slugs.
+ */
+export async function getAllCommuneSlugs(maxSlugs: number = 36_000): Promise<string[]> {
+  if (IS_BUILD) return []
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+    const PAGE = 1_000
+    const slugs: string[] = []
+    let from = 0
+    while (slugs.length < maxSlugs) {
+      const to = Math.min(from + PAGE - 1, maxSlugs - 1)
+      const { data, error } = await supabase
+        .from('communes')
+        .select('slug')
+        .eq('is_active', true)
+        .order('population', { ascending: false })
+        .range(from, to)
+      if (error || !data || data.length === 0) break
+      for (const row of data as { slug: string }[]) slugs.push(row.slug)
+      if (data.length < PAGE) break
+      from += PAGE
+    }
+    return slugs
+  } catch {
+    return []
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Fetch commune data by slug (cached 24h)
+// ---------------------------------------------------------------------------
 
 export async function getCommuneBySlug(slug: string): Promise<CommuneData | null> {
   if (IS_BUILD) return null // Skip DB during build — ISR will populate on first visit

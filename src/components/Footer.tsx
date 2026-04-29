@@ -29,6 +29,7 @@ const navigationLinks = [
   { name: 'Artisans RGE', href: '/rge' },
   { name: 'Départements', href: '/departements' },
   { name: 'Villes', href: '/villes' },
+  { name: '36 000 communes (open data)', href: '/communes' },
   { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },

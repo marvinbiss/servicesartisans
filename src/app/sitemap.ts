@@ -4,6 +4,7 @@ import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getIndexableProblemeCombos } from '@/lib/seo/problemes-whitelist'
+import { getAllCommuneSlugs } from '@/lib/data/commune-data'
 import {
   assertTierPartitionCoverage,
   getServiceCityPriority,
@@ -17,6 +18,7 @@ import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import {
+  STATIC_BATCH,
   LARGE_BATCH,
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
@@ -155,6 +157,18 @@ export async function generateSitemaps() {
     // (STATIC_BATCH = 8 000). Hors whitelist : 301 → /services/[primary]/[v]
     // (cf. src/lib/seo/problemes-whitelist.ts).
     { id: 'problemes-cities-0' },
+    // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c] pour 35 999 communes
+    // INSEE actives (long-tail + asset différenciateur data-driven). Hub /communes
+    // listé dans 'static'. Pages /communes/[c] = 36K / 8K STATIC_BATCH = 5 shards.
+    // Le handler fetch dynamiquement les slugs depuis Supabase (graceful fallback
+    // sur shard vide si DB indisponible). Si commune.slug = ville statique :
+    // permanentRedirect 301 vers /villes/[v] (canonical priority maintenu).
+    { id: 'communes' },
+    { id: 'communes-cities-0' },
+    { id: 'communes-cities-1' },
+    { id: 'communes-cities-2' },
+    { id: 'communes-cities-3' },
+    { id: 'communes-cities-4' },
     ...Array.from(
       { length: Math.ceil((departements.length * getTradesSlugs().length) / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -1123,6 +1137,37 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.4,
     }))
     return batchIndex === 0 ? result : []
+  }
+
+  // ── Communes hub (V3 #1 stratégie 140K) ─────────────────────────────
+  if (id === 'communes') {
+    return [
+      {
+        url: `${SITE_URL}/communes`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
+    ]
+  }
+
+  // ── Communes long-tail pages (V3 #1 stratégie 140K) ─────────────────
+  // 35 999 communes INSEE actives / STATIC_BATCH 8 000 = 5 shards.
+  // Slugs fetchés depuis Supabase au build/ISR (`getAllCommuneSlugs`),
+  // graceful fallback sur shard vide si DB indisponible.
+  // Les communes dont le slug = ville statique seront 301 par la page handler
+  // — on les inclut quand même au sitemap pour signaler le canonical à Google.
+  if (id.startsWith('communes-cities-')) {
+    const batchIndex = parseInt(id.replace('communes-cities-', ''), 10)
+    const BATCH = STATIC_BATCH
+    const slugs = await getAllCommuneSlugs()
+    const start = batchIndex * BATCH
+    const slice = slugs.slice(start, start + BATCH)
+    return slice.map((slug) => ({
+      url: `${SITE_URL}/communes/${slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    }))
   }
 
   // ── Dept × service pages ────────────────────────────────────────────

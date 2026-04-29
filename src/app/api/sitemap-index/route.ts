@@ -60,6 +60,14 @@ export async function GET(request: Request) {
     // haute=200/moyenne=100/basse=50 villes, ≈ 7 000 URLs en 1 seul shard).
     // Voir src/lib/seo/problemes-whitelist.ts.
     'problemes-cities-0',
+    // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c] (35 999 INSEE
+    // actives, 5 shards de 8 000). Hub /communes + 5 shards data-driven Supabase.
+    'communes',
+    'communes-cities-0',
+    'communes-cities-1',
+    'communes-cities-2',
+    'communes-cities-3',
+    'communes-cities-4',
     // dept × service — 105 depts × 47 services
     ...Array.from(
       { length: Math.ceil((departements.length * tradeSlugs.length) / LARGE_BATCH) },
