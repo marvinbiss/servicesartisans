@@ -1,0 +1,29 @@
+{
+  "firstLoadJSGlobal": 2400000,
+  "chunkBudget": 1200000,
+  "routeOverrides": {},
+  "ignoreRoutes": [
+    "/_error",
+    "/_app",
+    "/_document",
+    "/_not-found",
+    "/404",
+    "/500",
+    "/layout",
+    "/admin/*",
+    "/(admin)/*",
+    "/(private)/*",
+    "/api/*",
+    "/auth/*",
+    "/sentry-example-page/*"
+  ],
+  "_doc": {
+    "scope": "Routes publiques SEO uniquement (admin/private/auth ignorés car auth-walled, hors SEO).",
+    "firstLoadJSGlobal_KB": 2343,
+    "chunkBudget_KB": 1171,
+    "calibrated_against": ".next build 2026-04-29 (current state + ~10% buffer)",
+    "rationale": "Honest baseline qui ne bloque pas aujourd'hui. À resserrer après audit code-splitting (lazy load Tiptap/Stripe/Capacitor sur routes pSEO).",
+    "next_target": "1.2MB first-load sur /(public)/services|rge|blog après split.",
+    "boucler": "Bouclier 4 plan ULTRA DOMINATION SEO v2"
+  }
+}

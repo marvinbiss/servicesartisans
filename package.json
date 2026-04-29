@@ -18,6 +18,8 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
+    "check:bundle-budget": "tsx scripts/check-bundle-budget.ts",
+    "check:bundle-budget:baseline": "tsx scripts/check-bundle-budget.ts --baseline",
     "postinstall": "node scripts/fix-capacitor-proguard.js",
     "mobile:build": "next build && npx cap sync",
     "mobile:android": "npx cap open android",
