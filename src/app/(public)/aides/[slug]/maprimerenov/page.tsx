@@ -16,6 +16,13 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import LastUpdated from '@/components/seo/LastUpdated'
+import RelatedAides from '@/components/aides/RelatedAides'
+import { getCumulableAides } from '@/lib/aides/aides-catalog'
+import {
+  CLIMATE_ZONE_IMPACT,
+  CLIMATE_ZONE_LABELS,
+  deptToClimateZone,
+} from '@/lib/aides/climate-zones'
 import { getDepartementBySlug } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -30,10 +37,8 @@ import {
 
 export const revalidate = 86400
 export const dynamicParams = true
-const CONTENT_UPDATED_AT = '2026-04-19'
+const CONTENT_UPDATED_AT = '2026-04-29'
 
-// Top 20 departements pré-rendus au build (≥70 % du trafic pSEO attendu).
-// Le reste passe en ISR on-demand, invalidation quotidienne.
 const PRERENDER_DEPTS: readonly string[] = [
   'paris',
   'nord',
@@ -58,64 +63,11 @@ const PRERENDER_DEPTS: readonly string[] = [
 ]
 
 export function generateStaticParams() {
-  return PRERENDER_DEPTS.map((dept) => ({ dept }))
+  return PRERENDER_DEPTS.map((slug) => ({ slug }))
 }
 
 interface PageProps {
-  params: Promise<{ dept: string }>
-}
-
-// Zones climatiques RT2012 — impact direct sur bonifications CEE.
-const H3_DEPT_CODES = new Set(['06', '11', '13', '2A', '2B', '30', '34', '66', '83', '84'])
-const H2_DEPT_CODES = new Set([
-  '14',
-  '17',
-  '22',
-  '29',
-  '35',
-  '44',
-  '50',
-  '56',
-  '76',
-  '85',
-  '16',
-  '24',
-  '31',
-  '32',
-  '33',
-  '40',
-  '46',
-  '47',
-  '64',
-  '65',
-  '79',
-  '81',
-  '82',
-  '86',
-  '04',
-  '07',
-  '09',
-  '12',
-  '26',
-  '48',
-])
-
-function deptToClimateZone(code: string): 'H1' | 'H2' | 'H3' {
-  if (H3_DEPT_CODES.has(code)) return 'H3'
-  if (H2_DEPT_CODES.has(code)) return 'H2'
-  return 'H1'
-}
-
-const ZONE_LABELS: Record<'H1' | 'H2' | 'H3', string> = {
-  H1: 'H1 (Nord, Est, Ile-de-France — climat froid)',
-  H2: 'H2 (façade atlantique, sud-ouest — climat tempéré)',
-  H3: 'H3 (pourtour méditerranéen — climat doux)',
-}
-
-const ZONE_IMPACT: Record<'H1' | 'H2' | 'H3', string> = {
-  H1: "Les primes CEE forfaitaires pour l'isolation et le chauffage sont les plus élevées en zone H1 (gains énergétiques supérieurs au froid). La pompe à chaleur air-eau et l'isolation combles sont particulièrement rentables.",
-  H2: "Zone tempérée : les primes CEE sont intermédiaires. L'isolation des murs par l'extérieur (ITE) et la pompe à chaleur restent très amortissables, surtout en maison individuelle.",
-  H3: "Zone chaude : les primes CEE sont réduites sur le chauffage mais la climatisation réversible (PAC air-air) et la protection solaire toiture deviennent compétitives. L'audit énergétique est souvent décisif.",
+  params: Promise<{ slug: string }>
 }
 
 function truncate(s: string, max = 58): string {
@@ -124,7 +76,8 @@ function truncate(s: string, max = 58): string {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { dept: deptSlug } = await params
+  const { slug: deptSlug } = await params
+  if (!/^[a-z0-9-]+$/.test(deptSlug)) return {}
   const dept = getDepartementBySlug(deptSlug)
   if (!dept) return {}
 
@@ -149,18 +102,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function MprDeptPage({ params }: PageProps) {
-  const { dept: deptSlug } = await params
+  const { slug: deptSlug } = await params
+  // Security M1 — durcir le format avant lookup (defense in depth :
+  // getDepartementBySlug a déjà une allowlist, mais valider le shape évite
+  // un slug malformé d'atterrir dans un Schema.org JSON-LD.
+  if (!/^[a-z0-9-]+$/.test(deptSlug)) notFound()
   const dept = getDepartementBySlug(deptSlug)
   if (!dept) notFound()
 
   const path = `/aides/${dept.slug}/maprimerenov`
   const zone = deptToClimateZone(dept.code)
-  const zoneLabel = ZONE_LABELS[zone]
-  const zoneImpact = ZONE_IMPACT[zone]
+  const zoneLabel = CLIMATE_ZONE_LABELS[zone]
+  const zoneImpact = CLIMATE_ZONE_IMPACT[zone]
 
+  // Breadcrumb harmonisé : pointe vers le hub /aides + page nationale
+  // /aides/maprimerenov, en plus du nom du département. La cohérence entre
+  // hub national et déclinaisons départementales évite la cannibalisation
+  // SEO entre clusters.
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Aides', url: '/renovation-energetique' },
+    { name: 'Aides', url: '/aides' },
+    { name: "MaPrimeRénov'", url: '/aides/maprimerenov' },
     { name: dept.name, url: path },
   ])
 
@@ -214,10 +176,6 @@ export default async function MprDeptPage({ params }: PageProps) {
     includeSpeakable: true,
   })
 
-  // HowTo Schema — parcours MaPrimeRénov' en 7 étapes. Consommé par Bing,
-  // DuckDuckGo et surtout Google AI Overviews (nouveau champ de bataille SEO
-  // 2026). Google a retiré le rich result HowTo classique en 2023 mais l'AIO
-  // s'appuie fortement sur les structured data pour les réponses AI.
   const howToSchema = getHowToSchema(
     [
       {
@@ -257,6 +215,7 @@ export default async function MprDeptPage({ params }: PageProps) {
   )
 
   const topVilles = (dept.villes || []).slice(0, 3)
+  const cumulables = getCumulableAides('maprimerenov')
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, mprSchema, mprProductSchema]
   if (placeSchema) jsonLdItems.push(placeSchema as Record<string, unknown>)
@@ -270,7 +229,8 @@ export default async function MprDeptPage({ params }: PageProps) {
       <Breadcrumb
         items={[
           { label: 'Accueil', href: '/' },
-          { label: 'Aides', href: '/renovation-energetique' },
+          { label: 'Aides', href: '/aides' },
+          { label: "MaPrimeRénov'", href: '/aides/maprimerenov' },
           { label: dept.name },
         ]}
       />
@@ -395,7 +355,7 @@ export default async function MprDeptPage({ params }: PageProps) {
               </h2>
               <p className="text-charcoal-700 leading-relaxed">{zoneImpact}</p>
               <Link
-                href="/cee"
+                href="/aides/cee"
                 className="mt-3 inline-flex items-center gap-1 text-sm text-emerald-700 font-medium hover:text-emerald-800"
               >
                 Voir les primes CEE 2026
@@ -421,7 +381,15 @@ export default async function MprDeptPage({ params }: PageProps) {
               {topVilles.map((ville) => (
                 <Link
                   key={ville}
-                  href={`/rge/renovation-energetique/${ville.toLowerCase().replace(/[\s']/g, '-').replace(/[éèê]/g, 'e').replace(/[àâ]/g, 'a').replace(/[îï]/g, 'i').replace(/[ôö]/g, 'o').replace(/[ûü]/g, 'u').replace(/ç/g, 'c')}`}
+                  // Code-reviewer P1.2 — NFD normalization couvre tous les
+                  // diacritiques (ÿ, ñ, õ, etc.) sans risque d'oubli, contrairement
+                  // au remplacement chaîne par chaîne qui ratait L'Haÿ-les-Roses.
+                  href={`/rge/renovation-energetique/${ville
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[̀-ͯ]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-|-$/g, '')}`}
                   className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
                 >
                   <div className="flex items-center gap-3 mb-2">
@@ -466,17 +434,38 @@ export default async function MprDeptPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Aides cumulables — harmonisation hub /aides */}
+      <RelatedAides title="Aides cumulables avec MaPrimeRénov'" aides={cumulables} />
+
       {/* Trust signal */}
       <section className="bg-white py-8 border-t border-charcoal-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center gap-4 text-sm text-charcoal-600">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-            Sources officielles Anah et France Rénov&apos;
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-charcoal-600">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
+              Sources officielles Anah et France Rénov&apos;
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
+              Annuaire artisans RGE synchronisé ADEME
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-            Annuaire artisans RGE synchronisé ADEME
-          </div>
+          {/* Security L1 — disclaimer YMYL visible niveau page (était présent
+              uniquement dans le composant AideMontants pour les sous-pages
+              nationales). */}
+          <p className="text-xs text-charcoal-500 mt-3 leading-relaxed">
+            Informations à titre indicatif. Vérifiez les conditions exactes sur{' '}
+            <a
+              href="https://france-renov.gouv.fr/"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="underline hover:text-emerald-700"
+            >
+              france-renov.gouv.fr
+            </a>{' '}
+            ou auprès d&apos;un conseiller France Rénov&apos; (3818, appel non surtaxé) avant
+            signature d&apos;un devis.
+          </p>
         </div>
       </section>
     </>

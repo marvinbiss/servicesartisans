@@ -67,7 +67,7 @@ const AIDES = [
     description:
       "Aide de l'Anah versée selon 4 catégories de revenus (bleu, jaune, violet, rose). Parcours par geste ou accompagné (Mon Accompagnateur Rénov').",
     amount: 'Jusqu’à 70 000 € / logement',
-    href: '/guides/maprimerenov-2026',
+    href: '/aides/maprimerenov',
     icon: FileCheck2,
     authoritySource: 'https://www.anah.gouv.fr/',
   },
@@ -76,7 +76,7 @@ const AIDES = [
     description:
       "Certificats d'Économies d'Énergie financés par les obligés (EDF, Engie, TotalEnergies). Cumulables avec MaPrimeRénov'. Période P6 en cours (2026-2030).",
     amount: '300 € à 5 000 €+',
-    href: '/cee',
+    href: '/aides/cee',
     icon: Sparkles,
     authoritySource: 'https://france-renov.gouv.fr/aides/cee',
   },
@@ -85,7 +85,7 @@ const AIDES = [
     description:
       'Taux réduit automatique sur main-d’œuvre et matériaux énergétiques, valable en résidence principale ou secondaire achevée depuis plus de 2 ans.',
     amount: 'Économie ~14 % sur le devis',
-    href: '/guides/aides-renovation-2026',
+    href: '/aides/tva-5-5',
     icon: TrendingUp,
     authoritySource:
       'https://www.impots.gouv.fr/particulier/questions/vais-je-beneficier-du-taux-reduit-de-tva-pour-les-travaux',
@@ -95,7 +95,7 @@ const AIDES = [
     description:
       "Prêt à taux zéro jusqu'à 50 000 € pour financer le reste à charge. Cumulable avec MaPrimeRénov' et CEE, durée remboursement jusqu'à 20 ans.",
     amount: 'Jusqu’à 50 000 €',
-    href: '/guides/aides-renovation-2026',
+    href: '/aides/eco-ptz',
     icon: BookOpen,
     authoritySource: 'https://www.service-public.fr/particuliers/vosdroits/F19905',
   },

@@ -21,6 +21,7 @@ import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { fetchAllLastmodData, type SitemapLastmodData } from '@/lib/seo/lastmod-queries'
+import { aidesSlugs } from '@/lib/aides/aides-catalog'
 // Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
@@ -457,7 +458,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly',
         priority: 0.9,
       },
+      // Hub /aides — chantier #6 catalogue 12 aides 2026 (35-45K req/mois).
+      {
+        url: `${SITE_URL}/aides`,
+        lastModified: '2026-04-29',
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      },
+      ...aidesSlugs.map((slug) => ({
+        url: `${SITE_URL}/aides/${slug}`,
+        lastModified: '2026-04-29',
+        changeFrequency: 'weekly' as const,
+        priority: 0.85,
+      })),
       // Sprint 0.4 — Open data backbone (CC-BY 4.0 → backlinks DR 92 data.gouv.fr).
+      {
+        url: `${SITE_URL}/open-data`,
+        lastModified: '2026-04-29',
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
       {
         url: `${SITE_URL}/datasets/rge`,
         lastModified: '2026-04-29',
