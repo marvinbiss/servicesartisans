@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { isUrgenceIndexable } from '@/lib/seo/urgence-whitelist'
 import {
   Phone,
   Clock,
@@ -754,6 +755,11 @@ export async function generateMetadata({
   params: Promise<{ service: string; ville: string }>
 }): Promise<Metadata> {
   const { service, ville: villeSlug } = await params
+  // Stratégie 140K V2 #4 : 301 vers /services/[s]/[v] hors whitelist (4 svc × 25 villes).
+  // Redirect levé AVANT toute lecture de tradeContent / DB pour économiser le SSR.
+  if (!isUrgenceIndexable(service, villeSlug)) {
+    permanentRedirect(`/services/${service}/${villeSlug}`)
+  }
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
@@ -862,6 +868,14 @@ async function renderUrgenceServiceVillePage({
   params: Promise<{ service: string; ville: string }>
 }) {
   const { service, ville: villeSlug } = await params
+
+  // Stratégie 140K V2 #4 : 301 vers /services/[s]/[v] hors whitelist (4 svc × 25 villes).
+  // Double sécurité (déjà filtré par generateMetadata mais utile si le SSR
+  // skip metadata via fast-path — Next.js peut ré-exécuter la page en cas
+  // d'invalidation cache ISR).
+  if (!isUrgenceIndexable(service, villeSlug)) {
+    permanentRedirect(`/services/${service}/${villeSlug}`)
+  }
 
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)

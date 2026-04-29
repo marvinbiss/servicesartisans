@@ -102,7 +102,9 @@ export async function generateSitemaps() {
     (services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH
   )
 
-  const emergencySlugs = Object.keys(tradeContent)
+  // emergencySlugs anciennement utilisé pour calculer le nombre de shards
+  // urgence-service-cities (47 svc × ~2 267 villes / 8K STATIC_BATCH = 14 shards).
+  // V2 #4 stratégie 140K (2026-04-29) consolide tout dans 1 shard ⇒ plus besoin.
   const problemSlugs = getProblemSlugs()
 
   // Tier 2: avis, problemes use top 500 cities only.
@@ -120,10 +122,11 @@ export async function generateSitemaps() {
     // Tier 1: urgence, tarifs → all 2 267 cities
     // devis-service-cities REMOVED 2026-04-29 (V1 #2 — 301 vers /services/[s]/[v]).
     // Hub /devis et /devis/[s] (1-2 segments) restent dans sitemap (dans 'devis-services' ci-dessus).
-    ...Array.from(
-      { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => ({ id: `urgence-service-cities-${i}` })
-    ),
+    // urgence-service-cities CONSOLIDATED 2026-04-29 (V2 #4 stratégie 140K) :
+    // 47 svc × 2 267 villes = 106 549 → 4 svc × 25 villes = 100 URLs. Tient
+    // dans 1 seul shard. Hors whitelist : 301 → /services/[s]/[v] (cf.
+    // src/lib/seo/urgence-whitelist.ts).
+    { id: 'urgence-service-cities-0' },
     // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté). Hub /tarifs
     // et /tarifs/[s] (1-2 segments) restent dans sitemap via 'static' bloc.
@@ -983,34 +986,42 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Urgence service×city pages — all combos, priority boost for qualified ─
   if (id.startsWith('urgence-service-cities-')) {
-    const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
-    const emergencySlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
-    const { qualifiedCombos, byDeptServiceSlug } = await getLastmodData()
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
+    // Stratégie 140K V2 #4 (2026-04-29) : sitemap réduit aux combos whitelistés
+    // (4 services urgence × 25 villes top démographie = 100 URLs). Le reste
+    // est redirigé 301 vers /services/[s]/[v] au niveau page (cf.
+    // src/lib/seo/urgence-whitelist.ts).
+    //
+    // On itère sur la whitelist directement plutôt que de parcourir tous les
+    // combos puis filtrer — économise des cycles à chaque build sitemap.
+    const { URGENCE_INDEXED_SERVICES, URGENCE_INDEXED_CITIES } =
+      await import('@/lib/seo/urgence-whitelist')
+    const { byDeptServiceSlug } = await getLastmodData()
 
-    outer: for (const svc of emergencySlugs) {
-      for (const v of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start) {
-          const isQualified = !qualifiedCombos || qualifiedCombos.has(`${svc}::${v.slug}`)
-          const deptKey = `${normalizeName(v.departement)}::${svc}`
-          result.push({
-            url: `${SITE_URL}/urgence/${svc}/${v.slug}`,
-            lastModified: byDeptServiceSlug.get(deptKey),
-            changeFrequency: 'monthly',
-            priority: isQualified ? 0.6 : 0.4,
-          })
-        }
-        count++
+    // Convert villeSlug → ville object pour récupérer le département (lastmod).
+    const villeBySlug = new Map(villes.map((v) => [v.slug, v]))
+
+    const result: MetadataRoute.Sitemap = []
+    const services = Array.from(URGENCE_INDEXED_SERVICES)
+    const cities = Array.from(URGENCE_INDEXED_CITIES)
+    for (const svc of services) {
+      for (const villeSlug of cities) {
+        const v = villeBySlug.get(villeSlug)
+        if (!v) continue // Slug introuvable dans france.ts → skip silencieux
+        const deptKey = `${normalizeName(v.departement)}::${svc}`
+        result.push({
+          url: `${SITE_URL}/urgence/${svc}/${villeSlug}`,
+          lastModified: byDeptServiceSlug.get(deptKey),
+          changeFrequency: 'weekly', // urgence = freshness signal renforcé
+          priority: 0.7,
+        })
       }
     }
 
-    return result
+    // Le batchIndex reste accepté pour compatibilité sitemap-index, mais
+    // toutes les URLs tiennent dans un seul shard (≤100). Les batches >0
+    // retournent un sitemap vide (Next 14 accepte, Google ignore).
+    const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
+    return batchIndex === 0 ? result : []
   }
 
   // ── Tarifs service×city pages — REMOVED 2026-04-29 (V1 #3 stratégie 140K) ──

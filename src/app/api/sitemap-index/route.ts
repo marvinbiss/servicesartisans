@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, departements } from '@/lib/data/france'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import {
   STATIC_BATCH,
   LARGE_BATCH,
   PROVIDER_BATCH_SIZE,
   MAX_PROVIDER_SITEMAPS,
-  SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
   SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
@@ -24,7 +23,8 @@ import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
  * All constants imported from sitemap-config.ts (single source of truth).
  */
 export async function GET(request: Request) {
-  const emergencySlugs = Object.keys(tradeContent)
+  // emergencySlugs anciennement utilisé pour calculer le nombre de shards
+  // urgence-service-cities. V2 #4 stratégie 140K consolide en 1 shard.
   const tradeSlugs = getTradesSlugs()
   const problemSlugs = getProblemSlugs()
 
@@ -47,10 +47,9 @@ export async function GET(request: Request) {
     'devis-services',
     // devis-service-cities REMOVED 2026-04-29 (V1 #2 — 301 vers /services/[s]/[v]
     // via next.config.js redirects()).
-    ...Array.from(
-      { length: Math.ceil((emergencySlugs.length * SITEMAP_CITY_COUNT) / STATIC_BATCH) },
-      (_, i) => `urgence-service-cities-${i}`
-    ),
+    // urgence-service-cities CONSOLIDATED 2026-04-29 (V2 #4 — 4 svc × 25 villes
+    // = 100 URLs, tient dans 1 seul shard). Voir src/lib/seo/urgence-whitelist.ts
+    'urgence-service-cities-0',
     // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté dans SeoContent).
     // Tier 2: avis, problèmes → top 500 cities (tarifs-task supprimé 2026-04-29)
