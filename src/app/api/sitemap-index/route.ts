@@ -2,13 +2,10 @@ import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, departements } from '@/lib/data/france'
 import { getTradesSlugs } from '@/lib/data/trade-content'
-import { getProblemSlugs } from '@/lib/data/problems'
 import {
-  STATIC_BATCH,
   LARGE_BATCH,
   PROVIDER_BATCH_SIZE,
   MAX_PROVIDER_SITEMAPS,
-  SITEMAP_CITY_COUNT_TIER2,
   SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
 import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
@@ -25,8 +22,9 @@ import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 export async function GET(request: Request) {
   // emergencySlugs anciennement utilisé pour calculer le nombre de shards
   // urgence-service-cities. V2 #4 stratégie 140K consolide en 1 shard.
+  // problemSlugs n'est plus requis ici depuis V2 #7 — `problemes-cities-0` fixe
+  // (≈ 7 000 URLs ≤ STATIC_BATCH = 8 000, cf. problemes-whitelist.ts).
   const tradeSlugs = getTradesSlugs()
-  const problemSlugs = getProblemSlugs()
 
   // tarifs-task-cities REMOVED 2026-04-29 — see src/app/sitemap.ts
   // and src/lib/seo/gone-paths.ts. 184K URLs purged via DELETE 410.
@@ -58,10 +56,10 @@ export async function GET(request: Request) {
     // noindex tant que <3 avis, retirées du sitemap pour économiser le
     // crawl budget). Shard `avis-qualified-cities-*` à recréer en V2.
     'problemes',
-    ...Array.from(
-      { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
-      (_, i) => `problemes-cities-${i}`
-    ),
+    // problemes-cities CONSOLIDATED 2026-04-29 (V2 #7 — tiered allocation
+    // haute=200/moyenne=100/basse=50 villes, ≈ 7 000 URLs en 1 seul shard).
+    // Voir src/lib/seo/problemes-whitelist.ts.
+    'problemes-cities-0',
     // dept × service — 105 depts × 47 services
     ...Array.from(
       { length: Math.ceil((departements.length * tradeSlugs.length) / LARGE_BATCH) },

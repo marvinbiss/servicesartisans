@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
@@ -25,6 +25,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
+import { isProblemeIndexable } from '@/lib/seo/problemes-whitelist'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
@@ -452,6 +453,13 @@ export async function generateMetadata({
   const villeData = getVilleBySlug(ville)
   if (!problem || !villeData) notFound()
 
+  // Stratégie 140K vague 2 #7 — combos hors whitelist redirigés vers le canonical
+  // /services/[primaryService]/[ville] (cannibalisation /problemes ↔ /services
+  // résolue côté Google). Voir src/lib/seo/problemes-whitelist.ts.
+  if (!isProblemeIndexable(probleme, ville)) {
+    permanentRedirect(`/services/${problem.primaryService}/${ville}`)
+  }
+
   // Sprint 2 CTR — short prefix + 2026 modifier (tight title budget)
   const reviewStats = await getReviewStatsByDept(
     problem.primaryService,
@@ -539,6 +547,11 @@ async function renderProblemeVillePage({
   const problem = getProblemBySlug(probleme)
   const villeData = getVilleBySlug(ville)
   if (!problem || !villeData) notFound()
+
+  // Stratégie 140K vague 2 #7 — voir generateMetadata pour l'origine du gate.
+  if (!isProblemeIndexable(probleme, ville)) {
+    permanentRedirect(`/services/${problem.primaryService}/${ville}`)
+  }
 
   const trade = tradeContent[problem.primaryService]
   const tradeName = trade?.name ?? problem.primaryService

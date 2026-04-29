@@ -3,11 +3,11 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
+import { getIndexableProblemeCombos } from '@/lib/seo/problemes-whitelist'
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import {
-  STATIC_BATCH,
   LARGE_BATCH,
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
@@ -105,7 +105,8 @@ export async function generateSitemaps() {
   // emergencySlugs anciennement utilisé pour calculer le nombre de shards
   // urgence-service-cities (47 svc × ~2 267 villes / 8K STATIC_BATCH = 14 shards).
   // V2 #4 stratégie 140K (2026-04-29) consolide tout dans 1 shard ⇒ plus besoin.
-  const problemSlugs = getProblemSlugs()
+  // problemSlugs n'est plus utilisé ici depuis V2 #7 — 1 shard fixe `problemes-cities-0`
+  // suffit (tiered allocation ≈ 7 000 URLs ≤ STATIC_BATCH = 8 000).
 
   // Tier 2: avis, problemes use top 500 cities only.
   // tarifs-task-cities REMOVED 2026-04-29 (stratégie 140K vague 1) :
@@ -139,10 +140,12 @@ export async function generateSitemaps() {
     // Auto re-add quand flywheel produit ≥3 avis sur le combo : créer un
     // nouveau shard `avis-qualified-cities-*` filtré par DB query (V2 task).
     { id: 'problemes' },
-    ...Array.from(
-      { length: Math.ceil((problemSlugs.length * SITEMAP_CITY_COUNT_TIER2) / STATIC_BATCH) },
-      (_, i) => ({ id: `problemes-cities-${i}` })
-    ),
+    // problemes-cities CONSOLIDATED 2026-04-29 (V2 #7 stratégie 140K) :
+    // 61 problèmes × 500 villes = 30 500 → tiered allocation (haute=200,
+    // moyenne=100, basse=50) ≈ 7 000 URLs. Tient dans 1 seul shard
+    // (STATIC_BATCH = 8 000). Hors whitelist : 301 → /services/[primary]/[v]
+    // (cf. src/lib/seo/problemes-whitelist.ts).
+    { id: 'problemes-cities-0' },
     ...Array.from(
       { length: Math.ceil((departements.length * getTradesSlugs().length) / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -1091,31 +1094,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Problemes × city pages (Tier 2: top 500 cities) ────────────
+  // ── Problemes × city pages (V2 #7 stratégie 140K) ─────────────
+  // Whitelist tiered : haute=200, moyenne=100, basse=50 villes / problème.
+  // ≈ 7 000 URLs total → 1 seul shard (problemes-cities-0). Hors whitelist :
+  // 301 → /services/[primaryService]/[ville] (cf. problemes-whitelist.ts).
   if (id.startsWith('problemes-cities-')) {
     const batchIndex = parseInt(id.replace('problemes-cities-', ''))
-    const BATCH = STATIC_BATCH
-    const start = batchIndex * BATCH
-    const end = start + BATCH
     const problemSlugs = getProblemSlugs()
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const result: MetadataRoute.Sitemap = []
-    let count = 0
-
-    outer: for (const problem of problemSlugs) {
-      for (const ville of phase1Cities) {
-        if (count >= end) break outer
-        if (count >= start)
-          result.push({
-            url: `${SITE_URL}/problemes/${problem}/${ville.slug}`,
-            changeFrequency: 'monthly',
-            priority: 0.4,
-          })
-        count++
-      }
-    }
-
-    return result
+    const combos = getIndexableProblemeCombos(problemSlugs)
+    const result: MetadataRoute.Sitemap = combos.map(({ problemSlug, villeSlug }) => ({
+      url: `${SITE_URL}/problemes/${problemSlug}/${villeSlug}`,
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    }))
+    return batchIndex === 0 ? result : []
   }
 
   // ── Dept × service pages ────────────────────────────────────────────
