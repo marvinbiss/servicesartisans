@@ -1,0 +1,64 @@
+# Disavow file — servicesartisans.fr
+# Reviewed   : 2026-04-29
+# Source     : Ahrefs backlinks export (docs/ahrefs-audit-2026-04/normalized/ahrefs-backlinks.csv)
+# Total      : 45 domains
+# Method     :
+#   - Ahrefs spam flag (50/64 backlinks initialement)
+#   - Patterns PBN classics (.shop, .icu, .top, .party, .fyi, .xyz, .agency, .website, .sale)
+#   - SEO-spam keywords (rank, seo, backlink, optimize, traffic)
+#   - Low DR + ancres longues hors-thématique
+#   - DR élevé sans signal éditorial (PBN haut de gamme)
+#
+# Format     : `domain:` syntaxe Google = neutralise l'intégralité du domaine
+# Upload     : Google Search Console > Outils anciens > Désaveu de liens
+#              https://search.google.com/search-console/disavow-links
+# Property   : sc-domain:servicesartisans.fr
+# Doc        : docs/seo/DISAVOW-UPLOAD-GUIDE.md
+#
+# === DOMAINES À DÉSAVOUER (triés alpha) ===
+
+domain:analyticshaven.top
+domain:atomizelink.icu
+domain:backlinker.shop
+domain:backlinks-seorank.com
+domain:bestwebstats.com
+domain:bmwyng.com
+domain:booksreadr.org
+domain:bye.fyi
+domain:creativeposts.top
+domain:cybertoolbox.shop
+domain:dailymusings.top
+domain:digitalgearshop.shop
+domain:egyptiandirectory.com
+domain:fiverr-seo-for-business-growth.site
+domain:getwebsiteworth.com
+domain:globalecommerce.org
+domain:grow-your.website
+domain:hzdlpq.com
+domain:indians.cc
+domain:itxoft-reliable-seo-services.site
+domain:kgzxkf.com
+domain:kompromat100.info
+domain:linksnatcher.com
+domain:nettools.guru
+domain:optimizeflow.top
+domain:pagesearch.net
+domain:primeseo.xyz
+domain:pudhe.com
+domain:qhtycw.com
+domain:quantumwares.shop
+domain:quero.party
+domain:rank-your.website
+domain:rankongoogle.agency
+domain:rankpilot.shop
+domain:rent-a-shop.shop
+domain:runningwebsites.net
+domain:sarys.co.uk
+domain:seoagency.sale
+domain:seodaro.com
+domain:sitescooponline.com
+domain:technomarkethq.shop
+domain:tunca.org
+domain:wallpapers.pro
+domain:way2check.cv
+domain:zoldexlinks.shop
