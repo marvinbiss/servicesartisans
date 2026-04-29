@@ -22,6 +22,7 @@ import {
   LARGE_BATCH,
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
+  SITEMAP_CEE_CITY_COUNT,
   SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
@@ -187,7 +188,7 @@ export async function generateSitemaps() {
     // + hub par op\u00e9ration (19 URLs). Pages noindex fail-open si 0 provider.
     { id: 'cee-operation' }, // /cee/[op] — 19 URLs
     { id: 'cee-operation-guide' }, // /cee/[op]/guide — 5 URLs (high-intent guides)
-    { id: 'cee-operation-city' }, // /cee/[op]/[ville] — 19 × 500 = 9 500 URLs
+    { id: 'cee-operation-city' }, // /cee/[op]/[v] — V3 #2 : 22 × ≤1 000 villes filtré ≥1 artisan
   ]
 
   // Provider sitemaps are served dynamically via /api/sitemap-providers
@@ -1351,10 +1352,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── CEE operation × city pSEO (/cee/[op]/[ville]) ───────────────────
-  // 19 op\u00e9rations × top 500 villes = 9 500 URLs max → pruned aux combos
-  // avec ≥1 artisan éligible (Vague 1.3). Fail-open si DB blip.
+  // V3 #2 stratégie 140K (2026-04-29) : élargi à top 1 000 villes (vs 500).
+  // 22 opérations × ≤1 000 villes = 22 000 max → pruned aux combos avec ≥1
+  // artisan éligible (filtre `ceeQualifiedOperationCity`). Cible utile
+  // ≈ 12-15K URLs après filtre. Fail-open : si DB blip, le handler page
+  // émet `noindex` quand 0 artisan (soft 404 prevention déjà en place).
   if (id === 'cee-operation-city') {
-    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
+    const phase1Cities = villes.slice(0, SITEMAP_CEE_CITY_COUNT)
     const { ceeQualifiedOperationCity, ceeLastmodOperationCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const code of CEE_OPERATION_CODES) {

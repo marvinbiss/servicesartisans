@@ -44,6 +44,19 @@ export const SITEMAP_CITY_COUNT = 2_267
 export const SITEMAP_CITY_COUNT_TIER2 = 500
 
 /**
+ * V3 #2 stratégie 140K (2026-04-29) — CEE pSEO scaling.
+ *
+ * Cible : 15K URLs `/cee/[op]/[v]` indexées (vs 9.5K cap actuel à top 500).
+ * Élargissement à top 1 000 villes par opération, MAIS toujours filtré par
+ * `ceeQualifiedOperationCity` (≥ 1 artisan RGE éligible). Sans artisan,
+ * la page handler émet déjà `noindex` (fail-open soft 404 prevention).
+ *
+ * Effet attendu : 22 op × ≤1 000 villes après filtre artisan ≈ 12-15K URLs
+ * (suit la couverture territoriale RGE réelle).
+ */
+export const SITEMAP_CEE_CITY_COUNT = 1_000
+
+/**
  * Compte exact de villes émises pour les sitemaps `service-cities-*` :
  * top `SITEMAP_CITY_COUNT` (par population) + extras GSC priority qui ne
  * sont PAS dans le top.

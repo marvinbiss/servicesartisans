@@ -87,6 +87,9 @@ export async function generateStaticParams(): Promise<Array<{ operation: string;
           'bar-se-104',
         ]
 
+  // Pre-render budget : top 500 villes (TIER2). Les 500 suivantes émises au
+  // sitemap (V3 #2 SITEMAP_CEE_CITY_COUNT=1000) sont générées via ISR
+  // on-demand au premier hit Googlebot pour éviter d'exploser le build time.
   const topCities = staticVilles.slice(0, SITEMAP_CITY_COUNT_TIER2)
   return codes.flatMap((operation) => topCities.map((v) => ({ operation, ville: v.slug })))
 }
