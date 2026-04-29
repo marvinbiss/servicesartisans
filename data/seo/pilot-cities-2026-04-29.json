@@ -1,0 +1,57 @@
+{
+  "$schema_version": 1,
+  "snapshot_date": "2026-04-29",
+  "phase": "P0",
+  "sprint": "0.1",
+  "gate": "+50% clics J+30",
+  "rationale": "5 villes pilot couvrent ~22% du trafic /rge (Lyon/Paris/Marseille/Toulouse/Bordeaux). 3 services prioritaires alignés sur le volume GSC + intention transactionnelle CEE.",
+  "villes": ["lyon", "paris", "marseille", "toulouse", "bordeaux"],
+  "services": ["pompe-a-chaleur", "panneaux-solaires", "isolation-thermique"],
+  "urls": [
+    "/rge/pompe-a-chaleur/lyon",
+    "/rge/pompe-a-chaleur/paris",
+    "/rge/pompe-a-chaleur/marseille",
+    "/rge/pompe-a-chaleur/toulouse",
+    "/rge/pompe-a-chaleur/bordeaux",
+    "/rge/panneaux-solaires/lyon",
+    "/rge/panneaux-solaires/paris",
+    "/rge/panneaux-solaires/marseille",
+    "/rge/panneaux-solaires/toulouse",
+    "/rge/panneaux-solaires/bordeaux",
+    "/rge/isolation-thermique/lyon",
+    "/rge/isolation-thermique/paris",
+    "/rge/isolation-thermique/marseille",
+    "/rge/isolation-thermique/toulouse",
+    "/rge/isolation-thermique/bordeaux"
+  ],
+  "hubs": ["/", "/rge", "/aides", "/renovation-energetique", "/services"],
+  "filters": {
+    "scope_path_prefixes": [
+      "/",
+      "/rge",
+      "/aides",
+      "/services/",
+      "/villes/",
+      "/renovation-energetique"
+    ],
+    "exclude_path_prefixes": [
+      "/api/",
+      "/admin",
+      "/espace-client",
+      "/espace-artisan",
+      "/auth/",
+      "/_next/"
+    ]
+  },
+  "gate_thresholds": {
+    "j30_clicks_multiplier": 1.5,
+    "j45_top20_keywords_min": 20,
+    "j60_indexed_pages_min_pct": 0.3,
+    "j60_ctr_min_pct": 1.0
+  },
+  "notes": [
+    "Liste figée. Toute modification doit créer un nouveau fichier daté (pilot-cities-YYYY-MM-DD.json).",
+    "Sprint 0.1 modifie src/app/(public)/rge/[service]/[ville]/page.tsx — ne PAS éditer en parallèle.",
+    "Marvin colle GSC manuellement (memory feedback_gsc_manual_paste). Aucun pull MCP."
+  ]
+}

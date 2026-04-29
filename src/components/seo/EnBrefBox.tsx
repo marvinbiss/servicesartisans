@@ -8,7 +8,7 @@
  * Server Component — pas de 'use client'.
  */
 
-interface EnBrefBoxProps {
+type EnBrefBoxProps = {
   /** Resume de l'article (2-3 phrases max, 40-60 mots idealement) */
   summary?: string
   /** Points cles (alternative ou complement au summary) */
@@ -35,6 +35,7 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2}
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -58,6 +59,7 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={2.5}
+                aria-hidden="true"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>

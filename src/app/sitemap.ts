@@ -457,6 +457,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly',
         priority: 0.9,
       },
+      // Sprint 0.4 — Open data backbone (CC-BY 4.0 → backlinks DR 92 data.gouv.fr).
+      {
+        url: `${SITE_URL}/datasets/rge`,
+        lastModified: '2026-04-29',
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      },
+      {
+        url: `${SITE_URL}/developpeurs`,
+        lastModified: '2026-04-29',
+        changeFrequency: 'monthly',
+        priority: 0.5,
+      },
       {
         url: `${SITE_URL}/artisans`,
         lastModified: STATIC_DATE,

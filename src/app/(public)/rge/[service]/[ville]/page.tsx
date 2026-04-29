@@ -1,15 +1,32 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { FileText } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
-import { getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
+import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
+import {
+  getServiceBySlug,
+  getLocationBySlug,
+  getReviewStatsByDept,
+  getTopReviewsByDept,
+} from '@/lib/supabase'
 import { villes as staticVilles } from '@/lib/data/france'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
-import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
+import {
+  getBreadcrumbSchema,
+  getItemListSchema,
+  getGovernmentServiceSchema,
+  getFinancialProductSchema,
+} from '@/lib/seo/jsonld'
+import {
+  buildAggregateRatingFromProviders,
+  type PageAggregateRating,
+} from '@/lib/seo/aggregate-rating'
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndCity,
@@ -23,7 +40,16 @@ import {
   buildServiceCityFaq,
   buildFaqJsonLd,
 } from '@/lib/rge/pseo-content'
+import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 import { getVilleBySlug } from '@/lib/data/france'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
+import {
+  truncateTitle,
+  isRgeUpgradeV2,
+  currentMonthYearFr,
+  buildIntroParagraph,
+  safeJsonStringify,
+} from './helpers'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -51,23 +77,8 @@ export function generateStaticParams() {
   return PRERENDER_SERVICES.flatMap((service) => topCities.map((v) => ({ service, ville: v.slug })))
 }
 
-interface PageProps {
+type PageProps = {
   params: Promise<{ service: string; ville: string }>
-}
-
-/** Tronque un title à ~58 chars pour Google */
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
-/** Contenu de l'intro métier-spécifique (100-150 mots) */
-function buildIntroParagraph(serviceName: string, villeName: string, serviceSlug: string): string {
-  const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
-  const labelPart = qualif
-    ? `Les artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName} détiennent le label ${qualif.label} (délivré par ${qualif.organisme}), garantissant leur compétence pour ${qualif.specifics}.`
-    : `Les artisans ${serviceName.toLowerCase()} certifiés RGE (Reconnu Garant de l’Environnement) à ${villeName} répondent aux critères officiels d’\u00e9co-conditionnalité fixés par l’\u00c9tat.`
-  return `${labelPart} Cette certification est indispensable pour bénéficier des aides publiques à la rénovation énergétique : MaPrimeRénov’, Certificats d’\u00c9conomies d’\u00c9nergie (CEE), éco-prêt à taux zéro et TVA réduite à 5,5 %. Sans artisan RGE, aucune de ces aides n’est mobilisable. Tous les professionnels listés ci-dessous à ${villeName} ont une qualification vérifiée et toujours active, sourcée directement depuis le registre officiel ADEME / France Rénov’.`
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -97,10 +108,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countStrict = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
   const isNoindex = countStrict.ok && countStrict.count === 0
 
-  const rawTitle = `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`
+  // Sprint 0.1 — review prefix injecté en title pour CTR. Le fetch passe par
+  // le même cache que la page (mêmes params), donc warm-cache hit → 0 coût DB
+  // supplémentaire.
+  const upgradeV2 = isRgeUpgradeV2()
+  let aggregateRating: PageAggregateRating | null = null
+  let count = 0
+  if (upgradeV2) {
+    const listing = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {
+      limit: 50,
+    })
+    count = listing.count
+    aggregateRating = buildAggregateRatingFromProviders(listing.providers)
+  }
+
+  const rawTitle = upgradeV2
+    ? aggregateRating
+      ? `${aggregateRating.ratingValue}★ (${aggregateRating.reviewCount} avis) · ${count} ${serviceName.toLowerCase()} RGE ${villeName} · MaPrimeRénov’ 2026`
+      : `${count} ${serviceName.toLowerCase()} RGE ${villeName} — MaPrimeRénov’ 2026`
+    : `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`
   const title = truncateTitle(rawTitle)
 
-  const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName}. Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Qualifications vérifiées ADEME à jour.`
+  const rawDesc = upgradeV2
+    ? `${count} ${serviceName.toLowerCase()} RGE certifiés à ${villeName}. Devis gratuit 24h. MaPrimeRénov’ jusqu’à 11 000 €, CEE et TVA 5,5 %.`
+    : `Artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName}. Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Qualifications vérifiées ADEME à jour.`
   const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
@@ -196,7 +227,35 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // ont de vrais reviews. Si aucun review réel → null, pas d'étoiles SERP
   // (évite rich-snippet abuse). Sinon → étoiles visibles en SERP sur
   // toutes les 50K+ URLs /rge/[service]/[ville] éligibles.
-  const aggregateRating = buildAggregateRatingFromProviders(providers)
+  // Sprint 0.1 : fallback dept-level via review_stats_by_dept si pas d'avis
+  // sur les providers visibles (couvre les villes secondaires où les avis
+  // existent à l'échelle départementale mais pas sur les top 50 listés).
+  // Garde-fou anti rich-snippet abuse : on n'injecte aggregateRating au
+  // niveau dept QUE si on peut afficher au moins 1 avis réel sur la page
+  // (cohérence SERP ↔ page, sinon Google flag mismatch).
+  const upgradeV2 = isRgeUpgradeV2()
+  let aggregateRating: PageAggregateRating | null = buildAggregateRatingFromProviders(providers)
+  let deptStats: { review_count: number; avg_rating: number } | null = null
+  let deptReviews: Awaited<ReturnType<typeof getTopReviewsByDept>> = []
+  let fallbackDeptUsed = false
+  if (upgradeV2 && !aggregateRating && location.department_name) {
+    const [stats, reviews] = await Promise.all([
+      getReviewStatsByDept(serviceSlug, location.department_name).catch(() => null),
+      getTopReviewsByDept(serviceSlug, location.department_name, 5).catch(() => []),
+    ])
+    if (stats && stats.review_count > 0 && stats.avg_rating > 0 && reviews.length > 0) {
+      aggregateRating = {
+        '@type': 'AggregateRating',
+        ratingValue: stats.avg_rating.toFixed(1),
+        reviewCount: String(stats.review_count),
+        bestRating: '5',
+        worstRating: '1',
+      }
+      deptStats = stats
+      deptReviews = reviews
+      fallbackDeptUsed = true
+    }
+  }
 
   // Collection LocalBusiness (schema.org ItemList ne porte pas areaServed)
   const collectionSchema = {
@@ -213,9 +272,71 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         name: 'ServicesArtisans',
         url: SITE_URL,
       },
-      ...(aggregateRating && { aggregateRating }),
+      ...(aggregateRating && (!fallbackDeptUsed || deptReviews.length > 0) && { aggregateRating }),
     },
   }
+
+  // Sprint 0.1 — Article + Speakable + dateModified : signal de fraîcheur
+  // pour les ranking factors YMYL et compatible Google Assistant.
+  const monthYear = currentMonthYearFr()
+  const articleSchema = upgradeV2
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: `${count} ${serviceName} RGE à ${villeName} — Guide ${monthYear}`,
+        image: [`${SITE_URL}/og-rge-${service}.jpg`, `${SITE_URL}/og-default.jpg`],
+        datePublished: providers[0]?.created_at ?? '2026-01-01T00:00:00+02:00',
+        dateModified: new Date().toISOString(),
+        author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+        publisher: {
+          '@type': 'Organization',
+          name: 'ServicesArtisans',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/logo.png`,
+          },
+        },
+        mainEntityOfPage: pageUrl,
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', '[data-speakable="true"]'],
+        },
+      }
+    : null
+
+  // Sprint 0.1 — GovernmentService (ANAH / France Rénov’) : signal YMYL
+  // expliquant à Google que cette page documente un programme officiel.
+  const governmentServiceSchema = upgradeV2
+    ? getGovernmentServiceSchema({
+        name: `MaPrimeRénov’ et France Rénov’ pour ${serviceName.toLowerCase()} à ${villeName}`,
+        description: `Programmes publics MaPrimeRénov’ (ANAH) et France Rénov’ permettant aux propriétaires de ${villeName} de financer des travaux de ${serviceName.toLowerCase()} réalisés par un artisan RGE certifié. Aides cumulables avec les CEE et la TVA réduite à 5,5 %.`,
+        url: pageUrl,
+        serviceType: 'Aide financière à la rénovation énergétique',
+        audience: `Propriétaires occupants ou bailleurs d’un logement à ${villeName}`,
+        temporalCoverage: '2026-01-01/2030-12-31',
+        serviceOperator: {
+          name: "Agence nationale de l'habitat (ANAH)",
+          url: 'https://france-renov.gouv.fr/',
+        },
+        sameAs: [
+          'https://france-renov.gouv.fr/',
+          'https://www.maprimerenov.gouv.fr/',
+          'https://www.service-public.fr/particuliers/vosdroits/F342',
+        ],
+      })
+    : null
+
+  // Sprint 0.1 — FinancialProduct (cumul aides MaPrimeRénov’ + CEE + TVA 5,5 % + éco-PTZ).
+  const financialProductSchema = upgradeV2
+    ? getFinancialProductSchema({
+        name: `Aides cumulées rénovation énergétique — ${serviceName.toLowerCase()} ${villeName}`,
+        description: `Cumul des aides financières mobilisables à ${villeName} pour des travaux de ${serviceName.toLowerCase()} réalisés par un artisan RGE : MaPrimeRénov’ jusqu’à 11 000 €, prime CEE (standard ou bonification précarité), Éco-PTZ jusqu’à 50 000 € à taux zéro, TVA 5,5 %. Le total des aides ne peut excéder 100 % du coût TTC des travaux.`,
+        url: pageUrl,
+        category: 'Government Grant',
+        feesAndCommissionsSpecification:
+          "Aides versées sous condition d’éligibilité : logement de plus de 2 ans (CEE) ou de 15 ans (MaPrimeRénov'), artisan RGE à la date de signature du devis, parcours administratif respecté (engagement CEE AVANT signature du devis).",
+      })
+    : null
 
   const intro = buildIntroParagraph(serviceName, villeName, serviceSlug)
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
@@ -242,24 +363,50 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     : { total: 0, topCities: [] }
   const otherCities = serviceStats.topCities.filter((c) => c.slug !== villeSlug).slice(0, 5)
 
+  // Sprint 0.1 — communeData pour le bloc Primes CEE (revenu_median +
+  // climat_zone alimentent l’estimation tranche / économies). Null-safe.
+  const communeData = upgradeV2 ? await getCommuneBySlug(villeSlug).catch(() => null) : null
+
+  // CEE ops éligibles pour conditionner l’affichage du bloc primes
+  const eligibleCeeOps = upgradeV2 ? getCeeOpsForRgeService(serviceSlug) : []
+  const showCeeBlock = upgradeV2 && eligibleCeeOps.length > 0
+
   return (
     <main className="min-h-screen bg-white">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(breadcrumbSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(itemListSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(collectionSchema) }}
       />
       {faqSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(faqSchema) }}
+        />
+      )}
+      {articleSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(articleSchema) }}
+        />
+      )}
+      {governmentServiceSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(governmentServiceSchema) }}
+        />
+      )}
+      {financialProductSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(financialProductSchema) }}
         />
       )}
 
@@ -273,18 +420,53 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           className="mb-6"
         />
 
+        {upgradeV2 && (
+          <EnBrefBox
+            summary={`Trouvez ${count} ${serviceName.toLowerCase()} certifiés RGE à ${villeName}, éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Devis gratuits sous 24h. Qualifications vérifiées ADEME / France Rénov’.`}
+            keyPoints={[
+              `${count} artisans RGE actifs à ${villeName}`,
+              'Éligible MaPrimeRénov’ jusqu’à 11 000 €',
+              'Cumul CEE + TVA 5,5 % possible',
+              'Devis gratuit, réponse 24h',
+            ]}
+          />
+        )}
+
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
-            {serviceName} certifié RGE à {villeName}
+            {upgradeV2 ? (
+              <>
+                {count} {serviceName.toLowerCase()} RGE {villeName} ({monthYear})
+              </>
+            ) : (
+              <>
+                {serviceName} certifié RGE à {villeName}
+              </>
+            )}
           </h1>
           <p className="mt-3 text-charcoal-600">
             {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à {villeName}
           </p>
+          {upgradeV2 && (
+            <p className="mt-2 text-sm text-charcoal-500">
+              Auteur :{' '}
+              <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span>
+              {' · '}
+              Mis à jour le{' '}
+              <time dateTime={new Date().toISOString().slice(0, 10)}>
+                {new Date().toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </time>
+            </p>
+          )}
           <Link
             href={`/devis/${serviceSlug}/${villeSlug}`}
-            className="inline-flex items-center gap-2 mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
+            className="inline-flex items-center gap-2 mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
-            <FileText className="w-5 h-5" />
+            <FileText className="w-5 h-5" aria-hidden="true" />
             Demander un devis RGE
           </Link>
         </header>
@@ -292,7 +474,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
           <p>{intro}</p>
           {enrichedParagraphs.map((para, i) => (
-            <p key={i}>{para}</p>
+            <p key={`para-${i}-${para.slice(0, 20)}`}>{para}</p>
           ))}
         </section>
 
@@ -352,9 +534,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
           <Link
             href={`/devis/${serviceSlug}/${villeSlug}`}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
-            <FileText className="w-5 h-5" />
+            <FileText className="w-5 h-5" aria-hidden="true" />
             Obtenir mon devis gratuit
           </Link>
         </section>
@@ -367,7 +549,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <li>
               <Link
                 href={`/artisans-rge/${villeSlug}`}
-                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               >
                 <div className="font-semibold text-charcoal-900">
                   Tous les artisans RGE à {villeName}
@@ -378,7 +560,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <li>
               <Link
                 href={`/services/${serviceSlug}/${villeSlug}`}
-                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               >
                 <div className="font-semibold text-charcoal-900">
                   Tous les {serviceName.toLowerCase()} à {villeName}
@@ -428,7 +610,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/rge/${serviceSlug}/${c.slug}`}
-                  className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center px-4 py-2.5 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 >
                   {serviceName} RGE à {c.name}
                 </Link>
@@ -448,12 +630,15 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <div className="space-y-3">
               {faqItems.map((item, i) => (
                 <details
-                  key={i}
+                  key={`faq-${i}-${item.question.slice(0, 20)}`}
                   className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
                 >
                   <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
-                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                    <span
+                      className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                      aria-hidden="true"
+                    >
                       +
                     </span>
                   </summary>
@@ -462,6 +647,39 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               ))}
             </div>
           </section>
+        )}
+
+        {fallbackDeptUsed && location.department_name && (
+          <section className="mb-12">
+            <ReviewsDeptBlock
+              serviceSlug={serviceSlug}
+              serviceName={serviceName}
+              departmentName={location.department_name}
+              stats={deptStats}
+              reviews={deptReviews}
+            />
+          </section>
+        )}
+
+        {showCeeBlock && (
+          <Suspense
+            fallback={
+              <div
+                aria-busy="true"
+                aria-label="Chargement des primes CEE…"
+                className="animate-pulse bg-sand-100 h-32 rounded-xl mb-12"
+              />
+            }
+          >
+            <section className="mb-12">
+              <PrimesCEEBlock
+                serviceSlug={serviceSlug}
+                serviceName={serviceName}
+                villeName={villeName}
+                communeData={communeData}
+              />
+            </section>
+          </Suspense>
         )}
 
         <section className="mb-12 py-12 bg-charcoal-950 rounded-2xl text-center text-white">
@@ -473,9 +691,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
           <Link
             href={`/devis/${serviceSlug}/${villeSlug}`}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
-            <FileText className="w-5 h-5" />
+            <FileText className="w-5 h-5" aria-hidden="true" />
             Devis gratuit en 2 min
           </Link>
         </section>

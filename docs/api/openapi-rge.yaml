@@ -1,0 +1,417 @@
+# =============================================================================
+# OpenAPI 3.1 — ServicesArtisans RGE API (Sprint 0.4 — preparation only)
+# =============================================================================
+#
+# Statut : DRAFT — squelette livré pour data.gouv.fr Sprint 0.4. Les endpoints
+# /rge/lookup et /rge/search EXISTENT déjà en prod (src/app/api/v1/rge/{lookup,search}).
+# /rge/dataset/latest est NEUF — à câbler après Sprint 0.1 validé.
+#
+# Licence des données servies : CC-BY-4.0 (cf. /datasets/rge).
+# =============================================================================
+
+openapi: 3.1.0
+info:
+  title: ServicesArtisans RGE API
+  version: 0.1.0
+  summary: |
+    API publique d'accès aux données RGE (Reconnu Garant de l'Environnement)
+    de l'annuaire ServicesArtisans, sourcées du dataset officiel ADEME /
+    France Rénov' et enrichies (géolocalisation, services, validations).
+  description: |
+    Trois endpoints actuellement exposés :
+
+    1. **`GET /rge/lookup`** — Vérifie le statut RGE d'une entreprise par SIRET ou SIREN.
+    2. **`GET /rge/search`** — Recherche paginée d'artisans RGE par métier/ville/qualification.
+    3. **`GET /rge/dataset/latest`** — Redirige vers le dernier export bulk (CSV/JSON/Parquet) sous CC-BY-4.0.
+
+    ### Attribution
+
+    Toute redistribution doit créditer :
+    `Source : ServicesArtisans — https://servicesartisans.fr/datasets/rge`
+
+    ### Rate limits
+
+    | Quota | Anonyme | Avec `X-API-Key` |
+    | --- | --- | --- |
+    | Requêtes / 24 h | 1 000 | 10 000 |
+    | Burst (rps) | 5 | 20 |
+
+    Dépassement = 429 Too Many Requests. Headers de réponse :
+    `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
+
+    ### Stabilité
+
+    Le payload est **stable et versionné** (`v1`). Toute breaking change
+    ouvrira un namespace `/api/v2/rge/*` en parallèle, avec dépréciation
+    annoncée 90 jours à l'avance via le header `Sunset`.
+  license:
+    name: CC-BY-4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+  contact:
+    name: ServicesArtisans API
+    email: api@servicesartisans.fr
+    url: https://servicesartisans.fr/developpeurs
+  termsOfService: https://servicesartisans.fr/cgv
+
+servers:
+  - url: https://servicesartisans.fr/api/v1
+    description: Production
+
+tags:
+  - name: rge
+    description: Endpoints RGE (Reconnu Garant de l'Environnement)
+  - name: dataset
+    description: Datasets bulk en téléchargement (CSV / JSON / Parquet)
+  - name: public
+    description: Endpoints non authentifiés (rate-limit anonyme)
+
+paths:
+  /rge/lookup:
+    get:
+      tags: [rge, public]
+      summary: Recherche RGE par SIRET ou SIREN
+      operationId: lookupRgeBySiret
+      description: |
+        Retourne le statut RGE officiel d'une entreprise. La donnée provient
+        du dataset ADEME (sync hebdomadaire) — quand l'entreprise n'a pas de
+        qualification RGE active, le payload renvoie `{ rge: false, ... }`
+        plutôt qu'un 404 (pour distinguer "non-RGE" de "inconnue").
+      parameters:
+        - name: siret
+          in: query
+          required: false
+          description: SIRET 14 chiffres (avec ou sans espaces)
+          schema:
+            type: string
+            pattern: '^\d{14}$'
+            example: '83001931100026'
+        - name: siren
+          in: query
+          required: false
+          description: SIREN 9 chiffres
+          schema:
+            type: string
+            pattern: '^\d{9}$'
+            example: '830019311'
+      responses:
+        '200':
+          description: Statut RGE retourné (positif ou négatif)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RgeLookupResponse'
+        '400':
+          description: SIRET / SIREN invalide ou manquant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Rate limit dépassé
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /rge/search:
+    get:
+      tags: [rge, public]
+      summary: Recherche paginée d'artisans RGE
+      operationId: searchRgeProviders
+      description: |
+        Recherche full-text + filtres structurés. Retourne uniquement les
+        fiches `is_active=true AND noindex=false AND rge_qualifications IS NOT NULL`.
+      parameters:
+        - name: q
+          in: query
+          description: Recherche full-text (raison sociale, mots-clés)
+          schema:
+            type: string
+            minLength: 2
+            example: 'pompe à chaleur'
+        - name: service
+          in: query
+          description: Slug du service (ex. `pompe-a-chaleur`, `isolation-combles`)
+          schema:
+            type: string
+            example: pompe-a-chaleur
+        - name: ville
+          in: query
+          description: Slug de la ville (ex. `lyon`, `paris-15`)
+          schema:
+            type: string
+            example: lyon
+        - name: departement
+          in: query
+          description: Code département (`01`–`95`, `971`–`976`)
+          schema:
+            type: string
+            pattern: '^(0[1-9]|[1-8]\d|9[0-5]|97[1-6])$'
+            example: '69'
+        - name: qualification
+          in: query
+          description: Code qualification RGE (ex. `QualiPAC`, `Qualibat-8741`)
+          schema:
+            type: string
+            example: QualiPAC
+        - name: limit
+          in: query
+          description: Nb max de résultats (défaut 20, max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Offset de pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Liste paginée d'artisans RGE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RgeSearchResponse'
+        '400':
+          description: Paramètres invalides
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Rate limit dépassé
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /rge/dataset/latest:
+    get:
+      tags: [dataset, public]
+      summary: Téléchargement du dernier export bulk RGE
+      operationId: downloadLatestRgeDataset
+      description: |
+        Redirige (HTTP 302) vers le dernier export mensuel (`rge-latest.csv`
+        par défaut, ou format demandé via `?format=`).
+
+        Les fichiers sont publiés sous **licence CC-BY-4.0**, mis à jour le
+        1er de chaque mois via `/api/cron/export-rge-dataset`.
+
+        Sidecar de métadonnées disponible à
+        `https://servicesartisans.fr/datasets/rge/rge-latest.meta.json`
+        (count, sha256 par fichier, schema_version).
+      parameters:
+        - name: format
+          in: query
+          description: Format de téléchargement
+          schema:
+            type: string
+            enum: [csv, json, parquet]
+            default: csv
+      responses:
+        '302':
+          description: Redirection vers le fichier CDN
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://servicesartisans.fr/datasets/rge/rge-latest.csv
+        '404':
+          description: Dataset pas encore généré (premier mois après mise en service)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+components:
+  schemas:
+    RgeQualification:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          description: Code officiel de la qualification RGE
+          example: QualiPAC
+        nom:
+          type: string
+          example: Qualification Pompes À Chaleur
+        organisme:
+          type: string
+          description: Organisme certificateur
+          example: Qualit'EnR
+        domaine:
+          type: string
+          example: 'Chauffage / ECS'
+        date_debut:
+          type: string
+          format: date
+          example: '2024-03-15'
+        date_fin:
+          type: string
+          format: date
+          example: '2027-03-14'
+
+    RgeProvider:
+      type: object
+      required: [siret, name, slug]
+      properties:
+        siret:
+          type: string
+          pattern: '^\d{14}$'
+          example: '83001931100026'
+        name:
+          type: string
+          example: 'Chauffage Lyon SARL'
+        slug:
+          type: string
+          example: 'chauffage-lyon-sarl'
+        address_city:
+          type: string
+          nullable: true
+          example: 'Lyon'
+        address_postal_code:
+          type: string
+          nullable: true
+          example: '69003'
+        address_department:
+          type: string
+          nullable: true
+          example: '69'
+        address_region:
+          type: string
+          nullable: true
+          example: 'Auvergne-Rhône-Alpes'
+        latitude:
+          type: number
+          format: double
+          nullable: true
+          example: 45.7485
+        longitude:
+          type: number
+          format: double
+          nullable: true
+          example: 4.8467
+        specialty:
+          type: string
+          nullable: true
+          example: 'chauffagiste'
+        rge_qualifications:
+          type: array
+          items: { $ref: '#/components/schemas/RgeQualification' }
+        rge_valid_until:
+          type: string
+          format: date
+          nullable: true
+          example: '2027-03-14'
+        rge_organismes:
+          type: array
+          items:
+            type: string
+          example: ["Qualit'EnR", 'Qualibat']
+        rge_last_synced_at:
+          type: string
+          format: date-time
+          nullable: true
+        rge_source_url:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://france-renov.gouv.fr/annuaire-rge/...'
+        url:
+          type: string
+          format: uri
+          description: Page publique de la fiche sur ServicesArtisans
+          example: 'https://servicesartisans.fr/artisan/chauffage-lyon-sarl'
+
+    RgeLookupResponse:
+      type: object
+      required: [rge, source, fetched_at]
+      properties:
+        rge:
+          type: boolean
+          description: Vrai si l'entreprise a au moins une qualification RGE active
+        provider:
+          $ref: '#/components/schemas/RgeProvider'
+        source:
+          type: string
+          enum: [ademe, france-renov, internal]
+          example: ademe
+        fetched_at:
+          type: string
+          format: date-time
+        attribution:
+          $ref: '#/components/schemas/Attribution'
+
+    Pagination:
+      type: object
+      required: [total, limit, offset, has_more]
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          example: 1247
+        limit:
+          type: integer
+          example: 20
+        offset:
+          type: integer
+          example: 0
+        has_more:
+          type: boolean
+          example: true
+
+    RgeSearchResponse:
+      type: object
+      required: [results, pagination]
+      properties:
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/RgeProvider' }
+        pagination: { $ref: '#/components/schemas/Pagination' }
+        attribution: { $ref: '#/components/schemas/Attribution' }
+
+    Attribution:
+      type: object
+      required: [text, url, license]
+      properties:
+        text:
+          type: string
+          example: 'Source : ServicesArtisans — Annuaire RGE'
+        url:
+          type: string
+          format: uri
+          example: 'https://servicesartisans.fr/datasets/rge'
+        license:
+          type: string
+          example: 'CC-BY-4.0'
+
+    Error:
+      type: object
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          description: Code stable d'erreur (snake_case)
+          example: invalid_siret
+        message:
+          type: string
+          description: Description lisible (FR)
+          example: 'Le SIRET doit contenir 14 chiffres'
+        docs:
+          type: string
+          format: uri
+          example: 'https://servicesartisans.fr/api/v1/docs'
+
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        Clé API optionnelle (rate-limit étendu). Demande à
+        `api@servicesartisans.fr`. Sans clé : quota anonyme.
+
+security:
+  - {} # endpoints publics par défaut
+  - apiKey: []

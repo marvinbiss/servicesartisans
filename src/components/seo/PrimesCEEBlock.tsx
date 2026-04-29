@@ -20,7 +20,7 @@ import SimulateurCTA from '@/components/cee/SimulateurCTA'
 // Types
 // ---------------------------------------------------------------------------
 
-interface PrimesCEEBlockProps {
+type PrimesCEEBlockProps = {
   serviceSlug: string
   serviceName: string
   villeName: string
@@ -186,7 +186,7 @@ export default async function PrimesCEEBlock({
     <section className="py-6 bg-white rounded-xl border border-sand-200 p-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Zap className="w-5 h-5 text-emerald-600" />
+          <Zap className="w-5 h-5 text-emerald-600" aria-hidden="true" />
         </div>
         <h3 className="font-heading text-lg font-bold text-charcoal-900">
           Primes CEE pour {serviceName.toLowerCase()} à {villeName}
@@ -224,7 +224,7 @@ export default async function PrimesCEEBlock({
         return (
           <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 mb-4">
             <div className="flex items-start gap-2">
-              <Leaf className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <Leaf className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <p className="text-sm text-emerald-800 leading-relaxed">{savingsText}</p>
             </div>
           </div>
@@ -242,9 +242,9 @@ export default async function PrimesCEEBlock({
             >
               <div className="flex-shrink-0 mt-1">
                 {op.domaine === 'enveloppe' ? (
-                  <Leaf className="w-4 h-4 text-emerald-500" />
+                  <Leaf className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                 ) : (
-                  <Euro className="w-4 h-4 text-primary-500" />
+                  <Euro className="w-4 h-4 text-primary-500" aria-hidden="true" />
                 )}
               </div>
               <div className="min-w-0">
@@ -285,7 +285,7 @@ export default async function PrimesCEEBlock({
       <div className="mt-4 pt-4 border-t border-sand-200 space-y-3">
         <Link
           href={`/devis/${serviceSlug}`}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition"
+          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
         >
           Devis gratuit {serviceName.toLowerCase()} à {villeName}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />

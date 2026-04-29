@@ -373,6 +373,18 @@ export default function Footer() {
               >
                 Plan du site
               </Link>
+              <Link
+                href="/datasets/rge"
+                className="hover:text-primary-400 transition-colors duration-200 py-1.5"
+              >
+                Dataset RGE
+              </Link>
+              <Link
+                href="/developpeurs"
+                className="hover:text-primary-400 transition-colors duration-200 py-1.5"
+              >
+                API développeurs
+              </Link>
             </div>
           </div>
           <div className="mt-4 pt-4 border-t border-charcoal-800/60 text-xs text-sand-500/80 text-center">

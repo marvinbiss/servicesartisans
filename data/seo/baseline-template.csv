@@ -1,0 +1,18 @@
+# GSC export template — baseline ULTRA DOMINATION SEO Phase 0
+# Workflow:
+#   1. Open Google Search Console → Performance → "Pages" tab
+#   2. Set date range to 28 jours (or align with date_start/date_end below)
+#   3. Export rows as CSV, then map columns into this template:
+#        path        = top-level URL path (e.g. /rge/pompe-a-chaleur/lyon)
+#        clicks      = integer
+#        impressions = integer
+#        ctr         = decimal (0.0227 = 2.27%) — NOT a percent string
+#        position    = decimal average position
+#        date_start  = YYYY-MM-DD (inclusive)
+#        date_end    = YYYY-MM-DD (inclusive)
+#   4. Remove these "#" lines before running the script
+#   5. Run: npx tsx scripts/seo/baseline-snapshot.ts data/seo/baseline-template.csv
+# Lines starting with "#" are ignored by the parser.
+path,clicks,impressions,ctr,position,date_start,date_end
+# example
+/rge/pompe-a-chaleur/lyon,42,1850,0.0227,12.4,2026-04-01,2026-04-28

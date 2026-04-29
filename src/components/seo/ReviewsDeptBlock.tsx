@@ -5,7 +5,7 @@ import { Star, MessageSquare, ChevronRight } from 'lucide-react'
 // Types
 // ---------------------------------------------------------------------------
 
-interface ReviewsDeptBlockProps {
+type ReviewsDeptBlockProps = {
   serviceSlug: string
   serviceName: string
   departmentName: string
@@ -32,10 +32,16 @@ function StarRating({ rating }: { rating: number }) {
 
   for (let i = 0; i < 5; i++) {
     if (i < fullStars) {
-      stars.push(<Star key={i} className="w-4 h-4 text-secondary-400 fill-secondary-400" />)
+      stars.push(
+        <Star
+          key={i}
+          className="w-4 h-4 text-secondary-400 fill-secondary-400"
+          aria-hidden="true"
+        />
+      )
     } else if (i === fullStars && hasHalf) {
       stars.push(
-        <span key={i} className="relative inline-flex w-4 h-4">
+        <span key={i} className="relative inline-flex w-4 h-4" aria-hidden="true">
           <Star className="absolute w-4 h-4 text-sand-300" />
           <span className="absolute overflow-hidden" style={{ width: '50%' }}>
             <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
@@ -43,11 +49,18 @@ function StarRating({ rating }: { rating: number }) {
         </span>
       )
     } else {
-      stars.push(<Star key={i} className="w-4 h-4 text-sand-300" />)
+      stars.push(<Star key={i} className="w-4 h-4 text-sand-300" aria-hidden="true" />)
     }
   }
 
-  return <span className="inline-flex items-center gap-0.5">{stars}</span>
+  return (
+    <span className="inline-flex items-center gap-0.5">
+      <span className="sr-only">{rating} sur 5 étoiles</span>
+      <span className="inline-flex items-center gap-0.5" aria-hidden="true">
+        {stars}
+      </span>
+    </span>
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -148,7 +161,10 @@ export default function ReviewsDeptBlock({
 
                 {/* Author + provider */}
                 <div className="flex items-center gap-2 text-xs text-charcoal-500">
-                  <MessageSquare className="w-3.5 h-3.5 flex-shrink-0 text-charcoal-400" />
+                  <MessageSquare
+                    className="w-3.5 h-3.5 flex-shrink-0 text-charcoal-400"
+                    aria-hidden="true"
+                  />
                   <span className="font-medium text-charcoal-600">
                     {displayAuthor(review.author_name)}
                   </span>
@@ -167,10 +183,10 @@ export default function ReviewsDeptBlock({
         <div className="text-center">
           <Link
             href={`/avis/${serviceSlug}`}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-400 hover:text-primary-500 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-400 hover:text-primary-500 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             Voir tous les avis
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
       </div>
