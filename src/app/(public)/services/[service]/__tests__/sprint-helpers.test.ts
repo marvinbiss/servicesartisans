@@ -48,7 +48,10 @@ describe('buildEnBrefPoints', () => {
       trade: null,
       villesCount: 5000,
     })
-    expect(points[0]).toMatch(/1\s?234 plombier vérifiés SIREN/)
+    // toLocaleString('fr-FR') produit U+202F (NNBSP) sur Node ICU moderne ;
+    // \s ne le matche pas → on assert sur les chiffres + texte sans regex sur le séparateur.
+    const formatted = (1234).toLocaleString('fr-FR')
+    expect(points[0]).toContain(`${formatted} plombier vérifiés SIREN`)
   })
 
   it('falls back to villes count when no providers', () => {
@@ -59,7 +62,9 @@ describe('buildEnBrefPoints', () => {
       villesCount: 5000,
     })
     expect(points[0]).toContain('Annuaire plombier')
-    expect(points[0]).toMatch(/5\s?000\+ villes/)
+    // U+202F-safe : on assert sur la sortie réelle de toLocaleString, pas sur \s
+    const formatted = (5000).toLocaleString('fr-FR')
+    expect(points[0]).toContain(`${formatted}+ villes`)
   })
 
   it('inserts a price line when trade is provided', () => {

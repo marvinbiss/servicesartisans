@@ -143,7 +143,7 @@ export default function DevelopersHubPage() {
         <section className="mb-12 grid gap-6 md:grid-cols-3">
           <Link
             href="/datasets/rge"
-            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition"
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <Database className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
             <h2 className="font-semibold text-charcoal-900 mb-1">Dataset RGE</h2>
@@ -154,7 +154,7 @@ export default function DevelopersHubPage() {
 
           <a
             href="/api/v1/openapi.yaml"
-            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition"
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileJson className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
             <h2 className="font-semibold text-charcoal-900 mb-1">Spec OpenAPI 3.1</h2>

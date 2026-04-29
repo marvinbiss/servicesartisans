@@ -50,6 +50,7 @@ import {
   buildIntroParagraph,
   safeJsonStringify,
 } from './helpers'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -283,10 +284,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // dateModified : snapshot mensuel pour éviter "fake freshness" (Google
   // déclasse les pages qui s'auto-update quotidiennement sans nouveau contenu).
   const monthYear = currentMonthYearFr()
-  const monthlyAnchor = (() => {
-    const d = new Date()
-    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)).toISOString()
-  })()
+  const monthlyAnchor = monthlyAnchorIso()
   const articleSchema = upgradeV2
     ? {
         '@context': 'https://schema.org',

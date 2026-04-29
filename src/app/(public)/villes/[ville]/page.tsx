@@ -463,7 +463,8 @@ async function renderVillePage({ params }: PageProps) {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
-              }).format(new Date())}
+                timeZone: 'Europe/Paris',
+              }).format(new Date(monthlyAnchor))}
             </time>
           </p>
         </div>
