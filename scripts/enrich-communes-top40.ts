@@ -23,6 +23,16 @@
 import { createClient } from '@supabase/supabase-js'
 import * as fs from 'fs'
 import * as path from 'path'
+import {
+  parseArgileLevel,
+  parseZoneSismique,
+  parseRadon,
+  parseDvfCsv,
+  dvfDept,
+  isPriceM2Sane,
+  isPctSane,
+  isPositiveCount,
+} from './enrich-communes-parsers'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -101,21 +111,102 @@ function markDone(p: Progress, slug: string, source: string) {
   saveProgress(p)
 }
 
-async function fetchJson<T = unknown>(url: string, timeoutMs = 12000): Promise<T | null> {
-  const ctrl = new AbortController()
-  const t = setTimeout(() => ctrl.abort(), timeoutMs)
+// ---------------------------------------------------------------------------
+// HTTP layer — exponential backoff + jitter + Retry-After + circuit breaker
+// ---------------------------------------------------------------------------
+// Stripe-grade : 4xx non-retryable (sauf 408/429), 5xx retryable jusqu'à 3
+// tentatives avec jitter, respect de Retry-After, circuit breaker par host
+// (3 échecs consécutifs → tout skip pour ce host pour le reste du run).
+
+const HOST_FAILURES = new Map<string, number>()
+const CIRCUIT_BREAKER_THRESHOLD = 3
+
+function hostOf(url: string): string {
   try {
-    const res = await fetch(url, {
-      signal: ctrl.signal,
-      headers: { 'User-Agent': USER_AGENT, Accept: 'application/json' },
-    })
-    if (!res.ok) return null
-    return (await res.json()) as T
+    return new URL(url).host
   } catch {
-    return null
-  } finally {
-    clearTimeout(t)
+    return url
   }
+}
+
+function isCircuitOpen(host: string): boolean {
+  return (HOST_FAILURES.get(host) || 0) >= CIRCUIT_BREAKER_THRESHOLD
+}
+
+function noteFailure(host: string) {
+  HOST_FAILURES.set(host, (HOST_FAILURES.get(host) || 0) + 1)
+}
+
+function noteSuccess(host: string) {
+  if (HOST_FAILURES.has(host)) HOST_FAILURES.delete(host)
+}
+
+/** Fetch JSON avec retry exponentiel + jitter + Retry-After. Renvoie null
+ *  uniquement après épuisement des tentatives ou circuit breaker ouvert. */
+async function fetchJson<T = unknown>(
+  url: string,
+  timeoutMs = 12000,
+  maxAttempts = 3
+): Promise<T | null> {
+  const host = hostOf(url)
+  if (isCircuitOpen(host)) return null
+
+  let lastErr: string | null = null
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const ctrl = new AbortController()
+    const t = setTimeout(() => ctrl.abort(), timeoutMs)
+    try {
+      const res = await fetch(url, {
+        signal: ctrl.signal,
+        headers: { 'User-Agent': USER_AGENT, Accept: 'application/json' },
+      })
+
+      // 4xx non-retryable except 408/429
+      if (res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429) {
+        // 404 is the canonical "not found" → not a failure for circuit breaker
+        if (res.status !== 404) noteFailure(host)
+        return null
+      }
+
+      // Retryable : 408, 429, 5xx
+      if (res.status === 408 || res.status === 429 || res.status >= 500) {
+        const retryAfter = res.headers.get('retry-after')
+        const retryAfterMs = retryAfter ? Math.min(parseInt(retryAfter, 10) * 1000, 30_000) : 0
+        if (attempt < maxAttempts) {
+          const backoff =
+            retryAfterMs || 250 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 250)
+          await sleep(backoff)
+          continue
+        }
+        noteFailure(host)
+        return null
+      }
+
+      if (!res.ok) {
+        noteFailure(host)
+        return null
+      }
+
+      const json = (await res.json()) as T
+      noteSuccess(host)
+      return json
+    } catch (err) {
+      lastErr = (err as Error)?.message || 'unknown'
+      if (attempt < maxAttempts) {
+        await sleep(250 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 250))
+        continue
+      }
+      noteFailure(host)
+      return null
+    } finally {
+      clearTimeout(t)
+    }
+  }
+  if (lastErr) {
+    // last-resort log pour visibilité ; rester silencieux sinon (les
+    // 404 expected — FILOSOFI/MaPrime — ne loggent pas).
+  }
+  return null
 }
 
 // ---------------------------------------------------------------------------
@@ -127,12 +218,6 @@ const ARRONDISSEMENTS: Record<string, string[]> = {
   '75056': Array.from({ length: 20 }, (_, i) => `751${String(i + 1).padStart(2, '0')}`),
   '13055': Array.from({ length: 16 }, (_, i) => `132${String(i + 1).padStart(2, '0')}`),
   '69123': Array.from({ length: 9 }, (_, i) => `6938${i + 1}`),
-}
-
-/** Extract the geo-dvf department prefix : 2 chars, sauf Corse (2A/2B). */
-function dvfDept(codeInsee: string): string {
-  if (/^2[AB]/i.test(codeInsee)) return codeInsee.slice(0, 2).toUpperCase()
-  return codeInsee.slice(0, 2)
 }
 
 async function fetchDvfCsv(codeInsee: string, year: number): Promise<string | null> {
@@ -147,52 +232,6 @@ async function fetchDvfCsv(codeInsee: string, year: number): Promise<string | nu
     return await res.text()
   } catch {
     return null
-  }
-}
-
-function parseDvfCsv(csv: string): {
-  prixMoyen: number | null
-  prixMaison: number | null
-  prixAppart: number | null
-  nbMutations: number
-} {
-  const lines = csv.split(/\r?\n/).filter(Boolean)
-  if (lines.length < 2)
-    return { prixMoyen: null, prixMaison: null, prixAppart: null, nbMutations: 0 }
-  const header = lines[0].split(',')
-  const iValeur = header.indexOf('valeur_fonciere')
-  const iType = header.indexOf('type_local')
-  const iSurface = header.indexOf('surface_reelle_bati')
-  const iNature = header.indexOf('nature_mutation')
-  if (iValeur < 0 || iType < 0 || iSurface < 0)
-    return { prixMoyen: null, prixMaison: null, prixAppart: null, nbMutations: 0 }
-  const samples = { maison: [] as number[], appart: [] as number[], all: [] as number[] }
-  const mutationsSeen = new Set<string>()
-  const iMut = header.indexOf('id_mutation')
-  for (let i = 1; i < lines.length; i++) {
-    const parts = lines[i].split(',')
-    if (iNature >= 0 && parts[iNature] !== 'Vente') continue
-    const val = parseFloat(parts[iValeur])
-    const surf = parseFloat(parts[iSurface])
-    const type = parts[iType]
-    if (!val || !surf || surf < 9 || surf > 2000) continue
-    const prixM2 = val / surf
-    if (prixM2 < 100 || prixM2 > 50000) continue
-    if (iMut >= 0) mutationsSeen.add(parts[iMut])
-    samples.all.push(prixM2)
-    if (type === 'Maison') samples.maison.push(prixM2)
-    else if (type === 'Appartement') samples.appart.push(prixM2)
-  }
-  const median = (arr: number[]) => {
-    if (!arr.length) return null
-    const sorted = [...arr].sort((a, b) => a - b)
-    return Math.round(sorted[Math.floor(sorted.length / 2)])
-  }
-  return {
-    prixMoyen: median(samples.all),
-    prixMaison: median(samples.maison),
-    prixAppart: median(samples.appart),
-    nbMutations: mutationsSeen.size,
   }
 }
 
@@ -226,12 +265,13 @@ async function enrichDvf(commune: {
     arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : null
   const update: Record<string, number> = {}
   const pm = avg(all.overall)
-  if (pm) update.prix_m2_moyen = pm
+  if (isPriceM2Sane(pm)) update.prix_m2_moyen = pm
   const pma = avg(all.maison)
-  if (pma) update.prix_m2_maison = pma
+  if (isPriceM2Sane(pma)) update.prix_m2_maison = pma
   const pap = avg(all.appart)
-  if (pap) update.prix_m2_appartement = pap
-  if (all.nb) update.nb_transactions_annuelles = Math.round(all.nb / inseeCodes.length)
+  if (isPriceM2Sane(pap)) update.prix_m2_appartement = pap
+  if (isPositiveCount(all.nb))
+    update.nb_transactions_annuelles = Math.round(all.nb / inseeCodes.length)
   if (!Object.keys(update).length) return false
   await supabase.from('communes').update(update).eq('code_insee', commune.code_insee)
   return true
@@ -333,6 +373,7 @@ async function enrichAdemeDpe(commune: {
   const fg = await fetchJson<{ total?: number }>(base + qsFG)
   const nbPass = fg?.total ?? 0
   const pct = Math.round((nbPass / nbTotal) * 1000) / 10
+  if (!isPositiveCount(nbTotal) || !isPctSane(pct)) return false
   await supabase
     .from('communes')
     .update({ pct_passoires_dpe: pct, nb_dpe_total: nbTotal })
@@ -355,47 +396,6 @@ type GeoRisqueResponse = {
     radon?: GeoRisque
   }
   risquesTechnologiques?: Record<string, GeoRisque>
-}
-
-/** Parse a libelleStatutCommune string into "faible" | "moyen" | "fort".
- *  Vérifié 2026-04-29 : Géorisques retourne libellés type
- *  "Risque Existant - important" / "Risque Existant - faible". On mappe
- *  "important" / "élevé" → "fort" pour conserver une enum stable côté DB. */
-function parseArgileLevel(libelle: string | null | undefined): string | null {
-  if (!libelle) return null
-  const l = libelle.toLowerCase()
-  if (/(important|élevé|eleve|fort)/i.test(l)) return 'fort'
-  if (/moyen/i.test(l)) return 'moyen'
-  if (/faible/i.test(l)) return 'faible'
-  return null
-}
-
-/** Parse séisme libelleStatutCommune.
- *  Géorisques 2026 ne retourne plus la zone numérique (1-5) dans le rapport
- *  de risque commune ; le libellé est qualitatif "Risque Existant - faible".
- *  Mapping qualitatif → zone : très_faible→1, faible→2, moyen→3, important→4. */
-function parseZoneSismique(libelle: string | null | undefined): number | null {
-  if (!libelle) return null
-  const m = libelle.match(/zone\s+(\d)/i)
-  if (m) return parseInt(m[1], 10)
-  const l = libelle.toLowerCase()
-  if (/(très\s+faible|tres\s+faible|nul)/i.test(l)) return 1
-  if (/(important|élevé|eleve|fort)/i.test(l)) return 4
-  if (/moyen/i.test(l)) return 3
-  if (/faible/i.test(l)) return 2
-  return null
-}
-
-/** Parse radon classe "Catégorie 3" / "Risque Existant - moyen" → 1-3. */
-function parseRadon(libelle: string | null | undefined): number | null {
-  if (!libelle) return null
-  const m = libelle.match(/(?:catégorie|classe)\s*(\d)/i)
-  if (m) return parseInt(m[1], 10)
-  const l = libelle.toLowerCase()
-  if (/(important|élevé|eleve|fort)/i.test(l)) return 3
-  if (/moyen/i.test(l)) return 2
-  if (/faible/i.test(l)) return 1
-  return null
 }
 
 // Géorisques expose le rapport-risque via 2 hosts différents selon les

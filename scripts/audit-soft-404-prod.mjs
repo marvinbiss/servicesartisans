@@ -41,6 +41,11 @@ const PARALLEL = 6
 const MIN_BODY_BYTES = 5 * 1024
 const MAX_RESPONSE_MS = 3000
 
+// Markers d'état vide. Pour qualifier un soft 404, le marker SEUL ne suffit
+// pas — il faut aussi que la page soit "thin" (body court, peu de liens
+// internes vers des fiches/listings). Sinon c'est un faux positif sur du
+// contenu éditorial qui mentionne "aucun artisan ne devrait..." dans son
+// body (cas /methodologie / /sources / /a-propos).
 const SOFT_404_TEXT_MARKERS = [
   'aucun artisan',
   'aucun résultat',
@@ -49,6 +54,20 @@ const SOFT_404_TEXT_MARKERS = [
   'rien trouvé',
   'cette page est vide',
   'pas de données',
+]
+
+// Seuil au-dessous duquel un marker "vide" qualifie un soft 404.
+// Calibré sur prod 2026-04-29 : /methodologie ≈ 100KB, /a-propos ≈ 80KB,
+// /services/[s]/[v] avec 0 artisan ≈ 25-35KB (template seul, pas de cards).
+const SOFT_404_BODY_MAX_BYTES = 60 * 1024
+
+// Patterns de listing artisan / fiche détail. Si présents, la page liste des
+// résultats → pas soft 404 même si le marker apparaît dans une autre section.
+const LISTING_PATTERNS = [
+  /href="\/services\/[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+"/i, // fiche provider
+  /href="\/artisans\/[a-z0-9-]+"/i,
+  /data-provider-id=/i,
+  /class="[^"]*provider-card/i,
 ]
 
 const SAMPLE = [
@@ -239,7 +258,7 @@ async function followRedirects(url) {
 }
 
 function classifyBody(body) {
-  if (!body) return { hasH1: false, bodyBytes: 0, softMarker: null }
+  if (!body) return { hasH1: false, bodyBytes: 0, softMarker: null, hasListing: false }
   const bodyBytes = Buffer.byteLength(body, 'utf8')
   const hasH1 = /<h1[\s>]/i.test(body)
   let softMarker = null
@@ -250,10 +269,13 @@ function classifyBody(body) {
       break
     }
   }
+  // Faux positif : marker dans contenu éditorial long → ignoré si body riche
+  // OU si la page liste des artisans (vrai listing avec providers).
+  const hasListing = LISTING_PATTERNS.some((re) => re.test(body))
   const robotsMeta = /<meta[^>]+name=["']robots["'][^>]+content=["']([^"']+)["']/i.exec(body)
   const robotsContent = robotsMeta ? robotsMeta[1].toLowerCase() : null
   const isNoindex = robotsContent ? /noindex/.test(robotsContent) : false
-  return { hasH1, bodyBytes, softMarker, isNoindex }
+  return { hasH1, bodyBytes, softMarker, hasListing, isNoindex }
 }
 
 async function auditUrl(path) {
@@ -270,13 +292,19 @@ async function auditUrl(path) {
   if (final.ms > MAX_RESPONSE_MS) issues.push({ kind: 'slow_response', detail: `${final.ms} ms` })
 
   if (final.status === 200) {
-    const { hasH1, bodyBytes, softMarker, isNoindex } = classifyBody(final.body)
+    const { hasH1, bodyBytes, softMarker, hasListing, isNoindex } = classifyBody(final.body)
     if (bodyBytes < MIN_BODY_BYTES) {
       issues.push({ kind: 'thin_body', detail: `${bodyBytes} bytes` })
     }
     if (!hasH1) issues.push({ kind: 'no_h1', detail: 'aucun <h1> rendu' })
-    if (softMarker) {
-      issues.push({ kind: 'soft_404_marker', detail: `texte: "${softMarker}"` })
+    // Marker SEUL = faux positif. Marker + (body court OU pas de listing) =
+    // vrai soft 404. Le body court est l'indicateur principal — un /methodologie
+    // de 100KB qui mentionne "aucun artisan ne devrait..." est filtré.
+    if (softMarker && bodyBytes < SOFT_404_BODY_MAX_BYTES && !hasListing) {
+      issues.push({
+        kind: 'soft_404_marker',
+        detail: `texte: "${softMarker}" (body=${bodyBytes}B, listing=${hasListing})`,
+      })
     }
     if (isNoindex) {
       issues.push({ kind: 'noindex_in_sample', detail: 'meta robots noindex' })
