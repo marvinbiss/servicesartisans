@@ -24,6 +24,30 @@ describe('getRateLimitConfig — /api/open-data routing', () => {
     expect(getRateLimitConfig('/api/devis')).not.toBe(RATE_LIMITS.openData)
     expect(getRateLimitConfig('/api/cron/check-aides-freshness')).not.toBe(RATE_LIMITS.openData)
   })
+
+  it('maps exact /api/open-data (no suffix) to RATE_LIMITS.openData', () => {
+    expect(getRateLimitConfig('/api/open-data')).toBe(RATE_LIMITS.openData)
+  })
+
+  it('maps trailing-slash /api/open-data/ to RATE_LIMITS.openData', () => {
+    expect(getRateLimitConfig('/api/open-data/')).toBe(RATE_LIMITS.openData)
+  })
+
+  it('does NOT match a sibling like /api/open-data-extras (anchored pattern)', () => {
+    // Garde anti-prefix: une route hypothétique `/api/open-data-extras`
+    // ne doit PAS hériter du bucket openData failOpen.
+    expect(getRateLimitConfig('/api/open-data-extras')).not.toBe(RATE_LIMITS.openData)
+    expect(getRateLimitConfig('/api/open-database')).not.toBe(RATE_LIMITS.openData)
+  })
+
+  it('/api/cron/* still routes to RATE_LIMITS.cron (ordering guard)', () => {
+    expect(getRateLimitConfig('/api/cron/check-aides-freshness')).toBe(RATE_LIMITS.cron)
+  })
+
+  it('never falls through to RATE_LIMITS.api for any /api/open-data subpath', () => {
+    expect(getRateLimitConfig('/api/open-data/local-stats.csv')).not.toBe(RATE_LIMITS.api)
+    expect(getRateLimitConfig('/api/open-data/manifest.json')).not.toBe(RATE_LIMITS.api)
+  })
 })
 
 describe('RATE_LIMITS.openData configuration', () => {

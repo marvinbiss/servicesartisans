@@ -357,8 +357,12 @@ export function getRateLimitConfig(pathname: string): RateLimitConfig {
   // Cron jobs — Vercel cron triggers, must not be blocked
   if (pathname.startsWith('/api/cron')) return RATE_LIMITS.cron
 
-  // Open Data — public CC-BY/Etalab endpoints (chantier #4 + #3 DOS protection)
-  if (pathname.startsWith('/api/open-data')) return RATE_LIMITS.openData
+  // Open Data — public CC-BY/Etalab endpoints (chantier #4 + #3 DOS protection).
+  // Pattern ancré : exact `/api/open-data` ou suffixe `/api/open-data/...` —
+  // évite de matcher un futur `/api/open-data-extras` qui hériterait alors
+  // d'un bucket failOpen (audit sécu 2026-04-29 HIGH#2).
+  if (pathname === '/api/open-data' || pathname.startsWith('/api/open-data/'))
+    return RATE_LIMITS.openData
 
   // VAPI voice webhooks — very high throughput, fail-open
   if (pathname.startsWith('/api/vapi')) return RATE_LIMITS.vapiWebhook
