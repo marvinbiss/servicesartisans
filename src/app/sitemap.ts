@@ -170,6 +170,11 @@ export async function generateSitemaps() {
     { id: 'communes-cities-2' },
     { id: 'communes-cities-3' },
     { id: 'communes-cities-4' },
+    // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] pour 11
+    // aides nationales × 101 départements = 1 111 URLs (la 12ème = MaPrimeRénov'
+    // est déjà émise séparément par /aides/[dept]/maprimerenov, cf. shard 'static').
+    // 1 seul shard suffit (1 111 URLs ≤ STATIC_BATCH 8 000).
+    { id: 'aides-dept' },
     ...Array.from(
       { length: Math.ceil((departements.length * getTradesSlugs().length) / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -1138,6 +1143,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.4,
     }))
     return batchIndex === 0 ? result : []
+  }
+
+  // ── Aides × département (V3 #3 stratégie 140K) ──────────────────────
+  // 11 aides hors MaPrimeRénov' × 101 départements = 1 111 URLs.
+  // MaPrimeRénov par dept est déjà émis dans le shard 'static' (legacy, on ne
+  // dédoublonne pas pour ne pas casser la cohérence canonique des MPR existantes).
+  if (id === 'aides-dept') {
+    const otherAides = aidesSlugs.filter((s) => s !== 'maprimerenov')
+    const result: MetadataRoute.Sitemap = []
+    for (const aideSlug of otherAides) {
+      for (const dept of departements) {
+        result.push({
+          url: `${SITE_URL}/aides/${dept.slug}/${aideSlug}`,
+          lastModified: '2026-04-29',
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        })
+      }
+    }
+    return result
   }
 
   // ── Communes hub (V3 #1 stratégie 140K) ─────────────────────────────

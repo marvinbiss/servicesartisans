@@ -68,6 +68,9 @@ export async function GET(request: Request) {
     'communes-cities-2',
     'communes-cities-3',
     'communes-cities-4',
+    // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] (11 × 101
+    // = 1 111 URLs). MaPrimeRénov par dept déjà dans 'static' (legacy).
+    'aides-dept',
     // dept × service — 105 depts × 47 services
     ...Array.from(
       { length: Math.ceil((departements.length * tradeSlugs.length) / LARGE_BATCH) },
