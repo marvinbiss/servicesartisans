@@ -14,15 +14,21 @@
  * Auth : Bearer CRON_SECRET (pattern partagé avec rge-health, sitemap-health, etc.)
  * Schedule recommandé : `0 7 * * *` (quotidien, 07h UTC, avant le déploiement quotidien)
  *
- * Réponse JSON :
+ * Réponse JSON par défaut (minimale, anti-fuite état interne YMYL) :
  *   {
- *     ok: boolean,                  // true si aucune alerte CRITICAL
+ *     ok: boolean,                  // true ssi status === 'ok'
  *     status: 'ok' | 'warning' | 'critical',
  *     totalAides: 12,
- *     ageDays: { [slug]: number },  // âge en jours par aide
- *     alerts: Array<{ slug, severity, ageDays, lastReviewed }>,
  *     timestamp: string,
  *   }
+ *
+ * Le détail (`ageDays` + `alerts` avec `lastReviewed` exact) est volontairement
+ * EXCLU du payload JSON pour ne pas exposer publiquement l'état de veille
+ * éditoriale d'aides YMYL si `CRON_SECRET` venait à fuiter (audit sécu
+ * 2026-04-29 HIGH#1). Les détails sont toujours envoyés à Sentry/logger côté
+ * serveur via `logger.error/warn/info`. Pour debug ad hoc, passer le header
+ * `X-Debug-Detail: 1` sur une requête bearer-authentifiée → renvoie
+ * `{ ageDays, alerts }` en plus.
  */
 
 import { NextResponse } from 'next/server'
@@ -118,8 +124,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const report = computeFreshnessReport(aidesCatalog, new Date())
-    const timestamp = new Date().toISOString()
+    const now = new Date()
+    const report = computeFreshnessReport(aidesCatalog, now)
+    const timestamp = now.toISOString()
 
     if (report.status === 'critical') {
       logger.error(
@@ -142,13 +149,13 @@ export async function GET(request: Request) {
       })
     }
 
+    const debugDetail = request.headers.get('x-debug-detail') === '1'
     return NextResponse.json({
-      ok: report.status !== 'critical',
+      ok: report.status === 'ok',
       status: report.status,
       totalAides: report.totalAides,
-      ageDays: report.ageDays,
-      alerts: report.alerts,
       timestamp,
+      ...(debugDetail ? { ageDays: report.ageDays, alerts: report.alerts } : {}),
     })
   } catch (error) {
     logger.error('[check-aides-freshness] cron failed', error)

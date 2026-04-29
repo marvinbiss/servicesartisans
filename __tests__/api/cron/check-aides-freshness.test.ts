@@ -96,4 +96,29 @@ describe('computeFreshnessReport', () => {
     const r = computeFreshnessReport([{ slug: 'edge75', lastReviewed: ago(75) }], FIXED_NOW)
     expect(r.alerts[0]?.severity).toBe('critical')
   })
+
+  it('boundary at exactly 89 days → critical (one day before CI fail)', () => {
+    const r = computeFreshnessReport([{ slug: 'edge89', lastReviewed: ago(89) }], FIXED_NOW)
+    expect(r.alerts[0]?.severity).toBe('critical')
+    expect(r.status).toBe('critical')
+  })
+
+  it('empty catalog → status ok, no alerts, totalAides 0', () => {
+    const r = computeFreshnessReport([], FIXED_NOW)
+    expect(r.status).toBe('ok')
+    expect(r.alerts).toEqual([])
+    expect(r.totalAides).toBe(0)
+  })
+
+  it('future lastReviewed (now < reviewed) → no alert, negative ageDays', () => {
+    const future = new Date(FIXED_NOW)
+    future.setUTCDate(future.getUTCDate() + 5)
+    const r = computeFreshnessReport(
+      [{ slug: 'future', lastReviewed: future.toISOString().slice(0, 10) }],
+      FIXED_NOW
+    )
+    expect(r.status).toBe('ok')
+    expect(r.alerts).toEqual([])
+    expect(r.ageDays['future']).toBeLessThan(0)
+  })
 })
