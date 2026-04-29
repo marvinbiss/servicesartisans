@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -16,6 +16,11 @@ import {
 } from 'lucide-react'
 import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import { isSeoUpgradeV2, currentMonthYearFr } from '@/lib/seo/sprint-helpers'
+import { tradeContent } from '@/lib/data/trade-content'
+import { countLabelForSummary, buildEnBrefPoints } from './sprint-helpers'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
@@ -113,6 +118,7 @@ function truncateTitle(title: string, maxLen = 41): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug } = await params
+  const upgradeV2 = isSeoUpgradeV2()
 
   let serviceName = ''
   let providerCount = 0
@@ -136,16 +142,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const svcLower = serviceName.toLowerCase()
   const countLabel = providerCount > 0 ? `${providerCount}+` : 'des centaines de'
+  const tradeMeta = tradeContent[serviceSlug]
 
   const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
-  const titleTemplates = [
-    `${serviceName} France 2026 : Devis Gratuit`,
-    `${serviceName} : Artisans Vérifiés + Devis Gratuit`,
-    `${serviceName} France 2026 — Comparez + Devis`,
-    `${serviceName} : Tarifs 2026 + Devis Gratuit`,
-    `${serviceName} 2026 — Artisans Vérifiés en France`,
-  ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  // Sprint 0.2 — pattern Sprint 2 : "{count} {svc} France · {priceMin}–{priceMax} {unit} · 2026"
+  // pour gagner du CTR. Truncate à 41 base : avec le template root
+  // "%s | ServicesArtisans" (+19) → final 60 chars, sous la limite Google.
+  const titleTemplates = upgradeV2
+    ? [
+        tradeMeta && providerCount > 0
+          ? `${providerCount}+ ${svcLower} France · ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · 2026`
+          : `${countLabel} ${svcLower} France 2026 · Devis 24h`,
+        `${serviceName} 2026 — ${countLabel} artisans vérifiés, devis 24h`,
+        `${serviceName} France 2026 — Comparez, devis gratuit`,
+        tradeMeta
+          ? `${serviceName} ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · Devis gratuit 2026`
+          : `${serviceName} : Tarifs 2026 + Devis gratuit`,
+        `${serviceName} 2026 — Artisans vérifiés SIREN en France`,
+      ]
+    : [
+        `${serviceName} France 2026 : Devis Gratuit`,
+        `${serviceName} : Artisans Vérifiés + Devis Gratuit`,
+        `${serviceName} France 2026 — Comparez + Devis`,
+        `${serviceName} : Tarifs 2026 + Devis Gratuit`,
+        `${serviceName} 2026 — Artisans Vérifiés en France`,
+      ]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length], 41)
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
@@ -175,7 +197,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: `${SITE_URL}/services/${serviceSlug}`,
       type: 'website',
-      siteName: 'ServicesArtisans',
       images: [{ url: serviceImage.src, width: 1200, height: 630, alt: serviceImage.alt }],
     },
     twitter: {
@@ -184,7 +205,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       images: [serviceImage.src],
     },
-    alternates: getAlternates('/services/${serviceSlug}'),
+    alternates: getAlternates(`/services/${serviceSlug}`),
   }
 }
 
@@ -355,6 +376,59 @@ export default async function ServicePage({ params }: PageProps) {
         }
       : null
 
+  // Sprint 0.2 — Article + Speakable + dateModified : signal de fraîcheur
+  // pour les ranking factors et compatible Google Assistant. Image obligatoire
+  // (Article required field) → fallback service image.
+  const upgradeV2 = isSeoUpgradeV2()
+  const monthYear = currentMonthYearFr()
+  const pageUrl = `${SITE_URL}/services/${serviceSlug}`
+  const nowIso = new Date().toISOString()
+  const heroImage = getServiceImage(serviceSlug)
+  const articleImage = heroImage.src.startsWith('http')
+    ? heroImage.src
+    : `${SITE_URL}${heroImage.src}`
+  const articleSchema = upgradeV2
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: `${service.name} en France — Guide ${monthYear}`,
+        image: [articleImage],
+        datePublished: '2026-01-01T00:00:00+02:00',
+        dateModified: lastModified ?? nowIso,
+        author: {
+          '@type': 'Organization',
+          name: 'la rédaction ServicesArtisans',
+          url: SITE_URL,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'ServicesArtisans',
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+        },
+        mainEntityOfPage: pageUrl,
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', '[data-speakable="true"]'],
+        },
+      }
+    : null
+
+  // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
+  // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
+  // pour rester scannable.
+  const snippetTrades = upgradeV2
+    ? Object.values(tradeContent)
+        .filter((t) => t.priceRange?.min > 0 && t.priceRange?.max > 0)
+        .slice(0, 10)
+        .map((t) => ({
+          name: t.name,
+          slug: t.slug,
+          min: t.priceRange.min,
+          max: t.priceRange.max,
+          unit: t.priceRange.unit,
+        }))
+    : []
+
   return (
     <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
@@ -365,6 +439,7 @@ export default async function ServicePage({ params }: PageProps) {
           ...(faqSchema ? [faqSchema] : []),
           ...(pricingSchema ? [pricingSchema] : []),
           ...(itemListSchema ? [itemListSchema] : []),
+          ...(articleSchema ? [articleSchema] : []),
         ]}
       />
 
@@ -484,6 +559,47 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Sprint 0.2 — byline E-E-A-T (visible si Article schema racine actif). */}
+      {upgradeV2 && articleSchema && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <p className="text-xs text-charcoal-500">
+            Auteur :{' '}
+            <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span> ·
+            Mis à jour le{' '}
+            <time dateTime={nowIso}>
+              {new Intl.DateTimeFormat('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              }).format(new Date(nowIso))}
+            </time>
+          </p>
+        </div>
+      )}
+
+      {/* Sprint 0.2 — En bref : Featured Snippets en haut de page. */}
+      {upgradeV2 && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <EnBrefBox
+            summary={`${service.name} en France 2026 : ${countLabelForSummary(totalProviderCount)} artisans vérifiés SIREN, devis gratuits sous 24h${trade ? `, fourchette de prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}` : ''}.`}
+            keyPoints={buildEnBrefPoints({
+              serviceName: service.name,
+              providerCount: totalProviderCount,
+              trade,
+              villesCount: villes.length,
+            })}
+          />
+        </div>
+      )}
+
+      {/* Sprint 0.2 — SnippetBaitSummary : tableau prix par métier
+          (Featured Snippets). Affiché uniquement sur le hub principal. */}
+      {upgradeV2 && snippetTrades.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <SnippetBaitSummary trades={snippetTrades} />
+        </div>
+      )}
 
       <CrossIntentLinks service={serviceSlug} serviceName={service.name} currentIntent="services" />
 

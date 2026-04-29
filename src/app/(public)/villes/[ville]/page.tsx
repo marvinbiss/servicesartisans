@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -46,6 +46,8 @@ import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import CityHubLinks from '@/components/seo/CityHubLinks'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -55,6 +57,7 @@ import RelatedArticles from '@/components/seo/RelatedArticles'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
+import { isSeoUpgradeV2, currentMonthYearFr } from '@/lib/seo/sprint-helpers'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 
@@ -85,16 +88,39 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const cityImage = getCityImage(villeSlug)
   const metaContent = generateVilleContent(ville)
+  const upgradeV2 = isSeoUpgradeV2()
+
+  // Sprint 0.2 — review prefix injecté en title pour CTR (pattern Sprint 2).
+  // Source : aggregateRating ville-level via providers (skipped si DB KO).
+  let villeAggregate: ReturnType<typeof buildAggregateRatingFromProviders> = null
+  let villeProviderCount = 0
+  if (upgradeV2) {
+    const villeProviders = await getProvidersByLocation(villeSlug).catch(() => [])
+    villeProviderCount = villeProviders.length
+    villeAggregate = buildAggregateRatingFromProviders(villeProviders)
+  }
 
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
-  const titleTemplates = [
-    `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit`,
-    `Artisan ${ville.name} 2026 — Devis gratuit 24h`,
-    `${ville.name} : ${services.length} métiers d'artisans — Devis 2026`,
-    `Artisans à ${ville.name} 2026 — Comparez & choisissez`,
-    `${ville.name} (${ville.departementCode}) — Annuaire artisans 2026`,
-  ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const titleTemplates = upgradeV2
+    ? [
+        villeAggregate
+          ? `${villeAggregate.ratingValue}★ (${villeAggregate.reviewCount} avis) · ${villeProviderCount} artisans ${ville.name} ${ville.departementCode} 2026`
+          : `${villeProviderCount > 0 ? villeProviderCount + ' ' : ''}artisans ${ville.name} (${ville.departementCode}) 2026 — Devis 24h`,
+        villeAggregate
+          ? `${villeAggregate.ratingValue}★ ${ville.name} : ${services.length} métiers, ${villeAggregate.reviewCount} avis · 2026`
+          : `${ville.name} 2026 — ${services.length} métiers d’artisans, devis 24h`,
+        `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit 24h`,
+        `${ville.name} 2026 : ${services.length} métiers, devis 24h, RGE certifiés`,
+        `${ville.name} (${ville.departementCode}) — Annuaire artisans vérifiés 2026`,
+      ]
+    : [
+        `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit`,
+        `Artisan ${ville.name} 2026 — Devis gratuit 24h`,
+        `${ville.name} : ${services.length} métiers d'artisans — Devis 2026`,
+        `Artisans à ${ville.name} 2026 — Comparez & choisissez`,
+        `${ville.name} (${ville.departementCode}) — Annuaire artisans 2026`,
+      ]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length], 41)
 
   const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
   const descTemplates = [
@@ -233,6 +259,60 @@ async function renderVillePage({ params }: PageProps) {
       }
     : null
 
+  // Sprint 0.2 — Article + Speakable + dateModified : signal de fraîcheur
+  // pour les ranking factors et compatible Google Assistant. Image obligatoire
+  // (Google Article required field) → fallback OG image si pas de cityImage.
+  const upgradeV2 = isSeoUpgradeV2()
+  const monthYear = currentMonthYearFr()
+  const pageUrl = `${SITE_URL}/villes/${villeSlug}`
+  // dateModified figé au 1er du mois courant : évite la "fake freshness"
+  // (Google détecte les pages qui s'auto-update quotidiennement sans nouveau
+  // contenu et déclasse). Snapshot mensuel = signal honnête.
+  const monthlyAnchor = (() => {
+    const d = new Date()
+    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)).toISOString()
+  })()
+  const articleImage = cityImage?.src
+    ? cityImage.src.startsWith('http')
+      ? cityImage.src
+      : `${SITE_URL}${cityImage.src}`
+    : `${SITE_URL}/og-default.jpg`
+  const articleSchema = upgradeV2
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: `Artisans à ${ville.name} (${ville.departementCode}) — Guide ${monthYear}`,
+        image: [articleImage],
+        datePublished: '2026-01-01T00:00:00+02:00',
+        dateModified: monthlyAnchor,
+        author: {
+          '@type': 'Organization',
+          name: 'la rédaction ServicesArtisans',
+          url: SITE_URL,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'ServicesArtisans',
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+        },
+        mainEntityOfPage: pageUrl,
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', '[data-speakable="true"]'],
+        },
+      }
+    : null
+
+  // En bref bullets — adaptés à la ville
+  const enBrefPoints: string[] = [
+    `${services.length} corps de métier disponibles à ${ville.name}`,
+    'Devis gratuits, réponse 24h',
+    'Artisans vérifiés SIREN officiel',
+  ]
+  if (rgeCount > 0) {
+    enBrefPoints.push(`${rgeCount} artisan${rgeCount > 1 ? 's' : ''} RGE pour MaPrimeRénov’`)
+  }
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
@@ -242,6 +322,7 @@ async function renderVillePage({ params }: PageProps) {
           faqSchema,
           servicesListSchema,
           ...(cityAggregateSchema ? [cityAggregateSchema] : []),
+          ...(articleSchema ? [articleSchema] : []),
         ]}
       />
 
@@ -372,6 +453,54 @@ async function renderVillePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Sprint 0.2 — byline E-E-A-T (visible si Article schema racine actif).
+          Permet à Google de relier l'auteur Organization au contenu et de
+          satisfaire le pre-commit hook E-E-A-T DOM (byline + date visible). */}
+      {upgradeV2 && articleSchema && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <p className="text-xs text-charcoal-500">
+            Auteur :{' '}
+            <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span> ·
+            Mis à jour le{' '}
+            <time dateTime={monthlyAnchor}>
+              {new Intl.DateTimeFormat('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              }).format(new Date())}
+            </time>
+          </p>
+        </div>
+      )}
+
+      {/* Sprint 0.2 — En bref : capture des Featured Snippets en haut de page.
+          Conditionné sur villeProviders.length > 0 pour rester cohérent avec
+          ImmediateAnswerBlock (sinon promesse "X artisans vérifiés" sans
+          rendu concret en dessous → friction UX). */}
+      {upgradeV2 && villeProviders.length > 0 && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <EnBrefBox
+            summary={`Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}) : ${services.length} corps de métier disponibles, devis gratuits sous 24h, professionnels vérifiés SIREN. ${rgeCount > 0 ? `${rgeCount} certifié${rgeCount > 1 ? 's' : ''} RGE pour MaPrimeRénov’.` : ''}`.trim()}
+            keyPoints={enBrefPoints}
+          />
+        </div>
+      )}
+
+      {/* Sprint 0.2 — bloc de stats locales pour réponse immédiate (LLM-citable
+          + Featured Snippets). Composant existant ImmediateAnswerBlock. */}
+      {upgradeV2 && villeProviders.length > 0 && (
+        <div className="pt-2 pb-6">
+          <ImmediateAnswerBlock
+            serviceName="Artisans"
+            villeName={ville.name}
+            trade={null}
+            providerCount={villeProviders.length}
+            averageRating={aggregateRating ? Number(aggregateRating.ratingValue) : undefined}
+            totalReviews={aggregateRating ? Number(aggregateRating.reviewCount) : undefined}
+          />
+        </div>
+      )}
 
       {/* ─── RGE LOCAL SIGNAL ───────────────────────────────────
           Bandeau reassurance visible uniquement si au moins 1 artisan RGE
@@ -862,7 +991,7 @@ async function renderVillePage({ params }: PageProps) {
             </Link>
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-charcoal-300 hove[r:text-white_a:hover]:text-primary-400 font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-charcoal-300 hover:text-primary-400 font-medium transition-colors"
             >
               Voir les services <ArrowRight className="w-4 h-4" />
             </Link>

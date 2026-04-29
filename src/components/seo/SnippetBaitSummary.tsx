@@ -77,7 +77,7 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
                 <td className="px-5 py-3.5 text-sm border-t border-sand-200">
                   <Link
                     href={`/tarifs/${trade.slug}`}
-                    className="text-primary-600 hover:text-primary-700 hover:underline font-medium"
+                    className="text-primary-600 hover:text-primary-700 hover:underline font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none rounded-sm"
                   >
                     {trade.name}
                   </Link>
@@ -88,7 +88,7 @@ export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitS
                 <td className="hidden sm:table-cell px-3 py-3.5 border-t border-sand-200 text-center">
                   <Link
                     href={`/tarifs/${trade.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-2.5 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                   >
                     Voir tarifs
                   </Link>
