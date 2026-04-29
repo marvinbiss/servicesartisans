@@ -34,7 +34,7 @@ export default function YmylDisclaimer({ variant = 'default', prefix, className 
       <a
         href="https://france-renov.gouv.fr/"
         target="_blank"
-        rel="noopener noreferrer nofollow"
+        rel="noopener noreferrer"
         className="underline hover:text-emerald-700"
       >
         france-renov.gouv.fr

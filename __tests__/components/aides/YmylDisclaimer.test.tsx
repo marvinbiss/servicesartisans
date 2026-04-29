@@ -12,9 +12,10 @@ describe('YmylDisclaimer', () => {
     const link = screen.getByRole('link', { name: /france-renov\.gouv\.fr/i })
     expect(link).toHaveAttribute('href', 'https://france-renov.gouv.fr/')
     expect(link).toHaveAttribute('target', '_blank')
-    expect(link.getAttribute('rel')).toContain('nofollow')
     expect(link.getAttribute('rel')).toContain('noopener')
     expect(link.getAttribute('rel')).toContain('noreferrer')
+    // E-E-A-T : pas de nofollow vers source gouvernementale officielle (DR 92).
+    expect(link.getAttribute('rel')).not.toContain('nofollow')
   })
 
   it('default variant uses small footer typography (text-xs)', () => {
