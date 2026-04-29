@@ -151,6 +151,10 @@
     {
       "path": "/api/cron/noindex-sweep",
       "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/cron/google-algo-monitor",
+      "schedule": "30 6 * * *"
     }
   ]
 }
