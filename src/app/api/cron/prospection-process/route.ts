@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { processBatch, reconcileOrphanedMessages } from '@/lib/prospection/message-queue'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +12,7 @@ export const dynamic = 'force-dynamic'
  * Runs every 2 minutes via Vercel Cron
  * Picks up active campaigns and sends the next batch of queued messages
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-prospection-process', async (request: Request) => {
   try {
     // Verify cron secret
     const authHeader = request.headers.get('authorization')
@@ -72,4 +73,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

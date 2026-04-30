@@ -19,6 +19,7 @@ import { sendEmail } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
 import { createInvitationToken } from '@/lib/reviews/invitation-token'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const BATCH_SIZE = 100
@@ -85,7 +86,7 @@ function buildReviewEmail(input: {
   }
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-send-review-invitations', async (request: Request) => {
   const authHeader = request.headers.get('authorization')
   if (!verifyCronSecret(authHeader)) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -203,4 +204,4 @@ export async function GET(request: Request) {
   )
 
   return NextResponse.json({ success: true, sent, failed, processed: pending.length })
-}
+})
