@@ -4,13 +4,17 @@ import { notFound } from 'next/navigation'
 import { Phone, Clock, Shield, CheckCircle, ArrowRight, AlertTriangle, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
   getHowToSchema,
   getUrgencyHubServiceSchema,
 } from '@/lib/seo/jsonld'
-import { SITE_URL, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
@@ -319,11 +323,47 @@ export default async function UrgenceServicePage({
   // Related services for cross-linking
   const relatedServices = services.filter((s) => s.slug !== service).slice(0, 3)
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${trade.name} urgence — intervention rapide 24h/7j`,
+    description: `Service d'urgence ${trade.name.toLowerCase()} disponible 7j/7 en France. ${trade.averageResponseTime}. Soir, week-end, jours fériés.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/urgence/${service}`,
+    mainEntityOfPage: `${SITE_URL}/urgence/${service}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    `Service ${tradeLowerHowTo} d'urgence disponible 7j/7 en France`,
+    `Délai moyen d'intervention : ${trade.averageResponseTime}`,
+    trade.emergencyInfo
+      ? `Conseil d'urgence : ${trade.emergencyInfo.length > 110 ? trade.emergencyInfo.slice(0, 110) + '…' : trade.emergencyInfo}`
+      : `Avant tout : couper l'eau / l'électricité / le gaz selon la situation`,
+    `Tarifs : majoration 30-100 % selon créneau (nuit, week-end, jour férié) — devis avant intervention obligatoire`,
+  ]
+
+  const tldrBullets: string[] = [
+    `${trade.name} urgence — intervention 24h/7j en France, soir et week-end. ${trade.averageResponseTime}.`,
+    `Étapes immédiates : sécuriser la zone (couper eau / élec / gaz), photos pour assurance, contacter un ${tradeLowerHowTo} référencé SIREN.`,
+    `Tarifs : majoration habituelle 30-100 % selon créneau. Exiger un devis écrit même en urgence et conserver la facture pour l'assurance.`,
+    `Notre rôle : mise en relation rapide avec un ${tradeLowerHowTo} référencé près de chez vous, sans engagement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
         data={[
           breadcrumbSchema,
+          articleSchema,
           faqSchema,
           howToSchema,
           collectionPageSchema,
@@ -361,7 +401,10 @@ export default async function UrgenceServicePage({
               <span className="text-sm font-semibold">Disponible soir et week-end</span>
             </div>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1
+            className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight"
+            data-speakable="true"
+          >
             {(() => {
               const h1Hash = Math.abs(hashCode(`urgence-h1-${service}`))
               const h1Templates = [
@@ -417,6 +460,19 @@ export default async function UrgenceServicePage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <UrgencyCountdown serviceName={trade.name} />
       </div>
+
+      {/* Article byline + En bref — E-E-A-T DOM signals + FS Position 0 capture */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </div>
+      </section>
 
       {/* Problems */}
       <section className="py-16 bg-white">
@@ -536,6 +592,13 @@ export default async function UrgenceServicePage({
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* TL;DR pré-FAQ — capture FS Position 0 / AI Overviews */}
+      <section className="py-8 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

@@ -24,6 +24,10 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -1011,8 +1015,45 @@ async function renderUrgenceServiceVillePage({
   const speakableSchema = generateSpeakableSchema({
     url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
     title: `${trade.name} urgence à ${villeData.name}`,
-    cssSelectors: ['.speakable-summary', '.speakable-faq'],
+    cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
   })
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${trade.name} urgence à ${villeData.name} — dépannage 24h/24`,
+    description: `Dépannage ${tradeLower} en urgence à ${villeData.name} (${villeData.departement}). Intervention rapide soir et week-end. ${trade.averageResponseTime}.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+    mainEntityOfPage: `${SITE_URL}/urgence/${service}/${villeSlug}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    `Intervention ${tradeLower} en urgence à ${villeData.name} — soir, week-end, jours fériés`,
+    `Délai moyen : ${trade.averageResponseTime}`,
+    trade.emergencyInfo
+      ? `Conseil d'urgence : ${trade.emergencyInfo}`
+      : `Stop catastrophe en attendant l'artisan : couper l'eau / l'électricité selon le cas`,
+    providers.length > 0
+      ? `${providers.length} ${tradeLower}${providers.length > 1 ? 's' : ''} référencé${providers.length > 1 ? 's' : ''} disponible${providers.length > 1 ? 's' : ''} à ${villeData.name}`
+      : `Mise en relation immédiate avec un artisan référencé`,
+  ]
+
+  const tldrBullets: string[] = [
+    `${trade.name} urgence à ${villeData.name} — disponible soir, week-end, jours fériés. ${trade.averageResponseTime}.`,
+    `Étapes en cas d'urgence : sécuriser (couper eau / électricité / gaz), photos pour assurance, appeler un ${tradeLower} référencé.`,
+    `Tarifs urgence : majoration habituelle 30-100 % selon créneau (nuit, week-end, jour férié). Demander le détail avant intervention.`,
+    `Notre rôle : mise en relation immédiate avec un ${tradeLower} référencé à ${villeData.name}, devis rapide, sans engagement.`,
+  ]
 
   // AggregateRating schema
   //   - Source primaire : reviewStats dept-level (plus stable)
@@ -1056,6 +1097,7 @@ async function renderUrgenceServiceVillePage({
       <JsonLd
         data={[
           breadcrumbSchema,
+          articleSchema,
           faqSchema,
           serviceSchema,
           howToSchema,
@@ -1089,7 +1131,10 @@ async function renderUrgenceServiceVillePage({
             </div>
           </div>
 
-          <h1 className="speakable-summary font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1
+            className="speakable-summary font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight"
+            data-speakable="true"
+          >
             {(() => {
               const h1Hash = Math.abs(hashCode(`urgence-ville-h1-${service}-${villeSlug}`))
               const h1Templates = [
@@ -1154,6 +1199,19 @@ async function renderUrgenceServiceVillePage({
         serviceName={trade.name}
         villeName={villeData.name}
       />
+
+      {/* ─── Article byline + En bref — E-E-A-T DOM signals + FS Position 0 ── */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </div>
+      </section>
 
       {/* ─── URGENCY COUNTDOWN ─────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -1708,6 +1766,13 @@ async function renderUrgenceServiceVillePage({
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── TL;DR pré-FAQ — capture FS Position 0 / AI Overviews ──── */}
+      <section className="py-8 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

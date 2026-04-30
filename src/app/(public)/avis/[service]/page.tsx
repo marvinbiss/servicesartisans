@@ -13,8 +13,12 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema, getAvisHubSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
@@ -289,6 +293,45 @@ export default async function AvisServicePage({
 
   const faqSchema = getFAQSchema(allFaqItems)
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Avis ${trade.name} — comment bien choisir un ${tradeLower}`,
+    description: `Avis et recommandations pour bien choisir votre ${tradeLower}. Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, critères de sélection.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/avis/${service}`,
+    mainEntityOfPage: `${SITE_URL}/avis/${service}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    serviceStats.totalReviews > 0
+      ? `Note moyenne ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés en France`
+      : `Avis et critères de choix pour ${tradeLower} : qualifications, tarifs, fiabilité`,
+    `Tarifs nationaux : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
+    trade.certifications.length > 0
+      ? `Certifications à vérifier : ${trade.certifications.slice(0, 3).join(', ')}`
+      : `Assurance décennale + RC pro obligatoires`,
+    serviceStats.providers.length > 0
+      ? `${serviceStats.providers.length} ${tradeLower}${serviceStats.providers.length > 1 ? 's' : ''} dans le top national`
+      : `Délai de réponse moyen : ${trade.averageResponseTime}`,
+  ]
+
+  const tldrBullets: string[] = [
+    `Avis ${tradeLower}${serviceStats.totalReviews > 0 ? ` — ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés` : ' — recommandations clients vérifiées'}, tarifs ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `Critères clés : qualifications obligatoires (${trade.certifications.length > 0 ? trade.certifications.slice(0, 2).join(', ') : 'décennale + RC pro'}), transparence devis, ponctualité, qualité des finitions.`,
+    `Méthode : comparer 2-3 devis détaillés, demander photos de réalisations, vérifier SIREN actif, lire les avis avec commentaires longs (plus fiables).`,
+    `Notre rôle : mise en relation gratuite avec un ${tradeLower} référencé près de chez vous, devis sous 24 h, sans engagement.`,
+  ]
+
   const serviceSchema = getAvisHubSchema({
     serviceName: trade.name,
     serviceSlug: service,
@@ -398,7 +441,7 @@ export default async function AvisServicePage({
 
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema, ...serviceSchema]} />
 
       {/* Hero */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
@@ -426,7 +469,10 @@ export default async function AvisServicePage({
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            <h1
+              className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
+              data-speakable="true"
+            >
               {(() => {
                 const h1Hash = Math.abs(hashCode(`avis-h1-${service}`))
                 const h1Templates = [
@@ -473,6 +519,19 @@ export default async function AvisServicePage({
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Article byline + En bref — E-E-A-T DOM signals + FS Position 0 capture */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
         </div>
       </section>
 
@@ -774,6 +833,13 @@ export default async function AvisServicePage({
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* TL;DR pré-FAQ — capture FS Position 0 / AI Overviews */}
+      <section className="py-8 bg-sand-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

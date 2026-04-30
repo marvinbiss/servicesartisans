@@ -16,8 +16,12 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
@@ -158,9 +162,44 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
   // HowTo JSON-LD removed — Google no longer supports HowTo rich results
   const howToSchema = null
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: h1,
+    description: `${problem.name} : ${problem.description.length > 140 ? problem.description.slice(0, 140) + '…' : problem.description} Coût ${problem.estimatedCost.min}-${problem.estimatedCost.max} €.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/problemes/${probleme}`,
+    mainEntityOfPage: `${SITE_URL}/problemes/${probleme}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    `Coût indicatif : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} €`,
+    `Délai d'intervention typique : ${problem.averageResponseTime}`,
+    `Niveau d'urgence : ${urgencyLabels[problem.urgencyLevel].toLowerCase()}`,
+    `Métier concerné : ${tradeName}${problem.seasonality ? ` · saisonnalité : ${problem.seasonality}` : ''}`,
+  ]
+
+  const tldrBullets: string[] = [
+    `${problem.name} — coût indicatif ${problem.estimatedCost.min}-${problem.estimatedCost.max} €, délai ${problem.averageResponseTime}, urgence ${urgencyLabels[problem.urgencyLevel].toLowerCase()}.`,
+    `Étapes : repérer les ${problem.symptoms.length} symptômes, exécuter les ${problem.immediateActions.length} actions d'urgence, contacter un ${tradeName.toLowerCase()} référencé.`,
+    problem.preventiveTips.length > 0
+      ? `Prévention : ${problem.preventiveTips.length} bonnes pratiques pour éviter ce problème (entretien, surveillance, contrats).`
+      : `Bonnes pratiques : entretien régulier + surveillance des symptômes + contrats de maintenance.`,
+    `Notre rôle : mise en relation gratuite avec un ${tradeName.toLowerCase()} référencé près de chez vous, devis sous 24 h, sans engagement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema, howToSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -189,7 +228,12 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               {urgencyLabels[problem.urgencyLevel]}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">{h1}</h1>
+          <h1
+            className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight"
+            data-speakable="true"
+          >
+            {h1}
+          </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">{problem.description}</p>
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
@@ -228,6 +272,19 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               Trouver un {tradeName.toLowerCase()}
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Article byline + En bref — E-E-A-T DOM signals + FS Position 0 capture */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
         </div>
       </section>
 
@@ -419,6 +476,13 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* TL;DR pré-FAQ — capture FS Position 0 / AI Overviews */}
+      <section className="py-8 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

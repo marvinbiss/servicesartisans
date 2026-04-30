@@ -22,8 +22,12 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
@@ -548,6 +552,43 @@ async function renderAvisServiceVillePage({
       })
     : null
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Avis ${trade.name} à ${villeData.name} — recommandations clients vérifiées`,
+    description: `Avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.${totalReviews > 0 ? ` ${totalReviews} avis vérifiés, note ${roundedRating.toFixed(1)}/5.` : ''}`,
+    image: `${SITE_URL}/images/services/${service}.webp`,
+    url: `${SITE_URL}/avis/${service}/${villeSlug}`,
+    mainEntityOfPage: `${SITE_URL}/avis/${service}/${villeSlug}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    totalReviews > 0
+      ? `Note moyenne ${roundedRating.toFixed(1)}/5 sur ${totalReviews} avis vérifiés à ${villeData.name}`
+      : `Avis et recommandations clients pour ${tradeLower} à ${villeData.name}`,
+    `Tarifs locaux : ${minPrice}–${maxPrice} ${trade.priceRange.unit}`,
+    `Délai de réponse moyen : ${trade.averageResponseTime}`,
+    topProviders.length > 0
+      ? `${topProviders.length} ${tradeLower}${topProviders.length > 1 ? 's' : ''} référencé${topProviders.length > 1 ? 's' : ''} à ${villeData.name}`
+      : `Critères de choix : qualifications, transparence, réactivité, qualité`,
+  ]
+
+  const tldrBullets: string[] = [
+    `Avis ${tradeLower} à ${villeData.name} (${villeData.departementCode}) — ${totalReviews > 0 ? `${roundedRating.toFixed(1)}/5 sur ${totalReviews} avis` : 'recommandations vérifiées'}, fourchette ${minPrice}-${maxPrice} ${trade.priceRange.unit}.`,
+    `Critères clés : qualifications obligatoires (${trade.certifications.length > 0 ? trade.certifications.slice(0, 2).join(', ') : 'décennale + RC pro'}), transparence du devis, ponctualité, qualité des finitions.`,
+    `${trade.averageResponseTime}. Bonnes pratiques : demander 2-3 devis détaillés avant de signer, vérifier l'assurance et les certifications.`,
+    `Notre rôle : mise en relation gratuite avec un ${tradeLower} référencé à ${villeData.name}, devis sous 24 h, sans engagement.`,
+  ]
+
   // ----- Related links -----
   const nearbyCities = getNearbyCities(villeSlug, 6)
   const relatedSlugs = relatedServices[service] || []
@@ -607,6 +648,7 @@ async function renderAvisServiceVillePage({
       <JsonLd
         data={[
           breadcrumbSchema,
+          articleSchema,
           reviewSchema,
           ...(enrichedFAQSchema ? [enrichedFAQSchema] : []),
           enrichedSpeakableSchema,
@@ -644,7 +686,10 @@ async function renderAvisServiceVillePage({
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            <h1
+              className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
+              data-speakable="true"
+            >
               {(() => {
                 const h1Hash = Math.abs(hashCode(`avis-loc-h1-${service}-${villeSlug}`))
                 const h1Templates = [
@@ -716,6 +761,19 @@ async function renderAvisServiceVillePage({
         avgRating={roundedRating > 0 ? roundedRating : undefined}
         reviewCount={totalReviews > 0 ? totalReviews : undefined}
       />
+
+      {/* ─── Article byline + En bref — E-E-A-T DOM signals + FS Position 0 ── */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </div>
+      </section>
 
       {/* ─── REAL STATS BANNER ─────────────────────────── */}
       {totalReviews > 0 && (
@@ -1329,6 +1387,13 @@ async function renderAvisServiceVillePage({
           </div>
         </section>
       )}
+
+      {/* ─── TL;DR pré-FAQ — capture FS Position 0 / AI Overviews ──── */}
+      <section className="py-8 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
+        </div>
+      </section>
 
       {/* ─── FAQ ──────────────────────────────────────────────── */}
       <section className="py-16 bg-sand-50">
