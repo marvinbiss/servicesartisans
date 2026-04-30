@@ -50,13 +50,33 @@ export interface RgeNationalStats {
 }
 
 /**
+ * Process-level memoization de `getRgeNationalStats`.
+ *
+ * Pourquoi : le build Vercel génère 13 827 pages statiques qui peuvent
+ * toutes appeler cette fonction en parallèle pendant `Generating static
+ * pages`. Sans ce singleton, on ouvre 13 827 connexions Supabase
+ * concurrentes → rate-limit / timeout en cascade ; les logs montrent
+ * des centaines d'erreurs `[getRgeNationalStats] FAILED {"message":""}`.
+ *
+ * Le `getCachedData` Redis ne suffit pas : pendant la première fenêtre
+ * (entre le 1er appel et le retour du write Redis), tous les appels
+ * concurrents voient un cache miss et retentent vers Supabase. Avec ce
+ * singleton, un seul appel atteint la DB par process Node ; tous les
+ * autres attendent la même Promise. Reset implicite via redéploiement.
+ */
+let nationalStatsPromise: Promise<RgeNationalStats> | null = null
+
+/**
  * Retourne les stats nationales RGE : total d'artisans RGE actifs et top 10
- * villes par nombre d'artisans RGE. Cache 6h. Fail-open pendant le build.
+ * villes par nombre d'artisans RGE. Cache 6h Redis + singleton process-level
+ * pour éviter les cascades d'erreurs pendant le build (13 827 pages).
+ * Fail-open pendant le build local sans DB.
  */
 export async function getRgeNationalStats(): Promise<RgeNationalStats> {
   if (IS_BUILD) return { totalActive: 0, topCities: [] }
+  if (nationalStatsPromise) return nationalStatsPromise
 
-  return getCachedData<RgeNationalStats>(
+  nationalStatsPromise = getCachedData<RgeNationalStats>(
     'rge:guide-stats:national:v1',
     async () => {
       try {
@@ -105,6 +125,8 @@ export async function getRgeNationalStats(): Promise<RgeNationalStats> {
     CACHE_TTL_6H,
     { skipNull: true }
   )
+
+  return nationalStatsPromise
 }
 
 export interface RgeServiceStats {
@@ -113,9 +135,19 @@ export interface RgeServiceStats {
 }
 
 /**
+ * Process-level memoization par service pour `getRgeServiceStats`.
+ * Même rationale que `nationalStatsPromise` : pendant le build de 50K
+ * pages /rge/[s]/[v], chaque service est sollicité par des milliers de
+ * pages parallèles. Singleton par slug = 14 appels DB max au lieu de 50K.
+ */
+const serviceStatsPromises = new Map<RgeAllowedService, Promise<RgeServiceStats>>()
+
+/**
  * Retourne les stats RGE pour un service énergétique donné : total d'artisans
  * RGE actifs dans ce métier et top villes. Basé sur `providers` (filtrage par
- * `specialty` via SERVICE_TO_SPECIALTIES). Cache 6h. Fail-open pendant le build.
+ * `specialty` via SERVICE_TO_SPECIALTIES). Cache 6h Redis + singleton par slug
+ * pour éviter les cascades d'erreurs pendant le build (50K pages /rge/[s]/[v]).
+ * Fail-open pendant le build local sans DB.
  *
  * Note : pour le top villes on agrège côté JS sur un échantillon de 500
  * providers RGE du service. Suffisant pour extraire les ~10 villes dominantes
@@ -134,7 +166,10 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
     return { total: 0, topCities: [] }
   }
 
-  return getCachedData<RgeServiceStats>(
+  const cached = serviceStatsPromises.get(serviceSlug)
+  if (cached) return cached
+
+  const promise = getCachedData<RgeServiceStats>(
     `rge:guide-stats:service:${serviceSlug}:v1`,
     async () => {
       try {
@@ -220,4 +255,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
     CACHE_TTL_6H,
     { skipNull: true }
   )
+
+  serviceStatsPromises.set(serviceSlug, promise)
+  return promise
 }
