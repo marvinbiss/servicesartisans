@@ -6,6 +6,8 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { villes as staticVilles, getVilleBySlug } from '@/lib/data/france'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -15,6 +17,7 @@ import {
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
+import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getArtisanUrl } from '@/lib/utils'
 import { SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import {
@@ -276,6 +279,43 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const faqItems = buildCeeOperationCityFaq(operation, ville, count)
   const faqSchema = buildCeeFaqJsonLd(faqItems)
 
+  // Sprint ULTRA — signal YMYL freshness + Speakable (Google Assistant).
+  // dateModified : snapshot mensuel pour éviter "fake freshness" (Google
+  // déclasse les pages qui s'auto-update quotidiennement sans nouveau contenu).
+  const monthYear = currentMonthYearFr()
+  const monthlyAnchor = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} — Guide ${monthYear}`,
+    image: [`${SITE_URL}/og-cee-${operation.code.toLowerCase()}.jpg`, `${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: monthlyAnchor,
+    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}${path}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  // TL;DR pré-FAQ — capture Featured Snippet sur les requêtes prime CEE.
+  const tldrBullets: string[] = [
+    `Prime CEE ${operation.code} pour ${operation.nom.toLowerCase()} à ${villeName}, versée par les vendeurs d'énergie (loi POPE).`,
+    operation.precarite_eligible
+      ? `Bonification précarité énergétique : montant majoré pour les ménages modestes et très modestes.`
+      : `Tous ménages éligibles, sans condition de revenus.`,
+    operation.coup_de_pouce
+      ? `Coup de pouce ${operation.coup_de_pouce_charte ?? operation.code} : barème renforcé activé en 2026.`
+      : `Cumulable avec MaPrimeRénov' et la TVA réduite à 5,5 %.`,
+    `Artisan RGE obligatoire (qualif. ${operation.rge_qualifications_requises[0] ?? 'Qualibat'}). Engagement avant signature du devis.`,
+  ]
+
   // Cross-linking villes : top autres villes pour la même opération
   const topCities = await getCeeTopCitiesByOperation(opCode)
   const otherCities = topCities.filter((c) => c.slug !== villeSlug).slice(0, 5)
@@ -302,6 +342,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
   jsonLdItems.push(
     collectionSchema as Record<string, unknown>,
+    articleSchema as Record<string, unknown>,
     governmentServiceSchema as Record<string, unknown>,
     financialProductSchema as Record<string, unknown>
   )
@@ -321,6 +362,22 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           className="mb-6"
         />
 
+        <EnBrefBox
+          summary={
+            count > 0
+              ? `${count} artisan${count > 1 ? 's' : ''} RGE qualifié${count > 1 ? 's' : ''} pour la prime CEE ${operation.code} (${operation.nom.toLowerCase()}) à ${villeName}. Cumul MaPrimeRénov' + TVA 5,5 % possible. Vérification ADEME.`
+              : `Catalogue national de l'opération CEE ${operation.code} (${operation.nom.toLowerCase()}) à ${villeName}. Devis gratuit, prime versée par les vendeurs d'énergie.`
+          }
+          keyPoints={[
+            `Fiche officielle DGEC ${operation.code} — ${domaineLabel.toLowerCase()}`,
+            operation.precarite_eligible
+              ? 'Bonifié pour ménages en précarité énergétique'
+              : 'Tous ménages éligibles, sans condition de revenus',
+            "Cumul MaPrimeRénov' + TVA 5,5 % + éco-PTZ possible",
+            'Artisan RGE obligatoire — engagement avant signature du devis',
+          ]}
+        />
+
         <header className="mb-8">
           <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1 mb-3">
             <span className="text-xs font-semibold text-emerald-800">
@@ -328,7 +385,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             </span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
-            {operation.nom} : artisans RGE certifiés à {villeName}
+            {operation.nom} : artisans RGE certifiés à {villeName} ({monthYear})
           </h1>
           <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
@@ -341,6 +398,20 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 Catalogue national de l’opération CEE {operation.code} à {villeName}
               </>
             )}
+          </p>
+          <p className="mt-2 text-sm text-charcoal-500">
+            Auteur :{' '}
+            <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span>
+            {' · '}
+            Mis à jour le{' '}
+            <time dateTime={monthlyAnchor.slice(0, 10)}>
+              {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Europe/Paris',
+              })}
+            </time>
           </p>
         </header>
 
@@ -450,6 +521,38 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               </a>
             )}
           </div>
+        </section>
+
+        {/* TL;DR pré-FAQ — capture FS sur requêtes "prime CEE [code] [ville]" */}
+        <section aria-labelledby="essentiel-cee" className="mb-10">
+          <h2 id="essentiel-cee" className="sr-only">
+            L’essentiel de la prime CEE {operation.code} à {villeName}
+          </h2>
+          <TldrBlock bullets={tldrBullets} />
+        </section>
+
+        {/* Source officielle Etalab visible — E-E-A-T YMYL */}
+        <section className="mb-10 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+          <strong className="font-semibold">Source officielle&nbsp;:</strong> Données opération CEE{' '}
+          {operation.code} sourcées depuis la{' '}
+          <a
+            href="https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-emerald-700"
+          >
+            DGEC (ministère de la Transition écologique)
+          </a>{' '}
+          et qualifications RGE depuis{' '}
+          <a
+            href="https://data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-emerald-700"
+          >
+            data.gouv.fr — ADEME
+          </a>{' '}
+          (Licence Etalab 2.0).
         </section>
 
         {/* FAQ */}
