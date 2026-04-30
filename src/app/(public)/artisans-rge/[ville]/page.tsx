@@ -6,8 +6,12 @@ import { ShieldCheck, FileCheck2, Percent, ExternalLink, BookOpen } from 'lucide
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import ProviderList from '@/components/ProviderList'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
+import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { villes, getVilleBySlug } from '@/lib/data/france'
 import { getArtisanUrl } from '@/lib/utils'
 import { getRgeProvidersByCity, getRgeProviderCountByCity } from '@/lib/rge/city-listings'
@@ -139,7 +143,38 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
         })
       : null
 
-  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
+  // Sprint ULTRA — signal YMYL freshness + Speakable + AggregateRating page-level.
+  const aggregateRating = buildAggregateRatingFromProviders(providers as Provider[])
+  const monthYear = currentMonthYearFr()
+  const monthlyAnchor = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Artisans RGE certifiés à ${ville.name} — ${monthYear}`,
+    image: [`${SITE_URL}/og-rge-default.jpg`, `${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: monthlyAnchor,
+    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}${pagePath}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const tldrBullets: string[] = [
+    `${totalCount.toLocaleString('fr-FR')} artisan${totalCount > 1 ? 's' : ''} RGE actif${totalCount > 1 ? 's' : ''} à ${ville.name}, toutes spécialités énergétiques confondues.`,
+    "Label RGE = condition obligatoire pour MaPrimeRénov', CEE, Éco-PTZ et TVA à 5,5 %.",
+    'Données ADEME / France Rénov’ — synchronisation hebdomadaire, certifications en cours de validité.',
+    `Cumul possible des aides : MaPrimeRénov' jusqu'à 11 000 € + prime CEE + Éco-PTZ jusqu'à 50 000 € à taux zéro.`,
+  ]
+
+  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema, articleSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
   jsonLdItems.push(faqSchema as Record<string, unknown>)
 
@@ -149,6 +184,19 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={breadcrumbItems} />
+
+      {/* En bref — capture FS Position 0 sur "artisans RGE [ville]" */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+        <EnBrefBox
+          summary={`${totalCount.toLocaleString('fr-FR')} artisan${totalCount > 1 ? 's' : ''} certifié${totalCount > 1 ? 's' : ''} RGE actif${totalCount > 1 ? 's' : ''} à ${ville.name} — toutes spécialités énergétiques confondues. Éligibles MaPrimeRénov', CEE et TVA 5,5 %. Données officielles ADEME, mises à jour hebdomadaires.`}
+          keyPoints={[
+            'Label délivré par Qualibat, Qualit’EnR, Qualifelec, Certibat',
+            "Condition obligatoire pour MaPrimeRénov' + CEE + Éco-PTZ",
+            'Données ADEME / France Rénov’ — Licence Etalab 2.0',
+            'Cumul des aides possible jusqu’à 11 000 € + 50 000 € à taux zéro',
+          ]}
+        />
+      </div>
 
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
@@ -160,8 +208,21 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
-            Artisans certifiés RGE à {ville.name}
+            Artisans certifiés RGE à {ville.name} ({monthYear})
           </h1>
+          <p className="text-sm text-emerald-100/80 mb-3">
+            Auteur : <span className="font-medium text-white">la rédaction ServicesArtisans</span>
+            {' · '}
+            Mis à jour le{' '}
+            <time dateTime={monthlyAnchor.slice(0, 10)} className="font-medium">
+              {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Europe/Paris',
+              })}
+            </time>
+          </p>
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl">
             Le label RGE est délivré par des organismes accrédités (Qualibat, Qualit&apos;EnR,
             Qualifelec, Certibat…) aux artisans qualifiés pour les travaux de rénovation
@@ -347,6 +408,25 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* TL;DR pré-FAQ — capture FS sur "artisans RGE [ville]" */}
+      <section className="bg-white border-t">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="sr-only">L’essentiel des artisans RGE à {ville.name}</h2>
+          <TldrBlock bullets={tldrBullets} />
+        </div>
+      </section>
+
+      {/* AggregateRating note (E-E-A-T trust) */}
+      {aggregateRating && (
+        <section className="bg-emerald-50/40 border-t border-emerald-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 text-center text-sm text-emerald-900">
+            <strong className="font-semibold">{aggregateRating.ratingValue}/5</strong> — moyenne sur{' '}
+            <strong className="font-semibold">{aggregateRating.reviewCount}</strong> avis vérifiés
+            d&apos;artisans RGE listés à {ville.name}.
           </div>
         </section>
       )}
