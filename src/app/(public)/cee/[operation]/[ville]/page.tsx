@@ -8,6 +8,13 @@ import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   villes as staticVilles,
   getVilleBySlug,
@@ -212,8 +219,19 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     )
   }
 
-  const providers = await getCeeProvidersByOperationAndCity(opCode, villeSlug, { limit: 50 })
+  const [providers, communeData] = await Promise.all([
+    getCeeProvidersByOperationAndCity(opCode, villeSlug, { limit: 50 }),
+    getCommuneBySlug(villeSlug).catch(() => null),
+  ])
   const count = providers.length
+
+  // Sprint 4 — proxy service slug pour les composants AEO/local qui exigent
+  // un serviceSlug. CEE op → premier service RGE équivalent (fallback
+  // renovation-energetique). Réutilisé par MaillageInterneBlock + AEO blocks.
+  const proxyRgeServices = getRgeServicesForCeeOp(operation.code)
+  const sprint4ProxyServiceSlug = proxyRgeServices[0] ?? 'renovation-energetique'
+  const sprint4ProxyService = services.find((s) => s.slug === sprint4ProxyServiceSlug)
+  const sprint4ProxyServiceName = sprint4ProxyService?.name ?? 'Rénovation énergétique'
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -473,6 +491,69 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           ) : (
             <ProviderList providers={providers} totalCount={count} />
           )}
+        </section>
+
+        {/* Sprint 4 — AEO + intelligence locale pour 15K URLs CEE.
+            Câble les composants AEO/local existants jamais utilisés sur ce template :
+            AEO answer (LLM citation), commune context, DPE/passoires (raison d'être CEE),
+            risques climatiques, calendrier saisonnier, UGC questions. */}
+        <section aria-labelledby="reponse-rapide" className="mb-12">
+          <h2 id="reponse-rapide" className="sr-only">
+            Réponse rapide pour {operation.nom} à {villeName}
+          </h2>
+          <AEOAnswerBlock
+            serviceSlug={sprint4ProxyServiceSlug}
+            serviceName={sprint4ProxyServiceName}
+            villeName={villeName}
+            departmentName={ville.departement}
+            providerCount={count}
+            avgRating={aggregateRating ? Number(aggregateRating.ratingValue) : null}
+            priceRange={null}
+            communePopulation={communeData?.population ?? null}
+          />
+        </section>
+
+        {communeData && (
+          <>
+            <section className="mb-12">
+              <CommuneContextBlock
+                communeData={communeData}
+                serviceName={sprint4ProxyServiceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-12">
+              <ContexteDPEBlock
+                communeData={communeData}
+                serviceName={sprint4ProxyServiceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-12">
+              <RisquesGeoBlock
+                communeData={communeData}
+                serviceName={sprint4ProxyServiceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-12">
+              <CalendrierSaisonnierBlock
+                serviceSlug={sprint4ProxyServiceSlug}
+                serviceName={sprint4ProxyServiceName}
+                villeName={villeName}
+                climatZone={communeData.climat_zone ?? null}
+              />
+            </section>
+          </>
+        )}
+
+        <section className="mb-12">
+          <UserQuestionBlock
+            serviceSlug={sprint4ProxyServiceSlug}
+            serviceName={sprint4ProxyServiceName}
+            villeName={villeName}
+            villeSlug={villeSlug}
+          />
         </section>
 
         {/* Comprendre cette prime CEE */}

@@ -28,6 +28,9 @@ import {
   getVillesByDepartement,
   getRegionSlugByName,
 } from '@/lib/data/france'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 
 export const dynamicParams = true
 export const revalidate = 86_400
@@ -209,6 +212,43 @@ async function renderCommunePage({ params }: PageProps) {
           <GeorisquesSection commune={commune} />
           <PropertyMarketSection commune={commune} />
           <ArtisansSection commune={commune} />
+
+          {/* Sprint 4 — AEO + UGC + saisonnalité pour 35K URLs commune.
+              CommuneContextBlock / ContexteDPEBlock / RisquesGeoBlock déjà
+              couverts par DemographicsSection / PropertyMarketSection /
+              GeorisquesSection custom au-dessus. On ajoute uniquement les
+              composants AEO encore manquants (LLM citation + UGC + calendrier). */}
+          <section className="mb-8">
+            <AEOAnswerBlock
+              serviceSlug="renovation-energetique"
+              serviceName="Rénovation énergétique"
+              villeName={commune.name}
+              departmentName={dept}
+              providerCount={commune.nb_artisans_btp ?? 0}
+              avgRating={null}
+              priceRange={null}
+              communePopulation={commune.population ?? null}
+            />
+          </section>
+
+          <section className="mb-8">
+            <CalendrierSaisonnierBlock
+              serviceSlug="renovation-energetique"
+              serviceName="Rénovation énergétique"
+              villeName={commune.name}
+              climatZone={commune.climat_zone ?? null}
+            />
+          </section>
+
+          <section className="mb-8">
+            <UserQuestionBlock
+              serviceSlug="renovation-energetique"
+              serviceName="Artisans"
+              villeName={commune.name}
+              villeSlug={slug}
+            />
+          </section>
+
           <ServicesCallToActionSection commune={commune} />
           <RelatedHubsCommuneSection commune={commune} />
           <SourcesSection />

@@ -51,6 +51,12 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import InContentLinks from '@/components/seo/InContentLinks'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   truncateTitle,
@@ -814,6 +820,69 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <SimulateurCTA serviceSlug={serviceSlug} city={villeName} variant="banner" />
           </section>
         )}
+
+        {/* Sprint 4 — AEO + intelligence locale pour 50K URLs RGE.
+            Câble les composants AEO/local (jamais utilisés ici) qui tirent
+            communeData déjà chargée. AEO = LLM citation, blocs locaux =
+            featured snippets + CTR. */}
+        <section aria-labelledby="reponse-rapide-rge" className="mb-8">
+          <h2 id="reponse-rapide-rge" className="sr-only">
+            Réponse rapide pour {serviceName} RGE à {villeName}
+          </h2>
+          <AEOAnswerBlock
+            serviceSlug={serviceSlug}
+            serviceName={serviceName}
+            villeName={villeName}
+            departmentName={location.department_name ?? villeData?.departement ?? villeName}
+            providerCount={count}
+            avgRating={aggregateRating ? Number(aggregateRating.ratingValue) : null}
+            priceRange={null}
+            communePopulation={communeData?.population ?? null}
+          />
+        </section>
+
+        {communeData && (
+          <>
+            <section className="mb-8">
+              <CommuneContextBlock
+                communeData={communeData}
+                serviceName={serviceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-8">
+              <ContexteDPEBlock
+                communeData={communeData}
+                serviceName={serviceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-8">
+              <RisquesGeoBlock
+                communeData={communeData}
+                serviceName={serviceName}
+                villeName={villeName}
+              />
+            </section>
+            <section className="mb-8">
+              <CalendrierSaisonnierBlock
+                serviceSlug={serviceSlug}
+                serviceName={serviceName}
+                villeName={villeName}
+                climatZone={communeData.climat_zone ?? null}
+              />
+            </section>
+          </>
+        )}
+
+        <section className="mb-8">
+          <UserQuestionBlock
+            serviceSlug={serviceSlug}
+            serviceName={serviceName}
+            villeName={villeName}
+            villeSlug={villeSlug}
+          />
+        </section>
 
         {/* Sprint 2 maillage interne — cross-intent + intent-aware (50K URLs) */}
         <section className="mb-8">
