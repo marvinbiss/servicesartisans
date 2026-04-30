@@ -20,7 +20,14 @@ import {
   monthName,
   type CommuneData,
 } from '@/lib/data/commune-data'
-import { getVilleBySlug, services, villes as villesData } from '@/lib/data/france'
+import {
+  getVilleBySlug,
+  services,
+  villes as villesData,
+  getDepartementByCode,
+  getVillesByDepartement,
+  getRegionSlugByName,
+} from '@/lib/data/france'
 
 export const dynamicParams = true
 export const revalidate = 86_400
@@ -203,6 +210,7 @@ async function renderCommunePage({ params }: PageProps) {
           <PropertyMarketSection commune={commune} />
           <ArtisansSection commune={commune} />
           <ServicesCallToActionSection commune={commune} />
+          <RelatedHubsCommuneSection commune={commune} />
           <SourcesSection />
         </div>
       </main>
@@ -419,6 +427,124 @@ function ServicesCallToActionSection({ commune }: { commune: CommuneData }) {
             </li>
           )
         })}
+      </ul>
+    </section>
+  )
+}
+
+/**
+ * Sprint 2 maillage interne (35K URLs /communes/[c]).
+ * Pages communes = spokes profonds avec faible PageRank entrant. Cette
+ * section route vers : département parent, région parent, villes du même
+ * département (chef-lieu + 4 plus peuplées), aides nationales, catalogues
+ * /services et /artisans-rge. Anchor text varié pour éviter sur-optimisation.
+ */
+function RelatedHubsCommuneSection({ commune }: { commune: CommuneData }) {
+  const deptCode = commune.departement_code
+  const dept = deptCode ? getDepartementByCode(deptCode) : undefined
+  const regionSlug = commune.region_name ? getRegionSlugByName(commune.region_name) : undefined
+  const nearbyVilles = deptCode
+    ? getVillesByDepartement(deptCode)
+        .filter((v) => v.slug !== commune.slug)
+        .slice(0, 10)
+    : []
+
+  const links: { href: string; label: string }[] = []
+
+  if (dept) {
+    links.push({
+      href: `/departements/${dept.slug}`,
+      label: `Artisans du département ${dept.name}`,
+    })
+    // 3 services × département (jus PageRank vers /departements/[d]/[s])
+    const TIER_DEPT_SERVICES = ['plombier', 'electricien', 'chauffagiste'] as const
+    for (const svc of TIER_DEPT_SERVICES) {
+      const meta = services.find((s) => s.slug === svc)
+      if (!meta) continue
+      links.push({
+        href: `/departements/${dept.slug}/${svc}`,
+        label: `${meta.name} ${dept.name}`,
+      })
+    }
+  }
+
+  if (regionSlug && commune.region_name) {
+    links.push({
+      href: `/regions/${regionSlug}`,
+      label: `Région ${commune.region_name}`,
+    })
+  }
+
+  for (const v of nearbyVilles) {
+    links.push({ href: `/villes/${v.slug}`, label: `Artisans à ${v.name}` })
+  }
+
+  // Chef-lieu services × ville (top 5 services × première ville voisine)
+  // Renforce PageRank vers /services/[s]/[v] qui est lui-même un hub fort.
+  if (nearbyVilles.length > 0) {
+    const chefLieu = nearbyVilles[0]
+    const TIER_HUB_SERVICES = [
+      'plombier',
+      'electricien',
+      'chauffagiste',
+      'serrurier',
+      'couvreur',
+    ] as const
+    for (const svc of TIER_HUB_SERVICES) {
+      const meta = services.find((s) => s.slug === svc)
+      if (!meta) continue
+      links.push({
+        href: `/services/${svc}/${chefLieu.slug}`,
+        label: `${meta.name} à ${chefLieu.name}`,
+      })
+    }
+
+    if (commune.nb_artisans_rge && commune.nb_artisans_rge > 0) {
+      links.push({
+        href: `/artisans-rge/${chefLieu.slug}`,
+        label: `Artisans RGE proches de ${commune.name}`,
+      })
+    }
+  }
+
+  // Aides territoriales + nationales (cluster YMYL)
+  if (dept) {
+    links.push({
+      href: `/aides/${dept.slug}/maprimerenov`,
+      label: `MaPrimeRénov' ${dept.name}`,
+    })
+  }
+  links.push({ href: '/aides', label: 'Aides à la rénovation 2026' })
+  links.push({ href: '/cee', label: 'Catalogue des primes CEE' })
+  links.push({ href: '/rge', label: 'Annuaire RGE national' })
+  links.push({ href: '/services', label: 'Tous les corps de métier' })
+  links.push({ href: '/communes', label: 'Toutes les communes' })
+  links.push({ href: '/villes', label: 'Toutes les villes' })
+
+  if (links.length === 0) return null
+
+  return (
+    <section
+      aria-labelledby="commune-hubs-heading"
+      className="mb-8 rounded-xl bg-white p-6 shadow-sm"
+    >
+      <h2
+        id="commune-hubs-heading"
+        className="mb-4 flex items-center gap-2 text-xl font-semibold text-charcoal-900"
+      >
+        <Building2 className="h-5 w-5" /> À découvrir aussi
+      </h2>
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {links.map((l) => (
+          <li key={l.href + l.label}>
+            <Link
+              href={l.href}
+              className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+            >
+              {l.label}
+            </Link>
+          </li>
+        ))}
       </ul>
     </section>
   )

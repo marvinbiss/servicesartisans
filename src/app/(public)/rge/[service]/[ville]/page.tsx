@@ -44,7 +44,13 @@ import {
   buildFaqJsonLd,
 } from '@/lib/rge/pseo-content'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
-import { getVilleBySlug } from '@/lib/data/france'
+import { getVilleBySlug, getDepartementByCode } from '@/lib/data/france'
+import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
+import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
+import InContentLinks from '@/components/seo/InContentLinks'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   truncateTitle,
@@ -414,6 +420,16 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // CEE ops éligibles pour conditionner l’affichage du bloc primes
   const eligibleCeeOps = upgradeV2 ? getCeeOpsForRgeService(serviceSlug) : []
   const showCeeBlock = upgradeV2 && eligibleCeeOps.length > 0
+
+  // Sprint 2 maillage interne — câblage hub-spoke pour redistribuer PageRank
+  // sur 50K URLs RGE. WHY : pages /rge/[s]/[v] = spokes profonds dans le graphe
+  // interne, peu de liens entrants. Cross-intent + intent-aware groups donnent
+  // 5-15 liens contextuels vers tarifs/avis/urgence/devis + ville/dept/aides.
+  const maillageDeptCode = villeData?.departementCode
+  const maillageDeptSlug = maillageDeptCode
+    ? getDepartementByCode(maillageDeptCode)?.slug
+    : undefined
+  const problemSlugsForMaillage: string[] = []
 
   // TL;DR pré-FAQ — helper pure-function (testable, branches couvertes).
   const tldrBullets = upgradeV2
@@ -798,6 +814,71 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             <SimulateurCTA serviceSlug={serviceSlug} city={villeName} variant="banner" />
           </section>
         )}
+
+        {/* Sprint 2 maillage interne — cross-intent + intent-aware (50K URLs) */}
+        <section className="mb-8">
+          <CrossIntentLinks
+            service={serviceSlug}
+            serviceName={serviceName}
+            ville={villeSlug}
+            villeName={villeName}
+            currentIntent="services"
+            variant="pills"
+          />
+        </section>
+
+        <section className="mb-12">
+          <MaillageInterneBlock
+            serviceSlug={serviceSlug}
+            serviceName={serviceName}
+            villeSlug={villeSlug}
+            villeName={villeName}
+            departementSlug={maillageDeptSlug}
+            departementName={location.department_name ?? undefined}
+            regionName={villeData?.region}
+            currentIntent="services"
+            hasCEE={showCeeBlock}
+            problemSlugs={problemSlugsForMaillage}
+          />
+        </section>
+
+        {/* Sprint 2.1 densification — DeepPageLinks (services connexes + nearby cities + dept/region/articles, ~15 liens) */}
+        <DeepPageLinks
+          currentService={serviceSlug}
+          currentVille={villeSlug}
+          currentIntent="services"
+          skipCrossIntent={true}
+        />
+
+        {/* Sprint 2.1 — InContentLinks (5 liens contextuels distribués) */}
+        <section className="mb-8 max-w-4xl mx-auto px-4 sm:px-6">
+          <InContentLinks
+            serviceSlug={serviceSlug}
+            serviceName={serviceName}
+            villeSlug={villeSlug}
+            villeName={villeName}
+            currentIntent="services"
+            departement={location.department_name ?? undefined}
+            departementCode={villeData?.departementCode}
+            region={villeData?.region}
+          />
+        </section>
+
+        {/* Sprint 2.1 — VerticalCrossLinks (4 services × ville pour intent avis) */}
+        <VerticalCrossLinks
+          currentService={serviceSlug}
+          villeSlug={villeSlug}
+          villeName={villeName}
+          intent="avis"
+        />
+
+        {/* Sprint 2.1 — TopCitiesGrid (top 20 villes pour ce service RGE) */}
+        <TopCitiesGrid
+          serviceSlug={serviceSlug}
+          serviceName={serviceName}
+          intent="services"
+          title={`${serviceName} RGE dans les principales villes`}
+        />
 
         <section className="mb-12 py-12 bg-charcoal-950 rounded-2xl text-center text-white">
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-3">

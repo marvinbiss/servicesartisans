@@ -18,7 +18,11 @@ import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
 import { authors } from '@/lib/data/authors'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
-import { getDepartementBySlug } from '@/lib/data/france'
+import { getDepartementBySlug, getVillesByDepartement } from '@/lib/data/france'
+import {
+  aidesSlugs as ALL_AIDES_SLUGS,
+  getAideBySlug as resolveAide,
+} from '@/lib/aides/aides-catalog'
 import { getDeptPreposition } from '@/lib/geo-strings'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -297,6 +301,150 @@ export default async function AideDeptPage({ params }: PageProps) {
               <RelatedAides aides={cumulables} title="Aides cumulables" />
             </section>
           ) : null}
+
+          {/* Sprint 2.1 densification — 30+ liens internes hub-spoke (1.1K URLs aides×dept) */}
+          {(() => {
+            // Top 8 villes du département (PageRank vers /villes/[v])
+            const deptTopVilles = getVillesByDepartement(dept.code).slice(0, 8)
+            // Autres aides du même dept (cumul YMYL cluster)
+            const otherAidesSlugs = ALL_AIDES_SLUGS.filter((s) => s !== aide.slug).slice(0, 8)
+            // Services RGE pertinents pour la rénovation
+            const RGE_TIER_SERVICES: Array<{ slug: string; name: string }> = [
+              { slug: 'renovation-energetique', name: 'Rénovation énergétique' },
+              { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur' },
+              { slug: 'isolation-thermique', name: 'Isolation thermique' },
+              { slug: 'panneaux-solaires', name: 'Panneaux solaires' },
+              { slug: 'chauffagiste', name: 'Chauffagiste' },
+              { slug: 'menuisier', name: 'Menuisier (fenêtres)' },
+            ]
+            return (
+              <section className="mb-8 rounded-xl bg-white p-6 shadow-sm">
+                <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-charcoal-900">
+                  <MapPin className="h-5 w-5 text-emerald-700" /> Aller plus loin
+                </h2>
+
+                <h3 className="mt-4 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">
+                  {aide.name}
+                </h3>
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <li>
+                    <Link
+                      href={`/aides/${aide.slug}`}
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Guide national&nbsp;: {aide.name}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href={`/aides/${dept.slug}/maprimerenov`}
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      MaPrimeRénov&apos; {getDeptPreposition(dept.name)}
+                    </Link>
+                  </li>
+                </ul>
+
+                <h3 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">
+                  Autres aides cumulables
+                </h3>
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {otherAidesSlugs.map((slug) => {
+                    const a = resolveAide(slug)
+                    if (!a) return null
+                    return (
+                      <li key={slug}>
+                        <Link
+                          href={`/aides/${dept.slug}/${slug}`}
+                          className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                        >
+                          {a.name} {getDeptPreposition(dept.name)}
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+
+                <h3 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">
+                  Trouver un artisan {getDeptPreposition(dept.name)}
+                </h3>
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <li>
+                    <Link
+                      href={`/departements/${dept.slug}`}
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Artisans du département {dept.name} ({dept.code})
+                    </Link>
+                  </li>
+                  {deptTopVilles.map((v) => (
+                    <li key={v.slug}>
+                      <Link
+                        href={`/artisans-rge/${v.slug}`}
+                        className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                      >
+                        Artisans RGE à {v.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <h3 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">
+                  Travaux concernés par {aide.name}
+                </h3>
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {RGE_TIER_SERVICES.map((s) => (
+                    <li key={s.slug}>
+                      <Link
+                        href={`/services/${s.slug}`}
+                        className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                      >
+                        {s.name} en France
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <h3 className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">
+                  Hubs nationaux
+                </h3>
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <li>
+                    <Link
+                      href="/aides"
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Toutes les aides à la rénovation 2026
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/cee"
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Catalogue des primes CEE
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/rge"
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Annuaire des artisans RGE certifiés
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/simulateur-aides-renovation"
+                      className="block rounded-lg border border-sand-200 bg-warm-cream-50 px-3 py-2 text-sm text-charcoal-700 hover:border-coral-300 hover:bg-coral-50 hover:text-coral-700 transition"
+                    >
+                      Simulateur d&apos;aides à la rénovation
+                    </Link>
+                  </li>
+                </ul>
+              </section>
+            )
+          })()}
 
           <section className="mb-8">
             <AideSources sources={aide.sources} lastReviewed={aide.lastReviewed} />
