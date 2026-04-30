@@ -26,9 +26,9 @@ export const revalidate = 86400
 export const dynamic = 'force-static'
 
 const PATH = '/open-data'
-const TITLE = 'Open Data ServicesArtisans — annuaire RGE + statistiques locales'
+const TITLE = 'Open Data — annuaire RGE & stats locales France'
 const DESCRIPTION =
-  'Catalogue open data ServicesArtisans : annuaire des artisans RGE certifiés (sourcé ADEME), statistiques locales agrégées par commune et métier. Format CSV / NDJSON / DCAT. Licence Etalab 2.0.'
+  'Annuaire artisans RGE (ADEME) + statistiques locales par commune et métier. CSV / NDJSON / DCAT. Licence Etalab 2.0.'
 
 export const metadata: Metadata = {
   title: TITLE,

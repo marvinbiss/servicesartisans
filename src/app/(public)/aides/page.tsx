@@ -15,9 +15,9 @@ export const dynamic = 'force-static'
 export const revalidate = 86400
 
 const PATH = '/aides'
-const HUB_TITLE = 'Aides à la rénovation énergétique 2026'
+const HUB_TITLE = 'Aides rénovation énergétique 2026'
 const HUB_DESCRIPTION =
-  "Catalogue 2026 des aides publiques et privées pour rénover votre logement : MaPrimeRénov', primes CEE, éco-PTZ, TVA 5,5 %, chèque énergie, MaPrimeAdapt'. Cumuls, conditions, démarches officielles."
+  "Catalogue 2026 : MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %, chèque énergie, MaPrimeAdapt'. Cumuls, conditions, démarches officielles."
 
 const REVIEW_DATE = aidesCatalog.reduce(
   (min, a) => (a.lastReviewed < min ? a.lastReviewed : min),

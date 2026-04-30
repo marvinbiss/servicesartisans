@@ -29,19 +29,36 @@ interface SnippetBaitSummaryProps {
 export default function SnippetBaitSummary({ trades, year = 2026 }: SnippetBaitSummaryProps) {
   if (!trades || trades.length === 0) return null
 
-  // Calcul fourchette globale
-  const globalMin = Math.min(...trades.map((t) => t.min))
-  const globalMax = Math.max(...trades.map((t) => t.max))
+  // Calcul fourchette globale — n'agrège que les métiers partageant la MÊME unité,
+  // sinon "entre 30 et 8 000 € (mix €/h, €/m², €/intervention)" est sémantiquement
+  // faux et trompeur en SERP. WHY : la page villes câble cette bibliothèque sur 10
+  // métiers hétérogènes (plombier €/h vs peintre €/m² vs serrurier €/intervention).
+  // Détection : on ne calcule la fourchette que si TOUTES les lignes ont la même
+  // unité. Sinon, on affiche une formulation neutre sans plage chiffrée.
+  const uniqueUnits = new Set(trades.map((t) => t.unit))
+  const homogeneousUnit = uniqueUnits.size === 1 ? trades[0].unit : null
+  const globalMin = homogeneousUnit ? Math.min(...trades.map((t) => t.min)) : null
+  const globalMax = homogeneousUnit ? Math.max(...trades.map((t) => t.max)) : null
 
   return (
     <div className="snippet-answer max-w-4xl mx-auto" data-speakable="true">
       <p className="text-base text-charcoal-700 leading-relaxed mb-4">
-        Le <strong>prix moyen d'un artisan en France</strong> se situe entre{' '}
-        <strong>
-          {globalMin} et {globalMax} {trades[0]?.unit || '€/h'}
-        </strong>{' '}
-        en {year}. Les tarifs varient selon le corps de métier, la région et la complexité des
-        travaux. Voici le barème complet par métier :
+        {homogeneousUnit ? (
+          <>
+            Le <strong>prix moyen d&apos;un artisan en France</strong> se situe entre{' '}
+            <strong>
+              {globalMin} et {globalMax} {homogeneousUnit}
+            </strong>{' '}
+            en {year}.
+          </>
+        ) : (
+          <>
+            Les <strong>tarifs des artisans en France</strong> varient fortement selon le corps de
+            métier en {year} (taux horaire, prix au m², forfait par intervention).
+          </>
+        )}{' '}
+        Les tarifs varient aussi selon la région et la complexité des travaux. Voici le barème
+        complet par métier :
       </p>
 
       <div className="overflow-x-auto rounded-xl border border-sand-300 shadow-sm">

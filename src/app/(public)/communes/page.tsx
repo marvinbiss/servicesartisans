@@ -10,9 +10,9 @@ import { villes } from '@/lib/data/france'
 
 export const revalidate = 86_400
 
-const TITLE = '36 000 communes françaises — Données locales & artisans'
+const TITLE = '36 000 communes — Données locales & artisans 2026'
 const DESCRIPTION =
-  'Annuaire des 35 999 communes de France métropolitaine et DOM avec données INSEE, climat Météo-France, risques Géorisques, marché immobilier DVF et artisans RGE. Base ouverte CC-BY 4.0.'
+  'Annuaire 35 999 communes France : INSEE, climat, Géorisques, DVF, artisans RGE. Base ouverte CC-BY 4.0.'
 
 export const metadata: Metadata = {
   title: TITLE,
