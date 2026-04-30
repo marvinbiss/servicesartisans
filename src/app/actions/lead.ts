@@ -1,5 +1,6 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
@@ -8,6 +9,7 @@ import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 import { cleanPhone } from '@/lib/validation/phone'
 import { createInvitationForDevis } from '@/lib/reviews/invitations'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const leadSchema = z.object({
   providerId: z.string().min(1).optional(),
@@ -33,6 +35,24 @@ export async function submitLead(
   _prevState: LeadFormState,
   formData: FormData
 ): Promise<LeadFormState> {
+  // Rate-limit Server Action (vecteur public exposé via formulaire) — aligné
+  // sur /api/devis route.ts (10 req/min/IP, failOpen=true). Sans ça, un script
+  // peut spammer la table devis_requests + le dispatcher, polluant la base
+  // artisans et faussant les métriques. Audit gap-analyst 2026-04-30 chantier #6.
+  const requestHeaders = await headers()
+  const ip = getClientIp(requestHeaders)
+  const rl = await checkRateLimit(`lead-action:${ip}`, {
+    window: 60_000,
+    max: 10,
+    failOpen: true,
+  })
+  if (!rl.allowed) {
+    return {
+      success: false,
+      error: 'Trop de demandes en peu de temps. Réessayez dans une minute.',
+    }
+  }
+
   const raw = {
     providerId: formData.get('providerId'),
     serviceName: formData.get('serviceName'),
