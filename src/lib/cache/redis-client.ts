@@ -127,8 +127,17 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
 
     // Quand le circuit est ouvert on a déjà loggé l'incident — ne pas re-logger
     // chaque appel. tripCircuit() ne logge qu'une fois.
+    //
+    // logger.warn (non logger.error) : ces timeouts sont absorbés par le caller
+    // (return null → fail-open Supabase). Avec logger.error → Sentry capture
+    // automatiquement (audit 2026-04-30), on flood Sentry de N events / min sur
+    // un incident Upstash long. La visibilité Sentry reste garantie par
+    // maybeCaptureUpstashError ci-dessous (throttlé 1/min).
     if (!isCircuitOpen()) {
-      logger.error('Redis command error', err as Error)
+      logger.warn('Redis command error (absorbed, fail-open)', {
+        error: err instanceof Error ? err.message : String(err),
+        command: command[0],
+      })
       maybeCaptureUpstashError(err, { command: command[0] })
     }
     return null
