@@ -23,7 +23,11 @@ export async function POST(request: Request) {
   try {
     // Rate limiting: 3 requests per hour per IP
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`removal:${ip}`, { window: 3_600_000, max: 3 })
+    const rl = await checkRateLimit(`removal:${ip}`, {
+      window: 3_600_000,
+      max: 3,
+      failOpen: true,
+    })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de demandes. Réessayez dans une heure.' },

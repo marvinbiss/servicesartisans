@@ -91,12 +91,15 @@ export function getProviderAffectedUrls(
   villeSlug: string,
   providerPublicId?: string
 ): string[] {
+  // /tarifs/[s]/[v] et /devis/[s]/[v] retirés 2026-04-30 — pages dépréciées,
+  // 301 vers /services/[s]/[v] (et /services/[s]/[v]#tarifs). Inutile de
+  // notifier IndexNow d'une URL qui 301 — on perd un signal de fraîcheur sur
+  // la canonical. /urgence/[s]/[v] reste car la page existe (4×25 = 100 URLs
+  // whitelistées) et redirect côté page-level pour le reste.
   const urls = [
     `/services/${serviceSlug}/${villeSlug}`,
     `/avis/${serviceSlug}/${villeSlug}`,
-    `/tarifs/${serviceSlug}/${villeSlug}`,
     `/urgence/${serviceSlug}/${villeSlug}`,
-    `/devis/${serviceSlug}/${villeSlug}`,
     `/rge/${serviceSlug}/${villeSlug}`,
     `/villes/${villeSlug}`,
   ]

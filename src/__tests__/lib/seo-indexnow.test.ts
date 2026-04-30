@@ -168,24 +168,30 @@ describe('getProviderAffectedUrls', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris')
     expect(urls).toContain('/services/plomberie/paris')
     expect(urls).toContain('/avis/plomberie/paris')
-    expect(urls).toContain('/tarifs/plomberie/paris')
     expect(urls).toContain('/urgence/plomberie/paris')
-    expect(urls).toContain('/devis/plomberie/paris')
     expect(urls).toContain('/rge/plomberie/paris')
     expect(urls).toContain('/villes/paris')
+  })
+
+  it('exclut /tarifs/[s]/[v] et /devis/[s]/[v] (DEPRECATED 2026-04-30)', () => {
+    // Ces 2 patterns 301 désormais vers /services/[s]/[v] — on ne notifie
+    // plus IndexNow pour eux (perte de signal de fraîcheur sinon).
+    const urls = getProviderAffectedUrls('plomberie', 'paris')
+    expect(urls).not.toContain('/tarifs/plomberie/paris')
+    expect(urls).not.toContain('/devis/plomberie/paris')
   })
 
   it('includes provider page when publicId is provided', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris', 'abc-123')
     expect(urls).toContain('/services/plomberie/paris/abc-123')
-    // 7 pSEO templates + 1 provider detail page
-    expect(urls).toHaveLength(8)
+    // 5 pSEO templates + 1 provider detail page
+    expect(urls).toHaveLength(6)
   })
 
   it('excludes provider page when no publicId', () => {
     const urls = getProviderAffectedUrls('plomberie', 'paris')
-    // 7 pSEO templates : services, avis, tarifs, urgence, devis, rge, villes
-    expect(urls).toHaveLength(7)
+    // 5 pSEO templates : services, avis, urgence, rge, villes
+    expect(urls).toHaveLength(5)
   })
 
   it('handles different service/city slug combinations', () => {

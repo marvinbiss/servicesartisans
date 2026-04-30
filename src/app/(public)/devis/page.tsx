@@ -324,7 +324,7 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
             {villes.slice(0, 20).map((ville) => (
               <Link
                 key={ville.slug}
-                href={`/devis/plombier/${ville.slug}`}
+                href={`/services/plombier/${ville.slug}`}
                 className="inline-flex items-center gap-1.5 bg-sand-100 hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-lg px-3 py-2 text-sm text-charcoal-700 hover:text-primary-600 transition-colors"
               >
                 {ville.name}

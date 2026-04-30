@@ -227,10 +227,61 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
     return validateVilleSlug(artisansRgeMatch[1])
   }
 
-  // 5. /tarifs/[service]/[ville]/[travail] — bloc DEPRECATED 2026-04-29
+  // 5a. /devis/[service]/[ville] — bloc DEPRECATED 2026-04-30
+  //     Diagnostic GSC 30/04 : ~37 000 URLs en "explorée actuellement non
+  //     indexée" (32.9 % du total 112 429). Page n'existe plus dans l'app
+  //     router (seul /devis et /devis/[service] subsistent). Avant ce filet,
+  //     Google retombait sur le 404 défaut Next.js → soft 404 → crawl budget
+  //     gaspillé. On 301 vers /services/[s]/[v] qui est la canonical durable
+  //     (bloc devis intégré, mêmes artisans, intent identique).
+  //     Si service unknown ou ville malformée → 410 (Google oublie vite).
+  const devisMatch = /^\/devis\/([^/]+)\/([^/]+)\/?$/i.exec(pathname)
+  if (devisMatch) {
+    const [, service, ville] = devisMatch
+    const serviceLower = service.toLowerCase()
+    if (!VALID_SERVICE_SLUGS.has(serviceLower)) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    const villeDecision = validateVilleSlug(ville.toLowerCase())
+    if (villeDecision.gone) return villeDecision
+    return {
+      gone: false,
+      redirect: {
+        to: `/services/${serviceLower}/${ville.toLowerCase()}`,
+        status: 301,
+      },
+    }
+  }
+
+  // 5b. /tarifs/[service]/[ville] — bloc DEPRECATED 2026-04-30
+  //     Diagnostic GSC 30/04 : ~14 000 URLs en "explorée actuellement non
+  //     indexée" (12.7 %). Page n'existe plus (seul /tarifs/[service] hub
+  //     subsiste). 301 vers /services/[s]/[v]#tarifs (PriceTableHTML +
+  //     baromètre prix communaux y vivent). Cohérent avec le filet G3
+  //     existant pour /tarifs/[s]/[v]/[task] whitelistées.
+  const tarifsCityMatch = /^\/tarifs\/([^/]+)\/([^/]+)\/?$/i.exec(pathname)
+  if (tarifsCityMatch) {
+    const [, service, ville] = tarifsCityMatch
+    const serviceLower = service.toLowerCase()
+    if (!VALID_SERVICE_SLUGS.has(serviceLower)) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    const villeDecision = validateVilleSlug(ville.toLowerCase())
+    if (villeDecision.gone) return villeDecision
+    return {
+      gone: false,
+      redirect: {
+        to: `/services/${serviceLower}/${ville.toLowerCase()}#tarifs`,
+        status: 301,
+      },
+    }
+  }
+
+  // 6. /tarifs/[service]/[ville]/[travail] — bloc DEPRECATED 2026-04-29
   //    Stratégie 140K vague 1 : 184 500 URLs cannibalisantes, 0 KW Ahrefs,
   //    0 backlinks externes recensés. Purge définitive via 410.
-  //    /tarifs/[s] et /tarifs/[s]/[v] (1-2 segments) restent valides.
+  //    /tarifs/[s] (hub 1 segment) reste valide ; /tarifs/[s]/[v] traité
+  //    en 5b ci-dessus (301 vers /services/[s]/[v]#tarifs).
   //
   //    Filet G3 (plan 140K) : 100 URLs whitelistées (236 clics 90j actifs)
   //    sont 301-redirigées vers /services/[s]/[v]#tarifs (page vivante avec

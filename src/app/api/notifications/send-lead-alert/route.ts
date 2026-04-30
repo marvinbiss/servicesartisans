@@ -19,7 +19,11 @@ export async function POST(request: NextRequest) {
 
     // Rate limiting: 3 requests per minute per IP
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`send-lead-alert:${ip}`, { window: 60_000, max: 3 })
+    const rl = await checkRateLimit(`send-lead-alert:${ip}`, {
+      window: 60_000,
+      max: 3,
+      failOpen: true,
+    })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },

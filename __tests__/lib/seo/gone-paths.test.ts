@@ -209,9 +209,47 @@ describe('evaluateGonePath — /tarifs/[s]/[v]/[task] (DEPRECATED 2026-04-29)', 
     expect(evaluateGonePath('/tarifs/plombier')).toEqual({ gone: false })
   })
 
-  it('NE matche PAS /tarifs/[s]/[v] (2 segments) → gone:false', () => {
-    expect(evaluateGonePath('/tarifs/plombier/paris')).toEqual({ gone: false })
-    expect(evaluateGonePath('/tarifs/electricien/lyon')).toEqual({ gone: false })
+  it('/tarifs/[s]/[v] (2 segments) → 301 vers /services/[s]/[v]#tarifs (DEPRECATED 2026-04-30)', () => {
+    expect(evaluateGonePath('/tarifs/plombier/paris')).toEqual({
+      gone: false,
+      redirect: { to: '/services/plombier/paris#tarifs', status: 301 },
+    })
+    expect(evaluateGonePath('/tarifs/electricien/lyon')).toEqual({
+      gone: false,
+      redirect: { to: '/services/electricien/lyon#tarifs', status: 301 },
+    })
+  })
+
+  it('/tarifs/[s]/[v] avec service inconnu → 410 (gone:true)', () => {
+    expect(evaluateGonePath('/tarifs/inexistant/paris')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/devis/[s]/[v] (2 segments) → 301 vers /services/[s]/[v] (DEPRECATED 2026-04-30)', () => {
+    expect(evaluateGonePath('/devis/plombier/paris')).toEqual({
+      gone: false,
+      redirect: { to: '/services/plombier/paris', status: 301 },
+    })
+    expect(evaluateGonePath('/devis/electricien/lyon')).toEqual({
+      gone: false,
+      redirect: { to: '/services/electricien/lyon', status: 301 },
+    })
+  })
+
+  it('/devis/[s]/[v] avec service inconnu → 410', () => {
+    expect(evaluateGonePath('/devis/inexistant/paris')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/devis/[s]/[v] avec ville malformée → 410', () => {
+    expect(evaluateGonePath('/devis/plombier/--bad-slug')).toEqual({
+      gone: true,
+      reason: 'ville_slug_malformed',
+    })
   })
 
   it('NE matche PAS /tarifs (hub) → gone:false', () => {

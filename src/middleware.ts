@@ -126,8 +126,14 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 // reverse anti-spoofing officiel Google n'est pas possible dans Edge runtime
 // (pas d'accès `node:dns`) — il sera ajouté côté Node runtime sur les routes
 // sensibles si besoin (cf. Vague H).
+// Audit 2026-04-30 (incident 5xx 12 890 GSC) : on whiteliste aussi les bots
+// SEO/data tools (AhrefsBot, SemrushBot, MJ12bot, DataForSeoBot, YandexBot,
+// BLEXBot) car (1) ils crawlent en pic et déclenchaient `RATE_LIMITS.api`
+// fail-open mais saturaient quand même le compteur Upstash, (2) couper Ahrefs
+// nous prive de notre propre télémétrie SEO. Tous en GET/HEAD only (cf. note
+// ci-dessus sur le risque de spoofing UA).
 const CRAWLER_RE =
-  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|DuckDuckBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot/i
+  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|DuckDuckBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot|AhrefsBot|SemrushBot|MJ12bot|DataForSeoBot|YandexBot|BLEXBot|facebookexternalhit|LinkedInBot|Twitterbot/i
 
 /** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
 async function logGooglebotCrawl(url: string, userAgent: string) {
