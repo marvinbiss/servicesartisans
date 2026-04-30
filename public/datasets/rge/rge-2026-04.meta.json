@@ -1,0 +1,27 @@
+{
+  "yearmonth": "2026-04",
+  "count": 49960,
+  "generated_at": "2026-04-29T15:48:43.560Z",
+  "license": "CC-BY-4.0",
+  "schema_version": "0.1.0",
+  "files": [
+    {
+      "name": "rge-2026-04.csv",
+      "bytes": 70752465,
+      "sha256": "a608a9587360f5a596850296b84f88972d13cb23bd41e6e95a87b4d40f6226f9",
+      "encoding_format": "text/csv"
+    },
+    {
+      "name": "rge-2026-04.json",
+      "bytes": 79637959,
+      "sha256": "9408b99fe7ee969efa568a4320f7d58ef2db633c81e43eb4e189ee73d8b045fd",
+      "encoding_format": "application/x-ndjson"
+    },
+    {
+      "name": "rge-2026-04.parquet",
+      "bytes": 281,
+      "sha256": "97c515d4ebce524acc9fdd1557426f6f6ed44839f5aaf028b3cf24eec6d4164d",
+      "encoding_format": "application/vnd.apache.parquet"
+    }
+  ]
+}

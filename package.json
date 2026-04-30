@@ -22,6 +22,7 @@
     "check:bundle-budget:baseline": "tsx scripts/check-bundle-budget.ts --baseline",
     "indexnow:purge-140k": "tsx scripts/indexnow-purge-strategy-140k.ts",
     "sitemap:audit-140k": "tsx scripts/sitemap-audit-strategy-140k.ts",
+    "google-places:audit-eligibility": "tsx scripts/audit-google-places-eligibility.ts",
     "postinstall": "node scripts/fix-capacitor-proguard.js",
     "mobile:build": "next build && npx cap sync",
     "mobile:android": "npx cap open android",
