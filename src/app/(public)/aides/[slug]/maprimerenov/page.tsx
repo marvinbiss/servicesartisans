@@ -16,6 +16,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import LastUpdated from '@/components/seo/LastUpdated'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import RelatedAides from '@/components/aides/RelatedAides'
 import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { getCumulableAides } from '@/lib/aides/aides-catalog'
@@ -26,7 +28,8 @@ import {
 } from '@/lib/aides/climate-zones'
 import { getDepartementBySlug } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
-import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { authors } from '@/lib/data/authors'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
@@ -218,7 +221,42 @@ export default async function MprDeptPage({ params }: PageProps) {
   const topVilles = (dept.villes || []).slice(0, 3)
   const cumulables = getCumulableAides('maprimerenov')
 
-  const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, mprSchema, mprProductSchema]
+  // Sprint ULTRA YMYL — Article+Speakable + byline Person.
+  const author = authors['claire-dubois']
+  const reviewedIso = `${CONTENT_UPDATED_AT}T00:00:00+02:00`
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `MaPrimeRénov' ${dept.name} (${dept.code}) — barèmes & démarche 2026`,
+    image: [`${SITE_URL}/og-aides-maprimerenov.jpg`, `${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: reviewedIso,
+    author: { '@type': 'Person', name: author.name, url: `${SITE_URL}/equipe/${author.slug}` },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}${path}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const tldrBullets: string[] = [
+    `MaPrimeRénov' ${getDeptPreposition(dept.name)} ${dept.name} (${dept.code}) — aide nationale Anah, barèmes identiques sur tout le territoire.`,
+    `4 catégories de revenus (bleu, jaune, violet, rose) déterminent le montant — vérification via simulateur officiel maprimerenov.gouv.fr.`,
+    `Cumulable avec primes CEE, TVA 5,5 % et éco-PTZ. Zone climatique ${zoneLabel.split('—')[0].trim()} impacte les CEE associés.`,
+    `Artisan RGE obligatoire à la signature du devis (Qualibat, QualiPAC, QualiBois, Qualit'EnR). Vérification quotidienne base ADEME.`,
+  ]
+
+  const jsonLdItems: Record<string, unknown>[] = [
+    breadcrumbSchema,
+    mprSchema,
+    mprProductSchema,
+    articleSchema as Record<string, unknown>,
+  ]
   if (placeSchema) jsonLdItems.push(placeSchema as Record<string, unknown>)
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
   if (howToSchema) jsonLdItems.push(howToSchema as Record<string, unknown>)
@@ -235,6 +273,18 @@ export default async function MprDeptPage({ params }: PageProps) {
           { label: dept.name },
         ]}
       />
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
+        <EnBrefBox
+          summary={`MaPrimeRénov' ${getDeptPreposition(dept.name)} ${dept.name} (${dept.code}) — aide nationale Anah pour rénover votre logement. Barèmes 2026 identiques sur tout le territoire, parcours geste & accompagné, artisans RGE vérifiés ADEME.`}
+          keyPoints={[
+            `4 catégories de revenus (bleu, jaune, violet, rose)`,
+            'Cumul possible avec primes CEE + TVA 5,5 % + éco-PTZ',
+            `Zone climatique ${zoneLabel.split('—')[0].trim()} (impact CEE associés)`,
+            'Artisan RGE obligatoire — vérification quotidienne ADEME',
+          ]}
+        />
+      </div>
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
@@ -253,6 +303,19 @@ export default async function MprDeptPage({ params }: PageProps) {
             Aide officielle de l&apos;Anah pour rénover votre logement en {dept.region}. Barèmes
             2026, artisans RGE vérifiés via l&apos;API ADEME, cumul avec primes CEE et TVA 5,5 %
             automatique.
+          </p>
+          <p className="mt-4 text-sm text-emerald-100/80">
+            Auteur : <span className="font-medium text-white">{author.name}</span>
+            {' · '}
+            Mis à jour le{' '}
+            <time dateTime={CONTENT_UPDATED_AT} className="font-medium">
+              {new Date(reviewedIso).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Europe/Paris',
+              })}
+            </time>
           </p>
           <LastUpdated
             label="Barèmes vérifiés le"
@@ -408,6 +471,14 @@ export default async function MprDeptPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* TL;DR pré-FAQ — capture FS sur "MaPrimeRénov [dept]" */}
+      <section className="bg-white py-10 border-t border-charcoal-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="sr-only">L’essentiel MaPrimeRénov’ {dept.name}</h2>
+          <TldrBlock bullets={tldrBullets} />
+        </div>
+      </section>
 
       {/* FAQ */}
       <section className="bg-charcoal-50 py-12 border-t border-charcoal-100">

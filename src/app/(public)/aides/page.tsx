@@ -27,7 +27,10 @@ const REVIEW_DATE = aidesCatalog.reduce(
 const AUTHOR = authors['claire-dubois']
 
 export const metadata: Metadata = {
-  title: `${HUB_TITLE} — ${SITE_NAME}`,
+  // Le template root layout ajoute déjà ` | ServicesArtisans`. Ne pas
+  // dupliquer le brand dans le title sinon dépasse 60 chars (audit Meta
+  // Quality 2026-04-30 : 71 → 50 chars).
+  title: HUB_TITLE,
   description: HUB_DESCRIPTION,
   alternates: getAlternates(PATH),
   openGraph: {

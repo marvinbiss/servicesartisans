@@ -26,7 +26,10 @@ export const revalidate = 86400
 export const dynamic = 'force-static'
 
 const PATH = '/open-data'
-const TITLE = 'Open Data — annuaire RGE & stats locales France'
+// Title court : root template ajoute ` | ServicesArtisans` (17 chars),
+// objectif final ≤ 60 chars (audit Meta Quality 2026-04-30 : 66 → 50).
+const TITLE = 'Open Data — RGE & stats locales France'
+const TITLE_SOCIAL = 'Open Data — annuaire RGE & stats locales France'
 const DESCRIPTION =
   'Annuaire artisans RGE (ADEME) + statistiques locales par commune et métier. CSV / NDJSON / DCAT. Licence Etalab 2.0.'
 
@@ -42,13 +45,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     ...getOgDefaults(),
-    title: TITLE,
+    title: TITLE_SOCIAL,
     description: DESCRIPTION,
     type: 'website',
     locale: 'fr_FR',
     url: `${SITE_URL}${PATH}`,
   },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
+  twitter: { card: 'summary_large_image', title: TITLE_SOCIAL, description: DESCRIPTION },
   alternates: getAlternates(PATH),
 }
 

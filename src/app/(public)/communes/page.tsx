@@ -10,7 +10,10 @@ import { villes } from '@/lib/data/france'
 
 export const revalidate = 86_400
 
-const TITLE = '36 000 communes — Données locales & artisans 2026'
+// Title court : le template root ajoute ` | ServicesArtisans` (17 chars),
+// objectif final ≤ 60 chars (audit Meta Quality 2026-04-30 : 68 → 51).
+const TITLE = '36 000 communes — Données locales 2026'
+const TITLE_SOCIAL = '36 000 communes — Données locales & artisans 2026'
 const DESCRIPTION =
   'Annuaire 35 999 communes France : INSEE, climat, Géorisques, DVF, artisans RGE. Base ouverte CC-BY 4.0.'
 
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     ...getOgDefaults(),
     locale: 'fr_FR',
-    title: TITLE,
+    title: TITLE_SOCIAL,
     description: DESCRIPTION,
     url: `${SITE_URL}/communes`,
     type: 'website',
@@ -37,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: TITLE,
+    title: TITLE_SOCIAL,
     description: DESCRIPTION,
     images: [`${SITE_URL}/opengraph-image`],
   },

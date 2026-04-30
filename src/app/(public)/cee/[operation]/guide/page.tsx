@@ -6,12 +6,15 @@ import { ShieldCheck, CheckCircle2, ArrowRight, ExternalLink } from 'lucide-reac
 import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode } from '@/lib/cee/catalogue'
 import { CEE_OPERATIONS_WITH_GUIDE, getCeeOperationGuide } from '@/lib/cee/operation-guides-content'
 import { getRgeQualificationGuide } from '@/lib/rge/qualification-guides-content'
@@ -101,11 +104,29 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
     url: `${SITE_URL}${path}`,
     mainEntityOfPage: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
-    datePublished: '2026-01-15',
-    dateModified: new Date().toISOString().slice(0, 10),
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
   }
+
+  const enBrefPoints = [
+    `Prime CEE classique : ${guide.primeClassique}`,
+    `Bonification précarité : ${guide.primePrecarite}`,
+    `Cumul possible avec MaPrimeRénov' : ${guide.maPrimeRenov}`,
+    `Artisan obligatoirement RGE — qualifications acceptées : ${guide.rgeRequises.slice(0, 3).join(', ')}${guide.rgeRequises.length > 3 ? '…' : ''}`,
+  ]
+
+  const tldrBullets: string[] = [
+    `Prime CEE ${guide.code}${operation ? ` (${operation.nom})` : ''} — ${guide.primeClassique} en classique, ${guide.primePrecarite} pour les ménages modestes.`,
+    'Conditions clés : logement résidentiel >2 ans, devis CEE signé AVANT travaux, artisan RGE obligatoire, dossier déposé sous 6 mois après facture.',
+    `Cumulable avec MaPrimeRénov' (${guide.maPrimeRenov}), TVA 5,5 % et éco-PTZ. Cadre légal : loi POPE 2005, période P6 2026-2030.`,
+    'Notre rôle : mise en relation avec un artisan RGE qualifié, devis gratuit en 24 h, prime sécurisée dès la signature.',
+  ]
 
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -176,16 +197,24 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
               Guide officiel {guide.code}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+            data-speakable="true"
+          >
             {guide.h1}
           </h1>
           <ArticleMeta
             author="ServicesArtisans"
             datePublished="2026-01-15"
-            className="justify-center mt-4"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mt-4 mb-5"
           />
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
         </div>
+      </section>
+
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-10">
+        <EnBrefBox keyPoints={enBrefPoints} />
       </section>
 
       {/* Résumé montants */}
@@ -300,6 +329,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             </ul>
           </div>
         )}
+      </section>
+
+      {/* TL;DR pré-FAQ — capture FS Position 0 */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-4">
+        <TldrBlock bullets={tldrBullets} />
       </section>
 
       {/* FAQ */}

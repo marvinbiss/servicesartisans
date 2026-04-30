@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import LastUpdated from '@/components/seo/LastUpdated'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
 import AideMontants from '@/components/aides/AideMontants'
 import AideEligibilite from '@/components/aides/AideEligibilite'
 import AideDemarche from '@/components/aides/AideDemarche'
@@ -56,20 +57,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!aide) return {}
 
   const path = `/aides/${slug}`
-  const title = truncate(`${aide.name} 2026 — barèmes et démarche officielle`)
+  // Title brut sans " | SITE_NAME" : le root layout template l'ajoute déjà.
+  // Truncate à 43 chars pour rester ≤ 60 chars une fois suffixé.
+  const title = truncate(`${aide.name} 2026 — barèmes & démarche`, 43)
   const description = truncate(
     `${aide.tagline}. Conditions, montants 2026, démarche officielle.`,
     160
   )
 
   return {
-    title: `${title} | ${SITE_NAME}`,
+    title,
     description,
     alternates: getAlternates(path),
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',
-      title,
+      title: `${aide.name} 2026 — ${SITE_NAME}`,
       description,
       url: `${SITE_URL}${path}`,
       type: 'article',
@@ -135,9 +138,36 @@ export default async function AidePage({ params }: PageProps) {
     totalTime: 'P90D',
   })
 
+  // Sprint ULTRA YMYL — Article+Speakable, byline Person.
+  // dateModified = aide.lastReviewed (date éditoriale honnête, pas fake
+  // freshness — déjà géré par le système de revue rubric v1.3).
+  const reviewedIso = `${aide.lastReviewed}T00:00:00+02:00`
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${aide.name} 2026 — barèmes, conditions et démarche officielle`,
+    image: [`${SITE_URL}/og-aides-${aide.slug}.jpg`, `${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: reviewedIso,
+    author: AUTHOR
+      ? { '@type': 'Person', name: AUTHOR.name, url: `${SITE_URL}/equipe/${AUTHOR.slug}` }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema as Record<string, unknown>,
     mainSchema as Record<string, unknown>,
+    articleSchema as Record<string, unknown>,
   ]
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
   if (howToSchema) jsonLdItems.push(howToSchema as Record<string, unknown>)
@@ -166,6 +196,20 @@ export default async function AidePage({ params }: PageProps) {
         ]}
       />
 
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
+        <EnBrefBox
+          summary={`${aide.name} 2026 — ${aide.tagline}. Barèmes officiels, conditions d'éligibilité, démarche pas-à-pas et artisans RGE locaux. Vérifié le ${aide.lastReviewed}.`}
+          keyPoints={[
+            `Catégorie : ${aide.category}`,
+            `Plafond principal : ${aide.montants[0]?.max ?? 'voir détails'}`,
+            cumulables.length > 0
+              ? `Cumulable avec ${cumulables.length} autre(s) aide(s)`
+              : `Aide standalone, conditions strictes`,
+            `Artisan RGE obligatoire pour la majorité des travaux éligibles`,
+          ]}
+        />
+      </div>
+
       <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div
@@ -180,6 +224,21 @@ export default async function AidePage({ params }: PageProps) {
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             {aide.tagline}
           </p>
+          {AUTHOR && (
+            <p className="mt-3 text-sm text-emerald-100/80">
+              Auteur : <span className="font-medium text-white">{AUTHOR.name}</span>
+              {' · '}
+              Mis à jour le{' '}
+              <time dateTime={aide.lastReviewed} className="font-medium">
+                {new Date(reviewedIso).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  timeZone: 'Europe/Paris',
+                })}
+              </time>
+            </p>
+          )}
           <LastUpdated
             label="Barèmes vérifiés le"
             date={aide.lastReviewed}
