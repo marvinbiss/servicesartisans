@@ -16,6 +16,8 @@ import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
 import { aidesSlugs, getAideBySlug, getCumulableAides, type Aide } from '@/lib/aides/aides-catalog'
+import { villes } from '@/lib/data/france'
+import { MAIN_RGE_SERVICES } from '@/lib/rge/pseo-content'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -292,18 +294,55 @@ export default async function AidePage({ params }: PageProps) {
         className="bg-emerald-50/40 py-10 border-t border-emerald-100"
         aria-labelledby="rge-heading"
       >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2
             id="rge-heading"
             className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 mb-3"
           >
-            Trouver un artisan RGE
+            Trouver un artisan RGE pour {aide.name}
           </h2>
-          <p className="text-charcoal-700 leading-relaxed mb-4">
+          <p className="text-charcoal-700 leading-relaxed mb-6 max-w-3xl">
             La quasi-totalité des aides 2026 exige un artisan certifié RGE actif à la signature du
             devis. ServicesArtisans synchronise quotidiennement la base ADEME des artisans RGE
             (qualifications Qualibat, QualiPAC, QualiBois, Qualifelec).
           </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h3 className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3">
+                Par spécialité RGE
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {MAIN_RGE_SERVICES.map((svc) => (
+                  <Link
+                    key={svc.slug}
+                    href={`/rge/${svc.slug}`}
+                    className="block px-3 py-2 rounded-lg bg-white border border-emerald-200 text-sm text-charcoal-800 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                  >
+                    {svc.label} RGE
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3">
+                Par grande ville
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {villes.slice(0, 8).map((v) => (
+                  <Link
+                    key={v.slug}
+                    href={`/artisans-rge/${v.slug}`}
+                    className="block px-3 py-2 rounded-lg bg-white border border-emerald-200 text-sm text-charcoal-800 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                  >
+                    Artisans RGE à {v.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-wrap gap-3">
             <Link
               href="/rge"
@@ -316,6 +355,18 @@ export default async function AidePage({ params }: PageProps) {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
             >
               Demander un devis
+            </Link>
+            <Link
+              href="/cee"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+            >
+              Voir les opérations CEE
+            </Link>
+            <Link
+              href="/aides"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+            >
+              Toutes les aides
             </Link>
           </div>
         </div>
