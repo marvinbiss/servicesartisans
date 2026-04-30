@@ -395,7 +395,10 @@ export default function RenovationCuisinePage() {
             <ChefHat className="w-4 h-4" />
             Guide rénovation cuisine
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             {'Rénovation cuisine : guide complet des étapes et prix 2026'}
           </h1>
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">

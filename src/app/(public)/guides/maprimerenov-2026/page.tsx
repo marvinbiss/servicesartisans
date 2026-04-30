@@ -513,7 +513,10 @@ export default function MaPrimeRenov2026Page() {
                 Mis à jour mars 2026
               </span>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 font-heading leading-tight">
+            <h1
+              data-speakable="true"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 font-heading leading-tight"
+            >
               {"MaPrimeRénov' 2026 : Guide Complet des Aides à la Rénovation Énergétique"}
             </h1>
             <ArticleMeta

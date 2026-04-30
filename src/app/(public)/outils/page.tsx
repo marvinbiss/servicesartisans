@@ -184,7 +184,10 @@ export default function OutilsPage() {
                   {tools.length} outils gratuits
                 </span>
               </div>
-              <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+              <h1
+                data-speakable="true"
+                className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
+              >
                 Outils gratuits{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-indigo-300">
                   pour vos travaux

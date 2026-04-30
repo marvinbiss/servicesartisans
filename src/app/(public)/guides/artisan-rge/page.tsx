@@ -179,7 +179,10 @@ export default function ArtisanRGEPage() {
             <ShieldCheck className="w-4 h-4" />
             Guide certification RGE
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             {'Artisan RGE : Comment Vérifier et Trouver un Professionnel Certifié'}
           </h1>
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">

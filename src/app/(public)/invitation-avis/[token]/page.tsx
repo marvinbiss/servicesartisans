@@ -30,7 +30,10 @@ export default async function DonnerAvisPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-sand-50 py-16 px-4">
         <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-sm border border-sand-200 p-8 text-center">
-          <h1 className="font-heading text-2xl font-bold text-charcoal-900 mb-3">
+          <h1
+            data-speakable="true"
+            className="font-heading text-2xl font-bold text-charcoal-900 mb-3"
+          >
             Avis deja enregistre
           </h1>
           <p className="text-charcoal-600">
@@ -45,7 +48,12 @@ export default async function DonnerAvisPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-sand-50 py-16 px-4">
         <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-sm border border-sand-200 p-8 text-center">
-          <h1 className="font-heading text-2xl font-bold text-charcoal-900 mb-3">Lien expire</h1>
+          <h1
+            data-speakable="true"
+            className="font-heading text-2xl font-bold text-charcoal-900 mb-3"
+          >
+            Lien expire
+          </h1>
           <p className="text-charcoal-600">
             Le lien de cette invitation n&apos;est plus valide (au-dela de 30 jours). Vous pouvez
             toujours nous contacter si vous souhaitez laisser un avis.
@@ -59,7 +67,10 @@ export default async function DonnerAvisPage({ params }: PageProps) {
     <main className="min-h-screen bg-sand-50 py-10 px-4">
       <div className="max-w-xl mx-auto">
         <header className="text-center mb-6">
-          <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-2">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl font-bold text-charcoal-900 mb-2"
+          >
             Votre avis compte
           </h1>
           <p className="text-charcoal-600">

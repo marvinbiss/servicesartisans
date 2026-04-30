@@ -100,7 +100,10 @@ export default function DiagnosticPage() {
               items={breadcrumbItems}
               className="mb-4 text-primary-100 [&_a]:text-primary-100 [&_a:hover]:text-white [&_svg]:text-primary-200 [&>ol>li:last-child_span]:text-white"
             />
-            <h1 className="text-3xl sm:text-4xl font-extrabold font-heading mb-3">
+            <h1
+              data-speakable="true"
+              className="text-3xl sm:text-4xl font-extrabold font-heading mb-3"
+            >
               Quel artisan vous faut-il ?
             </h1>
             <p className="text-primary-100 text-lg max-w-2xl">

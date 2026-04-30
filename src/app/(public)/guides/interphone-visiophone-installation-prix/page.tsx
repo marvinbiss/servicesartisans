@@ -137,7 +137,10 @@ export default function Page() {
               <Bell className="w-3.5 h-3.5" aria-hidden />
               Sécurité · Guide vérifié
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Interphone / visiophone : prix 2026
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

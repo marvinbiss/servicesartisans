@@ -141,7 +141,10 @@ export default function Page() {
               <Euro className="w-3.5 h-3.5" aria-hidden />
               Prix &amp; Rénovation énergétique
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Prix d’une pompe à chaleur air-eau installée en 2026
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

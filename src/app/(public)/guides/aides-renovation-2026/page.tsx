@@ -274,7 +274,10 @@ export default function AidesRenovation2026Page() {
             <Euro className="w-4 h-4" />
             Guide mis à jour — Mars 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             {'Toutes les Aides à la Rénovation Énergétique en 2026'}
           </h1>
           <ArticleMeta

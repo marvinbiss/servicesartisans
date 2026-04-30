@@ -295,7 +295,10 @@ export default async function MprDeptPage({ params }: PageProps) {
               {dept.region} — {zoneLabel.split('—')[0].trim()}
             </span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             MaPrimeRénov&apos; {getDeptPreposition(dept.name)}{' '}
             <span className="text-emerald-200">({dept.code})</span>
           </h1>

@@ -183,7 +183,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h1
+            data-speakable="true"
+            className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4"
+          >
             Prime CEE {opCode} à {villeName}
           </h1>
           <p className="text-charcoal-700">
@@ -384,7 +387,10 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               Fiche officielle DGEC {operation.code}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+          >
             {operation.nom} : artisans RGE certifiés à {villeName} ({monthYear})
           </h1>
           <p className="mt-3 text-charcoal-600">

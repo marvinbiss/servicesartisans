@@ -111,7 +111,10 @@ export default async function ResultatPage({ params }: PageParams) {
           <p className="text-sm text-slate-500">
             Estimation <span className="font-mono text-slate-700">{data.public_id}</span>
           </p>
-          <h1 className="mt-1 font-heading text-3xl md:text-4xl font-extrabold tracking-tight text-charcoal-900">
+          <h1
+            data-speakable="true"
+            className="mt-1 font-heading text-3xl md:text-4xl font-extrabold tracking-tight text-charcoal-900"
+          >
             Votre estimation d&apos;aides
           </h1>
           <p className="mt-2 text-sm text-charcoal-600">

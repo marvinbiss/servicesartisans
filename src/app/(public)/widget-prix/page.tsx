@@ -124,7 +124,10 @@ export default function WidgetPrixPage() {
                 <Zap className="h-4 w-4" />
                 Gratuit et sans inscription
               </div>
-              <h1 className="mb-6 font-heading text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
+              <h1
+                data-speakable="true"
+                className="mb-6 font-heading text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl"
+              >
                 Widget Prix Artisan
               </h1>
               <p className="mb-8 text-lg leading-relaxed text-primary-100">

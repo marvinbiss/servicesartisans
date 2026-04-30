@@ -494,7 +494,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         )}
 
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+          >
             {upgradeV2 ? (
               isFallback && location.department_name ? (
                 <>

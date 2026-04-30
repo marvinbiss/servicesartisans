@@ -135,7 +135,10 @@ export default function Page() {
               <Wind className="w-3.5 h-3.5" aria-hidden />
               Problèmes maison · Guide vérifié
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Condensation fenêtres : 5 causes et solutions
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

@@ -247,7 +247,10 @@ export default function QualificationsRgePage() {
             <Award className="w-4 h-4" />
             Comparatif RGE 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir ?
           </h1>
           <ArticleMeta

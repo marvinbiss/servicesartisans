@@ -68,7 +68,7 @@ export default function MesFavorisPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-charcoal-900">
+            <h1 data-speakable="true" className="text-3xl font-heading font-bold text-charcoal-900">
               Mes artisans favoris
             </h1>
             <p className="text-charcoal-900 mt-1">

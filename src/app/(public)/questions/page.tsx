@@ -132,7 +132,10 @@ export default function QuestionsHubPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 mb-6">
             <HelpCircle className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading mb-4">
+          <h1
+            data-speakable="true"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading mb-4"
+          >
             Questions fréquentes
           </h1>
           <p className="text-lg sm:text-xl text-primary-100 max-w-2xl mx-auto leading-relaxed">

@@ -218,7 +218,10 @@ export default async function AidePage({ params }: PageProps) {
             <Sparkles className="w-4 h-4" aria-hidden="true" />
             <span className="text-sm font-medium">{aide.category}</span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             {aide.name}
           </h1>
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">

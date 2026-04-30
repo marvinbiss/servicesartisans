@@ -229,7 +229,7 @@ export default async function AideDeptPage({ params }: PageProps) {
           />
 
           <header className="mt-6 mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900">
+            <h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">
               {aide.name} {getDeptPreposition(dept.name)} {dept.name} ({dept.code}) — 2026
             </h1>
             <p className="mt-3 text-charcoal-700">{aide.description}</p>

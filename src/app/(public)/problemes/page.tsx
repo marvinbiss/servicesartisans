@@ -227,7 +227,10 @@ export default function ProblemesPage() {
               <AlertTriangle className="w-4 h-4 text-amber-400" />
               <span className="text-sm font-semibold text-amber-200">30 problèmes documentés</span>
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
+            >
               Problèmes courants{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-300">
                 Diagnostic et solutions

@@ -464,7 +464,7 @@ export default function StatistiquesArtisansFrancePage() {
               <span className="text-sm text-primary-200">Dernière mise à jour : mars 2026</span>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 data-speakable="true" className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
               Statistiques artisans en France
               <span className="block text-primary-200 mt-2">
                 Chiffres clés, prix et tendances 2026

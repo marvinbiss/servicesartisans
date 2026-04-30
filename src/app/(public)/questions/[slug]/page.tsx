@@ -107,7 +107,10 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
             <ArrowLeft className="w-4 h-4" />
             Toutes les questions
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl sm:text-4xl font-bold font-heading leading-tight"
+          >
             {question.question}
           </h1>
         </div>

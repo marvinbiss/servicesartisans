@@ -231,7 +231,10 @@ export default function CEE2026Page() {
             <Award className="w-4 h-4" />
             Guide CEE 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             Certificats d&apos;Économies d&apos;Énergie (CEE) 2026 : le guide complet
           </h1>
           <ArticleMeta

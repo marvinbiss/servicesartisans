@@ -207,7 +207,10 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
               Label RGE — Reconnu Garant de l&apos;Environnement
             </span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Artisans certifiés RGE à {ville.name} ({monthYear})
           </h1>
           <p className="text-sm text-emerald-100/80 mb-3">

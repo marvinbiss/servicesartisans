@@ -138,7 +138,10 @@ export default function Page() {
               <Home className="w-3.5 h-3.5" aria-hidden />
               Travaux spécialisés · Guide vérifié
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Surélévation toiture : prix 2026 et faisabilité
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

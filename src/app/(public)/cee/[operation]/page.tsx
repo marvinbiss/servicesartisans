@@ -146,7 +146,10 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     return (
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h1
+            data-speakable="true"
+            className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4"
+          >
             Prime CEE {opCode}
           </h1>
           <ArticleMeta
@@ -327,7 +330,10 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               Fiche officielle DGEC {operation.code}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Prime CEE : {operation.nom}
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">

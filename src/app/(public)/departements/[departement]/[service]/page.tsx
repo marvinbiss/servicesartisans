@@ -304,7 +304,10 @@ export default async function DeptServicePage({ params }: PageProps) {
                     `${trade.name} ${getDeptPreposition(dept.name)} (${dept.code})`,
                   ]
                   return (
-                    <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
+                    <h1
+                      data-speakable="true"
+                      className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]"
+                    >
                       {h1Templates[h1Hash % h1Templates.length]}
                     </h1>
                   )

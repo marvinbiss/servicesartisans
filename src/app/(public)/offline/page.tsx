@@ -12,7 +12,10 @@ export default function OfflinePage() {
           </div>
         </div>
 
-        <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-4 tracking-tight">
+        <h1
+          data-speakable="true"
+          className="font-heading text-3xl font-bold text-charcoal-900 mb-4 tracking-tight"
+        >
           Hors connexion
         </h1>
         <p className="text-charcoal-600 mb-8">

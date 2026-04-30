@@ -214,7 +214,10 @@ export default function Page() {
               <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
               Réglementation travaux · Guide vérifié
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Garantie décennale : quels artisans sont obligés, quels travaux sont couverts
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

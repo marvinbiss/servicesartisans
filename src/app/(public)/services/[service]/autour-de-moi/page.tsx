@@ -153,7 +153,10 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
       <section className="py-8 md:py-14 bg-gradient-to-b from-sand-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-heading text-3xl md:text-5xl font-bold text-charcoal-900 mb-4 leading-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-bold text-charcoal-900 mb-4 leading-tight"
+          >
             {name} autour de moi
           </h1>
           <p className="text-lg text-charcoal-600 mb-6 max-w-2xl mx-auto">

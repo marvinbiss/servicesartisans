@@ -245,7 +245,10 @@ export default async function QuartierPage({ params }: PageProps) {
                 `${ville.name} ${quartierName} — artisans de confiance`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                <h1
+                  data-speakable="true"
+                  className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
+                >
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )

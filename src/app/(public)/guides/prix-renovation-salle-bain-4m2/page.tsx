@@ -135,7 +135,10 @@ export default function Page() {
               <Euro className="w-3.5 h-3.5" aria-hidden />
               Prix &amp; Rénovation
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Prix rénovation salle de bain 4 m² en 2026 : budget complet
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

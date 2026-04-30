@@ -138,7 +138,10 @@ export default function Page() {
               <Leaf className="w-3.5 h-3.5" aria-hidden />
               Aides &amp; Location · Guide vérifié
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
+            >
               Prime pompe à chaleur pour un locataire : qui touche, qui paye
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">

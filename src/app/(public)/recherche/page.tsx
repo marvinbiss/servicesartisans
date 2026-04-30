@@ -65,7 +65,7 @@ export default function RecherchePage() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-indigo-500 rounded-full blur-[150px] opacity-30" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">
+          <h1 data-speakable="true" className="font-heading text-4xl md:text-5xl font-bold mb-4">
             Rechercher un artisan
           </h1>
           <p className="text-xl text-primary-100/80 mb-10 max-w-2xl mx-auto">

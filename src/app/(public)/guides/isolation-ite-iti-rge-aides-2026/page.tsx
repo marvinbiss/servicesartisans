@@ -212,7 +212,10 @@ export default function IsolationIteItiPage() {
             <Snowflake className="w-4 h-4" />
             Guide Isolation 2026
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
+          >
             Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides cumulables
           </h1>
           <ArticleMeta

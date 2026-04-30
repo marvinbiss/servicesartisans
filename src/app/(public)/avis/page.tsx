@@ -200,7 +200,9 @@ export default async function AvisPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
+            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
+              {cmsPage.title}
+            </h1>
           </div>
         </section>
         <section className="py-12">
@@ -299,7 +301,10 @@ export default async function AvisPage() {
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
+            >
               Avis artisans —{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-cyan-300">
                 professionnels

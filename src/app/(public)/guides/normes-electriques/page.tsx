@@ -252,7 +252,10 @@ export default function NormesElectriquesPage() {
               <Zap className="w-4 h-4" />
               <span>{'Réglementation & Sécurité'}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 mb-4 font-heading">
+            <h1
+              data-speakable="true"
+              className="text-3xl md:text-4xl font-bold text-charcoal-900 mb-4 font-heading"
+            >
               {'Normes Électriques NF C 15-100 : Guide pour les Particuliers'}
             </h1>
             <p className="text-lg text-charcoal-600 max-w-3xl">

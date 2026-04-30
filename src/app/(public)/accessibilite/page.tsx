@@ -53,7 +53,9 @@ export default async function AccessibilitePage() {
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'Accessibilité' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">{cmsPage.title}</h1>
+            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
+              {cmsPage.title}
+            </h1>
           </div>
         </section>
         <section className="py-12">
@@ -100,7 +102,10 @@ export default async function AccessibilitePage() {
             items={[{ label: 'Accessibilité' }]}
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
-          <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]"
+          >
             Déclaration d'accessibilité
           </h1>
           <p className="text-xl text-charcoal-400 max-w-3xl">
