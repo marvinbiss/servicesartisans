@@ -1286,7 +1286,10 @@ export default function GuidesPage() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="flex items-center gap-3 mb-4">
               <BookOpen className="w-8 h-8 text-primary-500" />
-              <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading">
+              <h1
+                data-speakable="true"
+                className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
+              >
                 Guides Pratiques
               </h1>
             </div>

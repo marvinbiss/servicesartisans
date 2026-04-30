@@ -159,7 +159,10 @@ export default async function VillesIndexPage() {
               </span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]"
+            >
               Artisans par{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400">
                 ville

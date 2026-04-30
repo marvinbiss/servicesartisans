@@ -109,7 +109,10 @@ export default async function RgeQualificationsHubPage() {
               Guides officiels des qualifications RGE
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Qualifications RGE&nbsp;: le référentiel complet
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">

@@ -169,7 +169,10 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               {label ? `${label.label} — ${label.organisme}` : 'Mention RGE officielle'}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             {content.h1}
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">

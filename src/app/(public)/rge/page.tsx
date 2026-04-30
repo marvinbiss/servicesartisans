@@ -237,7 +237,10 @@ export default async function RgeHubPage() {
               Label officiel — Reconnu Garant de l&apos;Environnement
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             Artisans RGE certifiés en France
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">

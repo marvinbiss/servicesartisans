@@ -151,7 +151,10 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               Délivrée par {guide.organisme}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             {guide.h1}
           </h1>
           <ArticleMeta

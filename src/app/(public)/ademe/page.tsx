@@ -141,7 +141,10 @@ export default async function AdemePage() {
               Source officielle — data.ademe.fr
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             Données ADEME & méthodologie RGE
           </h1>
           <p className="text-lg md:text-xl text-charcoal-200 max-w-3xl leading-relaxed">

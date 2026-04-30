@@ -193,7 +193,10 @@ export default function TarifsAuditEnergetiquePage() {
               Mis à jour pour MaPrimeRénov' 2026
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             Tarifs audit énergétique 2026 : prix, aides et retour sur investissement
           </h1>
           <ArticleMeta

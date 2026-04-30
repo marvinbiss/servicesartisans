@@ -346,7 +346,10 @@ export default function DevenirPartenaireCeePage() {
             <Users className="w-4 h-4 text-emerald-300" />
             <span className="text-sm font-medium text-emerald-100">Programme partenaire CEE</span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Artisan RGE&nbsp;? Recevez des leads exclusifs et gagnez plus sur chaque chantier.
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed mb-6">

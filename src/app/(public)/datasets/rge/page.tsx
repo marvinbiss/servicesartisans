@@ -261,7 +261,7 @@ export default function DatasetRgePage() {
               <Database className="h-3.5 w-3.5" aria-hidden="true" />
               Données ouvertes — licence CC-BY 4.0
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold text-charcoal-900">
+            <h1 data-speakable="true" className="mt-4 text-4xl font-extrabold text-charcoal-900">
               Dataset RGE — {formatNumber(STUB_COUNT)} artisans certifiés
             </h1>
             <p className="mt-3 text-lg text-charcoal-600">

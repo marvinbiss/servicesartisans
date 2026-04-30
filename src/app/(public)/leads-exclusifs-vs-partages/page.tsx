@@ -218,7 +218,10 @@ export default function LeadsExclusifsVsPartagesPage() {
               Guide artisan — acquisition clients
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Leads exclusifs vs leads partagés&nbsp;: le vrai coût pour un artisan
           </h1>
           <ArticleMeta

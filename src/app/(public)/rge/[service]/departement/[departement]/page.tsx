@@ -171,7 +171,10 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         />
 
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta">
+          <h1
+            data-speakable="true"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+          >
             {serviceName} certifié RGE dans le {dept.name} ({dept.code})
           </h1>
           <p className="mt-3 text-charcoal-600">

@@ -317,7 +317,10 @@ export default function RenovationEnergetiqueHub() {
               Aides cumulables 2026 — artisans RGE vérifiés via ADEME
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             Rénovation énergétique 2026
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">

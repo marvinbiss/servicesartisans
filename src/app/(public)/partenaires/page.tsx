@@ -90,7 +90,10 @@ export default async function PartenairesPage() {
             items={[{ label: 'Partenaires' }]}
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
-          <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]"
+          >
             Nos partenaires
           </h1>
           <p className="text-xl text-charcoal-400 max-w-3xl">

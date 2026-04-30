@@ -170,7 +170,10 @@ export default function RgeSourcesPage() {
               Transparence éditoriale E-E-A-T
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Sources et méthodologie RGE
           </h1>
           <ArticleMeta

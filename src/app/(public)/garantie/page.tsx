@@ -144,7 +144,10 @@ export default function GarantiePage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 mb-4">
             <Shield className="w-8 h-8 text-green-600" />
           </div>
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 mb-4"
+          >
             La garantie ServicesArtisans
           </h1>
           <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">

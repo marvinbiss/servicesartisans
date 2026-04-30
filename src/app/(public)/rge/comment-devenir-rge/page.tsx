@@ -264,7 +264,10 @@ export default function CommentDevenirRgePage() {
               Guide artisan — qualification RGE
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Comment devenir artisan RGE en 2026&nbsp;?
           </h1>
           <ArticleMeta

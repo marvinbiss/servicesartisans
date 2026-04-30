@@ -579,7 +579,10 @@ export default async function ServicesPage() {
             </span>
           </div>
 
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
+          >
             Tous nos{' '}
             <span className="bg-gradient-terra bg-clip-text text-transparent">services</span>{' '}
             artisans

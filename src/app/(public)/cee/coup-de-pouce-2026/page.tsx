@@ -310,7 +310,10 @@ export default function CoupDePouce2026Page() {
               Guide neutre — article L221-7 du code de l’énergie
             </span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5"
+          >
             Coup de pouce CEE 2026&nbsp;: chartes actives et bonifications
           </h1>
           <ArticleMeta

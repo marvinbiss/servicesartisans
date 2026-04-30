@@ -331,7 +331,10 @@ export default function MaprimeRenovCumulCeePage() {
               Mis à jour pour MaPrimeRénov’ 2026
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-6xl font-extrabold leading-tight mb-5"
+          >
             Cumul MaPrimeRénov’ et CEE 2026 : règles et plafonds
           </h1>
           <ArticleMeta

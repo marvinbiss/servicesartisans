@@ -179,7 +179,10 @@ export default function OpenDataPage() {
           <p className="text-sm text-amber-400 font-semibold uppercase tracking-wider mb-3">
             Open Data
           </p>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight mb-4"
+          >
             Catalogue ouvert ServicesArtisans
           </h1>
           <p className="text-lg text-charcoal-200 max-w-3xl">

@@ -157,7 +157,10 @@ export default async function ArtisansPage() {
                 : 'Annuaire des artisans'}
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+          <h1
+            data-speakable="true"
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight"
+          >
             Artisans{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
               qualifiés

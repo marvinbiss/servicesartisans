@@ -253,7 +253,10 @@ export default function FraudeRgeVerifierPage() {
               Guide responsable — sources officielles France Rénov’ &amp; DGCCRF
             </span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5"
+          >
             Fraude RGE&nbsp;: comment vérifier qu’un artisan est vraiment certifié&nbsp;?
           </h1>
           <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">

@@ -83,7 +83,12 @@ export default async function PlanDuSitePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-2">Plan du site</h1>
+        <h1
+          data-speakable="true"
+          className="font-heading text-3xl font-bold text-charcoal-900 mb-2"
+        >
+          Plan du site
+        </h1>
         <p className="text-charcoal-500 mb-10">
           Retrouvez l'ensemble des pages de ServicesArtisans pour trouver votre artisan.
         </p>

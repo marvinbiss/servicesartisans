@@ -280,7 +280,10 @@ export default function MandataireVsDirectPage() {
               Guide neutre — code de l’énergie L221-x / R221-x
             </span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5"
+          >
             Obligé, délégataire, mandataire CEE&nbsp;: comprendre les 3 rôles du circuit
           </h1>
           <ArticleMeta

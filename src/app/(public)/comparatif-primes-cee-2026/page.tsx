@@ -303,7 +303,10 @@ export default function ComparatifPrimesCee2026Page() {
               Comparatif — Période 6 (2026-2030)
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             Comparatif primes CEE 2026&nbsp;: qui verse le plus&nbsp;? Qui paie le plus vite&nbsp;?
           </h1>
           <ArticleMeta
