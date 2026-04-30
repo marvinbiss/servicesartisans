@@ -86,7 +86,10 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
             {/* Info */}
             <div className="flex-1 min-w-0">
               {/* Name - font-heading text-2xl font-bold */}
-              <h1 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-1 tracking-tight">
+              <h1
+                data-speakable="true"
+                className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-1 tracking-tight"
+              >
                 {displayName}
                 <span className="sr-only">
                   {' '}
