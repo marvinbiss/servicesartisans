@@ -21,6 +21,7 @@ import {
   getHowToSchema,
 } from '@/lib/seo/jsonld'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
+import { getServicePriceSchema } from '@/lib/seo/blog-product-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
 import { getRelatedServiceLinks, getRelatedArticleSlugs } from '@/lib/seo/internal-links'
@@ -759,12 +760,15 @@ export default async function BlogArticlePage({ params }: PageProps) {
       })()
     : null
 
+  const servicePriceSchema = getServicePriceSchema(slug)
+
   const allSchemas = [
     breadcrumbSchema,
     ...schemas,
     speakableSchema,
     ...(faqSchema ? [faqSchema] : []),
     ...(howToSchema ? [howToSchema] : []),
+    ...(servicePriceSchema ? [servicePriceSchema] : []),
   ]
 
   const articleUrl = `${SITE_URL}/blog/${slug}`

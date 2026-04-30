@@ -87,6 +87,7 @@ const ALLOWED_TYPES = new Set([
   'ReviewRating',
   'MonetaryAmount',
   'UnitPriceSpecification',
+  'PriceSpecification',
   'OpeningHoursSpecification',
   // Financial / Gov
   'GovernmentService',

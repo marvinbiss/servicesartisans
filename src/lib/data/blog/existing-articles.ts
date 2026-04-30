@@ -579,9 +579,9 @@ export const existingArticles: Record<string, BlogArticle> = {
     title: 'Prix Plombier 2026 : Tarifs Horaires',
     excerpt:
       "Tarif horaire moyen, coût d'un dépannage, prix des installations... Tous les tarifs plomberie actualisés pour 2026.",
-    metaTitle: 'Prix Plombier 2026 : Tarifs Dépannage, Réparation et Devis Gratuit',
+    metaTitle: "Prix d'un plombier en 2026 : tarif horaire 45-95 €/h + 14 dépannages",
     metaDescription:
-      'Combien coûte un plombier en 2026 ? Tarifs dépannage, réparation, installation. Comparez les prix et demandez un devis gratuit immédiat.',
+      'Plombier 2026 : 45-95 €/h, fuite urgente 90-180 €, débouchage 120-280 €, chauffe-eau 800-2 200 €. Tarifs réels par région + devis gratuit en 2 min.',
     content: [
       "Les tarifs des plombiers évoluent chaque année en fonction de l'inflation, du coût des matériaux et de la demande. En 2026, les prix restent stables par rapport à 2025, avec une légère hausse de 2 à 3 % sur la main-d'œuvre. Voici le guide complet et actualisé des prix de plomberie pour vous aider à estimer votre budget et [comparer efficacement les devis](/blog/devis-travaux-comment-comparer-choisir). Trouvez un [plombier qualifié](/services/plombier) près de chez vous.",
       "## Tarif horaire moyen en 2026\n\n### Les fourchettes par région\n\nLe tarif horaire moyen d'un plombier en 2026 est de 45 à 75 euros HT en province et de 65 à 95 euros HT en Île-de-France. Ces tarifs n'incluent pas les fournitures ni les frais de déplacement.\n\n### Les frais de déplacement\n\nLe forfait déplacement varie de 20 à 50 € selon la distance. Certains plombiers l'incluent dans le tarif horaire, d'autres le facturent en supplément. Vérifiez ce point dans le devis.\n\n:::budget\n| Zone | Tarif horaire HT | Déplacement |\n| Province (ville moyenne) | 45 - 65 € | 20 - 30 € |\n| Grande métropole | 55 - 75 € | 25 - 40 € |\n| Île-de-France | 65 - 95 € | 30 - 50 € |\n:::",
@@ -921,9 +921,9 @@ export const existingArticles: Record<string, BlogArticle> = {
     title: 'Prix Électricien 2026 : Tarifs Travaux',
     excerpt:
       "Mise aux normes, installation, dépannage... Tous les prix des travaux d'électricité en 2026 pour estimer votre budget et comparer les devis.",
-    metaTitle: 'Prix Électricien 2026 : Tarif Horaire 40-85€/h + Mise aux Normes',
+    metaTitle: "Prix d'un électricien en 2026 : 40-85 €/h + 12 prestations chiffrées",
     metaDescription:
-      'Prix électricien 2026 : tarif horaire 40-85€, mise aux normes 80-150€/m², dépannage 90-200€. Tarifs détaillés par région et devis gratuit en 2 min.',
+      'Tarif horaire 40-85 €/h, mise aux normes 80-150 €/m², dépannage 90-200 €, tableau électrique 800-2 000 €. Comparatif 2026, 12 prestations + devis gratuit en 2 min.',
     content: [
       "Les travaux d'électricité sont parmi les plus techniques et les plus réglementés du bâtiment. Ils doivent obligatoirement être réalisés dans le respect de la [norme NF C 15-100](/blog/electricite-normes-securite) et, pour les installations neuves ou entièrement rénovées, validés par un contrôle Consuel. Voici le guide complet des prix d'un électricien en 2026. Trouvez un [électricien qualifié](/services/electricien) près de chez vous pour un devis gratuit.",
       "## Tarif horaire moyen\n\n### Les fourchettes par région\n\nLe tarif horaire moyen d'un électricien est de 40 à 65 euros HT en province et de 55 à 85 euros HT en Île-de-France. Ces tarifs couvrent la main-d'œuvre uniquement.\n\n:::budget\n| Zone | Tarif horaire HT |\n| Province | 40 - 65 € |\n| Grande métropole | 50 - 75 € |\n| Île-de-France | 55 - 85 € |\n:::",
@@ -1274,9 +1274,9 @@ export const existingArticles: Record<string, BlogArticle> = {
     title: 'PAC vs Chaudière Gaz 2026 : Comparatif',
     excerpt:
       "Coût d'installation, consommation, aides disponibles... Comparatif complet et objectif pour choisir entre pompe à chaleur et chaudière gaz.",
-    metaTitle: 'PAC vs Chaudière Gaz 2026 : le vrai comparatif',
+    metaTitle: 'PAC ou chaudière gaz en 2026 ? Comparatif coût, conso et aides',
     metaDescription:
-      'Pompe à chaleur vs chaudière gaz 2026 : coût, conso, aides. PAC 8 000-16 000€ vs gaz 2 500-8 000€. Quel retour sur investissement ?',
+      "PAC 8 000-16 000 € (5 000 € MaPrimeRénov') vs chaudière gaz 2 500-8 000 €. Conso, retour sur investissement, aides 2026. Le vrai comparatif chiffré.",
     content: [
       'Le choix du système de chauffage est crucial pour votre confort et votre budget sur le long terme. En 2026, la pompe à chaleur et la chaudière gaz à condensation restent les deux options les plus courantes en rénovation. Mais le contexte réglementaire et économique évolue rapidement. Voici un comparatif objectif pour faire le choix le plus adapté à votre situation. Consultez un [chauffagiste](/services/chauffagiste) ou un installateur de [pompe à chaleur](/services/pompe-a-chaleur) pour un devis personnalisé.',
       "## Pompe à chaleur air-eau\n\n### Performances et coûts\n\n- **Coût d'installation** : 8 000 à 16 000 € (équipement + pose)\n- **Coût annuel de fonctionnement** : 500 à 900 € pour 100 m²\n- **Durée de vie** : 15 à 20 ans\n- **COP moyen** : 3 à 4 (produit 3-4 kWh de chaleur pour 1 kWh consommé)\n- **Éligible à MaPrimeRénov'** : jusqu'à 5 000 € d'aide + CEE (2 500-4 000 €)\n\n### Avantages\n\n- Économies d'énergie de 50-70 % par rapport au gaz\n- Fonction réversible (climatisation en été)\n- Éligible à toutes les aides\n- Énergie renouvelable, faibles émissions CO2\n\n### Inconvénients\n\n- Investissement initial élevé\n- Performances réduites par grand froid (< -7 °C)\n- Nuisance sonore de l'unité extérieure\n- Entretien spécialisé tous les 2 ans\n\n:::tip Conseil pro\nOptez pour une PAC haute température si vos radiateurs sont anciens (dimensionnés pour 65-70 °C). Une PAC basse température (35-45 °C) est idéale avec un plancher chauffant ou des radiateurs basse consommation.\n:::",

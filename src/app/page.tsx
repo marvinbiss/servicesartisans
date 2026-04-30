@@ -30,8 +30,8 @@ export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 2
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : "Des milliers d'"
-  const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés`
-  const metaDescription = `Trouvez un artisan qualifié parmi ${countStr} professionnels vérifiés SIREN. Plombier, électricien, serrurier : 101 départements couverts. Devis gratuit.`
+  const absoluteTitle = `ServicesArtisans : annuaire de ${countStr} artisans français vérifiés SIREN`
+  const metaDescription = `ServicesArtisans, l'annuaire des ${countStr} artisans français référencés SIREN. Plombier, électricien, serrurier dans 101 départements. Devis gratuit en 2 min.`
   return {
     title: { absolute: absoluteTitle },
     description: metaDescription,
@@ -70,7 +70,7 @@ export default async function HomePage() {
     return (
       <div className="min-h-screen">
         <h1 className="sr-only">
-          {cmsPage.title || "L'annuaire des artisans qualifiés en France"}
+          {cmsPage.title || 'ServicesArtisans — annuaire des artisans français vérifiés SIREN'}
         </h1>
         <section className="py-12">
           <div className="max-w-6xl mx-auto px-4">
@@ -112,14 +112,44 @@ export default async function HomePage() {
           },
         }
       : null
+  const artisanCount = homepageData.artisanCount || 0
+  const countStrSchema =
+    artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : 'plusieurs milliers'
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': SITE_URL,
+    url: SITE_URL,
+    name: 'ServicesArtisans',
+    description: `Annuaire des ${countStrSchema} artisans français référencés SIREN.`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
+    about: { '@id': `${SITE_URL}#organization` },
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/opengraph-image`,
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL }],
+    },
+  }
 
   return (
     <div className="min-h-screen">
-      {/* Homepage-specific JSON-LD: WebSite + FAQ + ItemList + AggregateRating */}
-      <JsonLd data={[faqSchema, itemListSchema, aggregateRatingSchema]} />
+      {/* Homepage-specific JSON-LD: WebPage + FAQ + ItemList + AggregateRating */}
+      <JsonLd data={[webPageSchema, faqSchema, itemListSchema, aggregateRatingSchema]} />
 
-      {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
-      <h1 className="sr-only">L'annuaire des artisans qualifiés en France</h1>
+      {/* H1 visible above-fold — brand-first pour ranking exact match.
+          Le hero ClayHeroSearch n'a pas de H1 propre, donc on en émet un
+          ici en bandeau sobre, accessible et indexable. */}
+      <header className="bg-white border-b border-sand-200">
+        <div className="max-w-6xl mx-auto px-4 py-5 md:py-6">
+          <h1 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 tracking-tight text-center md:text-left">
+            ServicesArtisans — annuaire des artisans français vérifiés SIREN
+          </h1>
+        </div>
+      </header>
 
       {/* ─── TRUST BAR — indicateurs clés (artisans, avis, SIREN, départements) ─── */}
       <TrustBar />

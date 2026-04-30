@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleTemplates = [
     `${trade.name} ${region.name} 2026 — Devis Gratuit 24h`,
     `${trade.name} ${region.name} 2026 — ${deptCount} départements`,
-    `${trade.name} ${getRegionPreposition(region.name)} 2026 : pros vérifiés`,
+    `${trade.name} ${getRegionPreposition(region.name)} 2026 : pros référencés SIREN`,
     `${trade.name} ${region.name} 2026 — Tarifs + Devis Gratuit`,
     `${trade.name} ${region.name} 2026 : comparez les pros`,
   ]

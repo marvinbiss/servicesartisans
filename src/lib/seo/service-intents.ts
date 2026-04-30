@@ -257,14 +257,14 @@ export function getIntentH1Variants(intent: ServiceIntent, ctx: H1Context): stri
   return hasProviders
     ? [
         `${serviceName} à ${locationName}`,
-        `${serviceName} à ${locationName} : pros vérifiés`,
+        `${serviceName} à ${locationName} : pros référencés SIREN`,
         `${serviceName} à ${locationName} — ${providerCount} pros référencés`,
         `${serviceName} à ${locationName}${deptSuffix}`,
         `${titleCasePlural} de confiance à ${locationName}`,
       ]
     : [
         `${serviceName} à ${locationName}`,
-        `${serviceName} à ${locationName} : pros vérifiés`,
+        `${serviceName} à ${locationName} : pros référencés SIREN`,
         `${serviceName} à ${locationName} — Artisans qualifiés`,
         `${serviceName} à ${locationName}${deptSuffix}`,
         `${titleCasePlural} de confiance à ${locationName}`,

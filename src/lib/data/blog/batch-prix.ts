@@ -370,9 +370,9 @@ export const prixArticles: Record<string, BlogArticle> = {
     title: 'Prix Menuisier 2026 : Tarifs Travaux',
     excerpt:
       'Tarifs menuisier 2026 : portes, fenêtres, escaliers, placards sur mesure. Tous les prix détaillés. Devis gratuit.',
-    metaTitle: 'Prix Menuisier 2026 : 35-70€/h — Tarifs détaillés',
+    metaTitle: "Prix d'un menuisier en 2026 : 35-70 €/h + 11 prestations",
     metaDescription:
-      'Tarifs menuisier 2026 : fenêtres 300-1 200€, escalier 2 000-8 000€, dressing sur mesure 1 500-5 000€. Prix réels + devis gratuit.',
+      'Menuisier 2026 : pose fenêtre 300-1 200 €, porte intérieure 250-900 €, escalier sur mesure 2 000-8 000 €, dressing 1 500-5 000 €. Prix réels + devis gratuit.',
     content: [
       "Vous souhaitez remplacer vos fenêtres vieillissantes, installer un escalier sur mesure ou aménager un dressing fonctionnel ? La menuiserie est un poste de dépenses souvent sous-estimé, avec des écarts de prix qui peuvent aller du simple au quintuple selon les matériaux et le niveau de finition. En 2026, le marché reste dynamique, porté par la rénovation énergétique (remplacement de fenêtres) et la demande croissante d'agencements sur mesure qui optimisent chaque mètre carré. Ce guide complet vous donne les **vrais tarifs** pratiqués pour chaque type de prestation. Comparez les tarifs de [menuisiers qualifiés dans votre ville](/services/menuisier).",
 
@@ -646,9 +646,9 @@ export const prixArticles: Record<string, BlogArticle> = {
     ],
   },
   'prix-macon-2026-gros-oeuvre-renovation': {
-    metaTitle: 'Prix Maçon 2026 : 40-85€/h — Gros œuvre et réno',
+    metaTitle: "Prix d'un maçon en 2026 : 40-85 €/h + gros œuvre, dalle, mur",
     metaDescription:
-      'Tarifs maçon 2026 : fondations 100-200€/ml, mur parpaing 50-100€/m², dalle béton 60-120€/m². Prix réels par prestation.',
+      'Maçon 2026 : fondations 100-200 €/ml, mur parpaing 50-100 €/m², dalle béton 60-120 €/m², ouverture mur porteur 1 800-4 000 €. 14 prix + devis gratuit.',
     title: 'Prix Maçon 2026 : Gros Œuvre et Rénovation',
     excerpt:
       'Tarifs maçon 2026 : construction, rénovation, fondations, murs porteurs. Prix détaillés et réalistes. Devis gratuit.',
@@ -1238,9 +1238,9 @@ export const prixArticles: Record<string, BlogArticle> = {
     title: 'Prix Cuisiniste 2026 : Cuisine Équipée',
     excerpt:
       'Prix cuisine équipée 2026 : du premier prix au haut de gamme. Tarifs fourniture et pose complète. Devis gratuit.',
-    metaTitle: 'Prix Cuisine Équipée 2026 : 3 000-40 000€',
+    metaTitle: "Prix d'une cuisine équipée en 2026 : 3 000-40 000 € (pose + fourniture)",
     metaDescription:
-      'Prix cuisine 2026 : entrée de gamme 3 000-6 000€, milieu 6 000-15 000€, haut de gamme 15 000€+. Tarifs pose + fourniture détaillés.',
+      'Cuisine 2026 : entrée de gamme 3 000-6 000 €, milieu 6 000-15 000 €, haut de gamme 15 000 €+. Détail pose, plan de travail, électroménager. Devis 2 min.',
     content: [
       "La cuisine est la pièce que vous utilisez 3 à 5 heures par jour, tous les jours. C'est aussi celle dont la rénovation génère le **meilleur retour sur investissement** : une cuisine refaite augmente la valeur d'un bien de 10 à 15 % selon les agents immobiliers. Mais entre une cuisine en kit à 3 000 € et un aménagement sur mesure à 40 000 €, comment s'y retrouver ? En 2026, les prix varient considérablement selon le niveau de gamme, les matériaux et la complexité de l'installation. Ce guide vous aide à **budgéter chaque poste** avec précision. Consultez notre annuaire de [cuisinistes professionnels](/services/cuisiniste) pour comparer les offres.",
 
@@ -1989,9 +1989,9 @@ export const prixArticles: Record<string, BlogArticle> = {
     title: 'Prix Installation Électrique 2026 : Tarifs',
     excerpt:
       'Installation électrique neuve : de 80 à 120 €/m² en 2026. Tableau, câblage, prises, domotique. Comparez les devis gratuits.',
-    metaTitle: 'Prix Électricité Neuve 2026 : 80-150€/m²',
+    metaTitle: 'Prix installation électrique neuve en 2026 : 80-150 €/m² tout compris',
     metaDescription:
-      'Prix installation électrique 2026 : neuf 8 000-15 000€ (100m²), mise aux normes 80-150€/m², domotique 1 000-20 000€. Devis gratuit.',
+      'Installation électrique 2026 : 8 000-15 000 € pour 100 m² (neuf), 80-150 €/m² (mise aux normes), 1 000-20 000 € (domotique), conformité NF C 15-100. Devis gratuit.',
     content: [
       "L'installation électrique est un poste technique majeur dans toute construction neuve ou rénovation lourde. En 2026, la norme NF C 15-100 impose des exigences strictes en matière de sécurité et de confort, tandis que la domotique transforme progressivement nos habitations. Ce guide détaille les tarifs des électriciens pour tous les types de prestations. Trouvez un [électricien certifié près de chez vous](/services/electricien).",
       "## Tarif horaire d'un électricien",

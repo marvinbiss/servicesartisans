@@ -129,9 +129,11 @@ export function getWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${SITE_URL}#website`,
     name: SITE_NAME,
     alternateName: ['servicesartisans.fr'],
     url: SITE_URL,
+    inLanguage: 'fr-FR',
     publisher: { '@id': `${SITE_URL}#organization` },
     potentialAction: {
       '@type': 'SearchAction',
