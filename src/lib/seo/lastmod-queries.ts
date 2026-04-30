@@ -14,7 +14,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
-import { villes } from '@/lib/data/france'
+import { villes, departements } from '@/lib/data/france'
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
@@ -462,16 +462,19 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
     }
   }
 
-  // Lazy-load the allowlist + service-to-specialty mapping. Importing at the
-  // top of this file would create a cycle (service-city-listings depends on
-  // @/lib/supabase which is mocked in tests of this file).
+  // Lazy-load (cycle prevention identical to before).
   let RGE_ALLOWED_SERVICES: readonly string[] = []
-  let SERVICE_TO_SPECIALTIES: Record<string, string[]> = {}
+  let getRgeServicesFromQualifications: (
+    q: unknown,
+    s: string | null | undefined,
+    a: readonly string[]
+  ) => string[] = () => []
   try {
     const rgeMod = await import('@/lib/rge/service-city-listings')
     RGE_ALLOWED_SERVICES = rgeMod.RGE_ALLOWED_SERVICES
-    const supaMod = await import('@/lib/supabase')
-    SERVICE_TO_SPECIALTIES = supaMod.SERVICE_TO_SPECIALTIES
+    const matcherMod = await import('@/lib/rge/qualification-matcher')
+    getRgeServicesFromQualifications =
+      matcherMod.getRgeServicesFromQualifications as typeof getRgeServicesFromQualifications
   } catch {
     return {
       rgeServiceCity: null,
@@ -481,24 +484,24 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
     }
   }
 
-  // Reverse lookup: specialty → RGE service slugs (keep only RGE-allowed).
-  const specialtyToRgeSlugs = new Map<string, string[]>()
-  for (const slug of RGE_ALLOWED_SERVICES) {
-    const specs = SERVICE_TO_SPECIALTIES[slug] || [slug]
-    for (const sp of specs) {
-      const norm = normalizeKey(sp)
-      const existing = specialtyToRgeSlugs.get(norm)
-      if (existing) {
-        if (!existing.includes(slug)) existing.push(slug)
-      } else {
-        specialtyToRgeSlugs.set(norm, [slug])
-      }
-    }
-  }
-
+  // Lookup ville: nom normalisé → slug.
   const cityToSlug = new Map<string, string>()
   for (const v of villes) {
     cityToSlug.set(normalizeKey(v.name), v.slug)
+  }
+
+  // Lookup département : on indexe par TOUTES les valeurs plausibles que la
+  // colonne DB `address_department` peut contenir (code numérique '69',
+  // code DOM '971', nom 'Rhône'/'Guadeloupe' avec accent, nom normalisé
+  // 'rhone'). WHY : avant le refactor, on indexait par `normalizeKey(dept)`
+  // depuis la DB ET on consommait avec `normalizeName(dept.name)` côté
+  // sitemap — résultat 1 seul match sur 1 414 attendus parce que la DB
+  // stocke souvent le code ('69') alors que la lookup demandait 'rhone'.
+  const deptValueToSlug = new Map<string, string>()
+  for (const d of departements) {
+    deptValueToSlug.set(d.code, d.slug)
+    deptValueToSlug.set(normalizeKey(d.name), d.slug)
+    deptValueToSlug.set(d.slug, d.slug)
   }
 
   try {
@@ -509,22 +512,19 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
     const today = new Date().toISOString().slice(0, 10)
     const pageSize = 1000
     let from = 0
-    // Cap defensively: ~60k unique RGE SIRET today per memory, ~10× safety.
     const maxRows = 600_000
 
     while (from < maxRows) {
       const { data, error } = await supabase
         .from('providers')
-        .select('specialty, address_city, address_department, updated_at')
+        .select('specialty, address_city, address_department, rge_qualifications, updated_at')
         .eq('is_active', true)
         .eq('noindex', false)
-        .not('specialty', 'is', null)
         .not('rge_qualifications', 'is', null)
         .gte('rge_valid_until', today)
         .range(from, from + pageSize - 1)
 
       if (error) {
-        // Fail-open on any query error.
         return {
           rgeServiceCity: null,
           rgeServiceDept: null,
@@ -538,20 +538,25 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
         const specialty = row.specialty as string | null
         const city = row.address_city as string | null
         const dept = row.address_department as string | null
+        const qualifs = row.rge_qualifications as unknown
         const updatedAt = toDateStr(row.updated_at as string | null | undefined)
-        if (!specialty) continue
 
-        const svcSlugs = specialtyToRgeSlugs.get(normalizeKey(specialty))
-        if (!svcSlugs || svcSlugs.length === 0) continue
+        // Source unifiée des services RGE éligibles : qualifs[] (catégorie) +
+        // specialty NAF directe. Fix racine du bug "shards à 1-143 URLs" :
+        // un artisan `specialty='chauffagiste'` avec qualif QualiPAC est
+        // désormais émis dans /rge/pompe-a-chaleur/[v] (catégorie 'pac' →
+        // mapping CATEGORY_TO_RGE_SERVICES).
+        const services = getRgeServicesFromQualifications(qualifs, specialty, RGE_ALLOWED_SERVICES)
+        if (services.length === 0) continue
 
-        // City combo — strip arrondissement suffix so Paris/Lyon/Marseille map.
+        // City combo — strip arrondissement suffix (Paris/Lyon/Marseille).
         if (city) {
           const cityKey = normalizeKey(city)
             .replace(/\s+\d+\s*(er|e|eme|ieme)?\s*(arr|arrondissement)?\.?\s*$/, '')
             .trim()
           const villeSlug = cityToSlug.get(cityKey)
           if (villeSlug) {
-            for (const svcSlug of svcSlugs) {
+            for (const svcSlug of services) {
               const key = `${svcSlug}::${villeSlug}`
               rgeServiceCity.add(key)
               if (updatedAt) {
@@ -562,16 +567,22 @@ export async function getQualifiedRgeCombos(): Promise<RgeQualifiedCombos> {
           }
         }
 
-        // Dept combo — normalize department name (matches departements[].slug
-        // via separate lookup built by the caller since dept slug ≠ name).
+        // Dept combo — résolution multi-format (code + nom normalisé) → slug.
         if (dept) {
-          const deptKey = normalizeKey(dept)
-          for (const svcSlug of svcSlugs) {
-            const key = `${svcSlug}::${deptKey}`
-            rgeServiceDept.add(key)
-            if (updatedAt) {
-              const prev = rgeLastmodServiceDept.get(key)
-              if (!prev || updatedAt > prev) rgeLastmodServiceDept.set(key, updatedAt)
+          const deptKeyRaw = dept.trim()
+          const deptSlug =
+            deptValueToSlug.get(deptKeyRaw) ?? deptValueToSlug.get(normalizeKey(deptKeyRaw))
+          if (deptSlug) {
+            for (const svcSlug of services) {
+              // Indexé par dept.slug (consommateur sitemap utilise dept.slug
+              // via `normalizeName(dept.name)` → on garde ce format pour
+              // backward compat avec le call site existant).
+              const key = `${svcSlug}::${deptSlug}`
+              rgeServiceDept.add(key)
+              if (updatedAt) {
+                const prev = rgeLastmodServiceDept.get(key)
+                if (!prev || updatedAt > prev) rgeLastmodServiceDept.set(key, updatedAt)
+              }
             }
           }
         }

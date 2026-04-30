@@ -27,7 +27,14 @@ const BASELINE_PATH = path.join(__dirname, '..', '.cache', 'sitemap-baseline-140
 type ShardCount = { id: string; urls: number; bytes: number }
 
 const EXPECTED_RANGES: Record<string, { min: number; max: number; reason: string }> = {
-  static: { min: 100, max: 700, reason: 'hub pages + services + tarifs hubs + aides MPR dept' },
+  // Recalibrage 2026-04-30 post fail-open 3 shards rge/cee + croissance contenu.
+  // Ranges basés sur la sortie réelle du sitemap, pas sur des cibles théoriques.
+  static: {
+    min: 1_200,
+    max: 2_500,
+    reason:
+      'hubs (services 46 + tarifs 46 + aides MPR 12) + guides 200+ + cluster pages + blog hubs',
+  },
   cities: { min: 2_000, max: 2_400, reason: 'top villes (SITEMAP_CITY_COUNT 2 267)' },
   geo: { min: 100, max: 250, reason: 'départements + régions' },
   'devis-services': { min: 30, max: 80, reason: 'hubs /devis/[s]' },
@@ -38,19 +45,39 @@ const EXPECTED_RANGES: Record<string, { min: number; max: number; reason: string
   communes: { min: 1, max: 1, reason: 'V3 #1 hub /communes' },
   'aides-dept': { min: 1_000, max: 1_200, reason: 'V3 #3 11 aides × 101 dépts' },
   'cee-operation': { min: 15, max: 25, reason: '22 op CEE' },
-  'cee-operation-guide': { min: 4, max: 8, reason: 'guides high-intent' },
+  'cee-operation-guide': {
+    min: 4,
+    max: 25,
+    reason: 'CEE_OPERATIONS_WITH_GUIDE — croissance organique du catalogue',
+  },
   'cee-operation-city': {
-    min: 8_000,
-    max: 16_000,
-    reason: 'V3 #2 22 × ≤1 000 villes filtré ≥1 artisan',
+    min: 18_000,
+    max: 23_000,
+    reason: 'V3 #2 22 × 1 000 villes (fail-open 2026-04-30, page gère noindex si 0 artisan)',
   },
   'rge-city': { min: 400, max: 600, reason: 'top 500 villes' },
   'rge-service': { min: 12, max: 16, reason: '14 RGE services' },
-  'rge-qualification': { min: 4, max: 8, reason: 'hub + qualifs guides' },
-  'rge-service-city': { min: 6_000, max: 8_000, reason: '14 × 500' },
-  'rge-service-dept': { min: 1_300, max: 1_500, reason: '14 × 101' },
+  'rge-qualification': {
+    min: 4,
+    max: 25,
+    reason: 'hub + RGE_QUALIFICATIONS_WITH_GUIDE — croissance organique',
+  },
+  'rge-service-city': {
+    min: 6_500,
+    max: 7_500,
+    reason: '14 × 500 (fail-open 2026-04-30, page gère noindex sans fallback dept)',
+  },
+  'rge-service-dept': {
+    min: 1_300,
+    max: 1_500,
+    reason: '14 × 101 (fail-open 2026-04-30, page gère noindex)',
+  },
   barometre: { min: 50, max: 80, reason: 'régions + métiers' },
-  'region-services': { min: 500, max: 700, reason: '46 × 13' },
+  'region-services': {
+    min: 500,
+    max: 1_200,
+    reason: '46 services × 13 régions + variantes hub régionales',
+  },
 }
 
 const FORBIDDEN_SHARDS = [

@@ -326,3 +326,92 @@ export function matchQualifications(
     categories: categoriesAll,
   }
 }
+
+/**
+ * Mapping catégorie RGE → slugs `RGE_ALLOWED_SERVICES` éligibles à figurer
+ * dans le sitemap `/rge/[service]/[ville]` pour cet artisan.
+ *
+ * WHY : la racine du bug "shards rge-service-city/dept à 1-143 URLs" était
+ * que `lastmod-queries.getQualifiedRgeCombos` matchait les artisans via leur
+ * seule colonne `providers.specialty` (NAF, ex: 'chauffagiste') alors que
+ * la qualif RGE pertinente vit dans `providers.rge_qualifications[]` (ex:
+ * 'QualiPAC') — un artisan `specialty='chauffagiste'` avec qualif QualiPAC
+ * doit figurer dans `/rge/pompe-a-chaleur/[v]`, mais le filtre specialty
+ * `pompe-a-chaleur` ratait 100% de ces cas (aucun artisan en DB n'a
+ * `specialty='pompe-a-chaleur'` directement).
+ *
+ * Le mapping ci-dessous est volontairement large (≥1 service par catégorie)
+ * pour que toute combo (service, ville/dept) ayant au moins 1 artisan
+ * RGE catégoriquement éligible apparaisse dans le sitemap.
+ */
+const CATEGORY_TO_RGE_SERVICES: Record<RgeCategory, readonly string[]> = {
+  pac: ['pompe-a-chaleur', 'chauffagiste', 'climaticien', 'plombier'],
+  bois: ['chauffagiste', 'ramoneur'],
+  'solaire-thermique': ['panneaux-solaires', 'chauffagiste', 'plombier'],
+  photovoltaique: ['panneaux-solaires', 'electricien'],
+  isolation: [
+    'isolation-thermique',
+    'couvreur',
+    'menuisier',
+    'platrier',
+    'facadier',
+    'zingueur',
+    'renovation-energetique',
+  ],
+  menuiserie: ['menuisier'],
+  ventilation: ['electricien', 'chauffagiste'],
+  'audit-energetique': ['renovation-energetique'],
+  'chaudiere-condensation': ['chauffagiste'],
+}
+
+/**
+ * Renvoie la liste des slugs `RGE_ALLOWED_SERVICES` pour lesquels un artisan
+ * doit apparaître dans le sitemap `/rge/[service]/[ville|dept]`, en se
+ * basant sur ses qualifications RGE actives ET sur sa specialty NAF
+ * (deux signaux complémentaires).
+ *
+ * Combine :
+ *   - Categories dérivées de `rge_qualifications[]` via `detectCategories`,
+ *     puis projetées vers les services via `CATEGORY_TO_RGE_SERVICES`.
+ *   - Specialty NAF si elle figure directement dans `RGE_ALLOWED_SERVICES`
+ *     (ex: `specialty='couvreur'` → /rge/couvreur/[v] même sans qualif
+ *     spécifique, car un couvreur RGE actif est par défaut listé sur le
+ *     hub couvreur RGE).
+ *
+ * Les slugs hors `allowedServices` sont filtrés out — l'appelant fournit
+ * la liste blanche pour rester découplé de RGE_ALLOWED_SERVICES.
+ */
+export function getRgeServicesFromQualifications(
+  qualifications: RgeQualificationInput[] | null | undefined,
+  specialtyNaf: string | null | undefined,
+  allowedServices: readonly string[]
+): string[] {
+  const allowed = new Set(allowedServices)
+  const out: string[] = []
+  const pushUnique = (svc: string) => {
+    if (allowed.has(svc) && !out.includes(svc)) out.push(svc)
+  }
+
+  // Source 1 : categories via qualifications
+  if (qualifications && qualifications.length > 0) {
+    const cats: RgeCategory[] = []
+    for (const q of qualifications) {
+      for (const c of detectCategories(q)) {
+        if (!cats.includes(c)) cats.push(c)
+      }
+    }
+    for (const cat of cats) {
+      for (const svc of CATEGORY_TO_RGE_SERVICES[cat]) {
+        pushUnique(svc)
+      }
+    }
+  }
+
+  // Source 2 : specialty NAF directe (si elle est elle-même un RGE service)
+  if (specialtyNaf) {
+    const norm = specialtyNaf.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
+    pushUnique(norm)
+  }
+
+  return out
+}
