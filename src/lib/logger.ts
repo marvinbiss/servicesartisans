@@ -1,7 +1,20 @@
 /**
  * Professional Logger - ServicesArtisans
  * Centralized logging with environment-aware output
+ *
+ * Audit 2026-04-30 (incident "Cron 1h Error" invisibles à Sentry) :
+ * `logger.error()` ne forwardait pas les erreurs à Sentry — seul
+ * `console.error()` était appelé, ce qui laissait les Vercel logs
+ * comme unique source de vérité (90j retention, pas d'alerting).
+ * On branche désormais `captureError` automatiquement sur `logger.error()`
+ * pour homogénéiser : 1 appel = 1 trace Vercel + 1 event Sentry.
+ *
+ * Idempotent : `captureError` est no-op si Sentry n'est pas initialisé
+ * (pas de DSN en dev/test). Wrapped en try/catch pour ne JAMAIS faire
+ * échouer un log à cause d'une erreur Sentry réseau/runtime.
  */
+
+import { captureError } from './monitoring/sentry'
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 
@@ -125,6 +138,20 @@ function createLogger(defaultContext?: LogContext): AppLogger {
         console.error(
           formatMessage('error', message, { ...mergeContext(context), error: errorDetails })
         )
+        // Forward to Sentry — only when an underlying error is provided.
+        // Pure-message errors (logger.error('something happened')) restent en
+        // console-only pour éviter de polluer Sentry de noise sans stack.
+        if (error !== undefined && process.env.NODE_ENV === 'production') {
+          try {
+            captureError(error, {
+              tags: { logger_message: message.slice(0, 80) },
+              extras: { context: maskPiiDeep(mergeContext(context) ?? {}) },
+              level: 'error',
+            })
+          } catch {
+            // Sentry capture must NEVER break logging itself.
+          }
+        }
       }
     },
 
