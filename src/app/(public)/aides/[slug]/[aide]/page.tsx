@@ -6,6 +6,8 @@ import { ArrowRight, Calculator, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import LastUpdated from '@/components/seo/LastUpdated'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import AideMontants from '@/components/aides/AideMontants'
 import AideEligibilite from '@/components/aides/AideEligibilite'
 import AideDemarche from '@/components/aides/AideDemarche'
@@ -14,6 +16,7 @@ import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
 import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
+import { authors } from '@/lib/data/authors'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
 import { getDepartementBySlug } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
@@ -165,11 +168,43 @@ export default async function AideDeptPage({ params }: PageProps) {
     }
   )
 
+  // Sprint ULTRA YMYL — Article+Speakable, byline Person, dateModified =
+  // aide.lastReviewed (date éditoriale honnête, pas fake freshness).
+  const author = authors['claire-dubois']
+  const reviewedIso = `${aide.lastReviewed}T00:00:00+02:00`
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${aide.name} ${dept.name} ${dept.code} — barèmes 2026`,
+    image: [`${SITE_URL}/og-aides-${aide.slug}.jpg`, `${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: reviewedIso,
+    author: { '@type': 'Person', name: author.name, url: `${SITE_URL}/equipe/${author.slug}` },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}${path}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const tldrBullets: string[] = [
+    `${aide.name} ${getDeptPreposition(dept.name)} ${dept.name} (${dept.code}) — aide nationale, barèmes identiques sur tout le territoire.`,
+    `Cumulable avec MaPrimeRénov', CEE, TVA 5,5 % et éco-PTZ dans la limite de 100 % du devis TTC.`,
+    `Zone climatique ${zoneLabel} — impacte les primes CEE associées (modulées H1/H2/H3), pas ${aide.name} elle-même.`,
+    `Artisan RGE obligatoire pour la majorité des travaux éligibles. Vérification quotidienne base ADEME.`,
+  ]
+
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={placeSchema} />
       <JsonLd data={aideMainSchema} />
+      <JsonLd data={articleSchema} />
       {faqSchema ? <JsonLd data={faqSchema} /> : null}
       {howToSchema ? <JsonLd data={howToSchema} /> : null}
 
@@ -183,6 +218,16 @@ export default async function AideDeptPage({ params }: PageProps) {
             ]}
           />
 
+          <EnBrefBox
+            summary={`${aide.name} ${getDeptPreposition(dept.name)} ${dept.name} (${dept.code}) — barèmes 2026, conditions d'éligibilité, démarche pas-à-pas et artisans RGE locaux. ${aide.tagline}`}
+            keyPoints={[
+              `Aide nationale — barèmes identiques sur tout le territoire`,
+              `Cumul possible MaPrimeRénov' + CEE + TVA 5,5 % + éco-PTZ`,
+              `Zone climatique ${zoneLabel} (impact CEE associés)`,
+              `Artisan RGE obligatoire — vérification quotidienne ADEME`,
+            ]}
+          />
+
           <header className="mt-6 mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900">
               {aide.name} {getDeptPreposition(dept.name)} {dept.name} ({dept.code}) — 2026
@@ -190,6 +235,19 @@ export default async function AideDeptPage({ params }: PageProps) {
             <p className="mt-3 text-charcoal-700">{aide.description}</p>
             <p className="mt-2 flex items-center gap-2 text-sm text-charcoal-600">
               <MapPin className="h-4 w-4" /> Région : {dept.region} · Zone climatique {zoneLabel}
+            </p>
+            <p className="mt-3 text-sm text-charcoal-500">
+              Auteur : <span className="font-medium text-charcoal-700">{author.name}</span>
+              {' · '}
+              Mis à jour le{' '}
+              <time dateTime={aide.lastReviewed}>
+                {new Date(reviewedIso).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  timeZone: 'Europe/Paris',
+                })}
+              </time>
             </p>
           </header>
 
@@ -221,6 +279,13 @@ export default async function AideDeptPage({ params }: PageProps) {
             >
               Lancer le simulateur <ArrowRight className="h-4 w-4" />
             </Link>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="sr-only">
+              L’essentiel de {aide.name} {getDeptPreposition(dept.name)} {dept.name}
+            </h2>
+            <TldrBlock bullets={tldrBullets} />
           </section>
 
           <section className="mb-8">
