@@ -742,10 +742,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
       alternates: getAlternates(canonicalPath),
     }
-  } catch {
-    // Don't noindex on transient DB errors — ISR will retry and Google will recrawl.
-    // Returning index:true prevents permanent noindex from temporary failures.
-    return { title: 'Artisan non trouvé' }
+  } catch (err) {
+    // Re-throw Next.js control-flow signals — sinon `notFound()` ligne 631
+    // est avalé et la page renvoie 200 avec title "Artisan non trouvé"
+    // (soft 404 indexable, cf. GSC : 1 854 imp pos 5.9 CTR 0% sur fiches
+    // supprimées).
+    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    // Vraies erreurs DB transitoires : noindex défensif. Le commentaire
+    // initial postulait qu'ISR retenterait ; en pratique le cache fige
+    // un title cassé pour 24h et Google indexe entre-temps. Mieux vaut
+    // un noindex temporaire (ISR re-render = nouveau metadata propre).
+    return {
+      title: 'Artisan non trouvé',
+      robots: { index: false, follow: true },
+    }
   }
 }
 
