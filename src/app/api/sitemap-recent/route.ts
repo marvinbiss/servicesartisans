@@ -5,6 +5,7 @@ import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
+import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 
 // Allowlists matérialisées une seule fois (module load) pour éviter le
 // rebuild des Set à chaque requête sitemap-recent.
@@ -75,6 +76,7 @@ export async function GET(request: Request) {
       const seenAvisCity = new Set<string>()
       const seenRgeServiceCity = new Set<string>()
       const seenServiceHub = new Set<string>()
+      const seenCeeOpCity = new Set<string>()
 
       for (const p of recentProviders) {
         const lastmod = new Date(p.updated_at).toISOString().split('T')[0]
@@ -179,6 +181,28 @@ export async function GET(request: Request) {
                 changefreq: 'daily',
                 priority: '0.7',
               })
+            }
+
+            // CEE \u00d7 city \u2014 pour chaque op\u00e9ration CEE \u00e9ligible au m\u00e9tier RGE
+            // du provider. /cee/{op}/{ville} couvre 9.5K URLs et profite du
+            // signal de fra\u00eecheur d\u00e8s qu'un artisan RGE \u00e9ligible CEE bouge
+            // dans la zone (nouveau dossier, nouvelle qualif, etc.).
+            //
+            // Note : on lower-case le code CEE \u2014 les URLs prod sont
+            // `/cee/bar-th-171/{ville}` (slug normalis\u00e9), pas l'uppercase.
+            const ceeOps = getCeeOpsForRgeService(service)
+            for (const ceeOp of ceeOps) {
+              const opSlug = ceeOp.code.toLowerCase()
+              const keyCee = `${opSlug}::${city}`
+              if (!seenCeeOpCity.has(keyCee)) {
+                seenCeeOpCity.add(keyCee)
+                urls.push({
+                  loc: `${SITE_URL}/cee/${opSlug}/${city}`,
+                  lastmod,
+                  changefreq: 'daily',
+                  priority: '0.6',
+                })
+              }
             }
           }
         }

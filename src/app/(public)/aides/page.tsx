@@ -6,6 +6,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import LastUpdated from '@/components/seo/LastUpdated'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { aidesCatalog } from '@/lib/aides/aides-catalog'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -95,8 +97,50 @@ export default function AidesHubPage() {
     publisher: { '@id': `${SITE_URL}#organization` },
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: HUB_TITLE,
+    description: HUB_DESCRIPTION,
+    url: `${SITE_URL}${PATH}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: REVIEW_DATE,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}${PATH}` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${aidesCatalog.length} aides nationales recensées (subventions, primes, prêts, fiscalité)`,
+    `Cumul possible MaPrimeRénov' + CEE + TVA 5,5 % + éco-PTZ`,
+    `Artisan certifié RGE obligatoire pour la majorité des dispositifs`,
+    `Sources : ANAH, ADEME, gouv.fr — révision mensuelle`,
+  ]
+
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema as Record<string, unknown>,
+    articleSchema as Record<string, unknown>,
     webPageSchema as Record<string, unknown>,
     itemListSchema as Record<string, unknown>,
   ]
@@ -113,7 +157,10 @@ export default function AidesHubPage() {
             <Compass className="w-4 h-4 text-emerald-300" aria-hidden="true" />
             <span className="text-sm font-medium text-emerald-100">Hub aides 2026</span>
           </div>
-          <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
             {HUB_TITLE}
           </h1>
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
@@ -143,7 +190,14 @@ export default function AidesHubPage() {
       </section>
 
       <section className="bg-white py-10 border-b border-charcoal-100">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6">
+          <ArticleMeta
+            author={AUTHOR?.name ?? 'Équipe éditoriale ServicesArtisans'}
+            authorHref={AUTHOR ? `/equipe/${AUTHOR.slug}` : '/a-propos'}
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={REVIEW_DATE}
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
           <TldrBlock title="L'essentiel des aides 2026" bullets={tldrBullets} />
         </div>
       </section>

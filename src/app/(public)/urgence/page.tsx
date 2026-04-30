@@ -23,6 +23,10 @@ import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { villes, services } from '@/lib/data/france'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -196,8 +200,55 @@ export default async function UrgencePage() {
     )
   }
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Artisan Urgence — Dépannage rapide ${new Date().getFullYear()}`,
+    description: `Plombier, électricien, serrurier, chauffagiste en urgence. Intervention rapide soir & week-end dans ${villes.length}+ villes, devis transparent.`,
+    url: `${SITE_URL}/urgence`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/urgence` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `4 métiers urgence : plombier, électricien, serrurier, chauffagiste`,
+    `Disponible soir & week-end, intervention rapide selon dispo locale`,
+    `${villes.length}+ villes couvertes en France`,
+    `Devis transparent — fuir les arnaques au tarif "express"`,
+  ]
+
+  const tldrBullets = [
+    `Une urgence est une situation à risque immédiat (fuite d'eau, court-circuit, porte claquée nuit, fuite gaz). Pour la sécurité — pompiers 18, gaz 0 800 47 33 33, dépannage 112.`,
+    `Notre service met en relation 4 corps de métier d'urgence avec des artisans vérifiés SIREN dans ${villes.length}+ villes, soir et week-end.`,
+    `Toujours demander un devis écrit AVANT intervention non vitale. Refuser les "tarifs express" verbaux > 200 €/h sans détail.`,
+    `Vérifier en arrivant : carte pro, SIRET, assurance décennale. Conserver tickets, photos, devis : indispensable pour assurance habitation.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
+      <JsonLd data={articleSchema} />
+
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -220,7 +271,10 @@ export default async function UrgencePage() {
               </span>
             </div>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+          >
             Urgence artisan ?<br />
             <span className="text-red-300">Intervention rapide 24h/7j.</span>
           </h1>
@@ -269,6 +323,20 @@ export default async function UrgencePage() {
               <span className="text-sm text-white/80">Devis gratuit</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Byline + En bref + TL;DR — E-E-A-T DOM signal post-hero */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

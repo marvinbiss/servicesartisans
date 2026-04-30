@@ -9,6 +9,10 @@ import { regions, departements, villes, services, getVillesByDepartement } from 
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 86400
 
@@ -107,9 +111,54 @@ export default async function RegionsIndexPage() {
     },
   ])
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${regions.length} régions de France — Annuaire artisans 2026`,
+    description: `Annuaire artisans dans ${regions.length} régions, ${totalDepartments} départements et ${villes.length} villes. Données SIREN officielles, baromètre régional CC-BY 4.0.`,
+    url: `${SITE_URL}/regions`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/regions` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${regions.length} régions couvertes (métropole + 5 DOM)`,
+    `${totalDepartments} départements, ${villes.length}+ villes`,
+    `Identité vérifiée via SIREN INSEE + qualifications RGE`,
+    `Baromètre régional indices prix CC-BY 4.0 trimestriel`,
+  ]
+
+  const tldrBullets = [
+    `${regions.length} régions de France couvertes : ${totalDepartments} départements et ${villes.length}+ communes accessibles via leurs URLs canoniques.`,
+    `DOM-TOM inclus (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) avec densité moindre qu'en métropole.`,
+    `Île-de-France, Auvergne-Rhône-Alpes et PACA concentrent la plus forte densité d'artisans référencés.`,
+    `Baromètre régional disponible sur /barometre/regions — indices de prix par métier et région, mis à jour trimestriellement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[collectionPageSchema, faqSchema]} />
+      <JsonLd data={[articleSchema, collectionPageSchema, faqSchema]} />
 
       {/* ─── HERO ──────────────────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
@@ -150,7 +199,10 @@ export default async function RegionsIndexPage() {
               </span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]"
+            >
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-accent-300 to-primary-300">
                 {regions.length} régions
               </span>
@@ -186,6 +238,20 @@ export default async function RegionsIndexPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Byline + En bref + TL;DR — E-E-A-T DOM signal post-hero */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

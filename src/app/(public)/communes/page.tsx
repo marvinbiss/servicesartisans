@@ -7,6 +7,10 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { villes } from '@/lib/data/france'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 86_400
 
@@ -56,9 +60,56 @@ export default function CommunesHubPage() {
   // Top 100 villes par population (déjà triée dans france.ts).
   const topVilles = villes.slice(0, 100)
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '36 000 communes — Données locales 2026',
+    description: DESCRIPTION,
+    url: `${SITE_URL}/communes`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/communes` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+  }
+
+  const enBrefPoints = [
+    `35 999 communes (métropole + DOM) avec données INSEE, climat, risques`,
+    `100 plus grandes villes accessibles directement, 33 700 par URL canonique`,
+    `Sources : INSEE, Météo-France, BRGM, DVF, ADEME, ANAH`,
+    `Licence ouverte CC-BY 4.0 — citation autorisée avec lien vers la source`,
+  ]
+
+  const tldrBullets = [
+    `Annuaire de 35 999 communes françaises agrégeant 6 datasets publics : INSEE, Météo-France, Géorisques (BRGM), DVF, ADEME (RGE), ANAH (MaPrimeRénov').`,
+    `Chaque commune dispose d'une page /communes/[slug] avec démographie, climat, risques, marché immobilier, parc artisans BTP et RGE.`,
+    `Les 100 plus grandes villes sont listées sur cette page ; les 33 700 autres sont accessibles via leur URL canonique sans pagination.`,
+    `Base ouverte sous licence Creative Commons BY 4.0 — réutilisation autorisée avec attribution.`,
+  ]
+
   return (
     <>
       <JsonLd data={getBreadcrumbSchema(breadcrumbSchemaItems)} />
+      <JsonLd data={articleSchema} />
       <JsonLd data={getDatasetSchema()} />
 
       <main className="min-h-screen bg-warm-cream-50">
@@ -66,7 +117,7 @@ export default function CommunesHubPage() {
           <Breadcrumb items={breadcrumbUiItems} />
 
           <header className="mt-6 mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900">
+            <h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">
               36 000 communes — données locales pour artisans & particuliers
             </h1>
             <p className="mt-3 text-charcoal-700">
@@ -82,6 +133,16 @@ export default function CommunesHubPage() {
               </a>
               .
             </p>
+            <div className="mt-6 space-y-4">
+              <ArticleMeta
+                author="Équipe éditoriale ServicesArtisans"
+                authorHref="/a-propos"
+                datePublished="2024-01-15T08:00:00.000Z"
+                dateModified={dateModifiedIso}
+              />
+              <EnBrefBox keyPoints={enBrefPoints} />
+              <TldrBlock bullets={tldrBullets} />
+            </div>
           </header>
 
           <section className="mb-8 rounded-xl bg-white p-6 shadow-sm">

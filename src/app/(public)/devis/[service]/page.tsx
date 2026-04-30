@@ -19,6 +19,10 @@ import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = false
 
@@ -173,9 +177,59 @@ export default async function DevisServicePage({
   // Sidebar FAQ from trade-specific FAQ
   const sidebarFaq = trade.faq.slice(0, 3).map((f) => ({ question: f.q, answer: f.a }))
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: truncateTitle(`${h1Text} — ${new Date().getFullYear()}`, 110),
+    description: `Devis gratuit ${tradeLower}. Fourchette ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 artisans vérifiés sous 24 h.`,
+    url: `${SITE_URL}/devis/${service}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: getServiceImage(service).src,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/devis/${service}` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+    about: { '@type': 'Service', name: trade.name },
+  }
+
+  const enBrefPoints = [
+    `Devis gratuit, sans engagement — réponse sous 24 h`,
+    `Jusqu'à 3 propositions d'artisans vérifiés SIREN`,
+    `Fourchette indicative ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
+    trade.certifications.length > 0
+      ? `Certifications : ${trade.certifications.slice(0, 2).join(', ')}`
+      : 'Tous les artisans sont assurés et vérifiés',
+  ]
+
+  const tldrBullets = [
+    `Devis ${tradeLower} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en moyenne, fourchette indicative incluant main-d'œuvre.`,
+    `Vous remplissez le formulaire (3 min) → 3 artisans qualifiés vous recontactent sous 24 h avec un devis détaillé.`,
+    `100 % gratuit, sans engagement, sans abonnement. Vous comparez et choisissez librement.`,
+    `Avant signature : vérifier SIRET, assurance décennale, et comparer au moins 3 devis détaillés.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, collectionPageSchema]} />
+      <JsonLd
+        data={[articleSchema, breadcrumbSchema, faqSchema, serviceSchema, collectionPageSchema]}
+      />
 
       {/* ─── HERO MINIMAL ────────────────────────────────── */}
       <section className="bg-white border-b border-sand-200">
@@ -184,13 +238,31 @@ export default async function DevisServicePage({
             items={[{ label: 'Devis', href: '/devis' }, { label: `Devis ${tradeLower}` }]}
             className="mb-4 text-charcoal-400"
           />
-          <h1 className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight"
+          >
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
             Devis gratuit de {tradeLower}s référencés et vérifiés. Prix indicatif :{' '}
             {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+            className="mt-4"
+          />
+        </div>
+      </section>
+
+      {/* En bref + TL;DR — capture FS Position 0 / AI Overviews */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+          <EnBrefBox keyPoints={enBrefPoints} />
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

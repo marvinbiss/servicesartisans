@@ -9,6 +9,10 @@ import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
 
@@ -120,10 +124,58 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
     )
   }
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const tradeCount = Object.keys(tradeContent).length
+  const villesCount = villes.length
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Devis Artisan Gratuit — ${tradeCount}+ Métiers, ${new Date().getFullYear()}`,
+    description: `Demandez un devis artisan gratuit : ${tradeCount}+ métiers couverts, ${villesCount}+ villes, jusqu'à 3 propositions sous 24 h, sans engagement.`,
+    url: `${SITE_URL}/devis`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/devis` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${tradeCount}+ métiers du bâtiment couverts`,
+    `${villesCount}+ villes — réponse sous 24 h`,
+    `Jusqu'à 3 devis par demande, 100 % gratuit`,
+    `Artisans vérifiés SIREN, sans engagement`,
+  ]
+
+  const tldrBullets = [
+    `Service de mise en relation gratuit : vous remplissez le formulaire (3 min) → 3 artisans vérifiés vous recontactent sous 24 h.`,
+    `${tradeCount}+ métiers du bâtiment couverts dans ${villesCount}+ communes françaises.`,
+    `Vous comparez les devis librement, sans abonnement, sans obligation d'accepter.`,
+    `Données partagées avec les artisans : nom, téléphone, description du projet — pas l'e-mail. Aucune revente à des tiers.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
         data={[
+          articleSchema,
           getBreadcrumbSchema([
             { name: 'Accueil', url: '/' },
             { name: 'Demander un devis', url: '/devis' },
@@ -136,7 +188,10 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
       <section className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
           <Breadcrumb items={[{ label: 'Demander un devis' }]} className="mb-4 text-charcoal-400" />
-          <h1 className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl font-bold text-charcoal-900 tracking-tight"
+          >
             Recevez vos devis gratuits
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
@@ -145,6 +200,21 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
           <p className="text-charcoal-500 mt-2 text-sm font-medium">
             ★ 4.8/5 — Plus de 23 000 demandes traitées
           </p>
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+            className="mt-4"
+          />
+        </div>
+      </section>
+
+      {/* En bref + TL;DR — capture FS Position 0 / AI Overviews */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+          <EnBrefBox keyPoints={enBrefPoints} />
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 
