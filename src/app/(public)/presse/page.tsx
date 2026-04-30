@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -14,10 +14,11 @@ export const metadata: Metadata = {
   title: 'Espace presse',
   description:
     "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans référencés SIREN en France.",
-  robots: { index: false, follow: true },
-  alternates: {
-    canonical: `${SITE_URL}/presse`,
-  },
+  // Indexation activée : les journalistes recherchent "espace presse [marque]"
+  // sur Google + Sprint RP outreach (avant SIRET) nécessite que la page soit
+  // découvrable. Schema.org Organization + WebPage déjà déclarés via layout.
+  robots: { index: true, follow: true },
+  alternates: getAlternates('/presse'),
   openGraph: {
     title: 'Espace presse',
     description:

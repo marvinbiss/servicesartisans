@@ -412,6 +412,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'yearly',
         priority: 0.3,
       },
+      // /presse rendu indexable 2026-04-30 — RP outreach pré-SIRET
+      {
+        url: `${SITE_URL}/presse`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.3,
+      },
       // FAQ lastmod = date the FAQPage schema was reactivated (commit 64b0a627)
       {
         url: `${SITE_URL}/faq`,
