@@ -18,6 +18,7 @@ import { getServiceBySlug, getProvidersByService, getProviderCountByService } fr
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import {
   isSeoUpgradeV2,
   currentMonthYearFr,
@@ -25,7 +26,7 @@ import {
   monthlyAnchorIso,
 } from '@/lib/seo/sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
-import { countLabelForSummary, buildEnBrefPoints } from './sprint-helpers'
+import { countLabelForSummary, buildEnBrefPoints, buildServiceTldrBullets } from './sprint-helpers'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
@@ -580,6 +581,23 @@ export default async function ServicePage({ params }: PageProps) {
               }).format(new Date(dateModifiedIso))}
             </time>
           </p>
+        </div>
+      )}
+
+      {/* Sprint 0.2 — TL;DR : 4 réponses directes pour AI Overviews + Speakable
+          (cssSelector includes [data-speakable="true"]). Distinct de EnBrefBox :
+          ici on répond aux questions fréquentes (prix, documents, délai,
+          recommandation) — EnBrefBox restitue le résumé chiffré. */}
+      {upgradeV2 && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <TldrBlock
+            bullets={buildServiceTldrBullets({
+              serviceName: service.name,
+              trade,
+              topCity: topCities[0]?.name ?? null,
+              villesCount: villes.length,
+            })}
+          />
         </div>
       )}
 

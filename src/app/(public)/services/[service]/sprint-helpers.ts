@@ -53,3 +53,53 @@ export function buildEnBrefPoints({
   points.push('Données SIRENE officielles, mises à jour quotidiennement')
   return points
 }
+
+/**
+ * Bullets TL;DR pour le hub /services/[s].
+ *
+ * Distinct de `buildEnBrefPoints` : optimisé AI Overviews + Speakable
+ * (SpeakableSpecification) — réponses directes à des questions fréquentes
+ * type "combien coûte un X", "comment trouver un X", "quels documents
+ * doit fournir un X". Pas de répétition du compteur déjà présent dans
+ * EnBrefBox + Hero — chaque bullet apporte une info différente.
+ *
+ * Retourne `[]` si aucune info exploitable (TldrBlock se rend null).
+ */
+export function buildServiceTldrBullets({
+  serviceName,
+  trade,
+  topCity,
+  villesCount,
+}: {
+  serviceName: string
+  trade: EnBrefTradeShape
+  topCity: string | null
+  villesCount: number
+}): string[] {
+  const bullets: string[] = []
+  const sName = serviceName.toLowerCase()
+
+  if (trade) {
+    const lo = Math.min(trade.priceRange.min, trade.priceRange.max)
+    const hi = Math.max(trade.priceRange.min, trade.priceRange.max)
+    bullets.push(
+      `Tarif moyen ${sName} en France : ${lo}–${hi} ${trade.priceRange.unit} (devis gratuit pour un prix exact).`
+    )
+  }
+  bullets.push(
+    `Un artisan ${sName} sérieux fournit obligatoirement : devis écrit signé, attestation SIRET, attestation d’assurance décennale et garantie biennale.`
+  )
+  if (topCity) {
+    bullets.push(
+      `Demande forte à ${topCity} et ${Math.max(0, villesCount - 1).toLocaleString('fr-FR')}+ autres villes — réponse moyenne sous 24h, intervention sous 48-72h selon urgence.`
+    )
+  } else {
+    bullets.push(
+      `Disponibles dans ${villesCount.toLocaleString('fr-FR')}+ villes — réponse moyenne sous 24h, intervention sous 48-72h selon urgence.`
+    )
+  }
+  bullets.push(
+    `Comparez plusieurs devis avant de signer (recommandation officielle service-public.fr) — chaque demande envoie votre projet à 1 seul artisan, jamais partagé.`
+  )
+  return bullets
+}

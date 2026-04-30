@@ -49,6 +49,8 @@ import CityHubLinks from '@/components/seo/CityHubLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { buildVilleTldrBullets } from './sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { getRegionPreposition } from '@/lib/geo-strings'
@@ -487,6 +489,26 @@ async function renderVillePage({ params }: PageProps) {
               }).format(new Date(monthlyAnchor))}
             </time>
           </p>
+        </div>
+      )}
+
+      {/* Sprint 0.2 — TL;DR : 4-5 réponses directes pour AI Overviews +
+          Speakable. Distinct de EnBrefBox (chiffres) et ImmediateAnswerBlock
+          (réponse front-end) — ici on répond aux intentions fréquentes
+          (vérification, délai, leads exclusifs, RGE/MPR si éligible). */}
+      {upgradeV2 && villeProviders.length > 0 && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <TldrBlock
+            bullets={buildVilleTldrBullets({
+              villeName: ville.name,
+              departementCode: ville.departementCode,
+              servicesCount: services.length,
+              villeProviderCount: villeProviders.length,
+              rgeCount,
+              climateLabel: content.profile.climateLabel ?? null,
+              citySizeLabel: content.profile.citySizeLabel ?? null,
+            })}
+          />
         </div>
       )}
 
