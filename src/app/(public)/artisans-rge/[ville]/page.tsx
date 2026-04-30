@@ -19,8 +19,16 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import InContentLinks from '@/components/seo/InContentLinks'
+import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
+import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
+import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
+import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
+import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
+import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { getArtisanUrl } from '@/lib/utils'
 import { getRgeProvidersByCity, getRgeProviderCountByCity } from '@/lib/rge/city-listings'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
 import {
   buildGenericRgeParagraphs,
   buildGenericRgeFaq,
@@ -90,9 +98,10 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
   const ville = getVilleBySlug(params.ville)
   if (!ville) notFound()
 
-  const [providers, totalCount] = await Promise.all([
+  const [providers, totalCount, communeData] = await Promise.all([
     getRgeProvidersByCity(params.ville, { limit: DEFAULT_LIMIT, offset: 0 }),
     getRgeProviderCountByCity(params.ville),
+    getCommuneBySlug(params.ville).catch(() => null),
   ])
 
   // Fail-open: only noindex when we confirmed 0. During build we fail-open (count = 1).
@@ -353,6 +362,98 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             </p>
           </div>
         )}
+      </section>
+
+      {/* Sprint 4 chantier #4 — AEO answer block (LLM-citable) */}
+      <section className="bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+          <AEOAnswerBlock
+            serviceSlug="renovation-energetique"
+            serviceName="Artisans RGE"
+            villeName={ville.name}
+            departmentName={ville.departement}
+            providerCount={totalCount}
+            avgRating={aggregateRating ? parseFloat(aggregateRating.ratingValue) : null}
+            priceRange={null}
+            communePopulation={communeData?.population ?? null}
+          />
+        </div>
+      </section>
+
+      {/* Sprint 4 chantier #4 — LocalProviderShowcase (top 3 RGE artisans, JSON-LD LocalBusiness) */}
+      {providers.length > 0 && (
+        <LocalProviderShowcase
+          providers={providers as Provider[]}
+          serviceName="Artisan RGE"
+          cityName={ville.name}
+          max={3}
+          jsonLdOnly={true}
+        />
+      )}
+
+      {/* Sprint 4 chantier #4 — intelligence locale unique par commune */}
+      {communeData && (
+        <>
+          <section className="bg-sand-50 border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+              <CommuneContextBlock
+                communeData={communeData}
+                serviceName="Rénovation énergétique"
+                villeName={ville.name}
+              />
+            </div>
+          </section>
+
+          <section className="bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+              <ContexteDPEBlock
+                communeData={communeData}
+                serviceName="Rénovation énergétique"
+                villeName={ville.name}
+              />
+            </div>
+          </section>
+
+          <section className="bg-sand-50 border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+              <RisquesGeoBlock
+                communeData={communeData}
+                serviceName="Rénovation énergétique"
+                villeName={ville.name}
+              />
+            </div>
+          </section>
+
+          <section className="bg-white border-t">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+              <CalendrierSaisonnierBlock
+                serviceSlug="renovation-energetique"
+                serviceName="Rénovation énergétique"
+                villeName={ville.name}
+                climatZone={communeData.climat_zone ?? null}
+                joursGelAnnuels={communeData.jours_gel_annuels ?? null}
+                precipitationAnnuelle={communeData.precipitation_annuelle ?? null}
+                temperatureMoyenneHiver={communeData.temperature_moyenne_hiver ?? null}
+                temperatureMoyenneEte={communeData.temperature_moyenne_ete ?? null}
+                moisTravauxExtDebut={communeData.mois_travaux_ext_debut ?? null}
+                moisTravauxExtFin={communeData.mois_travaux_ext_fin ?? null}
+                altitudeMoyenne={communeData.altitude_moyenne ?? null}
+              />
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Sprint 4 chantier #4 — UserQuestionBlock (FAQ enrichie LLM) */}
+      <section className="bg-sand-50 border-t">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+          <UserQuestionBlock
+            serviceSlug="renovation-energetique"
+            serviceName="Rénovation énergétique"
+            villeSlug={ville.slug}
+            villeName={ville.name}
+          />
+        </div>
       </section>
 
       {/* Long-form content: unique par ville */}
