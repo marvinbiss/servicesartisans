@@ -9,6 +9,7 @@ import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from '
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getCommuneBySlug,
@@ -137,11 +138,35 @@ async function renderCommunePage({ params }: PageProps) {
   const placeSchema = buildPlaceSchema(commune, slug)
   const datasetSchema = buildDatasetSchema(commune, slug)
 
+  // Sprint ULTRA — signal YMYL freshness sur 35K URLs INSEE.
+  // Pas d'EnBref/Tldr pour éviter padding sur communes data-sparse.
+  const monthlyAnchor = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${commune.name} (${cp}) — données locales & artisans`,
+    image: [`${SITE_URL}/og-default.jpg`],
+    datePublished: '2026-01-01T00:00:00+02:00',
+    dateModified: monthlyAnchor,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}/communes/${slug}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
   return (
     <>
       <JsonLd data={getBreadcrumbSchema(breadcrumbSchemaItems)} />
       <JsonLd data={placeSchema} />
       <JsonLd data={datasetSchema} />
+      <JsonLd data={articleSchema} />
 
       <main className="min-h-screen bg-warm-cream-50">
         <div className="mx-auto max-w-5xl px-4 py-8">
@@ -155,6 +180,20 @@ async function renderCommunePage({ params }: PageProps) {
               {region ? `${region} · ` : ''}
               {dept}
               {commune.gentile ? ` · Habitants : ${commune.gentile}` : ''}
+            </p>
+            <p className="mt-2 text-sm text-charcoal-500">
+              Auteur :{' '}
+              <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span>
+              {' · '}
+              Mis à jour le{' '}
+              <time dateTime={monthlyAnchor.slice(0, 10)}>
+                {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  timeZone: 'Europe/Paris',
+                })}
+              </time>
             </p>
           </header>
 
