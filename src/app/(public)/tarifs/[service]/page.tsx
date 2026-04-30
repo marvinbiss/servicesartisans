@@ -33,6 +33,10 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
@@ -379,10 +383,57 @@ export default async function TarifsServicePage({
 
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: truncateTitle(`Tarifs ${tradeLower} 2026 — Prix en France`, 110),
+    description: `Guide tarif ${tradeLower} 2026 : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, ${parsedTasks.length || trade.commonTasks.length} prestations, multiplicateur régional, méthodologie chiffrée.`,
+    url: `${SITE_URL}/tarifs/${service}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: getServiceImage(service).src,
+    author: {
+      '@type': 'Person',
+      name: author.name,
+      jobTitle: author.role,
+      url: `${SITE_URL}/a-propos#${author.slug ?? 'equipe'}`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/tarifs/${service}` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+    about: { '@type': 'Service', name: trade.name },
+  }
+
+  const enBrefPoints = [
+    `Prix ${tradeLower} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} (${new Date().getFullYear()})`,
+    `${trade.commonTasks.length} prestations détaillées avec fourchettes`,
+    `Multiplicateur régional : Île-de-France ×1,25 — Hauts-de-France ×0,95`,
+    `Tarifs vérifiés par ${author.name}, ${author.role.toLowerCase()}`,
+  ]
+
+  const tldrBullets = [
+    `Tarif ${tradeLower} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en ${new Date().getFullYear()}, fourchette indicative incluant main-d'œuvre.`,
+    `Prix ajusté selon la région : Paris/IdF +25 %, PACA/Auvergne-Rhône-Alpes +10 %, Hauts-de-France/Grand Est −5 %.`,
+    `${trade.commonTasks.length} prestations isolées disponibles avec leurs fourchettes propres (intervention, ${trade.priceRange.unit}).`,
+    `Comparer 3 devis détaillés (matériaux, MO, déplacement) avant signature ; vérifier SIRET + assurance décennale.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
         data={[
+          articleSchema,
           breadcrumbSchema,
           faqSchema,
           serviceSchema,
@@ -423,7 +474,10 @@ export default async function TarifsServicePage({
             className="mb-6 text-sand-400 [&_a]:text-sand-400 [[&_a:hover]:text-white_a:hover]:text-white [&_svg]:text-sand-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
+            >
               {(() => {
                 const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
                 const tradeLower = trade.name.toLowerCase()
@@ -477,6 +531,27 @@ export default async function TarifsServicePage({
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Byline + En bref — E-E-A-T DOM signal post-hero */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={author.name}
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+            className="mb-6"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </div>
+      </section>
+
+      {/* TL;DR — featured-snippet bait + speakable (cssSelector [data-speakable]) */}
+      <section className="py-8 bg-sand-50 border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 

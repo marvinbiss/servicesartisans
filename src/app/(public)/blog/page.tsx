@@ -24,7 +24,14 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: `Blog Travaux 2026 : prix et guides`,
   description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment. Devis gratuit.`,
-  alternates: getAlternates('/blog'),
+  alternates: {
+    ...getAlternates('/blog'),
+    types: {
+      'application/rss+xml': `${SITE_URL}/blog/feed.xml`,
+      'application/atom+xml': `${SITE_URL}/blog/atom.xml`,
+      'application/feed+json': `${SITE_URL}/blog/feed.json`,
+    },
+  },
   openGraph: {
     title: `Blog Travaux 2026 : ${allArticlesMeta.length}+ guides de prix et conseils`,
     description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,

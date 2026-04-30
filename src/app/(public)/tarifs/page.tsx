@@ -19,6 +19,10 @@ import { services, villes } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -158,9 +162,56 @@ export default async function TarifsPage() {
     },
   }))
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const totalPrestations = trades.reduce((s, t) => s + t.commonTasks.length, 0)
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Tarifs Artisans 2026 — Prix par métier en France',
+    description: `Guide des tarifs ${trades.length} métiers du bâtiment 2026 : ${totalPrestations} prestations, fourchettes vérifiées, multiplicateur régional, méthodologie publique.`,
+    url: `${SITE_URL}/tarifs`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/tarifs` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${trades.length} métiers du bâtiment couverts (plombier, électricien, maçon, peintre…)`,
+    `${totalPrestations} prestations avec fourchettes de prix indicatives`,
+    `Multiplicateur régional intégré (Paris ×1,25, Hauts-de-France ×0,95)`,
+    `Mise à jour annuelle — sources INSEE, CAPEB, FFB, devis vérifiés ServicesArtisans`,
+  ]
+
+  const tldrBullets = [
+    `Tarif horaire artisans France 2026 : 35 à 90 €/h TTC selon le métier (plombier 60–90 €/h, peintre 35–55 €/h).`,
+    `Île-de-France ≈ +25 % vs moyenne nationale ; Hauts-de-France/Grand Est ≈ −5 %.`,
+    `${totalPrestations} prestations indexées avec fourchettes prix par intervention/m²/h, mises à jour à partir de devis réels.`,
+    `Toujours comparer 3 devis détaillés (matériaux, MO, déplacement) avant de signer ; vérifier SIRET + assurance décennale.`,
+  ]
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchemas]} />
+      <JsonLd data={[articleSchema, breadcrumbSchema, faqSchema, ...serviceSchemas]} />
       <div className="min-h-screen bg-sand-50">
         {/* Hero */}
         <section className="relative bg-gradient-hero text-white overflow-hidden">
@@ -188,7 +239,10 @@ export default async function TarifsPage() {
               className="mb-6 text-sand-400 [&_a]:text-sand-400 [[&_a:hover]:text-white_a:hover]:text-white [&_svg]:text-sand-600"
             />
             <div className="text-center">
-              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-[-0.025em]">
+              <h1
+                data-speakable="true"
+                className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-[-0.025em]"
+              >
                 Guide des prix artisans 2026
               </h1>
               <p className="text-base sm:text-xl text-sand-400 max-w-3xl mx-auto mb-4">
@@ -210,6 +264,27 @@ export default async function TarifsPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Byline + En bref — E-E-A-T DOM signal post-hero */}
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <ArticleMeta
+              author="Équipe éditoriale ServicesArtisans"
+              authorHref="/a-propos"
+              datePublished="2024-01-15T08:00:00.000Z"
+              dateModified={dateModifiedIso}
+              className="mb-6"
+            />
+            <EnBrefBox keyPoints={enBrefPoints} />
+          </div>
+        </section>
+
+        {/* TL;DR — featured-snippet bait */}
+        <section className="py-8 bg-sand-50 border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <TldrBlock bullets={tldrBullets} />
           </div>
         </section>
 

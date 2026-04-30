@@ -35,6 +35,9 @@ import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 import {
   getBreadcrumbSchema,
@@ -836,6 +839,51 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   })
   jsonLdSchemas.push(enrichedSpeakable)
 
+  // Article schema — capture AI Overviews / Featured Snippets sur les requêtes
+  // informationnelles ("artisan plombier paris", "trouver electricien lyon").
+  // Speakable cssSelector dupliqué intentionnellement pour donner à Google
+  // une racine Article bien typée (le Service/LocalBusiness ne suffit pas
+  // toujours pour Google Assistant / SGE).
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleHeadline = `${service.name} à ${location.name} — Artisans vérifiés ${new Date().getFullYear()}`
+  jsonLdSchemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: articleHeadline.slice(0, 110),
+    description: `Trouver un ${service.name.toLowerCase()} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''} : ${totalProviderCount > 0 ? `${totalProviderCount} artisans vérifiés SIREN` : 'artisans qualifiés du département'}, devis gratuit en 24h.`,
+    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: getServiceImageForContext(serviceSlug, locationSlug).src,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+    about: {
+      '@type': 'Service',
+      name: service.name,
+      areaServed: { '@type': 'City', name: location.name },
+    },
+  })
+
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé
   jsonLdSchemas.push(
     getEnrichedLocalServiceSchema({
@@ -904,6 +952,33 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     tldrBullets.push('Devis gratuit, sans engagement, en moins de 24h')
   }
 
+  // En bref — bullets factuels (compte, rating, prix, RGE) en haut de page.
+  // Source des chiffres = mêmes que TldrBlock mais formulation différente
+  // (faits chiffrés isolés vs phrases featured-snippet).
+  const enBrefPoints: string[] = []
+  if (totalProviderCount > 0) {
+    enBrefPoints.push(
+      `${totalProviderCount} ${service.name.toLowerCase()}${totalProviderCount > 1 ? 's' : ''} actif${totalProviderCount > 1 ? 's' : ''} référencé${totalProviderCount > 1 ? 's' : ''} à ${location.name}`
+    )
+  }
+  if (averageRating && totalReviews && averageRating > 0 && totalReviews > 0) {
+    enBrefPoints.push(`Note moyenne ${averageRating.toFixed(1)}/5 — ${totalReviews} avis vérifiés`)
+  }
+  if (trade) {
+    const lo = Math.round(trade.priceRange.min * pricingMultiplier)
+    const hi = Math.round(trade.priceRange.max * pricingMultiplier)
+    enBrefPoints.push(
+      `Tarif ${lo}–${hi}€ ${trade.priceRange.unit} (indicatif ${new Date().getFullYear()})`
+    )
+  }
+  if (rgeProviderCount > 0) {
+    enBrefPoints.push(
+      `${rgeProviderCount} artisan${rgeProviderCount > 1 ? 's' : ''} RGE certifié${rgeProviderCount > 1 ? 's' : ''} — éligible MaPrimeRénov'`
+    )
+  } else {
+    enBrefPoints.push('Devis gratuit en moins de 24 h, sans engagement')
+  }
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -942,7 +1017,10 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       {/* SSR H1 — always in server component HTML for Googlebot */}
       <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 tracking-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 tracking-tight"
+          >
             {h1Text}
           </h1>
           {(location.department_name || location.postal_code) && (
@@ -954,8 +1032,29 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
                 ` — ${totalProviderCount} artisan${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''}`}
             </p>
           )}
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={dateModifiedIso}
+            className="mt-4"
+          />
         </div>
       </div>
+
+      {/* En bref — bullets factuels juste sous H1, capté par cssSelector
+          [data-speakable="true"] dans le schema enrichedSpeakable. */}
+      {enBrefPoints.length > 0 && (
+        <section
+          aria-labelledby="services-en-bref"
+          className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-4"
+        >
+          <h2 id="services-en-bref" className="sr-only">
+            En bref : {service.name.toLowerCase()} à {location.name}
+          </h2>
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </section>
+      )}
 
       {/* TL;DR — featured-snippet bait, juste sous le H1.
            Wrapper sans .speakable-summary : la classe est réservée à

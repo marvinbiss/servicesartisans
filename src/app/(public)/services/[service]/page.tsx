@@ -19,6 +19,7 @@ import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import {
   isSeoUpgradeV2,
   currentMonthYearFr,
@@ -487,7 +488,10 @@ export default async function ServicePage({ params }: PageProps) {
         />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight"
+          >
             {h1Text}
           </h1>
           <p className="text-lg md:text-xl text-sand-400 max-w-3xl leading-relaxed">
@@ -568,19 +572,12 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Sprint 0.2 — byline E-E-A-T (visible si Article schema racine actif). */}
       {upgradeV2 && articleSchema && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <p className="text-xs text-charcoal-500">
-            Auteur :{' '}
-            <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span> ·
-            Mis à jour le{' '}
-            <time dateTime={dateModifiedIso}>
-              {new Intl.DateTimeFormat('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                timeZone: 'Europe/Paris',
-              }).format(new Date(dateModifiedIso))}
-            </time>
-          </p>
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished={monthlyAnchor}
+            dateModified={dateModifiedIso}
+          />
         </div>
       )}
 
