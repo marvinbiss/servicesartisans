@@ -218,6 +218,10 @@ export default function QualificationsRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline:
       'Qualibat, QualiPAC, Qualifelec, QualiSol : quelle qualification RGE choisir selon vos travaux ?',

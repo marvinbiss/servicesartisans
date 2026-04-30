@@ -47,6 +47,11 @@ vi.mock('@/lib/data/france', () => ({
     { name: 'Lyon', slug: 'lyon' },
     { name: 'Marseille', slug: 'marseille' },
   ],
+  departements: [
+    { code: '75', slug: 'paris', name: 'Paris' },
+    { code: '69', slug: 'rhone', name: 'Rhône' },
+    { code: '13', slug: 'bouches-du-rhone', name: 'Bouches-du-Rhône' },
+  ],
 }))
 
 // ---------------------------------------------------------------------------

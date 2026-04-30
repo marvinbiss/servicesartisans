@@ -139,6 +139,10 @@ export default function TarifsAuditEnergetiquePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Tarifs audit énergétique 2026 : prix, aides et retour sur investissement',
     description:

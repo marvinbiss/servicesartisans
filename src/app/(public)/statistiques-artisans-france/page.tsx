@@ -413,6 +413,10 @@ export default function StatistiquesArtisansFrancePage() {
     },
     mainEntity: {
       '@type': 'Article',
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['h1', '[data-speakable="true"]'],
+      },
       headline: pageTitle,
       datePublished: '2026-01-15',
       dateModified: '2026-03-01',

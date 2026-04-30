@@ -8,6 +8,7 @@ import { Breadcrumb } from '@/components/seo/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPersonSchema, getBreadcrumbSchema, getProfilePageSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 3600
 
@@ -73,7 +74,7 @@ export default async function AuthorPage({ params }: PageProps) {
   // dateModified = date of most recent article (invalidates stale ProfilePage cache).
   // Fallback to current month ISO when the author has no articles yet — avoids
   // emitting a missing signal Google flags as invalid ProfilePage schema.
-  const fallbackIso = new Date().toISOString().slice(0, 10)
+  const fallbackIso = monthlyAnchorIso().slice(0, 10)
   const articleDates = articles.map((a) => a.date).filter(Boolean)
   const dateCreated = articleDates[articleDates.length - 1] || fallbackIso
   const dateModified = articleDates[0] || fallbackIso

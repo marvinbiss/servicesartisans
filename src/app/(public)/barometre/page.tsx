@@ -13,6 +13,7 @@ import {
   BookOpen,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -136,10 +137,14 @@ export default async function BarometrePage() {
   // d'apparaître en Top Stories Google sur les requêtes "baromètre artisans
   // France 2026" et fournit les métadonnées requises pour les citations
   // journalistes (CC-BY 4.0 déjà déclaré via datasetSchema.license).
-  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const lastUpdated = monthlyAnchorIso().slice(0, 10)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: `Baromètre des Artisans en France 2026 — ${stats.totalArtisans.toLocaleString('fr-FR')} professionnels analysés`,
     description: `Étude agrégée ${SITE_NAME} : notes moyennes, vérification SIREN, répartition métier et géographique des artisans du bâtiment en France.`,
     url: `${SITE_URL}/barometre`,

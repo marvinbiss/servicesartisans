@@ -95,6 +95,10 @@ export default function ComparaisonPage() {
     numberOfItems: comparisons.length,
     hasPart: comparisons.slice(0, 10).map((c) => ({
       '@type': 'Article',
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['h1', '[data-speakable="true"]'],
+      },
       name: c.title,
       url: `${SITE_URL}/comparaison/${c.slug}`,
       description: c.metaDescription,

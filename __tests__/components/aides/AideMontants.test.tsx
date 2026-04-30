@@ -31,7 +31,9 @@ describe('AideMontants', () => {
     expect(heading).toHaveTextContent('Montants Foo en 2026')
     const link = screen.getByRole('link', { name: /france-renov\.gouv\.fr/i })
     expect(link).toHaveAttribute('href', 'https://france-renov.gouv.fr/')
-    expect(link).toHaveAttribute('rel', expect.stringContaining('nofollow'))
+    // E-E-A-T : pas de nofollow vers source gouvernementale officielle (DR 92).
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
+    expect(link.getAttribute('rel')).not.toContain('nofollow')
     expect(link).toHaveAttribute('target', '_blank')
   })
 })

@@ -184,6 +184,10 @@ export default function IsolationIteItiPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Isolation ITE vs ITI 2026 : comparatif, artisan RGE et aides cumulables',
     description:

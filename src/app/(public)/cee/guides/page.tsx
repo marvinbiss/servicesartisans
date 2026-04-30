@@ -60,6 +60,10 @@ export default function CeeGuidesIndexPage() {
       const g = CEE_OPERATION_GUIDES[code]
       return {
         '@type': 'Article',
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', '[data-speakable="true"]'],
+        },
         name: g.h1,
         url: `${SITE_URL}/cee/${code.toLowerCase()}/guide`,
       }

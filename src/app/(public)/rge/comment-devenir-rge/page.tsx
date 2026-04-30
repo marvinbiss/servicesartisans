@@ -225,6 +225,10 @@ export default function CommentDevenirRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Comment devenir artisan RGE en 2026 ?',
     url: `${SITE_URL}${path}`,

@@ -61,6 +61,10 @@ export default async function RgeQualificationsHubPage() {
       const g = RGE_QUALIFICATION_GUIDES[slug]
       return {
         '@type': 'Article',
+        speakable: {
+          '@type': 'SpeakableSpecification',
+          cssSelector: ['h1', '[data-speakable="true"]'],
+        },
         name: g.name,
         url: `${SITE_URL}/rge/qualifications/${slug}`,
       }

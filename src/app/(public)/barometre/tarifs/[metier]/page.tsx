@@ -11,6 +11,7 @@ import { BAROMETRE_METIERS, getBarometreMetierBySlug, TOP_VILLES } from '@/lib/b
 import { getStatsByMetier, getMetierTopVilles } from '@/lib/barometre/queries'
 import type { BarometreStatRow } from '@/lib/barometre/queries'
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // ---------------------------------------------------------------------------
 // Static params (top 30 métiers)
@@ -135,7 +136,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
 
   // Dataset + Article schemas — data propriétaire par métier citable par
   // journalistes. CC-BY 4.0 + publisher + image = éligible Top Stories.
-  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const lastUpdated = monthlyAnchorIso().slice(0, 10)
   const canonicalUrlPage = `${SITE_URL}/barometre/tarifs/${metierSlug}`
   const totalArtisans = stats?.nb_artisans ?? 0
   const datasetSchema = {
@@ -156,6 +157,10 @@ export default async function BarometreMetierPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: `Baromètre ${metier.label} — France 2026`,
     description: `Analyse ${SITE_NAME} du métier de ${metier.label.toLowerCase()} en France : ${totalArtisans.toLocaleString('fr-FR')} professionnels, notes moyennes, top villes.`,
     url: canonicalUrlPage,

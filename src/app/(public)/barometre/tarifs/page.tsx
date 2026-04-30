@@ -8,6 +8,7 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getTopMetiers } from '@/lib/barometre/queries'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -48,7 +49,7 @@ export default async function BarometreTarifsPage() {
   // Dataset + Article schemas : baromètre tarifs = data propriétaire
   // citable (CC-BY 4.0). Rend la page éligible à Top Stories et aux
   // backlinks journalistes sur les requêtes "statistiques artisans métier".
-  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const lastUpdated = monthlyAnchorIso().slice(0, 10)
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
@@ -62,6 +63,10 @@ export default async function BarometreTarifsPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: 'Baromètre des Artisans par métier — France 2026',
     description: `Analyse comparée ${SITE_NAME} des corps de métier du bâtiment en France : volumétrie, notes moyennes, répartition géographique.`,
     url: canonicalUrl,

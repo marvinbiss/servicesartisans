@@ -241,6 +241,10 @@ export default function ComparatifPrimesCee2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Comparatif primes CEE 2026 : Effy, Hellio, Sonergia, PrimesEnergie',
     url: `${SITE_URL}${path}`,

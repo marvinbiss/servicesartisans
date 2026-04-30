@@ -197,6 +197,10 @@ export default function AidesRenovation2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Toutes les Aides à la Rénovation Énergétique en 2026',
     description:

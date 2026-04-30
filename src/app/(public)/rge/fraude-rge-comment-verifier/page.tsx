@@ -182,6 +182,10 @@ function getArticleSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Fraude RGE : comment vérifier qu’un artisan est vraiment certifié ?',
     description:

@@ -203,6 +203,10 @@ export default function CEE2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: "Certificats d'Économies d'Énergie (CEE) 2026 : guide complet",
     description:

@@ -274,6 +274,10 @@ export default function MaprimeRenovCumulCeePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Cumul MaPrimeRénov’ et CEE 2026 : règles et plafonds',
     description:

@@ -203,6 +203,10 @@ export default function MaPrimeRenov2026CriteresRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
     description:

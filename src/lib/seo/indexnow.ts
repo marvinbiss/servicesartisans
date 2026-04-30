@@ -94,9 +94,9 @@ export function getProviderAffectedUrls(
   const urls = [
     `/services/${serviceSlug}/${villeSlug}`,
     `/avis/${serviceSlug}/${villeSlug}`,
-    `/services/${serviceSlug}/${villeSlug}`,
+    `/tarifs/${serviceSlug}/${villeSlug}`,
     `/urgence/${serviceSlug}/${villeSlug}`,
-    `/services/${serviceSlug}/${villeSlug}`,
+    `/devis/${serviceSlug}/${villeSlug}`,
     `/rge/${serviceSlug}/${villeSlug}`,
     `/villes/${villeSlug}`,
   ]

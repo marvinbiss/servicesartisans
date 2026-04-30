@@ -441,6 +441,10 @@ export default function MaPrimeRenov2026Page() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: 'MaPrimeRénov 2026 : Guide Complet des Aides à la Rénovation Énergétique',
     description:
       'Guide complet MaPrimeRénov 2026 : montants, conditions, barèmes de revenus, parcours accompagné et par geste, démarches.',

@@ -163,6 +163,10 @@ export default function PacAidesCumulablesPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: "Pompe à chaleur 2026 : aides CEE + MaPrimeRénov' cumulables",
     description:

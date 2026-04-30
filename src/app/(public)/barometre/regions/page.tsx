@@ -8,6 +8,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { BAROMETRE_REGIONS } from '@/lib/barometre/constants'
 import { regionalIndices } from '@/lib/data/barometre'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // ---------------------------------------------------------------------------
 // Metadata
@@ -43,7 +44,7 @@ export default function BarometreRegionsPage() {
     { name: 'Régions', url: '/barometre/regions' },
   ])
 
-  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const lastUpdated = monthlyAnchorIso().slice(0, 10)
 
   const datasetSchema = {
     '@context': 'https://schema.org',
@@ -69,6 +70,10 @@ export default function BarometreRegionsPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: 'Baromètre des prix artisans par région — France 2026',
     description:
       'Analyse comparée des prix des artisans du bâtiment par région : indices base 100, volumétrie et tendances 2026.',

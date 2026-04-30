@@ -12,6 +12,7 @@ import {
   getRgeQualificationGuide,
 } from '@/lib/rge/qualification-guides-content'
 import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 86400
 export const dynamicParams = false
@@ -100,6 +101,10 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     image: `${SITE_URL}/opengraph-image`,
     headline: guide.h1,
     description: guide.metaDescription,
@@ -107,7 +112,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
     mainEntityOfPage: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15',
-    dateModified: new Date().toISOString().slice(0, 10),
+    dateModified: monthlyAnchorIso().slice(0, 10),
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     about: {

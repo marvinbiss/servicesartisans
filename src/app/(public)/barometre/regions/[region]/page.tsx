@@ -16,6 +16,7 @@ import { getStatsByRegion } from '@/lib/barometre/queries'
 import { regionalIndices } from '@/lib/data/barometre'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // ---------------------------------------------------------------------------
 // Static params (13 régions métropolitaines)
@@ -140,7 +141,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
 
   // Dataset + Article : baromètre régional = data propriétaire citable.
   // CC-BY 4.0 permet aux journalistes de citer avec backlink.
-  const lastUpdated = new Date().toISOString().slice(0, 10)
+  const lastUpdated = monthlyAnchorIso().slice(0, 10)
   const regionCanonicalUrl = `${SITE_URL}/barometre/regions/${regionSlug}`
   const datasetSchema = {
     '@context': 'https://schema.org',
@@ -155,6 +156,10 @@ export default async function BarometreRegionPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
     headline: `Baromètre des Artisans ${getRegionPreposition(region.name)} — 2026`,
     description: `Étude agrégée ${SITE_NAME} sur ${totalArtisans.toLocaleString('fr-FR')} artisans ${getRegionPreposition(region.name)} : métiers les plus représentés, densité territoriale.`,
     url: regionCanonicalUrl,
