@@ -44,10 +44,11 @@ import {
   buildFaqJsonLd,
 } from '@/lib/rge/pseo-content'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
-import { getVilleBySlug, getDepartementByCode } from '@/lib/data/france'
+import { getVilleBySlug, getDepartementByCode, services as staticServices } from '@/lib/data/france'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -917,6 +918,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           currentVille={villeSlug}
           currentIntent="services"
           skipCrossIntent={true}
+        />
+
+        {/* Sprint 4 chantier #13 — cross-intent reroute (sibling intent différent) */}
+        <ServiceIntentReroute
+          serviceSlug={serviceSlug}
+          villeSlug={villeSlug}
+          villeName={villeName}
+          resolveServiceName={(slug) => staticServices.find((s) => s.slug === slug)?.name ?? null}
         />
 
         {/* Sprint 2.1 — InContentLinks (5 liens contextuels distribués) */}

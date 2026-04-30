@@ -49,6 +49,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
@@ -2231,6 +2232,13 @@ async function renderUrgenceServiceVillePage({
         currentVille={villeSlug}
         currentIntent="urgence"
         skipCrossIntent
+      />
+
+      <ServiceIntentReroute
+        serviceSlug={service}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        resolveServiceName={(slug) => tradeContent[slug]?.name ?? null}
       />
 
       <MoneyPageBoost currentService={service} currentVille={villeSlug} />
