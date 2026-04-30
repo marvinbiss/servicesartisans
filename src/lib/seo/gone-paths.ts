@@ -126,6 +126,18 @@ export const VALID_RGE_SERVICE_SLUGS: ReadonlySet<string> = new Set([
  */
 export const CEE_OPERATION_RE = /^(BAR|BAT|IND|RES|AGRI|TRA)-[A-Z]{2}-\d{3}$/
 
+import { WHITELIST_TARIFS_TASK_GSC } from '@/lib/seo/gone-paths-whitelist-gsc'
+
+/**
+ * Normalise un pathname avant lookup whitelist : strip trailing slash et
+ * lowercase. Évite les faux négatifs sur `/tarifs/foo/bar/baz/` ou variants
+ * de casse rares.
+ */
+function normalizePath(p: string): string {
+  const stripped = p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p
+  return stripped.toLowerCase()
+}
+
 /**
  * Format générique d'un slug ville/commune.
  *
@@ -212,8 +224,14 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
   //    Stratégie 140K vague 1 : 184 500 URLs cannibalisantes, 0 KW Ahrefs,
   //    0 backlinks externes recensés. Purge définitive via 410.
   //    /tarifs/[s] et /tarifs/[s]/[v] (1-2 segments) restent valides.
+  //
+  //    Filet G3 (plan 140K) : 100 URLs whitelistées (236 clics 90j actifs)
+  //    sont préservées, cf. WHITELIST_TARIFS_TASK_GSC.
   const tarifsTaskMatch = /^\/tarifs\/[^/]+\/[^/]+\/[^/]+\/?$/.exec(pathname)
   if (tarifsTaskMatch) {
+    if (WHITELIST_TARIFS_TASK_GSC.has(normalizePath(pathname))) {
+      return { gone: false }
+    }
     return { gone: true, reason: 'tarifs_task_deprecated' }
   }
 

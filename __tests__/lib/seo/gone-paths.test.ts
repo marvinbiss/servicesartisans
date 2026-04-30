@@ -219,6 +219,45 @@ describe('evaluateGonePath — /tarifs/[s]/[v]/[task] (DEPRECATED 2026-04-29)', 
   })
 })
 
+describe('evaluateGonePath — /tarifs/[s]/[v]/[task] whitelist GSC G3', () => {
+  it('URL whitelistée (clic GSC actif 90j) → gone:false', () => {
+    // 28 clics GSC sur cette URL en 90j
+    expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m')).toEqual({
+      gone: false,
+    })
+    expect(evaluateGonePath('/tarifs/serrurier/lyon/changement-de-serrure-standard')).toEqual({
+      gone: false,
+    })
+    expect(
+      evaluateGonePath('/tarifs/couvreur/marseille/refection-complete-de-toiture-100-m')
+    ).toEqual({ gone: false })
+  })
+
+  it('whitelist case-insensitive + trailing slash tolérés', () => {
+    expect(evaluateGonePath('/Tarifs/Jardinier/Paris/Tonte-De-Pelouse-Jardin-De-200-M')).toEqual({
+      gone: false,
+    })
+    expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m/')).toEqual({
+      gone: false,
+    })
+  })
+
+  it('URL hors whitelist (mêmes service+ville mais task différent) → gone:true', () => {
+    expect(evaluateGonePath('/tarifs/jardinier/paris/abattage-d-arbre-avec-dessouchage')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+  })
+
+  it('URL hors whitelist (variation slug) → gone:true', () => {
+    // proche d'une URL whitelistée mais service/ville/task différents
+    expect(evaluateGonePath('/tarifs/plombier/paris/tonte-de-pelouse-jardin-de-200-m')).toEqual({
+      gone: true,
+      reason: 'tarifs_task_deprecated',
+    })
+  })
+})
+
 describe('evaluateGonePath — routes non-vulnérables (passthrough)', () => {
   it('homepage', () => {
     expect(evaluateGonePath('/')).toEqual({ gone: false })

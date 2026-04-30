@@ -51,6 +51,9 @@ export async function GET(request: Request) {
     // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté dans SeoContent).
     // Tier 2: avis, problèmes → top 500 cities (tarifs-task supprimé 2026-04-29)
+    // tarifs-task-whitelist-gsc 2026-04-30 : filet G3 réintroduit 100 URLs
+    // avec clics GSC actifs 90j (cf. src/lib/seo/gone-paths-whitelist-gsc.ts).
+    'tarifs-task-whitelist-gsc',
     'avis-services',
     // avis-service-cities REMOVED 2026-04-29 (V1 #5 stratégie 140K — pages
     // noindex tant que <3 avis, retirées du sitemap pour économiser le

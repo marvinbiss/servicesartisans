@@ -145,6 +145,10 @@ export async function generateSitemaps() {
     // et /tarifs/[s] (1-2 segments) restent dans sitemap via 'static' bloc.
     // Tier 2: problèmes → top 500 cities
     // tarifs-task-cities REMOVED 2026-04-29 (DELETE 410 — gone-paths.ts).
+    // tarifs-task-whitelist-gsc 2026-04-30 : filet G3 réintroduit les 100
+    // URLs avec clics GSC actifs 90j (236 clics, 3 545 imp) — préserve le
+    // signal d'indexation après V1 vague 1.
+    { id: 'tarifs-task-whitelist-gsc' },
     { id: 'avis-services' },
     // avis-service-cities REMOVED 2026-04-29 (V1 #5 stratégie 140K). Pages
     // restent accessibles via internal links mais noindex tant que <3 avis sur
@@ -1074,6 +1078,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // Le route file src/app/(public)/tarifs/[service]/[ville]/[travail]/page.tsx
   // est conservé jusqu'au déploiement du middleware mis à jour pour éviter
   // un build break ; il n'est plus indexé ni servi (middleware retourne 410).
+
+  // ── Tarifs task×city WHITELIST GSC G3 (filet 2026-04-30) ───────────────
+  // 100 URLs préservées du DELETE 410 : clics GSC actifs 90j (236 clics,
+  // 3 545 imp). Source : docs/sitemap-purge-whitelist-2026-04-30.md.
+  // À refresh quand un export GSC non tronqué (16 mois) est dispo.
+  if (id === 'tarifs-task-whitelist-gsc') {
+    const { WHITELIST_TARIFS_TASK_GSC } = await import('@/lib/seo/gone-paths-whitelist-gsc')
+    return Array.from(WHITELIST_TARIFS_TASK_GSC).map((path) => ({
+      url: `${SITE_URL}${path}`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
+    }))
+  }
 
   // ── Avis service hub pages ──────────────────────────────────────────
   if (id === 'avis-services') {
