@@ -6,6 +6,8 @@ import { MapPin, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react'
 import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
@@ -13,6 +15,7 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
 } from '@/lib/seo/jsonld'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 import {
@@ -186,6 +189,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     { name: operation.nom, url: path },
   ])
 
+  // Bug fix 2026-04-30 : dateModified = new Date() chaque requête = fake
+  // freshness (Google déclasse les pages qui s'auto-update sans nouveau
+  // contenu, cf. helpful content guidelines). Snapshot mensuel cohérent
+  // avec le pattern /rge/[s]/[v] et /cee/[op]/[ville].
+  const monthlyAnchor = monthlyAnchorIso()
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -194,11 +202,26 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     description: `Prime CEE ${operation.nom} : conditions, qualifications RGE, villes couvertes.`,
     url: `${SITE_URL}${path}`,
     mainEntityOfPage: `${SITE_URL}${path}`,
-    datePublished: '2026-01-15',
-    dateModified: new Date().toISOString().slice(0, 10),
+    datePublished: '2026-01-15T00:00:00+02:00',
+    dateModified: monthlyAnchor,
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
   }
+
+  const tldrBullets: string[] = [
+    `Prime CEE ${operation.code} pour ${operation.nom.toLowerCase()} — versée par les vendeurs d'énergie (loi POPE 2005).`,
+    operation.precarite_eligible
+      ? `Bonification précarité énergétique : montant majoré pour les ménages modestes et très modestes.`
+      : `Tous ménages éligibles, sans condition de revenus.`,
+    operation.coup_de_pouce
+      ? `Coup de pouce ${operation.coup_de_pouce_charte ?? operation.code} : barème renforcé activé en 2026.`
+      : `Cumulable avec MaPrimeRénov' + Éco-PTZ + TVA 5,5 %.`,
+    `Artisan RGE obligatoire (${operation.rge_qualifications_requises[0] ?? 'Qualibat'}). Engagement avant signature du devis.`,
+  ]
 
   const officialSources: string[] = [
     'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
@@ -277,6 +300,23 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       <JsonLd data={jsonLdItems} />
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: operation.nom }]} />
+
+      {/* En bref — capture FS Position 0 sur "prime CEE [code]" */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
+        <EnBrefBox
+          summary={`Prime CEE ${operation.code} (${operation.nom.toLowerCase()}) : aide financière obligatoire versée par les vendeurs d'énergie pour les travaux ${operation.nom.toLowerCase()}. Cumul MaPrimeRénov' + TVA 5,5 % + Éco-PTZ possible.`}
+          keyPoints={[
+            `Domaine ${domaineInfo?.label.toLowerCase() || operation.domaine} — fiche officielle DGEC`,
+            operation.precarite_eligible
+              ? 'Bonifié pour ménages en précarité énergétique'
+              : 'Tous ménages éligibles, sans condition de revenus',
+            `Qualifications RGE requises : ${operation.rge_qualifications_requises.slice(0, 2).join(', ') || 'Qualibat'}`,
+            operation.coup_de_pouce
+              ? `Coup de pouce actif — barème renforcé 2026`
+              : "Cumul MaPrimeRénov' + Éco-PTZ + TVA 5,5 %",
+          ]}
+        />
+      </div>
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
@@ -525,6 +565,41 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* TL;DR pré-FAQ — capture FS sur "prime CEE [code]" */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
+        <h2 className="sr-only">L’essentiel de la prime CEE {operation.code}</h2>
+        <TldrBlock bullets={tldrBullets} />
+      </section>
+
+      {/* FAQ visible — cohérent avec FAQPage schema émis (anti rich-snippet spam) */}
+      <section aria-labelledby="cee-hub-faq" className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+        <h2
+          id="cee-hub-faq"
+          className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-6"
+        >
+          Questions fréquentes — Prime CEE {operation.code}
+        </h2>
+        <div className="space-y-3">
+          {faqItems.map((item, i) => (
+            <details
+              key={`cee-faq-${i}`}
+              className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+            >
+              <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
+                <span>{item.question}</span>
+                <span
+                  className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p className="mt-3 text-charcoal-700 leading-relaxed">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
       {/* CTAs */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
