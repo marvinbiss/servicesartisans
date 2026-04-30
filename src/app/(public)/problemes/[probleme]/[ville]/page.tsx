@@ -22,6 +22,10 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
@@ -643,9 +647,44 @@ async function renderProblemeVillePage({
     },
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: h1,
+    description: `${problem.name} à ${villeData.name} : diagnostic, actions immédiates, fourchette de coût ${minPrice}-${maxPrice} €. ${problem.averageResponseTime}.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/problemes/${probleme}/${ville}`,
+    mainEntityOfPage: `${SITE_URL}/problemes/${probleme}/${ville}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    `Coût indicatif à ${villeData.name} : ${minPrice} à ${maxPrice} €`,
+    `Délai d'intervention typique : ${problem.averageResponseTime}`,
+    `Niveau d'urgence : ${urgencyLabels[problem.urgencyLevel].toLowerCase()}`,
+    problem.symptoms.length > 0
+      ? `${problem.symptoms.length} symptômes à identifier, ${problem.immediateActions.length} actions immédiates`
+      : `Diagnostic + ${problem.immediateActions.length} actions immédiates documentées`,
+  ]
+
+  const tldrBullets: string[] = [
+    `${problem.name} à ${villeData.name} (${villeData.departementCode}) — coût indicatif ${minPrice}-${maxPrice} €, délai ${problem.averageResponseTime}.`,
+    `Étapes : repérer les symptômes (${problem.symptoms.length}), exécuter les ${problem.immediateActions.length} actions d'urgence, contacter un ${tradeName.toLowerCase()} ${urgencyLabels[problem.urgencyLevel] === 'Urgence haute' ? '24 h/24' : 'qualifié'}.`,
+    `Cumul possible avec garanties : assurance habitation, contrats d'entretien, garantie décennale selon nature des travaux.`,
+    `Notre rôle : mise en relation avec un ${tradeName.toLowerCase()} référencé à ${villeData.name}, devis gratuit, sans engagement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema, howToSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema, serviceSchema, howToSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -676,7 +715,12 @@ async function renderProblemeVillePage({
               {urgencyLabels[problem.urgencyLevel]}
             </span>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">{h1}</h1>
+          <h1
+            className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight"
+            data-speakable="true"
+          >
+            {h1}
+          </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">{problem.description}</p>
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
@@ -718,6 +762,19 @@ async function renderProblemeVillePage({
               Trouver un {tradeName.toLowerCase()} à {villeData.name}
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Article byline + En bref — E-E-A-T DOM signals + FS Position 0 capture */}
+      <section className="bg-white border-b border-sand-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
         </div>
       </section>
 
@@ -995,6 +1052,13 @@ async function renderProblemeVillePage({
           </section>
         )
       })()}
+
+      {/* TL;DR pré-FAQ — capture FS Position 0 / AI Overviews */}
+      <section className="py-8 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
+        </div>
+      </section>
 
       {/* FAQ */}
       <section className="py-16 bg-sand-50">

@@ -15,8 +15,12 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import {
   regions,
   getRegionBySlug,
@@ -162,9 +166,44 @@ export default async function RegionPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(content.faqItems)
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Artisans ${getRegionPreposition(region.name)} — annuaire régional`,
+    description: `Annuaire d'artisans ${getRegionPreposition(region.name)} : ${deptCount} départements, ${cityCount} villes, ${allServices.length} corps de métier. Profil régional, climat, économie locale.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/regions/${regionSlug}`,
+    mainEntityOfPage: `${SITE_URL}/regions/${regionSlug}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    regionArtisanCount > 0
+      ? `${formatProviderCount(regionArtisanCount)} artisan${regionArtisanCount > 1 ? 's' : ''} référencé${regionArtisanCount > 1 ? 's' : ''} ${getRegionPreposition(region.name)}`
+      : `${allServices.length} corps de métier disponibles ${getRegionPreposition(region.name)}`,
+    `${deptCount} département${deptCount > 1 ? 's' : ''} · ${cityCount} ville${cityCount > 1 ? 's' : ''} couvertes`,
+    `Profil : ${content.profile.climateLabel}, ${content.profile.geoLabel.toLowerCase()}`,
+    `Économie locale : ${content.profile.economyLabel.toLowerCase()}`,
+  ]
+
+  const tldrBullets: string[] = [
+    `Annuaire d'artisans ${getRegionArticle(region.name)} — ${deptCount} départements, ${cityCount} villes, ${allServices.length} corps de métier.`,
+    `Profil régional : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.geoLabel.toLowerCase()}, ${content.profile.economyLabel.toLowerCase()}.`,
+    `Maillage territorial : couverture des ${deptCount} départements via ${cityCount} villes, du chef-lieu de région aux communes périphériques.`,
+    `Notre rôle : mise en relation gratuite avec un artisan vérifié SIREN, devis sous 24 h, sans engagement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, collectionSchema, faqSchema]} />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
@@ -227,7 +266,10 @@ export default async function RegionPage({ params }: PageProps) {
                 `Tous les artisans ${getRegionArticle(region.name)}`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                <h1
+                  className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
+                  data-speakable="true"
+                >
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )
@@ -301,6 +343,17 @@ export default async function RegionPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── Article byline + En bref — E-E-A-T DOM signals + FS Position 0 ── */}
+        <section className="mb-10 max-w-4xl">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </section>
+
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
           title={`Besoin d'un artisan ${getRegionPreposition(region.name)} ?`}
@@ -662,6 +715,11 @@ export default async function RegionPage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* ─── TL;DR pré-FAQ — capture FS Position 0 / AI Overviews ──── */}
+        <section className="mb-10 max-w-4xl">
+          <TldrBlock bullets={tldrBullets} />
         </section>
 
         {/* ─── FAQ ───────────────────────────────────────────── */}

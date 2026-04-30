@@ -15,8 +15,12 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import {
   departements,
   getDepartementBySlug,
@@ -160,9 +164,44 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const faqSchema = getFAQSchema(content.faqItems)
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Artisans ${getDeptPreposition(dept.name)} (${dept.code}) — annuaire ${dept.region}`,
+    description: `Annuaire d'artisans ${getDeptPreposition(dept.name)} (${dept.code}, ${dept.region}). ${services.length} corps de métier, ${dept.population} habitants, chef-lieu ${dept.chefLieu}.`,
+    image: `${SITE_URL}/opengraph-image`,
+    url: `${SITE_URL}/departements/${dept.slug}`,
+    mainEntityOfPage: `${SITE_URL}/departements/${dept.slug}`,
+    inLanguage: 'fr-FR',
+    datePublished: '2026-01-15T08:00:00+02:00',
+    dateModified: monthlyAnchorIso(),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints: string[] = [
+    deptArtisanCount > 0
+      ? `${formatProviderCount(deptArtisanCount)} artisan${deptArtisanCount > 1 ? 's' : ''} référencé${deptArtisanCount > 1 ? 's' : ''} ${getDeptPreposition(dept.name)}`
+      : `${services.length} corps de métier disponibles ${getDeptPreposition(dept.name)}`,
+    `Chef-lieu : ${dept.chefLieu} · Région ${dept.region}`,
+    `${dept.population} habitants · ${villesDuDepartement.length || dept.villes.length} villes couvertes`,
+    `Profil : ${content.profile.climateLabel}, ${content.profile.economyLabel.toLowerCase()}`,
+  ]
+
+  const tldrBullets: string[] = [
+    `Annuaire d'artisans ${getDeptArticle(dept.name)} (${dept.code}) — ${services.length} corps de métier, ${formatProviderCount(deptArtisanCount || 0)} pros référencés.`,
+    `Profil départemental : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.housingLabel.toLowerCase()}, ${content.profile.economyLabel.toLowerCase()}.`,
+    `Maillage : ${villesDuDepartement.length || dept.villes.length} villes du ${dept.code} couvertes, du chef-lieu ${dept.chefLieu} aux communes périphériques.`,
+    `Notre rôle : mise en relation gratuite avec un artisan vérifié SIREN, devis sous 24 h, sans engagement.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, collectionPageSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, collectionPageSchema, faqSchema]} />
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         {/* Background effects */}
@@ -235,7 +274,10 @@ export default async function DepartementPage({ params }: PageProps) {
                     `Tous les artisans ${getDeptPreposition(dept.name)}, ${dept.region}`,
                   ]
                   return (
-                    <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
+                    <h1
+                      className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]"
+                      data-speakable="true"
+                    >
                       {h1Templates[h1Hash % h1Templates.length]}
                     </h1>
                   )
@@ -293,6 +335,17 @@ export default async function DepartementPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── Article byline + En bref — E-E-A-T DOM signals + FS Position 0 ── */}
+        <section className="mb-10 max-w-4xl">
+          <ArticleMeta
+            author={SITE_NAME}
+            datePublished="2026-01-15"
+            dateModified={monthlyAnchorIso().slice(0, 10)}
+            className="mb-5"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
+        </section>
+
         {/* ─── HERO CTA ───────────────────────────────────────── */}
         <GeoPageCTA
           title={`Besoin d'un artisan ${getDeptPreposition(dept.name)} ?`}
@@ -712,6 +765,11 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        {/* ─── TL;DR pré-FAQ — capture FS Position 0 / AI Overviews ──── */}
+        <section className="mb-10 max-w-4xl">
+          <TldrBlock bullets={tldrBullets} />
+        </section>
 
         {/* ─── FAQ ───────────────────────────────────────────── */}
         <section className="mb-16">
