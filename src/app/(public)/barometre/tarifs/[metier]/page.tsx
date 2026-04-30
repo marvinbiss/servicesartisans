@@ -209,7 +209,10 @@ export default async function BarometreMetierPage({ params }: PageProps) {
               <span className="text-4xl" role="img" aria-hidden="true">
                 {metier.icon}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+              <h1
+                data-speakable="true"
+                className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight"
+              >
                 {metier.label} en France
               </h1>
             </div>

@@ -394,7 +394,10 @@ export default function DesertsArtisanauxPage() {
             <span className="text-sm text-charcoal-500">Publié le 28 mars 2026</span>
           </div>
 
-          <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal-900 leading-tight mb-6">
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal-900 leading-tight mb-6"
+          >
             Déserts artisanaux : la carte des départements en manque d&apos;artisans
           </h1>
 

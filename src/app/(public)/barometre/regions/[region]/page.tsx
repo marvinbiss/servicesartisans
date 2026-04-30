@@ -206,7 +206,10 @@ export default async function BarometreRegionPage({ params }: PageProps) {
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-4">
               <MapPin className="w-8 h-8 text-emerald-600" />
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+              <h1
+                data-speakable="true"
+                className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight"
+              >
                 {region.name}
               </h1>
               {index && (

@@ -208,7 +208,10 @@ export default async function BarometrePage() {
                 <BarChart3 className="w-4 h-4" />
                 Mise à jour : mars 2026
               </div>
-              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+              <h1
+                data-speakable="true"
+                className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
+              >
                 Baromètre des Artisans
               </h1>
               <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">

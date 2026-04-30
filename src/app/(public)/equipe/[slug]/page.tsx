@@ -109,7 +109,10 @@ export default async function AuthorPage({ params }: PageProps) {
                   .join('')}
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-1">
+                <h1
+                  data-speakable="true"
+                  className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-1"
+                >
                   {author.name}
                 </h1>
                 <p className="text-primary-600 font-medium mb-3">{author.role}</p>

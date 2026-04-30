@@ -145,7 +145,10 @@ export default function BarometreRegionsPage() {
               <MapPin className="w-4 h-4" />
               13 régions métropolitaines
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4">
+            <h1
+              data-speakable="true"
+              className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4"
+            >
               Baromètre par région
             </h1>
             <p className="text-lg text-charcoal-600 leading-relaxed">

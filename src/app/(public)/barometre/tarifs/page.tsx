@@ -109,7 +109,10 @@ export default async function BarometreTarifsPage() {
               <BarChart3 className="w-4 h-4" />
               {metiers.length} métiers référencés
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4">
+            <h1
+              data-speakable="true"
+              className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4"
+            >
               Statistiques par métier
             </h1>
             <p className="text-lg text-charcoal-600 leading-relaxed">

@@ -5,6 +5,10 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 const canonicalUrl = `${SITE_URL}/etudes`
 
@@ -103,21 +107,80 @@ export default function EtudesPage() {
     },
   ])
 
+  const dateModifiedIso = monthlyAnchorIso()
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Études et données artisanat France — ${SITE_NAME}`,
+    description:
+      'Analyses propriétaires sur l’artisanat en France basées sur les données SIREN officielles, croisées avec ADEME et les statistiques internes du réseau.',
+    url: canonicalUrl,
+    datePublished: '2026-03-28T08:00:00.000Z',
+    dateModified: dateModifiedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+  }
+
+  const enBrefPoints = [
+    `${studies.length} étude${studies.length > 1 ? 's' : ''} propriétaire publiée(s) à ce jour`,
+    `Sources : SIREN/SIRENE INSEE, ADEME france-renov.gouv.fr, CAPEB, FFB, CMA`,
+    `Méthodologie chiffrée, sources référencées, limites explicites`,
+    `Licence CC-BY 4.0 — citation autorisée avec lien vers la source`,
+  ]
+
+  const tldrBullets = [
+    `Études quantitatives sur l’artisanat français à partir de données officielles SIREN/INSEE croisées avec ADEME et les chambres des métiers (CAPEB, FFB, CMA).`,
+    `Études structurelles (densité, déserts artisanaux) actualisées annuellement ; études conjoncturelles (prix, tensions métiers) trimestriellement.`,
+    `Toutes les analyses sont publiées sous licence Creative Commons BY 4.0 : reprise autorisée avec mention « ServicesArtisans » et lien.`,
+    `Pour suggérer un sujet ou demander un dataset CSV/JSON personnalisé, contacter presse@servicesartisans.fr.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
-      <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
+      <JsonLd data={[articleSchema, breadcrumbSchema, collectionSchema, faqSchema]} />
 
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: 'Études' }]} className="mb-4" />
           <div className="flex items-center gap-3 mb-4">
             <BarChart3 className="w-8 h-8 text-primary-500" />
-            <h1 className="font-heading text-3xl font-bold text-charcoal-900">Études et données</h1>
+            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
+              Études et données
+            </h1>
           </div>
           <p className="text-lg text-charcoal-600 max-w-2xl">
             Analyses exclusives sur l&apos;artisanat en France, basées sur les données SIREN
             officielles et les statistiques des chambres des métiers.
           </p>
+          <div className="mt-6 space-y-4">
+            <ArticleMeta
+              author="Équipe éditoriale ServicesArtisans"
+              authorHref="/a-propos"
+              datePublished="2026-03-28T08:00:00.000Z"
+              dateModified={dateModifiedIso}
+            />
+            <EnBrefBox keyPoints={enBrefPoints} />
+            <TldrBlock bullets={tldrBullets} />
+          </div>
         </div>
       </section>
 

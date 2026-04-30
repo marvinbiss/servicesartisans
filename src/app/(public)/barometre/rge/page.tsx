@@ -194,7 +194,7 @@ export default async function BarometreRgePage() {
               <Database className="h-3.5 w-3.5" />
               Données officielles — sync ADEME hebdo
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold text-slate-900">
+            <h1 data-speakable="true" className="mt-4 text-4xl font-extrabold text-slate-900">
               Baromètre RGE {monthLabel}
             </h1>
             <ArticleMeta

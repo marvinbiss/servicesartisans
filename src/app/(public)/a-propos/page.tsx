@@ -366,7 +366,10 @@ export default async function AProposPage() {
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
+            >
               À propos de ServicesArtisans
             </h1>
             <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
