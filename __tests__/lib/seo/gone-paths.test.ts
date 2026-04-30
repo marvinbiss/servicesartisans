@@ -220,25 +220,34 @@ describe('evaluateGonePath — /tarifs/[s]/[v]/[task] (DEPRECATED 2026-04-29)', 
 })
 
 describe('evaluateGonePath — /tarifs/[s]/[v]/[task] whitelist GSC G3', () => {
-  it('URL whitelistée (clic GSC actif 90j) → gone:false', () => {
+  it('URL whitelistée (clic GSC actif 90j) → 301 vers /services/[s]/[v]#tarifs', () => {
     // 28 clics GSC sur cette URL en 90j
     expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m')).toEqual({
       gone: false,
+      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
     })
     expect(evaluateGonePath('/tarifs/serrurier/lyon/changement-de-serrure-standard')).toEqual({
       gone: false,
+      redirect: { to: '/services/serrurier/lyon#tarifs', status: 301 },
     })
     expect(
       evaluateGonePath('/tarifs/couvreur/marseille/refection-complete-de-toiture-100-m')
-    ).toEqual({ gone: false })
+    ).toEqual({
+      gone: false,
+      redirect: { to: '/services/couvreur/marseille#tarifs', status: 301 },
+    })
   })
 
   it('whitelist case-insensitive + trailing slash tolérés', () => {
+    // Lookup et cible 301 sont tous deux lowercased → on canonicalise vers
+    // /services/{lowercase}/{lowercase}#tarifs.
     expect(evaluateGonePath('/Tarifs/Jardinier/Paris/Tonte-De-Pelouse-Jardin-De-200-M')).toEqual({
       gone: false,
+      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
     })
     expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m/')).toEqual({
       gone: false,
+      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
     })
   })
 

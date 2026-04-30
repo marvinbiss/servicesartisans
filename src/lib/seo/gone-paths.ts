@@ -154,6 +154,12 @@ export const VILLE_SLUG_RE = /^[a-z0-9](?!.*--)[a-z0-9-]{0,58}[a-z0-9]$/
 /**
  * Résultat d'une validation. `gone: true` signifie que le chemin est
  * structurellement invalide et doit retourner HTTP 410 immédiatement.
+ *
+ * `redirect` (mutuellement exclusif avec `gone:true`) signifie qu'on doit
+ * faire un 301 vers une URL canonique vivante. Utilisé pour le filet G3
+ * sur `/tarifs/[s]/[v]/[task]` : la page a été supprimée, mais GSC montre
+ * qu'elle reçoit du trafic réel — on redirige vers `/services/[s]/[v]#tarifs`
+ * pour préserver l'équité de lien et l'expérience utilisateur.
  */
 export interface GonePathDecision {
   gone: boolean
@@ -163,6 +169,7 @@ export interface GonePathDecision {
     | 'cee_operation_invalid_format'
     | 'ville_slug_malformed'
     | 'tarifs_task_deprecated'
+  redirect?: { to: string; status: 301 }
 }
 
 function validateVilleSlug(ville: string): GonePathDecision {
@@ -226,11 +233,21 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
   //    /tarifs/[s] et /tarifs/[s]/[v] (1-2 segments) restent valides.
   //
   //    Filet G3 (plan 140K) : 100 URLs whitelistées (236 clics 90j actifs)
-  //    sont préservées, cf. WHITELIST_TARIFS_TASK_GSC.
-  const tarifsTaskMatch = /^\/tarifs\/[^/]+\/[^/]+\/[^/]+\/?$/.exec(pathname)
+  //    sont 301-redirigées vers /services/[s]/[v]#tarifs (page vivante avec
+  //    PriceTableHTML). On ne peut pas servir la page d'origine — elle a été
+  //    supprimée du repo (V1 #2/#3 strategy 140K) — mais on préserve l'équité
+  //    de lien et le clic GSC actif au lieu de renvoyer 404.
+  const tarifsTaskMatch = /^\/tarifs\/([^/]+)\/([^/]+)\/[^/]+\/?$/i.exec(pathname)
   if (tarifsTaskMatch) {
     if (WHITELIST_TARIFS_TASK_GSC.has(normalizePath(pathname))) {
-      return { gone: false }
+      const [, service, ville] = tarifsTaskMatch
+      return {
+        gone: false,
+        redirect: {
+          to: `/services/${service.toLowerCase()}/${ville.toLowerCase()}#tarifs`,
+          status: 301,
+        },
+      }
     }
     return { gone: true, reason: 'tarifs_task_deprecated' }
   }

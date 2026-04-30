@@ -160,6 +160,17 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         headers: goneResponseHeaders(),
       })
     }
+    if (goneDecision.redirect) {
+      const host = request.headers.get('host') || 'servicesartisans.fr'
+      const target = `https://${host}${goneDecision.redirect.to}`
+      const response = NextResponse.redirect(target, goneDecision.redirect.status)
+      response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+      response.headers.set(
+        'CDN-Cache-Control',
+        'public, s-maxage=86400, stale-while-revalidate=604800'
+      )
+      return response
+    }
   }
 
   // Redirect /tarifs-artisans → /tarifs (301 permanent, cached at CDN edge)
