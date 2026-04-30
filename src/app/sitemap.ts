@@ -1303,20 +1303,25 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
-  // 14 services énergétiques × 500 villes = 7 000 URLs max → pruned to combos
-  // with ≥1 active RGE provider (Vague 1.3 sitemap purge). Fail-open: if the
-  // DB query errors out, `rgeQualifiedServiceCity === null` ⇒ emit everything
-  // (current behaviour). Noindex fail-open côté route reste filet de secours.
+  // 14 services énergétiques × 500 villes = 7 000 URLs max.
+  // 2026-04-30 — fail-open systématique : audit baseline a révélé que le
+  // filtre `rgeQualifiedServiceCity` était trop strict (143 URLs émises sur
+  // 7000 attendues). Cause racine : le mapping `SERVICE_TO_SPECIALTIES`
+  // utilisé par le fetcher est trop fin (ex: aucun artisan DB n'a
+  // `specialty='pompe-a-chaleur'`, ils ont `specialty='chauffagiste'` avec
+  // qualif RGE QualiPAC dans `rge_qualifications[]`). Conséquence : 98%
+  // des combos étaient skip alors qu'elles ont en pratique des artisans
+  // RGE éligibles via fallback dept ou via providers `chauffagiste`+QualiPAC.
+  // La page route gère déjà le `robots:noindex` quand `count_strict=0` ET
+  // pas de fallback dept (cf. `getRgeCountByServiceAndCityStrict` page.tsx:115).
+  // On garde `rgeLastmodServiceCity` pour le `lastModified` quand dispo.
   if (id === 'rge-service-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const { rgeQualifiedServiceCity, rgeLastmodServiceCity } = await getLastmodData()
+    const { rgeLastmodServiceCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const ville of phase1Cities) {
         const key = `${svc}::${ville.slug}`
-        if (rgeQualifiedServiceCity && !rgeQualifiedServiceCity.has(key)) {
-          continue
-        }
         result.push({
           url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
           lastModified: rgeLastmodServiceCity?.get(key),
@@ -1329,18 +1334,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × department listings (/rge/[service]/departement/[dept])
-  // 14 services énergétiques × 101 départements = 1 414 URLs max → pruned
-  // to combos with ≥1 active RGE provider. Fail-open identique.
+  // 14 services énergétiques × 101 départements = 1 414 URLs max.
+  // 2026-04-30 — fail-open systématique. Audit baseline a révélé 1 URL
+  // sur 1 414 attendues (mismatch entre `address_department` DB qui stocke
+  // le code numérique '69' et la lookup `normalizeName(dept.name)='rhone'`).
+  // Page route gère noindex via fallback dept-listing.
   if (id === 'rge-service-dept') {
-    const { rgeQualifiedServiceDept, rgeLastmodServiceDept } = await getLastmodData()
+    const { rgeLastmodServiceDept } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const dept of departements) {
         const deptKey = normalizeName(dept.name)
         const mapKey = `${svc}::${deptKey}`
-        if (rgeQualifiedServiceDept && !rgeQualifiedServiceDept.has(mapKey)) {
-          continue
-        }
         result.push({
           url: `${SITE_URL}/rge/${svc}/departement/${dept.slug}`,
           lastModified: rgeLastmodServiceDept?.get(mapKey),
@@ -1377,21 +1382,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── CEE operation × city pSEO (/cee/[op]/[ville]) ───────────────────
-  // V3 #2 stratégie 140K (2026-04-29) : élargi à top 1 000 villes (vs 500).
-  // 22 opérations × ≤1 000 villes = 22 000 max → pruned aux combos avec ≥1
-  // artisan éligible (filtre `ceeQualifiedOperationCity`). Cible utile
-  // ≈ 12-15K URLs après filtre. Fail-open : si DB blip, le handler page
-  // émet `noindex` quand 0 artisan (soft 404 prevention déjà en place).
+  // V3 #2 stratégie 140K (2026-04-29) : top 1 000 villes.
+  // 22 opérations × 1 000 villes = 22 000 max.
+  // 2026-04-30 — fail-open systématique. Audit baseline a révélé 869 URLs
+  // sur 22 000 attendues, même cause racine que rge-service-city/dept :
+  // mapping specialty trop fin pour identifier les artisans CEE-éligibles
+  // depuis `providers.specialty` seul. La page route filtre déjà côté
+  // render via `getCeeProvidersByOperationAndCity` (count=0 ⇒ noindex meta).
   if (id === 'cee-operation-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CEE_CITY_COUNT)
-    const { ceeQualifiedOperationCity, ceeLastmodOperationCity } = await getLastmodData()
+    const { ceeLastmodOperationCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const code of CEE_OPERATION_CODES) {
       for (const ville of phase1Cities) {
         const key = `${code}::${ville.slug}`
-        if (ceeQualifiedOperationCity && !ceeQualifiedOperationCity.has(key)) {
-          continue
-        }
         result.push({
           url: `${SITE_URL}/cee/${code}/${ville.slug}`,
           lastModified: ceeLastmodOperationCity?.get(key),
