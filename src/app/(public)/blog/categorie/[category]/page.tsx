@@ -15,6 +15,10 @@ import {
   normalizeCategory,
 } from '@/lib/data/blog/categories'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 // Pre-render all category pages at build time
 export function generateStaticParams() {
@@ -118,6 +122,53 @@ export default async function BlogCategoryPage({ params }: PageProps) {
     ],
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: cat.metaTitle,
+    description: cat.metaDescription,
+    url: `${SITE_URL}/blog/categorie/${categorySlug}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: monthlyAnchorIso(),
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/blog/categorie/${categorySlug}`,
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${articles.length} article${articles.length > 1 ? 's' : ''} dans la catégorie « ${cat.label} »`,
+    `Mis à jour mensuellement — sources INSEE, CAPEB, FFB, ANAH`,
+    `Rédigé par l'équipe éditoriale + relecture par des artisans partenaires`,
+    `Citation autorisée avec lien vers la source — licence CC BY 4.0`,
+  ]
+
+  const tldrBullets = [
+    `${cat.label} : ${articles.length} guide${articles.length > 1 ? 's' : ''} ${cat.description.toLowerCase()}`,
+    `Tous les chiffres et fourchettes proviennent de devis réels et de sources publiques (INSEE, CAPEB, FFB).`,
+    `Articles relus avant publication, datés et mis à jour ; chaque guide cite ses sources.`,
+    `Pour démarrer un projet : demander un devis gratuit auprès d'artisans certifiés via ServicesArtisans.`,
+  ]
+
   const categoryColors: Record<string, string> = {
     Conseils: 'bg-amber-100 text-amber-700',
     Tarifs: 'bg-emerald-100 text-emerald-700',
@@ -138,8 +189,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[articleSchema, collectionSchema, breadcrumbSchema]} />
 
       <div className="min-h-screen bg-sand-50">
         {/* Hero */}
@@ -165,7 +215,10 @@ export default async function BlogCategoryPage({ params }: PageProps) {
               >
                 {cat.label}
               </span>
-              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+              <h1
+                data-speakable="true"
+                className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]"
+              >
                 {cat.metaTitle.split('—')[0].trim()}
               </h1>
               <p className="text-xl text-charcoal-400 max-w-2xl mx-auto">{cat.description}</p>
@@ -173,6 +226,20 @@ export default async function BlogCategoryPage({ params }: PageProps) {
                 {articles.length} article{articles.length > 1 ? 's' : ''}
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* Byline + En bref — E-E-A-T signal post-hero */}
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <ArticleMeta
+              author="Équipe éditoriale ServicesArtisans"
+              authorHref="/a-propos"
+              datePublished="2024-01-15T08:00:00.000Z"
+              dateModified={monthlyAnchorIso()}
+              className="mb-6"
+            />
+            <EnBrefBox keyPoints={enBrefPoints} />
           </div>
         </section>
 
@@ -266,6 +333,13 @@ export default async function BlogCategoryPage({ params }: PageProps) {
                 })}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* TL;DR — capture FS Position 0 / AI Overviews */}
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <TldrBlock bullets={tldrBullets} />
           </div>
         </section>
 

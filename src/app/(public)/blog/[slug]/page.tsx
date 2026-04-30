@@ -36,6 +36,7 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import BlogClusterLinks from '@/components/seo/BlogClusterLinks'
 import BlogServiceCityLinks from '@/components/seo/BlogServiceCityLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 
@@ -1063,6 +1064,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
               </section>
             ))}
           </div>
+
+          {/* TL;DR pré-FAQ — capture FS Position 0 / AI Overviews */}
+          {article.keyTakeaways && article.keyTakeaways.length > 0 && (
+            <TldrBlock bullets={article.keyTakeaways} />
+          )}
 
           {/* FAQ Section */}
           {faqItems.length > 0 && <ArticleFAQ items={faqItems} />}

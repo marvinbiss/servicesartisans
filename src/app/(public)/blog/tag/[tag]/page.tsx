@@ -10,6 +10,10 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { slugifyTag, allBlogTags as allTags } from '@/lib/data/blog/tags'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 86400
 
@@ -122,10 +126,55 @@ export default async function BlogTagPage({ params }: PageProps) {
     ],
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${tagInfo.label} — Articles & Guides`,
+    description: `Tous les articles sur ${tagInfo.label.toLowerCase()} : conseils, prix, réglementation et guides pratiques par les experts ServicesArtisans.`,
+    url: `${SITE_URL}/blog/tag/${tagSlug}`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: monthlyAnchorIso(),
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/tag/${tagSlug}` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
+  const enBrefPoints = [
+    `${articles.length} article${articles.length > 1 ? 's' : ''} taggé${articles.length > 1 ? 's' : ''} « ${tagInfo.label} »`,
+    relatedTags.length > 0
+      ? `${relatedTags.length} tag${relatedTags.length > 1 ? 's' : ''} associé${relatedTags.length > 1 ? 's' : ''} pour explorer`
+      : 'Tags associés disponibles selon les articles',
+    `Mis à jour mensuellement — sources INSEE, CAPEB, FFB, ANAH`,
+    `Citation autorisée avec lien — licence CC BY 4.0`,
+  ]
+
+  const tldrBullets = [
+    `Page tag « ${tagInfo.label} » : ${articles.length} guide${articles.length > 1 ? 's' : ''} pratique${articles.length > 1 ? 's' : ''} liés à ce sujet.`,
+    `Chiffres et fourchettes issus de devis réels et de sources publiques (INSEE, CAPEB, FFB, ANAH).`,
+    `Articles relus avant publication, datés et mis à jour ; citations gouvernementales pour les sujets aides/CEE.`,
+    `Pour démarrer un projet, demande de devis gratuite auprès d'artisans certifiés via ServicesArtisans.`,
+  ]
+
   return (
     <>
-      <JsonLd data={collectionSchema} />
-      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={[articleSchema, collectionSchema, breadcrumbSchema]} />
 
       <div className="min-h-screen bg-sand-50">
         {/* Hero */}
@@ -150,7 +199,10 @@ export default async function BlogTagPage({ params }: PageProps) {
                 <Tag className="w-4 h-4" />
                 Tag
               </div>
-              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+              <h1
+                data-speakable="true"
+                className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]"
+              >
                 {tagInfo.label}
               </h1>
               <p className="text-xl text-charcoal-400 max-w-2xl mx-auto">
@@ -158,6 +210,20 @@ export default async function BlogTagPage({ params }: PageProps) {
                 {tagInfo.label.toLowerCase()}
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* Byline + En bref — E-E-A-T signal post-hero */}
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <ArticleMeta
+              author="Équipe éditoriale ServicesArtisans"
+              authorHref="/a-propos"
+              datePublished="2024-01-15T08:00:00.000Z"
+              dateModified={monthlyAnchorIso()}
+              className="mb-6"
+            />
+            <EnBrefBox keyPoints={enBrefPoints} />
           </div>
         </section>
 
@@ -229,6 +295,13 @@ export default async function BlogTagPage({ params }: PageProps) {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* TL;DR — capture FS Position 0 / AI Overviews */}
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <TldrBlock bullets={tldrBullets} />
           </div>
         </section>
 

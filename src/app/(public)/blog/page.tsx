@@ -14,6 +14,10 @@ import { allBlogTags } from '@/lib/data/blog/tags'
 import BlogPageClient from './BlogPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { ArticleMeta } from '@/components/ArticleMeta'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 export const revalidate = 86400
 
@@ -95,6 +99,36 @@ export default async function BlogPage({ searchParams }: PageProps) {
     })),
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Blog Travaux 2026 — ${allArticlesMeta.length}+ guides de prix et conseils`,
+    description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,
+    url: `${SITE_URL}/blog`,
+    datePublished: '2024-01-15T08:00:00.000Z',
+    dateModified: monthlyAnchorIso(),
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    image: `${SITE_URL}/opengraph-image`,
+    author: {
+      '@type': 'Organization',
+      name: 'Équipe éditoriale ServicesArtisans',
+      url: `${SITE_URL}/a-propos`,
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '[data-speakable="true"]'],
+    },
+  }
+
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Blog', url: '/blog' },
@@ -141,6 +175,20 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const SSR_COUNT = 12
   const ssrArticles = allArticlesMeta.slice(0, SSR_COUNT)
 
+  const enBrefPoints = [
+    `${allArticlesMeta.length}+ guides experts publiés`,
+    `${blogCategories.length} catégories : tarifs, aides, fiches métier, rénovation`,
+    `${allBlogTags.length} tags pour explorer par sujet`,
+    `Mis à jour mensuellement — sources INSEE, CAPEB, FFB, ANAH`,
+  ]
+
+  const tldrBullets = [
+    `Le blog compte ${allArticlesMeta.length} articles vérifiés sur ${blogCategories.length} catégories.`,
+    `Les fourchettes de prix sont actualisées chaque année à partir de devis réels et de données publiques (INSEE, CAPEB, FFB).`,
+    `Les guides YMYL (aides, MaPrimeRénov', CEE) citent les sources gouvernementales et sont relus par des experts du bâtiment.`,
+    `Articles + études propriétaires sous licence Creative Commons BY 4.0 — citation autorisée.`,
+  ]
+
   const categoryColors: Record<string, string> = {
     Conseils: 'bg-amber-100 text-amber-700',
     Tarifs: 'bg-emerald-100 text-emerald-700',
@@ -163,7 +211,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
 
   return (
     <>
-      <JsonLd data={[collectionSchema, breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[articleSchema, collectionSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Server-rendered hero with H1 — visible to crawlers */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
@@ -191,7 +239,10 @@ export default async function BlogPage({ searchParams }: PageProps) {
             className="mb-6 text-charcoal-400 [&_a]:text-charcoal-400 [&_a:hover]:text-white [&_svg]:text-charcoal-600"
           />
           <div className="text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+            <h1
+              data-speakable="true"
+              className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]"
+            >
               Blog & Actualités
             </h1>
             <p className="text-xl text-charcoal-400 max-w-2xl mx-auto">
@@ -199,6 +250,20 @@ export default async function BlogPage({ searchParams }: PageProps) {
               ServicesArtisans.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Byline + En bref — E-E-A-T signal post-hero */}
+      <section className="bg-white border-b">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ArticleMeta
+            author="Équipe éditoriale ServicesArtisans"
+            authorHref="/a-propos"
+            datePublished="2024-01-15T08:00:00.000Z"
+            dateModified={monthlyAnchorIso()}
+            className="mb-6"
+          />
+          <EnBrefBox keyPoints={enBrefPoints} />
         </div>
       </section>
 
@@ -324,6 +389,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* TL;DR — capture FS Position 0 / AI Overviews avant tag archive */}
+      <section className="py-12 bg-white border-t">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 
