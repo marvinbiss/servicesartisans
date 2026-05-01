@@ -163,6 +163,13 @@ export function getIntentTitleVariants(intent: ServiceIntent, ctx: TitleContext)
   const hasProviders = providerCount > 0
   const deptSuffix = departmentCode ? ` (${departmentCode})` : ''
 
+  // Invariants enforcés par tests (__tests__/lib/seo/service-intents.test.ts) :
+  //   - URGENCE : chaque variant contient un signal d'urgence (24h, dépannage, urgence, rapide, intervention)
+  //   - RÉNOVATION : chaque variant contient un signal RGE/MaPrimeRénov/CEE/aides/certifiés
+  //   - TRAVAUX : neutre (ni 24h/24 ni RGE)
+  //   - Tous : si reviewPrefix est non vide, chaque variant DOIT commencer par lui (sinon star bait perdu)
+  // Variants ultra-courts en queue de liste = filet pour villes à long nom où les variants
+  // longs dépassent 41c. Le caller (page.tsx) choisit le 1er variant qui rentre.
   if (intent === 'urgence') {
     return hasProviders
       ? [
@@ -171,18 +178,18 @@ export function getIntentTitleVariants(intent: ServiceIntent, ctx: TitleContext)
           `${reviewPrefix}${serviceName} ${locationName} — Dépannage urgent ${year}`,
           `${reviewPrefix}${serviceName} ${locationName}${deptSuffix} · Urgence 24h/24`,
           `${reviewPrefix}${serviceName} ${locationName} — Devis 2h, intervention rapide`,
-          `${serviceName} ${locationName} — Urgence 24h/24`,
-          `${serviceName} ${locationName} 24h`,
-          `${serviceName} ${locationName}`,
+          `${reviewPrefix}${serviceName} ${locationName} — Urgence 24h/24`,
+          `${reviewPrefix}${serviceName} ${locationName} 24h`,
+          `${reviewPrefix}${serviceName} urgence ${locationName}`,
         ]
       : [
           `${reviewPrefix}${serviceName} ${locationName} 24h/24 · Intervention ${year}`,
           `${reviewPrefix}${serviceName} ${locationName} : Dépannage urgence ${year}`,
           `${reviewPrefix}${serviceName} ${locationName}${deptSuffix} · Urgence 24h/24`,
           `${reviewPrefix}${serviceName} ${locationName} — Devis express 2h`,
-          `${serviceName} ${locationName} — Urgence 24h/24`,
-          `${serviceName} ${locationName} 24h`,
-          `${serviceName} ${locationName}`,
+          `${reviewPrefix}${serviceName} ${locationName} — Urgence 24h/24`,
+          `${reviewPrefix}${serviceName} ${locationName} 24h`,
+          `${reviewPrefix}${serviceName} urgence ${locationName}`,
         ]
   }
 
@@ -194,25 +201,20 @@ export function getIntentTitleVariants(intent: ServiceIntent, ctx: TitleContext)
           `${reviewPrefix}${serviceName} ${locationName} — Artisans RGE + aides ${year}`,
           `${reviewPrefix}${serviceName} RGE ${locationName}${deptSuffix} · Devis aides`,
           `${reviewPrefix}${serviceName} ${locationName} — MaPrimeRénov\u2019 & CEE ${year}`,
-          `${serviceName} RGE ${locationName} ${year}`,
-          `${serviceName} RGE ${locationName}`,
-          `${serviceName} ${locationName}`,
+          `${reviewPrefix}${serviceName} RGE ${locationName} ${year}`,
+          `${reviewPrefix}${serviceName} RGE ${locationName}`,
         ]
       : [
           `${reviewPrefix}${serviceName} RGE ${locationName} · MaPrimeRénov\u2019 ${year}`,
           `${reviewPrefix}${serviceName} ${locationName} : Artisans RGE ${year}`,
           `${reviewPrefix}${serviceName} RGE ${locationName}${deptSuffix} · Devis aides`,
           `${reviewPrefix}${serviceName} ${locationName} — Artisans certifiés ${year}`,
-          `${serviceName} RGE ${locationName} ${year}`,
-          `${serviceName} RGE ${locationName}`,
-          `${serviceName} ${locationName}`,
+          `${reviewPrefix}${serviceName} RGE ${locationName} ${year}`,
+          `${reviewPrefix}${serviceName} RGE ${locationName}`,
         ]
   }
 
   // TRAVAUX (défaut)
-  // Variant ultra-court en dernière position (`${serviceName} ${locationName}`)
-  // = filet pour villes à long nom (Saint-Just-en-Chaussée, Verneuil-d'Avre…) où
-  // les autres variants dépassent 41c. Le caller choisit le 1er variant qui rentre.
   return hasProviders
     ? [
         `${reviewPrefix}${serviceName} ${locationName} ${year} — Devis Gratuit`,
@@ -220,18 +222,18 @@ export function getIntentTitleVariants(intent: ServiceIntent, ctx: TitleContext)
         `${reviewPrefix}${serviceName} ${locationName}${deptSuffix} — Devis ${year}`,
         `${reviewPrefix}${serviceName} ${locationName} ${year} : ${providerCount} Artisans`,
         `${reviewPrefix}${serviceName} ${locationName} — Artisans vérifiés ${year}`,
-        `${serviceName} ${locationName} — Devis ${year}`,
-        `${serviceName} ${locationName} ${year}`,
-        `${serviceName} ${locationName}`,
+        `${reviewPrefix}${serviceName} ${locationName} — Devis ${year}`,
+        `${reviewPrefix}${serviceName} ${locationName} ${year}`,
+        `${reviewPrefix}${serviceName} ${locationName}`,
       ]
     : [
         `${reviewPrefix}${serviceName} ${locationName} ${year} — Devis Gratuit`,
         `${reviewPrefix}${serviceName} ${locationName} : Devis Gratuit ${year}`,
         `${reviewPrefix}${serviceName} ${locationName}${deptSuffix} — Devis ${year}`,
         `${reviewPrefix}${serviceName} ${locationName} — Artisans ${year}`,
-        `${serviceName} ${locationName} — Devis ${year}`,
-        `${serviceName} ${locationName} ${year}`,
-        `${serviceName} ${locationName}`,
+        `${reviewPrefix}${serviceName} ${locationName} — Devis ${year}`,
+        `${reviewPrefix}${serviceName} ${locationName} ${year}`,
+        `${reviewPrefix}${serviceName} ${locationName}`,
       ]
 }
 
