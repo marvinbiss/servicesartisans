@@ -478,11 +478,15 @@ export async function sendEmail({
   subject,
   html,
   text,
+  headers,
+  replyTo,
 }: {
   to: string
   subject: string
   html: string
   text: string
+  headers?: Record<string, string>
+  replyTo?: string
 }): Promise<{ success: boolean; error?: string; messageId?: string }> {
   try {
     const { data, error } = await getResend().emails.send({
@@ -491,6 +495,10 @@ export async function sendEmail({
       subject,
       html,
       text,
+      ...(headers ? { headers } : {}),
+      // Resend SDK expects snake_case `reply_to` (node_modules/resend dist/index.d.ts L188).
+      // CamelCase `replyTo` is silently dropped.
+      ...(replyTo ? { reply_to: replyTo } : {}),
     })
 
     if (error) {

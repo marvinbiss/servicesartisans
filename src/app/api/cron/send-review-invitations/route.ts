@@ -43,6 +43,7 @@ function buildReviewEmail(input: {
   serviceName: string
   reviewUrl: string
   artisanName: string | null
+  unsubscribeUrl: string
 }) {
   const greeting = input.clientName ? `Bonjour ${input.clientName}` : 'Bonjour'
   const artisanBit = input.artisanName ? ` avec ${input.artisanName}` : ''
@@ -74,15 +75,16 @@ function buildReviewEmail(input: {
               </div>
               <p style="color:#999; font-size:13px; text-align:center;">Ce lien est personnel et valide 30 jours.</p>
               <hr style="border:none; border-top:1px solid #e5e7eb; margin:25px 0;">
-              <p style="color:#999; font-size:12px; text-align:center;">
-                ServicesArtisans — Artisans verifies et leads exclusifs
+              <p style="color:#999; font-size:12px; text-align:center; line-height:1.6;">
+                ServicesArtisans — Artisans vérifiés et leads exclusifs<br>
+                <a href="${input.unsubscribeUrl}" style="color:#999; text-decoration:underline;">Se désinscrire des invitations à laisser un avis</a>
               </p>
             </div>
           </div>
         </body>
       </html>
     `,
-    text: `${greeting},\n\nIl y a quelques jours, vous avez demande un devis pour ${input.serviceName}${artisanBit}. Comment cela s'est-il passe ?\n\nLaisser un avis : ${input.reviewUrl}\n\nCela ne prend que 30 secondes.\n\nServicesArtisans`,
+    text: `${greeting},\n\nIl y a quelques jours, vous avez demande un devis pour ${input.serviceName}${artisanBit}. Comment cela s'est-il passe ?\n\nLaisser un avis : ${input.reviewUrl}\n\nCela ne prend que 30 secondes.\n\n---\nServicesArtisans\nSe desinscrire : ${input.unsubscribeUrl}`,
   }
 }
 
@@ -155,6 +157,13 @@ export const GET = withCronCheckIn('cron-send-review-invitations', async (reques
     // which is the desired behaviour for retry semantics).
     const { plaintext, hash } = createInvitationToken()
     const reviewUrl = `${SITE_URL}/invitation-avis/${plaintext}`
+    // Mailto unsubscribe : RFC 2369 minimal viable. Le subject inclut l'ID
+    // pour que Marvin puisse retrouver et marquer manuellement l'invitation
+    // (ou setup une auto-traitement plus tard).
+    // TODO V2 : endpoint `/api/reviews/unsubscribe/[token]` + colonne
+    // `review_invitations.unsubscribed_at` (migration 486) pour permettre le
+    // List-Unsubscribe-Post one-click (RFC 8058) qui requiert HTTPS.
+    const unsubscribeMailto = `mailto:contact@servicesartisans.fr?subject=Desinscription%20avis%20-%20${invitation.id}&body=Merci%20de%20me%20desinscrire%20des%20invitations%20a%20laisser%20un%20avis.`
 
     const template = buildReviewEmail({
       clientName: invitation.client_name ?? '',
@@ -163,11 +172,22 @@ export const GET = withCronCheckIn('cron-send-review-invitations', async (reques
       artisanName: invitation.provider_id
         ? (artisanNames.get(invitation.provider_id) ?? null)
         : null,
+      unsubscribeUrl: unsubscribeMailto,
     })
 
+    // List-Unsubscribe (RFC 2369) requis par Gmail/Outlook 2024 sender guidelines
+    // pour les bulk senders >5K/jour (cf. https://support.google.com/mail/answer/81126).
+    // Mailto-only ici ; List-Unsubscribe-Post (RFC 8058) nécessite endpoint HTTPS
+    // dédié + colonne `unsubscribed_at` (TODO migration).
+    // ReplyTo redirige les réponses humaines vers contact@ (existant) plutôt que
+    // FROM_EMAIL (potentiellement noreply@) → conformité best practices et trust.
     const result = await sendEmail({
       to: invitation.client_email,
       ...template,
+      replyTo: 'contact@servicesartisans.fr',
+      headers: {
+        'List-Unsubscribe': `<${unsubscribeMailto}>`,
+      },
     })
 
     if (result.success) {

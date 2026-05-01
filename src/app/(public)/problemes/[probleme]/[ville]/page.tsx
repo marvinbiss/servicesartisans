@@ -457,11 +457,19 @@ export async function generateMetadata({
   const villeData = getVilleBySlug(ville)
   if (!problem || !villeData) notFound()
 
-  // Stratégie 140K vague 2 #7 — combos hors whitelist redirigés vers le canonical
-  // /services/[primaryService]/[ville] (cannibalisation /problemes ↔ /services
-  // résolue côté Google). Voir src/lib/seo/problemes-whitelist.ts.
+  // Stratégie 140K vague 2 #7 — noindex pour combos hors whitelist (audit GSC
+  // 2026-04-30 : ~5.5K URLs en "explorée non indexée" car `permanentRedirect()`
+  // dans generateMetadata + ISR + dynamicParams ne génère pas de 308 — bug
+  // Next.js 14.2 similaire au soft-404). Le redirect page-level (l. 556+) reste
+  // en place comme fallback. Pour Google, le signal noindex est plus efficace
+  // qu'un 200-disguisé-en-301 cassé.
   if (!isProblemeIndexable(probleme, ville)) {
-    permanentRedirect(`/services/${problem.primaryService}/${ville}`)
+    return {
+      title: 'Page redirigée — ServicesArtisans',
+      description: `Cette page problème a été consolidée vers /services/${problem.primaryService}/${ville}.`,
+      alternates: { canonical: `${SITE_URL}/services/${problem.primaryService}/${ville}` },
+      robots: { index: false, follow: true },
+    }
   }
 
   // Sprint 2 CTR — short prefix + 2026 modifier (tight title budget)

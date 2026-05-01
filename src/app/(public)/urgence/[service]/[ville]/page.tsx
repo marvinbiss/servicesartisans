@@ -760,14 +760,29 @@ export async function generateMetadata({
   params: Promise<{ service: string; ville: string }>
 }): Promise<Metadata> {
   const { service, ville: villeSlug } = await params
-  // Stratégie 140K V2 #4 : 301 vers /services/[s]/[v] hors whitelist (4 svc × 25 villes).
-  // Redirect levé AVANT toute lecture de tradeContent / DB pour économiser le SSR.
-  if (!isUrgenceIndexable(service, villeSlug)) {
-    permanentRedirect(`/services/${service}/${villeSlug}`)
-  }
+  // Ordre strict : 1. Validation existence (notFound 404 si service/ville
+  // inexistants — évite soft 404 sur slugs random), 2. Whitelist indexabilité.
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
+
+  // Stratégie 140K V2 #4 : noindex pour /urgence/[s]/[v] hors whitelist
+  // (4 svc × 25 villes). Le `permanentRedirect()` ne fonctionne PAS en
+  // generateMetadata avec ISR + dynamicParams (bug Next.js 14.2 similaire au
+  // soft-404 : la page rend 200 normal au lieu de 308). Audit GSC 2026-04-30
+  // a montré 106K URLs urgence hors whitelist qui rendaient en 200 normal,
+  // créant ~23K en "explorée non indexée" Google.
+  // Fix : retourner explicitement `robots: { index: false }` pour signaler à
+  // Google de retirer ces pages. La redirection page-level reste en place
+  // comme fallback (au cas où le bug Next.js serait fixé en aval).
+  if (!isUrgenceIndexable(service, villeSlug)) {
+    return {
+      title: 'Page redirigée — ServicesArtisans',
+      description: `Cette page urgence a été consolidée vers /services/${service}/${villeSlug}.`,
+      alternates: { canonical: `${SITE_URL}/services/${service}/${villeSlug}` },
+      robots: { index: false, follow: true },
+    }
+  }
 
   const tradeLower = trade.name.toLowerCase()
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
@@ -874,6 +889,13 @@ async function renderUrgenceServiceVillePage({
 }) {
   const { service, ville: villeSlug } = await params
 
+  // Ordre strict : 1. notFound 404 si service/ville inexistants (évite 308
+  // vers une page /services qui pourrait elle-même 404, soit une chaîne
+  // cassée), 2. Whitelist + redirect 308 vers le canonical /services/[s]/[v].
+  const trade = tradeContent[service]
+  const villeData = getVilleBySlug(villeSlug)
+  if (!trade || !villeData) notFound()
+
   // Stratégie 140K V2 #4 : 301 vers /services/[s]/[v] hors whitelist (4 svc × 25 villes).
   // Double sécurité (déjà filtré par generateMetadata mais utile si le SSR
   // skip metadata via fast-path — Next.js peut ré-exécuter la page en cas
@@ -881,10 +903,6 @@ async function renderUrgenceServiceVillePage({
   if (!isUrgenceIndexable(service, villeSlug)) {
     permanentRedirect(`/services/${service}/${villeSlug}`)
   }
-
-  const trade = tradeContent[service]
-  const villeData = getVilleBySlug(villeSlug)
-  if (!trade || !villeData) notFound()
 
   const commune = await getCommuneBySlug(villeSlug).catch(() => null)
 
