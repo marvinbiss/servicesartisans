@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,7 +64,7 @@ function calculateQualityScore(provider: Record<string, unknown>): {
   return { score: Math.min(100, score), flags }
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-recalculate-quality', async (request: Request) => {
   try {
     const supabase = createAdminClient()
 
@@ -173,4 +174,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

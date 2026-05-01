@@ -23,6 +23,7 @@ import {
   type SimulateurLeadInput,
 } from '@/lib/simulateur/pipedrive'
 import { createCallbackRequest, type CallbackPayload } from '@/lib/simulateur/callback-pipedrive'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -42,7 +43,7 @@ interface FailureRow {
   retry_count: number
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-simulateur-pipedrive-retry', async (request: Request) => {
   // Toujours 401 si le header n'est pas valide — qu'il manque OU que CRON_SECRET
   // soit non-configuré côté serveur. Évite l'info-oracle : un client ne peut pas
   // distinguer "secret absent" de "mauvais secret" (500 vs 401 révèle l'état).
@@ -260,4 +261,4 @@ export async function GET(request: Request) {
 
   logger.info('simulateur-pipedrive-retry: done', { total: rows.length, synced, failed })
   return NextResponse.json({ total: rows.length, synced, failed })
-}
+})

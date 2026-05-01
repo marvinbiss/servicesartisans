@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger'
 import { getToken } from '@/lib/sirene/client'
 import { SIRENE_CONFIG } from '@/lib/sirene/config'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Cron: Vérifie les SIRET en DB via l'API INSEE SIRENE.
@@ -19,7 +20,7 @@ const MAX_PROVIDERS_PER_RUN = 1000
 
 export const maxDuration = 60
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-check-radiees', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -162,4 +163,4 @@ export async function GET(request: Request) {
     logger.error('check-radiees: fatal error', err)
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
   }
-}
+})

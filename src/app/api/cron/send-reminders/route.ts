@@ -6,11 +6,12 @@ import {
 } from '@/lib/notifications/unified-notification-service'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 // GET /api/cron/send-reminders - Send reminder emails for tomorrow's bookings
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-send-reminders', async (request: Request) => {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -145,4 +146,4 @@ export async function GET(request: Request) {
     logger.error('[Cron] Error in send-reminders:', error)
     return NextResponse.json({ error: "Échec de l'envoi des rappels" }, { status: 500 })
   }
-}
+})

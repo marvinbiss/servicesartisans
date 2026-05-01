@@ -30,6 +30,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
@@ -67,7 +68,7 @@ function parseRetention(envName: string, fallback: number, minimum: number): num
   return parsed
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-purge-rgpd', async (request: Request) => {
   if (!verifyCronSecret(request.headers.get('authorization'))) {
     logger.warn('[purge-rgpd] Unauthorized')
     return NextResponse.json(
@@ -235,4 +236,4 @@ export async function GET(request: Request) {
     },
     { status: partialFailure ? 500 : 200 }
   )
-}
+})

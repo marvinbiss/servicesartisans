@@ -35,6 +35,7 @@ import {
   relanceJ14Client,
   relanceJ14Artisan,
 } from '@/lib/cee/relance-emails'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -113,7 +114,7 @@ interface ContactInfo {
 // Handler
 // ---------------------------------------------------------------------------
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-cee-relance', async (request: Request) => {
   // -- Auth ----------------------------------------------------------------
   const expected = process.env.CRON_SECRET
   if (!expected) {
@@ -321,7 +322,7 @@ export async function GET(request: Request) {
     })
     return NextResponse.json({ error: 'internal_error' }, { status: 500 })
   }
-}
+})
 
 // ---------------------------------------------------------------------------
 // Contact resolution

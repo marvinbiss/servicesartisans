@@ -24,11 +24,12 @@ import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { dispatchLead } from '@/app/actions/dispatch'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-lead-reassign', async (request: Request) => {
   const authHeader = request.headers.get('authorization')
   if (!verifyCronSecret(authHeader)) {
     logger.warn('[lead-reassign] Unauthorized')
@@ -123,4 +124,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})
