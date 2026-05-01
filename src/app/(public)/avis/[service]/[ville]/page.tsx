@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { logger } from '@/lib/logger'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   ArrowRight,
@@ -373,7 +374,12 @@ export default async function AvisServiceVillePage(props: {
     return await renderAvisServiceVillePage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[AvisServiceVillePage] unhandled error on render', err)
+    const params = await props.params.catch(() => null)
+    logger.error('avis_service_ville.unhandled_render_error', err as Error, {
+      route: 'avis/[service]/[ville]',
+      service: params?.service ?? null,
+      ville: params?.ville ?? null,
+    })
     notFound()
   }
 }

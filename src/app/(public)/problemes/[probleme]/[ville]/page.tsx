@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { logger } from '@/lib/logger'
 import {
   AlertTriangle,
   ArrowRight,
@@ -544,7 +545,12 @@ export default async function ProblemeVillePage(props: {
     return await renderProblemeVillePage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[ProblemeVillePage] unhandled error on render', err)
+    const params = await props.params.catch(() => null)
+    logger.error('probleme_ville.unhandled_render_error', err as Error, {
+      route: 'problemes/[probleme]/[ville]',
+      probleme: params?.probleme ?? null,
+      ville: params?.ville ?? null,
+    })
     notFound()
   }
 }

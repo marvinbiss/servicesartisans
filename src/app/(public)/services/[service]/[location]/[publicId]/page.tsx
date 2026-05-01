@@ -620,12 +620,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
-    // Parallel lookups to minimize total latency
+    // Parallel lookups to minimize total latency.
+    // Each .catch logs to Sentry via logger.error — alignée sur le pattern
+    // de renderProviderPage (audit 2026-05-01) pour éviter les fetch errors
+    // muets côté Sentry quand notFound() est déclenché par data manquante.
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
+    const metaErrCtx = {
+      route: 'services/[service]/[location]/[publicId]',
+      generator: 'metadata',
+      service: serviceSlug,
+      location: locationSlug,
+      publicId,
+    }
     const [stableIdResult, slugResult, service] = await Promise.all([
-      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch(() => null),
-      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch(() => null),
-      getServiceBySlug(serviceSlug).catch(() => null),
+      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
+        logger.error('provider_metadata.lookup_id_error', err as Error, metaErrCtx)
+        return null
+      }),
+      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
+        logger.error('provider_metadata.lookup_slug_error', err as Error, metaErrCtx)
+        return null
+      }),
+      getServiceBySlug(serviceSlug).catch((err) => {
+        logger.error('provider_metadata.service_lookup_error', err as Error, metaErrCtx)
+        return null
+      }),
     ])
     const rawProvider = stableIdResult || slugResult
     if (!rawProvider || (rawProvider as unknown as ProviderRecord).is_active === false) {

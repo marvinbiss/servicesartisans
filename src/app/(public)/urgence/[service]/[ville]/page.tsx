@@ -5,6 +5,7 @@ import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import { isUrgenceIndexable } from '@/lib/seo/urgence-whitelist'
+import { logger } from '@/lib/logger'
 import {
   Phone,
   Clock,
@@ -877,7 +878,12 @@ export default async function UrgenceServiceVillePage(props: {
     return await renderUrgenceServiceVillePage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[UrgenceServiceVillePage] unhandled error on render', err)
+    const params = await props.params.catch(() => null)
+    logger.error('urgence_service_ville.unhandled_render_error', err as Error, {
+      route: 'urgence/[service]/[ville]',
+      service: params?.service ?? null,
+      ville: params?.ville ?? null,
+    })
     notFound()
   }
 }

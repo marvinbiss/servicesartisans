@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { logger } from '@/lib/logger'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from 'lucide-react'
 
@@ -120,7 +121,11 @@ export default async function CommunePage(props: PageProps) {
     return await renderCommunePage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[CommunePage] unhandled error', err)
+    const params = await props.params.catch(() => null)
+    logger.error('commune.unhandled_render_error', err as Error, {
+      route: 'communes/[commune]',
+      commune: params?.commune ?? null,
+    })
     notFound()
   }
 }
