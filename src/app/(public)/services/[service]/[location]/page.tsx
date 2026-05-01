@@ -39,6 +39,11 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
+import {
+  buildUrgenceFsBait,
+  buildRenovationFsBait,
+  buildTravauxFsBait,
+} from '@/lib/seo/fs-bait-descriptions'
 
 import {
   getBreadcrumbSchema,
@@ -74,7 +79,6 @@ import {
   getServiceIntent,
   getIntentTitleVariants,
   getIntentH1Variants,
-  getIntentMetaDescription,
   shouldRenderRenovationBlocks,
   shouldRenderUrgencyBlock,
 } from '@/lib/seo/service-intents'
@@ -290,16 +294,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // First-fitting via helper partagé (Sprint 2 pattern, voir title-selector.ts).
   const title = selectFittingTitle(titleVariants, seoHash, 41)
 
-  // Intent-aware meta description — urgence / renovation / travaux registers.
-  // The CTR review snippet (`Note X/5 sur Y avis`) is appended regardless of
-  // intent to preserve social proof, when the threshold (≥5 avis) is met.
-  const baseDescription = getIntentMetaDescription(intent, {
+  // FS-bait : intent-routed builder (urgence / renovation / travaux). Pattern
+  // structuré pour Featured Snippet + PAA (count en début, signal aide en fin).
+  // descReviewSnippet est passé tel quel — clipping géré par buildXxxFsBait.
+  const fsBaitCtx = {
+    providerCount,
     serviceName,
     locationName,
-    providerCount,
     year: 2026,
-  })
-  const description = `${baseDescription}${descReviewSnippet}`
+    priceRange: null,
+    reviewSnippet: descReviewSnippet.trim() || undefined,
+  } as const
+  const description =
+    intent === 'urgence'
+      ? buildUrgenceFsBait(fsBaitCtx)
+      : intent === 'renovation'
+        ? buildRenovationFsBait(fsBaitCtx)
+        : buildTravauxFsBait(fsBaitCtx)
 
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
   // Only check dept fallback when providerCount is 0 (the only case where hasUniqueData matters).

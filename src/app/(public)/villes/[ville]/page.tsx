@@ -53,7 +53,6 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { buildVilleTldrBullets } from './sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
-import { getRegionPreposition } from '@/lib/geo-strings'
 import InContentLinks from '@/components/seo/InContentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
@@ -63,6 +62,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
 import { isSeoUpgradeV2, currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
+import { buildVilleHubFsBait } from '@/lib/seo/fs-bait-descriptions'
 import { logger } from '@/lib/logger'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
@@ -88,7 +88,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!ville) notFound()
 
   const cityImage = getCityImage(villeSlug)
-  const metaContent = generateVilleContent(ville)
   const upgradeV2 = isSeoUpgradeV2()
 
   // Sprint 0.2 — review prefix injecté en title pour CTR (pattern Sprint 2).
@@ -131,15 +130,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
   const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
-  const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
-  const descTemplates = [
-    `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). ${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuits.`,
-    `${ville.name}, ${ville.departement} : artisans référencés SIREN. ${metaContent.profile.citySizeLabel}, climat ${metaContent.profile.climateLabel.toLowerCase()}. Devis gratuit.`,
-    `Annuaire de ${services.length} métiers à ${ville.name} (${ville.departementCode}), ${ville.region}. ${metaContent.profile.climateLabel}. Comparez les devis.`,
-    `Artisans à ${ville.name} : plombier, électricien, serrurier et plus. ${ville.population} hab., ${ville.departement}. Devis gratuits en ligne.`,
-    `Tous les artisans de ${ville.name} (${ville.departementCode}). ${metaContent.profile.citySizeLabel} ${getRegionPreposition(ville.region)}. ${services.length} spécialités, devis gratuit.`,
-  ]
-  const description = descTemplates[descHash % descTemplates.length]
+  // FS-bait : count global + count métiers (PAA "Combien d'artisans à X").
+  const description = buildVilleHubFsBait({
+    providerCount: villeProviderCount,
+    servicesCount: services.length,
+    villeName: ville.name,
+    departementCode: ville.departementCode,
+    year: 2026,
+    reviewSnippet: villeAggregate
+      ? `Note ${villeAggregate.ratingValue}/5 sur ${villeAggregate.reviewCount} avis.`
+      : undefined,
+  })
 
   return {
     title,

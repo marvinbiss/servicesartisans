@@ -70,6 +70,7 @@ import {
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { hashCode } from '@/lib/seo/hash'
+import { buildRenovationFsBait } from '@/lib/seo/fs-bait-descriptions'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -186,10 +187,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleHash = hashCode(`rge-title-${serviceSlug}-${villeSlug}`)
   const title = selectFittingTitle(titleVariants, titleHash, 41)
 
-  const rawDesc = upgradeV2
-    ? `${count} ${serviceName.toLowerCase()} RGE certifiés à ${villeName}. Devis gratuit 24h. MaPrimeRénov’ jusqu’à 11 000 €, CEE et TVA 5,5 %.`
+  // FS-bait : count + price + "MaPrimeRénov' 11 000 €" structuré pour PAA financial.
+  const description = upgradeV2
+    ? buildRenovationFsBait({
+        providerCount: count,
+        serviceName,
+        locationName: villeName,
+        year: 2026,
+        priceRange: null,
+        reviewSnippet: aggregateRating
+          ? `Note ${aggregateRating.ratingValue}/5 sur ${aggregateRating.reviewCount} avis.`
+          : undefined,
+      })
     : `Artisans ${serviceName.toLowerCase()} certifiés RGE à ${villeName}. Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Qualifications vérifiées ADEME à jour.`
-  const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 
   const path = `/rge/${serviceSlug}/${villeSlug}`
 

@@ -31,6 +31,7 @@ import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/con
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
+import { buildAvisFsBait } from '@/lib/seo/fs-bait-descriptions'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
@@ -292,16 +293,15 @@ export async function generateMetadata({
   ]
   const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
-  const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
-  const dept = villeData.departement
-  const descTemplates = [
-    `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.${descReviewSnippet}`,
-    `Choisir un ${tradeLower} à ${villeData.name} (${dept}) : avis clients, notes et recommandations. Artisans vérifiés, devis gratuit.${descReviewSnippet}`,
-    `${trade.name} à ${villeData.name} : consultez les avis vérifiés et comparez les tarifs (${minPrice}–${maxPrice} ${trade.priceRange.unit}). Guide 2026.${descReviewSnippet}`,
-    `${tradeLower.charAt(0).toUpperCase() + tradeLower.slice(1)}s de confiance à ${villeData.name} selon les avis clients. Prix local : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez et choisissez.${descReviewSnippet}`,
-    `Avis et recommandations ${tradeLower} à ${villeData.name} (${dept}). Trouvez un artisan de confiance parmi les professionnels vérifiés.${descReviewSnippet}`,
-  ]
-  const description = descTemplates[descHash % descTemplates.length]
+  // FS-bait : count + price + comparison signal (PAA "Quel est le meilleur X à Y").
+  const description = buildAvisFsBait({
+    providerCount: 0,
+    serviceName: trade.name,
+    locationName: villeData.name,
+    year: 2026,
+    priceRange: { min: minPrice, max: maxPrice, unit: trade.priceRange.unit },
+    reviewSnippet: descReviewSnippet.trim() || undefined,
+  })
 
   const serviceImage = getServiceImageForContext(service, ville)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
