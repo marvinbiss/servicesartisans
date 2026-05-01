@@ -18,6 +18,7 @@ import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
 import { hashCode } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { villes, services } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
@@ -145,11 +146,6 @@ export function generateStaticParams() {
   return emergencySlugs.map((service) => ({ service }))
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -162,14 +158,17 @@ export async function generateMetadata({
   const tradeLower = trade.name.toLowerCase()
 
   const titleHash = Math.abs(hashCode(`urgence-title-${service}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${trade.name} urgence — Intervention rapide`,
     `${trade.name} d'urgence — Soir & week-end`,
     `Urgence ${tradeLower} — Dépannage rapide`,
     `${trade.name} urgence — Devis gratuit`,
     `Dépannage ${tradeLower} urgent — 24h/24`,
+    `${trade.name} urgence 24h/24`,
+    `Urgence ${tradeLower}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
   const descTemplates = [

@@ -34,6 +34,7 @@ import { isProblemeIndexable } from '@/lib/seo/problemes-whitelist'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/commune-data'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getRegionPreposition } from '@/lib/geo-strings'
@@ -110,10 +111,7 @@ function getClimatLabel(zone: string | null): string {
   return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
+// truncateTitle moved to @/lib/seo/title-selector.
 
 // ---------------------------------------------------------------------------
 // Problem × City correlation helper
@@ -496,13 +494,16 @@ export async function generateMetadata({
       : ''
 
   const titleHash = Math.abs(hashCode(`probleme-ville-title-${probleme}-${ville}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${reviewPrefix}${problem.name} ${villeData.name} 2026 — Solutions`,
     `${reviewPrefix}${problem.name} à ${villeData.name} 2026 : coûts`,
     `${reviewPrefix}${problem.name} ${villeData.name} — Artisans 24h`,
     `${reviewPrefix}${problem.name} ${villeData.name} 2026 — Diagnostic`,
+    `${reviewPrefix}${problem.name} ${villeData.name} 2026`,
+    `${reviewPrefix}${problem.name} ${villeData.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)

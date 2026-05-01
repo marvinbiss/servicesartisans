@@ -21,6 +21,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import {
   regions,
   getRegionBySlug,
@@ -51,11 +52,6 @@ interface PageProps {
   params: Promise<{ region: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { region: regionSlug } = await params
   const region = getRegionBySlug(regionSlug)
@@ -71,14 +67,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
   const countPrefix = artisanCount >= 100 ? `${formatProviderCount(artisanCount)} ` : ''
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${countPrefix}Artisans ${region.name} 2026 — Devis gratuit 24h`,
     `Artisan ${region.name} 2026 — ${deptCount} dép., ${cityCount} villes`,
     `${region.name} 2026 : ${countPrefix || 'artisans qualifiés'} — Devis`,
     `Artisans ${getRegionPreposition(region.name)} 2026 — Comparez ${countPrefix}`,
     `${region.name} 2026 — Annuaire ${countPrefix}artisans vérifiés`,
+    `Artisans ${region.name} 2026`,
+    `Artisans ${region.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''

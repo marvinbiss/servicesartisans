@@ -29,6 +29,7 @@ import {
 } from '@/lib/data/france'
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getServiceImageForContext } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -51,11 +52,6 @@ interface PageProps {
   params: Promise<{ region: string; service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { region: regionSlug, service: serviceSlug } = await params
   const region = getRegionBySlug(regionSlug)
@@ -68,14 +64,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const deptCount = region.departments.length
 
   const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${serviceSlug}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${trade.name} ${region.name} 2026 — Devis Gratuit 24h`,
     `${trade.name} ${region.name} 2026 — ${deptCount} départements`,
     `${trade.name} ${getRegionPreposition(region.name)} 2026 : pros référencés SIREN`,
     `${trade.name} ${region.name} 2026 — Tarifs + Devis Gratuit`,
     `${trade.name} ${region.name} 2026 : comparez les pros`,
+    `${trade.name} ${region.name} 2026`,
+    `${trade.name} ${region.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${serviceSlug}`))
   const descTemplates = [

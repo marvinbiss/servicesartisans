@@ -29,6 +29,7 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -735,10 +736,7 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
+// truncateTitle moved to @/lib/seo/title-selector.
 
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
@@ -803,14 +801,17 @@ export async function generateMetadata({
       : ''
 
   const titleHash = Math.abs(hashCode(`urgence-ville-title-${service}-${villeSlug}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${reviewPrefix}${trade.name} urgence ${villeData.name} — ${priceTag} | 24h/7j`,
     `${reviewPrefix}${trade.name} urgence ${villeData.name} — ${priceTag} | 7j/7`,
     `${reviewPrefix}Urgence ${tradeLower} ${villeData.name} — ${priceTag} 24h/24`,
     `${reviewPrefix}Dépannage ${tradeLower} ${villeData.name} — ${priceTag} nuit/WE`,
     `${reviewPrefix}${trade.name} urgence ${villeData.name} (${villeData.departementCode}) — ${priceTag}`,
+    `${reviewPrefix}${trade.name} urgence ${villeData.name} 24h/24`,
+    `${reviewPrefix}Urgence ${tradeLower} ${villeData.name} 24h`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
   const descTemplates = [

@@ -21,6 +21,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import {
   departements,
   getDepartementBySlug,
@@ -51,11 +52,6 @@ interface PageProps {
   params: Promise<{ departement: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { departement: deptSlug } = await params
   const dept = getDepartementBySlug(deptSlug)
@@ -66,14 +62,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
   const countPrefix = artisanCount >= 50 ? `${formatProviderCount(artisanCount)} ` : ''
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${countPrefix}Artisans ${dept.name} (${dept.code}) 2026 — Devis gratuit`,
     `Artisan ${dept.name} 2026 — Devis gratuit 24h`,
     `${dept.name} : ${countPrefix}artisans qualifiés — Devis 2026`,
     `Artisans ${dept.name} 2026 — Comparez ${countPrefix || 'les pros'}`,
     `${dept.name} (${dept.code}) — Annuaire ${countPrefix}artisans 2026`,
+    `Artisans ${dept.name} 2026`,
+    `Artisans ${dept.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-dept-${dept.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''

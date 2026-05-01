@@ -26,6 +26,7 @@ import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/d
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
@@ -63,11 +64,6 @@ const urgencyDotColors = {
   basse: 'bg-green-400',
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -78,14 +74,17 @@ export async function generateMetadata({
   if (!problem) return {}
 
   const titleHash = Math.abs(hashCode(`probleme-title-${probleme}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${problem.name} — Diagnostic et solutions`,
     `${problem.name} : que faire ? Coûts 2026`,
     `${problem.name} — Guide et tarifs`,
     `${problem.name} : solutions et artisans`,
     `${problem.name} — Coûts et conseils`,
+    `${problem.name} 2026`,
+    `${problem.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const description = `${problem.name} : ${problem.description} Coût estimé : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} €. ${problem.averageResponseTime}.`
 

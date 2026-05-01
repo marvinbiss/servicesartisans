@@ -34,6 +34,7 @@ import {
   hashCode,
   getRegionalMultiplier,
 } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getServiceImageForContext } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
@@ -57,11 +58,6 @@ interface PageProps {
   params: Promise<{ departement: string; service: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { departement: deptSlug, service: serviceSlug } = await params
   const dept = getDepartementBySlug(deptSlug)
@@ -73,14 +69,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
   const titleHash = Math.abs(hashCode(`title-dept-svc-${deptSlug}-${serviceSlug}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `${trade.name} ${dept.name} (${dept.code})`,
     `${trade.name} ${dept.name} — Devis gratuit`,
     `${trade.name} ${getDeptPreposition(dept.name)} — Devis`,
     `${trade.name} ${dept.code} : tarifs et devis`,
     `${trade.name} ${dept.name} — Artisans vérifiés`,
+    `${trade.name} ${dept.name} 2026`,
+    `${trade.name} ${dept.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-dept-svc-${deptSlug}-${serviceSlug}`))
   const descTemplates = [

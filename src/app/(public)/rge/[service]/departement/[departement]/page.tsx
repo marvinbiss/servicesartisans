@@ -9,6 +9,8 @@ import { getServiceBySlug } from '@/lib/supabase'
 import { departements, getDepartementBySlug, getVillesByDepartement } from '@/lib/data/france'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
+import { hashCode } from '@/lib/seo/hash'
 import { getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndDepartement,
@@ -43,11 +45,6 @@ interface PageProps {
   params: Promise<{ service: string; departement: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, departement: deptSlug } = await params
 
@@ -70,7 +67,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countStrict = await getRgeCountByServiceAndDepartementStrict(serviceSlug, dept.name)
   const isNoindex = countStrict.ok && countStrict.count === 0
 
-  const title = truncateTitle(`${serviceName} RGE ${dept.name} (${dept.code}) — MaPrimeRénov’`)
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
+  const titleHash = hashCode(`rge-dept-title-${serviceSlug}-${deptSlug}`)
+  const titleVariants = [
+    `${serviceName} RGE ${dept.name} (${dept.code}) — MaPrimeRénov’`,
+    `${serviceName} RGE ${dept.name} — MaPrimeRénov’ 2026`,
+    `${serviceName} RGE ${dept.name} — Aides 2026`,
+    `${serviceName} RGE ${dept.name} 2026`,
+    `${serviceName} RGE ${dept.name}`,
+  ]
+  const title = selectFittingTitle(titleVariants, titleHash, 41)
   const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE ${getDeptPreposition(dept.name)} (${dept.code}). Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Données ADEME.`
   const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 

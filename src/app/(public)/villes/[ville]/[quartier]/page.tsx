@@ -34,6 +34,7 @@ import {
 } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
@@ -56,11 +57,6 @@ interface PageProps {
   params: Promise<{ ville: string; quartier: string }>
 }
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { ville: villeSlug, quartier: quartierSlug } = await params
   const result = getQuartierBySlug(villeSlug, quartierSlug)
@@ -71,14 +67,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityImage = getCityImage(villeSlug)
 
   const titleHash = Math.abs(hashCode(`title-quartier-${villeSlug}-${quartierSlug}`))
+  // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
     `Artisans à ${quartierName}, ${ville.name}`,
     `${quartierName} (${ville.name}) — Artisans`,
     `Trouver un artisan à ${quartierName}`,
     `${quartierName}, ${ville.name} : devis gratuit`,
     `Artisans qualifiés — ${quartierName}`,
+    `Artisans ${quartierName} ${ville.name}`,
+    `Artisans ${quartierName}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-quartier-${villeSlug}-${quartierSlug}`))
   const descTemplates = [
