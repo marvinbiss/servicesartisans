@@ -11,6 +11,13 @@
  * Fail-safe : retourne `false` sur erreur DB (la metadata existante
  * (count_ville, hasUniqueData) reste seule à décider).
  *
+ * Seuil 2026-05-01 (P0 GSC audit) : passe de ≥1 à **≥3 providers** pour
+ * justifier l'indexation. Avec 1-2 providers fallback dept, la page est
+ * trop maigre pour ranker (zéro CTR observé sur ces cas selon GSC 90j).
+ * Google dépense alors du budget crawl sur des pages qui ne convertiront
+ * jamais. À ≥3, on a un mini-listing crédible (carte + comparaison + bloc
+ * dept) qui justifie sa place dans l'index.
+ *
  * Coût DB & DoS — les call-sites n'invoquent ce helper QUE quand
  * `providerCount === 0` (path froid). En amont, le middleware rejette les
  * slugs invalides via `evaluateGonePath` (HTTP 410 sans cold render). En
@@ -19,6 +26,8 @@
  */
 import { getProvidersByServiceAndDepartment } from '@/lib/supabase'
 
+const DEPT_FALLBACK_INDEX_THRESHOLD = 3
+
 export async function hasDeptProviderFallback(
   serviceSlug: string,
   departmentName: string | null | undefined
@@ -26,9 +35,9 @@ export async function hasDeptProviderFallback(
   if (!departmentName) return false
   try {
     const fallback = await getProvidersByServiceAndDepartment(serviceSlug, departmentName, {
-      limit: 1,
+      limit: DEPT_FALLBACK_INDEX_THRESHOLD,
     })
-    return fallback.length > 0
+    return fallback.length >= DEPT_FALLBACK_INDEX_THRESHOLD
   } catch {
     return false
   }

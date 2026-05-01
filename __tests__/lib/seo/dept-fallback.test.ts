@@ -31,10 +31,20 @@ describe('hasDeptProviderFallback', () => {
     expect(mockGetProviders).not.toHaveBeenCalled()
   })
 
-  it('returns true when fallback dept has at least one provider', async () => {
-    mockGetProviders.mockResolvedValueOnce([{ id: 'p1' }])
+  it('returns true when fallback dept has 3+ providers (index threshold)', async () => {
+    mockGetProviders.mockResolvedValueOnce([{ id: 'p1' }, { id: 'p2' }, { id: 'p3' }])
     expect(await hasDeptProviderFallback('plombier', 'Paris')).toBe(true)
-    expect(mockGetProviders).toHaveBeenCalledWith('plombier', 'Paris', { limit: 1 })
+    expect(mockGetProviders).toHaveBeenCalledWith('plombier', 'Paris', { limit: 3 })
+  })
+
+  it('returns false when fallback dept has only 1 provider (below threshold)', async () => {
+    mockGetProviders.mockResolvedValueOnce([{ id: 'p1' }])
+    expect(await hasDeptProviderFallback('plombier', 'Paris')).toBe(false)
+  })
+
+  it('returns false when fallback dept has 2 providers (below threshold)', async () => {
+    mockGetProviders.mockResolvedValueOnce([{ id: 'p1' }, { id: 'p2' }])
+    expect(await hasDeptProviderFallback('plombier', 'Paris')).toBe(false)
   })
 
   it('returns false when fallback dept is empty', async () => {
