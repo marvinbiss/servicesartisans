@@ -25,6 +25,7 @@ import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import { cleanAdemeText } from '@/lib/descriptions/retrieval'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
+import { logger } from '@/lib/logger'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
 interface ProviderRecord {
@@ -752,6 +753,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // initial postulait qu'ISR retenterait ; en pratique le cache fige
     // un title cassé pour 24h et Google indexe entre-temps. Mieux vaut
     // un noindex temporaire (ISR re-render = nouveau metadata propre).
+    logger.error('provider_page.metadata_db_error', err as Error, {
+      route: 'services/[service]/[location]/[publicId]',
+      service: serviceSlug,
+      location: locationSlug,
+      publicId,
+    })
     return {
       title: 'Artisan non trouvé',
       robots: { index: false, follow: true },
@@ -770,7 +777,18 @@ export default async function ProviderPage(props: PageProps) {
     // reload ("ça marche au 2e essai") works without seeing a Vercel 500.
     // The (public)/error.tsx boundary catches render-time errors only;
     // this guard catches data-fetch throws before the React tree mounts.
-    console.error('[ProviderPage] unhandled error on cold ISR render', err)
+    //
+    // logger.error forwarde à Sentry (commit 341c32162) avec context route +
+    // params normalisés : indispensable pour drill-down GSC 5xx → root cause.
+    // console.error précédent était muet côté Sentry → 0 issue depuis 7 jours
+    // alors que GSC reportait 7 350 fiches en 5xx (audit 2026-04-30).
+    const params = await props.params.catch(() => null)
+    logger.error('provider_page.unhandled_isr_error', err as Error, {
+      route: 'services/[service]/[location]/[publicId]',
+      service: params?.service ?? null,
+      location: params?.location ?? null,
+      publicId: params?.publicId ?? null,
+    })
     notFound()
   }
 }
@@ -791,40 +809,56 @@ async function renderProviderPage({ params }: PageProps) {
   }
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
-  // Run ALL lookups in parallel to minimize total latency
-  let provider: ProviderRecord | null = null
-  let service: Service | null = null
-  let location: Location | null = null
+  // Run ALL lookups in parallel to minimize total latency.
+  // Chaque .catch() track son erreur via logger.error pour ne PAS être muet
+  // côté Sentry (avant : `try { ... } catch {}` swallow silencieux → root cause
+  // des 7 350 fiches 5xx GSC invisibles dans Sentry).
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
+  const errCtx = {
+    route: 'services/[service]/[location]/[publicId]',
+    service: serviceSlug,
+    location: locationSlug,
+    publicId,
+  }
+  const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
+    (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
+      logger.error('provider_page.lookup_id_error', err as Error, errCtx)
+      return null
+    }),
+    (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
+      logger.error('provider_page.lookup_slug_error', err as Error, errCtx)
+      return null
+    }),
+    getServiceBySlug(serviceSlug).catch((err) => {
+      logger.error('provider_page.service_lookup_error', err as Error, errCtx)
+      return null
+    }),
+    getLocationBySlug(locationSlug).catch((err) => {
+      logger.error('provider_page.location_lookup_error', err as Error, errCtx)
+      return null
+    }),
+  ])
+  let provider = (stableIdResult || slugResult) as ProviderRecord | null
+  const service = svcResult as Service | null
+  const location = locResult as Location | null
 
-  try {
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
-    const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
-      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch(() => null),
-      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch(() => null),
-      getServiceBySlug(serviceSlug).catch(() => null),
-      getLocationBySlug(locationSlug).catch(() => null),
-    ])
-    provider = (stableIdResult || slugResult) as ProviderRecord | null
-    service = svcResult as Service | null
-    location = locResult as Location | null
-
-    // Fallback: if no match, try a deduped variant of the publicId.
-    // Migration 378 rewrote slugs to dedupe consecutive identical tokens
-    // (e.g. "brandon-marx-marx-marx-plomberie-..." → "brandon-marx-plomberie-...").
-    // Google may still serve the old URL; this retry keeps it alive and the
-    // canonical redirect below will then 307 the visitor to the clean URL.
-    if (!provider && !isUuid) {
-      const dedupedPublicId = publicId
-        .split('-')
-        .filter((w, i, arr) => w !== arr[i - 1])
-        .join('-')
-      if (dedupedPublicId !== publicId && dedupedPublicId.length > 0) {
-        const retryResult = await getProviderBySlug(dedupedPublicId).catch(() => null)
-        if (retryResult) provider = retryResult as ProviderRecord
-      }
+  // Fallback: if no match, try a deduped variant of the publicId.
+  // Migration 378 rewrote slugs to dedupe consecutive identical tokens
+  // (e.g. "brandon-marx-marx-marx-plomberie-..." → "brandon-marx-plomberie-...").
+  // Google may still serve the old URL; this retry keeps it alive and the
+  // canonical redirect below will then 307 the visitor to the clean URL.
+  if (!provider && !isUuid) {
+    const dedupedPublicId = publicId
+      .split('-')
+      .filter((w, i, arr) => w !== arr[i - 1])
+      .join('-')
+    if (dedupedPublicId !== publicId && dedupedPublicId.length > 0) {
+      const retryResult = await getProviderBySlug(dedupedPublicId).catch((err) => {
+        logger.error('provider_page.dedup_retry_error', err as Error, errCtx)
+        return null
+      })
+      if (retryResult) provider = retryResult as ProviderRecord
     }
-  } catch {
-    // Graceful degradation
   }
 
   if (!provider || provider.is_active === false) {
