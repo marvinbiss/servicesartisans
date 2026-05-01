@@ -195,6 +195,8 @@ export const prixArticles: Record<string, BlogArticle> = {
     content: [
       "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État. Trouvez un [chauffagiste qualifié près de chez vous](/services/chauffagiste) pour obtenir un devis personnalisé.",
 
+      "## En bref — prix d'un chauffagiste en 2026\n\n:::budget\n| Prestation | Prix moyen TTC 2026 |\n| Tarif horaire | 45 - 95 € HT/h |\n| Entretien chaudière annuel | 90 - 220 € |\n| Installation PAC air-eau (100 m²) | 8 000 - 16 000 € |\n| Installation chaudière gaz à condensation | 2 500 - 8 000 € |\n:::",
+
       "## Tarif horaire d'un chauffagiste",
 
       '### Tarifs selon la spécialisation',
@@ -654,6 +656,8 @@ export const prixArticles: Record<string, BlogArticle> = {
       'Tarifs maçon 2026 : construction, rénovation, fondations, murs porteurs. Prix détaillés et réalistes. Devis gratuit.',
     content: [
       "Vous envisagez une extension de maison, la création d'une ouverture dans un mur porteur ou la rénovation des fondations de votre maison ancienne ? La maçonnerie constitue le socle de tout projet de construction ou de rénovation lourde, et c'est aussi l'un des postes les plus coûteux. Une erreur de chiffrage peut déséquilibrer tout votre budget. En 2026, les prix restent soutenus par la hausse du coût des matériaux (+12 % depuis 2022 pour le ciment et les parpaings) et la forte demande liée à la rénovation du parc immobilier français. Ce guide vous donne les **tarifs réels** pour chaque type de prestation. Consultez notre annuaire pour trouver un [maçon qualifié dans votre ville](/services/macon).",
+
+      "## En bref — prix d'un maçon en 2026\n\n:::budget\n| Prestation | Prix moyen TTC 2026 |\n| Tarif horaire | 40 - 85 € HT/h |\n| Mur en parpaings (fourni-posé) | 40 - 80 € HT/m² |\n| Dalle béton | 50 - 100 € HT/m² |\n| Ouverture mur porteur (étude incluse) | 2 500 - 6 000 € |\n:::",
 
       "## Tarif horaire d'un maçon",
 
@@ -1994,6 +1998,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       'Installation électrique 2026 : 8 000-15 000 € pour 100 m² (neuf), 80-150 €/m² (mise aux normes), 1 000-20 000 € (domotique), conformité NF C 15-100. Devis gratuit.',
     content: [
       "L'installation électrique est un poste technique majeur dans toute construction neuve ou rénovation lourde. En 2026, la norme NF C 15-100 impose des exigences strictes en matière de sécurité et de confort, tandis que la domotique transforme progressivement nos habitations. Ce guide détaille les tarifs des électriciens pour tous les types de prestations. Trouvez un [électricien certifié près de chez vous](/services/electricien).",
+      "## En bref — prix d'une installation électrique neuve en 2026\n\n:::budget\n| Prestation | Prix moyen TTC 2026 |\n| Installation neuve complète | 80 - 150 €/m² |\n| Maison de 100 m² (neuf, tout compris) | 8 000 - 15 000 € |\n| Tableau électrique (neuf + raccordement) | 800 - 2 000 € |\n| Domotique (selon scope) | 1 000 - 20 000 € |\n:::",
       "## Tarif horaire d'un électricien",
       "Le taux horaire d'un électricien qualifié se situe entre 40 et 65 € HT en province et entre 55 et 85 € HT en Île-de-France. Un électricien spécialisé en domotique ou en systèmes photovoltaïques facture entre 55 et 95 € HT de l'heure. Ces tarifs n'incluent ni le déplacement (20 à 50 €) ni les fournitures.",
       '## Installation complète en construction neuve',
@@ -2071,6 +2076,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       'Prix salle de bain 2026 : entrée de gamme 3 000-6 000€, milieu 6 000-12 000€, haut de gamme 12 000€+. Tarifs poste par poste. Devis gratuit.',
     content: [
       "La salle de bain est, avec la cuisine, la pièce dont la rénovation apporte la plus grande plus-value immobilière. En 2026, les tendances sont à la douche à l'italienne, aux meubles suspendus et aux matériaux naturels. Mais derrière l'esthétique, c'est surtout le budget qu'il faut maîtriser. Ce guide vous livre un chiffrage complet et réaliste pour votre projet de salle de bain. Trouvez un [spécialiste salle de bain](/services/salle-de-bain) ou un [plombier qualifié](/services/plombier) pour concrétiser votre projet.",
+      "## En bref — prix d'une salle de bain complète en 2026\n\n:::budget\n| Niveau de gamme (5-7 m²) | Prix moyen TTC 2026 |\n| Entrée de gamme (sanitaires basiques) | 3 000 - 6 000 € |\n| Milieu de gamme (douche italienne) | 6 000 - 12 000 € |\n| Haut de gamme (sur mesure) | 12 000 - 25 000 € |\n| Pose seule (hors fournitures) | 1 500 - 4 000 € |\n:::",
       '## Les trois niveaux de budget',
       "Une salle de bain d'entrée de gamme (sanitaires basiques, faïence simple, meuble en kit) coûte entre 3 000 et 6 000 € pour 5 m². Le milieu de gamme (douche à l'italienne, meuble vasque de marque, carrelage imitation pierre) se situe entre 6 000 et 12 000 €. Le haut de gamme (robinetterie design, mosaïque, meuble sur mesure, douche de pluie encastrée) démarre à 12 000 € et peut dépasser 25 000 €.",
       '## Les sanitaires : prix détaillés',

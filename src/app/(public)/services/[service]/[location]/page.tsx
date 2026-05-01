@@ -288,7 +288,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     departmentCode: departmentCode || null,
   })
 
-  const title = truncateTitle(titleVariants[seoHash % titleVariants.length])
+  // Pick first variant that fits ≤ 41 chars (with brand suffix → 60 chars total).
+  // Falls back to truncateTitle if all variants exceed (long city + long service).
+  // WHY : 824 pages flagged title-too-long (ScreamingFrog 18/04). Fitting un-truncated
+  // beats `Chauffagiste Dammartin-en-Goële —…` ellipsis garbage (kills CTR).
+  const variantOffset = seoHash % titleVariants.length
+  const fittingTitle = titleVariants
+    .slice(variantOffset)
+    .concat(titleVariants.slice(0, variantOffset))
+    .find((v) => v.length <= 41)
+  const title = fittingTitle ?? truncateTitle(titleVariants[variantOffset])
 
   // Intent-aware meta description — urgence / renovation / travaux registers.
   // The CTR review snippet (`Note X/5 sur Y avis`) is appended regardless of
