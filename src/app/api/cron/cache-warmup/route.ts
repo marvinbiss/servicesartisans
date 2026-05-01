@@ -27,8 +27,8 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 const MAX_URLS_PER_RUN = 7_500
 const BATCH_SIZE = 50
-const SAFETY_TIMEOUT_MS = 55_000
-const REQUEST_TIMEOUT_MS = 8_000
+const SAFETY_TIMEOUT_MS = 45_000
+const REQUEST_TIMEOUT_MS = 5_000
 const TOP_100_CITIES = villes.slice(0, 100)
 const TOP_50_CITIES = villes.slice(0, 50)
 

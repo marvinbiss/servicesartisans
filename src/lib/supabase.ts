@@ -13,24 +13,20 @@ import { getCachedData, CACHE_TTL } from '@/lib/cache'
 export const IS_BUILD =
   process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
+// Audit 2026-05-01 : le wrapper `next: { revalidate: 3600 }` activait le
+// `patched-fetch` Next.js 14.2 qui logge `[TypeError: fetch failed]` au
+// niveau "error" même quand le call site a un .catch propre. Sur cold
+// lambdas + Cloudflare 502 backoff transient, ça polluait Vercel logs
+// (5+ events/h sur /services/[s]/[v]) sans valeur cache (`x-vercel-cache: MISS`
+// constant). On bascule sur le fetch natif : ISR + revalidate=3600 reste
+// piloté par le `export const revalidate` des pages ; Supabase utilise
+// son propre keep-alive pool.
 export const supabase =
   IS_BUILD || !process.env.NEXT_PUBLIC_SUPABASE_URL
     ? (null as unknown as ReturnType<typeof createClient>)
     : createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-        {
-          global: {
-            // Tell Next.js to cache Supabase responses so ISR pages don't
-            // become fully dynamic (perpetual x-vercel-cache: MISS).
-            fetch: (url, options = {}) => {
-              return fetch(url, {
-                ...options,
-                next: { revalidate: 3600 },
-              } as RequestInit)
-            },
-          },
-        }
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
       )
 
 /**
