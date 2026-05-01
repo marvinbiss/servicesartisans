@@ -1,14 +1,7 @@
 {
-  "generatedAt": "2026-05-01T14:56:02.297Z",
+  "generatedAt": "2026-05-01T15:08:26.268Z",
+  "source": "OpenAPI (service_role, RLS-bypass)",
   "drifts": [
-    {
-      "table": "profiles",
-      "column": "review_count"
-    },
-    {
-      "table": "profiles",
-      "column": "average_rating"
-    },
     {
       "table": "providers",
       "column": "specialty_slug"
@@ -27,11 +20,7 @@
     },
     {
       "table": "providers",
-      "column": "service_name"
-    },
-    {
-      "table": "providers",
-      "column": "city"
+      "column": "phone_secondary"
     },
     {
       "table": "providers",
@@ -39,19 +28,11 @@
     },
     {
       "table": "providers",
-      "column": "free_quote"
-    },
-    {
-      "table": "providers",
       "column": "accepts_new_clients"
     },
     {
       "table": "providers",
-      "column": "intervention_radius_km"
-    },
-    {
-      "table": "providers",
-      "column": "phone_secondary"
+      "column": "free_quote"
     },
     {
       "table": "providers",
@@ -59,31 +40,23 @@
     },
     {
       "table": "providers",
-      "column": "provider_id"
-    },
-    {
-      "table": "providers",
-      "column": "team_size"
-    },
-    {
-      "table": "providers",
-      "column": "client_id"
-    },
-    {
-      "table": "providers",
-      "column": "status"
+      "column": "intervention_radius_km"
     },
     {
       "table": "providers",
       "column": "faq"
     },
     {
-      "table": "cee_dossier_events",
-      "column": "to_status"
+      "table": "providers",
+      "column": "team_size"
     },
     {
       "table": "cee_dossier_events",
       "column": "from_status"
+    },
+    {
+      "table": "cee_dossier_events",
+      "column": "to_status"
     },
     {
       "table": "cee_dossier_events",
@@ -103,15 +76,15 @@
     },
     {
       "table": "cee_dossiers",
-      "column": "justificatifs"
-    },
-    {
-      "table": "cee_dossiers",
       "column": "delegataire_id"
     },
     {
+      "table": "cee_dossiers",
+      "column": "justificatifs"
+    },
+    {
       "table": "prospection_contacts",
-      "column": "bloctel_checked_at"
+      "column": "bloctel_listed"
     },
     {
       "table": "prospection_contacts",
@@ -119,7 +92,7 @@
     },
     {
       "table": "prospection_contacts",
-      "column": "bloctel_listed"
+      "column": "bloctel_checked_at"
     },
     {
       "table": "conversations",
@@ -135,11 +108,11 @@
     },
     {
       "table": "messages",
-      "column": "file_url"
+      "column": "message_type"
     },
     {
       "table": "messages",
-      "column": "message_type"
+      "column": "file_url"
     },
     {
       "table": "messages",
@@ -148,10 +121,6 @@
     {
       "table": "messages",
       "column": "file_size"
-    },
-    {
-      "table": "bookings",
-      "column": "total_price"
     },
     {
       "table": "bookings",
@@ -167,11 +136,15 @@
     },
     {
       "table": "bookings",
-      "column": "slot_id"
+      "column": "availability_slots"
     },
     {
       "table": "bookings",
       "column": "artisan_id"
+    },
+    {
+      "table": "bookings",
+      "column": "slot_id"
     },
     {
       "table": "audit_logs",
@@ -179,7 +152,7 @@
     },
     {
       "table": "audit_logs",
-      "column": "metadata"
+      "column": "resource_id"
     },
     {
       "table": "audit_logs",
@@ -187,19 +160,11 @@
     },
     {
       "table": "audit_logs",
-      "column": "resource_id"
-    },
-    {
-      "table": "services",
-      "column": "service_id"
+      "column": "metadata"
     },
     {
       "table": "services",
       "column": "category"
-    },
-    {
-      "table": "services",
-      "column": "city"
     },
     {
       "table": "services",

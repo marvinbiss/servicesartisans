@@ -365,7 +365,7 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     if (!artisan) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id, full_name, average_rating, review_count, created_at, role')
+        .select('id, full_name, created_at, role')
         .eq('id', artisanId)
         .eq('role', 'artisan')
         .single()

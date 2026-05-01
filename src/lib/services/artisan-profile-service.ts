@@ -14,8 +14,6 @@ export interface ProfileRow {
   email: string | null
   full_name: string | null
   role: string | null
-  average_rating: number | null
-  review_count: number | null
 }
 
 export interface ProfileSettingsRow {
@@ -218,7 +216,7 @@ export async function getProfileById(
 ): Promise<{ data: ProfileRow | null; error: unknown }> {
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, email, full_name, role, average_rating, review_count')
+    .select('id, email, full_name, role')
     .eq('id', userId)
     .single()
 
@@ -249,7 +247,7 @@ export async function updateProfileById(
     .from('profiles')
     .update(updates)
     .eq('id', userId)
-    .select('id, email, full_name, role, average_rating, review_count')
+    .select('id, email, full_name, role')
     .single()
 
   return { data, error }

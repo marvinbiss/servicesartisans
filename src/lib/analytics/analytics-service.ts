@@ -142,7 +142,7 @@ export class AnalyticsService {
     ] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }),
-      supabase.from('bookings').select('id, total_price, status, created_at').limit(50000),
+      supabase.from('bookings').select('id, total_amount, status, created_at').limit(50000),
       supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
@@ -160,7 +160,7 @@ export class AnalyticsService {
     const completedBookings = bookings.filter((b) => b.status === 'completed').length
     const totalRevenue = bookings
       .filter((b) => b.status === 'completed')
-      .reduce((sum, b) => sum + (b.total_price || 0), 0)
+      .reduce((sum, b) => sum + (b.total_amount || 0), 0)
 
     const bookingsThisMonth = monthlyBookingsResult.count || 0
     const newUsersThisMonth = monthlyUsersResult.count || 0
@@ -169,7 +169,7 @@ export class AnalyticsService {
     const monthlyBookings = bookings.filter((b) => new Date(b.created_at) >= startOfMonth)
     const revenueThisMonth = monthlyBookings
       .filter((b) => b.status === 'completed')
-      .reduce((sum, b) => sum + (b.total_price || 0), 0)
+      .reduce((sum, b) => sum + (b.total_amount || 0), 0)
 
     // Conversion rate (bookings / profile views)
     const conversionRate = totalBookings > 0 ? (completedBookings / totalBookings) * 100 : 0
@@ -229,7 +229,7 @@ export class AnalyticsService {
     const [bookingsResult, reviewsResult, quotesResult, profileViewsResult] = await Promise.all([
       supabase
         .from('bookings')
-        .select('id, status, total_price, created_at, service_type')
+        .select('id, status, total_amount, created_at, service_type')
         .eq('provider_id', providerId)
         .limit(50000),
       supabase.from('reviews').select('rating').eq('provider_id', providerId).limit(50000),
@@ -256,7 +256,7 @@ export class AnalyticsService {
 
         if (b.status === 'completed') {
           acc.completedBookings++
-          acc.totalRevenue += b.total_price || 0
+          acc.totalRevenue += b.total_amount || 0
         } else if (b.status === 'cancelled') {
           acc.cancelledBookings++
         }
@@ -339,7 +339,7 @@ export class AnalyticsService {
   }
 
   private groupRevenueByMonth(
-    bookings: { created_at: string; total_price?: number; status?: string }[]
+    bookings: { created_at: string; total_amount?: number; status?: string }[]
   ): { month: string; amount: number }[] {
     const amounts: Record<string, number> = {}
 
@@ -348,7 +348,7 @@ export class AnalyticsService {
       .forEach((b) => {
         const date = new Date(b.created_at)
         const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-        amounts[month] = (amounts[month] || 0) + (b.total_price || 0)
+        amounts[month] = (amounts[month] || 0) + (b.total_amount || 0)
       })
 
     return Object.entries(amounts)

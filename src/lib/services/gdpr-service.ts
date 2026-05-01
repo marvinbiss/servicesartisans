@@ -546,7 +546,7 @@ export async function adminExportUserData(
   const [{ data: profile }, { data: bookings }, { data: userProvider }] = await Promise.all([
     supabase
       .from('profiles')
-      .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+      .select('id, email, full_name, is_admin, role, phone_e164')
       .eq('id', userId)
       .single(),
     supabase

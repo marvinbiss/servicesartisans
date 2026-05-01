@@ -11,34 +11,32 @@
  * notFound() silencieux jusqu'à découverte (24-48h post-incident).
  *
  * Pipeline :
- *   1. Extract — parse src/**\/*.{ts,tsx} pour collecter toutes les
- *      références (table, column) dans les chaînes Supabase :
- *        .from('table').select('col1,col2,joined:fk(c3,c4)')
- *        .eq('col', x), .gt, .lt, .gte, .lte, .like, .ilike, .in,
- *        .contains, .containedBy, .is, .not('col', x), .order('col', ...)
- *   2. Probe — pour chaque (table, column) du code, hit
- *      `GET /rest/v1/<table>?select=<column>&limit=0` avec l'anon key.
- *      → 200/206 = OK, 400 + code 42703 = COLONNE MANQUANTE (DRIFT).
- *      → 401/403 = RLS bloque (skip silencieux, pas un drift).
- *      → 404 / code 42P01 = TABLE MANQUANTE (drift majeur).
- *   3. Diff — output les drifts détectés, exit 1 si --strict.
+ *   1. Fetch ONE TIME l'OpenAPI spec PostgREST avec service_role (RLS-bypass).
+ *      → Carte complète Map<table, Set<column>> de la prod actuelle.
+ *      Si pas de service_role → fallback probe-by-column (anon, plus lent
+ *      + faux positifs RLS).
+ *   2. Walk `src/**\/*.{ts,tsx}` pour collecter les couples (table, column)
+ *      depuis `.from('t').select('cols')` + filtres `.eq/.gt/.like/.in/...`
+ *   3. Diff : code (table, column) ∉ prod[table] = drift.
+ *   4. Vs baseline `.schema-drift-baseline.json` → bloque uniquement les
+ *      NOUVELLES drifts.
  *
- * Usage :
- *   node scripts/audit-schema-drift.mjs                  # human, exit 0
- *   node scripts/audit-schema-drift.mjs --json           # JSON output
- *   node scripts/audit-schema-drift.mjs --strict         # exit 1 si drift
- *   node scripts/audit-schema-drift.mjs --offline        # skip network
- *   node scripts/audit-schema-drift.mjs --table=providers # focus 1 table
+ * Modes :
+ *   --baseline-write : génère/régénère le baseline initial
+ *   --baseline-check : compare vs baseline (mode pre-push)
+ *   --strict         : exit 1 sur drift
+ *   --offline        : skip network (utile en CI sans secrets)
+ *   --json           : output JSON
+ *   --table=X        : focus 1 table
+ *   --verbose        : detailed RLS/skip info
  *
- * Lit `.env.local` (NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY).
- * Sans .env.local → exit 0 silencieux (CI sans secrets, pas un échec).
+ * Lit `.env.local` (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY ou
+ * NEXT_PUBLIC_SUPABASE_ANON_KEY). Sans .env.local → exit 0 silencieux.
  *
- * Limites connues (faux négatifs acceptés) :
- *   - .from(`${dynamic}`) — skip (pas de literal table)
+ * Limites connues (faux négatifs acceptés <5%) :
+ *   - .from(`${dynamic}`) — skip (literal table only)
  *   - .from('schema.table') — schema préfixé skip (rare)
  *   - .select(longue chaîne JS construite dynamiquement) — skip
- *   - tables RLS-blocked anon → skip (impossible de prouver via REST anon)
- *   Ces cas représentent <5% des refs Supabase du repo.
  */
 
 import { readFileSync, readdirSync, statSync, existsSync, writeFileSync } from 'node:fs'
@@ -61,25 +59,6 @@ const SRC_DIR = 'src'
 const ENV_FILE = '.env.local'
 const BASELINE_FILE = '.schema-drift-baseline.json'
 
-// Tables qu'on s'attend à NE PAS pouvoir probe via anon (RLS lock).
-// Listées pour ne pas générer de bruit "skipped". On compte les skips
-// pour être sûr qu'on n'oublie pas une vraie drift.
-const RLS_LOCKED_HINT = new Set([
-  'audit_logs',
-  'cee_dossiers',
-  'cee_dossier_events',
-  'cee_justificatifs',
-  'cee_payouts',
-  'leads',
-  'lead_assignments',
-  'devis_requests',
-  'bookings',
-  'profiles',
-  'provider_claims',
-  'admin_users',
-  'cron_leases',
-])
-
 // ----------------------------------------------------------------------------
 // 1. Walk + extract from code
 // ----------------------------------------------------------------------------
@@ -98,22 +77,7 @@ function walkSync(dir, exts, out = []) {
   return out
 }
 
-/**
- * Match `.from('table')` — captures table name from a string literal.
- * Backticks autorisés mais sans interpolation (literal only).
- */
-const FROM_RE = /\.from\(\s*['"`]([\w]+)['"`]\s*\)/g
-
-/**
- * Match `.select('col,col,join:fk(c,c)')` — captures the raw select string.
- * Multi-line backtick selects supportés.
- */
 const SELECT_RE = /\.select\(\s*['"`]([^'"`]+)['"`]/g
-
-/**
- * Match filter methods: `.eq('col', ...)`, `.gt`, `.lt`, etc.
- * Le 1er arg string littéral = nom de colonne.
- */
 const FILTER_METHODS = [
   'eq', 'neq', 'gt', 'gte', 'lt', 'lte',
   'like', 'ilike', 'is', 'in',
@@ -126,109 +90,60 @@ const FILTER_RE = new RegExp(
   'g'
 )
 
-/**
- * Parse a select string for column refs.
- * Examples:
- *   "id,name,specialty"                       → [id, name, specialty]
- *   "id, joined:fk_col(c1, c2), other"        → [id, fk_col, c1, c2, other]
- *   "*"                                       → [] (wildcard, no specific cols)
- *   "count"                                   → [] (PostgREST aggregate)
- *   "id::text"                                → [id]
- *
- * On retourne aussi les colonnes du join (c1, c2 dans l'exemple) car ce sont
- * de vraies colonnes de la table jointe — mais on ne sait pas associer la table
- * au join ici. Pour rester safe (faux négatif > faux positif), on les ignore.
- * Seules les colonnes de la table principale (top-level avant le `:` ou hors paren)
- * sont remontées.
- */
 function parseSelectExpression(raw) {
   const cols = []
-  // Strip whitespace and newlines
   const expr = raw.replace(/\s+/g, '')
   if (expr === '*' || expr === '') return cols
-  // Walk char by char to handle nested parens for joins
   let depth = 0
   let buf = ''
   const tokens = []
   for (const c of expr) {
-    if (c === '(') {
-      depth++
-      buf += c
-    } else if (c === ')') {
-      depth--
-      buf += c
-    } else if (c === ',' && depth === 0) {
-      tokens.push(buf)
-      buf = ''
-    } else {
-      buf += c
-    }
+    if (c === '(') { depth++; buf += c }
+    else if (c === ')') { depth--; buf += c }
+    else if (c === ',' && depth === 0) { tokens.push(buf); buf = '' }
+    else { buf += c }
   }
   if (buf) tokens.push(buf)
 
   for (const tok of tokens) {
-    // Format avec alias explicite "alias:fk_col(...)" → fk_col est UNE
-    //   colonne FK sur le PARENT (PostgREST utilise le FK pour résoudre).
-    // Format sans alias "joined_table(...)" → joined_table est le NOM DE LA
-    //   TABLE jointe (auto-FK detection PostgREST), PAS une colonne du parent.
-    //   On skip dans ce cas pour éviter les faux positifs.
     const joinAliased = tok.match(/^[\w]+:([\w]+)\(.*\)$/)
-    if (joinAliased) {
-      cols.push(joinAliased[1])
-      continue
-    }
+    if (joinAliased) { cols.push(joinAliased[1]); continue }
     const joinImplicit = tok.match(/^([\w]+)\(.*\)$/)
-    if (joinImplicit) {
-      // table jointe via auto-FK → ne pas remonter comme colonne du parent
-      continue
-    }
-    // Strip casts like "id::text"
+    if (joinImplicit) continue
     const castMatch = tok.match(/^([\w]+)(::[\w]+)?$/)
     if (castMatch) {
       const name = castMatch[1]
-      // Skip aggregate functions / metadata
       if (name === 'count' || name === '*') continue
       cols.push(name)
       continue
     }
-    // Aliased: "alias:col" (no parens)
     const aliasMatch = tok.match(/^[\w]+:([\w]+)$/)
-    if (aliasMatch) {
-      cols.push(aliasMatch[1])
-      continue
-    }
-    // Unknown token shape → skip silently (defensive)
+    if (aliasMatch) { cols.push(aliasMatch[1]); continue }
   }
   return cols
 }
 
-/**
- * Find the closest preceding `.from('table')` for each `.select`/filter call.
- * On split d'abord par `.from(...)` (chaque chunk appartient à 1 table),
- * puis dans chaque chunk on extrait les selects + filtres.
- */
 function extractFromContent(content) {
-  const refs = new Map() // table → Set<column>
-  // Split content into chunks per `.from('table')` occurrence
-  // We use a regex with capture to keep the table names
+  const refs = new Map()
   const matches = [...content.matchAll(/\.from\(\s*['"`]([\w]+)['"`]\s*\)/g)]
   for (let i = 0; i < matches.length; i++) {
     const table = matches[i][1]
     const start = matches[i].index + matches[i][0].length
-    const end = i + 1 < matches.length ? matches[i + 1].index : Math.min(start + 5000, content.length)
+    // Chunk-end : next `.from(` OR end-of-method-chain heuristic.
+    // Pour limiter la mis-attribution, on prend jusqu'au prochain `.from(`
+    // OU 2000 chars max OU un `\n\n` (séparation blocs JS).
+    let end = i + 1 < matches.length ? matches[i + 1].index : content.length
+    const blank = content.indexOf('\n\n', start)
+    if (blank !== -1 && blank < end) end = blank
+    end = Math.min(end, start + 2000)
     const chunk = content.slice(start, end)
 
     let cols = refs.get(table)
-    if (!cols) {
-      cols = new Set()
-      refs.set(table, cols)
-    }
+    if (!cols) { cols = new Set(); refs.set(table, cols) }
 
-    // Extract selects in this chunk
     for (const sm of chunk.matchAll(SELECT_RE)) {
       for (const c of parseSelectExpression(sm[1])) cols.add(c)
     }
-    // Extract filters in this chunk
     for (const fm of chunk.matchAll(FILTER_RE)) {
       cols.add(fm[2])
     }
@@ -237,31 +152,33 @@ function extractFromContent(content) {
 }
 
 function extractAllRefs(srcDir) {
-  const aggregate = new Map() // table → Set<column>
+  const aggregate = new Map()
+  const fileRefs = new Map() // table::col → [files]
   const files = walkSync(srcDir, /\.(ts|tsx)$/)
   let scanned = 0
   for (const file of files) {
-    // Skip test files
     if (/\.(test|spec)\.tsx?$/.test(file)) continue
-    if (file.includes(`${join('__tests__')}${process.platform === 'win32' ? '\\' : '/'}`)) continue
+    if (file.includes(`__tests__`)) continue
     const content = readFileSync(file, 'utf8')
     if (!content.includes('.from(')) continue
     scanned++
     const refs = extractFromContent(content)
     for (const [table, cols] of refs) {
       let agg = aggregate.get(table)
-      if (!agg) {
-        agg = new Set()
-        aggregate.set(table, agg)
+      if (!agg) { agg = new Set(); aggregate.set(table, agg) }
+      for (const c of cols) {
+        agg.add(c)
+        const key = `${table}::${c}`
+        if (!fileRefs.has(key)) fileRefs.set(key, new Set())
+        fileRefs.get(key).add(relative(srcDir, file))
       }
-      for (const c of cols) agg.add(c)
     }
   }
-  return { refs: aggregate, scannedFiles: scanned, totalFiles: files.length }
+  return { refs: aggregate, fileRefs, scannedFiles: scanned, totalFiles: files.length }
 }
 
 // ----------------------------------------------------------------------------
-// 2. Load env + probe prod
+// 2. Load env + fetch prod schema
 // ----------------------------------------------------------------------------
 
 function loadEnv() {
@@ -283,155 +200,94 @@ function loadEnv() {
   return env
 }
 
-async function probeColumn(supaUrl, anon, table, column) {
-  // Forge a SELECT that includes the column. PostgREST returns 400 + 42703
-  // if the column is missing on the table. Empty array if OK (limit=0).
-  const url = `${supaUrl}/rest/v1/${encodeURIComponent(table)}?select=${encodeURIComponent(column)}&limit=0`
-  const resp = await fetch(url, {
+async function fetchProdSchema(supaUrl, key) {
+  const resp = await fetch(`${supaUrl}/rest/v1/`, {
     headers: {
-      apikey: anon,
-      Authorization: `Bearer ${anon}`,
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      Accept: 'application/openapi+json',
     },
   })
-  if (resp.status >= 200 && resp.status < 300) {
-    return { ok: true }
+  if (!resp.ok) {
+    throw new Error(`OpenAPI fetch ${resp.status}`)
   }
-  let body
-  try {
-    body = await resp.json()
-  } catch {
-    body = { message: `HTTP ${resp.status}` }
+  const oapi = await resp.json()
+  const defs = oapi.definitions || oapi.components?.schemas || {}
+  const schema = new Map() // table → Set<column>
+  for (const [name, def] of Object.entries(defs)) {
+    const props = def.properties || {}
+    schema.set(name, new Set(Object.keys(props)))
   }
-  return { ok: false, status: resp.status, code: body.code, message: body.message }
+  return schema
 }
 
-async function probeRefs(supaUrl, anon, refs) {
-  const drift = [] // { table, column, status, code, message }
-  const skippedRls = [] // { table, column }
-  const skippedTable = [] // { table }
-  const concurrency = 8
+// ----------------------------------------------------------------------------
+// 3. Diff
+// ----------------------------------------------------------------------------
 
-  // Build flat list of probes
-  const probes = []
-  for (const [table, columns] of refs) {
+function diffSchema(codeRefs, prodSchema) {
+  const drift = []
+  const missingTables = []
+  for (const [table, cols] of codeRefs) {
     if (focusTable && table !== focusTable) continue
-    for (const column of columns) {
-      probes.push({ table, column })
+    const prodCols = prodSchema.get(table)
+    if (!prodCols) {
+      missingTables.push(table)
+      continue
     }
-  }
-
-  let cursor = 0
-  async function worker() {
-    while (cursor < probes.length) {
-      const { table, column } = probes[cursor++]
-      const r = await probeColumn(supaUrl, anon, table, column)
-      if (r.ok) continue
-      if (r.status === 401 || r.status === 403) {
-        skippedRls.push({ table, column })
-        continue
-      }
-      if (r.code === '42P01') {
-        skippedTable.push({ table })
-        continue
-      }
-      if (r.code === '42703') {
-        drift.push({ table, column, code: r.code, message: r.message })
-        continue
-      }
-      // Unknown error — surface as warning, not drift
-      if (verbose) {
-        console.error(`  ⚠️  Probe ${table}.${column} unknown error: ${r.status} ${r.code || ''} ${r.message || ''}`)
+    for (const col of cols) {
+      if (!prodCols.has(col)) {
+        drift.push({ table, column: col })
       }
     }
   }
-  await Promise.all(Array.from({ length: concurrency }, worker))
-
-  // Dedup skippedTable
-  const tableSet = new Set(skippedTable.map((x) => x.table))
-  return {
-    drift,
-    skippedRls,
-    skippedTables: [...tableSet],
-    totalProbes: probes.length,
-  }
+  return { drift, missingTables }
 }
 
 // ----------------------------------------------------------------------------
-// 3. Output
+// 4. Output
 // ----------------------------------------------------------------------------
 
-function reportHuman(extract, probeRes) {
+function reportHuman(extract, diffRes, prodSchema, source, baseline) {
   console.log('')
   console.log('📋 Schema Drift Audit')
   console.log('')
+  console.log(`  Source schema prod                    : ${source}`)
+  console.log(`  Tables prod                           : ${prodSchema.size}`)
   console.log(`  Fichiers TS/TSX scannés (avec .from)  : ${extract.scannedFiles} / ${extract.totalFiles}`)
-  console.log(`  Tables référencées (literal)          : ${extract.refs.size}`)
-  let totalCols = 0
-  for (const cols of extract.refs.values()) totalCols += cols.size
-  console.log(`  Couples (table, column) probés        : ${probeRes.totalProbes}`)
-  console.log(`  RLS bloque le probe anon              : ${probeRes.skippedRls.length}`)
-  console.log(`  Tables introuvables (42P01)           : ${probeRes.skippedTables.length}`)
+  console.log(`  Tables référencées en code            : ${extract.refs.size}`)
+  console.log(`  Tables introuvables en prod           : ${diffRes.missingTables.length}`)
   console.log('')
 
-  if (probeRes.drift.length === 0) {
+  if (diffRes.drift.length === 0 && diffRes.missingTables.length === 0) {
     console.log('  ✅ Aucune drift détectée.')
-    if (probeRes.skippedRls.length > 0 && verbose) {
-      console.log('')
-      console.log('  ℹ️  RLS-blocked (non-vérifiable via anon, OK):')
-      const byTable = new Map()
-      for (const s of probeRes.skippedRls) {
-        if (!byTable.has(s.table)) byTable.set(s.table, [])
-        byTable.get(s.table).push(s.column)
-      }
-      for (const [t, cols] of byTable) {
-        const isExpected = RLS_LOCKED_HINT.has(t)
-        console.log(`     ${isExpected ? '✓' : '?'} ${t} (${cols.length} cols)`)
-      }
-    }
     return
   }
 
-  console.log('  ❌ DRIFT DÉTECTÉE — code TS référence des colonnes absentes en prod :')
+  if (diffRes.missingTables.length > 0 && verbose) {
+    console.log('  ⚠️  Tables référencées mais absentes en prod :')
+    for (const t of diffRes.missingTables) console.log(`       - ${t}`)
+    console.log('')
+  }
+
+  if (diffRes.drift.length === 0) return
+
+  console.log(`  ❌ ${diffRes.drift.length} drift(s) détectée(s) :`)
   console.log('')
-  // Group by table
   const byTable = new Map()
-  for (const d of probeRes.drift) {
+  for (const d of diffRes.drift) {
     if (!byTable.has(d.table)) byTable.set(d.table, [])
     byTable.get(d.table).push(d)
   }
   for (const [table, drifts] of byTable) {
     console.log(`  📌 ${table} :`)
     for (const d of drifts) {
-      console.log(`       - ${d.column}  (${d.code}: ${d.message})`)
+      const files = extract.fileRefs.get(`${table}::${d.column}`)
+      const sample = files && files.size > 0 ? [...files].slice(0, 2).join(', ') : '?'
+      console.log(`       - ${d.column}  (réf : ${sample}${files && files.size > 2 ? `, +${files.size - 2}` : ''})`)
     }
   }
   console.log('')
-  console.log('  Action :')
-  console.log('    1. Vérifier que la migration définissant ces colonnes est appliquée en prod')
-  console.log('       via Supabase SQL editor :')
-  console.log("         SELECT column_name FROM information_schema.columns")
-  console.log("           WHERE table_schema = 'public' AND table_name = '<table>';")
-  console.log('    2. Si manquante : appliquer la migration ou créer une migration ADD COLUMN.')
-  console.log('    3. Si présente : vérifier que le code utilise le bon nom (renommage hors-Git ?).')
-  console.log('')
-}
-
-function reportJson(extract, probeRes) {
-  console.log(
-    JSON.stringify(
-      {
-        scannedFiles: extract.scannedFiles,
-        totalFiles: extract.totalFiles,
-        tableCount: extract.refs.size,
-        totalProbes: probeRes.totalProbes,
-        rlsBlocked: probeRes.skippedRls.length,
-        tablesNotFound: probeRes.skippedTables,
-        drift: probeRes.drift,
-      },
-      null,
-      2
-    )
-  )
 }
 
 // ----------------------------------------------------------------------------
@@ -443,66 +299,56 @@ async function main() {
 
   if (offline) {
     if (jsonOut) {
-      console.log(
-        JSON.stringify(
-          {
-            mode: 'offline',
-            scannedFiles: extract.scannedFiles,
-            tableCount: extract.refs.size,
-            tables: [...extract.refs.entries()].map(([t, c]) => ({ table: t, columns: [...c] })),
-          },
-          null,
-          2
-        )
-      )
+      console.log(JSON.stringify({ mode: 'offline', scannedFiles: extract.scannedFiles, tableCount: extract.refs.size }, null, 2))
     } else {
       console.log(`📋 Schema Drift Audit (offline)`)
       console.log(`  Fichiers scannés : ${extract.scannedFiles}`)
       console.log(`  Tables refs      : ${extract.refs.size}`)
-      console.log(`  ℹ️  Pour vérifier vs prod, retire --offline.`)
     }
     process.exit(0)
   }
 
   const env = loadEnv()
   if (!env) {
-    if (jsonOut) {
-      console.log(JSON.stringify({ skipped: true, reason: 'no .env.local' }))
-    } else {
-      console.log(`📋 Schema Drift Audit — skipped (.env.local absent)`)
-    }
+    if (jsonOut) console.log(JSON.stringify({ skipped: true, reason: 'no .env.local' }))
+    else console.log(`📋 Schema Drift Audit — skipped (.env.local absent)`)
     process.exit(0)
   }
   const supaUrl = env.NEXT_PUBLIC_SUPABASE_URL
-  const anon = env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!supaUrl || !anon) {
-    if (jsonOut) {
-      console.log(JSON.stringify({ skipped: true, reason: 'missing env vars' }))
-    } else {
-      console.log(`📋 Schema Drift Audit — skipped (NEXT_PUBLIC_SUPABASE_* absent)`)
-    }
+  const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY
+  const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const key = serviceKey || anonKey
+  const source = serviceKey ? 'OpenAPI (service_role, RLS-bypass)' : 'OpenAPI (anon, RLS-filtered)'
+  if (!supaUrl || !key) {
+    if (jsonOut) console.log(JSON.stringify({ skipped: true, reason: 'missing env vars' }))
+    else console.log(`📋 Schema Drift Audit — skipped (NEXT_PUBLIC_SUPABASE_* absent)`)
     process.exit(0)
   }
 
-  const probeRes = await probeRefs(supaUrl, anon, extract.refs)
+  let prodSchema
+  try {
+    prodSchema = await fetchProdSchema(supaUrl, key)
+  } catch (err) {
+    if (jsonOut) console.log(JSON.stringify({ skipped: true, reason: `fetch error: ${err.message}` }))
+    else console.error(`📋 Schema Drift Audit — fetch failed: ${err.message}`)
+    process.exit(strict ? 1 : 0)
+  }
 
-  // Disambiguation faux positifs : `alias:joined_table(c1,c2)` capture la
-  // table jointe comme "colonne" du parent. Si le nom capturé est lui-même
-  // un nom de table connue, on le retire — c'est un join PostgREST auto-FK,
-  // pas une colonne du parent.
-  const knownTables = new Set(extract.refs.keys())
-  probeRes.drift = probeRes.drift.filter((d) => !knownTables.has(d.column))
+  const diffRes = diffSchema(extract.refs, prodSchema)
+
+  // Disambiguation : `alias:joined_table(c1,c2)` capture la table jointe comme
+  // colonne du parent. Si le nom matche un nom de table existant, on retire.
+  const knownTables = new Set(prodSchema.keys())
+  diffRes.drift = diffRes.drift.filter((d) => !knownTables.has(d.column))
 
   // ---------- Baseline management ----------
-  // Le baseline encode les drifts connus historiques. En CI/pre-push, on
-  // ne bloque que les NOUVELLES drifts (delta vs baseline). Permet
-  // d'introduire le hook sans forcer le fix immédiat des 50+ drifts existantes.
-  let newDrifts = probeRes.drift
+  let newDrifts = diffRes.drift
   let baseline = null
   if (writeBaseline) {
     const payload = {
       generatedAt: new Date().toISOString(),
-      drifts: probeRes.drift.map(({ table, column }) => ({ table, column })),
+      source,
+      drifts: diffRes.drift.map(({ table, column }) => ({ table, column })),
     }
     writeFileSync(BASELINE_FILE, JSON.stringify(payload, null, 2) + '\n')
     if (!jsonOut) {
@@ -517,31 +363,25 @@ async function main() {
     }
     baseline = JSON.parse(readFileSync(BASELINE_FILE, 'utf8'))
     const baselineSet = new Set(baseline.drifts.map((d) => `${d.table}::${d.column}`))
-    newDrifts = probeRes.drift.filter((d) => !baselineSet.has(`${d.table}::${d.column}`))
-    probeRes.drift = newDrifts
+    newDrifts = diffRes.drift.filter((d) => !baselineSet.has(`${d.table}::${d.column}`))
+    diffRes.drift = newDrifts
   }
 
   if (jsonOut) {
-    reportJson(extract, probeRes)
+    console.log(JSON.stringify({
+      source,
+      scannedFiles: extract.scannedFiles,
+      tableCount: extract.refs.size,
+      prodTables: prodSchema.size,
+      drift: diffRes.drift,
+      missingTables: diffRes.missingTables,
+    }, null, 2))
   } else {
-    reportHuman(extract, probeRes)
-    if (checkBaseline) {
-      const stale = (baseline?.drifts || []).filter(
-        (d) => !probeRes.drift.find((x) => x.table === d.table && x.column === d.column) &&
-               !newDrifts.find((x) => x.table === d.table && x.column === d.column)
-      )
-      // Note: stale = baseline entries that are no longer drifts (column was added
-      // back). On ne bloque pas, mais on suggère de regénérer le baseline.
-      if (stale.length > 0 && verbose) {
-        console.log(`  ℹ️  ${stale.length} entries baseline résolues — pense à --baseline-write.`)
-      }
-    }
+    reportHuman(extract, diffRes, prodSchema, source, baseline)
   }
 
   if (strict && newDrifts.length > 0) {
-    if (checkBaseline) {
-      console.error(`❌ ${newDrifts.length} NOUVELLES drift(s) hors baseline — push bloqué.`)
-    }
+    if (checkBaseline) console.error(`❌ ${newDrifts.length} NOUVELLES drift(s) hors baseline — push bloqué.`)
     process.exit(1)
   }
   process.exit(0)

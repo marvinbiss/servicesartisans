@@ -585,7 +585,7 @@ export async function listUsers(
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+        .select('id, email, full_name, is_admin, role, phone_e164')
         .in('id', userIds)
 
       if (profiles) {
@@ -674,7 +674,7 @@ export async function getUserById(
   try {
     const { data } = await supabase
       .from('profiles')
-      .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+      .select('id, email, full_name, is_admin, role, phone_e164')
       .eq('id', userId)
       .single()
     if (data) profile = data
