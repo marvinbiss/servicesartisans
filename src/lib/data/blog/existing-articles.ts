@@ -627,7 +627,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     authorBio:
       "L'équipe éditoriale de ServicesArtisans vous accompagne dans vos projets de travaux avec des guides pratiques et des conseils d'experts.",
     date: '2026-02-08',
-    updatedDate: '2026-02-12',
+    updatedDate: '2026-04-30',
     readTime: '10 min',
     category: 'Tarifs',
     tags: ['Plomberie', 'Tarifs', 'Prix'],
@@ -968,7 +968,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     authorBio:
       "L'équipe éditoriale de ServicesArtisans vous accompagne dans vos projets de travaux avec des guides pratiques et des conseils d'experts.",
     date: '2026-01-27',
-    updatedDate: '2026-02-10',
+    updatedDate: '2026-04-30',
     readTime: '10 min',
     category: 'Tarifs',
     tags: ['Electricite', 'Tarifs', 'Prix'],
@@ -1074,7 +1074,7 @@ export const existingArticles: Record<string, BlogArticle> = {
     authorBio:
       "L'équipe éditoriale de ServicesArtisans vous accompagne dans vos projets de travaux avec des guides pratiques et des conseils d'experts.",
     date: '2026-01-25',
-    updatedDate: '2026-02-09',
+    updatedDate: '2026-04-30',
     readTime: '10 min',
     category: 'Tarifs',
     tags: ['Peinture', 'Tarifs', 'Prix'],

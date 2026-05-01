@@ -306,7 +306,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Chauffagiste', 'Pompe à chaleur', 'Aides financières'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-04-30',
     faq: [
       {
         question: "Quel est le prix d'une pompe à chaleur air-eau en 2026 ?",
@@ -753,7 +753,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Maçon', 'Gros œuvre', 'Rénovation'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-04-30',
     faq: [
       {
         question: "Combien coûte l'ouverture d'un mur porteur en 2026 ?",
@@ -2032,7 +2032,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Électricien', 'Installation électrique', 'Domotique'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-04-30',
     faq: [
       {
         question: "Combien coûte la mise aux normes électrique d'un appartement ?",
@@ -2109,7 +2109,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Salle de bain', 'Rénovation', 'Plomberie'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-04-30',
     faq: [
       {
         question: 'Quel budget pour rénover une salle de bain en 2026 ?',
