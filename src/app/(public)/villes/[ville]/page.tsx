@@ -61,12 +61,8 @@ import RelatedArticles from '@/components/seo/RelatedArticles'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
-import {
-  isSeoUpgradeV2,
-  currentMonthYearFr,
-  truncateTitle,
-  monthlyAnchorIso,
-} from '@/lib/seo/sprint-helpers'
+import { isSeoUpgradeV2, currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { logger } from '@/lib/logger'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
@@ -106,6 +102,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
+  // Sprint 2 — variants gradués + first-fitting. Tail variants courts pour
+  // longues villes (Saint-Just-en-Chaussée, Verneuil-d'Avre…).
   const titleTemplates = upgradeV2
     ? [
         villeAggregate
@@ -117,6 +115,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit 24h`,
         `${ville.name} 2026 : ${services.length} métiers, devis 24h, RGE certifiés`,
         `${ville.name} (${ville.departementCode}) — Annuaire artisans vérifiés 2026`,
+        `Artisans ${ville.name} 2026 — Devis 24h`,
+        `Artisans ${ville.name} 2026`,
+        `Artisans ${ville.name}`,
       ]
     : [
         `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit`,
@@ -124,8 +125,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${ville.name} : ${services.length} métiers d'artisans — Devis 2026`,
         `Artisans à ${ville.name} 2026 — Comparez & choisissez`,
         `${ville.name} (${ville.departementCode}) — Annuaire artisans 2026`,
+        `Artisans ${ville.name} 2026 — Devis`,
+        `Artisans ${ville.name} 2026`,
+        `Artisans ${ville.name}`,
       ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length], 41)
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
   const descTemplates = [

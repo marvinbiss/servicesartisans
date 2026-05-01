@@ -38,6 +38,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 
 import {
   getBreadcrumbSchema,
@@ -180,10 +181,8 @@ const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
  * (`%s | ServicesArtisans` = 19 chars), the rendered HTML title is ≤ 60 chars.
  * Hence raw ≤ 41. See Google Search Central : "Title links in search results".
  */
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
+// truncateTitle / selectFittingTitle moved to @/lib/seo/title-selector (shared
+// across /rge, /avis, /services/[s], /villes/[v]).
 
 // Lightweight metadata returned when the slug is invalid or unknown.
 // Calling notFound() in generateMetadata renders the not-found.tsx body with
@@ -288,16 +287,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     departmentCode: departmentCode || null,
   })
 
-  // Pick first variant that fits ≤ 41 chars (with brand suffix → 60 chars total).
-  // Falls back to truncateTitle if all variants exceed (long city + long service).
-  // WHY : 824 pages flagged title-too-long (ScreamingFrog 18/04). Fitting un-truncated
-  // beats `Chauffagiste Dammartin-en-Goële —…` ellipsis garbage (kills CTR).
-  const variantOffset = seoHash % titleVariants.length
-  const fittingTitle = titleVariants
-    .slice(variantOffset)
-    .concat(titleVariants.slice(0, variantOffset))
-    .find((v) => v.length <= 41)
-  const title = fittingTitle ?? truncateTitle(titleVariants[variantOffset])
+  // First-fitting via helper partagé (Sprint 2 pattern, voir title-selector.ts).
+  const title = selectFittingTitle(titleVariants, seoHash, 41)
 
   // Intent-aware meta description — urgence / renovation / travaux registers.
   // The CTR review snippet (`Note X/5 sur Y avis`) is appended regardless of

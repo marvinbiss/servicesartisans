@@ -20,12 +20,8 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import {
-  isSeoUpgradeV2,
-  currentMonthYearFr,
-  truncateTitle,
-  monthlyAnchorIso,
-} from '@/lib/seo/sprint-helpers'
+import { isSeoUpgradeV2, currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { tradeContent } from '@/lib/data/trade-content'
 import { countLabelForSummary, buildEnBrefPoints, buildServiceTldrBullets } from './sprint-helpers'
 import {
@@ -169,7 +165,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${serviceName} : Tarifs 2026 + Devis Gratuit`,
         `${serviceName} 2026 — Artisans Vérifiés en France`,
       ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length], 41)
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [

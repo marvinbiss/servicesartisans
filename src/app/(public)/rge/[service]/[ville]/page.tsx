@@ -61,7 +61,6 @@ import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { logger } from '@/lib/logger'
 import {
-  truncateTitle,
   isRgeUpgradeV2,
   currentMonthYearFr,
   buildIntroParagraph,
@@ -69,6 +68,8 @@ import {
   safeJsonStringify,
 } from './helpers'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
+import { hashCode } from '@/lib/seo/hash'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -160,12 +161,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     aggregateRating = buildAggregateRatingFromProviders(listing.providers)
   }
 
-  const rawTitle = upgradeV2
-    ? aggregateRating
-      ? `${aggregateRating.ratingValue}★ (${aggregateRating.reviewCount} avis) · ${count} ${serviceName.toLowerCase()} RGE ${villeName} · MaPrimeRénov’ 2026`
-      : `${count} ${serviceName.toLowerCase()} RGE ${villeName} — MaPrimeRénov’ 2026`
-    : `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`
-  const title = truncateTitle(rawTitle)
+  // Sprint 2 — multi-variant first-fitting selector. Évite les ellipsis qui
+  // bouffent le mot-clé secondaire ("Plombier RGE Saint-Just-en-Chaussée —…").
+  // Chaque variant garde le signal RGE (mot-clé core de ce template).
+  const reviewPrefix = aggregateRating
+    ? `${aggregateRating.ratingValue}★ (${aggregateRating.reviewCount} avis) · `
+    : ''
+  const svcLower = serviceName.toLowerCase()
+  const titleVariants = upgradeV2
+    ? [
+        `${reviewPrefix}${count} ${svcLower} RGE ${villeName} · MaPrimeRénov’ 2026`,
+        `${reviewPrefix}${serviceName} RGE ${villeName} — MaPrimeRénov’ 2026`,
+        `${reviewPrefix}${serviceName} RGE ${villeName} — Aides 2026`,
+        `${reviewPrefix}${serviceName} RGE ${villeName} 2026`,
+        `${reviewPrefix}${serviceName} RGE ${villeName}`,
+        `${serviceName} RGE ${villeName}`,
+      ]
+    : [
+        `${serviceName} RGE à ${villeName} — Certifié MaPrimeRénov’`,
+        `${serviceName} RGE ${villeName} — Certifiés 2026`,
+        `${serviceName} RGE ${villeName} 2026`,
+        `${serviceName} RGE ${villeName}`,
+      ]
+  const titleHash = hashCode(`rge-title-${serviceSlug}-${villeSlug}`)
+  const title = selectFittingTitle(titleVariants, titleHash, 41)
 
   const rawDesc = upgradeV2
     ? `${count} ${serviceName.toLowerCase()} RGE certifiés à ${villeName}. Devis gratuit 24h. MaPrimeRénov’ jusqu’à 11 000 €, CEE et TVA 5,5 %.`

@@ -30,6 +30,7 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
@@ -235,10 +236,7 @@ export const dynamicParams = true
 // Metadata
 // ---------------------------------------------------------------------------
 
-function truncateTitle(title: string, maxLen = 41): string {
-  if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
-}
+// truncateTitle moved to @/lib/seo/title-selector — kept import for first-fitting selector.
 
 export async function generateMetadata({
   params,
@@ -281,14 +279,18 @@ export async function generateMetadata({
       : ''
 
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
+  // Sprint 2 — variants gradués + first-fitting. Tail variants = filet pour
+  // longues villes (Saint-Just-en-Chaussée, Verneuil-d'Avre…).
   const titleTemplates = [
     `${reviewPrefix}Avis ${trade.name} ${villeData.name} 2026 — Tarifs ${priceTag}`,
     `${reviewPrefix}Avis ${tradeLower} à ${villeData.name} — Pros vérifiés 2026`,
     `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Tarifs ${priceTag}`,
     `${reviewPrefix}Avis ${trade.name} ${villeData.name} — Top artisans 2026`,
     `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Prix ${priceTag}`,
+    `${reviewPrefix}Avis ${trade.name} ${villeData.name} 2026`,
+    `${reviewPrefix}Avis ${tradeLower} ${villeData.name}`,
   ]
-  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+  const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   const descHash = Math.abs(hashCode(`avis-loc-desc-${service}-${ville}`))
   const dept = villeData.departement
