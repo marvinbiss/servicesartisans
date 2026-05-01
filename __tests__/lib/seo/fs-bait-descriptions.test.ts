@@ -74,6 +74,39 @@ describe('FS-bait descriptions — invariants', () => {
     expect(d.length).toBeLessThanOrEqual(FS_BAIT_MAX_LENGTH)
   })
 
+  it('uses pluralTerm correctly for compound names (no broken French)', () => {
+    const ctx = {
+      providerCount: 12,
+      serviceName: 'Pompe à chaleur',
+      pluralTerm: 'pompes à chaleur',
+      locationName: 'Lyon',
+      year: 2026,
+      priceRange: { min: 8000, max: 18000, unit: '€' },
+    }
+    const reno = buildRenovationFsBait(ctx)
+    expect(reno).toContain('12 pompes à chaleur RGE')
+    expect(reno).not.toContain('pompe à chaleurs')
+
+    const avis = buildAvisFsBait(ctx)
+    expect(avis).toContain('12 pompes à chaleur')
+    expect(avis).not.toContain('pompe à chaleurs')
+
+    const travaux = buildTravauxFsBait(ctx)
+    expect(travaux).toContain('12 pompes à chaleur vérifiés')
+    expect(travaux).not.toContain('pompe à chaleurs')
+  })
+
+  it('falls back to "${name}s" when pluralTerm is absent (backward compat)', () => {
+    const d = buildAvisFsBait({
+      providerCount: 5,
+      serviceName: 'Plombier',
+      locationName: 'Paris',
+      year: 2026,
+      priceRange: null,
+    })
+    expect(d).toContain('5 plombiers')
+  })
+
   it('VILLE hub contains both artisan count and metier count', () => {
     const d = buildVilleHubFsBait({
       providerCount: 1284,

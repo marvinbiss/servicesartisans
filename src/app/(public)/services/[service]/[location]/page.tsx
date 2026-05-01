@@ -297,9 +297,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // FS-bait : intent-routed builder (urgence / renovation / travaux). Pattern
   // structuré pour Featured Snippet + PAA (count en début, signal aide en fin).
   // descReviewSnippet est passé tel quel — clipping géré par buildXxxFsBait.
+  // pluralTerm corrige les noms composés ("pompes à chaleur" et non "pompe à chaleurs").
   const fsBaitCtx = {
     providerCount,
     serviceName,
+    pluralTerm: getNaturalTerm(serviceSlug).plural,
     locationName,
     year: 2026,
     priceRange: null,

@@ -71,6 +71,7 @@ import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { hashCode } from '@/lib/seo/hash'
 import { buildRenovationFsBait } from '@/lib/seo/fs-bait-descriptions'
+import { getNaturalTerm } from '@/lib/seo/natural-terms'
 
 // ISR : revalidation quotidienne (comme les autres routes pSEO géo)
 export const revalidate = 86400
@@ -136,6 +137,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Bug 2 fix : avant de basculer noindex, vérifier si le fallback dept
   // sauve la page (count_ville=0 mais count_dept≥1 — typique data ADEME
   // mal alignée sur certaines variantes d'address_city).
+  //
+  // Asymétrie volontaire avec `/services/[s]/[v]` (threshold ≥3 via
+  // hasDeptProviderFallback) : les pages /rge sont une vertical rare-supply
+  // (50K artisans RGE sur ~970K total). Requérir 3+ noindexerait des pages
+  // légitimes dans les départements à faible densité RGE (Lozère, Creuse…).
+  // L'audit GSC 90j qui a justifié le seuil 3 portait sur les pages services
+  // génériques, pas sur la vertical RGE qui a son propre intent (aides
+  // financières YMYL) et un volume de search/click bien meilleur.
   const countStrict = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
   let hasDeptFallback = false
   if (countStrict.ok && countStrict.count === 0 && location.department_name) {
@@ -188,10 +197,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = selectFittingTitle(titleVariants, titleHash, 41)
 
   // FS-bait : count + price + "MaPrimeRénov' 11 000 €" structuré pour PAA financial.
+  // pluralTerm corrige les noms composés ("pompes à chaleur" et non "pompe à chaleurs").
   const description = upgradeV2
     ? buildRenovationFsBait({
         providerCount: count,
         serviceName,
+        pluralTerm: getNaturalTerm(serviceSlug).plural,
         locationName: villeName,
         year: 2026,
         priceRange: null,

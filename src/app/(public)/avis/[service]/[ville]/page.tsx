@@ -32,6 +32,7 @@ import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { buildAvisFsBait } from '@/lib/seo/fs-bait-descriptions'
+import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities, getDepartementByCode } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
@@ -294,9 +295,15 @@ export async function generateMetadata({
   const title = selectFittingTitle(titleTemplates, titleHash, 41)
 
   // FS-bait : count + price + comparison signal (PAA "Quel est le meilleur X à Y").
+  // pluralTerm corrige les noms composés ("pompes à chaleur" et non
+  // "pompe à chaleurs"). providerCount fixé à 0 ici car on ne fetch pas la
+  // liste avant la metadata — la branche fallback `${plural} vérifiés` est
+  // syntaxiquement correcte.
+  const naturalTerm = getNaturalTerm(service)
   const description = buildAvisFsBait({
     providerCount: 0,
     serviceName: trade.name,
+    pluralTerm: naturalTerm.plural,
     locationName: villeData.name,
     year: 2026,
     priceRange: { min: minPrice, max: maxPrice, unit: trade.priceRange.unit },

@@ -33,6 +33,17 @@ export type FsBaitContext = {
   } | null
   /** Optionnel : moyenne avis (4.7) si ≥ 5 avis vérifiés. */
   reviewSnippet?: string
+  /**
+   * Optionnel : pluriel correct pour les noms composés (ex: "pompes à chaleur"
+   * et non "pompe à chaleurs"). Si absent, le helper appose un `s` au
+   * `serviceName.toLowerCase()` — OK pour les noms simples (plombier→plombiers).
+   */
+  pluralTerm?: string
+}
+
+/** Pluralise correctement le service. Préfère `pluralTerm` si fourni. */
+function pluralizeService(serviceName: string, pluralTerm?: string): string {
+  return pluralTerm ?? `${serviceName.toLowerCase()}s`
 }
 
 const MAX_DESCRIPTION_LENGTH = 158
@@ -48,9 +59,10 @@ function clipDescription(desc: string): string {
  * Cible PAA "Combien coûte un plombier en urgence" + FS budget.
  */
 export function buildUrgenceFsBait(ctx: FsBaitContext): string {
-  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet } = ctx
-  const svcLower = serviceName.toLowerCase()
-  const countStr = providerCount > 0 ? `${providerCount} ${svcLower}s` : `${serviceName}s vérifiés`
+  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet, pluralTerm } =
+    ctx
+  const plural = pluralizeService(serviceName, pluralTerm)
+  const countStr = providerCount > 0 ? `${providerCount} ${plural}` : `${plural} vérifiés`
   const priceStr = priceRange ? ` • ${priceRange.min}-${priceRange.max} ${priceRange.unit}` : ''
   const review = reviewSnippet ? ` ${reviewSnippet}` : ''
   return clipDescription(
@@ -63,10 +75,10 @@ export function buildUrgenceFsBait(ctx: FsBaitContext): string {
  * Cible PAA "Combien d'aides MaPrimeRénov'" + FS financial.
  */
 export function buildRenovationFsBait(ctx: FsBaitContext): string {
-  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet } = ctx
-  const svcLower = serviceName.toLowerCase()
-  const countStr =
-    providerCount > 0 ? `${providerCount} ${svcLower}s RGE` : `${serviceName}s RGE certifiés`
+  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet, pluralTerm } =
+    ctx
+  const plural = pluralizeService(serviceName, pluralTerm)
+  const countStr = providerCount > 0 ? `${providerCount} ${plural} RGE` : `${plural} RGE certifiés`
   const priceStr = priceRange
     ? ` • Prix ${priceRange.min}-${priceRange.max} ${priceRange.unit}`
     : ''
@@ -81,10 +93,10 @@ export function buildRenovationFsBait(ctx: FsBaitContext): string {
  * Cible FS budget + comparison.
  */
 export function buildTravauxFsBait(ctx: FsBaitContext): string {
-  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet } = ctx
-  const svcLower = serviceName.toLowerCase()
-  const countStr =
-    providerCount > 0 ? `${providerCount} ${svcLower}s vérifiés` : `${serviceName}s vérifiés`
+  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet, pluralTerm } =
+    ctx
+  const plural = pluralizeService(serviceName, pluralTerm)
+  const countStr = providerCount > 0 ? `${providerCount} ${plural} vérifiés` : `${plural} vérifiés`
   const priceStr = priceRange
     ? ` • Prix ${priceRange.min}-${priceRange.max} ${priceRange.unit}`
     : ''
@@ -98,9 +110,10 @@ export function buildTravauxFsBait(ctx: FsBaitContext): string {
  * AVIS — review proof + price ladder. Cible PAA "Quel est le meilleur X à Y".
  */
 export function buildAvisFsBait(ctx: FsBaitContext): string {
-  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet } = ctx
-  const svcLower = serviceName.toLowerCase()
-  const countStr = providerCount > 0 ? `${providerCount} ${svcLower}s` : `${serviceName}s vérifiés`
+  const { providerCount, serviceName, locationName, year, priceRange, reviewSnippet, pluralTerm } =
+    ctx
+  const plural = pluralizeService(serviceName, pluralTerm)
+  const countStr = providerCount > 0 ? `${providerCount} ${plural}` : `${plural} vérifiés`
   const priceStr = priceRange
     ? ` • Prix ${priceRange.min}-${priceRange.max} ${priceRange.unit}`
     : ''
