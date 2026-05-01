@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# Pre-push hook — schema drift detection.
+#
+# Run AFTER pre-commit (which already audits 30+ static checks). Pre-push is
+# the right tradeoff for network-bound checks : on accepte 20-30s de probe
+# Supabase REST UNE FOIS au push, plutôt qu'à chaque commit local.
+#
+# Le baseline `.schema-drift-baseline.json` encode les drifts historiques
+# tolérées. Seules les NOUVELLES drifts (colonnes référencées en code
+# absentes en prod) bloquent le push.
+#
+# Skippable via SKIP_SCHEMA_DRIFT=1 git push (pour cas force-push urgent).
+
+if [ "$SKIP_SCHEMA_DRIFT" = "1" ]; then
+  echo "⚠️  schema-drift audit SKIPPED (SKIP_SCHEMA_DRIFT=1)"
+  exit 0
+fi
+
+node scripts/audit-schema-drift.mjs --baseline-check --strict || exit 1
