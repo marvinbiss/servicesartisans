@@ -251,7 +251,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Fail-open: if DB hiccups or no reviews, fall through to existing templates.
   const reviewStats =
     departmentName || departmentCode
-      ? await getReviewStatsByDept(serviceSlug, departmentName || departmentCode).catch(() => null)
+      ? await getReviewStatsByDept(serviceSlug, departmentName || departmentCode).catch(
+          (err: unknown) => {
+            logger.error('service_location.review_stats_metadata_error', err as Error, {
+              route: 'services/[service]/[location]',
+              service: serviceSlug,
+              location: locationSlug,
+              dept: departmentName || departmentCode,
+            })
+            return null
+          }
+        )
       : null
   const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
   const reviewPrefix =
@@ -643,9 +653,14 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
         return { providers, isFallback, totalProviderCount, rgeProviderCount }
       })(),
       // Commune enrichment (best-effort, never crash)
-      getCommuneBySlug(locationSlug).catch(() => null) as Promise<
-        Awaited<ReturnType<typeof getCommuneBySlug>>
-      >,
+      getCommuneBySlug(locationSlug).catch((err: unknown) => {
+        logger.error('service_location.commune_lookup_error', err as Error, {
+          route: 'services/[service]/[location]',
+          service: serviceSlug,
+          location: locationSlug,
+        })
+        return null
+      }) as Promise<Awaited<ReturnType<typeof getCommuneBySlug>>>,
       // Recent devis count
       (async () => {
         if (process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL)
@@ -667,13 +682,39 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       })(),
       // Social proof: department reviews
       deptName
-        ? getReviewStatsByDept(serviceSlug, deptName).catch(() => null)
+        ? getReviewStatsByDept(serviceSlug, deptName).catch((err: unknown) => {
+            logger.error('service_location.review_stats_render_error', err as Error, {
+              route: 'services/[service]/[location]',
+              service: serviceSlug,
+              location: locationSlug,
+              dept: deptName,
+            })
+            return null
+          })
         : Promise.resolve(null),
       deptName
-        ? getTopReviewsByDept(serviceSlug, deptName).catch(() => [])
+        ? getTopReviewsByDept(serviceSlug, deptName).catch((err: unknown) => {
+            logger.error('service_location.top_reviews_error', err as Error, {
+              route: 'services/[service]/[location]',
+              service: serviceSlug,
+              location: locationSlug,
+              dept: deptName,
+            })
+            return []
+          })
         : Promise.resolve([] as Awaited<ReturnType<typeof getTopReviewsByDept>>),
       deptName
-        ? getDynamicLastModified(serviceSlug, location.department_code || '').catch(() => null)
+        ? getDynamicLastModified(serviceSlug, location.department_code || '').catch(
+            (err: unknown) => {
+              logger.error('service_location.last_modified_error', err as Error, {
+                route: 'services/[service]/[location]',
+                service: serviceSlug,
+                location: locationSlug,
+                deptCode: location.department_code,
+              })
+              return null
+            }
+          )
         : Promise.resolve(null),
     ])
 

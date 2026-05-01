@@ -910,18 +910,56 @@ async function renderUrgenceServiceVillePage({
     permanentRedirect(`/services/${service}/${villeSlug}`)
   }
 
-  const commune = await getCommuneBySlug(villeSlug).catch(() => null)
+  const commune = await getCommuneBySlug(villeSlug).catch((err: unknown) => {
+    logger.error('urgence_service_ville.commune_lookup_error', err as Error, {
+      route: 'urgence/[service]/[ville]',
+      service,
+      ville: villeSlug,
+    })
+    return null
+  })
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
   const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([
-    getReviewStatsByDept(service, villeData.departement).catch(() => null),
-    getTopReviewsByDept(service, villeData.departement).catch(() => []),
-    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+    getReviewStatsByDept(service, villeData.departement).catch((err: unknown) => {
+      logger.error('urgence_service_ville.review_stats_error', err as Error, {
+        route: 'urgence/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        dept: villeData.departement,
+      })
+      return null
+    }),
+    getTopReviewsByDept(service, villeData.departement).catch((err: unknown) => {
+      logger.error('urgence_service_ville.top_reviews_error', err as Error, {
+        route: 'urgence/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        dept: villeData.departement,
+      })
+      return []
+    }),
+    getDynamicLastModified(service, villeData.departementCode).catch((err: unknown) => {
+      logger.error('urgence_service_ville.last_modified_error', err as Error, {
+        route: 'urgence/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        deptCode: villeData.departementCode,
+      })
+      return null
+    }),
   ])
 
   // Fetch providers for showcase — fallback to département if city has 0
   let providers = await getProvidersByServiceAndLocation(service, villeSlug, { limit: 6 }).catch(
-    () => [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+    (err: unknown) => {
+      logger.error('urgence_service_ville.providers_lookup_error', err as Error, {
+        route: 'urgence/[service]/[ville]',
+        service,
+        ville: villeSlug,
+      })
+      return [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+    }
   )
   let isFallback = false
   if (providers.length === 0) {

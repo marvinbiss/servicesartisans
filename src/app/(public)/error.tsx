@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
+import * as Sentry from '@sentry/nextjs'
 
 export default function Error({
   error,
@@ -12,7 +13,10 @@ export default function Error({
   reset: () => void
 }) {
   useEffect(() => {
-    console.error('[PublicError]', error.message, error.digest)
+    Sentry.captureException(error, {
+      tags: { boundary: 'public_error' },
+      extra: { digest: error.digest },
+    })
   }, [error])
 
   return (

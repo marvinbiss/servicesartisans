@@ -477,7 +477,16 @@ export async function generateMetadata({
   const reviewStats = await getReviewStatsByDept(
     problem.primaryService,
     villeData.departement
-  ).catch(() => null)
+  ).catch((err: unknown) => {
+    logger.error('probleme_ville.review_stats_metadata_error', err as Error, {
+      route: 'problemes/[probleme]/[ville]',
+      probleme,
+      ville,
+      service: problem.primaryService,
+      dept: villeData.departement,
+    })
+    return null
+  })
   const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
   const reviewPrefix =
     hasReviewProof && reviewStats ? `${reviewStats.avg_rating.toFixed(1)}★ · ` : ''
@@ -575,7 +584,14 @@ async function renderProblemeVillePage({
   const tradeName = trade?.name ?? problem.primaryService
   const gradient = urgencyGradients[problem.urgencyLevel]
 
-  const commune = await getCommuneBySlug(ville).catch(() => null)
+  const commune = await getCommuneBySlug(ville).catch((err: unknown) => {
+    logger.error('probleme_ville.commune_lookup_error', err as Error, {
+      route: 'problemes/[probleme]/[ville]',
+      probleme,
+      ville,
+    })
+    return null
+  })
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)

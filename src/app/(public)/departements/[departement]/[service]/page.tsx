@@ -20,6 +20,7 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
 import { getReviewStatsByDept } from '@/lib/supabase'
+import { logger } from '@/lib/logger'
 import {
   departements,
   getDepartementBySlug,
@@ -196,7 +197,14 @@ export default async function DeptServicePage({ params }: PageProps) {
   // materialized view review_stats_by_dept. Émettre ici débloque les étoiles
   // SERP sur ~5 000 pages /departements/[dept]/[service] à fort volume
   // ("plombier paris 75", "electricien hauts-de-seine"...).
-  const reviewStats = await getReviewStatsByDept(serviceSlug, dept.code).catch(() => null)
+  const reviewStats = await getReviewStatsByDept(serviceSlug, dept.code).catch((err: unknown) => {
+    logger.error('departement_service.review_stats_error', err as Error, {
+      route: 'departements/[departement]/[service]',
+      service: serviceSlug,
+      deptCode: dept.code,
+    })
+    return null
+  })
   const aggregateRatingSchema =
     reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0
       ? {

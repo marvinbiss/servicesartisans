@@ -200,9 +200,27 @@ async function renderVillePage({ params }: PageProps) {
   // Fetch commune enrichment data + comptage RGE local + providers ville
   // pour alimenter aggregateRating. Parallèle + fail-open.
   const [commune, rgeCount, villeProviders] = await Promise.all([
-    getCommuneBySlug(villeSlug).catch(() => null),
-    getRgeProviderCountByCity(villeSlug).catch(() => 0),
-    getProvidersByLocation(villeSlug).catch(() => []),
+    getCommuneBySlug(villeSlug).catch((err: unknown) => {
+      logger.error('ville.commune_lookup_error', err as Error, {
+        route: 'villes/[ville]',
+        ville: villeSlug,
+      })
+      return null
+    }),
+    getRgeProviderCountByCity(villeSlug).catch((err: unknown) => {
+      logger.error('ville.rge_count_error', err as Error, {
+        route: 'villes/[ville]',
+        ville: villeSlug,
+      })
+      return 0
+    }),
+    getProvidersByLocation(villeSlug).catch((err: unknown) => {
+      logger.error('ville.providers_lookup_error', err as Error, {
+        route: 'villes/[ville]',
+        ville: villeSlug,
+      })
+      return []
+    }),
   ])
 
   // Generate unique SEO content

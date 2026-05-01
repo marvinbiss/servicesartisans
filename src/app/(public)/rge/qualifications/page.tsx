@@ -12,6 +12,7 @@ import {
 } from '@/lib/rge/qualification-guides-content'
 import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
 import LastUpdated from '@/components/seo/LastUpdated'
+import { logger } from '@/lib/logger'
 
 export const revalidate = 86400
 
@@ -42,7 +43,12 @@ export const metadata: Metadata = {
 export default async function RgeQualificationsHubPage() {
   // Fail-open strict — si la DB est down, `lastSyncDate` = null et le
   // composant `LastUpdated` retombera sur la date de rendu ISR.
-  const lastSyncDate = await getRgeLastSyncDate().catch(() => null)
+  const lastSyncDate = await getRgeLastSyncDate().catch((err: unknown) => {
+    logger.error('rge_qualifications_hub.last_sync_error', err as Error, {
+      route: 'rge/qualifications',
+    })
+    return null
+  })
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },

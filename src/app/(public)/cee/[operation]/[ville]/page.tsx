@@ -15,6 +15,7 @@ import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
 import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { logger } from '@/lib/logger'
 import {
   villes as staticVilles,
   getVilleBySlug,
@@ -221,7 +222,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
   const [providers, communeData] = await Promise.all([
     getCeeProvidersByOperationAndCity(opCode, villeSlug, { limit: 50 }),
-    getCommuneBySlug(villeSlug).catch(() => null),
+    getCommuneBySlug(villeSlug).catch((err: unknown) => {
+      logger.error('cee_operation_ville.commune_lookup_error', err as Error, {
+        route: 'cee/[operation]/[ville]',
+        operation: opCode,
+        ville: villeSlug,
+      })
+      return null
+    }),
   ])
   const count = providers.length
 

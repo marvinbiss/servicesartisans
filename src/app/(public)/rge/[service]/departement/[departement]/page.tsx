@@ -18,6 +18,7 @@ import {
   RGE_ALLOWED_SERVICES,
 } from '@/lib/rge/service-city-listings'
 import { getDeptPreposition, getDeptArticle } from '@/lib/geo-strings'
+import { logger } from '@/lib/logger'
 
 // ISR : revalidation quotidienne
 export const revalidate = 86400
@@ -54,7 +55,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dept = getDepartementBySlug(deptSlug)
   if (!dept) return {}
 
-  const service = await getServiceBySlug(serviceSlug).catch(() => null)
+  const service = await getServiceBySlug(serviceSlug).catch((err: unknown) => {
+    logger.error('rge_service_dept.service_metadata_error', err as Error, {
+      route: 'rge/[service]/departement/[departement]',
+      service: serviceSlug,
+      dept: deptSlug,
+    })
+    return null
+  })
   const serviceName = service?.name || serviceSlug
 
   // Vague 1.1 — stratégie 410 fail-open : count=0 confirmé → noindex dans les
@@ -99,7 +107,14 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
   const dept = getDepartementBySlug(deptSlug)
   if (!dept) notFound()
 
-  const service = await getServiceBySlug(serviceSlug).catch(() => null)
+  const service = await getServiceBySlug(serviceSlug).catch((err: unknown) => {
+    logger.error('rge_service_dept.service_render_error', err as Error, {
+      route: 'rge/[service]/departement/[departement]',
+      service: serviceSlug,
+      dept: deptSlug,
+    })
+    return null
+  })
   const serviceName = service?.name || serviceSlug
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
 

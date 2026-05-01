@@ -26,6 +26,7 @@ import {
 import { departements } from '@/lib/data/france'
 import { getRgeServiceStats } from '@/lib/rge/guide-stats'
 import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
+import { logger } from '@/lib/logger'
 import LastUpdated from '@/components/seo/LastUpdated'
 import { getRgeServiceHubContent } from '@/lib/rge/service-hub-content'
 import { getRgeGuidesForService, getCeeGuidesForService } from '@/lib/rge/service-guides-map'
@@ -84,11 +85,20 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   // Fail-open strict : DB down ou IS_BUILD → stats vides, page reste rendue
   // Stats service + dernière sync ADEME en parallèle. Fail-open sur les deux.
   const [stats, lastSyncDate] = await Promise.all([
-    getRgeServiceStats(serviceSlug).catch(() => ({
-      total: 0,
-      topCities: [],
-    })),
-    getRgeLastSyncDate().catch(() => null),
+    getRgeServiceStats(serviceSlug).catch((err: unknown) => {
+      logger.error('rge_service_hub.service_stats_error', err as Error, {
+        route: 'rge/[service]',
+        service: serviceSlug,
+      })
+      return { total: 0, topCities: [] }
+    }),
+    getRgeLastSyncDate().catch((err: unknown) => {
+      logger.error('rge_service_hub.last_sync_error', err as Error, {
+        route: 'rge/[service]',
+        service: serviceSlug,
+      })
+      return null
+    }),
   ])
 
   const total = stats.total || 0

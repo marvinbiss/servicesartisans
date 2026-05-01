@@ -282,7 +282,13 @@ export default async function ServicePage({ params }: PageProps) {
 
   // Real freshness signal (MAX provider.updated_at + latest review nationally).
   // Fail-open : absence > fausse date.
-  const lastModified = await getDynamicLastModifiedByService(serviceSlug).catch(() => null)
+  const lastModified = await getDynamicLastModifiedByService(serviceSlug).catch((err: unknown) => {
+    logger.error('service_hub.last_modified_error', err as Error, {
+      route: 'services/[service]',
+      service: serviceSlug,
+    })
+    return null
+  })
 
   // Always use static cities — faster, no DB latency, consistent 2267 cities
   topCities = getStaticCities()

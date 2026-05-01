@@ -25,6 +25,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getRgeNationalStats } from '@/lib/rge/guide-stats'
 import { getRgeLastSyncDate } from '@/lib/rge/last-sync'
+import { logger } from '@/lib/logger'
 import LastUpdated from '@/components/seo/LastUpdated'
 import {
   RGE_ALLOWED_SERVICES,
@@ -181,11 +182,14 @@ export default async function RgeHubPage() {
   // { totalActive: 0, topCities: [] }. Jamais de rendu cassé.
   // Fetch stats + dernière sync ADEME en parallèle. Fail-open sur les deux.
   const [stats, lastSyncDate] = await Promise.all([
-    getRgeNationalStats().catch(() => ({
-      totalActive: 0,
-      topCities: [],
-    })),
-    getRgeLastSyncDate().catch(() => null),
+    getRgeNationalStats().catch((err: unknown) => {
+      logger.error('rge_hub.national_stats_error', err as Error, { route: 'rge' })
+      return { totalActive: 0, topCities: [] }
+    }),
+    getRgeLastSyncDate().catch((err: unknown) => {
+      logger.error('rge_hub.last_sync_error', err as Error, { route: 'rge' })
+      return null
+    }),
   ])
 
   const totalActive = stats.totalActive || 0

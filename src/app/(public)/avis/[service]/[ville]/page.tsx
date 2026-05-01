@@ -259,7 +259,17 @@ export async function generateMetadata({
 
   // Sprint 2 CTR Attack — fetch dept review stats once for both metadata + noindex gate.
   // Fail-open: null stats => no proof prefix + hasReviews defaults to true (keep indexed).
-  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(() => null)
+  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(
+    (err: unknown) => {
+      logger.error('avis_service_ville.review_stats_metadata_error', err as Error, {
+        route: 'avis/[service]/[ville]',
+        service,
+        ville,
+        dept: villeData.departement,
+      })
+      return null
+    }
+  )
   const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
   const reviewPrefix =
     hasReviewProof && reviewStats
@@ -412,15 +422,45 @@ async function renderAvisServiceVillePage({
   )
   // reviews.provider_id references providers.id directly
   const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
-  const reviews = await getRecentReviews(providerIds).catch(
-    () => [] as Awaited<ReturnType<typeof getRecentReviews>>
-  )
+  const reviews = await getRecentReviews(providerIds).catch((err: unknown) => {
+    logger.error('avis_service_ville.recent_reviews_error', err as Error, {
+      route: 'avis/[service]/[ville]',
+      service,
+      ville: villeSlug,
+      providerCount: providerIds.length,
+    })
+    return [] as Awaited<ReturnType<typeof getRecentReviews>>
+  })
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
   const [reviewStats, topReviewsDept, dynamicLastMod] = await Promise.all([
-    getReviewStatsByDept(service, villeData.departement).catch(() => null),
-    getTopReviewsByDept(service, villeData.departement).catch(() => []),
-    getDynamicLastModified(service, villeData.departementCode).catch(() => null),
+    getReviewStatsByDept(service, villeData.departement).catch((err: unknown) => {
+      logger.error('avis_service_ville.review_stats_render_error', err as Error, {
+        route: 'avis/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        dept: villeData.departement,
+      })
+      return null
+    }),
+    getTopReviewsByDept(service, villeData.departement).catch((err: unknown) => {
+      logger.error('avis_service_ville.top_reviews_error', err as Error, {
+        route: 'avis/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        dept: villeData.departement,
+      })
+      return []
+    }),
+    getDynamicLastModified(service, villeData.departementCode).catch((err: unknown) => {
+      logger.error('avis_service_ville.last_modified_error', err as Error, {
+        route: 'avis/[service]/[ville]',
+        service,
+        ville: villeSlug,
+        deptCode: villeData.departementCode,
+      })
+      return null
+    }),
   ])
 
   // Calculate aggregate stats

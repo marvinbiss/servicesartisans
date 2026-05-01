@@ -29,6 +29,7 @@ import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { getArtisanUrl } from '@/lib/utils'
 import { getRgeProvidersByCity, getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { logger } from '@/lib/logger'
 import {
   buildGenericRgeParagraphs,
   buildGenericRgeFaq,
@@ -101,7 +102,13 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
   const [providers, totalCount, communeData] = await Promise.all([
     getRgeProvidersByCity(params.ville, { limit: DEFAULT_LIMIT, offset: 0 }),
     getRgeProviderCountByCity(params.ville),
-    getCommuneBySlug(params.ville).catch(() => null),
+    getCommuneBySlug(params.ville).catch((err: unknown) => {
+      logger.error('artisans_rge_ville.commune_lookup_error', err as Error, {
+        route: 'artisans-rge/[ville]',
+        ville: params.ville,
+      })
+      return null
+    }),
   ])
 
   // Fail-open: only noindex when we confirmed 0. During build we fail-open (count = 1).

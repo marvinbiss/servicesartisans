@@ -59,6 +59,7 @@ import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
 import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { logger } from '@/lib/logger'
 import {
   truncateTitle,
   isRgeUpgradeV2,
@@ -110,7 +111,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const [service, location] = await Promise.all([
-    getServiceBySlug(serviceSlug).catch(() => null),
+    getServiceBySlug(serviceSlug).catch((err: unknown) => {
+      logger.error('rge_service_ville.service_metadata_error', err as Error, {
+        route: 'rge/[service]/[ville]',
+        service: serviceSlug,
+        ville: villeSlug,
+      })
+      return null
+    }),
     getLocationBySlug(villeSlug),
   ])
   if (!location) notFound()
@@ -206,7 +214,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   }
 
   const [service, location] = await Promise.all([
-    getServiceBySlug(serviceSlug).catch(() => null),
+    getServiceBySlug(serviceSlug).catch((err: unknown) => {
+      logger.error('rge_service_ville.service_render_error', err as Error, {
+        route: 'rge/[service]/[ville]',
+        service: serviceSlug,
+        ville: villeSlug,
+      })
+      return null
+    }),
     getLocationBySlug(villeSlug),
   ])
   if (!location) notFound()
@@ -292,8 +307,24 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   let fallbackDeptUsed = false
   if (upgradeV2 && !aggregateRating && location.department_name) {
     const [stats, reviews] = await Promise.all([
-      getReviewStatsByDept(serviceSlug, location.department_name).catch(() => null),
-      getTopReviewsByDept(serviceSlug, location.department_name, 5).catch(() => []),
+      getReviewStatsByDept(serviceSlug, location.department_name).catch((err: unknown) => {
+        logger.error('rge_service_ville.review_stats_dept_error', err as Error, {
+          route: 'rge/[service]/[ville]',
+          service: serviceSlug,
+          ville: villeSlug,
+          dept: location.department_name,
+        })
+        return null
+      }),
+      getTopReviewsByDept(serviceSlug, location.department_name, 5).catch((err: unknown) => {
+        logger.error('rge_service_ville.top_reviews_dept_error', err as Error, {
+          route: 'rge/[service]/[ville]',
+          service: serviceSlug,
+          ville: villeSlug,
+          dept: location.department_name,
+        })
+        return []
+      }),
     ])
     if (stats && stats.review_count > 0 && stats.avg_rating > 0 && reviews.length > 0) {
       aggregateRating = {
@@ -422,7 +453,16 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
   // Sprint 0.1 — communeData pour le bloc Primes CEE (revenu_median +
   // climat_zone alimentent l’estimation tranche / économies). Null-safe.
-  const communeData = upgradeV2 ? await getCommuneBySlug(villeSlug).catch(() => null) : null
+  const communeData = upgradeV2
+    ? await getCommuneBySlug(villeSlug).catch((err: unknown) => {
+        logger.error('rge_service_ville.commune_lookup_error', err as Error, {
+          route: 'rge/[service]/[ville]',
+          service: serviceSlug,
+          ville: villeSlug,
+        })
+        return null
+      })
+    : null
 
   // CEE ops éligibles pour conditionner l’affichage du bloc primes
   const eligibleCeeOps = upgradeV2 ? getCeeOpsForRgeService(serviceSlug) : []
