@@ -43,6 +43,7 @@ import { NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 import { transitionCeeDossierStatus } from '@/lib/cee/dossiers'
 import { getJustificatifsGap } from '@/lib/cee/justificatifs'
 import type { CeeDossierStatus } from '@/lib/cee/dossier-types'
@@ -134,7 +135,7 @@ function hoursAgoIso(hours: number, now: Date = new Date()): string {
 // Handler
 // ---------------------------------------------------------------------------
 
-export async function GET(request: Request) {
+async function handleCeeDossierTransitions(request: Request): Promise<Response> {
   // -- Auth fail-closed -----------------------------------------------------
   const expected = process.env.CRON_SECRET
   if (!expected) {
@@ -391,3 +392,5 @@ export async function GET(request: Request) {
     }
   }
 }
+
+export const GET = withCronCheckIn('cron-cee-dossier-transitions', handleCeeDossierTransitions)
