@@ -491,7 +491,15 @@ export default async function ServiceLocationPage(props: PageProps) {
     return await renderServiceLocationPage(props)
   } catch (err) {
     if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
-    console.error('[ServiceLocationPage] unhandled error on render', err)
+    // logger.error forwarde à Sentry (commit 341c32162) avec context structuré.
+    // console.error précédent était capturé par onRequestError mais sans tags
+    // métier (route, service, location) → drill-down GSC 5xx impossible.
+    const params = await props.params.catch(() => null)
+    logger.error('service_location.unhandled_render_error', err as Error, {
+      route: 'services/[service]/[location]',
+      service: params?.service ?? null,
+      location: params?.location ?? null,
+    })
     notFound()
   }
 }
@@ -596,10 +604,26 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   // 2. Fetch ALL async data in a single parallel batch
   const [providersResult, communeData, recentDevisCount, reviewStats, topReviews, dynamicLastMod] =
     await Promise.all([
-      // Providers + count + RGE count, with department fallback
+      // Providers + count + RGE count, with department fallback.
+      // Audit 2026-05-01 (Sentry 295 events TimeoutError sur ce template) :
+      // `getProvidersByServiceAndLocation` était le SEUL fetch sans .catch() dans
+      // ce Promise.all. Un timeout Supabase faisait crash toute la page → Sentry
+      // remontait `TimeoutError - Page Server Component`. Désormais on dégrade
+      // vers une liste vide + log Sentry → la page tente le fallback département
+      // ligne 610-617, ou retourne notFound() proprement si vraiment 0 provider.
       (async () => {
         const [directProviders, totalProviderCount, rgeProviderCount] = await Promise.all([
-          getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }),
+          getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(
+            (err: unknown) => {
+              logger.error('service_location.providers_fetch_error', err as Error, {
+                route: 'services/[service]/[location]',
+                service: serviceSlug,
+                location: locationSlug,
+                rgeOnly,
+              })
+              return [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>
+            }
+          ),
           getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(
             () => -1
           ),
