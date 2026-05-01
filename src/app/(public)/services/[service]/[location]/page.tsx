@@ -280,10 +280,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = truncateTitle(titleVariants[seoHash % titleVariants.length])
 
-  // Resolve trade content early — still used to drive the noindex heuristic
-  // (a page with no providers but with trade content is still useful).
-  const tradeContent = getTradeContent(serviceSlug)
-
   // Intent-aware meta description — urgence / renovation / travaux registers.
   // The CTR review snippet (`Note X/5 sur Y avis`) is appended regardless of
   // intent to preserve social proof, when the threshold (≥5 avis) is met.
@@ -296,25 +292,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `${baseDescription}${descReviewSnippet}`
 
   // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
-  // Only fetch commune data when providerCount is 0 (the only case where hasUniqueData matters)
-  let communeExists = false
+  // Only check dept fallback when providerCount is 0 (the only case where hasUniqueData matters).
+  // Le check `communeExists` a été retiré (audit 2026-04-30) — la simple existence
+  // d'une commune ne justifie plus l'indexation d'une page service×ville sans listing
+  // (cf. justification dans le bloc isNoindex ci-dessous).
   let hasFallbackDept = false
   if (providerCount === 0) {
-    try {
-      communeExists = !!(await getCommuneBySlug(locationSlug))
-    } catch {
-      communeExists = false
-    }
     // Align metadata robots with render-time fallback: when local providers
     // are absent but the department-level fallback yields ≥1 artisan, the
     // page renders an active listing — must NOT be noindex'd.
     // See `renderServiceLocationPage` providersResult fallback (page.tsx).
     hasFallbackDept = await hasDeptProviderFallback(serviceSlug, departmentName)
   }
+  // Critère hasUniqueData restreint au fallback département (audit GSC 2026-04-30).
+  //
+  // Avant : `tradeContent || communeExists || hasFallbackDept`. Une page comme
+  // `/services/deratisation/les-ulis` (0 artisan ville, 0 artisan dept 91)
+  // était INDEXÉE car tradeContent('deratisation') et getCommuneBySlug('les-ulis')
+  // retournent du contenu non-null. Résultat observé : 22+ villes IDF dérat en
+  // pos 35-45 sur "dératisation [ville]" avec 0% CTR (template 5K mots, 0
+  // business listings). Google rank low car page = boilerplate éducatif sans
+  // valeur business.
+  //
+  // Après : seul `hasFallbackDept` justifie l'indexation. Une page service×ville
+  // promet un listing local — sans artisan (direct OU fallback dept), elle ne
+  // tient pas sa promesse et doit sortir de l'index. Trade content + commune
+  // restent affichés côté UX (éducation/contexte), mais ne suffisent plus à
+  // dépenser du budget crawl Google sur des pages à 0 conversion.
   const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
     providerCount,
     isQuartierPage: false,
-    hasUniqueData: !!(tradeContent || communeExists || hasFallbackDept),
+    hasUniqueData: hasFallbackDept,
   })
 
   return {
