@@ -35,8 +35,6 @@ const SERVICE_TO_CATEGORIES: Record<string, string[]> = {
   macon: ['Structure'],
   charpentier: ['Structure'],
   serrurier: ['Menuiserie'],
-  terrassier: ['Extérieur'],
-  pisciniste: ['Extérieur'],
   paysagiste: ['Extérieur'],
   facades: ['Structure'],
   facades_ravalement: ['Structure'],
@@ -44,7 +42,6 @@ const SERVICE_TO_CATEGORIES: Record<string, string[]> = {
   climatisation: ['Chauffage / Énergie'],
   'pompe-a-chaleur': ['Chauffage / Énergie'],
   vitrier: ['Menuiserie'],
-  storiste: ['Menuiserie', 'Extérieur'],
   verandas: ['Extérieur', 'Menuiserie'],
 }
 

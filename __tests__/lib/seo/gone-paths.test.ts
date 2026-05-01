@@ -16,6 +16,7 @@ import {
   evaluateGonePath,
   VALID_SERVICE_SLUGS,
   VALID_RGE_SERVICE_SLUGS,
+  VALID_PROBLEM_SLUGS,
   CEE_OPERATION_RE,
   VILLE_SLUG_RE,
   goneResponseHeaders,
@@ -23,6 +24,7 @@ import {
 } from '@/lib/seo/gone-paths'
 import { services as franceLightServices } from '@/lib/data/france-light'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import allProblems from '@/lib/data/problems'
 
 describe('evaluateGonePath — /services/[service]/[location]', () => {
   it('valid service + valid ville → gone:false', () => {
@@ -386,8 +388,78 @@ describe('VALID_SERVICE_SLUGS — cohérence avec france-light.ts', () => {
     expect(Array.from(VALID_SERVICE_SLUGS).sort()).toEqual(Array.from(lightSlugs).sort())
   })
 
-  it('46 services (15 historiques + 31 Sprint 1)', () => {
-    expect(VALID_SERVICE_SLUGS.size).toBe(46)
+  it('30 services (post pivot RGE 2026-05-01 : 16 Tier C niche supprimés)', () => {
+    expect(VALID_SERVICE_SLUGS.size).toBe(30)
+  })
+})
+
+describe('evaluateGonePath — /problemes/[probleme] (pivot RGE 2026-05-01)', () => {
+  it('problème valide simple → gone:false', () => {
+    expect(evaluateGonePath('/problemes/fuite-eau')).toEqual({ gone: false })
+    expect(evaluateGonePath('/problemes/canalisation-bouchee')).toEqual({ gone: false })
+    expect(evaluateGonePath('/problemes/court-circuit')).toEqual({ gone: false })
+  })
+
+  it('slug killed (nuisibles) → gone:true problem_slug_unknown', () => {
+    expect(evaluateGonePath('/problemes/nuisibles')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+    expect(evaluateGonePath('/problemes/infestation-fourmis')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+  })
+
+  it('slug inconnu arbitraire → gone:true problem_slug_unknown', () => {
+    expect(evaluateGonePath('/problemes/inexistant-slug')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+  })
+})
+
+describe('evaluateGonePath — /problemes/[probleme]/[ville]', () => {
+  it('problème valide + ville valide → gone:false', () => {
+    expect(evaluateGonePath('/problemes/fuite-eau/paris')).toEqual({ gone: false })
+    expect(evaluateGonePath('/problemes/serrure-bloquee/saint-etienne')).toEqual({ gone: false })
+  })
+
+  it('problème killed + ville valide → gone:true problem_slug_unknown', () => {
+    expect(evaluateGonePath('/problemes/nuisibles/paris')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+    expect(evaluateGonePath('/problemes/infestation-fourmis/lyon')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+  })
+
+  it('problème valide + ville malformée → gone:true ville_slug_malformed', () => {
+    expect(evaluateGonePath('/problemes/fuite-eau/Paris')).toEqual({
+      gone: true,
+      reason: 'ville_slug_malformed',
+    })
+  })
+
+  it('problème killed prime sur ville malformée (ordre check)', () => {
+    expect(evaluateGonePath('/problemes/nuisibles/Paris')).toEqual({
+      gone: true,
+      reason: 'problem_slug_unknown',
+    })
+  })
+})
+
+describe('VALID_PROBLEM_SLUGS — cohérence avec problems.ts', () => {
+  it('contient exactement les slugs déclarés (zéro écart)', () => {
+    const sourceSlugs = new Set(allProblems.map((p) => p.slug))
+    expect(Array.from(VALID_PROBLEM_SLUGS).sort()).toEqual(Array.from(sourceSlugs).sort())
+  })
+
+  it('exclut explicitement les slugs killed du pivot RGE 2026-05-01', () => {
+    expect(VALID_PROBLEM_SLUGS.has('nuisibles')).toBe(false)
+    expect(VALID_PROBLEM_SLUGS.has('infestation-fourmis')).toBe(false)
   })
 })
 

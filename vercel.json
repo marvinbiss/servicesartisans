@@ -170,6 +170,14 @@
     {
       "path": "/api/cron/canonical-fingerprint",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/cee-relance",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/export-rge-dataset",
+      "schedule": "0 4 1 * *"
     }
   ]
 }

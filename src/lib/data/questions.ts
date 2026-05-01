@@ -1828,7 +1828,7 @@ export const questions: Question[] = [
       "Limites du DIY : pour les grandes surfaces (> 40 m²), les poses complexes (chevrons, bâton rompu) ou le parquet massif collé, faites appel à un poseur professionnel. Le parquet massif requiert un encollage au sol, un temps de séchage de 48h et un ponçage-vitrification — des techniques qui nécessitent de l'expérience et du matériel spécialisé.",
     ],
     category: 'diy',
-    relatedService: 'poseur-de-parquet',
+    relatedService: 'menuisier',
     tags: ['parquet', 'flottant', 'pose', 'DIY', 'revêtement de sol'],
   },
   {

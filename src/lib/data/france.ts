@@ -36186,68 +36186,27 @@ export const services = [
   { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
   { slug: 'cuisiniste', name: 'Cuisiniste', icon: 'ChefHat', color: 'from-rose-500 to-rose-600' },
   {
-    slug: 'solier',
-    name: 'Solier-moquettiste',
-    icon: 'Layers',
-    color: 'from-indigo-500 to-indigo-600',
-  },
-  {
     slug: 'nettoyage',
     name: 'Nettoyage professionnel',
     icon: 'Sparkles',
     color: 'from-emerald-500 to-emerald-600',
   },
-  // ── 31 nouveaux services (Sprint 1 SEO) ──
-  {
-    slug: 'terrassier',
-    name: 'Terrassier',
-    icon: 'Shovel',
-    color: 'from-yellow-600 to-yellow-700',
-  },
+  // ── Pivot RGE 2026-05-01 : 16 métiers Tier C niche supprimés
+  //    (solier, terrassier, métallier, ferronnier, poseur-de-parquet,
+  //     miroitier, storiste, architecte-interieur, decorateur, domoticien,
+  //     pisciniste, antenniste, ascensoriste, geometre, desinsectisation,
+  //     deratisation) — focus rénovation énergétique.
   { slug: 'charpentier', name: 'Charpentier', icon: 'Axe', color: 'from-amber-700 to-amber-800' },
   { slug: 'zingueur', name: 'Zingueur', icon: 'Droplets', color: 'from-zinc-500 to-zinc-600' },
   { slug: 'etancheiste', name: 'Étanchéiste', icon: 'Shield', color: 'from-blue-600 to-blue-700' },
   { slug: 'facadier', name: 'Façadier', icon: 'Building', color: 'from-orange-600 to-orange-700' },
   { slug: 'platrier', name: 'Plâtrier', icon: 'Paintbrush', color: 'from-gray-500 to-gray-600' },
   {
-    slug: 'metallier',
-    name: 'Métallier',
-    icon: 'Construction',
-    color: 'from-zinc-600 to-zinc-700',
-  },
-  {
-    slug: 'ferronnier',
-    name: 'Ferronnier',
-    icon: 'Link',
-    color: 'from-charcoal-500 to-charcoal-600',
-  },
-  {
-    slug: 'poseur-de-parquet',
-    name: 'Poseur de parquet',
-    icon: 'Grid3X3',
-    color: 'from-amber-400 to-amber-500',
-  },
-  { slug: 'miroitier', name: 'Miroitier', icon: 'Maximize', color: 'from-sky-600 to-sky-700' },
-  { slug: 'storiste', name: 'Storiste', icon: 'PanelTop', color: 'from-violet-500 to-violet-600' },
-  {
     slug: 'salle-de-bain',
     name: 'Salle de bain',
     icon: 'Bath',
     color: 'from-blue-400 to-blue-500',
   },
-  {
-    slug: 'architecte-interieur',
-    name: "Architecte d'intérieur",
-    icon: 'Ruler',
-    color: 'from-pink-500 to-pink-600',
-  },
-  {
-    slug: 'decorateur',
-    name: 'Décorateur',
-    icon: 'Palette',
-    color: 'from-fuchsia-500 to-fuchsia-600',
-  },
-  { slug: 'domoticien', name: 'Domoticien', icon: 'Cpu', color: 'from-violet-600 to-violet-700' },
   {
     slug: 'pompe-a-chaleur',
     name: 'Pompe à chaleur',
@@ -36280,19 +36239,11 @@ export const services = [
   },
   { slug: 'ramoneur', name: 'Ramoneur', icon: 'Factory', color: 'from-neutral-600 to-neutral-700' },
   { slug: 'paysagiste', name: 'Paysagiste', icon: 'Trees', color: 'from-green-400 to-green-500' },
-  { slug: 'pisciniste', name: 'Pisciniste', icon: 'Waves', color: 'from-cyan-600 to-cyan-700' },
   {
     slug: 'alarme-securite',
     name: 'Alarme et sécurité',
     icon: 'ShieldAlert',
     color: 'from-red-600 to-red-700',
-  },
-  { slug: 'antenniste', name: 'Antenniste', icon: 'Radio', color: 'from-indigo-600 to-indigo-700' },
-  {
-    slug: 'ascensoriste',
-    name: 'Ascensoriste',
-    icon: 'ArrowUpDown',
-    color: 'from-charcoal-400 to-charcoal-500',
   },
   {
     slug: 'diagnostiqueur',
@@ -36300,13 +36251,5 @@ export const services = [
     icon: 'ClipboardCheck',
     color: 'from-blue-700 to-blue-800',
   },
-  { slug: 'geometre', name: 'Géomètre', icon: 'MapPin', color: 'from-lime-600 to-lime-700' },
-  {
-    slug: 'desinsectisation',
-    name: 'Désinsectisation',
-    icon: 'Bug',
-    color: 'from-red-400 to-red-500',
-  },
-  { slug: 'deratisation', name: 'Dératisation', icon: 'Bug', color: 'from-stone-600 to-stone-700' },
   { slug: 'demenageur', name: 'Déménageur', icon: 'Truck', color: 'from-blue-300 to-blue-400' },
 ]

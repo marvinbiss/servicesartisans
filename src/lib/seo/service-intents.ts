@@ -41,9 +41,6 @@ const URGENCE_SERVICES: ReadonlySet<string> = new Set([
   'electricien',
   'vitrier',
   'ramoneur',
-  'desinsectisation',
-  'deratisation',
-  'ascensoriste',
 ])
 
 /**

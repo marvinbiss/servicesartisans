@@ -61,9 +61,9 @@ const diagnosticFAQs = [
       "Un plombier intervient sur les canalisations d'eau, les robinets, les WC et les chauffe-eau. Un chauffagiste est spécialisé dans les systèmes de chauffage : chaudières, radiateurs, pompes à chaleur et planchers chauffants. Pour un chauffe-eau, les deux peuvent intervenir.",
   },
   {
-    question: 'Dois-je appeler un électricien ou un domoticien ?',
+    question: 'Quelle est la différence entre un peintre et un façadier ?',
     answer:
-      'Un électricien gère les installations électriques classiques (prises, tableau, éclairage). Un domoticien est spécialisé dans la maison connectée (automatisation des volets, éclairage intelligent, chauffage connecté). Pour une panne électrique, appelez un électricien.',
+      "Un peintre en bâtiment intervient principalement à l'intérieur (murs, plafonds, boiseries) et sur des surfaces extérieures simples. Un façadier est spécialisé dans la rénovation complète des façades : ravalement, enduit, isolation thermique par l'extérieur (ITE) et finitions architecturales.",
   },
   {
     question: 'Comment trouver un artisan en urgence ?',

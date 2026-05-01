@@ -537,9 +537,9 @@ const problemsExtra: Problem[] = [
     slug: 'volet-roulant-bloque',
     name: 'Volet roulant bloqué',
     description:
-      'Un volet roulant bloqué en position ouverte, fermée ou à mi-course empêche de sécuriser ou d’obscurcir la pièce. Les causes fréquentes sont une lame cassée, une sangle usée, un moteur en panne ou des coulisses encrassées. Un menuisier ou un storiste peut diagnostiquer et réparer le volet.',
-    relatedServices: ['menuisier', 'storiste'],
-    primaryService: 'storiste',
+      'Un volet roulant bloqué en position ouverte, fermée ou à mi-course empêche de sécuriser ou d’obscurcir la pièce. Les causes fréquentes sont une lame cassée, une sangle usée, un moteur en panne ou des coulisses encrassées. Un menuisier (volet motorisé inclus) peut diagnostiquer et réparer le volet.',
+    relatedServices: ['menuisier', 'electricien'],
+    primaryService: 'menuisier',
     urgencyLevel: 'moyenne',
     symptoms: [
       'Volet roulant qui ne descend plus ou ne remonte plus',
@@ -633,9 +633,9 @@ const problemsExtra: Problem[] = [
     slug: 'parquet-qui-gondole',
     name: 'Parquet qui gondole',
     description:
-      'Un parquet qui gondole, se soulève ou présente des vagues est généralement victime d’un excès d’humidité : dégât des eaux, remontées capillaires, absence de joint de dilatation périphérique ou sous-couche inadaptée. Un poseur de parquet peut diagnostiquer la cause et remettre le sol à plat.',
-    relatedServices: ['poseur-de-parquet', 'menuisier'],
-    primaryService: 'poseur-de-parquet',
+      'Un parquet qui gondole, se soulève ou présente des vagues est généralement victime d’un excès d’humidité : dégât des eaux, remontées capillaires, absence de joint de dilatation périphérique ou sous-couche inadaptée. Un menuisier peut diagnostiquer la cause et remettre le sol à plat.',
+    relatedServices: ['menuisier', 'carreleur'],
+    primaryService: 'menuisier',
     urgencyLevel: 'moyenne',
     symptoms: [
       'Lames de parquet soulevées, bombées ou ondulées',
@@ -725,56 +725,6 @@ const problemsExtra: Problem[] = [
       },
     ],
   },
-  {
-    slug: 'infestation-fourmis',
-    name: 'Invasion de fourmis',
-    description:
-      'Une invasion de fourmis dans le logement est un problème récurrent au printemps et en été. Les fourmis pénètrent par les fissures et les joints pour chercher de la nourriture. Un traitement professionnel par un spécialiste en désinsectisation permet d’éliminer la colonie à la source, y compris la fourmilière.',
-    relatedServices: ['desinsectisation'],
-    primaryService: 'desinsectisation',
-    urgencyLevel: 'basse',
-    symptoms: [
-      'Files de fourmis dans la cuisine, la salle de bain ou le long des plinthes',
-      'Fourmis en nombre autour des poubelles ou des restes alimentaires',
-      'Petits monticules de terre ou de sciure près des murs (fourmilière)',
-      'Fourmis ailées dans le logement (essaimage printanier)',
-      'Sciure fine au pied des poutres ou des menuiseries en bois (fourmis charpentières)',
-    ],
-    immediateActions: [
-      'Identifiez le point d’entrée des fourmis et colmatez-le temporairement (mastic, silicone)',
-      'Nettoyez les surfaces avec du vinaigre blanc pour effacer les pistes de phéromones',
-      'Rangez toute la nourriture dans des contenants hermétiques',
-      'Posez des appâts anti-fourmis (gel) sur les pistes pour empoisonner la colonie à la source',
-    ],
-    preventiveTips: [
-      'Bouchez les fissures et les interstices dans les murs, les joints de fenêtres et les seuils de porte',
-      'Ne laissez pas de nourriture ou de miettes accessibles (plan de travail, table)',
-      'Videz les poubelles régulièrement et utilisez des poubelles à couvercle hermétique',
-      'Taillez les branches d’arbres et les plantes grimpantes qui touchent la façade (pont d’accès)',
-    ],
-    estimatedCost: { min: 80, max: 250 },
-    averageResponseTime: 'Sous 24 à 72h',
-    seasonality: 'printemps-été',
-    faq: [
-      {
-        q: 'Comment se débarrasser des fourmis durablement ?',
-        a: 'Les sprays insecticides tuent les fourmis visibles mais pas la reine, qui continue de pondre. Pour éliminer la colonie, utilisez des appâts en gel (10 à 20 €) : les ouvrières rapportent le poison dans la fourmilière, tuant la reine en 1 à 2 semaines. Pour les infestations importantes, un professionnel localise et traite directement la fourmilière.',
-      },
-      {
-        q: 'Combien coûte un traitement professionnel anti-fourmis ?',
-        a: 'Un traitement par un spécialiste en désinsectisation coûte 80 à 200 € pour un logement standard. Le professionnel pose des appâts professionnels, traite les points d’entrée et peut injecter un insecticide dans la fourmilière extérieure. Un passage de contrôle est souvent inclus 2 à 3 semaines après.',
-      },
-      {
-        q: 'Les fourmis charpentières sont-elles dangereuses pour la maison ?',
-        a: 'Oui, les fourmis charpentières (Camponotus) creusent des galeries dans le bois humide (poutres, charpente, menuiseries) et peuvent fragiliser la structure. La sciure fine au pied des boiseries est un signe caractéristique. Faites intervenir un professionnel rapidement : le traitement coûte 150 à 400 € selon l’ampleur.',
-      },
-      {
-        q: 'Les remèdes naturels sont-ils efficaces contre les fourmis ?',
-        a: 'Le vinaigre blanc, le citron, la cannelle et la craie perturbent les pistes de phéromones et repoussent temporairement les fourmis, mais n’éliminent pas la colonie. La terre de diatomée (10 à 15 €/kg) est un insecticide naturel efficace : saupoudrez-la sur les pistes et les points d’entrée. Pour une infestation importante, le traitement professionnel reste le plus fiable.',
-      },
-    ],
-  },
-
   // ============================================================
   // AJOUT MARS 2026 — 11 problèmes supplémentaires
   // ============================================================
@@ -835,7 +785,7 @@ const problemsExtra: Problem[] = [
     name: 'Plancher qui craque',
     description:
       'Un plancher qui craque est un problème courant dans les maisons anciennes et les appartements avec parquet en bois. Les craquements sont dus au jeu entre les lames et les lambourdes, au séchage du bois ou au tassement de la structure. Un menuisier peut resserrer ou traiter le plancher pour réduire considérablement le bruit.',
-    relatedServices: ['menuisier', 'poseur-de-parquet'],
+    relatedServices: ['menuisier', 'carreleur'],
     primaryService: 'menuisier',
     urgencyLevel: 'basse',
     symptoms: [

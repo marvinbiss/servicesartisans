@@ -686,7 +686,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       'Les fondations profondes (pieux, micropieux) sont nettement plus onéreuses : **1 500 à 5 000 €** par pieu. Elles sont nécessaires sur les sols instables ou en pente.',
 
       '### Terrassement et dalle',
-      "Le [terrassement](/services/terrassier) préalable coûte entre **25 et 60 € HT/m³**. La dalle béton (10 à 15 cm d'épaisseur) revient entre **50 et 100 € HT/m²**, ferraillage et coffrage inclus.",
+      "Le [terrassement](/services/macon) préalable coûte entre **25 et 60 € HT/m³**. La dalle béton (10 à 15 cm d'épaisseur) revient entre **50 et 100 € HT/m²**, ferraillage et coffrage inclus.",
 
       ":::info Bon à savoir\nDepuis la **loi Élan de 2018**, l'étude géotechnique (étude de sol) est obligatoire pour toute construction de maison individuelle dans les zones exposées au retrait-gonflement des argiles. Même hors zone à risque, cette étude (800 à 2 000 €) est vivement recommandée : elle détermine le type de fondations adapté et évite des surcoûts considérables en cas de sinistre.\n:::",
 
@@ -742,7 +742,7 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       "1. Faites appel au maçon pour les travaux structurels et réalisez vous-même les **finitions** (enduits, peinture)\n2. **Groupez les travaux** pour amortir les frais de déplacement et d'installation de chantier (500 – 1 500 €)\n3. Vérifiez systématiquement l'[assurance décennale](/blog/comment-choisir-macon-guide) du maçon\n4. Prévoyez une **marge de 10 à 15 %** sur le budget initial pour les imprévus\n5. Comparez au moins trois devis détaillés de maçons vérifiés\n6. Planifiez en basse saison (automne-hiver) pour de meilleurs tarifs",
 
-      "Pour compléter votre projet de construction ou de rénovation, consultez aussi les [prix d'un terrassier](/blog/prix-terrassier-2026-tarifs-travaux), les [tarifs carreleur](/blog/prix-carreleur-2026-pose-fourniture) et les [prix de ravalement de façade](/blog/prix-ravalement-facade-2026). Pour le choix du professionnel, notre guide [Comment choisir son maçon](/blog/comment-choisir-macon-guide) vous donnera les critères essentiels.",
+      'Pour compléter votre projet de construction ou de rénovation, consultez aussi les [tarifs carreleur](/blog/prix-carreleur-2026-pose-fourniture) et les [prix de ravalement de façade](/blog/prix-ravalement-facade-2026). Pour le choix du professionnel, notre guide [Comment choisir son maçon](/blog/comment-choisir-macon-guide) vous donnera les critères essentiels.',
 
       '## Sources et méthodologie',
       'Les prix indiqués dans ce guide sont issus de :\\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025), tarif horaire maçon 40-75 € HT\\n- **Indice BT01** (INSEE) — évolution du coût de la construction\\n- **Ootravaux / Renovationettravaux.fr** — baromètre prix maçonnerie 2026 : mur parpaing 100-240 €/m² fourni-posé\\n- **Comparaison de devis** collectés via ServicesArtisans (680+ devis analysés, janvier-mars 2026)\\n\\nLes fourchettes couvrent 80 % des devis constatés et tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.',
@@ -988,7 +988,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       ':::budget\n| Type de vitrage | Prix fourni-posé/m² | Coefficient Ug | Usage recommandé |\n| Double vitrage standard (4/16/4) | 100 – 250 € | 1,1 W/m².K | Standard toute façade |\n| Double VIR gaz argon | 150 – 350 € | 1,0 W/m².K | Rénovation énergétique |\n| Triple vitrage | 200 – 450 € | 0,5 – 0,7 W/m².K | Façade nord, régions froides |\n| Vitrage acoustique feuilleté | 180 – 400 € | 1,1 W/m².K | Bord de route, centre-ville |\n:::',
 
       '### Remplacement du vitrage seul vs fenêtre complète',
-      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un [miroitier-vitrier à Paris](/services/vitrier/paris) pour un devis sur mesure.",
+      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un [vitrier-vitrier à Paris](/services/vitrier/paris) pour un devis sur mesure.",
 
       ":::info Bon à savoir\nLe coefficient **Ug** mesure la performance thermique du vitrage seul (le « g » signifie « glass »). Plus il est bas, meilleure est l'isolation. Le **Uw** mesure la performance de la fenêtre complète (vitrage + châssis). Pour bénéficier des aides à la rénovation énergétique, c'est le Uw qui doit être inférieur ou égal à 1,3 W/m².K.\n:::",
 
@@ -1336,104 +1336,6 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Ne versez jamais plus de 30 à 40 % d'acompte et inspectez chaque élément à la réception.",
     ],
   },
-  'prix-solier-revetement-sol-2026': {
-    title: 'Prix Solier 2026 : Revêtements de Sol',
-    excerpt:
-      'Tarifs solier 2026 : parquet, vinyle, moquette, béton ciré. Tous les prix au m² pour choisir votre revêtement. Devis gratuit.',
-    metaTitle: 'Prix Sol 2026 : 15-250€/m² — Comparatif complet',
-    metaDescription:
-      'Tarifs revêtement sol 2026 : stratifié 15-45€/m², parquet massif 80-250€/m², vinyle 20-50€/m². Comparatif + devis gratuit.',
-    content: [
-      "Parquet massif chaleureux, vinyle ultra-résistant, béton ciré contemporain ou moquette cocooning ? Le choix du revêtement de sol influence considérablement l'ambiance, le confort acoustique et la valeur de votre intérieur. Mais les écarts de prix sont vertigineux : de **15 €/m²** pour un stratifié basique à **250 €/m²** pour un parquet massif en noyer. En 2026, la palette d'options s'élargit avec des matériaux toujours plus performants. Ce guide comparatif vous permet de choisir en connaissance de cause. Trouvez un [solier professionnel](/services/solier) ou un [poseur de parquet](/services/poseur-de-parquet) près de chez vous.",
-
-      "## Tarif horaire d'un solier",
-
-      "Le taux horaire d'un solier se situe entre **30 et 50 € HT** en province et entre **45 et 70 € HT** en Île-de-France. La plupart des professionnels facturent au mètre carré pour plus de transparence.",
-
-      '## Parquet massif',
-
-      '### Prix par essence',
-      "La pose coûte **30 à 60 €/m²** (main-d'œuvre seule). La fourniture varie selon l'essence :\n- **Chêne** : 40 – 100 €/m² (le classique par excellence)\n- **Hêtre** : 35 – 70 €/m²\n- **Noyer** : 80 – 150 €/m²\n- **Bois exotiques** (ipé, teck) : 60 – 200 €/m²\n\nBudget total : **80 à 250 €/m²** fourni-posé. Le ponçage et la vitrification d'un parquet ancien coûtent **25 à 50 €/m²**.",
-
-      '## Parquet contrecollé et stratifié',
-
-      '### Le meilleur rapport qualité-prix',
-      "Le parquet contrecollé offre un excellent rapport qualité-prix : **20 à 70 €/m²** fourni-posé. Le stratifié est encore plus économique : **15 à 45 €/m²**. La pose flottante (clipsée) réduit le coût de main-d'œuvre à **10 – 20 €/m²**. La pose collée, recommandée sur plancher chauffant, revient à **15 – 30 €/m²**.",
-
-      ':::budget\n| Revêtement | Prix fourni-posé/m² | Durée de vie | Entretien | Plancher chauffant |\n| Parquet massif chêne | 80 – 200 € | 50 – 100 ans | Ponçage tous les 10 ans | Oui (collé) |\n| Contrecollé chêne | 40 – 100 € | 25 – 50 ans | Facile | Oui (collé) |\n| Stratifié | 15 – 45 € | 10 – 20 ans | Très facile | Selon modèle |\n| Vinyle LVT | 25 – 70 € | 15 – 25 ans | Très facile | Oui |\n| Béton ciré | 100 – 200 € | 30 ans+ | Cire annuelle | Non recommandé |\n| Moquette | 20 – 80 € | 8 – 15 ans | Aspirateur + shampoing | Non |\n:::',
-
-      '## Revêtements souples : vinyle et moquette',
-
-      '### Vinyle LVT',
-      'Les sols en vinyle (LVT - Luxury Vinyl Tile) connaissent un succès croissant. Le prix fourni-posé se situe entre **25 et 70 €/m²**. Le linoléum naturel coûte **30 à 80 €/m²**.',
-
-      '### Moquette',
-      'La moquette revient entre **20 et 80 €/m²** (bouclée, velours, shaggy). Les dalles PVC clipsables coûtent **20 à 50 €/m²**.',
-
-      '## Béton ciré et résine',
-
-      'Le béton ciré coûte **100 à 200 €/m²** pose comprise. La résine époxy : **80 à 180 €/m²**. Le microcement : **90 à 170 €/m²**. Ces revêtements nécessitent une préparation soignée et un savoir-faire spécifique.',
-
-      ":::info Bon à savoir\nLe **béton ciré** n'est pas un vrai béton : c'est un enduit décoratif à base de ciment, de résines et de pigments, appliqué en couches fines (2-3 mm). Il est compatible avec les sols chauffants basse température mais nécessite l'application d'un **vernis de protection** et d'une cire régulière. Attention aux taches acides (citron, vinaigre) qui attaquent la surface.\n:::",
-
-      '## Préparation du sol',
-
-      "- **Ragréage autolissant** : 15 – 30 €/m²\n- **Dépose ancien revêtement** : 5 – 20 €/m² selon le type\n- **Sous-couche acoustique** : 3 – 10 €/m²\n- **Primaire d'accrochage** : 2 – 5 €/m²",
-
-      '## Variations régionales',
-
-      "L'Île-de-France affiche des tarifs de pose **25 à 35 %** supérieurs à la moyenne. Les fournitures sont plus homogènes grâce à la distribution nationale, mais les bois locaux (chêne de Bourgogne, pin des Landes) offrent un avantage tarifaire dans leur région.",
-
-      '## Nos conseils pour économiser',
-
-      ':::tip Conseil pro\nComparez le **coût total sur 20 ans** (achat + entretien + durée de vie) plutôt que le seul prix au m². Un parquet massif en chêne à 120 €/m² dure 50 ans et peut être poncé 5 à 7 fois. Un stratifié à 25 €/m² dure 15 ans et ne peut pas être rénové. Sur 50 ans, le parquet massif revient à **2,40 €/m²/an** contre **3,30 €/m²/an** pour le stratifié (remplacé 3 fois).\n:::',
-
-      '1. Achetez vos matériaux en direct et ne confiez que la pose au professionnel\n2. Profitez des **fins de série** et déstockages (-30 à 50 %)\n3. Le contrecollé chêne offre le meilleur compromis esthétique/prix/durabilité\n4. Comparez au moins trois devis de soliers vérifiés',
-
-      ":::warning Attention\nSur **plancher chauffant**, seule la pose collée est autorisée pour le parquet (jamais la pose flottante, qui crée une lame d'air isolante réduisant l'efficacité du chauffage). Vérifiez la compatibilité du revêtement avec votre système de chauffage au sol : le fabricant indique une **résistance thermique maximale** (généralement 0,15 m².K/W). Le vinyle LVT et le carrelage sont les plus adaptés au plancher chauffant.\n:::",
-
-      '## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **CAPEB** — enquête annuelle sur les tarifs artisanaux (2025)\n- **UNILIN / Tarkett / Saint-Maclou** — catalogues tarifs fabricants et distributeurs 2025-2026\n- **Habitatpresto / Travaux.com** — baromètre prix revêtement sol 2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, grandes métropoles × 1.15). Dernière mise à jour : avril 2026.',
-
-      ':::takeaway\n- Stratifié (le plus économique) : **15 – 45 €/m²** fourni-posé\n- Parquet contrecollé chêne : **40 – 100 €/m²** (meilleur rapport qualité-prix)\n- Parquet massif chêne : **80 – 200 €/m²** (investissement long terme)\n- Béton ciré : **100 – 200 €/m²** (style contemporain)\n- Toujours prévoir **ragréage + sous-couche** dans le budget\n:::',
-    ],
-    image: '/images/blog/prix-solier-revetement-sol-2026.jpg',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-01-29',
-    readTime: '13 min',
-    category: 'Tarifs',
-    tags: ['Solier', 'Parquet', 'Revêtement de sol'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
-    faq: [
-      {
-        question: 'Quel est le revêtement de sol le moins cher en 2026 ?',
-        answer:
-          'Le stratifié est le revêtement le plus économique : 15 à 45 €/m² fourni-posé. Le vinyle en rouleau est également très abordable (15 – 35 €/m²). Attention toutefois au coût sur la durée : un stratifié dure 10-20 ans contre 50-100 ans pour un parquet massif qui peut être poncé plusieurs fois.',
-      },
-      {
-        question: 'Peut-on poser du parquet sur un plancher chauffant ?',
-        answer:
-          "Oui, mais uniquement en pose collée (jamais flottante). Le parquet doit avoir une résistance thermique inférieure à 0,15 m².K/W. Le contrecollé (épaisseur 14-15 mm avec couche d'usure de 3-4 mm) est le plus adapté. Le parquet massif épais est déconseillé car il réduit l'efficacité du chauffage. Le vinyle LVT et le carrelage sont les plus performants sur plancher chauffant.",
-      },
-      {
-        question: "Combien coûte la rénovation d'un parquet ancien ?",
-        answer:
-          "Le ponçage et la vitrification d'un parquet ancien coûtent entre 25 et 50 €/m². Si le parquet nécessite des réparations (remplacement de lames, rebouchage de trous), ajoutez 10 à 30 €/m². Pour un appartement de 60 m², le budget de rénovation du parquet se situe entre 1 500 et 4 800 €. C'est souvent plus économique et plus valorisant que la pose d'un nouveau revêtement.",
-      },
-      {
-        question: 'Le béton ciré est-il adapté à une salle de bain ?',
-        answer:
-          "Le béton ciré peut être posé en salle de bain à condition d'appliquer un traitement hydrofuge et un vernis de protection adaptés. Cependant, il nécessite un entretien régulier (cire tous les 6 à 12 mois) et reste sensible aux produits acides. Pour une douche à l'italienne, le carrelage reste plus fiable à long terme.",
-      },
-    ],
-    keyTakeaways: [
-      'Le parquet massif coûte 40 à 120 €/m² posé, le stratifié 15 à 40 €/m² et le vinyle LVT 25 à 60 €/m².',
-      'La pose collée est recommandée sur plancher chauffant ; la pose flottante pour les rénovations rapides.',
-      'Le ragréage du support (10 à 25 €/m²) est indispensable pour un résultat de pose impeccable.',
-      'Le parquet contrecollé offre le meilleur compromis entre esthétique bois et facilité de pose.',
-    ],
-  },
   'prix-nettoyage-professionnel-2026': {
     title: 'Prix Nettoyage Professionnel 2026 : Tarifs',
     excerpt:
@@ -1542,7 +1444,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '- **[Électricité complète](/services/electricien)** (norme NF C 15-100) : 80 – 150 €/m²\n- **[Plomberie complète](/services/plombier)** : 70 – 130 €/m²\n- **[Salle de bain](/blog/prix-salle-de-bain-complete-2026)** complète : 4 000 – 15 000 €\n- **[Cuisine équipée](/blog/prix-cuisiniste-2026-pose-cuisine)** : 5 000 – 25 000 €\n- **Isolation intérieure** : 40 – 100 €/m²',
 
       '### Postes de finition',
-      '- **[Revêtements de sol](/blog/prix-solier-revetement-sol-2026)** : 30 – 150 €/m²\n- **Peinture** : 20 – 40 €/m²\n- **[Carrelage](/blog/prix-carreleur-2026-pose-fourniture)** salle de bain/cuisine : 50 – 120 €/m²',
+      '- **Revêtements de sol** : 30 – 150 €/m²\n- **Peinture** : 20 – 40 €/m²\n- **[Carrelage](/blog/prix-carreleur-2026-pose-fourniture)** salle de bain/cuisine : 50 – 120 €/m²',
 
       ":::tip Conseil pro\nDans une rénovation lourde, commencez **toujours** par les postes techniques (démolition, électricité, plomberie) avant les finitions. L'ordre optimal est : 1) Démolition/gros œuvre, 2) Électricité/plomberie, 3) Plâtrerie/isolation, 4) [Carrelage](/blog/prix-carreleur-2026-pose-fourniture)/sols, 5) Menuiseries, 6) Peinture. Inverser cet ordre entraîne des reprises coûteuses.\n:::",
 
@@ -1796,7 +1698,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Terrasse sur plots',
       "Le système de pose sur plots permet de s'affranchir d'une dalle béton et de gérer les pentes et irrégularités du sol. Le surcoût lié aux plots est de 15 à 35 €/m². Cette technique convient particulièrement aux dalles céramiques, au bois et au composite. Elle facilite l'accès aux réseaux enterrés et assure un excellent drainage.",
       '## Travaux préparatoires',
-      "Le [terrassement](/services/terrassier) et la préparation du sol coûtent entre 20 et 50 €/m². La création d'une dalle béton support revient à 50 – 100 €/m². Le drainage périphérique se situe entre 30 et 60 € par mètre linéaire. L'éclairage extérieur encastré ajoute 50 à 150 € par spot. La balustrade ou le garde-corps coûte de 100 à 400 € par mètre linéaire.",
+      "Le [terrassement](/services/macon) et la préparation du sol coûtent entre 20 et 50 €/m². La création d'une dalle béton support revient à 50 – 100 €/m². Le drainage périphérique se situe entre 30 et 60 € par mètre linéaire. L'éclairage extérieur encastré ajoute 50 à 150 € par spot. La balustrade ou le garde-corps coûte de 100 à 400 € par mètre linéaire.",
       '## Variations régionales',
       "Les tarifs sont 20 à 30 % plus élevés en Île-de-France. Les régions du sud, où les terrasses sont davantage utilisées, bénéficient paradoxalement d'une forte concurrence qui modère les prix. Les régions montagneuses nécessitent des matériaux résistants au gel, souvent plus coûteux.",
       '## Nos conseils pour économiser',
@@ -1852,7 +1754,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs clôture 2026 : grillage 15-70€/ml, PVC 60-150€/ml, alu 100-300€/ml. Portail 700-8 000€. Comparez 3 devis gratuits.',
     content: [
-      "Clôturer sa propriété et installer un portail répondent à des besoins de sécurité, d'intimité et d'esthétique. En 2026, le choix de matériaux est vaste et les prix varient considérablement d'une solution à l'autre. Du simple grillage au portail motorisé en aluminium sur mesure, ce guide vous aide à chiffrer précisément votre projet de clôture. Faites appel à un [métallier](/services/metallier) pour des réalisations sur mesure.",
+      "Clôturer sa propriété et installer un portail répondent à des besoins de sécurité, d'intimité et d'esthétique. En 2026, le choix de matériaux est vaste et les prix varient considérablement d'une solution à l'autre. Du simple grillage au portail motorisé en aluminium sur mesure, ce guide vous aide à chiffrer précisément votre projet de clôture. Faites appel à un [métallier](/services/serrurier) pour des réalisations sur mesure.",
       '## Clôture en grillage',
       'Le grillage souple (type simple torsion) constitue la solution la plus économique : 15 à 30 €/ml fourni-posé, poteaux inclus. Le grillage rigide en panneaux soudés coûte entre 30 et 70 €/ml. Le grillage avec occultant (lamelles PVC ou brande de bruyère) revient de 40 à 90 €/ml. Ces prix incluent les poteaux, le scellement et la pose mais pas le terrassement éventuel.',
       '## Clôture en PVC et composite',
@@ -1860,7 +1762,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Clôture en bois',
       "La clôture en bois (pin traité, châtaignier) coûte entre 50 et 120 €/ml. Le claustra en bois ajouré se situe entre 80 et 200 €/ml. La palissade en bois pleine revient de 70 à 180 €/ml. Le ganivelle (clôture de châtaignier fendu), typique des régions côtières, coûte entre 25 et 60 €/ml. L'entretien (lasure ou saturateur) doit être renouvelé tous les 2 à 3 ans.",
       '## Clôture en aluminium et fer forgé',
-      "L'aluminium, sans entretien et disponible dans de nombreux coloris, coûte entre 100 et 300 €/ml. Le fer forgé artisanal réalisé par un [ferronnier d'art](/services/ferronnier), choix haut de gamme par excellence, revient de 200 à 600 €/ml selon la complexité des motifs. Les barreaudages en aluminium ou acier thermolaqué se situent entre 80 et 200 €/ml.",
+      "L'aluminium, sans entretien et disponible dans de nombreux coloris, coûte entre 100 et 300 €/ml. Le fer forgé artisanal réalisé par un [serrurier (métallerie)](/services/serrurier), choix haut de gamme par excellence, revient de 200 à 600 €/ml selon la complexité des motifs. Les barreaudages en aluminium ou acier thermolaqué se situent entre 80 et 200 €/ml.",
       '## Murs de clôture',
       'Le muret en parpaings enduit coûte entre 100 et 200 €/ml (hauteur 1 m). Le mur en pierre reconstituée revient de 150 à 350 €/ml. Le mur en gabions (cages métalliques remplies de pierres) se situe entre 100 à 250 €/ml. Le muret surmonté de lames (bois, alu ou composite) est une solution intermédiaire très esthétique, de 150 à 350 €/ml.',
       '## Portails : les prix',

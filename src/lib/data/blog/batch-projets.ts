@@ -290,7 +290,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## 5. Assurer la ventilation',
       "Une salle de bain sous combles nécessite impérativement une ventilation mécanique. La VMC simple flux hygroréglable est le minimum. Pour une performance optimale, raccordez la pièce à une VMC double flux si votre logement en est équipé. Prévoyez une bouche d'extraction de débit 30 m³/h minimum.",
       '## 6. Éclairer intelligemment',
-      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d'un store occultant pour l'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un [miroitier](/services/miroitier) pour une finition impeccable.",
+      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d'un store occultant pour l'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un [vitrier](/services/vitrier) pour une finition impeccable.",
       '## 7. Habiller les murs et le sol',
       'Le carrelage grès cérame reste le choix le plus fiable pour le sol et les murs de la zone humide. Le PVC en lames clipsables offre une alternative économique et étanche. Évitez le parquet dans la zone de douche. Pour les parties sèches, le lambris hydrofuge ou la peinture anti-humidité conviennent parfaitement.',
       '## Budget détaillé',
@@ -787,73 +787,6 @@ export const projetsArticles: Record<string, BlogArticle> = {
       "L'étanchéité sous carrelage (SPEC) est indispensable dans les pièces humides.",
     ],
   },
-  'installer-parquet-massif-contrecolle-guide': {
-    title: 'Parquet 2026 : Massif ou Stratifié ?',
-    excerpt:
-      'Comparez les trois types de parquet, leurs techniques de pose et leurs budgets pour faire le choix adapté à votre logement.',
-    metaTitle: 'Parquet 2026 : Massif, Contrecollé ou Stratifié',
-    metaDescription:
-      'Comparez parquet massif, contrecollé et stratifié : techniques de pose et budgets 2026. Obtenez un devis gratuit poseur.',
-    content: [
-      'Le parquet reste le revêtement de sol préféré des Français. Chaleureux, durable et valorisant pour le bien immobilier, il se décline en trois grandes familles qui répondent à des besoins et des budgets très différents. Ce guide vous aide à faire le bon choix et à comprendre les techniques de pose. Trouvez un [poseur de parquet](/services/poseur-de-parquet) qualifié pour un résultat impeccable.',
-      "## 1. Le parquet massif : l'authenticité",
-      'Fabriqué dans une seule essence de bois (chêne, hêtre, noyer, merisier), le parquet massif offre une durabilité exceptionnelle : il peut être poncé et rénové cinq à huit fois sur une durée de vie de 50 à 100 ans. Épaisseur standard de 14 à 23 mm. Pose clouée sur lambourdes ou collée en plein sur chape.',
-      '## 2. Le parquet contrecollé : le compromis',
-      "Composé d'une couche d'usure en bois noble (2,5 à 6 mm) sur un support en contreplaqué ou en HDF, le contrecollé allie l'esthétique du bois massif et la stabilité dimensionnelle. Il peut être poncé une à trois fois selon l'épaisseur de la couche d'usure. Pose flottante (clipsée) ou collée. Compatible avec le chauffage au sol.",
-      "## 3. Le stratifié : l'économique",
-      "Le stratifié n'est pas du parquet au sens strict : c'est un panneau de fibres recouvert d'un décor imprimé et d'une couche de résine protectrice. Il ne peut pas être poncé ni rénové. Durée de vie de 10 à 25 ans selon la classe d'usage. Pose flottante exclusivement, très rapide. Le meilleur rapport qualité-prix pour les petits budgets.",
-      "## 4. Choisir la bonne classe d'usage",
-      "Classe 21 : chambre (usage modéré). Classe 22 : séjour, salon (usage normal). Classe 23 : cuisine, couloir, entrée (usage intensif). Classe 31 à 34 : usage commercial. Plus la classe est élevée, plus le revêtement résiste à l'usure et à l'abrasion. Pour un logement résidentiel, la classe 23 est recommandée pour les pièces à vivre.",
-      '## 5. Préparer le support',
-      "Le support doit être plan (tolérance de 3 mm sous une règle de 2 m), sec (taux d'humidité inférieur à 3 % pour une chape ciment) et propre. Posez une sous-couche isolante (2 à 5 mm) pour la pose flottante : elle assure l'isolation phonique et compense les micro-irrégularités du sol. Sur chape, un film pare-vapeur est indispensable.",
-      '## 6. La pose flottante',
-      "Les lames se clipsent entre elles sans fixation au sol. Commencez par le mur le plus long en respectant un jeu de dilatation de 8 mm en périphérie (caché par les plinthes). Décalez les joints d'au moins un tiers de la longueur de lame. Un bricoleur averti peut poser 10 à 15 m² par jour.",
-      '## 7. La pose collée',
-      'La colle (élastique pour le massif, vinylique pour le contrecollé) est appliquée sur le support avec une spatule crantée. La pose collée réduit la résonance et améliore le confort acoustique. Elle est recommandée pour le parquet massif et obligatoire sur chauffage au sol. Temps de séchage : 24 à 48 heures avant circulation.',
-      '## 8. La pose clouée sur lambourdes',
-      "Technique traditionnelle réservée au parquet massif d'épaisseur supérieure ou égale à 20 mm. Les lambourdes (tasseaux de bois de 27 à 34 mm d'épaisseur) sont fixées au sol tous les 30 à 40 cm. Les lames sont clouées de biais dans la languette avec des pointes tête homme. Cette technique offre le meilleur rendu acoustique mais surélève le sol de 5 à 7 cm.",
-      '## 9. Les finitions',
-      "Le parquet massif brut doit être poncé (trois passages avec des grains de plus en plus fins) puis verni, huilé ou ciré. Le ponçage coûte 15 à 25 euros/m². Le vitrificateur offre la meilleure protection (40 à 60 euros/m² avec ponçage). L'huile pénètre le bois et se renouvelle plus facilement (35 à 50 euros/m²). Le parquet contrecollé et le stratifié sont livrés finis.",
-      '## Budget comparatif',
-      'Parquet massif chêne (fourni posé collé) : 60 à 150 euros/m². Parquet contrecollé chêne (fourni posé flottant) : 35 à 90 euros/m². Stratifié classe 23 (fourni posé flottant) : 15 à 40 euros/m². Plinthes : 5 à 15 euros par mètre linéaire. Ces prix incluent la sous-couche et les accessoires de pose.',
-      '## Durée des travaux',
-      'Pose flottante (stratifié ou contrecollé) : 15 à 25 m² par jour pour un professionnel. Pose collée (contrecollé ou massif) : 10 à 15 m² par jour. Pose clouée sur lambourdes : 8 à 12 m² par jour. Pour un séjour de 30 m², comptez un à trois jours selon la technique.',
-      '## Erreurs à éviter',
-      "N'oubliez jamais le jeu de dilatation périphérique. Laissez les lames s'acclimater 48 heures dans la pièce avant la pose. Ne posez pas de parquet massif sur chauffage au sol sans vérifier la compatibilité de l'essence. Évitez le stratifié dans les pièces humides (salle de bain, buanderie) sauf s'il est spécifiquement conçu pour.",
-    ],
-    image: '/images/blog/parquet-guide.jpg',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-01-15',
-    readTime: '12 min',
-    category: 'Guides',
-    tags: ['Parquet', 'Sol', 'Pose', 'Bois'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-02-12',
-    faq: [
-      {
-        question: 'Quel type de parquet choisir pour sa maison ?',
-        answer:
-          'Le parquet massif (60-150 €/m² posé) offre une durabilité exceptionnelle (50-100 ans, poncé 5 à 8 fois). Le contrecollé (35-90 €/m²) combine esthétique du bois et stabilité. Le stratifié (15-40 €/m²) est le plus économique mais ne peut pas être rénové. Pour un sol chauffant, privilégiez le contrecollé collé.',
-      },
-      {
-        question: 'Peut-on poser du parquet sur un sol chauffant ?',
-        answer:
-          "Le parquet contrecollé posé en collé est compatible avec le chauffage au sol. Le parquet massif nécessite une vérification de compatibilité de l'essence (le chêne convient bien). Le stratifié en pose flottante est déconseillé car la sous-couche fait office d'isolant et réduit l'efficacité du chauffage.",
-      },
-      {
-        question: 'Combien de temps faut-il pour poser du parquet ?',
-        answer:
-          'Pose flottante (stratifié ou contrecollé) : 15 à 25 m² par jour pour un professionnel. Pose collée : 10 à 15 m² par jour. Pose clouée sur lambourdes : 8 à 12 m² par jour. Pour un séjour de 30 m², comptez 1 à 3 jours selon la technique.',
-      },
-    ],
-    keyTakeaways: [
-      'Le parquet massif (40 à 120 €/m²) offre la plus grande longévité mais demande un support stable.',
-      'Le parquet contrecollé (30 à 80 €/m²) est compatible avec le plancher chauffant grâce à sa faible épaisseur.',
-      'La pose collée est recommandée sur plancher chauffant ; la pose flottante pour les budgets serrés.',
-      "Laissez le parquet s'acclimater 48 à 72 heures dans la pièce avant la pose.",
-    ],
-  },
   'construire-garage-guide-permis-budget': {
     title: 'Construire un Garage 2026 : Budget',
     excerpt:
@@ -931,7 +864,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     content: [
       "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/services/paysagiste) ou un [jardinier](/services/jardinier) près de chez vous.",
       '## 1. Définir ses besoins et ses envies',
-      "Listez vos priorités : espace détente, coin repas, aire de jeux pour les enfants, potager, [piscine](/services/pisciniste), massifs fleuris. Évaluez l'ensoleillement de chaque zone, la nature du sol (argileux, sableux, calcaire) et l'exposition au vent. Un jardin réussi combine esthétique, fonctionnalité et facilité d'entretien.",
+      "Listez vos priorités : espace détente, coin repas, aire de jeux pour les enfants, potager, [piscine](/services/macon), massifs fleuris. Évaluez l'ensoleillement de chaque zone, la nature du sol (argileux, sableux, calcaire) et l'exposition au vent. Un jardin réussi combine esthétique, fonctionnalité et facilité d'entretien.",
       '## 2. Le plan de conception paysagère',
       "Le paysagiste réalise un plan d'ensemble incluant les circulations (allées, chemins), les zones plantées, les surfaces minérales (terrasse, gravier), les clôtures et les points d'eau. Ce plan, facturé de 500 à 2 000 euros selon la superficie, est la garantie d'un résultat harmonieux et cohérent.",
       '## 3. Le terrassement et le nivellement',
@@ -994,7 +927,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comparez portails battants et coulissants : motorisation, matériaux et budget 2026. Obtenez un devis gratuit installation.',
     content: [
-      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/metallier) pour une réalisation sur mesure.",
+      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/serrurier) pour une réalisation sur mesure.",
       '## 1. Battant ou coulissant : le bon choix',
       "Le portail battant (deux vantaux qui s'ouvrent vers l'intérieur) est le plus traditionnel. Il nécessite un espace de débattement libre. Le portail coulissant (un vantail qui glisse latéralement sur un rail) est idéal pour les entrées en pente ou les espaces réduits. En terrain plat avec de la place, le battant est moins coûteux. En terrain contraint, le coulissant s'impose.",
       '## 2. Choisir le matériau',
@@ -1071,7 +1004,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## 5. La pose en rénovation ou en dépose totale',
       'Pose en rénovation (sur le dormant existant) : rapide (une à deux heures par fenêtre), pas de travaux de maçonnerie, mais perte de surface vitrée de 10 à 15 %. Pose en dépose totale (remplacement complet du cadre) : performances thermiques optimales, pas de perte de surface vitrée, mais nécessite des travaux de maçonnerie et de finition.',
       '## 6. Les volets et protections solaires',
-      "Le remplacement des fenêtres est l'occasion de revoir les volets. Un [storiste](/services/storiste) peut vous conseiller sur le choix le plus adapté. Volets roulants en aluminium (motorisés) : 300 à 800 euros par fenêtre. Volets battants en aluminium : 200 à 500 euros par fenêtre. Persiennes : 300 à 600 euros. Les volets roulants motorisés avec coffre intégré offrent une isolation complémentaire (Rw de +3 dB).",
+      "Le remplacement des fenêtres est l'occasion de revoir les volets. Un [menuisier (volets et stores)](/services/menuisier) peut vous conseiller sur le choix le plus adapté. Volets roulants en aluminium (motorisés) : 300 à 800 euros par fenêtre. Volets battants en aluminium : 200 à 500 euros par fenêtre. Persiennes : 300 à 600 euros. Les volets roulants motorisés avec coffre intégré offrent une isolation complémentaire (Rw de +3 dB).",
       '## 7. Déroulement du chantier',
       'Un menuisier expérimenté remplace quatre à six fenêtres par jour en pose rénovation. La dépose totale ralentit le rythme à deux ou trois fenêtres par jour. Prévoyez une journée supplémentaire pour les finitions intérieures (plâtre, peinture) et extérieures (enduit, joints). Le chantier se déroule en général sur deux à cinq jours pour une maison complète.',
       '## Budget pour une maison type',

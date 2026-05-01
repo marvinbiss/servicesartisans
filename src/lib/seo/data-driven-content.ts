@@ -241,22 +241,14 @@ export function generateDataDrivenContent(
 
       // Service-specific housing insight
       if (pct >= 60) {
-        const houseTrades = [
-          'couvreur',
-          'paysagiste',
-          'jardinier',
-          'facadier',
-          'terrassier',
-          'ramoneur',
-          'pisciniste',
-        ]
+        const houseTrades = ['couvreur', 'paysagiste', 'jardinier', 'facadier', 'ramoneur']
         if (houseTrades.includes(serviceSlug)) {
           parts.push(
             `Cette forte proportion de maisons individuelles génère une demande soutenue en services ${de} pour l'entretien et la rénovation des propriétés.`
           )
         }
       } else if (pct < 40) {
-        const apptTrades = ['plombier', 'electricien', 'serrurier', 'ascensoriste']
+        const apptTrades = ['plombier', 'electricien', 'serrurier']
         if (apptTrades.includes(serviceSlug)) {
           parts.push(
             `La prédominance d'immeubles collectifs à ${commune.name} crée des besoins spécifiques en ${svc} : parties communes, colonnes montantes et réseaux partagés.`
@@ -381,7 +373,7 @@ export function generateDataDrivenContent(
       }
 
       // Trade-specific market context
-      const specializedTrades = ['ascensoriste', 'pisciniste', 'domoticien', 'diagnostiqueur']
+      const specializedTrades = ['diagnostiqueur', 'ramoneur', 'borne-recharge']
       const commonTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment']
       if (specializedTrades.includes(serviceSlug)) {
         parts.push(
@@ -524,7 +516,6 @@ export function generateDataDrivenContent(
         'facadier',
         'peintre-en-batiment',
         'carreleur',
-        'terrassier',
       ]
       if (frostSensitive.includes(serviceSlug) && commune.jours_gel_annuels >= 30) {
         parts.push(
@@ -552,7 +543,6 @@ export function generateDataDrivenContent(
         'facadier',
         'peintre-en-batiment',
         'macon',
-        'terrassier',
         'paysagiste',
         'jardinier',
         'charpentier',
@@ -606,19 +596,16 @@ export function generateDataDrivenContent(
     'carreleur',
     'cuisiniste',
     'plaquiste',
-    'solier',
   ]
   const exteriorTrades = [
     'couvreur',
     'facadier',
     'paysagiste',
     'jardinier',
-    'terrassier',
     'macon',
     'charpentier',
     'zingueur',
     'etancheiste',
-    'pisciniste',
   ]
   const energyTrades = [
     'chauffagiste',

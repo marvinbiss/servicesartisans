@@ -10,7 +10,6 @@ import {
   Hammer,
   PaintBucket,
   Sparkles,
-  Layers,
   ChefHat,
   Brush,
   TreeDeciduous,
@@ -138,7 +137,6 @@ export const serviceCategories: ServiceCategory[] = [
         description: 'Peinture int. et ext.',
       },
       { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Carrelage, faïence' },
-      { name: 'Solier', slug: 'solier', icon: Layers, description: 'Parquet, moquette, lino' },
     ],
   },
   {

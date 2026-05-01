@@ -123,7 +123,6 @@ type ProblemCategory =
   | 'chauffage'
   | 'toiture'
   | 'humidite'
-  | 'nuisibles'
   | 'maconnerie'
   | 'autre'
 
@@ -172,14 +171,11 @@ function getProblemCategory(primaryService: string, slug: string): ProblemCatego
     'peinture-qui-cloque',
     'probleme-isolation',
   ]
-  const nuisiblesProblems = ['nuisibles', 'infestation-fourmis']
-
   if (plomberieProblems.includes(slug)) return 'plomberie'
   if (electriciteProblems.includes(slug)) return 'electricite'
   if (chauffageProblems.includes(slug)) return 'chauffage'
   if (toitureProblems.includes(slug)) return 'toiture'
   if (humiditeProblems.includes(slug)) return 'humidite'
-  if (nuisiblesProblems.includes(slug)) return 'nuisibles'
   if (primaryService === 'macon') return 'maconnerie'
   return 'autre'
 }
@@ -344,34 +340,6 @@ function getProblemCityCorrelation(
         insights.push({
           text: `Les ${commune.pct_passoires_dpe} % de passoires énergétiques à ${villeName} sont particulièrement vulnérables aux problèmes d'humidité par manque d'isolation.`,
           severity: 'medium',
-        })
-      }
-      break
-    }
-
-    case 'nuisibles': {
-      if (commune.climat_zone === 'mediterraneen') {
-        insights.push({
-          text: `Le climat méditerranéen de ${villeName} est particulièrement favorable à la prolifération d'insectes et de nuisibles toute l'année.`,
-          severity: 'high',
-        })
-      }
-      if (commune.temperature_moyenne_ete != null && commune.temperature_moyenne_ete > 25) {
-        insights.push({
-          text: `Avec une température estivale moyenne de ${commune.temperature_moyenne_ete} °C à ${villeName}, les conditions sont idéales pour la reproduction des insectes.`,
-          severity: 'high',
-        })
-      }
-      if (commune.part_maisons_pct != null && commune.part_maisons_pct > 60) {
-        insights.push({
-          text: `Les ${commune.part_maisons_pct} % de maisons individuelles avec jardins à ${villeName} offrent davantage de points d'entrée aux nuisibles.`,
-          severity: 'medium',
-        })
-      }
-      if (commune.precipitation_annuelle != null && commune.precipitation_annuelle > 800) {
-        insights.push({
-          text: `L'humidité liée aux ${formatNumber(Math.round(commune.precipitation_annuelle))} mm de pluie annuels favorise certains nuisibles comme les moustiques et les cloportes.`,
-          severity: 'low',
         })
       }
       break

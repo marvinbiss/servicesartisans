@@ -260,8 +260,8 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         id: 'parquet-abime',
         label: 'Parquet abîmé ou à poser',
         description: 'Lames de parquet rayées, gondolées ou à installer',
-        recommendedService: 'solier',
-        alternativeServices: ['menuisier'],
+        recommendedService: 'menuisier',
+        alternativeServices: ['carreleur'],
         estimatedPriceRange: '25-80 €/m²',
       },
       {
@@ -309,14 +309,6 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         alternativeServices: ['macon'],
         estimatedPriceRange: '40-150 €/ml',
       },
-      {
-        id: 'piscine',
-        label: 'Piscine',
-        description: 'Construction, entretien ou réparation de piscine',
-        recommendedService: 'pisciniste',
-        alternativeServices: ['macon'],
-        estimatedPriceRange: '15 000-50 000 €',
-      },
     ],
   },
   {
@@ -342,8 +334,7 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         id: 'domotique',
         label: 'Domotique et maison connectée',
         description: 'Automatisation de volets, éclairage, chauffage connecté',
-        recommendedService: 'domoticien',
-        alternativeServices: ['electricien'],
+        recommendedService: 'electricien',
         estimatedPriceRange: '500-5 000 €',
       },
       {
@@ -375,12 +366,9 @@ export const serviceLabels: Record<string, string> = {
   vitrier: 'Vitrier',
   climaticien: 'Climaticien',
   cuisiniste: 'Cuisiniste',
-  solier: 'Solier (revêtements de sol)',
   nettoyage: 'Nettoyage',
   charpentier: 'Charpentier',
-  domoticien: 'Domoticien',
   'alarme-securite': 'Alarme & Sécurité',
-  pisciniste: 'Pisciniste',
   paysagiste: 'Paysagiste',
 }
 
@@ -401,11 +389,8 @@ export const serviceIcons: Record<string, string> = {
   vitrier: '🪟',
   climaticien: '❄️',
   cuisiniste: '🍳',
-  solier: '🪵',
   nettoyage: '🧹',
   charpentier: '🪓',
-  domoticien: '🏡',
   'alarme-securite': '🔔',
-  pisciniste: '🏊',
   paysagiste: '🌳',
 }

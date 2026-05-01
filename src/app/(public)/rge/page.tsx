@@ -17,6 +17,10 @@ import {
   MapPin,
   BookOpen,
   ArrowRight,
+  PlugZap,
+  Thermometer,
+  ClipboardCheck,
+  Square,
 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
@@ -103,6 +107,28 @@ const SERVICE_DISPLAY: Record<RgeAllowedService, { title: string; tagline: strin
     title: 'Plâtrerie & ITI',
     tagline: 'Isolation thermique par l’intérieur et cloisons à haute performance.',
   },
+  // Élargissement RGE 2026-05-02 — slugs RGE-only.
+  'borne-recharge': {
+    title: 'Borne de recharge IRVE',
+    tagline: 'Installateurs Qualifelec IRVE (P1/P2/P3) — bornes maison, copro et entreprise.',
+  },
+  'chauffe-eau-thermodynamique': {
+    title: 'Chauffe-eau thermodynamique',
+    tagline: 'QualiPAC module CET — éligible MaPrimeRénov’ et prime CEE BAR-TH-148.',
+  },
+  'audit-energetique': {
+    title: 'Audit énergétique',
+    tagline:
+      'Architectes CNOA et bureaux d’études OPQIBI 1905/1911 — entrée du parcours rénovation.',
+  },
+  ventilation: {
+    title: 'Ventilation (VMC)',
+    tagline: 'VMC simple flux hygroréglable et double flux haute performance (BAR-TH-125).',
+  },
+  fenetres: {
+    title: 'Fenêtres performantes',
+    tagline: 'Remplacement de fenêtres et baies isolantes éligibles MaPrimeRénov’ (BAR-EN-104).',
+  },
 }
 
 // Icône Lucide par service — associations visuelles stables et cohérentes
@@ -122,6 +148,12 @@ const SERVICE_ICONS: Record<RgeAllowedService, React.ComponentType<{ className?:
   zingueur: Home,
   facadier: PaintBucket,
   platrier: PaintBucket,
+  // Élargissement RGE 2026-05-02 — slugs RGE-only.
+  'borne-recharge': PlugZap,
+  'chauffe-eau-thermodynamique': Thermometer,
+  'audit-energetique': ClipboardCheck,
+  ventilation: Wind,
+  fenetres: Square,
 }
 
 // FAQ éditoriale 100% unique, rédigée pour le hub /rge (pas de copier-coller

@@ -20,31 +20,20 @@ import {
   TrendingUp,
   Award,
   MapPin,
-  Shovel,
   Axe,
   Shield,
   Building,
   Paintbrush,
-  Construction,
-  Link as LinkIcon,
   Maximize,
-  PanelTop,
   Bath,
-  Ruler,
-  Palette,
-  Cpu,
   Sun,
   Snowflake,
   Leaf,
   PlugZap,
   Factory,
   Trees,
-  Waves,
   ShieldAlert,
-  Radio,
-  ArrowUpDown,
   ClipboardCheck,
-  Bug,
   Truck,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
@@ -151,18 +140,6 @@ const allServices = [
         description: 'Installation, mise aux normes, dépannage',
       },
       {
-        name: 'Domoticien',
-        slug: 'domoticien',
-        icon: Cpu,
-        description: 'Maison connectée, automatisation',
-      },
-      {
-        name: 'Antenniste',
-        slug: 'antenniste',
-        icon: Radio,
-        description: 'Antennes TV, paraboles, TNT',
-      },
-      {
         name: 'Borne de recharge',
         slug: 'borne-recharge',
         icon: PlugZap,
@@ -219,12 +196,6 @@ const allServices = [
         description: 'Ravalement, isolation extérieure',
       },
       {
-        name: 'Terrassier',
-        slug: 'terrassier',
-        icon: Shovel,
-        description: 'Terrassement, VRD, assainissement',
-      },
-      {
         name: 'Étanchéiste',
         slug: 'etancheiste',
         icon: Shield,
@@ -255,18 +226,6 @@ const allServices = [
         icon: Sofa,
         description: 'Conception et pose de cuisines',
       },
-      {
-        name: 'Storiste',
-        slug: 'storiste',
-        icon: PanelTop,
-        description: 'Stores, volets roulants, pergolas',
-      },
-      {
-        name: 'Ascensoriste',
-        slug: 'ascensoriste',
-        icon: ArrowUpDown,
-        description: 'Installation et maintenance ascenseurs',
-      },
     ],
   },
   {
@@ -287,18 +246,6 @@ const allServices = [
         description: 'Pose carrelage, faïence, mosaïque',
       },
       {
-        name: 'Solier-moquettiste',
-        slug: 'solier',
-        icon: Home,
-        description: 'Parquet, moquette, sols souples',
-      },
-      {
-        name: 'Poseur de parquet',
-        slug: 'poseur-de-parquet',
-        icon: Sparkles,
-        description: 'Parquet massif, contrecollé, stratifié',
-      },
-      {
         name: 'Plâtrier',
         slug: 'platrier',
         icon: Paintbrush,
@@ -307,8 +254,8 @@ const allServices = [
     ],
   },
   {
-    category: 'Métallerie & Vitrerie',
-    icon: Construction,
+    category: 'Vitrerie',
+    icon: Maximize,
     color: 'slate',
     services: [
       {
@@ -316,24 +263,6 @@ const allServices = [
         slug: 'vitrier',
         icon: Maximize,
         description: 'Remplacement vitres, miroirs, double vitrage',
-      },
-      {
-        name: 'Métallier',
-        slug: 'metallier',
-        icon: Construction,
-        description: 'Ouvrages métalliques, serrurerie',
-      },
-      {
-        name: 'Ferronnier',
-        slug: 'ferronnier',
-        icon: LinkIcon,
-        description: "Ferronnerie d'art, garde-corps, portails",
-      },
-      {
-        name: 'Miroitier',
-        slug: 'miroitier',
-        icon: Maximize,
-        description: 'Miroirs sur mesure, crédences en verre',
       },
     ],
   },
@@ -369,25 +298,6 @@ const allServices = [
     ],
   },
   {
-    category: 'Décoration & Architecture',
-    icon: Palette,
-    color: 'pink',
-    services: [
-      {
-        name: "Architecte d'intérieur",
-        slug: 'architecte-interieur',
-        icon: Ruler,
-        description: "Conception d'espaces, aménagement",
-      },
-      {
-        name: 'Décorateur',
-        slug: 'decorateur',
-        icon: Palette,
-        description: 'Décoration intérieure, home staging',
-      },
-    ],
-  },
-  {
     category: 'Extérieur & Jardin',
     icon: TreeDeciduous,
     color: 'emerald',
@@ -404,12 +314,6 @@ const allServices = [
         icon: Trees,
         description: 'Aménagement paysager, terrasses',
       },
-      {
-        name: 'Pisciniste',
-        slug: 'pisciniste',
-        icon: Waves,
-        description: 'Construction et entretien piscines',
-      },
     ],
   },
   {
@@ -423,31 +327,13 @@ const allServices = [
         icon: ClipboardCheck,
         description: 'DPE, amiante, plomb, électricité',
       },
-      {
-        name: 'Géomètre',
-        slug: 'geometre',
-        icon: MapPin,
-        description: 'Bornage, topographie, division',
-      },
     ],
   },
   {
-    category: 'Nuisibles & Hygiène',
-    icon: Bug,
+    category: 'Hygiène',
+    icon: Sparkles,
     color: 'orange',
     services: [
-      {
-        name: 'Désinsectisation',
-        slug: 'desinsectisation',
-        icon: Bug,
-        description: 'Cafards, punaises de lit, guêpes',
-      },
-      {
-        name: 'Dératisation',
-        slug: 'deratisation',
-        icon: Bug,
-        description: 'Rats, souris, rongeurs',
-      },
       {
         name: 'Nettoyage professionnel',
         slug: 'nettoyage',

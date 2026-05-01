@@ -1400,53 +1400,6 @@ const problems: Problem[] = [
       },
     ],
   },
-  {
-    slug: 'nuisibles',
-    name: 'Nuisibles',
-    description:
-      'Les nuisibles (cafards, punaises de lit, rats, souris, guêpes, frelons) représentent un risque sanitaire et matériel. Un traitement professionnel par un spécialiste de la désinsectisation est nécessaire pour éliminer l’infestation durablement et en toute sécurité.',
-    relatedServices: ['desinsectisation'],
-    primaryService: 'desinsectisation',
-    urgencyLevel: 'moyenne',
-    symptoms: [
-      'Présence d’insectes ou de rongeurs dans le logement',
-      'Piqûres ou morsures inexplicables au réveil (punaises de lit)',
-      'Excréments de rongeurs (petites crottes noires) dans les placards',
-      'Bruits de grattement dans les cloisons ou le plafond (rongeurs)',
-      'Nids de guêpes ou de frelons sur la façade ou sous le toit',
-    ],
-    immediateActions: [
-      'Identifiez le type de nuisible pour adapter le traitement',
-      'Ne tentez pas de détruire un nid de guêpes ou frelons vous-même',
-      'Rangez et protégez les aliments dans des contenants hermétiques',
-      'Contactez un spécialiste en désinsectisation ou dératisation',
-    ],
-    preventiveTips: [
-      'Bouchez les trous et fissures dans les murs (entrée de rongeurs)',
-      'Maintenez une hygiène rigoureuse (ne laissez pas de nourriture accessible)',
-      'Vérifiez régulièrement les zones sombres et humides (cave, grenier)',
-    ],
-    estimatedCost: { min: 100, max: 400 },
-    averageResponseTime: 'Sous 24 heures',
-    faq: [
-      {
-        q: 'Combien coûte un traitement anti-nuisibles ?',
-        a: 'Le prix dépend du type de nuisible et de la surface : désinsectisation cafards (100 à 200 €), traitement punaises de lit (200 à 400 € par pièce), dératisation (150 à 300 €), destruction de nid de guêpes (80 à 200 €). Plusieurs passages peuvent être nécessaires.',
-      },
-      {
-        q: 'Les traitements chimiques sont-ils dangereux ?',
-        a: 'Les professionnels utilisent des produits homologués et sécurisés. Vous devrez évacuer le logement pendant quelques heures après l’intervention (selon le produit). Les traitements par gel ou par pièges sont moins contraignants.',
-      },
-      {
-        q: 'Mon propriétaire doit-il payer le traitement ?',
-        a: 'Si l’infestation est due à un défaut du logement (trous dans les murs, manque d’étanchéité), le propriétaire est responsable. Pour les punaises de lit, la loi Elan de 2018 met le traitement à la charge du propriétaire sauf si le locataire est à l’origine de l’infestation.',
-      },
-      {
-        q: 'Combien de temps dure un traitement anti-nuisibles ?',
-        a: 'Un traitement cafards nécessite 2 à 3 passages espacés de 2 semaines. Les punaises de lit demandent 2 à 3 traitements sur 3 à 4 semaines. La dératisation prend 2 à 4 semaines avec un suivi mensuel pendant 3 mois.',
-      },
-    ],
-  },
 ]
 
 // Merge the 16 extra granular problems added March 2026

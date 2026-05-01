@@ -17,9 +17,6 @@ describe('service-intents — classification', () => {
     expect(getServiceIntent('electricien')).toBe('urgence')
     expect(getServiceIntent('vitrier')).toBe('urgence')
     expect(getServiceIntent('ramoneur')).toBe('urgence')
-    expect(getServiceIntent('desinsectisation')).toBe('urgence')
-    expect(getServiceIntent('deratisation')).toBe('urgence')
-    expect(getServiceIntent('ascensoriste')).toBe('urgence')
   })
 
   it('classifies RÉNOVATION services correctly', () => {
@@ -42,7 +39,6 @@ describe('service-intents — classification', () => {
     expect(getServiceIntent('carreleur')).toBe('travaux')
     expect(getServiceIntent('macon')).toBe('travaux')
     expect(getServiceIntent('paysagiste')).toBe('travaux')
-    expect(getServiceIntent('decorateur')).toBe('travaux')
     expect(getServiceIntent('demenageur')).toBe('travaux')
     expect(getServiceIntent('unknown-service')).toBe('travaux')
   })

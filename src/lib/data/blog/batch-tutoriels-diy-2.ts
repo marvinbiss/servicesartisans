@@ -337,7 +337,7 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
       {
         question: 'Quand faire appel à un professionnel ?',
         answer:
-          'Pour les stores extérieurs (bannes solaires, stores motorisés), la pose nécessite des fixations résistantes au vent et souvent une alimentation électrique. Faites appel à un [menuisier](/services/menuisier) ou un storiste professionnel pour ces installations.',
+          'Pour les stores extérieurs (bannes solaires, stores motorisés), la pose nécessite des fixations résistantes au vent et souvent une alimentation électrique. Faites appel à un [menuisier](/services/menuisier) ou un menuisier professionnel pour ces installations.',
       },
     ],
     content: [

@@ -79,17 +79,14 @@ const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = 
   ],
   'carrelage-vs-parquet-vs-vinyle': [
     { slug: 'carreleur', label: 'Carreleur' },
-    { slug: 'poseur-de-parquet', label: 'Poseur de parquet' },
+    { slug: 'menuisier', label: 'Menuisier (parquet)' },
   ],
   'chaudiere-gaz-vs-electrique-vs-pac': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'toiture-tuiles-vs-ardoise-vs-zinc': [
     { slug: 'couvreur', label: 'Couvreur' },
     { slug: 'zingueur', label: 'Zingueur' },
   ],
-  'volet-roulant-vs-battant-vs-persienne': [
-    { slug: 'storiste', label: 'Storiste' },
-    { slug: 'menuisier', label: 'Menuisier' },
-  ],
+  'volet-roulant-vs-battant-vs-persienne': [{ slug: 'menuisier', label: 'Menuisier' }],
   'peinture-mate-vs-satinee-vs-brillante': [
     { slug: 'peintre-en-batiment', label: 'Peintre en bâtiment' },
   ],
@@ -106,16 +103,16 @@ const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = 
     { slug: 'chauffagiste', label: 'Chauffagiste' },
   ],
   'climatisation-split-vs-gainable-vs-monobloc': [{ slug: 'climaticien', label: 'Climaticien' }],
-  'portail-coulissant-vs-battant': [{ slug: 'metallier-serrurier', label: 'Métallier serrurier' }],
+  'portail-coulissant-vs-battant': [{ slug: 'serrurier', label: 'Serrurier (portail)' }],
   'terrasse-bois-vs-composite-vs-carrelage': [
     { slug: 'carreleur', label: 'Carreleur' },
     { slug: 'menuisier', label: 'Menuisier' },
   ],
-  'piscine-coque-vs-beton-vs-hors-sol': [{ slug: 'pisciniste', label: 'Pisciniste' }],
-  'store-banne-vs-pergola-vs-voile-ombrage': [{ slug: 'storiste', label: 'Storiste' }],
+  'piscine-coque-vs-beton-vs-hors-sol': [{ slug: 'macon', label: 'Maçon (piscine béton)' }],
+  'store-banne-vs-pergola-vs-voile-ombrage': [{ slug: 'menuisier', label: 'Menuisier' }],
   'escalier-bois-vs-metal-vs-beton': [
     { slug: 'menuisier', label: 'Menuisier' },
-    { slug: 'metallier-serrurier', label: 'Métallier serrurier' },
+    { slug: 'serrurier', label: 'Serrurier (métallerie)' },
   ],
   'radiateur-fonte-vs-acier-vs-aluminium': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'gouttiere-zinc-vs-alu-vs-pvc': [
@@ -133,16 +130,14 @@ const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = 
   ],
   'plafond-tendu-vs-faux-plafond': [{ slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }],
   'porte-blindee-vs-renforcee': [{ slug: 'serrurier', label: 'Serrurier' }],
-  'parquet-massif-vs-contrecolle-vs-stratifie': [
-    { slug: 'poseur-de-parquet', label: 'Poseur de parquet' },
-  ],
+  'parquet-massif-vs-contrecolle-vs-stratifie': [{ slug: 'menuisier', label: 'Menuisier' }],
   'volet-electrique-vs-manuel': [
-    { slug: 'storiste', label: 'Storiste' },
+    { slug: 'menuisier', label: 'Menuisier' },
     { slug: 'electricien', label: 'Électricien' },
   ],
   'vmc-simple-flux-vs-double-flux': [{ slug: 'climaticien', label: 'Climaticien' }],
   'fosse-septique-vs-micro-station': [
-    { slug: 'terrassier', label: 'Terrassier' },
+    { slug: 'macon', label: 'Maçon (terrassement)' },
     { slug: 'plombier', label: 'Plombier' },
   ],
   'veranda-alu-vs-bois-vs-pvc': [{ slug: 'menuisier', label: 'Menuisier' }],

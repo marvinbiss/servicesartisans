@@ -99,13 +99,7 @@ const serviceCategories = [
   { name: 'Autres', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
 ]
 
-const otherServiceSlugs = [
-  'peintre-en-batiment',
-  'vitrier',
-  'menuisier',
-  'isolation-thermique',
-  'desinsectisation',
-]
+const otherServiceSlugs = ['peintre-en-batiment', 'vitrier', 'menuisier', 'isolation-thermique']
 
 function getProblemsByCategory(slug: string) {
   if (slug === '_other') {
@@ -125,7 +119,6 @@ const serviceNameMap: Record<string, string> = {
   vitrier: 'Vitrier',
   menuisier: 'Menuisier',
   'isolation-thermique': 'Isolation thermique',
-  desinsectisation: 'Désinsectisation',
 }
 
 const howSteps = [

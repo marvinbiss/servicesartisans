@@ -36,6 +36,10 @@ export type RgeCategory =
   | 'ventilation'
   | 'audit-energetique'
   | 'chaudiere-condensation'
+  // Élargissement RGE 2026-05-02 : IRVE (Qualifelec P1/P2/P3, hors CEE).
+  // Détectée par pattern textuel, déjà repérée par isQualifelecIrve pour le
+  // guide ; la catégorie permet en plus de projeter vers /rge/borne-recharge.
+  | 'irve'
 
 /**
  * Slugs de guides RGE rendus via les fiches artisans enrichies
@@ -107,6 +111,9 @@ const CATEGORY_TO_CEE: Record<RgeCategory, string[]> = {
   // Catégorie obsolète depuis abrogation BAR-TH-106 (01/01/2024). Les
   // chaudières gaz/fioul ne sont plus éligibles CEE.
   'chaudiere-condensation': [],
+  // IRVE (bornes de recharge) financé hors CEE par programme ADVENIR.
+  // Aucun BAR-EN/BAR-TH dédié → liste vide volontaire.
+  irve: [],
 }
 
 function normalize(s: string | null | undefined): string {
@@ -205,6 +212,17 @@ function detectCategories(q: RgeQualificationInput): RgeCategory[] {
     text.includes('chaudiere a gaz')
   ) {
     cats.push('chaudiere-condensation')
+  }
+
+  // IRVE — Qualifelec P1/P2/P3, libellés "borne de recharge" /
+  // "infrastructure de recharge". Pattern volontairement strict pour éviter
+  // les faux positifs sur "réseau électrique" / "véhicule" sans IRVE.
+  if (
+    text.includes('irve') ||
+    text.includes('borne de recharge') ||
+    text.includes('infrastructure de recharge')
+  ) {
+    cats.push('irve')
   }
 
   return cats
@@ -345,7 +363,15 @@ export function matchQualifications(
  * RGE catégoriquement éligible apparaisse dans le sitemap.
  */
 const CATEGORY_TO_RGE_SERVICES: Record<RgeCategory, readonly string[]> = {
-  pac: ['pompe-a-chaleur', 'chauffagiste', 'climaticien', 'plombier'],
+  // QualiPAC couvre PAC air/eau, air/air ET module CET (chauffe-eau
+  // thermodynamique) — d'où l'ajout du nouveau slug dédié.
+  pac: [
+    'pompe-a-chaleur',
+    'chauffagiste',
+    'climaticien',
+    'plombier',
+    'chauffe-eau-thermodynamique',
+  ],
   bois: ['chauffagiste', 'ramoneur'],
   'solaire-thermique': ['panneaux-solaires', 'chauffagiste', 'plombier'],
   photovoltaique: ['panneaux-solaires', 'electricien'],
@@ -358,10 +384,15 @@ const CATEGORY_TO_RGE_SERVICES: Record<RgeCategory, readonly string[]> = {
     'zingueur',
     'renovation-energetique',
   ],
-  menuiserie: ['menuisier'],
-  ventilation: ['electricien', 'chauffagiste'],
-  'audit-energetique': ['renovation-energetique'],
+  // Slug `fenetres` ajouté en plus de `menuisier` pour alimenter le sitemap
+  // /rge/fenetres/[ville] dédié BAR-EN-104.
+  menuiserie: ['menuisier', 'fenetres'],
+  ventilation: ['electricien', 'chauffagiste', 'ventilation'],
+  'audit-energetique': ['renovation-energetique', 'audit-energetique'],
   'chaudiere-condensation': ['chauffagiste'],
+  // IRVE → /rge/borne-recharge/[v] + /rge/electricien/[v] (Qualifelec couvre
+  // les deux profils : électricien généraliste avec IRVE + spécialiste IRVE).
+  irve: ['borne-recharge', 'electricien'],
 }
 
 /**

@@ -65,28 +65,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     },
   ],
 
-  terrassier: [
-    { src: unsplash('photo-3xaxYYv1_PI'), alt: 'Pelleteuse jaune sur un chantier de terrassement' },
-    {
-      src: unsplash('photo-maVHoAWycOs'),
-      alt: 'Excavatrice jaune et noire sur un terrain en terre',
-    },
-    {
-      src: unsplash('photo-jbJp18srifE'),
-      alt: "Vue aérienne d'une pelleteuse jaune en action sur un chantier",
-    },
-    {
-      src: unsplash('photo-ZgmGq_eFmUs'),
-      alt: 'Excavatrice Caterpillar creusant le sol sur un chantier',
-    },
-    {
-      src: unsplash('photo-h2UqpVtR89s'),
-      alt: "Vue aérienne d'un chantier de terrassement avec engins",
-    },
-    { src: unsplash('photo-rpP7zWy-Uxc'), alt: 'Bulldozer sur un terrain en cours de nivellement' },
-    { src: unsplash('photo-8wlxGDOAXSM'), alt: 'Engin de terrassement creusant devant une maison' },
-  ],
-
   'isolation-thermique': [
     {
       src: unsplash('photo-CFe3yzlfitY'),
@@ -114,30 +92,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     },
   ],
 
-  domoticien: [
-    {
-      src: unsplash('photo-AMowJMiKLNc'),
-      alt: 'Lampe connectée contrôlée par application domotique Wi-Fi',
-    },
-    {
-      src: unsplash('photo-ckPCV5cy-6A'),
-      alt: 'Tablette avec interface de contrôle maison connectée',
-    },
-    {
-      src: unsplash('photo-9TF54VdG0ws'),
-      alt: 'Enceinte connectée Google Home Mini sur une surface blanche',
-    },
-    { src: unsplash('photo-mIFEgEJBE6U'), alt: 'Assistant vocal Google Home posé sur une étagère' },
-    {
-      src: unsplash('photo-anapPhJFRhM'),
-      alt: 'Enceinte connectée et smartphone pour contrôle domotique',
-    },
-    {
-      src: unsplash('photo-nz7z0rNdvyI'),
-      alt: 'Écran intelligent Google Nest Hub pour la maison connectée',
-    },
-  ],
-
   paysagiste: [
     {
       src: unsplash('photo-B3yix9NT-PQ'),
@@ -159,30 +113,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
       src: unsplash('photo-iz_t6muEAl8'),
       alt: 'Jardin luxuriant rempli de fleurs vibrantes et colorées',
     },
-  ],
-
-  pisciniste: [
-    {
-      src: unsplash('photo--VOO96lxCH4'),
-      alt: 'Jardin avec piscine et terrasse dans une propriété résidentielle',
-    },
-    {
-      src: unsplash('photo-Ntdvds91U2U'),
-      alt: 'Piscine de luxe dans un jardin aménagé avec éclairage',
-    },
-    {
-      src: unsplash('photo-WACZrgiESh8'),
-      alt: 'Belle piscine avec terrasse et espace détente en extérieur',
-    },
-    {
-      src: unsplash('photo-Uv4zanxy5oM'),
-      alt: 'Piscine dans un jardin résidentiel avec vue dégagée',
-    },
-    {
-      src: unsplash('photo-oVnKC7wiQjA'),
-      alt: 'Villa tropicale avec piscine éclairée au crépuscule',
-    },
-    { src: unsplash('photo-08AJKJf75kw'), alt: 'Piscine à débordement avec vue panoramique' },
   ],
 
   'alarme-securite': [
@@ -229,82 +159,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     },
   ],
 
-  antenniste: [
-    {
-      src: unsplash('photo-s7SQQNgxDkw'),
-      alt: "Antenne parabolique installée sur le toit d'une maison",
-    },
-    {
-      src: unsplash('photo-leR_rOq9_hs'),
-      alt: 'Antenne de télévision sur un poteau avec ciel en arrière-plan',
-    },
-    { src: unsplash('photo-WD7Tx9pO87E'), alt: 'Antenne TV sur un poteau en bois sur un toit' },
-    { src: unsplash('photo-aCYdXrMqbzU'), alt: 'Toits avec antennes et tours sous un ciel bleu' },
-    {
-      src: unsplash('photo-vS9eh_707RY'),
-      alt: "Toit d'immeuble avec antennes relais contre le ciel bleu",
-    },
-    {
-      src: unsplash('photo-8z8Bo8sbsUg'),
-      alt: "Tours d'antennes sur le toit d'un bâtiment urbain",
-    },
-  ],
-
-  'architecte-interieur': [
-    {
-      src: unsplash('photo-4r9OKorlcTk'),
-      alt: 'Salon moderne minimaliste avec mobilier blanc et parquet',
-    },
-    {
-      src: unsplash('photo-AEXgOReTzoM'),
-      alt: 'Salon moderne avec cheminée et décoration minimaliste',
-    },
-    {
-      src: unsplash('photo-bc5D4xrShPQ'),
-      alt: 'Salon contemporain épuré avec murs blancs et design élégant',
-    },
-    {
-      src: unsplash('photo-CqAkN-dg_-s'),
-      alt: 'Salon moderne avec cheminée suspendue et grandes baies vitrées',
-    },
-    {
-      src: unsplash('photo-NUnjEA9qEHE'),
-      alt: 'Salon moderne avec canapé en cuir et cheminée design',
-    },
-    {
-      src: unsplash('photo-yxO8YG082v8'),
-      alt: 'Salon contemporain avec canapé sectionnel et grande fenêtre',
-    },
-  ],
-
-  ascensoriste: [
-    {
-      src: unsplash('photo-m01bajOe8E0'),
-      alt: "Porte d'ascenseur en acier inoxydable avec boutons d'appel",
-    },
-    {
-      src: unsplash('photo-SHcQ-AOLI9M'),
-      alt: 'Ascenseur moderne avec porte ouverte dans un immeuble',
-    },
-    {
-      src: unsplash('photo-713E0LsFGz0'),
-      alt: "Hall d'ascenseur moderne avec accents de marbre et verre",
-    },
-    {
-      src: unsplash('photo-tUcVQwXsNck'),
-      alt: "Lobby moderne avec ascenseurs et bureau d'accueil",
-    },
-    { src: unsplash('photo-b08Pe9MV_eU'), alt: "Hall d'immeuble avec ascenseurs en acier poli" },
-    {
-      src: unsplash('photo-sk4HZAiE5RA'),
-      alt: "Vue intérieure d'une cage d'ascenseur impressionnante",
-    },
-    {
-      src: unsplash('photo-dendZhhfkTc'),
-      alt: "Ascenseur fermé dans un couloir d'immeuble moderne",
-    },
-  ],
-
   'borne-recharge': [
     {
       src: unsplash('photo-Bf76Nnc8IR4'),
@@ -332,30 +186,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     },
   ],
 
-  decorateur: [
-    {
-      src: unsplash('photo-54MpIUI9nlQ'),
-      alt: 'Décorateur appliquant de la peinture au rouleau sur un mur',
-    },
-    {
-      src: unsplash('photo-rMVjOX8nm2U'),
-      alt: "Personne peignant un mur avec un rouleau lors d'une rénovation",
-    },
-    { src: unsplash('photo-57ldq9age5U'), alt: 'Artisan peintre décorant un mur au rouleau' },
-    {
-      src: unsplash('photo-ZHlyRT5u0bM'),
-      alt: 'Ouvrier utilisant un rouleau à peinture pour rénover un mur',
-    },
-    {
-      src: unsplash('photo-FI4ZN6aaWQ0'),
-      alt: 'Salon cosy avec canapé sectionnel et décoration chaleureuse',
-    },
-    {
-      src: unsplash('photo-CCQi3pV95k0'),
-      alt: 'Salon moderne avec fauteuils en cuir et cheminée décorative',
-    },
-  ],
-
   demenageur: [
     {
       src: unsplash('photo-ctXcNX1b4Oo'),
@@ -380,25 +210,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     {
       src: unsplash('photo-XFRiOwXEH4E'),
       alt: 'Jeune homme tenant des cartons de déménagement vu du dessus',
-    },
-  ],
-
-  deratisation: [
-    {
-      src: unsplash('photo-MPI00FHFKH4'),
-      alt: 'Technicien en combinaison pulvérisant du pesticide avec un appareil',
-    },
-    {
-      src: unsplash('photo-r_9acX8AORw'),
-      alt: 'Professionnel en combinaison de protection pulvérisant du désinfectant',
-    },
-    {
-      src: unsplash('photo-W1SSt1G6L80'),
-      alt: 'Homme pulvérisant du pesticide sur un terrain pour traitement',
-    },
-    {
-      src: unsplash('photo-iGk1LsIiNWY'),
-      alt: "Techniciens en tenue de protection pulvérisant de l'insecticide",
     },
   ],
 }

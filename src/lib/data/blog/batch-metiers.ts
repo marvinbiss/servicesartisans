@@ -624,7 +624,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
       '## Double vitrage, triple vitrage et vitrage de sécurité',
       'Le double vitrage à isolation renforcée (VIR) est le standard pour toute rénovation, avec un coefficient Ug de 1,1 W/m2.K environ. Le triple vitrage se justifie principalement pour les façades nord dans les régions froides ou les maisons passives. Pour les baies vitrées en rez-de-chaussée, les garde-corps et les verrières, le verre feuilleté de sécurité est obligatoire : il retient les éclats en cas de bris. Un bon vitrier vous conseille le vitrage adapté à chaque situation.',
       "## L'assurance bris de glace",
-      "La plupart des contrats d'assurance habitation couvrent le bris de glace, y compris les doubles et triples vitrages et les miroirs fixes posés par un [miroitier](/services/miroitier). Vérifiez votre contrat et signalez le sinistre dans les cinq jours ouvrés. Conservez les débris et prenez des photos avant toute intervention.",
+      "La plupart des contrats d'assurance habitation couvrent le bris de glace, y compris les doubles et triples vitrages et les miroirs fixes posés par un [vitrier](/services/vitrier). Vérifiez votre contrat et signalez le sinistre dans les cinq jours ouvrés. Conservez les débris et prenez des photos avant toute intervention.",
       ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui ne mesurent pas précisément, qui proposent du simple vitrage en remplacement de double, qui ne mentionnent pas le coefficient **Ug**, ou qui facturent un « diagnostic » avant même de donner un devis.\n:::",
 
       ":::tip Conseil pro\nIdentifiez un vitrier de confiance **avant l'urgence**. En cas de bris de glace, sécurisez la zone, prenez des photos pour l'assurance, et protégez l'ouverture avec un panneau provisoire. Déclarez le sinistre dans les **5 jours ouvrés**. Privilégiez le **double vitrage VIR** pour toute rénovation.\n:::",
@@ -911,68 +911,6 @@ export const metiersArticles: Record<string, BlogArticle> = {
       'La transition énergétique crée une forte demande pour les spécialistes en pompes à chaleur et solaire thermique.',
     ],
   },
-  'metier-electricien-formations-certifications': {
-    title: 'Métier Électricien : Formations',
-    excerpt:
-      'Du CAP au BTS, de Qualifelec au label RGE : parcours de formation, certifications et perspectives de carrière pour les électriciens.',
-    content: [
-      "L'électricien est un artisan incontournable du bâtiment, dont le rôle ne cesse de s'élargir avec la transition énergétique, la domotique et l'électromobilité. Bornes de recharge, panneaux photovoltaïques, installation d'antennes par un [antenniste](/services/antenniste), systèmes de gestion intelligente de l'énergie : le métier se transforme en profondeur. Tour d'horizon complet. Si vous cherchez un professionnel, consultez notre annuaire d'[électriciens certifiés](/services/electricien).",
-      '## Les formations initiales',
-      "Le CAP Électricien se prépare en deux ans après la troisième et permet d'acquérir les bases : lecture de schémas, câblage, pose d'appareillage, mise en service. Le BP Électricien approfondit les compétences en deux ans supplémentaires. Le Bac Pro MELEC (Métiers de l'électricité et de ses environnements connectés) offre une formation de trois ans incluant la domotique et les réseaux communicants. Le BTS Électrotechnique ouvre l'accès à des postes de technicien supérieur ou de chargé d'affaires.",
-      "## L'habilitation électrique et Qualifelec",
-      "Toute personne intervenant sur une installation électrique doit détenir une habilitation électrique (B0, B1, B2, BR, BC, etc.), renouvelée tous les trois ans. Qualifelec est l'organisme de qualification de référence : la qualification atteste des compétences techniques, des moyens humains et matériels, avec des indices de classification E1 à E4 selon la complexité des travaux.",
-      '## Le label RGE et la qualification IRVE',
-      "Le label RGE est indispensable pour les travaux liés aux énergies renouvelables : panneaux photovoltaïques (QualiPV), bornes de recharge (IRVE). La qualification IRVE est obligatoire pour l'installation de bornes de plus de 3,7 kW et se décline en trois niveaux (P1, P2, P3). Ce marché est en explosion avec le développement de la mobilité électrique.",
-      '## Les compétences du futur',
-      "L'électricien de demain maîtrise : les protocoles de communication (KNX, Zigbee, Z-Wave) pour la domotique, les systèmes de stockage d'énergie par batteries, la gestion intelligente de l'autoconsommation photovoltaïque, les infrastructures de recharge rapide, et la cybersécurité des installations connectées. La formation continue est plus que jamais essentielle.",
-      '## Salaire et revenus',
-      "Un électricien débutant salarié gagne entre 1 600 et 1 800 euros net par mois. Avec l'expérience et les qualifications, le salaire atteint 2 200 à 3 000 euros net. Un électricien à son compte, spécialisé (photovoltaïque, IRVE, domotique), peut dégager 3 500 à 5 500 euros net par mois. Les spécialisations en énergies renouvelables et mobilité électrique tirent les revenus vers le haut.",
-      '## Évolution de carrière et reconversion',
-      "Chef d'équipe, conducteur de travaux, chargé d'affaires, bureau d'études, création d'entreprise, formation : les perspectives sont nombreuses. La transition énergétique crée de nouveaux postes : coordinateur photovoltaïque, responsable IRVE, intégrateur domotique, energy manager. Le métier attire aussi de nombreux candidats à la reconversion : des formations accélérées (titre professionnel Électricien d'équipement du bâtiment, 6 à 10 mois) permettent d'obtenir un diplôme reconnu, financé par le CPF ou France Travail.",
-      ":::info Bon à savoir\nLa qualification **IRVE** (Infrastructure de Recharge pour Véhicules Électriques) est obligatoire pour l'installation de bornes de plus de **3,7 kW**. Elle se décline en trois niveaux : **P1** (bornes simples), **P2** (bornes communicantes), **P3** (bornes rapides). Ce marché est en explosion avec le développement de la mobilité électrique et représente un vivier de chiffre d'affaires considérable.\n:::",
-
-      ':::tip Conseil pour les futurs électriciens\nInvestissez dans les **formations continues** sur les nouvelles technologies : domotique (protocoles KNX, Zigbee, Z-Wave), photovoltaïque (**QualiPV**), bornes de recharge (**IRVE**). Les électriciens multi-certifiés sont les plus recherchés et les mieux rémunérés. Pensez aussi à la **cybersécurité des installations connectées**, un domaine émergent.\n:::',
-
-      ":::warning Réglementation\nToute personne intervenant sur une installation électrique **doit** détenir une habilitation électrique (B0, B1, B2, BR, BC, etc.), renouvelée **tous les trois ans**. Un électricien sans habilitation à jour s'expose à des sanctions pénales et met en danger ses clients. Vérifiez toujours que votre électricien possède une habilitation valide.\n:::",
-
-      ":::takeaway\n- Le **CAP Électricien** est la formation de base, le **BTS Électrotechnique** ouvre l'accès aux postes supérieurs\n- **Qualifelec** est la certification de référence (indices E1 à E4)\n- Le label **RGE** est indispensable pour le photovoltaïque et les aides\n- Salaire débutant : **1 600 – 1 800 € net/mois** ; indépendant spécialisé : **3 500 – 5 500 € net/mois**\n- La **mobilité électrique** et la **domotique** sont les marchés d'avenir\n:::",
-
-      '## Sur ServicesArtisans',
-      "ServicesArtisans vérifie les qualifications et les assurances de chaque électricien référencé. Si vous êtes électricien, rejoignez la plateforme pour développer votre clientèle et valoriser vos certifications (Qualifelec, RGE, IRVE) auprès de particuliers en recherche active. Découvrez aussi notre [guide pour choisir un électricien](/blog/comment-choisir-electricien-guide) et nos [tarifs d'électricité](/blog/prix-electricien-2026-tarifs-travaux).",
-    ],
-    image: '/images/blog/metier-electricien.jpg',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-01-22',
-    readTime: '14 min',
-    category: 'Fiches métier',
-    tags: ['Électricité', 'Formation', 'Métier'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
-    faq: [
-      {
-        question: 'Quelle formation pour devenir électricien ?',
-        answer:
-          "Le CAP Électricien (2 ans après la 3e) est la base. Le BP Électricien approfondit en 2 ans. Le Bac Pro MELEC inclut la domotique en 3 ans. Le BTS Électrotechnique ouvre l'accès à des postes de technicien supérieur. Des formations accélérées (6-10 mois) existent pour la reconversion.",
-      },
-      {
-        question: "Quel est le salaire d'un électricien en 2026 ?",
-        answer:
-          'Débutant salarié : 1 600 – 1 800 € net/mois. Avec expérience et qualifications : 2 200 – 3 000 € net. En indépendant spécialisé (photovoltaïque, IRVE, domotique) : 3 500 – 5 500 € net/mois. Les spécialisations en énergies renouvelables et mobilité électrique offrent les meilleures rémunérations.',
-      },
-      {
-        question: "Qu'est-ce que la qualification IRVE ?",
-        answer:
-          "La qualification IRVE (Infrastructure de Recharge pour Véhicules Électriques) est obligatoire pour l'installation de bornes de recharge de plus de 3,7 kW. Elle se décline en 3 niveaux : P1 (bornes simples), P2 (bornes communicantes), P3 (bornes rapides). C'est un marché en forte expansion avec le développement de la mobilité électrique.",
-      },
-    ],
-    keyTakeaways: [
-      "Le CAP Électricien est le diplôme d'entrée, complété par le BP, le Bac Pro MELEC ou le BTS Électrotechnique.",
-      'La certification Qualifelec et le label RGE sont les qualifications clés pour développer son activité.',
-      'Un électricien expérimenté gagne entre 2 200 et 3 500 € net par mois en salarié.',
-      "Les marchés porteurs sont la domotique, les bornes de recharge et l'autoconsommation photovoltaïque.",
-    ],
-  },
   'metier-macon-specialisations-carrieres': {
     title: 'Métier Maçon : Spécialisations',
     excerpt:
@@ -1230,7 +1168,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
       '## Les formations initiales',
       "Le CAP Peintre applicateur de revêtements (deux ans) enseigne la préparation des supports, l'application des peintures et la pose de revêtements muraux. Le BP Peintre applicateur de revêtements approfondit les techniques décoratives et la gestion de chantier. Le Bac Pro Aménagement et finition du bâtiment offre une vision large des métiers de la finition.",
       '## Les spécialisations décoratives',
-      "Le métier offre des spécialisations à forte valeur ajoutée : peintre décorateur (trompe-l'œil, patines, faux bois, faux marbre), applicateur de béton ciré, poseur de papier peint haut de gamme, spécialiste du stuc et de l'enduit décoratif (tadelakt, stucco vénitien). Pour un projet de décoration complet, vous pouvez aussi faire appel à un [décorateur d'intérieur](/services/decorateur), peintre en lettres, et ravaleur de façade. La mention complémentaire Peinture décoration permet de se spécialiser rapidement après le CAP.",
+      "Le métier offre des spécialisations à forte valeur ajoutée : peintre décorateur (trompe-l'œil, patines, faux bois, faux marbre), applicateur de béton ciré, poseur de papier peint haut de gamme, spécialiste du stuc et de l'enduit décoratif (tadelakt, stucco vénitien). Pour un projet de décoration complet, vous pouvez aussi faire appel à un [décorateur d'intérieur](/services/peintre-en-batiment), peintre en lettres, et ravaleur de façade. La mention complémentaire Peinture décoration permet de se spécialiser rapidement après le CAP.",
       '## Les certifications et le label RGE',
       "La qualification Qualibat en peinture et revêtements est le label de référence (sous-catégories : peinture et ravalement, revêtements muraux, revêtements de sol souples, ITE). Le label RGE est nécessaire pour les peintres réalisant des travaux d'isolation thermique par l'extérieur avec finition enduit, éligibles aux aides à la rénovation énergétique.",
       '## Les peintures écologiques et les techniques modernes',

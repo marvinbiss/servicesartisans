@@ -17,9 +17,9 @@ const SEASONAL_SERVICES: Record<number, string[]> = {
   2: ['jardinier', 'peintre-en-batiment', 'couvreur', 'macon', 'paysagiste'], // Mars
   3: ['jardinier', 'paysagiste', 'couvreur', 'macon', 'peintre-en-batiment'], // Avril
   4: ['jardinier', 'climaticien', 'paysagiste', 'couvreur', 'macon'], // Mai
-  5: ['climaticien', 'jardinier', 'paysagiste', 'pisciniste', 'electricien'], // Juin
-  6: ['climaticien', 'pisciniste', 'jardinier', 'serrurier', 'vitrier'], // Juillet
-  7: ['climaticien', 'pisciniste', 'serrurier', 'plombier', 'jardinier'], // Août
+  5: ['climaticien', 'jardinier', 'paysagiste', 'electricien', 'menuisier'], // Juin
+  6: ['climaticien', 'jardinier', 'paysagiste', 'serrurier', 'vitrier'], // Juillet
+  7: ['climaticien', 'serrurier', 'plombier', 'jardinier', 'paysagiste'], // Août
   8: ['couvreur', 'chauffagiste', 'peintre-en-batiment', 'macon', 'ramoneur'], // Septembre
   9: ['chauffagiste', 'ramoneur', 'couvreur', 'plombier', 'menuisier'], // Octobre
   10: ['chauffagiste', 'plombier', 'ramoneur', 'serrurier', 'vitrier'], // Novembre

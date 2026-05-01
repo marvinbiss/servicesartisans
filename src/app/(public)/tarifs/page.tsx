@@ -112,7 +112,6 @@ const tradeEmojis: Record<string, string> = {
   vitrier: '🪟',
   climaticien: '❄️',
   cuisiniste: '🍳',
-  solier: '🛋️',
   nettoyage: '✨',
 }
 

@@ -1475,7 +1475,7 @@ export const comparisons: Comparison[] = [
       {
         question: "Quel est le coût annuel d'entretien d'une piscine ?",
         answer:
-          "Comptez 800 à 1 500 €/an pour une piscine enterrée de 8x4 m : produits de traitement (200-400 €), électricité de la filtration (300-500 €), eau de remplissage (100-200 €), hivernage/remise en route (100-300 €). Un contrat d'entretien avec un pisciniste coûte 100 à 200 €/mois.",
+          "Comptez 800 à 1 500 €/an pour une piscine enterrée de 8x4 m : produits de traitement (200-400 €), électricité de la filtration (300-500 €), eau de remplissage (100-200 €), hivernage/remise en route (100-300 €). Un contrat d'entretien avec un professionnel piscine coûte 100 à 200 €/mois.",
       },
       {
         question: 'Une piscine augmente-t-elle la taxe foncière ?',
@@ -1585,7 +1585,7 @@ export const comparisons: Comparison[] = [
       {
         question: "Combien coûte le remplacement de la toile d'un store banne ?",
         answer:
-          "Le remplacement de la toile coûte 300 à 800 € selon la dimension et la qualité (acrylique Dickson, Sauleda). Il est recommandé de la remplacer tous les 8 à 12 ans ou dès que les couleurs sont délavées (perte de protection UV). Un storiste professionnel facture 150 à 250 € de main d'œuvre pour le remplacement.",
+          "Le remplacement de la toile coûte 300 à 800 € selon la dimension et la qualité (acrylique Dickson, Sauleda). Il est recommandé de la remplacer tous les 8 à 12 ans ou dès que les couleurs sont délavées (perte de protection UV). Un menuisier installateur de stores facture 150 à 250 € de main d'œuvre pour le remplacement.",
       },
     ],
   },

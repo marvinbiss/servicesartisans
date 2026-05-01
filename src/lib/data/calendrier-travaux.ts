@@ -109,10 +109,10 @@ export const calendrierTravaux: CalendrierMois[] = [
         service: 'facadier',
       },
       {
-        titre: 'Début des travaux de terrassement',
+        titre: 'Début des travaux de gros œuvre',
         description:
-          "Le sol dégèle et s'assèche progressivement. C'est le moment de lancer les terrassements pour une extension, une piscine ou un assainissement individuel, avant les chaleurs estivales.",
-        service: 'terrassier',
+          "Le sol dégèle et s'assèche progressivement. C'est le moment de lancer les fondations pour une extension ou un assainissement individuel, avant les chaleurs estivales.",
+        service: 'macon',
       },
       {
         titre: 'Vérification de la climatisation',
@@ -249,9 +249,9 @@ export const calendrierTravaux: CalendrierMois[] = [
     slug: 'juillet',
     travauxRecommandes: [
       {
-        titre: 'Construction de piscine',
+        titre: 'Construction de piscine maçonnée',
         description:
-          "Juillet est le dernier mois pour lancer une piscine et espérer en profiter en fin d'été. Le terrassement, le coulage et la mise en eau demandent 6 à 8 semaines. Attention aux délais : les piscinistes sont pris d'assaut.",
+          "Juillet est le dernier mois pour lancer une piscine et espérer en profiter en fin d'été. Le coulage du béton et la mise en eau demandent 6 à 8 semaines. Attention aux délais : les maçons spécialisés piscine sont pris d'assaut.",
         service: 'macon',
       },
       {
@@ -296,8 +296,8 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Assainissement individuel',
         description:
-          "Le sol est sec et stable en août, ce qui facilite le terrassement pour une fosse septique ou une micro-station d'épuration. Les nappes phréatiques sont au plus bas, réduisant le risque d'effondrement de tranchée.",
-        service: 'terrassier',
+          "Le sol est sec et stable en août, ce qui facilite les fondations pour une fosse septique ou une micro-station d'épuration. Les nappes phréatiques sont au plus bas, réduisant le risque d'effondrement de tranchée.",
+        service: 'macon',
       },
       {
         titre: 'Rénovation de charpente',

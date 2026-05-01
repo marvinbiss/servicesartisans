@@ -42,6 +42,21 @@ export const RGE_ALLOWED_SERVICES = [
   'zingueur',
   'facadier',
   'platrier',
+  // Élargissement RGE 2026-05-02 :
+  //   - borne-recharge   : qualif Qualifelec IRVE (P1/P2/P3) — quick win, slug
+  //                        déjà présent dans VALID_SERVICE_SLUGS + france-light.
+  //   - chauffe-eau-thermodynamique : QualiPAC module CET + BAR-TH-148.
+  //   - audit-energetique : architecte CNOA + BET OPQIBI 1905/1911 — funnel
+  //                         d'entrée mandataire CEE Sonergia.
+  //   - ventilation       : Qualibat 4311 / 4321 + BAR-TH-125 (VMC double flux).
+  //   - fenetres          : Qualibat menuiserie + BAR-EN-104 / BAR-EN-108.
+  // Ces 5 services sont RGE-only (pas de hub /services/[slug]) : ils n'ajoutent
+  // rien dans VALID_SERVICE_SLUGS / france-light, uniquement /rge/[s]/[v].
+  'borne-recharge',
+  'chauffe-eau-thermodynamique',
+  'audit-energetique',
+  'ventilation',
+  'fenetres',
 ] as const
 
 export type RgeAllowedService = (typeof RGE_ALLOWED_SERVICES)[number]
@@ -130,6 +145,35 @@ export const RGE_QUALIFICATION_LABELS: Record<
     label: 'QualiBois Entretien',
     organisme: 'Qualit\u2019EnR',
     specifics: 'entretien d\u2019appareils de chauffage bois et ramonage certifi\u00e9',
+  },
+  'borne-recharge': {
+    label: 'Qualifelec IRVE',
+    organisme: 'Qualifelec',
+    specifics:
+      'installation de bornes de recharge pour v\u00e9hicules \u00e9lectriques (niveaux P1, P2, P3)',
+  },
+  'chauffe-eau-thermodynamique': {
+    label: 'QualiPAC module CET',
+    organisme: 'Qualit\u2019EnR',
+    specifics:
+      'installation de chauffe-eau thermodynamiques (CET) \u00e9ligibles MaPrimeR\u00e9nov\u2019 et CEE BAR-TH-148',
+  },
+  'audit-energetique': {
+    label: 'OPQIBI 1905/1911 / Architecte CNOA',
+    organisme: 'OPQIBI / CNOA',
+    specifics:
+      'audit \u00e9nerg\u00e9tique r\u00e9glementaire (DPE projet\u00e9, sc\u00e9narios r\u00e9novation d\u2019ampleur)',
+  },
+  ventilation: {
+    label: 'Qualibat RGE ventilation',
+    organisme: 'Qualibat',
+    specifics: 'VMC simple flux hygror\u00e9glable et double flux haute performance (BAR-TH-125)',
+  },
+  fenetres: {
+    label: 'Qualibat RGE menuiserie',
+    organisme: 'Qualibat',
+    specifics:
+      'remplacement de fen\u00eatres et baies isolantes \u00e9ligibles MaPrimeR\u00e9nov\u2019 (BAR-EN-104 / BAR-EN-108)',
   },
 }
 

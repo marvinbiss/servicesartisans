@@ -73,50 +73,56 @@ async function upsertSnapshot(snap: Snapshot): Promise<void> {
 }
 
 export async function GET(request: Request) {
-  return await Sentry.withMonitor('cron-barometre-rge', async () => {
-    if (!process.env.CRON_SECRET) {
-      return NextResponse.json(
-        { error: 'Serveur mal configuré : CRON_SECRET manquant' },
-        { status: 500 }
-      )
+  return await Sentry.withMonitor(
+    'cron-barometre-rge',
+    async () => {
+      if (!process.env.CRON_SECRET) {
+        return NextResponse.json(
+          { error: 'Serveur mal configuré : CRON_SECRET manquant' },
+          { status: 500 }
+        )
+      }
+      const authHeader = request.headers.get('authorization')
+      if (!verifyCronSecret(authHeader)) {
+        return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      }
+
+      const yearmonth = new Date().toISOString().slice(0, 7)
+      const started = Date.now()
+
+      try {
+        const [rows, total] = await Promise.all([fetchAllProviders(), fetchTotalProviders()])
+        const snap = aggregate(rows, yearmonth, total)
+        await upsertSnapshot(snap)
+
+        // Nuke ISR cache so /barometre/rge picks up the new snapshot immediately
+        revalidatePath('/barometre/rge')
+
+        const duration = Date.now() - started
+        logger.info('[cron-barometre-rge] snapshot upserted', {
+          yearmonth: snap.yearmonth,
+          active: snap.total_rge_active,
+          expired: snap.total_rge_expired,
+          regions: snap.by_region.length,
+          duration_ms: duration,
+        })
+
+        return NextResponse.json({
+          ok: true,
+          yearmonth: snap.yearmonth,
+          total_rge_active: snap.total_rge_active,
+          total_rge_expired: snap.total_rge_expired,
+          regions: snap.by_region.length,
+          duration_ms: duration,
+        })
+      } catch (err) {
+        const msg = (err as Error).message
+        logger.error('[cron-barometre-rge] failed', { error: msg })
+        return NextResponse.json({ error: 'barometre_rge_failed', message: msg }, { status: 500 })
+      }
+    },
+    {
+      schedule: { type: 'crontab', value: '0 3 1 * *' },
     }
-    const authHeader = request.headers.get('authorization')
-    if (!verifyCronSecret(authHeader)) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-    }
-
-    const yearmonth = new Date().toISOString().slice(0, 7)
-    const started = Date.now()
-
-    try {
-      const [rows, total] = await Promise.all([fetchAllProviders(), fetchTotalProviders()])
-      const snap = aggregate(rows, yearmonth, total)
-      await upsertSnapshot(snap)
-
-      // Nuke ISR cache so /barometre/rge picks up the new snapshot immediately
-      revalidatePath('/barometre/rge')
-
-      const duration = Date.now() - started
-      logger.info('[cron-barometre-rge] snapshot upserted', {
-        yearmonth: snap.yearmonth,
-        active: snap.total_rge_active,
-        expired: snap.total_rge_expired,
-        regions: snap.by_region.length,
-        duration_ms: duration,
-      })
-
-      return NextResponse.json({
-        ok: true,
-        yearmonth: snap.yearmonth,
-        total_rge_active: snap.total_rge_active,
-        total_rge_expired: snap.total_rge_expired,
-        regions: snap.by_region.length,
-        duration_ms: duration,
-      })
-    } catch (err) {
-      const msg = (err as Error).message
-      logger.error('[cron-barometre-rge] failed', { error: msg })
-      return NextResponse.json({ error: 'barometre_rge_failed', message: msg }, { status: 500 })
-    }
-  })
+  )
 }

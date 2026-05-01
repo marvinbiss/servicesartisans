@@ -262,7 +262,7 @@ export const guidesDiversArticles: Record<string, BlogArticle> = {
       'KNX, Zigbee, Matter, Z-Wave : comparatif des protocoles domotiques et prix détaillés par poste. Budget complet pour une maison connectée de 100 m² en 2026.',
     metaTitle: 'Prix Domotique 2026 : Budget et Comparatif',
     metaDescription:
-      'Comparez KNX, Zigbee, Matter et Z-Wave. Budget domotique complet pour 100 m² en 2026. Obtenez un devis gratuit domoticien.',
+      'Comparez KNX, Zigbee, Matter et Z-Wave. Budget domotique complet pour 100 m² en 2026. Obtenez un devis gratuit electricien.',
     image: '/images/blog/prix-domotique-maison-2026.webp',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-12',

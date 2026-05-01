@@ -379,18 +379,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       'Prenez le temps de comparer au moins 3 devis de cuisinistes différents. Les écarts de prix pour des prestations similaires peuvent atteindre 30 à 50 %.',
   },
-  solier: {
-    coastal:
-      "En zone littorale humide, les sols PVC et vinyle sont particulièrement adaptés grâce à leur étanchéité naturelle. Évitez le parquet massif dans les pièces exposées à l'humidité marine.",
-    mountain:
-      'En montagne, le parquet massif en chêne ou en châtaignier apporte chaleur et authenticité. Associé à un chauffage au sol, le parquet contrecollé offre le meilleur compromis.',
-    urban:
-      "En appartement, l'isolation phonique du sol est essentielle pour le confort des voisins. Exigez une sous-couche acoustique conforme à la réglementation (ΔLw ≥ 17 dB).",
-    rural:
-      'Pour les maisons anciennes avec des planchers irréguliers, un ragréage soigné est indispensable avant la pose. Le solier évaluera la planéité et proposera la solution adaptée.',
-    default:
-      "Laissez le revêtement de sol s'acclimater 48 heures dans la pièce avant la pose, à température ambiante, pour éviter les retraits ou dilatations après installation.",
-  },
   nettoyage: {
     coastal:
       "En bord de mer, le nettoyage des vitres et des façades doit être plus fréquent en raison des dépôts de sel marin. Un contrat trimestriel de nettoyage extérieur préserve l'aspect du bâtiment.",
@@ -402,18 +390,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       'Pour les grandes propriétés, le nettoyage de fin de chantier après des travaux de rénovation nécessite une entreprise équipée : aspirateur industriel, autolaveuse, nettoyeur haute pression.',
     default:
       "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m² varie selon l'état des lieux et le type de nettoyage requis.",
-  },
-  terrassier: {
-    coastal:
-      "En zone littorale, les sols sablonneux et la proximité de la nappe phréatique imposent une étude géotechnique préalable. Le terrassier doit adapter le compactage et prévoir un drainage renforcé pour éviter les remontées d'eau.",
-    mountain:
-      "En montagne, la profondeur hors gel des fondations peut dépasser 1 mètre selon l'altitude. Privilégiez les travaux de terrassement en été, lorsque le sol est dégelé et sec, pour éviter les effondrements liés au dégel.",
-    urban:
-      'En milieu urbain dense, le terrassement nécessite une attention particulière aux réseaux enterrés (gaz, eau, électricité, fibre). Une déclaration de travaux (DT/DICT) est obligatoire avant tout coup de pelle mécanique.',
-    rural:
-      'En zone rurale, les terrains non viabilisés peuvent présenter des surprises : roche affleurante, argiles gonflantes ou anciennes cavités. Une étude de sol G2 est recommandée avant tout projet de construction.',
-    default:
-      "Planifiez vos travaux de terrassement en période sèche (printemps ou début d'automne) : un sol détrempé par la pluie est instable, plus lourd à évacuer et sujet aux effondrements de talus.",
   },
   charpentier: {
     coastal:
@@ -475,66 +451,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Les travaux de plâtrerie nécessitent une température ambiante comprise entre 5 et 30 °C pour un séchage optimal. Comptez une semaine par centimètre d'épaisseur avant d'appliquer la peinture de finition.",
   },
-  metallier: {
-    coastal:
-      "En bord de mer, les ouvrages métalliques (garde-corps, portails, verrières) doivent recevoir un traitement anticorrosion renforcé : galvanisation à chaud suivie d'un thermolaquage pour résister à l'air salin (classe de corrosivité C4-C5).",
-    mountain:
-      'En montagne, les structures métalliques extérieures (balcons, escaliers, auvents) doivent être dimensionnées pour supporter les charges de neige et les contraintes thermiques liées aux écarts de température importants.',
-    urban:
-      "En milieu urbain, le métallier conçoit des ouvrages sur mesure adaptés aux contraintes d'espace : verrières d'atelier, mezzanines, escaliers hélicoïdaux et garde-corps design qui optimisent les volumes intérieurs.",
-    rural:
-      "Pour les propriétés rurales, le métallier fabrique des portails, clôtures et structures agricoles (hangars, abris) robustes et fonctionnels. L'acier galvanisé offre un excellent rapport résistance-prix pour ces grands ouvrages.",
-    default:
-      "Un entretien annuel des ouvrages métalliques extérieurs est indispensable : inspection des soudures, reprise des points de rouille et application d'une peinture antirouille prolongent la durée de vie de vos installations.",
-  },
-  ferronnier: {
-    coastal:
-      'En bord de mer, le fer forgé est particulièrement vulnérable à la corrosion saline. Exigez un système duplex (galvanisation + thermolaquage) pour vos garde-corps, portails et grilles, et prévoyez un entretien trimestriel.',
-    mountain:
-      "En montagne, les ouvrages en fer forgé extérieurs (rambardes, balconnets) subissent les cycles gel-dégel qui accélèrent l'oxydation. Un traitement antirouille et une peinture spéciale montagne sont recommandés chaque printemps.",
-    urban:
-      "En centre-ville historique, le ferronnier d'art restaure les éléments de patrimoine (grilles, impostes, marquises) dans le respect du style d'origine. En secteur ABF, la conformité des ouvrages aux prescriptions architecturales est obligatoire.",
-    rural:
-      "Pour les demeures de caractère, le ferronnier crée des pièces uniques (portails, rampes d'escalier, girouettes) qui valorisent le patrimoine rural. Le fer forgé artisanal apporte un cachet authentique aux maisons de campagne.",
-    default:
-      "Entretenez vos ouvrages en fer forgé au moins deux fois par an : un nettoyage à l'eau savonneuse suivi d'une application de cire ou de vernis antirouille protège durablement le métal contre l'oxydation.",
-  },
-  'poseur-de-parquet': {
-    coastal:
-      "En zone littorale, l'humidité ambiante élevée rend le parquet massif vulnérable aux déformations. Privilégiez un parquet contrecollé ou un parquet en bois exotique (teck, ipé) naturellement résistant à l'humidité.",
-    mountain:
-      'En montagne, le parquet en chêne massif ou en châtaignier apporte chaleur et authenticité aux chalets. Associé à un plancher chauffant, le parquet contrecollé (épaisseur ≤ 15 mm) offre le meilleur compromis thermique.',
-    urban:
-      "En appartement, l'isolation phonique sous parquet est essentielle pour le confort des voisins. Exigez une sous-couche acoustique conforme à la réglementation (affaiblissement ΔLw ≥ 17 dB) avant toute pose.",
-    rural:
-      "Pour les maisons anciennes aux planchers irréguliers, un ragréage soigné est indispensable avant la pose. Un poseur expérimenté saura adapter la technique (pose collée, flottante ou clouée) à l'état du support.",
-    default:
-      "Le printemps et l'automne offrent les meilleures conditions pour la pose de parquet : une température de 18 à 20 °C et une hygrométrie entre 40 et 60 % garantissent la stabilité dimensionnelle du bois.",
-  },
-  miroitier: {
-    coastal:
-      'En bord de mer, les vitrages et miroirs extérieurs sont exposés aux projections salines. Le miroitier doit utiliser des vitrages traités anticorrosion avec des intercalaires warm-edge pour éviter la dégradation des joints.',
-    mountain:
-      'En altitude, le triple vitrage est recommandé pour les grandes surfaces vitrées exposées au froid. Le miroitier peut concevoir des vitrages à isolation thermique renforcée (Ug ≤ 0,6 W/m²K) pour limiter les déperditions.',
-    urban:
-      'En milieu urbain, le miroitier installe des cloisons vitrées, des crédences en verre et des miroirs sur mesure qui agrandissent visuellement les espaces réduits des appartements en centre-ville.',
-    rural:
-      "Pour les maisons isolées, le miroitier peut poser des vitrages retardateurs d'effraction (classés P2A à P5A) qui renforcent la sécurité sans nuire à l'esthétique ni nécessiter de barreaux ou volets blindés.",
-    default:
-      "Lors du remplacement d'un vitrage, demandez au miroitier un devis comparatif entre double et triple vitrage. L'écart de prix de 40 à 60 % peut être rentabilisé en 5 à 8 ans grâce aux économies d'énergie.",
-  },
-  storiste: {
-    coastal:
-      "En zone littorale, les stores bannes et volets roulants sont exposés aux vents forts et à l'air salin. Optez pour des toiles traitées anti-UV et anti-moisissures, et des mécanismes en aluminium laqué résistant à la corrosion.",
-    mountain:
-      'En montagne, les volets roulants isolants (mousse polyuréthane injectée) réduisent significativement les déperditions thermiques en hiver. Un storiste local saura adapter les dimensions aux contraintes des ouvertures de chalet.',
-    urban:
-      "En copropriété, l'installation de stores extérieurs ou de volets roulants peut nécessiter l'accord de l'assemblée générale si l'aspect de la façade est modifié. Vérifiez le règlement de copropriété avant les travaux.",
-    rural:
-      "Pour les grandes maisons avec de nombreuses ouvertures, un système de volets roulants motorisés avec centralisation domotique permet de gérer l'ensemble des ouvrants depuis une seule commande ou un smartphone.",
-    default:
-      'Faites installer vos stores bannes au printemps, avant les premières chaleurs estivales. Un entretien annuel (nettoyage de la toile, lubrification du mécanisme, vérification du moteur) prolonge leur durée de vie de 5 à 10 ans.',
-  },
   'salle-de-bain': {
     coastal:
       "En zone littorale, l'humidité ambiante élevée exige une ventilation renforcée dans la salle de bain (VMC hygroréglable type B minimum) et des matériaux résistants : carrelage grès cérame, meubles en stratifié hydrofuge.",
@@ -546,42 +462,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       "Pour les maisons non raccordées au tout-à-l'égout, la salle de bain doit être conçue pour limiter la charge sur l'assainissement individuel : robinetterie économe en eau, douche plutôt que baignoire, chasse d'eau double débit.",
     default:
       "Les vacances d'été sont souvent privilégiées pour rénover la salle de bain (4 semaines de travaux en moyenne), mais la période septembre-février offre de meilleurs délais et parfois des tarifs plus avantageux.",
-  },
-  'architecte-interieur': {
-    coastal:
-      "En bord de mer, l'architecte d'intérieur privilégie des matériaux résistants à l'humidité saline : sols en grès cérame, menuiseries en aluminium thermolaqué et textiles techniques anti-moisissures pour un intérieur durable.",
-    mountain:
-      "En montagne, l'architecte d'intérieur conçoit des espaces chaleureux adaptés au climat : bois massif, pierre naturelle, isolation renforcée et optimisation de la lumière naturelle dans des pièces souvent plus sombres en hiver.",
-    urban:
-      "En appartement citadin, l'architecte d'intérieur optimise chaque mètre carré : cloisons amovibles, rangements sur mesure, mezzanines et jeux de lumière agrandissent visuellement les espaces les plus contraints.",
-    rural:
-      "Pour les maisons de campagne et les corps de ferme réhabilités, l'architecte d'intérieur valorise les éléments de caractère (poutres apparentes, pierres, tomettes) tout en intégrant un confort moderne et fonctionnel.",
-    default:
-      "Consultez un architecte d'intérieur en amont de vos travaux de rénovation : sa vision globale du projet permet d'optimiser le budget, d'anticiper les contraintes techniques et de coordonner efficacement les différents corps de métier.",
-  },
-  decorateur: {
-    coastal:
-      "En bord de mer, le décorateur sélectionne des textiles résistants à l'humidité et aux UV (lin lavé, coton traité) et des couleurs qui ne ternissent pas avec le sel marin. Les matières naturelles (rotin, jute) apportent une ambiance littorale authentique.",
-    mountain:
-      "En montagne, le décorateur crée des ambiances cocooning avec des matières chaudes (laine, fourrure, bois brut) et des teintes profondes. Le mobilier et les textiles doivent aussi répondre aux contraintes d'entretien liées aux activités outdoor.",
-    urban:
-      "En petit espace urbain, le décorateur joue sur les couleurs claires, les miroirs et l'éclairage stratégique pour agrandir visuellement les pièces. Un choix cohérent de mobilier multifonctionnel optimise le confort au quotidien.",
-    rural:
-      "Pour les maisons de campagne, le décorateur marie l'ancien et le contemporain : meubles chinés, objets artisanaux locaux et touches de modernité créent un intérieur chaleureux qui respecte le cachet du bâti traditionnel.",
-    default:
-      "Faites appel à un décorateur avant d'acheter mobilier et matériaux : ses conseils sur les couleurs, les textures et l'agencement vous évitent des erreurs coûteuses et garantissent un résultat harmonieux dès le premier essai.",
-  },
-  domoticien: {
-    coastal:
-      "En zone littorale, la domotique permet de gérer automatiquement la fermeture des volets en cas de vent fort (capteur anémométrique) et de contrôler la ventilation pour lutter contre l'humidité saline dans le logement.",
-    mountain:
-      "En montagne, un système domotique optimise le chauffage : programmation selon les heures d'ensoleillement, gestion à distance pour les résidences secondaires et alertes en cas de gel pour prévenir les dégâts sur les canalisations.",
-    urban:
-      "En appartement connecté, la domotique centralise la gestion de l'éclairage, du chauffage, des volets et de la sécurité via une seule application. L'installation sans fil (protocole Zigbee, Z-Wave) évite les travaux lourds de câblage.",
-    rural:
-      "Pour les grandes propriétés rurales, la domotique sécurise les accès (portail motorisé, vidéosurveillance, détection de présence) et automatise l'arrosage du jardin et la gestion de l'éclairage extérieur à distance.",
-    default:
-      "Planifiez l'installation domotique pendant une rénovation électrique pour intégrer le câblage nécessaire. Pour un logement existant, les solutions sans fil offrent une mise en œuvre rapide et non invasive.",
   },
   'pompe-a-chaleur': {
     coastal:
@@ -667,18 +547,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Consultez un paysagiste avant de planter : sa connaissance du sol, du climat local et des végétaux adaptés vous évitera des erreurs coûteuses. Un plan d'aménagement paysager professionnel valorise votre propriété de 10 à 15 %.",
   },
-  pisciniste: {
-    coastal:
-      "En zone littorale, la piscine bénéficie d'un climat favorable à une longue saison de baignade (mai à octobre). Le pisciniste doit cependant anticiper la corrosion saline des équipements et recommander des matériaux adaptés (inox 316L, PVC renforcé).",
-    mountain:
-      "En montagne, la construction d'une piscine impose des précautions spécifiques : fondations hors gel, hivernage rigoureux, chauffage par pompe à chaleur haute température ou panneaux solaires pour compenser la fraîcheur des soirées d'altitude.",
-    urban:
-      "En milieu urbain, les mini-piscines (moins de 10 m²) ne nécessitent pas de permis de construire et s'intègrent dans les petits jardins de ville. Le pisciniste optimise l'espace avec des formes compactes et des équipements intégrés.",
-    rural:
-      "En zone rurale, les terrains spacieux permettent d'envisager de grandes piscines avec plage immergée et pool house. Vérifiez les règles du PLU et la distance réglementaire par rapport aux limites de propriété avant tout projet.",
-    default:
-      "L'hiver est la meilleure période pour planifier votre projet de piscine : les piscinistes sont plus disponibles, les délais de construction sont plus courts et le bassin sera prêt pour la saison estivale suivante.",
-  },
   'alarme-securite': {
     coastal:
       "En zone littorale, les systèmes d'alarme doivent résister à la corrosion saline. Privilégiez des détecteurs et sirènes en boîtiers étanches IP65 avec traitement anticorrosion, et prévoyez une maintenance semestrielle des contacts extérieurs.",
@@ -691,30 +559,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Faites réaliser un diagnostic sécurité par un installateur certifié APSAD avant de choisir votre système d'alarme. Il identifiera les points vulnérables de votre habitation et dimensionnera la solution adaptée à votre niveau de risque.",
   },
-  antenniste: {
-    coastal:
-      "En zone littorale, les antennes sont exposées aux vents forts et à la corrosion saline. L'antenniste doit utiliser des fixations en inox et des câbles à double blindage pour garantir une réception stable et durable face aux conditions marines.",
-    mountain:
-      "En montagne, la réception TNT peut être perturbée par le relief. L'antenniste orientera l'antenne vers le meilleur émetteur et pourra recommander un amplificateur de signal ou une parabole satellite si la couverture terrestre est insuffisante.",
-    urban:
-      "En copropriété, l'antenne collective dessert l'ensemble des logements. L'antenniste peut moderniser l'installation (passage à la fibre optique, ajout de prises multimédia) en intervenant sur les parties communes après accord du syndic.",
-    rural:
-      'En zone rurale, la couverture TNT peut être limitée et la fibre absente. Un antenniste qualifié évaluera les options disponibles : antenne directionnelle haute performance, réception satellite ou internet par antenne 4G/5G fixe.',
-    default:
-      'Depuis le passage à la TNT HD, certaines anciennes antennes râteau ne captent plus tous les canaux. Faites contrôler votre installation par un antenniste pour vérifier la compatibilité et optimiser la qualité de réception.',
-  },
-  ascensoriste: {
-    coastal:
-      "En zone littorale, les ascenseurs sont exposés à l'air salin qui corrode les câbles, guides et composants électroniques. Un contrat de maintenance renforcé avec inspection trimestrielle des pièces sensibles est recommandé pour les immeubles en front de mer.",
-    mountain:
-      "En station de montagne, les ascenseurs subissent des variations de température extrêmes et une fréquentation saisonnière intense. L'ascensoriste doit adapter le programme de maintenance au rythme des saisons touristiques.",
-    urban:
-      "En copropriété urbaine, la modernisation de l'ascenseur (mise aux normes, remplacement de la cabine, installation d'un variateur de fréquence) améliore la sécurité, réduit la consommation d'énergie et valorise le patrimoine de l'immeuble.",
-    rural:
-      "Pour les ERP (établissements recevant du public) en zone rurale comme les mairies, les EHPAD ou les cabinets médicaux, l'installation d'un ascenseur ou d'une plateforme élévatrice répond aux obligations d'accessibilité PMR.",
-    default:
-      "Le contrat d'entretien d'ascenseur est obligatoire et doit inclure au minimum une visite mensuelle de vérification et un contrôle technique quinquennal. Comparez les offres des ascensoristes en vérifiant le détail des prestations incluses.",
-  },
   diagnostiqueur: {
     coastal:
       "En zone littorale, le diagnostiqueur immobilier porte une attention particulière aux risques naturels (submersion marine, érosion côtière) et à l'état des matériaux exposés aux embruns, qui vieillissent plus rapidement qu'à l'intérieur des terres.",
@@ -726,42 +570,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       "En zone rurale, le diagnostiqueur vérifie également l'assainissement non collectif (contrôle SPANC obligatoire pour la vente) et les risques liés aux termites, aux mérules ou au radon selon la localisation géographique du bien.",
     default:
       "Regroupez tous vos diagnostics immobiliers obligatoires (DPE, amiante, plomb, électricité, gaz, termites, ERP) auprès d'un seul diagnostiqueur certifié. Le pack complet est plus économique que des interventions séparées.",
-  },
-  geometre: {
-    coastal:
-      'En zone littorale, le géomètre-expert intervient dans le contexte particulier du recul du trait de côte et des zones submersibles. Le bornage et la délimitation des propriétés tiennent compte des servitudes liées aux risques côtiers.',
-    mountain:
-      'En montagne, le géomètre-expert travaille sur des terrains pentus avec des accès parfois difficiles. Le relevé topographique est indispensable pour implanter correctement un bâtiment et dimensionner les terrassements sur un terrain en pente.',
-    urban:
-      "En milieu urbain dense, le géomètre-expert intervient pour les divisions parcellaires, les copropriétés et les limites mitoyennes. Son expertise est incontournable lors d'une division de terrain en vue d'une construction en second rang.",
-    rural:
-      "En zone rurale, le bornage par un géomètre-expert est essentiel pour sécuriser les limites de propriété, souvent imprécises sur les anciens cadastres. Cette démarche prévient les litiges de voisinage lors d'une clôture ou d'une construction.",
-    default:
-      'Avant tout achat de terrain constructible, faites réaliser un bornage contradictoire par un géomètre-expert. Ce document officiel, opposable aux tiers, garantit la superficie exacte et les limites précises de votre future propriété.',
-  },
-  desinsectisation: {
-    coastal:
-      "En zone littorale au climat doux, les insectes sont actifs une grande partie de l'année. Les moustiques, les blattes et les guêpes prolifèrent dès le printemps et nécessitent des traitements préventifs réguliers pour les habitations proches du littoral.",
-    mountain:
-      'En montagne, les insectes xylophages (capricornes, vrillettes) menacent les charpentes en bois des chalets et maisons traditionnelles. Un traitement préventif tous les 10 ans et une inspection régulière protègent la structure du bâti.',
-    urban:
-      'En milieu urbain dense, les blattes et les punaises de lit sont les nuisibles les plus fréquents. Une désinsectisation professionnelle avec traitement ciblé et suivi à 15 jours est indispensable pour éradiquer complètement une infestation.',
-    rural:
-      "En zone rurale, les guêpes, frelons (y compris le frelon asiatique) et les termites sont les principales menaces. La destruction d'un nid de frelons doit impérativement être confiée à un professionnel équipé pour intervenir en toute sécurité.",
-    default:
-      "N'attendez pas qu'une infestation s'installe pour agir. Dès les premiers signes (insectes récurrents, traces de piqûres, sciure suspecte), contactez un professionnel de la désinsectisation qui identifiera l'espèce et appliquera le traitement adapté.",
-  },
-  deratisation: {
-    coastal:
-      "En zone portuaire et littorale, les rats sont particulièrement présents en raison de la proximité des zones de stockage et des réseaux d'assainissement. Une dératisation professionnelle avec appâts sécurisés protège les habitations voisines du port.",
-    mountain:
-      "En montagne, les rongeurs cherchent refuge dans les habitations dès les premiers froids d'automne. Une dératisation préventive en septembre, avec obturation des points d'entrée, évite les infestations hivernales dans les combles et les caves.",
-    urban:
-      "En milieu urbain dense, la dératisation est un enjeu de santé publique. En immeuble, l'intervention doit être coordonnée à l'échelle de la copropriété (caves, locaux poubelles, courettes) pour éviter que les rongeurs ne migrent d'un logement à l'autre.",
-    rural:
-      "En zone rurale, les granges, hangars agricoles et dépendances sont des foyers de prolifération des rongeurs. Un plan de dératisation professionnel avec postes d'appâtage sécurisés protège les stocks alimentaires et évite la contamination.",
-    default:
-      'La dératisation professionnelle combine plusieurs techniques (appâts rodonticides, pièges mécaniques, obturation des accès) pour un résultat durable. Un suivi trimestriel est recommandé pour prévenir toute réinfestation après le traitement initial.',
   },
   demenageur: {
     coastal:
@@ -1939,10 +1747,8 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'carreleur',
     'climaticien',
     'vitrier',
-    'terrassier',
     'paysagiste',
     'facadier',
-    'domoticien',
   ],
   '1950-1980': [
     'electricien',
@@ -1957,9 +1763,7 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'serrurier',
     'vitrier',
     'facadier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   '1980-2000': [
     'peintre-en-batiment',
@@ -1974,13 +1778,10 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'macon',
     'vitrier',
     'facadier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   'post-2000': [
     'climaticien',
-    'domoticien',
     'serrurier',
     'plombier',
     'electricien',
@@ -1992,7 +1793,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'couvreur',
     'macon',
     'facadier',
-    'terrassier',
     'paysagiste',
   ],
   haussmannien: [
@@ -2008,9 +1808,7 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'vitrier',
     'climaticien',
     'facadier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   mixte: [
     'plombier',
@@ -2025,9 +1823,7 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'macon',
     'vitrier',
     'facadier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
 }
 
@@ -3154,9 +2950,7 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'climaticien',
     'carreleur',
     'vitrier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   continental: [
     'chauffagiste',
@@ -3171,9 +2965,7 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'facadier',
     'carreleur',
     'vitrier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   mediterraneen: [
     'climaticien',
@@ -3188,9 +2980,7 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'menuisier',
     'chauffagiste',
     'vitrier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   montagnard: [
     'chauffagiste',
@@ -3205,9 +2995,7 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'vitrier',
     'climaticien',
     'carreleur',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   'semi-oceanique': [
     'plombier',
@@ -3222,9 +3010,7 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'carreleur',
     'facadier',
     'vitrier',
-    'terrassier',
     'paysagiste',
-    'domoticien',
   ],
   tropical: [
     'climaticien',
@@ -3237,11 +3023,9 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'serrurier',
     'menuisier',
     'facadier',
-    'terrassier',
     'paysagiste',
     'vitrier',
     'chauffagiste',
-    'domoticien',
   ],
 }
 
@@ -4098,7 +3882,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
     (name) =>
       `En ${name}, le solaire photovoltaïque bénéficie d'un ensoleillement favorable (2 000 à 2 800 heures/an selon la zone). Une installation de 3 kWc peut produire 3 500 à 4 000 kWh/an. Le retour sur investissement dépend du taux d'autoconsommation et des aides disponibles.`,
     (name) =>
-      `Les piscines en ${name} nécessitent un entretien spécifique : filtration renforcée contre le calcaire, traitement anti-algues et vérification de l'étanchéité du liner tous les 10 ans. Faites appel à un pisciniste certifié.`,
+      `En ${name}, l'aménagement extérieur méditerranéen tire parti du climat : terrasses ombragées, plantations résistantes à la sécheresse et systèmes d'arrosage économes. Un paysagiste local saura choisir les essences adaptées (oliviers, lavande, romarin) et concevoir des espaces qui résistent à la chaleur estivale.`,
   ],
   montagnard: [
     (name) =>
@@ -4122,7 +3906,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
     (name) =>
       `En ${name}, les maisons à colombages et les constructions en tuffeau nécessitent des artisans formés aux techniques patrimoniales. Évitez les enduits ciment sur les murs anciens : la chaux est indispensable pour laisser respirer le bâti.`,
     (name) =>
-      `La domotique et les objets connectés gagnent du terrain en ${name} : thermostat intelligent, volets automatisés, détecteurs de fuite. Un électricien domoticien peut réduire votre facture énergétique de 15 à 25%.`,
+      `En ${name}, la rénovation énergétique est encouragée par MaPrimeRénov' et les CEE : isolation des combles, remplacement des fenêtres, installation d'une pompe à chaleur. Un artisan RGE peut vous accompagner et faire baisser votre facture de chauffage de 30 à 50 %.`,
   ],
   tropical: [
     (name) =>

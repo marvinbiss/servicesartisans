@@ -72,7 +72,6 @@ const METIERS = [
   'chauffagiste',
   'climaticien',
   'plaquiste',
-  'terrassier',
   'charpentier',
   'vitrier',
   'jardinier',

@@ -1105,6 +1105,391 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
     metaDescription:
       "Trouvez un plâtrier RGE Qualibat pour ITI, doublage isolant et cloisons performantes. Aides MaPrimeRénov' et CEE.",
   },
+  // === Élargissement RGE 2026-05-02 — slugs RGE-only ===
+  'borne-recharge': {
+    h1: 'Installateurs IRVE Qualifelec',
+    lede: "Électriciens certifiés Qualifelec IRVE pour l'installation de bornes de recharge en maison, copropriété et entreprise — éligibles au programme ADVENIR.",
+    description: [
+      "L'installation d'une borne de recharge pour véhicule électrique de plus de 3,7 kW exige un installateur titulaire de la qualification Qualifelec IRVE (Infrastructure de Recharge de Véhicule Électrique), seul label reconnu par le programme ADVENIR pour le versement des primes. La qualification se décline en trois niveaux : P1 (jusqu'à 22 kW AC), P2 (avec supervision et communication) et P3 (charge rapide DC).",
+      "Sans installateur Qualifelec IRVE actif à la date de signature du devis, aucune prime ADVENIR (jusqu'à 1 600 € en copropriété, 960 € en entreprise) n'est mobilisable, et le crédit d'impôt forfaitaire de 500 € pour les particuliers (résidences principales) ne peut pas être réclamé. Les contrôles d'Enedis et du programme ADVENIR aboutissent à un retrait de la prime lorsque la qualification fait défaut.",
+      "Les artisans listés ci-dessous sont tous titulaires d'une qualification Qualifelec IRVE active dans le référentiel France Rénov' / ADEME, mise à jour chaque semaine.",
+    ],
+    travaux: [
+      {
+        label: 'Borne murale 7 à 22 kW (Wallbox)',
+        detail:
+          'Borne AC monophasée ou triphasée pour maison individuelle, sortie de garage ou parking extérieur.',
+      },
+      {
+        label: 'Infrastructure copropriété',
+        detail:
+          "Câblage colonne montante, borne partagée, gestion d'accès par badge ou app — droit à la prise.",
+      },
+      {
+        label: 'Bornes entreprise et flotte',
+        detail:
+          'Plusieurs bornes en parking salariés ou clients, supervision énergétique, refacturation.',
+      },
+      {
+        label: 'Charge rapide DC (50 kW+)',
+        detail:
+          'Stations DC pour parkings publics, hôtels, restaurants — qualification Qualifelec IRVE P3.',
+      },
+    ],
+    aides: [
+      {
+        label: 'Prime ADVENIR copropriété',
+        montant: "jusqu'à 1 660 €/borne",
+        detail:
+          'Prise en charge par le programme ADVENIR, financé par les CEE — borne partagée en copro.',
+      },
+      {
+        label: 'Crédit d’impôt borne particulier',
+        montant: '500 € forfait',
+        detail:
+          "Crédit d'impôt fixe pour résidence principale, doublé à 1 000 € si pilotage énergétique.",
+      },
+      {
+        label: 'TVA à 5,5 %',
+        montant: '—',
+        detail:
+          "Taux réduit sur fourniture + pose en logement de plus de 2 ans, si l'installateur est Qualifelec IRVE.",
+      },
+      {
+        label: 'Aides locales',
+        montant: 'variable',
+        detail:
+          'Certaines régions et métropoles abondent ADVENIR (Île-de-France, Grand Lyon, etc.).',
+      },
+    ],
+    faq: [
+      {
+        question: 'Pourquoi l’installateur doit-il être Qualifelec IRVE ?',
+        answer:
+          "Au-delà de 3,7 kW, l'arrêté du 27 décembre 2016 (modifié 2022) impose une installation par un professionnel qualifié IRVE. Sans cette qualification, votre installation est non conforme : assurance habitation susceptible d'être refusée en cas de sinistre, prime ADVENIR rejetée, crédit d'impôt redressé. Qualifelec est l'organisme accrédité COFRAC qui délivre cette mention après formation et audit.",
+      },
+      {
+        question: 'Quelle puissance choisir pour une borne maison ?',
+        answer:
+          'Une Wallbox 7,4 kW monophasée couvre 99 % des besoins quotidiens (recharge 30 km/h). En triphasé, une 11 kW ou 22 kW divise le temps par 2 ou 3 mais nécessite un abonnement Enedis adapté (12 kVA mini en 22 kW). Au-delà, la charge rapide DC (50 kW+) est réservée aux usages intensifs et coûte 5 à 10 fois plus cher.',
+      },
+      {
+        question: 'Combien coûte une borne posée en maison ?',
+        answer:
+          "Une Wallbox 7,4 kW posée par un installateur Qualifelec IRVE coûte 1 200 à 2 000 € TTC tout compris (matériel + pose + protection différentielle Type B). Une borne pilotable communicante avec gestion de la puissance va de 2 000 à 3 000 €. Après crédit d'impôt 500 € (1 000 € si pilotage), le reste à charge est de 700 à 2 000 €.",
+      },
+      {
+        question: 'Comment vérifier qu’un installateur est bien Qualifelec IRVE ?',
+        answer:
+          "Le référentiel officiel est l'annuaire France Rénov' (france-renov.gouv.fr) : il recense toutes les qualifications RGE actives, dont Qualifelec IRVE. Notre vérificateur interne /verifier-artisan croise directement le SIRET de l'entreprise avec ce référentiel et affiche la liste des qualifications en cours de validité. Ne vous fiez jamais à un logo Qualifelec imprimé sur un devis sans contrôle officiel.",
+      },
+    ],
+    metaTitle: 'Installateur borne de recharge Qualifelec IRVE — ADVENIR',
+    metaDescription:
+      "Trouvez un installateur Qualifelec IRVE certifié pour votre borne de recharge. Prime ADVENIR, crédit d'impôt 500 €.",
+  },
+  'chauffe-eau-thermodynamique': {
+    h1: 'Artisans RGE chauffe-eau thermodynamique',
+    lede: "Plombiers et chauffagistes QualiPAC module CET pour l'installation de chauffe-eau thermodynamiques — éligibles MaPrimeRénov' et prime CEE BAR-TH-148.",
+    description: [
+      "Le chauffe-eau thermodynamique (CET) capte les calories de l'air ambiant ou extrait pour produire l'eau chaude sanitaire avec un coefficient de performance (COP) annuel supérieur à 3, soit 3 fois moins d'électricité qu'un cumulus classique. Son installation requiert un artisan titulaire de la qualification QualiPAC module CET (Qualit'EnR), spécifiquement validée pour ce produit.",
+      "Sans qualification QualiPAC CET active à la date de signature du devis, ni MaPrimeRénov' (forfait 400 à 1 200 € selon revenus) ni la prime CEE BAR-TH-148 (200 à 700 € selon délégataire) ne sont mobilisables. La TVA réduite à 5,5 % suit la même règle.",
+      "Les artisans listés sont titulaires d'une qualification active dans le référentiel France Rénov' / ADEME, synchronisé chaque semaine.",
+    ],
+    travaux: [
+      {
+        label: 'CET sur air ambiant (cave/garage)',
+        detail: "Volume technique requis ≥ 20 m³, puisage des calories de l'air non chauffé.",
+      },
+      {
+        label: 'CET sur air extrait (VMC)',
+        detail: 'Couplé à la VMC, idéal en logement neuf ou rénovation lourde — COP > 3,5.',
+      },
+      {
+        label: 'CET sur air extérieur (split)',
+        detail: 'Unité extérieure + ballon intérieur, parfait quand pas de volume technique.',
+      },
+      {
+        label: 'Remplacement cumulus électrique',
+        detail:
+          'Dépose ancien cumulus, raccordement hydraulique et électrique, mise en service et règlement programmation.',
+      },
+    ],
+    aides: [
+      {
+        label: "MaPrimeRénov' CET",
+        montant: '400 à 1 200 €',
+        detail: 'Forfait par tranche de revenus (bleu, jaune, violet, rose).',
+      },
+      {
+        label: 'Prime CEE BAR-TH-148',
+        montant: '200 à 700 €',
+        detail: 'Versée par les délégataires obligés (Effy, Sonergia, TotalEnergies, Engie, EDF).',
+      },
+      {
+        label: 'TVA à 5,5 %',
+        montant: '—',
+        detail: "Taux réduit sur fourniture + pose si l'artisan est QualiPAC CET RGE.",
+      },
+      {
+        label: 'Éco-PTZ travaux énergétiques',
+        montant: "jusqu'à 50 000 €",
+        detail: 'Prêt à taux zéro pour financer le reste à charge en bouquet de travaux.',
+      },
+    ],
+    faq: [
+      {
+        question: 'Quelle est la différence entre CET et cumulus électrique ?',
+        answer:
+          "Un cumulus électrique chauffe l'eau par effet Joule (résistance) avec un rendement de 1 (1 kWh consommé = 1 kWh restitué). Un CET utilise un cycle thermodynamique pour capter les calories de l'air et atteint un COP de 3 à 3,5 (1 kWh consommé = 3 à 3,5 kWh restitués). À l'usage, la facture ECS divisée par 3 — un foyer de 4 personnes économise 250 à 400 €/an.",
+      },
+      {
+        question: 'Faut-il un volume technique pour installer un CET ?',
+        answer:
+          "Pour un CET sur air ambiant (le plus courant), oui : un local non chauffé d'au moins 20 m³ (cave, garage attenant, buanderie). Sans ce volume, on s'oriente vers un CET sur air extrait (couplé VMC) ou un split avec unité extérieure. Un installateur QualiPAC CET vous oriente sur le modèle adapté à votre configuration.",
+      },
+      {
+        question: 'Combien coûte un CET installé ?',
+        answer:
+          "Le prix d'un CET 200 à 250 L posé par un artisan RGE va de 2 800 à 4 500 € TTC selon la marque et la configuration (air ambiant, air extrait, split). Après MaPrimeRénov' (400 à 1 200 €) et prime CEE (200 à 700 €), le reste à charge pour un ménage modeste tombe à 1 200-2 500 €.",
+      },
+      {
+        question: 'Le CET est-il bruyant ?',
+        answer:
+          "Le compresseur d'un CET émet 35 à 45 dB selon les modèles, équivalent à un réfrigérateur silencieux. Installé en cave ou garage, il est quasiment imperceptible. En buanderie attenante à une chambre, choisissez un modèle inverter et privilégiez les marques qui communiquent leur niveau acoustique en dB(A) à 1 m.",
+      },
+    ],
+    metaTitle: 'Artisan RGE chauffe-eau thermodynamique — QualiPAC CET',
+    metaDescription:
+      "Plombiers et chauffagistes QualiPAC CET pour votre chauffe-eau thermodynamique. MaPrimeRénov' jusqu'à 1 200 € + CEE BAR-TH-148.",
+  },
+  'audit-energetique': {
+    h1: 'Audit énergétique réglementaire',
+    lede: "Architectes CNOA et bureaux d'études OPQIBI 1905/1911 pour réaliser un audit énergétique conforme — point d'entrée obligatoire de la rénovation d'ampleur MaPrimeRénov'.",
+    description: [
+      "L'audit énergétique réglementaire est une étude approfondie qui établit l'état des lieux thermique d'un logement et propose au minimum deux scénarios de rénovation chiffrés permettant d'atteindre la classe B ou la classe A du DPE. Il est obligatoire depuis avril 2023 pour vendre un logement classé F ou G, et il conditionne l'accès au parcours MaPrimeRénov' Rénovation d'ampleur.",
+      "Seuls les architectes inscrits au Conseil National de l'Ordre (CNOA), les bureaux d'études qualifiés OPQIBI 1905 ou 1911, et certaines entreprises Qualibat 8731 peuvent réaliser un audit conforme à l'arrêté du 4 mai 2022. Le rapport doit comporter un descriptif énergétique, deux scénarios chiffrés, une évaluation économique et un schéma de phasage.",
+      "Les professionnels listés ici sont titulaires d'une qualification active reconnue par France Rénov' et l'ADEME — chaque audit ouvre droit à une prime forfaitaire MaPrimeRénov' (300 à 500 €) et déclenche le parcours d'accompagnement par Mon Accompagnateur Rénov'.",
+    ],
+    travaux: [
+      {
+        label: 'Audit énergétique réglementaire (vente F/G)',
+        detail: "Audit obligatoire pour la vente d'un logement classé F ou G, depuis avril 2023.",
+      },
+      {
+        label: 'Audit incitatif MaPrimeRénov’',
+        detail: "Préalable au parcours Rénovation d'ampleur — donne droit à la prime audit.",
+      },
+      {
+        label: 'Étude thermique RT/RE',
+        detail: 'Étude thermique réglementaire pour permis de construire (RE 2020 en neuf).',
+      },
+      {
+        label: 'Diagnostic technique global (DTG)',
+        detail: 'Audit énergétique copropriété avec scénarios de rénovation par parties communes.',
+      },
+    ],
+    aides: [
+      {
+        label: "Prime audit MaPrimeRénov'",
+        montant: '300 à 500 €',
+        detail:
+          "Forfait selon revenus (bleu/jaune/violet/rose) — versé après réalisation de l'audit.",
+      },
+      {
+        label: "MaPrimeRénov' Parcours Accompagné",
+        montant: "jusqu'à 70 000 €",
+        detail: "L'audit est obligatoire pour entrer dans le parcours rénovation d'ampleur.",
+      },
+      {
+        label: 'TVA à 5,5 %',
+        montant: '—',
+        detail:
+          "Taux réduit sur les travaux de rénovation énergétique mis en œuvre suite à l'audit.",
+      },
+      {
+        label: 'Éco-PTZ Performance globale',
+        montant: "jusqu'à 50 000 €",
+        detail: "Prêt à taux zéro éligible si l'audit prouve un gain énergétique de 35 % minimum.",
+      },
+    ],
+    faq: [
+      {
+        question: 'Audit énergétique ou DPE : quelle différence ?',
+        answer:
+          "Le DPE est un diagnostic réglementaire de 2 à 3 pages avec étiquette énergie A à G, obligatoire pour la vente ou la location. L'audit énergétique réglementaire est un rapport beaucoup plus poussé (40 à 80 pages) qui détaille les déperditions par poste, propose deux scénarios de rénovation chiffrés, et indique le gain énergétique en kWh/m²/an. Il est obligatoire pour la vente des passoires thermiques (F et G) depuis avril 2023.",
+      },
+      {
+        question: 'Combien coûte un audit énergétique réglementaire ?',
+        answer:
+          "Le prix d'un audit énergétique réalisé par un architecte CNOA ou un BET OPQIBI va de 800 à 1 800 € TTC selon la complexité du logement (maison, copropriété, surface, présence de combles). MaPrimeRénov' verse une prime audit forfaitaire de 300 à 500 € selon les revenus, ce qui ramène le reste à charge à 300-1 500 €.",
+      },
+      {
+        question: 'Qui peut réaliser un audit énergétique conforme ?',
+        answer:
+          "Trois profils sont reconnus par l'arrêté du 4 mai 2022 : les architectes inscrits au tableau du Conseil National de l'Ordre (CNOA), les bureaux d'études qualifiés OPQIBI 1905 ou 1911, et certaines entreprises Qualibat 8731 « audit énergétique ». Notre annuaire ne liste que des professionnels dont la qualification est active à date — exigez toujours le numéro de qualification sur le devis.",
+      },
+      {
+        question: 'L’audit est-il obligatoire pour MaPrimeRénov’ ?',
+        answer:
+          "Oui pour le parcours MaPrimeRénov' Rénovation d'ampleur (jusqu'à 70 000 € d'aide). Non pour le parcours par geste (un travail isolé : changement de chaudière, isolation des combles, etc.). Pour rentrer dans le parcours d'ampleur, l'audit conditionne l'accès au gain énergétique de 2 classes minimum exigé par l'Anah.",
+      },
+    ],
+    metaTitle: 'Audit énergétique réglementaire — Architectes & BET OPQIBI',
+    metaDescription:
+      "Architectes CNOA et bureaux d'études OPQIBI pour votre audit énergétique réglementaire. Prime MaPrimeRénov' 300-500 €.",
+  },
+  ventilation: {
+    h1: 'Artisans RGE ventilation (VMC)',
+    lede: 'Installateurs Qualibat RGE ventilation pour VMC simple flux hygroréglable et double flux haute performance — éligibles prime CEE BAR-TH-125.',
+    description: [
+      "Une ventilation mécanique contrôlée (VMC) performante est le complément indispensable de toute rénovation d'isolation : sans renouvellement d'air maîtrisé, l'humidité s'accumule et provoque condensation, moisissures et dégradations du bâti. La VMC double flux récupère 75 à 90 % de la chaleur de l'air extrait pour préchauffer l'air neuf entrant — gain énergétique de 5 à 15 % sur la facture chauffage.",
+      "L'installation par un artisan Qualibat RGE ventilation conditionne l'accès à la prime CEE BAR-TH-125 (jusqu'à 800 € pour une VMC double flux), et l'éligibilité au parcours MaPrimeRénov' Rénovation d'ampleur lorsque la ventilation fait partie du bouquet de travaux.",
+      "Les artisans listés sont titulaires d'une qualification active dans le référentiel France Rénov' / ADEME, mise à jour chaque semaine.",
+    ],
+    travaux: [
+      {
+        label: 'VMC simple flux hygroréglable',
+        detail: 'Type B, débit modulé selon humidité — solution standard rénovation logement.',
+      },
+      {
+        label: 'VMC double flux haute performance',
+        detail:
+          'Récupération de chaleur 75-90 %, idéale en rénovation BBC ou maison passive — BAR-TH-125.',
+      },
+      {
+        label: 'VMR (ventilation mécanique répartie)',
+        detail:
+          'Bouches autonomes pièce par pièce — solution sans gaines, adaptée appartements existants.',
+      },
+      {
+        label: 'Maintenance et entretien VMC',
+        detail:
+          'Nettoyage des bouches, remplacement des filtres, contrôle des débits — réglementaire annuel.',
+      },
+    ],
+    aides: [
+      {
+        label: 'Prime CEE BAR-TH-125 (VMC double flux)',
+        montant: "jusqu'à 800 €",
+        detail: 'Versée par les délégataires obligés selon les revenus du foyer.',
+      },
+      {
+        label: "MaPrimeRénov' Rénovation d'ampleur",
+        montant: 'forfait variable',
+        detail: 'VMC intégrée au bouquet quand au moins 2 gestes sont réalisés.',
+      },
+      {
+        label: 'TVA à 5,5 %',
+        montant: '—',
+        detail: 'Taux réduit sur fourniture + pose en logement de plus de 2 ans.',
+      },
+      {
+        label: 'Éco-PTZ',
+        montant: "jusqu'à 50 000 €",
+        detail: 'Prêt à taux zéro pour financer le reste à charge.',
+      },
+    ],
+    faq: [
+      {
+        question: 'VMC simple flux ou double flux : laquelle choisir ?',
+        answer:
+          "La VMC simple flux hygroréglable type B est le standard en rénovation : moins chère (700-1 500 € posée), elle évacue l'air vicié et le remplace par de l'air extérieur via les entrées d'air sur les fenêtres. La VMC double flux (3 500-7 000 € posée) récupère 75 à 90 % de la chaleur de l'air extrait — pertinente uniquement si le logement est déjà bien isolé (R ≥ 5 en murs et combles), sinon le retour sur investissement est trop long.",
+      },
+      {
+        question: 'Pourquoi installer une VMC après isolation ?',
+        answer:
+          "Une isolation efficace rend le bâtiment quasi étanche à l'air. Sans renouvellement mécanique, l'humidité produite par les occupants (cuisine, salle de bain, respiration) ne s'évacue plus : elle condense sur les parois froides (ponts thermiques) et provoque moisissures, dégradation du placo et insalubrité. La VMC est obligatoire dans tout logement neuf depuis 1982 et fortement recommandée après isolation.",
+      },
+      {
+        question: 'Combien coûte une VMC double flux ?',
+        answer:
+          "Le prix d'une VMC double flux haute performance posée par un Qualibat RGE va de 3 500 à 7 000 € TTC selon la surface, la configuration des gaines et le rendement de l'échangeur. Après prime CEE BAR-TH-125 (jusqu'à 800 €) et MaPrimeRénov' Rénovation d'ampleur si applicable, le reste à charge tombe à 2 000-5 000 €.",
+      },
+      {
+        question: 'À quelle fréquence entretenir une VMC ?',
+        answer:
+          "Pour une VMC simple flux : nettoyer les bouches d'extraction tous les 6 mois, changer les filtres si présents tous les ans, faire vérifier les débits par un professionnel tous les 3 ans. Pour une VMC double flux : remplacer les filtres tous les 3 à 6 mois (essentiel pour la qualité d'air), nettoyer l'échangeur tous les 2 ans, vérifier les débits tous les 3 ans. Un entretien négligé divise la performance par 2.",
+      },
+    ],
+    metaTitle: 'Artisan RGE VMC — Qualibat ventilation BAR-TH-125',
+    metaDescription:
+      "Installateurs Qualibat RGE pour VMC simple flux et double flux. Prime CEE BAR-TH-125 jusqu'à 800 €.",
+  },
+  fenetres: {
+    h1: 'Artisans RGE remplacement de fenêtres',
+    lede: "Menuisiers Qualibat RGE pour le remplacement de fenêtres et baies isolantes — éligibles MaPrimeRénov' et primes CEE BAR-EN-104 / BAR-EN-108.",
+    description: [
+      "Les fenêtres anciennes représentent 10 à 15 % des déperditions thermiques d'une maison non rénovée. Le remplacement par des fenêtres performantes (Uw ≤ 1,3 W/m².K) avec un menuisier Qualibat RGE conditionne l'accès à MaPrimeRénov' (forfait 40 à 100 €/équipement selon revenus) et aux primes CEE BAR-EN-104 (fenêtres) ou BAR-EN-108 (porte d'entrée donnant sur l'extérieur).",
+      "Sans qualification RGE menuiserie active à la date de signature du devis, aucune aide publique n'est mobilisable. Les contrôles a posteriori des délégataires CEE et de l'Anah aboutissent à un retrait de la prime lorsque la qualification fait défaut.",
+      "Les menuisiers listés sont titulaires d'une qualification active dans le référentiel France Rénov' / ADEME, mise à jour chaque semaine.",
+    ],
+    travaux: [
+      {
+        label: 'Remplacement fenêtre PVC double vitrage',
+        detail: 'Solution standard logement, Uw ≤ 1,3 — la plus diffusée pour MaPrimeRénov’.',
+      },
+      {
+        label: 'Fenêtre aluminium à rupture thermique',
+        detail: 'Profil fin, esthétique contemporaine, Uw 1,2-1,4 — copro et grandes ouvertures.',
+      },
+      {
+        label: 'Fenêtre bois ou bois/alu',
+        detail: 'Cadre bois isolant naturel, idéal en rénovation patrimoniale ou ABF.',
+      },
+      {
+        label: 'Triple vitrage haute performance',
+        detail: 'Uw ≤ 0,9 — pertinent uniquement en façade nord ou maison passive.',
+      },
+    ],
+    aides: [
+      {
+        label: "MaPrimeRénov' fenêtres",
+        montant: '40 à 100 €/équipement',
+        detail: 'Forfait par fenêtre selon revenus (bleu/jaune/violet) — non éligible rose.',
+      },
+      {
+        label: 'Prime CEE BAR-EN-104',
+        montant: '40 à 100 €/m²',
+        detail: 'Versée par les délégataires obligés (Effy, Sonergia, TotalEnergies).',
+      },
+      {
+        label: 'Prime CEE BAR-EN-108 (porte)',
+        montant: 'forfait',
+        detail: "Pour la porte d'entrée donnant sur l'extérieur, classe 4 minimum.",
+      },
+      {
+        label: 'TVA à 5,5 %',
+        montant: '—',
+        detail: 'Taux réduit sur fourniture + pose en logement de plus de 2 ans.',
+      },
+    ],
+    faq: [
+      {
+        question: 'Quelle valeur Uw viser pour bénéficier des aides ?',
+        answer:
+          "MaPrimeRénov' et les primes CEE imposent un coefficient de transmission thermique Uw ≤ 1,3 W/m².K (vitrage Ug ≤ 1,1). C'est le standard du double vitrage à isolation renforcée (4/16/4 argon, intercalaire warm edge) commercialisé en grande distribution depuis 10 ans. Le triple vitrage descend à Uw ≤ 0,9 mais coûte 30 à 50 % plus cher pour un gain énergétique marginal en façade sud ou est.",
+      },
+      {
+        question: 'PVC, alu ou bois : lequel choisir ?',
+        answer:
+          "Le PVC est le plus répandu (60 % du marché) : performant thermiquement, peu cher (300 à 600 €/fenêtre posée), entretien minimal. L'aluminium à rupture thermique est plus cher (500 à 1 000 €) mais offre des profils fins et un design contemporain. Le bois ou bois/alu (700 à 1 500 €) reste la solution patrimoniale et environnementale, exigée par les Architectes des Bâtiments de France en secteur protégé.",
+      },
+      {
+        question: 'Combien coûte le remplacement de fenêtres ?',
+        answer:
+          "Le prix d'une fenêtre PVC double vitrage 120 × 100 cm posée par un menuisier RGE va de 350 à 700 € TTC. Pour 6 fenêtres, comptez 2 500 à 4 200 €. Après MaPrimeRénov' (240 à 600 €) et prime CEE (200 à 500 €), le reste à charge pour un ménage modeste tombe sous 2 500 €.",
+      },
+      {
+        question: 'Faut-il une autorisation pour changer ses fenêtres ?',
+        answer:
+          "En copropriété : OUI, accord de l'AG si l'aspect extérieur change (couleur, matériau, dimensions). En maison individuelle : déclaration préalable de travaux en mairie si vous modifiez l'aspect extérieur (matériau, couleur, taille). En zone protégée (ABF, secteur sauvegardé), l'avis de l'Architecte des Bâtiments de France est obligatoire et impose souvent du bois.",
+      },
+    ],
+    metaTitle: 'Menuisier RGE fenêtres — Qualibat BAR-EN-104',
+    metaDescription:
+      "Menuisiers Qualibat RGE pour remplacement de fenêtres et baies isolantes. MaPrimeRénov' + prime CEE BAR-EN-104.",
+  },
 }
 
 export function getRgeServiceHubContent(slug: RgeAllowedService): RgeServiceHubContent {

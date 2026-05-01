@@ -171,8 +171,9 @@ curl "${SITE_URL}/api/v1/rge/search?specialty=pompe-a-chaleur&limit=50"</code></
     <p><code>plombier</code>, <code>electricien</code>, <code>serrurier</code>, <code>chauffagiste</code>,
     <code>peintre-en-batiment</code>, <code>menuisier</code>, <code>carreleur</code>, <code>couvreur</code>,
     <code>macon</code>, <code>jardinier</code>, <code>vitrier</code>, <code>climaticien</code>,
-    <code>plaquiste</code>, <code>charpentier</code>, <code>terrassier</code>, <code>facadier</code>,
-    <code>paysagiste</code>, et plus.</p>
+    <code>charpentier</code>, <code>facadier</code>, <code>platrier</code>,
+    <code>paysagiste</code>, <code>pompe-a-chaleur</code>, <code>panneaux-solaires</code>,
+    <code>isolation-thermique</code>, <code>renovation-energetique</code>, et plus.</p>
 
     <h2>Contact</h2>
     <p>Questions ? <a href="${SITE_URL}/contact">Contactez-nous</a></p>

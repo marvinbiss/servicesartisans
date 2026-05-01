@@ -52,8 +52,8 @@ describe('partition tiers', () => {
     expect(TIER_B_SERVICES.size).toBe(18)
   })
 
-  it('Tier C = exactement 16 services (niche)', () => {
-    expect(TIER_C_SERVICES.size).toBe(16)
+  it('Tier C = vide (16 métiers niche supprimés au pivot RGE 2026-05-01)', () => {
+    expect(TIER_C_SERVICES.size).toBe(0)
   })
 })
 
@@ -64,10 +64,6 @@ describe('getServiceTier', () => {
 
   it('isolation-thermique → B (cluster RGE)', () => {
     expect(getServiceTier('isolation-thermique')).toBe('B')
-  })
-
-  it('ferronnier → C (niche)', () => {
-    expect(getServiceTier('ferronnier')).toBe('C')
   })
 
   it('slug inconnu → C (fallback safe)', () => {
@@ -84,8 +80,8 @@ describe('getServiceCityPriority (Phase A — actif sans gate)', () => {
     expect(getServiceCityPriority('pompe-a-chaleur')).toBe(0.7)
   })
 
-  it('Tier C = 0.4', () => {
-    expect(getServiceCityPriority('ferronnier')).toBe(0.4)
+  it('slug inconnu → fallback Tier C priority 0.4', () => {
+    expect(getServiceCityPriority('service-fictif-xyz')).toBe(0.4)
   })
 })
 
@@ -106,7 +102,7 @@ describe('isServiceVilleIndexable (Phase B gate)', () => {
 
   it('gate OFF par défaut → tout combo accepté', () => {
     expect(isServiceVilleIndexable('plombier', 'paris')).toBe(true)
-    expect(isServiceVilleIndexable('ferronnier', 'andrezieux-boutheon')).toBe(true)
+    expect(isServiceVilleIndexable('pompe-a-chaleur', 'andrezieux-boutheon')).toBe(true)
   })
 
   it('gate ON + Tier A + Paris → indexable', () => {
@@ -114,20 +110,19 @@ describe('isServiceVilleIndexable (Phase B gate)', () => {
     expect(isServiceVilleIndexable('plombier', 'paris')).toBe(true)
   })
 
-  it('gate ON + Tier C + grosse ville hors top 200 → exclu', () => {
+  it('gate ON + slug inconnu (fallback Tier C) hors top 200 → exclu', () => {
     process.env.SA_REDUCE_SERVICES_TIERED = '1'
-    // ferronnier est Tier C → top 200 villes uniquement
-    // une ville en position ≥ 500 ne devrait pas être indexable Tier C
-    expect(isServiceVilleIndexable('ferronnier', 'cany-barville')).toBe(false)
+    // Tier C = vide depuis pivot RGE — slugs inconnus retombent en Tier C par fallback
+    expect(isServiceVilleIndexable('service-inconnu', 'cany-barville')).toBe(false)
   })
 
-  it('gate ON + Tier C + Paris (top 200) → indexable', () => {
+  it('gate ON + slug inconnu (fallback Tier C) + Paris (top 200) → indexable', () => {
     process.env.SA_REDUCE_SERVICES_TIERED = '1'
-    expect(isServiceVilleIndexable('ferronnier', 'paris')).toBe(true)
+    expect(isServiceVilleIndexable('service-inconnu', 'paris')).toBe(true)
   })
 
   it('gate ON + valeur env autre que "1" → considère gate OFF', () => {
     process.env.SA_REDUCE_SERVICES_TIERED = 'true'
-    expect(isServiceVilleIndexable('ferronnier', 'cany-barville')).toBe(true)
+    expect(isServiceVilleIndexable('service-inconnu', 'cany-barville')).toBe(true)
   })
 })

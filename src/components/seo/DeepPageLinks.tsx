@@ -159,14 +159,6 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'solier',
-    [
-      'prix-solier-revetement-sol-2026',
-      'comment-choisir-solier-guide',
-      'beton-cire-vs-resine-vs-carrelage',
-    ],
-  ],
-  [
     'nettoyage',
     [
       'prix-nettoyage-professionnel-2026',
@@ -174,15 +166,10 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
       'entretien-annuel-maison-checklist-complete',
     ],
   ],
-  // ── 31 nouveaux services (Sprint 1 SEO) ──
-  [
-    'terrassier',
-    [
-      'prix-extension-maison-2026',
-      'construire-garage-guide-permis-budget',
-      'permis-construire-declaration-prealable-guide',
-    ],
-  ],
+  // Pivot RGE 2026-05-01 : 16 entrées Tier C niche supprimées (solier,
+  // terrassier, métallier, ferronnier, poseur-de-parquet, miroitier,
+  // storiste, architecte-interieur, decorateur, domoticien, pisciniste,
+  // antenniste, ascensoriste, geometre, desinsectisation, deratisation).
   [
     'charpentier',
     [
@@ -220,71 +207,11 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'metallier',
-    [
-      'comment-choisir-metallier-guide',
-      'prix-cloture-portail-2026',
-      'installer-portail-automatique-guide',
-    ],
-  ],
-  [
-    'ferronnier',
-    [
-      'prix-cloture-portail-2026',
-      'installer-portail-automatique-guide',
-      'securiser-maison-cambriolage-solutions',
-    ],
-  ],
-  [
-    'poseur-de-parquet',
-    [
-      'comment-choisir-poseur-parquet-guide',
-      'installer-parquet-massif-contrecolle-guide',
-      'parquet-massif-vs-contrecolle-vs-stratifie',
-    ],
-  ],
-  [
-    'miroitier',
-    [
-      'comment-choisir-miroitier-guide',
-      'prix-vitrier-2026-remplacement-vitrage',
-      'guide-fenetre-double-vitrage',
-    ],
-  ],
-  [
-    'storiste',
-    [
-      'comment-choisir-storiste-guide',
-      'guide-volet-roulant-electrique',
-      'comment-reparer-volet-roulant',
-    ],
-  ],
-  [
     'salle-de-bain',
     [
       'renovation-salle-de-bain-budget-etapes',
       'tendances-salle-de-bain-2026',
       'prix-salle-de-bain-complete-2026',
-    ],
-  ],
-  [
-    'architecte-interieur',
-    [
-      'comment-choisir-architecte-interieur-guide',
-      'renover-cuisine-guide-complet-etapes',
-      'renovation-maison-par-ou-commencer',
-    ],
-  ],
-  [
-    'decorateur',
-    ['tendances-cuisine-2026', 'tendances-salle-de-bain-2026', 'peinture-interieure-conseils'],
-  ],
-  [
-    'domoticien',
-    [
-      'comment-choisir-domoticien-guide',
-      'domotique-maison-connectee-guide-debutant',
-      'prix-domotique-maison-2026',
     ],
   ],
   [
@@ -344,36 +271,8 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'pisciniste',
-    [
-      'comment-choisir-pisciniste-guide',
-      'prix-terrasse-exterieure-2026',
-      'amenagement-terrasse-exterieur-2026',
-    ],
-  ],
-  [
     'alarme-securite',
-    [
-      'securite-alarme-maison-guide-2026',
-      'securiser-maison-cambriolage-solutions',
-      'domotique-maison-connectee-guide-debutant',
-    ],
-  ],
-  [
-    'antenniste',
-    [
-      'comment-choisir-antenniste-guide',
-      'domotique-maison-connectee-guide-debutant',
-      'prix-domotique-maison-2026',
-    ],
-  ],
-  [
-    'ascensoriste',
-    [
-      'comment-choisir-ascensoriste-guide',
-      'adaptation-logement-senior-aides-2026',
-      'accessibilite-pmr-logement-normes',
-    ],
+    ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions'],
   ],
   [
     'diagnostiqueur',
@@ -381,30 +280,6 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
       'comment-choisir-diagnostiqueur-guide',
       'dpe-obligatoire-2026-guide',
       'diagnostic-immobilier-obligatoire-liste',
-    ],
-  ],
-  [
-    'geometre',
-    [
-      'comment-choisir-geometre-guide',
-      'permis-construire-declaration-prealable-guide',
-      'urbanisme-regles-construction-extension',
-    ],
-  ],
-  [
-    'desinsectisation',
-    [
-      'nuisibles-maison-prevention-traitement',
-      'entretien-annuel-maison-checklist-complete',
-      'humidite-moisissure-maison-solutions',
-    ],
-  ],
-  [
-    'deratisation',
-    [
-      'nuisibles-maison-prevention-traitement',
-      'entretien-annuel-maison-checklist-complete',
-      'humidite-moisissure-maison-solutions',
     ],
   ],
   [

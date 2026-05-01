@@ -22,7 +22,7 @@ export const revalidate = 86400
 
 const TITLE = 'Domotique 2026 : installation et prix'
 const DESCRIPTION =
-  'Domotique 2026 : prix 2 500-15 000 € TTC selon protocole (KNX, Zigbee, Z-Wave, Matter), pose par électricien domoticien, NF C 15-100.'
+  'Domotique 2026 : prix 2 500-15 000 € TTC selon protocole (KNX, Zigbee, Z-Wave, Matter), pose par électricien spécialisé domotique, NF C 15-100.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -45,7 +45,7 @@ const tldr = [
   'Prix 2026 TTC installé : maison 100 m² 5 000-9 000 € (Zigbee/Z-Wave/Matter) ou 10 000-18 000 € (KNX filaire haut de gamme).',
   'Protocoles : KNX (filaire, neuf, pérenne 20+ ans) / Zigbee (radio, mesh, Philips Hue, Ikea) / Z-Wave (radio longue portée) / Matter (standard universel 2023+).',
   'Fonctions gérables : éclairage, volets, chauffage, scénarios, sécurité (alarme, caméras, détecteurs), arrosage, ECS, multimédia.',
-  'Installation = électricien domoticien qualifié (Qualifelec DOM ou compétences KNX/Zigbee). NF C 15-100 A5 obligatoire.',
+  'Installation = électricien qualifié domotique (Qualifelec DOM ou compétences KNX/Zigbee). NF C 15-100 A5 obligatoire.',
   'Pas d’aide directe MaPrimeRénov’. Éco-PTZ incluable si bouquet rénovation + pilotage chauffage CEE possible.',
 ]
 
@@ -63,7 +63,7 @@ const faqs = [
   {
     question: 'Qui peut installer la domotique légalement ?',
     answer:
-      '(1) Éléments BT (basse tension, 230 V — relais éclairage, volets motorisés, chauffage) : électricien titulaire habilitation électrique BR (indispensable art. R4544-9 Code travail). (2) Domotique KNX : requiert formation spécialisée constructeur (Siemens, Schneider, ABB) + certification Qualifelec DOM recommandée (certification complémentaire domotique). (3) Domotique radio (Zigbee, Z-Wave) : moins exigeante techniquement mais paramétrage box + intégration = compétence clé ; faire appel à électricien ou domoticien intégrateur. (4) BRICOLAGE DIY : légal pour équipements TBT (très basse tension, <50 V = télécommandes, capteurs sans fil, box) mais TOUT câblage 230 V en maison occupée ou louée doit être fait par pro (assurance habitation l’exige, Consuel Attestation de Conformité obligatoire neuf ou rénovation lourde). (5) Sanctions : défaut Consuel = raccordement Enedis refusé. Faux pro (Qualifelec non valide) = assurance refuse sinistre, MaPrimeRénov’ refusée si couplé chauffage piloté.',
+      '(1) Éléments BT (basse tension, 230 V — relais éclairage, volets motorisés, chauffage) : électricien titulaire habilitation électrique BR (indispensable art. R4544-9 Code travail). (2) Domotique KNX : requiert formation spécialisée constructeur (Siemens, Schneider, ABB) + certification Qualifelec DOM recommandée (certification complémentaire domotique). (3) Domotique radio (Zigbee, Z-Wave) : moins exigeante techniquement mais paramétrage box + intégration = compétence clé ; faire appel à un électricien intégrateur certifié. (4) BRICOLAGE DIY : légal pour équipements TBT (très basse tension, <50 V = télécommandes, capteurs sans fil, box) mais TOUT câblage 230 V en maison occupée ou louée doit être fait par pro (assurance habitation l’exige, Consuel Attestation de Conformité obligatoire neuf ou rénovation lourde). (5) Sanctions : défaut Consuel = raccordement Enedis refusé. Faux pro (Qualifelec non valide) = assurance refuse sinistre, MaPrimeRénov’ refusée si couplé chauffage piloté.',
   },
   {
     question: 'Quelles aides pour la domotique en 2026 ?',
@@ -114,7 +114,7 @@ export default function Page() {
       'domotique prix installation',
       'smart home maison connectée',
       'KNX Zigbee Matter',
-      'électricien domoticien',
+      'électricien domotique KNX',
     ],
   })
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -213,7 +213,7 @@ export default function Page() {
               href="/services/electricien"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
-              Trouver un électricien domoticien <Phone className="w-3.5 h-3.5" aria-hidden />
+              Trouver un électricien (domotique) <Phone className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>

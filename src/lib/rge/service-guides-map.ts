@@ -48,19 +48,19 @@ const CEE_CODE_TO_RGE_SERVICES: Record<string, readonly string[]> = {
   // BAR-TH-164 abrogée → BAR-TH-174
   'BAR-TH-171': ['pompe-a-chaleur', 'chauffagiste'],
   'BAR-TH-172': ['pompe-a-chaleur', 'chauffagiste'],
-  'BAR-TH-174': ['isolation-thermique', 'renovation-energetique'],
+  'BAR-TH-174': ['isolation-thermique', 'renovation-energetique', 'audit-energetique'],
   'BAR-TH-112': ['chauffagiste', 'ramoneur'],
   'BAR-TH-113': ['chauffagiste'],
-  'BAR-TH-125': ['climaticien', 'chauffagiste'],
+  'BAR-TH-125': ['climaticien', 'chauffagiste', 'ventilation'],
   'BAR-TH-129': ['pompe-a-chaleur', 'climaticien'],
   'BAR-TH-143': ['panneaux-solaires', 'chauffagiste', 'plombier'],
-  'BAR-TH-148': ['pompe-a-chaleur', 'chauffagiste', 'plombier'],
+  'BAR-TH-148': ['pompe-a-chaleur', 'chauffagiste', 'plombier', 'chauffe-eau-thermodynamique'],
   'BAR-TH-159': ['pompe-a-chaleur', 'chauffagiste'],
   'BAR-EN-101': ['isolation-thermique', 'couvreur'],
   'BAR-EN-102': ['isolation-thermique', 'facadier', 'platrier'],
   'BAR-EN-103': ['isolation-thermique'],
-  'BAR-EN-104': ['menuisier'],
-  'BAR-EN-108': ['menuisier'],
+  'BAR-EN-104': ['menuisier', 'fenetres'],
+  'BAR-EN-108': ['menuisier', 'fenetres'],
 }
 
 /**

@@ -403,8 +403,9 @@ export async function getProviderBySlug(slug: string) {
 }
 
 // Reverse mapping: service slug → provider specialties (for fallback queries)
-// All 46 services must be mapped here — unmapped services can never show providers
-// on quartier pages, causing them to be permanently noindexed.
+// All 30 services (post pivot RGE 2026-05-01) must be mapped here — unmapped
+// services can never show providers on quartier pages, causing them to be
+// permanently noindexed.
 export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   // === Métiers du bâtiment — correspondance directe NAF ===
   plombier: ['plombier'], // NAF 43.22A
@@ -421,52 +422,47 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   vitrier: ['vitrier'], // NAF 43.34Z
   climaticien: ['climaticien'], // NAF 43.22B
   jardinier: ['jardinier'], // NAF 81.30Z
-  solier: ['solier'], // NAF 43.39Z
   nettoyage: ['nettoyage'], // NAF 81.21Z
 
   // === Bâtiment / Gros œuvre ===
-  terrassier: ['terrassier'], // NAF 43.12A
   zingueur: ['zingueur'], // NAF 43.91B (sous-spécialité couverture)
   etancheiste: ['etancheiste'], // NAF 43.99A
   facadier: ['facadier'], // NAF 43.34Z + 43.99C
   platrier: ['platrier'], // NAF 43.31Z
-  metallier: ['metallier'], // NAF 43.32B + 25.11Z
-  ferronnier: ['ferronnier'], // NAF 25.11Z
 
   // === Finitions / Aménagement ===
-  'poseur-de-parquet': ['poseur-de-parquet'], // NAF 43.33Z
-  miroitier: ['miroitier'], // NAF 43.34Z
-  storiste: ['storiste'], // NAF 43.32A
   'salle-de-bain': ['salle-de-bain'], // NAF 43.22A + 43.33Z
-  'architecte-interieur': ['architecte-interieur'], // NAF 71.11Z
-  decorateur: ['decorateur', 'decorateur-interieur'], // NAF 74.10Z
   cuisiniste: ['cuisiniste'], // NAF 43.32C + 31.02Z
 
   // === Énergie / Chauffage ===
-  domoticien: ['domoticien'], // NAF 43.21A
   'pompe-a-chaleur': ['pompe-a-chaleur'], // NAF 43.22B
   'panneaux-solaires': ['panneaux-solaires'], // NAF 43.21A + 43.22B
   'isolation-thermique': ['isolation-thermique', 'isolation'], // NAF 43.29A
   'renovation-energetique': ['renovation-energetique'], // NAF 43.29A + 43.22B
-  'borne-recharge': ['borne-recharge'], // NAF 43.21A
+  // borne-recharge : NAF 43.21A. Élargi à `electricien` car beaucoup
+  // d'installateurs IRVE Qualifelec ont specialty='electricien' en DB —
+  // le filtre `.not('rge_qualifications', 'is', null)` côté listing RGE
+  // garantit qu'on ne ramène que les certifiés.
+  'borne-recharge': ['borne-recharge', 'electricien'],
   ramoneur: ['ramoneur'], // NAF 81.29B
+
+  // === Élargissement RGE 2026-05-02 (slugs RGE-only, pas de hub /services) ===
+  // Aucun provider ne porte ces specialty values en DB ; on liste les NAF
+  // proches qui hébergent les artisans RGE concernés. Le filtre
+  // `.not('rge_qualifications', 'is', null)` du listing RGE filtre les non-RGE.
+  'chauffe-eau-thermodynamique': ['plombier', 'chauffagiste', 'pompe-a-chaleur'],
+  'audit-energetique': ['renovation-energetique', 'diagnostiqueur'],
+  ventilation: ['climaticien', 'chauffagiste', 'electricien'],
+  fenetres: ['menuisier'],
 
   // === Extérieur ===
   paysagiste: ['paysagiste'], // NAF 71.11Z + 81.30Z
-  pisciniste: ['pisciniste'], // NAF 43.22A
 
-  // === Sécurité / Technique ===
+  // === Sécurité / Diagnostics ===
   'alarme-securite': ['alarme-securite'], // NAF 43.21A
-  antenniste: ['antenniste'], // NAF 43.21A
-  ascensoriste: ['ascensoriste'], // NAF 43.29B
-
-  // === Diagnostics / Conseil ===
   diagnostiqueur: ['diagnostiqueur'], // NAF 71.20B
-  geometre: ['geometre'], // NAF 71.12B
 
   // === Services spécialisés ===
-  desinsectisation: ['desinsectisation'], // NAF 81.29A
-  deratisation: ['deratisation'], // NAF 81.29A
   demenageur: ['demenageur'], // NAF 49.42Z
 }
 

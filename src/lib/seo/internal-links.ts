@@ -17,7 +17,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   electricien: { slug: 'electricien', label: 'électricien' },
   électricité: { slug: 'electricien', label: 'électricien' },
   electricite: { slug: 'electricien', label: 'électricien' },
-  domotique: { slug: 'electricien', label: 'électricien' },
   // Serrurier / Serrurerie
   serrurier: { slug: 'serrurier', label: 'serrurier' },
   serrurerie: { slug: 'serrurier', label: 'serrurier' },
@@ -70,18 +69,11 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   // Cuisiniste
   cuisiniste: { slug: 'cuisiniste', label: 'cuisiniste' },
   cuisine: { slug: 'cuisiniste', label: 'cuisiniste' },
-  // Solier / Moquettiste
-  solier: { slug: 'solier-moquettiste', label: 'solier moquettiste' },
-  parquet: { slug: 'solier-moquettiste', label: 'solier moquettiste' },
-  'revêtement de sol': { slug: 'solier-moquettiste', label: 'solier moquettiste' },
   // Entreprise de nettoyage
   nettoyage: { slug: 'entreprise-de-nettoyage', label: 'entreprise de nettoyage' },
   // Charpentier
   charpentier: { slug: 'charpentier', label: 'charpentier' },
   charpente: { slug: 'charpentier', label: 'charpentier' },
-  // Terrassier
-  terrassier: { slug: 'terrassier', label: 'terrassier' },
-  terrassement: { slug: 'terrassier', label: 'terrassier' },
   // Zingueur
   zingueur: { slug: 'zingueur', label: 'zingueur' },
   zinguerie: { slug: 'zingueur', label: 'zingueur' },
@@ -101,27 +93,9 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   platrier: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
   plaquiste: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
   placo: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
-  // Métallier / Ferronnier
-  métallier: { slug: 'metallier-serrurier', label: 'métallier serrurier' },
-  metallier: { slug: 'metallier-serrurier', label: 'métallier serrurier' },
-  ferronnier: { slug: 'ferronnier', label: 'ferronnier' },
-  ferronnerie: { slug: 'ferronnier', label: 'ferronnier' },
-  // Storiste
-  storiste: { slug: 'storiste', label: 'storiste' },
-  store: { slug: 'storiste', label: 'storiste' },
-  'volet roulant': { slug: 'storiste', label: 'storiste' },
   // Salle de bain
   'salle de bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   'salle-de-bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
-  // Architecte intérieur / Décorateur
-  'architecte intérieur': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  'architecte-interieur': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  décorateur: { slug: 'decorateur-interieur', label: "décorateur d'intérieur" },
-  decorateur: { slug: 'decorateur-interieur', label: "décorateur d'intérieur" },
-  décoration: { slug: 'decorateur-interieur', label: "décorateur d'intérieur" },
-  // Domoticien
-  domoticien: { slug: 'domoticien', label: 'domoticien' },
-  'maison connectée': { slug: 'domoticien', label: 'domoticien' },
   // Pompe à chaleur (distinct du chauffagiste)
   'installateur pac': { slug: 'pompe-a-chaleur', label: 'installateur pompe à chaleur' },
   // Panneaux solaires
@@ -149,58 +123,19 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   // Ramoneur
   ramoneur: { slug: 'ramoneur', label: 'ramoneur' },
   ramonage: { slug: 'ramoneur', label: 'ramoneur' },
-  // Pisciniste
-  pisciniste: { slug: 'pisciniste', label: 'pisciniste' },
-  piscine: { slug: 'pisciniste', label: 'pisciniste' },
   // Alarme / Sécurité
   alarme: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   'alarme-securite': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   vidéosurveillance: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  // Antenniste
-  antenniste: { slug: 'antenniste', label: 'antenniste' },
-  antenne: { slug: 'antenniste', label: 'antenniste' },
-  // Ascensoriste
-  ascensoriste: { slug: 'ascensoriste', label: 'ascensoriste' },
-  ascenseur: { slug: 'ascensoriste', label: 'ascensoriste' },
   // Diagnostiqueur
   diagnostiqueur: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic immobilier': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   dpe: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
-  // Géomètre
-  géomètre: { slug: 'geometre-expert', label: 'géomètre expert' },
-  geometre: { slug: 'geometre-expert', label: 'géomètre expert' },
-  bornage: { slug: 'geometre-expert', label: 'géomètre expert' },
-  // Désinsectisation / Dératisation
-  désinsectisation: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  desinsectisation: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  punaise: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  dératisation: { slug: 'deratisation', label: 'dératiseur' },
-  deratisation: { slug: 'deratisation', label: 'dératiseur' },
   // Déménageur
   déménageur: { slug: 'demenageur', label: 'déménageur' },
   demenageur: { slug: 'demenageur', label: 'déménageur' },
   déménagement: { slug: 'demenageur', label: 'déménageur' },
   demenagement: { slug: 'demenageur', label: 'déménageur' },
-  // Poseur de parquet
-  'poseur de parquet': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'poseur-de-parquet': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'parquet massif': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'parquet flottant': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'parquet stratifié': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'parquet stratifie': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'pose parquet': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  vitrification: { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'ponçage parquet': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  'poncage parquet': { slug: 'poseur-de-parquet', label: 'poseur de parquet' },
-  // Miroitier
-  miroitier: { slug: 'miroitier', label: 'miroitier' },
-  miroiterie: { slug: 'miroitier', label: 'miroitier' },
-  'miroir sur mesure': { slug: 'miroitier', label: 'miroitier' },
-  'crédence verre': { slug: 'miroitier', label: 'miroitier' },
-  'credence verre': { slug: 'miroitier', label: 'miroitier' },
-  verrière: { slug: 'miroitier', label: 'miroitier' },
-  verriere: { slug: 'miroitier', label: 'miroitier' },
-  'paroi de douche': { slug: 'miroitier', label: 'miroitier' },
   // Ébéniste
   ébéniste: { slug: 'ebeniste', label: 'ébéniste' },
   ebeniste: { slug: 'ebeniste', label: 'ébéniste' },
@@ -228,13 +163,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'entretien jardin': { slug: 'jardinier', label: 'jardinier' },
   désherbage: { slug: 'jardinier', label: 'jardinier' },
   desherbage: { slug: 'jardinier', label: 'jardinier' },
-  // Solier — mots-clés supplémentaires (slug correct : solier)
-  moquette: { slug: 'solier', label: 'solier moquettiste' },
-  'sol souple': { slug: 'solier', label: 'solier moquettiste' },
-  lino: { slug: 'solier', label: 'solier moquettiste' },
-  linoleum: { slug: 'solier', label: 'solier moquettiste' },
-  'sol pvc': { slug: 'solier', label: 'solier moquettiste' },
-  'sol vinyle': { slug: 'solier', label: 'solier moquettiste' },
   // Nettoyage — mots-clés supplémentaires (slug correct : nettoyage)
   'nettoyage industriel': { slug: 'nettoyage', label: 'nettoyage professionnel' },
   'nettoyage professionnel': { slug: 'nettoyage', label: 'nettoyage professionnel' },
@@ -248,19 +176,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   cloison: { slug: 'platrier', label: 'plâtrier plaquiste' },
   'faux plafond': { slug: 'platrier', label: 'plâtrier plaquiste' },
   doublage: { slug: 'platrier', label: 'plâtrier plaquiste' },
-  // Métallier — mots-clés supplémentaires (slug correct : metallier)
-  'garde-corps': { slug: 'metallier', label: 'métallier' },
-  'escalier métallique': { slug: 'metallier', label: 'métallier' },
-  'escalier metallique': { slug: 'metallier', label: 'métallier' },
-  'structure métallique': { slug: 'metallier', label: 'métallier' },
-  'structure metallique': { slug: 'metallier', label: 'métallier' },
-  soudure: { slug: 'metallier', label: 'métallier' },
-  // Décorateur — mots-clés supplémentaires (slug correct : decorateur)
-  'home staging': { slug: 'decorateur', label: "décorateur d'intérieur" },
-  'agencement intérieur': { slug: 'decorateur', label: "décorateur d'intérieur" },
-  'agencement interieur': { slug: 'decorateur', label: "décorateur d'intérieur" },
-  'relooking intérieur': { slug: 'decorateur', label: "décorateur d'intérieur" },
-  'relooking interieur': { slug: 'decorateur', label: "décorateur d'intérieur" },
   // Diagnostiqueur — mots-clés supplémentaires (slug correct : diagnostiqueur)
   'diagnostic amiante': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic termites': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
@@ -268,12 +183,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'diagnostic gaz': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic électricité': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic electricite': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
-  // Géomètre — mots-clés supplémentaires (slug correct : geometre)
-  cadastre: { slug: 'geometre', label: 'géomètre expert' },
-  arpentage: { slug: 'geometre', label: 'géomètre expert' },
-  'division parcellaire': { slug: 'geometre', label: 'géomètre expert' },
-  'plan topographique': { slug: 'geometre', label: 'géomètre expert' },
-  'mesurage loi carrez': { slug: 'geometre', label: 'géomètre expert' },
   // Plombier — mots-clés supplémentaires
   "fuite d'eau": { slug: 'plombier', label: 'plombier' },
   robinet: { slug: 'plombier', label: 'plombier' },
@@ -350,12 +259,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   combles: { slug: 'charpentier', label: 'charpentier' },
   'toiture bois': { slug: 'charpentier', label: 'charpentier' },
   'charpente traditionnelle': { slug: 'charpentier', label: 'charpentier' },
-  // Terrassier — mots-clés supplémentaires
-  excavation: { slug: 'terrassier', label: 'terrassier' },
-  nivellement: { slug: 'terrassier', label: 'terrassier' },
-  enrochement: { slug: 'terrassier', label: 'terrassier' },
-  viabilisation: { slug: 'terrassier', label: 'terrassier' },
-  remblai: { slug: 'terrassier', label: 'terrassier' },
   // Zingueur — mots-clés supplémentaires
   zinc: { slug: 'zingueur', label: 'zingueur' },
   noue: { slug: 'zingueur', label: 'zingueur' },
@@ -375,30 +278,12 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   ite: { slug: 'facadier', label: 'façadier' },
   'isolation extérieure': { slug: 'facadier', label: 'façadier' },
   'isolation exterieure': { slug: 'facadier', label: 'façadier' },
-  // Ferronnier — mots-clés supplémentaires
-  'fer forgé': { slug: 'ferronnier', label: 'ferronnier' },
-  'fer forge': { slug: 'ferronnier', label: 'ferronnier' },
-  grille: { slug: 'ferronnier', label: 'ferronnier' },
-  'portail fer': { slug: 'ferronnier', label: 'ferronnier' },
-  'rampe escalier fer': { slug: 'ferronnier', label: 'ferronnier' },
-  // Storiste — mots-clés supplémentaires
-  volet: { slug: 'storiste', label: 'storiste' },
-  'brise-soleil': { slug: 'storiste', label: 'storiste' },
-  pergola: { slug: 'storiste', label: 'storiste' },
-  'store banne': { slug: 'storiste', label: 'storiste' },
-  'motorisation volet': { slug: 'storiste', label: 'storiste' },
   // Salle de bain — mots-clés supplémentaires
   douche: { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   baignoire: { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   'rénovation salle de bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   'renovation salle de bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   'douche italienne': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
-  // Domoticien — mots-clés supplémentaires
-  'smart home': { slug: 'domoticien', label: 'domoticien' },
-  'maison intelligente': { slug: 'domoticien', label: 'domoticien' },
-  automatisation: { slug: 'domoticien', label: 'domoticien' },
-  'objets connectés': { slug: 'domoticien', label: 'domoticien' },
-  'objets connectes': { slug: 'domoticien', label: 'domoticien' },
   // Pompe à chaleur — mots-clés supplémentaires
   pac: { slug: 'pompe-a-chaleur', label: 'installateur pompe à chaleur' },
   'pac air-eau': { slug: 'pompe-a-chaleur', label: 'installateur pompe à chaleur' },
@@ -450,12 +335,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'conduit fumee': { slug: 'ramoneur', label: 'ramoneur' },
   'poêle à bois': { slug: 'ramoneur', label: 'ramoneur' },
   'poele a bois': { slug: 'ramoneur', label: 'ramoneur' },
-  // Pisciniste — mots-clés supplémentaires
-  'construction piscine': { slug: 'pisciniste', label: 'pisciniste' },
-  'entretien piscine': { slug: 'pisciniste', label: 'pisciniste' },
-  liner: { slug: 'pisciniste', label: 'pisciniste' },
-  spa: { slug: 'pisciniste', label: 'pisciniste' },
-  'local technique piscine': { slug: 'pisciniste', label: 'pisciniste' },
   // Alarme / Sécurité — mots-clés supplémentaires
   'sécurité maison': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   'securite maison': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
@@ -463,32 +342,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   telesurveillance: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   'détecteur de fumée': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   'detecteur de fumee': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  // Antenniste — mots-clés supplémentaires
-  parabole: { slug: 'antenniste', label: 'antenniste' },
-  tnt: { slug: 'antenniste', label: 'antenniste' },
-  'réception tv': { slug: 'antenniste', label: 'antenniste' },
-  'reception tv': { slug: 'antenniste', label: 'antenniste' },
-  satellite: { slug: 'antenniste', label: 'antenniste' },
-  // Ascensoriste — mots-clés supplémentaires
-  'monte-charge': { slug: 'ascensoriste', label: 'ascensoriste' },
-  'monte-escalier': { slug: 'ascensoriste', label: 'ascensoriste' },
-  élévateur: { slug: 'ascensoriste', label: 'ascensoriste' },
-  elevateur: { slug: 'ascensoriste', label: 'ascensoriste' },
-  'accessibilité pmr': { slug: 'ascensoriste', label: 'ascensoriste' },
-  'accessibilite pmr': { slug: 'ascensoriste', label: 'ascensoriste' },
-  // Désinsectisation — mots-clés supplémentaires
-  'punaise de lit': { slug: 'desinsectisation', label: 'désinsectiseur' },
-  cafard: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  blatte: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  guêpe: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  guepe: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  frelon: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  nuisibles: { slug: 'desinsectisation', label: 'désinsectiseur' },
-  // Dératisation — mots-clés supplémentaires
-  rat: { slug: 'deratisation', label: 'dératiseur' },
-  souris: { slug: 'deratisation', label: 'dératiseur' },
-  rongeur: { slug: 'deratisation', label: 'dératiseur' },
-  rongeurs: { slug: 'deratisation', label: 'dératiseur' },
   // Déménageur — mots-clés supplémentaires
   'garde-meuble': { slug: 'demenageur', label: 'déménageur' },
   'monte-meuble': { slug: 'demenageur', label: 'déménageur' },
@@ -505,12 +358,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'fenêtre cassée': { slug: 'vitrier', label: 'vitrier' },
   'fenetre cassee': { slug: 'vitrier', label: 'vitrier' },
   'remplacement vitre': { slug: 'vitrier', label: 'vitrier' },
-  // Architecte d'intérieur — mots-clés supplémentaires
-  'rénovation intérieure': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  'renovation interieure': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  'aménagement intérieur': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  'amenagement interieur': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
-  'optimisation espace': { slug: 'architecte-interieur', label: "architecte d'intérieur" },
 }
 
 /**

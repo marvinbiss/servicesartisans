@@ -206,7 +206,7 @@ export default function Page() {
               href="/services/menuisier"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
-              Trouver un menuisier terrassier <Phone className="w-3.5 h-3.5" aria-hidden />
+              Trouver un menuisier ou charpentier <Phone className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>

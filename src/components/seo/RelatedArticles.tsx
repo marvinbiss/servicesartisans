@@ -98,14 +98,11 @@ function buildSearchTerms(slug: string): string[] {
     vitrier: ['vitrier', 'vitre', 'vitrage', 'verre'],
     charpentier: ['charpentier', 'charpente', 'ossature'],
     serrurier: ['serrurier', 'serrure', 'serrurerie'],
-    terrassier: ['terrassier', 'terrassement', 'excavation'],
     facade: ['facade', 'ravalement', 'enduit'],
     'isolation-thermique': ['isolation', 'isolant', 'thermique'],
     'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffage'],
     'salle-de-bain': ['salle-de-bain', 'bain', 'douche', 'sanitaire'],
-    domotique: ['domotique', 'connecte', 'smart'],
     paysagiste: ['paysagiste', 'jardin', 'paysage', 'exterieur'],
-    pisciniste: ['piscine', 'pisciniste', 'bassin'],
   }
 
   const found = variants[slug]

@@ -50,6 +50,12 @@ const RGE_SERVICE_LABELS: Record<(typeof RGE_ALLOWED_SERVICES)[number], string> 
   zingueur: 'Zingueur',
   facadier: 'Façadier',
   platrier: 'Plâtrier',
+  // Élargissement RGE 2026-05-02 — slugs RGE-only.
+  'borne-recharge': 'Borne de recharge',
+  'chauffe-eau-thermodynamique': 'Chauffe-eau thermodynamique',
+  'audit-energetique': 'Audit énergétique',
+  ventilation: 'Ventilation (VMC)',
+  fenetres: 'Fenêtres performantes',
 }
 
 export const revalidate = 86400

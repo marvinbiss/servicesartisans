@@ -31,7 +31,6 @@ const serviceNames: Record<string, string> = {
   vitrier: 'Vitrier',
   climaticien: 'Climaticien',
   cuisiniste: 'Cuisiniste',
-  solier: 'Solier-moquettiste',
   nettoyage: 'Nettoyage professionnel',
   general: 'Demande générale',
 }

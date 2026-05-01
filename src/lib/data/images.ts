@@ -100,10 +100,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1557749575-2ad9647f820d'),
     alt: 'Baie vitrée lumineuse posée par un vitrier',
   },
-  'poseur-de-parquet': {
-    src: unsplash('photo-1571091374875-3e354ceb6ed3'),
-    alt: 'Artisan posant un parquet en bois massif',
-  },
   facadier: {
     src: unsplash('photo-1597758011002-9a3e9537dd8b'),
     alt: "Façade d'immeuble en cours de ravalement",
@@ -112,25 +108,13 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1569370029765-33aaab1f4851'),
     alt: 'Charpentier assemblant une structure en bois',
   },
-  terrassier: {
-    src: unsplash('photo-1567238563567-b99d8ac66e9b'),
-    alt: 'Engin de terrassement nivelant un terrain',
-  },
   'isolation-thermique': {
     src: unsplash('photo-1631277190979-1704e8c7d574'),
     alt: "Artisan posant de l'isolation thermique en laine de roche",
   },
-  domoticien: {
-    src: unsplash('photo-1545259741-2ea3ebf61fa3'),
-    alt: 'Installation domotique dans une maison connectée',
-  },
   paysagiste: {
     src: unsplash('photo-1595387426256-cc153122a6f1'),
     alt: 'Jardin paysager aménagé par un professionnel',
-  },
-  pisciniste: {
-    src: unsplash('photo-1650519876461-c516be8be76c'),
-    alt: 'Piscine construite par un artisan pisciniste',
   },
   'alarme-securite': {
     src: unsplash('photo-1528312635006-8ea0bc49ec63'),
@@ -140,37 +124,13 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1559126698-1906840f3c95'),
     alt: 'Plâtrier posant des plaques de plâtre sur une ossature',
   },
-  antenniste: {
-    src: unsplash('photo-1663316026819-ea3a6293e8e9'),
-    alt: 'Antenne parabolique installée sur un toit de maison',
-  },
-  'architecte-interieur': {
-    src: unsplash('photo-1762545112336-646c69e4888b'),
-    alt: "Salon moderne aménagé par un architecte d'intérieur",
-  },
-  ascensoriste: {
-    src: unsplash('photo-1758193017781-e3aee6c3e359'),
-    alt: "Hall d'ascenseur moderne avec finitions en marbre et verre",
-  },
   'borne-recharge': {
     src: unsplash('photo-1582201872911-67877db5fb38'),
     alt: 'Véhicule électrique branché sur une borne de recharge',
   },
-  decorateur: {
-    src: unsplash('photo-1507238691740-187a5b1d37b8'),
-    alt: 'Décorateur appliquant de la peinture au rouleau sur un mur',
-  },
   demenageur: {
     src: unsplash('photo-1715645948484-da40dd56bc93'),
     alt: 'Déménageur chargeant des cartons dans un camion de déménagement',
-  },
-  deratisation: {
-    src: unsplash('photo-1646324554833-f0b6a479fa5d'),
-    alt: 'Technicien en tenue de protection pulvérisant un traitement antiparasitaire',
-  },
-  desinsectisation: {
-    src: unsplash('photo-1512592585971-bff48f1c9815'),
-    alt: 'Professionnels de désinsectisation en combinaison de protection intervenant dans un local',
   },
   diagnostiqueur: {
     src: unsplash('photo-1631300313270-227604e71ea5'),
@@ -179,22 +139,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   etancheiste: {
     src: unsplash('photo-1633759593085-1eaeb724fc88'),
     alt: 'Étanchéiste travaillant sur une toiture avec ses outils',
-  },
-  ferronnier: {
-    src: unsplash('photo-1528717384022-f8d665c86909'),
-    alt: 'Artisan ferronnier forgeant le fer sur une enclume dans son atelier',
-  },
-  geometre: {
-    src: unsplash('photo-1682663810771-89d21838530f'),
-    alt: 'Géomètre-expert avec son appareil de mesure topographique sur un chantier',
-  },
-  metallier: {
-    src: unsplash('photo-1764245546004-e6b743242a80'),
-    alt: 'Métallier soudeur travaillant le métal avec des étincelles en atelier',
-  },
-  miroitier: {
-    src: unsplash('photo-1740595362788-78bc54ea1bad'),
-    alt: 'Miroir rond élégant posé sur un mur de salle de bain par un miroitier',
   },
   nettoyage: {
     src: unsplash('photo-1674158687384-023265a5d536'),
@@ -215,14 +159,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   'renovation-energetique': {
     src: unsplash('photo-1441038718687-699f189fa401'),
     alt: 'Maison moderne écoénergétique avec végétation et technologies durables',
-  },
-  solier: {
-    src: unsplash('photo-1580810734898-5e1753f23337'),
-    alt: 'Ouvrier solier nivelant un revêtement de sol sur un chantier',
-  },
-  storiste: {
-    src: unsplash('photo-1758001606578-09b352df5b85'),
-    alt: 'Lumière du soleil filtrant à travers des stores vénitiens posés par un storiste',
   },
   zingueur: {
     src: unsplash('photo-1634853982486-c06f0e17940f'),
@@ -693,7 +629,7 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
   [/cuisin/, 'cuisiniste', 'service'],
   [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],
   [/isol/, 'isolation-thermique', 'service'],
-  [/domotiq/, 'domoticien', 'service'],
+  [/domotiq/, 'electricien', 'service'],
   [/nettoyag/, 'entretien', 'topic'],
   [/facade|ravalement/, 'facadier', 'service'],
   // Topics → photo spécifique

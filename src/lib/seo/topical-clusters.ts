@@ -114,20 +114,10 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'comment-choisir-cuisiniste-guide',
     'renover-cuisine-guide-complet-etapes',
   ],
-  solier: [
-    'prix-solier-revetement-sol-2026',
-    'comment-choisir-solier-guide',
-    'beton-cire-vs-resine-vs-carrelage',
-  ],
   nettoyage: [
     'prix-nettoyage-professionnel-2026',
     'comment-choisir-entreprise-nettoyage',
     'entretien-annuel-maison-checklist-complete',
-  ],
-  terrassier: [
-    'prix-extension-maison-2026',
-    'construire-garage-guide-permis-budget',
-    'permis-construire-declaration-prealable-guide',
   ],
   charpentier: [
     'prix-toiture-2026-refection-reparation-materiaux',
@@ -183,11 +173,6 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'ramonage-obligatoire-avant-hiver',
     'entretien-chaudiere-annuel',
     'preparer-maison-hiver-checklist',
-  ],
-  domoticien: [
-    'comment-choisir-domoticien-guide',
-    'domotique-maison-connectee-guide-debutant',
-    'prix-domotique-maison-2026',
   ],
   'borne-recharge': [
     'prix-borne-recharge-domicile-2026',

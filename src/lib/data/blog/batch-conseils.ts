@@ -219,7 +219,7 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
       "## Les solutions immédiates et gratuites\n\nAvant d'investir, adoptez les bons réflexes qui ne coûtent rien.\n\n### Gestes quotidiens anti-chaleur\n\n- Fermez volets et rideaux dès que le soleil atteint vos fenêtres (façades sud et ouest en priorité)\n- Ouvrez largement la nuit pour créer un **courant d'air traversant**\n- Suspendez un drap humide devant une fenêtre ouverte : l'évaporation abaisse la température de 3 à 5 °C\n- Éteignez les appareils électriques inutilisés (box internet, ordinateur, console : ils dégagent de la chaleur)\n- Faites tourner le lave-linge et le four le soir ou tôt le matin\n\n:::tip Conseil pro\nCréez un courant d'air traversant efficace en ouvrant les fenêtres aux côtés opposés de la maison. L'air frais entre par le côté ombragé et chasse l'air chaud par le côté exposé. Cette technique peut abaisser la température intérieure de **4 à 6 °C** en quelques heures nocturnes.\n:::",
 
-      "## Protections solaires extérieures\n\nLes protections solaires **extérieures** sont trois fois plus efficaces que les protections intérieures pour bloquer la chaleur.\n\n:::budget\n| Type de protection | Réduction apport solaire | Prix indicatif |\n| Store banne | 60 - 90 % | 800 - 3 000 € posé |\n| Volets roulants | 60 - 80 % | 300 - 800 € / fenêtre |\n| Film solaire réfléchissant | 40 - 70 % | 30 - 80 €/m² |\n| Brise-soleil orientable | 70 - 95 % | 200 - 600 € / fenêtre |\n| Pergola bioclimatique | 80 - 100 % | 3 000 - 10 000 € |\n:::\n\n:::info Bon à savoir\nLes brise-soleil orientables (BSO), installés par un [storiste professionnel](/services/storiste), sont la solution la plus performante : ils bloquent jusqu'à 95 % du rayonnement solaire tout en conservant la vue et la luminosité. Leur coût (200 à 600 euros par fenêtre) est vite amorti par la réduction de la facture de climatisation.\n:::",
+      "## Protections solaires extérieures\n\nLes protections solaires **extérieures** sont trois fois plus efficaces que les protections intérieures pour bloquer la chaleur.\n\n:::budget\n| Type de protection | Réduction apport solaire | Prix indicatif |\n| Store banne | 60 - 90 % | 800 - 3 000 € posé |\n| Volets roulants | 60 - 80 % | 300 - 800 € / fenêtre |\n| Film solaire réfléchissant | 40 - 70 % | 30 - 80 €/m² |\n| Brise-soleil orientable | 70 - 95 % | 200 - 600 € / fenêtre |\n| Pergola bioclimatique | 80 - 100 % | 3 000 - 10 000 € |\n:::\n\n:::info Bon à savoir\nLes brise-soleil orientables (BSO), installés par un [menuisier (volets et stores)](/services/menuisier), sont la solution la plus performante : ils bloquent jusqu'à 95 % du rayonnement solaire tout en conservant la vue et la luminosité. Leur coût (200 à 600 euros par fenêtre) est vite amorti par la réduction de la facture de climatisation.\n:::",
 
       "## Végétaliser pour rafraîchir\n\n### Solutions végétales par efficacité\n\n- **Arbre à feuilles caduques** devant façade sud : ombre en été, lumière en hiver (5 à 8 °C de gain)\n- **Pergola végétalisée** (vigne, glycine, jasmin) : abaisse la température ressentie de 5 à 8 °C\n- **Mur végétal** : réduit la température de surface de 20 à 40 °C en été\n- **Toiture végétalisée** : isole et rafraîchit, réduit les eaux de ruissellement\n- **Haie haute** : protège du rayonnement latéral en fin de journée\n\n:::tip Conseil pro\nPlantez un arbre caduc à 3 ou 4 mètres de la façade sud. En dix ans, il fournira une ombre efficace qui réduira de 40 à 60 % l'apport solaire sur cette façade. Choisissez des essences résistantes à la sécheresse : micocoulier, mûrier platane, albizia.\n:::",
 
@@ -298,7 +298,7 @@ export const conseilsArticles: Record<string, BlogArticle> = {
 
       "## Ce qu'il ne faut surtout pas faire\n\n:::warning Attention\n- **N'investissez pas dans des travaux trop personnalisés** : piscine excentrée, extension non déclarée, aménagements atypiques\n- **Ne rénovez pas luxueusement** un bien situé dans un quartier modeste : vous ne récupérerez pas votre investissement\n- **Ne masquez jamais un défaut structurel** (fissure, humidité) avec un simple coup de peinture : c'est un vice caché (articles 1641-1648 du Code civil) — l'acheteur dispose de 2 ans à compter de la découverte du vice pour agir en justice\n- **N'engagez pas de travaux sans devis** ni estimation de la plus-value par un agent immobilier\n:::",
 
-      "## Le home staging : l'alternative économique\n\nLe home staging consiste à valoriser un bien sans gros travaux.\n\n### Principes du home staging efficace\n\n1. Désencombrez chaque pièce (retirez un tiers du mobilier)\n2. Dépersonnalisez (rangez les photos de famille, les collections)\n3. Réorganisez le mobilier pour maximiser l'espace et la luminosité\n4. Ajoutez quelques accessoires de décoration neutres (coussins, plantes, miroirs) — un [décorateur d'intérieur](/services/decorateur) peut vous accompagner\n5. Nettoyez en profondeur chaque recoin\n\n**Coût moyen** : 1 à 2 % du prix de vente. **Résultat** : un bien vendu en moyenne **30 jours plus vite** et au prix demandé dans 80 % des cas.",
+      "## Le home staging : l'alternative économique\n\nLe home staging consiste à valoriser un bien sans gros travaux.\n\n### Principes du home staging efficace\n\n1. Désencombrez chaque pièce (retirez un tiers du mobilier)\n2. Dépersonnalisez (rangez les photos de famille, les collections)\n3. Réorganisez le mobilier pour maximiser l'espace et la luminosité\n4. Ajoutez quelques accessoires de décoration neutres (coussins, plantes, miroirs) — un [décorateur d'intérieur](/services/peintre-en-batiment) peut vous accompagner\n5. Nettoyez en profondeur chaque recoin\n\n**Coût moyen** : 1 à 2 % du prix de vente. **Résultat** : un bien vendu en moyenne **30 jours plus vite** et au prix demandé dans 80 % des cas.",
 
       "## Estimer le retour sur investissement\n\nAvant de vous lancer, suivez cette méthode en trois étapes :\n\n1. Faites estimer votre bien **en l'état** par deux ou trois agents immobiliers\n2. Demandez-leur quels travaux ils recommandent et quelle plus-value ils estiment\n3. Comparez avec les devis d'artisans pour calculer votre retour sur investissement\n\nSur [ServicesArtisans](/), obtenez rapidement des devis gratuits pour chiffrer vos projets de valorisation avant vente.\n\n:::takeaway\n- La peinture offre le meilleur retour sur investissement : 200 à 300 % de plus-value\n- Améliorer le DPE d'une ou deux classes peut supprimer une décote de 5 à 15 % sur le prix\n- Rafraîchissez cuisine et salle de bains sans tout refaire : 2 000 à 5 000 € suffisent\n- Ne masquez jamais un défaut structurel : c'est un vice caché passible de poursuites\n- Faites estimer la plus-value des travaux par un agent immobilier avant d'investir\n:::",
     ],
@@ -338,70 +338,6 @@ export const conseilsArticles: Record<string, BlogArticle> = {
       'Les travaux de rénovation énergétique (DPE amélioré) augmentent significativement le prix de vente.',
       'Concentrez-vous sur la cuisine, la salle de bain et les façades : ce sont les postes les plus visibles.',
       'Un home staging professionnel (1 500 à 5 000 €) accélère la vente et augmente le prix de 5 à 15 %.',
-    ],
-  },
-
-  'travaux-copropriete-guide-regles': {
-    title: 'Travaux Copropriété 2026 : Règles',
-    excerpt:
-      "Quels travaux pouvez-vous réaliser librement dans votre appartement ? Lesquels nécessitent l'accord de la copropriété ? Tout ce qu'il faut savoir pour éviter les conflits.",
-    content: [
-      "Vivre en copropriété implique de respecter des règles précises en matière de travaux. Entre les parties privatives et les parties communes, la frontière n'est pas toujours claire. Chaque année, des milliers de litiges opposent des copropriétaires ayant entrepris des travaux sans autorisation. La loi du 10 juillet 1965, modifiée à plusieurs reprises, encadre strictement ces situations. Voici le guide complet pour y voir clair et éviter les conflits. Consultez un [architecte d'intérieur](/services/architecte-interieur) pour vos projets en copropriété.",
-
-      "## Parties privatives : ce que vous pouvez faire librement\n\nDans vos parties privatives, vous pouvez réaliser sans autorisation :\n\n- Peinture et papier peint\n- Remplacement de revêtements de sol (sous réserve des normes acoustiques)\n- Changement de sanitaires à l'identique\n- Aménagement de placards et rangements\n- Remplacement d'équipements de cuisine\n- Pose de carrelage mural\n\n:::info Bon à savoir\nCes travaux ne doivent **ni toucher aux parties communes**, **ni modifier l'aspect extérieur** de l'immeuble, **ni affecter la solidité** du bâtiment. En cas de doute, consultez votre règlement de copropriété qui définit précisément les parties privatives et communes de votre immeuble.\n:::",
-
-      "## Les travaux soumis à autorisation de l'assemblée générale\n\nTout ce qui affecte les parties communes ou l'aspect extérieur nécessite un vote en AG.\n\n### Travaux nécessitant la majorité simple (article 24)\n\n- Travaux d'accessibilité aux personnes handicapées\n- Travaux d'entretien courant des parties communes\n\n### Travaux nécessitant la majorité absolue (article 25)\n\n- Modification des cloisons porteuses\n- Changement de fenêtres (couleur ou matériau différent)\n- Installation d'une climatisation avec unité extérieure visible\n- Fermeture d'un balcon ou d'une loggia\n\n### Travaux nécessitant la double majorité (article 26)\n\n- Création d'une ouverture en façade\n- Modification de la destination de parties communes\n- Surélévation ou construction de bâtiments annexes\n\n:::warning Attention\nRéaliser des travaux affectant les parties communes sans autorisation de l'AG est une faute. Le syndicat peut exiger la **remise en état à vos frais**, même dix ans après les travaux. Les tribunaux sont systématiquement favorables à la copropriété dans ces cas.\n:::",
-
-      '## Horaires et nuisances : le cadre légal\n\n### Horaires habituellement autorisés\n\n| Jour | Horaires autorisés |\n| --- | --- |\n| Lundi à vendredi | 8 h - 12 h et 14 h - 19 h 30 |\n| Samedi | 9 h - 12 h et 15 h - 19 h |\n| Dimanche et jours fériés | **Travaux bruyants interdits** |\n\n:::tip Conseil pro\nVérifiez systématiquement le règlement de copropriété et les arrêtés municipaux de votre commune, qui peuvent être **plus restrictifs** que ces horaires généraux. Prévenez vos voisins directs (dessus, dessous, palier) avant le début des travaux : un simple mot dans la boîte aux lettres évite bien des tensions.\n:::',
-
-      "## Procédure pour obtenir l'autorisation\n\n### Étapes à suivre\n\n1. Préparez un dossier complet : description détaillée des travaux, plans, devis, attestation d'assurance de l'artisan\n2. Adressez votre demande au syndic **au moins deux mois avant l'AG**\n3. Le syndic inscrit votre demande à l'ordre du jour avec les documents joints\n4. Présentez votre projet lors de l'AG et répondez aux questions\n5. Le vote a lieu : la majorité requise dépend de la nature des travaux\n\n:::info Bon à savoir\nPrévoyez un délai total de **trois à six mois** entre votre demande et le début effectif des travaux. Si l'AG suivante est dans plus de six mois, vous pouvez demander au syndic de convoquer une AG extraordinaire (à vos frais si vous êtes seul demandeur).\n:::",
-
-      "## Règles spécifiques pour le sol\n\nLe changement de revêtement de sol est la source n°1 de conflits en copropriété.\n\n:::warning Attention\nSi vous remplacez une moquette par du carrelage ou du [parquet](/blog/installer-parquet-massif-contrecolle-guide), vous devez respecter les normes d'[isolation phonique](/blog/bruit-isolation-phonique-solutions) prévues par le règlement de copropriété. Une sous-couche acoustique adaptée (15 à 30 €/m²) est généralement exigée. En cas de plainte d'un voisin du dessous, une expertise acoustique peut être ordonnée par le tribunal, et les frais de remise en conformité sont à votre charge.\n:::",
-
-      "## Plomberie et électricité en copropriété\n\n### Parties communes vs parties privatives\n\n| Élément | Statut | Qui paie les travaux |\n| --- | --- | --- |\n| Colonnes montantes d'eau | Partie commune | Copropriété |\n| Gaines électriques principales | Partie commune | Copropriété |\n| Circuit après compteur individuel | Partie privative | Copropriétaire |\n| Radiateurs | Partie privative | Copropriétaire |\n| Chaudière collective | Partie commune | Copropriété |\n\nTout raccordement ou modification sur une partie commune nécessite l'accord du syndic.\n\n:::warning Attention\nUne fuite d'eau sur une canalisation privée qui cause des dégâts chez un voisin **engage votre responsabilité civile**. Votre assurance habitation couvre ces sinistres, mais pensez à vérifier vos plafonds de garantie.\n:::",
-
-      "## Travaux urgents : l'exception\n\n:::info Bon à savoir\nEn cas d'urgence avérée (fuite d'eau importante, risque d'effondrement, défaut électrique dangereux), vous pouvez engager des **travaux conservatoires** sans attendre l'autorisation de l'AG. C'est le seul cas où l'on peut déroger à la règle de l'autorisation préalable.\n:::\n\n### Procédure en cas d'urgence\n\n1. Sécurisez la situation immédiatement (coupez l'eau, l'électricité ou le gaz)\n2. Prévenez le syndic sans délai (par téléphone + courriel)\n3. Documentez la situation : photos, vidéos, constat d'huissier si possible\n4. Faites intervenir un artisan pour les réparations conservatoires\n5. Conservez toutes les factures pour le remboursement en AG",
-
-      '## Sanctions en cas de travaux non autorisés\n\nSi vous réalisez des travaux sans autorisation, les conséquences peuvent être lourdes :\n\n- **Remise en état** exigée à vos frais (même plusieurs années après)\n- **Délai de prescription** : dix ans à compter de la réalisation des travaux\n- **Frais de procédure** à votre charge en cas de condamnation\n- **Dommages et intérêts** si les travaux ont causé un préjudice\n\n:::expert\n"En matière de copropriété, le principe est clair : toute modification des parties communes ou de l\'aspect extérieur sans autorisation est une voie de fait. Les tribunaux ordonnent quasi systématiquement la remise en état."\n-- Maître Julie Sanchez, avocate en droit immobilier\n:::',
-
-      "## Assurances et responsabilités\n\n### Documents à exiger de votre artisan\n\n- Attestation d'assurance **décennale** en cours de validité\n- Attestation de **responsabilité civile professionnelle**\n- Numéro SIRET vérifiable sur societe.com\n- Qualification ou certification pour les travaux spécialisés (RGE, QualiPAC, etc.)\n\nSouscrivez une assurance dommages-ouvrage pour les travaux de structure (obligatoire légalement). Prévenez votre propre assurance habitation des travaux entrepris.\n\nPrivilégiez des artisans habitués aux contraintes de la copropriété : respect des horaires, protection des parties communes, gestion des gravats. Sur [ServicesArtisans](/), les artisans référencés sont vérifiés et assurés.\n\n:::takeaway\n- En parties privatives : peinture, sols, sanitaires et cuisine sont libres (sous réserve des normes acoustiques)\n- Tout ce qui touche les parties communes ou l'aspect extérieur nécessite un vote en AG\n- Prévoyez trois à six mois de délai entre la demande et le début des travaux autorisés\n- Les travaux non autorisés peuvent entraîner une remise en état à vos frais, même dix ans après\n- En cas d'urgence avérée, vous pouvez agir sans autorisation mais devez prévenir le syndic immédiatement\n:::",
-    ],
-    image: '/images/blog/travaux-copropriete.webp',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-01-25',
-    readTime: '12 min',
-    category: 'Conseils',
-    tags: ['copropriété', 'règlementation', 'autorisation', 'assemblée générale', 'syndic'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-02-10',
-    faq: [
-      {
-        question: "Peut-on changer ses fenêtres sans l'accord de la copropriété ?",
-        answer:
-          "Si vous remplacez vos fenêtres à l'identique (même matériau, même couleur), l'autorisation n'est généralement pas nécessaire. En revanche, si vous changez le matériau (bois vers PVC) ou la couleur, un vote en AG à la majorité absolue (article 25) est obligatoire.",
-      },
-      {
-        question: 'Quels travaux peut-on faire librement dans un appartement en copropriété ?',
-        answer:
-          "Vous pouvez réaliser sans autorisation : peinture, papier peint, remplacement de revêtements de sol (sous réserve du respect des normes acoustiques), changement de sanitaires, aménagement de placards et remplacement d'équipements de cuisine, à condition de ne pas toucher aux parties communes ni modifier l'aspect extérieur.",
-      },
-      {
-        question: 'Quels sont les horaires autorisés pour les travaux en copropriété ?',
-        answer:
-          'En règle générale : du lundi au vendredi de 8 h à 12 h et de 14 h à 19 h 30, le samedi de 9 h à 12 h et de 15 h à 19 h. Les travaux bruyants sont interdits le dimanche et les jours fériés. Vérifiez le règlement de copropriété et les arrêtés municipaux qui peuvent être plus restrictifs.',
-      },
-      {
-        question: 'Que risque-t-on si on fait des travaux sans autorisation en copropriété ?',
-        answer:
-          "Le syndicat des copropriétaires peut exiger la remise en état à vos frais, avec un délai de prescription de dix ans. Les frais de procédure judiciaire s'ajoutent au coût de la remise en état. Les tribunaux sont quasi systématiquement favorables à la copropriété.",
-      },
-    ],
-    keyTakeaways: [
-      "Les travaux touchant les parties communes nécessitent un vote en AG à la majorité de l'article 25.",
-      "Les travaux privatifs ne doivent pas affecter la structure, l'étanchéité ou l'aspect extérieur de l'immeuble.",
-      'Prévenez le syndic et les voisins avant tout chantier bruyant pour éviter les conflits.',
-      'Vérifiez le règlement de copropriété avant de modifier les sols, les murs porteurs ou les canalisations.',
     ],
   },
 
@@ -638,57 +574,6 @@ export const conseilsArticles: Record<string, BlogArticle> = {
     ],
   },
 
-  'domotique-maison-connectee-guide-debutant': {
-    title: 'Domotique 2026 : Guide Maison Connectée',
-    excerpt:
-      "De l'éclairage intelligent au thermostat connecté, découvrez comment transformer votre habitat en maison connectée sans être un expert en technologie.",
-    content: [
-      "La maison connectée n'est plus un fantasme de science-fiction. En 2025, plus de 40 % des foyers français possèdent au moins un objet connecté pour la maison. Mais entre les assistants vocaux, les protocoles de communication et la multitude de produits, il est facile de s'y perdre. Ce guide vous accompagne pas à pas. Faites appel à un [domoticien](/services/domoticien) pour une installation professionnelle.",
-      "## Par où commencer ?\n\nDémarrez par les équipements les plus utiles au quotidien. Le trio gagnant pour débuter : un thermostat connecté (économie d'énergie immédiate), des ampoules intelligentes (confort et sécurité) et une enceinte connectée comme hub central. Budget d'entrée : 300 à 500 euros pour équiper les pièces principales.",
-      "## Les protocoles de communication\n\nWi-Fi : simple mais énergivore, idéal pour les gros appareils (caméras, thermostats). Zigbee : basse consommation, nécessite un hub, parfait pour les capteurs et ampoules. Z-Wave : similaire à Zigbee avec une meilleure portée. Matter : le nouveau standard universel qui promet l'interopérabilité entre toutes les marques. Privilégiez les appareils compatibles Matter pour pérenniser votre installation.",
-      "## L'éclairage intelligent\n\nLes ampoules connectées permettent de programmer l'éclairage, de varier l'intensité et la couleur, et de simuler une présence pendant vos absences. Comptez 15 à 40 euros par ampoule. Un kit de démarrage avec hub et trois ampoules coûte environ 100 euros. L'économie d'énergie atteint 20 à 30 % grâce à la variation d'intensité.",
-      "## Le chauffage connecté\n\nC'est le poste où la domotique offre le meilleur retour sur investissement. Un thermostat intelligent apprend vos habitudes et adapte la température pièce par pièce. Économie moyenne : 10 à 15 % sur la facture de chauffage (source : ADEME). Les têtes thermostatiques connectées (30 à 80 euros l'unité) permettent un réglage individuel de chaque radiateur.",
-      '## Sécurité connectée\n\nCaméras, détecteurs de mouvement, serrures connectées, alarmes : la domotique renforce considérablement la sécurité de votre logement. Une caméra intérieure ou extérieure coûte entre 50 et 200 euros. Les serrures connectées (200 à 500 euros) permettent de gérer les accès à distance et de créer des codes temporaires pour les artisans ou les invités.',
-      "## Volets et stores automatisés\n\nL'automatisation des volets roulants permet de programmer leur ouverture et fermeture selon le lever et le coucher du soleil. En été, la fermeture automatique aux heures les plus chaudes réduit la température intérieure de 3 à 5 °C. Comptez 200 à 500 euros par volet pour une motorisation connectée.",
-      "## Les erreurs à éviter\n\nNe multipliez pas les applications : choisissez un écosystème principal et restez-y. Ne négligez pas la sécurité informatique : changez les mots de passe par défaut, activez l'authentification à deux facteurs. Évitez les produits sans marque importés directement : la sécurité des données n'est souvent pas garantie.",
-      "## Installation : faire soi-même ou faire appel à un pro ?\n\nLa plupart des objets connectés se posent facilement soi-même (ampoules, prises, capteurs). En revanche, la motorisation des volets, l'installation d'un thermostat raccordé à la chaudière ou la mise en place d'un système d'alarme complet nécessitent l'intervention d'un électricien qualifié. Comptez 200 à 500 euros de main-d'œuvre pour une installation complète.",
-      "## Le coût réel d'une maison connectée\n\nUn équipement progressif sur deux à trois ans est la stratégie la plus raisonnable. Budget réaliste : 500 à 1 000 euros pour un équipement de base (thermostat, éclairage, enceinte), 2 000 à 5 000 euros pour un équipement complet (ajout sécurité, volets, électroménager). Les économies d'énergie générées financent une partie de l'investissement.",
-      "## L'avenir : vers la maison autonome\n\nLes progrès de l'intelligence artificielle permettront bientôt à votre maison d'anticiper vos besoins sans intervention. La gestion énergétique autonome, couplée aux panneaux solaires et aux batteries domestiques, ouvre la voie de l'autoconsommation intelligente. Pour installer vos équipements domotiques, trouvez un électricien spécialisé sur ServicesArtisans. Pour la réception TV et satellite, un [antenniste qualifié](/services/antenniste) assure une installation optimale de vos antennes et paraboles connectées.",
-    ],
-    image: '/images/blog/domotique-maison-connectee.webp',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-02-05',
-    readTime: '8 min',
-    category: 'Guides',
-    tags: ['domotique', 'maison connectée', 'thermostat', 'sécurité', 'économies'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-02-10',
-    faq: [
-      {
-        question: 'Combien coûte une maison connectée ?',
-        answer:
-          'Un équipement de base (thermostat connecté, éclairage intelligent, enceinte) coûte 500 à 1 000 euros. Un équipement complet (ajout sécurité, volets motorisés, électroménager connecté) revient à 2 000 à 5 000 euros. La stratégie la plus raisonnable est un équipement progressif sur 2 à 3 ans.',
-      },
-      {
-        question: 'Quel protocole domotique choisir en 2026 ?',
-        answer:
-          "Privilégiez les appareils compatibles Matter, le nouveau standard universel qui assure l'interopérabilité entre toutes les marques. Le Wi-Fi convient pour les gros appareils (caméras, thermostats), le Zigbee pour les capteurs et ampoules (basse consommation).",
-      },
-      {
-        question: "La domotique permet-elle vraiment d'économiser de l'énergie ?",
-        answer:
-          "Oui, un thermostat intelligent permet d'économiser 10 à 15 % sur la facture de chauffage (source : ADEME). L'éclairage connecté avec variation d'intensité génère 20 à 30 % d'économies sur l'éclairage. La fermeture automatique des volets réduit aussi les déperditions thermiques.",
-      },
-    ],
-    keyTakeaways: [
-      'La domotique permet de piloter chauffage, éclairage, volets et sécurité depuis un smartphone.',
-      'Un thermostat connecté (200 à 400 €) est le premier investissement domotique recommandé.',
-      'Privilégiez un protocole ouvert (Zigbee, Z-Wave, Matter) pour éviter la dépendance à un seul fabricant.',
-      "L'installation complète d'un système domotique coûte entre 2 000 et 10 000 € selon le périmètre.",
-    ],
-  },
-
   'materiaux-ecologiques-construction-guide': {
     title: 'Matériaux Écologiques 2026 : Guide',
     excerpt:
@@ -842,56 +727,6 @@ export const conseilsArticles: Record<string, BlogArticle> = {
     ],
   },
 
-  'nuisibles-maison-prevention-traitement': {
-    title: 'Nuisibles : Prévention et Traitement',
-    excerpt:
-      'Termites, cafards, souris, punaises de lit : identifiez les nuisibles et découvrez les méthodes de prévention et traitement efficaces.',
-    content: [
-      "Les nuisibles ne sont pas qu'une question de confort : certains menacent la structure même de votre maison (termites, capricornes), tandis que d'autres représentent un risque sanitaire (cafards, rongeurs, punaises de lit). La France connaît une recrudescence de certains nuisibles, en partie liée au réchauffement climatique et à l'urbanisation croissante. Contactez un [spécialiste en désinsectisation](/services/desinsectisation) ou en [dératisation](/services/deratisation) pour un traitement efficace.",
-      "## Termites : la menace silencieuse\n\nLes termites souterrains touchent 54 départements français (zones d'alerte). Ils dévorent le bois de l'intérieur, rendant la détection tardive. Un diagnostic termites est obligatoire avant la vente dans les zones concernées. Le traitement curatif par pièges-appâts coûte entre 1 500 et 4 000 euros, le traitement par barrière chimique entre 2 000 et 6 000 euros.",
-      "## Insectes xylophages du bois\n\nCapricornes, vrillettes, lyctus : ces insectes attaquent charpentes, planchers et menuiseries. Les petits trous dans le bois et la sciure fine sont les signes révélateurs. Le traitement préventif par injection ou pulvérisation coûte 15 à 30 euros le mètre carré. Le traitement curatif d'une charpente complète : 2 000 à 5 000 euros. Vérifiez votre charpente tous les cinq ans.",
-      "## Rongeurs : souris et rats\n\nUne souris peut se faufiler par un trou de six millimètres. Les rongeurs rongent les câbles électriques (risque d'incendie), contaminent les aliments et dégradent l'isolation. Prévention : obturez toutes les ouvertures, stockez les aliments dans des récipients hermétiques, supprimez les points d'eau accessibles. Traitement : pièges mécaniques (plus écologiques) ou appâts raticides (attention aux enfants et animaux).",
-      "## Punaises de lit : l'épidémie moderne\n\nLa France est l'un des pays européens les plus touchés. Les punaises de lit ne sont pas liées à un manque d'hygiène. Elles se propagent via les voyages et les meubles d'occasion. Le traitement professionnel combine passage vapeur haute température (180 °C) et insecticide ciblé. Coût : 300 à 800 euros par pièce. Deux à trois passages sont nécessaires.",
-      "## Cafards et blattes\n\nLes cafards se reproduisent à une vitesse vertigineuse : un couple peut engendrer 100 000 descendants en un an. Ils sont vecteurs de maladies (salmonelle, dysenterie). Le traitement par gel insecticide appliqué par un professionnel est la méthode la plus efficace (150 à 300 euros par intervention). Complétez par une hygiène rigoureuse : pas de nourriture accessible, pas d'eau stagnante.",
-      "## Guêpes et frelons\n\nUn nid de guêpes dans les combles ou un nid de frelons asiatiques dans le jardin représente un danger réel. Ne tentez jamais de détruire un nid vous-même. Faites appel à un professionnel équipé (80 à 200 euros l'intervention). Certaines communes prennent en charge la destruction des nids de frelons asiatiques, espèce invasive classée nuisible.",
-      "## Mérule : le champignon dévastateur\n\nLa mérule est un champignon qui dévore le bois en milieu humide et confiné. Elle peut traverser les murs de maçonnerie et progresser de plusieurs centimètres par semaine. Le traitement est lourd : asséchement complet, dépose des bois atteints, traitement fongicide, amélioration de la ventilation. Coût : 5 000 à 30 000 euros selon l'étendue.",
-      "## Prévention générale : les bons gestes\n\nMaintenez une ventilation adéquate dans toutes les pièces, notamment les caves et greniers. Supprimez les sources d'humidité. Stockez le bois de chauffage à l'écart de la maison. Inspectez régulièrement les zones sombres et humides. Élaguez les branches qui touchent la façade. Ces gestes simples réduisent considérablement le risque d'infestation.",
-      "## Quand faire appel à un professionnel\n\nPour les termites, la mérule et les infestations importantes, l'intervention d'un professionnel certifié est indispensable. Vérifiez la certification Certibiocide (obligatoire pour l'utilisation de produits biocides professionnels). Demandez un diagnostic précis et un devis détaillé avant toute intervention. Sur ServicesArtisans, trouvez des spécialistes du traitement des nuisibles vérifiés et certifiés.",
-    ],
-    image: '/images/blog/nuisibles-maison.webp',
-    author: "L'équipe ServicesArtisans",
-    date: '2026-02-09',
-    readTime: '9 min',
-    category: 'Conseils',
-    tags: ['nuisibles', 'termites', 'punaises de lit', 'rongeurs', 'traitement'],
-    authorBio:
-      "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-02-10',
-    faq: [
-      {
-        question: 'Comment savoir si ma maison est infestée de termites ?',
-        answer:
-          'Les signes révélateurs sont : du bois qui sonne creux en tapotant, des galeries terreuses le long des murs, de la sciure fine au pied des boiseries, ou des essaimages (envols de termites ailés) au printemps. Un diagnostic termites par un professionnel certifié coûte 100 à 300 euros.',
-      },
-      {
-        question: 'Le traitement des punaises de lit est-il efficace ?',
-        answer:
-          'Oui, à condition de faire appel à un professionnel qui combine le passage vapeur haute température (180 °C) et un insecticide ciblé. Deux à trois passages espacés de 15 jours sont nécessaires. Coût : 300 à 800 euros par pièce. Les traitements faits soi-même sont rarement suffisants.',
-      },
-      {
-        question: 'La mérule est-elle dangereuse pour la structure de la maison ?',
-        answer:
-          'Oui, la mérule est le champignon le plus destructeur du bâtiment. Elle dévore le bois en milieu humide et confiné, peut traverser les murs de maçonnerie et progresser de plusieurs centimètres par semaine. Le traitement est lourd et coûteux (5 000 à 30 000 euros) mais indispensable pour sauver la structure.',
-      },
-    ],
-    keyTakeaways: [
-      'La prévention (étanchéité des ouvertures, propreté, gestion des déchets) est plus efficace que le traitement curatif.',
-      'Faites appel à un professionnel certifié pour les infestations de termites, mérules ou nuisibles de santé publique.',
-      'Le traitement des termites est obligatoire dans les zones délimitées par arrêté préfectoral.',
-      'Un traitement anti-termites coûte entre 1 500 et 5 000 € selon la surface et la technique utilisée.',
-    ],
-  },
-
   'bruit-isolation-phonique-solutions': {
     title: 'Isolation Phonique : Contre le Bruit',
     metaTitle: 'Isolation Phonique : solutions anti-bruit 2026',
@@ -901,7 +736,7 @@ export const conseilsArticles: Record<string, BlogArticle> = {
       "Bruits aériens, bruits d'impact, nuisances extérieures : toutes les solutions d'isolation acoustique pour retrouver le calme chez soi. Devis gratuit.",
     content: [
       "Le bruit est la première source de nuisance pour les Français selon l'ADEME. Près de 25 millions de personnes se déclarent gênées par le bruit à leur domicile. Au-delà de l'inconfort, l'exposition chronique au bruit provoque stress, troubles du sommeil et problèmes cardiovasculaires. Heureusement, des solutions existent pour chaque situation. Consultez un [plâtrier](/services/platrier) ou un [spécialiste en isolation](/services/isolation-thermique) pour un diagnostic acoustique.",
-      "## Comprendre les types de bruit\n\nLes bruits aériens (voix, musique, télévision) se propagent par l'air et traversent les parois. Les bruits d'impact (pas, chutes d'objets) se transmettent par la structure du bâtiment. Les bruits d'équipements (chaudière, [ascenseur](/services/ascensoriste), VMC) combinent les deux modes de propagation. Chaque type de bruit appelle une solution différente.",
+      "## Comprendre les types de bruit\n\nLes bruits aériens (voix, musique, télévision) se propagent par l'air et traversent les parois. Les bruits d'impact (pas, chutes d'objets) se transmettent par la structure du bâtiment. Les bruits d'équipements (chaudière, ascenseur, VMC) combinent les deux modes de propagation. Chaque type de bruit appelle une solution différente.",
       "## Diagnostic acoustique : cibler le problème\n\nAvant d'investir, identifiez précisément la source et le chemin du bruit. Un acousticien peut réaliser des mesures précises (300 à 800 euros) et recommander les solutions adaptées. Souvent, le bruit passe par les points faibles : prises électriques dos à dos, coffres de volets roulants, entrées d'air, portes légères.",
       "## Solutions pour les murs mitoyens\n\nContre-cloison sur ossature métallique désolidarisée : c'est la solution la plus performante. Gain acoustique : 15 à 20 dB (division par trois à quatre du bruit perçu). Coût : 60 à 120 euros le mètre carré posé. L'isolant acoustique (laine minérale haute densité) doit remplir intégralement la cavité. Perte d'espace : 7 à 13 cm par mur traité.",
       "## Isolation du plafond contre les bruits de voisins\n\nLe faux plafond acoustique sur suspentes anti-vibratiles offre un gain de 10 à 15 dB. Coût : 80 à 150 euros le mètre carré. Pour les bruits d'impact (pas), la solution la plus efficace est de traiter le sol de l'étage supérieur avec une chape flottante ou un revêtement résilient, mais cela nécessite l'accord du voisin.",

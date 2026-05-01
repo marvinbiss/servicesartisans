@@ -41,7 +41,11 @@
  * vérifie la cohérence.
  */
 export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
-  // 15 services historiques
+  // Pivot RGE 2026-05-01 : 16 métiers Tier C niche supprimés
+  // (solier, terrassier, metallier, ferronnier, poseur-de-parquet, miroitier,
+  //  storiste, architecte-interieur, decorateur, domoticien, pisciniste,
+  //  antenniste, ascensoriste, geometre, desinsectisation, deratisation)
+  // → middleware retournera 410 sur leurs URLs.
   'plombier',
   'electricien',
   'serrurier',
@@ -55,24 +59,13 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   'vitrier',
   'climaticien',
   'cuisiniste',
-  'solier',
   'nettoyage',
-  // 31 services Sprint 1 SEO — liste miroir de france-light.ts
-  'terrassier',
   'charpentier',
   'zingueur',
   'etancheiste',
   'facadier',
   'platrier',
-  'metallier',
-  'ferronnier',
-  'poseur-de-parquet',
-  'miroitier',
-  'storiste',
   'salle-de-bain',
-  'architecte-interieur',
-  'decorateur',
-  'domoticien',
   'pompe-a-chaleur',
   'panneaux-solaires',
   'isolation-thermique',
@@ -80,14 +73,8 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   'borne-recharge',
   'ramoneur',
   'paysagiste',
-  'pisciniste',
   'alarme-securite',
-  'antenniste',
-  'ascensoriste',
   'diagnostiqueur',
-  'geometre',
-  'desinsectisation',
-  'deratisation',
   'demenageur',
 ])
 
@@ -115,6 +102,88 @@ export const VALID_RGE_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   'zingueur',
   'facadier',
   'platrier',
+  // Élargissement RGE 2026-05-02 (cf. RGE_ALLOWED_SERVICES) — slugs RGE-only.
+  'borne-recharge',
+  'chauffe-eau-thermodynamique',
+  'audit-energetique',
+  'ventilation',
+  'fenetres',
+])
+
+/**
+ * Slugs problèmes couverts par `/problemes/[probleme]` et
+ * `/problemes/[probleme]/[ville]`.
+ *
+ * Source de vérité : `src/lib/data/problems.ts` + `problems-extra.ts`.
+ * Liste dupliquée ici pour edge runtime (zéro I/O, < 1 kB minified).
+ *
+ * Pivot RGE 2026-05-01 : les entrées `nuisibles` et `infestation-fourmis`
+ * ont été retirées car leur seul service associé (desinsectisation /
+ * deratisation) a été supprimé. Tout slug hors liste retourne 410.
+ *
+ * Le test `gone-paths.test.ts` vérifie la cohérence avec problems.ts/extra.ts.
+ */
+export const VALID_PROBLEM_SLUGS: ReadonlySet<string> = new Set([
+  // problems.ts (catégories principales)
+  'fuite-eau',
+  'canalisation-bouchee',
+  'panne-chaudiere',
+  'serrure-bloquee',
+  'porte-claquee',
+  'panne-electrique',
+  'court-circuit',
+  'fissure-mur',
+  'infiltration-toiture',
+  'degat-des-eaux',
+  'humidite',
+  'moisissure',
+  'mur-humide',
+  'fenetre-qui-condense',
+  'peinture-qui-cloque',
+  'probleme-isolation',
+  // problems-extra.ts (problèmes granulaires)
+  'wc-bouche',
+  'wc-qui-coule',
+  'chasse-eau-bloquee',
+  'robinet-qui-fuit',
+  'robinet-qui-goutte',
+  'tuyau-pvc-qui-fuit',
+  'gel-tuyaux',
+  'panne-ballon-eau-chaude',
+  'ballon-eau-chaude-panne',
+  'odeur-egout',
+  'odeur-humidite-cave',
+  'inondation',
+  'chaudiere-qui-fuit',
+  'panne-chauffage',
+  'radiateur-froid',
+  'radiateur-qui-siffle',
+  'disjoncteur-qui-saute',
+  'prise-qui-chauffe',
+  'alarme-declenchee',
+  'interphone-panne',
+  'porte-entree-qui-gonfle',
+  'porte-qui-grince',
+  'porte-garage-bloquee',
+  'fenetre-qui-ferme-mal',
+  'volet-bloque',
+  'volet-roulant-bloque',
+  'vitre-cassee',
+  'reparation-toiture',
+  'fuite-toiture',
+  'fuite-toiture-ardoise',
+  'tuile-cassee',
+  'toit-qui-fuit',
+  'gouttiere-bouchee',
+  'fissure-facade',
+  'peinture-facade-ecaillee',
+  'tache-humidite-plafond',
+  'plancher-qui-craque',
+  'parquet-qui-gondole',
+  'escalier-bois-qui-craque',
+  'carrelage-fissure',
+  'joint-salle-de-bain-moisi',
+  'affaissement-terrasse',
 ])
 
 /**
@@ -169,6 +238,7 @@ export interface GonePathDecision {
     | 'cee_operation_invalid_format'
     | 'ville_slug_malformed'
     | 'tarifs_task_deprecated'
+    | 'problem_slug_unknown'
   redirect?: { to: string; status: 301 }
 }
 
@@ -301,6 +371,34 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
       }
     }
     return { gone: true, reason: 'tarifs_task_deprecated' }
+  }
+
+  // 7. /problemes/[probleme] — bloc DEPRECATED 2026-05-01 (pivot RGE)
+  //    Les entrées `nuisibles` et `infestation-fourmis` ont été retirées
+  //    de problems.ts car le seul service associé (desinsectisation/
+  //    deratisation) a été supprimé du catalogue. Sans ce filet, Next.js 14.2
+  //    + ISR + notFound() renvoie HTTP 200 (soft 404) — Google continue à
+  //    crawler. On retourne 410 pour purge index immédiate.
+  const problemMatch = /^\/problemes\/([^/]+)\/?$/.exec(pathname)
+  if (problemMatch) {
+    const [, probleme] = problemMatch
+    if (!VALID_PROBLEM_SLUGS.has(probleme)) {
+      return { gone: true, reason: 'problem_slug_unknown' }
+    }
+    return { gone: false }
+  }
+
+  // 8. /problemes/[probleme]/[ville] — même logique que bloc 7 + validation ville.
+  //    Couvre les ~7 000 URLs whitelistées par `isProblemeIndexable` (top 50/100/200
+  //    villes selon urgencyLevel) ainsi que les milliers d'URLs en queue
+  //    "explorée non indexée" qui pointaient vers nuisibles/infestation-fourmis.
+  const problemVilleMatch = /^\/problemes\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
+  if (problemVilleMatch) {
+    const [, probleme, ville] = problemVilleMatch
+    if (!VALID_PROBLEM_SLUGS.has(probleme)) {
+      return { gone: true, reason: 'problem_slug_unknown' }
+    }
+    return validateVilleSlug(ville)
   }
 
   return { gone: false }

@@ -20,7 +20,7 @@ describe('RGE_ALLOWED_SERVICES', () => {
     }
   })
 
-  it('contient exactement les 14 services énergétiques attendus', () => {
+  it('contient exactement les 19 services énergétiques attendus (post élargissement 2026-05-02)', () => {
     const expected = [
       'pompe-a-chaleur',
       'panneaux-solaires',
@@ -36,9 +36,15 @@ describe('RGE_ALLOWED_SERVICES', () => {
       'zingueur',
       'facadier',
       'platrier',
+      // Élargissement RGE 2026-05-02 — slugs RGE-only.
+      'borne-recharge',
+      'chauffe-eau-thermodynamique',
+      'audit-energetique',
+      'ventilation',
+      'fenetres',
     ]
     expect([...RGE_ALLOWED_SERVICES].sort()).toEqual([...expected].sort())
-    expect(RGE_ALLOWED_SERVICES).toHaveLength(14)
+    expect(RGE_ALLOWED_SERVICES).toHaveLength(19)
   })
 
   it('ne contient aucun doublon', () => {

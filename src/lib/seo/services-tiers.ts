@@ -67,25 +67,16 @@ export const TIER_B_SERVICES: ReadonlySet<string> = new Set([
   'diagnostiqueur',
 ])
 
-/** Tier C — 16 métiers niche (vol search < 500/mois, faible intention transac). */
-export const TIER_C_SERVICES: ReadonlySet<string> = new Set([
-  'solier',
-  'terrassier',
-  'metallier',
-  'ferronnier',
-  'poseur-de-parquet',
-  'miroitier',
-  'storiste',
-  'architecte-interieur',
-  'decorateur',
-  'domoticien',
-  'pisciniste',
-  'antenniste',
-  'ascensoriste',
-  'geometre',
-  'desinsectisation',
-  'deratisation',
-])
+/**
+ * Tier C — vide depuis pivot RGE 2026-05-01.
+ * Les 16 métiers niche (solier, terrassier, métallier, ferronnier,
+ * poseur-de-parquet, miroitier, storiste, architecte-interieur,
+ * decorateur, domoticien, pisciniste, antenniste, ascensoriste,
+ * geometre, desinsectisation, deratisation) ont été supprimés du
+ * catalogue : zéro overlap RGE/CEE, faible volume search, focus
+ * stratégique sur la rénovation énergétique.
+ */
+export const TIER_C_SERVICES: ReadonlySet<string> = new Set([])
 
 const TIER_A_PRIORITY = 0.9
 const TIER_B_PRIORITY = 0.7

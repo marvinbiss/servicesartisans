@@ -673,15 +673,15 @@ export default function PermisConstruirePage() {
               </h2>
               <p className="text-primary-100 mb-6 max-w-2xl">
                 {
-                  'Trouvez un architecte ou un maçon qualifié près de chez vous pour vous accompagner dans vos démarches de permis de construire et la réalisation de vos travaux.'
+                  'Trouvez un maçon ou un charpentier qualifié près de chez vous pour vous accompagner dans la réalisation de vos travaux soumis à permis de construire.'
                 }
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/services/architecte-interieur"
+                  href="/services/charpentier"
                   className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
                 >
-                  {'Trouver un architecte'} <ArrowRight className="w-4 h-4" />
+                  {'Trouver un charpentier'} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/services/macon"

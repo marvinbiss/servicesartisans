@@ -199,16 +199,4 @@ export const serviceImagePool_batch1: Record<string, { src: string; alt: string 
       alt: 'Detail d une plaque metallique avec numerotation sur une porte',
     },
   ],
-
-  'poseur-de-parquet': [
-    {
-      src: 'photo-MCiRFIS7VNE',
-      alt: 'Gros plan sur un parquet en bois naturel avec reflets de lumiere',
-    },
-    { src: 'photo-o6Qwcv-abjs', alt: 'Sol en parquet bois clair avec une porte blanche' },
-    { src: 'photo-XGTvP4qG7aY', alt: 'Piece vide avec murs blancs et sol en parquet bois' },
-    { src: 'photo-Bh4YvzgZF1Y', alt: 'Grande piece vide avec parquet en bois naturel' },
-    { src: 'photo-uXQHJrRvFok', alt: 'Piece renovee avec porte blanche et parquet en bois' },
-    { src: 'photo-vBBr-MOWhaY', alt: 'Piece vide avec escalier et parquet en bois massif' },
-  ],
 }
