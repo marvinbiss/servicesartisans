@@ -377,9 +377,9 @@ export default function ArtisanPageClient({
                   <ArtisanServices artisan={artisan} isClaimed={isClaimed} />
                 </section>
               )}
-              {/* 8. Business card — verification details */}
+              {/* 8. Business card — verification details (email gated by isClaimed for RGPD) */}
               <section aria-label="Fiche entreprise">
-                <ArtisanBusinessCard artisan={artisan} />
+                <ArtisanBusinessCard artisan={artisan} isClaimed={isClaimed} />
               </section>
               {/* Mobile-only contact section — only if claimed */}
               {isClaimed && (
