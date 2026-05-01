@@ -643,8 +643,23 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
         let isFallback = false
         if (providers.length === 0 && totalProviderCount <= 0) {
           if (deptName) {
+            // Vercel logs 2026-05-01 : 5+ URLs/h en `[TypeError: fetch failed]`
+            // (limans, valence, cadenet, carros, solier/80379…). Sans .catch
+            // ici, l'IIFE rejette → Promise.all global rejette → outer catch
+            // ligne ~502 → notFound() avec body "Page non trouvée" alors que
+            // ce n'est qu'un timeout réseau Supabase transient. Le commit
+            // 7bcbfe9fd a catché getProvidersByServiceAndLocation mais pas
+            // ce fallback département (cascade fix oubliée).
             providers = await getProvidersByServiceAndDepartment(serviceSlug, deptName, {
               limit: 6,
+            }).catch((err: unknown) => {
+              logger.error('service_location.dept_fallback_fetch_error', err as Error, {
+                route: 'services/[service]/[location]',
+                service: serviceSlug,
+                location: locationSlug,
+                dept: deptName,
+              })
+              return [] as Awaited<ReturnType<typeof getProvidersByServiceAndDepartment>>
             })
             isFallback = providers.length > 0
           }
