@@ -81,8 +81,9 @@ export const dynamicParams = true
 // Slug guard (comme services/[service]/[location])
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-// Top 8 services énergétiques pré-rendus (subset de l'allowlist) × top 20 villes
-// = 160 pages statiques au build ; le reste passe par ISR on-demand.
+// Top 10 services énergétiques pré-rendus (subset de l'allowlist) × top 20 villes
+// = 200 pages statiques au build ; le reste passe par ISR on-demand.
+// 2026-05-02 : +chauffe-eau-thermodynamique +audit-energetique (flagship CEE pivot RGE).
 const PRERENDER_SERVICES: string[] = [
   'pompe-a-chaleur',
   'panneaux-solaires',
@@ -92,6 +93,8 @@ const PRERENDER_SERVICES: string[] = [
   'renovation-energetique',
   'menuisier',
   'couvreur',
+  'chauffe-eau-thermodynamique',
+  'audit-energetique',
 ]
 const PRERENDER_CITIES_COUNT = 20
 

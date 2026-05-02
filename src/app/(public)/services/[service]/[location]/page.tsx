@@ -33,6 +33,7 @@ import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
@@ -1467,6 +1468,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           departementName={location.department_name}
           regionName={location.region_name}
           currentIntent="services"
+          hasCEE={getCeeOpsForRgeService(serviceSlug).length > 0}
         />
       </div>
       {/* --- end pSEO enrichment blocks --- */}
