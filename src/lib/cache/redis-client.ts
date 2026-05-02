@@ -313,8 +313,38 @@ export async function releaseLock(key: string, token: string): Promise<void> {
 }
 
 /**
- * Minimal RateLimiter shim — delegates to Upstash REST (sliding window)
- * Used by src/middleware/rate-limit.ts
+ * Minimal RateLimiter shim — fixed-window via INCR + EXPIRE.
+ *
+ * Used by :
+ *   - src/middleware/rate-limit.ts
+ *   - src/app/api/prospection/optout/route.ts
+ *
+ * 2026-05-02 — switch from sliding-window ZADD/ZCARD/PEXPIRE → fixed-window
+ * INCR + EXPIRE pour 3 raisons :
+ *
+ *   1. NOPERM zadd (Sentry NEXTJS-87 / 6N / 5B partiel) : le user Redis
+ *      `default` du token Upstash actif n'a pas la permission `+zadd`
+ *      (ACL restreinte côté Upstash backend, indépendante du token UI).
+ *      INCR + EXPIRE sont des commandes core supportées par toutes les
+ *      ACL Redis, donc immunes à ce type de restriction.
+ *
+ *   2. Bug silent under-count : la version ZADD passait `now` comme score
+ *      ET comme member (`['ZADD', key, String(now), String(now)]`). En
+ *      Redis, ZADD avec un member existant override le score sans rien
+ *      ajouter au cardinal. Conséquence : 100 requêtes à la même ms ne
+ *      comptent que pour 1 → rate-limit bypassé. Cf rate-limiter.ts:71-77
+ *      qui décrit ce piège et le contourne avec un counter unique.
+ *
+ *   3. Performance : 1 round-trip Upstash REST au lieu de 4 (ZADD +
+ *      ZREMRANGEBYSCORE + ZCARD + PEXPIRE) → divise par ~4 la latence.
+ *
+ * Approximation acceptée : fixed-window (vs sliding) → un client peut
+ * burster 2x la limite à la frontière d'une window. Pour les cas d'usage
+ * (optout DSAR + middleware throttle anti-spam) c'est négligeable.
+ *
+ * Pour un rate-limiting précis sliding-window, utiliser `checkRateLimit`
+ * de `src/lib/rate-limiter.ts` (qui garde le pipeline ZADD avec member
+ * unique, à utiliser quand l'ACL Upstash sera corrigée).
  */
 export const rateLimiter = {
   async isAllowed(
@@ -324,21 +354,27 @@ export const rateLimiter = {
   ): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
     const now = Date.now()
     const windowMs = windowSeconds * 1000
-    const key = `sa:rl:${identifier}`
+    // Bucket basé sur la window : `sa:rl:<id>:<bucketStart>` → expire seul.
+    const bucketStart = Math.floor(now / windowMs) * windowMs
+    const key = `sa:rl:${identifier}:${bucketStart}`
+    const resetAt = bucketStart + windowMs
 
     try {
-      await redisCommand(['ZADD', key, String(now), String(now)])
-      await redisCommand(['ZREMRANGEBYSCORE', key, '0', String(now - windowMs)])
-      const count = (await redisCommand<number>(['ZCARD', key])) ?? 0
-      await redisCommand(['PEXPIRE', key, String(windowMs)])
+      const count = (await redisCommand<number>(['INCR', key])) ?? 1
+      // EXPIRE seulement à la 1ère INCR (count=1) — économise les writes.
+      // Si Redis perd le TTL (rare), pire cas = clé persiste 1 window de plus.
+      if (count === 1) {
+        await redisCommand(['PEXPIRE', key, String(windowMs)])
+      }
 
       if (count > limit) {
-        await redisCommand(['ZREM', key, String(now)])
-        return { allowed: false, remaining: 0, resetAt: now + windowMs }
+        return { allowed: false, remaining: 0, resetAt }
       }
-      return { allowed: true, remaining: Math.max(0, limit - count), resetAt: now + windowMs }
+      return { allowed: true, remaining: Math.max(0, limit - count), resetAt }
     } catch {
-      return { allowed: true, remaining: limit, resetAt: now + windowMs }
+      // Fail-open : Redis indispo → on laisse passer, jamais blocker un
+      // user sur un problème infra. Sentry capture déjà via redisCommand.
+      return { allowed: true, remaining: limit, resetAt }
     }
   },
 }

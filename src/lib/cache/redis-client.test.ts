@@ -148,3 +148,56 @@ describe('redis-client circuit breaker', () => {
     vi.useRealTimers()
   })
 })
+
+describe('rateLimiter shim (fixed-window INCR + EXPIRE)', () => {
+  it('uses INCR + PEXPIRE — never ZADD (immune au NOPERM zadd)', async () => {
+    const calls: Array<string[]> = []
+    const fetchMock = vi.fn().mockImplementation(async (_url: string, init: RequestInit) => {
+      const body = JSON.parse(String(init.body)) as string[]
+      calls.push(body)
+      // 1ère commande = INCR → retourne le compteur (1, puis 2, etc.)
+      // 2ème commande = PEXPIRE → retourne 1
+      const cmd = body[0]
+      if (cmd === 'INCR')
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ result: calls.filter((b) => b[0] === 'INCR').length }),
+        }
+      if (cmd === 'PEXPIRE') return { ok: true, status: 200, json: async () => ({ result: 1 }) }
+      throw new Error(`Unexpected Redis command in test: ${cmd}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { rateLimiter } = await import('./redis-client')
+
+    const r1 = await rateLimiter.isAllowed('test:user', 5, 60)
+    expect(r1.allowed).toBe(true)
+    expect(r1.remaining).toBe(4)
+
+    // Aucune commande envoyée ne doit être un ZADD/ZREMRANGEBYSCORE/ZCARD/ZREM
+    const verbs = calls.map((c) => c[0])
+    expect(verbs).not.toContain('ZADD')
+    expect(verbs).not.toContain('ZREMRANGEBYSCORE')
+    expect(verbs).not.toContain('ZCARD')
+    expect(verbs).not.toContain('ZREM')
+
+    // Doit contenir au moins 1 INCR + 1 PEXPIRE (sur la 1ère INCR du bucket)
+    expect(verbs).toContain('INCR')
+    expect(verbs).toContain('PEXPIRE')
+  })
+
+  it('fail-open quand Redis throw (jamais bloquer un user sur infra)', async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new Error('NOPERM whatever'))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { rateLimiter } = await import('./redis-client')
+
+    // L'invariant clé : `allowed: true` même si Redis est down (fail-open).
+    // Le `remaining` peut varier selon le path catch (try-catch outer vs
+    // redisCommand qui swallow → INCR=null → count=1 → remaining=limit-1).
+    // L'important est qu'aucun user ne soit bloqué par un problème infra.
+    const r = await rateLimiter.isAllowed('test:user', 5, 60)
+    expect(r.allowed).toBe(true)
+  })
+})
