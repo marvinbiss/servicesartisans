@@ -6,7 +6,9 @@ import { getRgeServiceHubContent } from '@/lib/rge/service-hub-content'
 
 describe('Élargissement RGE 2026-05-02 — invariants cross-files', () => {
   it('VALID_RGE_SERVICE_SLUGS miroir parfait de RGE_ALLOWED_SERVICES', () => {
-    expect([...VALID_RGE_SERVICE_SLUGS].sort()).toEqual([...RGE_ALLOWED_SERVICES].sort())
+    expect(Array.from(VALID_RGE_SERVICE_SLUGS).sort()).toEqual(
+      Array.from(RGE_ALLOWED_SERVICES).sort()
+    )
   })
 
   it('chaque slug a une entrée dans RGE_QUALIFICATION_LABELS', () => {

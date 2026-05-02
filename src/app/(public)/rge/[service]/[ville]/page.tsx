@@ -36,6 +36,7 @@ import {
   getRgeCountByServiceAndCityStrict,
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
+  resolveRgeServiceDisplayName,
 } from '@/lib/rge/service-city-listings'
 import { getRgeServiceStats } from '@/lib/rge/guide-stats'
 import {
@@ -126,7 +127,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ])
   if (!location) notFound()
 
-  const serviceName = service?.name || serviceSlug
+  const serviceName = resolveRgeServiceDisplayName(serviceSlug, service?.name)
   const villeName = location.name
 
   // Vague 1.1 — stratégie 410 : count=0 confirmé → notFound() côté page
@@ -266,7 +267,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   ])
   if (!location) notFound()
 
-  const serviceName = service?.name || serviceSlug
+  const serviceName = resolveRgeServiceDisplayName(serviceSlug, service?.name)
   const villeName = location.name
 
   let { providers, count } = await getRgeProvidersByServiceAndCity(serviceSlug, villeSlug, {

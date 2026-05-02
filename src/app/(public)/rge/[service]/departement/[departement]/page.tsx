@@ -18,6 +18,7 @@ import {
   isRgeAllowedService,
   RGE_QUALIFICATION_LABELS,
   RGE_ALLOWED_SERVICES,
+  resolveRgeServiceDisplayName,
 } from '@/lib/rge/service-city-listings'
 import { getDeptPreposition, getDeptArticle } from '@/lib/geo-strings'
 import { logger } from '@/lib/logger'
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     })
     return null
   })
-  const serviceName = service?.name || serviceSlug
+  const serviceName = resolveRgeServiceDisplayName(serviceSlug, service?.name)
 
   // Vague 1.1 — stratégie 410 fail-open : count=0 confirmé → noindex dans les
   // metadata ; erreur transitoire → on reste indexable (ISR corrige).
@@ -121,7 +122,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
     })
     return null
   })
-  const serviceName = service?.name || serviceSlug
+  const serviceName = resolveRgeServiceDisplayName(serviceSlug, service?.name)
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
 
   const { providers, count } = await getRgeProvidersByServiceAndDepartement(

@@ -66,6 +66,44 @@ export function isRgeAllowedService(slug: string): slug is RgeAllowedService {
 }
 
 /**
+ * Display names pour les slugs RGE-only (élargissement 2026-05-02).
+ *
+ * Ces slugs n'existent pas dans `france-light.services` (pas de hub
+ * `/services/[slug]`) ni dans la table `services` côté DB. `getServiceBySlug`
+ * renvoie donc `null` pour eux et le rendu pSEO retombe sur le slug brut.
+ *
+ * Cette table fournit un fallback humain pour `/rge/[service]/[ville]` et
+ * `/rge/[service]/departement/[dept]` afin que le H1 / metaTitle / breadcrumb
+ * affichent un libellé propre (« Chauffe-eau thermodynamique » plutôt que
+ * « chauffe-eau-thermodynamique »).
+ *
+ * Les services RGE historiques (pompe-a-chaleur, etc.) restent résolus via
+ * `getServiceBySlug` car ils existent dans france.ts.
+ */
+export const RGE_VIRTUAL_SERVICE_NAMES: Record<string, string> = {
+  'borne-recharge': 'Borne de recharge',
+  'chauffe-eau-thermodynamique': 'Chauffe-eau thermodynamique',
+  'audit-energetique': 'Audit énergétique',
+  ventilation: 'Ventilation (VMC)',
+  fenetres: 'Fenêtres performantes',
+}
+
+/**
+ * Renvoie le libellé humain à afficher pour un slug RGE. Préfère le `name`
+ * issu de `getServiceBySlug` (DB ou static france.ts), sinon retombe sur
+ * `RGE_VIRTUAL_SERVICE_NAMES`, sinon retourne le slug brut.
+ *
+ * Pure helper — utilisable en metadata generation et rendu SSR.
+ */
+export function resolveRgeServiceDisplayName(
+  slug: string,
+  fromDbOrStatic: string | null | undefined
+): string {
+  if (fromDbOrStatic && fromDbOrStatic.length > 0) return fromDbOrStatic
+  return RGE_VIRTUAL_SERVICE_NAMES[slug] ?? slug
+}
+
+/**
  * Mapping service énergétique → qualification RGE de référence (marque + organisme).
  * Utilisé pour personnaliser l'intro SEO de la page avec le bon label "QualiPAC",
  * "QualiSol", etc. Fallback générique "RGE" pour les services moins typés.
