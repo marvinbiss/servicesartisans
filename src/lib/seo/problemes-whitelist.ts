@@ -3,21 +3,25 @@
  *
  * Stratégie 140K vague 2 #7 (2026-04-29) — voir docs/strategy-140k-2026-04-29.md.
  *
- * Avant : 61 problèmes × 500 villes = 30 500 URLs (cannibalisation /services
- * massive — la majorité des SERP rank /services/[s]/[v] pour les requêtes
- * problème + ville, /problemes apporte 0 clic GSC sur 90j sur le bottom 80 %).
+ * Vague 2 #12 nettoyage 2026-05-02 : tier resserré 200/100/50 → 100/50/25
+ * pour aller plus loin dans la densité>volume. Bottom 50 % des combos avait
+ * <0.1 imp/page/mois GSC sur la fenêtre 90j post-vague 2 #7. -3 775 URLs.
  *
- * Après : allocation tier basée sur urgencyLevel (Ahrefs vol search corrélé
- * à l'urgence) :
- *   - haute   → top 200 villes (pages réellement utiles, intention transac)
- *   - moyenne → top 100 villes
- *   - basse   → top 50 villes
- * Total ≈ 7 000 URLs (-77 %). Le reste est redirigé 301 vers
- * /services/${primaryService}/${ville} (canonical durable).
+ * Avant tout pivot : 61 problèmes × 500 villes = 30 500 URLs (cannibalisation
+ * /services massive — la majorité des SERP rank /services/[s]/[v] pour les
+ * requêtes problème + ville).
+ *
+ * Allocation tier basée sur urgencyLevel (Ahrefs vol search corrélé à
+ * l'urgence) :
+ *   - haute   → top 100 villes (pages réellement utiles, intention transac)
+ *   - moyenne → top 50 villes
+ *   - basse   → top 25 villes
+ * Total ≈ 3 775 URLs (-87 % vs baseline 30K). Le reste est noindex et
+ * 301-redirigé vers /services/${primaryService}/${ville}.
  *
  * Critères :
  *   - Vol search "problème + ville" décroît rapidement avec la population
- *   - Top 50/100/200 villes INSEE = 60-90 % de l'intention adressable
+ *   - Top 25/50/100 villes INSEE = 50-80 % de l'intention adressable
  *   - Garde l'archive éditoriale long-tail désindexée mais redirigée
  *     (préserve le PageRank externe accumulé)
  *
@@ -30,9 +34,9 @@
 import { villes } from '@/lib/data/france'
 import { getProblemBySlug } from '@/lib/data/problems'
 
-const TOP_HAUTE = 200
-const TOP_MOYENNE = 100
-const TOP_BASSE = 50
+const TOP_HAUTE = 100
+const TOP_MOYENNE = 50
+const TOP_BASSE = 25
 
 const top200CitiesSet: ReadonlySet<string> = new Set(villes.slice(0, TOP_HAUTE).map((v) => v.slug))
 const top100CitiesSet: ReadonlySet<string> = new Set(

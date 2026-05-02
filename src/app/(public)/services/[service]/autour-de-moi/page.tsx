@@ -67,6 +67,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title: titleRoot,
     description,
     alternates: getAlternates(path),
+    // Vague 2 #13 (2026-05-02) : page geolocation pure UX, search volume
+    // hijacké par Google Maps. Hors stratégie SEO densité>volume → noindex.
+    robots: { index: false, follow: true },
     openGraph: {
       ...getOgDefaults(),
       title,

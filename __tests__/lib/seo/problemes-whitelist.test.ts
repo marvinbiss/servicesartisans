@@ -1,10 +1,10 @@
 /**
  * Tests — problemes-whitelist : validation du gate /problemes/[p]/[v].
  *
- * Stratégie 140K vague 2 #7 (2026-04-29) :
- *   - haute   → top 200 villes
- *   - moyenne → top 100 villes
- *   - basse   → top 50 villes
+ * Stratégie 140K vague 2 #12 (2026-05-02) — tier resserré :
+ *   - haute   → top 100 villes
+ *   - moyenne → top 50 villes
+ *   - basse   → top 25 villes
  *
  * Module 100 % pur (Sets en mémoire, lookup O(1), zéro I/O).
  */
@@ -23,13 +23,13 @@ describe('isProblemeIndexable', () => {
     expect(isProblemeIndexable('fuite-eau', 'ville-fantaisie-zzz')).toBe(false)
   })
 
-  it('accepte (haute, top 200) — Paris + fuite-eau', () => {
+  it('accepte (haute, top 100) — Paris + fuite-eau', () => {
     const problem = getProblemBySlug('fuite-eau')
     expect(problem?.urgencyLevel).toBe('haute')
     expect(isProblemeIndexable('fuite-eau', 'paris')).toBe(true)
   })
 
-  it('rejette (haute, hors top 200) — petite commune', () => {
+  it('rejette (haute, hors top 100) — petite commune', () => {
     const problem = getProblemBySlug('fuite-eau')
     expect(problem?.urgencyLevel).toBe('haute')
     const smallCity = villes[1500]
@@ -37,32 +37,32 @@ describe('isProblemeIndexable', () => {
     expect(isProblemeIndexable('fuite-eau', smallCity!.slug)).toBe(false)
   })
 
-  it('accepte (moyenne, top 100) — Paris + humidite', () => {
+  it('accepte (moyenne, top 50) — Paris + humidite', () => {
     const problem = getProblemBySlug('humidite')
     expect(problem?.urgencyLevel).toBe('moyenne')
     expect(isProblemeIndexable('humidite', 'paris')).toBe(true)
   })
 
-  it('rejette (moyenne, hors top 100, dans top 200) — humidite', () => {
+  it('rejette (moyenne, hors top 50, dans top 100) — humidite', () => {
     const problem = getProblemBySlug('humidite')
     expect(problem?.urgencyLevel).toBe('moyenne')
-    const villeRang150 = villes[150]
-    expect(villeRang150).toBeDefined()
-    expect(isProblemeIndexable('humidite', villeRang150!.slug)).toBe(false)
+    const villeRang75 = villes[75]
+    expect(villeRang75).toBeDefined()
+    expect(isProblemeIndexable('humidite', villeRang75!.slug)).toBe(false)
   })
 
-  it('accepte (basse, top 50) — Paris + fissure-mur', () => {
+  it('accepte (basse, top 25) — Paris + fissure-mur', () => {
     const problem = getProblemBySlug('fissure-mur')
     expect(problem?.urgencyLevel).toBe('basse')
     expect(isProblemeIndexable('fissure-mur', 'paris')).toBe(true)
   })
 
-  it('rejette (basse, hors top 50, dans top 100) — fissure-mur', () => {
+  it('rejette (basse, hors top 25, dans top 50) — fissure-mur', () => {
     const problem = getProblemBySlug('fissure-mur')
     expect(problem?.urgencyLevel).toBe('basse')
-    const villeRang75 = villes[75]
-    expect(villeRang75).toBeDefined()
-    expect(isProblemeIndexable('fissure-mur', villeRang75!.slug)).toBe(false)
+    const villeRang40 = villes[40]
+    expect(villeRang40).toBeDefined()
+    expect(isProblemeIndexable('fissure-mur', villeRang40!.slug)).toBe(false)
   })
 })
 
@@ -72,9 +72,9 @@ describe('getIndexableProblemeCombos', () => {
     expect(combos.length).toBeLessThanOrEqual(8_000)
   })
 
-  it('retourne au moins 5 000 combos (volume utile préservé)', () => {
+  it('retourne au moins 2 500 combos (volume utile préservé après tier resserré)', () => {
     const combos = getIndexableProblemeCombos(getProblemSlugs())
-    expect(combos.length).toBeGreaterThan(5_000)
+    expect(combos.length).toBeGreaterThan(2_500)
   })
 
   it('chaque combo retourné est isProblemeIndexable() === true (cohérence)', () => {
@@ -88,8 +88,8 @@ describe('getIndexableProblemeCombos', () => {
 
   it('ignore silencieusement les slugs problèmes inconnus', () => {
     const combos = getIndexableProblemeCombos(['probleme-inexistant', 'fuite-eau'])
-    // Tous les combos doivent appartenir à fuite-eau (haute → 200)
-    expect(combos.length).toBe(200)
+    // Tous les combos doivent appartenir à fuite-eau (haute → top 100)
+    expect(combos.length).toBe(100)
     expect(combos.every((c) => c.problemSlug === 'fuite-eau')).toBe(true)
   })
 
