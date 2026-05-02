@@ -1284,7 +1284,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service hub pages (/rge/[service]) ─────────────────────────
-  // 14 URLs — une par métier énergétique couvert par la mention RGE.
+  // 19 URLs — une par métier énergétique couvert par la mention RGE
+  // (14 historiques + 5 élargissement 2026-05-02 : borne-recharge,
+  //  chauffe-eau-thermodynamique, audit-energetique, ventilation, fenetres).
   // Priority 0.7 (hub éditorial, entre la home /rge à 0.8 et les pSEO
   // ville à 0.6). lastmod statique : contenu éditorial versionné code.
   if (id === 'rge-service') {
@@ -1317,7 +1319,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
-  // 14 services énergétiques × 500 villes = 7 000 URLs max.
+  // 19 services énergétiques × 500 villes = 9 500 URLs max
+  // (14 historiques + 5 élargissement 2026-05-02).
   // 2026-04-30 — fail-open systématique : audit baseline a révélé que le
   // filtre `rgeQualifiedServiceCity` était trop strict (143 URLs émises sur
   // 7000 attendues). Cause racine : le mapping `SERVICE_TO_SPECIALTIES`
@@ -1348,7 +1351,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── RGE service × department listings (/rge/[service]/departement/[dept])
-  // 14 services énergétiques × 101 départements = 1 414 URLs max.
+  // 19 services énergétiques × 101 départements = 1 919 URLs max
+  // (14 historiques + 5 élargissement 2026-05-02).
   // 2026-04-30 — fail-open systématique. Audit baseline a révélé 1 URL
   // sur 1 414 attendues (mismatch entre `address_department` DB qui stocke
   // le code numérique '69' et la lookup `normalizeName(dept.name)='rhone'`).

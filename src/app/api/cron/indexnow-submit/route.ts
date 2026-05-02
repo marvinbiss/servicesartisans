@@ -378,7 +378,9 @@ export async function GET(request: Request) {
       urls.push(...rgeCityBatch)
       counts.rgeCity = rgeCityBatch.length
 
-      // /rge/{service}/{city} — 14 services × top 10 villes, rotation 1/3 par jour (~47/jour)
+      // /rge/{service}/{city} — 19 services × top 10 villes, rotation 1/3 par jour (~63/jour)
+      // (14 historiques + 5 élargissement 2026-05-02 : borne-recharge,
+      //  chauffe-eau-thermodynamique, audit-energetique, ventilation, fenetres)
       const rgeServiceTopCitySlugs = villes.slice(0, 10).map((v) => v.slug)
       const allRgeServiceCityUrls: string[] = []
       for (const serviceSlug of RGE_ALLOWED_SERVICES) {
