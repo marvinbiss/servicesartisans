@@ -1,0 +1,145 @@
+# =============================================================================
+# gitleaks configuration — ServicesArtisans
+# =============================================================================
+#
+# Anti-régression secrets : 6 drifts hors-Git en 1 mois, plus 1 leak Upstash
+# REST token dans un chat 2026-05-02 (heureusement non commit). Ce fichier
+# définit les règles de détection + l'allowlist des faux positifs connus.
+#
+# Doc :
+#   - CI : .github/workflows/secrets-scan.yml (bloque PR/push avec finding)
+#   - Local pre-commit : .husky/pre-commit (soft-skip si gitleaks absent)
+#   - Audit historique one-shot :
+#       gitleaks detect --source . --log-opts="--all" --redact \
+#         --report-path /tmp/gitleaks-history.json
+#
+# Toute clé/token DOIT vivre dans .env.local (gitignored) ou Vercel env vars.
+# =============================================================================
+
+title = "ServicesArtisans gitleaks config"
+
+# Hérite de tous les rules par défaut de gitleaks (AWS, GitHub, Stripe, ...).
+[extend]
+useDefault = true
+
+# -----------------------------------------------------------------------------
+# Rules custom — secrets propres à la stack ServicesArtisans
+# -----------------------------------------------------------------------------
+
+[[rules]]
+id = "supabase-service-role-jwt"
+description = "Supabase service_role JWT (RLS bypass — fuite catastrophique)"
+regex = '''eyJ[A-Za-z0-9_-]{20,}\.eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{40,}'''
+keywords = ["service_role", "supabase", "SUPABASE_SERVICE", "eyJ"]
+
+[[rules]]
+id = "upstash-redis-rest-token"
+description = "Upstash Redis REST token (commands DB → fuite = RCE Redis)"
+regex = '''(?i)(upstash[_-]?redis[_-]?rest[_-]?token|UPSTASH_REDIS_REST_TOKEN|KV_REST_API_TOKEN)['"\s:=]+[A-Za-z0-9_-]{40,}'''
+keywords = ["upstash", "UPSTASH_REDIS_REST_TOKEN", "KV_REST_API_TOKEN"]
+
+[[rules]]
+id = "upstash-redis-cli-uri"
+description = "Upstash Redis URI (redis-cli format avec password inline)"
+regex = '''redis://default:[A-Za-z0-9_=+/-]{20,}@[a-z0-9.-]+\.upstash\.io'''
+keywords = ["upstash.io", "redis://"]
+
+[[rules]]
+id = "pipedrive-api-token"
+description = "Pipedrive API token (CRM → fuite = vol leads)"
+regex = '''(?i)(pipedrive[_-]?api[_-]?token|PIPEDRIVE_API_TOKEN)['"\s:=]+[a-f0-9]{40}'''
+keywords = ["pipedrive", "PIPEDRIVE_API_TOKEN"]
+
+[[rules]]
+id = "brevo-api-key"
+description = "Brevo (ex-Sendinblue) API key — préfixe xkeysib-"
+regex = '''xkeysib-[A-Za-z0-9_-]{60,}'''
+keywords = ["brevo", "sendinblue", "xkeysib"]
+
+[[rules]]
+id = "mailpace-api-token"
+description = "Mailpace transactional API token"
+regex = '''(?i)(mailpace[_-]?api[_-]?token|MAILPACE_API_TOKEN)['"\s:=]+[A-Za-z0-9_-]{32,}'''
+keywords = ["mailpace", "MAILPACE_API_TOKEN"]
+
+[[rules]]
+id = "sentry-dsn-with-secret"
+description = "Sentry DSN avec secret token (legacy format avec @)"
+regex = '''https://[a-f0-9]{32}:[a-f0-9]{32}@[a-z0-9.-]+\.ingest\.sentry\.io'''
+keywords = ["sentry.io", "@o"]
+
+[[rules]]
+id = "sentry-auth-token"
+description = "Sentry auth token (sntrys_ ou sntryu_ prefix)"
+regex = '''sntry[a-z]_[A-Za-z0-9+/=]{40,}'''
+keywords = ["sntrys_", "sntryu_"]
+
+[[rules]]
+id = "ahrefs-api-token"
+description = "Ahrefs API token (préfixe -fUKR_ documenté CLAUDE.md)"
+regex = '''-fUKR_[A-Za-z0-9_-]{30,}'''
+keywords = ["ahrefs", "-fUKR_"]
+
+[[rules]]
+id = "google-maps-api-key"
+description = "Google Maps API key (préfixe AIza)"
+regex = '''AIza[0-9A-Za-z_-]{35}'''
+keywords = ["AIza", "GOOGLE_MAPS"]
+
+[[rules]]
+id = "vercel-bypass-token"
+description = "Vercel deployment protection bypass token"
+regex = '''(?i)(vercel[_-]?bypass[_-]?token|VERCEL_AUTOMATION_BYPASS_SECRET)['"\s:=]+[A-Za-z0-9]{32,}'''
+keywords = ["VERCEL_AUTOMATION_BYPASS_SECRET", "vercel_bypass"]
+
+[[rules]]
+id = "anthropic-api-key"
+description = "Anthropic API key (sk-ant-)"
+regex = '''sk-ant-(api03|admin01)-[A-Za-z0-9_-]{80,}'''
+keywords = ["sk-ant-"]
+
+[[rules]]
+id = "openai-api-key"
+description = "OpenAI API key"
+regex = '''sk-(proj-)?[A-Za-z0-9_-]{40,}'''
+keywords = ["sk-proj-", "OPENAI_API_KEY"]
+
+[[rules]]
+id = "private-key-pem"
+description = "Clé privée PEM (RSA, EC, OpenSSH)"
+regex = '''-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----'''
+keywords = ["BEGIN PRIVATE KEY", "BEGIN RSA PRIVATE", "BEGIN OPENSSH"]
+
+# -----------------------------------------------------------------------------
+# Allowlist — faux positifs connus (à étendre prudemment)
+# -----------------------------------------------------------------------------
+
+[allowlist]
+description = "Faux positifs connus — fixtures de tests, anon keys publiques, etc."
+paths = [
+  '''package-lock\.json$''',
+  '''node_modules/''',
+  '''\.next/''',
+  '''dist/''',
+  '''coverage/''',
+  '''.*\.snap$''',
+  '''__fixtures__/.*\.json$''',
+  '''docs/.*\.md$''',          # docs commit hashes / non-secret samples
+  '''CHANGELOG\.md$''',
+]
+
+regexes = [
+  # Anon key Supabase (publique par design — exposée au client, pas un secret)
+  '''(?i)NEXT_PUBLIC_SUPABASE_ANON_KEY''',
+  # Sentry DSN public (préfixe SENTRY_DSN_PUBLIC ou NEXT_PUBLIC_SENTRY_DSN — exposé volontairement au client)
+  '''NEXT_PUBLIC_SENTRY_DSN''',
+  # Patterns "FAKE_TOKEN_FOR_TESTS" ou "test_*" explicitement marqués
+  '''FAKE_[A-Z_]+_FOR_TESTS''',
+  '''test_[a-z]+_[a-f0-9]+''',
+  # Hash de commits Git (40 chars hex) ressemblant à un token
+  '''['"`]?[a-f0-9]{40}['"`]?\s*(\b//|\b#|/\*|$)''',
+]
+
+# Commits historiques tolérés — uniquement après audit manuel et rotation
+# confirmée des secrets concernés. Vide pour l'instant.
+commits = []

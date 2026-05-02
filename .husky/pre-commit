@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+sh scripts/gitleaks-precommit.sh || exit 1
 node scripts/check-migration-unique.mjs || exit 1
 node scripts/audit-migration-search-path.mjs || exit 1
 node scripts/audit-rls-coverage.mjs --strict || exit 1
