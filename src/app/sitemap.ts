@@ -1104,13 +1104,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly' as const,
         priority: 0.7,
       },
-      // /avis/{service} — lastmod = date du dernier avis pour ce service. Si aucun → omis.
-      ...tradeSlugs.map((slug) => ({
-        url: `${SITE_URL}/avis/${slug}`,
-        lastModified: reviewByService.get(slug),
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
-      })),
+      // Vague ε nettoyage 2026-05-02 : on n'émet que les hubs /avis/[s] qui
+      // ont au moins 1 avis (reviewByService.has = ≥1 avis publié pour ce
+      // service). Sans avis, la page hub n'a rien à afficher → thin content
+      // donc noindex en sitemap pour économiser le budget crawl.
+      // Fail-open si reviewByService est vide (DB blip).
+      ...tradeSlugs
+        .filter((slug) => reviewByService.size === 0 || reviewByService.has(slug))
+        .map((slug) => ({
+          url: `${SITE_URL}/avis/${slug}`,
+          lastModified: reviewByService.get(slug),
+          changeFrequency: 'weekly' as const,
+          priority: 0.6,
+        })),
     ]
   }
 
@@ -1219,11 +1225,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
-        // lastmod = date du dernier provider (dept, service). Si aucun → omis.
+        // Vague δ nettoyage 2026-05-02 : on n'émet que les combos avec ≥1
+        // provider (lastmod défini = ≥1 provider sur ce dept×service).
+        // Sans provider, la page est thin par construction (juste template +
+        // commune stats). byDeptService = empty Map sur DB blip → fail-open.
         const key = `${normalizeName(dept.name)}::${service}`
+        const lastmod = byDeptService.get(key)
+        if (byDeptService.size > 0 && !lastmod) continue
         allUrls.push({
           url: `${SITE_URL}/departements/${dept.slug}/${service}`,
-          lastModified: byDeptService.get(key),
+          lastModified: lastmod,
           changeFrequency: 'monthly',
           priority: 0.5,
         })
@@ -1257,15 +1268,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const { byRegionService } = await getLastmodData()
     const tradeSlugs = getTradesSlugs()
     return regions.flatMap((region) =>
-      tradeSlugs.map((service) => {
-        const key = `${normalizeName(region.name)}::${service}`
-        return {
+      tradeSlugs
+        .map((service) => {
+          const key = `${normalizeName(region.name)}::${service}`
+          return { service, key, lastmod: byRegionService.get(key) }
+        })
+        // Vague δ' nettoyage 2026-05-02 : skip combo region×service sans
+        // provider (lastmod undefined). Fail-open si Map vide (DB blip).
+        .filter(({ lastmod }) => byRegionService.size === 0 || lastmod !== undefined)
+        .map(({ service, lastmod }) => ({
           url: `${SITE_URL}/regions/${region.slug}/${service}`,
-          lastModified: byRegionService.get(key),
+          lastModified: lastmod,
           changeFrequency: 'monthly' as const,
           priority: 0.5,
-        }
-      })
+        }))
     )
   }
 
