@@ -24,7 +24,7 @@ const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'macon', name: 'Maçon' },
   { slug: 'couvreur', name: 'Couvreur' },
   { slug: 'carreleur', name: 'Carreleur' },
-  { slug: 'jardinier', name: 'Jardinier' },
+  { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur' },
 ]
 
 // Top 20 cities by population / search volume

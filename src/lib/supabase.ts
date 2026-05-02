@@ -421,8 +421,6 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   serrurier: ['serrurier'], // NAF 43.32B
   vitrier: ['vitrier'], // NAF 43.34Z
   climaticien: ['climaticien'], // NAF 43.22B
-  jardinier: ['jardinier'], // NAF 81.30Z
-  nettoyage: ['nettoyage'], // NAF 81.21Z
 
   // === Bâtiment / Gros œuvre ===
   zingueur: ['zingueur'], // NAF 43.91B (sous-spécialité couverture)
@@ -455,15 +453,12 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   ventilation: ['climaticien', 'chauffagiste', 'electricien'],
   fenetres: ['menuisier'],
 
-  // === Extérieur ===
-  paysagiste: ['paysagiste'], // NAF 71.11Z + 81.30Z
-
-  // === Sécurité / Diagnostics ===
-  'alarme-securite': ['alarme-securite'], // NAF 43.21A
+  // === Diagnostics ===
   diagnostiqueur: ['diagnostiqueur'], // NAF 71.20B
 
-  // === Services spécialisés ===
-  demenageur: ['demenageur'], // NAF 49.42Z
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // jardinier, nettoyage, paysagiste, alarme-securite, demenageur retirés
+  // (services à la personne / hors BTP / cannibalisation).
 }
 
 // ---------------------------------------------------------------------------

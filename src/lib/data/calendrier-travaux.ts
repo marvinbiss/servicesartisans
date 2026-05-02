@@ -58,12 +58,6 @@ export const calendrierTravaux: CalendrierMois[] = [
     slug: 'fevrier',
     travauxRecommandes: [
       {
-        titre: 'Élagage des arbres',
-        description:
-          'Février est le dernier mois idéal pour élaguer les arbres avant la reprise de la sève. Les branches mortes ou dangereuses proches de la maison ou des lignes électriques doivent être coupées par un professionnel.',
-        service: 'paysagiste',
-      },
-      {
         titre: 'Rénovation intérieure (peinture, sols)',
         description:
           "C'est la bonne période pour les travaux d'intérieur : peinture, pose de parquet ou carrelage intérieur, rénovation de salle de bain. Les artisans sont encore disponibles avant le rush du printemps.",
@@ -183,12 +177,6 @@ export const calendrierTravaux: CalendrierMois[] = [
         description:
           "L'ensoleillement augmente et les jours sont longs : c'est le moment idéal pour installer des panneaux photovoltaïques et commencer à produire dès l'été. Les aides MaPrimeRénov' et l'obligation d'achat rendent l'investissement rentable.",
         service: 'panneaux-solaires',
-      },
-      {
-        titre: 'Aménagement de jardin et clôture',
-        description:
-          'La terre est réchauffée et les plantes reprennent. Créez vos massifs, posez votre clôture, installez un portail automatique ou aménagez un espace extérieur avant les réceptions estivales.',
-        service: 'paysagiste',
       },
       {
         titre: 'Réfection de toiture',

@@ -80,10 +80,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1534759844553-c2f76b04e35f'),
     alt: 'Maçon construisant un mur en briques',
   },
-  jardinier: {
-    src: unsplash('photo-1626075218494-89e92b375502'),
-    alt: 'Jardinier entretenant un beau jardin paysager',
-  },
   climaticien: {
     src: unsplash('photo-1588090272888-033e92b141b1'),
     alt: 'Technicien installant une climatisation murale',
@@ -112,14 +108,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1631277190979-1704e8c7d574'),
     alt: "Artisan posant de l'isolation thermique en laine de roche",
   },
-  paysagiste: {
-    src: unsplash('photo-1595387426256-cc153122a6f1'),
-    alt: 'Jardin paysager aménagé par un professionnel',
-  },
-  'alarme-securite': {
-    src: unsplash('photo-1528312635006-8ea0bc49ec63'),
-    alt: 'Caméra de surveillance et système de sécurité résidentiel',
-  },
   platrier: {
     src: unsplash('photo-1559126698-1906840f3c95'),
     alt: 'Plâtrier posant des plaques de plâtre sur une ossature',
@@ -128,10 +116,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1582201872911-67877db5fb38'),
     alt: 'Véhicule électrique branché sur une borne de recharge',
   },
-  demenageur: {
-    src: unsplash('photo-1715645948484-da40dd56bc93'),
-    alt: 'Déménageur chargeant des cartons dans un camion de déménagement',
-  },
   diagnostiqueur: {
     src: unsplash('photo-1631300313270-227604e71ea5'),
     alt: "Diagnostiqueur immobilier avec casque et dossier d'inspection",
@@ -139,10 +123,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   etancheiste: {
     src: unsplash('photo-1633759593085-1eaeb724fc88'),
     alt: 'Étanchéiste travaillant sur une toiture avec ses outils',
-  },
-  nettoyage: {
-    src: unsplash('photo-1674158687384-023265a5d536'),
-    alt: 'Professionnelle de nettoyage nettoyant un sol avec une serpillère',
   },
   'panneaux-solaires': {
     src: unsplash('photo-1745187946672-2c1d8cf26a2b'),
@@ -624,7 +604,6 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
   [/carrel/, 'carreleur', 'service'],
   [/couv|toiture|toitur/, 'couvreur', 'service'],
   [/macon|maçon/, 'macon', 'service'],
-  [/jardin|paysag/, 'jardinier', 'service'],
   [/climatici|climatisation/, 'climaticien', 'service'],
   [/cuisin/, 'cuisiniste', 'service'],
   [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],

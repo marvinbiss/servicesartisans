@@ -48,8 +48,10 @@ describe('partition tiers', () => {
     expect(TIER_A_SERVICES.size).toBe(12)
   })
 
-  it('Tier B = exactement 18 services (moyenne)', () => {
-    expect(TIER_B_SERVICES.size).toBe(18)
+  it('Tier B = exactement 13 services (moyenne) — pivot pure-play BTP 2026-05-02', () => {
+    // 18 → 13 : retrait jardinier, paysagiste, nettoyage, alarme-securite,
+    // demenageur (services hors thèse rénovation BTP énergétique).
+    expect(TIER_B_SERVICES.size).toBe(13)
   })
 
   it('Tier C = vide (16 métiers niche supprimés au pivot RGE 2026-05-01)', () => {

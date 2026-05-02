@@ -51,10 +51,11 @@ export const TIER_A_SERVICES: ReadonlySet<string> = new Set([
   'ramoneur',
 ])
 
-/** Tier B — 18 métiers moyenne demande (vol search 500-5K/mois) + cluster RGE. */
+/** Tier B — 13 métiers moyenne demande (vol search 500-5K/mois) + cluster RGE.
+ *  Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse retirés
+ *  (jardinier, paysagiste, demenageur, nettoyage, alarme-securite).
+ */
 export const TIER_B_SERVICES: ReadonlySet<string> = new Set([
-  'jardinier',
-  'paysagiste',
   'pompe-a-chaleur',
   'panneaux-solaires',
   'isolation-thermique',
@@ -67,9 +68,6 @@ export const TIER_B_SERVICES: ReadonlySet<string> = new Set([
   'platrier',
   'salle-de-bain',
   'cuisiniste',
-  'alarme-securite',
-  'demenageur',
-  'nettoyage',
   'diagnostiqueur',
 ])
 

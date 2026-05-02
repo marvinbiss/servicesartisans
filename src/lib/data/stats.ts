@@ -150,7 +150,7 @@ const HOMEPAGE_SERVICE_SLUGS = [
   'peintre-en-batiment',
   'menuisier',
   'macon',
-  'jardinier',
+  'pompe-a-chaleur',
 ]
 
 /** Données complètes pour la homepage : stats + providers + avis + compteurs */

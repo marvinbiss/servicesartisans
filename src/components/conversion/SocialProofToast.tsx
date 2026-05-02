@@ -74,7 +74,7 @@ const METIERS = [
   'plaquiste',
   'charpentier',
   'vitrier',
-  'jardinier',
+  'pompe-a-chaleur',
 ]
 
 function hashSeed(str: string): number {

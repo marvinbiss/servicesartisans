@@ -92,50 +92,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     },
   ],
 
-  paysagiste: [
-    {
-      src: unsplash('photo-B3yix9NT-PQ'),
-      alt: 'Jardinier professionnel taillant une haie avec un taille-haie',
-    },
-    {
-      src: unsplash('photo-Vu1GaaPWyTI'),
-      alt: 'Paysagiste passant la tondeuse dans un jardin verdoyant',
-    },
-    {
-      src: unsplash('photo-iYDSYuRAI3E'),
-      alt: 'Escalier en pierre dans un jardin paysager fleuri',
-    },
-    {
-      src: unsplash('photo-qmRh69t79-A'),
-      alt: 'Cascade sur pierres avec fleurs colorées dans un jardin aménagé',
-    },
-    {
-      src: unsplash('photo-iz_t6muEAl8'),
-      alt: 'Jardin luxuriant rempli de fleurs vibrantes et colorées',
-    },
-  ],
-
-  'alarme-securite': [
-    { src: unsplash('photo-KNt4zd8HPb0'), alt: 'Caméra de surveillance blanche fixée sur un mur' },
-    {
-      src: unsplash('photo-OfwiURcZwYw'),
-      alt: 'Trois caméras CCTV blanches montées sur un mur extérieur',
-    },
-    { src: unsplash('photo-AUefYR7RrWc'), alt: 'Caméra de sécurité blanche installée sur un mur' },
-    {
-      src: unsplash('photo-cJDAgJYQ6i8'),
-      alt: 'Caméra de surveillance montée sur un bâtiment en béton',
-    },
-    {
-      src: unsplash('photo-ujSsIk5iZmA'),
-      alt: "Caméra de sécurité fixée au plafond d'un bâtiment",
-    },
-    {
-      src: unsplash('photo-zBTYRFCeaS0'),
-      alt: 'Caméra de surveillance blanche sur poteau extérieur',
-    },
-  ],
-
   platrier: [
     {
       src: unsplash('photo-U7snZ-kAI5M'),
@@ -183,33 +139,6 @@ export const serviceImagePool_batch2: Record<string, { src: string; alt: string 
     {
       src: unsplash('photo-HeWrUlV5JSo'),
       alt: 'Voiture électrique connectée à un chargeur domestique',
-    },
-  ],
-
-  demenageur: [
-    {
-      src: unsplash('photo-ctXcNX1b4Oo'),
-      alt: 'Déménageur chargeant des cartons dans un camion de déménagement',
-    },
-    {
-      src: unsplash('photo-vV5iOAidkQE'),
-      alt: 'Couple portant des cartons de déménagement dans leur nouveau logement',
-    },
-    {
-      src: unsplash('photo-41S8eu6nImg'),
-      alt: "Couple heureux avec cartons et plantes lors d'un déménagement",
-    },
-    {
-      src: unsplash('photo-x8l4lN6-xd0'),
-      alt: 'Couple emménageant dans leur nouvelle maison avec les clés',
-    },
-    {
-      src: unsplash('photo-KqqKF9lDg8Q'),
-      alt: 'Couple portant des cartons dans leur nouveau logement',
-    },
-    {
-      src: unsplash('photo-XFRiOwXEH4E'),
-      alt: 'Jeune homme tenant des cartons de déménagement vu du dessus',
     },
   ],
 }

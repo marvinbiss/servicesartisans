@@ -814,7 +814,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'macon',
       'couvreur',
       'carreleur',
-      'jardinier',
+      'pompe-a-chaleur',
     ] as const
     const aroundMePages: MetadataRoute.Sitemap = AROUND_ME_SERVICES.map((slug) => ({
       url: `${SITE_URL}/services/${slug}/autour-de-moi`,

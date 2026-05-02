@@ -94,11 +94,6 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'comment-choisir-macon-guide',
     'agrandir-maison-extension-guide',
   ],
-  jardinier: [
-    'prix-jardinier-paysagiste-2026',
-    'comment-choisir-jardinier-paysagiste',
-    'amenager-terrasse-exterieure-guide',
-  ],
   vitrier: [
     'prix-vitrier-2026-remplacement-vitrage',
     'comment-choisir-vitrier-guide',
@@ -113,11 +108,6 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'prix-cuisiniste-2026-pose-cuisine',
     'comment-choisir-cuisiniste-guide',
     'renover-cuisine-guide-complet-etapes',
-  ],
-  nettoyage: [
-    'prix-nettoyage-professionnel-2026',
-    'comment-choisir-entreprise-nettoyage',
-    'entretien-annuel-maison-checklist-complete',
   ],
   charpentier: [
     'prix-toiture-2026-refection-reparation-materiaux',
@@ -179,11 +169,8 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'electricite-normes-securite',
     'domotique-maison-connectee-guide-debutant',
   ],
-  'alarme-securite': [
-    'securite-alarme-maison-guide-2026',
-    'securiser-maison-cambriolage-solutions',
-    'domotique-maison-connectee-guide-debutant',
-  ],
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // jardinier, nettoyage, alarme-securite retirés (services hors thèse).
 }
 
 // ---------------------------------------------------------------------------

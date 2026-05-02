@@ -44,8 +44,12 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   // Pivot RGE 2026-05-01 : 16 métiers Tier C niche supprimés
   // (solier, terrassier, metallier, ferronnier, poseur-de-parquet, miroitier,
   //  storiste, architecte-interieur, decorateur, domoticien, pisciniste,
-  //  antenniste, ascensoriste, geometre, desinsectisation, deratisation)
+  //  antenniste, ascensoriste, geometre, desinsectisation, deratisation).
+  //
+  // Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse
+  // supprimés (demenageur, nettoyage, jardinier, paysagiste, alarme-securite)
   // → middleware retournera 410 sur leurs URLs.
+  // 30 → 25 services. SA = pure-play rénovation BTP énergétique.
   'plombier',
   'electricien',
   'serrurier',
@@ -55,11 +59,9 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   'carreleur',
   'couvreur',
   'macon',
-  'jardinier',
   'vitrier',
   'climaticien',
   'cuisiniste',
-  'nettoyage',
   'charpentier',
   'zingueur',
   'etancheiste',
@@ -72,10 +74,7 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   'renovation-energetique',
   'borne-recharge',
   'ramoneur',
-  'paysagiste',
-  'alarme-securite',
   'diagnostiqueur',
-  'demenageur',
 ])
 
 /**

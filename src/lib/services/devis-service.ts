@@ -27,11 +27,9 @@ const serviceNames: Record<string, string> = {
   menuisier: 'Menuisier',
   macon: 'Maçon',
   carreleur: 'Carreleur',
-  jardinier: 'Jardinier-paysagiste',
   vitrier: 'Vitrier',
   climaticien: 'Climaticien',
   cuisiniste: 'Cuisiniste',
-  nettoyage: 'Nettoyage professionnel',
   general: 'Demande générale',
 }
 

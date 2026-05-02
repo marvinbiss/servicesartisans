@@ -241,7 +241,13 @@ export function generateDataDrivenContent(
 
       // Service-specific housing insight
       if (pct >= 60) {
-        const houseTrades = ['couvreur', 'paysagiste', 'jardinier', 'facadier', 'ramoneur']
+        const houseTrades = [
+          'couvreur',
+          'facadier',
+          'ramoneur',
+          'isolation-thermique',
+          'pompe-a-chaleur',
+        ]
         if (houseTrades.includes(serviceSlug)) {
           parts.push(
             `Cette forte proportion de maisons individuelles génère une demande soutenue en services ${de} pour l'entretien et la rénovation des propriétés.`
@@ -543,8 +549,6 @@ export function generateDataDrivenContent(
         'facadier',
         'peintre-en-batiment',
         'macon',
-        'paysagiste',
-        'jardinier',
         'charpentier',
         'zingueur',
         'etancheiste',
@@ -597,16 +601,7 @@ export function generateDataDrivenContent(
     'cuisiniste',
     'plaquiste',
   ]
-  const exteriorTrades = [
-    'couvreur',
-    'facadier',
-    'paysagiste',
-    'jardinier',
-    'macon',
-    'charpentier',
-    'zingueur',
-    'etancheiste',
-  ]
+  const exteriorTrades = ['couvreur', 'facadier', 'macon', 'charpentier', 'zingueur', 'etancheiste']
   const energyTrades = [
     'chauffagiste',
     'climaticien',

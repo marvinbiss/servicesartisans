@@ -102,7 +102,6 @@ function buildSearchTerms(slug: string): string[] {
     'isolation-thermique': ['isolation', 'isolant', 'thermique'],
     'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffage'],
     'salle-de-bain': ['salle-de-bain', 'bain', 'douche', 'sanitaire'],
-    paysagiste: ['paysagiste', 'jardin', 'paysage', 'exterieur'],
   }
 
   const found = variants[slug]

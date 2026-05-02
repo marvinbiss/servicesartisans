@@ -261,10 +261,13 @@ describe('evaluateGonePath — /tarifs/[s]/[v]/[task] (DEPRECATED 2026-04-29)', 
 
 describe('evaluateGonePath — /tarifs/[s]/[v]/[task] whitelist GSC G3', () => {
   it('URL whitelistée (clic GSC actif 90j) → 301 vers /services/[s]/[v]#tarifs', () => {
-    // 28 clics GSC sur cette URL en 90j
-    expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m')).toEqual({
+    // Pivot pure-play BTP énergétique 2026-05-02 : test migré jardinier→couvreur
+    // (jardinier retiré de VALID_SERVICE_SLUGS + whitelist GSC).
+    expect(
+      evaluateGonePath('/tarifs/couvreur/besancon/nettoyage-et-demoussage-de-toiture')
+    ).toEqual({
       gone: false,
-      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
+      redirect: { to: '/services/couvreur/besancon#tarifs', status: 301 },
     })
     expect(evaluateGonePath('/tarifs/serrurier/lyon/changement-de-serrure-standard')).toEqual({
       gone: false,
@@ -281,18 +284,22 @@ describe('evaluateGonePath — /tarifs/[s]/[v]/[task] whitelist GSC G3', () => {
   it('whitelist case-insensitive + trailing slash tolérés', () => {
     // Lookup et cible 301 sont tous deux lowercased → on canonicalise vers
     // /services/{lowercase}/{lowercase}#tarifs.
-    expect(evaluateGonePath('/Tarifs/Jardinier/Paris/Tonte-De-Pelouse-Jardin-De-200-M')).toEqual({
+    expect(
+      evaluateGonePath('/Tarifs/Couvreur/Besancon/Nettoyage-Et-Demoussage-De-Toiture')
+    ).toEqual({
       gone: false,
-      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
+      redirect: { to: '/services/couvreur/besancon#tarifs', status: 301 },
     })
-    expect(evaluateGonePath('/tarifs/jardinier/paris/tonte-de-pelouse-jardin-de-200-m/')).toEqual({
+    expect(
+      evaluateGonePath('/tarifs/couvreur/besancon/nettoyage-et-demoussage-de-toiture/')
+    ).toEqual({
       gone: false,
-      redirect: { to: '/services/jardinier/paris#tarifs', status: 301 },
+      redirect: { to: '/services/couvreur/besancon#tarifs', status: 301 },
     })
   })
 
   it('URL hors whitelist (mêmes service+ville mais task différent) → gone:true', () => {
-    expect(evaluateGonePath('/tarifs/jardinier/paris/abattage-d-arbre-avec-dessouchage')).toEqual({
+    expect(evaluateGonePath('/tarifs/couvreur/besancon/refection-complete-toiture-1000m')).toEqual({
       gone: true,
       reason: 'tarifs_task_deprecated',
     })
@@ -388,8 +395,11 @@ describe('VALID_SERVICE_SLUGS — cohérence avec france-light.ts', () => {
     expect(Array.from(VALID_SERVICE_SLUGS).sort()).toEqual(Array.from(lightSlugs).sort())
   })
 
-  it('30 services (post pivot RGE 2026-05-01 : 16 Tier C niche supprimés)', () => {
-    expect(VALID_SERVICE_SLUGS.size).toBe(30)
+  it('25 services (post pivot pure-play BTP énergétique 2026-05-02 : -16 Tier C + -5 hors thèse)', () => {
+    // Pivot RGE 2026-05-01 : 46 → 30 services (16 niche Tier C supprimés).
+    // Pivot pure-play BTP 2026-05-02 : 30 → 25 (jardinier, paysagiste,
+    // nettoyage, alarme-securite, demenageur retirés).
+    expect(VALID_SERVICE_SLUGS.size).toBe(25)
   })
 })
 

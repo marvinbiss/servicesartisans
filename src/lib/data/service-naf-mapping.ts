@@ -27,11 +27,9 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   macon: ['4399C'], // Maçonnerie générale
   vitrier: ['4334Z'], // Peinture et vitrerie (same NAF)
 
-  // Specialized trades
-  jardinier: ['8130Z'], // Services d'aménagement paysager
-  paysagiste: ['7111Z', '8130Z'], // Architecture + aménagement paysager
+  // Specialized trades — pivot pure-play BTP énergétique 2026-05-02 :
+  // jardinier, paysagiste, nettoyage retirés (services à la personne hors BTP).
   cuisiniste: ['4332C', '3102Z'], // Agencement + fabrication meubles cuisine
-  nettoyage: ['8121Z', '8122Z'], // Nettoyage de bâtiments
   charpentier: ['4391A'], // Charpente
   zingueur: ['4391B'], // Couverture (zinguerie = sous-spécialité)
   etancheiste: ['4399A'], // Étanchéification
@@ -48,13 +46,12 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   'isolation-thermique': ['4329A'], // Isolation
   'renovation-energetique': ['4329A', '4322B'], // Isolation + thermique
 
-  // Maintenance & security
+  // Maintenance & security — pivot 2026-05-02 : alarme-securite retiré
+  // (marché dominé installateurs marques, hors thèse BTP).
   ramoneur: ['8129B'], // Autres services de nettoyage
-  'alarme-securite': ['4321A', '8020Z'], // Installation électrique + systèmes de sécurité
 
-  // Other
+  // Other — pivot 2026-05-02 : demenageur retiré (logistique hors BTP).
   diagnostiqueur: ['7120B'], // Analyses techniques
-  demenageur: ['4942Z'], // Déménagement
 }
 
 /** Get all NAF codes for a service slug */

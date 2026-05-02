@@ -29,7 +29,7 @@ const AROUND_ME_SERVICES: readonly string[] = [
   'macon',
   'couvreur',
   'carreleur',
-  'jardinier',
+  'pompe-a-chaleur',
 ] as const
 
 export function generateStaticParams() {

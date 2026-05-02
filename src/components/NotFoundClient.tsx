@@ -26,21 +26,18 @@ const SERVICE_KEYWORDS: Record<string, { slug: string; label: string }> = {
   couv: { slug: 'couvreur', label: 'Couvreur' },
   macon: { slug: 'macon', label: 'Maçon' },
   maçon: { slug: 'macon', label: 'Maçon' },
-  jardin: { slug: 'jardinier', label: 'Jardinier' },
   vitr: { slug: 'vitrier', label: 'Vitrier' },
   climat: { slug: 'climaticien', label: 'Climaticien' },
   cuisin: { slug: 'cuisiniste', label: 'Cuisiniste' },
-  nettoy: { slug: 'nettoyage', label: 'Nettoyage professionnel' },
   charpent: { slug: 'charpentier', label: 'Charpentier' },
   ravalement: { slug: 'facadier', label: 'Façadier' },
   facade: { slug: 'facadier', label: 'Façadier' },
   façade: { slug: 'facadier', label: 'Façadier' },
-  demenag: { slug: 'demenageur', label: 'Déménageur' },
-  déménag: { slug: 'demenageur', label: 'Déménageur' },
   isolation: { slug: 'isolation-thermique', label: 'Isolation thermique' },
   solaire: { slug: 'panneaux-solaires', label: 'Panneaux solaires' },
-  alarme: { slug: 'alarme-securite', label: 'Alarme et sécurité' },
   ramone: { slug: 'ramoneur', label: 'Ramoneur' },
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // jardin/nettoy/demenag/alarme retirés (services hors thèse).
 }
 
 /** Well-known city names (top ~30 for fast matching) */

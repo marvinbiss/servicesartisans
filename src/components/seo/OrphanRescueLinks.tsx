@@ -43,7 +43,6 @@ function getRareServices(excludeSlug?: string): { slug: string; name: string }[]
     'peintre-en-batiment',
     'menuisier',
     'macon',
-    'jardinier',
   ])
 
   return services

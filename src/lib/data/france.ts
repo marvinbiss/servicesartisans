@@ -36176,26 +36176,17 @@ export const services = [
   { slug: 'carreleur', name: 'Carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600' },
   { slug: 'couvreur', name: 'Couvreur', icon: 'Home', color: 'from-red-500 to-red-600' },
   { slug: 'macon', name: 'Maçon', icon: 'Blocks', color: 'from-stone-500 to-stone-600' },
-  {
-    slug: 'jardinier',
-    name: 'Jardinier',
-    icon: 'TreeDeciduous',
-    color: 'from-green-500 to-green-600',
-  },
   { slug: 'vitrier', name: 'Vitrier', icon: 'Square', color: 'from-sky-500 to-sky-600' },
   { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
   { slug: 'cuisiniste', name: 'Cuisiniste', icon: 'ChefHat', color: 'from-rose-500 to-rose-600' },
-  {
-    slug: 'nettoyage',
-    name: 'Nettoyage professionnel',
-    icon: 'Sparkles',
-    color: 'from-emerald-500 to-emerald-600',
-  },
   // ── Pivot RGE 2026-05-01 : 16 métiers Tier C niche supprimés
   //    (solier, terrassier, métallier, ferronnier, poseur-de-parquet,
   //     miroitier, storiste, architecte-interieur, decorateur, domoticien,
   //     pisciniste, antenniste, ascensoriste, geometre, desinsectisation,
   //     deratisation) — focus rénovation énergétique.
+  // ── Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse
+  //    supprimés (jardinier, nettoyage, paysagiste, alarme-securite,
+  //    demenageur) — services à la personne / hors BTP / cannibalisation.
   { slug: 'charpentier', name: 'Charpentier', icon: 'Axe', color: 'from-amber-700 to-amber-800' },
   { slug: 'zingueur', name: 'Zingueur', icon: 'Droplets', color: 'from-zinc-500 to-zinc-600' },
   { slug: 'etancheiste', name: 'Étanchéiste', icon: 'Shield', color: 'from-blue-600 to-blue-700' },
@@ -36238,18 +36229,10 @@ export const services = [
     color: 'from-emerald-600 to-emerald-700',
   },
   { slug: 'ramoneur', name: 'Ramoneur', icon: 'Factory', color: 'from-neutral-600 to-neutral-700' },
-  { slug: 'paysagiste', name: 'Paysagiste', icon: 'Trees', color: 'from-green-400 to-green-500' },
-  {
-    slug: 'alarme-securite',
-    name: 'Alarme et sécurité',
-    icon: 'ShieldAlert',
-    color: 'from-red-600 to-red-700',
-  },
   {
     slug: 'diagnostiqueur',
     name: 'Diagnostiqueur',
     icon: 'ClipboardCheck',
     color: 'from-blue-700 to-blue-800',
   },
-  { slug: 'demenageur', name: 'Déménageur', icon: 'Truck', color: 'from-blue-300 to-blue-400' },
 ]

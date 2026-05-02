@@ -127,14 +127,6 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'jardinier',
-    [
-      'prix-jardinier-paysagiste-2026',
-      'comment-choisir-jardinier-paysagiste',
-      'amenager-terrasse-exterieure-guide',
-    ],
-  ],
-  [
     'vitrier',
     [
       'prix-vitrier-2026-remplacement-vitrage',
@@ -158,18 +150,12 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
       'renover-cuisine-guide-complet-etapes',
     ],
   ],
-  [
-    'nettoyage',
-    [
-      'prix-nettoyage-professionnel-2026',
-      'comment-choisir-entreprise-nettoyage',
-      'entretien-annuel-maison-checklist-complete',
-    ],
-  ],
   // Pivot RGE 2026-05-01 : 16 entrées Tier C niche supprimées (solier,
   // terrassier, métallier, ferronnier, poseur-de-parquet, miroitier,
   // storiste, architecte-interieur, decorateur, domoticien, pisciniste,
   // antenniste, ascensoriste, geometre, desinsectisation, deratisation).
+  // Pivot pure-play BTP énergétique 2026-05-02 : 5 entrées hors thèse
+  // retirées (jardinier, nettoyage, paysagiste, alarme-securite, demenageur).
   [
     'charpentier',
     [
@@ -263,31 +249,11 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'paysagiste',
-    [
-      'prix-jardinier-paysagiste-2026',
-      'amenager-jardin-paysagiste-guide',
-      'amenagement-terrasse-exterieur-2026',
-    ],
-  ],
-  [
-    'alarme-securite',
-    ['securite-alarme-maison-guide-2026', 'securiser-maison-cambriolage-solutions'],
-  ],
-  [
     'diagnostiqueur',
     [
       'comment-choisir-diagnostiqueur-guide',
       'dpe-obligatoire-2026-guide',
       'diagnostic-immobilier-obligatoire-liste',
-    ],
-  ],
-  [
-    'demenageur',
-    [
-      'comment-choisir-demenageur-guide',
-      'preparer-maison-revente-travaux-rentables',
-      'travaux-avant-vendre-maison-rentables',
     ],
   ],
 ])

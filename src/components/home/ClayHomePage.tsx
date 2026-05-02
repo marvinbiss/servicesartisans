@@ -12,7 +12,7 @@ import {
   Shield,
   Key,
   Flame,
-  TreeDeciduous,
+  Thermometer,
   ArrowRight,
   Clock,
   CheckCircle,
@@ -51,7 +51,7 @@ const SERVICE_ITEMS = [
   { Icon: PaintBucket, name: 'Peinture', slug: 'peintre-en-batiment', price: '25' },
   { Icon: Hammer, name: 'Menuiserie', slug: 'menuisier', price: '45' },
   { Icon: HardHat, name: 'Maçonnerie', slug: 'macon', price: '55' },
-  { Icon: TreeDeciduous, name: 'Jardinage', slug: 'jardinier', price: '30' },
+  { Icon: Thermometer, name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', price: '120' },
 ]
 
 // Artisans mis en avant (sélection manuelle — vrais profils vérifiés)

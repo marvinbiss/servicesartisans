@@ -12,7 +12,6 @@ import {
   Droplets,
   Wind,
   Thermometer,
-  TreeDeciduous,
   Sofa,
   Sparkles,
   ShieldCheck,
@@ -31,10 +30,7 @@ import {
   Leaf,
   PlugZap,
   Factory,
-  Trees,
-  ShieldAlert,
   ClipboardCheck,
-  Truck,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import TldrBlock from '@/components/flagship/TldrBlock'
@@ -157,12 +153,6 @@ const allServices = [
         slug: 'serrurier',
         icon: Key,
         description: 'Ouverture de porte, changement serrure, blindage',
-      },
-      {
-        name: 'Alarme et sécurité',
-        slug: 'alarme-securite',
-        icon: ShieldAlert,
-        description: "Alarme, vidéosurveillance, contrôle d'accès",
       },
     ],
   },
@@ -298,25 +288,6 @@ const allServices = [
     ],
   },
   {
-    category: 'Extérieur & Jardin',
-    icon: TreeDeciduous,
-    color: 'emerald',
-    services: [
-      {
-        name: 'Jardinier',
-        slug: 'jardinier',
-        icon: TreeDeciduous,
-        description: 'Création et entretien jardins',
-      },
-      {
-        name: 'Paysagiste',
-        slug: 'paysagiste',
-        icon: Trees,
-        description: 'Aménagement paysager, terrasses',
-      },
-    ],
-  },
-  {
     category: 'Diagnostics & Expertises',
     icon: ClipboardCheck,
     color: 'blue',
@@ -329,32 +300,9 @@ const allServices = [
       },
     ],
   },
-  {
-    category: 'Hygiène',
-    icon: Sparkles,
-    color: 'orange',
-    services: [
-      {
-        name: 'Nettoyage professionnel',
-        slug: 'nettoyage',
-        icon: Sparkles,
-        description: 'Nettoyage professionnel, remise en état',
-      },
-    ],
-  },
-  {
-    category: 'Déménagement & Transport',
-    icon: Truck,
-    color: 'slate',
-    services: [
-      {
-        name: 'Déménageur',
-        slug: 'demenageur',
-        icon: Truck,
-        description: 'Déménagement, transport de meubles',
-      },
-    ],
-  },
+  // Pivot pure-play BTP énergétique 2026-05-02 : 4 catégories retirées
+  // (Sécurité→alarme retiré, Extérieur & Jardin = jardinier/paysagiste,
+  // Hygiène = nettoyage, Déménagement = demenageur). Hors thèse SA.
 ]
 
 const colorClasses: Record<string, { bg: string; icon: string; hover: string }> = {

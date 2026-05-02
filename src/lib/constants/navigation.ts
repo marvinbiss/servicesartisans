@@ -18,7 +18,6 @@ export const SERVICE_WEIGHT: Record<string, number> = {
   carreleur: 3,
   climaticien: 3,
   cuisiniste: 2,
-  jardinier: 2,
   vitrier: 2,
 }
 
@@ -34,7 +33,7 @@ export const popularServices = [
   { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket' },
   { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer' },
   { name: 'Maçon', slug: 'macon', icon: 'HardHat' },
-  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous' },
+  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: 'Thermometer' },
 ]
 
 export const popularCities = [
@@ -51,17 +50,20 @@ export const popularCities = [
  * 16 métiers Tier C niche supprimés (solier, terrassier, métallier, ferronnier,
  * poseur-de-parquet, miroitier, storiste, architecte-interieur, decorateur,
  * domoticien, pisciniste, antenniste, ascensoriste, geometre, desinsectisation,
- * deratisation). Toutes les références ont été retirées des arrays sibling.
+ * deratisation).
+ *
+ * Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse retirés
+ * (jardinier, paysagiste, nettoyage, alarme-securite, demenageur). Toutes les
+ * références ont été retirées des arrays sibling et des entrées sources.
  */
 export const relatedServices: Record<string, string[]> = {
   plombier: ['chauffagiste', 'salle-de-bain', 'cuisiniste', 'climaticien', 'pompe-a-chaleur'],
-  electricien: ['alarme-securite', 'borne-recharge', 'panneaux-solaires', 'climaticien'],
-  serrurier: ['alarme-securite', 'vitrier', 'menuisier'],
+  electricien: ['borne-recharge', 'panneaux-solaires', 'climaticien'],
+  serrurier: ['vitrier', 'menuisier'],
   chauffagiste: ['plombier', 'climaticien', 'pompe-a-chaleur', 'ramoneur', 'isolation-thermique'],
   'peintre-en-batiment': ['facadier', 'platrier', 'carreleur', 'menuisier'],
   menuisier: ['charpentier', 'cuisiniste', 'salle-de-bain', 'vitrier'],
   macon: ['charpentier', 'couvreur', 'facadier', 'etancheiste'],
-  jardinier: ['paysagiste', 'nettoyage'],
   carreleur: ['salle-de-bain', 'peintre-en-batiment', 'platrier'],
   couvreur: ['charpentier', 'zingueur', 'etancheiste', 'facadier', 'ramoneur'],
   climaticien: [
@@ -71,13 +73,12 @@ export const relatedServices: Record<string, string[]> = {
     'isolation-thermique',
     'electricien',
   ],
-  vitrier: ['menuisier', 'serrurier', 'alarme-securite'],
+  vitrier: ['menuisier', 'serrurier'],
   cuisiniste: ['plombier', 'electricien', 'salle-de-bain', 'carreleur'],
-  nettoyage: ['ramoneur', 'facadier', 'jardinier'],
   charpentier: ['couvreur', 'menuisier', 'macon', 'zingueur'],
   zingueur: ['couvreur', 'charpentier', 'etancheiste', 'facadier', 'plombier'],
   etancheiste: ['couvreur', 'facadier', 'zingueur', 'macon', 'isolation-thermique'],
-  facadier: ['peintre-en-batiment', 'etancheiste', 'macon', 'isolation-thermique', 'nettoyage'],
+  facadier: ['peintre-en-batiment', 'etancheiste', 'macon', 'isolation-thermique'],
   platrier: ['peintre-en-batiment', 'carreleur', 'isolation-thermique'],
   'salle-de-bain': ['plombier', 'carreleur', 'electricien', 'cuisiniste'],
   'pompe-a-chaleur': [
@@ -108,12 +109,9 @@ export const relatedServices: Record<string, string[]> = {
     'chauffagiste',
     'diagnostiqueur',
   ],
-  'borne-recharge': ['electricien', 'panneaux-solaires', 'alarme-securite'],
-  ramoneur: ['chauffagiste', 'couvreur', 'nettoyage', 'charpentier', 'diagnostiqueur'],
-  paysagiste: ['jardinier', 'macon'],
-  'alarme-securite': ['serrurier', 'electricien', 'vitrier'],
+  'borne-recharge': ['electricien', 'panneaux-solaires'],
+  ramoneur: ['chauffagiste', 'couvreur', 'charpentier', 'diagnostiqueur'],
   diagnostiqueur: ['renovation-energetique', 'electricien', 'ramoneur', 'isolation-thermique'],
-  demenageur: ['nettoyage', 'peintre-en-batiment', 'electricien', 'plombier', 'serrurier'],
 }
 
 export const popularRegions = [

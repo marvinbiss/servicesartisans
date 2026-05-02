@@ -56,11 +56,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   climaticien: { slug: 'climaticien', label: 'climaticien' },
   climatisation: { slug: 'climaticien', label: 'climaticien' },
   'pac air-air': { slug: 'climaticien', label: 'climaticien' },
-  // Jardinier paysagiste
-  jardinier: { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  paysagiste: { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  jardin: { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
-  paysagisme: { slug: 'jardinier-paysagiste', label: 'jardinier paysagiste' },
   // Vitrier
   vitrier: { slug: 'vitrier', label: 'vitrier' },
   vitrerie: { slug: 'vitrier', label: 'vitrier' },
@@ -69,8 +64,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   // Cuisiniste
   cuisiniste: { slug: 'cuisiniste', label: 'cuisiniste' },
   cuisine: { slug: 'cuisiniste', label: 'cuisiniste' },
-  // Entreprise de nettoyage
-  nettoyage: { slug: 'entreprise-de-nettoyage', label: 'entreprise de nettoyage' },
   // Charpentier
   charpentier: { slug: 'charpentier', label: 'charpentier' },
   charpente: { slug: 'charpentier', label: 'charpentier' },
@@ -123,19 +116,10 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   // Ramoneur
   ramoneur: { slug: 'ramoneur', label: 'ramoneur' },
   ramonage: { slug: 'ramoneur', label: 'ramoneur' },
-  // Alarme / Sécurité
-  alarme: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  'alarme-securite': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  vidéosurveillance: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
   // Diagnostiqueur
   diagnostiqueur: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic immobilier': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   dpe: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
-  // Déménageur
-  déménageur: { slug: 'demenageur', label: 'déménageur' },
-  demenageur: { slug: 'demenageur', label: 'déménageur' },
-  déménagement: { slug: 'demenageur', label: 'déménageur' },
-  demenagement: { slug: 'demenageur', label: 'déménageur' },
   // Ébéniste
   ébéniste: { slug: 'ebeniste', label: 'ébéniste' },
   ebeniste: { slug: 'ebeniste', label: 'ébéniste' },
@@ -145,31 +129,9 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'restauration meuble': { slug: 'ebeniste', label: 'ébéniste' },
   marqueterie: { slug: 'ebeniste', label: 'ébéniste' },
   'bois massif': { slug: 'ebeniste', label: 'ébéniste' },
-  // Paysagiste (service distinct de jardinier)
-  'aménagement paysager': { slug: 'paysagiste', label: 'paysagiste' },
-  'amenagement paysager': { slug: 'paysagiste', label: 'paysagiste' },
-  'création jardin': { slug: 'paysagiste', label: 'paysagiste' },
-  'creation jardin': { slug: 'paysagiste', label: 'paysagiste' },
-  'conception paysagère': { slug: 'paysagiste', label: 'paysagiste' },
-  'conception paysagere': { slug: 'paysagiste', label: 'paysagiste' },
-  engazonnement: { slug: 'paysagiste', label: 'paysagiste' },
-  'arrosage automatique': { slug: 'paysagiste', label: 'paysagiste' },
-  // Jardinier — mots-clés supplémentaires (slug correct : jardinier)
-  tonte: { slug: 'jardinier', label: 'jardinier' },
-  'tonte pelouse': { slug: 'jardinier', label: 'jardinier' },
-  élagage: { slug: 'jardinier', label: 'jardinier' },
-  elagage: { slug: 'jardinier', label: 'jardinier' },
-  'taille de haie': { slug: 'jardinier', label: 'jardinier' },
-  'entretien jardin': { slug: 'jardinier', label: 'jardinier' },
-  désherbage: { slug: 'jardinier', label: 'jardinier' },
-  desherbage: { slug: 'jardinier', label: 'jardinier' },
-  // Nettoyage — mots-clés supplémentaires (slug correct : nettoyage)
-  'nettoyage industriel': { slug: 'nettoyage', label: 'nettoyage professionnel' },
-  'nettoyage professionnel': { slug: 'nettoyage', label: 'nettoyage professionnel' },
-  ménage: { slug: 'nettoyage', label: 'nettoyage professionnel' },
-  menage: { slug: 'nettoyage', label: 'nettoyage professionnel' },
-  propreté: { slug: 'nettoyage', label: 'nettoyage professionnel' },
-  proprete: { slug: 'nettoyage', label: 'nettoyage professionnel' },
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // Mots-clés paysagiste/jardinier/nettoyage/alarme/déménageur retirés
+  // (slugs services supprimés du catalogue).
   // Plâtrier — mots-clés supplémentaires (slug correct : platrier)
   plâtre: { slug: 'platrier', label: 'plâtrier plaquiste' },
   platre: { slug: 'platrier', label: 'plâtrier plaquiste' },
@@ -335,18 +297,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'conduit fumee': { slug: 'ramoneur', label: 'ramoneur' },
   'poêle à bois': { slug: 'ramoneur', label: 'ramoneur' },
   'poele a bois': { slug: 'ramoneur', label: 'ramoneur' },
-  // Alarme / Sécurité — mots-clés supplémentaires
-  'sécurité maison': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  'securite maison': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  télésurveillance: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  telesurveillance: { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  'détecteur de fumée': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  'detecteur de fumee': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
-  // Déménageur — mots-clés supplémentaires
-  'garde-meuble': { slug: 'demenageur', label: 'déménageur' },
-  'monte-meuble': { slug: 'demenageur', label: 'déménageur' },
-  'emballage déménagement': { slug: 'demenageur', label: 'déménageur' },
-  'emballage demenagement': { slug: 'demenageur', label: 'déménageur' },
   // Peintre en bâtiment — mots-clés supplémentaires
   tapisserie: { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
   'papier peint': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },

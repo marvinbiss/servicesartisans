@@ -102,14 +102,10 @@ const _specialtyToServiceSlug: Record<string, string> = {
   rge: 'renovation-energetique',
   'borne-electrique': 'borne-recharge',
   ramonage: 'ramoneur',
-  'amenagement-exterieur': 'paysagiste',
-  alarme: 'alarme-securite',
-  securite: 'alarme-securite',
-  videosurveillance: 'alarme-securite',
   diagnostic: 'diagnostiqueur',
   dpe: 'diagnostiqueur',
-  demenagement: 'demenageur',
-  'nettoyage-professionnel': 'nettoyage',
+  // Pivot pure-play BTP énergétique 2026-05-02 : alias retirés
+  // (jardinier/paysagiste/nettoyage/alarme/demenageur).
 }
 
 // Generate SEO-friendly artisan URL using static slug lookup

@@ -23,19 +23,18 @@ export const BAROMETRE_METIERS: BarometreMetier[] = [
   { slug: 'carreleur', label: 'Carreleur', icon: '🧱' },
   { slug: 'couvreur', label: 'Couvreur', icon: '🏠' },
   { slug: 'macon', label: 'Maçon', icon: '🏗️' },
-  { slug: 'jardinier', label: 'Jardinier', icon: '🌿' },
   { slug: 'vitrier', label: 'Vitrier', icon: '🪟' },
   { slug: 'climaticien', label: 'Climaticien', icon: '❄️' },
   { slug: 'charpentier', label: 'Charpentier', icon: '🪓' },
   { slug: 'facadier', label: 'Façadier', icon: '🏢' },
-  { slug: 'paysagiste', label: 'Paysagiste', icon: '🌳' },
   { slug: 'zingueur', label: 'Zingueur', icon: '💧' },
   { slug: 'etancheiste', label: 'Étanchéiste', icon: '🛡️' },
   { slug: 'platrier', label: 'Plâtrier', icon: '🧱' },
   { slug: 'cuisiniste', label: 'Cuisiniste', icon: '🍳' },
   { slug: 'ramoneur', label: 'Ramoneur', icon: '🏭' },
   { slug: 'diagnostiqueur', label: 'Diagnostiqueur', icon: '📋' },
-  { slug: 'demenageur', label: 'Déménageur', icon: '🚚' },
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // jardinier, paysagiste, demenageur retirés (hors thèse).
 ]
 
 export function getBarometreMetierBySlug(slug: string): BarometreMetier | undefined {

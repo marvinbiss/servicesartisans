@@ -326,31 +326,8 @@ const emergencyMeta: Record<
       'Déperdition thermique critique en hiver',
     ],
   },
-  paysagiste: {
-    gradient: 'from-green-700 to-green-900',
-    lightBg: 'bg-green-50',
-    lightText: 'text-green-800',
-    problems: [
-      'Arbre dangereux menaçant habitation',
-      'Mur de soutènement fissuré ou effondré',
-      'Inondation aménagement paysager',
-      'Éboulement enrochement ou talus',
-      'Dégâts de tempête sur jardin paysagé',
-    ],
-  },
-  'alarme-securite': {
-    gradient: 'from-red-700 to-red-900',
-    lightBg: 'bg-red-50',
-    lightText: 'text-red-800',
-    problems: [
-      "Panne système d'alarme (domicile non protégé)",
-      'Caméra de surveillance hors service',
-      'Détecteur de mouvement défaillant',
-      'Alarme qui se déclenche en boucle',
-      'Mise en sécurité après intrusion',
-      'Serrure connectée bloquée',
-    ],
-  },
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // paysagiste + alarme-securite retirés (services hors thèse SA).
   platrier: {
     gradient: 'from-neutral-600 to-neutral-800',
     lightBg: 'bg-neutral-50',

@@ -143,11 +143,9 @@ describe('resolveServiceName', () => {
     expect(resolveServiceName('menuisier')).toBe('Menuisier')
     expect(resolveServiceName('macon')).toBe('Maçon')
     expect(resolveServiceName('carreleur')).toBe('Carreleur')
-    expect(resolveServiceName('jardinier')).toBe('Jardinier-paysagiste')
     expect(resolveServiceName('vitrier')).toBe('Vitrier')
     expect(resolveServiceName('climaticien')).toBe('Climaticien')
     expect(resolveServiceName('cuisiniste')).toBe('Cuisiniste')
-    expect(resolveServiceName('nettoyage')).toBe('Nettoyage professionnel')
     expect(resolveServiceName('general')).toBe('Demande générale')
   })
 

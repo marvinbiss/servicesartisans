@@ -21,7 +21,7 @@ export const SERVICES = [
   { value: 'maçon', label: 'Maçon', icon: '🧱' },
   { value: 'carreleur', label: 'Carreleur', icon: '🔲' },
   { value: 'couvreur', label: 'Couvreur', icon: '🏠' },
-  { value: 'jardinier', label: 'Jardinier', icon: '🌱' },
+  { value: 'pompe-a-chaleur', label: 'Pompe à chaleur', icon: '🌡️' },
 ]
 
 interface MapFiltersProps {

@@ -331,18 +331,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Ne planifiez pas de travaux de maçonnerie en période de gel (température < 5 °C) : le mortier et le béton ne prennent pas correctement et la solidité de l'ouvrage est compromise.",
   },
-  jardinier: {
-    coastal:
-      'En zone littorale, privilégiez des plantes résistantes aux embruns et au vent : tamaris, laurier-rose, agapanthe, graminées ornementales. Un jardinier-paysagiste local saura composer un jardin adapté.',
-    mountain:
-      'En montagne, la saison de jardinage est plus courte. Choisissez des plantes rustiques résistantes au gel (-15 à -25 °C) et planifiez les plantations entre mai et septembre.',
-    urban:
-      "En ville, les jardins de petite superficie et les terrasses gagnent à être aménagés par un paysagiste qui optimisera l'espace avec des plantes en bacs, des treillages et du mobilier adapté.",
-    rural:
-      "Pour les grands terrains, un contrat d'entretien annuel avec tonte bimensuelle, taille des haies et entretien des massifs est la solution la plus économique à long terme.",
-    default:
-      'Adaptez votre calendrier de jardinage à votre zone climatique : les dates de taille, de plantation et de semis varient significativement entre le nord et le sud de la France.',
-  },
   vitrier: {
     coastal:
       'En front de mer, les vitrages doivent résister aux projections salines et aux vents forts. Optez pour du double vitrage feuilleté avec un intercalaire warm-edge pour une isolation optimale.',
@@ -378,18 +366,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       "Pour les grandes cuisines de maison, l'îlot central est un atout majeur. Prévoyez au minimum 90 cm de passage autour de l'îlot pour une circulation confortable.",
     default:
       'Prenez le temps de comparer au moins 3 devis de cuisinistes différents. Les écarts de prix pour des prestations similaires peuvent atteindre 30 à 50 %.',
-  },
-  nettoyage: {
-    coastal:
-      "En bord de mer, le nettoyage des vitres et des façades doit être plus fréquent en raison des dépôts de sel marin. Un contrat trimestriel de nettoyage extérieur préserve l'aspect du bâtiment.",
-    mountain:
-      "Après la saison d'hiver, un nettoyage complet des extérieurs (façade, terrasse, gouttières) est recommandé pour éliminer les résidus de sel de déneigement et les mousses.",
-    urban:
-      "En copropriété, le nettoyage des parties communes (hall, escaliers, local poubelles) est un poste important du budget. Un appel d'offres annuel permet d'obtenir les meilleurs tarifs.",
-    rural:
-      'Pour les grandes propriétés, le nettoyage de fin de chantier après des travaux de rénovation nécessite une entreprise équipée : aspirateur industriel, autolaveuse, nettoyeur haute pression.',
-    default:
-      "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m² varie selon l'état des lieux et le type de nettoyage requis.",
   },
   charpentier: {
     coastal:
@@ -535,30 +511,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       'Le ramonage est obligatoire au moins une fois par an (deux fois pour le bois et le charbon). Le certificat de ramonage délivré par le professionnel est exigé par votre assurance habitation en cas de sinistre lié au chauffage.',
   },
-  paysagiste: {
-    coastal:
-      'En bord de mer, le paysagiste compose avec les contraintes du vent, du sel et de la sécheresse estivale. Les jardins littoraux réussis associent haies brise-vent (tamaris, éléagnus), couvre-sols résistants et plantes de rocaille.',
-    mountain:
-      "En montagne, le paysagiste doit sélectionner des végétaux rustiques supportant le gel intense et la courte saison de végétation. Les jardins alpins, les murets en pierre sèche et les prairies fleuries s'intègrent naturellement au paysage.",
-    urban:
-      "En milieu urbain, le paysagiste optimise les petits espaces : jardins de ville, terrasses et toitures végétalisées. La conception paysagère intègre les contraintes de vis-à-vis, de poids et d'accès pour créer des îlots de verdure en cœur de ville.",
-    rural:
-      "Pour les grands terrains ruraux, le paysagiste conçoit un plan d'aménagement global : allées, haies champêtres, verger, potager et espaces de détente. Un projet bien pensé valorise la propriété tout en limitant l'entretien futur.",
-    default:
-      "Consultez un paysagiste avant de planter : sa connaissance du sol, du climat local et des végétaux adaptés vous évitera des erreurs coûteuses. Un plan d'aménagement paysager professionnel valorise votre propriété de 10 à 15 %.",
-  },
-  'alarme-securite': {
-    coastal:
-      "En zone littorale, les systèmes d'alarme doivent résister à la corrosion saline. Privilégiez des détecteurs et sirènes en boîtiers étanches IP65 avec traitement anticorrosion, et prévoyez une maintenance semestrielle des contacts extérieurs.",
-    mountain:
-      "En montagne, les résidences secondaires inoccupées une partie de l'année sont des cibles privilégiées. Un système d'alarme connecté avec vidéosurveillance et alerte smartphone permet de surveiller votre bien à distance toute l'année.",
-    urban:
-      "En centre-ville et en appartement, les cambriolages sont statistiquement plus fréquents. Un système d'alarme avec détection d'ouverture sur toutes les fenêtres accessibles et une sirène intérieure dissuasive renforce significativement la protection.",
-    rural:
-      "En zone rurale isolée, un système d'alarme avec détection périmétrique extérieure (barrières infrarouges, vidéo-détection) protège la propriété avant même qu'un intrus n'atteigne le bâtiment. La télésurveillance compense l'éloignement des forces de l'ordre.",
-    default:
-      "Faites réaliser un diagnostic sécurité par un installateur certifié APSAD avant de choisir votre système d'alarme. Il identifiera les points vulnérables de votre habitation et dimensionnera la solution adaptée à votre niveau de risque.",
-  },
   diagnostiqueur: {
     coastal:
       "En zone littorale, le diagnostiqueur immobilier porte une attention particulière aux risques naturels (submersion marine, érosion côtière) et à l'état des matériaux exposés aux embruns, qui vieillissent plus rapidement qu'à l'intérieur des terres.",
@@ -570,18 +522,6 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       "En zone rurale, le diagnostiqueur vérifie également l'assainissement non collectif (contrôle SPANC obligatoire pour la vente) et les risques liés aux termites, aux mérules ou au radon selon la localisation géographique du bien.",
     default:
       "Regroupez tous vos diagnostics immobiliers obligatoires (DPE, amiante, plomb, électricité, gaz, termites, ERP) auprès d'un seul diagnostiqueur certifié. Le pack complet est plus économique que des interventions séparées.",
-  },
-  demenageur: {
-    coastal:
-      "En zone littorale, les déménagements estivaux coïncident avec l'afflux touristique, ce qui complique l'accès et le stationnement. Réservez votre déménageur au moins 2 mois à l'avance pour la période juin-septembre en bord de mer.",
-    mountain:
-      'En montagne, les déménagements sont plus complexes en raison des routes sinueuses, des accès limités en hiver et des conditions météo changeantes. Privilégiez la période mai-octobre et choisissez un déménageur habitué au terrain montagneux.',
-    urban:
-      "En centre-ville, le déménageur doit gérer les contraintes d'accès : étages sans ascenseur, rues étroites, stationnement réglementé. Demandez l'autorisation de stationnement en mairie au moins 15 jours avant et prévoyez le monte-meubles si nécessaire.",
-    rural:
-      "En zone rurale, les grandes distances entre l'ancien et le nouveau logement augmentent le coût du déménagement. Un déménageur proposant un forfait tout compris (emballage, transport, déballage) est souvent plus avantageux qu'une location de camion.",
-    default:
-      "Demandez un devis après visite technique obligatoire (gratuite) : le déménageur évaluera le volume à transporter, les contraintes d'accès et les besoins spécifiques. Comparez au moins 3 devis détaillés et vérifiez les assurances proposées.",
   },
 }
 
@@ -1747,7 +1687,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'carreleur',
     'climaticien',
     'vitrier',
-    'paysagiste',
     'facadier',
   ],
   '1950-1980': [
@@ -1763,7 +1702,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'serrurier',
     'vitrier',
     'facadier',
-    'paysagiste',
   ],
   '1980-2000': [
     'peintre-en-batiment',
@@ -1778,7 +1716,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'macon',
     'vitrier',
     'facadier',
-    'paysagiste',
   ],
   'post-2000': [
     'climaticien',
@@ -1793,7 +1730,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'couvreur',
     'macon',
     'facadier',
-    'paysagiste',
   ],
   haussmannien: [
     'peintre-en-batiment',
@@ -1808,7 +1744,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'vitrier',
     'climaticien',
     'facadier',
-    'paysagiste',
   ],
   mixte: [
     'plombier',
@@ -1823,7 +1758,6 @@ const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
     'macon',
     'vitrier',
     'facadier',
-    'paysagiste',
   ],
 }
 
@@ -2950,7 +2884,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'climaticien',
     'carreleur',
     'vitrier',
-    'paysagiste',
   ],
   continental: [
     'chauffagiste',
@@ -2965,7 +2898,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'facadier',
     'carreleur',
     'vitrier',
-    'paysagiste',
   ],
   mediterraneen: [
     'climaticien',
@@ -2980,7 +2912,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'menuisier',
     'chauffagiste',
     'vitrier',
-    'paysagiste',
   ],
   montagnard: [
     'chauffagiste',
@@ -2995,7 +2926,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'vitrier',
     'climaticien',
     'carreleur',
-    'paysagiste',
   ],
   'semi-oceanique': [
     'plombier',
@@ -3010,7 +2940,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'carreleur',
     'facadier',
     'vitrier',
-    'paysagiste',
   ],
   tropical: [
     'climaticien',
@@ -3023,7 +2952,6 @@ const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
     'serrurier',
     'menuisier',
     'facadier',
-    'paysagiste',
     'vitrier',
     'chauffagiste',
   ],

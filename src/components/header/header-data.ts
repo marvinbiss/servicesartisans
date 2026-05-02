@@ -11,8 +11,6 @@ import {
   PaintBucket,
   Sparkles,
   ChefHat,
-  Brush,
-  TreeDeciduous,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -145,22 +143,10 @@ export const serviceCategories: ServiceCategory[] = [
     icon: ChefHat,
     services: [
       { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
-      { name: 'Nettoyage', slug: 'nettoyage', icon: Brush, description: 'Ménage professionnel' },
     ],
   },
-  {
-    category: 'Extérieur',
-    color: 'emerald',
-    icon: TreeDeciduous,
-    services: [
-      {
-        name: 'Jardinier',
-        slug: 'jardinier',
-        icon: TreeDeciduous,
-        description: 'Jardin, aménagement',
-      },
-    ],
-  },
+  // Pivot pure-play BTP énergétique 2026-05-02 : catégorie "Extérieur"
+  // (jardinier) retirée. "Aménagement" : nettoyage retiré.
 ]
 
 // ── Helpers ─────────────────────────────────────────────

@@ -12,14 +12,16 @@ interface SeasonalLinksProps {
  * Based on real French demand patterns (chauffage in winter, jardinage in spring, etc.)
  */
 const SEASONAL_SERVICES: Record<number, string[]> = {
+  // Pivot pure-play BTP énergétique 2026-05-02 :
+  // jardinier + paysagiste retirés du calendrier saisonnier (hors thèse).
   0: ['chauffagiste', 'plombier', 'serrurier', 'vitrier', 'ramoneur'], // Janvier
   1: ['chauffagiste', 'plombier', 'electricien', 'peintre-en-batiment', 'vitrier'], // Février
-  2: ['jardinier', 'peintre-en-batiment', 'couvreur', 'macon', 'paysagiste'], // Mars
-  3: ['jardinier', 'paysagiste', 'couvreur', 'macon', 'peintre-en-batiment'], // Avril
-  4: ['jardinier', 'climaticien', 'paysagiste', 'couvreur', 'macon'], // Mai
-  5: ['climaticien', 'jardinier', 'paysagiste', 'electricien', 'menuisier'], // Juin
-  6: ['climaticien', 'jardinier', 'paysagiste', 'serrurier', 'vitrier'], // Juillet
-  7: ['climaticien', 'serrurier', 'plombier', 'jardinier', 'paysagiste'], // Août
+  2: ['couvreur', 'macon', 'peintre-en-batiment', 'facadier', 'isolation-thermique'], // Mars
+  3: ['couvreur', 'macon', 'peintre-en-batiment', 'facadier', 'pompe-a-chaleur'], // Avril
+  4: ['climaticien', 'couvreur', 'macon', 'pompe-a-chaleur', 'panneaux-solaires'], // Mai
+  5: ['climaticien', 'electricien', 'menuisier', 'panneaux-solaires', 'pompe-a-chaleur'], // Juin
+  6: ['climaticien', 'serrurier', 'vitrier', 'panneaux-solaires', 'pompe-a-chaleur'], // Juillet
+  7: ['climaticien', 'serrurier', 'plombier', 'panneaux-solaires', 'pompe-a-chaleur'], // Août
   8: ['couvreur', 'chauffagiste', 'peintre-en-batiment', 'macon', 'ramoneur'], // Septembre
   9: ['chauffagiste', 'ramoneur', 'couvreur', 'plombier', 'menuisier'], // Octobre
   10: ['chauffagiste', 'plombier', 'ramoneur', 'serrurier', 'vitrier'], // Novembre

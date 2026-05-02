@@ -72,7 +72,6 @@ export const GENERIC_TRADE_WORDS: ReadonlySet<string> = new Set([
   'ramonage',
   'etancheite',
   'depannage',
-  'paysagiste',
   'vitrier',
   'charpentier',
   'charpente',

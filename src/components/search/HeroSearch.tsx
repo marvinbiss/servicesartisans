@@ -122,11 +122,11 @@ const services = [
     urgent: false,
   },
   {
-    name: 'Jardinier',
-    slug: 'jardinier',
-    icon: 'TreeDeciduous',
-    color: 'from-green-500 to-green-600',
-    searches: '3k/mois',
+    name: 'Pompe à chaleur',
+    slug: 'pompe-a-chaleur',
+    icon: 'Thermometer',
+    color: 'from-emerald-500 to-emerald-600',
+    searches: '8k/mois',
     urgent: false,
   },
 ]
