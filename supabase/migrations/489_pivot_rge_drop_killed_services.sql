@@ -58,9 +58,12 @@
 -- ============================================================================
 -- 1. DESACTIVATION DES 16 SERVICES TIER C
 -- ============================================================================
+-- Note : pas de SET updated_at = NOW() — la table `services` n'a pas
+-- nécessairement cette colonne (vérification 2026-05-02 via SQL editor a
+-- révélé une syntax error 42601). Si la colonne existe en prod réelle,
+-- elle sera maintenue par un trigger BEFORE UPDATE.
 UPDATE public.services
-SET is_active = false,
-    updated_at = NOW()
+SET is_active = false
 WHERE slug IN (
   -- Bâtiment / Gros œuvre
   'solier',
