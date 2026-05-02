@@ -2,24 +2,27 @@
 /**
  * scripts/audit-migrations-applied.mjs
  * -------------------------------------
- * Audit anti-régression "migrations repo non appliquées en prod" et inverse.
+ * Audit anti-drift hors-Git : détecte les migrations appliquées en prod sans
+ * fichier .sql committé dans le repo (cas réel observé : DROP colonnes
+ * `lead_events.actor_id`, drift `bookings.service_*` columns).
  *
- * Complète `audit-schema-drift.mjs` qui ne couvre que le path code→DB. Ce
- * script couvre le path **migrations repo ↔ prod `supabase_migrations`** :
+ * Complète `audit-schema-drift.mjs` qui couvre le path code→DB.
  *
- *   1. Migration .sql présente dans `supabase/migrations/` MAIS pas dans la
- *      table `supabase_migrations` en prod = drift "non appliquée".
- *      Cas observés : mig 475 (RGPD purge_audit_logs), mig 477
- *      (search_providers_by_name), mig 483 (google_places columns).
+ * IMPORTANT — pourquoi seul le check "orphan" est actif (2026-05-02) :
+ *   La table `supabase_migrations.schema_migrations` n'est populated QUE par
+ *   `supabase db push` (CLI officielle). Le workflow réel ServicesArtisans
+ *   utilise le SQL Editor du dashboard pour appliquer les migrations
+ *   (cf CLAUDE.md "Supabase SQL editor: split multi-statements..."). Donc
+ *   161 migrations exécutées en prod n'apparaissent pas dans cette table
+ *   = 161 faux positifs sur le check "notApplied".
  *
- *   2. Migration dans `supabase_migrations` prod MAIS pas de .sql dans le
- *      repo = drift "manuelle hors-Git" (qq'un a appliqué via SQL Editor
- *      sans commit le fichier). Cas observés : drop colonnes `lead_events.actor_id`,
- *      drift `bookings.service_*` colonnes.
+ *   On garde uniquement le check "orphan" qui reste fiable : si la prod
+ *   référence une mig version=X et qu'il n'y a pas X_*.sql dans le repo,
+ *   c'est forcément un drift hors-Git (qq'un a tapé du SQL ad-hoc qui a
+ *   atterri dans schema_migrations sans passer par Git).
  *
- *   3. Migration appliquée en prod mais .sql modifié depuis (hash diff) =
- *      drift "édition post-apply". Cas observés : aucun pour l'instant
- *      mais on le détecte pour être préventif.
+ *   Si tu utilises supabase db push à 100%, active --check-not-applied
+ *   pour réactiver l'audit complet.
  *
  * Pipeline :
  *   1. Liste les fichiers `supabase/migrations/*.sql` (= source de vérité repo).
@@ -28,12 +31,14 @@
  *      au service_role uniquement (SECURITY DEFINER + GRANT EXECUTE ciblé).
  *   3. Diff version par version (le hash check est désactivé : Supabase
  *      normalise le SQL côté insertion, drift de whitespace = faux positifs).
- *   4. Output rapport texte ou JSON. Exit 1 sur drift en mode --strict.
+ *   4. Output rapport texte ou JSON. Exit 1 sur orphan détecté en --strict.
  *
  * Modes :
- *   --strict   : exit 1 si drift détecté (= mode CI/pre-push)
- *   --json     : output JSON pour parsing programmatique
- *   --verbose  : log les hash et timestamps
+ *   --strict             : exit 1 si orphan détecté (= mode CI/pre-push)
+ *   --check-not-applied  : réactive le check "missing in prod" (workflow
+ *                          `supabase db push` only)
+ *   --json               : output JSON pour parsing programmatique
+ *   --verbose            : log les hash et timestamps
  *
  * Lit `.env.local`. Skip silencieux si pas de SUPABASE_SERVICE_ROLE_KEY.
  *
@@ -48,6 +53,9 @@ const args = new Set(process.argv.slice(2))
 const strict = args.has('--strict')
 const jsonOut = args.has('--json')
 const verbose = args.has('--verbose')
+// Réactive le check "fichiers .sql repo non présents en prod schema_migrations".
+// Désactivé par défaut car incompatible avec le workflow SQL Editor (cf header).
+const checkNotApplied = args.has('--check-not-applied')
 
 const MIGRATIONS_DIR = 'supabase/migrations'
 const ENV_FILE = '.env.local'
@@ -171,16 +179,20 @@ function reportText(d, { local, applied }) {
   lines.push('📋 Migrations Applied Audit')
   lines.push('')
   lines.push(`  Migrations repo                       : ${local.length}`)
-  lines.push(`  Migrations appliquées en prod         : ${applied.length}`)
-  lines.push(`  Manquantes en prod (à appliquer)      : ${d.notApplied.length}`)
+  lines.push(`  Migrations dans schema_migrations     : ${applied.length}`)
   lines.push(`  Orphelines en prod (hors-Git)         : ${d.orphan.length}`)
+  if (checkNotApplied) {
+    lines.push(`  Manquantes dans schema_migrations     : ${d.notApplied.length}`)
+  }
   lines.push('')
 
-  if (d.notApplied.length > 0) {
-    lines.push('❌ Migrations repo NON appliquées en prod :')
+  if (checkNotApplied && d.notApplied.length > 0) {
+    lines.push('❌ Migrations repo absentes de schema_migrations :')
     for (const m of d.notApplied) lines.push(`     ${m.file}`)
     lines.push('')
-    lines.push('   → Apply via Supabase SQL editor OU `supabase db push`.')
+    lines.push('   → Apply via `supabase db push` (le SQL Editor ne populate pas')
+    lines.push('     schema_migrations — utiliser --check-not-applied uniquement si')
+    lines.push('     tu utilises le workflow CLI).')
     lines.push('')
   }
 
@@ -193,8 +205,9 @@ function reportText(d, { local, applied }) {
     lines.push('')
   }
 
-  if (d.notApplied.length === 0 && d.orphan.length === 0) {
-    lines.push('  ✅ Aucune drift migration détectée.')
+  const hasReportableDrift = d.orphan.length > 0 || (checkNotApplied && d.notApplied.length > 0)
+  if (!hasReportableDrift) {
+    lines.push('  ✅ Aucune drift migration hors-Git détectée.')
     lines.push('')
   }
 
@@ -243,7 +256,10 @@ async function main() {
     console.log(reportText(d, { local, applied }))
   }
 
-  const hasDrift = d.notApplied.length > 0 || d.orphan.length > 0
+  // Seul le check `orphan` bloque par défaut (drift hors-Git = vrai signal).
+  // Le check `notApplied` est opt-in pour éviter 161 faux positifs sur les
+  // migrations appliquées via SQL Editor sans populate schema_migrations.
+  const hasDrift = d.orphan.length > 0 || (checkNotApplied && d.notApplied.length > 0)
   if (strict && hasDrift) process.exit(1)
 }
 
