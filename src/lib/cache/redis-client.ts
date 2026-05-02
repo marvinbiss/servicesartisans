@@ -20,9 +20,13 @@ const isAvailable = Boolean(REST_URL && REST_TOKEN)
 const IS_BUILD_PHASE = process.env.NEXT_PHASE === 'phase-production-build'
 
 // Timeouts Upstash — voir rate-limiter.ts pour la même politique.
-// Un cache-miss SSR doit coûter < 100 ms ; au-delà de 2 s, on préfère re-fetcher
-// Supabase plutôt que de faire attendre Googlebot/un user.
-const UPSTASH_FETCH_TIMEOUT_MS = 2000
+// Audit 2026-05-02 : Vercel CDG1 (Paris) tape une DB Upstash hors-EU
+// (probablement US ou ASIA) → latency réseau pic à 2-3s sous charge ⇒ ~17
+// timeouts/h résiduels après tous les autres fix. Bumped de 2000 → 3500 ms.
+// Compromis : un cache-miss SSR coûte au pire 3.5s avant fallback Supabase
+// (Googlebot tolère ≤4s avant abandon de fetch), mais on supprime ~80% des
+// timeouts. À reduire à 1500 ms après migration de la DB en `eu-central-1`.
+const UPSTASH_FETCH_TIMEOUT_MS = 3500
 
 // Sentry throttling pour ne pas flooder pendant un incident long.
 const SENTRY_THROTTLE_MS = 60_000
