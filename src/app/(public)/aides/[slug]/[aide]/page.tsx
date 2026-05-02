@@ -23,6 +23,7 @@ import {
   aidesSlugs as ALL_AIDES_SLUGS,
   getAideBySlug as resolveAide,
 } from '@/lib/aides/aides-catalog'
+import { isAidesDeptIndexable } from '@/lib/seo/aides-dept-whitelist'
 import { getDeptPreposition } from '@/lib/geo-strings'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -83,11 +84,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     158
   )
 
+  // Vague 2 #11 (2026-05-02) : cohérence sitemap ↔ noindex.
+  // Hors whitelist top 30 dépts × 5 aides → noindex (page reste accessible).
+  const indexable = isAidesDeptIndexable(deptSlug, aideSlug)
+
   return {
     title,
     description,
     alternates: getAlternates(path),
-    robots: { index: true, follow: true },
+    robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',

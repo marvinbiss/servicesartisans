@@ -1081,9 +1081,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Tarifs task×city pages — DELETED 2026-04-29 (stratégie 140K vague 1) ──
   // 184 500 URLs supprimées via DELETE 410. Voir evaluateGonePath()
   // dans src/lib/seo/gone-paths.ts + docs/strategy-140k-2026-04-29.md.
-  // Le route file src/app/(public)/tarifs/[service]/[ville]/[travail]/page.tsx
-  // est conservé jusqu'au déploiement du middleware mis à jour pour éviter
-  // un build break ; il n'est plus indexé ni servi (middleware retourne 410).
+  // Le route file /tarifs/[s]/[v]/[travail]/page.tsx a été retiré du repo.
 
   // ── Tarifs task×city WHITELIST GSC G3 ─────────────────────────────────
   // Shard supprimé 2026-04-30 : les 100 URLs whitelistées sont 301-redirigées
@@ -1167,17 +1165,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── Aides × département (V3 #3 stratégie 140K) ──────────────────────
-  // 11 aides hors MaPrimeRénov' × 101 départements = 1 111 URLs.
-  // MaPrimeRénov par dept est déjà émis dans le shard 'static' (legacy, on ne
-  // dédoublonne pas pour ne pas casser la cohérence canonique des MPR existantes).
+  // Vague 2 #11 nettoyage 2026-05-02 : whitelist top 30 dépts × 5 aides
+  // transactionnelles = 150 URLs (-87 % vs 1 111 avant). Templates dept-aide
+  // sans data locale = thin content. Le reste reste accessible mais drop sitemap.
+  // MaPrimeRénov par dept émis dans le shard 'static' (legacy, hors scope).
   if (id === 'aides-dept') {
-    const otherAides = aidesSlugs.filter((s) => s !== 'maprimerenov')
+    const { AIDES_INDEXED_DEPTS, AIDES_INDEXED_SLUGS } =
+      await import('@/lib/seo/aides-dept-whitelist')
     const result: MetadataRoute.Sitemap = []
-    for (const aideSlug of otherAides) {
-      for (const dept of departements) {
+    for (const aideSlug of Array.from(AIDES_INDEXED_SLUGS)) {
+      for (const deptSlug of Array.from(AIDES_INDEXED_DEPTS)) {
         result.push({
-          url: `${SITE_URL}/aides/${dept.slug}/${aideSlug}`,
-          lastModified: '2026-04-29',
+          url: `${SITE_URL}/aides/${deptSlug}/${aideSlug}`,
+          lastModified: '2026-05-02',
           changeFrequency: 'weekly' as const,
           priority: 0.7,
         })
