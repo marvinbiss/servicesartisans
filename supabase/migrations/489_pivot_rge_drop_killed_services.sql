@@ -50,7 +50,9 @@
 --   'domoticien','pisciniste','antenniste','ascensoriste','geometre',
 --   'desinsectisation','deratisation'
 -- );
--- Attendu : 16 lignes, toutes is_active = false.
+-- Attendu : entre 0 et 16 lignes, toutes is_active = false.
+-- (Le set présent en prod 2026-05-02 = 5 slugs ; les 11 autres n'ont
+--  jamais été seedés ou ont été DELETE manuellement avant le pivot.)
 -- =============================================================================
 
 -- ============================================================================
@@ -85,25 +87,39 @@ WHERE slug IN (
 );
 
 -- ============================================================================
--- 2. VERIFICATION INVARIANT (FAIL-FAST si décompte inattendu)
+-- 2. VERIFICATION INVARIANT FONCTIONNEL (FAIL-FAST si état incohérent)
 -- ============================================================================
+-- L'invariant est fonctionnel, pas quantitatif : la prod peut avoir un sous-
+-- ensemble du seed historique (mig 311 a inséré 16 slugs killed, mais la
+-- prod observée 2026-05-02 n'en contient que 5 — les 11 autres ont été
+-- supprimés manuellement ou jamais seedés).
+--
+-- Ce qu'on vérifie : AUCUN des 16 slugs killed n'a is_active=true. Les slugs
+-- absents de la table sont OK (rien à désactiver). On échoue uniquement si
+-- l'UPDATE n'a pas atteint son but (rangée existante toujours active).
 DO $$
 DECLARE
-  killed_count INTEGER;
+  still_active_count INTEGER;
+  desactivated_count INTEGER;
+  still_active_list TEXT;
 BEGIN
-  SELECT COUNT(*) INTO killed_count
+  SELECT
+    COUNT(*) FILTER (WHERE is_active = false),
+    COUNT(*) FILTER (WHERE is_active = true),
+    string_agg(slug, ', ') FILTER (WHERE is_active = true)
+  INTO desactivated_count, still_active_count, still_active_list
   FROM public.services
-  WHERE is_active = false
-    AND slug IN (
-      'solier','terrassier','metallier','ferronnier','poseur-de-parquet',
-      'miroitier','storiste','architecte-interieur','decorateur',
-      'domoticien','pisciniste','antenniste','ascensoriste','geometre',
-      'desinsectisation','deratisation'
-    );
+  WHERE slug IN (
+    'solier','terrassier','metallier','ferronnier','poseur-de-parquet',
+    'miroitier','storiste','architecte-interieur','decorateur',
+    'domoticien','pisciniste','antenniste','ascensoriste','geometre',
+    'desinsectisation','deratisation'
+  );
 
-  IF killed_count <> 16 THEN
-    RAISE EXCEPTION 'Pivot RGE invariant violation: expected 16 services désactivés, got %', killed_count;
+  IF still_active_count > 0 THEN
+    RAISE EXCEPTION 'Pivot RGE invariant violation: % service(s) killed encore actif(s) après UPDATE: %',
+      still_active_count, still_active_list;
   END IF;
 
-  RAISE NOTICE 'Pivot RGE 2026-05-01 : % services Tier C désactivés', killed_count;
+  RAISE NOTICE 'Pivot RGE 2026-05-01 : % service(s) Tier C désactivé(s) (les autres slugs killed n''existent pas en DB)', desactivated_count;
 END $$;
