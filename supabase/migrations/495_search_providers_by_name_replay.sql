@@ -21,7 +21,19 @@
 --   reste idempotent côté instances déjà alignées.
 --
 -- Voir aussi mig 477 (origine) — cette migration en est une copie 1:1.
+--
+-- 2026-05-02 (post-application incident SQL editor) :
+-- DROP préalable obligatoire car la version qui tournait en prod avait une
+-- TABLE de retour différente (probablement définition pré-mig 477 jamais
+-- remplacée). PG ≤ 17 refuse `CREATE OR REPLACE FUNCTION` qui modifie le
+-- RETURNS TABLE — message d'erreur typique :
+--   ERROR:  42P13: cannot change return type of existing function
+--   HINT:   Use DROP FUNCTION ... first.
+-- DROP IF EXISTS est idempotent et reset les GRANTs, donc on les ré-applique
+-- en bas de migration.
 -- =============================================================================
+
+DROP FUNCTION IF EXISTS public.search_providers_by_name(TEXT, INTEGER, INTEGER);
 
 CREATE OR REPLACE FUNCTION public.search_providers_by_name(
   p_query TEXT,

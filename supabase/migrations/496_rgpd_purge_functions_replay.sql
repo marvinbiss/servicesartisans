@@ -26,6 +26,14 @@
 --   doit modifier mig 475 ET cette mig (ou créer une nouvelle replay).
 -- =============================================================================
 
+-- DROP IF EXISTS préalable pour éviter le piège "cannot change return type"
+-- (ERROR 42P13) si une version antérieure avec un schéma différent existait
+-- en prod sans avoir été tracée dans supabase_migrations. Idempotent : NO-OP
+-- si la fonction n'existait pas, ce qui est le scénario observé Sentry
+-- (issues 7T/7V/7S "Could not find the function").
+DROP FUNCTION IF EXISTS public.purge_audit_logs(integer);
+DROP FUNCTION IF EXISTS public.find_inactive_users(integer);
+
 -- ----------------------------------------------------------------------------
 -- 1. purge_audit_logs(retention_days int) → int
 -- ----------------------------------------------------------------------------
