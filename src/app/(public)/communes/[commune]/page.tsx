@@ -19,6 +19,7 @@ import {
   formatNumber,
   formatEuro,
   monthName,
+  isCommuneQualified,
   type CommuneData,
 } from '@/lib/data/commune-data'
 import {
@@ -86,11 +87,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descTruncated =
     description.length > 160 ? description.slice(0, 159).replace(/\s+\S*$/, '') + '…' : description
 
+  // Vague γ nettoyage 2026-05-02 : commune hors filter qualifié (population
+  // <500 ET 0 artisan) → noindex pour aligner avec l'omission sitemap.
+  // Sans ce check, Google peut indexer ces pages via découvertes externes.
+  const isExcludedByQualification = !isCommuneQualified(commune)
+
   return {
     title: truncated,
     description: descTruncated,
     alternates: getAlternates(`/communes/${slug}`),
-    robots: { index: true, follow: true },
+    robots: isExcludedByQualification
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',

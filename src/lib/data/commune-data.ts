@@ -154,8 +154,21 @@ const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUB
  *
  * Pagination : Supabase PostgREST cap par défaut max-rows=1000. On batch
  * jusqu'à 36 000 (~36 rounds) pour récupérer tous les slugs.
+ *
+ * Vague γ nettoyage 2026-05-02 : filtre `qualifiedOnly` (true par défaut)
+ * exclut les hameaux INSEE sans signal :
+ *   - population < 500 ET
+ *   - provider_count = 0 OU NULL
+ * → ces communes deviennent noindex (sitemap les omet, page bascule via
+ * `isCommuneQualified`). Estimation : -16K URLs sur 36K (-45%).
+ *
+ * Pour récupérer la liste complète sans filtre (debug/audit/migration) :
+ * `getAllCommuneSlugs(36_000, false)`.
  */
-export async function getAllCommuneSlugs(maxSlugs: number = 36_000): Promise<string[]> {
+export async function getAllCommuneSlugs(
+  maxSlugs: number = 36_000,
+  qualifiedOnly: boolean = true
+): Promise<string[]> {
   if (IS_BUILD) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
@@ -165,12 +178,18 @@ export async function getAllCommuneSlugs(maxSlugs: number = 36_000): Promise<str
     let from = 0
     while (slugs.length < maxSlugs) {
       const to = Math.min(from + PAGE - 1, maxSlugs - 1)
-      const { data, error } = await supabase
+      let query = supabase
         .from('communes')
         .select('slug')
         .eq('is_active', true)
         .order('population', { ascending: false })
         .range(from, to)
+      if (qualifiedOnly) {
+        // Garde les communes "utiles" : ≥500 hab OU ≥1 artisan en commune.
+        // PostgREST OR syntax : `.or('cond1,cond2')`.
+        query = query.or('population.gte.500,provider_count.gte.1')
+      }
+      const { data, error } = await query
       if (error || !data || data.length === 0) break
       for (const row of data as { slug: string }[]) slugs.push(row.slug)
       if (data.length < PAGE) break
@@ -180,6 +199,22 @@ export async function getAllCommuneSlugs(maxSlugs: number = 36_000): Promise<str
   } catch {
     return []
   }
+}
+
+/**
+ * Vague γ — invariant page : si la commune est exclue par le filter qualifié,
+ * on doit aussi noindex la page côté metadata pour éviter qu'elle reste
+ * indexée via découvertes externes (internal links, GSC inspection).
+ *
+ * Pure synchronous helper basé sur les champs déjà chargés par
+ * `getCommuneBySlug`. Si `commune` est null (DB unavailable), retourne true
+ * (fail-open : on garde indexable plutôt que de noindexer faussement).
+ */
+export function isCommuneQualified(commune: CommuneData | null): boolean {
+  if (!commune) return true // fail-open
+  const pop = commune.population ?? 0
+  const providers = commune.provider_count ?? 0
+  return pop >= 500 || providers >= 1
 }
 
 // ---------------------------------------------------------------------------

@@ -1410,11 +1410,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // render via `getCeeProvidersByOperationAndCity` (count=0 ⇒ noindex meta).
   if (id === 'cee-operation-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CEE_CITY_COUNT)
-    const { ceeLastmodOperationCity } = await getLastmodData()
+    const { ceeLastmodOperationCity, ceeQualifiedOperationCity } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
     for (const code of CEE_OPERATION_CODES) {
       for (const ville of phase1Cities) {
         const key = `${code}::${ville.slug}`
+        // Vague β nettoyage 2026-05-02 : on n'émet que les combos avec ≥1
+        // artisan RGE éligible localement. ceeQualifiedOperationCity = null
+        // ⇒ DB blip ⇒ fail-open (on garde tout, lastmod-queries log l'erreur).
+        // Audit prod 2026-05-02 : 42% des combos ont ≥1 RGE qualifié → -58%
+        // d'URLs émises (~22K → ~9K) sans toucher aux pages utiles.
+        if (ceeQualifiedOperationCity && !ceeQualifiedOperationCity.has(key)) continue
         result.push({
           url: `${SITE_URL}/cee/${code}/${ville.slug}`,
           lastModified: ceeLastmodOperationCity?.get(key),
