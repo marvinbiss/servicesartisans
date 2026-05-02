@@ -284,6 +284,9 @@ export async function getLocationBySlug(slug: string) {
     async () => {
       try {
         const data = await retryWithBackoff(async () => {
+          // .maybeSingle() : retourne null sur 0 row au lieu de throw PGRST116.
+          // Le slug peut exister dans france.ts static (35 999 communes) sans
+          // exister dans `communes` DB → silencieux + fallback static plus bas.
           const { data, error } = await supabase
             .from('communes')
             .select(
@@ -291,9 +294,10 @@ export async function getLocationBySlug(slug: string) {
             )
             .eq('slug', slug)
             .limit(1)
-            .single()
+            .maybeSingle()
 
-          if (error || !data) throw error || new Error('Location not found')
+          if (error) throw error
+          if (!data) throw new Error('Location not found')
           return {
             id: data.code_insee,
             name: data.name,
@@ -356,12 +360,15 @@ async function queryProviderDetail(field: 'stable_id' | 'id' | 'slug', value: st
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type Row = Record<string, any>
 
+  // .maybeSingle() : la fiche peut être absente (pSEO publicId pointe sur
+  // un stable_id orphelin, ou provider supprimé). Retourner null silencieux
+  // → page Next.js déclenche notFound() proprement, pas PGRST116 dans Sentry.
   const { data } = await supabase
     .from('providers')
     .select(PROVIDER_DETAIL_SELECT)
     .eq(field, value)
     .eq('is_active', true)
-    .single()
+    .maybeSingle()
 
   return data ? resolveProviderCity(data as Row) : null
 }
