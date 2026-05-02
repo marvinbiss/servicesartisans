@@ -49,19 +49,19 @@ export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
   // Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse
   // supprimés (demenageur, nettoyage, jardinier, paysagiste, alarme-securite)
   // → middleware retournera 410 sur leurs URLs.
-  // 30 → 25 services. SA = pure-play rénovation BTP énergétique.
+  //
+  // Pivot full RGE 2026-05-03 : 4 métiers commodity hors RGE supprimés
+  // (serrurier, vitrier, carreleur, cuisiniste) → middleware retourne 410
+  // sur leurs URLs. Repositionnement « 100% artisans RGE certifiés ».
+  // 25 → 21 services.
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
   'peintre-en-batiment',
   'menuisier',
-  'carreleur',
   'couvreur',
   'macon',
-  'vitrier',
   'climaticien',
-  'cuisiniste',
   'charpentier',
   'zingueur',
   'etancheiste',

@@ -425,14 +425,11 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   electricien: ['electricien'], // NAF 43.21A
   chauffagiste: ['chauffagiste'], // NAF 43.22B
   menuisier: ['menuisier'], // NAF 43.32A
-  carreleur: ['carreleur'], // NAF 43.33Z
   couvreur: ['couvreur'], // NAF 43.91B
   macon: ['macon'], // NAF 43.99C
   'peintre-en-batiment': ['peintre', 'peintre-en-batiment'], // NAF 43.34Z
   peintre: ['peintre', 'peintre-en-batiment'], // alias → peintre-en-batiment
   charpentier: ['charpentier'], // NAF 43.91A
-  serrurier: ['serrurier'], // NAF 43.32B
-  vitrier: ['vitrier'], // NAF 43.34Z
   climaticien: ['climaticien'], // NAF 43.22B
 
   // === Bâtiment / Gros œuvre ===
@@ -443,7 +440,6 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
 
   // === Finitions / Aménagement ===
   'salle-de-bain': ['salle-de-bain'], // NAF 43.22A + 43.33Z
-  cuisiniste: ['cuisiniste'], // NAF 43.32C + 31.02Z
 
   // === Énergie / Chauffage ===
   'pompe-a-chaleur': ['pompe-a-chaleur'], // NAF 43.22B
@@ -472,6 +468,8 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // jardinier, nettoyage, paysagiste, alarme-securite, demenageur retirés
   // (services à la personne / hors BTP / cannibalisation).
+  // Pivot full RGE 2026-05-03 :
+  // serrurier, carreleur, vitrier, cuisiniste retirés (commodity, hors RGE).
 }
 
 // ---------------------------------------------------------------------------

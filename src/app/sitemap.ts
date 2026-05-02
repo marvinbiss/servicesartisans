@@ -10,6 +10,7 @@ import {
   getServiceCityPriority,
   isServiceVilleIndexable,
 } from '@/lib/seo/services-tiers'
+import { isRemovedByRgePivot } from '@/lib/seo/pivot-rge-removed-services'
 
 // Boot-time guard : si un service est ajouté à france.ts sans MAJ tiers, throw
 // au build pour éviter le silent fallback Tier C en prod.
@@ -808,18 +809,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.8,
     }))
 
-    // "Autour de moi" — 10 high-volume services with browser geolocation UX
-    // linked to the 30 top French cities. Pilier 3.C of CEO strategy.
+    // "Autour de moi" — 8 high-volume services RGE-éligibles avec UX
+    // géolocalisation navigateur, lié aux 30 top villes FR. Pilier 3.C
+    // de la stratégie CEO. Pivot full RGE 2026-05-03 : retiré serrurier
+    // et carreleur (commodity hors RGE).
     const AROUND_ME_SERVICES = [
       'plombier',
       'electricien',
-      'serrurier',
       'chauffagiste',
       'peintre-en-batiment',
       'menuisier',
       'macon',
       'couvreur',
-      'carreleur',
       'pompe-a-chaleur',
     ] as const
     const aroundMePages: MetadataRoute.Sitemap = AROUND_ME_SERVICES.map((slug) => ({
@@ -829,7 +830,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.7,
     }))
 
-    const emergencySlugs = Object.keys(tradeContent)
+    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs avant émission.
+    const emergencySlugs = Object.keys(tradeContent).filter((slug) => !isRemovedByRgePivot(slug))
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
       lastModified: byService.get(slug) || STATIC_DATE,
@@ -837,12 +839,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.8,
     }))
 
-    const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
-      url: `${SITE_URL}/tarifs/${slug}`,
-      lastModified: byService.get(slug) || STATIC_DATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    }))
+    const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent)
+      .filter((slug) => !isRemovedByRgePivot(slug))
+      .map((slug) => ({
+        url: `${SITE_URL}/tarifs/${slug}`,
+        lastModified: byService.get(slug) || STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+      }))
 
     // Blog category pages — lastModified = date du dernier article de la catégorie
     const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
@@ -1024,13 +1028,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Devis service hub pages ─────────────────────────────────────────
   // Devis hub pages — STATIC_DATE: template content, stable
+  // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
   if (id === 'devis-services') {
-    return Object.keys(tradeContent).map((slug) => ({
-      url: `${SITE_URL}/devis/${slug}`,
-      lastModified: STATIC_DATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
+    return Object.keys(tradeContent)
+      .filter((slug) => !isRemovedByRgePivot(slug))
+      .map((slug) => ({
+        url: `${SITE_URL}/devis/${slug}`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      }))
   }
 
   // ── Devis service×city pages — REMOVED 2026-04-29 (V1 #2 stratégie 140K) ──
@@ -1097,7 +1104,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Avis service hub pages ──────────────────────────────────────────
   if (id === 'avis-services') {
     const { reviewByService } = await getLastmodData()
-    const tradeSlugs = Object.keys(tradeContent)
+    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
+    const tradeSlugs = Object.keys(tradeContent).filter((slug) => !isRemovedByRgePivot(slug))
     // Hub /avis — lastmod = date du dernier avis toutes catégories confondues
     const allReviewDates = Array.from(reviewByService.values())
     const latestReview = allReviewDates.length > 0 ? allReviewDates.sort().reverse()[0] : undefined
@@ -1227,7 +1235,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id.startsWith('dept-services-')) {
     const { byDeptService } = await getLastmodData()
     const batchIndex = parseInt(id.replace('dept-services-', ''))
-    const tradeSlugs = getTradesSlugs()
+    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
+    const tradeSlugs = getTradesSlugs().filter((slug) => !isRemovedByRgePivot(slug))
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
@@ -1260,19 +1269,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.5,
     }))
     // Baromètre métiers — lastmod = dernier provider modifié pour ce service
-    const barometreMetiers: MetadataRoute.Sitemap = getTradesSlugs().map((slug) => ({
-      url: `${SITE_URL}/barometre/tarifs/${slug}`,
-      lastModified: byService.get(slug),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    }))
+    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
+    const barometreMetiers: MetadataRoute.Sitemap = getTradesSlugs()
+      .filter((slug) => !isRemovedByRgePivot(slug))
+      .map((slug) => ({
+        url: `${SITE_URL}/barometre/tarifs/${slug}`,
+        lastModified: byService.get(slug),
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      }))
     return [...barometreRegions, ...barometreMetiers]
   }
 
   // ── Region × service pages ──────────────────────────────────────────
   if (id === 'region-services') {
     const { byRegionService } = await getLastmodData()
-    const tradeSlugs = getTradesSlugs()
+    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
+    const tradeSlugs = getTradesSlugs().filter((slug) => !isRemovedByRgePivot(slug))
     return regions.flatMap((region) =>
       tradeSlugs
         .map((service) => {

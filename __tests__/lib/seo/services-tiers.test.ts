@@ -44,14 +44,15 @@ describe('partition tiers', () => {
     }
   })
 
-  it('Tier A = exactement 12 services (haute demande)', () => {
-    expect(TIER_A_SERVICES.size).toBe(12)
+  it('Tier A = exactement 9 services (haute demande, post pivot full RGE 2026-05-03)', () => {
+    // 12 → 9 : retrait serrurier, carreleur, vitrier (commodity hors RGE).
+    expect(TIER_A_SERVICES.size).toBe(9)
   })
 
-  it('Tier B = exactement 13 services (moyenne) — pivot pure-play BTP 2026-05-02', () => {
-    // 18 → 13 : retrait jardinier, paysagiste, nettoyage, alarme-securite,
-    // demenageur (services hors thèse rénovation BTP énergétique).
-    expect(TIER_B_SERVICES.size).toBe(13)
+  it('Tier B = exactement 12 services (moyenne) — pivot full RGE 2026-05-03', () => {
+    // 18 → 13 (pivot pure-play BTP 2026-05-02) → 12 (pivot full RGE 2026-05-03 :
+    // retrait cuisiniste).
+    expect(TIER_B_SERVICES.size).toBe(12)
   })
 
   it('Tier C = vide (16 métiers niche supprimés au pivot RGE 2026-05-01)', () => {

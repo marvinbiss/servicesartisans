@@ -395,11 +395,13 @@ describe('VALID_SERVICE_SLUGS — cohérence avec france-light.ts', () => {
     expect(Array.from(VALID_SERVICE_SLUGS).sort()).toEqual(Array.from(lightSlugs).sort())
   })
 
-  it('25 services (post pivot pure-play BTP énergétique 2026-05-02 : -16 Tier C + -5 hors thèse)', () => {
+  it('21 services (post pivot full RGE 2026-05-03 : -4 commodity hors RGE)', () => {
     // Pivot RGE 2026-05-01 : 46 → 30 services (16 niche Tier C supprimés).
     // Pivot pure-play BTP 2026-05-02 : 30 → 25 (jardinier, paysagiste,
     // nettoyage, alarme-securite, demenageur retirés).
-    expect(VALID_SERVICE_SLUGS.size).toBe(25)
+    // Pivot full RGE 2026-05-03 : 25 → 21 (serrurier, vitrier, carreleur,
+    // cuisiniste retirés — commodity sans qualification RGE possible).
+    expect(VALID_SERVICE_SLUGS.size).toBe(21)
   })
 })
 

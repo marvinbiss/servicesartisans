@@ -35,25 +35,25 @@ import { villes, services } from '@/lib/data/france'
 
 export type ServiceTier = 'A' | 'B' | 'C'
 
-/** Tier A — 12 métiers haute demande (Ahrefs vol search > 5K/mois). */
+/** Tier A — 9 métiers haute demande RGE-éligibles (post pivot full RGE 2026-05-03).
+ *  Retirés : serrurier, carreleur, vitrier (commodity, hors RGE).
+ */
 export const TIER_A_SERVICES: ReadonlySet<string> = new Set([
   'plombier',
   'electricien',
   'chauffagiste',
   'peintre-en-batiment',
-  'serrurier',
   'couvreur',
   'menuisier',
   'macon',
-  'carreleur',
-  'vitrier',
   'climaticien',
   'ramoneur',
 ])
 
-/** Tier B — 13 métiers moyenne demande (vol search 500-5K/mois) + cluster RGE.
+/** Tier B — 12 métiers moyenne demande (vol search 500-5K/mois) + cluster RGE.
  *  Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse retirés
  *  (jardinier, paysagiste, demenageur, nettoyage, alarme-securite).
+ *  Pivot full RGE 2026-05-03 : cuisiniste retiré (aménagement, hors RGE).
  */
 export const TIER_B_SERVICES: ReadonlySet<string> = new Set([
   'pompe-a-chaleur',
@@ -67,7 +67,6 @@ export const TIER_B_SERVICES: ReadonlySet<string> = new Set([
   'facadier',
   'platrier',
   'salle-de-bain',
-  'cuisiniste',
   'diagnostiqueur',
 ])
 
