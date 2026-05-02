@@ -162,16 +162,22 @@ export async function generateSitemaps() {
     { id: 'problemes-cities-0' },
     // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c] pour 35 999 communes
     // INSEE actives (long-tail + asset différenciateur data-driven). Hub /communes
-    // listé dans 'static'. Pages /communes/[c] = 36K / 8K STATIC_BATCH = 5 shards.
-    // Le handler fetch dynamiquement les slugs depuis Supabase (graceful fallback
-    // sur shard vide si DB indisponible). Si commune.slug = ville statique :
-    // permanentRedirect 301 vers /villes/[v] (canonical priority maintenu).
+    // listé dans 'static'. Le handler fetch dynamiquement les slugs depuis
+    // Supabase (graceful fallback sur shard vide si DB indisponible). Si
+    // commune.slug = ville statique : permanentRedirect 301 vers /villes/[v]
+    // (canonical priority maintenu).
+    //
+    // 4 shards de STATIC_BATCH (8 000) = 32 000 capacité — empiriquement
+    // suffisant : le filtre `getAllCommuneSlugs(qualifiedOnly=true)` (≥500 hab
+    // OU ≥1 artisan) exclut les communes thin et ramène le total à ~28-30K.
+    // Audit Sentry 2026-05-02 : `communes-cities-4` retournait -100% car shard
+    // empty. Réintroduire dès que le total dépasse 32 000 (ex. après une
+    // vague de claims provider_count >= 1).
     { id: 'communes' },
     { id: 'communes-cities-0' },
     { id: 'communes-cities-1' },
     { id: 'communes-cities-2' },
     { id: 'communes-cities-3' },
-    { id: 'communes-cities-4' },
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] pour 11
     // aides nationales × 101 départements = 1 111 URLs (la 12ème = MaPrimeRénov'
     // est déjà émise séparément par /aides/[dept]/maprimerenov, cf. shard 'static').

@@ -229,16 +229,22 @@ export async function getServiceBySlug(slug: string) {
       try {
         const data = await withTimeout(
           (async () => {
+            // .maybeSingle() évite PGRST116 ("Cannot coerce..." — Sentry
+            // 7G/7F/7J/7K/7N/7P : ~4700 events/24h en mai 2026) quand le slug
+            // existe côté code (`france-light.services` ou nouveaux pSEO RGE
+            // type `geometre`, `chauffagiste-rge`) mais pas encore dans la
+            // table DB. Le fallback `staticServices` prend le relais.
             const { data, error } = await supabase
               .from('services')
               .select('id, name, slug, description, icon, category, is_active')
               .eq('slug', slug)
-              .single()
+              .maybeSingle()
 
             if (error || !data) {
               const staticService = staticServices[slug]
               if (staticService) return staticService
-              throw error || new Error('Service not found')
+              if (error) throw error
+              return null
             }
             return data
           })(),

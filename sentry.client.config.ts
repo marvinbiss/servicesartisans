@@ -62,6 +62,16 @@ if (SENTRY_DSN) {
       'ChunkLoadError',
       'Loading chunk',
       'SecurityError',
+      // Audit Sentry 2026-05-02 — bruits externes confirmés sur 24h prod :
+      // - "@context.toLowerCase" : extensions Safari (Reader / SchemaParser)
+      //   parsent les JSON-LD de la page et crashent quand `@context` est
+      //   un objet/undefined plutôt qu'une string. Hors SA. ~14 events/24h.
+      // - "invalid group specifier name" : regex `(?<name>...)` named groups
+      //   non supportés par Safari < 16.4 dans une lib tierce embed
+      //   (probablement leaflet ou un script analytics). ~15 events/24h.
+      'evaluating \'r["@context"].toLowerCase\'',
+      "Cannot read properties of undefined (reading '@context')",
+      'Invalid regular expression: invalid group specifier name',
     ],
 
     // Drop anything originating from browser extensions

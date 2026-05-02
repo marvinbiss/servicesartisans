@@ -63,14 +63,17 @@ export async function GET(request: Request) {
     // haute=200/moyenne=100/basse=50 villes, ≈ 7 000 URLs en 1 seul shard).
     // Voir src/lib/seo/problemes-whitelist.ts.
     'problemes-cities-0',
-    // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c] (35 999 INSEE
-    // actives, 5 shards de 8 000). Hub /communes + 5 shards data-driven Supabase.
+    // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c]. Hub /communes
+    // + 4 shards data-driven Supabase de STATIC_BATCH (8 000). Initialement
+    // 5 shards mais `qualifiedOnly` (≥500 hab OU ≥1 artisan) ramène le total
+    // à ~28-30K (audit Sentry 2026-05-02 : shard 4 empty -100%). Réintroduire
+    // 'communes-cities-4' dès dépassement 32 000 communes qualifiées. KEEP IN
+    // SYNC avec src/app/sitemap.ts.
     'communes',
     'communes-cities-0',
     'communes-cities-1',
     'communes-cities-2',
     'communes-cities-3',
-    'communes-cities-4',
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] (11 × 101
     // = 1 111 URLs). MaPrimeRénov par dept déjà dans 'static' (legacy).
     'aides-dept',
