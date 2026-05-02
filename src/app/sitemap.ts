@@ -945,8 +945,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       // Signal Google soft : Tier A recrawlé ×2, Tier C ×0.5 — sans rien couper.
       const priority = getServiceCityPriority(service.slug)
       for (const ville of mergedCities) {
-        // Phase B (gated par env SA_REDUCE_SERVICES_TIERED=1) : combos hors
-        // allocation tiered exclus du sitemap. Off par défaut, attend filet GSC.
+        // Phase B (vague α nettoyage 2026-05-02, ON par défaut) : combos hors
+        // allocation tiered exclus du sitemap (~68K → ~33K URLs).
+        // Rollback urgence : `SA_DISABLE_SERVICES_TIERED=1`.
         if (!isServiceVilleIndexable(service.slug, ville.slug)) continue
         // lastmod from latest provider activity in dept×service.
         // If no data → omitted (honest).

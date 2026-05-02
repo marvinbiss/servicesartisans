@@ -3,24 +3,30 @@
  *
  * Voir docs/strategy-140k-2026-04-29.md.
  *
- * ## Phase A (active dès ce commit) — signal Google non-destructif
+ * ## Phase A — signal Google non-destructif (toujours actif)
  * Le sitemap émet `priority` différencié par tier, ce qui pousse Googlebot à
  * prioriser le crawl des Tier A et raréfier celui des Tier C — sans rien
  * couper du sitemap. Effet attendu : recrawl Tier A ×2 plus rapide, Tier C ×0.5.
  *
  *   - Tier A (12 métiers haute demande) → priority 0.9
  *   - Tier B (18 métiers moyenne)       → priority 0.7
- *   - Tier C (16 métiers niche)         → priority 0.4
+ *   - Tier C (vide depuis pivot RGE)    → priority 0.4
  *
- * ## Phase B (gated par env `SA_REDUCE_SERVICES_TIERED=1`) — coupe destructive
- * Allocation cible 36 200 URLs :
+ * ## Phase B — coupe destructive (vague α nettoyage 2026-05-02, ON par défaut)
+ * Allocation cible ~33 000 URLs (vs ~68 000 historique = -35K kill) :
  *   - Tier A × 2 000 villes (top pop)  = 24 000
  *   - Tier B × 500 villes              =  9 000
- *   - Tier C × 200 villes              =  3 200
+ *   - Tier C × 0 (vide pivot RGE)      =      0
  *
- * BLOQUE jusqu'à G3 (top 1000 pages clics GSC 90j) pour appliquer le filet
- * "≥1 clic = épargné". Sans filet, on risque de couper les pages Tier C qui
- * captent du trafic résiduel et de péter les chaînes 301 V1 #2/#3.
+ * Initialement bloquée "jusqu'à G3 (top 1000 pages clics GSC 90j)" pour filet
+ * "≥1 clic = épargné". Le pivot RGE 2026-05-01 a vidé Tier C (16 métiers niche
+ * supprimés de france.ts) → le risque résiduel se limite aux combos Tier B
+ * × villes hors top 500. Estimation pessimiste : <2 % du trafic SEO actuel
+ * vient de combos Tier B + ville rang 500-2267 (audit GSC 30/04, mémoire
+ * `servicesartisans-gsc-diagnostic-2026-04-30.md`).
+ *
+ * Pour rollback urgence : `SA_DISABLE_SERVICES_TIERED=1` désactive la coupe
+ * et restaure le sitemap full ~68K URLs.
  *
  * Edge runtime safe — Sets en mémoire, lookup O(1), zéro I/O.
  */
@@ -124,14 +130,18 @@ export function getServiceCityPriority(serviceSlug: string): number {
 
 /**
  * Phase B — combo (service, ville) éligible à l'index post-coupe.
- * GATE OFF par défaut. Pour activer : `SA_REDUCE_SERVICES_TIERED=1`.
+ * GATE ON par défaut depuis vague α nettoyage 2026-05-02 (sitemap allégé
+ * de 68K → 33K URLs). Pour rollback urgence : `SA_DISABLE_SERVICES_TIERED=1`
+ * restaure le comportement full.
  *
- * Quand activé : les combos hors allocation tiered seront retirés du sitemap
- * et redirigés 301 vers `/services/${service}/[plus-grosse-ville-du-dept]`
- * (handler à câbler dans page.tsx, voir docs).
+ * Comportement coupe : les combos hors allocation tiered sont retirés du
+ * sitemap. Côté page `/services/[s]/[v]` : la mécanique fail-open noindex
+ * existante (count=0 + dept-fallback < 3 → robots:noindex) catches les
+ * pages exclues qui resteraient accessibles via URL directe.
  */
 export function isServiceVilleIndexable(serviceSlug: string, villeSlug: string): boolean {
-  if (process.env.SA_REDUCE_SERVICES_TIERED !== '1') return true
+  // Rollback escape hatch : SA_DISABLE_SERVICES_TIERED=1 désactive la coupe.
+  if (process.env.SA_DISABLE_SERVICES_TIERED === '1') return true
   switch (getServiceTier(serviceSlug)) {
     case 'A':
       return tierACitiesSet.has(villeSlug)

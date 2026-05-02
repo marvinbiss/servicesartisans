@@ -85,44 +85,46 @@ describe('getServiceCityPriority (Phase A — actif sans gate)', () => {
   })
 })
 
-describe('isServiceVilleIndexable (Phase B gate)', () => {
-  const originalEnv = process.env.SA_REDUCE_SERVICES_TIERED
+describe('isServiceVilleIndexable (Phase B — vague α 2026-05-02 ON par défaut)', () => {
+  const originalEnv = process.env.SA_DISABLE_SERVICES_TIERED
 
   beforeEach(() => {
-    delete process.env.SA_REDUCE_SERVICES_TIERED
+    delete process.env.SA_DISABLE_SERVICES_TIERED
   })
 
   afterEach(() => {
     if (originalEnv === undefined) {
-      delete process.env.SA_REDUCE_SERVICES_TIERED
+      delete process.env.SA_DISABLE_SERVICES_TIERED
     } else {
-      process.env.SA_REDUCE_SERVICES_TIERED = originalEnv
+      process.env.SA_DISABLE_SERVICES_TIERED = originalEnv
     }
   })
 
-  it('gate OFF par défaut → tout combo accepté', () => {
-    expect(isServiceVilleIndexable('plombier', 'paris')).toBe(true)
-    expect(isServiceVilleIndexable('pompe-a-chaleur', 'andrezieux-boutheon')).toBe(true)
-  })
-
-  it('gate ON + Tier A + Paris → indexable', () => {
-    process.env.SA_REDUCE_SERVICES_TIERED = '1'
+  it('par défaut (gate ON) — Tier A + Paris → indexable', () => {
     expect(isServiceVilleIndexable('plombier', 'paris')).toBe(true)
   })
 
-  it('gate ON + slug inconnu (fallback Tier C) hors top 200 → exclu', () => {
-    process.env.SA_REDUCE_SERVICES_TIERED = '1'
+  it('par défaut (gate ON) — slug inconnu (fallback Tier C vide) hors top 0 → exclu', () => {
     // Tier C = vide depuis pivot RGE — slugs inconnus retombent en Tier C par fallback
+    // qui n'a aucune ville allouée → toujours false.
     expect(isServiceVilleIndexable('service-inconnu', 'cany-barville')).toBe(false)
   })
 
-  it('gate ON + slug inconnu (fallback Tier C) + Paris (top 200) → indexable', () => {
-    process.env.SA_REDUCE_SERVICES_TIERED = '1'
+  it('par défaut (gate ON) — Tier A + ville hors top 2 000 → exclu', () => {
+    // Combo coupé par allocation : Tier A × top 2 000 villes.
+    // Une commune INSEE rare hors du top 2000 sera exclue.
+    expect(isServiceVilleIndexable('plombier', 'cany-barville')).toBe(false)
+  })
+
+  it('rollback escape SA_DISABLE_SERVICES_TIERED=1 → tout combo accepté', () => {
+    process.env.SA_DISABLE_SERVICES_TIERED = '1'
+    expect(isServiceVilleIndexable('plombier', 'cany-barville')).toBe(true)
     expect(isServiceVilleIndexable('service-inconnu', 'paris')).toBe(true)
   })
 
-  it('gate ON + valeur env autre que "1" → considère gate OFF', () => {
-    process.env.SA_REDUCE_SERVICES_TIERED = 'true'
-    expect(isServiceVilleIndexable('service-inconnu', 'cany-barville')).toBe(true)
+  it('rollback escape valeur env autre que "1" → gate reste ON (coupe active)', () => {
+    process.env.SA_DISABLE_SERVICES_TIERED = 'true'
+    // Valeur "true" ≠ "1" → escape inactif, coupe maintenue.
+    expect(isServiceVilleIndexable('plombier', 'cany-barville')).toBe(false)
   })
 })

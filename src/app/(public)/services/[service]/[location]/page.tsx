@@ -86,6 +86,7 @@ import UrgencyBlock from '@/components/seo/UrgencyBlock'
 import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import { getPageContent } from '@/lib/cms'
 import { shouldNoindex } from '@/lib/seo/pruning'
+import { isServiceVilleIndexable } from '@/lib/seo/services-tiers'
 import { hasDeptProviderFallback } from '@/lib/seo/dept-fallback'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
@@ -342,11 +343,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // tient pas sa promesse et doit sortir de l'index. Trade content + commune
   // restent affichés côté UX (éducation/contexte), mais ne suffisent plus à
   // dépenser du budget crawl Google sur des pages à 0 conversion.
-  const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
-    providerCount,
-    isQuartierPage: false,
-    hasUniqueData: hasFallbackDept,
-  })
+  // Vague α nettoyage 2026-05-02 : combos hors allocation tiered sont retirés
+  // du sitemap (cf. services-tiers.ts Phase B). On aligne le comportement page
+  // pour que ces combos soient également noindex — sinon Google peut les
+  // indexer via découvertes externes (internal links, GSC URL inspection).
+  // Rollback urgence : SA_DISABLE_SERVICES_TIERED=1 (cf. services-tiers.ts).
+  const isExcludedByTier = !isServiceVilleIndexable(serviceSlug, locationSlug)
+  const isNoindex =
+    isExcludedByTier ||
+    shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
+      providerCount,
+      isQuartierPage: false,
+      hasUniqueData: hasFallbackDept,
+    })
 
   return {
     title,
