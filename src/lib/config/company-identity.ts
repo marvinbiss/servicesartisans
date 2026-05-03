@@ -109,10 +109,14 @@ if (_status === 'launched' && (_isBuildTime || _isRuntimeProd)) {
 
 export const companyIdentity = {
   // Brand (Level 5 — UI copy only)
+  // Pivot full RGE 2026-05-03 : repositionnement « 100% artisans RGE certifiés ».
+  // 49 228 fiches RGE indexées via mig 306 (Qualibat / Qualifelec / QualiPAC /
+  // Qualit'EnR), filiation france-renov.gouv.fr. Avantage différenciant :
+  // chaque artisan est éligible MaPrimeRénov' + CEE pour le client final.
   name: 'ServicesArtisans' as const,
-  tagline: 'Trouvez des artisans qualifiés près de chez vous',
+  tagline: 'Le premier annuaire 100% artisans RGE certifiés',
   description:
-    'Des artisans référencés dans toute la France grâce aux données SIREN officielles. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
+    "Le premier annuaire 100% artisans RGE certifiés en France. 49 000 professionnels qualifiés (Qualibat, Qualifelec, QualiPAC) pour vos travaux de rénovation énergétique éligibles MaPrimeRénov' et CEE. SIREN vérifié, devis gratuits.",
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
 
   // Legal identity (Level 1 — from env vars, null until company registration)

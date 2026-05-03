@@ -5,6 +5,7 @@ import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import { isUrgenceIndexable } from '@/lib/seo/urgence-whitelist'
+import { isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
 import { logger } from '@/lib/logger'
 import {
   Phone,
@@ -40,11 +41,9 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber, monthName } from '@/lib/data/commune-data'
 import { getServiceImageForContext } from '@/lib/data/images'
 import {
-  hasProvidersByServiceAndLocation,
   getProvidersByServiceAndLocation,
   getProvidersByServiceAndDepartment,
 } from '@/lib/supabase'
-import { shouldNoindex } from '@/lib/seo/pruning'
 import FallbackProviders from '@/components/seo/FallbackProviders'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -549,16 +548,13 @@ export async function generateMetadata({
   const villeData = getVilleBySlug(villeSlug)
   if (!trade || !villeData) notFound()
 
-  // Stratégie 140K V2 #4 : noindex pour /urgence/[s]/[v] hors whitelist
-  // (4 svc × 25 villes). Le `permanentRedirect()` ne fonctionne PAS en
-  // generateMetadata avec ISR + dynamicParams (bug Next.js 14.2 similaire au
-  // soft-404 : la page rend 200 normal au lieu de 308). Audit GSC 2026-04-30
-  // a montré 106K URLs urgence hors whitelist qui rendaient en 200 normal,
-  // créant ~23K en "explorée non indexée" Google.
-  // Fix : retourner explicitement `robots: { index: false }` pour signaler à
-  // Google de retirer ces pages. La redirection page-level reste en place
-  // comme fallback (au cas où le bug Next.js serait fixé en aval).
-  if (!isUrgenceIndexable(service, villeSlug)) {
+  // Stratégie 140K V2 #4 + Pivot full RGE 2026-05-03 : double gate.
+  //   1) `isUrgenceRgeCompatible` : trade RGE-éligible (5 slugs whitelist).
+  //   2) `isUrgenceIndexable` : combo svc × ville historique (4 svc × 25 villes).
+  // Le `permanentRedirect()` ne fonctionne PAS en generateMetadata avec ISR +
+  // dynamicParams (bug Next.js 14.2 similaire au soft-404). Fix : retourner
+  // `robots: { index: false }` pour signaler à Google de retirer ces pages.
+  if (!isUrgenceRgeCompatible(service) || !isUrgenceIndexable(service, villeSlug)) {
     return {
       title: 'Page redirigée — ServicesArtisans',
       description: `Cette page urgence a été consolidée vers /services/${service}/${villeSlug}.`,
@@ -610,19 +606,17 @@ export async function generateMetadata({
   const serviceImage = getServiceImageForContext(service, villeSlug)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
 
-  // Gate indexation on provider availability (HCU anti-thin). Fail-open during build.
-  const hasProviders = await hasProvidersByServiceAndLocation(service, villeSlug)
-  // hasUniqueData: trade content (pricing, FAQ, emergency info) and villeData (commune context) are real unique data
-  const noindex = shouldNoindex(`/urgence/${service}/${villeSlug}`, {
-    providerCount: hasProviders ? 1 : 0,
-    hasUniqueData: !!(trade && villeData),
-  })
+  // Pivot full RGE 2026-05-03 : `noindex` est désormais forcé à true
+  // (cf. retour ci-dessous), donc plus besoin de calculer `shouldNoindex`
+  // ici (provider lookup coûteux + import retiré).
 
+  // Le early-return ci-dessus a déjà filtré les combos hors whitelist
+  // RGE + hors whitelist 140K V2#4. À ce point on est en combo indexable.
   return {
     title,
     description,
     alternates: getAlternates(`/urgence/${service}/${villeSlug}`),
-    robots: { index: !noindex, follow: true },
+    robots: { index: true, follow: true },
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',

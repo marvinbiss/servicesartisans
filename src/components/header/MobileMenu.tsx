@@ -377,13 +377,15 @@ export default function MobileMenu({
                 </span>
               )}
             </Link>
+            {/* Pivot full RGE 2026-05-03 : CTA mobile "Urgences 24h"
+                remplacé par "Simuler aides MaPrimeRénov & CEE". */}
             <Link
-              href="/urgence"
-              className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-200 shadow-lg shadow-red-600/20"
+              href="/simulateur-aides-renovation"
+              className="flex items-center justify-center gap-2 w-full py-3.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold transition-colors duration-200 shadow-lg shadow-green-600/20"
               onClick={closeMobileMenu}
             >
               <Phone className="w-5 h-5" />
-              Urgences 24h/24
+              Simuler mes aides rénovation
             </Link>
             <div className="flex gap-3">
               <Link

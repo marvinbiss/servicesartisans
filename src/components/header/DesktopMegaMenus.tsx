@@ -147,13 +147,16 @@ export default function DesktopMegaMenus({
                   Voir tous les services
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
+                {/* Pivot full RGE 2026-05-03 : CTA "Urgence" remplacé par
+                    "Simulateur aides" — aligné repositionnement RGE +
+                    monétisation mandataire CEE / MaPrimeRénov. */}
                 <Link
-                  href="/urgence"
+                  href="/simulateur-aides-renovation"
                   onClick={closeMenus}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 font-semibold transition-all duration-200 hover:shadow-md"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 font-semibold transition-all duration-200 hover:shadow-md"
                 >
                   <Phone className="w-4 h-4" />
-                  Urgence ? Artisan disponible maintenant
+                  Simuler vos aides MaPrimeRénov & CEE
                 </Link>
               </div>
             </div>

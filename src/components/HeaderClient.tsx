@@ -436,6 +436,10 @@ export default function HeaderClient({
                 Connexion
               </Link>
 
+              {/* Pivot full RGE 2026-05-03 (revert partiel) : badge urgence
+                  réintégré, restreint aux trades RGE-compatibles (plombier,
+                  chauffagiste, electricien, couvreur, climaticien). Le hub
+                  /urgence reste indexable + sitemap-listed. */}
               <Link
                 href="/urgence"
                 className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors duration-200"
@@ -444,7 +448,7 @@ export default function HeaderClient({
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
                 </span>
-                Urgences 24h
+                Urgence RGE 24h
               </Link>
 
               <Link

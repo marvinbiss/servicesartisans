@@ -302,12 +302,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 Réponse rapide
               </span>
             </div>
+            {/* Pivot full RGE 2026-05-03 : CTA "Urgent" remplacé par
+                CTA "Simulateur aides" — repositionnement RGE. */}
             <Link
-              href="/urgence"
+              href="/simulateur-aides-renovation"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-charcoal-500 hover:text-primary-400 transition-colors"
             >
               <Zap className="w-4 h-4" />
-              Urgent ? Réponse en 24h garantie
+              Simulez vos aides MaPrimeRénov & CEE
             </Link>
           </div>
 

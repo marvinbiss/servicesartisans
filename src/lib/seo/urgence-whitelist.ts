@@ -28,11 +28,19 @@
  * Quand le flywheel reviews + DR croissent, on peut ouvrir à 50 villes.
  */
 
+// Pivot full RGE 2026-05-03 (revert partiel) :
+//   - `serrurier` retiré (commodity sans qualif RGE possible — cf.
+//     PIVOT_RGE_REMOVED_SLUGS, métier coupé du catalogue, /services/serrurier/*
+//     répond 410 via gone-paths → impossible de pointer un canonical vers 410).
+//   - `couvreur` ajouté (RGE Qualibat 7113 — fuite toiture, tempête).
+//   - `climaticien` ajouté (RGE QualiPAC — panne canicule, fluide frigorigène).
+// Doit rester un sous-ensemble strict de URGENCE_RGE_COMPATIBLE_SLUGS.
 export const URGENCE_INDEXED_SERVICES: ReadonlySet<string> = new Set([
   'plombier',
-  'serrurier',
   'electricien',
   'chauffagiste',
+  'couvreur',
+  'climaticien',
 ])
 
 export const URGENCE_INDEXED_CITIES: ReadonlySet<string> = new Set([

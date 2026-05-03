@@ -39,15 +39,19 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisan Urgence : Dépannage 24/7',
+  // Pivot full RGE 2026-05-03 (revert partiel) : hub /urgence reste
+  // indexable, périmètre restreint aux trades qu'un artisan RGE peut
+  // prendre (plombier, chauffagiste, electricien, couvreur, climaticien).
+  // Les sous-pages hors whitelist sont noindex (cf. URGENCE_RGE_COMPATIBLE_SLUGS).
+  title: 'Artisan RGE en urgence : plomberie, chauffage, électricité',
   description:
-    'Artisan en urgence : plombier, électricien, serrurier. Dépannage soir et week-end partout en France. Devis gratuit, artisans vérifiés SIREN.',
+    'Plombier, chauffagiste, électricien, couvreur, climaticien : artisans RGE certifiés disponibles en urgence. Dépannage soir et week-end. Devis gratuit, SIREN vérifié.',
   alternates: getAlternates(`/urgence`),
   openGraph: {
     locale: 'fr_FR',
-    title: 'Artisan Urgence — Dépannage Soir & Week-end',
+    title: 'Artisan RGE en urgence — Plomberie, chauffage, électricité',
     description:
-      'Plombier, électricien, serrurier en urgence. Dépannage soir et week-end. Devis gratuit, artisans vérifiés.',
+      'Plombier, chauffagiste, électricien, couvreur, climaticien RGE certifiés en urgence. Dépannage soir et week-end. Devis gratuit.',
     url: `${SITE_URL}/urgence`,
     type: 'website',
     images: [
@@ -55,15 +59,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Urgence artisan',
+        alt: 'ServicesArtisans — Urgence artisan RGE',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Artisan Urgence — Dépannage Soir & Week-end',
+    title: 'Artisan RGE en urgence — Plomberie, chauffage, électricité',
     description:
-      'Plombier, électricien, serrurier en urgence. Dépannage soir et week-end. Devis gratuit.',
+      'Plombier, chauffagiste, électricien, couvreur, climaticien RGE en urgence. Devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

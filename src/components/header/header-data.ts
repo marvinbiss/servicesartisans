@@ -1,7 +1,6 @@
 import {
   Clock,
   Wrench,
-  Key,
   Zap,
   Flame,
   Wind,
@@ -9,8 +8,8 @@ import {
   Home,
   Hammer,
   PaintBucket,
-  Sparkles,
-  ChefHat,
+  Leaf,
+  Snowflake,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -60,9 +59,50 @@ export type MobileAccordion = 'services' | 'villes' | 'regions' | null
 
 // ── Constants ──────────────────────────────────────────
 
+// Pivot full RGE 2026-05-03 : repositionnement « 100% artisans RGE certifiés ».
+// - Catégorie "Urgences 24h/24" reconfigurée : restreinte aux trades qu'un
+//   artisan RGE peut prendre (plombier, chauffagiste, electricien, couvreur,
+//   climaticien — cf. URGENCE_RGE_COMPATIBLE_SLUGS). Serrurier supprimé.
+// - Métiers commodity sans qualif RGE retirés du catalogue : serrurier,
+//   carreleur, cuisiniste, vitrier (cf. PIVOT_RGE_REMOVED_SLUGS dans
+//   src/lib/seo/pivot-rge-removed-services.ts).
+// - "Rénovation énergétique" promu en tête (catégorie phare = flux MaPrimeRénov + CEE).
+// - Pivot pure-play BTP énergétique 2026-05-02 : "Extérieur" (jardinier) retirée,
+//   "Aménagement" (nettoyage) retirée.
 export const serviceCategories: ServiceCategory[] = [
   {
-    category: 'Urgences 24h/24',
+    category: 'Rénovation énergétique',
+    color: 'green',
+    icon: Leaf,
+    services: [
+      {
+        name: 'Pompe à chaleur',
+        slug: 'pompe-a-chaleur',
+        icon: Snowflake,
+        description: 'Air-eau, géothermique — RGE QualiPAC',
+      },
+      {
+        name: 'Isolation thermique',
+        slug: 'isolation-thermique',
+        icon: Home,
+        description: 'Combles, murs, ITE — RGE Qualibat',
+      },
+      {
+        name: 'Chauffagiste',
+        slug: 'chauffagiste',
+        icon: Flame,
+        description: 'Chaudière biomasse, PAC — RGE',
+      },
+      {
+        name: 'Climaticien',
+        slug: 'climaticien',
+        icon: Wind,
+        description: 'Installation, entretien — RGE QualiPAC',
+      },
+    ],
+  },
+  {
+    category: 'Urgences RGE 24h/24',
     color: 'red',
     icon: Clock,
     services: [
@@ -70,41 +110,29 @@ export const serviceCategories: ServiceCategory[] = [
         name: 'Plombier',
         slug: 'plombier',
         icon: Wrench,
-        description: 'Fuites, débouchage, installation',
+        description: 'Fuite, dégât des eaux, chauffe-eau',
         urgent: true,
       },
       {
-        name: 'Serrurier',
-        slug: 'serrurier',
-        icon: Key,
-        description: 'Ouverture de porte, serrure',
+        name: 'Chauffagiste',
+        slug: 'chauffagiste',
+        icon: Flame,
+        description: 'Panne chaudière/PAC, fuite gaz',
         urgent: true,
       },
       {
         name: 'Électricien',
         slug: 'electricien',
         icon: Zap,
-        description: 'Panne, dépannage électrique',
+        description: 'Coupure, court-circuit',
         urgent: true,
       },
-    ],
-  },
-  {
-    category: 'Chauffage & Clim',
-    color: 'orange',
-    icon: Flame,
-    services: [
       {
-        name: 'Chauffagiste',
-        slug: 'chauffagiste',
-        icon: Flame,
-        description: 'Chaudière, pompe à chaleur',
-      },
-      {
-        name: 'Climaticien',
-        slug: 'climaticien',
-        icon: Wind,
-        description: 'Installation, entretien clim',
+        name: 'Couvreur',
+        slug: 'couvreur',
+        icon: Home,
+        description: 'Fuite toiture, tempête',
+        urgent: true,
       },
     ],
   },
@@ -114,39 +142,20 @@ export const serviceCategories: ServiceCategory[] = [
     icon: HardHat,
     services: [
       { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation' },
-      { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie' },
       {
         name: 'Menuisier',
         slug: 'menuisier',
         icon: Hammer,
-        description: 'Fenêtres, portes, escaliers',
+        description: 'Fenêtres, portes — RGE',
       },
-    ],
-  },
-  {
-    category: 'Finitions',
-    color: 'green',
-    icon: PaintBucket,
-    services: [
       {
         name: 'Peintre',
         slug: 'peintre-en-batiment',
         icon: PaintBucket,
         description: 'Peinture int. et ext.',
       },
-      { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Carrelage, faïence' },
     ],
   },
-  {
-    category: 'Aménagement',
-    color: 'pink',
-    icon: ChefHat,
-    services: [
-      { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
-    ],
-  },
-  // Pivot pure-play BTP énergétique 2026-05-02 : catégorie "Extérieur"
-  // (jardinier) retirée. "Aménagement" : nettoyage retiré.
 ]
 
 // ── Helpers ─────────────────────────────────────────────

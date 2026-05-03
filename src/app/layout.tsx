@@ -93,11 +93,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "ServicesArtisans — Annuaire d'artisans en France",
+    default: 'ServicesArtisans — Le 1er annuaire 100% artisans RGE certifiés',
     template: '%s | ServicesArtisans',
   },
   description:
-    "Annuaire d'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.",
+    'Le premier annuaire 100% artisans RGE certifiés en France. 49 000 professionnels qualifiés (Qualibat, Qualifelec, QualiPAC) pour vos travaux de rénovation énergétique. SIREN vérifié, devis gratuits.',
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -115,22 +115,23 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: SITE_URL,
     siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
+    title: 'ServicesArtisans — 1er annuaire 100% artisans RGE certifiés',
     description:
-      "Annuaire d'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.",
+      '49 000 artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) pour vos travaux de rénovation énergétique. Éligibles MaPrimeRénov & CEE. Devis gratuits.',
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Annuaire des artisans référencés en France',
+        alt: 'ServicesArtisans — Le 1er annuaire 100% artisans RGE certifiés',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
-    description: "Annuaire d'artisans de France. Devis gratuits, données gouvernementales SIREN.",
+    title: 'ServicesArtisans — 1er annuaire 100% artisans RGE certifiés',
+    description:
+      '49 000 artisans RGE pour la rénovation énergétique : Qualibat, Qualifelec, QualiPAC. Éligibles MaPrimeRénov & CEE.',
   },
   robots: {
     index: true,

@@ -17,6 +17,7 @@ import {
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
+import { isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
 import { hashCode } from '@/lib/seo/location-content'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { villes, services } from '@/lib/data/france'
@@ -181,10 +182,16 @@ export async function generateMetadata({
   const description = descTemplates[descHash % descTemplates.length]
   const serviceImage = getServiceImage(service)
 
+  // Pivot full RGE 2026-05-03 (revert partiel) : on garde l'urgence
+  // indexable uniquement pour les trades qu'un artisan RGE peut prendre
+  // (cf. URGENCE_RGE_COMPATIBLE_SLUGS). Hors whitelist → noindex+follow
+  // pour préserver le maillage interne vers /services/[s].
+  const isRgeCompatible = isUrgenceRgeCompatible(service)
   return {
     title,
     description,
     alternates: getAlternates(`/urgence/${service}`),
+    robots: isRgeCompatible ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',

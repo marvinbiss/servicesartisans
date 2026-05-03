@@ -10,7 +10,7 @@ import {
   getServiceCityPriority,
   isServiceVilleIndexable,
 } from '@/lib/seo/services-tiers'
-import { isRemovedByRgePivot } from '@/lib/seo/pivot-rge-removed-services'
+import { isRemovedByRgePivot, isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
 
 // Boot-time guard : si un service est ajouté à france.ts sans MAJ tiers, throw
 // au build pour éviter le silent fallback Tier C en prod.
@@ -133,13 +133,16 @@ export async function generateSitemaps() {
     { id: 'cities' },
     { id: 'geo' },
     { id: 'devis-services' },
-    // Tier 1: urgence, tarifs → all 2 267 cities
+    // Tier 1: tarifs → all 2 267 cities
     // devis-service-cities REMOVED 2026-04-29 (V1 #2 — 301 vers /services/[s]/[v]).
     // Hub /devis et /devis/[s] (1-2 segments) restent dans sitemap (dans 'devis-services' ci-dessus).
-    // urgence-service-cities CONSOLIDATED 2026-04-29 (V2 #4 stratégie 140K) :
-    // 47 svc × 2 267 villes = 106 549 → 4 svc × 25 villes = 100 URLs. Tient
-    // dans 1 seul shard. Hors whitelist : 301 → /services/[s]/[v] (cf.
-    // src/lib/seo/urgence-whitelist.ts).
+    // urgence-service-cities (revert partiel pivot full RGE 2026-05-03) :
+    // shard restauré avec périmètre restreint aux 5 trades RGE-compatibles
+    // (plombier, chauffagiste, electricien, couvreur, climaticien — cf.
+    // URGENCE_RGE_COMPATIBLE_SLUGS). Filtre appliqué dans le handler
+    // ci-dessous. Les autres slugs urgence restent noindex via metadata
+    // page-level. Combo final = 5 svc × ≤25 villes (whitelist 140K V2#4)
+    // ≈ 125 URLs ≤ STATIC_BATCH 8 000 → 1 shard suffit.
     { id: 'urgence-service-cities-0' },
     // tarifs-service-cities REMOVED 2026-04-29 (V1 #3 — 301 vers
     // /services/[s]/[v]#tarifs avec PriceTableHTML injecté). Hub /tarifs
@@ -229,11 +232,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly',
         priority: 0.9,
       },
+      // /urgence (revert partiel pivot RGE 2026-05-03) : hub indexable —
+      // périmètre restreint aux 5 trades qu'un artisan RGE peut prendre
+      // (plombier, chauffagiste, electricien, couvreur, climaticien).
+      // Sous-pages hors whitelist : noindex via metadata page-level.
       {
         url: `${SITE_URL}/urgence`,
         lastModified: STATIC_DATE,
         changeFrequency: 'weekly',
-        priority: 0.9,
+        priority: 0.85,
       },
       {
         url: `${SITE_URL}/devis`,
@@ -830,14 +837,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.7,
     }))
 
-    // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs avant émission.
-    const emergencySlugs = Object.keys(tradeContent).filter((slug) => !isRemovedByRgePivot(slug))
-    const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
-      url: `${SITE_URL}/urgence/${slug}`,
-      lastModified: byService.get(slug) || STATIC_DATE,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    }))
+    // Pivot full RGE 2026-05-03 (revert partiel) : on émet /urgence/{slug}
+    // uniquement pour les trades qu'un artisan RGE peut prendre (plombier,
+    // chauffagiste, electricien, couvreur, climaticien). Les autres restent
+    // noindex via metadata page-level (cf. URGENCE_RGE_COMPATIBLE_SLUGS).
+    const urgencePages: MetadataRoute.Sitemap = Object.keys(tradeContent)
+      .filter((slug) => isUrgenceRgeCompatible(slug))
+      .map((slug) => ({
+        url: `${SITE_URL}/urgence/${slug}`,
+        lastModified: byService.get(slug) || STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+      }))
 
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent)
       .filter((slug) => !isRemovedByRgePivot(slug))
@@ -1052,6 +1063,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     // est redirigé 301 vers /services/[s]/[v] au niveau page (cf.
     // src/lib/seo/urgence-whitelist.ts).
     //
+    // Pivot full RGE 2026-05-03 (revert partiel) : double gate avec
+    // `isUrgenceRgeCompatible` — n'émet que les services qu'un artisan RGE
+    // peut prendre (plombier, chauffagiste, electricien, couvreur, climaticien).
+    //
     // On itère sur la whitelist directement plutôt que de parcourir tous les
     // combos puis filtrer — économise des cycles à chaque build sitemap.
     const { URGENCE_INDEXED_SERVICES, URGENCE_INDEXED_CITIES } =
@@ -1062,7 +1077,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const villeBySlug = new Map(villes.map((v) => [v.slug, v]))
 
     const result: MetadataRoute.Sitemap = []
-    const services = Array.from(URGENCE_INDEXED_SERVICES)
+    const services = Array.from(URGENCE_INDEXED_SERVICES).filter(isUrgenceRgeCompatible)
     const cities = Array.from(URGENCE_INDEXED_CITIES)
     for (const svc of services) {
       for (const villeSlug of cities) {

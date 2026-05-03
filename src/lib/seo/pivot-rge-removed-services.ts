@@ -34,3 +34,35 @@ export const PIVOT_RGE_REMOVED_SLUGS: ReadonlySet<string> = new Set([
 export function isRemovedByRgePivot(slug: string): boolean {
   return PIVOT_RGE_REMOVED_SLUGS.has(slug)
 }
+
+/**
+ * Métiers où un artisan RGE peut légitimement prendre l'urgence.
+ *
+ * Décision Marvin 2026-05-03 (revert partiel Phase 2) : rouvrir /urgence/*
+ * uniquement pour les trades dont un artisan RGE certifié peut couvrir
+ * l'intervention sans casser le narratif « 100% RGE » :
+ *   - plombier      → fuite/dégât des eaux/chauffe-eau (RGE Qualibat 5311)
+ *   - chauffagiste  → panne chaudière/PAC, fuite gaz (RGE QualiPAC, Qualibat 5911)
+ *   - electricien   → coupure, court-circuit, IRVE (RGE Qualifelec)
+ *   - couvreur      → fuite toiture, tempête, tuiles (RGE Qualibat 7113)
+ *   - climaticien   → panne clim, fluide frigorigène (RGE QualiPAC)
+ *
+ * Les autres slugs urgence (peintre, maçon, menuisier…) ne sont pas des
+ * urgences réalistes et leur version /urgence/{slug}/* reste noindex +
+ * hors sitemap.
+ */
+export const URGENCE_RGE_COMPATIBLE_SLUGS: ReadonlySet<string> = new Set([
+  'plombier',
+  'chauffagiste',
+  'electricien',
+  'couvreur',
+  'climaticien',
+])
+
+/**
+ * Helper : true si le slug peut conserver une URL `/urgence/{slug}/*`
+ * indexable + listée au sitemap après le pivot RGE.
+ */
+export function isUrgenceRgeCompatible(slug: string): boolean {
+  return URGENCE_RGE_COMPATIBLE_SLUGS.has(slug)
+}

@@ -30,8 +30,9 @@ export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 2
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : "Des milliers d'"
-  const absoluteTitle = `ServicesArtisans : annuaire de ${countStr} artisans français vérifiés SIREN`
-  const metaDescription = `ServicesArtisans, l'annuaire des ${countStr} artisans français référencés SIREN. Plombier, électricien, serrurier dans 101 départements. Devis gratuit en 2 min.`
+  // Pivot full RGE 2026-05-03 : repositionnement « 100% artisans RGE certifiés ».
+  const absoluteTitle = `ServicesArtisans — Le 1er annuaire 100% artisans RGE certifiés`
+  const metaDescription = `Le premier annuaire 100% artisans RGE certifiés en France : ${countStr} professionnels Qualibat, Qualifelec, QualiPAC pour vos travaux de rénovation énergétique. Éligibles MaPrimeRénov & CEE. Devis gratuit.`
   return {
     title: { absolute: absoluteTitle },
     description: metaDescription,
@@ -47,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `${SITE_URL}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: 'ServicesArtisans — Annuaire des artisans en France',
+          alt: 'ServicesArtisans — Le 1er annuaire 100% artisans RGE certifiés',
         },
       ],
     },
@@ -102,7 +103,7 @@ export default async function HomePage() {
           '@type': 'Organization',
           name: 'ServicesArtisans',
           url: SITE_URL,
-          description: "Annuaire d'artisans en France",
+          description: 'Le 1er annuaire 100% artisans RGE certifiés en France',
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: homepageData.avgRating,
@@ -121,7 +122,7 @@ export default async function HomePage() {
     '@id': SITE_URL,
     url: SITE_URL,
     name: 'ServicesArtisans',
-    description: `Annuaire des ${countStrSchema} artisans français référencés SIREN.`,
+    description: `Le 1er annuaire 100% artisans RGE certifiés en France — ${countStrSchema} fiches qualifiées (Qualibat, Qualifelec, QualiPAC) éligibles MaPrimeRénov' et CEE.`,
     inLanguage: 'fr-FR',
     isPartOf: { '@id': `${SITE_URL}#website` },
     about: { '@id': `${SITE_URL}#organization` },
@@ -146,7 +147,7 @@ export default async function HomePage() {
       <header className="bg-white border-b border-sand-200">
         <div className="max-w-6xl mx-auto px-4 py-5 md:py-6">
           <h1 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 tracking-tight text-center md:text-left">
-            ServicesArtisans — annuaire des artisans français vérifiés SIREN
+            ServicesArtisans — le 1<sup>er</sup> annuaire 100% artisans RGE certifiés
           </h1>
         </div>
       </header>
