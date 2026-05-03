@@ -31,7 +31,9 @@ import {
   getServicePricingSchema,
   getDeepSectionsTechArticleSchema,
   getDeepSectionsFAQPageSchema,
+  getDeepSectionsHowToSchemas,
 } from '@/lib/seo/jsonld'
+import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -448,6 +450,14 @@ export default async function ServicePage({ params }: PageProps) {
     pageUrl,
     sections: deepSectionsForSchema,
   })
+  // Sprint G Ahrefs 2026-05-03 — HowTo Schemas pour les sections décisionnelles
+  // (comparatifs / "comment choisir"). Bing/DDG affichent step-by-step rich
+  // snippet, AI Overviews exploitent la structure procédurale.
+  const deepSectionsHowToSchemas = getDeepSectionsHowToSchemas({
+    pageUrl,
+    sections: deepSectionsForSchema,
+    overlayLookup: getHowToOverlay,
+  })
 
   // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
   // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
@@ -478,6 +488,7 @@ export default async function ServicePage({ params }: PageProps) {
           ...(articleSchema ? [articleSchema] : []),
           ...(deepSectionsTechArticleSchema ? [deepSectionsTechArticleSchema] : []),
           ...(deepSectionsFAQSchema ? [deepSectionsFAQSchema] : []),
+          ...deepSectionsHowToSchemas,
         ]}
       />
 

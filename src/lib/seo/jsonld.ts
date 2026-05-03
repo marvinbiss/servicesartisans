@@ -1391,6 +1391,53 @@ export function getDeepSectionsTechArticleSchema(params: {
   }
 }
 
+// Schema.org HowTo dérivé des deep H2 sections décisionnelles (Sprint G
+// Ahrefs 2026-05-03). Pour chaque section avec un overlay HowTo défini dans
+// `deep-sections-howto-overlays.ts`, émet un HowTo Schema indépendant ancré
+// sur l'id de la section. Permet à Bing + DDG + AI Overviews d'afficher des
+// rich snippets step-by-step pour les requêtes "comment choisir / vérifier /
+// dimensionner".
+//
+// Cohabite avec TechArticle (Sprint F) et FAQPage (Sprint H) — Google +
+// AI Overviews exploitent les 3 schemas en parallèle pour des modes de
+// citation différents (article complet, FAQ courte, étapes procédurales).
+//
+// Retourne un tableau de HowTo Schemas (1 par section avec overlay), ou
+// tableau vide si aucune section n'a d'overlay.
+export function getDeepSectionsHowToSchemas(params: {
+  pageUrl: string
+  sections: ReadonlyArray<{ id: string }>
+  overlayLookup: (sectionId: string) => {
+    name: string
+    description: string
+    totalTime?: string
+    steps: ReadonlyArray<{ name: string; text: string }>
+  } | null
+}): Array<Record<string, unknown>> {
+  const out: Array<Record<string, unknown>> = []
+  for (const section of params.sections) {
+    const overlay = params.overlayLookup(section.id)
+    if (!overlay) continue
+    out.push({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      '@id': `${params.pageUrl}#howto-${section.id}`,
+      name: overlay.name,
+      description: overlay.description,
+      ...(overlay.totalTime && { totalTime: overlay.totalTime }),
+      mainEntityOfPage: { '@type': 'WebPage', '@id': params.pageUrl },
+      step: overlay.steps.map((s, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: s.name,
+        text: s.text,
+        url: `${params.pageUrl}#${section.id}`,
+      })),
+    })
+  }
+  return out
+}
+
 // Schema.org FAQPage dérivé d'une collection de deep H2 sections (Sprint H
 // Ahrefs 2026-05-03). Transforme chaque section { h2, body[] } en QA pair :
 //   - question = le H2 reformulé en interrogation si nécessaire (déjà OK)

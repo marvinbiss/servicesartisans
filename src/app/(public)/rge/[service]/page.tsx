@@ -20,9 +20,11 @@ import {
   getBreadcrumbSchema,
   getCollectionPageSchema,
   getDeepSectionsFAQPageSchema,
+  getDeepSectionsHowToSchemas,
   getDeepSectionsTechArticleSchema,
   getFAQSchema,
 } from '@/lib/seo/jsonld'
+import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -196,12 +198,21 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
     pageUrl: `${SITE_URL}${pagePath}`,
     sections: deepSections,
   })
+  // Sprint G Ahrefs 2026-05-03 — HowTo Schemas pour les sections décisionnelles
+  // RGE-only (CET ambiant vs ext, VMC simple vs double, fenêtre PVC/alu/bois,
+  // IRVE niveau Qualifelec).
+  const deepSectionsHowToSchemas = getDeepSectionsHowToSchemas({
+    pageUrl: `${SITE_URL}${pagePath}`,
+    sections: deepSections,
+    overlayLookup: getHowToOverlay,
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
   if (deepSectionsTechArticleSchema) jsonLdItems.push(deepSectionsTechArticleSchema)
   if (deepSectionsFAQSchema) jsonLdItems.push(deepSectionsFAQSchema)
+  if (deepSectionsHowToSchemas.length > 0) jsonLdItems.push(...deepSectionsHowToSchemas)
 
   return (
     <>

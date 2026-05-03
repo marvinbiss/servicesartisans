@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
 
-import { getDeepSectionsFAQPageSchema, getDeepSectionsTechArticleSchema } from '../jsonld'
+import {
+  getDeepSectionsFAQPageSchema,
+  getDeepSectionsHowToSchemas,
+  getDeepSectionsTechArticleSchema,
+} from '../jsonld'
 import { SITE_URL } from '../config'
 
 const SAMPLE_SECTIONS = [
@@ -198,5 +202,90 @@ describe('getDeepSectionsFAQPageSchema — Sprint H Ahrefs 2026-05-03', () => {
     const entity = (s?.mainEntity as Array<Record<string, unknown>>)[0]
     const answer = entity.acceptedAnswer as Record<string, unknown>
     expect(answer.text).toBe('')
+  })
+})
+
+describe('getDeepSectionsHowToSchemas — Sprint G Ahrefs 2026-05-03', () => {
+  const pageUrl = `${SITE_URL}/services/pompe-a-chaleur`
+
+  it('returns empty array when no section has an overlay', () => {
+    const result = getDeepSectionsHowToSchemas({
+      pageUrl,
+      sections: [{ id: 'no-overlay-id' }],
+      overlayLookup: () => null,
+    })
+    expect(result).toEqual([])
+  })
+
+  it('emits one HowTo Schema per section that has an overlay', () => {
+    const result = getDeepSectionsHowToSchemas({
+      pageUrl,
+      sections: [{ id: 'a' }, { id: 'b' }, { id: 'no-overlay' }],
+      overlayLookup: (id) =>
+        id === 'a' || id === 'b'
+          ? {
+              name: `Comment X pour ${id}`,
+              description: `Description ${id}`,
+              totalTime: 'PT15M',
+              steps: [
+                { name: 'Step 1', text: 'Long enough text content for step 1.' },
+                { name: 'Step 2', text: 'Long enough text content for step 2.' },
+                { name: 'Step 3', text: 'Long enough text content for step 3.' },
+              ],
+            }
+          : null,
+    })
+    expect(result).toHaveLength(2)
+    expect(result[0]['@id']).toBe(`${pageUrl}#howto-a`)
+    expect(result[1]['@id']).toBe(`${pageUrl}#howto-b`)
+  })
+
+  it('HowTo Schema declares correct shape : @context, @type, mainEntityOfPage, ordered steps', () => {
+    const result = getDeepSectionsHowToSchemas({
+      pageUrl,
+      sections: [{ id: 'comp' }],
+      overlayLookup: () => ({
+        name: 'Comment choisir',
+        description: 'Test desc',
+        totalTime: 'PT20M',
+        steps: [
+          { name: 'Step A', text: 'A long enough description for step A content.' },
+          { name: 'Step B', text: 'A long enough description for step B content.' },
+          { name: 'Step C', text: 'A long enough description for step C content.' },
+        ],
+      }),
+    })
+    const schema = result[0]
+    expect(schema['@context']).toBe('https://schema.org')
+    expect(schema['@type']).toBe('HowTo')
+    expect(schema.name).toBe('Comment choisir')
+    expect(schema.totalTime).toBe('PT20M')
+    const mainEntity = schema.mainEntityOfPage as Record<string, unknown>
+    expect(mainEntity['@type']).toBe('WebPage')
+    expect(mainEntity['@id']).toBe(pageUrl)
+    const steps = schema.step as Array<Record<string, unknown>>
+    expect(steps).toHaveLength(3)
+    steps.forEach((s, i) => {
+      expect(s['@type']).toBe('HowToStep')
+      expect(s.position).toBe(i + 1)
+      expect(s.url).toBe(`${pageUrl}#comp`)
+    })
+  })
+
+  it('omits totalTime when overlay does not provide it', () => {
+    const result = getDeepSectionsHowToSchemas({
+      pageUrl,
+      sections: [{ id: 'no-time' }],
+      overlayLookup: () => ({
+        name: 'X',
+        description: 'Y',
+        steps: [
+          { name: 'S1', text: 'A long enough description for step S1 content.' },
+          { name: 'S2', text: 'A long enough description for step S2 content.' },
+          { name: 'S3', text: 'A long enough description for step S3 content.' },
+        ],
+      }),
+    })
+    expect(result[0].totalTime).toBeUndefined()
   })
 })
