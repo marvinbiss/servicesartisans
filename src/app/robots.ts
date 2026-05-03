@@ -6,7 +6,11 @@ import { SITE_URL } from '@/lib/seo/config'
 // applique longest-match priority : `/api/glossaire-rge.json` (28 chars)
 // override `/api/` (5 chars) du PRIVATE_DISALLOW. Permet aux crawlers
 // data.gouv.fr / Wikipedia / journalistes de découvrir l'asset.
-const OPEN_DATA_ALLOW = ['/', '/api/glossaire-rge.json']
+//
+// Sprint AF Ahrefs 2026-05-03 — ajout variante CSV `/api/glossaire-rge.csv`
+// pour les consommateurs non-JSON (data.gouv.fr datasets tabulaires, Excel,
+// LibreOffice, BI tools). Même logique de longest-match override `/api/`.
+const OPEN_DATA_ALLOW = ['/', '/api/glossaire-rge.json', '/api/glossaire-rge.csv']
 
 const PRIVATE_DISALLOW = [
   // Immutable static assets (1-year cache headers) — no need for Google to crawl

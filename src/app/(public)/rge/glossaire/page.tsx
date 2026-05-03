@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Award, ArrowRight, ShieldCheck, Code2 } from 'lucide-react'
+import { Award, ArrowRight, ShieldCheck, Code2, Table } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -280,6 +280,23 @@ export default function RgeGlossairePage() {
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">
                   Licence CC-BY 4.0 — réutilisable
+                </div>
+              </div>
+            </a>
+            {/* Sprint AF Ahrefs 2026-05-03 — variante CSV pour data.gouv.fr,
+                Excel, LibreOffice, BI tools (Power BI, Tableau, Looker Studio).
+                BOM UTF-8 + RFC 4180 escape pour ouverture directe sans assistant. */}
+            <a
+              href="/api/glossaire-rge.csv"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+            >
+              <Table className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <div className="min-w-0">
+                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                  Données ouvertes CSV
+                </div>
+                <div className="text-xs text-charcoal-600 mt-0.5">
+                  Excel / LibreOffice — Licence CC-BY 4.0
                 </div>
               </div>
             </a>
