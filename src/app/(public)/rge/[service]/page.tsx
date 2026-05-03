@@ -27,6 +27,7 @@ import {
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
+import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -630,6 +631,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Sprint K Ahrefs 2026-05-03 — Glossaire RGE visible (cohérence Schema/DOM) */}
+      <RgeGlossaryBlock
+        title={`Glossaire RGE — ${content.h1}`}
+        intro={`Définitions officielles des qualifications RGE et primes CEE applicables au métier ${content.h1.toLowerCase()}. Vérifiez systématiquement le numéro de qualification de votre artisan sur annuaire-rge.ademe.fr.`}
+      />
 
       {/* FAQ contextualisée */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">

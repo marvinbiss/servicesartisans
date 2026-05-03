@@ -36,6 +36,7 @@ import {
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
+import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -987,6 +988,16 @@ export default async function ServicePage({ params }: PageProps) {
           </section>
         )
       })()}
+
+      {/* Sprint K Ahrefs 2026-05-03 — Glossaire RGE visible (cohérence Schema/DOM).
+          Émis seulement si le service est RGE-eligible (cohérent avec Sprint M
+          qui n'émet le DefinedTermSet que dans ce cas). */}
+      {servicesRgeGlossarySchema && (
+        <RgeGlossaryBlock
+          title={`Glossaire RGE — ${service.name}`}
+          intro={`Définitions officielles des qualifications RGE et primes CEE applicables au métier ${service.name.toLowerCase()}. Vérifiez systématiquement le numéro de qualification de votre artisan sur annuaire-rge.ademe.fr.`}
+        />
+      )}
 
       {/* FAQ — rich content for SEO */}
       {trade && trade.faq.length > 0 && (
