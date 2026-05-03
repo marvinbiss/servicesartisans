@@ -8,6 +8,8 @@ import {
   FileJson,
   FileSpreadsheet,
   FileBox,
+  FileText,
+  BookOpen,
   Mail,
   Github,
   Calendar,
@@ -278,9 +280,49 @@ export default async function DatasetRgePage() {
     })),
   }
 
+  // Sprint AH Ahrefs 2026-05-03 — Dataset complémentaire glossaire RGE.
+  // Référence l'asset open-data /api/glossaire-rge.{json,csv} créé par
+  // Sprints AC + AF. Inventaire unique des datasets RGE sur cette page.
+  const glossaireDatasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Glossaire RGE — Définitions canoniques',
+    description:
+      "Vocabulaire canonique des 16 qualifications RGE officielles (QualiPAC, QualiSol, QualiBois, Qualibat 7141/7144/7131, Qualifelec IRVE, OPQIBI 1905…) avec organismes certificateurs, domaines de travaux et primes CEE/MaPrimeRénov' débloquées. Source ADEME / France Rénov'.",
+    url: `${SITE_URL}/rge/glossaire`,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+    creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    inLanguage: 'fr-FR',
+    keywords: [
+      'glossaire RGE',
+      'qualifications RGE',
+      'QualiPAC',
+      'Qualibat',
+      'Qualifelec',
+      'OPQIBI',
+      'DefinedTermSet',
+    ],
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/ld+json',
+        contentUrl: `${SITE_URL}/api/glossaire-rge.json`,
+        name: 'JSON-LD (Schema.org DefinedTermSet)',
+      },
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'text/csv',
+        contentUrl: `${SITE_URL}/api/glossaire-rge.csv`,
+        name: 'CSV (Excel-ready, BOM UTF-8)',
+      },
+    ],
+  }
+
   return (
     <>
-      <JsonLd data={[getBreadcrumbSchema(breadcrumbs), datasetSchema]} />
+      <JsonLd data={[getBreadcrumbSchema(breadcrumbs), datasetSchema, glossaireDatasetSchema]} />
 
       <div className="min-h-screen bg-sand-50">
         <div className="mx-auto max-w-5xl px-6 py-10">
@@ -509,6 +551,58 @@ de France [Dataset]. Licence CC-BY-4.0. Récupéré sur ${canonicalUrl}`}
               </Link>
               . Endpoints actuellement exposés : <code>/api/v1/rge/lookup</code>,{' '}
               <code>/api/v1/rge/search</code>.
+            </p>
+          </section>
+
+          {/* Datasets complémentaires — Sprint AH Ahrefs 2026-05-03 */}
+          <section className="mt-12" id="datasets-complementaires">
+            <h2 className="text-2xl font-bold text-charcoal-900">Datasets complémentaires</h2>
+            <p className="mt-2 text-charcoal-600">
+              D’autres assets open-data ServicesArtisans liés à l’écosystème RGE, sous la même
+              licence CC-BY 4.0. Réutilisables librement avec attribution.
+            </p>
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <a
+                href="/api/glossaire-rge.json"
+                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-emerald-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+              >
+                <FileJson className="h-6 w-6 flex-shrink-0 text-primary-600" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-charcoal-900">
+                    Glossaire RGE — Définitions canoniques
+                  </p>
+                  <p className="mt-1 text-sm text-charcoal-600">
+                    16 qualifications RGE officielles (QualiPAC, Qualibat, Qualifelec, OPQIBI) en
+                    JSON-LD
+                  </p>
+                  <p className="mt-2 text-xs text-charcoal-400">
+                    Format : JSON-LD Schema.org · Licence : CC-BY 4.0
+                  </p>
+                </div>
+              </a>
+              <a
+                href="/api/glossaire-rge.csv"
+                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-emerald-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                download
+              >
+                <FileText className="h-6 w-6 flex-shrink-0 text-emerald-600" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-charcoal-900">Glossaire RGE — Format CSV</p>
+                  <p className="mt-1 text-sm text-charcoal-600">
+                    Mêmes définitions RGE en CSV (Excel-ready, BOM UTF-8)
+                  </p>
+                  <p className="mt-2 text-xs text-charcoal-400">
+                    Format : text/csv · Licence : CC-BY 4.0
+                  </p>
+                </div>
+              </a>
+            </div>
+            <p className="mt-4 inline-flex items-center gap-2 text-sm text-charcoal-600">
+              <BookOpen className="h-4 w-4 text-clay-500" aria-hidden="true" />
+              Page HTML canonique (entité de référence) :{' '}
+              <Link href="/rge/glossaire" className="text-clay-500 underline">
+                /rge/glossaire
+              </Link>
             </p>
           </section>
 
