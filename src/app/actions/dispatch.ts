@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { geocoder } from '@/lib/api/adresse'
+import { isRgeRequiredService } from '@/lib/dispatch/rge-required-services'
 
 export interface DispatchOptions {
   serviceName?: string
@@ -17,6 +18,9 @@ export interface DispatchOptions {
    * VMC double-flux, menuiseries isolantes…). Le dispatch priorise — et
    * filtre si `algorithm_config.require_rge_for_cee = true` — les artisans
    * RGE-valides. Migration 391.
+   *
+   * Depuis mig 498, est aussi auto-déduit côté SQL si `serviceName` est dans
+   * `rge_required_services` (PAC, isolation, audit énergétique, etc.).
    */
   ceeEligible?: boolean
 }
@@ -25,7 +29,7 @@ export interface DispatchOptions {
  * Dispatch a lead to eligible artisans using the configurable algorithm.
  *
  * ACTIVE SCHEMA: public (NOT app)
- * - Calls `public.dispatch_lead` from migration 363_fix_dispatch_location.sql
+ * - Calls `public.dispatch_lead` (mig 498 — RGE-first hard filter)
  * - Reads config from `public.algorithm_config` (201_algorithm_config.sql)
  * - Writes to `public.lead_assignments` and `public.providers`
  *
@@ -39,9 +43,21 @@ export interface DispatchOptions {
  * attempts geocoding via API Adresse (data.gouv.fr) to get coordinates.
  * Falls back gracefully to city/department matching if geocoding fails.
  *
+ * RGE hard filter (mig 498):
+ *   - If `serviceName ∈ rge_required_services` (PAC, isolation, audit
+ *     énergétique, etc.) OR `ceeEligible=true`, the SQL filters candidates
+ *     to RGE-valid artisans only (rge_qualifications IS NOT NULL AND
+ *     rge_valid_until > today).
+ *   - Radius is escalated 50→80→120→200 km if no candidate at base radius
+ *     (only when coordinates are available).
+ *   - On 0 candidate after escalation, returns []. NEVER leaks to non-RGE.
+ *     The SQL writes an audit_log `dispatch.rge_strict_no_match`; this
+ *     wrapper additionally emits a Sentry warn for ops visibility.
+ *
  * Uses service_role (bypasses RLS) — server-only.
  *
- * Returns array of assigned provider IDs (up to max_artisans_per_lead).
+ * Returns array of assigned provider IDs (up to max_artisans_per_lead),
+ * or [] when the lead could not be dispatched (RGE filter, quota, no zone).
  */
 export async function dispatchLead(leadId: string, opts?: DispatchOptions): Promise<string[]> {
   try {
@@ -94,7 +110,30 @@ export async function dispatchLead(leadId: string, opts?: DispatchOptions): Prom
       return []
     }
 
-    return (data as string[]) || []
+    const assigned = (data as string[]) || []
+
+    // Mig 498: 0 candidat sur un lead potentiellement RGE-required → trace.
+    // Le SQL n'écrit `dispatch.rge_strict_no_match` dans audit_logs QUE quand
+    // le filtre RGE a effectivement été appliqué et a évincé tous les candidats.
+    // Côté TS on ne sait pas si la cause exacte est le filtre RGE ou autre
+    // (quota, zone vide même non-RGE) — d'où la phrasing prudente "potentially
+    // RGE-required". Le diagnostic précis se fait via la requête audit_logs.
+    const rgeRequiredByService = isRgeRequiredService(opts?.serviceName)
+    if (assigned.length === 0 && (rgeRequiredByService || opts?.ceeEligible)) {
+      logger.warn('Dispatch returned 0 assignments for a potentially RGE-required lead', {
+        leadId,
+        service: opts?.serviceName,
+        city: opts?.city,
+        postalCode: opts?.postalCode,
+        latitude,
+        longitude,
+        ceeEligible: opts?.ceeEligible ?? false,
+        rgeRequiredByService,
+        hint: 'Check audit_logs WHERE action = dispatch.rge_strict_no_match for confirmation',
+      })
+    }
+
+    return assigned
   } catch (err) {
     logger.error('Dispatch action error', err)
     return []
