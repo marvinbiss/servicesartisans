@@ -278,6 +278,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.75,
       },
       {
+        // Sprint AG Ahrefs 2026-05-03 — endpoint open-data CC-BY 4.0 (Sprint AC).
+        // Déclaration sitemap pour découverte explicite par data.gouv.fr Validator,
+        // Bing/Yandex (Google indexe puis flague noindex via X-Robots-Tag — OK,
+        // signal de présence suffit). Priority 0.3 = asset technique.
+        url: `${SITE_URL}/api/glossaire-rge.json`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.3,
+      },
+      {
+        // Sprint AG Ahrefs 2026-05-03 — variante CSV de l'endpoint open-data
+        // (Sprint AF). Mêmes garanties (CC-BY 4.0, X-Robots-Tag noindex).
+        // Format Excel-friendly (BOM + CRLF + RFC 4180) ciblant les data
+        // analysts qui crawlent data.gouv.fr Validator. Priority 0.3.
+        url: `${SITE_URL}/api/glossaire-rge.csv`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.3,
+      },
+      {
         url: `${SITE_URL}/cee`,
         lastModified: STATIC_DATE,
         changeFrequency: 'weekly',
