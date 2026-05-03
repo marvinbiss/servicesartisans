@@ -14,7 +14,10 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getRgeDefinedTermSetSchema,
 } from '@/lib/seo/jsonld'
+import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
+import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import { getCeeClientTerm } from '@/lib/cee/client-terms'
@@ -300,6 +303,17 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     includeSpeakable: true,
   })
 
+  // Sprint P Ahrefs 2026-05-03 — DefinedTermSet RGE glossary émis sur /cee/[op].
+  // Les pages CEE mentionnent abondamment QualiPAC/Qualibat/QualiBois/Qualit'EnR
+  // dans la copie éditoriale — émettre le vocabulaire ici permet à Google AI
+  // Overviews + Bing de citer la définition exacte (cohérent Sprints J + M).
+  const ceeRgeGlossarySchema = getRgeDefinedTermSetSchema({
+    pageUrl: `${SITE_URL}${path}`,
+    name: `Glossaire RGE — Prime CEE ${operation.code}`,
+    description: `Définitions officielles des qualifications RGE applicables à la prime CEE ${operation.code} (${operation.nom}).`,
+    terms: getAllRgeGlossaryEntries(),
+  })
+
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema,
     articleSchema,
@@ -307,6 +321,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     financialProductSchema as Record<string, unknown>,
   ]
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  if (ceeRgeGlossarySchema) jsonLdItems.push(ceeRgeGlossarySchema)
 
   return (
     <main className="min-h-screen bg-white">
@@ -521,6 +536,14 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Sprint K Ahrefs 2026-05-03 — Glossaire RGE rendu HTML cohérent avec
+          le DefinedTermSet emis (anchors #term-<slug> = DefinedTerm @id).
+          Place après "Métiers RGE qualifiés" (continuité éditoriale : liste
+          des métiers → définitions des certifications). */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
+        <RgeGlossaryBlock entries={getAllRgeGlossaryEntries()} />
+      </section>
 
       {/* Top villes */}
       {topCities.length > 0 && (
