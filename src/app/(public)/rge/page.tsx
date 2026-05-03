@@ -38,6 +38,7 @@ import {
 } from '@/lib/rge/service-city-listings'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 import { CEE_SHORT_LABELS } from '@/lib/cee/shared-labels'
+import { RGE_DEEP_LINK_CARDS } from '@/lib/seo/rge-deep-link-cards'
 
 // ISR — révalidation quotidienne. Les stats nationales RGE évoluent au rythme
 // de la sync ADEME hebdomadaire, 24h est un bon compromis crawl/fraîcheur.
@@ -704,6 +705,41 @@ export default async function RgeHubPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Deep-link cards — Action #3 Bloc 4-5 Ahrefs 2026-05-03.
+          Cible 49K vol/mois cumulés via deep H2 anchors créés Bloc 1+2 :
+          PAC air/eau, PAC géothermique, ITE, choix isolant, PV autoconso,
+          dimensionnement kWc. Maillage thématique direct depuis le pillar
+          /rge vers les sections SEO les plus rentables. */}
+      <section className="bg-emerald-50/40 border-t border-charcoal-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
+            Approfondir un sujet énergétique
+          </h2>
+          <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
+            Six guides courts pour comprendre les techniques, prix et conditions d&apos;aides des
+            grands postes de rénovation énergétique. Chaque lien pointe vers une section dédiée du
+            guide pillar correspondant.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {RGE_DEEP_LINK_CARDS.map((card) => (
+              <Link
+                key={`${card.serviceSlug}-${card.anchorId}`}
+                href={`/services/${card.serviceSlug}#${card.anchorId}`}
+                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+              >
+                <div className="font-bold text-charcoal-900 text-base group-hover:text-emerald-700 transition">
+                  {card.label}
+                </div>
+                <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">{card.hint}</p>
+                <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Lire la section <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* CTAs finaux */}
