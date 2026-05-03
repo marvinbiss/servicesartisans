@@ -38,6 +38,7 @@ import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
+import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -983,7 +984,8 @@ export default async function ServicePage({ params }: PageProps) {
                         data-speakable={i === 0 ? 'true' : undefined}
                         className="text-charcoal-700 leading-relaxed"
                       >
-                        {paragraph}
+                        {/* Sprint L Ahrefs 2026-05-03 — auto-link RGE terms vers #term-<slug> */}
+                        {autoLinkRgeTerms(paragraph)}
                       </p>
                     ))}
                   </div>

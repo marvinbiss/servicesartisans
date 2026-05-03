@@ -29,6 +29,7 @@ import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
+import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -624,7 +625,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                   <div className="space-y-4 text-charcoal-700 leading-relaxed">
                     {s.body.map((p, i) => (
                       <p key={i} data-speakable={i === 0 ? 'true' : undefined}>
-                        {p}
+                        {/* Sprint L Ahrefs 2026-05-03 — auto-link RGE terms vers #term-<slug> */}
+                        {autoLinkRgeTerms(p)}
                       </p>
                     ))}
                   </div>
