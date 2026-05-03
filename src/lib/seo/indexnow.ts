@@ -80,8 +80,8 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
 }
 
 /**
- * Sprint V Ahrefs 2026-05-03 — URLs canoniques de l'entité RGE à pousser
- * sur IndexNow après les Sprints O/T/U.
+ * Sprint V+W Ahrefs 2026-05-03 — URLs canoniques à pousser sur IndexNow
+ * après les Sprints O/T/U/W.
  *
  *   1. /rge/glossaire — page canonique DefinedTermSet (nouvelle, Sprint O).
  *      Bing/Yandex doivent l'indexer pour servir les rich snippets
@@ -91,17 +91,27 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
  *   3. /qualifications-rge — ancien chemin 404, désormais 301 vers (2).
  *      Push pour que Bing/Yandex re-crawl, voient le 301, et retirent
  *      le 404 du cache (sinon Bing met 4-6 semaines à le purger).
+ *   4. /comparaison — cible canonique du 301 Sprint W (refresh).
+ *   5. /comparatifs — ancien chemin 404 (jamais créé), désormais 301
+ *      vers (4). Même logique que (3).
  *
- * Ces 3 URLs sont la liste minimale d'amorçage du nouveau cluster RGE
- * canonique. Les ~459K pages avec footer modifié (Sprint T) ne sont
- * PAS dans cette liste — la propagation naturelle via crawl du sitemap
- * est suffisante pour un changement footer (PageRank flow secondaire).
+ * Ces 5 URLs sont la liste minimale d'amorçage du nouveau cluster RGE +
+ * fix orphan links sitewide. Les ~459K pages avec footer modifié
+ * (Sprints T/W) ne sont PAS dans cette liste — la propagation naturelle
+ * via crawl du sitemap est suffisante pour un changement footer
+ * (PageRank flow secondaire).
  *
  * Module pure : retourne des paths relatifs, transformés en URLs absolues
  * par submitToIndexNow.
  */
 export function getSprintVCanonicalRgeUrls(): string[] {
-  return ['/rge/glossaire', '/rge/qualifications', '/qualifications-rge']
+  return [
+    '/rge/glossaire',
+    '/rge/qualifications',
+    '/qualifications-rge',
+    '/comparaison',
+    '/comparatifs',
+  ]
 }
 
 /**

@@ -13,11 +13,11 @@ import { getSprintVCanonicalRgeUrls } from '../indexnow'
  *   - L'URL canonique Sprint O `/rge/glossaire` est en première position
  *     (signal de priorité, même si IndexNow n'a pas de notion d'ordre).
  */
-describe('getSprintVCanonicalRgeUrls — Sprint V', () => {
+describe('getSprintVCanonicalRgeUrls — Sprint V+W', () => {
   const urls = getSprintVCanonicalRgeUrls()
 
-  it('retourne exactement 3 URLs', () => {
-    expect(urls).toHaveLength(3)
+  it('retourne exactement 5 URLs (Sprint V + W)', () => {
+    expect(urls).toHaveLength(5)
   })
 
   it('contient /rge/glossaire (entité canonique Sprint O)', () => {
@@ -30,6 +30,14 @@ describe('getSprintVCanonicalRgeUrls — Sprint V', () => {
 
   it('contient /qualifications-rge (ancien 404 → 301 Sprint U)', () => {
     expect(urls).toContain('/qualifications-rge')
+  })
+
+  it('contient /comparaison (cible 301 Sprint W)', () => {
+    expect(urls).toContain('/comparaison')
+  })
+
+  it('contient /comparatifs (ancien 404 → 301 Sprint W)', () => {
+    expect(urls).toContain('/comparatifs')
   })
 
   it('toutes les URLs sont des paths relatifs (commencent par /)', () => {

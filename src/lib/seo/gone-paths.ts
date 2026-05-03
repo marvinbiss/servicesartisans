@@ -427,6 +427,24 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
     return { gone: false }
   }
 
+  // 14. /comparatifs — Sprint W Ahrefs 2026-05-03.
+  //     Lien historique du Footer (`Footer.tsx` ligne 40 avant fix Sprint W)
+  //     pointait vers cette URL qui n'a jamais existé comme route. Audit
+  //     P0 2026-05-03 l'avait listée comme "hub à créer" — jamais fait.
+  //     ~459K pages renvoyaient un 404 sur ce lien. On 301 vers
+  //     /comparaison (page comparateur existante la plus proche
+  //     sémantiquement) pour préserver toute équité de lien externe.
+  //     Path exact uniquement.
+  if (pathname === '/comparatifs' || pathname === '/comparatifs/') {
+    return {
+      gone: false,
+      redirect: {
+        to: '/comparaison',
+        status: 301,
+      },
+    }
+  }
+
   // 13. /qualifications-rge — Sprint U Ahrefs 2026-05-03.
   //     Lien historique du Footer (`Footer.tsx` ligne 34 avant fix Sprint U)
   //     pointait vers cette URL qui n'a jamais existé comme route. Audit

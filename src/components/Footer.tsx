@@ -20,13 +20,16 @@ import FooterClusterLinks from '@/components/seo/FooterClusterLinks'
 import DynamicFooterLinks from '@/components/seo/DynamicFooterLinks'
 
 // Navigation links — money pages & essential hubs only (link equity optimization)
-// Audit P0 2026-05-03 : ajout `/comparatifs`, `/barometre/rge` pour sortir
-// ces hubs sitemap de l'état orphan (0 lien interne entrant détecté).
+// Audit P0 2026-05-03 : ajout `/barometre/rge` pour sortir le hub sitemap
+// de l'état orphan (0 lien interne entrant détecté).
 // Sprint T Ahrefs 2026-05-03 : ajout `/rge/glossaire` (entité canonique
 // DefinedTermSet Sprint O) — boost interne sitewide (~459K pages × 1 lien).
 // Sprint U Ahrefs 2026-05-03 : fix lien cassé `/qualifications-rge` (route
 // inexistante, 404 sur 459K pages) → `/rge/qualifications` (hub réel).
-// Le 301 reste actif via gone-paths.ts (bloc 13) pour les backlinks externes.
+// Sprint W Ahrefs 2026-05-03 : retrait du lien `/comparatifs` (route jamais
+// créée — 459K pages × 1 lien 404 sortant). Le 301 vers `/comparaison`
+// (page existante la plus proche) est actif via gone-paths.ts bloc 14
+// pour préserver tout backlink externe résiduel.
 const navigationLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Tarifs', href: '/tarifs' },
@@ -37,7 +40,6 @@ const navigationLinks = [
   { name: 'Qualifications RGE', href: '/rge/qualifications' },
   { name: 'Glossaire RGE', href: '/rge/glossaire' },
   { name: 'Baromètre RGE', href: '/barometre/rge' },
-  { name: 'Comparatifs CEE', href: '/comparatifs' },
   { name: 'Problèmes & dépannages', href: '/problemes' },
   { name: 'Départements', href: '/departements' },
   { name: 'Villes', href: '/villes' },

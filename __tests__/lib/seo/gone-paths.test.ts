@@ -603,6 +603,30 @@ describe('evaluateGonePath — Sprint U /qualifications-rge → 301 /rge/qualifi
   })
 })
 
+describe('evaluateGonePath — Sprint W /comparatifs → 301 /comparaison', () => {
+  it('/comparatifs → 301 vers /comparaison', () => {
+    expect(evaluateGonePath('/comparatifs')).toEqual({
+      gone: false,
+      redirect: { to: '/comparaison', status: 301 },
+    })
+  })
+
+  it('/comparatifs/ (trailing slash) → 301 vers /comparaison', () => {
+    expect(evaluateGonePath('/comparatifs/')).toEqual({
+      gone: false,
+      redirect: { to: '/comparaison', status: 301 },
+    })
+  })
+
+  it('/comparatifs/sub-path NON traité (passe à travers)', () => {
+    expect(evaluateGonePath('/comparatifs/foo')).toEqual({ gone: false })
+  })
+
+  it('/comparaison (cible canonique) → gone:false (pas de redirect loop)', () => {
+    expect(evaluateGonePath('/comparaison')).toEqual({ gone: false })
+  })
+})
+
 describe('VALID_PROBLEM_SLUGS — cohérence avec problems.ts', () => {
   it('contient exactement les slugs déclarés (zéro écart)', () => {
     const sourceSlugs = new Set(allProblems.map((p) => p.slug))
