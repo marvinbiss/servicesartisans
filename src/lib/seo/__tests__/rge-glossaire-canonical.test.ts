@@ -75,3 +75,67 @@ describe('Sprint O — DefinedTermSet canonique /rge/glossaire', () => {
     }
   })
 })
+
+describe('Sprint Z — sameAs canonical entity consolidation', () => {
+  const PAGE_URL = 'https://servicesartisans.fr/rge/glossaire'
+  const HUB_URL = 'https://servicesartisans.fr/services/pompe-a-chaleur'
+
+  it("sur la page canonique (pageUrl === canonicalEntityBaseUrl), n'émet PAS de sameAs", () => {
+    const schema = getRgeDefinedTermSetSchema({
+      pageUrl: PAGE_URL,
+      canonicalEntityBaseUrl: PAGE_URL,
+      name: 'Test',
+      description: 'Test',
+      terms: getAllRgeGlossaryEntries(),
+    })
+    expect(schema?.sameAs).toBeUndefined()
+    const terms = schema?.hasDefinedTerm as Array<Record<string, unknown>>
+    for (const t of terms) {
+      expect(t.sameAs).toBeUndefined()
+    }
+  })
+
+  it("sans canonicalEntityBaseUrl (omis), n'émet PAS de sameAs (backward compat)", () => {
+    const schema = getRgeDefinedTermSetSchema({
+      pageUrl: HUB_URL,
+      name: 'Test',
+      description: 'Test',
+      terms: getAllRgeGlossaryEntries(),
+    })
+    expect(schema?.sameAs).toBeUndefined()
+    const terms = schema?.hasDefinedTerm as Array<Record<string, unknown>>
+    for (const t of terms) {
+      expect(t.sameAs).toBeUndefined()
+    }
+  })
+
+  it('sur un hub (pageUrl !== canonicalEntityBaseUrl), émet sameAs vers la canonique', () => {
+    const schema = getRgeDefinedTermSetSchema({
+      pageUrl: HUB_URL,
+      canonicalEntityBaseUrl: PAGE_URL,
+      name: 'Test',
+      description: 'Test',
+      terms: getAllRgeGlossaryEntries(),
+    })
+    expect(schema?.sameAs).toBe(`${PAGE_URL}#glossary-rge`)
+    const terms = schema?.hasDefinedTerm as Array<Record<string, unknown>>
+    for (const t of terms) {
+      const expectedSameAs = `${PAGE_URL}#term-${(t['@id'] as string).split('#term-')[1]}`
+      expect(t.sameAs).toBe(expectedSameAs)
+    }
+  })
+
+  it('le @id local reste différent du sameAs (consolidation, pas duplication)', () => {
+    const schema = getRgeDefinedTermSetSchema({
+      pageUrl: HUB_URL,
+      canonicalEntityBaseUrl: PAGE_URL,
+      name: 'Test',
+      description: 'Test',
+      terms: getAllRgeGlossaryEntries().slice(0, 1),
+    })
+    const terms = schema?.hasDefinedTerm as Array<Record<string, unknown>>
+    expect(terms[0]['@id']).not.toBe(terms[0].sameAs)
+    expect(terms[0]['@id']).toContain(HUB_URL)
+    expect(terms[0].sameAs).toContain(PAGE_URL)
+  })
+})

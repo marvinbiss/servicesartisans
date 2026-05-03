@@ -470,12 +470,15 @@ export default async function ServicePage({ params }: PageProps) {
   // vocabulaire ici permet à Google AI Overviews + Bing de citer la définition
   // depuis ces pages aussi (vs RGE-only avant Sprint M).
   const isRgeEligibleService = isRgeAllowedService(serviceSlug)
+  // Sprint Z Ahrefs 2026-05-03 — sameAs vers /rge/glossaire (entité canonique
+  // Sprint O) consolide l'autorité topical des 4 hubs DefinedTermSet.
   const servicesRgeGlossarySchema = isRgeEligibleService
     ? getRgeDefinedTermSetSchema({
         pageUrl,
         name: `Glossaire RGE — ${service.name}`,
         description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${service.name.toLowerCase()}.`,
         terms: getAllRgeGlossaryEntries(),
+        canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
       })
     : null
 

@@ -215,11 +215,16 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   // Émet un vocabulaire complet (Qualibat 7141, QualiPAC, IRVE P1…) pour que
   // Google AI Overviews + Bing puissent citer les définitions exactes des
   // certifications mentionnées dans la page (carrousel definition rich result).
+  // Sprint Z Ahrefs 2026-05-03 — canonicalEntityBaseUrl pointe vers
+  // /rge/glossaire (entité canonique Sprint O). Émet sameAs sur chaque
+  // DefinedTerm + sur le DefinedTermSet → consolide l'autorité topical
+  // au lieu de la disperser entre les 4 hubs (J/M/P/O).
   const rgeGlossarySchema = getRgeDefinedTermSetSchema({
     pageUrl: `${SITE_URL}${pagePath}`,
     name: `Glossaire RGE — ${content.h1}`,
     description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${content.h1.toLowerCase()}.`,
     terms: getAllRgeGlossaryEntries(),
+    canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
   })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]

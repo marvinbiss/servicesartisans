@@ -1430,8 +1430,23 @@ export function getRgeDefinedTermSetSchema(params: {
     organisme: string
     termCode?: string
   }>
+  /**
+   * Sprint Z Ahrefs 2026-05-03 — URL absolue du DefinedTermSet canonique
+   * (ex. `${SITE_URL}/rge/glossaire`). Si fourni ET différent de pageUrl,
+   * émet `sameAs: ['${canonicalEntityBaseUrl}#term-<slug>']` sur chaque
+   * DefinedTerm. Schema.org `sameAs` indique à Google AI Overviews + Bing
+   * que cette entité (DefinedTerm) est la MÊME que celle de l'URL canonique
+   * — consolide l'autorité topical au lieu de la disperser entre les 4
+   * hubs (Sprints J/M/P/O).
+   *
+   * Si omis ou égal à pageUrl, aucun sameAs émis (cas de la page canonique
+   * elle-même : self-sameAs est inutile et bruite la sortie JSON-LD).
+   */
+  canonicalEntityBaseUrl?: string
 }): Record<string, unknown> | null {
   if (!params.terms || params.terms.length === 0) return null
+  const canonicalUrl = params.canonicalEntityBaseUrl
+  const isCanonicalPage = !canonicalUrl || canonicalUrl === params.pageUrl
   return {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
@@ -1439,6 +1454,9 @@ export function getRgeDefinedTermSetSchema(params: {
     name: params.name,
     description: params.description,
     inLanguage: 'fr-FR',
+    ...(!isCanonicalPage && {
+      sameAs: `${canonicalUrl}#glossary-rge`,
+    }),
     hasDefinedTerm: params.terms.map((t) => ({
       '@type': 'DefinedTerm',
       '@id': `${params.pageUrl}#term-${t.slug}`,
@@ -1446,6 +1464,9 @@ export function getRgeDefinedTermSetSchema(params: {
       description: t.definition,
       termCode: t.termCode ?? t.code,
       inDefinedTermSet: `${params.pageUrl}#glossary-rge`,
+      ...(!isCanonicalPage && {
+        sameAs: `${canonicalUrl}#term-${t.slug}`,
+      }),
       ...(t.organisme && {
         publisher: { '@type': 'Organization', name: t.organisme },
       }),

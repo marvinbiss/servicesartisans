@@ -307,11 +307,14 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   // Les pages CEE mentionnent abondamment QualiPAC/Qualibat/QualiBois/Qualit'EnR
   // dans la copie éditoriale — émettre le vocabulaire ici permet à Google AI
   // Overviews + Bing de citer la définition exacte (cohérent Sprints J + M).
+  // Sprint Z Ahrefs 2026-05-03 — sameAs vers /rge/glossaire (entité canonique
+  // Sprint O) consolide l'autorité topical des 4 hubs DefinedTermSet.
   const ceeRgeGlossarySchema = getRgeDefinedTermSetSchema({
     pageUrl: `${SITE_URL}${path}`,
     name: `Glossaire RGE — Prime CEE ${operation.code}`,
     description: `Définitions officielles des qualifications RGE applicables à la prime CEE ${operation.code} (${operation.nom}).`,
     terms: getAllRgeGlossaryEntries(),
+    canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
   })
 
   const jsonLdItems: Record<string, unknown>[] = [
