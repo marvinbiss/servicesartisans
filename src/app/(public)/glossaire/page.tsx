@@ -416,6 +416,21 @@ export default function GlossairePage() {
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Link
+              href="/rge/glossaire"
+              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-emerald-200 p-5 hover:border-emerald-400 hover:shadow-md transition-all group"
+            >
+              <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                <BookOpen className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition-colors text-sm">
+                  Glossaire RGE
+                </span>
+                <p className="text-xs text-charcoal-500">QualiPAC, Qualibat, Qualifelec…</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-emerald-600 transition-colors" />
+            </Link>
+            <Link
               href="/guides/artisan-rge"
               className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-sand-200 p-5 hover:border-green-300 hover:shadow-md transition-all group"
             >

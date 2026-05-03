@@ -266,6 +266,27 @@ export default function RgeGlossairePage() {
                 <div className="text-xs text-charcoal-600 mt-0.5">Procédure pour artisans</div>
               </div>
             </Link>
+            {/* Sprint Y Ahrefs 2026-05-03 — cross-link vers le glossaire général.
+                Audit a confirmé 0 overlap thématique : /glossaire = vocabulaire
+                bâtiment 150+ termes, /rge/glossaire = certifications RGE 16 termes.
+                Cross-linking transforme la coexistence en cluster sémantique. */}
+            <Link
+              href="/glossaire"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+            >
+              <ArrowRight
+                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
+              <div className="min-w-0">
+                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                  Glossaire bâtiment
+                </div>
+                <div className="text-xs text-charcoal-600 mt-0.5">
+                  150+ termes techniques généraux
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
