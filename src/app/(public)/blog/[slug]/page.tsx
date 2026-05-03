@@ -37,6 +37,7 @@ import BlogClusterLinks from '@/components/seo/BlogClusterLinks'
 import BlogServiceCityLinks from '@/components/seo/BlogServiceCityLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 
@@ -371,6 +372,14 @@ function extractFAQFromBlocks(blocks: ParsedBlock[]): { question: string; answer
 /* ─── Inline markdown rendering ───────────────────────── */
 
 /** Parse inline markdown (**bold** and [text](url)) and return React nodes */
+// Sprint R Ahrefs 2026-05-03 — auto-link RGE → /rge/glossaire (entité canonique
+// Sprint O). Hors-scope intentionnel : les bold (**…**) et links explicites
+// ([text](url)) ne sont PAS auto-linkés (l'auteur a déjà un signal éditorial
+// volontaire — ne pas le surcharger). Anti-spam global : autoLinkRgeTerms
+// limite à 1 lien par slug par appel — ici 1 par fragment string brut, donc
+// peut produire 2-3 liens par paragraphe si plusieurs slugs distincts (acceptable).
+const RGE_GLOSSARY_PATH = '/rge/glossaire'
+
 function renderInlineMarkdown(text: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = []
   // Pattern matches **bold** or [text](url)
@@ -379,9 +388,11 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
   let match: RegExpExecArray | null
 
   while ((match = pattern.exec(text)) !== null) {
-    // Add text before match
+    // Add text before match — auto-link RGE terms here (NOT inside bold/links).
     if (match.index > lastIndex) {
-      nodes.push(text.slice(lastIndex, match.index))
+      nodes.push(
+        autoLinkRgeTerms(text.slice(lastIndex, match.index), { hostPath: RGE_GLOSSARY_PATH })
+      )
     }
 
     if (match[2]) {
@@ -405,12 +416,12 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
     lastIndex = match.index + match[0].length
   }
 
-  // Add remaining text
+  // Add remaining text — auto-link RGE terms here too.
   if (lastIndex < text.length) {
-    nodes.push(text.slice(lastIndex))
+    nodes.push(autoLinkRgeTerms(text.slice(lastIndex), { hostPath: RGE_GLOSSARY_PATH }))
   }
 
-  return nodes.length > 0 ? nodes : [text]
+  return nodes.length > 0 ? nodes : [autoLinkRgeTerms(text, { hostPath: RGE_GLOSSARY_PATH })]
 }
 
 /* ─── Callout rendering helpers ───────────────────────── */

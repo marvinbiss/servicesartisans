@@ -72,4 +72,22 @@ describe('autoLinkRgeTerms — Sprint L Ahrefs 2026-05-03', () => {
     const html = render(autoLinkRgeTerms('Voir QualiPAC.'))
     expect(html).toMatch(/title="QualiPAC"/)
   })
+
+  // Sprint R Ahrefs 2026-05-03 — verrou cross-page hostPath.
+  it('Sprint R — option hostPath produit href absolu /rge/glossaire#term-…', () => {
+    const html = render(autoLinkRgeTerms('Voir QualiPAC.', { hostPath: '/rge/glossaire' }))
+    expect(html).toContain('href="/rge/glossaire#term-qualipac"')
+    expect(html).not.toContain('href="#term-qualipac"')
+  })
+
+  it("Sprint R — sans hostPath, garde l'ancre relative same-page (backward compat)", () => {
+    const html = render(autoLinkRgeTerms('Voir QualiPAC.'))
+    expect(html).toContain('href="#term-qualipac"')
+    expect(html).not.toContain('/rge/glossaire')
+  })
+
+  it('Sprint R — hostPath === "" équivalent à same-page (no-op)', () => {
+    const html = render(autoLinkRgeTerms('Voir QualiPAC.', { hostPath: '' }))
+    expect(html).toContain('href="#term-qualipac"')
+  })
 })

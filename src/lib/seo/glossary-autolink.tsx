@@ -85,10 +85,17 @@ function getPatterns(): readonly LinkableTerm[] {
  * texte brut). Ça évite de spammer "Qualibat 7141" 5 fois liés dans le même
  * paragraphe.
  */
-export function autoLinkRgeTerms(text: string): ReactNode {
+export function autoLinkRgeTerms(text: string, options?: { hostPath?: string }): ReactNode {
   if (!text || text.length === 0) return text
   const patterns = getPatterns()
   if (patterns.length === 0) return text
+
+  // hostPath optionnel (Sprint R Ahrefs 2026-05-03) : préfixe path absolu
+  // pour produire des liens cross-page vers /rge/glossaire#term-<slug> au
+  // lieu de l'ancre relative same-page. Activé sur le blog pour mailler vers
+  // l'entité canonique (Sprint O). Same-page ancre conservée par défaut sur
+  // les hubs qui rendent leur propre RgeGlossaryBlock (Sprints J/M/P).
+  const linkPrefix = options?.hostPath ?? ''
 
   // Build une regex combinée (alternation OR), word boundaries, gi flags.
   const combined = new RegExp(`\\b(${patterns.map((p) => p.pattern).join('|')})\\b`, 'gi')
@@ -113,7 +120,7 @@ export function autoLinkRgeTerms(text: string): ReactNode {
     out.push(
       <a
         key={`${term.slug}-${m.index}`}
-        href={`#term-${term.slug}`}
+        href={`${linkPrefix}#term-${term.slug}`}
         title={term.title}
         className="text-emerald-700 underline-offset-2 hover:underline"
       >
