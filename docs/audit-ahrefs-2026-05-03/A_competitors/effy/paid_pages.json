@@ -1,0 +1,756 @@
+{
+  "pages": [
+    {
+      "url": "https://www.effy.fr/lp/generique/aides/prime-cee",
+      "keywords": 507
+    },
+    { "url": "https://www.effy.fr/guide/aides-renovation", "keywords": 483 },
+    {
+      "url": "https://www.effy.fr/lp/isolation/isolation-des-murs/isolation-exterieure/aides-newform",
+      "keywords": 425
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides/logement-type?theme=clim&climatisation",
+      "keywords": 393
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides",
+      "keywords": 243
+    },
+    { "url": "https://www.effy.fr/prime-effy-lp", "keywords": 172 },
+    { "url": "https://www.effy.fr/", "keywords": 144 },
+    {
+      "url": "https://www.effy.fr/lp/isolation/isolation-des-combles/1-euro-newform",
+      "keywords": 129
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/moisissure-mur",
+      "keywords": 108
+    },
+    { "url": "https://www.effy.fr/boutique/collections/all", "keywords": 58 },
+    { "url": "https://www.effy.fr/nos-offres/prime-effy", "keywords": 58 },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/pab-pag-newform",
+      "keywords": 44
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides/",
+      "keywords": 36
+    },
+    {
+      "url": "https://www.effy.fr/lp/isolation/fenetres-newform",
+      "keywords": 33
+    },
+    { "url": "http://effy.fr/parcours/1/travaux-aides/", "keywords": 30 },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/bareme",
+      "keywords": 29
+    },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/pompe-a-chaleur/pompe-a-chaleur-air-eau-newform",
+      "keywords": 27
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-exterieur/faire-isolation-exterieure-soi-meme",
+      "keywords": 24
+    },
+    { "url": "https://www.effy.fr/aide-energetique/eco-ptz", "keywords": 22 },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/etiquette-energie-logement",
+      "keywords": 22
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-interieur/sans-perdre-de-place",
+      "keywords": 21
+    },
+    { "url": "https://web.effy.fr/pro/contactez-nous", "keywords": 19 },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/poele-a-granules",
+      "keywords": 19
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/zoom-sur-la-methode-de-calcul-en-2022",
+      "keywords": 18
+    },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/chauffe-eau-thermodynamique-newform",
+      "keywords": 18
+    },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/clim-newform",
+      "keywords": 16
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-phonique",
+      "keywords": 14
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/pac-air-air-ou-climatisation",
+      "keywords": 13
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffe-eau/capacite",
+      "keywords": 13
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/volets-roulants",
+      "keywords": 12
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/residence-secondaire-aides",
+      "keywords": 12
+    },
+    { "url": "https://www.effy.fr/aide-energetique/anah", "keywords": 11 },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/insert-cheminee-newform",
+      "keywords": 11
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/anah/faq",
+      "keywords": 10
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/ventilation-double-flux",
+      "keywords": 10
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-toit/toiture-terrasse/aides/renovation",
+      "keywords": 10
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/geothermie-prix",
+      "keywords": 10
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/prime-energie/qui-peut-obtenir-la-prime-cee",
+      "keywords": 10
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/climatisation-reversible",
+      "keywords": 9
+    },
+    {
+      "url": "https://www.effy.fr/lp/generique/aides/ma-prime-renov-v2",
+      "keywords": 9
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/climatisation/clim-reversible/consommation",
+      "keywords": 9
+    },
+    {
+      "url": "https://www.effy.fr/magazine/prix-energie-electricite",
+      "keywords": 9
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides?theme=fenetre&aides",
+      "keywords": 9
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/difference-chauffage-solaire-et-photovoltaique",
+      "keywords": 8
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/fonctionnement-pompe-a-chaleur",
+      "keywords": 8
+    },
+    {
+      "url": "https://www.effy.fr/magazine/actualite/cheque-energie-2025",
+      "keywords": 8
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/poele-a-bois",
+      "keywords": 8
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/calcul-performance-energetique",
+      "keywords": 8
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/climatisation/devis",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/climatisation/clim-reversible/meilleure",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides?theme=fenetre",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/chauffage/radiateur/meilleur-radiateur-electrique",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/calculer-sa-consommation-de-pellet",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/vmc/comment-choisir",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/vmc-comment-l-installer",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/magazine/actualite/leasing-social-voitures",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/cheminee/foyer-ferme-vs-insert",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/daikin",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/prime-energie",
+      "keywords": 7
+    },
+    {
+      "url": "https://www.effy.fr/magazine/impots-2024-puis-je-deduire-mes-travaux-de-renovation-energetique",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/chauffe-eau-thermodynamique",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/travaux-eligibles",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/poele-bois-installation",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/nos-offres/bilan-energetique-gratuit-etiquette-climat",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/panneau-solaire-photovoltaique/monocristallin-ou-polycristallin",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/aides-proprietaire-bailleur",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/viessmann",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/cheque-energie",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/radiateur/calcul-puissance-de-chauffe-radiateur",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/porte-entree",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/mitsubishi",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/chaudiere/chaudiere-bois-newform",
+      "keywords": 6
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/bilan-energetique-maison",
+      "keywords": 5
+    },
+    { "url": "https://www.effy.fr/aide-energetique/fenetre", "keywords": 5 },
+    {
+      "url": "https://www.effy.fr/economies-energie/chauffe-eau-thermodynamique/prix-economies",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/consommation-electrique/maison-100m2",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/pergola-panneau-solaire",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/audit-energetique/obligatoire",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/quel-bois-de-chauffage-choisir",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-exterieur/quel-isolant",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/comparatif-bois-granules",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/renovation-globale",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/prix-chaudiere-granules",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/batterie-virtuelle",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/aides-panneaux-solaires",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/prix-poele-granules",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-interieur/prix",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-toit/materiaux-isolants",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/puissance",
+      "keywords": 5
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/rose",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffe-eau/chauffe-eau-electrique",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/vmc-double-flux/meilleure",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-sol/isolation-sols-dessus-ou-dessous",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/lp/chauffage/clim-newform%7Bignore%7D?utm_campaign=%7B_campaignname%7D&utm_content=%7B_adgroupname%7D&utm_term=%7Bkeyword%7D&utm_source=google&utm_medium=cpc",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/consommation-electrique-moyenne-maison",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/hitachi",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/magazine/passoires-thermiques-quels-risques-en-louant-apres-interdiction-2025",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/nettoyage-panneau-solaire",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/fenetres-parois-vitrees",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/unites-mesure-energie-kw-kwh-kwc-quelle-difference",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/nous-connaitre/notre-espace-presse",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/prime-energie/pac-air-air",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/parcours/1/travaux-aides?theme=fenetre&fenetredetoit",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolant/laine-de-verre-vs-laine-de-roche",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/Pac-ou-poele-granules",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/budget-renovation-maison",
+      "keywords": 4
+    },
+    { "url": "https://www.effy.fr/lp/isolation", "keywords": 4 },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-interieur/quel-isolant",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/lg",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/comment-ca-marche",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chauffe-eau-electrique/consommation",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/quel-materiau-choisir",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/magazine/proprietaire-dun-logement-classe-g-que-puis-je-faire-avec",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/audit-energetique-prix",
+      "keywords": 4
+    },
+    { "url": "https://www.effy.fr/a-propos/notre-equipe", "keywords": 4 },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/compteur-linky",
+      "keywords": 4
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/cheminee/insert/installation",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/renovation-globale/permis-de-construction",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/chauffage/pompe-a-chaleur/meilleure-pompe-a-chaleur-air-eau",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/dysfonctionnement-pac-ne-chauffe-pas",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/pompe-a-chaleur-air-eau",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/climatisation/clim-reversible/prix",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/magazine/prix-energie-chauffage-bois",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/systeme-solaire-combine",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/jaune",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/toshiba",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/humidite-maison/odeurs",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-toit/chevrons",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-interieur",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/lp/generique/aides/prime-energie",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/logement-indecent-quels-travaux",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/tuile-solaire",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/prix-kwh-electricite",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-sol/maison-ancienne",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/tva-travaux-differents-taux",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/poele-a-granules/installation",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/consommation-granules",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/prime-energie/bois",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-exterieur",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/pont-thermique",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chauffe-eau-thermodynamique/fonctionnement",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/rendement-panneau",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/volet-roulant",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/confort-thermique/ete/store-banne",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/chaudiere-gaz-entretien",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/vmc-double-flux",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/pac-air-air/climatisation-appartement",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/isolation-murs-interieur",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/en-pierre",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/velux-fenetre-toit",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/nibe",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/aides-regionales-locales/occitanie",
+      "keywords": 3
+    },
+    { "url": "https://www.effy.fr/aides-renovation-lp", "keywords": 3 },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/choisir-des-batteries/calcul-panneau-solaire",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/ou-placer-poele-a-bois",
+      "keywords": 3
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/prix-installation-panneaux/financement/recuperation-tva",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/puit-canadien",
+      "keywords": 2
+    },
+    { "url": "https://www.effy.fr/guide/bouclier-tarifaire", "keywords": 2 },
+    {
+      "url": "https://www.effy.fr/aide-energetique/tva-reduite",
+      "keywords": 2
+    },
+    { "url": "https://www.effy.fr/magazine/prix-energie-gaz", "keywords": 2 },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/radiateur/radiateur-a-inertie",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/maison-phenix",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/chaudiere-granules",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/magazine/impots-2024-que-declarer-pour-vos-panneaux-solaires-et-votre-electricite",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/bleu",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/humide",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/plafonds-ressources",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-interieur-ou-par-l-exterieur-que-choisir",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/coefficient-resistance-thermique",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/prix-chaudiere-gaz",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/ma-prime-renov/depose-cuve-fioul",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/magazine/actualite/taxe-fonciere-renovation",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/les-bonnes-raisons-d-installer-un-poele-a-granules",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/magazine/pompesa-chaleur-le-vraifaux-de-leur-consommation-electrique",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/climatisation/clim-reversible",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/ventilation/vmc-double-flux/aides",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/nos-offres/devis-artisan-rge",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/poele/poele-granules-da-old",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/parcours/2/travaux-aides/logement-type?theme=clim&climatisation",
+      "keywords": 2
+    },
+    { "url": "https://www.effy.fr/a-propos/qui-sommes-nous", "keywords": 2 },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-murs/par-l-exterieur/prix",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffe-eau/chauffe-eau-thermodynamique/meilleur",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/isolation-combles/rampants-definition",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffe-eau/prix-chauffe-eau-solaire",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/quelle-chaudiere-pour-plancher-chauffant",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/triple-vitrage",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/anti-effraction",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/chaudiere/consommation-granules",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/pac-geothermique",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/dimensionnement",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/condensation",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/double-vitrage",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/aide-energetique/aide-pret-caf",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/panneau-solaire-photovoltaique/taxe-fonciere",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/chauffage/pompe-a-chaleur/thermor",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/renovation-energetique/reglementation-thermique",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/solaire/panneau-solaire-hybride",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/travaux-energetique/isolation/fenetre/volet-solaire",
+      "keywords": 2
+    },
+    {
+      "url": "https://www.effy.fr/magazine/eco-pret-taux-zero-quelles-banques-le-distribuent-le-plus",
+      "keywords": 2
+    }
+  ]
+}

@@ -91,3 +91,6 @@ public/datasets/rge/*.csv
 public/datasets/rge/*.json
 public/datasets/rge/*.parquet
 !public/datasets/rge/*.meta.json
+
+# Audit Ahrefs 2026-05-03 — F2 contient PII (emails/phones), exclu du repo
+docs/audit-ahrefs-2026-05-03/F_supply/F2_top5000_artisans.csv

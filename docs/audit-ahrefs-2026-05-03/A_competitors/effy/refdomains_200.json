@@ -1,0 +1,1804 @@
+{
+  "refdomains": [
+    {
+      "domain": "google.com",
+      "domain_rating": 99.0,
+      "traffic_domain": 1293735168,
+      "first_seen": "2025-09-04T09:18:38Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "youtube.com",
+      "domain_rating": 99.0,
+      "traffic_domain": 2703535616,
+      "first_seen": "2025-08-10T16:49:37Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "apple.com",
+      "domain_rating": 97.0,
+      "traffic_domain": 443957280,
+      "first_seen": "2025-09-30T01:12:49Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "wikipedia.org",
+      "domain_rating": 97.0,
+      "traffic_domain": 4311878656,
+      "first_seen": "2018-04-10T11:29:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "github.com",
+      "domain_rating": 97.0,
+      "traffic_domain": 43453440,
+      "first_seen": "2021-01-06T19:08:11Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "shopify.com",
+      "domain_rating": 96.0,
+      "traffic_domain": 9867707,
+      "first_seen": "2024-05-05T03:49:16Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "squarespace.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 3467681,
+      "first_seen": "2021-08-08T07:37:57Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "blogspot.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 24775714,
+      "first_seen": "2019-04-10T21:12:52Z",
+      "dofollow_links": 41,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "amazonaws.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 4195633,
+      "first_seen": "2020-05-27T19:20:03Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "cloudfront.net",
+      "domain_rating": 94.0,
+      "traffic_domain": 1871289,
+      "first_seen": "2020-10-22T00:31:53Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "pages.dev",
+      "domain_rating": 93.0,
+      "traffic_domain": 119583528,
+      "first_seen": "2024-05-23T04:18:59Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "indeed.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 126176264,
+      "first_seen": "2025-04-06T02:14:12Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 12497566,
+      "first_seen": "2022-12-02T06:30:44Z",
+      "dofollow_links": 13,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "webflow.io",
+      "domain_rating": 92.0,
+      "traffic_domain": 786783,
+      "first_seen": "2026-02-04T20:40:13Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "techcrunch.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 668101,
+      "first_seen": "2023-03-31T22:29:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "fortune.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 2044370,
+      "first_seen": "2023-04-01T18:38:33Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "canva.site",
+      "domain_rating": 91.0,
+      "traffic_domain": 223854,
+      "first_seen": "2025-05-21T08:34:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "lemonde.fr",
+      "domain_rating": 91.0,
+      "traffic_domain": 7399248,
+      "first_seen": "2022-09-03T00:10:11Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lefigaro.fr",
+      "domain_rating": 91.0,
+      "traffic_domain": 15065909,
+      "first_seen": "2021-01-23T04:27:15Z",
+      "dofollow_links": 7,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "flipsnack.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 146254,
+      "first_seen": "2025-09-22T19:13:37Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "crunchbase.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 1496099,
+      "first_seen": "2023-11-11T21:38:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ecologie.gouv.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 405598,
+      "first_seen": "2022-08-11T04:47:19Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "appspot.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 1983453,
+      "first_seen": "2017-12-04T17:06:21Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "autodesk.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 5845729,
+      "first_seen": "2023-09-15T22:39:21Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "jimdosite.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 201414,
+      "first_seen": "2025-09-15T15:30:45Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ouest-france.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 20654020,
+      "first_seen": "2025-02-02T06:15:46Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "francetvinfo.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 2328,
+      "first_seen": "2019-08-20T13:17:12Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "za.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 6546766,
+      "first_seen": "2024-07-05T06:38:18Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "yandex.eu",
+      "domain_rating": 90.0,
+      "traffic_domain": 65990,
+      "first_seen": "2023-10-10T21:08:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "radiofrance.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 7412330,
+      "first_seen": "2022-08-09T16:42:38Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lesechos.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 1275389,
+      "first_seen": "2021-01-29T00:23:11Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "pagesjaunes.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 10297983,
+      "first_seen": "2023-12-06T07:13:15Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "leparisien.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 3366259,
+      "first_seen": "2023-12-28T21:36:26Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "bfmtv.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 10806809,
+      "first_seen": "2021-09-17T09:15:21Z",
+      "dofollow_links": 9,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "main.jp",
+      "domain_rating": 89.0,
+      "traffic_domain": 330757,
+      "first_seen": "2024-08-17T05:27:28Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.co.uk",
+      "domain_rating": 89.0,
+      "traffic_domain": 1848527,
+      "first_seen": "2022-10-27T05:04:35Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 2612924,
+      "first_seen": "2022-10-24T23:50:25Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "francebleu.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 505462,
+      "first_seen": "2024-06-23T11:06:49Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "e-monsite.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 169193,
+      "first_seen": "2023-10-22T21:41:57Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "neocities.org",
+      "domain_rating": 88.0,
+      "traffic_domain": 615166,
+      "first_seen": "2021-10-06T22:12:13Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "orange.fr",
+      "domain_rating": 88.0,
+      "traffic_domain": 9625703,
+      "first_seen": "2024-01-05T20:50:42Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "smartrecruiters.com",
+      "domain_rating": 87.0,
+      "traffic_domain": 151096,
+      "first_seen": "2021-05-11T23:58:21Z",
+      "dofollow_links": 14,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ausha.co",
+      "domain_rating": 87.0,
+      "traffic_domain": 57368,
+      "first_seen": "2024-09-08T02:31:59Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "actu.fr",
+      "domain_rating": 87.0,
+      "traffic_domain": 2113936,
+      "first_seen": "2022-08-10T04:42:28Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "castbox.fm",
+      "domain_rating": 87.0,
+      "traffic_domain": 31200,
+      "first_seen": "2023-10-24T19:40:21Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "liberation.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 1225059,
+      "first_seen": "2024-07-05T19:31:32Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "welcometothejungle.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 485536,
+      "first_seen": "2019-11-04T02:21:56Z",
+      "dofollow_links": 1156,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "com.ru",
+      "domain_rating": 86.0,
+      "traffic_domain": 1419118,
+      "first_seen": "2023-04-20T08:34:25Z",
+      "dofollow_links": 31,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "cbinsights.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 112538,
+      "first_seen": "2023-04-07T12:11:14Z",
+      "dofollow_links": 6,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lepoint.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 948765,
+      "first_seen": "2022-06-27T08:55:54Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ladepeche.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 2576150,
+      "first_seen": "2020-10-05T20:01:33Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "canalblog.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 84315,
+      "first_seen": "2019-06-23T06:14:21Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "20minutes.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 8453614,
+      "first_seen": "2022-07-27T13:35:19Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "simplypsychology.org",
+      "domain_rating": 85.0,
+      "traffic_domain": 1755189,
+      "first_seen": "2023-02-12T20:41:02Z",
+      "dofollow_links": 11,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "sudouest.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 1433636,
+      "first_seen": "2022-02-23T15:47:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "futura-sciences.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 748831,
+      "first_seen": "2021-09-21T13:11:27Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.ca",
+      "domain_rating": 85.0,
+      "traffic_domain": 986759,
+      "first_seen": "2022-11-20T14:14:36Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "pagesperso-orange.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 0,
+      "first_seen": "2022-04-07T11:26:09Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "avis-verifies.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 153778,
+      "first_seen": "2022-01-04T13:25:29Z",
+      "dofollow_links": 178,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "itxoft.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 0,
+      "first_seen": "2025-02-23T00:10:22Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.com.au",
+      "domain_rating": 85.0,
+      "traffic_domain": 579722,
+      "first_seen": "2022-10-25T01:49:19Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ghost.io",
+      "domain_rating": 84.0,
+      "traffic_domain": 26882,
+      "first_seen": "2023-02-27T12:38:08Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "latribune.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 307044,
+      "first_seen": "2021-12-06T12:27:19Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "smoobu.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 42506,
+      "first_seen": "2022-11-02T00:10:54Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "pole-emploi.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 65421,
+      "first_seen": "2017-05-18T08:23:21Z",
+      "dofollow_links": 408,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.jp",
+      "domain_rating": 84.0,
+      "traffic_domain": 138879,
+      "first_seen": "2022-10-25T09:12:44Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "your-server.de",
+      "domain_rating": 84.0,
+      "traffic_domain": 7912,
+      "first_seen": "2023-08-08T17:18:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "letelegramme.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 1028680,
+      "first_seen": "2024-01-12T16:22:45Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "capital.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 501989,
+      "first_seen": "2021-04-17T04:38:19Z",
+      "dofollow_links": 12,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "notaires.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 1182978,
+      "first_seen": "2023-04-26T16:26:09Z",
+      "dofollow_links": 55,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "elle.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 2995440,
+      "first_seen": "2022-10-07T03:41:50Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.it",
+      "domain_rating": 83.0,
+      "traffic_domain": 996664,
+      "first_seen": "2022-10-28T16:36:55Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ig.com.br",
+      "domain_rating": 83.0,
+      "traffic_domain": 6506976,
+      "first_seen": "2021-09-09T22:52:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "builder-preview.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 10,
+      "first_seen": "2025-05-18T10:35:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "apollo.io",
+      "domain_rating": 83.0,
+      "traffic_domain": 361429,
+      "first_seen": "2020-01-11T21:21:45Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "mappy.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 8876630,
+      "first_seen": "2019-01-19T03:00:00Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "credit-agricole.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 5409176,
+      "first_seen": "2022-02-07T04:32:02Z",
+      "dofollow_links": 30,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "lavoixdunord.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 978224,
+      "first_seen": "2021-12-29T14:46:12Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "blogs.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 0,
+      "first_seen": "2018-06-02T04:38:27Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "cnnindonesia.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 7086380,
+      "first_seen": "2021-09-12T05:23:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "f6s.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 602801,
+      "first_seen": "2023-03-22T09:33:00Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "challenges.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 202276,
+      "first_seen": "2021-09-24T10:17:34Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ledauphine.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 1129964,
+      "first_seen": "2021-01-22T17:17:22Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lublin.pl",
+      "domain_rating": 82.0,
+      "traffic_domain": 360561,
+      "first_seen": "2024-08-17T17:53:48Z",
+      "dofollow_links": 7,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "rtl.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 1867904,
+      "first_seen": "2023-12-24T07:25:16Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "hunter.io",
+      "domain_rating": 82.0,
+      "traffic_domain": 286152,
+      "first_seen": "2018-10-10T22:51:03Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "leprogres.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 1228207,
+      "first_seen": "2021-02-02T16:12:47Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "huffingtonpost.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 1286435,
+      "first_seen": "2020-10-15T15:14:42Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "msk.ru",
+      "domain_rating": 82.0,
+      "traffic_domain": 311709,
+      "first_seen": "2024-05-02T02:17:40Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ina.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 335557,
+      "first_seen": "2022-07-02T10:00:29Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "scoop.it",
+      "domain_rating": 82.0,
+      "traffic_domain": 89854,
+      "first_seen": "2021-09-22T19:34:24Z",
+      "dofollow_links": 11,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.es",
+      "domain_rating": 81.0,
+      "traffic_domain": 206271,
+      "first_seen": "2022-10-21T05:29:42Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.com.br",
+      "domain_rating": 81.0,
+      "traffic_domain": 2040088,
+      "first_seen": "2022-11-11T09:26:04Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "uberflip.com",
+      "domain_rating": 81.0,
+      "traffic_domain": 2493,
+      "first_seen": "2023-04-02T00:10:09Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "laprovence.com",
+      "domain_rating": 81.0,
+      "traffic_domain": 790624,
+      "first_seen": "2025-10-08T10:34:04Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ifop.com",
+      "domain_rating": 81.0,
+      "traffic_domain": 85770,
+      "first_seen": "2020-11-16T21:43:02Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "clubic.com",
+      "domain_rating": 80.0,
+      "traffic_domain": 807578,
+      "first_seen": "2025-02-26T18:39:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.nl",
+      "domain_rating": 80.0,
+      "traffic_domain": 152529,
+      "first_seen": "2022-10-24T20:49:35Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.mx",
+      "domain_rating": 80.0,
+      "traffic_domain": 741528,
+      "first_seen": "2022-11-24T04:41:06Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lamontagne.fr",
+      "domain_rating": 80.0,
+      "traffic_domain": 831767,
+      "first_seen": "2024-04-16T01:06:48Z",
+      "dofollow_links": 7,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "estrepublicain.fr",
+      "domain_rating": 80.0,
+      "traffic_domain": 507338,
+      "first_seen": "2021-01-22T17:32:00Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cerema.fr",
+      "domain_rating": 79.0,
+      "traffic_domain": 70734,
+      "first_seen": "2024-10-19T21:03:59Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "maddyness.com",
+      "domain_rating": 79.0,
+      "traffic_domain": 25943,
+      "first_seen": "2023-03-30T07:20:02Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cnews.fr",
+      "domain_rating": 79.0,
+      "traffic_domain": 1504981,
+      "first_seen": "2024-07-26T23:07:59Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "tech.eu",
+      "domain_rating": 79.0,
+      "traffic_domain": 1518,
+      "first_seen": "2023-03-30T07:35:19Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ecoflow.com",
+      "domain_rating": 79.0,
+      "traffic_domain": 1417099,
+      "first_seen": "2024-01-31T08:06:17Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "village-justice.com",
+      "domain_rating": 79.0,
+      "traffic_domain": 80964,
+      "first_seen": "2017-09-13T06:49:20Z",
+      "dofollow_links": 1024,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "seloger.com",
+      "domain_rating": 79.0,
+      "traffic_domain": 5296368,
+      "first_seen": "2021-02-17T19:54:53Z",
+      "dofollow_links": 8,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "lci.fr",
+      "domain_rating": 79.0,
+      "traffic_domain": 2791,
+      "first_seen": "2020-01-10T11:08:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "banquedesterritoires.fr",
+      "domain_rating": 79.0,
+      "traffic_domain": 37630,
+      "first_seen": "2022-04-07T09:24:46Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "reporterre.net",
+      "domain_rating": 79.0,
+      "traffic_domain": 81857,
+      "first_seen": "2023-06-15T16:41:40Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "boursorama.com",
+      "domain_rating": 79.0,
+      "traffic_domain": 6766374,
+      "first_seen": "2023-02-07T12:56:13Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "buybacklinks.agency",
+      "domain_rating": 79.0,
+      "traffic_domain": 0,
+      "first_seen": "2026-03-24T11:12:49Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "selectra.info",
+      "domain_rating": 78.0,
+      "traffic_domain": 422374,
+      "first_seen": "2024-06-17T16:51:27Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "appadvice.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 143,
+      "first_seen": "2020-03-23T09:22:33Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "meilleursagents.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 273745,
+      "first_seen": "2022-10-08T00:17:17Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "biz.ua",
+      "domain_rating": 78.0,
+      "traffic_domain": 1460382,
+      "first_seen": "2024-07-10T03:55:54Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ooreka.fr",
+      "domain_rating": 78.0,
+      "traffic_domain": 1518,
+      "first_seen": "2022-11-01T01:30:00Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "dna.fr",
+      "domain_rating": 78.0,
+      "traffic_domain": 426543,
+      "first_seen": "2021-01-22T19:22:10Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "capeb.fr",
+      "domain_rating": 78.0,
+      "traffic_domain": 19568,
+      "first_seen": "2024-03-07T03:37:06Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "eu-startups.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 28218,
+      "first_seen": "2023-03-30T10:36:10Z",
+      "dofollow_links": 1323,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "frandroid.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 1348939,
+      "first_seen": "2025-03-13T03:50:46Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "livedoor.biz",
+      "domain_rating": 78.0,
+      "traffic_domain": 121353,
+      "first_seen": "2020-07-02T22:24:31Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "actu-environnement.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 150083,
+      "first_seen": "2026-04-30T02:31:51Z",
+      "dofollow_links": 15,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "atlantic.fr",
+      "domain_rating": 78.0,
+      "traffic_domain": 218427,
+      "first_seen": "2023-05-27T15:43:20Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lesfurets.com",
+      "domain_rating": 78.0,
+      "traffic_domain": 329467,
+      "first_seen": "2022-08-10T16:41:18Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.co.nz",
+      "domain_rating": 77.0,
+      "traffic_domain": 65681,
+      "first_seen": "2023-01-30T04:09:34Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "aufeminin.com",
+      "domain_rating": 77.0,
+      "traffic_domain": 230523,
+      "first_seen": "2024-11-01T03:58:40Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "tci-thaijo.org",
+      "domain_rating": 77.0,
+      "traffic_domain": 218499,
+      "first_seen": "2024-02-01T13:51:14Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "totalenergies.fr",
+      "domain_rating": 77.0,
+      "traffic_domain": 624001,
+      "first_seen": "2024-05-20T12:05:48Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "viteundevis.com",
+      "domain_rating": 77.0,
+      "traffic_domain": 79,
+      "first_seen": "2025-05-09T23:33:50Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "openaire.eu",
+      "domain_rating": 77.0,
+      "traffic_domain": 17706,
+      "first_seen": "2024-07-21T03:10:58Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "kompass.com",
+      "domain_rating": 77.0,
+      "traffic_domain": 361369,
+      "first_seen": "2021-05-20T09:53:40Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "hautetfort.com",
+      "domain_rating": 77.0,
+      "traffic_domain": 1065,
+      "first_seen": "2024-01-12T23:14:37Z",
+      "dofollow_links": 30,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "grdf.fr",
+      "domain_rating": 77.0,
+      "traffic_domain": 127223,
+      "first_seen": "2021-03-12T05:52:04Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "grokipedia.com",
+      "domain_rating": 77.0,
+      "traffic_domain": 562267,
+      "first_seen": "2026-01-25T07:44:15Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "paper.li",
+      "domain_rating": 77.0,
+      "traffic_domain": 761,
+      "first_seen": "2018-06-18T18:26:18Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.ch",
+      "domain_rating": 77.0,
+      "traffic_domain": 143035,
+      "first_seen": "2023-02-15T04:39:04Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "infopro-digital.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 2295,
+      "first_seen": "2017-05-26T07:32:58Z",
+      "dofollow_links": 17,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.com.sg",
+      "domain_rating": 76.0,
+      "traffic_domain": 44938,
+      "first_seen": "2022-10-23T15:43:43Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "mesinfos.fr",
+      "domain_rating": 76.0,
+      "traffic_domain": 87292,
+      "first_seen": "2023-04-20T00:29:15Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "piaille.fr",
+      "domain_rating": 76.0,
+      "traffic_domain": 172,
+      "first_seen": "2024-01-11T21:10:09Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.ie",
+      "domain_rating": 76.0,
+      "traffic_domain": 69702,
+      "first_seen": "2023-02-08T14:05:59Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "fournisseur-energie.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 36189,
+      "first_seen": "2023-04-22T02:29:37Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "raindrop.io",
+      "domain_rating": 76.0,
+      "traffic_domain": 15149,
+      "first_seen": "2025-08-15T20:54:07Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ariston.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 212943,
+      "first_seen": "2025-01-18T09:02:13Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "symbaloo.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 1254700,
+      "first_seen": "2025-01-02T09:29:46Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "generali.fr",
+      "domain_rating": 76.0,
+      "traffic_domain": 190186,
+      "first_seen": "2021-10-25T13:09:44Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "orisha.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 55872,
+      "first_seen": "2024-03-23T10:14:25Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "vinci.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 65152,
+      "first_seen": "2023-10-12T07:16:20Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "marianne.net",
+      "domain_rating": 76.0,
+      "traffic_domain": 232755,
+      "first_seen": "2021-01-12T22:32:12Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "batiactu.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 22649,
+      "first_seen": "2023-06-20T18:59:36Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "paris-normandie.fr",
+      "domain_rating": 76.0,
+      "traffic_domain": 175668,
+      "first_seen": "2024-03-12T16:39:04Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lejsl.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 339035,
+      "first_seen": "2021-01-22T15:22:07Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "glassdoor.fr",
+      "domain_rating": 76.0,
+      "traffic_domain": 188891,
+      "first_seen": "2022-05-11T14:08:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "jackery.com",
+      "domain_rating": 76.0,
+      "traffic_domain": 383981,
+      "first_seen": "2025-12-01T02:56:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "skeepers.io",
+      "domain_rating": 76.0,
+      "traffic_domain": 36609,
+      "first_seen": "2024-12-11T00:41:43Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "bing.net",
+      "domain_rating": 76.0,
+      "traffic_domain": 0,
+      "first_seen": "2025-02-25T18:15:19Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "flatchr.io",
+      "domain_rating": 76.0,
+      "traffic_domain": 11908,
+      "first_seen": "2023-02-04T04:14:08Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "papernest.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 199726,
+      "first_seen": "2021-08-17T16:30:03Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cetelem.fr",
+      "domain_rating": 75.0,
+      "traffic_domain": 199505,
+      "first_seen": "2023-09-01T23:11:10Z",
+      "dofollow_links": 12,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.co.za",
+      "domain_rating": 75.0,
+      "traffic_domain": 166430,
+      "first_seen": "2023-02-13T08:53:52Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "institutmontaigne.org",
+      "domain_rating": 75.0,
+      "traffic_domain": 122419,
+      "first_seen": "2023-03-28T11:20:09Z",
+      "dofollow_links": 20,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "labanquepostale.fr",
+      "domain_rating": 75.0,
+      "traffic_domain": 4182216,
+      "first_seen": "2023-03-31T22:54:26Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "bienpublic.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 197206,
+      "first_seen": "2021-01-22T15:15:24Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "theorg.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 81598,
+      "first_seen": "2024-11-04T05:24:16Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lalsace.fr",
+      "domain_rating": 75.0,
+      "traffic_domain": 178849,
+      "first_seen": "2021-01-23T05:04:47Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "rank-your.site",
+      "domain_rating": 75.0,
+      "traffic_domain": 0,
+      "first_seen": "2025-07-09T14:17:52Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "rocketreach.co",
+      "domain_rating": 75.0,
+      "traffic_domain": 599208,
+      "first_seen": "2022-09-05T19:58:16Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.pt",
+      "domain_rating": 75.0,
+      "traffic_domain": 151436,
+      "first_seen": "2023-01-12T18:50:21Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "example3.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 0,
+      "first_seen": "2026-01-22T00:06:29Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "jobteaser.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 132848,
+      "first_seen": "2018-02-14T23:48:42Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "meilleur-artisan.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 8863,
+      "first_seen": "2023-05-20T04:14:45Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.gr",
+      "domain_rating": 75.0,
+      "traffic_domain": 378190,
+      "first_seen": "2022-11-09T22:24:59Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "maison-travaux.fr",
+      "domain_rating": 75.0,
+      "traffic_domain": 94692,
+      "first_seen": "2022-10-12T18:17:22Z",
+      "dofollow_links": 11,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "accio.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 299096,
+      "first_seen": "2025-08-12T23:45:20Z",
+      "dofollow_links": 17,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "manomano.fr",
+      "domain_rating": 75.0,
+      "traffic_domain": 2330086,
+      "first_seen": "2022-08-16T21:14:24Z",
+      "dofollow_links": 720,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "notretemps.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 927744,
+      "first_seen": "2024-11-24T09:04:19Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "daa.jp",
+      "domain_rating": 75.0,
+      "traffic_domain": 109709,
+      "first_seen": "2024-07-09T10:13:27Z",
+      "dofollow_links": 258,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "cnbeta.com",
+      "domain_rating": 75.0,
+      "traffic_domain": 0,
+      "first_seen": "2021-07-27T21:36:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "2ip.ru",
+      "domain_rating": 74.0,
+      "traffic_domain": 426360,
+      "first_seen": "2021-11-03T13:05:27Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "april.fr",
+      "domain_rating": 74.0,
+      "traffic_domain": 205594,
+      "first_seen": "2025-11-19T13:51:26Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "magicmaman.com",
+      "domain_rating": 74.0,
+      "traffic_domain": 636620,
+      "first_seen": "2024-02-18T21:28:02Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "rankyour.website",
+      "domain_rating": 74.0,
+      "traffic_domain": 0,
+      "first_seen": "2025-12-27T01:42:52Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "larep.fr",
+      "domain_rating": 74.0,
+      "traffic_domain": 197795,
+      "first_seen": "2024-08-18T07:31:41Z",
+      "dofollow_links": 7,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "airbnb.at",
+      "domain_rating": 74.0,
+      "traffic_domain": 25936,
+      "first_seen": "2022-10-29T20:27:54Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "welcomekit.co",
+      "domain_rating": 74.0,
+      "traffic_domain": 5420,
+      "first_seen": "2018-02-22T15:54:31Z",
+      "dofollow_links": 67,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "rank-top.click",
+      "domain_rating": 74.0,
+      "traffic_domain": 0,
+      "first_seen": "2026-04-08T09:36:31Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": true
+    },
+    {
+      "domain": "generation.org",
+      "domain_rating": 74.0,
+      "traffic_domain": 40295,
+      "first_seen": "2024-09-26T10:22:52Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "readly.com",
+      "domain_rating": 74.0,
+      "traffic_domain": 51037,
+      "first_seen": "2023-10-01T16:20:21Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "quelleenergie.fr",
+      "domain_rating": 74.0,
+      "traffic_domain": 174049,
+      "first_seen": "2017-05-06T05:23:58Z",
+      "dofollow_links": 3788852,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nuzzel.com",
+      "domain_rating": 74.0,
+      "traffic_domain": 11631,
+      "first_seen": "2017-07-17T19:34:54Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "makesense.org",
+      "domain_rating": 74.0,
+      "traffic_domain": 72400,
+      "first_seen": "2022-06-06T03:31:25Z",
+      "dofollow_links": 10,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "nosgestesclimat.fr",
+      "domain_rating": 74.0,
+      "traffic_domain": 11127,
+      "first_seen": "2024-06-19T16:57:18Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "piwigo.com",
+      "domain_rating": 74.0,
+      "traffic_domain": 1554,
+      "first_seen": "2021-08-24T13:12:10Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "milled.com",
+      "domain_rating": 74.0,
+      "traffic_domain": 27435,
+      "first_seen": "2020-10-17T13:28:25Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "economiematin.fr",
+      "domain_rating": 73.0,
+      "traffic_domain": 40111,
+      "first_seen": "2023-09-11T11:34:43Z",
+      "dofollow_links": 10,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "mitsubishielectric.fr",
+      "domain_rating": 73.0,
+      "traffic_domain": 30382,
+      "first_seen": "2019-02-10T19:15:42Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "airbnb.com.co",
+      "domain_rating": 73.0,
+      "traffic_domain": 292122,
+      "first_seen": "2022-10-25T17:55:08Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "juritravail.com",
+      "domain_rating": 73.0,
+      "traffic_domain": 241160,
+      "first_seen": "2022-07-04T05:31:20Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+severity,category,issue_name,pages_affected,change_since_last,issue_id
+Error,Other,Noindex page receives organic traffic,2,0,c64d84df-d0f4-11e7-8ed1-001e67ed4656
+Notice,Other,Organic traffic dropped,1,0,cb8ebb59-3502-4193-b4f1-a154bc0dddbe
+Notice,Other,Pages dropped from Top 10,2,2,f2e4c823-6a12-42e9-8083-960d78f19dc3
+Notice,Other,Pages to submit to IndexNow,9616,459,b23ae498-5dee-4626-930b-9d5facd8a17d
+Notice,Other,Structured data has Google rich results validation error,8219,184,b35de3ae-76f2-49cc-bb8f-33bc4aaedf10
+Notice,Other,Structured data has schema.org validation error,8922,95,c22e9647-5a8f-4352-8b38-14cb66d7f101
+Notice,External pages,External 3XX redirect,46,8,c64d8847-d0f4-11e7-8ed1-001e67ed4656
+Notice,External pages,External 4XX,38,10,c64d89a6-d0f4-11e7-8ed1-001e67ed4656
+Notice,Content,H1 tag changed,18,-8905,9cb115e3-7380-4f73-9ec0-7628c3393bdd
+Notice,Content,H1 tag missing or empty,386,-36,838c947a-001a-11e8-823b-001e67ed4656
+Notice,Content,Meta description changed,7334,-730,7bbfc9eb-ed59-4bba-970d-fd98cc2ac0fe
+Warning,Content,Meta description too long,141,-441,c64d56c9-d0f4-11e7-8ed1-001e67ed4656
+Notice,Content,Meta description too short,4,4,8d785026-001c-11e8-aa34-001e67ed4656
+Warning,Content,Meta description too short,2708,2686,c64d5156-d0f4-11e7-8ed1-001e67ed4656
+Notice,Content,Multiple H1 tags,8207,184,c64d52ef-d0f4-11e7-8ed1-001e67ed4656
+Notice,Content,Page and SERP titles do not match,12,1,d69246c2-225a-11ec-8456-06d2f2f613d8
+Notice,Content,Title tag changed,7045,-1777,3f369e7f-85fc-48fc-84b7-9cf28faafffc
+Warning,Content,Title too long,159,58,c64dac3a-d0f4-11e7-8ed1-001e67ed4656
+Notice,Content,Word count changed,497,-8427,b6a947e0-910c-4f71-81e2-666bdbc8559b
+Notice,Indexability,Canonical URL changed,369,-59,3d528372-1259-4306-937b-4b66e186296a
+Notice,Indexability,Indexable page became non-indexable,1,-856,96c86162-fe10-4013-bbd1-d55431913a9d
+Notice,Indexability,Noindex follow page,386,-36,f485750c-10a0-11e8-a32a-001e67ed4656
+Warning,Indexability,Noindex page,386,-36,c64d588b-d0f4-11e7-8ed1-001e67ed4656
+Warning,Links,Orphan page (has no incoming internal links),92,-8,944b9296-00b2-11e8-aeb8-001e67ed4656
+Error,Links,Orphan page (has no incoming internal links),484,-11,c64d7e96-d0f4-11e7-8ed1-001e67ed4656
+Error,Links,Page has links to broken page,23,6,c64daf06-d0f4-11e7-8ed1-001e67ed4656
+Warning,Links,Page has links to redirect,79,13,c64d3aa7-d0f4-11e7-8ed1-001e67ed4656
+Notice,Links,Page has nofollow outgoing internal links,1,1,c64da7a0-d0f4-11e7-8ed1-001e67ed4656
+Notice,Links,Page has only one dofollow incoming internal link,986,7,c64d863c-d0f4-11e7-8ed1-001e67ed4656
+Notice,Links,Page has only one dofollow incoming internal link,76,-6,f6d1d4fc-00b2-11e8-9066-001e67ed4656
+Warning,Usability and performance,Slow page,1103,148,c64d7cbc-d0f4-11e7-8ed1-001e67ed4656
+Warning,Redirects,3XX redirect,3,0,c64d12c1-d0f4-11e7-8ed1-001e67ed4656
+Notice,Redirects,HTTP to HTTPS redirect,2,0,c64d5080-d0f4-11e7-8ed1-001e67ed4656
+Notice,Redirects,Redirect chain,1,0,c64d7b51-d0f4-11e7-8ed1-001e67ed4656
+Notice,Sitemaps,No. of URLs in sitemap decreased,8,-38,1a5a375d-5529-4179-b6b0-d2d075687f44
+Error,Sitemaps,Noindex page in sitemap,386,-36,c64d53a0-d0f4-11e7-8ed1-001e67ed4656
+Notice,Sitemaps,Page in multiple sitemaps,394,-60,41b8a46d-a157-4b62-bea3-a30b58c59a22
+Warning,Social tags,Open Graph tags incomplete,157,1,c64d8b03-d0f4-11e7-8ed1-001e67ed4656

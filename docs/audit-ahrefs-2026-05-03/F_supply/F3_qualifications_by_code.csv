@@ -1,0 +1,81 @@
+code,domaine,organisme,nb_artisans,with_email
+41,Pompe à chaleur : chauffage,qualitenr,7123,7117
+43,Chauffe-Eau Thermodynamique,qualitenr,7112,7106
+3511D109,"Fenêtres, volets, portes donnant sur l'extérieur",qualibat,5058,5047
+7122D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,2377,2371
+7131D112,Isolation des murs par l'extérieur,qualibat,2322,2312
+32,Panneaux solaires photovoltaïques,qualitenr,2186,2183
+4131D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,1931,1928
+22,Chaudière bois,qualitenr,1854,1854
+23,Poêle ou insert bois,qualitenr,1841,1841
+5231D105,Pompe à chaleur : chauffage,qualibat,1678,1675
+7122D114,Isolation des combles perdus,qualibat,1642,1637
+5231D106,Chauffe-Eau Thermodynamique,qualibat,1527,1526
+5211D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,1413,1411
+21,Poêle ou insert bois,qualitenr,1387,1387
+71,Ventilation mécanique,qualitenr,1263,1263
+3101D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,1248,1243
+3101D110,Fenêtres de toit,qualibat,1214,1208
+8611M10D109,"Fenêtres, volets, portes donnant sur l'extérieur",qualibat,1147,1145
+4131D114,Isolation des combles perdus,qualibat,1082,1081
+7122D115,Isolation des planchers bas,qualibat,1000,996
+8611M4D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,949,948
+5311D108,Ventilation mécanique,qualibat,902,900
+3101D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,875,869
+5211D107,"Radiateurs électriques, dont régulation.",qualibat,734,734
+11,Chauffage et/ou eau chaude solaire,qualitenr,665,665
+8611M4D114,Isolation des combles perdus,qualibat,659,658
+3101D114,Isolation des combles perdus,qualibat,645,643
+43SPVRGE,Panneaux solaires photovoltaïques,qualifelec,610,609
+61,Chaudière condensation ou micro-cogénération gaz ou fioul,qualitenr,553,553
+33,Panneaux solaires photovoltaïques,qualitenr,552,552
+44LCPTRGEr,"Radiateurs électriques, dont régulation.",qualifelec,538,536
+44LCPTRGEv,Ventilation mécanique,qualifelec,529,527
+4131D115,Isolation des planchers bas,qualibat,511,511
+8611M3D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,489,487
+3132D110,Fenêtres de toit,qualibat,486,486
+5133D106,Chauffe-Eau Thermodynamique,qualibat,484,484
+8621T16D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,484,482
+8611M3D112,Isolation des murs par l'extérieur,qualibat,448,446
+7121D114,Isolation des combles perdus,qualibat,412,412
+8611M8D110,Fenêtres de toit,qualibat,409,409
+5222D103,Chaudière bois,qualibat,406,406
+8611M12D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,402,402
+1905,Audit énergétique Maison individuelle; Audit énergétique Logement collectif,opqibi,401,398
+3132D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,397,397
+12,Chauffage et/ou eau chaude solaire,qualitenr,370,370
+8621T16D112,Isolation des murs par l'extérieur,qualibat,366,364
+8621T17D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,362,360
+8621T18D109,"Fenêtres, volets, portes donnant sur l'extérieur",qualibat,357,355
+3211D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,353,352
+5222D104,Poêle ou insert bois,qualibat,342,342
+8611M8D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,338,338
+8611M3D114,Isolation des combles perdus,qualibat,330,328
+8611M8D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,329,329
+8611M4D115,Isolation des planchers bas,qualibat,329,328
+1911,Audit énergétique Maison individuelle,opqibi,321,321
+8611M11D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,303,303
+8611M3D109,"Fenêtres, volets, portes donnant sur l'extérieur",qualibat,296,294
+8611M3D110,Fenêtres de toit,qualibat,286,284
+5221D104,Poêle ou insert bois,qualibat,282,282
+8611M3D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,277,275
+5911D118,Panneaux solaires photovoltaïques,qualibat,274,271
+3101D112,Isolation des murs par l'extérieur,qualibat,264,264
+3143D110,Fenêtres de toit,qualibat,262,262
+5212D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,259,259
+8621T16D114,Isolation des combles perdus,qualibat,259,258
+3132D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,258,258
+8621T17D114,Isolation des combles perdus,qualibat,257,255
+5312D108,Ventilation mécanique,qualibat,255,255
+4132D111,Isolation par l'intérieur des murs ou rampants de toitures  ou plafonds,qualibat,253,252
+7131D115,Isolation des planchers bas,qualibat,250,249
+5213D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,244,244
+8621T17D110,Fenêtres de toit,qualibat,237,235
+8611M8D114,Isolation des combles perdus,qualibat,235,235
+8611M12D107,"Radiateurs électriques, dont régulation.",qualibat,221,221
+3811D112,Isolation des murs par l'extérieur,qualibat,218,218
+8611M12D108,Ventilation mécanique,qualibat,212,212
+5111D107,"Radiateurs électriques, dont régulation.",qualibat,211,211
+5111D101,Chaudière condensation ou micro-cogénération gaz ou fioul,qualibat,206,206
+8621T17D113,Isolation des toitures terrasses ou des toitures par l'extérieur,qualibat,203,201
+1331,Etude thermique reglementaire,opqibi,203,203

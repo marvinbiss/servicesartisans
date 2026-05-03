@@ -1,0 +1,1804 @@
+{
+  "refdomains": [
+    {
+      "domain": "youtube.com",
+      "domain_rating": 99.0,
+      "traffic_domain": 2703535616,
+      "first_seen": "2025-08-17T10:43:18Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "wikipedia.org",
+      "domain_rating": 97.0,
+      "traffic_domain": 4311878656,
+      "first_seen": "2025-06-26T14:30:09Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "squarespace.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 3467681,
+      "first_seen": "2021-09-12T09:33:55Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "blogspot.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 24775714,
+      "first_seen": "2016-01-17T00:27:43Z",
+      "dofollow_links": 610,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "amazonaws.com",
+      "domain_rating": 95.0,
+      "traffic_domain": 4195633,
+      "first_seen": "2022-01-13T00:34:18Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "weebly.com",
+      "domain_rating": 94.0,
+      "traffic_domain": 4340609,
+      "first_seen": "2020-10-14T19:20:12Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "yahoo.com",
+      "domain_rating": 94.0,
+      "traffic_domain": 304449056,
+      "first_seen": "2020-07-10T11:24:55Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "nytimes.com",
+      "domain_rating": 94.0,
+      "traffic_domain": 167575136,
+      "first_seen": "2020-09-08T01:53:15Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "archive.org",
+      "domain_rating": 93.0,
+      "traffic_domain": 13124702,
+      "first_seen": "2020-09-08T04:51:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "bing.com",
+      "domain_rating": 93.0,
+      "traffic_domain": 29123574,
+      "first_seen": "2024-03-11T11:31:29Z",
+      "dofollow_links": 8,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "yahoo.co.jp",
+      "domain_rating": 93.0,
+      "traffic_domain": 229775392,
+      "first_seen": "2021-02-14T15:14:39Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "pages.dev",
+      "domain_rating": 93.0,
+      "traffic_domain": 119583528,
+      "first_seen": "2023-07-17T07:03:00Z",
+      "dofollow_links": 1,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "googleapis.com",
+      "domain_rating": 93.0,
+      "traffic_domain": 957578,
+      "first_seen": "2025-12-23T18:57:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "businessinsider.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 5477320,
+      "first_seen": "2020-07-06T07:42:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "jimdo.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 394667,
+      "first_seen": "2016-05-15T15:34:08Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "bloomberg.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 5656294,
+      "first_seen": "2020-07-04T10:19:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cnbc.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 18509270,
+      "first_seen": "2020-07-03T09:54:48Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "usatoday.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 19704416,
+      "first_seen": "2020-08-27T12:58:03Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "msn.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 28130870,
+      "first_seen": "2020-07-03T10:14:16Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "jimdofree.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 2326014,
+      "first_seen": "2025-03-14T17:55:59Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "go.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 11786284,
+      "first_seen": "2020-07-10T13:15:18Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "feedly.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 65399,
+      "first_seen": "2020-11-02T23:47:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "apnews.com",
+      "domain_rating": 92.0,
+      "traffic_domain": 3988451,
+      "first_seen": "2020-07-03T11:58:23Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nbcnews.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 8569464,
+      "first_seen": "2020-07-04T10:49:34Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "globo.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 198168448,
+      "first_seen": "2020-07-03T09:52:28Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "nikkei.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 9740959,
+      "first_seen": "2020-09-18T03:18:09Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "aol.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 13726734,
+      "first_seen": "2020-07-05T08:02:26Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "uol.com.br",
+      "domain_rating": 91.0,
+      "traffic_domain": 79402776,
+      "first_seen": "2020-12-01T02:09:05Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "espn.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 171549056,
+      "first_seen": "2020-07-03T08:18:45Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "herokuapp.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 504412,
+      "first_seen": "2020-09-08T11:22:27Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "lefigaro.fr",
+      "domain_rating": 91.0,
+      "traffic_domain": 15065909,
+      "first_seen": "2020-09-08T07:03:11Z",
+      "dofollow_links": 127563,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "zdnet.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 956128,
+      "first_seen": "2020-07-09T09:46:51Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "mashable.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 11640133,
+      "first_seen": "2020-11-29T13:10:35Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "douban.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 380408,
+      "first_seen": "2020-11-19T09:58:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "typepad.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 36,
+      "first_seen": "2016-02-04T23:17:25Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "crunchbase.com",
+      "domain_rating": 91.0,
+      "traffic_domain": 1496099,
+      "first_seen": "2023-12-24T16:02:02Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "appspot.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 1983453,
+      "first_seen": "2020-07-06T11:03:16Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "today.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 6828998,
+      "first_seen": "2020-07-06T10:45:48Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "sueddeutsche.de",
+      "domain_rating": 90.0,
+      "traffic_domain": 2374940,
+      "first_seen": "2020-07-06T07:50:09Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "autodesk.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 5845729,
+      "first_seen": "2026-04-12T14:54:36Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "goo.ne.jp",
+      "domain_rating": 90.0,
+      "traffic_domain": 168280,
+      "first_seen": "2020-11-01T04:13:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "nasdaq.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 4595006,
+      "first_seen": "2020-11-03T00:30:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ouest-france.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 20654020,
+      "first_seen": "2023-08-26T16:04:20Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "hs-sites.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 345,
+      "first_seen": "2025-09-22T20:34:52Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "slate.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 654156,
+      "first_seen": "2020-07-03T09:48:05Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "sfgate.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 539811,
+      "first_seen": "2020-07-08T07:39:11Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "reurl.cc",
+      "domain_rating": 90.0,
+      "traffic_domain": 117078,
+      "first_seen": "2020-10-15T00:45:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "francetvinfo.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 2328,
+      "first_seen": "2020-05-19T18:38:34Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ovh.net",
+      "domain_rating": 90.0,
+      "traffic_domain": 257636,
+      "first_seen": "2025-10-17T09:40:37Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "howstuffworks.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 5120304,
+      "first_seen": "2020-07-08T07:45:36Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "za.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 6546766,
+      "first_seen": "2024-07-04T05:42:34Z",
+      "dofollow_links": 1,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "engadget.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 281164,
+      "first_seen": "2020-07-03T10:12:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "radiofrance.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 7412330,
+      "first_seen": "2022-02-12T00:51:46Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nymag.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 1097947,
+      "first_seen": "2020-10-05T12:03:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lesechos.fr",
+      "domain_rating": 90.0,
+      "traffic_domain": 1275389,
+      "first_seen": "2023-09-25T14:34:20Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "vnexpress.net",
+      "domain_rating": 90.0,
+      "traffic_domain": 14444405,
+      "first_seen": "2020-09-10T10:08:57Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "dnb.com",
+      "domain_rating": 90.0,
+      "traffic_domain": 623072,
+      "first_seen": "2022-11-23T03:54:21Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "chron.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 176892,
+      "first_seen": "2020-07-03T12:04:49Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "thehindu.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 7179533,
+      "first_seen": "2020-07-16T08:24:13Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "repubblica.it",
+      "domain_rating": 89.0,
+      "traffic_domain": 9222195,
+      "first_seen": "2020-09-22T22:43:36Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cbslocal.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 2236,
+      "first_seen": "2020-07-11T10:58:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "leparisien.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 3366259,
+      "first_seen": "2024-09-20T04:36:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "bfmtv.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 10806809,
+      "first_seen": "2021-09-24T20:47:44Z",
+      "dofollow_links": 297,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ndtv.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 24039006,
+      "first_seen": "2020-07-30T07:21:09Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "standard.co.uk",
+      "domain_rating": 89.0,
+      "traffic_domain": 2390345,
+      "first_seen": "2020-07-09T05:56:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "francebleu.fr",
+      "domain_rating": 89.0,
+      "traffic_domain": 505462,
+      "first_seen": "2023-07-31T19:12:40Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "corriere.it",
+      "domain_rating": 89.0,
+      "traffic_domain": 17047118,
+      "first_seen": "2020-11-20T14:55:05Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "abril.com.br",
+      "domain_rating": 89.0,
+      "traffic_domain": 12183898,
+      "first_seen": "2020-12-23T18:05:55Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "similarweb.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 3723973,
+      "first_seen": "2016-02-17T11:01:07Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "indianexpress.com",
+      "domain_rating": 89.0,
+      "traffic_domain": 7612178,
+      "first_seen": "2020-07-08T10:11:34Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nfl.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 15013446,
+      "first_seen": "2020-07-03T08:47:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "e-monsite.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 169193,
+      "first_seen": "2025-10-10T04:02:37Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "techrepublic.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 99835,
+      "first_seen": "2020-12-14T12:16:34Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nikkeibp.co.jp",
+      "domain_rating": 88.0,
+      "traffic_domain": 4442948,
+      "first_seen": "2020-12-08T14:24:30Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ign.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 10548051,
+      "first_seen": "2020-09-07T15:55:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "wikibooks.org",
+      "domain_rating": 88.0,
+      "traffic_domain": 999674,
+      "first_seen": "2024-02-20T00:38:31Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "news.com.au",
+      "domain_rating": 88.0,
+      "traffic_domain": 4780558,
+      "first_seen": "2020-07-04T08:45:57Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "elmundo.es",
+      "domain_rating": 88.0,
+      "traffic_domain": 14036036,
+      "first_seen": "2020-07-07T19:56:23Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "udn.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 5817012,
+      "first_seen": "2020-12-31T10:40:53Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "insider.com",
+      "domain_rating": 88.0,
+      "traffic_domain": 321,
+      "first_seen": "2020-07-05T05:20:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "abc.es",
+      "domain_rating": 88.0,
+      "traffic_domain": 5930549,
+      "first_seen": "2020-07-13T10:16:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "bild.de",
+      "domain_rating": 87.0,
+      "traffic_domain": 23247994,
+      "first_seen": "2020-07-07T15:29:46Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "thecut.com",
+      "domain_rating": 87.0,
+      "traffic_domain": 571998,
+      "first_seen": "2020-09-23T00:02:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "slashdot.org",
+      "domain_rating": 87.0,
+      "traffic_domain": 120245,
+      "first_seen": "2020-09-22T04:05:03Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ynet.co.il",
+      "domain_rating": 87.0,
+      "traffic_domain": 6516506,
+      "first_seen": "2020-07-03T12:34:00Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "francetravail.fr",
+      "domain_rating": 87.0,
+      "traffic_domain": 3637529,
+      "first_seen": "2024-02-16T07:52:30Z",
+      "dofollow_links": 8,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "ausha.co",
+      "domain_rating": 87.0,
+      "traffic_domain": 57368,
+      "first_seen": "2021-03-27T21:25:19Z",
+      "dofollow_links": 64,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "tomsguide.com",
+      "domain_rating": 87.0,
+      "traffic_domain": 5145090,
+      "first_seen": "2020-07-03T12:04:42Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "actu.fr",
+      "domain_rating": 87.0,
+      "traffic_domain": 2113936,
+      "first_seen": "2024-02-27T19:48:55Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "castbox.fm",
+      "domain_rating": 87.0,
+      "traffic_domain": 31200,
+      "first_seen": "2020-09-21T05:23:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "vulture.com",
+      "domain_rating": 87.0,
+      "traffic_domain": 490605,
+      "first_seen": "2020-07-03T11:31:23Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nj.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 1346428,
+      "first_seen": "2020-07-10T06:36:09Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "benzinga.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 2132046,
+      "first_seen": "2020-10-12T19:31:40Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "aol.co.uk",
+      "domain_rating": 86.0,
+      "traffic_domain": 309591,
+      "first_seen": "2020-07-03T12:36:19Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "liberation.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 1225059,
+      "first_seen": "2020-01-21T06:49:31Z",
+      "dofollow_links": 6,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "welcometothejungle.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 485536,
+      "first_seen": "2020-11-27T02:58:04Z",
+      "dofollow_links": 63,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nzz.ch",
+      "domain_rating": 86.0,
+      "traffic_domain": 533548,
+      "first_seen": "2025-02-18T16:31:25Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "indiatoday.in",
+      "domain_rating": 86.0,
+      "traffic_domain": 6108667,
+      "first_seen": "2020-10-15T13:01:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "curbed.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 25464,
+      "first_seen": "2020-12-04T17:07:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "com.ru",
+      "domain_rating": 86.0,
+      "traffic_domain": 1419118,
+      "first_seen": "2023-04-20T11:03:46Z",
+      "dofollow_links": 39,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "manta.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 60523,
+      "first_seen": "2020-12-11T10:03:20Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "popsci.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 245465,
+      "first_seen": "2020-09-07T18:59:54Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ajc.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 285055,
+      "first_seen": "2020-07-03T08:28:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "livestorm.co",
+      "domain_rating": 86.0,
+      "traffic_domain": 203303,
+      "first_seen": "2023-06-08T06:59:31Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "azcentral.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 696722,
+      "first_seen": "2020-09-08T19:52:00Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "rd.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 2149850,
+      "first_seen": "2020-07-03T09:52:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "oregonlive.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 525841,
+      "first_seen": "2020-07-03T12:27:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "narod.ru",
+      "domain_rating": 86.0,
+      "traffic_domain": 155469,
+      "first_seen": "2020-10-24T04:41:01Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "japantimes.co.jp",
+      "domain_rating": 86.0,
+      "traffic_domain": 218293,
+      "first_seen": "2021-01-06T11:10:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lepoint.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 948765,
+      "first_seen": "2023-09-06T09:28:32Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "msnbc.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 2683,
+      "first_seen": "2020-07-03T11:12:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "terra.com.br",
+      "domain_rating": 86.0,
+      "traffic_domain": 20229710,
+      "first_seen": "2020-07-03T12:05:23Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "canalblog.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 84315,
+      "first_seen": "2015-08-06T23:13:44Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "leboncoin.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 24839282,
+      "first_seen": "2025-08-27T11:13:18Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "foreignpolicy.com",
+      "domain_rating": 86.0,
+      "traffic_domain": 81744,
+      "first_seen": "2020-09-20T22:53:49Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "20minutes.fr",
+      "domain_rating": 86.0,
+      "traffic_domain": 8453614,
+      "first_seen": "2021-09-02T09:21:49Z",
+      "dofollow_links": 4,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "hurriyet.com.tr",
+      "domain_rating": 85.0,
+      "traffic_domain": 57552184,
+      "first_seen": "2020-07-07T05:22:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "elespanol.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 4803813,
+      "first_seen": "2020-09-02T21:56:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "fivethirtyeight.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 63055,
+      "first_seen": "2020-07-06T11:07:45Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "exame.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 3201335,
+      "first_seen": "2020-07-04T08:01:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "sankei.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 1948242,
+      "first_seen": "2020-08-24T10:01:07Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "simplypsychology.org",
+      "domain_rating": 85.0,
+      "traffic_domain": 1755189,
+      "first_seen": "2023-02-12T05:20:39Z",
+      "dofollow_links": 33,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "rt.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 1276085,
+      "first_seen": "2020-07-05T08:46:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "sudouest.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 1433636,
+      "first_seen": "2024-07-07T19:54:39Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "familyhandyman.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 282720,
+      "first_seen": "2020-07-03T08:51:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cleveland.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 893879,
+      "first_seen": "2020-10-15T05:17:54Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "wikiwand.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 75543,
+      "first_seen": "2024-11-13T15:08:20Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "auone.jp",
+      "domain_rating": 85.0,
+      "traffic_domain": 2392761,
+      "first_seen": "2021-02-22T07:18:32Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "futura-sciences.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 748831,
+      "first_seen": "2023-08-10T05:08:12Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "freep.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 714990,
+      "first_seen": "2020-10-14T23:02:49Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "pagesperso-orange.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 0,
+      "first_seen": "2022-07-29T22:06:24Z",
+      "dofollow_links": 2,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "francenum.gouv.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 189595,
+      "first_seen": "2025-08-08T22:30:57Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "mlive.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 822815,
+      "first_seen": "2020-10-12T22:35:31Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "beta.gouv.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 299238,
+      "first_seen": "2021-05-14T18:36:06Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "chosun.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 1777350,
+      "first_seen": "2020-11-01T06:11:17Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "eonline.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 3924161,
+      "first_seen": "2020-07-08T05:00:27Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lexpress.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 290936,
+      "first_seen": "2021-06-09T11:52:42Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "tasteofhome.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 2538000,
+      "first_seen": "2020-07-03T12:00:44Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "marieclaire.fr",
+      "domain_rating": 85.0,
+      "traffic_domain": 1466692,
+      "first_seen": "2020-08-27T21:50:55Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "avis-verifies.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 153778,
+      "first_seen": "2020-08-16T09:56:29Z",
+      "dofollow_links": 20,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "itxoft.com",
+      "domain_rating": 85.0,
+      "traffic_domain": 0,
+      "first_seen": "2024-08-14T19:49:06Z",
+      "dofollow_links": 0,
+      "is_spam": true,
+      "is_root_domain": false
+    },
+    {
+      "domain": "androidauthority.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 407386,
+      "first_seen": "2020-09-09T14:05:23Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "latribune.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 307044,
+      "first_seen": "2021-06-04T15:39:34Z",
+      "dofollow_links": 3,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "as.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 18999436,
+      "first_seen": "2021-02-10T08:36:30Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "eldiario.es",
+      "domain_rating": 84.0,
+      "traffic_domain": 2704718,
+      "first_seen": "2020-09-22T05:22:54Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nbcsports.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 2646413,
+      "first_seen": "2020-08-15T18:40:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "clarin.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 7602934,
+      "first_seen": "2020-07-30T06:56:46Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "gitnux.org",
+      "domain_rating": 84.0,
+      "traffic_domain": 5083,
+      "first_seen": "2026-02-14T13:59:33Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "elperiodico.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 3927452,
+      "first_seen": "2020-07-03T10:15:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "marca.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 24216170,
+      "first_seen": "2020-07-06T07:12:22Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "pole-emploi.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 65421,
+      "first_seen": "2021-09-09T17:01:37Z",
+      "dofollow_links": 15,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "al.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 1014930,
+      "first_seen": "2020-09-02T20:53:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "jsonline.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 799596,
+      "first_seen": "2020-10-15T04:08:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "yna.co.kr",
+      "domain_rating": 84.0,
+      "traffic_domain": 407115,
+      "first_seen": "2020-09-09T06:45:56Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "sciencealert.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 157410,
+      "first_seen": "2020-07-07T21:40:47Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "detroitnews.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 513935,
+      "first_seen": "2020-10-15T03:37:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "thewrap.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 392498,
+      "first_seen": "2020-09-23T02:23:24Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nme.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 2664770,
+      "first_seen": "2020-09-07T21:31:20Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "your-server.de",
+      "domain_rating": 84.0,
+      "traffic_domain": 7912,
+      "first_seen": "2023-06-30T18:41:19Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "inquirer.net",
+      "domain_rating": 84.0,
+      "traffic_domain": 1546352,
+      "first_seen": "2020-09-25T02:45:27Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "capital.fr",
+      "domain_rating": 84.0,
+      "traffic_domain": 501989,
+      "first_seen": "2023-02-06T14:18:26Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "milliyet.com.tr",
+      "domain_rating": 84.0,
+      "traffic_domain": 23960872,
+      "first_seen": "2020-07-19T07:37:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "lastampa.it",
+      "domain_rating": 84.0,
+      "traffic_domain": 1386584,
+      "first_seen": "2020-09-26T06:23:01Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "tempo.co",
+      "domain_rating": 84.0,
+      "traffic_domain": 5604234,
+      "first_seen": "2020-09-20T21:25:29Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "miteco.gob.es",
+      "domain_rating": 84.0,
+      "traffic_domain": 276101,
+      "first_seen": "2025-12-04T12:22:03Z",
+      "dofollow_links": 7,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "expansion.com",
+      "domain_rating": 84.0,
+      "traffic_domain": 3074177,
+      "first_seen": "2020-09-20T03:10:49Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "franceinter.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 592,
+      "first_seen": "2021-12-20T05:33:39Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "windowscentral.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 156087,
+      "first_seen": "2020-09-07T21:06:52Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "walla.co.il",
+      "domain_rating": 83.0,
+      "traffic_domain": 3514696,
+      "first_seen": "2020-07-04T05:50:39Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "augsburger-allgemeine.de",
+      "domain_rating": 83.0,
+      "traffic_domain": 1287696,
+      "first_seen": "2020-07-04T10:44:05Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "eltiempo.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 4464558,
+      "first_seen": "2020-07-03T12:00:58Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "ig.com.br",
+      "domain_rating": 83.0,
+      "traffic_domain": 6506976,
+      "first_seen": "2020-09-11T12:39:51Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "globes.co.il",
+      "domain_rating": 83.0,
+      "traffic_domain": 2221696,
+      "first_seen": "2020-07-04T05:58:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "tennessean.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 435708,
+      "first_seen": "2020-11-02T03:11:41Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "apollo.io",
+      "domain_rating": 83.0,
+      "traffic_domain": 361429,
+      "first_seen": "2021-07-13T03:06:49Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "europe1.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 420862,
+      "first_seen": "2020-07-09T07:09:55Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "newatlas.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 73920,
+      "first_seen": "2020-09-04T05:01:17Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "myanimelist.net",
+      "domain_rating": 83.0,
+      "traffic_domain": 3430656,
+      "first_seen": "2020-09-20T15:42:01Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "nbcnewyork.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 289417,
+      "first_seen": "2020-07-03T08:45:26Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "doctissimo.fr",
+      "domain_rating": 83.0,
+      "traffic_domain": 1208083,
+      "first_seen": "2024-09-27T19:24:47Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "golem.de",
+      "domain_rating": 83.0,
+      "traffic_domain": 213094,
+      "first_seen": "2020-11-01T01:55:58Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "deccanherald.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 707217,
+      "first_seen": "2020-09-07T20:53:43Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "cnnindonesia.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 7086380,
+      "first_seen": "2020-09-20T18:57:31Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "metacritic.com",
+      "domain_rating": 83.0,
+      "traffic_domain": 1845526,
+      "first_seen": "2021-01-01T16:03:08Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "espn.co.uk",
+      "domain_rating": 83.0,
+      "traffic_domain": 4560355,
+      "first_seen": "2020-07-09T06:36:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "pcdn.co",
+      "domain_rating": 83.0,
+      "traffic_domain": 14255,
+      "first_seen": "2020-10-13T21:10:14Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "globaltimes.cn",
+      "domain_rating": 83.0,
+      "traffic_domain": 67989,
+      "first_seen": "2020-10-12T16:27:51Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "larousse.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 5389782,
+      "first_seen": "2020-07-03T10:06:37Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "glassdoor.co.uk",
+      "domain_rating": 82.0,
+      "traffic_domain": 727816,
+      "first_seen": "2024-11-23T12:49:10Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "r7.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 3241314,
+      "first_seen": "2020-08-01T15:46:28Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "theprint.in",
+      "domain_rating": 82.0,
+      "traffic_domain": 351413,
+      "first_seen": "2020-09-26T12:12:54Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "challenges.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 202276,
+      "first_seen": "2021-03-04T09:25:01Z",
+      "dofollow_links": 2,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "news12.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 250077,
+      "first_seen": "2020-10-13T12:08:11Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "lublin.pl",
+      "domain_rating": 82.0,
+      "traffic_domain": 360561,
+      "first_seen": "2024-08-17T17:52:36Z",
+      "dofollow_links": 5,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "stuttgarter-zeitung.de",
+      "domain_rating": 82.0,
+      "traffic_domain": 863435,
+      "first_seen": "2020-07-05T05:46:51Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "india.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 5204056,
+      "first_seen": "2020-07-03T12:04:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "rtl.fr",
+      "domain_rating": 82.0,
+      "traffic_domain": 1867904,
+      "first_seen": "2022-01-11T16:45:02Z",
+      "dofollow_links": 1,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "androidcentral.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 452968,
+      "first_seen": "2020-08-25T07:41:13Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    },
+    {
+      "domain": "indystar.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 477513,
+      "first_seen": "2020-10-02T02:01:04Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": false
+    },
+    {
+      "domain": "dailydot.com",
+      "domain_rating": 82.0,
+      "traffic_domain": 163813,
+      "first_seen": "2020-09-07T17:03:59Z",
+      "dofollow_links": 0,
+      "is_spam": false,
+      "is_root_domain": true
+    }
+  ]
+}
