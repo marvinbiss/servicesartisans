@@ -463,6 +463,146 @@ describe('evaluateGonePath — /problemes/[probleme]/[ville]', () => {
   })
 })
 
+describe('evaluateGonePath — bare hubs (pivot RGE soft-404 leak fix)', () => {
+  it('/services/serrurier (bare hub dead slug) → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/services/serrurier')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/avis/serrurier → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/avis/serrurier')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/devis/vitrier → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/devis/vitrier')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/tarifs/carreleur → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/tarifs/carreleur')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/urgence/cuisiniste → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/urgence/cuisiniste')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('bare hub avec slug valide → gone:false (pass-through)', () => {
+    expect(evaluateGonePath('/services/plombier')).toEqual({ gone: false })
+    expect(evaluateGonePath('/avis/chauffagiste')).toEqual({ gone: false })
+    expect(evaluateGonePath('/devis/electricien')).toEqual({ gone: false })
+  })
+
+  it('/services/serrurier/autour-de-moi → 410 service_slug_unknown', () => {
+    expect(evaluateGonePath('/services/serrurier/autour-de-moi')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/services/plombier/autour-de-moi → gone:false', () => {
+    expect(evaluateGonePath('/services/plombier/autour-de-moi')).toEqual({ gone: false })
+  })
+})
+
+describe('evaluateGonePath — /avis|/urgence/[service]/[ville] (2-segment)', () => {
+  it('/avis/serrurier/paris → 410', () => {
+    expect(evaluateGonePath('/avis/serrurier/paris')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/urgence/serrurier/lyon → 410', () => {
+    expect(evaluateGonePath('/urgence/serrurier/lyon')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/avis/plombier/paris → gone:false', () => {
+    expect(evaluateGonePath('/avis/plombier/paris')).toEqual({ gone: false })
+  })
+
+  it('/avis/plombier/Paris (MAJ) → 410 ville_slug_malformed', () => {
+    expect(evaluateGonePath('/avis/plombier/Paris')).toEqual({
+      gone: true,
+      reason: 'ville_slug_malformed',
+    })
+  })
+})
+
+describe('evaluateGonePath — /departements|/regions/[territory]/[service]', () => {
+  it('/departements/seine-saint-denis/serrurier → 410', () => {
+    expect(evaluateGonePath('/departements/seine-saint-denis/serrurier')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/regions/ile-de-france/vitrier → 410', () => {
+    expect(evaluateGonePath('/regions/ile-de-france/vitrier')).toEqual({
+      gone: true,
+      reason: 'service_slug_unknown',
+    })
+  })
+
+  it('/departements/seine-saint-denis/plombier → gone:false', () => {
+    expect(evaluateGonePath('/departements/seine-saint-denis/plombier')).toEqual({ gone: false })
+  })
+})
+
+describe('evaluateGonePath — /rge/[service]/departement/[dept]', () => {
+  it('/rge/serrurier/departement/75 → 410 rge_service_slug_unknown', () => {
+    expect(evaluateGonePath('/rge/serrurier/departement/75')).toEqual({
+      gone: true,
+      reason: 'rge_service_slug_unknown',
+    })
+  })
+
+  it('/rge/chauffagiste/departement/75 → gone:false', () => {
+    expect(evaluateGonePath('/rge/chauffagiste/departement/75')).toEqual({ gone: false })
+  })
+})
+
+describe('evaluateGonePath — Sprint U /qualifications-rge → 301 /rge/qualifications', () => {
+  it('/qualifications-rge → 301 vers /rge/qualifications', () => {
+    expect(evaluateGonePath('/qualifications-rge')).toEqual({
+      gone: false,
+      redirect: { to: '/rge/qualifications', status: 301 },
+    })
+  })
+
+  it('/qualifications-rge/ (trailing slash) → 301 vers /rge/qualifications', () => {
+    expect(evaluateGonePath('/qualifications-rge/')).toEqual({
+      gone: false,
+      redirect: { to: '/rge/qualifications', status: 301 },
+    })
+  })
+
+  it('/qualifications-rge/sub-path NON traité ici (passe à travers)', () => {
+    // Le bloc 13 ne match QUE le path exact. Tout sous-chemin retombe sur
+    // le default `{ gone: false }` final — Next.js retournera 404 standard.
+    expect(evaluateGonePath('/qualifications-rge/foo')).toEqual({ gone: false })
+  })
+
+  it('/rge/qualifications (cible canonique) → gone:false (pas de redirect loop)', () => {
+    expect(evaluateGonePath('/rge/qualifications')).toEqual({ gone: false })
+  })
+})
+
 describe('VALID_PROBLEM_SLUGS — cohérence avec problems.ts', () => {
   it('contient exactement les slugs déclarés (zéro écart)', () => {
     const sourceSlugs = new Set(allProblems.map((p) => p.slug))

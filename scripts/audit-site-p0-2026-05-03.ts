@@ -368,7 +368,7 @@ const SITEMAP_HUB_PATHS = [
   '/villes',
   '/problemes',
   '/urgence',
-  '/qualifications-rge',
+  '/rge/qualifications', // Sprint U 2026-05-03 : ex `/qualifications-rge` (route inexistante)
   '/renovation-energetique',
   '/comparatifs',
   '/barometre/rge', // route réelle sans accent (`/baromètre/rge` est faux positif)
