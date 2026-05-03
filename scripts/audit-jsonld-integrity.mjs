@@ -107,6 +107,8 @@ const ALLOWED_TYPES = new Set([
   'DataCatalog',
   'DataDownload',
   'CreativeWork',
+  'DefinedTerm',
+  'DefinedTermSet',
   // Web App
   'WebApplication',
   'SoftwareApplication',

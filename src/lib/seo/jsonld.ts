@@ -1391,6 +1391,55 @@ export function getDeepSectionsTechArticleSchema(params: {
   }
 }
 
+// Schema.org DefinedTermSet pour le vocabulaire RGE (Sprint J Ahrefs 2026-05-03).
+// Émet un DefinedTermSet contenant chaque qualification RGE (Qualibat 7141,
+// QualiPAC, IRVE P1, OPQIBI 1905…) sous forme de DefinedTerm. Permet à Google
+// AI Overviews + Bing de citer la définition exacte pour les requêtes
+// "qu'est-ce que <qualification>" très fréquentes en SERP YMYL aides
+// énergétiques 2026.
+//
+// Pourquoi DefinedTermSet plutôt que glossaire HTML : Schema.org DefinedTerm
+// est le vocabulaire canonique pour les définitions techniques/réglementaires.
+// AI Overviews préfère DefinedTerm à FAQPage pour les définitions courtes.
+//
+// Cohabite avec FAQPage / TechArticle / HowTo (modes de citation différents).
+export function getRgeDefinedTermSetSchema(params: {
+  pageUrl: string
+  /** Nom du vocabulaire (ex. "Qualifications RGE — Pompe à chaleur"). */
+  name: string
+  /** Description courte du set (≤ 200 chars). */
+  description: string
+  terms: ReadonlyArray<{
+    slug: string
+    code: string
+    name: string
+    definition: string
+    organisme: string
+    termCode?: string
+  }>
+}): Record<string, unknown> | null {
+  if (!params.terms || params.terms.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${params.pageUrl}#glossary-rge`,
+    name: params.name,
+    description: params.description,
+    inLanguage: 'fr-FR',
+    hasDefinedTerm: params.terms.map((t) => ({
+      '@type': 'DefinedTerm',
+      '@id': `${params.pageUrl}#term-${t.slug}`,
+      name: t.name,
+      description: t.definition,
+      termCode: t.termCode ?? t.code,
+      inDefinedTermSet: `${params.pageUrl}#glossary-rge`,
+      ...(t.organisme && {
+        publisher: { '@type': 'Organization', name: t.organisme },
+      }),
+    })),
+  }
+}
+
 // Schema.org HowTo dérivé des deep H2 sections décisionnelles (Sprint G
 // Ahrefs 2026-05-03). Pour chaque section avec un overlay HowTo défini dans
 // `deep-sections-howto-overlays.ts`, émet un HowTo Schema indépendant ancré

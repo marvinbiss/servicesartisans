@@ -23,8 +23,10 @@ import {
   getDeepSectionsHowToSchemas,
   getDeepSectionsTechArticleSchema,
   getFAQSchema,
+  getRgeDefinedTermSetSchema,
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
+import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -206,6 +208,16 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
     sections: deepSections,
     overlayLookup: getHowToOverlay,
   })
+  // Sprint J Ahrefs 2026-05-03 — DefinedTermSet RGE qualifications glossary.
+  // Émet un vocabulaire complet (Qualibat 7141, QualiPAC, IRVE P1…) pour que
+  // Google AI Overviews + Bing puissent citer les définitions exactes des
+  // certifications mentionnées dans la page (carrousel definition rich result).
+  const rgeGlossarySchema = getRgeDefinedTermSetSchema({
+    pageUrl: `${SITE_URL}${pagePath}`,
+    name: `Glossaire RGE — ${content.h1}`,
+    description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${content.h1.toLowerCase()}.`,
+    terms: getAllRgeGlossaryEntries(),
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
@@ -213,6 +225,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   if (deepSectionsTechArticleSchema) jsonLdItems.push(deepSectionsTechArticleSchema)
   if (deepSectionsFAQSchema) jsonLdItems.push(deepSectionsFAQSchema)
   if (deepSectionsHowToSchemas.length > 0) jsonLdItems.push(...deepSectionsHowToSchemas)
+  if (rgeGlossarySchema) jsonLdItems.push(rgeGlossarySchema)
 
   return (
     <>
