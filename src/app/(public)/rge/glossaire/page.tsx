@@ -123,10 +123,16 @@ export default function RgeGlossairePage() {
         "Non. RGE est obligatoire uniquement pour bénéficier des aides publiques (MaPrimeRénov', CEE, éco-PTZ, TVA 5,5 %). Un chantier réalisé hors aides publiques peut être confié à un artisan non RGE — mais l'aide ne sera pas versée.",
     },
   ]
+  // Sprint W-fix Ahrefs 2026-05-03 — override speakableCssSelectors :
+  // le default `.faq-question`/`.faq-answer` du helper ne matche aucun
+  // élément de notre DOM (on utilise <details>/<summary> Tailwind).
+  // Sans cet override, Google Speakable checker discard silencieusement
+  // le signal speakable du FAQPage. Reviewer SEO catch HIGH.
   const faqSchema = getFAQSchema(faqItems, {
     pageUrl,
     name: 'FAQ — Glossaire RGE',
     includeSpeakable: true,
+    speakableCssSelectors: ['h1', '[data-speakable="true"]', 'details summary', 'details p'],
   })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]

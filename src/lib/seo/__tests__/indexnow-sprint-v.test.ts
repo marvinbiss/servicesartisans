@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest'
 import { getSprintVCanonicalRgeUrls } from '../indexnow'
 
 /**
- * Sprint V Ahrefs 2026-05-03 — verrou liste canonique RGE pour IndexNow.
+ * Sprint V+W Ahrefs 2026-05-03 — verrou liste canonique RGE pour IndexNow.
  *
  * Garantit que :
- *   - Les 3 URLs canoniques RGE sont bien présentes (drift detection si
- *     quelqu'un retire ou ajoute une URL sans réflexion).
+ *   - Les 5 URLs canoniques (3 RGE Sprint U + 2 comparatifs Sprint W) sont
+ *     bien présentes (drift detection si quelqu'un retire/ajoute une URL).
  *   - L'ordre / format / chemin relatif sont stables (le script CLI les
  *     pipe directement à submitToIndexNow qui transforme en absolu).
  *   - L'URL canonique Sprint O `/rge/glossaire` est en première position
