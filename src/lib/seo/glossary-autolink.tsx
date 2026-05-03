@@ -68,14 +68,29 @@ function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-let CACHED_PATTERNS: readonly LinkableTerm[] | null = null
-
-function getPatterns(): readonly LinkableTerm[] {
-  if (CACHED_PATTERNS === null) {
-    CACHED_PATTERNS = buildLinkablePatterns(getAllRgeGlossaryEntries())
+// Sprint AE Ahrefs 2026-05-03 — memoization closure-encapsulée (Reviewer TS MEDIUM).
+// Avant : `let CACHED_PATTERNS` au module-level, test-hostile (state survivait
+// entre tests, incompatible avec mock de getAllRgeGlossaryEntries). React.cache
+// non utilisable ici car incompatible runtime Vitest (jsdom). Pattern factory
+// IIFE = même perf que singleton (1 build per server boot), avec reset exposé
+// pour les tests via __resetGlossaryAutolinkCacheForTests.
+const { getPatterns, __resetGlossaryAutolinkCacheForTests } = (() => {
+  let cached: readonly LinkableTerm[] | null = null
+  return {
+    getPatterns(): readonly LinkableTerm[] {
+      if (cached === null) {
+        cached = buildLinkablePatterns(getAllRgeGlossaryEntries())
+      }
+      return cached
+    },
+    /** Test-only : permet de reset le cache entre tests qui mockent le glossaire. */
+    __resetGlossaryAutolinkCacheForTests(): void {
+      cached = null
+    },
   }
-  return CACHED_PATTERNS
-}
+})()
+
+export { __resetGlossaryAutolinkCacheForTests }
 
 /**
  * Auto-link les mentions de qualifications RGE dans une string.

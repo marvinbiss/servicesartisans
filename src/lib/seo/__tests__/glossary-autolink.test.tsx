@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-import { autoLinkRgeTerms } from '../glossary-autolink'
+import { autoLinkRgeTerms, __resetGlossaryAutolinkCacheForTests } from '../glossary-autolink'
 
 function render(node: React.ReactNode): string {
   return renderToStaticMarkup(<>{node}</>)
@@ -89,5 +89,18 @@ describe('autoLinkRgeTerms — Sprint L Ahrefs 2026-05-03', () => {
   it('Sprint R — hostPath === "" équivalent à same-page (no-op)', () => {
     const html = render(autoLinkRgeTerms('Voir QualiPAC.', { hostPath: '' }))
     expect(html).toContain('href="#term-qualipac"')
+  })
+
+  // Sprint AE Ahrefs 2026-05-03 — verrou reset cache testable.
+  it('Sprint AE — __resetGlossaryAutolinkCacheForTests permet reset propre', () => {
+    // Premier appel populate le cache
+    const html1 = render(autoLinkRgeTerms('QualiPAC.'))
+    expect(html1).toContain('href="#term-qualipac"')
+    // Reset cache
+    __resetGlossaryAutolinkCacheForTests()
+    // Deuxième appel re-build le cache → résultat identique (déterministe)
+    const html2 = render(autoLinkRgeTerms('QualiPAC.'))
+    expect(html2).toContain('href="#term-qualipac"')
+    expect(html2).toBe(html1)
   })
 })
