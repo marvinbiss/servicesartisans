@@ -19,6 +19,7 @@ import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getCollectionPageSchema,
+  getDeepSectionsFAQPageSchema,
   getDeepSectionsTechArticleSchema,
   getFAQSchema,
 } from '@/lib/seo/jsonld'
@@ -190,11 +191,17 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
     authorName: 'la rédaction ServicesArtisans',
     publisherName: 'ServicesArtisans',
   })
+  // Sprint H Ahrefs 2026-05-03 — FAQPage dérivé des deep H2 sections (PAA + AI Overviews).
+  const deepSectionsFAQSchema = getDeepSectionsFAQPageSchema({
+    pageUrl: `${SITE_URL}${pagePath}`,
+    sections: deepSections,
+  })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
   if (deepSectionsTechArticleSchema) jsonLdItems.push(deepSectionsTechArticleSchema)
+  if (deepSectionsFAQSchema) jsonLdItems.push(deepSectionsFAQSchema)
 
   return (
     <>

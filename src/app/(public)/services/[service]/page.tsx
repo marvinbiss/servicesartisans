@@ -30,6 +30,7 @@ import {
   getSpeakableSchema,
   getServicePricingSchema,
   getDeepSectionsTechArticleSchema,
+  getDeepSectionsFAQPageSchema,
 } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -440,6 +441,13 @@ export default async function ServicePage({ params }: PageProps) {
     authorName: 'la rédaction ServicesArtisans',
     publisherName: 'ServicesArtisans',
   })
+  // Sprint H Ahrefs 2026-05-03 — FAQPage dérivé des deep H2 sections pour
+  // cibler People Also Ask + AI Overviews. Cohabite avec le FAQPage de la
+  // FAQ collapsible (mainEntity disjoints).
+  const deepSectionsFAQSchema = getDeepSectionsFAQPageSchema({
+    pageUrl,
+    sections: deepSectionsForSchema,
+  })
 
   // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
   // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
@@ -469,6 +477,7 @@ export default async function ServicePage({ params }: PageProps) {
           ...(itemListSchema ? [itemListSchema] : []),
           ...(articleSchema ? [articleSchema] : []),
           ...(deepSectionsTechArticleSchema ? [deepSectionsTechArticleSchema] : []),
+          ...(deepSectionsFAQSchema ? [deepSectionsFAQSchema] : []),
         ]}
       />
 

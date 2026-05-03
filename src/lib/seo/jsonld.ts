@@ -1391,6 +1391,46 @@ export function getDeepSectionsTechArticleSchema(params: {
   }
 }
 
+// Schema.org FAQPage dérivé d'une collection de deep H2 sections (Sprint H
+// Ahrefs 2026-05-03). Transforme chaque section { h2, body[] } en QA pair :
+//   - question = le H2 reformulé en interrogation si nécessaire (déjà OK)
+//   - answer = body[0] tronqué à ~500 chars (Google AI Overviews préfère
+//     des réponses denses et concises pour les snippets featured / People
+//     Also Ask).
+//
+// Émis comme FAQPage distinct du FAQPage existant de la page (qui couvre la
+// FAQ collapsible utilisateur). Les 2 FAQPage cohabitent sans conflit côté
+// Google (mainEntity disjoints + @id ancrés).
+//
+// Pourquoi un FAQPage dérivé : les deep sections sont rendues en bloc article,
+// pas en accordion FAQ. Les exposer aussi en FAQPage permet de cibler les
+// rich snippets People Also Ask de Google + AI Overviews qui dominent les
+// SERP YMYL aides énergétiques 2026.
+export function getDeepSectionsFAQPageSchema(params: {
+  pageUrl: string
+  sections: ReadonlyArray<{ id: string; h2: string; body: readonly string[] }>
+  /** Longueur max de la réponse (defaults to 500 — sweet spot AI Overviews). */
+  answerMaxChars?: number
+}): Record<string, unknown> | null {
+  if (!params.sections || params.sections.length === 0) return null
+  const maxChars = params.answerMaxChars ?? 500
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${params.pageUrl}#faq-deep`,
+    mainEntity: params.sections.map((s) => ({
+      '@type': 'Question',
+      '@id': `${params.pageUrl}#faq-${s.id}`,
+      name: s.h2,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: (s.body[0] ?? '').slice(0, maxChars),
+        url: `${params.pageUrl}#${s.id}`,
+      },
+    })),
+  }
+}
+
 // Schema.org ProfilePage — Google's 2024+ canonical pattern for author pages.
 // Wraps the Person node as `mainEntity`, exposes dateCreated + dateModified
 // (required signals for ProfilePage rich result), and lists authored articles

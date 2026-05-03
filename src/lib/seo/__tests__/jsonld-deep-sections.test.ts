@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { getDeepSectionsTechArticleSchema } from '../jsonld'
+import { getDeepSectionsFAQPageSchema, getDeepSectionsTechArticleSchema } from '../jsonld'
 import { SITE_URL } from '../config'
 
 const SAMPLE_SECTIONS = [
@@ -126,5 +126,77 @@ describe('getDeepSectionsTechArticleSchema — Sprint F Ahrefs 2026-05-03', () =
     expect(s?.image).toEqual([`${SITE_URL}/og-image.jpg`])
     expect(s?.datePublished).toBe('2026-05-03T00:00:00+02:00')
     expect(s?.dateModified).toBe('2026-05-03T00:00:00+02:00')
+  })
+})
+
+describe('getDeepSectionsFAQPageSchema — Sprint H Ahrefs 2026-05-03', () => {
+  const pageUrl = `${SITE_URL}/services/pompe-a-chaleur`
+  const baseParams = {
+    pageUrl,
+    sections: SAMPLE_SECTIONS,
+  }
+
+  it('returns null when sections is empty', () => {
+    expect(
+      getDeepSectionsFAQPageSchema({
+        pageUrl,
+        sections: [],
+      })
+    ).toBeNull()
+  })
+
+  it('emits @context schema.org and @type FAQPage with stable @id', () => {
+    const s = getDeepSectionsFAQPageSchema(baseParams)
+    expect(s?.['@context']).toBe('https://schema.org')
+    expect(s?.['@type']).toBe('FAQPage')
+    expect(s?.['@id']).toBe(`${pageUrl}#faq-deep`)
+  })
+
+  it('mainEntity has one Question per section with stable @id and url anchor', () => {
+    const s = getDeepSectionsFAQPageSchema(baseParams)
+    const entities = s?.mainEntity as Array<Record<string, unknown>>
+    expect(entities).toHaveLength(SAMPLE_SECTIONS.length)
+    entities.forEach((q, i) => {
+      expect(q['@type']).toBe('Question')
+      expect(q['@id']).toBe(`${pageUrl}#faq-${SAMPLE_SECTIONS[i].id}`)
+      expect(q.name).toBe(SAMPLE_SECTIONS[i].h2)
+      const answer = q.acceptedAnswer as Record<string, unknown>
+      expect(answer['@type']).toBe('Answer')
+      expect(answer.url).toBe(`${pageUrl}#${SAMPLE_SECTIONS[i].id}`)
+      expect(answer.text).toBe(SAMPLE_SECTIONS[i].body[0])
+    })
+  })
+
+  it('truncates answer text to default 500 chars', () => {
+    const longBody = 'x'.repeat(700)
+    const s = getDeepSectionsFAQPageSchema({
+      pageUrl,
+      sections: [{ id: 'long', h2: 'Long ?', body: [longBody] }],
+    })
+    const entity = (s?.mainEntity as Array<Record<string, unknown>>)[0]
+    const answer = entity.acceptedAnswer as Record<string, unknown>
+    expect((answer.text as string).length).toBe(500)
+  })
+
+  it('honors answerMaxChars override (e.g. 250 for compact PAA)', () => {
+    const longBody = 'y'.repeat(700)
+    const s = getDeepSectionsFAQPageSchema({
+      pageUrl,
+      sections: [{ id: 'long', h2: 'Long ?', body: [longBody] }],
+      answerMaxChars: 250,
+    })
+    const entity = (s?.mainEntity as Array<Record<string, unknown>>)[0]
+    const answer = entity.acceptedAnswer as Record<string, unknown>
+    expect((answer.text as string).length).toBe(250)
+  })
+
+  it('handles section with empty body[] gracefully (answer text empty string)', () => {
+    const s = getDeepSectionsFAQPageSchema({
+      pageUrl,
+      sections: [{ id: 'empty', h2: 'Empty ?', body: [] }],
+    })
+    const entity = (s?.mainEntity as Array<Record<string, unknown>>)[0]
+    const answer = entity.acceptedAnswer as Record<string, unknown>
+    expect(answer.text).toBe('')
   })
 })
