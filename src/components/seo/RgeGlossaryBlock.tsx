@@ -1,9 +1,18 @@
-import { ShieldCheck } from 'lucide-react'
+import Link from 'next/link'
+import { ShieldCheck, ArrowRight } from 'lucide-react'
 
 import {
   type RgeGlossaryEntry,
   getAllRgeGlossaryEntries,
 } from '@/lib/seo/rge-qualifications-glossary'
+
+/**
+ * URL canonique de la page hébergeant le DefinedTermSet RGE complet
+ * (Sprint O Ahrefs 2026-05-03). Référencée comme target des "Voir
+ * glossaire complet" depuis chaque hub, et comme `mainEntityOfPage`
+ * pour les liens externes.
+ */
+const RGE_GLOSSAIRE_CANONICAL_PATH = '/rge/glossaire'
 
 /**
  * RgeGlossaryBlock — Sprint K Ahrefs 2026-05-03.
@@ -23,10 +32,18 @@ export default function RgeGlossaryBlock({
   entries = getAllRgeGlossaryEntries(),
   title = 'Glossaire des qualifications RGE',
   intro = 'Définitions officielles des certifications obligatoires pour bénéficier des aides MaPrimeRénov’ et CEE en 2026.',
+  /**
+   * Sprint S Ahrefs 2026-05-03 — affiche un lien "Voir glossaire complet"
+   * vers /rge/glossaire (entité canonique Sprint O). Activé sur les hubs
+   * (/services, /rge, /cee) qui rendent un sous-ensemble. Désactivé sur
+   * /rge/glossaire elle-même (auto-référence inutile).
+   */
+  showCanonicalLink = true,
 }: {
   entries?: readonly RgeGlossaryEntry[]
   title?: string
   intro?: string
+  showCanonicalLink?: boolean
 }) {
   if (entries.length === 0) return null
 
@@ -61,6 +78,17 @@ export default function RgeGlossaryBlock({
             </div>
           ))}
         </dl>
+        {showCanonicalLink && (
+          <div className="mt-8">
+            <Link
+              href={RGE_GLOSSAIRE_CANONICAL_PATH}
+              className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-900 underline-offset-4 hover:underline"
+            >
+              Voir le glossaire RGE complet
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
         <p className="text-xs text-charcoal-500 mt-8 leading-relaxed max-w-3xl">
           Sources officielles : france-renov.gouv.fr, annuaire-rge.ademe.fr, arrêté du 12 janvier
           2017 (IRVE), arrêté Anah du 23 décembre 2024 (RGE obligatoire MaPrimeRénov&apos;).

@@ -167,11 +167,13 @@ export default function RgeGlossairePage() {
         </div>
       </section>
 
-      {/* Glossaire visible — DefinedTermSet rendu HTML cohérent avec le Schema. */}
+      {/* Glossaire visible — DefinedTermSet rendu HTML cohérent avec le Schema.
+          showCanonicalLink=false : on EST la page canonique, pas de self-link. */}
       <RgeGlossaryBlock
         entries={entries}
         title={`Les ${entries.length} qualifications RGE expliquées`}
         intro="Définitions officielles, organismes certificateurs et primes débloquées. Cliquez sur l’ancre #term-… pour partager une définition exacte."
+        showCanonicalLink={false}
       />
 
       {/* FAQ visible — cohérent avec FAQPage Schema. */}
