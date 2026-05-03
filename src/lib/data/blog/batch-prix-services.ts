@@ -9,7 +9,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs déménageur 2026 : studio 400-800€, T3 900-2000€, maison 1500-4000€. Prix réels selon distance et volume. Devis gratuit en ligne.',
     content: [
-      "En France, 3 millions de ménages déménagent chaque année — et le budget moyen d'un déménagement professionnel se situe entre **800 et 2 500 €**. Pourtant, les écarts de prix entre devis peuvent atteindre 100 % pour la même prestation. Volume à transporter, distance, étage, accessibilité, période de l'année : de nombreux facteurs influencent la facture. Ce guide vous donne les **tarifs réels des déménageurs professionnels en 2026** pour vous aider à comparer les devis en toute connaissance de cause. Pour trouver un [déménageur de confiance près de chez vous](/services/demenageur), consultez notre annuaire vérifié.",
+      "En France, 3 millions de ménages déménagent chaque année — et le budget moyen d'un déménagement professionnel se situe entre **800 et 2 500 €**. Pourtant, les écarts de prix entre devis peuvent atteindre 100 % pour la même prestation. Volume à transporter, distance, étage, accessibilité, période de l'année : de nombreux facteurs influencent la facture. Ce guide vous donne les **tarifs réels des déménageurs professionnels en 2026** pour vous aider à comparer les devis en toute connaissance de cause. Pour trouver un déménageur de confiance près de chez vous, consultez notre annuaire vérifié.",
 
       '## Tarifs en 2026',
 
@@ -63,7 +63,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       '## Trouver un professionnel près de chez vous',
 
       'Comparez les devis de déménageurs certifiés dans votre ville :',
-      '- [Déménageur à Paris](/services/demenageur/paris)\n- [Déménageur à Lyon](/services/demenageur/lyon)\n- [Déménageur à Marseille](/services/demenageur/marseille)\n- [Déménageur à Toulouse](/services/demenageur/toulouse)\n- [Déménageur à Bordeaux](/services/demenageur/bordeaux)\n- [Déménageur à Nice](/services/demenageur/nice)\n- [Déménageur à Nantes](/services/demenageur/nantes)\n- [Déménageur à Strasbourg](/services/demenageur/strasbourg)\n- [Déménageur à Montpellier](/services/demenageur/montpellier)\n- [Déménageur à Lille](/services/demenageur/lille)',
+      '- Déménageur à Paris\n- Déménageur à Lyon\n- Déménageur à Marseille\n- Déménageur à Toulouse\n- Déménageur à Bordeaux\n- Déménageur à Nice\n- Déménageur à Nantes\n- Déménageur à Strasbourg\n- Déménageur à Montpellier\n- Déménageur à Lille',
 
       'Au-delà du budget, le choix du professionnel est déterminant pour la qualité du chantier. Consultez notre [guide pour choisir son déménageur](/blog/comment-choisir-demenageur-guide) afin de sélectionner un artisan fiable et qualifié.',
 

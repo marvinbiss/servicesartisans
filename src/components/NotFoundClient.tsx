@@ -14,21 +14,20 @@ interface Suggestion {
   label: string
 }
 
-/** Known service keyword → slug mappings */
+/** Known service keyword → slug mappings.
+ *  Pivot full RGE 2026-05-03 : retrait des 4 commodity services (serrurier,
+ *  vitrier, carreleur, cuisiniste). Leurs URLs `/services/{slug}` retournent
+ *  410 via gone-paths.ts → ne plus suggérer de tels slugs depuis le 404. */
 const SERVICE_KEYWORDS: Record<string, { slug: string; label: string }> = {
   plomb: { slug: 'plombier', label: 'Plombier' },
   electr: { slug: 'electricien', label: 'Électricien' },
-  serrur: { slug: 'serrurier', label: 'Serrurier' },
   chauffag: { slug: 'chauffagiste', label: 'Chauffagiste' },
   peint: { slug: 'peintre-en-batiment', label: 'Peintre en bâtiment' },
   menuisi: { slug: 'menuisier', label: 'Menuisier' },
-  carrel: { slug: 'carreleur', label: 'Carreleur' },
   couv: { slug: 'couvreur', label: 'Couvreur' },
   macon: { slug: 'macon', label: 'Maçon' },
   maçon: { slug: 'macon', label: 'Maçon' },
-  vitr: { slug: 'vitrier', label: 'Vitrier' },
   climat: { slug: 'climaticien', label: 'Climaticien' },
-  cuisin: { slug: 'cuisiniste', label: 'Cuisiniste' },
   charpent: { slug: 'charpentier', label: 'Charpentier' },
   ravalement: { slug: 'facadier', label: 'Façadier' },
   facade: { slug: 'facadier', label: 'Façadier' },
@@ -36,8 +35,8 @@ const SERVICE_KEYWORDS: Record<string, { slug: string; label: string }> = {
   isolation: { slug: 'isolation-thermique', label: 'Isolation thermique' },
   solaire: { slug: 'panneaux-solaires', label: 'Panneaux solaires' },
   ramone: { slug: 'ramoneur', label: 'Ramoneur' },
-  // Pivot pure-play BTP énergétique 2026-05-02 :
-  // jardin/nettoy/demenag/alarme retirés (services hors thèse).
+  // Pivot pure-play BTP énergétique 2026-05-02 : jardin/nettoy/demenag/alarme retirés.
+  // Pivot full RGE 2026-05-03 : serrur/vitr/carrel/cuisin retirés.
 }
 
 /** Well-known city names (top ~30 for fast matching) */
@@ -228,10 +227,10 @@ export default function NotFoundClient() {
                 Électricien
               </Link>
               <Link
-                href="/services/serrurier"
+                href="/services/chauffagiste"
                 className="text-sm bg-sand-100 hover:bg-primary-100 text-charcoal-700 hover:text-primary-600 px-3 py-1.5 rounded-full transition-colors"
               >
-                Serrurier
+                Chauffagiste
               </Link>
             </div>
           </div>

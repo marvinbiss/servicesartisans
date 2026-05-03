@@ -148,7 +148,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       'Un sol parfaitement plan est la condition numéro un : un ragréage est nécessaire si le dénivelé dépasse 3 mm sous une règle de 2 mètres.',
       'Le double encollage (colle sur le sol ET sur le carreau) est obligatoire pour les formats supérieurs à 30 × 30 cm afin de garantir une adhérence totale.',
       'Les croisillons garantissent des joints réguliers — choisissez 2 mm pour un rendu moderne ou 5 mm pour un style plus rustique.',
-      "Pour les pièces humides ou les grandes surfaces, faites appel à un [carreleur professionnel](/services/carreleur) pour une pose dans les règles de l'art.",
+      "Pour les pièces humides ou les grandes surfaces, faites appel à un carreleur professionnel pour une pose dans les règles de l'art.",
     ],
     faq: [
       {
@@ -192,7 +192,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       '## Étape 6 — Quand faire appel à un carreleur professionnel',
 
-      "Certains chantiers dépassent les compétences du bricoleur occasionnel. Faites appel à un [carreleur professionnel](/services/carreleur) pour : les pièces humides nécessitant une étanchéité (douche à l'italienne, salle de bain), les grands formats (60 × 60 cm ou plus), les poses en diagonale ou en chevron, les sols chauffants, ou les surfaces dépassant 30 m². Un carreleur professionnel facture entre 30 et 60 euros/m² (pose et fournitures), mais garantit un résultat durable et conforme aux normes.",
+      "Certains chantiers dépassent les compétences du bricoleur occasionnel. Faites appel à un carreleur professionnel pour : les pièces humides nécessitant une étanchéité (douche à l'italienne, salle de bain), les grands formats (60 × 60 cm ou plus), les poses en diagonale ou en chevron, les sols chauffants, ou les surfaces dépassant 30 m². Un carreleur professionnel facture entre 30 et 60 euros/m² (pose et fournitures), mais garantit un résultat durable et conforme aux normes.",
     ],
   },
 
@@ -754,7 +754,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       {
         question: 'Quand faut-il remplacer les fenêtres ?',
         answer:
-          "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/services/menuisier) ou un [vitrier](/services/vitrier) pour un devis. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût.",
+          "Le remplacement est recommandé si vos fenêtres sont en simple vitrage, si le cadre est déformé ou pourri (bois) ou si les joints d'étanchéité entre le vitrage et le cadre sont défaillants. Faites appel à un [menuisier](/services/menuisier) ou un vitrier pour un devis. Des aides financières (MaPrimeRénov', CEE) peuvent couvrir une partie du coût.",
       },
       {
         question: 'Combien peut-on économiser en isolant ses fenêtres ?',
@@ -787,7 +787,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       '## Étape 6 — Quand envisager le remplacement des fenêtres',
 
-      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/services/menuisier) ou un [vitrier](/services/vitrier) pour un devis. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant.",
+      "Les solutions de calfeutrage sont efficaces mais temporaires. Si vos fenêtres sont en simple vitrage, très anciennes (plus de 30 ans) ou si le cadre est dégradé, le remplacement par du double ou triple vitrage est la solution définitive. Faites appel à un [menuisier](/services/menuisier) ou un vitrier pour un devis. Le coût moyen est de 300 à 800 euros par fenêtre (pose comprise), mais les aides financières (MaPrimeRénov', certificats d'économies d'énergie) peuvent couvrir 30 à 50 % du montant.",
     ],
   },
 

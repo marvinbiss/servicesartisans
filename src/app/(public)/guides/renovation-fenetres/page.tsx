@@ -135,11 +135,12 @@ const typesOuverture = [
   },
 ]
 
+// Pivot full RGE 2026-05-03 : vitrier retiré (410). Link vers /devis.
 const services = [
   { label: 'Menuisier', href: '/services/menuisier', icon: Hammer },
-  { label: 'Vitrier', href: '/services/vitrier', icon: Home },
+  { label: 'Vitrier', href: '/devis', icon: Home },
   { label: 'Isolation', href: '/services/isolation-thermique', icon: Building2 },
-  { label: 'Peintre', href: '/services/peintre', icon: Hammer },
+  { label: 'Peintre', href: '/services/peintre-en-batiment', icon: Hammer },
   { label: 'Maçon', href: '/services/macon', icon: Building2 },
 ]
 

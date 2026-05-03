@@ -308,12 +308,14 @@ const tendances2026 = [
   },
 ]
 
+// Pivot full RGE 2026-05-03 : cuisiniste + carreleur retirés (gone-paths
+// 410). On conserve les labels visuels mais on link vers /devis générique.
 const services = [
-  { label: 'Cuisiniste', href: '/services/cuisiniste', icon: ChefHat },
+  { label: 'Cuisiniste', href: '/devis', icon: ChefHat },
   { label: 'Plombier', href: '/services/plombier', icon: Wrench },
   { label: 'Électricien', href: '/services/electricien', icon: Zap },
-  { label: 'Carreleur', href: '/services/carreleur', icon: Hammer },
-  { label: 'Peintre', href: '/services/peintre', icon: Home },
+  { label: 'Carreleur', href: '/devis', icon: Hammer },
+  { label: 'Peintre', href: '/services/peintre-en-batiment', icon: Home },
 ]
 
 const faqItems = [

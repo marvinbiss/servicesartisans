@@ -9,7 +9,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs serrurier 2026 : ouverture porte 80-150€, serrure 3 points 250-850€, blindage 600-1 200€. Prix réels + guide anti-arnaque.',
     content: [
-      "La serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales selon la DGCCRF : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. Ce guide détaille les **vrais prix du marché** en 2026 pour chaque type d'intervention. Pour trouver un [serrurier de confiance près de chez vous](/services/serrurier), consultez notre annuaire vérifié.",
+      "La serrurerie est l'un des secteurs les plus touchés par les pratiques commerciales déloyales selon la DGCCRF : des factures de 800 à 1 500 € pour une simple ouverture de porte ne sont pas rares. Ce guide détaille les **vrais prix du marché** en 2026 pour chaque type d'intervention. Pour trouver un serrurier de confiance près de chez vous, consultez notre annuaire vérifié.",
 
       "## Les tarifs horaires d'un serrurier en 2026",
 
@@ -100,7 +100,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Nos conseils pour économiser',
 
       '### Planifier plutôt que subir',
-      "Privilégiez les interventions en semaine et en journée pour éviter les majorations de 50 à 100 %. Identifiez un [serrurier de confiance à Paris](/services/serrurier/paris) ou dans votre ville **avant** d'en avoir besoin et conservez ses coordonnées dans votre téléphone.",
+      "Privilégiez les interventions en semaine et en journée pour éviter les majorations de 50 à 100 %. Identifiez un serrurier de confiance à Paris ou dans votre ville **avant** d'en avoir besoin et conservez ses coordonnées dans votre téléphone.",
 
       '### Comparer et négocier',
       'Comparez au moins **trois devis** avant de vous engager pour tout projet non urgent (changement de serrure, blindage). Les écarts de prix peuvent atteindre 40 % entre deux artisans pour la même prestation.',
@@ -506,7 +506,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Tarifs carreleur 2026 : pose sol 30-70€/m², faïence 40-80€/m², terrasse 50-100€/m². Prix réels fourniture + main-d'œuvre.",
     content: [
-      "Vous rêvez d'une salle de bain moderne avec du carrelage grand format, ou d'une terrasse en grès cérame imitation bois ? Le carrelage demeure l'un des revêtements les plus prisés en France grâce à sa durabilité exceptionnelle (30 ans et plus), sa facilité d'entretien et la diversité infinie de ses finitions. Mais entre le prix du carrelage lui-même, la préparation du support et la main-d'œuvre, la facture peut rapidement grimper. En 2026, il est indispensable de connaître les tarifs pratiqués pour éviter les mauvaises surprises et **budgéter votre projet avec précision**. Trouvez un [carreleur professionnel près de chez vous](/services/carreleur) pour obtenir des devis détaillés.",
+      "Vous rêvez d'une salle de bain moderne avec du carrelage grand format, ou d'une terrasse en grès cérame imitation bois ? Le carrelage demeure l'un des revêtements les plus prisés en France grâce à sa durabilité exceptionnelle (30 ans et plus), sa facilité d'entretien et la diversité infinie de ses finitions. Mais entre le prix du carrelage lui-même, la préparation du support et la main-d'œuvre, la facture peut rapidement grimper. En 2026, il est indispensable de connaître les tarifs pratiqués pour éviter les mauvaises surprises et **budgéter votre projet avec précision**. Trouvez un carreleur professionnel près de chez vous pour obtenir des devis détaillés.",
 
       "## Tarif horaire d'un carreleur",
 
@@ -558,7 +558,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       "Le carrelage sur plots, de plus en plus populaire, revient à **50 – 100 €/m²** avec les plots inclus. Cette technique ne nécessite pas de dalle béton et facilite l'accès aux réseaux enterrés.",
 
       '### Budget global terrasse',
-      'Prévoyez un budget global de **80 à 180 €/m²** fourniture et pose comprises pour une terrasse carrelée en grès cérame de forte épaisseur (20 mm). Demandez conseil à un [carreleur à Marseille](/services/carreleur/marseille) ou dans votre région pour le choix des matériaux adaptés à votre climat.',
+      'Prévoyez un budget global de **80 à 180 €/m²** fourniture et pose comprises pour une terrasse carrelée en grès cérame de forte épaisseur (20 mm). Demandez conseil à un carreleur à Marseille ou dans votre région pour le choix des matériaux adaptés à votre climat.',
 
       '## Variations régionales',
 
@@ -816,7 +816,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Tarifs jardinier 2026 : tonte 30-80€, élagage 200-1 500€, création jardin 50-150€/m². Crédit d'impôt 50%. Comparez 3 devis gratuits.",
     content: [
-      "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez les devis de [jardiniers et paysagistes près de chez vous](/services/jardinier).",
+      "Votre jardin ressemble plus à une jungle qu'à un espace de détente ? Vous rêvez d'une terrasse paysagée, d'un potager structuré ou simplement d'une pelouse impeccable ? Un jardin bien entretenu valorise votre patrimoine immobilier de **5 à 20 %** selon les professionnels de l'immobilier. Mais entre un simple entretien et un aménagement paysager complet, les tarifs varient du simple au décuple. Ce guide 2026 vous donne toutes les clés pour **budgéter précisément vos travaux d'extérieur** et profiter du crédit d'impôt de 50 %. Comparez les devis de jardiniers et paysagistes près de chez vous.",
 
       "## Tarif horaire d'un jardinier",
 
@@ -857,7 +857,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '- **Arbres et arbustes** : 30 – 150 € par sujet selon la taille\n- **Massif fleuri** : 25 – 80 €/m²\n- **Haie vive** (fourniture et plantation) : 15 – 40 €/ml',
 
       '### Aménagement paysager complet',
-      'Un aménagement paysager complet (conception, terrassement, plantation, arrosage automatique, éclairage) se situe entre **50 et 150 €/m²** pour un jardin de taille moyenne. Pour un jardin de 200 m², prévoyez un budget de **10 000 à 30 000 €**. Un [paysagiste professionnel](/services/paysagiste) peut concevoir un plan sur mesure adapté à votre terrain et votre budget.',
+      'Un aménagement paysager complet (conception, terrassement, plantation, arrosage automatique, éclairage) se situe entre **50 et 150 €/m²** pour un jardin de taille moyenne. Pour un jardin de 200 m², prévoyez un budget de **10 000 à 30 000 €**. Un paysagiste professionnel peut concevoir un plan sur mesure adapté à votre terrain et votre budget.',
 
       '## Arrosage automatique',
 
@@ -966,7 +966,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs vitrier 2026 : vitre simple 60-150€, double vitrage 100-350€/m², urgence +50%. Prix réels + devis gratuit en 2 min.',
     content: [
-      "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un [vitrier qualifié dans votre ville](/services/vitrier) pour un devis rapide.",
+      "Une vitre brisée par un ballon de football, une tentative d'effraction qui a fissuré votre double vitrage, ou simplement des fenêtres anciennes qui laissent passer le froid : les raisons de faire appel à un vitrier sont nombreuses. Mais combien cela coûte-t-il réellement ? En 2026, le marché de la vitrerie est porté par les exigences croissantes en matière d'isolation thermique et acoustique, avec des technologies de vitrage toujours plus performantes. Ce guide complet vous donne les **prix réels** pour chaque type d'intervention, de l'urgence au projet de rénovation énergétique. Trouvez un vitrier qualifié dans votre ville pour un devis rapide.",
 
       "## Tarif horaire d'un vitrier",
 
@@ -988,7 +988,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       ':::budget\n| Type de vitrage | Prix fourni-posé/m² | Coefficient Ug | Usage recommandé |\n| Double vitrage standard (4/16/4) | 100 – 250 € | 1,1 W/m².K | Standard toute façade |\n| Double VIR gaz argon | 150 – 350 € | 1,0 W/m².K | Rénovation énergétique |\n| Triple vitrage | 200 – 450 € | 0,5 – 0,7 W/m².K | Façade nord, régions froides |\n| Vitrage acoustique feuilleté | 180 – 400 € | 1,1 W/m².K | Bord de route, centre-ville |\n:::',
 
       '### Remplacement du vitrage seul vs fenêtre complète',
-      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un [vitrier-vitrier à Paris](/services/vitrier/paris) pour un devis sur mesure.",
+      "Ces prix s'entendent **hors remplacement du châssis** de la fenêtre. Le remplacement du vitrage seul (si le châssis est en bon état) est 40 à 60 % moins cher que le remplacement de la fenêtre complète. Consultez notre guide sur le [prix des fenêtres double vitrage](/blog/prix-fenetre-double-vitrage-2026) pour une comparaison détaillée, ou contactez un vitrier-vitrier à Paris pour un devis sur mesure.",
 
       ":::info Bon à savoir\nLe coefficient **Ug** mesure la performance thermique du vitrage seul (le « g » signifie « glass »). Plus il est bas, meilleure est l'isolation. Le **Uw** mesure la performance de la fenêtre complète (vitrage + châssis). Pour bénéficier des aides à la rénovation énergétique, c'est le Uw qui doit être inférieur ou égal à 1,3 W/m².K.\n:::",
 
@@ -1246,7 +1246,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Cuisine 2026 : entrée de gamme 3 000-6 000 €, milieu 6 000-15 000 €, haut de gamme 15 000 €+. Détail pose, plan de travail, électroménager. Devis 2 min.',
     content: [
-      "La cuisine est la pièce que vous utilisez 3 à 5 heures par jour, tous les jours. C'est aussi celle dont la rénovation génère le **meilleur retour sur investissement** : une cuisine refaite augmente la valeur d'un bien de 10 à 15 % selon les agents immobiliers. Mais entre une cuisine en kit à 3 000 € et un aménagement sur mesure à 40 000 €, comment s'y retrouver ? En 2026, les prix varient considérablement selon le niveau de gamme, les matériaux et la complexité de l'installation. Ce guide vous aide à **budgéter chaque poste** avec précision. Consultez notre annuaire de [cuisinistes professionnels](/services/cuisiniste) pour comparer les offres.",
+      "La cuisine est la pièce que vous utilisez 3 à 5 heures par jour, tous les jours. C'est aussi celle dont la rénovation génère le **meilleur retour sur investissement** : une cuisine refaite augmente la valeur d'un bien de 10 à 15 % selon les agents immobiliers. Mais entre une cuisine en kit à 3 000 € et un aménagement sur mesure à 40 000 €, comment s'y retrouver ? En 2026, les prix varient considérablement selon le niveau de gamme, les matériaux et la complexité de l'installation. Ce guide vous aide à **budgéter chaque poste** avec précision. Consultez notre annuaire de cuisinistes professionnels pour comparer les offres.",
 
       '## Les gammes de prix en 2026',
 
@@ -1286,7 +1286,7 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       '## Variations régionales',
 
-      'Les cuisinistes parisiens pratiquent des tarifs **20 à 35 %** supérieurs à la moyenne nationale. Les grandes villes de province se situent **10 à 15 %** au-dessus. Les zones rurales offrent des tarifs plus compétitifs, mais le choix de [cuisinistes qualifiés](/services/cuisiniste) peut être limité. Consultez aussi notre [guide pour choisir un cuisiniste](/blog/comment-choisir-cuisiniste-guide).',
+      'Les cuisinistes parisiens pratiquent des tarifs **20 à 35 %** supérieurs à la moyenne nationale. Les grandes villes de province se situent **10 à 15 %** au-dessus. Les zones rurales offrent des tarifs plus compétitifs, mais le choix de cuisinistes qualifiés peut être limité. Consultez aussi notre [guide pour choisir un cuisiniste](/blog/comment-choisir-cuisiniste-guide).',
 
       '## Nos conseils pour économiser',
 
@@ -1344,7 +1344,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Tarifs nettoyage 2026 : ménage 20-45€/h, fin de chantier 3-10€/m², copropriété 150-700€. Crédit d'impôt 50%. Devis gratuit.",
     content: [
-      "Votre chantier de rénovation est terminé mais l'appartement est recouvert d'une fine couche de poussière de plâtre ? Votre copropriété cherche un prestataire fiable pour l'entretien des parties communes ? Ou vous souhaitez simplement un ménage régulier sans vous ruiner ? Le nettoyage professionnel répond à des besoins variés, et les prix oscillent entre **20 et 70 € de l'heure** selon la prestation. Bonne nouvelle : le ménage à domicile bénéficie d'un **crédit d'impôt de 50 %**, ce qui divise la facture par deux. Trouvez une [entreprise de nettoyage professionnelle](/services/nettoyage) sur notre annuaire. Voici tous les tarifs 2026 détaillés.",
+      "Votre chantier de rénovation est terminé mais l'appartement est recouvert d'une fine couche de poussière de plâtre ? Votre copropriété cherche un prestataire fiable pour l'entretien des parties communes ? Ou vous souhaitez simplement un ménage régulier sans vous ruiner ? Le nettoyage professionnel répond à des besoins variés, et les prix oscillent entre **20 et 70 € de l'heure** selon la prestation. Bonne nouvelle : le ménage à domicile bénéficie d'un **crédit d'impôt de 50 %**, ce qui divise la facture par deux. Trouvez une entreprise de nettoyage professionnelle sur notre annuaire. Voici tous les tarifs 2026 détaillés.",
 
       '## Tarif horaire du nettoyage professionnel',
 
@@ -1516,7 +1516,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Prix extension 2026 : combles 600-1 500€/m², maçonnerie 1 200-2 200€/m², bois 1 400-2 500€/m², surélévation 1 800-3 000€/m². Devis gratuit.',
     content: [
-      "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au [déménagement](/services/demenageur). Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
+      "Votre famille s'agrandit, vous avez besoin d'un bureau pour le télétravail, ou vous rêvez d'une suite parentale avec salle de bain ? Face à la hausse des prix de l'immobilier, l'extension de maison constitue une alternative séduisante au déménagement. Gagner **20 à 40 m² habitables** coûte souvent moins cher qu'acheter plus grand (et sans frais de notaire !). En 2026, les solutions se diversifient. Ce guide vous aide à **chiffrer précisément** votre projet.",
 
       '## Extension traditionnelle en parpaing ou brique',
 
@@ -1686,7 +1686,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs terrasse 2026 : bois 40-200€/m², composite 80-180€/m², béton 40-150€/m², pierre 80-250€/m². Comparez les devis gratuits.',
     content: [
-      'Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **3 à 10 %** selon la région et le type de bien (source : Notaires de France). Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts. Consultez un [paysagiste professionnel](/services/paysagiste) pour concevoir un projet harmonieux.',
+      'Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **3 à 10 %** selon la région et le type de bien (source : Notaires de France). Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts. Consultez un paysagiste professionnel pour concevoir un projet harmonieux.',
       '## Terrasse en bois naturel',
       'Le bois reste le matériau le plus apprécié pour les terrasses grâce à son esthétique chaleureuse. Le pin traité autoclave (classe 4) coûte entre 40 et 80 €/m² fourni-posé. Le bois exotique (ipé, cumaru, teck) revient de 100 à 200 €/m². Le mélèze et le douglas se situent entre 60 et 120 €/m². La durée de vie varie de 15 ans (pin traité) à 40 ans et plus (ipé) avec un entretien régulier.',
       '## Terrasse en composite',
@@ -1754,7 +1754,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs clôture 2026 : grillage 15-70€/ml, PVC 60-150€/ml, alu 100-300€/ml. Portail 700-8 000€. Comparez 3 devis gratuits.',
     content: [
-      "Clôturer sa propriété et installer un portail répondent à des besoins de sécurité, d'intimité et d'esthétique. En 2026, le choix de matériaux est vaste et les prix varient considérablement d'une solution à l'autre. Du simple grillage au portail motorisé en aluminium sur mesure, ce guide vous aide à chiffrer précisément votre projet de clôture. Faites appel à un [métallier](/services/serrurier) pour des réalisations sur mesure.",
+      "Clôturer sa propriété et installer un portail répondent à des besoins de sécurité, d'intimité et d'esthétique. En 2026, le choix de matériaux est vaste et les prix varient considérablement d'une solution à l'autre. Du simple grillage au portail motorisé en aluminium sur mesure, ce guide vous aide à chiffrer précisément votre projet de clôture. Faites appel à un métallier pour des réalisations sur mesure.",
       '## Clôture en grillage',
       'Le grillage souple (type simple torsion) constitue la solution la plus économique : 15 à 30 €/ml fourni-posé, poteaux inclus. Le grillage rigide en panneaux soudés coûte entre 30 et 70 €/ml. Le grillage avec occultant (lamelles PVC ou brande de bruyère) revient de 40 à 90 €/ml. Ces prix incluent les poteaux, le scellement et la pose mais pas le terrassement éventuel.',
       '## Clôture en PVC et composite',
@@ -1762,7 +1762,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Clôture en bois',
       "La clôture en bois (pin traité, châtaignier) coûte entre 50 et 120 €/ml. Le claustra en bois ajouré se situe entre 80 et 200 €/ml. La palissade en bois pleine revient de 70 à 180 €/ml. Le ganivelle (clôture de châtaignier fendu), typique des régions côtières, coûte entre 25 et 60 €/ml. L'entretien (lasure ou saturateur) doit être renouvelé tous les 2 à 3 ans.",
       '## Clôture en aluminium et fer forgé',
-      "L'aluminium, sans entretien et disponible dans de nombreux coloris, coûte entre 100 et 300 €/ml. Le fer forgé artisanal réalisé par un [serrurier (métallerie)](/services/serrurier), choix haut de gamme par excellence, revient de 200 à 600 €/ml selon la complexité des motifs. Les barreaudages en aluminium ou acier thermolaqué se situent entre 80 et 200 €/ml.",
+      "L'aluminium, sans entretien et disponible dans de nombreux coloris, coûte entre 100 et 300 €/ml. Le fer forgé artisanal réalisé par un serrurier (métallerie), choix haut de gamme par excellence, revient de 200 à 600 €/ml selon la complexité des motifs. Les barreaudages en aluminium ou acier thermolaqué se situent entre 80 et 200 €/ml.",
       '## Murs de clôture',
       'Le muret en parpaings enduit coûte entre 100 et 200 €/ml (hauteur 1 m). Le mur en pierre reconstituée revient de 150 à 350 €/ml. Le mur en gabions (cages métalliques remplies de pierres) se situe entre 100 à 250 €/ml. Le muret surmonté de lames (bois, alu ou composite) est une solution intermédiaire très esthétique, de 150 à 350 €/ml.',
       '## Portails : les prix',
@@ -1843,7 +1843,7 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ":::tip Conseil pro\nRemplacez **toutes vos fenêtres en même temps** pour bénéficier d'un tarif dégressif (économie de 10 à 20 %). Faites poser **en automne ou en hiver**, période creuse où les artisans proposent des tarifs plus avantageux et sont plus disponibles. Le PVC offre le meilleur rapport performance/prix pour 80 % des projets.\n:::",
 
-      "1. Vérifiez que l'artisan est certifié **RGE** pour bénéficier des aides\n2. Comparez au minimum **trois devis** détaillés avec coefficient Uw\n3. Privilégiez la **dépose totale** pour de meilleures performances\n4. Consultez un [vitrier professionnel](/services/vitrier) ou notre guide du [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitrage seul",
+      "1. Vérifiez que l'artisan est certifié **RGE** pour bénéficier des aides\n2. Comparez au minimum **trois devis** détaillés avec coefficient Uw\n3. Privilégiez la **dépose totale** pour de meilleures performances\n4. Consultez un vitrier professionnel ou notre guide du [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitrage seul",
 
       ":::info Bon à savoir\nLe remplacement de fenêtres est l'un des travaux de rénovation énergétique les plus **rentables** : retour sur investissement en **10 à 20 ans** selon les aides obtenues, le type de logement et les économies réalisées (10 à 15 % de la facture de chauffage). L'investissement se justifie aussi par le confort acoustique, la valorisation du bien et les obligations réglementaires futures. C'est aussi l'un des plus simples à mettre en œuvre (1 à 2 heures par fenêtre en pose rénovation).\n:::",
 

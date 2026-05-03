@@ -9,7 +9,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez toutes les étapes pour rénover votre cuisine en 2026. Budget 5 000-25 000 €. Obtenez un devis gratuit cuisiniste.',
     content: [
-      "La cuisine est le cœur de la maison. Sa rénovation est l'un des projets les plus valorisants pour un logement, mais aussi l'un des plus complexes à orchestrer. Entre la plomberie, l'électricité, l'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un [cuisiniste professionnel](/services/cuisiniste) pour concevoir votre projet.",
+      "La cuisine est le cœur de la maison. Sa rénovation est l'un des projets les plus valorisants pour un logement, mais aussi l'un des plus complexes à orchestrer. Entre la plomberie, l'électricité, l'agencement et les finitions, chaque étape doit être pensée dans le bon ordre pour éviter les reprises coûteuses. Trouvez un cuisiniste professionnel pour concevoir votre projet.",
       '## 1. Définir le projet et le budget',
       "Avant de contacter le moindre artisan, posez-vous les bonnes questions : s'agit-il d'un simple rafraîchissement (peinture, crédence, plan de travail) ou d'une rénovation complète avec modification des réseaux ? Le budget moyen d'une rénovation de cuisine se situe entre 5 000 et 25 000 euros selon l'ampleur des travaux. Prévoyez une marge de 10 à 15 % pour les imprévus.",
       "## 2. Concevoir l'agencement",
@@ -290,7 +290,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
       '## 5. Assurer la ventilation',
       "Une salle de bain sous combles nécessite impérativement une ventilation mécanique. La VMC simple flux hygroréglable est le minimum. Pour une performance optimale, raccordez la pièce à une VMC double flux si votre logement en est équipé. Prévoyez une bouche d'extraction de débit 30 m³/h minimum.",
       '## 6. Éclairer intelligemment',
-      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d'un store occultant pour l'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un [vitrier](/services/vitrier) pour une finition impeccable.",
+      "La fenêtre de toit apporte une lumière naturelle incomparable. Choisissez un modèle à vitrage opaque ou équipé d'un store occultant pour l'intimité. Complétez avec un éclairage LED encastré (spots IP44 obligatoires au-dessus de la douche) et un miroir rétroéclairé au-dessus du lavabo, posé par un vitrier pour une finition impeccable.",
       '## 7. Habiller les murs et le sol',
       'Le carrelage grès cérame reste le choix le plus fiable pour le sol et les murs de la zone humide. Le PVC en lames clipsables offre une alternative économique et étanche. Évitez le parquet dans la zone de douche. Pour les parties sèches, le lambris hydrofuge ou la peinture anti-humidité conviennent parfaitement.',
       '## Budget détaillé',
@@ -341,7 +341,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comparez extension, surélévation et véranda pour agrandir votre maison en 2026. Budget et démarches. Obtenez un devis gratuit.',
     content: [
-      "Quand la famille s'agrandit ou que les besoins évoluent, l'agrandissement de la maison est souvent préférable à un [déménagement](/services/demenageur). Trois solutions s'offrent à vous : l'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
+      "Quand la famille s'agrandit ou que les besoins évoluent, l'agrandissement de la maison est souvent préférable à un déménagement. Trois solutions s'offrent à vous : l'extension latérale, la surélévation et la véranda. Chacune présente des avantages, des contraintes et des budgets très différents. Consultez un [maçon qualifié](/services/macon) pour évaluer la faisabilité.",
       "## L'extension latérale : la solution classique",
       "L'extension au sol est la plus courante. Elle permet de créer une ou plusieurs pièces en prolongement de la maison existante. Les matériaux possibles sont le parpaing (le plus économique), le bois (rapidité de mise en œuvre) ou l'ossature métallique (grandes portées). Budget : 1 200 à 2 500 euros/m² selon les matériaux et les finitions.",
       '## La surélévation : quand le terrain manque',
@@ -474,7 +474,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comparez bois, composite, pierre et carrelage pour votre terrasse 2026. Étapes et prix détaillés. Obtenez un devis gratuit.',
     content: [
-      "La terrasse extérieure prolonge l'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un [paysagiste](/services/paysagiste) pour la conception de votre projet.",
+      "La terrasse extérieure prolonge l'espace de vie de la maison et constitue un véritable atout pour la qualité de vie comme pour la valeur du bien. Encore faut-il choisir le bon matériau et respecter les règles de construction pour une terrasse durable et esthétique. Consultez un paysagiste pour la conception de votre projet.",
       '## 1. Définir le projet',
       "Quel usage pour votre terrasse ? Coin repas, espace détente, abord de piscine ? La surface minimale recommandée est de 10 à 12 m² pour un coin repas quatre personnes, et de 20 à 30 m² pour un espace polyvalent. La forme (rectangulaire, en L, arrondie) dépend de la configuration du terrain et de l'architecture de la maison.",
       '## 2. Les démarches administratives',
@@ -730,7 +730,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez les techniques de pose carrelage : droite, diagonale, chevrons. Évitez les erreurs courantes. Devis gratuit carreleur.',
     content: [
-      'Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un [carreleur professionnel](/services/carreleur) ou que vous posiez vous-même.',
+      'Le carrelage est le revêtement le plus résistant et le plus hygiénique pour les sols et les murs. Sa pose demande rigueur et méthode : un carrelage mal posé se fissure, se décolle et vieillit prématurément. Ce guide vous accompagne étape par étape, que vous fassiez appel à un carreleur professionnel ou que vous posiez vous-même.',
       '## 1. Choisir le bon carrelage',
       'Grès cérame pleine masse : le plus résistant (classement UPEC U4P4), idéal pour les pièces à fort passage. Grès cérame émaillé : large choix de décors, adapté aux pièces de vie. Faïence : réservée aux murs, fragile au choc. Terre cuite : aspect authentique, nécessite un traitement hydrofuge. Pierre naturelle : noble mais exigeante en entretien.',
       '## 2. Préparer le support',
@@ -862,7 +862,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez comment transformer votre jardin avec un paysagiste : conception, végétaux et éclairage. Prix 2026. Devis gratuit.',
     content: [
-      "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d'un aménagement paysager réussi. Trouvez un [paysagiste qualifié](/services/paysagiste) ou un [jardinier](/services/jardinier) près de chez vous.",
+      "Un jardin bien conçu est une pièce à vivre à part entière. Faire appel à un paysagiste permet de valoriser chaque mètre carré de votre extérieur tout en limitant les erreurs coûteuses. De la conception à la réalisation, voici les étapes d'un aménagement paysager réussi. Trouvez un paysagiste qualifié ou un jardinier près de chez vous.",
       '## 1. Définir ses besoins et ses envies',
       "Listez vos priorités : espace détente, coin repas, aire de jeux pour les enfants, potager, [piscine](/services/macon), massifs fleuris. Évaluez l'ensoleillement de chaque zone, la nature du sol (argileux, sableux, calcaire) et l'exposition au vent. Un jardin réussi combine esthétique, fonctionnalité et facilité d'entretien.",
       '## 2. Le plan de conception paysagère',
@@ -927,7 +927,7 @@ export const projetsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comparez portails battants et coulissants : motorisation, matériaux et budget 2026. Obtenez un devis gratuit installation.',
     content: [
-      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un [métallier](/services/serrurier) pour une réalisation sur mesure.",
+      "Le portail automatique allie confort, sécurité et esthétique. Il valorise l'entrée de votre propriété et vous évite de descendre de voiture par temps de pluie. Le marché propose des solutions adaptées à toutes les configurations de terrain et à tous les budgets. Consultez un métallier pour une réalisation sur mesure.",
       '## 1. Battant ou coulissant : le bon choix',
       "Le portail battant (deux vantaux qui s'ouvrent vers l'intérieur) est le plus traditionnel. Il nécessite un espace de débattement libre. Le portail coulissant (un vantail qui glisse latéralement sur un rail) est idéal pour les entrées en pente ou les espaces réduits. En terrain plat avec de la place, le battant est moins coûteux. En terrain contraint, le coulissant s'impose.",
       '## 2. Choisir le matériau',

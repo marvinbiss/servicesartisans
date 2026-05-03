@@ -186,7 +186,7 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
       {
         question: 'Faut-il un professionnel pour poser une crédence ?',
         answer:
-          'La pose d’une crédence en panneaux est accessible à tout bricoleur. La pose de carrelage nécessite un peu plus d’expérience (découpes, joints). Pour une crédence en verre trempé sur mesure ou une découpe autour de prises encastrées, un [carreleur](/services/carreleur) ou un cuisiniste professionnel garantira un résultat impeccable.',
+          'La pose d’une crédence en panneaux est accessible à tout bricoleur. La pose de carrelage nécessite un peu plus d’expérience (découpes, joints). Pour une crédence en verre trempé sur mesure ou une découpe autour de prises encastrées, un carreleur ou un cuisiniste professionnel garantira un résultat impeccable.',
       },
     ],
     content: [
@@ -200,7 +200,7 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
 
       '## Réaliser les découpes et finitions\n\nPour les prises électriques, tracez le contour sur le panneau ou le carreau et découpez avec une scie cloche (carrelage) ou une scie sauteuse (stratifié). Coupez toujours le courant avant de démonter les prises. Appliquez un joint silicone transparent ou assorti entre la crédence et le plan de travail : ce joint empêche l’eau de s’infiltrer derrière le plan. Utilisez un silicone alimentaire ou spécial cuisine résistant aux moisissures.',
 
-      '## Budget et recours à un professionnel\n\nLe coût total d’une crédence DIY varie selon le matériau : **50 à 150 €** pour du carrelage (3 m²), **80 à 200 €** pour du stratifié, **250 à 500 €** pour du verre trempé sur mesure. Ajoutez 20 à 40 € de colle, joints et silicone. Un professionnel facture **200 à 600 €** de main-d’œuvre selon la complexité. Pour les découpes délicates autour d’une plaque de cuisson encastrée ou les grandes surfaces de carrelage, un [carreleur expérimenté](/services/carreleur) garantira un alignement et des joints parfaits.',
+      '## Budget et recours à un professionnel\n\nLe coût total d’une crédence DIY varie selon le matériau : **50 à 150 €** pour du carrelage (3 m²), **80 à 200 €** pour du stratifié, **250 à 500 €** pour du verre trempé sur mesure. Ajoutez 20 à 40 € de colle, joints et silicone. Un professionnel facture **200 à 600 €** de main-d’œuvre selon la complexité. Pour les découpes délicates autour d’une plaque de cuisson encastrée ou les grandes surfaces de carrelage, un carreleur expérimenté garantira un alignement et des joints parfaits.',
     ],
   },
 

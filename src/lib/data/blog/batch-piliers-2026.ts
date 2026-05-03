@@ -534,7 +534,7 @@ Même si vous n'en avez pas besoin aujourd'hui, préparez la salle de bain pour 
 
 **Crédit d'impôt** : les équipements spécifiques pour personnes handicapées (siège de douche mural, barre d'appui) ouvrent droit à un crédit d'impôt de 25 % dans la limite de 5 000 € (personne seule) ou 10 000 € (couple).
 
-Pour trouver un [plombier qualifié](/services/plombier) ou un [carreleur expérimenté](/services/carreleur) près de chez vous, utilisez notre annuaire d'artisans vérifiés et recevez vos devis en 48h.`,
+Pour trouver un [plombier qualifié](/services/plombier) ou un carreleur expérimenté près de chez vous, utilisez notre annuaire d'artisans vérifiés et recevez vos devis en 48h.`,
 
       `## Sources et méthodologie
 

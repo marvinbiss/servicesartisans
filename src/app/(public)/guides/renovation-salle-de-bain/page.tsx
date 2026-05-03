@@ -221,12 +221,16 @@ const tendances = [
   },
 ]
 
+// Pivot full RGE 2026-05-03 : carreleur retiré (410). Link vers /devis.
+// `renovation-interieure` et `peintre` (slug court) ne sont pas dans
+// VALID_SERVICE_SLUGS — usage de slugs valides (renovation-energetique +
+// peintre-en-batiment).
 const services = [
   { label: 'Plombier', href: '/services/plombier', icon: Wrench },
-  { label: 'Carreleur', href: '/services/carreleur', icon: Hammer },
+  { label: 'Carreleur', href: '/devis', icon: Hammer },
   { label: 'Électricien', href: '/services/electricien', icon: Zap },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Home },
-  { label: 'Peintre', href: '/services/peintre', icon: Sparkles },
+  { label: 'Rénovation énergétique', href: '/services/renovation-energetique', icon: Home },
+  { label: 'Peintre', href: '/services/peintre-en-batiment', icon: Sparkles },
 ]
 
 const faqItems = [

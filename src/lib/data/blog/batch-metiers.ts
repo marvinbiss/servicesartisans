@@ -105,9 +105,9 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Comment trouver un serrurier honnête en urgence ? Les 5 signaux d'arnaque + réflexes anti-surfacturation. Tarifs réels inclus.",
     content: [
-      "La serrurerie est l'un des secteurs de l'artisanat les plus exposés aux arnaques. En situation d'urgence — porte claquée, clé cassée dans la serrure, cambriolage — le stress pousse à appeler le premier numéro trouvé sur internet, souvent à des tarifs astronomiques. Ce guide vous arme pour faire le bon choix, même dans l'urgence. Commencez par identifier un [serrurier de confiance](/services/serrurier) dès maintenant.",
+      "La serrurerie est l'un des secteurs de l'artisanat les plus exposés aux arnaques. En situation d'urgence — porte claquée, clé cassée dans la serrure, cambriolage — le stress pousse à appeler le premier numéro trouvé sur internet, souvent à des tarifs astronomiques. Ce guide vous arme pour faire le bon choix, même dans l'urgence. Commencez par identifier un serrurier de confiance dès maintenant.",
       "## Anticipez : trouvez votre serrurier avant l'urgence",
-      "Le meilleur conseil que l'on puisse vous donner est de repérer un serrurier de confiance avant d'en avoir besoin. Conservez ses coordonnées dans votre téléphone. Sur ServicesArtisans, vous pouvez identifier les [serruriers vérifiés à Lyon](/services/serrurier/lyon) ou dans votre quartier et consulter les avis de clients précédents. Un serrurier digne de ce nom détient au minimum un CAP Serrurier-métallier ou un diplôme équivalent. Le label A2P (Assurance Prévention Protection) délivré par le CNPP est un gage de sérieux supplémentaire.",
+      "Le meilleur conseil que l'on puisse vous donner est de repérer un serrurier de confiance avant d'en avoir besoin. Conservez ses coordonnées dans votre téléphone. Sur ServicesArtisans, vous pouvez identifier les serruriers vérifiés à Lyon ou dans votre quartier et consulter les avis de clients précédents. Un serrurier digne de ce nom détient au minimum un CAP Serrurier-métallier ou un diplôme équivalent. Le label A2P (Assurance Prévention Protection) délivré par le CNPP est un gage de sérieux supplémentaire.",
       '## Les tarifs normaux à connaître',
       'Pour éviter de vous faire piéger, connaissez les fourchettes de prix habituelles : une ouverture de porte simple (sans destruction) coûte entre 80 et 150 euros en journée. Un changement de serrure standard va de 100 à 300 euros selon le modèle. La majoration pour intervention de nuit ou le week-end est généralement de 50 à 80 %. Si un serrurier annonce 500 euros pour ouvrir une porte claquée, fuyez.',
       '## Les pièges classiques à éviter',
@@ -364,7 +364,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comment choisir un carreleur ? Qualifications, techniques, assurances : tout vérifier avant de signer. Exemples de pose + devis.',
     content: [
-      "Le carrelage est un revêtement exigeant qui ne pardonne pas l'à-peu-près. Une pose mal réalisée se voit immédiatement : joints irréguliers, carreaux décalés, planéité insuffisante. Le choix du carreleur est donc crucial pour un résultat esthétique et durable. Voici les critères à examiner attentivement. Comparez les profils de [carreleurs professionnels](/services/carreleur) sur notre annuaire.",
+      "Le carrelage est un revêtement exigeant qui ne pardonne pas l'à-peu-près. Une pose mal réalisée se voit immédiatement : joints irréguliers, carreaux décalés, planéité insuffisante. Le choix du carreleur est donc crucial pour un résultat esthétique et durable. Voici les critères à examiner attentivement. Comparez les profils de carreleurs professionnels sur notre annuaire.",
       '## Les qualifications professionnelles',
       "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage-revêtements est un gage de compétence supplémentaire. Pour les travaux en pièces humides (salle de bain, douche à l'italienne), vérifiez que l'artisan maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2. Demandez des photos de chantiers récents pour évaluer la régularité des joints et la finition des découpes.",
       "## Le devis : ce qu'il doit contenir",
@@ -550,7 +550,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Comment choisir un jardinier ou paysagiste ? Crédit d'impôt 50%, qualifications, contrat : les critères essentiels. Devis gratuit.",
     content: [
-      "Le jardinier paysagiste est bien plus qu'un simple tondeur de gazon. C'est un professionnel qui conçoit, aménage et entretient vos espaces extérieurs en tenant compte du sol, du climat, de l'exposition et de vos goûts. Bien choisi, il transforme votre jardin en un véritable prolongement de votre habitation. Trouvez un [jardinier](/services/jardinier) ou un [paysagiste](/services/paysagiste) de confiance près de chez vous.",
+      "Le jardinier paysagiste est bien plus qu'un simple tondeur de gazon. C'est un professionnel qui conçoit, aménage et entretient vos espaces extérieurs en tenant compte du sol, du climat, de l'exposition et de vos goûts. Bien choisi, il transforme votre jardin en un véritable prolongement de votre habitation. Trouvez un jardinier ou un paysagiste de confiance près de chez vous.",
       '## Jardinier ou paysagiste : quelle différence ?',
       "Le jardinier réalise principalement des travaux d'entretien : tonte, taille de haies, désherbage, plantation. Le paysagiste conçoit et réalise des aménagements plus élaborés : création de jardins, terrasses, allées, bassins, systèmes d'arrosage automatique. Certains professionnels cumulent les deux compétences. Identifiez clairement votre besoin avant de chercher.",
       '## Les qualifications à vérifier',
@@ -612,7 +612,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comment choisir un vitrier, y compris en urgence ? Certifications, tarifs normaux, pièges. Ne surpayez plus votre intervention.',
     content: [
-      "Qu'il s'agisse d'un bris de glace accidentel, d'une tentative d'effraction ou du remplacement de vos simples vitrages par du double vitrage performant, le vitrier est un artisan spécialisé dont l'intervention demande précision et rapidité. Comme pour la serrurerie, les situations d'urgence rendent le choix plus difficile. Identifiez un [vitrier de confiance](/services/vitrier) dès maintenant.",
+      "Qu'il s'agisse d'un bris de glace accidentel, d'une tentative d'effraction ou du remplacement de vos simples vitrages par du double vitrage performant, le vitrier est un artisan spécialisé dont l'intervention demande précision et rapidité. Comme pour la serrurerie, les situations d'urgence rendent le choix plus difficile. Identifiez un vitrier de confiance dès maintenant.",
       '## Qualifications et réflexes en urgence',
       "Un vitrier qualifié détient un CAP Menuisier-aluminium-verre ou un titre professionnel équivalent. En cas de bris de glace, sécurisez la zone, prenez des photos pour votre assurance et contactez un vitrier rapidement. En attendant l'intervention, protégez l'ouverture avec un panneau de contreplaqué ou un film plastique épais. Prévenez votre assurance habitation : le bris de glace est généralement couvert.",
       '## Les tarifs normaux à connaître',
@@ -624,7 +624,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
       '## Double vitrage, triple vitrage et vitrage de sécurité',
       'Le double vitrage à isolation renforcée (VIR) est le standard pour toute rénovation, avec un coefficient Ug de 1,1 W/m2.K environ. Le triple vitrage se justifie principalement pour les façades nord dans les régions froides ou les maisons passives. Pour les baies vitrées en rez-de-chaussée, les garde-corps et les verrières, le verre feuilleté de sécurité est obligatoire : il retient les éclats en cas de bris. Un bon vitrier vous conseille le vitrage adapté à chaque situation.',
       "## L'assurance bris de glace",
-      "La plupart des contrats d'assurance habitation couvrent le bris de glace, y compris les doubles et triples vitrages et les miroirs fixes posés par un [vitrier](/services/vitrier). Vérifiez votre contrat et signalez le sinistre dans les cinq jours ouvrés. Conservez les débris et prenez des photos avant toute intervention.",
+      "La plupart des contrats d'assurance habitation couvrent le bris de glace, y compris les doubles et triples vitrages et les miroirs fixes posés par un vitrier. Vérifiez votre contrat et signalez le sinistre dans les cinq jours ouvrés. Conservez les débris et prenez des photos avant toute intervention.",
       ":::warning Attention\nComme pour la serrurerie, le secteur de la vitrerie d'urgence attire des entreprises peu scrupuleuses. Méfiez-vous des vitriers qui ne mesurent pas précisément, qui proposent du simple vitrage en remplacement de double, qui ne mentionnent pas le coefficient **Ug**, ou qui facturent un « diagnostic » avant même de donner un devis.\n:::",
 
       ":::tip Conseil pro\nIdentifiez un vitrier de confiance **avant l'urgence**. En cas de bris de glace, sécurisez la zone, prenez des photos pour l'assurance, et protégez l'ouverture avec un panneau provisoire. Déclarez le sinistre dans les **5 jours ouvrés**. Privilégiez le **double vitrage VIR** pour toute rénovation.\n:::",
@@ -735,7 +735,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comment choisir un cuisiniste ? Conception 3D, matériaux, pose, SAV : les 7 critères pour une cuisine réussie. Comparez les devis.',
     content: [
-      "La cuisine est la pièce la plus technique et souvent la plus coûteuse à aménager dans un logement. Elle combine plomberie, électricité, ventilation, menuiserie et carrelage. Le choix du cuisiniste — qu'il s'agisse d'un indépendant, d'une enseigne spécialisée ou d'un artisan menuisier — a un impact majeur sur le résultat final et votre satisfaction au quotidien. Comparez les [cuisinistes professionnels](/services/cuisiniste) de votre région.",
+      "La cuisine est la pièce la plus technique et souvent la plus coûteuse à aménager dans un logement. Elle combine plomberie, électricité, ventilation, menuiserie et carrelage. Le choix du cuisiniste — qu'il s'agisse d'un indépendant, d'une enseigne spécialisée ou d'un artisan menuisier — a un impact majeur sur le résultat final et votre satisfaction au quotidien. Comparez les cuisinistes professionnels de votre région.",
       '## Cuisiniste indépendant, grande enseigne ou artisan',
       "Les grandes enseignes (Schmidt, SoCoo'c, Mobalpa) offrent un large choix de gammes et des outils de conception 3D performants, mais la qualité de la pose dépend du sous-traitant local. Le cuisiniste indépendant propose un accompagnement personnalisé de A à Z, avec souvent une meilleure maîtrise de la pose. L'artisan menuisier réalise du sur-mesure intégral mais à un budget supérieur.",
       "## La conception et le triangle d'activité",
@@ -797,7 +797,7 @@ export const metiersArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Comment choisir un service de nettoyage pro ? Agréments, assurances, contrat : les critères pour copropriétés et fin de chantier.',
     content: [
-      "Que ce soit pour l'entretien régulier de locaux professionnels, un nettoyage de fin de chantier ou l'entretien des parties communes d'une copropriété, le choix d'une entreprise de nettoyage compétente garantit un résultat impeccable et une relation de confiance sur la durée. Trouvez une [entreprise de nettoyage professionnelle](/services/nettoyage) sur notre annuaire.",
+      "Que ce soit pour l'entretien régulier de locaux professionnels, un nettoyage de fin de chantier ou l'entretien des parties communes d'une copropriété, le choix d'une entreprise de nettoyage compétente garantit un résultat impeccable et une relation de confiance sur la durée. Trouvez une entreprise de nettoyage professionnelle sur notre annuaire.",
       '## Les certifications et agréments',
       "La certification Qualipropre, délivrée par la Fédération des Entreprises de Propreté, est la référence du secteur. Elle atteste du respect des normes de qualité, de sécurité et d'environnement. Pour le nettoyage de sites sensibles (agro-alimentaire, médical), des certifications spécifiques existent. Avant de demander des devis, rédigez un cahier des charges précis : surfaces, fréquence, prestations détaillées, horaires et exigences particulières.",
       '## Le devis : les points de vigilance',

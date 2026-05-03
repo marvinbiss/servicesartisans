@@ -9,7 +9,7 @@ export const prixTechArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs alarme maison 2026 : alarme sans fil 400-1 800€, vidéosurveillance 800-3 500€, interphone 300-2 000€. Prix réels + guide complet.',
     content: [
-      "Protéger son domicile n'est plus un luxe mais une nécessité. En France, un cambriolage a lieu toutes les 90 secondes, soit plus de 230 000 par an selon le ministère de l'Intérieur. Face à cette réalité, le marché de la sécurité domestique a considérablement évolué : alarmes connectées, vidéosurveillance intelligente, contrôle d'accès biométrique. Les prix ont aussi changé, avec des solutions accessibles dès 300 € et des systèmes professionnels pouvant dépasser 10 000 €. Ce guide complet vous détaille les **tarifs réels du marché** en 2026, pour investir dans la bonne protection au juste prix. Trouvez un [spécialiste alarme et sécurité près de chez vous](/services/alarme-securite) pour obtenir un devis personnalisé.",
+      "Protéger son domicile n'est plus un luxe mais une nécessité. En France, un cambriolage a lieu toutes les 90 secondes, soit plus de 230 000 par an selon le ministère de l'Intérieur. Face à cette réalité, le marché de la sécurité domestique a considérablement évolué : alarmes connectées, vidéosurveillance intelligente, contrôle d'accès biométrique. Les prix ont aussi changé, avec des solutions accessibles dès 300 € et des systèmes professionnels pouvant dépasser 10 000 €. Ce guide complet vous détaille les **tarifs réels du marché** en 2026, pour investir dans la bonne protection au juste prix. Trouvez un spécialiste alarme et sécurité près de chez vous pour obtenir un devis personnalisé.",
 
       '## Tarifs en 2026',
 
@@ -74,7 +74,7 @@ export const prixTechArticles: Record<string, BlogArticle> = {
 
       '## Trouver un spécialiste alarme et sécurité près de chez vous',
 
-      'Consultez notre annuaire pour trouver un installateur alarme et sécurité qualifié dans votre ville :\n\n- [Alarme et sécurité à Paris](/services/alarme-securite/paris)\n- [Alarme et sécurité à Lyon](/services/alarme-securite/lyon)\n- [Alarme et sécurité à Marseille](/services/alarme-securite/marseille)\n- [Alarme et sécurité à Toulouse](/services/alarme-securite/toulouse)\n- [Alarme et sécurité à Bordeaux](/services/alarme-securite/bordeaux)\n- [Alarme et sécurité à Nantes](/services/alarme-securite/nantes)\n- [Alarme et sécurité à Lille](/services/alarme-securite/lille)\n- [Alarme et sécurité à Strasbourg](/services/alarme-securite/strasbourg)\n- [Alarme et sécurité à Nice](/services/alarme-securite/nice)\n- [Alarme et sécurité à Montpellier](/services/alarme-securite/montpellier)',
+      'Consultez notre annuaire pour trouver un installateur alarme et sécurité qualifié dans votre ville :\n\n- Alarme et sécurité à Paris\n- Alarme et sécurité à Lyon\n- Alarme et sécurité à Marseille\n- Alarme et sécurité à Toulouse\n- Alarme et sécurité à Bordeaux\n- Alarme et sécurité à Nantes\n- Alarme et sécurité à Lille\n- Alarme et sécurité à Strasbourg\n- Alarme et sécurité à Nice\n- Alarme et sécurité à Montpellier',
 
       'À lire aussi : notre guide complet sur les [guide alarme maison](/blog/alarme-maison-guide-complet-2026) pour compléter votre recherche.',
 

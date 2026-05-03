@@ -36,7 +36,7 @@ const transformations = [
     budget: '8 000 – 15 000 €',
     duree: '2 – 3 semaines',
     artisans: ['Plombier', 'Carreleur', 'Électricien'],
-    services: ['/services/plombier', '/services/carreleur', '/services/electricien'],
+    services: ['/services/plombier', '/devis', '/services/electricien'],
   },
   {
     title: 'Cuisine ouverte sur séjour',
@@ -47,12 +47,7 @@ const transformations = [
     budget: '15 000 – 30 000 €',
     duree: '4 – 6 semaines',
     artisans: ['Maçon', 'Cuisiniste', 'Plombier', 'Électricien'],
-    services: [
-      '/services/macon',
-      '/services/cuisiniste',
-      '/services/plombier',
-      '/services/electricien',
-    ],
+    services: ['/services/macon', '/devis', '/services/plombier', '/services/electricien'],
   },
   {
     title: 'Isolation extérieure + ravalement',
@@ -145,12 +140,7 @@ const transformations = [
     budget: '10 000 – 18 000 €',
     duree: '2 – 3 semaines',
     artisans: ['Plombier', 'Carreleur', 'Menuisier', 'Électricien'],
-    services: [
-      '/services/plombier',
-      '/services/carreleur',
-      '/services/menuisier',
-      '/services/electricien',
-    ],
+    services: ['/services/plombier', '/devis', '/services/menuisier', '/services/electricien'],
   },
   {
     title: 'Fenêtres remplacées',
@@ -161,7 +151,7 @@ const transformations = [
     budget: '8 000 – 15 000 €',
     duree: '2 – 3 jours',
     artisans: ['Menuisier', 'Vitrier'],
-    services: ['/services/menuisier', '/services/vitrier'],
+    services: ['/services/menuisier', '/devis'],
   },
   {
     title: 'Combles aménagés',

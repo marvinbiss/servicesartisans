@@ -819,7 +819,7 @@ Les trois solutions exigent un support parfaitement plan, propre, sec et stable.
 
       `## Faire le bon choix avec un professionnel
 
-Le béton ciré et la résine de sol sont des revêtements techniques dont la qualité dépend à 90 % de la compétence de l'applicateur. Un mauvais dosage, un support mal préparé ou un temps de séchage non respecté ruinent le résultat. Exigez des références de chantiers réalisés et demandez à voir des réalisations en conditions réelles. Trouvez un [applicateur qualifié](/services/carreleur) ou un carreleur expérimenté sur ServicesArtisans.`,
+Le béton ciré et la résine de sol sont des revêtements techniques dont la qualité dépend à 90 % de la compétence de l'applicateur. Un mauvais dosage, un support mal préparé ou un temps de séchage non respecté ruinent le résultat. Exigez des références de chantiers réalisés et demandez à voir des réalisations en conditions réelles. Trouvez un applicateur qualifié ou un carreleur expérimenté sur ServicesArtisans.`,
     ],
   },
 }

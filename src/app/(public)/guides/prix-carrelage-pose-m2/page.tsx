@@ -252,14 +252,14 @@ export default function Page() {
                     3 devis carreleur comparés
                   </p>
                   <p className="text-sm md:text-base text-sand-700 mb-3">
-                    Trouvez un carreleur vérifié près de chez vous. SIRET actif, décennale couvrant
-                    l’activité, avis clients réels.
+                    Demandez un devis carrelage à des artisans vérifiés près de chez vous : SIRET
+                    actif, décennale couvrant l’activité, avis clients réels.
                   </p>
                   <Link
-                    href="/services/carreleur"
+                    href="/devis"
                     className="inline-flex items-center gap-1.5 text-primary-700 font-semibold hover:underline"
                   >
-                    Annuaire carreleurs <ArrowRight className="w-4 h-4" aria-hidden />
+                    Demander un devis carrelage <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>
                 </div>
               </div>
@@ -296,11 +296,8 @@ export default function Page() {
             <Link href="/guides" className="inline-flex items-center gap-1 hover:text-primary-700">
               ← Tous les guides
             </Link>
-            <Link
-              href="/services/carreleur"
-              className="inline-flex items-center gap-1 hover:text-primary-700"
-            >
-              Trouver un carreleur <Home className="w-3.5 h-3.5" aria-hidden />
+            <Link href="/devis" className="inline-flex items-center gap-1 hover:text-primary-700">
+              Demander un devis <Home className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>

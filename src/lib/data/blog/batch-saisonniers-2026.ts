@@ -276,7 +276,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       "### Les gestes essentiels\n- **Simulez une présence** : branchez des prises programmables sur quelques lampes (5-15 € l'unité)\n- **Ne fermez pas tous les volets** : des volets fermés en plein été signalent une absence\n- **Prévenez un voisin de confiance** qui pourra relever le courrier et ouvrir les volets de temps en temps\n- **N'annoncez pas votre absence** sur les réseaux sociaux\n- **Verrouillez toutes les ouvertures** : fenêtres, portes, garage, cave",
 
-      "### Les investissements utiles\n- Serrure multipoints certifiée A2P : 250 à 600 € (voir nos [tarifs serrurier](/blog/prix-serrurier-2026-tarifs-interventions))\n- Alarme connectée avec notification smartphone : 200 à 800 €\n- Caméra de surveillance extérieure : 50 à 300 € l'unité\n- Éclairage extérieur à détecteur de mouvement : 30 à 100 € l'unité\n\nPour renforcer votre sécurité, consultez un [serrurier professionnel](/services/serrurier).",
+      "### Les investissements utiles\n- Serrure multipoints certifiée A2P : 250 à 600 € (voir nos [tarifs serrurier](/blog/prix-serrurier-2026-tarifs-interventions))\n- Alarme connectée avec notification smartphone : 200 à 800 €\n- Caméra de surveillance extérieure : 50 à 300 € l'unité\n- Éclairage extérieur à détecteur de mouvement : 30 à 100 € l'unité\n\nPour renforcer votre sécurité, consultez un serrurier professionnel.",
 
       '## Électricité : prévenir les pannes',
 
@@ -693,7 +693,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaDescription:
       'Taille haies et arbres 2026 : périodes légales, distance 0,5-2m de la clôture, hauteur max, sanctions. Réglementation complète + droits voisinage.',
     content: [
-      "La taille des haies et des arbres est encadrée par plusieurs textes de loi qui visent à protéger la biodiversité (notamment la nidification des oiseaux) et à régler les rapports de voisinage. En 2026, la réglementation reste stricte, avec des amendes pouvant atteindre **150 000 €** pour la destruction de nids d'espèces protégées. Que vous soyez propriétaire, locataire ou exploitant agricole, voici ce que vous devez savoir avant de sortir le taille-haie. Pour les travaux importants, faites appel à un [élagueur professionnel](/services/jardinier) qualifié.",
+      "La taille des haies et des arbres est encadrée par plusieurs textes de loi qui visent à protéger la biodiversité (notamment la nidification des oiseaux) et à régler les rapports de voisinage. En 2026, la réglementation reste stricte, avec des amendes pouvant atteindre **150 000 €** pour la destruction de nids d'espèces protégées. Que vous soyez propriétaire, locataire ou exploitant agricole, voici ce que vous devez savoir avant de sortir le taille-haie. Pour les travaux importants, faites appel à un élagueur professionnel qualifié.",
 
       '## Périodes de taille : ce que dit la loi',
 

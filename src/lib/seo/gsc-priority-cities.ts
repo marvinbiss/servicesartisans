@@ -84,13 +84,12 @@ export const GSC_PRIORITY_CITIES: string[] = [
  *
  * Last update: 2026-02-25 (GSC Queries export)
  */
+// Pivot pure-play 2026-05-02 + full RGE 2026-05-03 :
+// retrait des entrées pointant vers les services supprimés (demenageur,
+// alarme-securite, vitrier, etc.) qui retournent maintenant 410 via
+// gone-paths.ts — boostage SEO sur du 410 = gaspillage budget crawl.
 export const GSC_BOOST_PAGES: string[] = [
-  // Position 5-20, impressions >= 5
-  '/services/demenageur/croissy-sur-seine',
-  '/services/demenageur/domont',
-  '/services/demenageur/carqueiranne',
+  // Position 5-20, impressions >= 5 — uniquement services survivants au pivot
   '/services/electricien/courbevoie',
-  '/services/alarme-securite/saran',
-  '/services/vitrier/stains',
   '/services/peintre-en-batiment/le-plessis-trevise',
 ]

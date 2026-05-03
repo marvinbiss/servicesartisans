@@ -213,7 +213,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Porte claquée, serrure cassée : vrais prix 2026 (80-300€), réflexes anti-arnaque, et comment trouver un serrurier fiable. Guide d'urgence complet.",
     content: [
-      "Vous êtes sur le palier, la porte vient de claquer, les clés sont à l'intérieur. Ou bien la clé a cassé dans la serrure. Le stress monte et votre premier réflexe est de taper « serrurier urgence » sur Google. C'est exactement là que les ennuis commencent : **la serrurerie d'urgence est le secteur le plus touché par les arnaques** en France selon la DGCCRF. Des factures de 800 à 2 000 € pour une ouverture qui devrait coûter 100 à 150 € sont monnaie courante. Ce guide vous arme pour garder la tête froide, payer le juste prix et trouver un [serrurier honnête](/services/serrurier).",
+      "Vous êtes sur le palier, la porte vient de claquer, les clés sont à l'intérieur. Ou bien la clé a cassé dans la serrure. Le stress monte et votre premier réflexe est de taper « serrurier urgence » sur Google. C'est exactement là que les ennuis commencent : **la serrurerie d'urgence est le secteur le plus touché par les arnaques** en France selon la DGCCRF. Des factures de 800 à 2 000 € pour une ouverture qui devrait coûter 100 à 150 € sont monnaie courante. Ce guide vous arme pour garder la tête froide, payer le juste prix et trouver un serrurier honnête.",
 
       '## Les gestes immédiats',
 
@@ -236,7 +236,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       '## Comment trouver un serrurier fiable',
 
-      "1. **Appelez votre assurance** en premier (serrurier conventionné = tarif garanti)\n2. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr avant d'appeler\n3. **Exigez un prix au téléphone** : un professionnel sérieux donne toujours une fourchette\n4. **Demandez un devis écrit** sur place avant toute intervention\n5. **Refusez le « il faut changer la serrure »** si le serrurier n'a pas d'abord tenté le crochetage\n6. **Consultez les avis** sur des plateformes fiables\n7. Utilisez un [annuaire de serruriers vérifiés](/services/serrurier) pour trouver un professionnel près de chez vous",
+      "1. **Appelez votre assurance** en premier (serrurier conventionné = tarif garanti)\n2. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr avant d'appeler\n3. **Exigez un prix au téléphone** : un professionnel sérieux donne toujours une fourchette\n4. **Demandez un devis écrit** sur place avant toute intervention\n5. **Refusez le « il faut changer la serrure »** si le serrurier n'a pas d'abord tenté le crochetage\n6. **Consultez les avis** sur des plateformes fiables\n7. Utilisez un annuaire de serruriers vérifiés pour trouver un professionnel près de chez vous",
 
       "## Vos droits en cas d'arnaque",
 
@@ -701,7 +701,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Vitre cassée : sécurisation immédiate, protection contre le froid et les intrusions, prix remplacement vitrier 2026 : 100-600€ selon type.',
     content: [
-      "Une vitre qui éclate — qu'il s'agisse d'un accident domestique, d'une tentative d'effraction, d'une tempête ou d'un ballon de football — crée une urgence immédiate : risque de coupure, froid, pluie, bruit et insécurité. En France, les vitriers d'urgence sont sollicités plus de **200 000 fois par an**. Voici comment sécuriser les lieux en attendant la réparation et trouver un [vitrier fiable](/services/vitrier) sans vous faire arnaquer.",
+      "Une vitre qui éclate — qu'il s'agisse d'un accident domestique, d'une tentative d'effraction, d'une tempête ou d'un ballon de football — crée une urgence immédiate : risque de coupure, froid, pluie, bruit et insécurité. En France, les vitriers d'urgence sont sollicités plus de **200 000 fois par an**. Voici comment sécuriser les lieux en attendant la réparation et trouver un vitrier fiable sans vous faire arnaquer.",
 
       '## Sécurisation immédiate (10 premières minutes)',
 
@@ -719,7 +719,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       "## Quand appeler un vitrier d'urgence",
 
-      "- Vitre au rez-de-chaussée ou accessible = **risque d'intrusion** : intervention urgente nécessaire\n- Vitre cassée en **hiver** : le froid entre et les tuyaux peuvent geler\n- **Grande baie vitrée** impossible à sécuriser avec du plastique\n- Vitre de **porte d'entrée** : sécurité compromise\n- Présence d'**enfants en bas âge** : les éclats résiduels sont dangereux\n\nTrouvez un [vitrier d'urgence](/services/vitrier) dans votre ville.",
+      "- Vitre au rez-de-chaussée ou accessible = **risque d'intrusion** : intervention urgente nécessaire\n- Vitre cassée en **hiver** : le froid entre et les tuyaux peuvent geler\n- **Grande baie vitrée** impossible à sécuriser avec du plastique\n- Vitre de **porte d'entrée** : sécurité compromise\n- Présence d'**enfants en bas âge** : les éclats résiduels sont dangereux\n\nTrouvez un vitrier d'urgence dans votre ville.",
 
       '## Attention aux arnaques vitrier',
 
@@ -891,7 +891,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Après un cambriolage : police, sécurisation porte, déclaration assurance sous 2 jours. Étapes, prix serrurier, droits victimes. Guide 2026.',
     content: [
-      "Découvrir que votre domicile a été cambriolé est un choc. Au-delà de l'émotion et du sentiment de violation de votre intimité, il y a des gestes concrets à réaliser dans un ordre précis et des délais stricts à respecter pour protéger vos droits et obtenir une indemnisation. En France, on recense **230 000 cambriolages par an**, soit un toutes les 2 minutes. Voici la marche à suivre étape par étape. Pour la sécurisation de votre porte, trouvez un [serrurier de confiance](/services/serrurier).",
+      "Découvrir que votre domicile a été cambriolé est un choc. Au-delà de l'émotion et du sentiment de violation de votre intimité, il y a des gestes concrets à réaliser dans un ordre précis et des délais stricts à respecter pour protéger vos droits et obtenir une indemnisation. En France, on recense **230 000 cambriolages par an**, soit un toutes les 2 minutes. Voici la marche à suivre étape par étape. Pour la sécurisation de votre porte, trouvez un serrurier de confiance.",
 
       '## Étape 1 : Appelez la police (immédiat)',
 
@@ -909,7 +909,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
       '### Sécurisation définitive',
       "Après l'urgence, envisagez une mise à niveau de la sécurité :\n- **Cylindre haute sécurité A2P*** : 80-250 € (résistance à l'effraction testée en laboratoire)\n- **Serrure multipoints 3 ou 5 points** : 250-850 € pose comprise\n- **Blindage de porte** : 600-1 200 € (renforcement de la porte existante)\n- **Bloc-porte blindé A2P** : 1 500-3 500 € (remplacement complet)\n- **Cornières anti-pince** : 100-200 € (empêchent le pied-de-biche)",
 
-      ":::warning Important\nAprès un cambriolage, l'assureur peut exiger un **niveau minimum de sécurité** pour renouveler la couverture. Vérifiez les exigences de votre contrat (souvent : serrure 3 points minimum, cylindre A2P). Un [serrurier qualifié](/services/serrurier) peut vous conseiller sur la mise aux normes.\n:::",
+      ":::warning Important\nAprès un cambriolage, l'assureur peut exiger un **niveau minimum de sécurité** pour renouveler la couverture. Vérifiez les exigences de votre contrat (souvent : serrure 3 points minimum, cylindre A2P). Un serrurier qualifié peut vous conseiller sur la mise aux normes.\n:::",
 
       "## Étape 3 : Déclarez à l'assurance (sous 2 jours)",
 
@@ -1457,7 +1457,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Installateur alarme : certification NF A2P, APSAD, télésurveillance. Prix installation 2026 : 500-3 000€. Critères et arnaques à éviter.',
     content: [
-      "Avec **230 000 cambriolages par an** en France, la question de la sécurité du domicile est légitime. Mais entre les systèmes DIY à 50 € et les installations professionnelles à 3 000 €, entre les alarmes filaires et les systèmes connectés, et entre les dizaines d'installateurs qui se disputent le marché, le choix est complexe. Ce guide vous donne les critères objectifs pour choisir le bon système et le bon installateur. Trouvez un [installateur d'alarme qualifié](/services/alarme-securite) sur ServicesArtisans.",
+      "Avec **230 000 cambriolages par an** en France, la question de la sécurité du domicile est légitime. Mais entre les systèmes DIY à 50 € et les installations professionnelles à 3 000 €, entre les alarmes filaires et les systèmes connectés, et entre les dizaines d'installateurs qui se disputent le marché, le choix est complexe. Ce guide vous donne les critères objectifs pour choisir le bon système et le bon installateur. Trouvez un installateur d'alarme qualifié sur ServicesArtisans.",
 
       '## Les certifications à exiger',
 

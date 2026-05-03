@@ -214,11 +214,8 @@ export default function Page() {
             <Link href="/guides" className="inline-flex items-center gap-1 hover:text-primary-700">
               ← Tous les guides
             </Link>
-            <Link
-              href="/services/serrurier"
-              className="inline-flex items-center gap-1 hover:text-primary-700"
-            >
-              Trouver un serrurier <Phone className="w-3.5 h-3.5" aria-hidden />
+            <Link href="/devis" className="inline-flex items-center gap-1 hover:text-primary-700">
+              Demander un devis <Phone className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>

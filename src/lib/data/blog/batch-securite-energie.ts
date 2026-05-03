@@ -61,7 +61,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       },
     ],
     content: [
-      "En 2026, la France enregistre plus de 230 000 cambriolages par an selon les chiffres du ministère de l'Intérieur, soit un toutes les deux minutes. Face à cette réalité, l'alarme maison n'est plus un luxe mais un investissement de bon sens. Le marché a profondément évolué : les systèmes connectés pilotables depuis un smartphone côtoient désormais les installations professionnelles certifiées, avec des prix qui ont baissé de 20 % en cinq ans grâce à la concurrence. Ce guide vous donne toutes les clés pour choisir, dimensionner et installer le système qui correspond à votre logement et à votre budget. Si vous envisagez de renforcer également vos accès, consultez notre annuaire de [serruriers qualifiés](/services/serrurier) pour un diagnostic complet de votre sécurité.",
+      "En 2026, la France enregistre plus de 230 000 cambriolages par an selon les chiffres du ministère de l'Intérieur, soit un toutes les deux minutes. Face à cette réalité, l'alarme maison n'est plus un luxe mais un investissement de bon sens. Le marché a profondément évolué : les systèmes connectés pilotables depuis un smartphone côtoient désormais les installations professionnelles certifiées, avec des prix qui ont baissé de 20 % en cinq ans grâce à la concurrence. Ce guide vous donne toutes les clés pour choisir, dimensionner et installer le système qui correspond à votre logement et à votre budget. Si vous envisagez de renforcer également vos accès, consultez notre annuaire de serruriers qualifiés pour un diagnostic complet de votre sécurité.",
 
       "## Les différents types d'alarmes maison",
 
@@ -132,7 +132,7 @@ export const securiteEnergieArticles: Record<string, BlogArticle> = {
       "### L'installation en mode DIY",
       "Les kits sans fil modernes sont conçus pour une installation par le particulier. L'application mobile guide pas à pas : appairage des détecteurs, test de portée, paramétrage des zones. Comptez 1 à 3 heures pour un kit de 6-8 détecteurs. En revanche, vous ne bénéficiez pas de l'étude de vulnérabilité professionnelle ni du PV de mise en service. Les erreurs les plus fréquentes : détecteur de mouvement face à une source de chaleur (fausses alertes), détecteur d'ouverture mal aligné (non-détection), sirène extérieure inaccessible pour le changement de batterie.",
 
-      'Pour trouver un installateur qualifié dans votre secteur, vous pouvez consulter notre annuaire de [serruriers et spécialistes sécurité](/services/serrurier) ou demander un [devis gratuit](/devis) pour comparer les offres.',
+      'Pour trouver un installateur qualifié dans votre secteur, vous pouvez consulter notre annuaire de serruriers et spécialistes sécurité ou demander un [devis gratuit](/devis) pour comparer les offres.',
 
       '## Alarme et assurance habitation : la réduction de 10 %',
 

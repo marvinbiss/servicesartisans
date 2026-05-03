@@ -140,7 +140,7 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Tarifs paysagiste 2026 : création jardin 30-80€/m², terrasse 80-250€/m², élagage 200-800€, entretien 150-400€/mois. Prix réels.',
     content: [
-      "Envie de transformer votre terrain en un jardin de rêve ? De créer une terrasse conviviale ou simplement de remettre en état un espace extérieur négligé ? Le paysagiste est le professionnel clé de tous vos projets d'aménagement extérieur. En 2026, le marché du paysagisme en France connaît une forte croissance, dopé par l'engouement pour les espaces verts post-Covid et la montée de l'aménagement durable (jardins secs, récupération d'eau, biodiversité). Ce guide vous détaille les **vrais tarifs du marché** pour chaque type de prestation, de la simple tonte à la création complète d'un jardin paysager. Pour trouver un [paysagiste qualifié près de chez vous](/services/paysagiste), consultez notre annuaire vérifié.",
+      "Envie de transformer votre terrain en un jardin de rêve ? De créer une terrasse conviviale ou simplement de remettre en état un espace extérieur négligé ? Le paysagiste est le professionnel clé de tous vos projets d'aménagement extérieur. En 2026, le marché du paysagisme en France connaît une forte croissance, dopé par l'engouement pour les espaces verts post-Covid et la montée de l'aménagement durable (jardins secs, récupération d'eau, biodiversité). Ce guide vous détaille les **vrais tarifs du marché** pour chaque type de prestation, de la simple tonte à la création complète d'un jardin paysager. Pour trouver un paysagiste qualifié près de chez vous, consultez notre annuaire vérifié.",
 
       '## Tarif horaire / forfaitaire en 2026',
 
@@ -221,7 +221,7 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
 
       '## Trouver un paysagiste près de chez vous',
 
-      'Comparez les devis de paysagistes dans les principales villes françaises :\n- [Paysagiste à Paris](/services/paysagiste/paris)\n- [Paysagiste à Lyon](/services/paysagiste/lyon)\n- [Paysagiste à Marseille](/services/paysagiste/marseille)\n- [Paysagiste à Bordeaux](/services/paysagiste/bordeaux)\n- [Paysagiste à Toulouse](/services/paysagiste/toulouse)\n- [Paysagiste à Nice](/services/paysagiste/nice)\n- [Paysagiste à Nantes](/services/paysagiste/nantes)\n- [Paysagiste à Montpellier](/services/paysagiste/montpellier)\n- [Paysagiste à Rennes](/services/paysagiste/rennes)\n- [Paysagiste à Strasbourg](/services/paysagiste/strasbourg)',
+      'Comparez les devis de paysagistes dans les principales villes françaises :\n- Paysagiste à Paris\n- Paysagiste à Lyon\n- Paysagiste à Marseille\n- Paysagiste à Bordeaux\n- Paysagiste à Toulouse\n- Paysagiste à Nice\n- Paysagiste à Nantes\n- Paysagiste à Montpellier\n- Paysagiste à Rennes\n- Paysagiste à Strasbourg',
 
       'À lire aussi : notre guide complet sur les [prix jardinier paysagiste](/blog/prix-jardinier-paysagiste-2026) pour compléter votre recherche.',
 

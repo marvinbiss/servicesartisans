@@ -611,7 +611,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Découvrez les travaux jardin à planifier au printemps : paysagiste, tarifs 2026 et conseils. Obtenez un devis gratuit paysagiste.',
     content: [
-      "Après l'hiver, votre jardin a besoin d'un réveil en douceur. Mars à mai constitue la **fenêtre idéale** pour les plantations, la taille, le désherbage et l'aménagement. Mais tous les travaux ne sont pas à la portée du jardinier amateur : la taille d'un grand arbre, l'aménagement d'une terrasse ou la création d'un système d'arrosage automatique nécessitent l'expertise d'un [paysagiste professionnel](/services/paysagiste). Voici les travaux de printemps, ceux que vous pouvez réaliser vous-même et ceux qui justifient un appel au pro.",
+      "Après l'hiver, votre jardin a besoin d'un réveil en douceur. Mars à mai constitue la **fenêtre idéale** pour les plantations, la taille, le désherbage et l'aménagement. Mais tous les travaux ne sont pas à la portée du jardinier amateur : la taille d'un grand arbre, l'aménagement d'une terrasse ou la création d'un système d'arrosage automatique nécessitent l'expertise d'un paysagiste professionnel. Voici les travaux de printemps, ceux que vous pouvez réaliser vous-même et ceux qui justifient un appel au pro.",
 
       '## Le calendrier du jardin de printemps',
 
@@ -630,7 +630,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       'Tonte, désherbage manuel, taille des petits arbustes (moins de 2 m), plantation de vivaces et annuelles, semis de gazon sur petites surfaces, et entretien des bordures sont à la portée de tout jardinier motivé. Investissez dans de bons outils : un sécateur Felco (30-50 €), une bêche de qualité (25-40 €) et un râteau solide dureront des années.',
 
       '## Comment choisir un bon paysagiste',
-      "Vérifiez que le professionnel possède un **diplôme reconnu** (BTS Aménagements paysagers, BTSA) ou une expérience justifiable. Demandez **3 devis détaillés** et des **références de chantiers réalisés** dans votre région. Un bon paysagiste propose un **plan d'aménagement** avant les travaux et peut vous guider sur le choix des végétaux adaptés à votre sol et votre exposition. Consultez notre [annuaire de paysagistes](/services/paysagiste) pour trouver un professionnel qualifié.",
+      "Vérifiez que le professionnel possède un **diplôme reconnu** (BTS Aménagements paysagers, BTSA) ou une expérience justifiable. Demandez **3 devis détaillés** et des **références de chantiers réalisés** dans votre région. Un bon paysagiste propose un **plan d'aménagement** avant les travaux et peut vous guider sur le choix des végétaux adaptés à votre sol et votre exposition. Consultez notre annuaire de paysagistes pour trouver un professionnel qualifié.",
 
       'Pour budgéter cette intervention, retrouvez tous les [prix jardinier paysagiste en 2026](/blog/prix-jardinier-paysagiste-2026) dans notre guide tarifaire dédié.',
 
@@ -758,14 +758,14 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "Si le morceau de clé dépasse, essayez de l'extraire avec une **pince fine**. Si le fragment est enfoncé, un serrurier utilise un extracteur spécial (100 à 200 € en journée, 180 à 350 € la nuit). Dans la plupart des cas, le cylindre n'a pas besoin d'être remplacé.",
 
       "### Serrure bloquée après tentative d'effraction",
-      "Si votre serrure a été forcée, ne tentez pas de l'ouvrir — vous risquez d'aggraver les dégâts. Appelez un [serrurier d'urgence](/services/serrurier) et **déposez plainte** au commissariat (obligatoire pour la prise en charge assurance). Le remplacement d'une serrure forcée (cylindre + mécanisme) coûte entre **250 et 700 €** la nuit, mais est généralement couvert par votre assurance multirisques habitation.",
+      "Si votre serrure a été forcée, ne tentez pas de l'ouvrir — vous risquez d'aggraver les dégâts. Appelez un serrurier d'urgence et **déposez plainte** au commissariat (obligatoire pour la prise en charge assurance). Le remplacement d'une serrure forcée (cylindre + mécanisme) coûte entre **250 et 700 €** la nuit, mais est généralement couvert par votre assurance multirisques habitation.",
 
       '## Comment éviter les arnaques',
 
       ":::warning Attention\nLes serruriers frauduleux utilisent des techniques éprouvées : **prix d'appel à 39 €** sur internet, diagnostic alarmiste (« il faut changer toute la serrure »), remplacement de pièces inutiles, facturation de fournitures au triple du prix, et paiement exigé en espèces. Règle d'or : **si le devis dépasse 400 € pour une ouverture de porte simple**, demandez une justification détaillée ou appelez un second serrurier.\n:::",
 
       '### Les bons réflexes',
-      "1. **Demandez un prix ferme au téléphone** avant le déplacement (fourchette haute et basse)\n2. **Exigez un devis écrit** avant le début de l'intervention\n3. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr\n4. **Refusez le paiement en espèces** — payez par carte ou chèque pour garder une trace\n5. **Ne signez rien sous pression** — vous avez 14 jours de droit de rétractation pour les travaux à domicile non sollicités\n6. **Identifiez un serrurier de confiance à l'avance** via notre [annuaire vérifié](/services/serrurier) et gardez son numéro dans votre téléphone",
+      "1. **Demandez un prix ferme au téléphone** avant le déplacement (fourchette haute et basse)\n2. **Exigez un devis écrit** avant le début de l'intervention\n3. **Vérifiez le SIRET** sur societe.com ou infogreffe.fr\n4. **Refusez le paiement en espèces** — payez par carte ou chèque pour garder une trace\n5. **Ne signez rien sous pression** — vous avez 14 jours de droit de rétractation pour les travaux à domicile non sollicités\n6. **Identifiez un serrurier de confiance à l'avance** via notre annuaire vérifié et gardez son numéro dans votre téléphone",
 
       "## Prise en charge par l'assurance",
       "Votre assurance multirisques habitation couvre généralement : l'ouverture de porte après **perte de clés** (souvent plafonnée à 300-500 €), le remplacement de serrure après **effraction ou tentative** (intégralement, sur présentation du dépôt de plainte), et le **gardiennage ou relogement temporaire** si la porte ne peut être sécurisée dans la nuit. Contactez le numéro d'assistance de votre contrat **avant** d'appeler un serrurier — l'assureur envoie souvent un professionnel agréé à tarif encadré.",

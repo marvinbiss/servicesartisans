@@ -104,7 +104,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Remplacement baignoire par douche 2026 : douche classique 2 500-4 500€, italienne 4 000-8 000€, PMR 3 500-6 000€. Devis gratuit.',
     content: [
-      "Remplacer une baignoire par une douche est l'un des projets de rénovation les plus demandés en France. Gain de place, accessibilité améliorée, économies d'eau — les raisons ne manquent pas. En 2026, cette transformation concerne aussi bien les seniors souhaitant sécuriser leur salle de bain que les jeunes couples voulant moderniser un logement ancien. Mais combien cela coûte-t-il réellement ? Ce guide détaille les prix par type de douche, les facteurs de variation et les aides disponibles. Pour un devis sur mesure, consultez un [plombier qualifié](/services/plombier) ou un [carreleur spécialisé](/services/carreleur).",
+      "Remplacer une baignoire par une douche est l'un des projets de rénovation les plus demandés en France. Gain de place, accessibilité améliorée, économies d'eau — les raisons ne manquent pas. En 2026, cette transformation concerne aussi bien les seniors souhaitant sécuriser leur salle de bain que les jeunes couples voulant moderniser un logement ancien. Mais combien cela coûte-t-il réellement ? Ce guide détaille les prix par type de douche, les facteurs de variation et les aides disponibles. Pour un devis sur mesure, consultez un [plombier qualifié](/services/plombier) ou un carreleur spécialisé.",
 
       '## Prix par type de douche',
 
@@ -193,7 +193,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaDescription:
       'Installation douche italienne 2026 : receveur extra-plat 3 000-5 000€, maçonnée carrelée 5 000-9 000€. Prix pose + étanchéité.',
     content: [
-      "La douche à l'italienne est devenue la référence en matière de salle de bain moderne. Son design épuré, son accessibilité de plain-pied et sa capacité à agrandir visuellement l'espace en font le choix numéro un des rénovations. Mais derrière cette apparente simplicité se cache une installation technique exigeante, notamment en matière d'étanchéité. En 2026, les prix varient du simple au triple selon la solution choisie. Ce guide vous détaille tous les coûts pour une installation réussie. Consultez un [carreleur spécialisé](/services/carreleur) ou un [plombier](/services/plombier) pour un devis adapté à votre projet.",
+      "La douche à l'italienne est devenue la référence en matière de salle de bain moderne. Son design épuré, son accessibilité de plain-pied et sa capacité à agrandir visuellement l'espace en font le choix numéro un des rénovations. Mais derrière cette apparente simplicité se cache une installation technique exigeante, notamment en matière d'étanchéité. En 2026, les prix varient du simple au triple selon la solution choisie. Ce guide vous détaille tous les coûts pour une installation réussie. Consultez un carreleur spécialisé ou un [plombier](/services/plombier) pour un devis adapté à votre projet.",
 
       '## Les différentes solutions et leurs prix',
 
