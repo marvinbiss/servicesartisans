@@ -93,6 +93,8 @@ const existingEmojis: Record<string, string> = {
   'choisir-artisan-guide-anti-arnaque-2026': '🛡️',
   'aides-renovation-energetique-cumul-2026': '🏛️',
   'prix-toiture-refection-complete-2026': '🏠',
+  // Bloc 3 Action #3 Ahrefs 2026-05-03 — striking distance "isolation phonique mur mitoyen"
+  'isolation-phonique-mur-mitoyen': '🔇',
 }
 
 /** Normalize non-accented category names to their accented equivalents */

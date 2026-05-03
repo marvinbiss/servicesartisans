@@ -35,6 +35,7 @@ import { saisonniers2026Articles } from './batch-saisonniers-2026'
 import { metiers5Articles } from './batch-metiers-5'
 import { prestationsArticles } from './batch-prestations-problemes'
 import { piliersArticles } from './batch-piliers-2026'
+import { isolationPhoniqueArticles } from './batch-isolation-phonique'
 
 export interface BlogArticle {
   title: string
@@ -146,6 +147,7 @@ const _rawArticles: Record<string, BlogArticle> = {
   ...metiers5Articles,
   ...prestationsArticles,
   ...piliersArticles,
+  ...isolationPhoniqueArticles,
 }
 
 /** Filtered articles — redirected doublons excluded */
