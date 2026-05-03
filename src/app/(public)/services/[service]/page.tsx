@@ -69,6 +69,7 @@ import RecentProviders from './RecentProviders'
 import LiveProviderCount from './LiveProviderCount'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
+import { getDeepSections } from '@/lib/seo/trade-deep-sections'
 import dynamic from 'next/dynamic'
 
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
@@ -897,6 +898,35 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Deep H2 sections — variants KW haute volume (Action #3 Ahrefs 2026-05-03).
+          Cible : "pompe à chaleur air eau" 11K, "pompe à chaleur géothermique" 3.6K,
+          "isolation par l'extérieur" 13K, "isolant thermique" 8.2K. Visibles dès
+          rendu initial (vs FAQ collapsible) pour signal H2 fort. */}
+      {(() => {
+        const deepSections = getDeepSections(serviceSlug)
+        if (deepSections.length === 0) return null
+        return (
+          <section className="py-12 bg-white border-y border-sand-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+              {deepSections.map((section) => (
+                <article key={section.id} id={section.id}>
+                  <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-5 tracking-tight">
+                    {section.h2}
+                  </h2>
+                  <div className="space-y-4">
+                    {section.body.map((paragraph, i) => (
+                      <p key={i} className="text-charcoal-700 leading-relaxed">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )
+      })()}
 
       {/* FAQ — rich content for SEO */}
       {trade && trade.faq.length > 0 && (
