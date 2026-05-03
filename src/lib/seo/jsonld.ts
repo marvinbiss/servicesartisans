@@ -293,9 +293,22 @@ export function getFAQSchema(
   if (options?.includeSpeakable) {
     schema.speakable = {
       '@type': 'SpeakableSpecification',
+      // Sprint X Ahrefs 2026-05-03 — defaults alignés sur le pattern dominant
+      // du codebase. Le pattern <details>/<summary> Tailwind est utilisé sur
+      // 18+ pages avec FAQ (cee, rge, aides, diagnostic, renovation-energetique,
+      // etc. — vérifié exhaustivement). Les classes `.faq-question`/`.faq-answer`
+      // n'existent dans AUCUN composant : sans cet update, Google Speakable
+      // checker rejetait silencieusement le signal speakable du FAQPage sur
+      // toutes ces pages (HIGH bug Reviewer SEO Schema 2026-05-03).
+      //
+      // Conserve `h1` + `[data-speakable="true"]` (présents partout) +
+      // `.faq-question`/`.faq-answer` en fallback rétrocompat (zéro coût SEO :
+      // selectors qui ne match rien sont juste ignorés par le checker).
       cssSelector: options.speakableCssSelectors || [
         'h1',
         '[data-speakable="true"]',
+        'details summary',
+        'details p',
         '.faq-question',
         '.faq-answer',
       ],

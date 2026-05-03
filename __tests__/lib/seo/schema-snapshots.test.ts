@@ -173,6 +173,36 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
       }
     `)
   })
+
+  // Sprint X Ahrefs 2026-05-03 — verrou speakable defaults FAQPage.
+  // Le pattern <details>/<summary> Tailwind est dominant. Sans `details summary`
+  // dans les defaults, Google Speakable checker rejetait le signal sur 18+
+  // pages (ghost-match HIGH bug Reviewer SEO Schema).
+  it('Sprint X — getFAQSchema includeSpeakable default contient details summary/p', () => {
+    const schema = getFAQSchema([{ question: 'Q', answer: 'A' }], {
+      pageUrl: 'https://example.com/faq',
+      includeSpeakable: true,
+    })
+    const speakable = schema?.speakable as Record<string, unknown>
+    const selectors = speakable.cssSelector as string[]
+    expect(selectors).toContain('details summary')
+    expect(selectors).toContain('details p')
+    expect(selectors).toContain('h1')
+    expect(selectors).toContain('[data-speakable="true"]')
+    // Rétrocompat fallback préservé (zéro coût SEO).
+    expect(selectors).toContain('.faq-question')
+    expect(selectors).toContain('.faq-answer')
+  })
+
+  it('Sprint X — speakableCssSelectors override remplace bien le default', () => {
+    const schema = getFAQSchema([{ question: 'Q', answer: 'A' }], {
+      pageUrl: 'https://example.com/faq',
+      includeSpeakable: true,
+      speakableCssSelectors: ['h2', '.custom-faq'],
+    })
+    const speakable = schema?.speakable as Record<string, unknown>
+    expect(speakable.cssSelector).toEqual(['h2', '.custom-faq'])
+  })
 })
 
 describe('Schema.org snapshots — RGE templates (YMYL)', () => {
