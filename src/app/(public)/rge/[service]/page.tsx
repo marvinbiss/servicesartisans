@@ -28,6 +28,7 @@ import {
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
+import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -594,9 +595,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* Bloc 6 Ahrefs 2026-05-03 — Deep H2 sections (striking distance KW)
-          Sprint F : id="deep-sections" + data-speakable wrapper pour TechArticle Schema. */}
+          Sprint F : id="deep-sections" + data-speakable wrapper pour TechArticle Schema.
+          Sprint N : ToC ancrée intégrée en tête de section. */}
       {deepSections.length > 0 && (
         <section id="deep-sections" className="bg-white border-b border-charcoal-100">
+          <DeepSectionsToc sections={deepSections} title={`Sommaire — ${content.h1}`} />
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
             <div className="flex items-center gap-2 mb-3">
               <BookOpen className="w-5 h-5 text-emerald-700" aria-hidden="true" />

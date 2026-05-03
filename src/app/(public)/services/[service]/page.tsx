@@ -37,6 +37,7 @@ import {
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
+import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -965,6 +966,10 @@ export default async function ServicePage({ params }: PageProps) {
         if (deepSections.length === 0) return null
         return (
           <section id="deep-sections" className="py-12 bg-white border-y border-sand-100">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Sprint N Ahrefs 2026-05-03 — ToC ancrée pour scan UX + signal SEO. */}
+              <DeepSectionsToc sections={deepSections} title={`Sommaire — ${service.name}`} />
+            </div>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
               {deepSections.map((section) => (
                 <article key={section.id} id={section.id} className="scroll-mt-24">
