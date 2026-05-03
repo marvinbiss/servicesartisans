@@ -14,8 +14,13 @@
  *
  * Bloc 2 garde uniquement panneaux-solaires : `chauffe-eau-thermodynamique` et
  * `audit-energetique` sont RGE-only (allowlist `RGE_ALLOWED_SERVICES`) et n'ont
- * pas de hub `/services/[slug]` — leurs deep sections seront wirées sur
- * `/rge/[service]` dans un commit ultérieur (Bloc 6).
+ * pas de hub `/services/[slug]` — leurs deep sections vivent dans le registry
+ * `RGE_ONLY_DEEP_SECTIONS` ci-dessous et sont wirées sur `/rge/[service]`
+ * (Bloc 6 — 2026-05-03).
+ *
+ * Bloc 6 ajoute 4 services RGE-only : CET (BAR-TH-148, ~3K vol/mois),
+ * audit-energetique (OPQIBI 1905, ~9K), ventilation (BAR-TH-125 VMC double flux,
+ * ~6K), fenetres (BAR-EN-104, ~12K). Total ajouté ~30K vol/mois.
  *
  * Convention :
  *   - `id` : ancre HTML stable, format kebab-case
@@ -113,16 +118,117 @@ const DEEP_SECTIONS: Record<string, readonly TradeDeepSection[]> = {
 } as const
 
 /**
+ * RGE-only deep sections — métiers énergie qui n'ont PAS de hub `/services/[slug]`
+ * (absents de `CANONICAL_SERVICE_SLUGS_SET`). Wirés uniquement sur `/rge/[service]`.
+ *
+ * Cf. `RGE_ALLOWED_SERVICES` dans `src/lib/rge/service-city-listings.ts` pour
+ * la liste complète des services RGE-only.
+ */
+const RGE_ONLY_DEEP_SECTIONS: Record<string, readonly TradeDeepSection[]> = {
+  'chauffe-eau-thermodynamique': [
+    {
+      id: 'cet-prix-cop-aides',
+      h2: 'Chauffe-eau thermodynamique : prix, COP et aides 2026',
+      body: [
+        "Le chauffe-eau thermodynamique (CET) capte les calories de l'air ambiant ou de l'air extérieur via une mini pompe à chaleur intégrée pour produire l'eau chaude sanitaire. Il consomme 3 à 4 fois moins d'électricité qu'un cumulus électrique classique : COP moyen 2,5 à 3,5 selon la technologie et la zone climatique. Pour un foyer de 4 personnes, l'économie annuelle vs cumulus standard est de 200 à 350 € sur la facture EDF.",
+        "Comptez 2 500 à 4 500 € pose comprise pour un CET 200 à 270 litres (foyer 3-5 personnes). Le prix inclut le ballon (1 500 à 2 800 €), la pompe à chaleur intégrée, le raccordement hydraulique et électrique, et la dépose du cumulus existant. Les modèles split (unité PAC séparée du ballon) coûtent 3 500 à 5 500 € mais offrent un COP supérieur (3,5 à 4) car ils captent l'air extérieur.",
+        "Aides 2026 cumulables sur le CET : MaPrimeRénov' jusqu'à 1 200 € (revenus très modestes), prime CEE BAR-TH-148 jusqu'à 250 à 600 € selon délégataire, TVA réduite à 5,5 %, Éco-PTZ. Conditions strictes : artisan RGE QualiPAC module CET actif, COP ≥ 2,5 mesuré selon norme EN 16147, ballon ≥ 150 litres pour MaPrimeRénov'. Le CET est éligible MaPrimeRénov' Sérénité dans un bouquet rénovation globale.",
+      ],
+    },
+    {
+      id: 'cet-air-ambiant-vs-air-exterieur',
+      h2: 'CET sur air ambiant ou air extérieur : comment choisir',
+      body: [
+        "Le CET sur air ambiant capte la chaleur d'une pièce non chauffée et bien ventilée (volume ≥ 20 m³ exigé) — typiquement garage, cellier, buanderie. Installation simple, prix bas (2 500 à 3 500 €), COP modéré 2,3 à 2,8 car la pièce se refroidit en hiver. Inadapté si le local fait moins de 20 m³ ou s'il est intégré au volume chauffé (refroidirait la maison).",
+        "Le CET sur air extérieur (split ou monobloc avec gaines) capte la chaleur de l'air extérieur via une unité dédiée ou des gaines isolées traversant le mur. COP supérieur 3 à 4 stable toute l'année car l'air extérieur reste plus chaud que la pièce non chauffée en hiver. Coût plus élevé (3 500 à 5 500 €) mais ROI 6-9 ans grâce aux aides + économies réelles.",
+        "Critère de décision : si vous disposez d'un local non chauffé ≥ 20 m³ bien ventilé (garage, sous-sol), le CET air ambiant suffit (le moins cher). Si vous habitez en région froide (zone climatique H1), si le local est trop petit ou si vous voulez la performance maximale, optez pour le CET sur air extérieur (split avec unité PAC dehors).",
+      ],
+    },
+  ],
+  'audit-energetique': [
+    {
+      id: 'audit-energetique-obligation-vente-dpe',
+      h2: 'Audit énergétique réglementaire : obligation vente DPE F, G, E',
+      body: [
+        "L'audit énergétique réglementaire est obligatoire à la vente d'un logement dont le DPE est classé F ou G depuis le 1er avril 2023, et étendu aux DPE classés E depuis le 1er janvier 2025. À compter du 1er janvier 2034, l'obligation s'élargira aux logements classés D. Sans audit annexé au compromis, l'acquéreur peut demander la nullité de la vente ou une diminution du prix devant le juge.",
+        "L'audit doit être réalisé par un auditeur RGE qualifié OPQIBI 1905 (BET thermique) ou Qualibat 8731 (étude énergétique enveloppe + équipements), ou par un architecte inscrit au CNOA habilité audit. Il dresse l'état énergétique du logement et propose 2 scénarios chiffrés de travaux pour atteindre la classe B (passoire vers performant) en passant par la classe E ou D — mention des coûts, des aides mobilisables et du gain DPE.",
+        "Validité de l'audit : 5 ans. Il est valable pour toute mutation pendant cette durée, ce qui le rend également utile pour bénéficier de MaPrimeRénov' Parcours Accompagné (rénovation d'ampleur) qui exige un audit en amont du projet. Délai de réalisation : 3 à 6 semaines (visite sur site + rédaction). Il est annexé au DPE et remis au notaire.",
+      ],
+    },
+    {
+      id: 'audit-energetique-prix-aides-2026',
+      h2: 'Audit énergétique : prix et aides MaPrimeRénov en 2026',
+      body: [
+        "Comptez 800 à 1 800 € pour un audit énergétique réglementaire en maison individuelle (selon la surface et la complexité). Pour un appartement, le tarif est de 500 à 1 200 €. Les copropriétés relèvent d'un dispositif distinct (audit énergétique global de copropriété, AEG) facturé 4 000 à 12 000 € selon la taille de l'immeuble et financé via MaPrimeRénov' Copropriétés.",
+        "Aides 2026 sur l'audit énergétique individuel : MaPrimeRénov' Audit jusqu'à 500 € pour les revenus très modestes, 400 € pour les modestes, 300 € pour les intermédiaires, 0 € pour les revenus supérieurs. Cumulable avec la prime CEE Audit (montant variable, 100 à 250 € selon délégataire). L'audit est aussi pris en charge à 100 % dans le cadre d'une demande de MaPrimeRénov' Parcours Accompagné.",
+        "Distinction importante : l'audit énergétique réglementaire (vente DPE F/G/E) est différent du DPE lui-même. Le DPE coûte 100 à 250 € et reste obligatoire à la vente et à la location de tout logement (validité 10 ans). L'audit énergétique va plus loin : il propose des scénarios de travaux chiffrés. Les deux sont annexés au compromis si le logement est en F, G ou E.",
+      ],
+    },
+  ],
+  ventilation: [
+    {
+      id: 'vmc-double-flux-bar-th-125',
+      h2: 'VMC double flux : performance et aide CEE BAR-TH-125',
+      body: [
+        "La VMC double flux récupère 70 à 90 % des calories de l'air extrait pour préchauffer l'air neuf entrant via un échangeur thermique. Elle réduit les déperditions par renouvellement d'air de 15 à 20 % sur la facture de chauffage d'un logement bien isolé. Indispensable en rénovation BBC ou maison passive, où la ventilation représente jusqu'à 25 % des pertes thermiques résiduelles.",
+        "Comptez 4 000 à 8 000 € pose comprise pour une VMC double flux dans une maison individuelle de 100-150 m². Le prix inclut le caisson échangeur (1 500 à 3 500 €), le réseau de gaines isolées en faux plafond ou comble, les bouches d'extraction et d'insufflation dans chaque pièce, le filtre F7/G4 et la mise en service avec mesures de débit. Les modèles haut rendement (≥ 85 %) sont éligibles aux aides.",
+        "Aides 2026 cumulables : MaPrimeRénov' jusqu'à 4 000 € (revenus très modestes), prime CEE BAR-TH-125 jusqu'à 800 à 1 500 € selon délégataire et zone climatique, Éco-PTZ jusqu'à 50 000 €, TVA à 5,5 %. Conditions : artisan RGE Qualibat 4311 (réseaux aérauliques) ou QualiPAC ventilation, rendement de l'échangeur ≥ 85 %, étude de dimensionnement préalable obligatoire (NF DTU 68.3).",
+      ],
+    },
+    {
+      id: 'vmc-simple-flux-vs-double-flux',
+      h2: 'VMC simple flux hygroréglable vs double flux : choisir',
+      body: [
+        "La VMC simple flux extrait l'air vicié des pièces humides (cuisine, WC, salle de bain) sans préchauffer l'air entrant. Hygroréglable de type B, elle module les débits selon l'humidité ambiante : 200 à 600 € l'équipement seul, 800 à 1 500 € pose comprise. Solution la plus économique pour respecter la réglementation ventilation des logements (arrêté du 24 mars 1982 modifié).",
+        "La VMC double flux préchauffe l'air entrant via les calories de l'air extrait — gain énergétique réel de 15 à 20 % sur la facture chauffage. Coût 4 à 6 fois supérieur (4 000 à 8 000 € posés). Rentabilité conditionnée à un logement bien isolé (BBC ou rénovation lourde) : si l'enveloppe fuit, l'investissement double flux ne sera jamais amorti par les économies générées.",
+        "Critère de décision : VMC simple flux hygroréglable si vous voulez juste respecter la réglementation et gérer l'humidité (rénovation classique sans isolation lourde). VMC double flux si vous engagez une rénovation BBC/passive (isolation murs + combles + fenêtres triple vitrage) — c'est seulement dans ce cas que l'investissement est amorti en 8 à 12 ans grâce aux économies de chauffage.",
+      ],
+    },
+  ],
+  fenetres: [
+    {
+      id: 'remplacement-fenetres-uw-vitrage',
+      h2: 'Remplacement de fenêtres : Uw, vitrage et matériau',
+      body: [
+        "La performance thermique d'une fenêtre est mesurée par le coefficient Uw (W/m².K) — plus il est faible, mieux la fenêtre isole. Les fenêtres standard d'avant 2000 affichent Uw 3 à 5, alors que les modèles 2026 atteignent Uw 0,8 à 1,3 grâce au double vitrage à isolation renforcée (4/16/4 argon, lame d'argon 16 mm) ou au triple vitrage (Uw 0,7 à 1,0). Pour bénéficier des aides MaPrimeRénov' et CEE, le seuil exigé est Uw ≤ 1,3.",
+        "Comptez 500 à 1 200 € par fenêtre standard (1,5 m²) pose comprise selon le matériau, le type de vitrage et la difficulté de pose (rénovation sur dormant existant ou dépose totale + nouveau dormant). Pour 10 fenêtres remplacées dans une maison de 100 m², le budget total est de 5 000 à 12 000 €. Privilégier la dépose totale en rénovation lourde — la pose sur dormant ancien réduit l'efficacité thermique de 15 à 25 %.",
+        "Aides 2026 cumulables sur le remplacement de fenêtres : MaPrimeRénov' jusqu'à 100 € par fenêtre (revenus très modestes), prime CEE BAR-EN-104 jusqu'à 80 à 120 € par fenêtre selon délégataire et zone climatique, Éco-PTZ jusqu'à 30 000 € pour un bouquet incluant fenêtres, TVA à 5,5 %. Conditions : artisan RGE Qualibat menuiserie (5111 ou 5112), Uw ≤ 1,3 et facteur solaire Sw ≥ 0,30, dépose totale en cas de remplacement non simple.",
+      ],
+    },
+    {
+      id: 'fenetre-pvc-alu-bois',
+      h2: 'Fenêtre PVC, aluminium ou bois : prix et performance',
+      body: [
+        'Le PVC est le matériau le plus vendu en rénovation (60 % du marché) : performance thermique excellente (Uw 1,1 à 1,3 standard), prix accessible (300 à 700 € HT par fenêtre 1,5 m²), entretien quasi nul. Inconvénients : palette de couleurs limitée (blanc dominant), aspect industriel parfois mal perçu en bâti ancien, durée de vie 25-30 ans (vs 50+ pour le bois).',
+        "L'aluminium offre les profilés les plus fins (clarté maximale, baies coulissantes XXL) et une grande variété de teintes (RAL au choix). Coût supérieur 600 à 1 500 € HT par fenêtre. Performance thermique correcte uniquement avec rupture de pont thermique (Uw 1,3 à 1,5). Idéal pour architecture contemporaine, baies coulissantes ≥ 2,5 m, immeubles. Évitez en zone froide H1 sans rupture de pont thermique premium.",
+        "Le bois est le plus performant thermiquement (Uw 0,9 à 1,2 standard), le plus durable (50+ ans avec entretien) et le plus écologique (matériau biosourcé renouvelable). Coût élevé 800 à 1 800 € HT par fenêtre, entretien tous les 5-10 ans (lasure ou peinture). Souvent obligatoire en zone ABF (Architecte des Bâtiments de France) pour respect du patrimoine. Bonus MaPrimeRénov' biosourcé dans certaines régions.",
+      ],
+    },
+  ],
+} as const
+
+/**
  * Returns the deep sections for a trade slug, or empty array if none defined.
+ * Looks up both canonical (`/services/[slug]`) and RGE-only (`/rge/[service]`)
+ * registries — wired-in callers don't need to know which bucket they hit.
  * Safe to call for any slug — never throws.
  */
 export function getDeepSections(slug: string): readonly TradeDeepSection[] {
-  return DEEP_SECTIONS[slug] ?? []
+  return DEEP_SECTIONS[slug] ?? RGE_ONLY_DEEP_SECTIONS[slug] ?? []
 }
 
 /**
- * List of trade slugs that have deep sections defined. Used for tests.
+ * List of canonical trade slugs (intersection avec `CANONICAL_SERVICE_SLUGS_SET`).
+ * Utilisé par le test drift SSoT — ne contient PAS les RGE-only slugs.
  */
 export function getDeepSectionsTradeSlugs(): readonly string[] {
   return Object.keys(DEEP_SECTIONS)
+}
+
+/**
+ * List of RGE-only trade slugs (sous-ensemble de `RGE_ALLOWED_SERVICES`).
+ * Utilisé par le test drift RGE — ne contient PAS les canonical slugs.
+ */
+export function getRgeOnlyDeepSectionsSlugs(): readonly string[] {
+  return Object.keys(RGE_ONLY_DEEP_SECTIONS)
 }

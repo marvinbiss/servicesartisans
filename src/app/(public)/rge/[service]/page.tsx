@@ -30,6 +30,7 @@ import { logger } from '@/lib/logger'
 import LastUpdated from '@/components/seo/LastUpdated'
 import { getRgeServiceHubContent } from '@/lib/rge/service-hub-content'
 import { getRgeGuidesForService, getCeeGuidesForService } from '@/lib/rge/service-guides-map'
+import { getDeepSections } from '@/lib/seo/trade-deep-sections'
 
 // ISR — révalidation quotidienne. Les stats RGE par service suivent le rythme
 // de la sync ADEME hebdomadaire, 24h est le bon compromis crawl/fraîcheur.
@@ -110,6 +111,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   // guide dédié — pas d'encart affiché).
   const rgeGuideLinks = getRgeGuidesForService(serviceSlug)
   const ceeGuideLinks = getCeeGuidesForService(serviceSlug)
+
+  // Bloc 6 Sprint Ahrefs 2026-05-03 — deep H2 sections SEO (striking distance KW)
+  // Wirées sur /rge/[service] pour les 4 RGE-only métiers à fort volume search :
+  // CET, audit-energetique, ventilation, fenetres. Slug canonical (PAC, isolation,
+  // panneaux-solaires) ont déjà leurs deep sections sur /services/[slug].
+  const deepSections = getDeepSections(serviceSlug)
 
   const pagePath = `/rge/${serviceSlug}`
 
@@ -528,6 +535,42 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Bloc 6 Ahrefs 2026-05-03 — Deep H2 sections (striking distance KW) */}
+      {deepSections.length > 0 && (
+        <section className="bg-white border-b border-charcoal-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+                Approfondir le sujet
+              </span>
+            </div>
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
+              Tout comprendre sur ce métier RGE en 2026
+            </h2>
+            <p className="text-charcoal-600 mb-10 leading-relaxed">
+              Notre rédaction technique décrypte les variantes les plus recherchées : prix,
+              performances, conditions d&apos;éligibilité aux aides publiques. Chaque section est
+              ancrée pour un partage direct.
+            </p>
+            <div className="space-y-12">
+              {deepSections.map((s) => (
+                <article key={s.id} id={s.id} className="scroll-mt-24">
+                  <h3 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-5">
+                    {s.h2}
+                  </h3>
+                  <div className="space-y-4 text-charcoal-700 leading-relaxed">
+                    {s.body.map((p, i) => (
+                      <p key={i}>{p}</p>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FAQ contextualisée */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
