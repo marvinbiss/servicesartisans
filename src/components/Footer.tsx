@@ -22,6 +22,8 @@ import DynamicFooterLinks from '@/components/seo/DynamicFooterLinks'
 // Navigation links — money pages & essential hubs only (link equity optimization)
 // Audit P0 2026-05-03 : ajout `/qualifications-rge`, `/comparatifs`, `/barometre/rge`
 // pour sortir ces 3 hubs sitemap de l'état orphan (0 lien interne entrant détecté).
+// Sprint T Ahrefs 2026-05-03 : ajout `/rge/glossaire` (entité canonique
+// DefinedTermSet Sprint O) — boost interne sitewide (~459K pages × 1 lien).
 const navigationLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Tarifs', href: '/tarifs' },
@@ -30,6 +32,7 @@ const navigationLinks = [
   { name: 'Aides 2026', href: '/aides' },
   { name: 'Artisans RGE', href: '/rge' },
   { name: 'Qualifications RGE', href: '/qualifications-rge' },
+  { name: 'Glossaire RGE', href: '/rge/glossaire' },
   { name: 'Baromètre RGE', href: '/barometre/rge' },
   { name: 'Comparatifs CEE', href: '/comparatifs' },
   { name: 'Problèmes & dépannages', href: '/problemes' },
