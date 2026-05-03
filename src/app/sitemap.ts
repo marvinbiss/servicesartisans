@@ -267,6 +267,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.75,
       },
       {
+        // Sprint O Ahrefs 2026-05-03 — page canonique unique du DefinedTermSet
+        // RGE (16 qualifications). Cible naturelle des liens externes presse
+        // / blogs tiers / dictionnaires métier mentionnant "QualiPAC" ou
+        // "Qualibat 7141". Priority 0.75 = entre hub /rge (0.8) et guides
+        // qualifications (0.7) — entité topical canonique.
+        url: `${SITE_URL}/rge/glossaire`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
         url: `${SITE_URL}/cee`,
         lastModified: STATIC_DATE,
         changeFrequency: 'weekly',

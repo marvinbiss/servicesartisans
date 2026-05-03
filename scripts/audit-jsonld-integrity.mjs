@@ -139,7 +139,10 @@ function isIsoDate(s) {
 
 function main() {
   // Scope to files that actually produce JSON-LD (contain @context or @type)
+  // Exclut __tests__/ : les tests utilisent légitimement des URLs hardcodées
+  // pour vérifier le shape des Schemas (vérification déterministe vs SITE_URL).
   const files = walk(SEO_DIR).filter((f) => {
+    if (f.includes('__tests__') || /\.test\.(ts|tsx)$/.test(f)) return false
     const src = readFileSync(f, 'utf8')
     return /@context|@type/.test(src)
   })
