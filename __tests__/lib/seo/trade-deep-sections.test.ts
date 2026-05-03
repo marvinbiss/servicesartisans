@@ -171,4 +171,20 @@ describe('trade-deep-sections — Action #3 Ahrefs 2026-05-03', () => {
       expect(ids).toContain('fenetre-pvc-alu-bois')
     })
   })
+
+  describe('Bloc 7 — borne-recharge (canonical + RGE-allowed, 2026-05-03)', () => {
+    it('borne-recharge est dans le SSoT canonical (a un hub /services/borne-recharge)', () => {
+      expect(TRADE_SLUGS).toContain('borne-recharge')
+    })
+
+    it('borne-recharge est aussi RGE-allowed (Qualifelec IRVE P1/P2/P3)', () => {
+      expect(RGE_ALLOWED_SET.has('borne-recharge')).toBe(true)
+    })
+
+    it('borne-recharge cible prix wallbox maison + niveaux IRVE Qualifelec', () => {
+      const ids = getDeepSections('borne-recharge').map((s: TradeDeepSection) => s.id)
+      expect(ids).toContain('borne-recharge-maison-prix-puissance')
+      expect(ids).toContain('borne-recharge-irve-niveau-p1-p2-p3')
+    })
+  })
 })

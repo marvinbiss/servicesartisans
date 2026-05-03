@@ -22,6 +22,10 @@
  * audit-energetique (OPQIBI 1905, ~9K), ventilation (BAR-TH-125 VMC double flux,
  * ~6K), fenetres (BAR-EN-104, ~12K). Total ajouté ~30K vol/mois.
  *
+ * Bloc 7 ajoute borne-recharge (Qualifelec IRVE P1/P2/P3, ~7K vol/mois cumulé :
+ * "borne de recharge maison" 4K + "borne recharge voiture électrique" 2K + "prix
+ * borne recharge" 1K). Quick win 5e RGE-only.
+ *
  * Convention :
  *   - `id` : ancre HTML stable, format kebab-case
  *   - `h2` : titre H2 SEO-optimisé (≤ 70 chars), terme search exact
@@ -83,6 +87,26 @@ const DEEP_SECTIONS: Record<string, readonly TradeDeepSection[]> = {
         'Le dimensionnement dépend de votre consommation annuelle. Une installation 3 kWc (8-10 panneaux, 18 m² de toiture) convient à un couple ou une famille avec faible consommation (< 4 500 kWh/an, sans clim ni PAC). Production 3 200-4 200 kWh/an, autoconsommation 30-40 %, retour sur investissement 9-13 ans. Choix le plus prudent et le plus rentable au m² installé.',
         "Une installation 6 kWc (16-18 panneaux, 32 m² de toiture) cible une famille avec consommation moyenne (5 000-7 000 kWh/an) ou avec une PAC air/eau. Production 6 500-8 500 kWh/an, autoconsommation 35-45 % avec pilotage des usages (lave-vaisselle, ballon ECS programmés en heures solaires). ROI 8-11 ans grâce au bonus prime à l'autoconsommation.",
         '9 kWc (24-30 panneaux, 50 m²) est le maximum sans changer de régime fiscal/contractuel. Cible : grande maison + PAC + véhicule électrique + piscine. Production 9 500-12 500 kWh/an. Au-delà de 9 kWc, vous basculez en régime professionnel (TVA 20 %, prime supprimée, contrat tarif F en injection totale) — rarement rentable pour un particulier sans réelle consommation industrielle.',
+      ],
+    },
+  ],
+  'borne-recharge': [
+    {
+      id: 'borne-recharge-maison-prix-puissance',
+      h2: 'Borne de recharge à la maison : prix, puissance et installation',
+      body: [
+        "L'installation d'une borne de recharge (wallbox) à domicile est devenue le standard pour propriétaires de véhicule électrique : recharge complète en 4 à 8 heures vs 24 à 30 heures sur prise domestique standard, et division par 2 de l'usure de la batterie grâce au courant continu maîtrisé. Trois puissances dominent : 3,7 kW (monophasé, recharge lente nocturne), 7,4 kW (monophasé renforcé, le plus vendu en maison individuelle) et 11/22 kW (triphasé, nécessite abonnement Enedis triphasé).",
+        "Comptez 1 200 à 2 500 € TTC pose comprise pour une wallbox 7,4 kW dans une maison individuelle. Le prix inclut la borne (600 à 1 200 € selon marque et fonctions : Schneider EVlink, Hager Witty, Wallbox Pulsar Plus, Legrand Green'Up Premium), la pose par un électricien IRVE (300 à 600 €), le câble dédié 6 mm² entre tableau et borne, le disjoncteur différentiel type A/F 30 mA et le délesteur si abonnement < 9 kVA.",
+        "Aides 2026 cumulables : crédit d'impôt installation borne 75 % du montant TTC plafonné à 500 € par borne (300 € pour bornes pilotables uniquement), prime ADVENIR 600 € en copropriété, TVA réduite à 5,5 % pour la pose et 20 % pour le matériel. Conditions strictes : artisan IRVE Qualifelec P1 (mention spécifique recharge véhicule électrique) actif au moment de la signature du devis. Sans IRVE : aucune aide, garantie constructeur souvent annulée.",
+      ],
+    },
+    {
+      id: 'borne-recharge-irve-niveau-p1-p2-p3',
+      h2: 'Qualification IRVE niveau 1, 2 ou 3 : laquelle vous concerne',
+      body: [
+        "L'arrêté du 12 janvier 2017 impose qu'à partir de toute borne de recharge dépassant 3,7 kW, l'installation soit confiée à un électricien titulaire de la mention IRVE (Infrastructures de Recharge pour Véhicules Électriques). Trois niveaux structurent la qualification, délivrée par Qualifelec ou AFNOR Certification après formation de 21 heures et examen pratique.",
+        "IRVE P1 (basique) couvre les bornes ≤ 22 kW non communicantes en maison individuelle ou petit professionnel. C'est le niveau requis pour 95 % des installations résidentielles. IRVE P2 (avancé) ajoute les bornes communicantes pilotables à distance (supervision, modulation de charge, badge RFID) en habitat collectif et tertiaire. IRVE P3 (expert) traite les stations de recharge rapide ≥ 50 kW en courant continu (sites publics, autoroutes) — formation de 35 heures + module DC obligatoire.",
+        "Pour vérifier la qualification d'un installateur, demandez son numéro Qualifelec ou AFNOR et croisez sur le site france-renov.gouv.fr ou directement annuaire-rge.ademe.fr. Tout devis doit mentionner explicitement « IRVE P1 » (ou supérieur) avec le numéro et la date d'expiration. Sans cette mention vérifiable, refuser le devis : aucune aide ne sera versée et l'assurance habitation peut refuser de couvrir un sinistre lié à une installation non conforme NF C 15-100 amendement A5.",
       ],
     },
   ],
