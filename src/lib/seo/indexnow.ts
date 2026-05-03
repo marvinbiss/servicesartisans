@@ -80,6 +80,31 @@ export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> 
 }
 
 /**
+ * Sprint V Ahrefs 2026-05-03 — URLs canoniques de l'entité RGE à pousser
+ * sur IndexNow après les Sprints O/T/U.
+ *
+ *   1. /rge/glossaire — page canonique DefinedTermSet (nouvelle, Sprint O).
+ *      Bing/Yandex doivent l'indexer pour servir les rich snippets
+ *      "definition" sur "qu'est-ce que QualiPAC", etc.
+ *   2. /rge/qualifications — cible canonique du 301 Sprint U (refresh
+ *      pour signaler la nouvelle source de PageRank entrant).
+ *   3. /qualifications-rge — ancien chemin 404, désormais 301 vers (2).
+ *      Push pour que Bing/Yandex re-crawl, voient le 301, et retirent
+ *      le 404 du cache (sinon Bing met 4-6 semaines à le purger).
+ *
+ * Ces 3 URLs sont la liste minimale d'amorçage du nouveau cluster RGE
+ * canonique. Les ~459K pages avec footer modifié (Sprint T) ne sont
+ * PAS dans cette liste — la propagation naturelle via crawl du sitemap
+ * est suffisante pour un changement footer (PageRank flow secondaire).
+ *
+ * Module pure : retourne des paths relatifs, transformés en URLs absolues
+ * par submitToIndexNow.
+ */
+export function getSprintVCanonicalRgeUrls(): string[] {
+  return ['/rge/glossaire', '/rge/qualifications', '/qualifications-rge']
+}
+
+/**
  * Build the list of affected URLs when a provider changes.
  * Inclut TOUS les templates pSEO qui consomment rating_average / review_count
  * pour émettre Schema.org aggregateRating (étoiles SERP). Étendu 2026-04-22
