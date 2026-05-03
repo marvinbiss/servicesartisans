@@ -32,8 +32,10 @@ import {
   getDeepSectionsTechArticleSchema,
   getDeepSectionsFAQPageSchema,
   getDeepSectionsHowToSchemas,
+  getRgeDefinedTermSetSchema,
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
+import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
@@ -458,6 +460,21 @@ export default async function ServicePage({ params }: PageProps) {
     sections: deepSectionsForSchema,
     overlayLookup: getHowToOverlay,
   })
+  // Sprint M Ahrefs 2026-05-03 — DefinedTermSet RGE glossary émis aussi sur les
+  // hubs canonical /services/[s] qui sont RGE-eligible (PAC, isolation,
+  // photovoltaïque, chauffagiste, électricien, etc.). Les sections deep
+  // mentionnent abondamment Qualibat 7141, QualiPAC, IRVE — émettre le
+  // vocabulaire ici permet à Google AI Overviews + Bing de citer la définition
+  // depuis ces pages aussi (vs RGE-only avant Sprint M).
+  const isRgeEligibleService = isRgeAllowedService(serviceSlug)
+  const servicesRgeGlossarySchema = isRgeEligibleService
+    ? getRgeDefinedTermSetSchema({
+        pageUrl,
+        name: `Glossaire RGE — ${service.name}`,
+        description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${service.name.toLowerCase()}.`,
+        terms: getAllRgeGlossaryEntries(),
+      })
+    : null
 
   // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
   // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
@@ -489,6 +506,7 @@ export default async function ServicePage({ params }: PageProps) {
           ...(deepSectionsTechArticleSchema ? [deepSectionsTechArticleSchema] : []),
           ...(deepSectionsFAQSchema ? [deepSectionsFAQSchema] : []),
           ...deepSectionsHowToSchemas,
+          ...(servicesRgeGlossarySchema ? [servicesRgeGlossarySchema] : []),
         ]}
       />
 
