@@ -36,6 +36,14 @@ const devisSchema = z.object({
         .min(10, 'Numéro de téléphone invalide')
         .regex(/^(\+33|0033|0)[1-9]\d{8}$/, 'Format de téléphone français invalide')
     ),
+  // Action #5 Ahrefs 2026-05-03 — attribution LP / Google Ads. Format strict
+  // pour éviter pollution Pipedrive : 1-50 chars, [a-z0-9-_] uniquement.
+  source: z
+    .string()
+    .min(1)
+    .max(50)
+    .regex(/^[a-z0-9_-]+$/, 'Source invalide (a-z, 0-9, _, - uniquement)')
+    .optional(),
 })
 
 export async function POST(request: Request) {

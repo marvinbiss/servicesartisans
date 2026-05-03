@@ -1,0 +1,198 @@
+'use client'
+
+import { useCallback, useState } from 'react'
+import { ArrowRight, Check, Loader2, ShieldCheck } from 'lucide-react'
+import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
+
+type LpFormProps = {
+  campaignSlug: string
+  serviceSlug: string
+  ctaLabel: string
+}
+
+type FormState = 'idle' | 'submitting' | 'success' | 'error'
+
+export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormProps) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [telephone, setTelephone] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+  const [state, setState] = useState<FormState>('idle')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  const onSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (state === 'submitting') return
+
+      const phone = cleanPhone(telephone)
+      if (!isValidFrenchPhone(phone)) {
+        setErrorMsg('Numéro de téléphone français invalide.')
+        setState('error')
+        return
+      }
+
+      setState('submitting')
+      setErrorMsg(null)
+
+      try {
+        const res = await fetch('/api/devis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service: serviceSlug,
+            urgency: 'mois',
+            nom: name.trim() || undefined,
+            email: email.trim() || undefined,
+            telephone: phone,
+            codePostal: postalCode.trim() || undefined,
+            description: `Demande LP ${campaignSlug}`,
+            source: `lp_${campaignSlug}`,
+          }),
+        })
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => null)
+          throw new Error(body?.error || 'Erreur serveur')
+        }
+
+        setState('success')
+      } catch (err) {
+        setErrorMsg(err instanceof Error ? err.message : 'Erreur réseau')
+        setState('error')
+      }
+    },
+    [state, telephone, name, email, postalCode, serviceSlug, campaignSlug]
+  )
+
+  if (state === 'success') {
+    return (
+      <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-8 text-center">
+        <div className="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-4">
+          <Check className="w-7 h-7 text-white" />
+        </div>
+        <h3 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2">
+          Demande reçue !
+        </h3>
+        <p className="text-charcoal-700">
+          Un artisan RGE va vous rappeler sous 24h pour estimer vos aides et établir un devis
+          gratuit. Aucun engagement.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <form
+      onSubmit={onSubmit}
+      className="bg-white rounded-2xl border border-charcoal-200 shadow-soft p-6 md:p-8 space-y-4"
+      aria-label="Formulaire devis landing page"
+    >
+      <div>
+        <label htmlFor="lp-name" className="block text-sm font-semibold text-charcoal-700 mb-1">
+          Prénom et nom
+        </label>
+        <input
+          id="lp-name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Jean Dupont"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          autoComplete="name"
+          required
+          minLength={2}
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="lp-telephone"
+          className="block text-sm font-semibold text-charcoal-700 mb-1"
+        >
+          Téléphone
+        </label>
+        <input
+          id="lp-telephone"
+          type="tel"
+          value={telephone}
+          onChange={(e) => setTelephone(e.target.value)}
+          placeholder="06 12 34 56 78"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          autoComplete="tel"
+          required
+          inputMode="tel"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="lp-email" className="block text-sm font-semibold text-charcoal-700 mb-1">
+            Email
+          </label>
+          <input
+            id="lp-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="vous@exemple.fr"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            autoComplete="email"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="lp-postal" className="block text-sm font-semibold text-charcoal-700 mb-1">
+            Code postal
+          </label>
+          <input
+            id="lp-postal"
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            placeholder="75015"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            autoComplete="postal-code"
+            inputMode="numeric"
+            pattern="[0-9]{5}"
+            maxLength={5}
+            required
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        disabled={state === 'submitting'}
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-md"
+      >
+        {state === 'submitting' ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+            Envoi en cours…
+          </>
+        ) : (
+          <>
+            {ctaLabel}
+            <ArrowRight className="w-5 h-5" aria-hidden="true" />
+          </>
+        )}
+      </button>
+
+      {errorMsg && (
+        <p
+          role="alert"
+          className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"
+        >
+          {errorMsg}
+        </p>
+      )}
+
+      <p className="flex items-start gap-2 text-xs text-charcoal-500 leading-relaxed">
+        <ShieldCheck className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        Vos données sont confidentielles, transmises uniquement à un artisan RGE certifié près de
+        chez vous. Aucun engagement, devis gratuit.
+      </p>
+    </form>
+  )
+}

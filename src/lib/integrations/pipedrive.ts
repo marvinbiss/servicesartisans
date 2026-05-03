@@ -51,6 +51,11 @@ export interface DevisLeadForSync {
   city: string | null
   postal_code: string | null
   created_at: string
+  /**
+   * Origine du lead (mig 499 + Action #5 Ahrefs 2026-05-03). NULL = défaut
+   * 'servicesartisans.fr'. Convention LP : `lp_${campaign}` (ex `lp_aides-pac`).
+   */
+  source?: string | null
 }
 
 interface PipedriveResponse<T> {
@@ -188,7 +193,10 @@ async function createDeal(
   if (cfg.fields.urgency && lead.urgency) body[cfg.fields.urgency] = lead.urgency
   if (cfg.fields.city && lead.city) body[cfg.fields.city] = lead.city
   if (cfg.fields.postalCode && lead.postal_code) body[cfg.fields.postalCode] = lead.postal_code
-  if (cfg.fields.source) body[cfg.fields.source] = 'servicesartisans.fr'
+  // Mig 499 — fallback par défaut sur 'servicesartisans.fr' si la colonne
+  // source est NULL (leads historiques + cas non-LP). Sinon, valeur fournie
+  // (ex `lp_aides-pac`) pour attribution Google Ads / reporting Pipedrive.
+  if (cfg.fields.source) body[cfg.fields.source] = lead.source ?? 'servicesartisans.fr'
 
   const res = await pdFetch<PipedriveDeal>('/deals', {
     token: cfg.token,
@@ -268,7 +276,7 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
   const { data: lead, error } = await supabase
     .from('devis_requests')
     .select(
-      'id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, created_at, pipedrive_deal_id, pipedrive_sync_attempts, pipedrive_dead_letter_at'
+      'id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, source, created_at, pipedrive_deal_id, pipedrive_sync_attempts, pipedrive_dead_letter_at'
     )
     .eq('id', devisId)
     .single()

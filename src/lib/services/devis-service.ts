@@ -61,6 +61,12 @@ export interface DevisInput {
   nom?: string
   email?: string
   telephone: string
+  /**
+   * Origine du lead pour attribution. NULL/undefined = défaut
+   * 'servicesartisans.fr'. Convention LP : `lp_${campaign}`.
+   * Cf. mig 499 + src/lib/integrations/pipedrive.ts.
+   */
+  source?: string
 }
 
 export type DevisResult =
@@ -179,6 +185,8 @@ export async function processDevis(
       city: data.ville || null,
       postal_code: data.codePostal || '',
       status: 'pending',
+      // Mig 499 — attribution LP / Google Ads. NULL = défaut servicesartisans.fr.
+      ...(data.source ? { source: data.source } : {}),
     })
     .select()
     .single()
