@@ -2,6 +2,11 @@
 // Generated for image rotation on service pages
 // Source: Unsplash (licence gratuite, usage commercial autorise)
 // REGLE: ZERO doublon avec images.ts
+//
+// Pivot full RGE 2026-05-03 : pools serrurier/carreleur/vitrier/cuisiniste
+// retirés (slugs commodity hors RGE). Le pool 'jardinier' subsiste comme
+// dead-letter (jamais référencé par france-light.ts post-pivot 2026-05-02
+// mais conservé pour réactivation éventuelle d'un slug paysagiste BTP).
 
 export const serviceImagePool_batch1: Record<string, { src: string; alt: string }[]> = {
   plombier: [
@@ -38,18 +43,6 @@ export const serviceImagePool_batch1: Record<string, { src: string; alt: string 
       alt: 'Technicien avec casque et gilet de securite intervenant sur une machine',
     },
     { src: 'photo-o2I4HsudmlY', alt: 'Electricien professionnel en gilet orange et casque bleu' },
-  ],
-
-  serrurier: [
-    { src: 'photo-85ZaYvfwdpw', alt: 'Atelier de serrurerie avec machines a tailler les cles' },
-    {
-      src: 'photo-7SYor2lp53Y',
-      alt: 'Serrurier professionnel reproduisant des cles dans son atelier',
-    },
-    { src: 'photo-ID1NqV_n6oY', alt: 'Serrurier travaillant le metal sur une enclume' },
-    { src: 'photo-1AmEImwtnFk', alt: 'Main sur une poignee de porte avec serrure' },
-    { src: 'photo-KrPulSdUetk', alt: 'Gros plan sur un cadenas securise sur une porte' },
-    { src: 'photo-iHNGF-5Dyn8', alt: 'Gros plan sur une poignee de porte ancienne et sa serrure' },
   ],
 
   chauffagiste: [
@@ -92,18 +85,6 @@ export const serviceImagePool_batch1: Record<string, { src: string; alt: string 
       alt: 'Artisan dans un atelier de menuiserie entouré de ses outils',
     },
     { src: 'photo-9VnL4pK7EO0', alt: 'Menuisiere fabriquant un meuble dans son atelier' },
-  ],
-
-  carreleur: [
-    { src: 'photo-LyQi9DS7AEg', alt: 'Carreleur tenant un carreau blanc pret a poser' },
-    {
-      src: 'photo-VCUbsNJdZpQ',
-      alt: 'Douche moderne avec carrelage mural blanc et pomme de douche noire',
-    },
-    { src: 'photo-3Zy6U5swEio', alt: 'Carreaux de sol en parquet bois poses en motif' },
-    { src: 'photo-9wKj_L2CCtg', alt: 'Station de metro avec plafond et sol en carrelage' },
-    { src: 'photo-sKfxpU49eNg', alt: 'Pile de briques empilees pour un chantier de carrelage' },
-    { src: 'photo-PM8KGF_mHs0', alt: 'Mur en briques apparentes avec joints soignes' },
   ],
 
   couvreur: [
@@ -157,25 +138,6 @@ export const serviceImagePool_batch1: Record<string, { src: string; alt: string 
     { src: 'photo-PWxMg0Dwkks', alt: 'Reseau de tuyaux isoles pour un systeme de climatisation' },
   ],
 
-  cuisiniste: [
-    {
-      src: 'photo-mhDeeOvBs9o',
-      alt: 'Cuisine moderne avec plans de travail en bois clair et ilot central',
-    },
-    { src: 'photo-ahQMzqHrw5I', alt: 'Grande cuisine avec ilot central et placards blancs' },
-    { src: 'photo-XU_ODlSO9ac', alt: 'Cuisine moderne avec meubles en bois et ilot central' },
-    {
-      src: 'photo-j1XuL3mwi8U',
-      alt: 'Cuisine moderne avec electromenager inox et placards blancs',
-    },
-    { src: 'photo-o-uPDNNSsDA', alt: 'Grande cuisine avec ilot en marbre et placards blancs' },
-    { src: 'photo-JyeUdbb9TOg', alt: 'Cuisine avec ilot central et plans de travail en marbre' },
-    {
-      src: 'photo-2_mY4hCQxYw',
-      alt: 'Cuisine en renovation avec meubles bleus en cours d installation',
-    },
-  ],
-
   'salle-de-bain': [
     { src: 'photo-GqlosWVi5zo', alt: 'Meuble de salle de bain moderne avec vasque en marbre' },
     { src: 'photo-rT0zaQn2r5o', alt: 'Salle de bain renovee avec meuble en bois bleu' },
@@ -186,17 +148,5 @@ export const serviceImagePool_batch1: Record<string, { src: string; alt: string 
     { src: 'photo-JUdaVudt_Ok', alt: 'Grande salle de bain avec douche a l italienne spacieuse' },
     { src: 'photo-XrUnkoHm4Uw', alt: 'Salle de bain avec baignoire et douche moderne' },
     { src: 'photo-EctrGV2TKBY', alt: 'Salle de bain avec douche a l italienne pres d un lavabo' },
-  ],
-
-  vitrier: [
-    { src: 'photo-bLFzefNDGpo', alt: 'Fenetre a quatre carreaux avec vitrage transparent' },
-    { src: 'photo-CyZgTVKEQrU', alt: 'Vue floue a travers des portes vitrees avec reflets' },
-    { src: 'photo-L9OmEdFTd7A', alt: 'Reflet d un immeuble dans une baie vitree' },
-    { src: 'photo-pvV3mldScPE', alt: 'Reflet architectural dans une fenetre en verre' },
-    { src: 'photo-ywjdVCxwMno', alt: 'Reflet d un batiment dans une vitre transparente' },
-    {
-      src: 'photo-j7mGBT2hyM8',
-      alt: 'Detail d une plaque metallique avec numerotation sur une porte',
-    },
   ],
 }

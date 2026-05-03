@@ -368,6 +368,7 @@ async function queryProviderDetail(field: 'stable_id' | 'id' | 'slug', value: st
     .select(PROVIDER_DETAIL_SELECT)
     .eq(field, value)
     .eq('is_active', true)
+    .eq('noindex', false)
     .maybeSingle()
 
   return data ? resolveProviderCity(data as Row) : null

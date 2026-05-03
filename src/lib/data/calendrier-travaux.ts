@@ -248,11 +248,13 @@ export const calendrierTravaux: CalendrierMois[] = [
           "En été, la salle de bain est moins sollicitée (douche extérieure, vacances). C'est le moment de refaire la plomberie, le carrelage et l'étanchéité sans trop gêner le quotidien familial.",
         service: 'plombier',
       },
+      // Pivot full RGE 2026-05-03 : entrée 'Pose de carrelage extérieur' /
+      // service 'carreleur' retirée (slug commodity hors RGE).
       {
-        titre: 'Pose de carrelage extérieur',
+        titre: 'Étanchéité de toiture-terrasse',
         description:
-          'Le temps chaud et sec de juillet est parfait pour la pose de carrelage sur terrasse ou plage de piscine. La colle et les joints sèchent rapidement. Respectez toutefois les joints de dilatation pour éviter les fissures thermiques.',
-        service: 'carreleur',
+          "Les beaux jours sont la meilleure fenêtre pour refaire l'étanchéité d'une toiture-terrasse : membrane EPDM, bitume ou résine appliquée sur support sec. Cohérent avec la rénovation énergétique (souvent couplée à l'isolation des combles).",
+        service: 'etancheiste',
       },
       {
         titre: 'Installation de volets roulants',
@@ -440,7 +442,7 @@ export const calendrierTravaux: CalendrierMois[] = [
         titre: 'Aménagement de combles',
         description:
           "L'aménagement de combles est un chantier d'intérieur qui ne dépend pas de la météo (une fois la toiture fermée). Isolation, placo, électricité, plancher : tout peut avancer pendant l'hiver.",
-        service: 'plaquiste',
+        service: 'platrier',
       },
       {
         titre: 'Rénovation électrique intérieure',

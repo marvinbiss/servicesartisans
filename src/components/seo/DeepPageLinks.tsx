@@ -71,14 +71,6 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'serrurier',
-    [
-      'prix-serrurier-2026-tarifs-interventions',
-      'comment-choisir-serrurier-conseils',
-      'securiser-maison-cambriolage-solutions',
-    ],
-  ],
-  [
     'chauffagiste',
     [
       'prix-chauffagiste-2026-installation-entretien',
@@ -103,14 +95,6 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'carreleur',
-    [
-      'prix-carreleur-2026-pose-fourniture',
-      'comment-choisir-carreleur-guide',
-      'guide-carrelage-salle-de-bain',
-    ],
-  ],
-  [
     'couvreur',
     [
       'prix-toiture-2026-refection-reparation-materiaux',
@@ -127,27 +111,11 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     ],
   ],
   [
-    'vitrier',
-    [
-      'prix-vitrier-2026-remplacement-vitrage',
-      'comment-choisir-vitrier-guide',
-      'guide-fenetre-double-vitrage',
-    ],
-  ],
-  [
     'climaticien',
     [
       'prix-climaticien-2026-installation-entretien',
       'comment-choisir-climaticien-guide',
       'climatisation-reversible-guide',
-    ],
-  ],
-  [
-    'cuisiniste',
-    [
-      'prix-cuisiniste-2026-pose-cuisine',
-      'comment-choisir-cuisiniste-guide',
-      'renover-cuisine-guide-complet-etapes',
     ],
   ],
   // Pivot RGE 2026-05-01 : 16 entrées Tier C niche supprimées (solier,
@@ -156,6 +124,8 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   // antenniste, ascensoriste, geometre, desinsectisation, deratisation).
   // Pivot pure-play BTP énergétique 2026-05-02 : 5 entrées hors thèse
   // retirées (jardinier, nettoyage, paysagiste, alarme-securite, demenageur).
+  // Pivot full RGE 2026-05-03 : 4 entrées commodity supprimées
+  // (serrurier, vitrier, carreleur, cuisiniste — slugs hors RGE).
   [
     'charpentier',
     [

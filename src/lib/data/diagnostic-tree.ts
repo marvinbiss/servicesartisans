@@ -114,44 +114,9 @@ export const diagnosticCategories: DiagnosticCategory[] = [
       },
     ],
   },
-  {
-    id: 'serrurerie-securite',
-    label: 'Serrurerie & Sécurité',
-    icon: '🔑',
-    subProblems: [
-      {
-        id: 'porte-claquee',
-        label: 'Porte claquée',
-        description: "Porte fermée avec les clés à l'intérieur",
-        recommendedService: 'serrurier',
-        estimatedPriceRange: '80-150 €',
-        urgencyTip:
-          'Restez calme. Un serrurier qualifié peut ouvrir sans dégâts dans la majorité des cas.',
-      },
-      {
-        id: 'cle-perdue',
-        label: 'Clé perdue ou volée',
-        description: 'Perte de clés, besoin de doubles ou remplacement du barillet',
-        recommendedService: 'serrurier',
-        estimatedPriceRange: '100-300 €',
-        urgencyTip: 'En cas de vol, déposez plainte avant de faire changer la serrure.',
-      },
-      {
-        id: 'blindage-porte',
-        label: 'Blindage de porte',
-        description: "Renforcement de porte ou installation d'une porte blindée",
-        recommendedService: 'serrurier',
-        estimatedPriceRange: '800-4 500 €',
-      },
-      {
-        id: 'serrure-cassee',
-        label: 'Serrure cassée ou bloquée',
-        description: 'La clé tourne dans le vide, barillet cassé ou bloqué',
-        recommendedService: 'serrurier',
-        estimatedPriceRange: '100-400 €',
-      },
-    ],
-  },
+  // Pivot full RGE 2026-05-03 : catégorie 'Serrurerie & Sécurité' retirée
+  // (slug serrurier commodity hors RGE — diagnostic tree ne recommande plus
+  // de métiers absents du catalog canonical).
   {
     id: 'chauffage-climatisation',
     label: 'Chauffage & Climatisation',
@@ -212,12 +177,13 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         urgencyTip:
           "Placez des récipients sous la fuite et protégez vos meubles en attendant l'artisan.",
       },
+      // Pivot full RGE 2026-05-03 : recommendedService 'vitrier' (commodity)
+      // re-routé vers 'menuisier' (slug RGE-canonical pour fenêtres).
       {
         id: 'fenetre-cassee',
         label: 'Fenêtre ou vitre cassée',
         description: 'Vitre brisée, double vitrage en panne ou condensation',
-        recommendedService: 'vitrier',
-        alternativeServices: ['menuisier'],
+        recommendedService: 'menuisier',
         estimatedPriceRange: '80-500 €',
       },
       {
@@ -249,11 +215,15 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         recommendedService: 'peintre-en-batiment',
         estimatedPriceRange: '20-45 €/m²',
       },
+      // Pivot full RGE 2026-05-03 : recommendedService 'carreleur' (commodity)
+      // re-routé vers 'salle-de-bain' (slug RGE-canonical le plus proche pour
+      // les problématiques carrelage), entrée 'parquet-abime' nettoyée de son
+      // alternativeService 'carreleur'.
       {
         id: 'carrelage-casse',
         label: 'Carrelage cassé ou à poser',
         description: 'Carreaux fêlés, pose de carrelage sol ou mural',
-        recommendedService: 'carreleur',
+        recommendedService: 'salle-de-bain',
         estimatedPriceRange: '30-80 €/m²',
       },
       {
@@ -261,7 +231,6 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         label: 'Parquet abîmé ou à poser',
         description: 'Lames de parquet rayées, gondolées ou à installer',
         recommendedService: 'menuisier',
-        alternativeServices: ['carreleur'],
         estimatedPriceRange: '25-80 €/m²',
       },
       {
@@ -271,12 +240,14 @@ export const diagnosticCategories: DiagnosticCategory[] = [
         recommendedService: 'peintre-en-batiment',
         estimatedPriceRange: '15-40 €/m²',
       },
+      // Pivot full RGE 2026-05-03 : entrée 'installation-cuisine' (slug
+      // cuisiniste commodity hors RGE) re-routée vers menuisier (slug RGE-
+      // canonical le plus proche pour agencement intérieur).
       {
         id: 'installation-cuisine',
         label: 'Installation de cuisine',
         description: "Montage et pose d'une cuisine équipée",
-        recommendedService: 'cuisiniste',
-        alternativeServices: ['menuisier'],
+        recommendedService: 'menuisier',
         estimatedPriceRange: '2 000-10 000 €',
       },
     ],
@@ -329,21 +300,25 @@ export const diagnosticCategories: DiagnosticCategory[] = [
 /**
  * Noms lisibles des services pour l'affichage (slug -> label)
  */
+// Pivot full RGE 2026-05-03 : labels & icônes serrurier/carreleur/vitrier/
+// cuisiniste retirés (slugs commodity hors RGE), ajout des slugs RGE manquants
+// (salle-de-bain, pompe-a-chaleur, isolation-thermique, etc.) pour cohérence
+// avec recommendedService des subProblems.
 export const serviceLabels: Record<string, string> = {
   plombier: 'Plombier',
   electricien: 'Électricien',
-  serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
   'peintre-en-batiment': 'Peintre en bâtiment',
   menuisier: 'Menuisier',
-  carreleur: 'Carreleur',
   couvreur: 'Couvreur',
   macon: 'Maçon',
-  vitrier: 'Vitrier',
   climaticien: 'Climaticien',
-  cuisiniste: 'Cuisiniste',
   charpentier: 'Charpentier',
   facadier: 'Façadier',
+  'salle-de-bain': 'Spécialiste salle de bain',
+  'pompe-a-chaleur': 'Installateur pompe à chaleur',
+  'isolation-thermique': 'Spécialiste isolation thermique',
+  'renovation-energetique': 'Spécialiste rénovation énergétique',
 }
 
 /**
@@ -352,16 +327,16 @@ export const serviceLabels: Record<string, string> = {
 export const serviceIcons: Record<string, string> = {
   plombier: '🚿',
   electricien: '⚡',
-  serrurier: '🔑',
   chauffagiste: '🔥',
   'peintre-en-batiment': '🎨',
   menuisier: '🪚',
-  carreleur: '🧱',
   couvreur: '🏠',
   macon: '🏗️',
-  vitrier: '🪟',
   climaticien: '❄️',
-  cuisiniste: '🍳',
   charpentier: '🪓',
   facadier: '🧱',
+  'salle-de-bain': '🛁',
+  'pompe-a-chaleur': '🌡️',
+  'isolation-thermique': '🧊',
+  'renovation-energetique': '🌱',
 }

@@ -8,11 +8,10 @@ import {
   TrendingUp,
   Zap,
   Wrench,
-  Key,
   Flame,
   PaintBucket,
   Hammer,
-  Grid3X3,
+  Thermometer,
   Home,
   TreeDeciduous,
   Navigation,
@@ -38,11 +37,10 @@ function getAllVilles(): Promise<Ville[]> {
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Wrench,
   Zap,
-  Key,
   Flame,
   PaintBucket,
   Hammer,
-  Grid3X3,
+  Thermometer,
   Home,
   TreeDeciduous,
 }
@@ -65,14 +63,9 @@ const services = [
     searches: '12k/mois',
     urgent: true,
   },
-  {
-    name: 'Serrurier',
-    slug: 'serrurier',
-    icon: 'Key',
-    color: 'from-charcoal-600 to-charcoal-700',
-    searches: '9k/mois',
-    urgent: true,
-  },
+  // Pivot full RGE 2026-05-03 : tile 'Serrurier' (commodity hors RGE) retirée.
+  // Repositionnement « 100% artisans RGE certifiés » : la suggestion urgente
+  // côté search se concentre sur plombier + electricien + chauffagiste.
   {
     name: 'Chauffagiste',
     slug: 'chauffagiste',
@@ -97,12 +90,14 @@ const services = [
     searches: '5k/mois',
     urgent: false,
   },
+  // Pivot full RGE 2026-05-03 : tile 'Carreleur' retirée — remplacée par
+  // 'Pompe à chaleur' (gravity hub RGE, volume search RGE-aligné).
   {
-    name: 'Carreleur',
-    slug: 'carreleur',
-    icon: 'Grid3X3',
+    name: 'Pompe à chaleur',
+    slug: 'pompe-a-chaleur',
+    icon: 'Thermometer',
     color: 'from-teal-500 to-teal-600',
-    searches: '4k/mois',
+    searches: '8k/mois',
     urgent: false,
   },
   {

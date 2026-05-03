@@ -52,10 +52,9 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1636218685495-8f6545aadb71'),
     alt: 'Électricien installant un tableau électrique',
   },
-  serrurier: {
-    src: unsplash('photo-1575908539614-ff89490f4a78'),
-    alt: 'Serrurier professionnel taillant des clés dans son atelier',
-  },
+  // Pivot full RGE 2026-05-03 : entrées serrurier/carreleur/cuisiniste/vitrier
+  // retirées (slugs commodity hors RGE — getServiceImage retombe sur
+  // defaultServiceImage si jamais un legacy guide réfère encore ces slugs).
   chauffagiste: {
     src: unsplash('photo-1572537842835-08c65286efef'),
     alt: 'Thermostat mural réglé par un chauffagiste professionnel',
@@ -67,10 +66,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   menuisier: {
     src: unsplash('photo-1678184098226-114d9295540e'),
     alt: 'Menuisier travaillant le bois dans son atelier',
-  },
-  carreleur: {
-    src: unsplash('photo-1590880265945-6b43effeb599'),
-    alt: 'Carreleur posant du carrelage dans une salle de bain',
   },
   couvreur: {
     src: unsplash('photo-1604732998734-9f9529104a77'),
@@ -84,17 +79,9 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1588090272888-033e92b141b1'),
     alt: 'Technicien installant une climatisation murale',
   },
-  cuisiniste: {
-    src: unsplash('photo-1556912167-f556f1f39fdf'),
-    alt: 'Cuisine moderne installée par un professionnel',
-  },
   'salle-de-bain': {
     src: unsplash('photo-1758548157466-7c454382035a'),
     alt: 'Salle de bain rénovée avec vasque moderne',
-  },
-  vitrier: {
-    src: unsplash('photo-1557749575-2ad9647f820d'),
-    alt: 'Baie vitrée lumineuse posée par un vitrier',
   },
   facadier: {
     src: unsplash('photo-1597758011002-9a3e9537dd8b'),
@@ -595,18 +582,20 @@ const blogCategoryFallbacks: Record<string, { src: string; alt: string }> = {
 /** Mots-clés slug → clé dans serviceImages ou blogTopicImages */
 const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
   // Métiers → réutilise la photo du service (cohérence visuelle)
+  // Pivot full RGE 2026-05-03 : règles serrurier/carreleur/cuisiniste/vitrier
+  // re-routées vers slugs RGE-canonical (carrel→salle-de-bain, vitr→menuisier,
+  // cuisin→menuisier) ou retirées (serru → topic 'securite' déjà couvert).
   [/plomb/, 'plombier', 'service'],
   [/electri/, 'electricien', 'service'],
-  [/serru/, 'serrurier', 'service'],
   [/chauffag|chaudier|radiateur/, 'chauffagiste', 'service'],
   [/peint/, 'peintre-en-batiment', 'service'],
   [/menuisi|parquet/, 'menuisier', 'service'],
-  [/carrel/, 'carreleur', 'service'],
+  [/carrel/, 'salle-de-bain', 'service'],
   [/couv|toiture|toitur/, 'couvreur', 'service'],
   [/macon|maçon/, 'macon', 'service'],
   [/climatici|climatisation/, 'climaticien', 'service'],
-  [/cuisin/, 'cuisiniste', 'service'],
-  [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],
+  [/cuisin/, 'menuisier', 'service'],
+  [/vitr|fenêtre|fenetre|vitrage/, 'menuisier', 'service'],
   [/isol/, 'isolation-thermique', 'service'],
   [/domotiq/, 'electricien', 'service'],
   [/nettoyag/, 'entretien', 'topic'],

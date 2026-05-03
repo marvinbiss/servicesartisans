@@ -50,14 +50,9 @@ const PRICE_ARTICLE_CONFIG: Record<string, PriceServiceConfig> = {
     unitDescription: 'tarif horaire HT en France 2026',
     offerCount: 14,
   },
-  'prix-cuisiniste-2026-pose-cuisine': {
-    serviceName: 'Cuisiniste',
-    serviceSlug: 'cuisiniste',
-    priceMin: 3000,
-    priceMax: 40000,
-    unitDescription: 'cuisine équipée complète (pose + fourniture)',
-    offerCount: 6,
-  },
+  // Pivot full RGE 2026-05-03 : entrée 'prix-cuisiniste-2026-pose-cuisine'
+  // retirée du PRICE_ARTICLE_CONFIG (slug cuisiniste commodity hors RGE).
+  // L'article blog reste indexé mais ne génère plus de Schema Product.
   'chauffage-pompe-chaleur-vs-chaudiere-gaz-2026': {
     serviceName: 'Pompe à chaleur air-eau',
     serviceSlug: 'pompe-a-chaleur',

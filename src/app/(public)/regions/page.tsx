@@ -13,8 +13,11 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86400
+
+const PUBLISHED_DATE = getPublishedDate('/regions')
 
 export const metadata: Metadata = {
   title: 'Artisans par Région — 18 Régions',
@@ -120,7 +123,7 @@ export default async function RegionsIndexPage() {
     headline: `${regions.length} régions de France — Annuaire artisans 2026`,
     description: `Annuaire artisans dans ${regions.length} régions, ${totalDepartments} départements et ${villes.length} villes. Données SIREN officielles, baromètre régional CC-BY 4.0.`,
     url: `${SITE_URL}/regions`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -249,7 +252,7 @@ export default async function RegionsIndexPage() {
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
           />
           <EnBrefBox keyPoints={enBrefPoints} />

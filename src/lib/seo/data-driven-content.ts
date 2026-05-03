@@ -254,7 +254,7 @@ export function generateDataDrivenContent(
           )
         }
       } else if (pct < 40) {
-        const apptTrades = ['plombier', 'electricien', 'serrurier']
+        const apptTrades = ['plombier', 'electricien', 'chauffagiste']
         if (apptTrades.includes(serviceSlug)) {
           parts.push(
             `La prédominance d'immeubles collectifs à ${commune.name} crée des besoins spécifiques en ${svc} : parties communes, colonnes montantes et réseaux partagés.`
@@ -380,7 +380,7 @@ export function generateDataDrivenContent(
 
       // Trade-specific market context
       const specializedTrades = ['diagnostiqueur', 'ramoneur', 'borne-recharge']
-      const commonTrades = ['plombier', 'electricien', 'serrurier', 'peintre-en-batiment']
+      const commonTrades = ['plombier', 'electricien', 'chauffagiste', 'peintre-en-batiment']
       if (specializedTrades.includes(serviceSlug)) {
         parts.push(
           `Le métier ${de} étant une spécialité de niche, les professionnels disponibles à ${commune.name} couvrent généralement un périmètre plus large que les artisans du second œuvre.`
@@ -429,7 +429,7 @@ export function generateDataDrivenContent(
       'pompe-a-chaleur',
       'renovation-energetique',
     ]
-    const energyIndirectTrades = ['menuisier', 'vitrier', 'couvreur', 'facadier', 'plaquiste']
+    const energyIndirectTrades = ['menuisier', 'couvreur', 'facadier', 'platrier']
     const plumbingTrades = ['plombier']
     const elecTrades = ['electricien']
 
@@ -521,7 +521,7 @@ export function generateDataDrivenContent(
         'macon',
         'facadier',
         'peintre-en-batiment',
-        'carreleur',
+        'salle-de-bain',
       ]
       if (frostSensitive.includes(serviceSlug) && commune.jours_gel_annuels >= 30) {
         parts.push(
@@ -592,14 +592,16 @@ export function generateDataDrivenContent(
   }
 
   // Service-specific demand drivers per trade category
+  // Pivot full RGE 2026-05-03 : serrurier/carreleur/cuisiniste/plaquiste
+  // re-routés vers slugs RGE-canonical (salle-de-bain pour intent revêtements,
+  // platrier slug correct, menuisier pour agencement intérieur).
   const interiorTrades = [
     'plombier',
     'electricien',
-    'serrurier',
+    'menuisier',
     'peintre-en-batiment',
-    'carreleur',
-    'cuisiniste',
-    'plaquiste',
+    'salle-de-bain',
+    'platrier',
   ]
   const exteriorTrades = ['couvreur', 'facadier', 'macon', 'charpentier', 'zingueur', 'etancheiste']
   const energyTrades = [
@@ -717,11 +719,6 @@ export function generateDataDrivenContent(
       `Le diagnostic électricité est obligatoire pour la vente de logements de plus de 15 ans et pour la location depuis 2018. À ${commune.name}, de nombreux logements anciens sont concernés.`,
       `Le Consuel (Comité National pour la Sécurité des Usagers de l'Électricité) doit valider toute nouvelle installation ou rénovation lourde. Votre électricien à ${commune.name} se charge de cette démarche.`,
     ],
-    serrurier: [
-      `La norme A2P (Assurance Prévention Protection) certifie la résistance des serrures à l'effraction. À ${commune.name}, nous recommandons au minimum une serrure A2P* pour les portes d'entrée.`,
-      `En cas de cambriolage à ${commune.name}, le dépôt de plainte et le constat d'un serrurier sont indispensables pour la prise en charge par l'assurance habitation.`,
-      `La loi impose que les parties communes d'immeubles à ${commune.name} soient équipées de portes conformes aux normes coupe-feu et accessibilité PMR.`,
-    ],
     chauffagiste: [
       `L'entretien annuel de la chaudière est obligatoire à ${commune.name} (décret 2009-649). L'attestation d'entretien est exigible par l'assureur en cas de sinistre.`,
       `Depuis 2022, l'installation de chaudières fioul neuves est interdite. À ${commune.name}, les alternatives sont la pompe à chaleur, la chaudière gaz à condensation ou le chauffage bois/granulés.`,
@@ -752,10 +749,13 @@ export function generateDataDrivenContent(
       `Le remplacement de fenêtres à ${commune.name} est éligible à MaPrimeRénov' et aux CEE à condition de faire appel à un artisan RGE et d'atteindre un Uw ≤ 1.3 W/m².K.`,
       `En secteur ABF ou bâtiment classé à ${commune.name}, le choix des matériaux et le design des menuiseries sont soumis à l'approbation de l'architecte des Bâtiments de France.`,
     ],
-    carreleur: [
-      `La pose de carrelage à ${commune.name} doit respecter le DTU 52.1 (revêtements de sol scellés) ou le DTU 52.2 (pose collée), selon la technique utilisée.`,
-      `Le classement UPEC (Usure, Poinçonnement, Eau, Chimie) détermine l'adéquation du carrelage avec l'usage prévu. Votre carreleur à ${commune.name} vous conseille le classement adapté.`,
-      `Pour les pièces humides (salle de bain, cuisine) à ${commune.name}, le système d'étanchéité sous carrelage (SPEC) est fortement recommandé, voire obligatoire en receveur de douche.`,
+    // Pivot full RGE 2026-05-03 : entrées TRADE_REGL.serrurier et .carreleur
+    // retirées (slugs commodity hors RGE — fallback générique pris pour ces
+    // recherches résiduelles).
+    'salle-de-bain': [
+      `La pose de carrelage en salle de bain à ${commune.name} doit respecter le DTU 52.1/52.2 et inclure une étanchéité sous carrelage (système SPEC) en zone de projection d'eau.`,
+      `Pour les pièces humides à ${commune.name}, le receveur de douche extra-plat et la pente d'écoulement de 1 à 2% sont des exigences techniques incontournables.`,
+      `La rénovation de salle de bain à ${commune.name} ouvre droit à TVA réduite 10% (rénovation) ou 5,5% si elle s'inscrit dans un bouquet d'amélioration de la performance énergétique.`,
     ],
   }
 

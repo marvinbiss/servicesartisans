@@ -15,6 +15,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes, departements } from '@/lib/data/france'
+import { CEE_OPERATION_CODES as CEE_OPERATION_CODES_FOR_SITEMAP } from '@/lib/cee/operation-codes'
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
@@ -23,6 +24,9 @@ export type LastmodMap = Map<string, string>
 
 /** Set of `${serviceSlug}::${villeSlug}` combos that have ≥1 qualified provider */
 export type QualifiedCombos = Set<string>
+
+/** Set of `${normalizedDeptName}::${serviceSlug}` combos with ≥ DEPT_FALLBACK_INDEX_THRESHOLD providers (3) */
+export type DeptFallbackCombos = Set<string>
 
 // ─── Helpers ────────────────────────────────────────────────────────────
 
@@ -426,6 +430,81 @@ export async function getQualifiedServiceCityCombos(): Promise<QualifiedCombos |
   }
 }
 
+// ─── Query: Dept×service combos with ≥3 providers (sitemap↔noindex parity) ─
+
+/**
+ * Returns a Set<`${normalizedDeptName}::${serviceSlug}`> of combos where the
+ * department-level fallback yields ≥ DEPT_FALLBACK_INDEX_THRESHOLD (=3) active
+ * providers — same threshold as `hasDeptProviderFallback` (page render).
+ *
+ * Used by sitemap.ts to avoid emitting `/services/[s]/[v]` URLs that the page
+ * would noindex (providerCount=0 + dept fallback <3). Drift fix Sprint A #6 PhB.
+ *
+ * Fail-open: returns `null` on DB error. Callers MUST treat `null` as
+ * "include everything" — identical to the page's fail-open behavior
+ * (providerCount default = 1).
+ */
+export async function getDeptServiceFallbackCombos(): Promise<DeptFallbackCombos | null> {
+  const supabase = safeAdminClient()
+  if (!supabase) return null
+
+  // Reverse lookup: DB specialty → service slug used in URLs.
+  const specialtyToService = new Map<string, string>()
+  for (const [serviceSlug, specialties] of Object.entries(SERVICE_TO_SPECIALTIES)) {
+    for (const sp of specialties) {
+      if (!specialtyToService.has(sp)) {
+        specialtyToService.set(sp, serviceSlug)
+      }
+    }
+  }
+
+  try {
+    const counts = new Map<string, number>()
+    const pageSize = 1000
+    let from = 0
+    const maxRows = 200_000
+
+    while (from < maxRows) {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('specialty, address_department')
+        .eq('is_active', true)
+        .eq('noindex', false)
+        .not('specialty', 'is', null)
+        .not('address_department', 'is', null)
+        .range(from, from + pageSize - 1)
+
+      if (error) return null
+      if (!data || data.length === 0) break
+
+      for (const row of data) {
+        const specialty = row.specialty as string | null
+        const dept = row.address_department as string | null
+        if (!specialty || !dept) continue
+
+        const svcSlug = specialtyToService.get(specialty.toLowerCase().trim())
+        if (!svcSlug) continue
+
+        const deptKey = normalizeKey(dept)
+        const key = `${deptKey}::${svcSlug}`
+        counts.set(key, (counts.get(key) ?? 0) + 1)
+      }
+
+      if (data.length < pageSize) break
+      from += pageSize
+    }
+
+    // Apply threshold (must match DEPT_FALLBACK_INDEX_THRESHOLD in dept-fallback.ts).
+    const result: DeptFallbackCombos = new Set()
+    for (const [key, count] of Array.from(counts.entries())) {
+      if (count >= 3) result.add(key)
+    }
+    return result
+  } catch {
+    return null
+  }
+}
+
 // ─── Query: Qualified RGE service×ville and service×dept combos ────────
 
 /**
@@ -766,6 +845,8 @@ export interface SitemapLastmodData {
   ceeQualifiedOperationCity: Set<string> | null
   /** Map<"operationCode::villeSlug", YYYY-MM-DD> — latest eligible provider updated_at per combo. null on DB blip. */
   ceeLastmodOperationCity: Map<string, string> | null
+  /** Set<"normalizedDeptName::serviceSlug"> with ≥3 active providers (matches `hasDeptProviderFallback` threshold). null = include all. */
+  deptServiceFallbackCombos: DeptFallbackCombos | null
 }
 
 // ─── Derivation: dept×serviceSlug from dept×specialty ──────────────────
@@ -822,35 +903,6 @@ function deriveDeptServiceSlugMap(byDeptService: LastmodMap): LastmodMap {
 }
 
 /**
- * CEE operation codes consumed by the sitemap. Kept in sync with
- * `CEE_OPERATION_CODES` in src/app/sitemap.ts. Duplicated here to avoid an
- * import cycle (sitemap.ts already imports from this module).
- */
-const CEE_OPERATION_CODES_FOR_SITEMAP: readonly string[] = [
-  'bar-en-101',
-  'bar-en-102',
-  'bar-en-103',
-  'bar-en-104',
-  'bar-en-108',
-  'bar-th-112',
-  'bar-th-113',
-  'bar-th-125',
-  'bar-th-127',
-  'bar-th-129',
-  'bar-th-143',
-  'bar-th-148',
-  'bar-th-159',
-  'bar-th-161',
-  'bar-th-171',
-  'bar-th-172',
-  'bar-th-173',
-  'bar-th-174',
-  'bar-th-175',
-  'bar-th-177',
-  'bar-se-104',
-] as const
-
-/**
  * Fetch all lastmod data in parallel. Call once at the start of sitemap generation.
  * If Supabase is unavailable, all maps will be empty (= no lastmod = honest).
  */
@@ -866,6 +918,7 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     qualifiedCombos,
     rgeCombos,
     ceeQualifiedOperationCity,
+    deptServiceFallbackCombos,
   ] = await Promise.all([
     getLastmodByCity(),
     getLastmodByDepartment(),
@@ -877,6 +930,7 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     getQualifiedServiceCityCombos(),
     getQualifiedRgeCombos(),
     getQualifiedCeeCombos(CEE_OPERATION_CODES_FOR_SITEMAP),
+    getDeptServiceFallbackCombos(),
   ])
 
   // Derive dept×serviceSlug map from the raw dept×specialty data (no extra DB call)
@@ -898,5 +952,6 @@ export async function fetchAllLastmodData(): Promise<SitemapLastmodData> {
     rgeLastmodServiceDept: rgeCombos.rgeLastmodServiceDept,
     ceeQualifiedOperationCity: ceeQualifiedOperationCity ? ceeQualifiedOperationCity.combos : null,
     ceeLastmodOperationCity: ceeQualifiedOperationCity ? ceeQualifiedOperationCity.lastmod : null,
+    deptServiceFallbackCombos,
   }
 }

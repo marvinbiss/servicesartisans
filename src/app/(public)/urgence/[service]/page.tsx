@@ -76,19 +76,8 @@ const emergencyMeta: Record<
       'Fil dénudé dangereux',
     ],
   },
-  serrurier: {
-    gradient: 'from-green-600 to-green-800',
-    lightBg: 'bg-green-50',
-    lightText: 'text-green-700',
-    problems: [
-      'Porte claquée',
-      'Clé perdue ou volée',
-      'Serrure bloquée',
-      'Cambriolage (sécurisation)',
-      'Changement de serrure urgent',
-      'Porte blindée bloquée',
-    ],
-  },
+  // Pivot full RGE 2026-05-03 : serrurier/vitrier retirés (commodity hors RGE,
+  // gated par isUrgenceRgeCompatible — middleware retournerait 410).
   chauffagiste: {
     gradient: 'from-red-600 to-red-800',
     lightBg: 'bg-red-50',
@@ -100,19 +89,6 @@ const emergencyMeta: Record<
       'Radiateur qui fuit',
       "Ballon d'eau chaude HS",
       'Problème de thermostat',
-    ],
-  },
-  vitrier: {
-    gradient: 'from-cyan-600 to-cyan-800',
-    lightBg: 'bg-cyan-50',
-    lightText: 'text-cyan-700',
-    problems: [
-      'Vitre cassée',
-      'Baie vitrée brisée',
-      'Vitrine commerciale endommagée',
-      'Double vitrage fissuré',
-      'Effraction / cambriolage',
-      'Tempête / grêle',
     ],
   },
   couvreur: {

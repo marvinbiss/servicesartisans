@@ -23,6 +23,7 @@ export default async function ArtisanRedirectPage({ params }: Props) {
     .select('slug, stable_id, specialty, address_city, is_active, noindex')
     .or(`slug.eq.${slug},stable_id.eq.${slug}`)
     .eq('is_active', true)
+    .eq('noindex', false)
     .limit(1)
     .maybeSingle()
 

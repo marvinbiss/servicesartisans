@@ -11,17 +11,21 @@ export interface Filters {
   emergency: boolean
 }
 
+// Pivot full RGE 2026-05-03 : serrurier/carreleur retirés (commodity hors RGE)
+// — remplacés par isolation-thermique + panneaux-solaires (gravity hubs RGE).
+// Slugs alignés sur SERVICE_SLUGS_CANONICAL : 'peintre' → 'peintre-en-batiment',
+// 'maçon' → 'macon' (sans cédille pour respecter le slug canon).
 export const SERVICES = [
   { value: 'plombier', label: 'Plombier', icon: '🔧' },
   { value: 'electricien', label: 'Électricien', icon: '⚡' },
   { value: 'chauffagiste', label: 'Chauffagiste', icon: '🔥' },
-  { value: 'serrurier', label: 'Serrurier', icon: '🔑' },
-  { value: 'peintre', label: 'Peintre', icon: '🎨' },
+  { value: 'peintre-en-batiment', label: 'Peintre', icon: '🎨' },
   { value: 'menuisier', label: 'Menuisier', icon: '🪚' },
-  { value: 'maçon', label: 'Maçon', icon: '🧱' },
-  { value: 'carreleur', label: 'Carreleur', icon: '🔲' },
+  { value: 'macon', label: 'Maçon', icon: '🧱' },
   { value: 'couvreur', label: 'Couvreur', icon: '🏠' },
   { value: 'pompe-a-chaleur', label: 'Pompe à chaleur', icon: '🌡️' },
+  { value: 'isolation-thermique', label: 'Isolation thermique', icon: '🧊' },
+  { value: 'panneaux-solaires', label: 'Panneaux solaires', icon: '☀️' },
 ]
 
 interface MapFiltersProps {

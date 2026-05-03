@@ -84,11 +84,13 @@ function fuzzyMatch(query: string, target: string): number {
 }
 
 // Popular services for quick access
+// Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) — remplacé
+// par pompe-a-chaleur (gravity hub RGE, signal autocomplétion RGE-aligné).
 const popularServices = [
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
+  'pompe-a-chaleur',
   'peintre-en-batiment',
 ]
 
@@ -382,7 +384,7 @@ export function MetierAutocomplete({
         >
           <div className="text-charcoal-500">Aucun métier trouvé pour "{query}"</div>
           <div className="mt-2 text-sm text-charcoal-400">
-            Essayez : plombier, électricien, serrurier...
+            Essayez : plombier, électricien, chauffagiste...
           </div>
         </div>
       )}

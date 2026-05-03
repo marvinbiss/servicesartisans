@@ -64,17 +64,18 @@ const TOPIC_KEYWORDS: Array<{ topic: GuideTopic; match: (slug: string) => boolea
     topic: 'facade',
     match: (s) => /(^|-)(facade|ravalement|crepi|enduit|peintre|peinture)(-|$)/.test(s),
   },
+  // Pivot full RGE 2026-05-03 : tokens 'vitrier' et 'carreleur' retirés des
+  // regex (slugs commodity hors RGE). Les keywords thématiques restants
+  // (fenetre/double-vitrage/carrelage) couvrent les contenus historiques.
   {
     topic: 'menuiserie',
     match: (s) =>
-      /(^|-)(menuisier|fenetre|double-vitrage|porte|vitrier|volet|store|verriere|parquet)(-|$)/.test(
-        s
-      ),
+      /(^|-)(menuisier|fenetre|double-vitrage|porte|volet|store|verriere|parquet)(-|$)/.test(s),
   },
   {
     topic: 'amenagement',
     match: (s) =>
-      /(^|-)(amenagement|extension|combles|garage|veranda|terrasse|cuisine|salle-de-bain|cloison|placo|carrelage|platre|gros-oeuvre|macon|carreleur)(-|$)/.test(
+      /(^|-)(amenagement|extension|combles|garage|veranda|terrasse|cuisine|salle-de-bain|cloison|placo|carrelage|platre|gros-oeuvre|macon)(-|$)/.test(
         s
       ),
   },

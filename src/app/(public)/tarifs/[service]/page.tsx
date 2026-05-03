@@ -45,6 +45,7 @@ import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import dynamic from 'next/dynamic'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
   ssr: false,
@@ -80,6 +81,8 @@ function truncateTitle(title: string, maxLen = 41): string {
   const truncated = title.slice(0, maxLen - (endsWithQuestion ? 2 : 1)).replace(/\s+\S*$/, '')
   return endsWithQuestion ? truncated + ' ?' : truncated + '…'
 }
+
+const PUBLISHED_DATE = getPublishedDate('/tarifs/[service]')
 
 export async function generateMetadata({
   params,
@@ -118,11 +121,6 @@ export async function generateMetadata({
       description:
         'Tarifs peintre 2026 : prix au m², rafraîchissement, rénovation complète. Comparez les devis gratuits et obtenez un résultat impeccable.',
     },
-    serrurier: {
-      title: 'Tarif serrurier 2026 : prix urgence + dépannage + Devis',
-      description:
-        'Prix serrurier 2026 : ouverture de porte, changement de serrure, blindage. Comparez les devis gratuits 24h/24 et évitez les arnaques.',
-    },
     couvreur: {
       title: 'Combien coûte un couvreur en 2026 ? Prix + Devis Gratuit',
       description:
@@ -132,11 +130,6 @@ export async function generateMetadata({
       title: 'Tarif maçon 2026 : prix au m² + prestations + Devis Gratuit',
       description:
         'Prix maçon 2026 : gros œuvre, extension, rénovation. Grille tarifaire complète par prestation + devis gratuit en 2 min.',
-    },
-    carreleur: {
-      title: 'Prix carreleur 2026 : tarif au m² + pose + Devis Gratuit',
-      description:
-        'Tarifs carreleur 2026 : pose carrelage sol, mur, faïence. Comparez les devis gratuits et obtenez un travail soigné par un artisan qualifié.',
     },
     'pompe-a-chaleur': {
       title: 'Prix pompe à chaleur 2026 : aides + tarifs + Devis Gratuit',
@@ -392,7 +385,7 @@ export default async function TarifsServicePage({
     headline: truncateTitle(`Tarifs ${tradeLower} 2026 — Prix en France`, 110),
     description: `Guide tarif ${tradeLower} 2026 : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, ${parsedTasks.length || trade.commonTasks.length} prestations, multiplicateur régional, méthodologie chiffrée.`,
     url: `${SITE_URL}/tarifs/${service}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -542,7 +535,7 @@ export default async function TarifsServicePage({
           <ArticleMeta
             author={author.name}
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
             className="mb-6"
           />

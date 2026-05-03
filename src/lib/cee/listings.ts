@@ -10,12 +10,18 @@
  *  - Provider localisé dans la ville (INSEE / nom via `getCityValues`)
  *  - Provider `is_active = TRUE`
  *
- * On NE filtre PAS côté SQL sur le croisement `rge_qualifications[*].code ∈
- * rge_qualifications_requises` : l'attribut est un JSONB dans providers et
- * supabase-js ne permet pas de match précis sans RPC dédiée. En pratique :
- *  - Tous les artisans renvoyés sont déjà RGE actifs.
- *  - Le code RGE précis (Qualibat-7131, QualiPAC, etc.) est affiché sur la
- *    card RGE, le visiteur voit immédiatement si le match est parfait.
+ * Filtre code RGE par opération (audit 2026-05-03 P0 #6) :
+ *  - SQL : `rge_valid_until >= today` (post-1).
+ *  - Post-filter JS : intersection des codes `rge_qualifications[*].code` du
+ *    provider avec `operation.rge_qualifications_requises`. Si l'opération
+ *    n'a PAS de codes requis listés (cas legacy / opérations généralistes),
+ *    on accepte tout artisan RGE (comportement fail-open compatible avec
+ *    l'historique). Si l'opération exige des codes mais que le provider n'a
+ *    aucun match, on l'exclut — c'est la promesse SEO/trust : sur
+ *    `/cee/[op]/[ville]` on ne liste que des artisans capables d'obtenir
+ *    cette prime spécifique.
+ *  - Le code RGE précis (Qualibat-7131, QualiPAC, etc.) reste affiché sur la
+ *    card RGE pour transparence visiteur.
  *
  * Cache 6h, fail-open strict (IS_BUILD ou erreur → liste vide / 0).
  */
@@ -117,6 +123,10 @@ export async function getCeeProvidersByOperationAndCity(
         // (cf. migration 380 — colonnes dénormalisées paire). On laisse tomber
         // le filtre redondant pour permettre au planner d'utiliser
         // `idx_providers_rge_active` (partial index très sélectif).
+        // On rapatrie 4× la limite pour que le post-filter JS sur les codes RGE
+        // requis n'épuise pas la page de résultats (10-25% des artisans RGE
+        // d'une ville auront le code spécifique requis pour une opération
+        // donnée).
         const { data, error } = await supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
@@ -128,9 +138,22 @@ export async function getCeeProvidersByOperationAndCity(
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .order('name')
-          .limit(limit)
+          .limit(limit * 4)
 
         if (error) throw error
+
+        const requiredCodes = (operation.rge_qualifications_requises ?? []).map((c) =>
+          c.toLowerCase()
+        )
+        type RgeQualif = { code?: string | null }
+        const matchesRequired = (p: { rge_qualifications?: unknown }): boolean => {
+          if (requiredCodes.length === 0) return true
+          const quals = (p.rge_qualifications as RgeQualif[] | null) ?? []
+          return quals.some((q) => {
+            const code = q?.code?.toLowerCase?.()
+            return code != null && requiredCodes.includes(code)
+          })
+        }
 
         const providers = resolveProviderCities(
           (data || []) as unknown as Array<{
@@ -139,7 +162,7 @@ export async function getCeeProvidersByOperationAndCity(
           }>
         ) as unknown as Provider[]
 
-        return providers
+        return providers.filter(matchesRequired).slice(0, limit)
       } catch (err) {
         logger.error(
           `[getCeeProvidersByOperationAndCity] FAILED for ${operationCode}/${villeSlug}`,

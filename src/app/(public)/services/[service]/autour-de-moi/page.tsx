@@ -19,17 +19,19 @@ export const dynamicParams = false
 
 // 10 services éligibles au pattern "autour de moi" — volume de recherche
 // significatif pour le long-tail "près de moi / près de chez moi".
+// Pivot full RGE 2026-05-03 : serrurier/carreleur retirés (commodity hors RGE)
+// — remplacés par isolation-thermique + panneaux-solaires (gravity hubs RGE).
 const AROUND_ME_SERVICES: readonly string[] = [
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
   'peintre-en-batiment',
   'menuisier',
   'macon',
   'couvreur',
-  'carreleur',
   'pompe-a-chaleur',
+  'isolation-thermique',
+  'panneaux-solaires',
 ] as const
 
 export function generateStaticParams() {

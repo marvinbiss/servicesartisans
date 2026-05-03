@@ -122,52 +122,7 @@ export const servicePricings: ServicePricing[] = [
       },
     ],
   },
-  {
-    service: 'serrurier',
-    serviceName: 'Serrurier',
-    interventions: [
-      {
-        name: 'Ouverture porte claquée',
-        prixMin: 80,
-        prixMax: 150,
-        unite: 'intervention',
-        tendance: 'stable',
-        variation: 1.0,
-      },
-      {
-        name: 'Ouverture porte blindée',
-        prixMin: 150,
-        prixMax: 400,
-        unite: 'intervention',
-        tendance: 'hausse',
-        variation: 2.5,
-      },
-      {
-        name: 'Changement serrure 3 points',
-        prixMin: 200,
-        prixMax: 600,
-        unite: 'intervention',
-        tendance: 'hausse',
-        variation: 3.1,
-      },
-      {
-        name: 'Blindage de porte',
-        prixMin: 800,
-        prixMax: 2000,
-        unite: 'intervention',
-        tendance: 'hausse',
-        variation: 4.0,
-      },
-      {
-        name: 'Installation serrure connectée',
-        prixMin: 200,
-        prixMax: 600,
-        unite: 'intervention',
-        tendance: 'baisse',
-        variation: -3.5,
-      },
-    ],
-  },
+  // Pivot full RGE 2026-05-03 : entrée 'serrurier' retirée (commodity hors RGE).
   {
     service: 'chauffagiste',
     serviceName: 'Chauffagiste',
@@ -252,49 +207,18 @@ export const servicePricings: ServicePricing[] = [
       },
     ],
   },
+  // Pivot full RGE 2026-05-03 : entrée 'carreleur' retirée (commodity hors RGE).
   {
-    service: 'carreleur',
-    serviceName: 'Carreleur',
+    service: 'salle-de-bain',
+    serviceName: 'Spécialiste salle de bain',
     interventions: [
       {
-        name: 'Pose carrelage sol',
-        prixMin: 30,
-        prixMax: 70,
-        unite: 'm²',
-        tendance: 'hausse',
-        variation: 3.0,
-      },
-      {
-        name: 'Pose faïence murale',
+        name: 'Pose carrelage salle de bain',
         prixMin: 35,
         prixMax: 80,
         unite: 'm²',
         tendance: 'hausse',
-        variation: 2.6,
-      },
-      {
-        name: 'Pose carrelage grand format',
-        prixMin: 40,
-        prixMax: 90,
-        unite: 'm²',
-        tendance: 'hausse',
-        variation: 3.8,
-      },
-      {
-        name: 'Pose mosaïque',
-        prixMin: 50,
-        prixMax: 120,
-        unite: 'm²',
-        tendance: 'stable',
-        variation: 1.5,
-      },
-      {
-        name: 'Ragréage et préparation sol',
-        prixMin: 15,
-        prixMax: 30,
-        unite: 'm²',
-        tendance: 'stable',
-        variation: 0.9,
+        variation: 3.0,
       },
     ],
   },
@@ -420,9 +344,10 @@ export const servicePricings: ServicePricing[] = [
       },
     ],
   },
+  // Pivot full RGE 2026-05-03 : slug 'plaquiste' corrigé en 'platrier' (canon).
   {
-    service: 'plaquiste',
-    serviceName: 'Plaquiste',
+    service: 'platrier',
+    serviceName: 'Plâtrier plaquiste',
     interventions: [
       {
         name: 'Pose cloison placo BA13',

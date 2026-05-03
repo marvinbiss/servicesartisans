@@ -161,14 +161,9 @@ export default function ArtisanInternalLinks({
               >
                 Tarifs {serviceName} en France
               </Link>
-              {[
-                'plombier',
-                'electricien',
-                'serrurier',
-                'chauffagiste',
-                'vitrier',
-                'couvreur',
-              ].includes(serviceSlug) && (
+              {['plombier', 'electricien', 'chauffagiste', 'couvreur', 'ramoneur'].includes(
+                serviceSlug
+              ) && (
                 <Link
                   href={`/urgence/${serviceSlug}`}
                   className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"

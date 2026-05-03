@@ -82,6 +82,7 @@ export async function GET(request: NextRequest) {
       )
       .eq(lookupField, lookupValue)
       .eq('is_active', true)
+      .eq('noindex', false)
       .limit(1)
 
     if (error) {

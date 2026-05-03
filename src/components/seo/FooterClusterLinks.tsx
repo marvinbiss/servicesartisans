@@ -12,12 +12,14 @@ import { getServiceWeight } from '@/lib/constants/navigation'
 // Liens statiques, pas de DB — safe pour le footer global.
 // ---------------------------------------------------------------------------
 
-/** Top 6 services par volume de recherche — sorted by SERVICE_WEIGHT */
+/** Top 6 services par volume de recherche — sorted by SERVICE_WEIGHT.
+ * Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) —
+ * remplacé par pompe-a-chaleur (gravity hub RGE, weight 7). */
 const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
-  { slug: 'serrurier', name: 'Serrurier' },
   { slug: 'chauffagiste', name: 'Chauffagiste' },
+  { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur' },
   { slug: 'couvreur', name: 'Couvreur' },
   { slug: 'macon', name: 'Maçon' },
 ].sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
@@ -32,11 +34,12 @@ const TOP_CITIES: { slug: string; name: string }[] = [
   { slug: 'lille', name: 'Lille' },
 ]
 
-/** Top 5 services × top 4 villes = 20 liens stratégiques — sorted by weight */
+/** Top 5 services × top 4 villes = 20 liens stratégiques — sorted by weight.
+ * Pivot full RGE 2026-05-03 : serrurier retiré → pompe-a-chaleur. */
 const COMBO_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
-  { slug: 'serrurier', name: 'Serrurier' },
+  { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur' },
   { slug: 'chauffagiste', name: 'Chauffagiste' },
   { slug: 'couvreur', name: 'Couvreur' },
 ].sort((a, b) => getServiceWeight(b.slug) - getServiceWeight(a.slug))
@@ -66,13 +69,15 @@ export default function FooterClusterLinks() {
     label: `Artisans ${c.name}`,
   }))
 
-  // Pages utiles — 7 liens
+  // Pages utiles — 9 liens
   const utilityLinks: FooterLink[] = [
     { href: '/simulateur-aides-renovation', label: 'Simulateur aides' },
     { href: '/guides', label: 'Guides travaux' },
     { href: '/barometre', label: 'Baromètre prix' },
     { href: '/comparaison', label: 'Comparatifs' },
     { href: '/urgence', label: 'Artisan urgence' },
+    { href: '/diagnostic', label: 'Diagnostic immobilier' },
+    { href: '/travaux', label: 'Travaux rénovation' },
     { href: '/badge', label: 'Badge artisan vérifié' },
     { href: '/questions', label: 'Questions fréquentes' },
   ]

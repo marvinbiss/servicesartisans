@@ -23,6 +23,7 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = false
 
@@ -38,6 +39,8 @@ function truncateTitle(title: string, maxLen = 41): string {
   if (title.length <= maxLen) return title
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
+
+const PUBLISHED_DATE = getPublishedDate('/devis/[service]')
 
 export async function generateMetadata({
   params,
@@ -184,7 +187,7 @@ export default async function DevisServicePage({
     headline: truncateTitle(`${h1Text} — ${new Date().getFullYear()}`, 110),
     description: `Devis gratuit ${tradeLower}. Fourchette ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 artisans vérifiés sous 24 h.`,
     url: `${SITE_URL}/devis/${service}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -251,7 +254,7 @@ export default async function DevisServicePage({
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
             className="mt-4"
           />

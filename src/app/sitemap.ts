@@ -46,36 +46,10 @@ export const dynamicParams = false
 // artificially claiming daily content updates.
 const STATIC_DATE = new Date().toISOString().slice(0, 10)
 
-// CEE — codes d'opérations seed (migration 383). Source statique, alignée sur
-// `cee_operations`. Utilisée par les sitemaps pour éviter un round-trip DB au
-// build (les codes FOS ne bougent qu'à la publication d'un nouvel arrêté DGEC).
-// Fiches abrogées retirées : BAR-TH-106 (01/01/2024, remplacée par BAR-TH-171),
-// BAR-TH-160 (01/08/2025, pas de remplacement direct), BAR-TH-164 (remplacée
-// par BAR-TH-174). Nouvelles fiches en vigueur ajoutées : BAR-TH-172, 174,
-// 175, 177. Ordre alphabétique conservé.
-const CEE_OPERATION_CODES: readonly string[] = [
-  'bar-en-101',
-  'bar-en-102',
-  'bar-en-103',
-  'bar-en-104',
-  'bar-en-108',
-  'bar-th-112',
-  'bar-th-113',
-  'bar-th-125',
-  'bar-th-127',
-  'bar-th-129',
-  'bar-th-143',
-  'bar-th-148',
-  'bar-th-159',
-  'bar-th-161',
-  'bar-th-171',
-  'bar-th-172',
-  'bar-th-173',
-  'bar-th-174',
-  'bar-th-175',
-  'bar-th-177',
-  'bar-se-104',
-] as const
+// CEE — codes d'opérations seed. Source unique : src/lib/cee/operation-codes.ts
+// (leaf module sans imports — réutilisé par sitemap.ts, lastmod-queries.ts,
+// indexnow-submit/route.ts pour éliminer le drift triple SSoT).
+import { CEE_OPERATION_CODES } from '@/lib/cee/operation-codes'
 
 // Lazily-loaded lastmod data from DB. Fetched once, reused across all sitemap IDs.
 // If DB is unavailable, all maps are empty → lastmod is omitted (honest).
@@ -515,6 +489,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'weekly' as const,
         priority: 0.85,
       })),
+      // Hub /diagnostic — Action #8 sub-step 8.3 (DPE + audit + classes A→G).
+      {
+        url: `${SITE_URL}/diagnostic`,
+        lastModified: '2026-05-03',
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      },
+      // Hub /travaux — Action #8 sub-step 8.4 (entreprise rénovation, métiers, refaire toiture).
+      {
+        url: `${SITE_URL}/travaux`,
+        lastModified: '2026-05-03',
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      },
       // Sprint 0.4 — Open data backbone (CC-BY 4.0 → backlinks DR 92 data.gouv.fr).
       {
         url: `${SITE_URL}/open-data`,
@@ -958,7 +946,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       .filter((v): v is NonNullable<typeof v> => v != null)
     const mergedCities = [...phase1Cities, ...gscExtras]
 
-    const { byDeptServiceSlug } = await getLastmodData()
+    const { byDeptServiceSlug, qualifiedCombos, deptServiceFallbackCombos } = await getLastmodData()
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
@@ -974,6 +962,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         // If no data → omitted (honest).
         const deptKey = `${normalizeName(ville.departement)}::${service.slug}`
         const lastmod = byDeptServiceSlug.get(deptKey)
+        // Sprint A #6 PhB (2026-05-03) — drift sitemap↔noindex aligné. La page
+        // applique `robots:noindex` quand `providerCount === 0 && !hasFallbackDept`
+        // (cf. services/[s]/[location]/page.tsx). Le sitemap doit appliquer la
+        // même règle pour ne pas exposer d'URL noindex à Google (gaspille budget
+        // crawl). Seuils alignés avec la page :
+        //   - `qualifiedCombos.has(...)` = ≥1 provider local (specialty + city match)
+        //   - `deptServiceFallbackCombos.has(...)` = ≥3 providers dept (cf. DEPT_FALLBACK_INDEX_THRESHOLD)
+        // Fail-open : si une des deux sources est `null` (DB blip), on inclut
+        // l'URL — identique au comportement page (providerCount default = 1).
+        if (qualifiedCombos !== null && deptServiceFallbackCombos !== null) {
+          const hasLocalProviders = qualifiedCombos.has(`${service.slug}::${ville.slug}`)
+          const hasDeptFallback = deptServiceFallbackCombos.has(deptKey)
+          if (!hasLocalProviders && !hasDeptFallback) continue
+        }
         allUrls.push({
           url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
           lastModified: lastmod,
@@ -1372,24 +1374,43 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── RGE service × city listings (/rge/[service]/[ville]) ───────────
   // 19 services énergétiques × 500 villes = 9 500 URLs max
   // (14 historiques + 5 élargissement 2026-05-02).
-  // 2026-04-30 — fail-open systématique : audit baseline a révélé que le
-  // filtre `rgeQualifiedServiceCity` était trop strict (143 URLs émises sur
-  // 7000 attendues). Cause racine : le mapping `SERVICE_TO_SPECIALTIES`
-  // utilisé par le fetcher est trop fin (ex: aucun artisan DB n'a
-  // `specialty='pompe-a-chaleur'`, ils ont `specialty='chauffagiste'` avec
-  // qualif RGE QualiPAC dans `rge_qualifications[]`). Conséquence : 98%
-  // des combos étaient skip alors qu'elles ont en pratique des artisans
-  // RGE éligibles via fallback dept ou via providers `chauffagiste`+QualiPAC.
-  // La page route gère déjà le `robots:noindex` quand `count_strict=0` ET
-  // pas de fallback dept (cf. `getRgeCountByServiceAndCityStrict` page.tsx:115).
-  // On garde `rgeLastmodServiceCity` pour le `lastModified` quand dispo.
+  //
+  // 2026-04-30 historique : fail-open systématique car fetcher trop strict
+  // (143 URLs émises sur 7000 attendues). Cause racine : mapping
+  // `SERVICE_TO_SPECIALTIES` trop fin — un artisan `specialty='chauffagiste'`
+  // avec qualif RGE QualiPAC n'était pas matché vers /rge/pompe-a-chaleur.
+  //
+  // 2026-05-03 (Action #3 Sprint B sub-step 2) : fetcher refactoré (utilise
+  // `getRgeServicesFromQualifications` + multi-format dept lookup). Probe live
+  // : 1 790 city combos (18.8%) + 1 794 dept combos (93.5%). On réactive le
+  // filtrage avec règle "city OR dept" — la page applique exactement cette
+  // logique : `isNoindex = countStrict === 0 && !hasDeptFallback` (rge/[s]/[v]
+  // page.tsx:162). Le seuil dept est ≥1 (pas ≥3 comme /services/[s]/[v]) car
+  // RGE est rare-supply (50K artisans sur 970K).
+  //
+  // Fail-open : si fetcher retourne null (DB blip), on inclut tout — identique
+  // au comportement page (countStrict.ok === false → fail-open).
   if (id === 'rge-service-city') {
     const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
-    const { rgeLastmodServiceCity } = await getLastmodData()
+    const { rgeLastmodServiceCity, rgeQualifiedServiceCity, rgeQualifiedServiceDept } =
+      await getLastmodData()
     const result: MetadataRoute.Sitemap = []
+    // Narrow once to non-null Sets so we can use them directly in the loop
+    // without `!` non-null assertions (eslint @typescript-eslint/no-non-null-assertion).
+    const cityCombos = rgeQualifiedServiceCity
+    const deptCombos = rgeQualifiedServiceDept
+    const filterActive = cityCombos !== null && deptCombos !== null
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const ville of phase1Cities) {
         const key = `${svc}::${ville.slug}`
+        if (filterActive && cityCombos !== null && deptCombos !== null) {
+          const hasLocal = cityCombos.has(key)
+          // Fallback dept : on convertit le nom dept FR en slug (normalizeName
+          // produit le même format que dept.slug, ex: "Bas-Rhin" → "bas-rhin").
+          const deptSlug = normalizeName(ville.departement)
+          const hasDept = deptCombos.has(`${svc}::${deptSlug}`)
+          if (!hasLocal && !hasDept) continue
+        }
         result.push({
           url: `${SITE_URL}/rge/${svc}/${ville.slug}`,
           lastModified: rgeLastmodServiceCity?.get(key),
@@ -1403,18 +1424,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── RGE service × department listings (/rge/[service]/departement/[dept])
   // 19 services énergétiques × 101 départements = 1 919 URLs max
-  // (14 historiques + 5 élargissement 2026-05-02).
-  // 2026-04-30 — fail-open systématique. Audit baseline a révélé 1 URL
-  // sur 1 414 attendues (mismatch entre `address_department` DB qui stocke
-  // le code numérique '69' et la lookup `normalizeName(dept.name)='rhone'`).
-  // Page route gère noindex via fallback dept-listing.
+  //
+  // 2026-04-30 historique : fail-open total (1 URL sur 1 414 attendues —
+  // mismatch entre code DB '69' et lookup 'rhone').
+  //
+  // 2026-05-03 (Action #3 Sprint B sub-step 2) : fetcher refactoré avec
+  // lookup multi-format (code/nom/slug → slug). Probe live : 1 794/1 919
+  // combos (93.5% coverage). Réactivation safe.
+  // Fail-open si fetcher null (DB blip).
   if (id === 'rge-service-dept') {
-    const { rgeLastmodServiceDept } = await getLastmodData()
+    const { rgeLastmodServiceDept, rgeQualifiedServiceDept } = await getLastmodData()
     const result: MetadataRoute.Sitemap = []
+    const deptCombos = rgeQualifiedServiceDept
     for (const svc of RGE_ALLOWED_SERVICES) {
       for (const dept of departements) {
         const deptKey = normalizeName(dept.name)
         const mapKey = `${svc}::${deptKey}`
+        if (deptCombos !== null && !deptCombos.has(mapKey)) continue
         result.push({
           url: `${SITE_URL}/rge/${svc}/departement/${dept.slug}`,
           lastModified: rgeLastmodServiceDept?.get(mapKey),

@@ -126,19 +126,8 @@ const emergencyMeta: Record<
       'Fil dénudé dangereux',
     ],
   },
-  serrurier: {
-    gradient: 'from-green-600 to-green-800',
-    lightBg: 'bg-green-50',
-    lightText: 'text-green-700',
-    problems: [
-      'Porte claquée',
-      'Clé perdue ou volée',
-      'Serrure bloquée',
-      'Cambriolage (sécurisation)',
-      'Changement de serrure urgent',
-      'Porte blindée bloquée',
-    ],
-  },
+  // Pivot full RGE 2026-05-03 : serrurier/vitrier/carreleur/cuisiniste retirés
+  // (commodity hors RGE, gated par isUrgenceRgeCompatible).
   chauffagiste: {
     gradient: 'from-red-600 to-red-800',
     lightBg: 'bg-red-50',
@@ -150,19 +139,6 @@ const emergencyMeta: Record<
       'Radiateur qui fuit',
       "Ballon d'eau chaude HS",
       'Problème de thermostat',
-    ],
-  },
-  vitrier: {
-    gradient: 'from-cyan-600 to-cyan-800',
-    lightBg: 'bg-cyan-50',
-    lightText: 'text-cyan-700',
-    problems: [
-      'Vitre cassée',
-      'Baie vitrée brisée',
-      'Vitrine commerciale endommagée',
-      'Double vitrage fissuré',
-      'Effraction / cambriolage',
-      'Tempête / grêle',
     ],
   },
   climaticien: {
@@ -228,18 +204,6 @@ const emergencyMeta: Record<
       'Sinistre nécessitant remise en peinture rapide',
     ],
   },
-  carreleur: {
-    gradient: 'from-teal-600 to-teal-800',
-    lightBg: 'bg-teal-50',
-    lightText: 'text-teal-700',
-    problems: [
-      'Carrelage décollé (risque de chute)',
-      'Fissure douche italienne avec infiltration',
-      'Infiltration sous carrelage',
-      'Carreaux cassés dans zone de passage',
-      'Joint de douche défaillant (fuite active)',
-    ],
-  },
   plaquiste: {
     gradient: 'from-slate-600 to-slate-800',
     lightBg: 'bg-slate-50',
@@ -262,18 +226,6 @@ const emergencyMeta: Record<
       'Inondation jardin après fortes pluies',
       'Haie ou arbre bloquant un accès',
       'Déblaiement urgent après tempête',
-    ],
-  },
-  cuisiniste: {
-    gradient: 'from-rose-600 to-rose-800',
-    lightBg: 'bg-rose-50',
-    lightText: 'text-rose-700',
-    problems: [
-      'Fuite sous évier encastré',
-      'Plan de travail effondré ou cassé',
-      'Charnière cassée (porte de meuble tombée)',
-      'Façade de cuisine décrochée',
-      'Dégât des eaux sur meubles de cuisine',
     ],
   },
   'salle-de-bain': {
@@ -463,18 +415,7 @@ const emergencyMeta: Record<
       "Descente d'eau pluviale cassée",
     ],
   },
-  ebeniste: {
-    gradient: 'from-amber-800 to-amber-950',
-    lightBg: 'bg-amber-50',
-    lightText: 'text-amber-900',
-    problems: [
-      'Meuble ancien effondré ou cassé (valeur patrimoniale)',
-      'Escalier en bois avec marche cassée (danger)',
-      'Porte en bois massif fracturée',
-      'Boiserie endommagée après dégât des eaux',
-      'Réparation urgente mobilier avant événement',
-    ],
-  },
+  // ebeniste retiré 2026-05-03 (pivot full RGE — slug hors catalog 21).
 }
 
 // Default problems for services without a specific emergencyMeta entry
@@ -2163,14 +2104,6 @@ function EmergencyEditorialSections({
     "Préparez votre adresse exacte, étage et code d'accès",
     "Rassemblez les informations du contrat d'électricité (Enedis, etc.)",
   ]
-  const checklistSerrurier = [
-    'Vérifiez si une autre entrée est accessible (fenêtre, porte de service)',
-    'Contactez le syndic ou le gardien si vous êtes en copropriété',
-    'Prenez en photo la serrure et la marque de la porte',
-    "Préparez une pièce d'identité et un justificatif de domicile",
-    'Notez la marque et le modèle de la serrure si visible',
-    'Demandez un devis ferme avant que le serrurier ne commence',
-  ]
   const checklistDefault = [
     "Sécurisez la zone en attendant l'artisan (coupez l'eau, l'électricité ou le gaz si nécessaire)",
     'Prenez des photos du problème sous différents angles',
@@ -2183,7 +2116,6 @@ function EmergencyEditorialSections({
   const checklistMap: Record<string, string[]> = {
     plombier: checklistPlombier,
     electricien: checklistElectricien,
-    serrurier: checklistSerrurier,
   }
   const checklist = checklistMap[service] || checklistDefault
 

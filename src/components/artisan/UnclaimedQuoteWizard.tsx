@@ -49,14 +49,6 @@ const SERVICE_OPTIONS: Record<string, string[]> = {
     'Tableau électrique',
     'Autre',
   ],
-  serrurier: [
-    'Porte claquée',
-    'Serrure cassée',
-    'Changement de serrure',
-    'Double de clé',
-    'Blindage de porte',
-    'Autre',
-  ],
   chauffagiste: [
     'Panne chaudière',
     'Entretien chaudière',
@@ -74,13 +66,6 @@ const SERVICE_OPTIONS: Record<string, string[]> = {
     'Autre',
   ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet', 'Autre'],
-  carreleur: [
-    'Carrelage sol',
-    'Carrelage mural',
-    'Faïence salle de bain',
-    'Terrasse extérieure',
-    'Autre',
-  ],
   couvreur: [
     'Fuite toiture',
     'Rénovation toiture',

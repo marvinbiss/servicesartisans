@@ -18,18 +18,17 @@ import { createInvitationForDevis } from '@/lib/reviews/invitations'
 // ---------------------------------------------------------------------------
 
 const serviceNames: Record<string, string> = {
+  // Pivot full RGE 2026-05-03 : retrait de serrurier, vitrier, carreleur,
+  // cuisiniste (commodity hors RGE — dispatch /api/devis n'accepte plus
+  // ces slugs).
   plombier: 'Plombier',
   electricien: 'Électricien',
-  serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
   'peintre-en-batiment': 'Peintre en bâtiment',
   couvreur: 'Couvreur',
   menuisier: 'Menuisier',
   macon: 'Maçon',
-  carreleur: 'Carreleur',
-  vitrier: 'Vitrier',
   climaticien: 'Climaticien',
-  cuisiniste: 'Cuisiniste',
   general: 'Demande générale',
 }
 

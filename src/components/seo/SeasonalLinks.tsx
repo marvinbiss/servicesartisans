@@ -14,18 +14,21 @@ interface SeasonalLinksProps {
 const SEASONAL_SERVICES: Record<number, string[]> = {
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // jardinier + paysagiste retirés du calendrier saisonnier (hors thèse).
-  0: ['chauffagiste', 'plombier', 'serrurier', 'vitrier', 'ramoneur'], // Janvier
-  1: ['chauffagiste', 'plombier', 'electricien', 'peintre-en-batiment', 'vitrier'], // Février
+  // Pivot full RGE 2026-05-03 : serrurier + vitrier retirés (commodity hors
+  // RGE) — remplacés par menuisier (problématiques fenêtres/portes RGE) et
+  // par les gravity hubs RGE (isolation-thermique / pompe-a-chaleur).
+  0: ['chauffagiste', 'plombier', 'menuisier', 'isolation-thermique', 'ramoneur'], // Janvier
+  1: ['chauffagiste', 'plombier', 'electricien', 'peintre-en-batiment', 'isolation-thermique'], // Février
   2: ['couvreur', 'macon', 'peintre-en-batiment', 'facadier', 'isolation-thermique'], // Mars
   3: ['couvreur', 'macon', 'peintre-en-batiment', 'facadier', 'pompe-a-chaleur'], // Avril
   4: ['climaticien', 'couvreur', 'macon', 'pompe-a-chaleur', 'panneaux-solaires'], // Mai
   5: ['climaticien', 'electricien', 'menuisier', 'panneaux-solaires', 'pompe-a-chaleur'], // Juin
-  6: ['climaticien', 'serrurier', 'vitrier', 'panneaux-solaires', 'pompe-a-chaleur'], // Juillet
-  7: ['climaticien', 'serrurier', 'plombier', 'panneaux-solaires', 'pompe-a-chaleur'], // Août
+  6: ['climaticien', 'menuisier', 'panneaux-solaires', 'pompe-a-chaleur', 'isolation-thermique'], // Juillet
+  7: ['climaticien', 'menuisier', 'plombier', 'panneaux-solaires', 'pompe-a-chaleur'], // Août
   8: ['couvreur', 'chauffagiste', 'peintre-en-batiment', 'macon', 'ramoneur'], // Septembre
   9: ['chauffagiste', 'ramoneur', 'couvreur', 'plombier', 'menuisier'], // Octobre
-  10: ['chauffagiste', 'plombier', 'ramoneur', 'serrurier', 'vitrier'], // Novembre
-  11: ['chauffagiste', 'plombier', 'serrurier', 'electricien', 'ramoneur'], // Décembre
+  10: ['chauffagiste', 'plombier', 'ramoneur', 'menuisier', 'isolation-thermique'], // Novembre
+  11: ['chauffagiste', 'plombier', 'menuisier', 'electricien', 'ramoneur'], // Décembre
 }
 
 /**

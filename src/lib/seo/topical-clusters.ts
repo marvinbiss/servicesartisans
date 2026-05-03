@@ -59,11 +59,6 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'comment-choisir-electricien-guide',
     'electricite-normes-securite',
   ],
-  serrurier: [
-    'prix-serrurier-2026-tarifs-interventions',
-    'comment-choisir-serrurier-conseils',
-    'securiser-maison-cambriolage-solutions',
-  ],
   chauffagiste: [
     'prix-chauffagiste-2026-installation-entretien',
     'comment-choisir-chauffagiste-guide',
@@ -79,11 +74,6 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'comment-choisir-menuisier-guide',
     'menuiseries-bois-pvc-alu-comparatif',
   ],
-  carreleur: [
-    'prix-carreleur-2026-pose-fourniture',
-    'comment-choisir-carreleur-guide',
-    'guide-carrelage-salle-de-bain',
-  ],
   couvreur: [
     'prix-toiture-2026-refection-reparation-materiaux',
     'comment-choisir-couvreur-guide',
@@ -94,20 +84,10 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
     'comment-choisir-macon-guide',
     'agrandir-maison-extension-guide',
   ],
-  vitrier: [
-    'prix-vitrier-2026-remplacement-vitrage',
-    'comment-choisir-vitrier-guide',
-    'guide-fenetre-double-vitrage',
-  ],
   climaticien: [
     'prix-climaticien-2026-installation-entretien',
     'comment-choisir-climaticien-guide',
     'climatisation-reversible-guide',
-  ],
-  cuisiniste: [
-    'prix-cuisiniste-2026-pose-cuisine',
-    'comment-choisir-cuisiniste-guide',
-    'renover-cuisine-guide-complet-etapes',
   ],
   charpentier: [
     'prix-toiture-2026-refection-reparation-materiaux',
@@ -171,6 +151,8 @@ const SERVICE_ARTICLE_MAP: Record<string, string[]> = {
   ],
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // jardinier, nettoyage, alarme-securite retirés (services hors thèse).
+  // Pivot full RGE 2026-05-03 : serrurier, carreleur, vitrier, cuisiniste
+  // retirés (commodity hors RGE).
 }
 
 // ---------------------------------------------------------------------------

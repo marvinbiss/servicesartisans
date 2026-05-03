@@ -11,30 +11,8 @@ import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
-/** CEE operation codes — mirrors sitemap.ts:CEE_OPERATION_CODES. Keep in sync. */
-const CEE_OPERATION_CODES: readonly string[] = [
-  'bar-en-101',
-  'bar-en-102',
-  'bar-en-103',
-  'bar-en-104',
-  'bar-en-108',
-  'bar-th-112',
-  'bar-th-113',
-  'bar-th-125',
-  'bar-th-127',
-  'bar-th-129',
-  'bar-th-143',
-  'bar-th-148',
-  'bar-th-159',
-  'bar-th-161',
-  'bar-th-171',
-  'bar-th-172',
-  'bar-th-173',
-  'bar-th-174',
-  'bar-th-175',
-  'bar-th-177',
-  'bar-se-104',
-] as const
+/** CEE operation codes — source unique : src/lib/cee/operation-codes.ts (leaf). */
+import { CEE_OPERATION_CODES } from '@/lib/cee/operation-codes'
 
 const TOP_CITIES = [
   'paris',

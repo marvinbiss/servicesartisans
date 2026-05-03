@@ -21,6 +21,7 @@ import { getVilleBySlug } from '@/lib/data/france'
 import { getCityValues, resolveProviderCities } from '@/lib/insee-resolver'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
+import { notifyFailOpen } from '@/lib/monitoring/fail-open'
 import type { Provider } from '@/types'
 
 /**
@@ -306,8 +307,8 @@ export async function getRgeProvidersByServiceAndCity(
 
         return { providers, count: count ?? providers.length }
       } catch (err) {
-        logger.error(`[getRgeProvidersByServiceAndCity] FAILED for ${serviceSlug}/${villeSlug}:`, {
-          error: err instanceof Error ? err.message : err,
+        notifyFailOpen('rge-list-by-service-city', err, {
+          key: `${serviceSlug}:${villeSlug}`,
         })
         return { providers: [], count: 0 }
       }
@@ -400,10 +401,9 @@ export async function getRgeProvidersByServiceAndDepartement(
 
         return { providers, count: count ?? providers.length }
       } catch (err) {
-        logger.error(
-          `[getRgeProvidersByServiceAndDepartement] FAILED for ${serviceSlug}/${departementName}:`,
-          { error: err instanceof Error ? err.message : err }
-        )
+        notifyFailOpen('rge-list-by-service-dept', err, {
+          key: `${serviceSlug}:${departementName}`,
+        })
         return { providers: [], count: 0 }
       }
     },

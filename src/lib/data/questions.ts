@@ -115,7 +115,7 @@ export const questions: Question[] = [
       'Vérifiez le numéro SIRET du serrurier sur societe.com et lisez les avis en ligne. Privilégiez les serruriers recommandés par votre assurance habitation ou votre syndic de copropriété.',
     ],
     category: 'prix',
-    relatedService: 'serrurier',
+    relatedService: 'menuisier',
     tags: ['serrurier', 'urgence', 'tarif', 'porte claquée'],
   },
   {
@@ -145,7 +145,7 @@ export const questions: Question[] = [
       'Exigez un carreleur expérimenté pour les grands formats et la pose sans joint apparent. Vérifiez sa garantie décennale. La TVA est de 10 % en rénovation (logement de plus de 2 ans). Un bon carreleur pose 8 à 12 m² par jour.',
     ],
     category: 'prix',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
     tags: ['carrelage', 'pose', 'prix au m²', 'carreleur'],
   },
   {
@@ -378,7 +378,7 @@ export const questions: Question[] = [
       'Prévenez votre propriétaire ou syndic si vous êtes locataire. Demandez au serrurier un devis écrit avant intervention. Conservez la facture : les frais peuvent parfois être pris en charge par votre assurance habitation.',
     ],
     category: 'urgence',
-    relatedService: 'serrurier',
+    relatedService: 'menuisier',
     tags: ['porte claquée', 'serrurier', 'urgence', 'ouverture'],
   },
   {
@@ -423,7 +423,7 @@ export const questions: Question[] = [
       'Si la vitre a été cassée par un tiers (cambriolage, vandalisme, intempéries), votre assurance habitation prend en charge le remplacement. Déclarez le sinistre sous 2 jours ouvrés en cas de vol, 5 jours pour les autres cas. Conservez la facture du vitrier.',
     ],
     category: 'urgence',
-    relatedService: 'vitrier',
+    relatedService: 'menuisier',
     tags: ['vitre cassée', 'vitrier', 'urgence', 'sécuriser'],
   },
   {
@@ -799,7 +799,7 @@ export const questions: Question[] = [
       'Pour optimiser votre budget : commandez pendant les promotions saisonnières (janvier et septembre), comparez cuisinistes indépendants et grandes enseignes, et négociez la pose incluse dans le devis global. Vérifiez que le devis inclut bien les finitions (plinthes, joints silicone, raccords) pour éviter les surcoûts.',
     ],
     category: 'prix',
-    relatedService: 'cuisiniste',
+    relatedService: 'menuisier',
     tags: ['cuisine équipée', 'pose', 'prix', 'budget', 'cuisiniste'],
   },
 
@@ -1010,7 +1010,7 @@ export const questions: Question[] = [
       'Pour minimiser la gêne, installez un coin cuisine provisoire (plaque portable, micro-ondes, réfrigérateur) dans une autre pièce. Coordonnez les différents corps de métier (plombier, électricien, carreleur, cuisiniste) en amont pour éviter les temps morts. Un maître d’œuvre ou un cuisiniste sérieux gère cette coordination pour vous.',
     ],
     category: 'prix',
-    relatedService: 'cuisiniste',
+    relatedService: 'menuisier',
     tags: ['rénovation cuisine', 'durée travaux', 'planning', 'cuisiniste', 'délai'],
   },
   {
@@ -1436,7 +1436,7 @@ export const questions: Question[] = [
       "Conseil pratique : quel que soit le revêtement choisi, assurez-vous que l'étanchéité sous le revêtement est parfaite, surtout dans la zone de douche. Le système SPEC (Système de Protection à l'Eau sous Carrelage) est obligatoire dans les douches à l'italienne. Faites réaliser ces travaux par un carreleur qualifié avec garantie décennale.",
     ],
     category: 'choix',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
     tags: ['carrelage', 'parquet', 'salle de bain', 'vinyle', 'revêtement'],
   },
   {
@@ -1732,7 +1732,7 @@ export const questions: Question[] = [
       "Un cuisiniste indépendant ou un artisan menuisier facture généralement 15 à 25 % de moins que les grandes enseignes, avec une qualité de pose souvent supérieure. Demandez 3 devis détaillés pour comparer poste par poste. La TVA est de 10 % sur la main-d'œuvre si le logement a plus de 2 ans.",
     ],
     category: 'prix',
-    relatedService: 'cuisiniste',
+    relatedService: 'menuisier',
     tags: ['cuisine', 'rénovation', 'prix', 'cuisiniste', 'plan de travail'],
   },
   {
@@ -1764,7 +1764,7 @@ export const questions: Question[] = [
       "Votre assurance habitation couvre souvent l'intervention d'un serrurier en cas de vol ou de tentative d'effraction (mais rarement en cas de porte claquée). Appelez votre assureur en premier : il dispose d'un réseau de serruriers agréés avec des tarifs négociés. Les cartes bancaires premium (Visa Premier, Gold Mastercard) incluent parfois aussi une assistance serrurerie.",
     ],
     category: 'urgence',
-    relatedService: 'serrurier',
+    relatedService: 'menuisier',
     tags: ['serrurier', 'urgence', '24h', 'porte claquée', 'tarif'],
   },
   {
@@ -1812,7 +1812,7 @@ export const questions: Question[] = [
       "Pour les pièces humides (salle de bain, douche), la pose d'un système d'étanchéité sous le carrelage (SPEC ou équivalent) est indispensable et requiert un savoir-faire spécifique. Dans une douche à l'italienne, faites appel à un carreleur professionnel : un défaut d'étanchéité provoque des dégâts des eaux coûteux et invisibles pendant des mois.",
     ],
     category: 'diy',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
     tags: ['carrelage', 'DIY', 'pose', 'soi-même', 'carreleur'],
   },
   {

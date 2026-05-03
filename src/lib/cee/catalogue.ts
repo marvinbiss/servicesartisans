@@ -14,7 +14,7 @@
 
 import { supabase, IS_BUILD } from '@/lib/supabase'
 import { getCachedData } from '@/lib/cache'
-import { logger } from '@/lib/logger'
+import { notifyFailOpen } from '@/lib/monitoring/fail-open'
 
 const CACHE_TTL_6H = 6 * 60 * 60
 
@@ -148,9 +148,7 @@ export async function getCeeOperations(): Promise<CeeOperation[]> {
         if (error) throw error
         return (data || []) as unknown as CeeOperation[]
       } catch (err) {
-        logger.error('[getCeeOperations] FAILED', {
-          error: err instanceof Error ? err.message : err,
-        })
+        notifyFailOpen('cee-catalog', err)
         return []
       }
     },
@@ -183,9 +181,7 @@ export async function getCeeOperationByCode(code: string): Promise<CeeOperation 
         if (error) throw error
         return (data as unknown as CeeOperation) || null
       } catch (err) {
-        logger.error(`[getCeeOperationByCode] FAILED for ${normalizedCode}`, {
-          error: err instanceof Error ? err.message : err,
-        })
+        notifyFailOpen('cee-operation-by-code', err, { key: normalizedCode })
         return null
       }
     },
@@ -211,7 +207,12 @@ export async function getCeeOperationsByDomaine(): Promise<Record<CeeDomaine, Ce
     autre: [],
   }
   for (const op of operations) {
-    const domaine = (grouped[op.domaine] ? op.domaine : 'autre') as CeeDomaine
+    // Object.hasOwn — `grouped[op.domaine]` est toujours un array initialisé (truthy)
+    // donc le pattern `? :` ne route jamais vers 'autre'. Si la DB introduit un nouveau
+    // domaine, push() crash sans cette guarde stricte.
+    const domaine: CeeDomaine = Object.hasOwn(grouped, op.domaine)
+      ? (op.domaine as CeeDomaine)
+      : 'autre'
     grouped[domaine].push(op)
   }
   return grouped

@@ -772,7 +772,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le ragréage est un enduit autolissant appliqué sur un sol pour le rendre parfaitement plan avant la pose d'un revêtement (carrelage, parquet, vinyle). Il corrige les irrégularités de surface jusqu'à 10 mm d'épaisseur. Un ragréage raté (fissures, décollements) compromet l'adhérence et la durabilité du revêtement final.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: "Primaire d'accrochage",
@@ -780,7 +780,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le primaire d'accrochage est un produit liquide appliqué sur un support avant l'enduit, le ragréage ou la colle à carrelage. Il améliore l'adhérence du produit suivant et régule l'absorption du support. Sauter cette étape est la cause n°1 de décollement des carrelages et enduits.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Enduit de lissage',
@@ -796,7 +796,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       'La chape est une couche de mortier (ciment ou anhydrite) coulée sur une dalle pour obtenir une surface plane et lisse. Elle peut intégrer un plancher chauffant et une isolation acoustique. Son épaisseur varie de 3 à 8 cm. Le temps de séchage (3 à 4 semaines pour une chape ciment) est à respecter impérativement avant la pose du revêtement.',
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Sous-couche (peinture)',
@@ -812,7 +812,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le grès cérame est un carrelage en pâte de grès pressée et cuite à très haute température (1 200 °C). Extrêmement dur et peu poreux, il résiste au gel, aux taches et à l'usure. Il existe en version pleine masse (teint dans la masse) ou émaillé. C'est le choix privilégié pour les sols intérieurs et extérieurs.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Faïence',
@@ -820,7 +820,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       'La faïence est un carrelage mural en terre cuite émaillée, plus léger et plus facile à couper que le grès cérame. Elle est destinée uniquement aux murs (trop fragile pour les sols). Très utilisée dans les salles de bain et cuisines, elle offre une grande variété de couleurs et de décors.',
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Émaux de Briare',
@@ -828,7 +828,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       'Les émaux de Briare sont de petites mosaïques en pâte de verre émaillée, originaires de la ville de Briare. Ils sont utilisés pour les piscines, les douches et les frises décoratives. Résistants au gel et aux produits chimiques, ils offrent une palette de couleurs éclatantes et une finition haut de gamme.',
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Croisillons',
@@ -836,7 +836,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Les croisillons sont de petites pièces en plastique placées entre les carreaux lors de la pose pour garantir un espacement régulier des joints. Ils existent en différentes épaisseurs (1 à 5 mm). Le choix de l'épaisseur dépend du format du carrelage et du rendu esthétique souhaité.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Mortier-colle',
@@ -844,7 +844,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le mortier-colle est un mélange à base de ciment utilisé pour fixer les carreaux sur leur support. Il existe en différentes classes (C1, C2, C2S pour les supports déformables) et en version standard ou améliorée. Le choix dépend du type de carrelage, du support et de l'usage (intérieur, extérieur, pièce humide).",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Joint de carrelage',
@@ -852,7 +852,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le joint de carrelage comble l'espace entre les carreaux. Il assure l'étanchéité, compense les variations dimensionnelles et permet un entretien facile. Il existe en version ciment (classique) ou époxy (imputrescible, résistant aux taches). Les joints époxy sont recommandés dans les douches et cuisines professionnelles.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Enduit à la chaux',
@@ -868,7 +868,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       'Le béton ciré est un revêtement décoratif composé de ciment, de résine et de pigments, appliqué en couche mince (2-3 mm) sur un sol ou un mur. Il offre un rendu contemporain et sans joint. Sa mise en œuvre demande un savoir-faire particulier et un support parfaitement préparé pour éviter les fissures.',
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: "SPEC (Système de Protection à l'Eau sous Carrelage)",
@@ -876,7 +876,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le SPEC est un système d'étanchéité liquide appliqué sous le carrelage dans les pièces humides (douche, salle de bain). Il se compose d'une résine, de bandes de renfort aux angles et d'une natte. Il est obligatoire dans les douches à l'italienne et fortement recommandé dans toute salle d'eau.",
     category: 'Revêtements',
-    relatedService: 'carreleur',
+    relatedService: 'salle-de-bain',
   },
   {
     term: 'Parquet flottant',
@@ -1184,7 +1184,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Une porte blindée est une porte d'entrée renforcée avec un bloc-porte en acier, des paumelles anti-dégondage et une serrure multipoints (3, 5 ou 7 points). Certifiée A2P (1 à 3 étoiles selon le niveau de résistance à l'effraction), elle offre une protection contre le cambriolage tout en assurant une isolation thermique et acoustique.",
     category: 'Menuiserie',
-    relatedService: 'serrurier',
+    relatedService: 'menuisier',
   },
 
   // ─── Termes supplémentaires — Revêtements ─────────────────
@@ -1210,7 +1210,7 @@ export const glossaireTerms: GlossaireTerm[] = [
     definition:
       "Le placo (marque Placoplatre devenue nom commun) désigne les plaques de plâtre utilisées pour créer des cloisons, doublages et faux plafonds. Il existe en version standard (BA13), hydrofuge (vert, pour les pièces humides), coupe-feu (rose) et haute dureté. Le placo se visse sur une ossature métallique et se joint à l'enduit.",
     category: 'Revêtements',
-    relatedService: 'plaquiste',
+    relatedService: 'platrier',
   },
 
   // ─── Termes supplémentaires — Administratif ────────────────

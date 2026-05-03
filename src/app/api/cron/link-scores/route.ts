@@ -24,11 +24,13 @@ const FOOTER_NAV_PATHS = new Set([
 ])
 
 /** Pages present in FooterClusterLinks (sitewide, low weight) */
+// Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) — remplacé
+// par pompe-a-chaleur (gravity hub RGE, slug canonique).
 const FOOTER_CLUSTER_SERVICE_SLUGS = [
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
+  'pompe-a-chaleur',
   'couvreur',
   'macon',
 ]

@@ -7,18 +7,29 @@
 // ---------------------------------------------------------------------------
 
 export const SERVICE_WEIGHT: Record<string, number> = {
+  // Pivot full RGE 2026-05-03 : retrait de serrurier, vitrier, carreleur,
+  // cuisiniste (commodity hors RGE).
   plombier: 10,
   electricien: 9,
-  serrurier: 8,
   chauffagiste: 8,
   'peintre-en-batiment': 6,
   couvreur: 5,
   macon: 5,
   menuisier: 4,
-  carreleur: 3,
   climaticien: 3,
-  cuisiniste: 2,
-  vitrier: 2,
+  'pompe-a-chaleur': 7,
+  'panneaux-solaires': 7,
+  'isolation-thermique': 7,
+  'renovation-energetique': 7,
+  facadier: 4,
+  charpentier: 3,
+  zingueur: 3,
+  etancheiste: 3,
+  platrier: 3,
+  'borne-recharge': 3,
+  ramoneur: 2,
+  diagnostiqueur: 2,
+  'salle-de-bain': 2,
 }
 
 export function getServiceWeight(slug: string): number {
@@ -28,12 +39,12 @@ export function getServiceWeight(slug: string): number {
 export const popularServices = [
   { name: 'Plombier', slug: 'plombier', icon: 'Wrench' },
   { name: 'Électricien', slug: 'electricien', icon: 'Zap' },
-  { name: 'Serrurier', slug: 'serrurier', icon: 'Key' },
   { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame' },
+  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: 'Thermometer' },
   { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket' },
   { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer' },
   { name: 'Maçon', slug: 'macon', icon: 'HardHat' },
-  { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: 'Thermometer' },
+  { name: 'Couvreur', slug: 'couvreur', icon: 'Home' },
 ]
 
 export const popularCities = [
@@ -57,14 +68,15 @@ export const popularCities = [
  * références ont été retirées des arrays sibling et des entrées sources.
  */
 export const relatedServices: Record<string, string[]> = {
-  plombier: ['chauffagiste', 'salle-de-bain', 'cuisiniste', 'climaticien', 'pompe-a-chaleur'],
+  // Pivot full RGE 2026-05-03 : retrait de toutes les références aux 4 métiers
+  // commodity (serrurier, vitrier, carreleur, cuisiniste). Les chaînes
+  // ré-orientées vers des métiers RGE-compatibles cohérents.
+  plombier: ['chauffagiste', 'salle-de-bain', 'climaticien', 'pompe-a-chaleur'],
   electricien: ['borne-recharge', 'panneaux-solaires', 'climaticien'],
-  serrurier: ['vitrier', 'menuisier'],
   chauffagiste: ['plombier', 'climaticien', 'pompe-a-chaleur', 'ramoneur', 'isolation-thermique'],
-  'peintre-en-batiment': ['facadier', 'platrier', 'carreleur', 'menuisier'],
-  menuisier: ['charpentier', 'cuisiniste', 'salle-de-bain', 'vitrier'],
+  'peintre-en-batiment': ['facadier', 'platrier', 'menuisier'],
+  menuisier: ['charpentier', 'salle-de-bain', 'peintre-en-batiment'],
   macon: ['charpentier', 'couvreur', 'facadier', 'etancheiste'],
-  carreleur: ['salle-de-bain', 'peintre-en-batiment', 'platrier'],
   couvreur: ['charpentier', 'zingueur', 'etancheiste', 'facadier', 'ramoneur'],
   climaticien: [
     'chauffagiste',
@@ -73,14 +85,12 @@ export const relatedServices: Record<string, string[]> = {
     'isolation-thermique',
     'electricien',
   ],
-  vitrier: ['menuisier', 'serrurier'],
-  cuisiniste: ['plombier', 'electricien', 'salle-de-bain', 'carreleur'],
   charpentier: ['couvreur', 'menuisier', 'macon', 'zingueur'],
   zingueur: ['couvreur', 'charpentier', 'etancheiste', 'facadier', 'plombier'],
   etancheiste: ['couvreur', 'facadier', 'zingueur', 'macon', 'isolation-thermique'],
   facadier: ['peintre-en-batiment', 'etancheiste', 'macon', 'isolation-thermique'],
-  platrier: ['peintre-en-batiment', 'carreleur', 'isolation-thermique'],
-  'salle-de-bain': ['plombier', 'carreleur', 'electricien', 'cuisiniste'],
+  platrier: ['peintre-en-batiment', 'isolation-thermique'],
+  'salle-de-bain': ['plombier', 'electricien', 'menuisier'],
   'pompe-a-chaleur': [
     'chauffagiste',
     'climaticien',

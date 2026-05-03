@@ -16,7 +16,13 @@
  *
  * Auteur YMYL : claire-dubois (cf. src/lib/data/authors.ts) — methodology
  * publiée incluant croisement 3 sources officielles minimum.
+ *
+ * Anti-drift : les montants chiffrés réutilisés (MaPrimeRénov / éco-PTZ / CEE)
+ * sont importés depuis src/lib/aides/constants.ts (SSoT numérique) puis formatés
+ * via formatEur(). Ne JAMAIS hardcoder un nombre déjà présent dans constants.ts.
  */
+
+import { ECO_PTZ, MAPRIMERENOV, formatEur } from './constants'
 
 export type AideKind = 'GovernmentService' | 'FinancialProduct'
 
@@ -99,21 +105,21 @@ export const aidesCatalog: Aide[] = [
     montants: [
       {
         label: 'Parcours par geste — plafond global',
-        max: '30 000 €',
+        max: formatEur(MAPRIMERENOV.MAX_PARCOURS_GESTE_EUR),
         condition: '1 ou 2 gestes isolés (isolation, fenêtres, pompe à chaleur, etc.)',
       },
       {
         label: 'Parcours accompagné — plafond global',
-        max: '70 000 €',
+        max: formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR),
         condition: '2+ gestes isolation + saut ≥ 2 classes DPE, accompagnement MAR obligatoire',
       },
       {
         label: 'Pompe à chaleur air-eau — revenus très modestes (bleu)',
-        max: 'jusqu’à 5 000 €',
+        max: `jusqu’à ${formatEur(MAPRIMERENOV.PAC_AIR_EAU_BLEU_EUR)}`,
       },
       {
         label: 'Pompe à chaleur air-eau — revenus modestes (jaune)',
-        max: 'jusqu’à 4 000 €',
+        max: `jusqu’à ${formatEur(MAPRIMERENOV.PAC_AIR_EAU_JAUNE_EUR)}`,
       },
       {
         label: 'Isolation des combles — revenus très modestes (bleu)',
@@ -321,22 +327,22 @@ export const aidesCatalog: Aide[] = [
     montants: [
       {
         label: 'Action seule (1 geste)',
-        max: 'jusqu’à 15 000 €',
+        max: `jusqu’à ${formatEur(ECO_PTZ.MAX_ACTION_SEULE_EUR)}`,
         condition: '15 ans de remboursement maximum',
       },
       {
         label: 'Bouquet de travaux (2+ gestes)',
-        max: 'jusqu’à 30 000 €',
+        max: `jusqu’à ${formatEur(ECO_PTZ.MAX_BOUQUET_EUR)}`,
         condition: '15 ans de remboursement',
       },
       {
         label: 'Performance énergétique globale',
-        max: 'jusqu’à 50 000 €',
-        condition: '20 ans de remboursement, gain énergétique ≥ 35 %',
+        max: `jusqu’à ${formatEur(ECO_PTZ.MAX_GLOBAL_EUR)}`,
+        condition: `${ECO_PTZ.DURATION_GLOBAL_YEARS} ans de remboursement, gain énergétique ≥ 35 %`,
       },
       {
         label: 'Assainissement non collectif',
-        max: 'jusqu’à 10 000 €',
+        max: `jusqu’à ${formatEur(ECO_PTZ.MAX_ASSAINISSEMENT_EUR)}`,
       },
     ],
     eligibilite: [

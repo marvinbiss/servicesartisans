@@ -11,7 +11,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Wrench,
-  Key,
   ChevronRight,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,6 +27,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import dynamic from 'next/dynamic'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
   ssr: false,
@@ -37,6 +37,8 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 })
 
 export const revalidate = 86400
+
+const PUBLISHED_DATE = getPublishedDate('/urgence')
 
 export const metadata: Metadata = {
   // Pivot full RGE 2026-05-03 (revert partiel) : hub /urgence reste
@@ -113,26 +115,9 @@ const urgencyServices = [
       'Dépannage électrique en urgence, soir & week-end. Nos électriciens qualifiés interviennent rapidement pour sécuriser votre installation électrique.',
     responseTime: 'Intervention rapide',
   },
-  {
-    name: 'Serrurier urgence',
-    slug: 'serrurier',
-    icon: Key,
-    color: 'green',
-    bgGradient: 'from-green-500 to-green-600',
-    lightBg: 'bg-green-50',
-    lightText: 'text-green-700',
-    problems: [
-      'Porte claquée',
-      'Clé perdue ou volée',
-      'Serrure bloquée',
-      'Cambriolage (sécurisation)',
-      'Changement de serrure urgent',
-      'Porte blindée bloquée',
-    ],
-    description:
-      'Ouverture de porte et dépannage serrurerie en urgence. Nos serruriers interviennent sans dégâts, disponibles selon les artisans de votre secteur.',
-    responseTime: 'Intervention rapide',
-  },
+  // Pivot full RGE 2026-05-03 : carte 'Serrurier urgence' retirée (slug
+  // serrurier commodity hors RGE — page /urgence reste centrée sur les 3
+  // urgences RGE-canonical : plombier, electricien, chauffagiste).
   {
     name: 'Chauffagiste urgence',
     slug: 'chauffagiste',
@@ -213,7 +198,7 @@ export default async function UrgencePage() {
     headline: `Artisan Urgence — Dépannage rapide ${new Date().getFullYear()}`,
     description: `Plombier, électricien, serrurier, chauffagiste en urgence. Intervention rapide soir & week-end dans ${villes.length}+ villes, devis transparent.`,
     url: `${SITE_URL}/urgence`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -338,7 +323,7 @@ export default async function UrgencePage() {
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
           />
           <EnBrefBox keyPoints={enBrefPoints} />

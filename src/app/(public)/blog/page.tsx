@@ -18,8 +18,11 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86400
+
+const PUBLISHED_DATE = getPublishedDate('/blog')
 
 export const metadata: Metadata = {
   title: `Blog Travaux 2026 : prix et guides`,
@@ -114,7 +117,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
     headline: `Blog Travaux 2026 — ${allArticlesMeta.length}+ guides de prix et conseils`,
     description: `Prix artisans, guides rénovation et aides 2026. ${allArticlesMeta.length}+ articles vérifiés par des experts du bâtiment.`,
     url: `${SITE_URL}/blog`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: monthlyAnchorIso(),
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -268,7 +271,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={monthlyAnchorIso()}
             className="mb-6"
           />

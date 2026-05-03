@@ -10,6 +10,10 @@
  * metallier, ferronnier, poseur-de-parquet, miroitier, storiste, architecte-
  * interieur, decorateur, domoticien, pisciniste, antenniste, ascensoriste,
  * geometre, desinsectisation, deratisation).
+ *
+ * Pivot full RGE 2026-05-03 : retrait de serrurier, carreleur, vitrier,
+ * cuisiniste (commodity hors RGE — code 4332B/4333Z/4334Z/4332C/3102Z
+ * désormais inutilisés par le mapping service→NAF).
  */
 
 /** NAF codes associated with each service slug */
@@ -21,15 +25,11 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   climaticien: ['4322B'], // Same NAF as chauffagiste
   'peintre-en-batiment': ['4334Z'], // Peinture et vitrerie
   menuisier: ['4332A'], // Menuiserie bois et PVC
-  serrurier: ['4332B'], // Menuiserie métallique et serrurerie
-  carreleur: ['4333Z'], // Revêtement des sols et murs
   couvreur: ['4391B'], // Couverture par éléments
   macon: ['4399C'], // Maçonnerie générale
-  vitrier: ['4334Z'], // Peinture et vitrerie (same NAF)
 
   // Specialized trades — pivot pure-play BTP énergétique 2026-05-02 :
   // jardinier, paysagiste, nettoyage retirés (services à la personne hors BTP).
-  cuisiniste: ['4332C', '3102Z'], // Agencement + fabrication meubles cuisine
   charpentier: ['4391A'], // Charpente
   zingueur: ['4391B'], // Couverture (zinguerie = sous-spécialité)
   etancheiste: ['4399A'], // Étanchéification
@@ -37,7 +37,7 @@ export const SERVICE_TO_NAF: Record<string, string[]> = {
   platrier: ['4331Z'], // Plâtrerie
 
   // Bathroom/Interior
-  'salle-de-bain': ['4322A', '4333Z'], // Plomberie + revêtement
+  'salle-de-bain': ['4322A'], // Plomberie (revêtement 4333Z retiré post-pivot RGE)
 
   // Tech/Energy
   'borne-recharge': ['4321A'], // Installation électrique

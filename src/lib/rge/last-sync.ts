@@ -17,7 +17,7 @@
 
 import { supabase, IS_BUILD } from '@/lib/supabase'
 import { getCachedData } from '@/lib/cache'
-import { logger } from '@/lib/logger'
+import { notifyFailOpen } from '@/lib/monitoring/fail-open'
 
 const CACHE_KEY = 'rge:last-sync:national:v1'
 const CACHE_TTL_6H = 6 * 60 * 60
@@ -53,9 +53,7 @@ export async function getRgeLastSyncDate(): Promise<string | null> {
 
         return parsed.toISOString()
       } catch (err) {
-        logger.error('[getRgeLastSyncDate] FAILED', {
-          error: err instanceof Error ? err.message : err,
-        })
+        notifyFailOpen('rge-last-sync', err)
         return null
       }
     },

@@ -35,13 +35,10 @@ export type ServiceIntent = 'urgence' | 'renovation' | 'travaux'
  * Signal SERP : "plombier 24h", "serrurier urgence", "intervention rapide".
  * YMYL : non. Aides rénovation : non pertinentes. CTA : appel + délai.
  */
-const URGENCE_SERVICES: ReadonlySet<string> = new Set([
-  'plombier',
-  'serrurier',
-  'electricien',
-  'vitrier',
-  'ramoneur',
-])
+// Pivot full RGE 2026-05-03 : serrurier/vitrier retirés (commodity hors RGE).
+// Intent urgence reste pertinent pour plombier (fuites/canalisations),
+// electricien (panne courant), ramoneur (urgence cheminée hivernale).
+const URGENCE_SERVICES: ReadonlySet<string> = new Set(['plombier', 'electricien', 'ramoneur'])
 
 /**
  * RÉNOVATION — intent projet énergétique, aides publiques en jeu (YMYL).

@@ -69,6 +69,7 @@ import {
   getQualifiedServiceCityCombos,
   getQualifiedRgeCombos,
   getQualifiedCeeCombos,
+  getDeptServiceFallbackCombos,
   fetchAllLastmodData,
 } from '@/lib/seo/lastmod-queries'
 
@@ -500,6 +501,82 @@ describe('getQualifiedCeeCombos', () => {
   it('returns null when operation codes list is empty', async () => {
     const combos = await getQualifiedCeeCombos([])
     expect(combos).toBeNull()
+  })
+})
+
+// ===========================================================================
+// getDeptServiceFallbackCombos — Sprint A #6 PhB drift sitemap↔noindex
+// ===========================================================================
+
+describe('getDeptServiceFallbackCombos', () => {
+  it('returns null on supabase unavailable (fail-open)', async () => {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    vi.mocked(createAdminClient).mockImplementationOnce(() => {
+      throw new Error('no env')
+    })
+
+    const combos = await getDeptServiceFallbackCombos()
+    expect(combos).toBeNull()
+  })
+
+  it('returns null on query error (fail-open)', async () => {
+    const builder = createChainBuilder()
+    builder.range = vi.fn().mockResolvedValue({ data: null, error: { message: 'DB error' } })
+    mockFrom.mockReturnValue(builder)
+
+    const combos = await getDeptServiceFallbackCombos()
+    expect(combos).toBeNull()
+  })
+
+  it('only includes combos with ≥3 providers (matches DEPT_FALLBACK_INDEX_THRESHOLD)', async () => {
+    // dept "Rhône" / specialty "plombier" → 3 providers (= threshold met)
+    // dept "Paris" / specialty "plombier" → 2 providers (= below threshold)
+    const builder = createChainBuilder({ data: [], error: null })
+    builder.range = vi.fn().mockResolvedValue({
+      data: [
+        { specialty: 'plombier', address_department: 'Rhône' },
+        { specialty: 'plombier', address_department: 'Rhône' },
+        { specialty: 'plombier', address_department: 'Rhône' },
+        { specialty: 'plombier', address_department: 'Paris' },
+        { specialty: 'plombier', address_department: 'Paris' },
+      ],
+      error: null,
+    })
+    mockFrom.mockReturnValue(builder)
+
+    const combos = await getDeptServiceFallbackCombos()
+    expect(combos).not.toBeNull()
+    expect(combos!.has('rhone::plombier')).toBe(true)
+    expect(combos!.has('paris::plombier')).toBe(false)
+  })
+})
+
+// ===========================================================================
+// getQualifiedRgeCombos — Sprint B Action #3 sub-step 2 (sitemap drift fix)
+// Re-validation post-refactor : combos doivent matcher la logique page
+// `isNoindex = countStrict === 0 && !hasDeptFallback` (≥1 dept fallback).
+// ===========================================================================
+
+describe('getQualifiedRgeCombos — sitemap re-activation', () => {
+  it('returns 4 keys with consistent shape (Set|null + Map|null)', async () => {
+    const builder = createChainBuilder()
+    builder.range = vi.fn().mockResolvedValue({ data: [], error: null })
+    mockFrom.mockReturnValue(builder)
+
+    const combos = await getQualifiedRgeCombos()
+    // Fail-open contract : either the lazy imports succeed (Set/Map) OR they
+    // fail (all-null). Both are valid — sitemap.ts handles both via filterActive.
+    const allNull =
+      combos.rgeServiceCity === null &&
+      combos.rgeServiceDept === null &&
+      combos.rgeLastmodServiceCity === null &&
+      combos.rgeLastmodServiceDept === null
+    const allSet =
+      combos.rgeServiceCity instanceof Set &&
+      combos.rgeServiceDept instanceof Set &&
+      combos.rgeLastmodServiceCity instanceof Map &&
+      combos.rgeLastmodServiceDept instanceof Map
+    expect(allNull || allSet).toBe(true)
   })
 })
 

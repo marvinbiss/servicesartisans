@@ -41,11 +41,13 @@ interface PageProps {
   params: Promise<{ commune: string }>
 }
 
+// Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) — remplacé
+// par pompe-a-chaleur (gravity hub RGE).
 const TIER_A_SERVICES = [
   'plombier',
   'electricien',
   'chauffagiste',
-  'serrurier',
+  'pompe-a-chaleur',
   'couvreur',
   'menuisier',
   'macon',
@@ -536,11 +538,13 @@ function RelatedHubsCommuneSection({ commune }: { commune: CommuneData }) {
   // Renforce PageRank vers /services/[s]/[v] qui est lui-même un hub fort.
   if (nearbyVilles.length > 0) {
     const chefLieu = nearbyVilles[0]
+    // Pivot full RGE 2026-05-03 : serrurier retiré, remplacé par pompe-a-chaleur
+    // (gravity hub RGE) pour booster le maillage vers les pages stratégiques.
     const TIER_HUB_SERVICES = [
       'plombier',
       'electricien',
       'chauffagiste',
-      'serrurier',
+      'pompe-a-chaleur',
       'couvreur',
     ] as const
     for (const svc of TIER_HUB_SERVICES) {

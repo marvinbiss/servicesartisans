@@ -201,7 +201,7 @@ const problemsExtra: Problem[] = [
     name: 'Condensation sur les fenêtres',
     description:
       'La condensation sur les fenêtres se manifeste par de la buée, des gouttelettes d’eau ou du givre sur les vitres. Elle est causée par un excès d’humidité intérieure, une ventilation insuffisante ou des fenêtres à faible performance thermique. Non traitée, elle provoque moisissures et dégradation des menuiseries.',
-    relatedServices: ['menuisier', 'vitrier', 'isolation-thermique'],
+    relatedServices: ['menuisier', 'isolation-thermique'],
     primaryService: 'menuisier',
     urgencyLevel: 'basse',
     symptoms: [
@@ -249,7 +249,7 @@ const problemsExtra: Problem[] = [
     name: 'Porte qui grince ou frotte',
     description:
       'Une porte qui grince, frotte le sol ou ne ferme plus correctement est un problème fréquent dû à des charnières usées, un affaissement du cadre ou un gonflement du bois lié à l’humidité. Un menuisier peut ajuster, raboter ou remplacer les paumelles pour retrouver un fonctionnement fluide.',
-    relatedServices: ['menuisier', 'serrurier'],
+    relatedServices: ['menuisier'],
     primaryService: 'menuisier',
     urgencyLevel: 'basse',
     symptoms: [
@@ -586,8 +586,8 @@ const problemsExtra: Problem[] = [
     name: 'Carrelage fissuré ou décollé',
     description:
       'Un carrelage fissuré, décollé ou qui sonne creux indique un problème de pose, de support ou de dilatation. Le remplacement des carreaux endommagés par un carreleur professionnel permet de retrouver un sol esthétique et sûr, tout en évitant les infiltrations d’eau.',
-    relatedServices: ['carreleur'],
-    primaryService: 'carreleur',
+    relatedServices: ['salle-de-bain'],
+    primaryService: 'salle-de-bain',
     urgencyLevel: 'basse',
     symptoms: [
       'Carreaux fissurés ou fêlés au sol ou au mur',
@@ -634,7 +634,7 @@ const problemsExtra: Problem[] = [
     name: 'Parquet qui gondole',
     description:
       'Un parquet qui gondole, se soulève ou présente des vagues est généralement victime d’un excès d’humidité : dégât des eaux, remontées capillaires, absence de joint de dilatation périphérique ou sous-couche inadaptée. Un menuisier peut diagnostiquer la cause et remettre le sol à plat.',
-    relatedServices: ['menuisier', 'carreleur'],
+    relatedServices: ['menuisier', 'salle-de-bain'],
     primaryService: 'menuisier',
     urgencyLevel: 'moyenne',
     symptoms: [
@@ -785,7 +785,7 @@ const problemsExtra: Problem[] = [
     name: 'Plancher qui craque',
     description:
       'Un plancher qui craque est un problème courant dans les maisons anciennes et les appartements avec parquet en bois. Les craquements sont dus au jeu entre les lames et les lambourdes, au séchage du bois ou au tassement de la structure. Un menuisier peut resserrer ou traiter le plancher pour réduire considérablement le bruit.',
-    relatedServices: ['menuisier', 'carreleur'],
+    relatedServices: ['menuisier', 'salle-de-bain'],
     primaryService: 'menuisier',
     urgencyLevel: 'basse',
     symptoms: [
@@ -833,7 +833,7 @@ const problemsExtra: Problem[] = [
     name: 'Joint de salle de bain moisi',
     description:
       'Les joints de salle de bain (silicone ou ciment) noircissent et moisissent à cause de l’humidité permanente. Des joints moisis sont inesthétiques et favorisent la prolifération de moisissures néfastes pour la santé. Le remplacement des joints est une intervention rapide et peu coûteuse.',
-    relatedServices: ['plombier', 'carreleur'],
+    relatedServices: ['plombier', 'salle-de-bain'],
     primaryService: 'plombier',
     urgencyLevel: 'basse',
     symptoms: [
@@ -1030,7 +1030,7 @@ const problemsExtra: Problem[] = [
     name: 'Porte d’entrée qui gonfle',
     description:
       'Une porte d’entrée en bois qui gonfle est un problème saisonnier classique, dû à l’absorption d’humidité par le bois. La porte frotte contre le cadre, se ferme difficilement ou ne ferme plus du tout. Un menuisier peut raboter, ajuster ou traiter la porte pour résoudre durablement le problème.',
-    relatedServices: ['menuisier', 'serrurier'],
+    relatedServices: ['menuisier'],
     primaryService: 'menuisier',
     urgencyLevel: 'basse',
     symptoms: [
@@ -1126,7 +1126,7 @@ const problemsExtra: Problem[] = [
     name: 'Fenêtre qui ne ferme plus correctement',
     description:
       'Une fenêtre qui ferme mal laisse passer l’air froid, l’eau de pluie et le bruit. Les causes sont multiples : gonds déréglés, quincaillerie usée, bois gonflé ou cadre déformé. Un menuisier peut régler, ajuster ou remplacer les pièces défectueuses pour restaurer l’étanchéité.',
-    relatedServices: ['menuisier', 'vitrier'],
+    relatedServices: ['menuisier'],
     primaryService: 'menuisier',
     urgencyLevel: 'moyenne',
     symptoms: [

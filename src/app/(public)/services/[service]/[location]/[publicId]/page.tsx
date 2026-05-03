@@ -379,16 +379,16 @@ function generateDescription(
     parts.push(`Noté ${Number(rating).toFixed(1)}/5 par ses clients.`)
   }
 
-  // Service-specific expertise (programmatic based on specialty slug)
+  // Service-specific expertise (programmatic based on specialty slug).
+  // Pivot full RGE 2026-05-03 : serrurier/carreleur retirés (commodity hors RGE).
   const serviceDescriptions: Record<string, string> = {
     plombier: `Les prestations couvrent l'installation, la réparation et l'entretien de plomberie : robinetterie, canalisations, sanitaires, chauffe-eau et dépannage de fuites.`,
     electricien: `Les interventions incluent la mise aux normes électriques, l'installation de tableaux, le câblage, le dépannage et la pose d'éclairage intérieur et extérieur.`,
     chauffagiste: `Spécialiste en systèmes de chauffage : installation, entretien et dépannage de chaudières, radiateurs, planchers chauffants et pompes à chaleur.`,
-    serrurier: `Interventions en serrurerie : ouverture de portes, changement de serrures, blindage, installation de systèmes de sécurité et reproduction de clés.`,
     menuisier: `Travaux de menuiserie intérieure et extérieure : fabrication et pose de portes, fenêtres, placards, escaliers et aménagements sur mesure.`,
     couvreur: `Travaux de couverture : réfection de toiture, pose de tuiles et ardoises, zinguerie, étanchéité et isolation de combles.`,
     macon: `Travaux de maçonnerie : construction, rénovation, extension, dalles, murs porteurs, fondations et ravalement de façade.`,
-    carreleur: `Pose de carrelage et faïence : sols, murs, douches à l'italienne, terrasses et mosaïques pour tous types de projets.`,
+    'salle-de-bain': `Conception et rénovation de salles de bain clé en main : pose de carrelage et faïence, douches à l'italienne, sanitaires et étanchéité.`,
     'peintre-en-batiment': `Travaux de peinture intérieure et extérieure : préparation des surfaces, enduits, peinture décorative et ravalement.`,
     climaticien: `Installation et maintenance de climatisation : pose de splits, gainable, réversible et contrats d'entretien annuel.`,
   }

@@ -10,7 +10,6 @@ import {
   Clock,
   Wrench,
   Zap,
-  Key,
   Flame,
   HardHat,
 } from 'lucide-react'
@@ -86,7 +85,15 @@ const serviceCategories = [
     color: 'text-amber-600',
     bg: 'bg-amber-50',
   },
-  { name: 'Serrurerie', slug: 'serrurier', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
+  // Pivot full RGE 2026-05-03 : catégorie 'Serrurerie' retirée (slug serrurier
+  // commodity hors RGE) — remplacée par 'Rénovation énergétique' (gravity hub).
+  {
+    name: 'Rénovation énergétique',
+    slug: 'renovation-energetique',
+    icon: Flame,
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+  },
   { name: 'Chauffage', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
   { name: 'Toiture', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
   {
@@ -99,7 +106,14 @@ const serviceCategories = [
   { name: 'Autres', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
 ]
 
-const otherServiceSlugs = ['peintre-en-batiment', 'vitrier', 'menuisier', 'isolation-thermique']
+// Pivot full RGE 2026-05-03 : 'vitrier' retiré (commodity hors RGE), remplacé
+// par 'salle-de-bain' (slug RGE-canonical pour intent intérieur résiduel).
+const otherServiceSlugs = [
+  'peintre-en-batiment',
+  'menuisier',
+  'isolation-thermique',
+  'salle-de-bain',
+]
 
 function getProblemsByCategory(slug: string) {
   if (slug === '_other') {
@@ -108,17 +122,19 @@ function getProblemsByCategory(slug: string) {
   return problems.filter((p) => p.primaryService === slug)
 }
 
+// Pivot full RGE 2026-05-03 : labels serrurier/vitrier retirés (slugs commodity
+// hors RGE — re-routés en amont vers menuisier/salle-de-bain dans problems.ts).
 const serviceNameMap: Record<string, string> = {
   plombier: 'Plombier',
   electricien: 'Électricien',
-  serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
   couvreur: 'Couvreur',
   macon: 'Maçon',
   'peintre-en-batiment': 'Peintre en bâtiment',
-  vitrier: 'Vitrier',
   menuisier: 'Menuisier',
   'isolation-thermique': 'Isolation thermique',
+  'salle-de-bain': 'Spécialiste salle de bain',
+  'renovation-energetique': 'Spécialiste rénovation énergétique',
 }
 
 const howSteps = [

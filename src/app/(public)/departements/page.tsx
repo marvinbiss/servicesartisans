@@ -13,6 +13,7 @@ import { departements, regions, villes, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getProviderCount, formatProviderCount } from '@/lib/data/stats'
+import { getLatestRgeSnapshot } from '@/lib/barometre/rge-snapshot'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const revalidate = 86400
@@ -58,10 +59,12 @@ const deptsByRegion = departements.reduce(
 const sortedRegions = Object.entries(deptsByRegion).sort((a, b) => a[0].localeCompare(b[0]))
 
 export default async function DepartementsIndexPage() {
-  const [cmsPage, artisanCount] = await Promise.all([
+  const [cmsPage, artisanCount, rgeSnap] = await Promise.all([
     getPageContent('departements', 'static'),
     getProviderCount(),
+    getLatestRgeSnapshot(),
   ])
+  const rgeActiveCount = rgeSnap ? rgeSnap.total_rge_active.toLocaleString('fr-FR') : '~49 000'
 
   // JSON-LD : breadcrumb + CollectionPage + FAQ (cible rich snippet "People
   // also ask" sur requêtes "artisans département france").
@@ -119,7 +122,7 @@ export default async function DepartementsIndexPage() {
     },
     {
       question: 'Les artisans sont-ils certifiés RGE ?',
-      answer: `Environ 50 000 artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement). Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier + RGE pour trouver un artisan éligible aux aides.`,
+      answer: `${rgeActiveCount} artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement) à ce jour. Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier + RGE pour trouver un artisan éligible aux aides.`,
     },
     {
       question: "Les départements d'outre-mer sont-ils couverts ?",

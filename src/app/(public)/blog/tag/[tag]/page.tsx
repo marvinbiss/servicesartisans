@@ -14,6 +14,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86400
 
@@ -27,6 +28,8 @@ export const dynamicParams = false
 interface PageProps {
   params: Promise<{ tag: string }>
 }
+
+const PUBLISHED_DATE = getPublishedDate('/blog/tag')
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagSlug } = await params
@@ -132,7 +135,7 @@ export default async function BlogTagPage({ params }: PageProps) {
     headline: `${tagInfo.label} — Articles & Guides`,
     description: `Tous les articles sur ${tagInfo.label.toLowerCase()} : conseils, prix, réglementation et guides pratiques par les experts ServicesArtisans.`,
     url: `${SITE_URL}/blog/tag/${tagSlug}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: monthlyAnchorIso(),
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -219,7 +222,7 @@ export default async function BlogTagPage({ params }: PageProps) {
             <ArticleMeta
               author="Équipe éditoriale ServicesArtisans"
               authorHref="/a-propos"
-              datePublished="2024-01-15T08:00:00.000Z"
+              datePublished={PUBLISHED_DATE}
               dateModified={monthlyAnchorIso()}
               className="mb-6"
             />

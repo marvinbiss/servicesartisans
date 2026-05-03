@@ -179,8 +179,8 @@ const problems: Problem[] = [
     name: 'Serrure bloquée',
     description:
       'Une serrure bloquée empêche l’ouverture ou la fermeture de votre porte. Cela peut être dû à un mécanisme grippé, une clé cassée dans le barillet ou une déformation du cylindre. Un serrurier professionnel peut intervenir sans endommager la porte.',
-    relatedServices: ['serrurier'],
-    primaryService: 'serrurier',
+    relatedServices: ['menuisier'],
+    primaryService: 'menuisier',
     urgencyLevel: 'haute',
     symptoms: [
       'La clé tourne dans le vide sans actionner le mécanisme',
@@ -226,8 +226,8 @@ const problems: Problem[] = [
     name: 'Porte claquée',
     description:
       'Une porte claquée avec les clés restées à l’intérieur est l’une des urgences de serrurerie les plus fréquentes. Le serrurier peut ouvrir la porte sans dégât dans la majorité des cas grâce à des techniques non destructives.',
-    relatedServices: ['serrurier'],
-    primaryService: 'serrurier',
+    relatedServices: ['menuisier'],
+    primaryService: 'menuisier',
     urgencyLevel: 'haute',
     symptoms: [
       'Impossible d’ouvrir la porte : le pêne est engagé sans la clé',
@@ -611,8 +611,8 @@ const problems: Problem[] = [
     name: 'Vitre cassée',
     description:
       'Une vitre cassée expose votre logement aux intempéries, au froid et aux intrusions. Qu’il s’agisse d’un simple vitrage, d’un double vitrage ou d’une baie vitrée, un vitrier peut intervenir en urgence pour sécuriser l’ouverture et remplacer le vitrage.',
-    relatedServices: ['vitrier', 'menuisier'],
-    primaryService: 'vitrier',
+    relatedServices: ['menuisier'],
+    primaryService: 'menuisier',
     urgencyLevel: 'haute',
     symptoms: [
       'Vitre fêlée, fissurée ou entièrement brisée',
@@ -1026,8 +1026,8 @@ const problems: Problem[] = [
     name: 'Porte de garage bloquée',
     description:
       'Une porte de garage bloquée, qu’elle soit sectionnelle, basculante ou enroulable, peut être causée par un problème de motorisation, de rails déformés, de ressorts cassés ou de cellules de sécurité défaillantes. Un spécialiste peut diagnostiquer et réparer la panne.',
-    relatedServices: ['serrurier', 'menuisier'],
-    primaryService: 'serrurier',
+    relatedServices: ['menuisier'],
+    primaryService: 'menuisier',
     urgencyLevel: 'moyenne',
     symptoms: [
       'La porte ne s’ouvre plus ou reste bloquée à mi-course',

@@ -25,7 +25,7 @@ const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUB
 export const metadata: Metadata = {
   title: 'Avis Artisans Vérifiés 2026',
   description:
-    'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+    'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
   alternates: getAlternates('/avis'),
   robots: {
     index: true,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans : plombier, électricien, serrurier et 50 métiers. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

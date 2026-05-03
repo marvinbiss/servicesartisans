@@ -60,21 +60,23 @@ const VILLES = [
   'Brest',
 ]
 
+// Pivot full RGE 2026-05-03 : labels d'affichage social proof — serrurier,
+// carreleur, vitrier retirés (commodity hors RGE), plaquiste→plâtrier (slug
+// canonique). Liste enrichie avec gravity hubs RGE pour cohérence pivot.
 const METIERS = [
   'plombier',
   'électricien',
-  'serrurier',
   'peintre',
   'maçon',
   'couvreur',
   'menuisier',
-  'carreleur',
   'chauffagiste',
   'climaticien',
-  'plaquiste',
+  'plâtrier',
   'charpentier',
-  'vitrier',
   'pompe-a-chaleur',
+  'isolation-thermique',
+  'panneaux-solaires',
 ]
 
 function hashSeed(str: string): number {

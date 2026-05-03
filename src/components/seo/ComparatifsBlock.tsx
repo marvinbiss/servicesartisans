@@ -23,25 +23,24 @@ interface ComparatifsBlockProps {
 // Service → category mapping
 // ---------------------------------------------------------------------------
 
-/** Maps service slugs to comparison categories for filtering */
+/** Maps service slugs to comparison categories for filtering.
+ * Pivot full RGE 2026-05-03 : carreleur/serrurier/vitrier retirés (commodity hors RGE). */
 const SERVICE_TO_CATEGORIES: Record<string, string[]> = {
   plombier: ['Chauffage / Énergie'],
   chauffagiste: ['Chauffage / Énergie', 'Isolation'],
   electricien: ['Chauffage / Énergie'],
   menuisier: ['Menuiserie'],
   peintre: ['Revêtements'],
-  carreleur: ['Revêtements'],
+  'salle-de-bain': ['Revêtements'],
   couvreur: ['Structure', 'Extérieur'],
   macon: ['Structure'],
   charpentier: ['Structure'],
-  serrurier: ['Menuiserie'],
   paysagiste: ['Extérieur'],
   facades: ['Structure'],
   facades_ravalement: ['Structure'],
-  isolation: ['Isolation', 'Chauffage / Énergie'],
-  climatisation: ['Chauffage / Énergie'],
+  'isolation-thermique': ['Isolation', 'Chauffage / Énergie'],
+  climaticien: ['Chauffage / Énergie'],
   'pompe-a-chaleur': ['Chauffage / Énergie'],
-  vitrier: ['Menuiserie'],
   verandas: ['Extérieur', 'Menuiserie'],
 }
 

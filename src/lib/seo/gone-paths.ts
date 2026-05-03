@@ -35,47 +35,12 @@
 /**
  * Services couverts par `/services/[service]/[location]`.
  *
- * Source de vérité canonique : `src/lib/data/france-light.ts` → `services`.
- * On duplique ici pour éviter d'importer 1.1 MB côté Edge. Toute modification
- * de la liste prod DOIT être reflétée ici — le test `gone-paths.test.ts`
- * vérifie la cohérence.
+ * Source de vérité unique : `src/lib/services/canonical-slugs.ts` (leaf module
+ * sans imports — Edge-friendly, 0 coût bundle). Catalog.ts (server) et ce
+ * module (Edge middleware) consomment la même constante → zero drift triple.
  */
-export const VALID_SERVICE_SLUGS: ReadonlySet<string> = new Set([
-  // Pivot RGE 2026-05-01 : 16 métiers Tier C niche supprimés
-  // (solier, terrassier, metallier, ferronnier, poseur-de-parquet, miroitier,
-  //  storiste, architecte-interieur, decorateur, domoticien, pisciniste,
-  //  antenniste, ascensoriste, geometre, desinsectisation, deratisation).
-  //
-  // Pivot pure-play BTP énergétique 2026-05-02 : 5 métiers hors thèse
-  // supprimés (demenageur, nettoyage, jardinier, paysagiste, alarme-securite)
-  // → middleware retournera 410 sur leurs URLs.
-  //
-  // Pivot full RGE 2026-05-03 : 4 métiers commodity hors RGE supprimés
-  // (serrurier, vitrier, carreleur, cuisiniste) → middleware retourne 410
-  // sur leurs URLs. Repositionnement « 100% artisans RGE certifiés ».
-  // 25 → 21 services.
-  'plombier',
-  'electricien',
-  'chauffagiste',
-  'peintre-en-batiment',
-  'menuisier',
-  'couvreur',
-  'macon',
-  'climaticien',
-  'charpentier',
-  'zingueur',
-  'etancheiste',
-  'facadier',
-  'platrier',
-  'salle-de-bain',
-  'pompe-a-chaleur',
-  'panneaux-solaires',
-  'isolation-thermique',
-  'renovation-energetique',
-  'borne-recharge',
-  'ramoneur',
-  'diagnostiqueur',
-])
+import { CANONICAL_SERVICE_SLUGS_SET } from '@/lib/services/canonical-slugs'
+export const VALID_SERVICE_SLUGS: ReadonlySet<string> = CANONICAL_SERVICE_SLUGS_SET
 
 /**
  * Services RGE couverts par `/rge/[service]/[ville]`.
@@ -398,6 +363,68 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
       return { gone: true, reason: 'problem_slug_unknown' }
     }
     return validateVilleSlug(ville)
+  }
+
+  // 9. Bare hubs `/[prefix]/[service]` (1 segment service slug) — pivot RGE 2026-05-03.
+  //    Couvre `/avis/serrurier`, `/devis/serrurier`, `/tarifs/serrurier`,
+  //    `/services/serrurier`, `/urgence/serrurier`, `/services/serrurier/autour-de-moi`.
+  //    Bug Next.js 14.2 #69103 : `notFound()` sur ISR + dynamicParams=true retourne
+  //    HTTP 200 + noindex au lieu de 404 → soft 404 leak. On force 410.
+  const bareHubMatch = /^\/(services|avis|devis|tarifs|urgence)\/([^/]+)\/?$/.exec(pathname)
+  if (bareHubMatch) {
+    const [, , service] = bareHubMatch
+    if (!VALID_SERVICE_SLUGS.has(service.toLowerCase())) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    return { gone: false }
+  }
+
+  // 9b. `/services/[service]/autour-de-moi` — sous-route hub, même gating.
+  const autourDeMoiMatch = /^\/services\/([^/]+)\/autour-de-moi\/?$/.exec(pathname)
+  if (autourDeMoiMatch) {
+    if (!VALID_SERVICE_SLUGS.has(autourDeMoiMatch[1].toLowerCase())) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    return { gone: false }
+  }
+
+  // 10. /avis/[service]/[ville] + /urgence/[service]/[ville] — patterns 2-segment
+  //     manquants au filet avant 2026-05-03. Sans ce bloc, /avis/serrurier/paris
+  //     etc retombe en soft 404 (Next.js 14.2 bug).
+  const avisVilleMatch = /^\/(avis|urgence)\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
+  if (avisVilleMatch) {
+    const [, , service, ville] = avisVilleMatch
+    if (!VALID_SERVICE_SLUGS.has(service.toLowerCase())) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    return validateVilleSlug(ville)
+  }
+
+  // 11. /departements/[dept]/[service] + /regions/[region]/[service]
+  //     Mêmes leaks soft-404 sur les dead slugs en hiérarchie territoriale.
+  const territoryServiceMatch = /^\/(departements|regions)\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
+  if (territoryServiceMatch) {
+    const [, , territory, service] = territoryServiceMatch
+    if (!VILLE_SLUG_RE.test(territory)) {
+      return { gone: true, reason: 'ville_slug_malformed' }
+    }
+    if (!VALID_SERVICE_SLUGS.has(service.toLowerCase())) {
+      return { gone: true, reason: 'service_slug_unknown' }
+    }
+    return { gone: false }
+  }
+
+  // 12. /rge/[service]/departement/[dept] — variante RGE territoriale.
+  const rgeDeptMatch = /^\/rge\/([^/]+)\/departement\/([^/]+)\/?$/.exec(pathname)
+  if (rgeDeptMatch) {
+    const [, service, dept] = rgeDeptMatch
+    if (!VALID_RGE_SERVICE_SLUGS.has(service.toLowerCase())) {
+      return { gone: true, reason: 'rge_service_slug_unknown' }
+    }
+    if (!VILLE_SLUG_RE.test(dept)) {
+      return { gone: true, reason: 'ville_slug_malformed' }
+    }
+    return { gone: false }
   }
 
   return { gone: false }

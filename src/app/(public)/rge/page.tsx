@@ -186,28 +186,51 @@ const FAQ: Array<{ question: string; answer: string }> = [
     answer:
       'Trois chemins complémentaires selon votre besoin. Pour une recherche par ville, utilisez nos annuaires dédiés /artisans-rge/[votre-ville] — ils affichent tous les artisans RGE actifs dans la commune, toutes spécialités confondues, synchronisés chaque semaine avec l’ADEME. Pour une recherche par métier ciblé, passez par /rge/[service]/[ville] (exemple : /rge/pompe-a-chaleur/lyon). Enfin, si vous connaissez déjà le nom de l’entreprise, notre vérificateur /verifier-artisan vous confirme en temps réel si sa mention RGE est en cours de validité. Dans tous les cas, comparez toujours au moins trois devis d’artisans RGE avant de signer : c’est la seule manière d’objectiver les prix et de détecter les anomalies techniques.',
   },
+  {
+    question: 'Qu’est-ce qu’un artisan RGE qualifié ?',
+    answer:
+      'Un artisan RGE qualifié est une entreprise du bâtiment qui détient une qualification active délivrée par un organisme accrédité COFRAC (Qualibat, Qualit’EnR, Qualifelec, Certibat, OPQIBI). Cette qualification atteste de trois éléments : une formation technique attestée du dirigeant ou d’un référent technique salarié, une assurance responsabilité civile professionnelle décennale couvrant les travaux de rénovation énergétique, et au moins un audit chantier réalisé par l’organisme certificateur dans les deux premières années. La qualification est nominative à l’entreprise (SIRET) et restreinte à des domaines précis : un artisan RGE pour les pompes à chaleur (QualiPAC) n’est pas automatiquement RGE pour l’isolation par l’extérieur (Qualibat 7141). Vérifiez toujours que la qualification correspond exactement aux travaux que vous voulez engager.',
+  },
+  {
+    question: 'Qu’est-ce que l’annuaire RGE et où le consulter ?',
+    answer:
+      'L’annuaire RGE est le référentiel public listant l’ensemble des entreprises du bâtiment titulaires d’une qualification RGE active en France. La source officielle est l’annuaire France Rénov’ piloté par l’ADEME, accessible sur france-renov.gouv.fr. Notre annuaire ServicesArtisans synchronise ce référentiel chaque semaine et l’enrichit : recherche par ville (/artisans-rge/[ville]), par métier énergétique (/rge/[service]), par qualification (/rge/qualifications), affichage du SIRET vérifié auprès de l’INSEE, des dates de fin de validité par qualification, des organismes certificateurs et de l’historique des renouvellements. Cette double source (ADEME officiel + croisement INSEE) permet de détecter les fausses mentions RGE — première source de fraude observée sur les devis particuliers.',
+  },
 ]
 
-export const metadata: Metadata = {
-  title: 'Artisans RGE certifiés : trouvez un pro',
-  description:
-    'Annuaire national artisans RGE actifs en France. Données ADEME officielles, mise à jour hebdo. Éligibles MaPrimeRénov’, CEE, TVA 5,5 %.',
-  alternates: getAlternates('/rge'),
-  openGraph: {
-    locale: 'fr_FR',
-    title: 'Artisans RGE certifiés en France — Annuaire officiel ADEME',
-    description:
-      'Tous les artisans RGE actifs en France, sourcés ADEME. MaPrimeRénov’, CEE, TVA 5,5 %. Vérification gratuite en temps réel.',
-    url: PAGE_URL,
-    siteName: 'ServicesArtisans',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Artisans RGE certifiés en France',
-    description:
-      'Annuaire national des artisans RGE. Données ADEME, vérification gratuite, éligibles aux aides publiques.',
-  },
+// Action #3 (Sprint B 2026-05-03) — pillar /rge metadata upgrade.
+// Migration static metadata → generateMetadata pour injecter `totalActive` ADEME
+// dans la description (snippet riche + signal fraîcheur). Title optimisé sur les
+// 4 KW racine identifiés Plan Domination : "annuaire rge", "artisan rge",
+// "trouver artisan rge", "rge qualifié". Authority signal : mention ADEME.
+export async function generateMetadata(): Promise<Metadata> {
+  const stats = await getRgeNationalStats().catch(() => ({ totalActive: 0, topCities: [] }))
+  const totalActive = stats.totalActive || 0
+
+  const title = 'Annuaire artisan RGE 2026 : trouver un pro certifié — ADEME'
+  const description =
+    totalActive > 0
+      ? `Trouvez parmi ${totalActive.toLocaleString('fr-FR')} artisans RGE qualifiés en France. Vérification ADEME en 1 clic, devis gratuit, éligibles MaPrimeRénov', CEE, TVA 5,5 %.`
+      : 'Annuaire national des artisans RGE qualifiés. Données ADEME officielles, vérification en 1 clic, éligibles MaPrimeRénov’, CEE, TVA 5,5 %.'
+
+  return {
+    title,
+    description,
+    alternates: getAlternates('/rge'),
+    openGraph: {
+      locale: 'fr_FR',
+      title,
+      description,
+      url: PAGE_URL,
+      siteName: 'ServicesArtisans',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+  }
 }
 
 export default async function RgeHubPage() {

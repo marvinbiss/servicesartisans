@@ -6,53 +6,11 @@ import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { getLatestRgeSnapshot } from '@/lib/barometre/rge-snapshot'
 
 export const revalidate = 86400 // 24h — régénéré par le cron mensuel
 
-type RegionBucket = {
-  region: string
-  region_slug: string
-  nb_rge_active: number
-  nb_rge_expired: number
-  top_qualification: string | null
-  top_qualification_count: number
-}
-type QualificationBucket = { code: string; nb_artisans: number; rank: number }
-type SpecialtyBucket = { specialty: string; nb_rge_active: number; share_pct: number }
-type OrganismeBucket = { organisme: string; nb_artisans: number }
-
-type Snapshot = {
-  yearmonth: string
-  captured_at: string
-  total_rge_active: number
-  total_rge_expired: number
-  total_providers: number
-  by_region: RegionBucket[]
-  by_qualification: QualificationBucket[]
-  by_specialty: SpecialtyBucket[]
-  organismes: OrganismeBucket[]
-  methodology: string
-  source_note: string
-}
-
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
-
-async function getLatestSnapshot(): Promise<Snapshot | null> {
-  if (IS_BUILD) return null
-  try {
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from('barometre_rge_snapshots')
-      .select('*')
-      .order('yearmonth', { ascending: false })
-      .limit(1)
-    if (error || !data || data.length === 0) return null
-    return data[0] as Snapshot
-  } catch {
-    return null
-  }
-}
+const getLatestSnapshot = getLatestRgeSnapshot
 
 function formatMonth(yearmonth: string): string {
   return new Date(`${yearmonth}-01T00:00:00Z`).toLocaleDateString('fr-FR', {
@@ -67,7 +25,7 @@ const canonicalUrl = `${SITE_URL}/barometre/rge`
 export async function generateMetadata(): Promise<Metadata> {
   const snap = await getLatestSnapshot()
   const month = snap ? formatMonth(snap.yearmonth) : '2026'
-  const active = snap ? snap.total_rge_active.toLocaleString('fr-FR') : '50 000+'
+  const active = snap ? snap.total_rge_active.toLocaleString('fr-FR') : '~49 000'
   return {
     title: `Baromètre RGE ${month} — ${active} artisans certifiés en France`,
     description: `Statistiques ${month} : ${active} artisans RGE actifs en France, top régions, qualifications (QualiPAC, Qualibat). Source ADEME.`,

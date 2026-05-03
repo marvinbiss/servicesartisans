@@ -41,7 +41,9 @@ import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 
 export function generateStaticParams() {
   // Pre-render top 5 services per region (16 × 5 = 80 pages) — rest via ISR
-  const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
+  // Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) —
+  // remplacé par pompe-a-chaleur (gravity hub RGE).
+  const topServices = ['plombier', 'electricien', 'chauffagiste', 'couvreur', 'pompe-a-chaleur']
   return regions.flatMap((r) => topServices.map((s) => ({ region: r.slug, service: s })))
 }
 

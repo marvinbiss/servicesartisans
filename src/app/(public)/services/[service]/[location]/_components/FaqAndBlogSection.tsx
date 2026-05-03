@@ -15,11 +15,13 @@ interface Props {
 
 export default function FaqAndBlogSection({ combinedFaq, service, location, serviceSlug }: Props) {
   const isPlombier = serviceSlug === 'plombier'
+  // Pivot full RGE 2026-05-03 : 'carreleur' retiré (commodity hors RGE)
+  // — remplacé par 'salle-de-bain' (intent rénovation pièces humides RGE-canon).
   const isBatiment = [
     'peintre-en-batiment',
     'macon',
     'couvreur',
-    'carreleur',
+    'salle-de-bain',
     'menuisier',
   ].includes(serviceSlug)
 

@@ -82,7 +82,10 @@ const _specialtyToServiceSlug: Record<string, string> = {
   plaquiste: 'platrier',
   platrerie: 'platrier',
   finition: 'peintre-en-batiment',
-  'menuisier-metallique': 'serrurier',
+  // Pivot full RGE 2026-05-03 : alias 'menuisier-metallique' → 'serrurier'
+  // retiré (slug serrurier commodity hors RGE) ; même métier physique reste
+  // catégorisé 'menuisier' (canonical RGE-compatible).
+  'menuisier-metallique': 'menuisier',
   charpentier: 'charpentier',
   isolation: 'isolation-thermique',
   'couvreur-zingueur': 'zingueur',
@@ -92,7 +95,9 @@ const _specialtyToServiceSlug: Record<string, string> = {
   parqueteur: 'menuisier',
   store: 'menuisier',
   volet: 'menuisier',
-  'installateur-de-cuisine': 'cuisiniste',
+  // Pivot full RGE 2026-05-03 : 'installateur-de-cuisine' re-routé vers
+  // menuisier (slug RGE-canonical pour agencement intérieur bois).
+  'installateur-de-cuisine': 'menuisier',
   'installateur-de-salle-de-bain': 'salle-de-bain',
   pac: 'pompe-a-chaleur',
   photovoltaique: 'panneaux-solaires',

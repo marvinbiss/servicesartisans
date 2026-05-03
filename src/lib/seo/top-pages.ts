@@ -13,18 +13,20 @@ export interface MoneyPage {
   tier: 1 | 2 | 3 // tier 1 = top 30, tier 2 = top 100, tier 3 = top 200
 }
 
-// Top 10 services (highest search volume in France)
+// Top 10 services (highest search volume RGE-canonical post-pivot 2026-05-03).
+// serrurier/carreleur retirés (commodity hors RGE), remplacés par 2 gravity
+// hubs RGE forts : isolation-thermique + panneaux-solaires.
 const TOP_SERVICES: { slug: string; name: string }[] = [
   { slug: 'plombier', name: 'Plombier' },
   { slug: 'electricien', name: 'Électricien' },
-  { slug: 'serrurier', name: 'Serrurier' },
   { slug: 'chauffagiste', name: 'Chauffagiste' },
   { slug: 'peintre-en-batiment', name: 'Peintre en bâtiment' },
   { slug: 'menuisier', name: 'Menuisier' },
   { slug: 'macon', name: 'Maçon' },
   { slug: 'couvreur', name: 'Couvreur' },
-  { slug: 'carreleur', name: 'Carreleur' },
   { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur' },
+  { slug: 'isolation-thermique', name: 'Isolation thermique' },
+  { slug: 'panneaux-solaires', name: 'Panneaux solaires' },
 ]
 
 // Top 20 cities by population / search volume

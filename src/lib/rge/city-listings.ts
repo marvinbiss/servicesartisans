@@ -20,7 +20,7 @@ import { supabase, IS_BUILD } from '@/lib/supabase'
 import { getVilleBySlug } from '@/lib/data/france'
 import { getCityValues, resolveProviderCities } from '@/lib/insee-resolver'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
-import { logger } from '@/lib/logger'
+import { notifyFailOpen } from '@/lib/monitoring/fail-open'
 import type { Provider } from '@/types'
 
 // Same shape as PROVIDER_LIST_SELECT in src/lib/supabase.ts. Duplicated here to avoid
@@ -101,9 +101,7 @@ export async function getRgeProvidersByCity(
         // resolveProviderCities normalises INSEE code → commune name.
         return resolveProviderCities((data || []) as unknown as Provider[])
       } catch (err) {
-        logger.error(`[getRgeProvidersByCity] FAILED for ${citySlug}`, {
-          error: err instanceof Error ? err.message : err,
-        })
+        notifyFailOpen('rge-list-by-city', err, { key: citySlug })
         return []
       }
     },
@@ -141,9 +139,7 @@ export async function getRgeProviderCountByCity(citySlug: string): Promise<numbe
         if (error) throw error
         return count ?? 0
       } catch (err) {
-        logger.error(`[getRgeProviderCountByCity] FAILED for ${citySlug}`, {
-          error: err instanceof Error ? err.message : err,
-        })
+        notifyFailOpen('rge-count-by-city', err, { key: citySlug })
         return 0
       }
     },

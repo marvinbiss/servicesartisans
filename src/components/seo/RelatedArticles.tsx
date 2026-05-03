@@ -84,24 +84,24 @@ function buildSearchTerms(slug: string): string[] {
   terms.add(slug)
 
   // Common trade-name → topic mappings
+  // Pivot full RGE 2026-05-03 : entrées carreleur/cuisiniste/vitrier/serrurier
+  // retirées (slugs commodity hors RGE — re-routage des keywords vers les slugs
+  // RGE-canonical : carrelage→salle-de-bain, vitre/cuisine→menuisier, etc.).
+  // Les keywords associés restent matchés via salle-de-bain et menuisier.
   const variants: Record<string, string[]> = {
     plombier: ['plombier', 'plomberie', 'plombiers'],
     electricien: ['electricien', 'electrique', 'electricite', 'electriques', 'electriq'],
     chauffagiste: ['chauffagiste', 'chauffage', 'chaudiere', 'pompe-a-chaleur'],
     couvreur: ['couvreur', 'toiture', 'couverture', 'toit'],
-    menuisier: ['menuisier', 'menuiserie', 'fenetre', 'bois'],
+    menuisier: ['menuisier', 'menuiserie', 'fenetre', 'bois', 'vitre', 'vitrage', 'cuisine'],
     'peintre-en-batiment': ['peintre', 'peinture', 'ravalement'],
     macon: ['macon', 'maconnerie', 'beton', 'fondation'],
-    carreleur: ['carreleur', 'carrelage', 'faience'],
-    cuisiniste: ['cuisiniste', 'cuisine'],
     climaticien: ['climaticien', 'climatisation', 'clim'],
-    vitrier: ['vitrier', 'vitre', 'vitrage', 'verre'],
     charpentier: ['charpentier', 'charpente', 'ossature'],
-    serrurier: ['serrurier', 'serrure', 'serrurerie'],
-    facade: ['facade', 'ravalement', 'enduit'],
+    facadier: ['facade', 'ravalement', 'enduit'],
     'isolation-thermique': ['isolation', 'isolant', 'thermique'],
     'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffage'],
-    'salle-de-bain': ['salle-de-bain', 'bain', 'douche', 'sanitaire'],
+    'salle-de-bain': ['salle-de-bain', 'bain', 'douche', 'sanitaire', 'carrelage', 'faience'],
   }
 
   const found = variants[slug]

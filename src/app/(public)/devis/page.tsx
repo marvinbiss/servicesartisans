@@ -15,13 +15,16 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86400
+
+const PUBLISHED_DATE = getPublishedDate('/devis')
 
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit 2026 — 3 Offres 24h',
   description:
-    'Demandez un devis artisan gratuit 2026 : plombier, électricien, serrurier et 50 métiers. Réponse sous 24h, 3 offres, 100% gratuit, sans engagement.',
+    'Demandez un devis artisan gratuit 2026 : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Réponse sous 24h, 3 offres, 100% gratuit, sans engagement.',
   alternates: getAlternates('/devis'),
   robots: {
     index: true,
@@ -135,7 +138,7 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
     headline: `Devis Artisan Gratuit — ${tradeCount}+ Métiers, ${new Date().getFullYear()}`,
     description: `Demandez un devis artisan gratuit : ${tradeCount}+ métiers couverts, ${villesCount}+ villes, jusqu'à 3 propositions sous 24 h, sans engagement.`,
     url: `${SITE_URL}/devis`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -205,7 +208,7 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
             className="mt-4"
           />

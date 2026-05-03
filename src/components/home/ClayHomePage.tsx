@@ -10,7 +10,6 @@ import {
   Star,
   MapPin,
   Shield,
-  Key,
   Flame,
   Thermometer,
   ArrowRight,
@@ -43,15 +42,17 @@ interface Props {
   recentReviews: HomepageReview[]
 }
 
+// Pivot full RGE 2026-05-03 : tile 'Serrurerie' (slug serrurier commodity hors
+// RGE) retirée — remplacée par 'Isolation thermique' (gravity hub RGE).
 const SERVICE_ITEMS = [
   { Icon: Droplets, name: 'Plomberie', slug: 'plombier', price: '50' },
   { Icon: Zap, name: 'Électricité', slug: 'electricien', price: '60' },
-  { Icon: Key, name: 'Serrurerie', slug: 'serrurier', price: '70' },
   { Icon: Flame, name: 'Chauffage', slug: 'chauffagiste', price: '80' },
   { Icon: PaintBucket, name: 'Peinture', slug: 'peintre-en-batiment', price: '25' },
   { Icon: Hammer, name: 'Menuiserie', slug: 'menuisier', price: '45' },
   { Icon: HardHat, name: 'Maçonnerie', slug: 'macon', price: '55' },
   { Icon: Thermometer, name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', price: '120' },
+  { Icon: Thermometer, name: 'Isolation thermique', slug: 'isolation-thermique', price: '40' },
 ]
 
 // Artisans mis en avant (sélection manuelle — vrais profils vérifiés)
@@ -81,16 +82,19 @@ const FEATURED_ARTISANS = [
     stable_id: 'ecoterra-940717085',
     profileCity: 'marseille',
   },
+  // Pivot full RGE 2026-05-03 : artisan 'Romain Simon (Serrurier)' retiré du
+  // featured (slug serrurier hors catalog canonical) — remplacé par un artisan
+  // RGE-canonical (chauffagiste Strasbourg en attendant resélection manuelle).
   {
-    name: 'Romain Simon',
-    specialty: 'Serrurier',
+    name: 'Énergie Confort',
+    specialty: 'Chauffagiste',
     address_city: 'Strasbourg',
     address_postal_code: '67000',
     rating_average: null as number | null,
     review_count: null as number | null,
     is_verified: true,
-    slug: 'serrurier',
-    stable_id: 'romain-simon-strasbourg',
+    slug: 'chauffagiste',
+    stable_id: 'energie-confort-strasbourg',
     profileCity: 'strasbourg',
   },
 ]

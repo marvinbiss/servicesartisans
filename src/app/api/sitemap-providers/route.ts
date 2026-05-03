@@ -25,13 +25,16 @@ function escapeXml(s: string): string {
   )
 }
 
+// Pivot full RGE 2026-05-03 : tous les alias serrurier/carreleur/vitrier/
+// cuisiniste re-routés vers slugs RGE-canonical. Le sitemap ne doit JAMAIS
+// émettre d'URL /services/<slug-mort>/<ville> (middleware retournerait 410).
 const specialtyToSlug: Record<string, string> = {
   plombier: 'plombier',
   electricien: 'electricien',
   chauffagiste: 'chauffagiste',
   menuisier: 'menuisier',
-  'menuisier-metallique': 'serrurier',
-  carreleur: 'carreleur',
+  'menuisier-metallique': 'menuisier',
+  carreleur: 'salle-de-bain',
   couvreur: 'couvreur',
   macon: 'macon',
   peintre: 'peintre-en-batiment',
@@ -39,10 +42,10 @@ const specialtyToSlug: Record<string, string> = {
   isolation: 'isolation-thermique',
   platrier: 'platrier',
   finition: 'peintre-en-batiment',
-  serrurier: 'serrurier',
-  vitrier: 'vitrier',
-  cuisiniste: 'cuisiniste',
-  'installateur-de-cuisine': 'cuisiniste',
+  serrurier: 'menuisier',
+  vitrier: 'menuisier',
+  cuisiniste: 'menuisier',
+  'installateur-de-cuisine': 'menuisier',
   zingueur: 'zingueur',
   'couvreur-zingueur': 'zingueur',
   etancheiste: 'etancheiste',

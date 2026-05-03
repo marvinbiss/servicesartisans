@@ -142,15 +142,17 @@ export async function getSiteStats(): Promise<SiteStats> {
   }
 }
 
+// Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) — homepage
+// met désormais en avant 8 métiers RGE-canonical (catalog SSoT).
 const HOMEPAGE_SERVICE_SLUGS = [
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
   'peintre-en-batiment',
   'menuisier',
   'macon',
   'pompe-a-chaleur',
+  'isolation-thermique',
 ]
 
 /** Données complètes pour la homepage : stats + providers + avis + compteurs */

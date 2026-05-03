@@ -35,11 +35,13 @@ function getSmallCitiesInDepartment(departementCode: string, excludeSlug?: strin
  * Get rare services not in the popular services list.
  */
 function getRareServices(excludeSlug?: string): { slug: string; name: string }[] {
+  // Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) —
+  // remplacé par couvreur (slug RGE-canonical, gravity hub fort).
   const popularSlugs = new Set([
     'plombier',
     'electricien',
-    'serrurier',
     'chauffagiste',
+    'couvreur',
     'peintre-en-batiment',
     'menuisier',
     'macon',
@@ -125,7 +127,7 @@ function getServiceHubRescueLinks(serviceSlug: string): RescueLink[] {
   const related = relatedServices[serviceSlug]
   if (related) {
     const rareRelated = related
-      .filter((slug) => !['plombier', 'electricien', 'serrurier', 'chauffagiste'].includes(slug))
+      .filter((slug) => !['plombier', 'electricien', 'chauffagiste', 'couvreur'].includes(slug))
       .sort((a, b) => getServiceWeight(b) - getServiceWeight(a))
     for (const relSlug of rareRelated.slice(0, 2)) {
       const relService = services.find((s) => s.slug === relSlug)

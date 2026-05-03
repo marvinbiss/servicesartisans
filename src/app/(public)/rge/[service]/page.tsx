@@ -16,7 +16,12 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCollectionPageSchema,
+  getDeepSectionsTechArticleSchema,
+  getFAQSchema,
+} from '@/lib/seo/jsonld'
 import {
   RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
@@ -167,9 +172,29 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
         }
       : null
 
+  // Sprint F Ahrefs 2026-05-03 — TechArticle Schema pour les deep H2 sections.
+  // Émis seulement si le service RGE a des deep sections (CET/audit/VMC/fenêtres
+  // /borne-recharge). Renforce signal topical Google AI Overviews + Bing.
+  // Image OG par défaut SA pour la page hub RGE — pas de hero photo dédiée
+  // par service RGE (vs /services/[service] qui a getServiceImage()), donc
+  // on utilise l'image OG racine du site (cohérent avec openGraph metadata).
+  // datePublished du Bloc 6/7 (2026-05-03), dateModified = freshness ADEME.
+  const dateModifiedRgeIso = lastSyncDate ?? '2026-05-03T00:00:00+02:00'
+  const deepSectionsTechArticleSchema = getDeepSectionsTechArticleSchema({
+    pageUrl: `${SITE_URL}${pagePath}`,
+    topic: content.h1,
+    sections: deepSections,
+    image: `${SITE_URL}/og-image.jpg`,
+    datePublished: '2026-05-03T00:00:00+02:00',
+    dateModified: dateModifiedRgeIso,
+    authorName: 'la rédaction ServicesArtisans',
+    publisherName: 'ServicesArtisans',
+  })
+
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
   if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  if (deepSectionsTechArticleSchema) jsonLdItems.push(deepSectionsTechArticleSchema)
 
   return (
     <>
@@ -536,9 +561,10 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Bloc 6 Ahrefs 2026-05-03 — Deep H2 sections (striking distance KW) */}
+      {/* Bloc 6 Ahrefs 2026-05-03 — Deep H2 sections (striking distance KW)
+          Sprint F : id="deep-sections" + data-speakable wrapper pour TechArticle Schema. */}
       {deepSections.length > 0 && (
-        <section className="bg-white border-b border-charcoal-100">
+        <section id="deep-sections" className="bg-white border-b border-charcoal-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
             <div className="flex items-center gap-2 mb-3">
               <BookOpen className="w-5 h-5 text-emerald-700" aria-hidden="true" />
@@ -562,7 +588,9 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                   </h3>
                   <div className="space-y-4 text-charcoal-700 leading-relaxed">
                     {s.body.map((p, i) => (
-                      <p key={i}>{p}</p>
+                      <p key={i} data-speakable={i === 0 ? 'true' : undefined}>
+                        {p}
+                      </p>
                     ))}
                   </div>
                 </article>

@@ -15,7 +15,7 @@
 
 import { supabase, SERVICE_TO_SPECIALTIES, IS_BUILD } from '@/lib/supabase'
 import { getCachedData } from '@/lib/cache'
-import { logger } from '@/lib/logger'
+import { notifyFailOpen } from '@/lib/monitoring/fail-open'
 import { isRgeAllowedService, type RgeAllowedService } from '@/lib/rge/service-city-listings'
 
 const CACHE_TTL_6H = 6 * 60 * 60 // 6 hours
@@ -116,8 +116,8 @@ export async function getRgeNationalStats(): Promise<RgeNationalStats> {
           topCities,
         }
       } catch (err) {
-        logger.error('[getRgeNationalStats] FAILED', {
-          message: serializeSupabaseError(err),
+        notifyFailOpen('rge-stats-national', err, {
+          extras: { detail: serializeSupabaseError(err) },
         })
         return { totalActive: 0, topCities: [] }
       }
@@ -246,8 +246,9 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
 
         return { total: count ?? 0, topCities }
       } catch (err) {
-        logger.error(`[getRgeServiceStats] FAILED for ${serviceSlug}`, {
-          message: serializeSupabaseError(err),
+        notifyFailOpen('rge-stats-service', err, {
+          key: serviceSlug,
+          extras: { detail: serializeSupabaseError(err) },
         })
         return { total: 0, topCities: [] }
       }

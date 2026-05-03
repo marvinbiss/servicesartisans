@@ -26,14 +26,16 @@ interface GlossaireTooltipsProps {
 // Category ↔ service domain mapping (fallback when relatedService is absent)
 // ---------------------------------------------------------------------------
 
+// Pivot full RGE 2026-05-03 : 'carreleur' (commodity hors RGE) re-routé vers
+// salle-de-bain (slug RGE-canonical pour intent revêtements en pièces humides).
 const CATEGORY_SERVICE_MAP: Record<string, string[]> = {
-  'Gros œuvre': ['macon', 'demolition'],
+  'Gros œuvre': ['macon'],
   'Charpente & toiture': ['charpentier', 'couvreur'],
   Plomberie: ['plombier'],
   Électricité: ['electricien'],
-  'Isolation & énergie': ['isolation', 'chauffagiste', 'climatisation'],
-  Menuiserie: ['menuisier', 'fenetre', 'volet'],
-  Revêtements: ['carreleur', 'peintre', 'sol'],
+  'Isolation & énergie': ['isolation-thermique', 'chauffagiste', 'climaticien'],
+  Menuiserie: ['menuisier'],
+  Revêtements: ['salle-de-bain', 'peintre-en-batiment'],
   'Administratif & juridique': [],
 }
 

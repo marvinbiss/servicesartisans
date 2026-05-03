@@ -3,7 +3,6 @@ import Link from 'next/link'
 import {
   Wrench,
   Zap,
-  Key,
   Flame,
   PaintBucket,
   Home,
@@ -12,9 +11,7 @@ import {
   Droplets,
   Wind,
   Thermometer,
-  Sofa,
   Sparkles,
-  ShieldCheck,
   ArrowRight,
   TrendingUp,
   Award,
@@ -23,7 +20,6 @@ import {
   Shield,
   Building,
   Paintbrush,
-  Maximize,
   Bath,
   Sun,
   Snowflake,
@@ -82,7 +78,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur. Artisans vérifiés SIREN, devis gratuit.`,
+    description: `${staticServicesList.length} métiers RGE du bâtiment : plombier, électricien, chauffagiste, couvreur, pompe à chaleur, isolation. Artisans certifiés ADEME, devis gratuit.`,
   },
 }
 
@@ -144,19 +140,6 @@ const allServices = [
     ],
   },
   {
-    category: 'Sécurité',
-    icon: ShieldCheck,
-    color: 'green',
-    services: [
-      {
-        name: 'Serrurier',
-        slug: 'serrurier',
-        icon: Key,
-        description: 'Ouverture de porte, changement serrure, blindage',
-      },
-    ],
-  },
-  {
     category: 'Gros œuvre & Maçonnerie',
     icon: HardHat,
     color: 'orange',
@@ -210,12 +193,6 @@ const allServices = [
         icon: Hammer,
         description: 'Fenêtres, portes, escaliers, placards',
       },
-      {
-        name: 'Cuisiniste',
-        slug: 'cuisiniste',
-        icon: Sofa,
-        description: 'Conception et pose de cuisines',
-      },
     ],
   },
   {
@@ -230,29 +207,10 @@ const allServices = [
         description: 'Peinture intérieure et extérieure',
       },
       {
-        name: 'Carreleur',
-        slug: 'carreleur',
-        icon: Sparkles,
-        description: 'Pose carrelage, faïence, mosaïque',
-      },
-      {
         name: 'Plâtrier',
         slug: 'platrier',
         icon: Paintbrush,
         description: 'Cloisons, plafonds, isolation',
-      },
-    ],
-  },
-  {
-    category: 'Vitrerie',
-    icon: Maximize,
-    color: 'slate',
-    services: [
-      {
-        name: 'Vitrier',
-        slug: 'vitrier',
-        icon: Maximize,
-        description: 'Remplacement vitres, miroirs, double vitrage',
       },
     ],
   },

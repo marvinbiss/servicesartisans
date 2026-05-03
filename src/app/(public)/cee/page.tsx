@@ -88,24 +88,24 @@ const FAQ: Array<{ question: string; answer: string }> = [
 ]
 
 export const metadata: Metadata = {
-  title: 'Primes CEE 2026 : économies d’énergie',
+  title: 'Prime CEE 2026 : montants, calcul + 19 opérations éligibles',
   description:
-    'Découvrez les 19 opérations CEE résidentielles 2026 : qualifications RGE, cumul MaPrimeRénov’, villes couvertes. Gestion des primes simplifiée.',
+    'Calculer ma prime CEE 2026 : montants par opération (BAR-TH, BAR-EN), cumul MaPrimeRénov’ + TVA 5,5 %, simulateur 3 min. Versement obligés 4-12 sem.',
   alternates: getAlternates('/cee'),
   openGraph: {
     locale: 'fr_FR',
-    title: 'Primes CEE 2026 — Catalogue complet des opérations',
+    title: 'Certificats d’économies d’énergie (CEE) 2026 : prime + montants',
     description:
-      'Toutes les primes CEE résidentielles 2026 : isolation, chauffage, ventilation, régulation. Cumul MaPrimeRénov’ possible.',
+      'Catalogue complet des primes CEE 2026 : isolation, chauffage, ventilation. Calcul du montant + cumul MaPrimeRénov’ et TVA réduite.',
     url: PAGE_URL,
     siteName: 'ServicesArtisans',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Primes CEE 2026 : catalogue complet',
+    title: 'Prime CEE 2026 : montants, calcul + opérations éligibles',
     description:
-      'Les 19 opérations CEE résidentielles éligibles en 2026. Cumul MaPrimeRénov’, TVA 5,5 %, artisans RGE.',
+      'Calculer ma prime CEE 2026 par opération + cumul MaPrimeRénov’, TVA 5,5 %, simulateur 3 min, artisans RGE.',
   },
 }
 
@@ -318,6 +318,133 @@ export default async function CeeHubPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <CeeCTA variant="hero" />
       </div>
+
+      {/* Calcul prime CEE — capture KW racine "montant prime CEE", "calcul prime CEE" */}
+      <section
+        id="calcul-prime-cee"
+        aria-labelledby="calcul-heading"
+        className="bg-white border-y border-charcoal-100"
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <h2
+            id="calcul-heading"
+            className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3"
+          >
+            Combien vais-je toucher en prime CEE en 2026&nbsp;?
+          </h2>
+          <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
+            Le montant d’une prime CEE dépend de l’opération réalisée, de la zone climatique (H1
+            froid, H2 tempéré, H3 doux), de la surface (m² isolés, kW de chaudière) et du
+            <strong className="font-semibold"> profil de revenus</strong> (classique vs précarité —
+            cours environ 2× supérieurs sur le segment précaire). Voici 4 ordres de grandeur
+            indicatifs en 2026 :
+          </p>
+
+          <div className="overflow-x-auto rounded-2xl border border-charcoal-100 bg-white">
+            <table className="w-full text-left">
+              <caption className="sr-only">Montants prime CEE 2026 par opération</caption>
+              <thead className="bg-charcoal-50 text-sm text-charcoal-700">
+                <tr>
+                  <th scope="col" className="px-5 py-3 font-semibold">
+                    Opération
+                  </th>
+                  <th scope="col" className="px-5 py-3 font-semibold">
+                    Code DGEC
+                  </th>
+                  <th scope="col" className="px-5 py-3 font-semibold whitespace-nowrap">
+                    Prime classique
+                  </th>
+                  <th scope="col" className="px-5 py-3 font-semibold whitespace-nowrap">
+                    Prime précarité
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-charcoal-100 text-sm text-charcoal-800">
+                <tr>
+                  <th scope="row" className="px-5 py-3 font-medium align-top">
+                    <Link href="/cee/bar-th-171" className="hover:text-emerald-700 hover:underline">
+                      Pompe à chaleur air-eau
+                    </Link>
+                  </th>
+                  <td className="px-5 py-3 align-top text-charcoal-600">BAR-TH-171</td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    2 500 – 5 000 €
+                  </td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    4 500 – 9 000 €
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" className="px-5 py-3 font-medium align-top">
+                    <Link href="/cee/bar-en-101" className="hover:text-emerald-700 hover:underline">
+                      Isolation combles perdus
+                    </Link>
+                  </th>
+                  <td className="px-5 py-3 align-top text-charcoal-600">BAR-EN-101</td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    11 – 13 € / m²
+                  </td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    19 – 22 € / m²
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" className="px-5 py-3 font-medium align-top">
+                    <Link href="/cee/bar-th-112" className="hover:text-emerald-700 hover:underline">
+                      Poêle à granulés
+                    </Link>
+                  </th>
+                  <td className="px-5 py-3 align-top text-charcoal-600">BAR-TH-112</td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    800 – 2 500 €
+                  </td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    1 600 – 4 800 €
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" className="px-5 py-3 font-medium align-top">
+                    <Link href="/cee/bar-th-148" className="hover:text-emerald-700 hover:underline">
+                      Chauffe-eau thermodynamique
+                    </Link>
+                  </th>
+                  <td className="px-5 py-3 align-top text-charcoal-600">BAR-TH-148</td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    600 – 1 200 €
+                  </td>
+                  <td className="px-5 py-3 align-top whitespace-nowrap text-emerald-700 font-semibold">
+                    1 100 – 2 200 €
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="mt-4 text-xs text-charcoal-500 leading-relaxed">
+            Fourchettes indicatives 2026 sur la base d’un cours moyen 5,5–7,5 € / MWh cumac
+            (classique) et 7,5–11 € / MWh cumac (précarité), hors bonifications « Coup de pouce ».
+            Les montants exacts dépendent du cours du MWh cumac le jour du dépôt et de la fiche
+            opérationnelle. Le simulateur calcule la prime ferme pour votre logement.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/simulateur-aides-renovation"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-700 text-white font-semibold shadow-md hover:bg-emerald-800 transition"
+            >
+              <TrendingUp className="w-5 h-5" aria-hidden="true" />
+              Calculer ma prime CEE en 3 min
+            </Link>
+            <Link
+              href="/aides"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+            >
+              <Users className="w-5 h-5" aria-hidden="true" />
+              Voir toutes les aides 2026
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Catalogue par domaine */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-14">

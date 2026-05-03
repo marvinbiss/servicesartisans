@@ -1334,6 +1334,63 @@ export function getPersonSchema(author: {
   }
 }
 
+// Schema.org TechArticle for the deep H2 sections collection (Sprint F Ahrefs
+// 2026-05-03). Émet un seul TechArticle qui décrit la collection de deep
+// sections présentes sur la page (PAC variants / ITE-ITI / VMC / etc.). Chaque
+// section devient un WebPageElement enfant via `hasPart` avec un cssSelector
+// pointant vers son ancre `#<id>`, ce qui permet à Google + AI Overviews de
+// citer un sous-extrait précis de la page (rich snippet "section" + Speakable
+// audio digest sur les H3 + premier paragraphe).
+//
+// Pourquoi TechArticle plutôt que Article : Schema.org TechArticle s'applique
+// aux articles techniques avec étapes ou explications procédurales — exact
+// fit pour nos guides "comment choisir une PAC", "VMC double flux vs simple
+// flux", etc. Type plus précis = meilleur match topical pour l'index Google.
+export function getDeepSectionsTechArticleSchema(params: {
+  pageUrl: string
+  topic: string
+  sections: ReadonlyArray<{ id: string; h2: string; body: readonly string[] }>
+  /** Image absolue (https) — obligatoire Schema.org Article (utiliser le héros de la page). */
+  image: string
+  /** ISO 8601 — date de première publication des deep sections (mois courant si nouveau). */
+  datePublished: string
+  /** ISO 8601 — date de dernière modification éditoriale ou refresh ADEME. */
+  dateModified: string
+  /** Auteur (Person ou ligne éditoriale) — obligatoire Schema.org Article. */
+  authorName: string
+  /** Publisher organisation (souvent le nom du site). */
+  publisherName: string
+}): Record<string, unknown> | null {
+  if (!params.sections || params.sections.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    '@id': `${params.pageUrl}#techarticle-deep`,
+    headline: `${params.topic} : guide approfondi`,
+    image: [params.image],
+    datePublished: params.datePublished,
+    dateModified: params.dateModified,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    proficiencyLevel: 'Beginner',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': params.pageUrl },
+    articleSection: params.sections.map((s) => s.h2),
+    author: { '@type': 'Person', name: params.authorName },
+    publisher: { '@type': 'Organization', name: params.publisherName },
+    hasPart: params.sections.map((s) => ({
+      '@type': 'WebPageElement',
+      '@id': `${params.pageUrl}#${s.id}`,
+      name: s.h2,
+      cssSelector: `#${s.id}`,
+      ...(s.body[0] && { description: s.body[0].slice(0, 250) }),
+    })),
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['#deep-sections h3', '#deep-sections [data-speakable="true"]'],
+    },
+  }
+}
+
 // Schema.org ProfilePage — Google's 2024+ canonical pattern for author pages.
 // Wraps the Person node as `mainEntity`, exposes dateCreated + dateModified
 // (required signals for ProfilePage rich result), and lists authored articles

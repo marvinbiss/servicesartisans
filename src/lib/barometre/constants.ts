@@ -16,25 +16,30 @@ export interface BarometreMetier {
 export const BAROMETRE_METIERS: BarometreMetier[] = [
   { slug: 'plombier', label: 'Plombier', icon: '🔧' },
   { slug: 'electricien', label: 'Électricien', icon: '⚡' },
-  { slug: 'serrurier', label: 'Serrurier', icon: '🔑' },
   { slug: 'chauffagiste', label: 'Chauffagiste', icon: '🔥' },
   { slug: 'peintre-en-batiment', label: 'Peintre en bâtiment', icon: '🎨' },
   { slug: 'menuisier', label: 'Menuisier', icon: '🪚' },
-  { slug: 'carreleur', label: 'Carreleur', icon: '🧱' },
   { slug: 'couvreur', label: 'Couvreur', icon: '🏠' },
   { slug: 'macon', label: 'Maçon', icon: '🏗️' },
-  { slug: 'vitrier', label: 'Vitrier', icon: '🪟' },
   { slug: 'climaticien', label: 'Climaticien', icon: '❄️' },
   { slug: 'charpentier', label: 'Charpentier', icon: '🪓' },
   { slug: 'facadier', label: 'Façadier', icon: '🏢' },
   { slug: 'zingueur', label: 'Zingueur', icon: '💧' },
   { slug: 'etancheiste', label: 'Étanchéiste', icon: '🛡️' },
   { slug: 'platrier', label: 'Plâtrier', icon: '🧱' },
-  { slug: 'cuisiniste', label: 'Cuisiniste', icon: '🍳' },
+  { slug: 'pompe-a-chaleur', label: 'Pompe à chaleur', icon: '🌡️' },
+  { slug: 'panneaux-solaires', label: 'Panneaux solaires', icon: '☀️' },
+  { slug: 'isolation-thermique', label: 'Isolation thermique', icon: '🧊' },
+  { slug: 'renovation-energetique', label: 'Rénovation énergétique', icon: '🌱' },
+  { slug: 'borne-recharge', label: 'Borne de recharge', icon: '🔌' },
+  { slug: 'salle-de-bain', label: 'Salle de bain', icon: '🛁' },
   { slug: 'ramoneur', label: 'Ramoneur', icon: '🏭' },
   { slug: 'diagnostiqueur', label: 'Diagnostiqueur', icon: '📋' },
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // jardinier, paysagiste, demenageur retirés (hors thèse).
+  // Pivot full RGE 2026-05-03 : serrurier, carreleur, vitrier, cuisiniste
+  // retirés (commodity hors RGE) → remplacés par 6 métiers RGE-canonical
+  // manquants. Catalog 21/21 aligné sur SERVICE_SLUGS_CANONICAL.
 ]
 
 export function getBarometreMetierBySlug(slug: string): BarometreMetier | undefined {

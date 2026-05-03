@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
 import Link from 'next/link'
 import {
   Database,
@@ -18,26 +20,55 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 /**
  * Page hub du dataset RGE — Sprint 0.4 (data.gouv.fr backbone).
  *
- * NON câblée à la DB côté Server Component pour éviter charge prod tant que
- * Sprint 0.1 (template /rge/[s]/[v]) n'est pas validé. Les chiffres
- * dynamiques (count, dernière maj) sont des stubs typés — voir TODOs.
- *
- * Activation après Sprint 0.1 :
- *   1. Remplacer STUB_COUNT / STUB_GENERATED_AT par fetch real-time depuis
- *      `/datasets/rge/rge-latest.meta.json` (ou query Supabase si meta KO)
- *   2. Connecter à `barometre_rge_snapshots` pour le compte mensuel
- *   3. Activer la cron `/api/cron/export-rge-dataset` (env RGE_DATASET_EXPORT_ENABLED)
- *   4. Soumettre dataset à data.gouv.fr (cf. docs/datagouv-submission-2026-04.md)
+ * Action #4 (Sprint B 2026-05-03) : activation complète.
+ *   1. ✅ Remplacement STUB par fetch real-time du fichier `rge-latest.meta.json`
+ *      au build (build-time read, pas de charge prod runtime)
+ *   2. Cron `/api/cron/export-rge-dataset` à activer via env RGE_DATASET_EXPORT_ENABLED=true
+ *   3. Manifest data.gouv.fr : `docs/datagouv-rge-manifest.json`
+ *   4. Submission UI : data.gouv.fr/admin/datasets/new (manuel post-activation cron)
  */
 
 // 24 h — la cron tourne 1×/mois, pas besoin de fraîcheur fine
 export const revalidate = 86400
 
-// TODO Sprint 0.4 : fetch /datasets/rge/rge-latest.meta.json
-const STUB_COUNT = 49228
-// TODO Sprint 0.4 : ISO du dernier export réel (rge-latest.meta.json → generated_at)
-const STUB_GENERATED_AT = '2026-04-01T04:00:00Z'
-const STUB_YEARMONTH = '2026-04'
+// Fallback values utilisés si le fichier meta JSON n'est pas lisible (build env).
+// Synchronisés avec le dernier export réel pour rester crédibles si la lecture
+// fs échoue (CI sans fichier copié, test build, etc.).
+const FALLBACK_COUNT = 49228
+const FALLBACK_GENERATED_AT = '2026-04-01T04:00:00Z'
+const FALLBACK_YEARMONTH = '2026-04'
+
+type DatasetMeta = {
+  count: number
+  generatedAt: string
+  yearmonth: string
+}
+
+async function readDatasetMeta(): Promise<DatasetMeta> {
+  // Read at build time (Server Component, revalidate=86400). No prod runtime
+  // hit. If the file is absent or malformed, fall back to last-known values.
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'datasets', 'rge', 'rge-latest.meta.json')
+    const raw = await fs.readFile(filePath, 'utf8')
+    const parsed = JSON.parse(raw) as {
+      count?: number
+      generated_at?: string
+      yearmonth?: string
+    }
+    return {
+      count: typeof parsed.count === 'number' ? parsed.count : FALLBACK_COUNT,
+      generatedAt:
+        typeof parsed.generated_at === 'string' ? parsed.generated_at : FALLBACK_GENERATED_AT,
+      yearmonth: typeof parsed.yearmonth === 'string' ? parsed.yearmonth : FALLBACK_YEARMONTH,
+    }
+  } catch {
+    return {
+      count: FALLBACK_COUNT,
+      generatedAt: FALLBACK_GENERATED_AT,
+      yearmonth: FALLBACK_YEARMONTH,
+    }
+  }
+}
 
 const canonicalUrl = `${SITE_URL}/datasets/rge`
 const datasetBaseUrl = `${SITE_URL}/datasets/rge`
@@ -59,24 +90,27 @@ const formatDateLong = (iso: string): string =>
     timeZone: 'UTC',
   })
 
-export const metadata: Metadata = {
-  title: `Dataset Artisans RGE — CC-BY 4.0`,
-  description: `Annuaire officiel des artisans RGE France, mis à jour mensuellement. CSV / JSON / Parquet libres. Source ADEME / France Rénov'. CC-BY 4.0.`,
-  alternates: getAlternates('/datasets/rge'),
-  robots: {
-    index: true,
-    follow: true,
-    'max-snippet': -1,
-    'max-image-preview': 'large' as const,
-    'max-video-preview': -1,
-  },
-  openGraph: {
-    ...getOgDefaults(),
-    title: `Dataset RGE — ${formatNumber(STUB_COUNT)} artisans certifiés | ${SITE_NAME}`,
-    description: `Téléchargement libre CSV / JSON / Parquet. Licence CC-BY 4.0. Mise à jour mensuelle.`,
-    url: canonicalUrl,
-    type: 'article',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const meta = await readDatasetMeta()
+  return {
+    title: `Dataset Artisans RGE 2026 — ${formatNumber(meta.count)} fiches CC-BY 4.0`,
+    description: `Annuaire officiel ${formatNumber(meta.count)} artisans RGE France, maj mensuelle. CSV / JSON / Parquet libres. Source ADEME / France Rénov'. Licence CC-BY 4.0.`,
+    alternates: getAlternates('/datasets/rge'),
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large' as const,
+      'max-video-preview': -1,
+    },
+    openGraph: {
+      ...getOgDefaults(),
+      title: `Dataset RGE — ${formatNumber(meta.count)} artisans certifiés | ${SITE_NAME}`,
+      description: `Téléchargement libre CSV / JSON / Parquet. Licence CC-BY 4.0. Mise à jour mensuelle.`,
+      url: canonicalUrl,
+      type: 'article',
+    },
+  }
 }
 
 type SchemaField = {
@@ -160,9 +194,10 @@ const SCHEMA_FIELDS: SchemaField[] = [
   },
 ]
 
-export default function DatasetRgePage() {
-  const monthLabel = formatMonth(STUB_YEARMONTH)
-  const generatedAtLong = formatDateLong(STUB_GENERATED_AT)
+export default async function DatasetRgePage() {
+  const meta = await readDatasetMeta()
+  const monthLabel = formatMonth(meta.yearmonth)
+  const generatedAtLong = formatDateLong(meta.generatedAt)
 
   const breadcrumbs = [
     { name: 'Accueil', url: SITE_URL },
@@ -174,7 +209,7 @@ export default function DatasetRgePage() {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: `Annuaire des artisans RGE de France — ${monthLabel}`,
-    description: `Liste exhaustive des entreprises certifiées RGE (Reconnu Garant de l'Environnement) référencées sur ${SITE_NAME}, ${formatNumber(STUB_COUNT)} fiches au ${monthLabel}. Source ADEME / France Rénov' enrichie (géolocalisation, services, validations). Mise à jour mensuelle.`,
+    description: `Liste exhaustive des entreprises certifiées RGE (Reconnu Garant de l'Environnement) référencées sur ${SITE_NAME}, ${formatNumber(meta.count)} fiches au ${monthLabel}. Source ADEME / France Rénov' enrichie (géolocalisation, services, validations). Mise à jour mensuelle.`,
     url: canonicalUrl,
     license: 'https://creativecommons.org/licenses/by/4.0/',
     creator: {
@@ -188,9 +223,9 @@ export default function DatasetRgePage() {
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },
-    datePublished: STUB_GENERATED_AT,
-    dateModified: STUB_GENERATED_AT,
-    temporalCoverage: STUB_YEARMONTH,
+    datePublished: meta.generatedAt,
+    dateModified: meta.generatedAt,
+    temporalCoverage: meta.yearmonth,
     spatialCoverage: {
       '@type': 'Place',
       name: 'France',
@@ -262,7 +297,7 @@ export default function DatasetRgePage() {
               Données ouvertes — licence CC-BY 4.0
             </div>
             <h1 data-speakable="true" className="mt-4 text-4xl font-extrabold text-charcoal-900">
-              Dataset RGE — {formatNumber(STUB_COUNT)} artisans certifiés
+              Dataset RGE — {formatNumber(meta.count)} artisans certifiés
             </h1>
             <p className="mt-3 text-lg text-charcoal-600">
               Annuaire mensuel exhaustif des entreprises RGE (Reconnu Garant de l’Environnement) de
@@ -354,7 +389,7 @@ export default function DatasetRgePage() {
               <div className="rounded-xl border border-sand-300 bg-white p-5">
                 <dt className="text-sm text-charcoal-500">Nombre de fiches</dt>
                 <dd className="mt-1 text-2xl font-bold text-charcoal-900">
-                  {formatNumber(STUB_COUNT)}
+                  {formatNumber(meta.count)}
                 </dd>
               </div>
               <div className="rounded-xl border border-sand-300 bg-white p-5">
@@ -444,21 +479,21 @@ export default function DatasetRgePage() {
 
             <h3 className="mt-6 text-base font-semibold text-charcoal-900">APA</h3>
             <pre className="mt-2 overflow-x-auto rounded-lg bg-charcoal-900 p-4 text-xs leading-relaxed text-sand-100">
-              {`ServicesArtisans. (${STUB_YEARMONTH.split('-')[0]}). Annuaire des artisans RGE
+              {`ServicesArtisans. (${meta.yearmonth.split('-')[0]}). Annuaire des artisans RGE
 de France [Dataset]. Licence CC-BY-4.0. Récupéré sur ${canonicalUrl}`}
             </pre>
 
             <h3 className="mt-6 text-base font-semibold text-charcoal-900">BibTeX</h3>
             <pre className="mt-2 overflow-x-auto rounded-lg bg-charcoal-900 p-4 text-xs leading-relaxed text-sand-100">
-              {`@dataset{servicesartisans_rge_${STUB_YEARMONTH.replace('-', '_')},
+              {`@dataset{servicesartisans_rge_${meta.yearmonth.replace('-', '_')},
   author       = {{ServicesArtisans}},
   title        = {Annuaire des artisans RGE de France},
-  year         = {${STUB_YEARMONTH.split('-')[0]}},
-  month        = {${STUB_YEARMONTH.split('-')[1]}},
+  year         = {${meta.yearmonth.split('-')[0]}},
+  month        = {${meta.yearmonth.split('-')[1]}},
   publisher    = {ServicesArtisans SAS},
   url          = {${canonicalUrl}},
   license      = {CC-BY-4.0},
-  version      = {${STUB_YEARMONTH}}
+  version      = {${meta.yearmonth}}
 }`}
             </pre>
           </section>

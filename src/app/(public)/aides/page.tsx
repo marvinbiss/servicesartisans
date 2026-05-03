@@ -12,6 +12,7 @@ import { aidesCatalog } from '@/lib/aides/aides-catalog'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const dynamic = 'force-static'
 export const revalidate = 86400
@@ -25,6 +26,7 @@ const REVIEW_DATE = aidesCatalog.reduce(
   (min, a) => (a.lastReviewed < min ? a.lastReviewed : min),
   aidesCatalog[0]?.lastReviewed ?? '2026-04-29'
 )
+const PUBLISHED_DATE = getPublishedDate('/aides')
 
 const AUTHOR = authors['claire-dubois']
 
@@ -103,7 +105,7 @@ export default function AidesHubPage() {
     headline: HUB_TITLE,
     description: HUB_DESCRIPTION,
     url: `${SITE_URL}${PATH}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: REVIEW_DATE,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -194,7 +196,7 @@ export default function AidesHubPage() {
           <ArticleMeta
             author={AUTHOR?.name ?? 'Équipe éditoriale ServicesArtisans'}
             authorHref={AUTHOR ? `/equipe/${AUTHOR.slug}` : '/a-propos'}
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={REVIEW_DATE}
           />
           <EnBrefBox keyPoints={enBrefPoints} />
@@ -230,6 +232,63 @@ export default function AidesHubPage() {
                 </span>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="cumul-aides"
+        aria-labelledby="cumul-heading"
+        className="bg-white py-12 border-t border-charcoal-100"
+      >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2
+            id="cumul-heading"
+            className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3"
+          >
+            Cumul des aides 2026 : combien au maximum&nbsp;?
+          </h2>
+          <p className="text-charcoal-700 leading-relaxed mb-5">
+            Les 4 dispositifs principaux (MaPrimeRénov’, prime CEE, TVA 5,5 %, éco-PTZ) sont{' '}
+            <strong>cumulables sur les mêmes travaux</strong>. La règle Anah dite{' '}
+            «&nbsp;anti-enrichissement&nbsp;» plafonne le cumul d’aides à{' '}
+            <strong>100 % du coût TTC</strong> des travaux : un ménage très modeste peut donc
+            atteindre la quasi-gratuité sur certaines opérations bonifiées (chaudière biomasse,
+            isolation combles 1&nbsp;€).
+          </p>
+          <ul className="space-y-3 text-sm text-charcoal-700 leading-relaxed mb-6">
+            <li>
+              <strong className="text-emerald-700">MaPrimeRénov’ + CEE</strong> : cumul de droit
+              commun, sans plafond spécifique au-delà de la règle anti-enrichissement.
+            </li>
+            <li>
+              <strong className="text-emerald-700">+ TVA 5,5 %</strong> : appliquée automatiquement
+              par l’artisan RGE sur main-d’œuvre et matériaux énergétiques (économie ~14 %).
+            </li>
+            <li>
+              <strong className="text-emerald-700">+ éco-PTZ jusqu’à 50 000 €</strong> : prêt à taux
+              zéro pour préfinancer le reste à charge ou un bouquet de travaux.
+            </li>
+            <li>
+              <strong className="text-emerald-700">+ aides locales</strong> (régions, départements,
+              communes) : à vérifier sur france-renov.gouv.fr selon votre adresse.
+            </li>
+          </ul>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/simulateur-aides-renovation"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 text-white font-semibold shadow-md hover:bg-emerald-800 transition"
+            >
+              <Calculator className="w-5 h-5" aria-hidden="true" />
+              Simuler mon cumul d’aides
+            </Link>
+            <Link
+              href="/cee"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+            >
+              Voir les 19 primes CEE 2026
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </section>

@@ -14,9 +14,16 @@ import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
 // Services d'urgence et services populaires (slugs)
 // ---------------------------------------------------------------------------
 
-const URGENCE_SERVICES = ['plombier', 'serrurier', 'electricien'] as const
-const DEVIS_TARIFS_SERVICES = ['plombier', 'electricien', 'chauffagiste', 'serrurier'] as const
-const AVIS_SERVICES = ['plombier', 'electricien', 'serrurier'] as const
+// Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) —
+// remplacé par chauffagiste (urgence) / pompe-a-chaleur (devis) / couvreur (avis).
+const URGENCE_SERVICES = ['plombier', 'chauffagiste', 'electricien'] as const
+const DEVIS_TARIFS_SERVICES = [
+  'plombier',
+  'electricien',
+  'chauffagiste',
+  'pompe-a-chaleur',
+] as const
+const AVIS_SERVICES = ['plombier', 'electricien', 'couvreur'] as const
 
 // ---------------------------------------------------------------------------
 // Props

@@ -137,15 +137,14 @@ describe('resolveServiceName', () => {
   })
 
   it('returns known service name for all mapped services', () => {
-    expect(resolveServiceName('serrurier')).toBe('Serrurier')
+    // Pivot full RGE 2026-05-03 : serrurier/carreleur/vitrier/cuisiniste retirés
+    // de serviceNames (commodity hors RGE) — leur résolution passe désormais
+    // par le fallback générique (capitalisation du slug brut), testé séparément.
     expect(resolveServiceName('chauffagiste')).toBe('Chauffagiste')
     expect(resolveServiceName('couvreur')).toBe('Couvreur')
     expect(resolveServiceName('menuisier')).toBe('Menuisier')
     expect(resolveServiceName('macon')).toBe('Maçon')
-    expect(resolveServiceName('carreleur')).toBe('Carreleur')
-    expect(resolveServiceName('vitrier')).toBe('Vitrier')
     expect(resolveServiceName('climaticien')).toBe('Climaticien')
-    expect(resolveServiceName('cuisiniste')).toBe('Cuisiniste')
     expect(resolveServiceName('general')).toBe('Demande générale')
   })
 

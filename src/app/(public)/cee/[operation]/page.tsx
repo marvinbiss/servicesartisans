@@ -17,6 +17,7 @@ import {
 } from '@/lib/seo/jsonld'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
+import { getCeeClientTerm } from '@/lib/cee/client-terms'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
 import {
   RGE_ALLOWED_SERVICES,
@@ -98,7 +99,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const opName = operation?.nom ?? `Prime CEE ${opCode}`
   const path = `/cee/${opCode.toLowerCase()}`
 
-  const title = truncate(`Prime CEE ${opName} (${opCode}) — artisans RGE`, 60)
+  // Action #9 (Sprint A 2026-05-03) — title-rewrite striking distance attack.
+  // Quand un mapping client existe (ex: BAR-TH-112 → "Poêle à granulés"), on
+  // expose le terme client en premier pour matcher l'intent recherche utilisateur.
+  // Captation potentielle : ~50K vol/mois (poêle 16K + granulés 13K + chauffe-eau
+  // thermo 31K + variantes). Description garde le jargon ADEME pour autorité.
+  // Cf. docs/audit-ahrefs-2026-05-03/E_site/STRIKING_DISTANCE_PLAN.md.
+  const clientTerm = getCeeClientTerm(opCode)
+  const title = clientTerm
+    ? truncate(`${clientTerm} : prime CEE 2026 (${opCode}) — artisans RGE`, 60)
+    : truncate(`Prime CEE ${opName} (${opCode}) — artisans RGE`, 60)
   const description = truncate(
     `${opName} : conditions, qualifications RGE requises, villes couvertes. Prime CEE mobilisable avec MaPrimeRénov’ et TVA 5,5 %.`,
     158

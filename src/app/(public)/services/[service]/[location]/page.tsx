@@ -110,6 +110,7 @@ import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 import IntentNavBar from '@/components/seo/IntentNavBar'
 import type { Service, Location as LocationType, Provider } from '@/types'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 // SSR activé pour ces 4 composants de conversion : le bail-out ssr:false
 // masquait le corps de page à Googlebot (HTML quasi-vide → soft 404 risk).
@@ -203,6 +204,8 @@ const NOT_FOUND_METADATA: Metadata = {
   description: "Cette combinaison service/ville n'existe pas dans notre annuaire.",
   robots: { index: false, follow: false },
 }
+
+const PUBLISHED_DATE = getPublishedDate('/services/[service]/[location]')
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug } = await params
@@ -965,7 +968,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     headline: articleHeadline.slice(0, 110),
     description: `Trouver un ${service.name.toLowerCase()} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''} : ${totalProviderCount > 0 ? `${totalProviderCount} artisans vérifiés SIREN` : 'artisans qualifiés du département'}, devis gratuit en 24h.`,
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -1148,7 +1151,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
             authorHref="/a-propos"
-            datePublished="2024-01-15T08:00:00.000Z"
+            datePublished={PUBLISHED_DATE}
             dateModified={dateModifiedIso}
             className="mt-4"
           />

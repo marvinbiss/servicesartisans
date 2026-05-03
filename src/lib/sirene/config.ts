@@ -55,22 +55,24 @@ export const NAF_CODES_PRIORITAIRES = [
 ]
 
 // Mapping NAF -> Service slug
+// Pivot full RGE 2026-05-03 : codes 4332B/4333Z mappés sur menuisier/salle-de-bain
+// (slugs serrurier/carreleur retirés du catalog canonical).
 export const NAF_TO_SERVICE: Record<string, string> = {
   '4321A': 'electricien',
   '4321B': 'electricien',
   '4322A': 'plombier',
   '4322B': 'chauffagiste',
-  '4329A': 'isolation',
+  '4329A': 'isolation-thermique',
   '4331Z': 'platrier',
   '4332A': 'menuisier',
-  '4332B': 'serrurier',
-  '4333Z': 'carreleur',
-  '4334Z': 'peintre',
+  '4332B': 'menuisier',
+  '4333Z': 'salle-de-bain',
+  '4334Z': 'peintre-en-batiment',
   '4391A': 'charpentier',
   '4391B': 'couvreur',
   '4399C': 'macon',
-  '4120A': 'constructeur-maison',
-  '4120B': 'entreprise-batiment',
+  '4120A': 'macon',
+  '4120B': 'macon',
 }
 
 // Tranches d'effectifs INSEE

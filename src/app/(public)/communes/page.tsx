@@ -11,6 +11,7 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86_400
 
@@ -20,6 +21,8 @@ const TITLE = '36 000 communes — Données locales 2026'
 const TITLE_SOCIAL = '36 000 communes — Données locales & artisans 2026'
 const DESCRIPTION =
   'Annuaire 35 999 communes France : INSEE, climat, Géorisques, DVF, artisans RGE. Base ouverte CC-BY 4.0.'
+
+const PUBLISHED_DATE = getPublishedDate('/communes')
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -67,7 +70,7 @@ export default function CommunesHubPage() {
     headline: '36 000 communes — Données locales 2026',
     description: DESCRIPTION,
     url: `${SITE_URL}/communes`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -137,7 +140,7 @@ export default function CommunesHubPage() {
               <ArticleMeta
                 author="Équipe éditoriale ServicesArtisans"
                 authorHref="/a-propos"
-                datePublished="2024-01-15T08:00:00.000Z"
+                datePublished={PUBLISHED_DATE}
                 dateModified={dateModifiedIso}
               />
               <EnBrefBox keyPoints={enBrefPoints} />

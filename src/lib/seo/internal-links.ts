@@ -17,10 +17,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   electricien: { slug: 'electricien', label: 'électricien' },
   électricité: { slug: 'electricien', label: 'électricien' },
   electricite: { slug: 'electricien', label: 'électricien' },
-  // Serrurier / Serrurerie
-  serrurier: { slug: 'serrurier', label: 'serrurier' },
-  serrurerie: { slug: 'serrurier', label: 'serrurier' },
-  serrure: { slug: 'serrurier', label: 'serrurier' },
   // Chauffagiste / Chauffage
   chauffagiste: { slug: 'chauffagiste', label: 'chauffagiste' },
   chauffage: { slug: 'chauffagiste', label: 'chauffagiste' },
@@ -34,9 +30,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   fenêtre: { slug: 'menuisier', label: 'menuisier' },
   fenêtres: { slug: 'menuisier', label: 'menuisier' },
   fenetres: { slug: 'menuisier', label: 'menuisier' },
-  // Carreleur / Carrelage
-  carreleur: { slug: 'carreleur', label: 'carreleur' },
-  carrelage: { slug: 'carreleur', label: 'carreleur' },
   // Couvreur / Toiture
   couvreur: { slug: 'couvreur', label: 'couvreur' },
   toiture: { slug: 'couvreur', label: 'couvreur' },
@@ -56,14 +49,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   climaticien: { slug: 'climaticien', label: 'climaticien' },
   climatisation: { slug: 'climaticien', label: 'climaticien' },
   'pac air-air': { slug: 'climaticien', label: 'climaticien' },
-  // Vitrier
-  vitrier: { slug: 'vitrier', label: 'vitrier' },
-  vitrerie: { slug: 'vitrier', label: 'vitrier' },
-  vitrage: { slug: 'vitrier', label: 'vitrier' },
-  'double vitrage': { slug: 'vitrier', label: 'vitrier' },
-  // Cuisiniste
-  cuisiniste: { slug: 'cuisiniste', label: 'cuisiniste' },
-  cuisine: { slug: 'cuisiniste', label: 'cuisiniste' },
   // Charpentier
   charpentier: { slug: 'charpentier', label: 'charpentier' },
   charpente: { slug: 'charpentier', label: 'charpentier' },
@@ -81,11 +66,11 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   façadier: { slug: 'facadier', label: 'façadier' },
   facadier: { slug: 'facadier', label: 'façadier' },
   enduit: { slug: 'facadier', label: 'façadier' },
-  // Plâtrier
-  plâtrier: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
-  platrier: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
-  plaquiste: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
-  placo: { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
+  // Plâtrier (slug canonique = platrier — plaquiste/placo = mots-clés associés)
+  plâtrier: { slug: 'platrier', label: 'plâtrier plaquiste' },
+  platrier: { slug: 'platrier', label: 'plâtrier plaquiste' },
+  plaquiste: { slug: 'platrier', label: 'plâtrier plaquiste' },
+  placo: { slug: 'platrier', label: 'plâtrier plaquiste' },
   // Salle de bain
   'salle de bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
   'salle-de-bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
@@ -120,18 +105,11 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   diagnostiqueur: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   'diagnostic immobilier': { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
   dpe: { slug: 'diagnostiqueur', label: 'diagnostiqueur immobilier' },
-  // Ébéniste
-  ébéniste: { slug: 'ebeniste', label: 'ébéniste' },
-  ebeniste: { slug: 'ebeniste', label: 'ébéniste' },
-  ébénisterie: { slug: 'ebeniste', label: 'ébéniste' },
-  ebenisterie: { slug: 'ebeniste', label: 'ébéniste' },
-  'meuble sur mesure': { slug: 'ebeniste', label: 'ébéniste' },
-  'restauration meuble': { slug: 'ebeniste', label: 'ébéniste' },
-  marqueterie: { slug: 'ebeniste', label: 'ébéniste' },
-  'bois massif': { slug: 'ebeniste', label: 'ébéniste' },
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // Mots-clés paysagiste/jardinier/nettoyage/alarme/déménageur retirés
   // (slugs services supprimés du catalogue).
+  // Pivot full RGE 2026-05-03 : retrait serrurier/carreleur/vitrier/cuisiniste
+  // (commodity hors RGE) + ébéniste (jamais dans le catalog canonical).
   // Plâtrier — mots-clés supplémentaires (slug correct : platrier)
   plâtre: { slug: 'platrier', label: 'plâtrier plaquiste' },
   platre: { slug: 'platrier', label: 'plâtrier plaquiste' },
@@ -162,12 +140,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   cablage: { slug: 'electricien', label: 'électricien' },
   'mise aux normes électriques': { slug: 'electricien', label: 'électricien' },
   'mise aux normes electriques': { slug: 'electricien', label: 'électricien' },
-  // Serrurier — mots-clés supplémentaires
-  'blindage de porte': { slug: 'serrurier', label: 'serrurier' },
-  'porte blindée': { slug: 'serrurier', label: 'serrurier' },
-  'porte blindee': { slug: 'serrurier', label: 'serrurier' },
-  cylindre: { slug: 'serrurier', label: 'serrurier' },
-  verrou: { slug: 'serrurier', label: 'serrurier' },
   // Chauffagiste — mots-clés supplémentaires
   radiateur: { slug: 'chauffagiste', label: 'chauffagiste' },
   'plancher chauffant': { slug: 'chauffagiste', label: 'chauffagiste' },
@@ -181,13 +153,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'aménagement placard': { slug: 'menuisier', label: 'menuisier' },
   'amenagement placard': { slug: 'menuisier', label: 'menuisier' },
   dressing: { slug: 'menuisier', label: 'menuisier' },
-  // Carreleur — mots-clés supplémentaires
-  faïence: { slug: 'carreleur', label: 'carreleur' },
-  faience: { slug: 'carreleur', label: 'carreleur' },
-  mosaïque: { slug: 'carreleur', label: 'carreleur' },
-  mosaique: { slug: 'carreleur', label: 'carreleur' },
-  'pose de carrelage': { slug: 'carreleur', label: 'carreleur' },
-  'carreaux de ciment': { slug: 'carreleur', label: 'carreleur' },
   // Couvreur — mots-clés supplémentaires
   ardoise: { slug: 'couvreur', label: 'couvreur' },
   tuile: { slug: 'couvreur', label: 'couvreur' },
@@ -208,13 +173,6 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'clim reversible': { slug: 'climaticien', label: 'climaticien' },
   vmc: { slug: 'climaticien', label: 'climaticien' },
   ventilation: { slug: 'climaticien', label: 'climaticien' },
-  // Cuisiniste — mots-clés supplémentaires
-  'cuisine équipée': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'cuisine equipee': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'plan de travail': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'ilot central': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'aménagement cuisine': { slug: 'cuisiniste', label: 'cuisiniste' },
-  'amenagement cuisine': { slug: 'cuisiniste', label: 'cuisiniste' },
   // Charpentier — mots-clés supplémentaires
   fermette: { slug: 'charpentier', label: 'charpentier' },
   'ossature bois': { slug: 'charpentier', label: 'charpentier' },
@@ -303,11 +261,13 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'enduit décoratif': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
   'enduit decoratif': { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
   lasure: { slug: 'peintre-en-batiment', label: 'peintre en bâtiment' },
-  // Vitrier — mots-clés supplémentaires
-  'triple vitrage': { slug: 'vitrier', label: 'vitrier' },
-  'fenêtre cassée': { slug: 'vitrier', label: 'vitrier' },
-  'fenetre cassee': { slug: 'vitrier', label: 'vitrier' },
-  'remplacement vitre': { slug: 'vitrier', label: 'vitrier' },
+  // Pivot full RGE 2026-05-03 : mots-clés vitrier (triple vitrage / vitre cassée)
+  // re-routés vers menuisier (slug RGE-compatible le plus proche pour les
+  // problématiques fenêtre / double-vitrage du parcours rénovation énergétique).
+  'triple vitrage': { slug: 'menuisier', label: 'menuisier' },
+  'fenêtre cassée': { slug: 'menuisier', label: 'menuisier' },
+  'fenetre cassee': { slug: 'menuisier', label: 'menuisier' },
+  'remplacement vitre': { slug: 'menuisier', label: 'menuisier' },
 }
 
 /**
@@ -345,17 +305,29 @@ const localServiceMapping: Record<
   string,
   { serviceSlug: string; citySlug: string; label: string; cityName: string }
 > = (() => {
+  // Top 10 services post-pivot full RGE 2026-05-03 :
+  // serrurier/carreleur retirés (commodity hors RGE) + platrier-plaquiste corrigé
+  // en platrier (slug canonique). Remplacés par pompe-a-chaleur + isolation
+  // (gravity hubs RGE forts).
   const TOP_10_SERVICES = [
     { slug: 'plombier', label: 'plombier', keywords: ['plombier'] },
     { slug: 'electricien', label: 'électricien', keywords: ['electricien', 'électricien'] },
-    { slug: 'serrurier', label: 'serrurier', keywords: ['serrurier'] },
     { slug: 'chauffagiste', label: 'chauffagiste', keywords: ['chauffagiste'] },
     { slug: 'peintre-en-batiment', label: 'peintre en bâtiment', keywords: ['peintre'] },
     { slug: 'menuisier', label: 'menuisier', keywords: ['menuisier'] },
     { slug: 'macon', label: 'maçon', keywords: ['macon', 'maçon'] },
     { slug: 'couvreur', label: 'couvreur', keywords: ['couvreur'] },
-    { slug: 'carreleur', label: 'carreleur', keywords: ['carreleur'] },
-    { slug: 'platrier-plaquiste', label: 'plaquiste', keywords: ['plaquiste'] },
+    { slug: 'platrier', label: 'plaquiste', keywords: ['plaquiste', 'platrier'] },
+    {
+      slug: 'pompe-a-chaleur',
+      label: 'installateur pompe à chaleur',
+      keywords: ['pompe à chaleur', 'pompe-a-chaleur', 'pac'],
+    },
+    {
+      slug: 'isolation-thermique',
+      label: 'spécialiste isolation thermique',
+      keywords: ['isolation', 'isolation thermique'],
+    },
   ]
 
   const mapping: Record<

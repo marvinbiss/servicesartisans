@@ -51,6 +51,8 @@ const ALLOWED_TYPES = new Set([
   'WebSite',
   'WebPage',
   'Article',
+  'TechArticle',
+  'WebPageElement',
   'BlogPosting',
   'NewsArticle',
   'FAQPage',

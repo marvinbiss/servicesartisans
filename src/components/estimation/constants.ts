@@ -2,6 +2,8 @@
 // Quick prompts par metier
 // ---------------------------------------------------------------------------
 
+// Pivot full RGE 2026-05-03 : serrurier/carreleur/vitrier/cuisiniste retirés
+// (commodity hors RGE — slugs catalog 21).
 export const quickPrompts: Record<string, string[]> = {
   plombier: [
     "J'ai une fuite d'eau",
@@ -9,7 +11,6 @@ export const quickPrompts: Record<string, string[]> = {
     'Chauffe-eau en panne',
     'WC suspendu à installer',
   ],
-  serrurier: ['Enfermé dehors', 'Serrure cassée', 'Porte blindée', 'Changer le cylindre'],
   electricien: [
     'Tableau qui disjoncte',
     'Mise aux normes',
@@ -30,14 +31,7 @@ export const quickPrompts: Record<string, string[]> = {
     'Traitement humidité murs',
   ],
   menuisier: ['Porte sur mesure', 'Placard intégré', 'Escalier bois', 'Fenêtres à changer'],
-  carreleur: [
-    'Carrelage salle de bain',
-    'Carrelage terrasse',
-    'Faïence cuisine',
-    'Pose de parquet',
-  ],
-  maçon: ['Extension maison', 'Mur de clôture', 'Terrasse béton', 'Ouverture mur porteur'],
-  vitrier: ['Vitre cassée', 'Double vitrage', 'Porte vitrée', 'Miroir sur mesure'],
+  macon: ['Extension maison', 'Mur de clôture', 'Terrasse béton', 'Ouverture mur porteur'],
   'pompe-a-chaleur': [
     'Installation pompe à chaleur',
     'Remplacement chaudière par PAC',
@@ -71,19 +65,16 @@ export const CONVERSATION_STORAGE_KEY = 'sa_estimation_conversation'
 // Prix d'appel réalistes par métier (min €) pour le teaser
 // ---------------------------------------------------------------------------
 
+// Pivot full RGE 2026-05-03 : serrurier/carreleur/vitrier/cuisiniste retirés.
 export const priceTeasers: Record<string, string> = {
   plombier: 'Fuite d’eau : à partir de 80€',
-  serrurier: 'Ouverture de porte : à partir de 90€',
   electricien: 'Panne électrique : à partir de 70€',
   chauffagiste: 'Entretien chaudière : à partir de 90€',
   couvreur: 'Réparation toiture : à partir de 150€',
   peintre: 'Peinture pièce : à partir de 25€/m²',
   menuisier: 'Porte sur mesure : à partir de 200€',
-  carreleur: 'Carrelage : à partir de 30€/m²',
-  maçon: 'Mur de clôture : à partir de 100€/ml',
-  vitrier: 'Remplacement vitre : à partir de 80€',
+  macon: 'Mur de clôture : à partir de 100€/ml',
   climaticien: 'Installation clim : à partir de 800€',
-  cuisiniste: 'Cuisine équipée : à partir de 3 000€',
   'pompe-a-chaleur': 'PAC air-eau : à partir de 10 000€',
   'isolation-thermique': 'Isolation combles : à partir de 20€/m²',
 }

@@ -29,6 +29,7 @@ import {
   getFAQSchema,
   getSpeakableSchema,
   getServicePricingSchema,
+  getDeepSectionsTechArticleSchema,
 } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -424,6 +425,22 @@ export default async function ServicePage({ params }: PageProps) {
       }
     : null
 
+  // Sprint F Ahrefs 2026-05-03 — TechArticle Schema pour les deep H2 sections.
+  // Émis seulement si le service a des deep sections (PAC/isolation/PV/borne-recharge).
+  // Permet à Google + AI Overviews + Bing de citer un sous-extrait précis via
+  // hasPart (WebPageElement avec cssSelector ancré sur #section-id).
+  const deepSectionsForSchema = getDeepSections(serviceSlug)
+  const deepSectionsTechArticleSchema = getDeepSectionsTechArticleSchema({
+    pageUrl,
+    topic: service.name,
+    sections: deepSectionsForSchema,
+    image: articleImage,
+    datePublished: '2026-05-03T00:00:00+02:00',
+    dateModified: dateModifiedIso,
+    authorName: 'la rédaction ServicesArtisans',
+    publisherName: 'ServicesArtisans',
+  })
+
   // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
   // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
   // pour rester scannable.
@@ -451,6 +468,7 @@ export default async function ServicePage({ params }: PageProps) {
           ...(pricingSchema ? [pricingSchema] : []),
           ...(itemListSchema ? [itemListSchema] : []),
           ...(articleSchema ? [articleSchema] : []),
+          ...(deepSectionsTechArticleSchema ? [deepSectionsTechArticleSchema] : []),
         ]}
       />
 
@@ -907,16 +925,20 @@ export default async function ServicePage({ params }: PageProps) {
         const deepSections = getDeepSections(serviceSlug)
         if (deepSections.length === 0) return null
         return (
-          <section className="py-12 bg-white border-y border-sand-100">
+          <section id="deep-sections" className="py-12 bg-white border-y border-sand-100">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
               {deepSections.map((section) => (
-                <article key={section.id} id={section.id}>
+                <article key={section.id} id={section.id} className="scroll-mt-24">
                   <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-5 tracking-tight">
                     {section.h2}
                   </h2>
                   <div className="space-y-4">
                     {section.body.map((paragraph, i) => (
-                      <p key={i} className="text-charcoal-700 leading-relaxed">
+                      <p
+                        key={i}
+                        data-speakable={i === 0 ? 'true' : undefined}
+                        className="text-charcoal-700 leading-relaxed"
+                      >
                         {paragraph}
                       </p>
                     ))}
@@ -1032,27 +1054,20 @@ export default async function ServicePage({ params }: PageProps) {
             { slug: 'extension-maison', title: 'Guide extension maison' },
             { slug: 'permis-construire', title: 'Guide permis de construire' },
           ],
-          carreleur: [
+          'salle-de-bain': [
             { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
             { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-          ],
-          cuisiniste: [
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
           ],
           climaticien: [
             { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
             { slug: 'maprimerenov-2026', title: "MaPrimeRénov' 2026" },
           ],
-          vitrier: [{ slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' }],
           charpentier: [
             { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
             { slug: 'isolation-combles', title: 'Guide isolation des combles' },
           ],
-          serrurier: [
-            { slug: 'eviter-arnaques-artisan', title: 'Éviter les arnaques artisan' },
-            { slug: 'devis-travaux', title: 'Guide devis travaux' },
-          ],
+          // Pivot full RGE 2026-05-03 : carreleur/cuisiniste/vitrier/serrurier
+          // retirés (commodity hors RGE — middleware retourne 410 sur ces routes).
         }
         const guides = serviceGuidesMap[serviceSlug]
         if (!guides || guides.length === 0) return null

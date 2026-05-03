@@ -24,6 +24,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import dynamic from 'next/dynamic'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
   ssr: false,
@@ -33,6 +34,8 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
 })
 
 export const revalidate = 86400
+
+const PUBLISHED_DATE = getPublishedDate('/tarifs')
 
 export const metadata: Metadata = {
   title: 'Tarifs Artisans 2026 : Prix par Métier',
@@ -98,20 +101,20 @@ const tradeFaqs = [
   },
 ]
 
+// Pivot full RGE 2026-05-03 : serrurier/carreleur/vitrier/cuisiniste retirés.
 const tradeEmojis: Record<string, string> = {
   plombier: '🔧',
   electricien: '⚡',
-  serrurier: '🔑',
   chauffagiste: '🔥',
   'peintre-en-batiment': '🎨',
   menuisier: '🪚',
-  carreleur: '🧱',
+  'salle-de-bain': '🛁',
   couvreur: '🏠',
   macon: '🏗️',
   jardinier: '🌳',
-  vitrier: '🪟',
   climaticien: '❄️',
-  cuisiniste: '🍳',
+  'pompe-a-chaleur': '♨️',
+  'isolation-thermique': '🧱',
   nettoyage: '✨',
 }
 
@@ -172,7 +175,7 @@ export default async function TarifsPage() {
     headline: 'Tarifs Artisans 2026 — Prix par métier en France',
     description: `Guide des tarifs ${trades.length} métiers du bâtiment 2026 : ${totalPrestations} prestations, fourchettes vérifiées, multiplicateur régional, méthodologie publique.`,
     url: `${SITE_URL}/tarifs`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -274,7 +277,7 @@ export default async function TarifsPage() {
             <ArticleMeta
               author="Équipe éditoriale ServicesArtisans"
               authorHref="/a-propos"
-              datePublished="2024-01-15T08:00:00.000Z"
+              datePublished={PUBLISHED_DATE}
               dateModified={dateModifiedIso}
               className="mb-6"
             />

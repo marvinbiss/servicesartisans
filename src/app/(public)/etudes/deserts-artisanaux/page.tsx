@@ -170,10 +170,10 @@ function computeTradeShortages() {
       description: 'Demande accentuée par la rénovation énergétique',
     },
     {
-      trade: 'Carreleur',
+      trade: 'Spécialiste salle de bain',
       tension: 55,
-      slug: 'carreleur',
-      description: '55 % des artisans carreleurs cherchent des ouvriers',
+      slug: 'salle-de-bain',
+      description: '55 % des artisans pose carrelage / salle de bain cherchent des ouvriers',
     },
     {
       trade: 'Peintre en bâtiment',

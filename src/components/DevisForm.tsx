@@ -46,13 +46,6 @@ const serviceSubcategories: Record<string, string[]> = {
     'Mise aux normes',
     'Domotique',
   ],
-  serrurier: [
-    'Porte claquée',
-    'Serrure cassée',
-    'Changement de serrure',
-    'Double de clé',
-    'Blindage de porte',
-  ],
   chauffagiste: [
     'Panne chaudière',
     'Entretien chaudière',
@@ -68,7 +61,6 @@ const serviceSubcategories: Record<string, string[]> = {
     'Plafond',
   ],
   menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure'],
   couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],

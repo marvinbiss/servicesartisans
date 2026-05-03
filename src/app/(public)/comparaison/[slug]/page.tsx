@@ -69,17 +69,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 /**
  * Maps comparison slugs to related service slugs for cross-linking.
  * Each comparison typically involves 1-2 trades/services.
+ *
+ * Pivot full RGE 2026-05-03 :
+ *  - Slug `platrier-plaquiste` corrigé en `platrier` (slug canonique).
+ *  - Références à serrurier/carreleur (commodity hors RGE) retirées : entrées
+ *    purement-serrurier supprimées (porte-blindee, portail), entrées mixtes
+ *    re-routées vers les slugs RGE-compatibles restants (menuisier, macon,
+ *    salle-de-bain).
  */
 const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = {
   'pompe-a-chaleur-vs-chaudiere-gaz': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'fenetre-pvc-vs-aluminium-vs-bois': [{ slug: 'menuisier', label: 'Menuisier' }],
   'isolation-interieure-vs-exterieure': [
     { slug: 'facadier', label: 'Façadier' },
-    { slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' },
+    { slug: 'platrier', label: 'Plâtrier plaquiste' },
   ],
   'carrelage-vs-parquet-vs-vinyle': [
-    { slug: 'carreleur', label: 'Carreleur' },
     { slug: 'menuisier', label: 'Menuisier (parquet)' },
+    { slug: 'salle-de-bain', label: 'Spécialiste salle de bain' },
   ],
   'chaudiere-gaz-vs-electrique-vs-pac': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'toiture-tuiles-vs-ardoise-vs-zinc': [
@@ -91,29 +98,19 @@ const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = 
     { slug: 'peintre-en-batiment', label: 'Peintre en bâtiment' },
   ],
   'cloison-placo-vs-brique-vs-carreau-platre': [
-    { slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' },
+    { slug: 'platrier', label: 'Plâtrier plaquiste' },
     { slug: 'macon', label: 'Maçon' },
   ],
-  'porte-entree-bois-vs-alu-vs-pvc': [
-    { slug: 'menuisier', label: 'Menuisier' },
-    { slug: 'serrurier', label: 'Serrurier' },
-  ],
+  'porte-entree-bois-vs-alu-vs-pvc': [{ slug: 'menuisier', label: 'Menuisier' }],
   'chauffe-eau-electrique-vs-thermodynamique-vs-solaire': [
     { slug: 'plombier', label: 'Plombier' },
     { slug: 'chauffagiste', label: 'Chauffagiste' },
   ],
   'climatisation-split-vs-gainable-vs-monobloc': [{ slug: 'climaticien', label: 'Climaticien' }],
-  'portail-coulissant-vs-battant': [{ slug: 'serrurier', label: 'Serrurier (portail)' }],
-  'terrasse-bois-vs-composite-vs-carrelage': [
-    { slug: 'carreleur', label: 'Carreleur' },
-    { slug: 'menuisier', label: 'Menuisier' },
-  ],
+  'terrasse-bois-vs-composite-vs-carrelage': [{ slug: 'menuisier', label: 'Menuisier' }],
   'piscine-coque-vs-beton-vs-hors-sol': [{ slug: 'macon', label: 'Maçon (piscine béton)' }],
   'store-banne-vs-pergola-vs-voile-ombrage': [{ slug: 'menuisier', label: 'Menuisier' }],
-  'escalier-bois-vs-metal-vs-beton': [
-    { slug: 'menuisier', label: 'Menuisier' },
-    { slug: 'serrurier', label: 'Serrurier (métallerie)' },
-  ],
+  'escalier-bois-vs-metal-vs-beton': [{ slug: 'menuisier', label: 'Menuisier' }],
   'radiateur-fonte-vs-acier-vs-aluminium': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'gouttiere-zinc-vs-alu-vs-pvc': [
     { slug: 'zingueur', label: 'Zingueur' },
@@ -126,10 +123,10 @@ const comparisonServiceMap: Record<string, { slug: string; label: string }[]> = 
   ],
   'chaudiere-gaz-vs-bois-granules': [{ slug: 'chauffagiste', label: 'Chauffagiste' }],
   'isolation-laine-vs-ouate-vs-polyurethane': [
-    { slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' },
+    { slug: 'isolation-thermique', label: 'Spécialiste isolation thermique' },
+    { slug: 'platrier', label: 'Plâtrier plaquiste' },
   ],
-  'plafond-tendu-vs-faux-plafond': [{ slug: 'platrier-plaquiste', label: 'Plâtrier plaquiste' }],
-  'porte-blindee-vs-renforcee': [{ slug: 'serrurier', label: 'Serrurier' }],
+  'plafond-tendu-vs-faux-plafond': [{ slug: 'platrier', label: 'Plâtrier plaquiste' }],
   'parquet-massif-vs-contrecolle-vs-stratifie': [{ slug: 'menuisier', label: 'Menuisier' }],
   'volet-electrique-vs-manuel': [
     { slug: 'menuisier', label: 'Menuisier' },

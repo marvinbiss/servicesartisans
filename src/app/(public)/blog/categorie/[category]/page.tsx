@@ -19,6 +19,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getPublishedDate } from '@/lib/seo/published-dates'
 
 // Pre-render all category pages at build time
 export function generateStaticParams() {
@@ -31,6 +32,8 @@ export const revalidate = 86400
 interface PageProps {
   params: Promise<{ category: string }>
 }
+
+const PUBLISHED_DATE = getPublishedDate('/blog/categorie')
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: categorySlug } = await params
@@ -128,7 +131,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
     headline: cat.metaTitle,
     description: cat.metaDescription,
     url: `${SITE_URL}/blog/categorie/${categorySlug}`,
-    datePublished: '2024-01-15T08:00:00.000Z',
+    datePublished: PUBLISHED_DATE,
     dateModified: monthlyAnchorIso(),
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
@@ -235,7 +238,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
             <ArticleMeta
               author="Équipe éditoriale ServicesArtisans"
               authorHref="/a-propos"
-              datePublished="2024-01-15T08:00:00.000Z"
+              datePublished={PUBLISHED_DATE}
               dateModified={monthlyAnchorIso()}
               className="mb-6"
             />

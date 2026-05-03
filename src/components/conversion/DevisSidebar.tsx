@@ -73,7 +73,7 @@ const testimonials = [
     city: 'Marseille',
     rating: 4,
     text: 'Devis reçus rapidement. Bon suivi et artisan ponctuel. Je referai appel au service.',
-    service: 'serrurier',
+    service: 'menuisier',
   },
   {
     name: 'Isabelle C.',

@@ -32,12 +32,14 @@ function getAnchorText(serviceName: string, cityName: string, index: number): st
 }
 
 // Fallback: top services to display when no service match is found
+// Pivot full RGE 2026-05-03 : serrurier retiré — remplacé par menuisier (slug
+// canonique le plus universel pour le fallback maillage interne blog).
 const FALLBACK_SERVICES = [
   'plombier',
   'electricien',
-  'serrurier',
   'chauffagiste',
   'peintre-en-batiment',
+  'menuisier',
 ]
 
 const FALLBACK_CITIES = [
