@@ -1,6 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 
+// Sprint AD Ahrefs 2026-05-03 — exceptions explicites pour assets open-data
+// servis sous /api/ mais publiquement référençables (CC-BY 4.0). Google
+// applique longest-match priority : `/api/glossaire-rge.json` (28 chars)
+// override `/api/` (5 chars) du PRIVATE_DISALLOW. Permet aux crawlers
+// data.gouv.fr / Wikipedia / journalistes de découvrir l'asset.
+const OPEN_DATA_ALLOW = ['/', '/api/glossaire-rge.json']
+
 const PRIVATE_DISALLOW = [
   // Immutable static assets (1-year cache headers) — no need for Google to crawl
   '/_next/static/',
@@ -64,19 +71,19 @@ export default function robots(): MetadataRoute.Robots {
       // Googlebot: full access, no crawl-delay (Google ignores it)
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Bingbot: full access
       {
         userAgent: 'Bingbot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Yandex: full access with crawl-delay (Yandex respects crawl-delay, unlike Google)
       {
         userAgent: 'YandexBot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
         crawlDelay: 1,
       },
@@ -84,68 +91,68 @@ export default function robots(): MetadataRoute.Robots {
       // Block private routes to avoid unnecessary ad-serving crawl on auth/admin pages.
       {
         userAgent: ['AdsBot-Google', 'AdsBot-Google-Mobile'],
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // APIs-Google — also ignores '*'. Used for push notification deliveries.
       // We don't use Google push notifications, but block private routes defensively.
       {
         userAgent: 'APIs-Google',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Mediapartners-Google (AdSense) — also ignores '*' per Google special-crawlers spec.
       // Block private routes defensively even though we don't run AdSense.
       {
         userAgent: 'Mediapartners-Google',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // AI Search bots — Allow retrieval/search (appear in AI answers)
       // These crawlers fetch content when users ask questions — we WANT to be cited.
       {
         userAgent: ['OAI-SearchBot', 'ChatGPT-User'],
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       {
         userAgent: ['Claude-SearchBot', 'Claude-User'],
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       {
         userAgent: 'PerplexityBot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Applebot-Extended — Apple Intelligence / Siri AI search (CRITICAL for Apple ecosystem visibility)
       {
         userAgent: 'Applebot-Extended',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Amazonbot — Amazon Alexa and shopping AI answers
       {
         userAgent: 'Amazonbot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Meta-ExternalAgent — Meta AI (Facebook, Instagram, WhatsApp AI assistant)
       {
         userAgent: 'Meta-ExternalAgent',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // YouBot — You.com AI search engine
       {
         userAgent: 'YouBot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Google-CloudVertexBot — Google Vertex AI grounding/search
       {
         userAgent: 'Google-CloudVertexBot',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // AI Training bots — Block training data scraping (protect content)
@@ -177,13 +184,13 @@ export default function robots(): MetadataRoute.Robots {
           'Discordbot',
           'WhatsApp',
         ],
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // All other legitimate bots
       {
         userAgent: '*',
-        allow: '/',
+        allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },
       // Block aggressive SEO scrapers (consume resources, no SEO benefit)
