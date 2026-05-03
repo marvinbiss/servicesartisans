@@ -9,6 +9,13 @@
  *     "PAC hybride" (1.4K)
  *   - Isolation : "isolation par l'extérieur" (13K), "isolant thermique" (8.2K),
  *     "isolation des combles" (6.1K)
+ *   - Photovoltaïque (Bloc 2) : "panneaux photovoltaiques" (8.1K), "panneaux solaires
+ *     autoconsommation" (3.4K), "kit photovoltaique 3 kwc / 6 kwc" (cumul 5K)
+ *
+ * Bloc 2 garde uniquement panneaux-solaires : `chauffe-eau-thermodynamique` et
+ * `audit-energetique` sont RGE-only (allowlist `RGE_ALLOWED_SERVICES`) et n'ont
+ * pas de hub `/services/[slug]` — leurs deep sections seront wirées sur
+ * `/rge/[service]` dans un commit ultérieur (Bloc 6).
  *
  * Convention :
  *   - `id` : ancre HTML stable, format kebab-case
@@ -51,6 +58,26 @@ const DEEP_SECTIONS: Record<string, readonly TradeDeepSection[]> = {
         "La PAC géothermique capte les calories du sol via un capteur enterré (horizontal sur 1,2 m de profondeur, ou vertical jusqu'à 100 m via forage). Le sol restant à température stable (10-12 °C toute l'année), le COP atteint 4 à 5 même en plein hiver — c'est la PAC la plus performante du marché.",
         'Coût total 15 000 à 25 000 € pose comprise. Le surcoût vs PAC air/eau (5 000 à 10 000 €) vient du forage géothermique (8 000 à 15 000 € selon profondeur et nature du sol). Le retour sur investissement reste compétitif sur 12-15 ans grâce aux économies (-50 à -70 % vs énergie fossile).',
         "Conditions : terrain disponible (capteur horizontal nécessite 1,5 à 2 fois la surface chauffée) ou autorisation forage en mairie (capteur vertical). Qualification RGE QualiPAC + Qualiforage obligatoire. Aides identiques à la PAC air/eau (MaPrimeRénov' jusqu'à 5 000 €, CEE BAR-TH-104, Éco-PTZ, TVA 5,5 %).",
+      ],
+    },
+  ],
+  'panneaux-solaires': [
+    {
+      id: 'panneaux-photovoltaiques-autoconsommation',
+      h2: 'Panneaux photovoltaïques en autoconsommation : prix et rentabilité',
+      body: [
+        "L'autoconsommation photovoltaïque consiste à consommer directement l'électricité produite par vos panneaux solaires. Une installation de 3 kWc (10 panneaux, 18 m²) produit 3 200 à 4 200 kWh/an selon la région — couvre 30 à 50 % de la consommation moyenne d'un foyer (5 000 kWh/an). Le surplus non consommé est revendu à EDF Obligation d'Achat à un tarif garanti 20 ans (~10 c€/kWh révisé trimestriellement par la CRE).",
+        "Comptez 7 000 à 10 000 € pose comprise pour 3 kWc, 12 000 à 16 000 € pour 6 kWc, 16 000 à 22 000 € pour 9 kWc (limite particulier). Le prix inclut les modules monocristallins 400-500 Wc, l'onduleur (string ou micro-onduleurs), la structure de fixation, le coffret AC/DC, le compteur Linky bidirectionnel et le raccordement Enedis (1 200 à 1 800 € selon configuration).",
+        "Aides 2026 : prime à l'autoconsommation Enedis versée sur 5 ans (1 140 € pour 3 kWc, 1 950 € pour 6 kWc, 2 700 € pour 9 kWc), TVA réduite à 10 % jusqu'à 9 kWc et 5,5 % depuis le 1er octobre 2025 sur les installations résidentielles, exonération d'impôt sur la revente du surplus jusqu'à 3 kWc. Conditions : artisan RGE QualiPV ou QualiSol obligatoire, attestation Consuel pré-raccordement, déclaration préalable en mairie.",
+      ],
+    },
+    {
+      id: 'photovoltaique-3kwc-6kwc-9kwc',
+      h2: 'Quelle puissance de panneaux solaires : 3, 6 ou 9 kWc',
+      body: [
+        'Le dimensionnement dépend de votre consommation annuelle. Une installation 3 kWc (8-10 panneaux, 18 m² de toiture) convient à un couple ou une famille avec faible consommation (< 4 500 kWh/an, sans clim ni PAC). Production 3 200-4 200 kWh/an, autoconsommation 30-40 %, retour sur investissement 9-13 ans. Choix le plus prudent et le plus rentable au m² installé.',
+        "Une installation 6 kWc (16-18 panneaux, 32 m² de toiture) cible une famille avec consommation moyenne (5 000-7 000 kWh/an) ou avec une PAC air/eau. Production 6 500-8 500 kWh/an, autoconsommation 35-45 % avec pilotage des usages (lave-vaisselle, ballon ECS programmés en heures solaires). ROI 8-11 ans grâce au bonus prime à l'autoconsommation.",
+        '9 kWc (24-30 panneaux, 50 m²) est le maximum sans changer de régime fiscal/contractuel. Cible : grande maison + PAC + véhicule électrique + piscine. Production 9 500-12 500 kWh/an. Au-delà de 9 kWc, vous basculez en régime professionnel (TVA 20 %, prime supprimée, contrat tarif F en injection totale) — rarement rentable pour un particulier sans réelle consommation industrielle.',
       ],
     },
   ],

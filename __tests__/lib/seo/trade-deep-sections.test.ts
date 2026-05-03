@@ -99,4 +99,10 @@ describe('trade-deep-sections — Action #3 Ahrefs 2026-05-03', () => {
     expect(ids).toContain('isolation-interieur-iti')
     expect(ids).toContain('choisir-isolant-thermique')
   })
+
+  it('panneaux-solaires cible autoconsommation et dimensionnement kWc (Bloc 2)', () => {
+    const ids = getDeepSections('panneaux-solaires').map((s: TradeDeepSection) => s.id)
+    expect(ids).toContain('panneaux-photovoltaiques-autoconsommation')
+    expect(ids).toContain('photovoltaique-3kwc-6kwc-9kwc')
+  })
 })
