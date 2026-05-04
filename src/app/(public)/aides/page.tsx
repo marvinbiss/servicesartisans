@@ -9,9 +9,9 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { aidesCatalog } from '@/lib/aides/aides-catalog'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const dynamic = 'force-static'
@@ -29,6 +29,7 @@ const REVIEW_DATE = aidesCatalog.reduce(
 const PUBLISHED_DATE = getPublishedDate('/aides')
 
 const AUTHOR = authors['claire-dubois']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 export const metadata: Metadata = {
   // Le template root layout ajoute déjà ` | ServicesArtisans`. Ne pas
@@ -120,6 +121,7 @@ export default function AidesHubPage() {
             AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

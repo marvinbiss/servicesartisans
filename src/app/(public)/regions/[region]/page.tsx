@@ -77,7 +77,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Artisans ${region.name} 2026`,
     `Artisans ${region.name}`,
   ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''

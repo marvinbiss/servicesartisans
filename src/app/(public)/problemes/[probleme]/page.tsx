@@ -84,7 +84,8 @@ export async function generateMetadata({
     `${problem.name} 2026`,
     `${problem.name}`,
   ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const description = `${problem.name} : ${problem.description} Coût estimé : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} €. ${problem.averageResponseTime}.`
 

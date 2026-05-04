@@ -25,6 +25,14 @@ export type Author = {
   credentialsBasis: string
   yearsExperience: number
   image: string
+  /**
+   * Cross-review : slug d'un autre auteur du réseau qui relit le contenu
+   * sur les sujets de chevauchement (fiscal, technique, réglementaire).
+   * Sert à émettre `reviewedBy` Schema.org Article — signal E-E-A-T YMYL
+   * (Google QRG section 3.4 : multi-author review = autorité éditoriale).
+   * Pas de claim externe : les reviewers sont les pairs internes.
+   */
+  reviewerSlug?: string
 }
 
 export const authors: Record<string, Author> = {
@@ -44,6 +52,7 @@ export const authors: Record<string, Author> = {
       "Parcours en rédaction spécialisée bâtiment et habitat ; veille quotidienne sur les publications de l'ADEME et du Ministère de la Transition écologique.",
     yearsExperience: 8,
     image: '/images/authors/sophie-martin.svg',
+    reviewerSlug: 'claire-dubois',
   },
   'claire-dubois': {
     slug: 'claire-dubois',
@@ -65,6 +74,7 @@ export const authors: Record<string, Author> = {
       "Formation en économie et finance ; veille continue sur les dispositifs MaPrimeRénov', CEE, éco-PTZ et TVA 5,5 %.",
     yearsExperience: 12,
     image: '/images/authors/claire-dubois.svg',
+    reviewerSlug: 'sophie-martin',
   },
   'marc-lefebvre': {
     slug: 'marc-lefebvre',
@@ -87,6 +97,7 @@ export const authors: Record<string, Author> = {
       'Formation en génie électrique ; veille régulière sur les publications Qualifelec, Consuel et UTE.',
     yearsExperience: 18,
     image: '/images/authors/marc-lefebvre.svg',
+    reviewerSlug: 'jean-pierre-duval',
   },
   'jean-pierre-duval': {
     slug: 'jean-pierre-duval',
@@ -104,6 +115,7 @@ export const authors: Record<string, Author> = {
       'Parcours long en rédaction technique bâtiment ; veille quotidienne sur les évolutions DTU et les dispositifs Coup de pouce chauffage.',
     yearsExperience: 20,
     image: '/images/authors/jean-pierre-duval.svg',
+    reviewerSlug: 'marc-lefebvre',
   },
   'thomas-bernard': {
     slug: 'thomas-bernard',
@@ -121,6 +133,7 @@ export const authors: Record<string, Author> = {
       "Formation en conception et aménagement d'intérieur ; veille continue sur les baromètres sectoriels et les publications DTU.",
     yearsExperience: 10,
     image: '/images/authors/thomas-bernard.svg',
+    reviewerSlug: 'isabelle-renault',
   },
   'isabelle-renault': {
     slug: 'isabelle-renault',
@@ -143,9 +156,21 @@ export const authors: Record<string, Author> = {
       'Parcours en rédaction technique revêtements et finitions ; veille régulière sur les évolutions DTU 59 et les dispositifs CEE isolation.',
     yearsExperience: 14,
     image: '/images/authors/isabelle-renault.svg',
+    reviewerSlug: 'thomas-bernard',
   },
 }
 
 export function getAuthorByName(name: string): Author | undefined {
   return Object.values(authors).find((a) => a.name === name)
+}
+
+/**
+ * Retourne le pair-reviewer interne d'un auteur (cross-review YMYL).
+ * `undefined` si l'auteur n'a pas de reviewer assigné ou si le slug pointe
+ * vers lui-même (garde-fou contre auto-review accidentel).
+ */
+export function getReviewerForAuthor(author: Author | undefined): Author | undefined {
+  if (!author?.reviewerSlug) return undefined
+  if (author.reviewerSlug === author.slug) return undefined
+  return authors[author.reviewerSlug]
 }

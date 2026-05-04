@@ -532,7 +532,8 @@ export async function generateMetadata({
     `${reviewPrefix}${trade.name} urgence ${villeData.name} 24h/24`,
     `${reviewPrefix}Urgence ${tradeLower} ${villeData.name} 24h`,
   ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
   const descTemplates = [

@@ -19,7 +19,6 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import RelatedAides from '@/components/aides/RelatedAides'
-import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { getCumulableAides } from '@/lib/aides/aides-catalog'
 import {
   CLIMATE_ZONE_IMPACT,
@@ -28,7 +27,7 @@ import {
 } from '@/lib/aides/climate-zones'
 import { getDepartementBySlug, departements } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
@@ -37,6 +36,7 @@ import {
   getGovernmentServiceSchema,
   getHowToSchema,
   getPlaceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
@@ -206,6 +206,7 @@ export default async function MprDeptPage({ params }: PageProps) {
 
   // Sprint ULTRA YMYL — Article+Speakable + byline Person.
   const author = authors['claire-dubois']
+  const reviewer = getReviewerForAuthor(author)
   const reviewedIso = `${CONTENT_UPDATED_AT}T00:00:00+02:00`
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -215,6 +216,7 @@ export default async function MprDeptPage({ params }: PageProps) {
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: reviewedIso,
     author: { '@type': 'Person', name: author.name, url: `${SITE_URL}/equipe/${author.slug}` },
+    ...(reviewer && { reviewedBy: getReviewedByPersonSchema(reviewer) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -508,9 +510,8 @@ export default async function MprDeptPage({ params }: PageProps) {
               Annuaire artisans RGE synchronisé ADEME
             </div>
           </div>
-          {/* Security L1 (chantier #6 round 2) — disclaimer YMYL niveau page
-              via composant YmylDisclaimer centralisé. */}
-          <YmylDisclaimer className="mt-3" />
+          {/* Tier 1 2026-05-04 : YmylDisclaimer maintenant injecté par
+              src/app/(public)/aides/layout.tsx (footer commun cluster aides). */}
         </div>
       </section>
     </>

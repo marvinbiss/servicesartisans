@@ -1354,6 +1354,24 @@ export function getPersonSchema(author: {
   }
 }
 
+// Schema.org Person ref minimal — destiné à être inséré dans `reviewedBy`
+// (Article / TechArticle / MedicalEntity) ou comme @id-only pointer ailleurs.
+//
+// Pourquoi un schema séparé du Person complet : Google + AI Overviews
+// dédupliquent via @id ; on émet ici uniquement les champs nécessaires à la
+// reconnaissance (name, jobTitle, url) et on s'appuie sur `getPersonSchema`
+// pour la fiche complète émise par /equipe/[slug]. Limite la duplication JSON
+// dans le head des pages YMYL.
+export function getReviewedByPersonSchema(reviewer: { slug: string; name: string; role: string }) {
+  return {
+    '@type': 'Person',
+    '@id': `${SITE_URL}/equipe/${reviewer.slug}#person`,
+    name: reviewer.name,
+    jobTitle: reviewer.role,
+    url: `${SITE_URL}/equipe/${reviewer.slug}`,
+  }
+}
+
 // Schema.org TechArticle for the deep H2 sections collection (Sprint F Ahrefs
 // 2026-05-03). Émet un seul TechArticle qui décrit la collection de deep
 // sections présentes sur la page (PAC variants / ITE-ITI / VMC / etc.). Chaque

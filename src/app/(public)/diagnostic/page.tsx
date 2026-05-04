@@ -16,9 +16,14 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const dynamic = 'force-static'
@@ -34,6 +39,7 @@ const HUB_DESCRIPTION = `Comprendre son DPE et l'audit énergétique ${REVIEW_YE
 const PUBLISHED_DATE = getPublishedDate('/diagnostic')
 
 const AUTHOR = authors['sophie-martin']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const FAQ: Array<{ question: string; answer: string }> = [
   {
@@ -280,6 +286,7 @@ export default function DiagnosticHubPage() {
             AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

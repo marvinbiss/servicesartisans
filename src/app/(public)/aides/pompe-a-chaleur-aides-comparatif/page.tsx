@@ -20,9 +20,9 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import { aidesCatalog } from '@/lib/aides/aides-catalog'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 
 /**
  * /aides/pompe-a-chaleur-aides-comparatif — Sprint AI Wave L 2026-05-03.
@@ -46,6 +46,7 @@ const PAGE_URL = `${SITE_URL}${PATH}`
 const PUBLISHED_AT = '2026-05-03'
 const REVIEWED_AT = '2026-05-03'
 const AUTHOR = authors['claire-dubois']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const TITLE = 'Aides pompe à chaleur 2026 : montants par type de PAC'
 const DESCRIPTION =
@@ -215,6 +216,7 @@ export default function PompeAChaleurAidesComparatifPage() {
             AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

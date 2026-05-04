@@ -471,7 +471,8 @@ export async function generateMetadata({
     `${reviewPrefix}${problem.name} ${villeData.name} 2026`,
     `${reviewPrefix}${problem.name} ${villeData.name}`,
   ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const multiplier = getRegionalMultiplier(villeData.region, villeData.departementCode)
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)

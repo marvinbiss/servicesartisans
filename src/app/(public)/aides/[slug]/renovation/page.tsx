@@ -44,20 +44,20 @@ import JsonLd from '@/components/JsonLd'
 import LastUpdated from '@/components/seo/LastUpdated'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
-import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import {
   CEE_REGIONAL_SLUGS,
   getCeeRegionalSpecifics,
   isCeeRegionalSlug,
 } from '@/lib/cee/regional-specifics'
 import { regions } from '@/lib/data/france'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
@@ -122,6 +122,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
   const path = `/aides/${regionSlug}/renovation`
   const pageUrl = `${SITE_URL}${path}`
   const author = authors['claire-dubois']
+  const reviewer = getReviewerForAuthor(author)
   const reviewedIso = `${reg.lastReviewedAt}T00:00:00+02:00`
 
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -186,6 +187,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
     datePublished: '2026-05-04T00:00:00+02:00',
     dateModified: reviewedIso,
     author: { '@type': 'Person', name: author.name, url: `${SITE_URL}/equipe/${author.slug}` },
+    ...(reviewer && { reviewedBy: getReviewedByPersonSchema(reviewer) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -490,9 +492,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
-        <YmylDisclaimer />
-      </div>
+      {/* Tier 1 2026-05-04 : YmylDisclaimer injecté via layout cluster aides. */}
 
       {/* CTA */}
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">

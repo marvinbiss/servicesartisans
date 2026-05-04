@@ -77,7 +77,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${serviceName} RGE ${dept.name} 2026`,
     `${serviceName} RGE ${dept.name}`,
   ]
-  const title = selectFittingTitle(titleVariants, titleHash, 41)
+  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
+  const title = selectFittingTitle(titleVariants, titleHash, 60)
   const rawDesc = `Artisans ${serviceName.toLowerCase()} certifiés RGE ${getDeptPreposition(dept.name)} (${dept.code}). Éligibles MaPrimeRénov’, CEE et TVA 5,5 %. Données ADEME.`
   const description = rawDesc.length <= 158 ? rawDesc : rawDesc.slice(0, 155) + '…'
 

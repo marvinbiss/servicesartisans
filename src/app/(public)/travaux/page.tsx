@@ -19,9 +19,9 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const dynamic = 'force-static'
@@ -35,6 +35,7 @@ const REVIEW_DATE = '2026-04-29'
 const PUBLISHED_DATE = getPublishedDate('/travaux')
 
 const AUTHOR = authors['sophie-martin']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const FAQ: Array<{ question: string; answer: string }> = [
   {
@@ -266,6 +267,7 @@ export default function TravauxHubPage() {
             AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

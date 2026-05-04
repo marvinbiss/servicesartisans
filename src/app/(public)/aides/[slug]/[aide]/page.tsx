@@ -14,9 +14,8 @@ import AideDemarche from '@/components/aides/AideDemarche'
 import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
-import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
 import { getDepartementBySlug, getVillesByDepartement, departements } from '@/lib/data/france'
 import {
@@ -33,6 +32,7 @@ import {
   getGovernmentServiceSchema,
   getHowToSchema,
   getPlaceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 
 export const dynamicParams = true
@@ -192,6 +192,7 @@ export default async function AideDeptPage({ params }: PageProps) {
   // Sprint ULTRA YMYL — Article+Speakable, byline Person, dateModified =
   // aide.lastReviewed (date éditoriale honnête, pas fake freshness).
   const author = authors['claire-dubois']
+  const reviewer = getReviewerForAuthor(author)
   const reviewedIso = `${aide.lastReviewed}T00:00:00+02:00`
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -201,6 +202,7 @@ export default async function AideDeptPage({ params }: PageProps) {
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: reviewedIso,
     author: { '@type': 'Person', name: author.name, url: `${SITE_URL}/equipe/${author.slug}` },
+    ...(reviewer && { reviewedBy: getReviewedByPersonSchema(reviewer) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
@@ -272,7 +274,7 @@ export default async function AideDeptPage({ params }: PageProps) {
             </p>
           </header>
 
-          <YmylDisclaimer />
+          {/* Tier 1 : YmylDisclaimer injecté via layout cluster aides. */}
 
           <section className="mb-8">
             <AideMontants aideName={aide.name} montants={aide.montants} />

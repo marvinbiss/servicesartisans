@@ -30,7 +30,7 @@ import {
 } from '@/lib/aides/dept-hub-data'
 import { villes } from '@/lib/data/france'
 import { MAIN_RGE_SERVICES } from '@/lib/rge/pseo-content'
-import { authors } from '@/lib/data/authors'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
@@ -38,6 +38,7 @@ import {
   getFinancialProductSchema,
   getGovernmentServiceSchema,
   getHowToSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 
 // Sprint AI Wave H 2026-05-03 — passage à dynamicParams=true car le slug peut
@@ -48,6 +49,7 @@ export const dynamicParams = true
 export const revalidate = 86400
 
 const AUTHOR = authors['claire-dubois']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const CATEGORY_BADGE: Record<Aide['category'], string> = {
   'Subvention nationale': 'bg-emerald-500/20 border-emerald-400/30 text-emerald-100',
@@ -210,6 +212,7 @@ export default async function AidePage({ params }: PageProps) {
     author: AUTHOR
       ? { '@type': 'Person', name: AUTHOR.name, url: `${SITE_URL}/equipe/${AUTHOR.slug}` }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
