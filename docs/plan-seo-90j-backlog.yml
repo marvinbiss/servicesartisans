@@ -211,7 +211,7 @@ items:
       - P3-soft404-fix-mass
     human_required: false
     dod: node scripts/audit-search-pages-coverage.mjs --strict
-    status: pending
+    status: completed
     ahrefs:
       kw_primary: "[service] [adjectif] [ville]"
       volume_ahrefs: 12500
@@ -219,7 +219,12 @@ items:
       cpc_ahrefs: 2.1
       cluster_pillar: 1
       leader_rank: aucun leader (longtail dispersée)
-      ahrefs_csv_source: docs/ahrefs-bloc3-longtail.csv:top-200
+      ahrefs_csv_source: docs/audit-ahrefs-2026-05-03/striking_distance_2026-05.csv
+    notes: >-
+      Pivot 2026-05-04 : audit MAPPING top 200 KW Ahrefs → pages SA existantes plutôt que création route
+      /recherche/[query] (canonicalization risk + duplicate content). Coverage 90.5% sur top 200 striking-distance KW.
+      Vrais gaps = KW hors-scope SA (attestation hébergement, primeo energie) ou aliases slug (isolation par extérieur ↔
+      ite).
   - id: P4-schemaorg-cohesion-final
     pillar: 4
     title: Schema.org cohésion @id+inLanguage+isPartOf (Tiers 22-38)
