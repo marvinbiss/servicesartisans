@@ -1733,6 +1733,13 @@ export function getDeepSectionsTechArticleSchema(params: {
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
     proficiencyLevel: 'Beginner',
+    /**
+     * Tier 33 — isPartOf #website. Cohérent avec FAQPage/HowTo/ItemList/
+     * ProfilePage. AI Overviews préfère TechArticle rattachés à un
+     * #website : sans isPartOf, citation possible mais sans le label
+     * « from servicesartisans.fr ».
+     */
+    isPartOf: { '@id': `${SITE_URL}#website` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': params.pageUrl },
     url: params.pageUrl,
     articleSection: sectionH2s,
@@ -1809,6 +1816,13 @@ export function getRgeDefinedTermSetSchema(params: {
     '@context': 'https://schema.org',
     '@type': 'DefinedTermSet',
     '@id': `${params.pageUrl}#glossary-rge`,
+    /**
+     * Tier 33 — isPartOf #website. Le DefinedTermSet RGE est une
+     * collection éditoriale rattachée au site : sans isPartOf, Google
+     * peut le considérer comme un dataset orphelin et le déclasser dans
+     * les rich results glossaire technique.
+     */
+    isPartOf: { '@id': `${SITE_URL}#website` },
     name: params.name,
     description: params.description,
     inLanguage: 'fr-FR',
@@ -1970,6 +1984,14 @@ export function getProfilePageSchema(params: {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
     '@id': `${params.canonicalUrl}#profilepage`,
+    /**
+     * Tier 33 — inLanguage + isPartOf #website. Aligne ProfilePage sur
+     * les conventions Tiers 29-32. Important pour /equipe/[slug] : sans
+     * isPartOf, Google traite la fiche profil comme un node orphelin
+     * et n'attache pas l'autorité du WebSite à la Person mainEntity.
+     */
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     url: params.canonicalUrl,
     dateCreated: params.dateCreated,
     dateModified: params.dateModified,
