@@ -15,7 +15,11 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const URG_AUTHOR = authors['sophie-martin']
+const URG_REVIEWER = getReviewerForAuthor(URG_AUTHOR)
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
@@ -203,12 +207,22 @@ export default async function UrgencePage() {
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
     image: `${SITE_URL}/opengraph-image`,
-    author: {
-      '@type': 'Organization',
-      name: 'Équipe éditoriale ServicesArtisans',
-      url: `${SITE_URL}/a-propos`,
-      '@id': `${SITE_URL}#organization`,
-    },
+    author: URG_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: URG_AUTHOR.name,
+          jobTitle: URG_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${URG_AUTHOR.slug}`,
+          ...(URG_AUTHOR.methodology &&
+            URG_AUTHOR.methodology.length > 0 && { skills: URG_AUTHOR.methodology }),
+        }
+      : {
+          '@type': 'Organization',
+          name: 'Équipe éditoriale ServicesArtisans',
+          url: `${SITE_URL}/a-propos`,
+          '@id': `${SITE_URL}#organization`,
+        },
+    ...(URG_REVIEWER && { reviewedBy: getReviewedByPersonSchema(URG_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

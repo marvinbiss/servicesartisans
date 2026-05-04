@@ -22,6 +22,11 @@ import {
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+import { getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const STATS_AUTHOR = authors['claire-dubois']
+const STATS_REVIEWER = getReviewerForAuthor(STATS_AUTHOR)
 import { DEPT_ARTISAN_COUNTS } from '@/lib/data/dept-artisan-counts'
 import { DEPARTMENTS } from '@/lib/geography'
 import {
@@ -420,10 +425,17 @@ export default function StatistiquesArtisansFrancePage() {
       headline: pageTitle,
       datePublished: '2026-01-15',
       dateModified: '2026-03-01',
-      author: {
-        '@type': 'Organization',
-        name: SITE_NAME,
-      },
+      author: STATS_AUTHOR
+        ? {
+            '@type': 'Person',
+            name: STATS_AUTHOR.name,
+            jobTitle: STATS_AUTHOR.role,
+            url: `${SITE_URL}/equipe/${STATS_AUTHOR.slug}`,
+            ...(STATS_AUTHOR.methodology &&
+              STATS_AUTHOR.methodology.length > 0 && { skills: STATS_AUTHOR.methodology }),
+          }
+        : { '@type': 'Organization', name: SITE_NAME },
+      ...(STATS_REVIEWER && { reviewedBy: getReviewedByPersonSchema(STATS_REVIEWER) }),
     },
   }
 

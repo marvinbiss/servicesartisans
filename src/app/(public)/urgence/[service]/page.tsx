@@ -13,7 +13,10 @@ import {
   getFAQSchema,
   getHowToSchema,
   getUrgencyHubServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -308,6 +311,8 @@ export default async function UrgenceServicePage({
   // Related services for cross-linking
   const relatedServices = services.filter((s) => s.slug !== service).slice(0, 3)
 
+  const URG_S_AUTHOR = getAuthorForServiceSlug(service)
+  const URG_S_REVIEWER = getReviewerForAuthor(URG_S_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -319,7 +324,15 @@ export default async function UrgenceServicePage({
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: URG_S_AUTHOR.name,
+      jobTitle: URG_S_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${URG_S_AUTHOR.slug}`,
+      ...(URG_S_AUTHOR.methodology &&
+        URG_S_AUTHOR.methodology.length > 0 && { skills: URG_S_AUTHOR.methodology }),
+    },
+    ...(URG_S_REVIEWER && { reviewedBy: getReviewedByPersonSchema(URG_S_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',
