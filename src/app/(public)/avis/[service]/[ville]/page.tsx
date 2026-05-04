@@ -617,12 +617,32 @@ async function renderAvisServiceVillePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/avis/${service}/${villeSlug}#article`,
     headline: `Avis ${trade.name} à ${villeData.name} — recommandations clients vérifiées`,
     description: `Avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.${totalReviews > 0 ? ` ${totalReviews} avis vérifiés, note ${roundedRating.toFixed(1)}/5.` : ''}`,
     image: `${SITE_URL}/images/services/${service}.webp`,
     url: `${SITE_URL}/avis/${service}/${villeSlug}`,
     mainEntityOfPage: `${SITE_URL}/avis/${service}/${villeSlug}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Avis clients',
+    keywords: [
+      `avis ${tradeLower}`,
+      villeData.name,
+      `département ${villeData.departementCode}`,
+      'recommandations',
+      'devis',
+      'artisan',
+    ].join(', '),
+    about: [
+      {
+        '@type': 'Service',
+        name: trade.name,
+        areaServed: { '@type': 'City', name: villeData.name },
+      },
+      { '@type': 'City', name: villeData.name },
+      { '@type': 'Thing', name: `Avis ${tradeLower}` },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
@@ -634,7 +654,12 @@ async function renderAvisServiceVillePage({
         AVIS_AUTHOR.methodology.length > 0 && { skills: AVIS_AUTHOR.methodology }),
     },
     ...(AVIS_REVIEWER && { reviewedBy: getReviewedByPersonSchema(AVIS_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
