@@ -5,7 +5,9 @@ import { Star, Users, Shield, MapPin, ArrowRight, HelpCircle } from 'lucide-reac
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { BAROMETRE_METIERS, getBarometreMetierBySlug, TOP_VILLES } from '@/lib/barometre/constants'
 import { getStatsByMetier, getMetierTopVilles } from '@/lib/barometre/queries'
@@ -154,6 +156,10 @@ export default async function BarometreMetierPage({ params }: PageProps) {
       { '@type': 'PropertyValue', name: "Nombre d'avis", unitText: 'count' },
     ],
   }
+  // Tier 8 — author dispatché par metier slug (fallback claire-dubois si
+  // metier non couvert par service-author map). reviewedBy auto cross-review.
+  const METIER_AUTHOR = getAuthorForServiceSlug(metier.slug) ?? authors['claire-dubois']
+  const METIER_REVIEWER = getReviewerForAuthor(METIER_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -166,7 +172,15 @@ export default async function BarometreMetierPage({ params }: PageProps) {
     url: canonicalUrlPage,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: METIER_AUTHOR.name,
+      jobTitle: METIER_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${METIER_AUTHOR.slug}`,
+      ...(METIER_AUTHOR.methodology &&
+        METIER_AUTHOR.methodology.length > 0 && { skills: METIER_AUTHOR.methodology }),
+    },
+    ...(METIER_REVIEWER && { reviewedBy: getReviewedByPersonSchema(METIER_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

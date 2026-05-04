@@ -9,7 +9,16 @@ import ProviderList from '@/components/ProviderList'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getCollectionPageSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCollectionPageSchema,
+  getItemListSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const ART_RGE_AUTHOR = authors['sophie-martin']
+const ART_RGE_REVIEWER = getReviewerForAuthor(ART_RGE_AUTHOR)
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { villes, getVilleBySlug, getDepartementByCode } from '@/lib/data/france'
@@ -176,7 +185,17 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
     image: [`${SITE_URL}/og-rge-default.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
-    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    author: ART_RGE_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: ART_RGE_AUTHOR.name,
+          jobTitle: ART_RGE_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${ART_RGE_AUTHOR.slug}`,
+          ...(ART_RGE_AUTHOR.methodology &&
+            ART_RGE_AUTHOR.methodology.length > 0 && { skills: ART_RGE_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    ...(ART_RGE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(ART_RGE_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

@@ -16,7 +16,11 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const BARO_AUTHOR = authors['claire-dubois']
+const BARO_REVIEWER = getReviewerForAuthor(BARO_AUTHOR)
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getNationalStats, getTopMetiers, getTopVilles } from '@/lib/barometre/queries'
 import RelatedHubs from '@/components/seo/RelatedHubs'
@@ -150,7 +154,17 @@ export default async function BarometrePage() {
     url: `${SITE_URL}/barometre`,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: BARO_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: BARO_AUTHOR.name,
+          jobTitle: BARO_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${BARO_AUTHOR.slug}`,
+          ...(BARO_AUTHOR.methodology &&
+            BARO_AUTHOR.methodology.length > 0 && { skills: BARO_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(BARO_REVIEWER && { reviewedBy: getReviewedByPersonSchema(BARO_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

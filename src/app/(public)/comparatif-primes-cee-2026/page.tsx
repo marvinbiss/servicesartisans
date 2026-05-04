@@ -22,7 +22,12 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const COMP_AUTHOR = authors['claire-dubois']
+const COMP_REVIEWER = getReviewerForAuthor(COMP_AUTHOR)
 import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
@@ -249,7 +254,17 @@ export default function ComparatifPrimesCee2026Page() {
     headline: 'Comparatif primes CEE 2026 : Effy, Hellio, Sonergia, PrimesEnergie',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
-    author: { '@type': 'Organization', name: 'ServicesArtisans' },
+    author: COMP_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: COMP_AUTHOR.name,
+          jobTitle: COMP_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${COMP_AUTHOR.slug}`,
+          ...(COMP_AUTHOR.methodology &&
+            COMP_AUTHOR.methodology.length > 0 && { skills: COMP_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans' },
+    ...(COMP_REVIEWER && { reviewedBy: getReviewedByPersonSchema(COMP_REVIEWER) }),
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
     datePublished: '2026-04-12',
     dateModified: '2026-04-12',

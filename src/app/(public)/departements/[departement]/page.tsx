@@ -19,7 +19,16 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCollectionPageSchema,
+  getFAQSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const DEPT_AUTHOR = authors['sophie-martin']
+const DEPT_REVIEWER = getReviewerForAuthor(DEPT_AUTHOR)
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import {
@@ -175,7 +184,17 @@ export default async function DepartementPage({ params }: PageProps) {
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: DEPT_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: DEPT_AUTHOR.name,
+          jobTitle: DEPT_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${DEPT_AUTHOR.slug}`,
+          ...(DEPT_AUTHOR.methodology &&
+            DEPT_AUTHOR.methodology.length > 0 && { skills: DEPT_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(DEPT_REVIEWER && { reviewedBy: getReviewedByPersonSchema(DEPT_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',

@@ -4,8 +4,12 @@ import { BarChart3, Star, Users, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+
+const BARO_AUTHOR = authors['claire-dubois']
+const BARO_REVIEWER = getReviewerForAuthor(BARO_AUTHOR)
 import { getTopMetiers } from '@/lib/barometre/queries'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
@@ -72,7 +76,17 @@ export default async function BarometreTarifsPage() {
     url: canonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: BARO_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: BARO_AUTHOR.name,
+          jobTitle: BARO_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${BARO_AUTHOR.slug}`,
+          ...(BARO_AUTHOR.methodology &&
+            BARO_AUTHOR.methodology.length > 0 && { skills: BARO_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(BARO_REVIEWER && { reviewedBy: getReviewedByPersonSchema(BARO_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

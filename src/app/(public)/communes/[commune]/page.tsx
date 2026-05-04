@@ -9,7 +9,11 @@ import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from '
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const COMM_AUTHOR = authors['sophie-martin']
+const COMM_REVIEWER = getReviewerForAuthor(COMM_AUTHOR)
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -181,7 +185,17 @@ async function renderCommunePage({ params }: PageProps) {
     image: [`${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: COMM_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: COMM_AUTHOR.name,
+          jobTitle: COMM_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${COMM_AUTHOR.slug}`,
+          ...(COMM_AUTHOR.methodology &&
+            COMM_AUTHOR.methodology.length > 0 && { skills: COMM_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(COMM_REVIEWER && { reviewedBy: getReviewedByPersonSchema(COMM_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
