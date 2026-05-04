@@ -48,6 +48,33 @@ export const urgencyOptions = [
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
+// Map des noms de champs serveur (zod schema /api/devis) vers les noms côté
+// client (DevisFormData). 'urgency' (API) ↔ 'urgence' (FR client).
+const SERVER_FIELD_MAP: Record<string, keyof DevisFormData> = {
+  service: 'service',
+  ville: 'ville',
+  description: 'description',
+  urgency: 'urgence',
+  budget: 'budget',
+  nom: 'nom',
+  telephone: 'telephone',
+  email: 'email',
+}
+
+// À quel step appartient chaque champ. Permet de revenir sur l'étape la plus
+// précoce où une erreur de validation serveur a été détectée.
+const STEP_FIELD_MAP: Record<keyof DevisFormData, 1 | 2 | 3> = {
+  service: 1,
+  ville: 1,
+  description: 2,
+  urgence: 2,
+  budget: 2,
+  email: 2,
+  nom: 3,
+  telephone: 3,
+  consentement: 3,
+}
+
 interface UseDevisFormOptions {
   source: string
   initialData?: Partial<DevisFormData>
@@ -76,6 +103,12 @@ export function useDevisForm(options: UseDevisFormOptions) {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  // Audit funnel vague 4 (2026-05-04) :
+  // - 'duplicate' : 409 du serveur (demande similaire dans l'heure) — affiché
+  //   en info (vert), pas en erreur (rouge).
+  // - 'pending_dispatch' : 200 mais artisans_notified === 0 — succès partiel,
+  //   l'équipe recontacte sous 24h.
+  const [submitOutcome, setSubmitOutcome] = useState<'duplicate' | 'pending_dispatch' | null>(null)
 
   const [villeQuery, setVilleQuery] = useState(initialVilleQuery)
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
@@ -102,6 +135,7 @@ export function useDevisForm(options: UseDevisFormOptions) {
     setErrors({})
     setSubmitted(false)
     setSubmitError(null)
+    setSubmitOutcome(null)
     abandonTrackedRef.current = false
   }, [])
 
@@ -234,6 +268,7 @@ export function useDevisForm(options: UseDevisFormOptions) {
 
       setSubmitting(true)
       setSubmitError(null)
+      setSubmitOutcome(null)
 
       try {
         const res = await fetch('/api/devis', {
@@ -251,6 +286,52 @@ export function useDevisForm(options: UseDevisFormOptions) {
           }),
         })
 
+        // Audit funnel vague 4 (2026-05-04) F1 :
+        // Parser body.details.fieldErrors (Zod flatten) et mapper aux champs
+        // côté client. Avant : "Erreur serveur" générique → ~60% du drop-off.
+        if (res.status === 400) {
+          const body = await res.json().catch(() => null)
+          const fieldErrors = body?.details?.fieldErrors as
+            | Record<string, string[] | undefined>
+            | undefined
+          if (fieldErrors) {
+            const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
+            let earliestStep: 1 | 2 | 3 = 3
+            for (const [serverField, messages] of Object.entries(fieldErrors)) {
+              const clientField = SERVER_FIELD_MAP[serverField]
+              const message = messages?.[0]
+              if (clientField && message) {
+                newErrors[clientField] = message
+                const fieldStep = STEP_FIELD_MAP[clientField]
+                if (fieldStep < earliestStep) earliestStep = fieldStep
+              }
+            }
+            if (Object.keys(newErrors).length > 0) {
+              setErrors(newErrors)
+              if (earliestStep < step) setStep(earliestStep)
+              setSubmitError('Vérifiez les champs surlignés.')
+              return
+            }
+          }
+          throw new Error(body?.error || 'Données invalides')
+        }
+
+        // Audit funnel vague 4 (2026-05-04) F4 :
+        // 409 = demande similaire déjà soumise dans l'heure. Pas une erreur,
+        // mais une info pédago. On valide le submit et DevisConfirmation gère
+        // le rendu différencié via submitOutcome.
+        if (res.status === 409) {
+          setSubmitOutcome('duplicate')
+          trackEvent('form_completed', {
+            service: formData.service,
+            source,
+            outcome: 'duplicate',
+          })
+          setSubmitted(true)
+          onSubmitSuccess?.(null)
+          return null
+        }
+
         if (!res.ok) {
           const body = await res.json().catch(() => null)
           throw new Error(body?.error || 'Erreur serveur')
@@ -266,9 +347,24 @@ export function useDevisForm(options: UseDevisFormOptions) {
           }).catch(() => {})
         }
 
+        // Audit funnel vague 4 (2026-05-04) F3 :
+        // Pipedrive silent failure — si artisans_notified === 0, le lead est
+        // créé en DB mais aucun artisan n'a été notifié (pas de match ou
+        // dispatch en échec). Surfacer l'info au lieu de afficher succès brut.
+        const artisansNotified =
+          typeof responseBody?.artisans_notified === 'number' ? responseBody.artisans_notified : 0
+        if (artisansNotified === 0) {
+          setSubmitOutcome('pending_dispatch')
+          trackEvent('form_completed_no_artisans', {
+            service: formData.service,
+            source,
+          })
+        }
+
         trackEvent('form_completed', {
           service: formData.service,
           source,
+          artisans_notified: artisansNotified,
         })
 
         setSubmitted(true)
@@ -286,7 +382,7 @@ export function useDevisForm(options: UseDevisFormOptions) {
         setSubmitting(false)
       }
     },
-    [submitting, validateStep3, formData, source, onSubmitSuccess]
+    [submitting, validateStep3, formData, source, onSubmitSuccess, step]
   )
 
   const selectVille = useCallback(
@@ -320,6 +416,8 @@ export function useDevisForm(options: UseDevisFormOptions) {
     submitting,
     submitError,
     setSubmitError,
+    submitOutcome,
+    setSubmitOutcome,
 
     villeQuery,
     setVilleQuery,

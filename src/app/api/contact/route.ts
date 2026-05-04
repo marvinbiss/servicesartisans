@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { Resend } from 'resend'
 import { contactFormSchema } from '@/lib/validations/schemas'
+import { safeJsonBody } from '@/lib/api/handler'
 
 // HTML escape function to prevent XSS
 function escapeHtml(text: string): string {
@@ -49,10 +50,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const body = await request.json()
+    const parsed = await safeJsonBody<unknown>(request)
+    if (!parsed.ok) return parsed.response
 
     // Validate input
-    const validation = contactFormSchema.safeParse(body)
+    const validation = contactFormSchema.safeParse(parsed.data)
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Données invalides', details: validation.error.flatten() },

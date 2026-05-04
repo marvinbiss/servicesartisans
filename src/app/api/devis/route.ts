@@ -13,6 +13,7 @@ import { cleanPhone } from '@/lib/validation/phone'
 import { processDevis } from '@/lib/services/devis-service'
 import { submitToIndexNow, getProviderAffectedUrls } from '@/lib/seo/indexnow'
 import { slugify } from '@/lib/utils'
+import { safeJsonBody } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,7 +62,12 @@ export async function POST(request: Request) {
       )
     }
 
-    const body = await request.json()
+    // Sprint 1 vague 4 (2026-05-04) — body invalide → 400 explicit, pas 500
+    // catché en bas de fichier. Sentry signal de lead loss reste pertinent
+    // uniquement pour les vraies exceptions serveur.
+    const parsed = await safeJsonBody<unknown>(request)
+    if (!parsed.ok) return parsed.response
+    const body = parsed.data
 
     // Resolve authenticated user if present (null for anonymous submissions)
     let clientId: string | null = null

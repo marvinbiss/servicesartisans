@@ -9,6 +9,7 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getResendClient } from '@/lib/api/resend-client'
 import { newsletterEmailSchema } from '@/lib/validations/schemas'
+import { safeJsonBody } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,10 +28,11 @@ export async function POST(request: Request) {
       )
     }
 
-    const body = await request.json()
+    const parsed = await safeJsonBody<unknown>(request)
+    if (!parsed.ok) return parsed.response
 
     // Validate input
-    const validation = newsletterEmailSchema.safeParse(body)
+    const validation = newsletterEmailSchema.safeParse(parsed.data)
     if (!validation.success) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }

@@ -619,6 +619,7 @@ export default function DevisForm({
           ceeOperationCodes={ceeOperationCodes}
           serviceSlug={form.formData.service}
           postalCode={selectedVillePostal}
+          outcome={form.submitOutcome}
         />
 
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
@@ -1173,7 +1174,7 @@ export default function DevisForm({
                     value={form.formData.telephone}
                     onChange={(e) => form.updateField('telephone', e.target.value)}
                     onBlur={() => validateField('telephone')}
-                    aria-describedby={form.errors.telephone ? 'telephone-error' : undefined}
+                    aria-describedby={form.errors.telephone ? 'telephone-error' : 'telephone-hint'}
                     aria-invalid={!!form.errors.telephone}
                     style={{ fontSize: '16px' }}
                     className={`${inputBase} pr-10 ${inputBorderClass('telephone')}`}
@@ -1184,13 +1185,17 @@ export default function DevisForm({
                     </span>
                   )}
                 </div>
-                {form.errors.telephone && (
+                {form.errors.telephone ? (
                   <p
                     id="telephone-error"
                     role="alert"
                     className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
                   >
                     {form.errors.telephone}
+                  </p>
+                ) : (
+                  <p id="telephone-hint" className="mt-1.5 text-xs text-charcoal-500">
+                    Espaces, points et tirets acceptés (ex&nbsp;: 06 12 34 56 78).
                   </p>
                 )}
               </div>
@@ -1315,6 +1320,15 @@ export default function DevisForm({
                   )}
                 </button>
               </div>
+              {!form.isStep3Valid && !form.submitting && !form.formData.consentement && (
+                <p
+                  className="mt-1 text-center text-xs text-charcoal-500"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Cochez la case de consentement ci-dessus pour activer le bouton.
+                </p>
+              )}
             </div>
           )}
         </div>

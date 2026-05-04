@@ -17,6 +17,7 @@ export type BookingEvent =
   | 'slot_selected'
   | 'form_started'
   | 'form_completed'
+  | 'form_completed_no_artisans'
   | 'booking_initiated'
   | 'booking_completed'
   | 'devis_submitted'

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
+import { safeJsonBody } from '@/lib/api/handler'
 
 // Basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -29,7 +30,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email, service, city, step } = await request.json()
+    const parsed = await safeJsonBody<{
+      email?: unknown
+      service?: unknown
+      city?: unknown
+      step?: unknown
+    }>(request)
+    if (!parsed.ok) return parsed.response
+    const { email, service, city, step } = parsed.data
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json({ error: 'email required' }, { status: 400 })

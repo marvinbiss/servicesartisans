@@ -120,6 +120,37 @@ export function jsonResponse<T>(data: T, status: number = 200) {
 }
 
 /**
+ * Parse JSON body avec gestion d'erreur explicite.
+ *
+ * Audit Sprint 1 vague 4 (2026-05-04) — anti-pattern récurrent : `await
+ * request.json()` au top level des handlers déclenche une exception non
+ * catchée si le body est malformé/vide → 500 Sentry spam alors que la
+ * réponse correcte est 400. Cette helper retourne 400 explicit avec un
+ * message FR, ou la valeur typée à utiliser ensuite.
+ *
+ * Usage :
+ *   const parsed = await safeJsonBody<MyType>(request)
+ *   if (!parsed.ok) return parsed.response
+ *   const body = parsed.data
+ */
+export async function safeJsonBody<T = unknown>(
+  request: Request
+): Promise<{ ok: true; data: T } | { ok: false; response: NextResponse }> {
+  try {
+    const data = (await request.json()) as T
+    return { ok: true, data }
+  } catch {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: 'Corps de requête JSON invalide ou vide' },
+        { status: 400 }
+      ),
+    }
+  }
+}
+
+/**
  * Create a paginated response
  */
 export function paginatedResponse<T>(

@@ -68,6 +68,16 @@ interface DevisConfirmationProps {
   serviceSlug?: string
   /** Code postal 5 chiffres — utilisé pour le contexte CEE */
   postalCode?: string
+  /**
+   * Audit funnel vague 4 (2026-05-04) — différenciation des outcomes :
+   * - 'duplicate' : le serveur a renvoyé 409 (demande similaire dans l'heure).
+   *   Pas une erreur ; on remercie l'utilisateur et on évite de relancer un
+   *   nouveau dispatch. F4 du root cause analysis.
+   * - 'pending_dispatch' : 200 mais artisans_notified === 0 (aucun match
+   *   immédiat). Lead créé en DB ; l'équipe recontacte sous 24h. F3 du root
+   *   cause analysis (Pipedrive silent failure).
+   */
+  outcome?: 'duplicate' | 'pending_dispatch' | null
 }
 
 /* ─── Helpers ──────────────────────────────────────────────────────── */
@@ -98,6 +108,7 @@ export default function DevisConfirmation({
   ceeOperationCodes = [],
   serviceSlug: _serviceSlug,
   postalCode: _postalCode,
+  outcome = null,
 }: DevisConfirmationProps) {
   const [providers, setProviders] = useState<MatchedProvider[]>([])
   const [loading, setLoading] = useState(true)
@@ -240,17 +251,27 @@ export default function DevisConfirmation({
             compact ? 'text-lg mb-1' : 'text-2xl md:text-3xl mb-2'
           }`}
         >
-          Demande envoyée avec succès !
+          {outcome === 'duplicate'
+            ? 'Votre demande a déjà été reçue'
+            : outcome === 'pending_dispatch'
+              ? 'Demande bien enregistrée'
+              : 'Demande envoyée avec succès !'}
         </h3>
         <p className={`text-charcoal-500 ${compact ? 'text-xs mb-1' : 'text-sm mb-2'}`}>
-          {providerCount !== null && providerCount >= 3
-            ? `3 artisans ${serviceLabel.toLowerCase()} correspondent à votre besoin`
-            : providerCount !== null && providerCount > 0
-              ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
-              : 'Nous recherchons des artisans qualifiés pour vous'}
+          {outcome === 'duplicate'
+            ? 'Une demande similaire est déjà en traitement. Inutile d’en relancer une, vous recevrez les devis prochainement.'
+            : outcome === 'pending_dispatch'
+              ? `Aucun ${serviceLabel.toLowerCase()} disponible immédiatement à ${city}. Notre équipe élargit la recherche et vous recontacte sous 24 h.`
+              : providerCount !== null && providerCount >= 3
+                ? `3 artisans ${serviceLabel.toLowerCase()} correspondent à votre besoin`
+                : providerCount !== null && providerCount > 0
+                  ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} ${serviceLabel.toLowerCase()} trouvé${providerCount > 1 ? 's' : ''} près de chez vous`
+                  : 'Nous recherchons des artisans qualifiés pour vous'}
         </p>
         <p className={`font-medium text-accent-600 ${compact ? 'text-xs mb-4' : 'text-sm mb-6'}`}>
-          Un conseiller vous rappelle rapidement
+          {outcome === 'duplicate'
+            ? 'Surveillez votre boîte mail (et spams)'
+            : 'Un conseiller vous rappelle rapidement'}
         </p>
       </motion.div>
 

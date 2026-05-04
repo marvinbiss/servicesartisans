@@ -601,6 +601,14 @@ describe('useDevisForm — handleSubmit', () => {
   })
 
   it('calls trackEvent on success', async () => {
+    // Sprint 1 vague 4 (2026-05-04) F3 — handleSubmit attend désormais
+    // result.artisans_notified pour différencier dispatch réussi (>0) vs
+    // pending_dispatch (0). On mocke 3 artisans notifiés ici pour rester sur
+    // le happy path "succès complet".
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 'devis-123', artisans_notified: 3 }),
+    })
     const { result } = renderDevisForm({
       source: 'homepage',
       initialData: fullFormData,
@@ -611,7 +619,86 @@ describe('useDevisForm — handleSubmit', () => {
     expect(trackEvent).toHaveBeenCalledWith('form_completed', {
       service: 'plombier',
       source: 'homepage',
+      artisans_notified: 3,
     })
+    expect(trackEvent).not.toHaveBeenCalledWith('form_completed_no_artisans', expect.anything())
+    expect(result.current.submitOutcome).toBeNull()
+  })
+
+  it('emits form_completed_no_artisans when artisans_notified === 0', async () => {
+    // Sprint 1 vague 4 (2026-05-04) F3 — Pipedrive silent failure :
+    // l'API renvoie 200 mais aucun artisan n'a été matché. On veut une
+    // visibilité explicite pour cette voie (vs succès brut).
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: 'devis-456', artisans_notified: 0 }),
+    })
+    const { result } = renderDevisForm({
+      source: 'homepage',
+      initialData: fullFormData,
+    })
+    await act(async () => {
+      await result.current.handleSubmit()
+    })
+    expect(trackEvent).toHaveBeenCalledWith('form_completed_no_artisans', {
+      service: 'plombier',
+      source: 'homepage',
+    })
+    expect(result.current.submitOutcome).toBe('pending_dispatch')
+  })
+
+  it('treats 409 duplicate as pédago info, not error', async () => {
+    // Sprint 1 vague 4 (2026-05-04) F4 — 409 = demande similaire dans l'heure.
+    // Pas d'erreur affichée ; on marque submitted=true avec submitOutcome
+    // 'duplicate' pour que DevisConfirmation rende le message info.
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 409,
+      json: () => Promise.resolve({ error: 'Vous avez déjà soumis…' }),
+    })
+    const { result } = renderDevisForm({
+      source: 'homepage',
+      initialData: fullFormData,
+    })
+    await act(async () => {
+      await result.current.handleSubmit()
+    })
+    expect(result.current.submitted).toBe(true)
+    expect(result.current.submitError).toBeNull()
+    expect(result.current.submitOutcome).toBe('duplicate')
+  })
+
+  it('maps 400 fieldErrors to per-field errors and rewinds to earliest step', async () => {
+    // Sprint 1 vague 4 (2026-05-04) F1 — body.details.fieldErrors (Zod
+    // flatten) doit être mappé aux champs et le step doit reculer sur le
+    // step le plus précoce. Ici email (step 2) < telephone (step 3) → step 2.
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: () =>
+        Promise.resolve({
+          error: 'Données invalides',
+          details: {
+            fieldErrors: {
+              email: ['Email invalide'],
+              telephone: ['Format de téléphone français invalide'],
+            },
+            formErrors: [],
+          },
+        }),
+    })
+    const { result } = renderDevisForm({
+      source: 'homepage',
+      initialData: fullFormData,
+      initialStep: 3,
+    })
+    await act(async () => {
+      await result.current.handleSubmit()
+    })
+    expect(result.current.errors.email).toBe('Email invalide')
+    expect(result.current.errors.telephone).toBe('Format de téléphone français invalide')
+    expect(result.current.step).toBe(2)
+    expect(result.current.submitted).toBe(false)
   })
 
   it('passes extraPayload to the API', async () => {
