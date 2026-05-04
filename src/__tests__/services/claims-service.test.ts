@@ -33,7 +33,12 @@ vi.mock('@/lib/api/resend-client', () => ({
 }))
 
 vi.mock('crypto', () => ({
-  default: { randomUUID: () => 'random-uuid-mock' },
+  default: {
+    randomUUID: () => 'random-uuid-mock',
+    randomBytes: (size: number) => ({
+      toString: (_enc: string) => 'a'.repeat(Math.max(32, size)),
+    }),
+  },
 }))
 
 // ---------------------------------------------------------------------------
@@ -146,9 +151,11 @@ describe('createClaim', () => {
           return b
         }
         if (callIndex === 5) {
-          // Insert claim
+          // Insert claim — Sprint 4 vague 4 chaîne maintenant .select('id').single()
+          // pour récupérer l'id et envoyer l'email de confirmation.
           const b = createMockQueryBuilder()
-          b.insert = vi.fn().mockResolvedValue({ error: null })
+          b.single = vi.fn().mockResolvedValue({ data: { id: 'new-claim-id' }, error: null })
+          b.insert = vi.fn().mockReturnValue(b)
           return b
         }
       }

@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
-import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
+import { sendClaimApprovedEmail, sendClaimEmailConfirmation } from '@/lib/api/resend-client'
 import { sendClaimApprovedAuthenticatedEmail } from '@/lib/simulateur/emails'
 import crypto from 'crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -244,17 +244,28 @@ export async function createClaim(
     }
   }
 
-  // SIREN/SIRET matches — create a pending claim for admin review
-  const { error: insertError } = await adminClient.from('provider_claims').insert({
-    provider_id: providerId,
-    user_id: userId ?? null,
-    siret_provided: isSirenInput ? normalizedStored : normalizedInput,
-    claimant_name: claimantName,
-    claimant_email: email.trim().toLowerCase(),
-    claimant_phone: claimantPhone,
-    claimant_position: claimantPosition,
-    status: 'pending',
-  })
+  // SIREN/SIRET matches — create a pending claim for admin review.
+  // Sprint 4 vague 4 : on génère un token URL-safe 32 bytes pour l'email
+  // confirmation (précondition auto-approve cron). Single-use, expire 7j.
+  const emailToken = crypto.randomBytes(32).toString('base64url')
+  const emailTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data: insertedClaim, error: insertError } = await adminClient
+    .from('provider_claims')
+    .insert({
+      provider_id: providerId,
+      user_id: userId ?? null,
+      siret_provided: isSirenInput ? normalizedStored : normalizedInput,
+      claimant_name: claimantName,
+      claimant_email: email.trim().toLowerCase(),
+      claimant_phone: claimantPhone,
+      claimant_position: claimantPosition,
+      status: 'pending',
+      email_confirmation_token: emailToken,
+      email_confirmation_expires_at: emailTokenExpiresAt,
+    })
+    .select('id')
+    .single()
 
   if (insertError) {
     if (insertError.code === '23505') {
@@ -288,6 +299,29 @@ export async function createClaim(
         updated_at: new Date().toISOString(),
       })
       .eq('id', userId)
+  }
+
+  // Sprint 4 vague 4 — envoi email confirmation (précondition auto-approve).
+  // Fire-and-forget côté happy path : si Resend tombe, le claim reste créé,
+  // l'admin peut toujours valider manuellement depuis le dashboard. On log
+  // l'erreur pour visibilité.
+  if (insertedClaim?.id) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const confirmLink = `${siteUrl}/api/artisan/claim/confirm/${emailToken}`
+    try {
+      await sendClaimEmailConfirmation({
+        to: email.trim().toLowerCase(),
+        name: claimantName,
+        providerName: provider.name || 'votre fiche',
+        confirmLink,
+      })
+    } catch (mailErr) {
+      logger.error('Claim email confirmation send failed', {
+        claimId: insertedClaim.id,
+        providerId,
+        error: mailErr instanceof Error ? mailErr.message : String(mailErr),
+      })
+    }
   }
 
   logger.info('Claim submitted', {
@@ -370,8 +404,12 @@ export async function listClaims(
 export async function approveClaim(
   supabase: SupabaseClient,
   claimId: string,
-  adminId: string
+  adminId: string | null
 ): Promise<ServiceResult<{ message: string }>> {
+  // adminId === null = système (cron auto-approve Sprint 4 vague 4). reviewed_by
+  // est nullable (FK → profiles(id)), donc on stocke NULL pour distinguer la
+  // décision automatique d'une approbation humaine. L'audit trail détaillé
+  // vit dans claims_auto_approve_log côté cron.
   const now = new Date().toISOString()
 
   // Fetch the claim

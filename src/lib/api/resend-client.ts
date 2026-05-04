@@ -344,6 +344,64 @@ export async function sendPasswordResetEmail(params: {
 }
 
 /**
+ * Send claim email confirmation (Sprint 4 vague 4 — précondition auto-approve).
+ * URL-safe token single-use, expire 7j. Lien public GET → flip email_confirmed_at.
+ */
+export async function sendClaimEmailConfirmation(params: {
+  to: string
+  name: string
+  providerName: string
+  confirmLink: string
+}): Promise<EmailResult> {
+  const { to, name, providerName, confirmLink } = params
+  const greeting = name ? `Bonjour ${name}` : 'Bonjour'
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #f59e0b; margin: 0;">ServicesArtisans</h1>
+  </div>
+
+  <h2 style="color: #333;">${greeting},</h2>
+
+  <p>Vous venez de demander la revendication de la fiche <strong>${providerName}</strong>.</p>
+
+  <p>Confirmez votre adresse email pour qu'un administrateur puisse valider votre demande&nbsp;:</p>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="${confirmLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+      Confirmer mon email
+    </a>
+  </div>
+
+  <p style="color: #666; font-size: 14px;">
+    Ce lien est valable 7 jours. Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet email.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="color: #999; font-size: 12px; text-align: center;">
+    ServicesArtisans — La plateforme des artisans qualifiés<br>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+  </p>
+</body>
+</html>
+  `
+
+  return sendEmail({
+    to,
+    subject: `Confirmez votre email pour la fiche "${providerName}"`,
+    html,
+    tags: [{ name: 'type', value: 'claim_email_confirm' }],
+  })
+}
+
+/**
  * Send claim approved email (artisan sets password)
  */
 export async function sendClaimApprovedEmail(params: {
