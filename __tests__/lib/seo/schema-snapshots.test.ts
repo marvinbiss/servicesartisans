@@ -114,8 +114,13 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/services/plombier/paris#itemlist",
         "@type": "ItemList",
         "description": "Top 2 plombiers",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "itemListElement": [
           {
             "@type": "ListItem",

@@ -485,6 +485,22 @@ export function getItemListSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
+    /**
+     * Tier 31 — @id déterministe basé sur l'URL canonique de la page
+     * hôte. Permet à Google KG de dédoublonner l'ItemList quand le
+     * même listing apparaît sur plusieurs renderings (ex. AMP, m.,
+     * dev preview). Aligné avec la convention `#itemlist` du codebase.
+     */
+    '@id': `${SITE_URL}${params.url}#itemlist`,
+    /**
+     * Tier 31 — inLanguage racine + isPartOf #website. Aligne ItemList
+     * sur les conventions FAQPage/HowTo (Tiers 29-30). AI Overviews
+     * filtre les ItemList non-rattachés (orphans) — sans isPartOf,
+     * un listing rank perd son éligibilité au rich snippet « from
+     * servicesartisans.fr ».
+     */
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     name: params.name,
     description: params.description,
     url: `${SITE_URL}${params.url}`,
@@ -578,6 +594,13 @@ export function getCollectionPageSchema(params: {
     name: params.name,
     description: params.description,
     url: fullUrl,
+    /**
+     * Tier 31 — inLanguage racine. CollectionPage avait déjà isPartOf et
+     * @id ; manquait inLanguage pour aligner avec FAQPage/HowTo/ItemList.
+     * AI Overviews filtre les CollectionPage sans langue déclarée pour
+     * les requêtes en français pur.
+     */
+    inLanguage: 'fr-FR',
     numberOfItems: params.itemCount,
     isPartOf: {
       '@type': 'WebSite',

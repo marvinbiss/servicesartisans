@@ -470,6 +470,20 @@ describe('getItemListSchema', () => {
     expect(itemA.aggregateRating).toBeDefined()
     expect(itemB.aggregateRating).toBeUndefined()
   })
+
+  it('emits @id, inLanguage fr-FR, isPartOf #website (Tier 31)', () => {
+    const schema = getItemListSchema({
+      name: 'List',
+      description: 'd',
+      url: '/services/plomberie/paris',
+      items: [],
+    })
+    expect(schema['@id']).toBe('https://servicesartisans.fr/services/plomberie/paris#itemlist')
+    expect(schema.inLanguage).toBe('fr-FR')
+    expect((schema.isPartOf as { '@id': string })['@id']).toBe(
+      'https://servicesartisans.fr#website'
+    )
+  })
 })
 
 // ---------- getPlaceSchema ----------
@@ -509,6 +523,16 @@ describe('getCollectionPageSchema', () => {
     })
     expect(schema['@type']).toBe('CollectionPage')
     expect(schema.numberOfItems).toBe(46)
+  })
+
+  it('emits inLanguage fr-FR (Tier 31)', () => {
+    const schema = getCollectionPageSchema({
+      name: 'X',
+      description: 'd',
+      url: '/x',
+      itemCount: 1,
+    })
+    expect(schema.inLanguage).toBe('fr-FR')
   })
 })
 
