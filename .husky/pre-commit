@@ -44,5 +44,6 @@ node scripts/audit-robots-directives.mjs --strict || exit 1
 node scripts/audit-ahrefs-first-rule.mjs --strict || exit 1
 node scripts/audit-rge-template.mjs --strict || exit 1
 node scripts/audit-aides-hub.mjs --strict || exit 1
+node scripts/audit-pac-cluster.mjs --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged

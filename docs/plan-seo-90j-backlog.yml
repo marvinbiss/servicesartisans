@@ -122,7 +122,8 @@ items:
     blocked_by: []
     human_required: false
     dod: node scripts/audit-pac-cluster.mjs --strict
-    status: pending
+    status: completed
+    completed_at: '2026-05-05'
     ahrefs:
       kw_primary: 'pompe a chaleur prix'
       volume_ahrefs: 49500
