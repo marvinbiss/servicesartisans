@@ -975,6 +975,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   jsonLdSchemas.push({
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/services/${serviceSlug}/${locationSlug}#article`,
     headline: articleHeadline.slice(0, 110),
     description: `Trouver un ${service.name.toLowerCase()} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''} : ${totalProviderCount > 0 ? `${totalProviderCount} artisans vérifiés SIREN` : 'artisans qualifiés du département'}, devis gratuit en 24h.`,
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
@@ -982,6 +983,15 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: trade?.name || service.name,
+    keywords: [
+      service.name,
+      location.name,
+      ...(location.department_code ? [`département ${location.department_code}`] : []),
+      'artisan',
+      'devis gratuit',
+      'SIREN',
+    ].join(', '),
     image: getServiceImageForContext(serviceSlug, locationSlug).src,
     author: {
       '@type': 'Person',
@@ -994,6 +1004,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     ...(SERVICE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(SERVICE_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
@@ -1006,11 +1017,14 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    about: {
-      '@type': 'Service',
-      name: service.name,
-      areaServed: { '@type': 'City', name: location.name },
-    },
+    about: [
+      {
+        '@type': 'Service',
+        name: service.name,
+        areaServed: { '@type': 'City', name: location.name },
+      },
+      { '@type': 'City', name: location.name },
+    ],
   })
 
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé

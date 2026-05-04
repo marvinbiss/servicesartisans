@@ -436,10 +436,31 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     ? {
         '@context': 'https://schema.org',
         '@type': 'Article',
+        '@id': `${pageUrl}#article`,
+        url: pageUrl,
         headline: `${count} ${serviceName} RGE à ${villeName} — Guide ${monthYear}`,
+        description: `Trouver un artisan ${serviceName} RGE à ${villeName} : ${count} professionnels qualifiés, MaPrimeRénov' et CEE cumulables, devis gratuit.`,
         image: [`${SITE_URL}/og-rge-${serviceSlug}.jpg`, `${SITE_URL}/og-default.jpg`],
         datePublished: providers[0]?.created_at ?? '2026-01-01T00:00:00+02:00',
         dateModified: monthlyAnchor,
+        inLanguage: 'fr-FR',
+        isAccessibleForFree: true,
+        articleSection: 'Rénovation énergétique',
+        keywords: [
+          serviceName,
+          'RGE',
+          villeName,
+          "MaPrimeRénov'",
+          'CEE',
+          'Coup de pouce',
+          'rénovation énergétique',
+        ].join(', '),
+        about: [
+          { '@type': 'Service', name: `${serviceName} RGE` },
+          { '@type': 'City', name: villeName },
+          { '@type': 'Thing', name: "MaPrimeRénov'" },
+          { '@type': 'Thing', name: "CEE — Certificats d'économies d'énergie" },
+        ],
         author: RGE_AUTHOR
           ? {
               '@type': 'Person',
@@ -453,6 +474,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         ...(RGE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(RGE_REVIEWER) }),
         publisher: {
           '@type': 'Organization',
+          '@id': `${SITE_URL}#organization`,
           name: 'ServicesArtisans',
           logo: {
             '@type': 'ImageObject',
