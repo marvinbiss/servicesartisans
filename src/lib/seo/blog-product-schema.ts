@@ -70,6 +70,8 @@ export function getServicePriceSchema(slug: string): Record<string, unknown> | n
     '@context': 'https://schema.org',
     '@type': 'Service',
     '@id': `${SITE_URL}/blog/${slug}#service`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     name: cfg.serviceName,
     serviceType: cfg.serviceName,
     areaServed: { '@type': 'Country', name: 'France' },

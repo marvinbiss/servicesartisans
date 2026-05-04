@@ -241,6 +241,13 @@ export function getServiceSchema(service: {
      * déclarée pour les requêtes francophones pures.
      */
     inLanguage: 'fr-FR',
+    /**
+     * Tier 37 — rattachement WebSite. Permet à Google KG de relier ce
+     * Service au node #website du site (qui porte le copyright, l'audience
+     * et le SearchAction global). Cohérent avec les Tiers 32-36 qui
+     * portent isPartOf sur tous les helpers.
+     */
+    isPartOf: { '@id': `${SITE_URL}#website` },
     name: service.name,
     description: service.description,
     ...(service.image ? { image: service.image } : {}),
@@ -665,6 +672,7 @@ export function getServicePricingSchema(params: {
      */
     '@id': `${params.url}#service-pricing`,
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     name: params.location
       ? `${params.serviceName} à ${params.location}`
       : `${params.serviceName} en France`,
@@ -726,6 +734,7 @@ export function getLocalServiceSchema(params: {
     url: params.url,
     serviceType: params.serviceType,
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     areaServed: {
       '@type': 'City',
       name: params.cityName,

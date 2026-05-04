@@ -84,12 +84,16 @@ export function generateFAQSchema(faqs: FAQItem[]): Record<string, unknown> | nu
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
+      inLanguage: 'fr-FR',
       acceptedAnswer: {
         '@type': 'Answer',
         text: faq.answer,
+        inLanguage: 'fr-FR',
       },
     })),
   }
@@ -138,10 +142,13 @@ export function generateHowToSchema(options: HowToOptions): Record<string, unkno
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
+    '@id': `${url}#howto-devis`,
     name: `Comment décrire son projet de ${svcLower}${locationSuffix}`,
     description:
       description ||
       `Guide en 5 étapes pour obtenir des devis gratuits de ${svcLower}s qualifiés${locationSuffix} sur ${SITE_NAME}.`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(totalTime ? { totalTime } : { totalTime: 'PT10M' }),
     estimatedCost: {
       '@type': 'MonetaryAmount',
@@ -155,6 +162,7 @@ export function generateHowToSchema(options: HowToOptions): Record<string, unkno
       position: index + 1,
       name: step.name,
       text: step.text,
+      inLanguage: 'fr-FR',
       url: `${url}#etape-${index + 1}`,
     })),
   }
@@ -204,8 +212,11 @@ export function generateHowToSchemaUrgence(options: UrgenceHowToOptions): Record
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
+    '@id': `${url}#howto-urgence`,
     name: `Que faire en cas d'urgence ${svcLower}${locationSuffix}`,
     description: `Les étapes à suivre en cas d'urgence ${svcLower}${locationSuffix} : sécurisation, diagnostic et intervention rapide.`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     totalTime: 'PT15M',
     supply: [],
     tool: [],
@@ -214,6 +225,7 @@ export function generateHowToSchemaUrgence(options: UrgenceHowToOptions): Record
       position: index + 1,
       name: step.name,
       text: step.text,
+      inLanguage: 'fr-FR',
       url: `${url}#etape-urgence-${index + 1}`,
     })),
   }
@@ -250,11 +262,13 @@ export function generateDetailedPricingSchema(
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    '@id': `${url}#detailed-pricing-svc`,
     name: `Tarifs ${svcLower}${locationSuffix}`,
     description: `Grille tarifaire détaillée des prestations de ${svcLower}${locationSuffix}. Prix indicatifs TTC, devis gratuit sur ${SITE_NAME}.`,
     url,
     serviceType: serviceName,
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     provider: {
       '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
@@ -313,8 +327,11 @@ export function generateSpeakableSchema(options: SpeakableOptions): Record<strin
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
+    '@id': `${url}#speakable-enrichment`,
     name: title,
     url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: cssSelectors || ['.speakable-summary', '.speakable-faq'],
@@ -351,8 +368,11 @@ export function generateAggregateRatingSchema(options: {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
+    '@id': `${SITE_URL}/services/${serviceSlug}/${villeSlug}#localbusiness`,
     name: `${serviceName} à ${villeName} — ${SITE_NAME}`,
     url: `${SITE_URL}/services/${serviceSlug}/${villeSlug}`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     address: {
       '@type': 'PostalAddress',
       addressLocality: villeName,
@@ -397,7 +417,10 @@ export function generateItemListSchema(options: {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
+    '@id': `${SITE_URL}/services/${options.serviceSlug}/${options.villeSlug}#itemlist-providers`,
     name: `${serviceName} à ${villeName} — artisans vérifiés`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     numberOfItems: providers.length,
     itemListElement: providers.map((provider, index) => ({
       '@type': 'ListItem',

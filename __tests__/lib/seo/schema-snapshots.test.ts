@@ -80,6 +80,9 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
         },
         "description": "Plombier qualifié à Paris",
         "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "name": "Plombier Paris",
         "provider": {
           "@id": "https://servicesartisans.fr#organization",
@@ -336,6 +339,7 @@ describe('Schema.org snapshots — schema-enrichment generators', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/services/plombier/paris#localbusiness",
         "@type": "LocalBusiness",
         "address": {
           "@type": "PostalAddress",
@@ -348,6 +352,10 @@ describe('Schema.org snapshots — schema-enrichment generators', () => {
           "ratingValue": 4.5,
           "reviewCount": 12,
           "worstRating": 1,
+        },
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
         },
         "name": "Plombier à Paris — ServicesArtisans",
         "url": "https://servicesartisans.fr/services/plombier/paris",
@@ -364,7 +372,12 @@ describe('Schema.org snapshots — schema-enrichment generators', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/services/plombier/paris#speakable-enrichment",
         "@type": "WebPage",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "name": "Plombier Paris",
         "speakable": {
           "@type": "SpeakableSpecification",
