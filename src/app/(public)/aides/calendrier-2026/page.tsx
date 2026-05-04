@@ -24,7 +24,11 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   AIDES_CALENDAR_2026,
@@ -238,6 +242,22 @@ export default function AidesCalendrier2026Page() {
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
           itemListSchema as Record<string, unknown>,
+          getGovernmentServiceSchema({
+            name: 'Calendrier officiel des aides rénovation 2026',
+            description:
+              "Calendrier consolidé des dates clés 2026 des dispositifs publics de la rénovation énergétique : MaPrimeRénov' (Anah), Coup de pouce CEE (DGEC), éco-PTZ (banques agréées) et TVA à 5,5 %.",
+            url: `${SITE_URL}/aides/calendrier-2026`,
+            serviceType: 'Calendrier réglementaire des aides à la rénovation',
+            audience:
+              "Propriétaires occupants, bailleurs, copropriétés et entreprises mandataires en France métropolitaine et départements d'outre-mer",
+            temporalCoverage: '2026-01-01/2026-12-31',
+            sameAs: [
+              'https://www.maprimerenov.gouv.fr/',
+              'https://france-renov.gouv.fr/',
+              'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+              'https://www.service-public.fr/particuliers/vosdroits/F35083',
+            ],
+          }) as Record<string, unknown>,
         ]}
       />
 

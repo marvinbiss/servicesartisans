@@ -22,7 +22,12 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
@@ -275,6 +280,38 @@ export default function PompeAChaleurAidesComparatifPage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
+          getGovernmentServiceSchema({
+            name: "MaPrimeRénov' Pompe à chaleur",
+            description:
+              "Aide forfaitaire de l'État pour l'installation d'une pompe à chaleur air/eau ou géothermique chez un propriétaire occupant ou bailleur, conditionnée à la pose par un artisan QualiPAC.",
+            url: `${SITE_URL}/aides/pompe-a-chaleur-aides-comparatif`,
+            serviceType: 'Aide à la rénovation énergétique — installation PAC',
+            audience: 'Propriétaires occupants et bailleurs (résidence principale)',
+            temporalCoverage: '2026-01-01/2026-12-31',
+            sameAs: [
+              'https://www.maprimerenov.gouv.fr/',
+              'https://france-renov.gouv.fr/aides/maprimerenov',
+              'https://france-renov.gouv.fr/travaux/changer-chaudiere/pompe-chaleur',
+              'https://www.qualit-enr.org/qualipac/',
+            ],
+            serviceOperator: {
+              name: "Agence nationale de l'habitat (Anah)",
+              url: 'https://www.anah.gouv.fr/',
+            },
+          }) as Record<string, unknown>,
+          getGovernmentServiceSchema({
+            name: 'Coup de pouce Chauffage — Pompe à chaleur',
+            description:
+              "Bonification CEE versée par les obligés et délégataires sous charte chauffage résidentiel pour le remplacement d'une chaudière fossile par une pompe à chaleur.",
+            url: `${SITE_URL}/aides/pompe-a-chaleur-aides-comparatif`,
+            serviceType: 'Bonification CEE — chauffage résidentiel',
+            audience: 'Ménages aux revenus modestes et très modestes',
+            temporalCoverage: '2026-01-01/2030-12-31',
+            sameAs: [
+              'https://www.ecologie.gouv.fr/coup-pouce-economies-denergie',
+              'https://france-renov.gouv.fr/aides/coup-de-pouce-economies-denergie',
+            ],
+          }) as Record<string, unknown>,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />

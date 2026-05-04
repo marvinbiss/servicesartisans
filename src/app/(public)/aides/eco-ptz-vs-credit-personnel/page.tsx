@@ -10,7 +10,13 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getGovernmentServiceSchema,
+  getLoanOrCreditSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
@@ -245,6 +251,35 @@ export default function EcoPtzVsCreditPage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
+          getGovernmentServiceSchema({
+            name: 'Éco-prêt à taux zéro (éco-PTZ)',
+            description:
+              "Prêt sans intérêt distribué par les banques conventionnées avec l'État pour financer les travaux d'amélioration de la performance énergétique du logement (isolation, chauffage, VMC, audit énergétique). Plafond jusqu'à 50 000 € pour un bouquet performance globale, durée de remboursement jusqu'à 20 ans.",
+            url: `${SITE_URL}/aides/eco-ptz-vs-credit-personnel`,
+            serviceType: 'Prêt aidé à la rénovation énergétique',
+            audience:
+              'Propriétaires occupants, bailleurs et syndicats de copropriétaires de logements achevés depuis plus de 2 ans en France',
+            temporalCoverage: '2026-01-01/2027-12-31',
+            sameAs: [
+              'https://www.service-public.fr/particuliers/vosdroits/F19905',
+              'https://france-renov.gouv.fr/aides/eco-ptz',
+              'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044881907/',
+            ],
+            serviceOperator: {
+              name: 'Direction générale du Trésor',
+              url: 'https://www.tresor.economie.gouv.fr/',
+            },
+          }) as Record<string, unknown>,
+          getLoanOrCreditSchema({
+            name: 'Éco-PTZ — Prêt à taux zéro travaux',
+            description:
+              "Prêt sans intérêt garanti par l'État pour financer la rénovation énergétique du logement, distribué par les établissements bancaires conventionnés.",
+            url: `${SITE_URL}/aides/eco-ptz-vs-credit-personnel`,
+            loanType: 'Prêt à taux zéro travaux',
+            amount: 'jusqu’à 50 000 €',
+            currency: 'EUR',
+            annualPercentageRate: 0,
+          }) as Record<string, unknown>,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />

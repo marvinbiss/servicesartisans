@@ -19,7 +19,11 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   getAidesRegionHubEntries,
@@ -192,6 +196,24 @@ export default function AidesParRegionPage() {
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
           itemListSchema as Record<string, unknown>,
+          getGovernmentServiceSchema({
+            name: 'Aides régionales à la rénovation énergétique',
+            description:
+              "Aides versées par les conseils régionaux et certaines collectivités locales en complément de MaPrimeRénov' et des CEE pour la rénovation énergétique des logements.",
+            url: `${SITE_URL}/aides/par-region`,
+            serviceType: 'Aide territoriale à la rénovation énergétique',
+            audience: 'Propriétaires occupants et bailleurs en France métropolitaine et DOM',
+            temporalCoverage: '2026-01-01/2026-12-31',
+            sameAs: [
+              'https://france-renov.gouv.fr/',
+              'https://www.maprimerenov.gouv.fr/',
+              'https://www.service-public.fr/particuliers/vosdroits/F35083',
+            ],
+            serviceOperator: {
+              name: 'Conseils régionaux et collectivités locales',
+              url: 'https://france-renov.gouv.fr/',
+            },
+          }) as Record<string, unknown>,
         ]}
       />
 
