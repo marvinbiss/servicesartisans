@@ -323,10 +323,12 @@ export function getQAPageSchema(params: {
     '@type': 'Question',
     name: params.question,
     text: params.question,
+    inLanguage: 'fr-FR',
     answerCount: 1 + suggested.length,
     acceptedAnswer: {
       '@type': 'Answer',
       text: params.acceptedAnswerText,
+      inLanguage: 'fr-FR',
       url: `${params.pageUrl}#accepted-answer`,
       ...(params.upvoteCount !== undefined && { upvoteCount: params.upvoteCount }),
     },
@@ -335,6 +337,7 @@ export function getQAPageSchema(params: {
     mainEntity.suggestedAnswer = suggested.map((answerText, i) => ({
       '@type': 'Answer',
       text: answerText,
+      inLanguage: 'fr-FR',
       url: `${params.pageUrl}#suggested-${i + 1}`,
     }))
   }
@@ -343,6 +346,8 @@ export function getQAPageSchema(params: {
     '@type': 'QAPage',
     '@id': `${params.pageUrl}#qapage`,
     url: params.pageUrl,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(params.name && { name: params.name }),
     ...(params.dateCreated && { dateCreated: params.dateCreated }),
     mainEntity,
@@ -554,6 +559,7 @@ export function getPlaceSchema(city: {
     '@id': `${SITE_URL}/villes/${city.slug}#place`,
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
     ...(city.region || city.department
@@ -861,9 +867,12 @@ export function getFinancialProductSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'FinancialProduct',
+    '@id': `${params.url}#financial-product`,
     name: params.name,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     category: params.category || 'Government Grant',
     provider: {
       '@type': 'Organization',
@@ -909,9 +918,12 @@ export function getGovernmentServiceSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'GovernmentService',
+    '@id': `${params.url}#government-service`,
     name: params.name,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     serviceType: params.serviceType || 'Financial Assistance',
     areaServed: {
       '@type': 'Country',
@@ -1051,9 +1063,12 @@ export function getLoanOrCreditSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'LoanOrCredit',
+    '@id': `${params.url}#loan-or-credit`,
     name: params.name,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(params.loanType && { loanType: params.loanType }),
     ...(params.amount && {
       amount: {
@@ -1311,6 +1326,7 @@ export function getEnrichedLocalServiceSchema(params: {
     serviceType: params.serviceType,
     ...(params.image && { image: params.image }),
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     areaServed: {
       '@type': 'City',
       name: params.cityName,
@@ -1420,6 +1436,7 @@ export function getEnrichedPlaceSchema(city: {
     '@id': `${SITE_URL}/villes/${city.slug}#place`,
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
     ...(city.region || city.department
@@ -1475,9 +1492,12 @@ export function getCityServicesListSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
+    '@id': `${SITE_URL}/villes/${params.citySlug}#city-services-list`,
     name: `Services artisans à ${params.cityName}`,
     description: `Liste des ${params.services.length} corps de métier disponibles à ${params.cityName}`,
     url: `${SITE_URL}/villes/${params.citySlug}`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     numberOfItems: params.services.length,
     itemListElement: params.services.map((svc, i) => ({
       '@type': 'ListItem',

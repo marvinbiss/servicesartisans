@@ -234,6 +234,7 @@ describe('Schema.org snapshots — RGE templates (YMYL)', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/rge/pompe-a-chaleur/paris#government-service",
         "@type": "GovernmentService",
         "areaServed": {
           "@type": "Country",
@@ -244,6 +245,10 @@ describe('Schema.org snapshots — RGE templates (YMYL)', () => {
           "audienceType": "Propriétaires occupants",
         },
         "description": "Aide ANAH cumulable CEE.",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "name": "MaPrimeRénov pour pompe à chaleur à Paris",
         "provider": {
           "@id": "https://servicesartisans.fr#organization",
@@ -276,6 +281,7 @@ describe('Schema.org snapshots — RGE templates (YMYL)', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/rge/pompe-a-chaleur/paris#financial-product",
         "@type": "FinancialProduct",
         "areaServed": {
           "@type": "Country",
@@ -284,6 +290,10 @@ describe('Schema.org snapshots — RGE templates (YMYL)', () => {
         "category": "Government Grant",
         "description": "MaPrimeRénov + CEE + Éco-PTZ + TVA 5,5%.",
         "feesAndCommissionsSpecification": "Aides versées sous condition d'éligibilité.",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "name": "Cumul aides rénovation pompe à chaleur Paris",
         "provider": {
           "@id": "https://servicesartisans.fr#organization",
