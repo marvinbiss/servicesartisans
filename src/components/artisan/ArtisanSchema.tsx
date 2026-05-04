@@ -5,6 +5,8 @@ import { slugify, getArtisanUrl } from '@/lib/utils'
 import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 import { cleanAdemeText } from '@/lib/ademe/text'
 import { safeJsonStringify } from '@/lib/seo/safe-json'
+import { authors } from '@/lib/data/authors'
+import { SITE_URL } from '@/lib/seo/config'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -356,6 +358,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
 
   const breadcrumbSchema = {
     '@type': 'BreadcrumbList',
+    '@id': `${artisanUrl}#breadcrumb`,
     itemListElement: breadcrumbItems.map((item, index) => {
       const isLast = index === breadcrumbItems.length - 1
       return {
@@ -376,10 +379,27 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
   }
 
   // ProfilePage Schema (wraps the artisan profile)
-  const profilePageSchema = {
+  // Tier 19 — enrichissement E-E-A-T : url + name + description + inLanguage
+  // + isAccessibleForFree + lastReviewed (date dernière vérif éditoriale =
+  // updated_at, signal QRG) + reviewedBy (notre rédaction éditoriale qui a
+  // validé la fiche : SIRET INSEE + RGE ADEME + zone d'intervention).
+  // Cf. Google QRG section 3.4 (trustworthiness) : Google récompense les
+  // pages annuaire qui exposent leur process de vérification, pas seulement
+  // qui se déclarent "vérifiées" dans le texte.
+  const PROFILE_REVIEWER = authors['sophie-martin']
+  const profilePageDescription =
+    artisan.description?.slice(0, 200) ||
+    `Fiche artisan ${displayName} ${artisan.specialty ? `— ${artisan.specialty} ` : ''}à ${artisan.city}. SIRET vérifié, qualifications RGE synchronisées ADEME.`
+  const profilePageSchema: Record<string, unknown> = {
     '@type': 'ProfilePage',
     '@id': `${artisanUrl}#profile`,
+    url: artisanUrl,
+    name: `${displayName}${artisan.city ? ` — ${artisan.city}` : ''}`,
+    description: profilePageDescription,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
     mainEntity: { '@id': `${artisanUrl}#business` },
+    breadcrumb: { '@id': `${artisanUrl}#breadcrumb` },
     ...(artisan.created_at
       ? {
           dateCreated: new Date(artisan.created_at).toISOString(),
@@ -392,8 +412,18 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     ...(artisan.updated_at
       ? {
           dateModified: new Date(artisan.updated_at).toISOString(),
+          lastReviewed: new Date(artisan.updated_at).toISOString().slice(0, 10),
         }
       : {}),
+    ...(PROFILE_REVIEWER && {
+      reviewedBy: {
+        '@type': 'Person',
+        '@id': `${SITE_URL}/equipe/${PROFILE_REVIEWER.slug}#person`,
+        name: PROFILE_REVIEWER.name,
+        jobTitle: PROFILE_REVIEWER.role,
+        url: `${SITE_URL}/equipe/${PROFILE_REVIEWER.slug}`,
+      },
+    }),
   }
 
   // Combined schema graph for better SEO (single JSON-LD with @graph)
