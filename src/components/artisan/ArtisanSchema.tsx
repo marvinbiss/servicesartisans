@@ -51,6 +51,8 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     '@id': `${artisanUrl}#service-${index}`,
     name: service.name,
     description: service.description || `${service.name} par ${displayName}`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${baseUrl}#website` },
     provider: {
       '@type': 'LocalBusiness',
       '@id': `${artisanUrl}#business`,
@@ -98,6 +100,8 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
     image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${baseUrl}#website` },
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
     ...(isClaimed &&
@@ -359,6 +363,9 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
   const breadcrumbSchema = {
     '@type': 'BreadcrumbList',
     '@id': `${artisanUrl}#breadcrumb`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${baseUrl}#website` },
+    numberOfItems: breadcrumbItems.length,
     itemListElement: breadcrumbItems.map((item, index) => {
       const isLast = index === breadcrumbItems.length - 1
       return {
@@ -397,6 +404,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     name: `${displayName}${artisan.city ? ` — ${artisan.city}` : ''}`,
     description: profilePageDescription,
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${baseUrl}#website` },
     isAccessibleForFree: true,
     mainEntity: { '@id': `${artisanUrl}#business` },
     breadcrumb: { '@id': `${artisanUrl}#breadcrumb` },
