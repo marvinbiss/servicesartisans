@@ -1,3 +1,26 @@
+/**
+ * /rge/[service]/[ville] — pSEO 50K URLs (Pilier 2 rénovation énergétique).
+ *
+ * @kw-primary    artisan rge [ville]
+ * @kw-volume     8400
+ * @kw-kd         12
+ * @kw-cpc        2.40
+ * @cluster       1
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/longtail-rge-services.csv:42-180
+ * @backlog-item  P3-rge-template-upgrade
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 + audit 10 agents 2026-04-28)
+ *
+ * Patterns DoD (cf. scripts/audit-rge-template.mjs) :
+ *   - selectFittingTitle maxLen=60 (Sprint 5 vague 4)
+ *   - reviewPrefix Sprint 2 (★ + count + 24h)
+ *   - AggregateRating fallback département (review_stats_by_dept)
+ *   - Article + Speakable + author + reviewedBy
+ *   - GovernmentService (ANAH / France Rénov')
+ *   - FinancialProduct (cumul aides)
+ *   - CollectionPage avec @id + inLanguage + isPartOf
+ *   - PrimesCEEBlock conditionnel (eligibleCeeOps.length > 0)
+ *   - TldrBlock pré-FAQ
+ */
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
@@ -400,17 +423,22 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   }
 
   // Collection LocalBusiness (schema.org ItemList ne porte pas areaServed)
+  // Tier 40 — alignement triplet @id + inLanguage + isPartOf (Tiers 28-37).
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    '@id': `${pageUrl}#collection`,
     name: `${serviceName} RGE à ${villeName}`,
     url: pageUrl,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     about: {
       '@type': 'Service',
       name: `${serviceName} certifié RGE`,
       areaServed: { '@type': 'City', name: villeName },
       provider: {
         '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
         name: 'ServicesArtisans',
         url: SITE_URL,
       },
