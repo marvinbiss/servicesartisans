@@ -25,6 +25,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 export const revalidate = 86400
 
@@ -266,6 +267,7 @@ function getArticleSchema() {
       { '@type': 'Thing', name: 'Chartes Coup de pouce' },
       { '@type': 'Thing', name: "Code de l'énergie, article L221-7" },
     ],
+    ...spreadCitationsForTopics('CEE Coup de pouce MaPrimeRénov rénovation énergétique'),
   }
 }
 

@@ -20,6 +20,7 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -192,6 +193,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       { '@type': 'Service', name: problem.primaryService },
       { '@type': 'Thing', name: 'Dépannage bâtiment' },
     ],
+    ...spreadCitationsForTopics(`${problem.name} ${problem.primaryService}`),
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {

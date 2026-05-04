@@ -37,6 +37,7 @@ import {
   getUrgencyServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
@@ -841,6 +842,7 @@ async function renderUrgenceServiceVillePage({
       { '@type': 'City', name: villeData.name },
       { '@type': 'Thing', name: 'Dépannage urgent' },
     ],
+    ...spreadCitationsForTopics(`${trade.name} urgence dépannage ${villeData.name}`),
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {

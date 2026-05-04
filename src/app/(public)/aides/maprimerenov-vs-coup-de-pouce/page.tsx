@@ -11,6 +11,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
  * /aides/maprimerenov-vs-coup-de-pouce — Sprint AI Wave K 2026-05-03.
@@ -196,6 +197,7 @@ export default function MprVsCoupDePoucePage() {
       { '@type': 'Thing', name: "MaPrimeRénov'" },
       { '@type': 'Thing', name: 'Coup de pouce CEE' },
     ],
+    ...spreadCitationsForTopics('MaPrimeRénov Coup de pouce CEE'),
     author: AUTHOR
       ? {
           '@type': 'Person',

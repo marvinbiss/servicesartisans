@@ -25,6 +25,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   AIDES_CALENDAR_2026,
   AIDES_CALENDAR_CATEGORIES,
@@ -188,6 +189,7 @@ export default function AidesCalendrier2026Page() {
       { '@type': 'Thing', name: "MaPrimeRénov'" },
       { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics('MaPrimeRénov CEE Coup de pouce éco-PTZ TVA réduite'),
     author: AUTHOR
       ? {
           '@type': 'Person',

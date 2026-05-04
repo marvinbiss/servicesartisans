@@ -28,6 +28,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 export const revalidate = 86400
 
@@ -236,6 +237,7 @@ function getArticleSchema() {
       { '@type': 'Thing', name: "Code de l'énergie, articles L221-1 à L221-12" },
       { '@type': 'Thing', name: "Pôle national des certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics('CEE certificats économies énergie'),
   }
 }
 

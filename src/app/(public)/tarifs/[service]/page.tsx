@@ -22,6 +22,7 @@ import {
   getDetailedPricingSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { authors as personAuthors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
@@ -412,6 +413,7 @@ export default async function TarifsServicePage({
       { '@type': 'Thing', name: `Tarifs ${tradeLower}` },
       { '@type': 'Country', name: 'France' },
     ],
+    ...spreadCitationsForTopics(`tarifs ${tradeLower} ${trade.name}`),
     image: getServiceImage(service).src,
     author: richAuthor
       ? {

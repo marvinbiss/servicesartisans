@@ -13,6 +13,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
@@ -200,6 +201,7 @@ export default async function TarifsPage() {
       { '@type': 'Country', name: 'France' },
       { '@type': 'Thing', name: 'Prix prestations bâtiment' },
     ],
+    ...spreadCitationsForTopics('tarifs artisans bâtiment rénovation'),
     image: `${SITE_URL}/opengraph-image`,
     author: TARIFS_AUTHOR
       ? {

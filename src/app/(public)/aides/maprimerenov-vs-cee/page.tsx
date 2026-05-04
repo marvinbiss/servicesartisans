@@ -11,6 +11,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
  * /aides/maprimerenov-vs-cee — Sprint AI Wave I 2026-05-03.
@@ -189,6 +190,7 @@ export default function MaprimerenovVsCeePage() {
       { '@type': 'Thing', name: "MaPrimeRénov'" },
       { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics('MaPrimeRénov CEE rénovation énergétique'),
     author: AUTHOR
       ? {
           '@type': 'Person',

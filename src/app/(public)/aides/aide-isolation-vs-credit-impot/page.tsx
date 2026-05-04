@@ -20,6 +20,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
  * /aides/aide-isolation-vs-credit-impot — Sprint Q 2026-05-03.
@@ -179,6 +180,7 @@ export default function AideIsolationVsCreditImpotPage() {
       { '@type': 'Thing', name: "Crédit d'impôt rénovation" },
       { '@type': 'Thing', name: "MaPrimeRénov'" },
     ],
+    ...spreadCitationsForTopics('isolation MaPrimeRénov CEE éco-PTZ TVA'),
     author: AUTHOR
       ? {
           '@type': 'Person',

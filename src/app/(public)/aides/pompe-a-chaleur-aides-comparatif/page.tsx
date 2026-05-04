@@ -23,6 +23,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
  * /aides/pompe-a-chaleur-aides-comparatif — Sprint AI Wave L 2026-05-03.
@@ -226,6 +227,7 @@ export default function PompeAChaleurAidesComparatifPage() {
       { '@type': 'Thing', name: 'Coup de pouce chauffage' },
       { '@type': 'Thing', name: 'Qualification QualiPAC' },
     ],
+    ...spreadCitationsForTopics('pompe à chaleur PAC MaPrimeRénov Coup de pouce CEE RGE QualiPAC'),
     author: AUTHOR
       ? {
           '@type': 'Person',

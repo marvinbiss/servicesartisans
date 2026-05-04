@@ -11,6 +11,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 /**
  * /aides/eco-ptz-vs-credit-personnel — Sprint AI Wave K 2026-05-03.
@@ -196,6 +197,7 @@ export default function EcoPtzVsCreditPage() {
       { '@type': 'Thing', name: 'Éco-PTZ — Prêt à taux zéro' },
       { '@type': 'Thing', name: 'Crédit personnel travaux' },
     ],
+    ...spreadCitationsForTopics('éco-PTZ rénovation énergétique'),
     author: AUTHOR
       ? {
           '@type': 'Person',

@@ -20,6 +20,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   getAidesRegionHubEntries,
   getAidesRegionHubLastReviewedAt,
@@ -142,6 +143,7 @@ export default function AidesParRegionPage() {
       { '@type': 'Thing', name: "MaPrimeRénov'" },
       { '@type': 'Thing', name: 'France métropolitaine' },
     ],
+    ...spreadCitationsForTopics('MaPrimeRénov CEE rénovation énergétique'),
     author: AUTHOR
       ? {
           '@type': 'Person',

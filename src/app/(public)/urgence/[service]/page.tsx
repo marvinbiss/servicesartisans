@@ -15,6 +15,7 @@ import {
   getUrgencyHubServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -338,6 +339,7 @@ export default async function UrgenceServicePage({
       { '@type': 'Country', name: 'France' },
       { '@type': 'Thing', name: 'Dépannage urgent' },
     ],
+    ...spreadCitationsForTopics(`${trade.name} urgence dépannage`),
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
