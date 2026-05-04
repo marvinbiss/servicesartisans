@@ -410,3 +410,25 @@ items:
       leader_rank: n/a
       ahrefs_csv_source: memory:servicesartisans-strategy-140k-2026-04-29 + memory:servicesartisans-gsc-diagnostic-2026-04-30
     notes: "Tier 53 (2026-05-04) : 7/7 vagues 140K appliquées. Coverage 100 %. Threshold bump 60 → 95 lock-in regression."
+  - id: P3-funnel-devis-fail-soft
+    pillar: 3
+    title: Anti-régression funnel devis Zod fail-soft (vague 4 F1)
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-funnel-devis-fail-soft.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: n/a (anti-régression funnel critique)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:servicesartisans-ahrefs-deep-audit-vague4-2026-05-04
+    notes: >-
+      Lock-in fix vague 4 F1 : Zod silencieuse 60% drop-off form_started→form_submitted (97→7). Audit verrouille le
+      contract serveur ↔ client : /api/devis retourne details.fieldErrors, useDevisForm parse + map vers
+      SERVER_FIELD_MAP + jump earliest step + 409 distinct + 500 JSON-parsable + TypeError Failed-to-fetch handled. 8
+      patterns code-only. Régression = perte ~20 leads/j × 80-150€ = 1.6-3K€/j cash perdu silencieusement.
