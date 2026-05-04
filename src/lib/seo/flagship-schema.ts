@@ -1,5 +1,26 @@
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName, getReviewerForAuthor, type Author } from '@/lib/data/authors'
+import { getAuthorityCitations } from '@/lib/seo/authoritative-citations'
+
+/**
+ * Tier 20 — auto-résolution des citations autorité depuis section + keywords.
+ * Évite ~141 callers d'avoir à passer `citation` explicitement. Override
+ * possible via `input.citation` (ex. guide qui cite des sources spécifiques
+ * d'une opération CEE précise).
+ */
+function resolveCitationsForFlagship(section: string, keywords: readonly string[]): string[] {
+  const haystack = [section, ...keywords].join(' ').toLowerCase()
+  const topics: string[] = []
+  if (/maprimer[ée]nov/.test(haystack)) topics.push('maprimerenov')
+  if (/\bcee\b|certificat.*[ée]conomie/.test(haystack)) topics.push('cee')
+  if (/\brge\b|qualibat|qualipac|qualibois|qualifelec|qualisol/.test(haystack)) topics.push('rge')
+  if (/[ée]co[ -]ptz|prêt à taux z[eé]ro/.test(haystack)) topics.push('eco-ptz')
+  if (/tva.*5,?5|tva r[eé]duite/.test(haystack)) topics.push('tva')
+  if (/pompe à chaleur|\bpac\b/.test(haystack)) topics.push('pac')
+  if (/coup de pouce/.test(haystack)) topics.push('coup-de-pouce')
+  if (/isolation|\bite\b|\biti\b/.test(haystack)) topics.push('isolation')
+  return getAuthorityCitations(topics)
+}
 
 type FlagshipAuthor = { type: 'person'; name: string } | { type: 'organization' }
 
@@ -20,6 +41,13 @@ export type FlagshipArticleInput = {
   /** Opt out of Speakable if a guide should not be surfaced to voice
    * (e.g., highly procedural content where voice cards misread steps). */
   disableSpeakable?: boolean
+  /** Tier 20 — URLs autorité (.gouv.fr, ANAH, ADEME, Légifrance) émises
+   * comme `citation` Schema.org. Signal QRG section 3.4 trustworthiness :
+   * Google + AI Overviews valorisent les pages YMYL qui sourcent leurs
+   * affirmations sur des publications publiques officielles plutôt que sur
+   * du contenu auto-référencé. Cf. `lib/seo/authoritative-citations.ts`
+   * pour les listes par topic (MAPRIMERENOV / CEE / RGE / éco-PTZ etc.). */
+  citation?: readonly string[]
 }
 
 function buildPersonNode(profile: Author): Record<string, unknown> {
@@ -130,6 +158,15 @@ export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<st
       { '@type': 'Thing', name: input.section },
       ...input.keywords.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),
     ],
+    ...(() => {
+      // Override caller > auto-résolution. La liste auto est mergée avec
+      // l'override pour ne pas perdre les sources spécifiques que le caller
+      // a choisi de citer en plus.
+      const auto = resolveCitationsForFlagship(input.section, input.keywords)
+      const override = input.citation ?? []
+      const merged = Array.from(new Set<string>([...override, ...auto]))
+      return merged.length > 0 ? { citation: merged } : {}
+    })(),
   }
   if (!input.disableSpeakable) {
     schema.speakable = {

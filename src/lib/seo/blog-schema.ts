@@ -1,6 +1,28 @@
 import { SITE_URL } from '@/lib/seo/config'
 import { getAuthorByName, getReviewerForAuthor } from '@/lib/data/authors'
 import { getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { getAuthorityCitations } from '@/lib/seo/authoritative-citations'
+
+/**
+ * Tier 20 — auto-résolution des citations autorité depuis category + tags.
+ * Permet aux ~110 articles blog d'émettre des `citation` Schema.org sans
+ * édition par page : si le tag matche un topic connu (maprimerenov, cee,
+ * rge, eco-ptz, pac, isolation, coup-de-pouce, tva), les URLs autorité
+ * correspondantes sont injectées dans le payload Article.
+ */
+function resolveCitationsForBlogArticle(category: string, tags: readonly string[]): string[] {
+  const haystack = [category, ...tags].join(' ').toLowerCase()
+  const topics: string[] = []
+  if (/maprimer[ée]nov/.test(haystack)) topics.push('maprimerenov')
+  if (/\bcee\b|certificat.*[ée]conomie/.test(haystack)) topics.push('cee')
+  if (/\brge\b|qualibat|qualipac|qualibois|qualifelec|qualisol/.test(haystack)) topics.push('rge')
+  if (/[ée]co[ -]ptz|prêt à taux z[eé]ro/.test(haystack)) topics.push('eco-ptz')
+  if (/tva.*5,?5|tva r[eé]duite/.test(haystack)) topics.push('tva')
+  if (/pompe à chaleur|\bpac\b/.test(haystack)) topics.push('pac')
+  if (/coup de pouce/.test(haystack)) topics.push('coup-de-pouce')
+  if (/isolation|\bite\b|\biti\b/.test(haystack)) topics.push('isolation')
+  return getAuthorityCitations(topics)
+}
 
 /**
  * Generate the Article + FAQ JSON-LD schemas for a blog post.
@@ -103,6 +125,10 @@ export function getBlogArticleSchema(
       { '@type': 'Thing', name: article.category },
       ...article.tags.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),
     ],
+    ...(() => {
+      const citations = resolveCitationsForBlogArticle(article.category, article.tags)
+      return citations.length > 0 ? { citation: citations } : {}
+    })(),
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: [
