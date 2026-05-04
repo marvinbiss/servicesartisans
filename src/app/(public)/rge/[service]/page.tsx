@@ -208,7 +208,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
     image: `${SITE_URL}/og-image.jpg`,
     datePublished: '2026-05-03T00:00:00+02:00',
     dateModified: dateModifiedRgeIso,
-    authorName: 'la rédaction ServicesArtisans',
+    authorName: 'Sophie Martin',
     publisherName: 'ServicesArtisans',
   })
   // Sprint H Ahrefs 2026-05-03 — FAQPage dérivé des deep H2 sections (PAA + AI Overviews).

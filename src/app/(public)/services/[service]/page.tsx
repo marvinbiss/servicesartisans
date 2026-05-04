@@ -473,7 +473,7 @@ export default async function ServicePage({ params }: PageProps) {
     image: articleImage,
     datePublished: '2026-05-03T00:00:00+02:00',
     dateModified: dateModifiedIso,
-    authorName: 'la rédaction ServicesArtisans',
+    authorName: HUB_AUTHOR?.name || 'la rédaction ServicesArtisans',
     publisherName: 'ServicesArtisans',
   })
   // Sprint H Ahrefs 2026-05-03 — FAQPage dérivé des deep H2 sections pour

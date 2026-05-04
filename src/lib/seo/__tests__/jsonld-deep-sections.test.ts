@@ -131,6 +131,56 @@ describe('getDeepSectionsTechArticleSchema — Sprint F Ahrefs 2026-05-03', () =
     expect(s?.datePublished).toBe('2026-05-03T00:00:00+02:00')
     expect(s?.dateModified).toBe('2026-05-03T00:00:00+02:00')
   })
+
+  // Tier 12 — enrichissement Person profile + reviewedBy + keywords + about
+  describe('Tier 12 enrichments', () => {
+    it('falls back to flat Person node when authorName does not match a profile', () => {
+      const s = getDeepSectionsTechArticleSchema(baseParams)
+      const author = s?.author as Record<string, unknown>
+      expect(author['@type']).toBe('Person')
+      expect(author.name).toBe('la rédaction ServicesArtisans')
+      expect(author['@id']).toBeUndefined()
+      expect(s?.reviewedBy).toBeUndefined()
+    })
+
+    it('emits rich Person node + reviewedBy when authorName matches a real Author', () => {
+      const s = getDeepSectionsTechArticleSchema({
+        ...baseParams,
+        authorName: 'Sophie Martin',
+      })
+      const author = s?.author as Record<string, unknown>
+      expect(author['@type']).toBe('Person')
+      expect(author.name).toBe('Sophie Martin')
+      expect(typeof author['@id']).toBe('string')
+      expect(author.jobTitle).toBeDefined()
+      expect(author.url).toBeDefined()
+      expect(s?.reviewedBy).toBeDefined()
+      const reviewer = s?.reviewedBy as Record<string, unknown>
+      expect(reviewer['@type']).toBe('Person')
+    })
+
+    it('emits keywords (topic + section H2s) and about[] for topical matching', () => {
+      const s = getDeepSectionsTechArticleSchema(baseParams)
+      expect(typeof s?.keywords).toBe('string')
+      expect((s?.keywords as string).startsWith('Pompe à chaleur')).toBe(true)
+      const about = s?.about as Array<Record<string, unknown>>
+      expect(Array.isArray(about)).toBe(true)
+      expect(about.length).toBeGreaterThanOrEqual(2)
+      expect(about[0]).toEqual({ '@type': 'Thing', name: 'Pompe à chaleur' })
+    })
+
+    it('emits canonical url field on the TechArticle', () => {
+      const s = getDeepSectionsTechArticleSchema(baseParams)
+      expect(s?.url).toBe(pageUrl)
+    })
+
+    it('publisher carries @id + name (Organization de-dup with global Org node)', () => {
+      const s = getDeepSectionsTechArticleSchema(baseParams)
+      const publisher = s?.publisher as Record<string, unknown>
+      expect(publisher['@id']).toBe(`${SITE_URL}#organization`)
+      expect(publisher.name).toBe('ServicesArtisans')
+    })
+  })
 })
 
 describe('getDeepSectionsFAQPageSchema — Sprint H Ahrefs 2026-05-03', () => {

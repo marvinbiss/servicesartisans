@@ -2,6 +2,7 @@ import { SITE_URL, SITE_NAME } from './config'
 import { companyIdentity, isCompanyRegistered, getSocialLinks } from '@/lib/config/company-identity'
 import { hashCode } from '@/lib/seo/location-content'
 import { getAllRgeGlossaryEntries, RGE_GLOSSAIRE_PATH } from '@/lib/seo/rge-qualifications-glossary'
+import { getAuthorByName, getReviewerForAuthor } from '@/lib/data/authors'
 
 // Schema.org Organization
 export function getOrganizationSchema() {
@@ -1400,6 +1401,35 @@ export function getDeepSectionsTechArticleSchema(params: {
   publisherName: string
 }): Record<string, unknown> | null {
   if (!params.sections || params.sections.length === 0) return null
+
+  // Tier 12 — résolution Person profile + reviewedBy peer cross-review.
+  // Si `authorName` matche un Author (ex. "Sophie Martin", "Claire Dubois"),
+  // on émet un Person riche avec @id stable + knowsAbout + jobTitle, et on
+  // auto-injecte `reviewedBy` via la table de cross-review pairs. Sinon on
+  // retombe sur le node minimal `{ name }` historique (compat callers
+  // génériques type "la rédaction ServicesArtisans").
+  const authorProfile = getAuthorByName(params.authorName)
+  const authorNode = authorProfile
+    ? {
+        '@type': 'Person' as const,
+        '@id': `${SITE_URL}/equipe/${authorProfile.slug}#person`,
+        name: authorProfile.name,
+        jobTitle: authorProfile.role,
+        url: `${SITE_URL}/equipe/${authorProfile.slug}`,
+        ...(authorProfile.expertise &&
+          authorProfile.expertise.length > 0 && { knowsAbout: authorProfile.expertise }),
+        ...(authorProfile.methodology &&
+          authorProfile.methodology.length > 0 && { skills: authorProfile.methodology }),
+      }
+    : { '@type': 'Person' as const, name: params.authorName }
+  const reviewer = authorProfile ? getReviewerForAuthor(authorProfile) : undefined
+
+  // Keywords + about[] dérivés des H2 sections — Google AI Overviews + Bing
+  // utilisent ces signaux pour le topical matching ; les H2 sont la meilleure
+  // approximation des sous-thèmes traités par la page.
+  const sectionH2s = params.sections.map((s) => s.h2)
+  const keywordTopics = [params.topic, ...sectionH2s].slice(0, 12)
+
   return {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
@@ -1412,9 +1442,20 @@ export function getDeepSectionsTechArticleSchema(params: {
     isAccessibleForFree: true,
     proficiencyLevel: 'Beginner',
     mainEntityOfPage: { '@type': 'WebPage', '@id': params.pageUrl },
-    articleSection: params.sections.map((s) => s.h2),
-    author: { '@type': 'Person', name: params.authorName },
-    publisher: { '@type': 'Organization', name: params.publisherName },
+    url: params.pageUrl,
+    articleSection: sectionH2s,
+    keywords: keywordTopics.join(', '),
+    about: [
+      { '@type': 'Thing', name: params.topic },
+      ...sectionH2s.slice(0, 5).map((h2) => ({ '@type': 'Thing', name: h2 })),
+    ],
+    author: authorNode,
+    ...(reviewer && { reviewedBy: getReviewedByPersonSchema(reviewer) }),
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: params.publisherName,
+    },
     hasPart: params.sections.map((s) => ({
       '@type': 'WebPageElement',
       '@id': `${params.pageUrl}#${s.id}`,
