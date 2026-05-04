@@ -380,8 +380,13 @@ describe('Schema.org snapshots — Article + Person (E-E-A-T)', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/blog/guide-plombier#article-speakable-webpage",
         "@type": "WebPage",
         "description": "Guide complet du plombier 2026 — tarifs, garanties, certifications.",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "name": "Guide plombier 2026",
         "speakable": {
           "@type": "SpeakableSpecification",

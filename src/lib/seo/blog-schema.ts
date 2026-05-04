@@ -55,8 +55,11 @@ export function getBlogArticleSchema(
   schemas.push({
     '@context': 'https://schema.org',
     '@type': articleType,
+    '@id': `${SITE_URL}/blog/${slug}#article`,
     headline: article.title,
     description: article.excerpt,
+    url: `${SITE_URL}/blog/${slug}`,
+    isPartOf: { '@id': `${SITE_URL}#website` },
     image: articleImage,
     ...(articleReviewer && { reviewedBy: getReviewedByPersonSchema(articleReviewer) }),
     author: (() => {

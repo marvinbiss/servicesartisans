@@ -154,6 +154,7 @@ export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<st
     articleSection: input.section,
     keywords: input.keywords.join(', '),
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     about: [
       { '@type': 'Thing', name: input.section },
       ...input.keywords.slice(0, 5).map((tag) => ({ '@type': 'Thing', name: tag })),

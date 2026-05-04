@@ -1260,8 +1260,11 @@ export function getSpeakableSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
+    '@id': `${params.url}#speakable-webpage`,
     name: params.title,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: params.speakableCssSelectors || [
@@ -1561,9 +1564,12 @@ export function getArticleSpeakableSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
+    '@id': `${params.url}#article-speakable-webpage`,
     name: params.title,
     url: params.url,
     description: params.excerpt,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: params.speakableCssSelectors || [
@@ -1932,6 +1938,8 @@ export function getDeepSectionsHowToSchemas(params: {
       '@id': `${params.pageUrl}#howto-${section.id}`,
       name: overlay.name,
       description: overlay.description,
+      inLanguage: 'fr-FR',
+      isPartOf: { '@id': `${SITE_URL}#website` },
       ...(overlay.totalTime && { totalTime: overlay.totalTime }),
       mainEntityOfPage: { '@type': 'WebPage', '@id': params.pageUrl },
       step: overlay.steps.map((s, i) => ({
@@ -1939,6 +1947,7 @@ export function getDeepSectionsHowToSchemas(params: {
         position: i + 1,
         name: s.name,
         text: s.text,
+        inLanguage: 'fr-FR',
         url: `${params.pageUrl}#${section.id}`,
       })),
     })
@@ -1973,13 +1982,17 @@ export function getDeepSectionsFAQPageSchema(params: {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     '@id': `${params.pageUrl}#faq-deep`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     mainEntity: params.sections.map((s) => ({
       '@type': 'Question',
       '@id': `${params.pageUrl}#faq-${s.id}`,
       name: s.h2,
+      inLanguage: 'fr-FR',
       acceptedAnswer: {
         '@type': 'Answer',
         text: (s.body[0] ?? '').slice(0, maxChars),
+        inLanguage: 'fr-FR',
         url: `${params.pageUrl}#${s.id}`,
       },
     })),
