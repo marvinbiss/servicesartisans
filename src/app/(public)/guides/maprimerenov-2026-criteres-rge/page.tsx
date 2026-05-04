@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema } from '@/lib/seo/jsonld'
+import { getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
@@ -184,6 +185,9 @@ const breadcrumbItems = [
   { label: "MaPrimeRénov' 2026 : critères RGE" },
 ]
 
+const G_AUTHOR = authors['sophie-martin']
+const G_REVIEWER = getReviewerForAuthor(G_AUTHOR)
+
 export default function MaPrimeRenov2026CriteresRgePage() {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -211,7 +215,17 @@ export default function MaPrimeRenov2026CriteresRgePage() {
     headline: "MaPrimeRénov' 2026 : critères RGE, montants et dossier",
     description:
       "Guide complet MaPrimeRénov' 2026 : barèmes par travaux, plafonds de ressources, dossier en 5 étapes, obligation RGE et cumul avec les CEE.",
-    author: { '@type': 'Organization', name: SITE_NAME },
+    author: G_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: G_AUTHOR.name,
+          jobTitle: G_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${G_AUTHOR.slug}`,
+          ...(G_AUTHOR.methodology &&
+            G_AUTHOR.methodology.length > 0 && { skills: G_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(G_REVIEWER && { reviewedBy: getReviewedByPersonSchema(G_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     datePublished: '2026-04-09',
     dateModified: '2026-04-09',

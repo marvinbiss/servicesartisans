@@ -3,7 +3,11 @@ import Link from 'next/link'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema } from '@/lib/seo/jsonld'
+import { getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const G_AUTHOR = authors['claire-dubois']
+const G_REVIEWER = getReviewerForAuthor(G_AUTHOR)
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import CeeCTA from '@/components/cee/CeeCTA'
@@ -211,7 +215,17 @@ export default function CEE2026Page() {
     headline: "Certificats d'Économies d'Énergie (CEE) 2026 : guide complet",
     description:
       "Mécanisme CEE, obligés et délégataires, opérations coup de pouce 2026, éligibilité RGE, démarche et cumul MaPrimeRénov'.",
-    author: { '@type': 'Organization', name: SITE_NAME },
+    author: G_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: G_AUTHOR.name,
+          jobTitle: G_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${G_AUTHOR.slug}`,
+          ...(G_AUTHOR.methodology &&
+            G_AUTHOR.methodology.length > 0 && { skills: G_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME },
+    ...(G_REVIEWER && { reviewedBy: getReviewedByPersonSchema(G_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     datePublished: '2026-04-09',
     dateModified: '2026-04-09',

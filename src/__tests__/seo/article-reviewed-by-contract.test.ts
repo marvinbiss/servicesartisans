@@ -53,15 +53,8 @@ const EXEMPT_ROUTES = new Set<string>([
   'rge/qualifications/[slug]/page.tsx',
   'rge/sources/page.tsx',
   'rge/tarifs-audit-energetique/page.tsx',
-  // Guides hub-level (les /guides/[slug]/* utilisent getFlagshipArticleSchema).
-  'guides/aides-renovation-2026/page.tsx',
-  'guides/cee-certificats-economies-energie-2026/page.tsx',
-  'guides/isolation-ite-iti-rge-aides-2026/page.tsx',
+  // Guides hub-level dynamiques (les /guides/[slug]/* utilisent getFlagshipArticleSchema).
   'guides/long-tail/[slug]/page.tsx',
-  'guides/maprimerenov-2026/page.tsx',
-  'guides/maprimerenov-2026-criteres-rge/page.tsx',
-  'guides/pompe-a-chaleur-cee-maprimerenov-2026/page.tsx',
-  'guides/qualibat-qualipac-qualifelec-qui-choisir/page.tsx',
 ])
 
 const REVIEWED_BY_TOKENS = [

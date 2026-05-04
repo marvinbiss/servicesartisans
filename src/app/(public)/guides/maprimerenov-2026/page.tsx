@@ -39,8 +39,13 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getLoanOrCreditSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
+
+const G_AUTHOR = authors['claire-dubois']
+const G_REVIEWER = getReviewerForAuthor(G_AUTHOR)
 import { ArticleMeta } from '@/components/ArticleMeta'
 
 // ---------------------------------------------------------------------------
@@ -450,11 +455,17 @@ export default function MaPrimeRenov2026Page() {
       'Guide complet MaPrimeRénov 2026 : montants, conditions, barèmes de revenus, parcours accompagné et par geste, démarches.',
     datePublished: '2026-01-15',
     dateModified: '2026-03-10',
-    author: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    author: G_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: G_AUTHOR.name,
+          jobTitle: G_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${G_AUTHOR.slug}`,
+          ...(G_AUTHOR.methodology &&
+            G_AUTHOR.methodology.length > 0 && { skills: G_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(G_REVIEWER && { reviewedBy: getReviewedByPersonSchema(G_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
