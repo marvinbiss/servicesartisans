@@ -1448,6 +1448,17 @@ export function getPersonSchema(author: {
       '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
     },
+    /**
+     * Tier 25 — lie le node Person à la fiche /equipe/[slug] qui le décrit.
+     * Permet à Google KG de remonter de la Person vers la ProfilePage qui
+     * publie son bio + dernières contributions, ce qui consolide l'entité
+     * éditoriale au-delà des seules pages Article où elle apparaît en
+     * `author`.
+     */
+    mainEntityOfPage: {
+      '@type': 'ProfilePage',
+      '@id': `${SITE_URL}/equipe/${author.slug}#profile`,
+    },
   }
 }
 
@@ -1466,6 +1477,17 @@ export function getReviewedByPersonSchema(reviewer: { slug: string; name: string
     name: reviewer.name,
     jobTitle: reviewer.role,
     url: `${SITE_URL}/equipe/${reviewer.slug}`,
+    /**
+     * Tier 25 — affilie explicitement le reviewer à l'organisation éditrice
+     * pour que Google KG puisse vérifier qu'il s'agit bien d'un pair interne
+     * et non d'un reviewer externe non-vérifié. Évite les ambiguïtés
+     * Helpful Content sur la provenance du contrôle qualité YMYL.
+     */
+    affiliation: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
   }
 }
 

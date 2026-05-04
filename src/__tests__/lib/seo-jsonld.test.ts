@@ -52,6 +52,7 @@ import {
   getSpeakableSchema,
   getEnrichedLocalServiceSchema,
   getPersonSchema,
+  getReviewedByPersonSchema,
   getInsuranceProductSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
@@ -865,5 +866,37 @@ describe('getPersonSchema', () => {
       yearsExperience: 5,
     })
     expect('sameAs' in schema).toBe(false)
+  })
+
+  it('emits mainEntityOfPage pointing to /equipe/[slug]#profile (Tier 25)', () => {
+    const schema = getPersonSchema({
+      name: 'Jean Dupont',
+      slug: 'jean-dupont',
+      role: 'Rédacteur',
+      bio: 'Bio',
+      expertise: [],
+      yearsExperience: 5,
+    })
+    expect(schema.mainEntityOfPage).toEqual({
+      '@type': 'ProfilePage',
+      '@id': expect.stringMatching(/\/equipe\/jean-dupont#profile$/),
+    })
+  })
+})
+
+// ---------- getReviewedByPersonSchema ----------
+describe('getReviewedByPersonSchema', () => {
+  it('emits Person ref with @id, name, jobTitle, url + Org affiliation (Tier 25)', () => {
+    const reviewer = getReviewedByPersonSchema({
+      slug: 'claire-dubois',
+      name: 'Claire Dubois',
+      role: 'Rédactrice spécialisée',
+    })
+    expect(reviewer['@type']).toBe('Person')
+    expect(reviewer['@id']).toMatch(/\/equipe\/claire-dubois#person$/)
+    expect(reviewer.name).toBe('Claire Dubois')
+    expect(reviewer.jobTitle).toBe('Rédactrice spécialisée')
+    expect(reviewer.affiliation).toBeDefined()
+    expect((reviewer.affiliation as { '@type': string })['@type']).toBe('Organization')
   })
 })
