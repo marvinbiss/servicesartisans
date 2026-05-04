@@ -205,16 +205,42 @@ export default async function AidePage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${url}#article`,
+    url,
     headline: `${aide.name} 2026 — barèmes, conditions et démarche officielle`,
+    description: `${aide.name} 2026 — ${aide.tagline}. Barèmes, conditions, démarche officielle et cumul avec les autres aides.`,
     image: [`${SITE_URL}/og-aides-${aide.slug}.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: reviewedIso,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: aide.category,
+    keywords: [
+      aide.name,
+      aide.category,
+      ...cumulables.slice(0, 4).map((c) => c.name),
+      'rénovation énergétique',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: aide.name },
+      { '@type': 'Thing', name: aide.category },
+      ...cumulables.slice(0, 3).map((c) => ({ '@type': 'Thing', name: c.name })),
+    ],
     author: AUTHOR
-      ? { '@type': 'Person', name: AUTHOR.name, url: `${SITE_URL}/equipe/${AUTHOR.slug}` }
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },
