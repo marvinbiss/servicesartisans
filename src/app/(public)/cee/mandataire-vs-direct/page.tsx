@@ -19,12 +19,14 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, SITE_NAME } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 
 export const revalidate = 86400
@@ -33,6 +35,8 @@ const PAGE_PATH = '/cee/mandataire-vs-direct'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-04-09'
 const MODIFIED = '2026-04-09'
+const AUTHOR = authors['claire-dubois']
+const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 export const metadata: Metadata = {
   title: 'Obligé, délégataire, mandataire CEE',
@@ -196,11 +200,17 @@ function getArticleSchema() {
     dateModified: MODIFIED,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    author: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

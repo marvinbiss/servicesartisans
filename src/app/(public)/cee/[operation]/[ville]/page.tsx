@@ -28,12 +28,14 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import InContentLinks from '@/components/seo/InContentLinks'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getItemListSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
@@ -324,6 +326,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   // déclasse les pages qui s'auto-update quotidiennement sans nouveau contenu).
   const monthYear = currentMonthYearFr()
   const monthlyAnchor = monthlyAnchorIso()
+  const AUTHOR = authors['claire-dubois']
+  const REVIEWER = getReviewerForAuthor(AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -331,7 +335,17 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     image: [`${SITE_URL}/og-cee-${operation.code.toLowerCase()}.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
-    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

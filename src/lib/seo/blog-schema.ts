@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/lib/seo/config'
-import { getAuthorByName } from '@/lib/data/authors'
+import { getAuthorByName, getReviewerForAuthor } from '@/lib/data/authors'
+import { getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 
 /**
  * Generate the Article + FAQ JSON-LD schemas for a blog post.
@@ -26,12 +27,16 @@ export function getBlogArticleSchema(
   const isRecent =
     article.date && Date.now() - new Date(article.date).getTime() < 48 * 60 * 60 * 1000
   const articleType = isRecent ? 'NewsArticle' : 'Article'
+  const articleAuthorProfile =
+    article.author === 'ServicesArtisans' ? undefined : getAuthorByName(article.author)
+  const articleReviewer = getReviewerForAuthor(articleAuthorProfile)
   schemas.push({
     '@context': 'https://schema.org',
     '@type': articleType,
     headline: article.title,
     description: article.excerpt,
     image: articleImage,
+    ...(articleReviewer && { reviewedBy: getReviewedByPersonSchema(articleReviewer) }),
     author: (() => {
       if (article.author === 'ServicesArtisans') {
         return {

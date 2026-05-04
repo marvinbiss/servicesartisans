@@ -9,11 +9,13 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import LastUpdated from '@/components/seo/LastUpdated'
 import { ArticleMeta } from '@/components/ArticleMeta'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { getCeeOperationByCode, getCeeOperations } from '@/lib/cee/catalogue'
 import {
@@ -153,6 +155,8 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
     category: 'CEE — Certificats Économies Énergie',
   })
 
+  const AUTHOR = authors['claire-dubois']
+  const REVIEWER = getReviewerForAuthor(AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -165,7 +169,17 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
     image: `${SITE_URL}/opengraph-image`,
-    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',

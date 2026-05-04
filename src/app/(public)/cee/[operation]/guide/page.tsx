@@ -8,11 +8,13 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode } from '@/lib/cee/catalogue'
@@ -87,6 +89,8 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
   const operation = await getCeeOperationByCode(opCode)
   const topCities = await getCeeTopCitiesByOperation(opCode)
   const path = `/cee/${urlCode}/guide`
+  const AUTHOR = authors['claire-dubois']
+  const REVIEWER = getReviewerForAuthor(AUTHOR)
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -106,7 +110,17 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',

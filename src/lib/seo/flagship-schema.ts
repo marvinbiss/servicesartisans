@@ -1,5 +1,5 @@
 import { SITE_URL } from '@/lib/seo/config'
-import { getAuthorByName, type Author } from '@/lib/data/authors'
+import { getAuthorByName, getReviewerForAuthor, type Author } from '@/lib/data/authors'
 
 type FlagshipAuthor = { type: 'person'; name: string } | { type: 'organization' }
 
@@ -84,7 +84,17 @@ export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<st
     return { '@type': 'Person' as const, name: input.author.name }
   })()
 
-  const reviewerProfile = input.reviewerName ? getAuthorByName(input.reviewerName) : undefined
+  // Reviewer resolution priority :
+  //   1. Explicit `reviewerName` passed by the caller (legacy + override path).
+  //   2. Auto-derive from the author's `reviewerSlug` (peer cross-review map
+  //      defined in `@/lib/data/authors`). Couvre 141 callers d'un seul édit.
+  // Garde-fou : pas de self-review (déjà filtré dans getReviewerForAuthor).
+  const reviewerProfile = (() => {
+    if (input.reviewerName) return getAuthorByName(input.reviewerName)
+    if (input.author.type !== 'person') return undefined
+    const authorProfile = getAuthorByName(input.author.name)
+    return getReviewerForAuthor(authorProfile)
+  })()
 
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',

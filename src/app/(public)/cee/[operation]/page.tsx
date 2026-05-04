@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   buildHubRgeGlossarySchema,
@@ -15,6 +16,7 @@ import {
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
@@ -209,6 +211,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   // contenu, cf. helpful content guidelines). Snapshot mensuel cohérent
   // avec le pattern /rge/[s]/[v] et /cee/[op]/[ville].
   const monthlyAnchor = monthlyAnchorIso()
+  const AUTHOR = authors['claire-dubois']
+  const REVIEWER = getReviewerForAuthor(AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -219,7 +223,17 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     mainEntityOfPage: `${SITE_URL}${path}`,
     datePublished: '2026-01-15T00:00:00+02:00',
     dateModified: monthlyAnchor,
-    author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    author: AUTHOR
+      ? {
+          '@type': 'Person',
+          name: AUTHOR.name,
+          jobTitle: AUTHOR.role,
+          url: `${SITE_URL}/equipe/${AUTHOR.slug}`,
+          ...(AUTHOR.methodology &&
+            AUTHOR.methodology.length > 0 && { skills: AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',
