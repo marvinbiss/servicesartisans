@@ -755,10 +755,17 @@ export function getComparisonReviewSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Review',
+    '@id': `${params.url}#comparison-review`,
     name: params.title,
     description: params.description,
     url: params.url,
-    author: { '@type': 'Organization', name: SITE_NAME },
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
+    author: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
     reviewRating: {
       '@type': 'Rating',
       ratingValue: 5,
@@ -809,10 +816,13 @@ export function getInsuranceProductSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'FinancialProduct',
+    '@id': `${params.url}#insurance-product`,
     additionalType: 'https://schema.org/InsuranceProduct',
     name: params.name,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     category: params.category || 'Insurance',
     provider: {
       '@type': 'Organization',
@@ -1090,14 +1100,12 @@ export function getAvisHubSchema(params: {
   const collectionPage: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    '@id': `${params.url}#collectionpage`,
     name: `Avis ${params.serviceName} en France`,
     description: params.description,
     url: params.url,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     about: { '@id': serviceId },
   }
 
@@ -1109,6 +1117,8 @@ export function getAvisHubSchema(params: {
     serviceType: params.serviceName,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     provider: {
       '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
@@ -1164,9 +1174,12 @@ export function getUrgencyServiceSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    '@id': `${params.url}#urgency-service`,
     name: `Dépannage urgent ${params.serviceName} à ${params.cityName}`,
     description: `Service d'urgence ${params.serviceName} disponible 7j/7 à ${params.cityName}. Intervention rapide, devis gratuit.`,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     serviceType: params.serviceName,
     areaServed: {
       '@type': 'City',
@@ -1214,9 +1227,12 @@ export function getUrgencyHubServiceSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    '@id': `${params.url}#urgency-hub-service`,
     name: `${params.serviceName} urgence soir & week-end`,
     description: params.description,
     url: params.url,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     serviceType: params.serviceName,
     provider: {
       '@type': 'Organization',
@@ -1488,11 +1504,13 @@ export function getDetailedPricingSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    '@id': `${params.url}#detailed-pricing`,
     name: `${params.serviceName} en France`,
     description: params.description,
     url: params.url,
     serviceType: params.serviceName,
     inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     provider: {
       '@type': 'Organization',
       '@id': `${SITE_URL}#organization`,
