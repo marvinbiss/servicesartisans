@@ -17,7 +17,11 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const LEADS_AUTHOR = authors['claire-dubois']
+const LEADS_REVIEWER = getReviewerForAuthor(LEADS_AUTHOR)
 import { ArticleMeta } from '@/components/ArticleMeta'
 
 export const revalidate = 86400
@@ -194,7 +198,17 @@ export default function LeadsExclusifsVsPartagesPage() {
     headline: 'Leads exclusifs vs leads partagés : comparatif pour artisans du bâtiment',
     url: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
-    author: { '@type': 'Organization', name: 'ServicesArtisans' },
+    author: LEADS_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: LEADS_AUTHOR.name,
+          jobTitle: LEADS_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${LEADS_AUTHOR.slug}`,
+          ...(LEADS_AUTHOR.methodology &&
+            LEADS_AUTHOR.methodology.length > 0 && { skills: LEADS_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: 'ServicesArtisans' },
+    ...(LEADS_REVIEWER && { reviewedBy: getReviewedByPersonSchema(LEADS_REVIEWER) }),
     publisher: { '@type': 'Organization', name: 'ServicesArtisans' },
     datePublished: '2026-04-12',
     dateModified: '2026-04-12',

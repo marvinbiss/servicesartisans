@@ -62,10 +62,6 @@ const EXEMPT_ROUTES = new Set<string>([
   'guides/maprimerenov-2026-criteres-rge/page.tsx',
   'guides/pompe-a-chaleur-cee-maprimerenov-2026/page.tsx',
   'guides/qualibat-qualipac-qualifelec-qui-choisir/page.tsx',
-  // Pages standalone qui restent à wirer (T9 backlog explicite).
-  'leads-exclusifs-vs-partages/page.tsx',
-  'maprimerenov-cumulaison-cee/page.tsx',
-  'regions/[region]/page.tsx',
 ])
 
 const REVIEWED_BY_TOKENS = [

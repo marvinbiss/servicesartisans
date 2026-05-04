@@ -21,7 +21,11 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const MPR_CEE_AUTHOR = authors['claire-dubois']
+const MPR_CEE_REVIEWER = getReviewerForAuthor(MPR_CEE_AUTHOR)
 
 export const revalidate = 86400
 
@@ -287,11 +291,17 @@ export default function MaprimeRenovCumulCeePage() {
     inLanguage: 'fr-FR',
     url: PAGE_URL,
     mainEntityOfPage: PAGE_URL,
-    author: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    author: MPR_CEE_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: MPR_CEE_AUTHOR.name,
+          jobTitle: MPR_CEE_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${MPR_CEE_AUTHOR.slug}`,
+          ...(MPR_CEE_AUTHOR.methodology &&
+            MPR_CEE_AUTHOR.methodology.length > 0 && { skills: MPR_CEE_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(MPR_CEE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(MPR_CEE_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

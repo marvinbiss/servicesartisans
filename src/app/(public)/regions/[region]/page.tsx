@@ -18,7 +18,16 @@ import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCollectionPageSchema,
+  getFAQSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+
+const REG_AUTHOR = authors['sophie-martin']
+const REG_REVIEWER = getReviewerForAuthor(REG_AUTHOR)
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
@@ -177,7 +186,17 @@ export default async function RegionPage({ params }: PageProps) {
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: REG_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: REG_AUTHOR.name,
+          jobTitle: REG_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${REG_AUTHOR.slug}`,
+          ...(REG_AUTHOR.methodology &&
+            REG_AUTHOR.methodology.length > 0 && { skills: REG_AUTHOR.methodology }),
+        }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    ...(REG_REVIEWER && { reviewedBy: getReviewedByPersonSchema(REG_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',
