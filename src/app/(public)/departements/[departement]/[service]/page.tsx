@@ -48,7 +48,39 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getDeptPreposition } from '@/lib/geo-strings'
 
-const topServices = ['plombier']
+/**
+ * @kw-cluster departements × services (mid-tail multi-cluster)
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/keyword_opportunities_2026-05.csv,
+ *   tmp/ahrefs/bloc1-sa-keywords-v2.json
+ * @snapshot 2026-05-04
+ *
+ * Sprint 2 vague 4 (2026-05-04) — extension du pré-render de 103 (plombier
+ * seul × 103 dépt) à 1030 pages (10 services × 103 dépt). Les 10 services
+ * sont les premiers définis dans `tradeContent` qui (a) ont une fiche prix
+ * existante, (b) bénéficient de cluster Ahrefs documenté ou KW perdus
+ * récupérables (cf. sa_lost_keywords_2026-05.csv pour facadier). Source
+ * unique de vérité = trade-content.ts → 1030 = topServices.length × dept.
+ *
+ * Volumes cumulés Ahrefs par cluster (mémoire bloc1-niche-cee-2026-05-04) :
+ *   - chauffagiste     → cluster Chauffage 86K vol KD 2.6
+ *   - couvreur         → cluster toiture/zinguerie family
+ *   - electricien      → multi-KW électrique
+ *   - plombier         → top historique SA + lost KW (comment deboucher wc 2.2K pos 18)
+ *   - menuisier/macon  → gros œuvre + finition mid-tail
+ *   - climaticien/etancheiste/charpentier/zingueur → niches mid-tail
+ */
+const topServices = [
+  'plombier',
+  'electricien',
+  'chauffagiste',
+  'couvreur',
+  'macon',
+  'menuisier',
+  'climaticien',
+  'charpentier',
+  'zingueur',
+  'etancheiste',
+] as const
 
 export function generateStaticParams() {
   return departements.flatMap((d) => topServices.map((s) => ({ departement: d.slug, service: s })))
