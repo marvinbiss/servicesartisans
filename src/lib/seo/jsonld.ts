@@ -173,10 +173,45 @@ export function getWebsiteSchema() {
     '@type': 'WebSite',
     '@id': `${SITE_URL}#website`,
     name: SITE_NAME,
-    alternateName: ['servicesartisans.fr'],
+    alternateName: ['servicesartisans.fr', 'Services Artisans', 'Annuaire ServicesArtisans'],
     url: SITE_URL,
     inLanguage: 'fr-FR',
+    description:
+      "Annuaire des artisans RGE certifiés en France. 49 000 professionnels qualifiés (Qualibat, Qualifelec, QualiPAC) pour la rénovation énergétique éligible MaPrimeRénov' et CEE.",
+    /**
+     * Tier 27 — abstract = résumé court conçu pour AI Overviews / Bing AI.
+     * Distinct de description (utilisé par les SERP classiques) — abstract
+     * vise le format de citation IA (15-25 mots).
+     */
+    abstract:
+      "Annuaire 100% RGE des artisans français pour la rénovation énergétique : MaPrimeRénov', CEE, devis vérifiés.",
+    /**
+     * Tier 27 — mots-clés cluster principaux. Pas un dump de KW Ahrefs ;
+     * uniquement les 10 concepts pivots du site qui doivent ressortir au
+     * niveau WebSite (pas les pages individuelles).
+     */
+    keywords:
+      "artisan RGE, rénovation énergétique, MaPrimeRénov', certificats économies énergie, devis travaux, pompe à chaleur, isolation thermique, plombier, électricien, chauffagiste",
+    /**
+     * Tier 27 — propriété & filiation organisationnelle. Lie le WebSite
+     * à l'Organization #organization (publisher) ET copyrightHolder.
+     * Knowledge Graph utilise ces 3 liens (publisher, copyrightHolder,
+     * isPartOf) pour valider que le site fait bien partie de l'écosystème
+     * de l'organisation déclarée.
+     */
     publisher: { '@id': `${SITE_URL}#organization` },
+    copyrightHolder: { '@id': `${SITE_URL}#organization` },
+    copyrightYear: 2024,
+    isPartOf: { '@id': `${SITE_URL}#organization` },
+    /**
+     * Tier 27 — audience cible. Améliore la pertinence des AI Overviews
+     * pour les requêtes ciblées particuliers + propriétaires (vs B2B).
+     */
+    audience: {
+      '@type': 'Audience',
+      audienceType:
+        'Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et départements d’outre-mer',
+    },
     potentialAction: {
       '@type': 'SearchAction',
       target: {

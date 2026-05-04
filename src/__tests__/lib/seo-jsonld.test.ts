@@ -119,6 +119,22 @@ describe('getWebsiteSchema', () => {
     const schema = getWebsiteSchema()
     expect(schema['@type']).toBe('WebSite')
     expect(schema.potentialAction).toBeDefined()
+  })
+
+  it('links to #organization via publisher, copyrightHolder, isPartOf (Tier 27)', () => {
+    const schema = getWebsiteSchema()
+    const orgId = 'https://servicesartisans.fr#organization'
+    expect((schema.publisher as { '@id': string })['@id']).toBe(orgId)
+    expect((schema.copyrightHolder as { '@id': string })['@id']).toBe(orgId)
+    expect((schema.isPartOf as { '@id': string })['@id']).toBe(orgId)
+  })
+
+  it('emits abstract + keywords + audience for AI Overviews (Tier 27)', () => {
+    const schema = getWebsiteSchema()
+    expect(schema.abstract).toBeDefined()
+    expect(schema.keywords).toBeDefined()
+    expect(schema.audience).toBeDefined()
+    expect((schema.audience as { '@type': string })['@type']).toBe('Audience')
     expect((schema.potentialAction as Record<string, unknown>)['@type']).toBe('SearchAction')
   })
 
