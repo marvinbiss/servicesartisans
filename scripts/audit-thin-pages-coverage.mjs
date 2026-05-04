@@ -58,21 +58,12 @@ const jsonOut = args.includes('--json')
 
 const ROOT = process.cwd()
 const NEXT_CONFIG = join(ROOT, 'next.config.js')
-const AVIS_VILLE_PAGE = join(
-  ROOT,
-  'src',
-  'app',
-  '(public)',
-  'avis',
-  '[service]',
-  '[ville]',
-  'page.tsx'
-)
+const PUBLIC = join(ROOT, 'src', 'app', '(public)')
+const AVIS_VILLE_PAGE = join(PUBLIC, 'avis', '[service]', '[ville]', 'page.tsx')
+const URGENCE_VILLE_PAGE = join(PUBLIC, 'urgence', '[service]', '[ville]', 'page.tsx')
+const PROBLEMES_VILLE_PAGE = join(PUBLIC, 'problemes', '[probleme]', '[ville]', 'page.tsx')
 const TARIFS_TASK_PAGE = join(
-  ROOT,
-  'src',
-  'app',
-  '(public)',
+  PUBLIC,
   'tarifs',
   '[service]',
   '[location]',
@@ -82,6 +73,24 @@ const TARIFS_TASK_PAGE = join(
 
 const configSrc = existsSync(NEXT_CONFIG) ? readFileSync(NEXT_CONFIG, 'utf8') : ''
 const avisSrc = existsSync(AVIS_VILLE_PAGE) ? readFileSync(AVIS_VILLE_PAGE, 'utf8') : ''
+const urgenceSrc = existsSync(URGENCE_VILLE_PAGE) ? readFileSync(URGENCE_VILLE_PAGE, 'utf8') : ''
+const problemesSrc = existsSync(PROBLEMES_VILLE_PAGE)
+  ? readFileSync(PROBLEMES_VILLE_PAGE, 'utf8')
+  : ''
+
+// Helper : page implémente noindex conditionnel via whitelist (pattern
+// `if (!isXxxIndexable(...)) return { robots:{index:false}, alternates:{canonical:...} }`)
+function hasWhitelistNoindexPattern(src) {
+  if (!src) return false
+  return (
+    /index:\s*false/.test(src) &&
+    /alternates[\s\S]{0,300}?canonical/.test(src) &&
+    (/Indexable\s*\(/.test(src) ||
+      /isUrgenceIndexable/.test(src) ||
+      /isProblemesIndexable/.test(src) ||
+      /shouldNoindex\s*\(/.test(src))
+  )
+}
 
 function hasRedirect(sourcePattern, destinationPattern) {
   // Match a redirect block { source: '...', destination: '...', permanent: true }
@@ -113,15 +122,19 @@ const checks = [
     weight: 2.0,
   },
   {
-    id: 'wave_urgence_2seg',
-    label: '/urgence/[s]/[v] → 301 /services/[s]/[v] (23K URLs)',
-    ok: /source:\s*['"]\/urgence\/:service\/:(?:location|ville)['"]/.test(configSrc),
+    id: 'wave_urgence_noindex_or_301',
+    label: '/urgence/[s]/[v] noindex+canonical (whitelist) ou 301 (23K URLs)',
+    ok:
+      /source:\s*['"]\/urgence\/:service\/:(?:location|ville)['"]/.test(configSrc) ||
+      hasWhitelistNoindexPattern(urgenceSrc),
     weight: 2.0,
   },
   {
-    id: 'wave_problemes_2seg',
-    label: '/problemes/[p]/[v] → 301 /services/[s]/[v] (5.5K URLs)',
-    ok: /source:\s*['"]\/problemes\/:[a-z]+\/:(?:location|ville)['"]/.test(configSrc),
+    id: 'wave_problemes_noindex_or_301',
+    label: '/problemes/[p]/[v] noindex+canonical (whitelist) ou 301 (5.5K URLs)',
+    ok:
+      /source:\s*['"]\/problemes\/:[a-z]+\/:(?:location|ville)['"]/.test(configSrc) ||
+      hasWhitelistNoindexPattern(problemesSrc),
     weight: 1.0,
   },
   {

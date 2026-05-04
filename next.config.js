@@ -667,30 +667,23 @@ const nextConfig = {
         permanent: true,
       },
 
-      // ====== Stratégie 140K — vague 1 #4 (Tier 53, 2026-05-04) ======
-      // /urgence/[s]/[v] → /services/[s]/[v] (~23K URLs 20.5% explorée non indexée)
-      // Similarité d'intent forte avec /services (urgent = sub-segment, pas
-      // une page). Risk d'over-canonicalization minime : /urgence reste utile
-      // comme hub conversion, mais pas par couple service×ville.
-      // Hub /urgence + /urgence/[s] (1-2 seg) restent vivants.
-      {
-        source: '/urgence/:service/:location',
-        destination: '/services/:service/:location',
-        permanent: true,
-      },
-
-      // ====== Stratégie 140K — vague 1 #5 (Tier 53, 2026-05-04) ======
-      // /problemes/[p]/[v] → /services/[s]/[v] (~5.5K URLs 4.9% explorée
-      // non indexée). Low volume mais cohérent avec la consolidation.
-      // Hub /problemes + /problemes/[p] (1-2 seg) restent vivants.
-      // NOTE : on redirige sur /services générique (pas de mapping
-      // probleme→service possible sans overrides custom — ratio coût/bénéfice
-      // négatif vu les 5.5K URLs concernées).
-      {
-        source: '/problemes/:probleme/:ville',
-        destination: '/services',
-        permanent: true,
-      },
+      // ====== Stratégie 140K — vagues #4 & #5 NOTE (Tier 54, 2026-05-04) ======
+      // /urgence/[s]/[v] et /problemes/[p]/[v] :
+      // PAS de redirect blanket en next.config.js → on respecte la stratégie
+      // déjà appliquée (V2 #4 + pivot RGE 2026-05-03) :
+      //   - whitelist 4-5 svc × ≤25 villes ≈ 100-125 URLs gardent
+      //     `robots: { index: true, follow: true }` + sitemap shard
+      //   - hors whitelist : metadata `robots: { index: false, follow: true }`
+      //     + alternates.canonical vers /services/[s]/[v] (deindex sans
+      //     casser la nav interne, link equity transmis via canonical).
+      // Pourquoi PAS de 301 :
+      //   1. Next.js 14.2 permanentRedirect cassé en ISR + dynamicParams
+      //      (cf. commentaires page.tsx).
+      //   2. 301 blanket overrideraient le whitelist indexable RGE.
+      //   3. noindex + canonical = signal Google équivalent à 301 pour
+      //      consolidation autorité, sans déstabiliser le rendering.
+      // Sitemap shards conservés : urgence-service-cities-0,
+      // problemes-cities-0 (émettent uniquement les whitelisted URLs).
     ]
   },
 
