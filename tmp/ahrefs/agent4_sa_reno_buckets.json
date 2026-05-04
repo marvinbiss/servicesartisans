@@ -1,0 +1,289 @@
+{
+  "total": 143,
+  "reno_total": 15,
+  "buckets": {
+    "1-3": [
+      {
+        "keyword": "prix pompe a chaleur albi",
+        "volume": 0,
+        "kd": 0,
+        "pos": 3,
+        "url": "https://servicesartisans.fr/tarifs/chauffagiste/albi/installation-d-une-pompe-a-chaleur-air-eau",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "remplacement chaudiÃ¨re fioul par pac grasse",
+        "volume": 0,
+        "kd": 0,
+        "pos": 2,
+        "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "remplacement chaudiÃ¨re fioul par pompe Ã  chaleur grasse",
+        "volume": 0,
+        "kd": 0,
+        "pos": 3,
+        "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+        "traffic": 0,
+        "source": "bloc1"
+      }
+    ],
+    "4-10": [
+      {
+        "keyword": "plomberie urgence",
+        "volume": 200,
+        "kd": 1,
+        "pos": 4,
+        "url": "https://servicesartisans.fr/urgence/plombier/saint-julien-en-genevois",
+        "traffic": 10,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "vitrier aubergenville",
+        "volume": 90,
+        "kd": 0,
+        "pos": 7,
+        "url": "https://servicesartisans.fr/avis/vitrier/aubergenville",
+        "traffic": 4,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "idf calorifuge",
+        "volume": 40,
+        "kd": 0,
+        "pos": 9,
+        "url": "https://servicesartisans.fr/services/isolation-thermique/guitrancourt/idf-calorifuge-idf-groupe-818851107",
+        "traffic": 1,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "ambiance poele perissac",
+        "volume": 0,
+        "kd": 0,
+        "pos": 7,
+        "url": "https://servicesartisans.fr/services/chauffagiste/perissac/ap-reno-ambiance-poele-900770587",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "etancheite bureaux villefranche sur mer",
+        "volume": 0,
+        "kd": 0,
+        "pos": 8,
+        "url": "https://servicesartisans.fr/devis/etancheiste/villefranche-sur-mer",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "changer sa chaudiÃ¨re fioul grasse",
+        "volume": 0,
+        "kd": 0,
+        "pos": 8,
+        "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "pompe Ã  chaleur corbeil-essonnes",
+        "volume": 0,
+        "kd": 0,
+        "pos": 9,
+        "url": "https://servicesartisans.fr/services/pompe-a-chaleur/corbeil-essonnes",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "etancheite toit goudron mandelieu",
+        "volume": 0,
+        "kd": 0,
+        "pos": 10,
+        "url": "https://servicesartisans.fr/tarifs/etancheiste/mandelieu-la-napoule/etancheite-toiture-terrasse-membrane-epdm",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "parabole satellite nice",
+        "volume": 0,
+        "kd": 0,
+        "pos": 5,
+        "url": "https://servicesartisans.fr/tarifs/antenniste/nice/installation-parabole-satellite",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "Ã©lectricien dÃ©pannage urgent",
+        "volume": 0,
+        "kd": 0,
+        "pos": 5,
+        "url": "https://servicesartisans.fr/urgence/electricien",
+        "traffic": 0,
+        "source": "bloc1"
+      }
+    ],
+    "11-20": [
+      {
+        "keyword": "remplacement chaudiÃ¨re fioul par pac antibes",
+        "volume": 0,
+        "kd": 0,
+        "pos": 11,
+        "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/mougins/remplacement-de-chaudiere-fioul-par-pac",
+        "traffic": 0,
+        "source": "bloc1"
+      },
+      {
+        "keyword": "prix panneaux photovoltaiques albi",
+        "volume": 0,
+        "kd": 0,
+        "pos": 11,
+        "url": "https://servicesartisans.fr/tarifs/panneaux-solaires/albi",
+        "traffic": 0,
+        "source": "bloc1"
+      }
+    ],
+    "21-50": [],
+    "51-100": [],
+    "unranked": []
+  },
+  "striking": [
+    {
+      "keyword": "plomberie urgence",
+      "volume": 200,
+      "kd": 1,
+      "pos": 4,
+      "url": "https://servicesartisans.fr/urgence/plombier/saint-julien-en-genevois",
+      "traffic": 10,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "vitrier aubergenville",
+      "volume": 90,
+      "kd": 0,
+      "pos": 7,
+      "url": "https://servicesartisans.fr/avis/vitrier/aubergenville",
+      "traffic": 4,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "idf calorifuge",
+      "volume": 40,
+      "kd": 0,
+      "pos": 9,
+      "url": "https://servicesartisans.fr/services/isolation-thermique/guitrancourt/idf-calorifuge-idf-groupe-818851107",
+      "traffic": 1,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "parabole satellite nice",
+      "volume": 0,
+      "kd": 0,
+      "pos": 5,
+      "url": "https://servicesartisans.fr/tarifs/antenniste/nice/installation-parabole-satellite",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "Ã©lectricien dÃ©pannage urgent",
+      "volume": 0,
+      "kd": 0,
+      "pos": 5,
+      "url": "https://servicesartisans.fr/urgence/electricien",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "ambiance poele perissac",
+      "volume": 0,
+      "kd": 0,
+      "pos": 7,
+      "url": "https://servicesartisans.fr/services/chauffagiste/perissac/ap-reno-ambiance-poele-900770587",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "etancheite bureaux villefranche sur mer",
+      "volume": 0,
+      "kd": 0,
+      "pos": 8,
+      "url": "https://servicesartisans.fr/devis/etancheiste/villefranche-sur-mer",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "changer sa chaudiÃ¨re fioul grasse",
+      "volume": 0,
+      "kd": 0,
+      "pos": 8,
+      "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "pompe Ã  chaleur corbeil-essonnes",
+      "volume": 0,
+      "kd": 0,
+      "pos": 9,
+      "url": "https://servicesartisans.fr/services/pompe-a-chaleur/corbeil-essonnes",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "etancheite toit goudron mandelieu",
+      "volume": 0,
+      "kd": 0,
+      "pos": 10,
+      "url": "https://servicesartisans.fr/tarifs/etancheiste/mandelieu-la-napoule/etancheite-toiture-terrasse-membrane-epdm",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "remplacement chaudiÃ¨re fioul par pac antibes",
+      "volume": 0,
+      "kd": 0,
+      "pos": 11,
+      "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/mougins/remplacement-de-chaudiere-fioul-par-pac",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "prix panneaux photovoltaiques albi",
+      "volume": 0,
+      "kd": 0,
+      "pos": 11,
+      "url": "https://servicesartisans.fr/tarifs/panneaux-solaires/albi",
+      "traffic": 0,
+      "source": "bloc1"
+    }
+  ],
+  "top3": [
+    {
+      "keyword": "prix pompe a chaleur albi",
+      "volume": 0,
+      "kd": 0,
+      "pos": 3,
+      "url": "https://servicesartisans.fr/tarifs/chauffagiste/albi/installation-d-une-pompe-a-chaleur-air-eau",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "remplacement chaudiÃ¨re fioul par pac grasse",
+      "volume": 0,
+      "kd": 0,
+      "pos": 2,
+      "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+      "traffic": 0,
+      "source": "bloc1"
+    },
+    {
+      "keyword": "remplacement chaudiÃ¨re fioul par pompe Ã  chaleur grasse",
+      "volume": 0,
+      "kd": 0,
+      "pos": 3,
+      "url": "https://servicesartisans.fr/tarifs/pompe-a-chaleur/grasse/remplacement-de-chaudiere-fioul-par-pac",
+      "traffic": 0,
+      "source": "bloc1"
+    }
+  ]
+}

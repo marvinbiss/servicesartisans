@@ -130,6 +130,16 @@ export function generateStaticParams() {
 }
 export const dynamicParams = true
 
+// Tier 0 + 45 bleeding stop 2026-05-04 (P3-soft404-fix-mass) :
+// raceTimeout protège chaque lookup DB contre un Supabase ralenti pour éviter
+// qu'une fonction Vercel ne sature les 30s d'allocation et produise un 5xx GSC.
+// Memory `gsc-diagnostic-2026-04-30` documente 12 890 pages 5xx dont 57 % sur
+// ce template. Le helper est partagé entre generateMetadata et renderProviderPage
+// pour appliquer la même garantie temps-réel.
+const RACE_MS = 6000
+const raceTimeout = <T,>(p: Promise<T>, fallback: T): Promise<T> =>
+  Promise.race<T>([p, new Promise<T>((resolve) => setTimeout(() => resolve(fallback), RACE_MS))])
+
 interface PageProps {
   params: Promise<{
     service: string
@@ -628,6 +638,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // Each .catch logs to Sentry via logger.error — alignée sur le pattern
     // de renderProviderPage (audit 2026-05-01) pour éviter les fetch errors
     // muets côté Sentry quand notFound() est déclenché par data manquante.
+    //
+    // Tier 45 (2026-05-04, P3-soft404-fix-mass) : race contre timeout 6s sur
+    // chaque lookup pour éviter qu'un Supabase ralenti ne consomme la fonction
+    // Vercel et produise un 5xx GSC sur generateMetadata. GSC documente 12 890
+    // pages 5xx dont 57% sur ce template — root cause = generateMetadata bloqué
+    // sur DB lente sans fallback. raceTimeout dégrade en `null` → catch DB
+    // fallback retourne {title:'Artisan non trouvé', robots:{index:false}}.
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
     const metaErrCtx = {
       route: 'services/[service]/[location]/[publicId]',
@@ -637,18 +654,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publicId,
     }
     const [stableIdResult, slugResult, service] = await Promise.all([
-      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
-        logger.error('provider_metadata.lookup_id_error', err as Error, metaErrCtx)
-        return null
-      }),
-      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
-        logger.error('provider_metadata.lookup_slug_error', err as Error, metaErrCtx)
-        return null
-      }),
-      getServiceBySlug(serviceSlug).catch((err) => {
-        logger.error('provider_metadata.service_lookup_error', err as Error, metaErrCtx)
-        return null
-      }),
+      raceTimeout(
+        (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
+          logger.error('provider_metadata.lookup_id_error', err as Error, metaErrCtx)
+          return null
+        }),
+        null
+      ),
+      raceTimeout(
+        (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
+          logger.error('provider_metadata.lookup_slug_error', err as Error, metaErrCtx)
+          return null
+        }),
+        null
+      ),
+      raceTimeout(
+        getServiceBySlug(serviceSlug).catch((err) => {
+          logger.error('provider_metadata.service_lookup_error', err as Error, metaErrCtx)
+          return null
+        }),
+        null
+      ),
     ])
     const rawProvider = stableIdResult || slugResult
     if (!rawProvider || (rawProvider as unknown as ProviderRecord).is_active === false) {
@@ -836,6 +862,12 @@ async function renderProviderPage({ params }: PageProps) {
   // Chaque .catch() track son erreur via logger.error pour ne PAS être muet
   // côté Sentry (avant : `try { ... } catch {}` swallow silencieux → root cause
   // des 7 350 fiches 5xx GSC invisibles dans Sentry).
+  //
+  // Tier 45 (2026-05-04, P3-soft404-fix-mass) : raceTimeout 6s par lookup pour
+  // éviter qu'un Supabase ralenti ne consomme les 30s Vercel et produise un
+  // 504/5xx GSC. Sans race, p99 12-25s sur cold ISR → 504. Avec race, soit le
+  // provider arrive sous 6s soit on tombe sur null → notFound() = vrai 404
+  // catalogué en GSC (Google oublie en ~30j vs noindex 90j+).
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
   const errCtx = {
     route: 'services/[service]/[location]/[publicId]',
@@ -844,22 +876,34 @@ async function renderProviderPage({ params }: PageProps) {
     publicId,
   }
   const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
-    (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
-      logger.error('provider_page.lookup_id_error', err as Error, errCtx)
-      return null
-    }),
-    (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
-      logger.error('provider_page.lookup_slug_error', err as Error, errCtx)
-      return null
-    }),
-    getServiceBySlug(serviceSlug).catch((err) => {
-      logger.error('provider_page.service_lookup_error', err as Error, errCtx)
-      return null
-    }),
-    getLocationBySlug(locationSlug).catch((err) => {
-      logger.error('provider_page.location_lookup_error', err as Error, errCtx)
-      return null
-    }),
+    raceTimeout(
+      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch((err) => {
+        logger.error('provider_page.lookup_id_error', err as Error, errCtx)
+        return null
+      }),
+      null
+    ),
+    raceTimeout(
+      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch((err) => {
+        logger.error('provider_page.lookup_slug_error', err as Error, errCtx)
+        return null
+      }),
+      null
+    ),
+    raceTimeout(
+      getServiceBySlug(serviceSlug).catch((err) => {
+        logger.error('provider_page.service_lookup_error', err as Error, errCtx)
+        return null
+      }),
+      null
+    ),
+    raceTimeout(
+      getLocationBySlug(locationSlug).catch((err) => {
+        logger.error('provider_page.location_lookup_error', err as Error, errCtx)
+        return null
+      }),
+      null
+    ),
   ])
   let provider = (stableIdResult || slugResult) as ProviderRecord | null
   const service = svcResult as Service | null
@@ -908,18 +952,10 @@ async function renderProviderPage({ params }: PageProps) {
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
   // Fetch reviews and similar artisans in parallel (graceful degradation).
-  // Tier 0 bleeding stop 2026-05-04 : race contre un timeout 6s par lookup
-  // pour éviter qu'un Supabase ralenti ne consomme les 30s de la function
-  // Vercel et déclenche un 504/5xx visible GSC. Memory `gsc-diagnostic`
-  // documente 12 890 pages 5xx dont 57 % sur ce template — root cause
-  // probable = cold ISR + DB lente + 0 fallback de timeout côté code.
-  // Sans race, le sub-fetch peut prendre 12-25s en p99, le tree React n'est
-  // alors jamais flushé → 504. Avec race, on dégrade en page complète avec
-  // section reviews/similar vide (deja cas géré via initial value [] + UI).
-  const RACE_MS = 6000
-  const raceTimeout = <T,>(p: Promise<T>, fallback: T): Promise<T> =>
-    Promise.race<T>([p, new Promise<T>((resolve) => setTimeout(() => resolve(fallback), RACE_MS))])
-
+  // raceTimeout helper hoisté en module scope (Tier 45) — partagé avec
+  // generateMetadata + le bloc lookups providers ci-dessus pour appliquer la
+  // même garantie 6s sur chaque lookup DB. Memory `gsc-diagnostic-2026-04-30`
+  // documente 12 890 pages 5xx dont 57 % sur ce template.
   let reviews: Review[] = []
   let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
   try {
