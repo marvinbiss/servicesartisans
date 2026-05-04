@@ -50,6 +50,8 @@ const STATIC_DATE = new Date().toISOString().slice(0, 10)
 // (leaf module sans imports — réutilisé par sitemap.ts, lastmod-queries.ts,
 // indexnow-submit/route.ts pour éliminer le drift triple SSoT).
 import { CEE_OPERATION_CODES } from '@/lib/cee/operation-codes'
+// Sprint AI Wave D Ahrefs 2026-05-03 — cluster CEE×région.
+import { CEE_REGIONAL_SLUGS } from '@/lib/cee/regional-specifics'
 
 // Lazily-loaded lastmod data from DB. Fetched once, reused across all sitemap IDs.
 // If DB is unavailable, all maps are empty → lastmod is omitted (honest).
@@ -161,6 +163,12 @@ export async function generateSitemaps() {
     // est déjà émise séparément par /aides/[dept]/maprimerenov, cf. shard 'static').
     // 1 seul shard suffit (1 111 URLs ≤ STATIC_BATCH 8 000).
     { id: 'aides-dept' },
+    // Sprint AI Wave H 2026-05-03 — BUILD /aides/[dept] (hub aggregator dept,
+    // cross-aides) pour les 30 dépts whitelistés. Distribue PageRank vers
+    // /aides/[dept]/[aide] (5 indexées) + /aides/[dept]/maprimerenov + aides
+    // nationales /aides/[aide]. Volume search "aides renovation [dept]" ≈
+    // 200-500/mois × 30 = 6-15K req/mois capturables. 30 URLs ≤ STATIC_BATCH.
+    { id: 'aides-dept-hub' },
     ...Array.from(
       { length: Math.ceil((departements.length * getTradesSlugs().length) / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -180,6 +188,11 @@ export async function generateSitemaps() {
     { id: 'cee-operation' }, // /cee/[op] — 19 URLs
     { id: 'cee-operation-guide' }, // /cee/[op]/guide — 5 URLs (high-intent guides)
     { id: 'cee-operation-city' }, // /cee/[op]/[v] — V3 #2 : 22 × ≤1 000 villes filtré ≥1 artisan
+    // Sprint AI Wave D Ahrefs 2026-05-03 — cluster CEE×région (~14 régions × 19 ops).
+    // Pages /cee/[op]/region/[region] avec contenu différencié (zone climatique
+    // RT2012, aides régionales sourcées, top villes DB-driven). noindex fail-open
+    // au render si 0 provider régional (anti-thin-content).
+    { id: 'cee-operation-region' }, // /cee/[op]/region/[region] — ~266 URLs
   ]
 
   // Provider sitemaps are served dynamically via /api/sitemap-providers
@@ -326,6 +339,371 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.75,
+      },
+      // Sprint AI Wave I 2026-05-03 — comparator MaPrimeRénov’ vs CEE
+      // (10 critères + 6 cas + bridge cumul). Volume "vs" exact ≈ 1-2K/mois.
+      {
+        url: `${SITE_URL}/aides/maprimerenov-vs-cee`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint AI Wave K 2026-05-03 — comparator éco-PTZ vs crédit personnel
+      // travaux. Volume estimé 500-800 req/mois en variantes.
+      {
+        url: `${SITE_URL}/aides/eco-ptz-vs-credit-personnel`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      // Sprint AI Wave K 2026-05-03 — comparator MaPrimeRénov’ vs Coup de pouce.
+      // Dissipe la confusion (cumul, pas alternative). Volume 300-500 req/mois.
+      {
+        url: `${SITE_URL}/aides/maprimerenov-vs-coup-de-pouce`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      // Sprint AI Wave L 2026-05-03 — comparator aides PAC par type
+      // (air-eau / air-air / géothermique / hybride). Volume "aide pompe à
+      // chaleur 2026" 3-5K req/mois + variantes type-spécifiques.
+      {
+        url: `${SITE_URL}/aides/pompe-a-chaleur-aides-comparatif`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint AI Wave L 2026-05-03 — hub racine cluster aides par région
+      // (parent canonique des 13 régions × aides régionales + cross-link
+      // /cee/[op]/region/[region] + /aides/[dept]). Priority 0.75 = parent.
+      {
+        url: `${SITE_URL}/aides/par-region`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint O 2026-05-03 — hub time-bound calendrier aides 2026.
+      // Volume estimé 1.5-3K req/mois (pic novembre-mars), zéro concurrence
+      // française sur "calendrier aides rénovation 2026" (audit 2026-05-03).
+      {
+        url: `${SITE_URL}/aides/calendrier-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint P 2026-05-03 — comparator pédagogique Anah vs MaPrimeRénov’.
+      // Dissipe la confusion historique (MPR EST géré par l'Anah depuis 2020).
+      // Volume "anah ou maprimerenov" 1-2K exact + 3-5K variantes /mois.
+      {
+        url: `${SITE_URL}/aides/anah-vs-maprimerenov`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint AI Wave Q 2026-05-03 — comparator /aides/aide-isolation-vs-credit-impot.
+      // Capte la confusion historique « crédit d'impôt isolation » (CITE supprimé fin 2020)
+      // en redirigeant l'intent vers les 4 dispositifs cumulables qui le remplacent
+      // (MaPrimeRénov', CEE, TVA 5,5 %, éco-PTZ). Volume 800-1.5K req/mois.
+      {
+        url: `${SITE_URL}/aides/aide-isolation-vs-credit-impot`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      // Sprint S' Phase 1 — 2026-05-03 — Hub Rénovation Énergétique → Travaux → PAC.
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "pompe a chaleur prix"        → 1 607 vol, KD 2, CPC $1,10
+      //   - "prix pompe a chaleur air eau" → 2 263 vol, KD 1, CPC $1,20
+      // Easy wins KD ≤ 2, intent commercial fort. Famille cumulée ~4 500 vol/mois.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/air-eau-prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      // Sprint S' Phase 2 — 2026-05-03 — Hub Rénovation Énergétique → Passoires thermiques.
+      // KW pivot Ahrefs API live (snapshot 2026-05-03) :
+      //   - "passoire thermique" → 2 959 vol, KD 1, CPC $0,08
+      //   - Famille cumulée (passoire energetique/location/vente/loi/2025) ~3 500 vol/mois
+      // Easy win KD 1, intent informationnel pur. Audit du 19/04 surévaluait à 8K vol KD 30.
+      {
+        url: `${SITE_URL}/renovation-energetique/passoires-thermiques`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      // Sprint S' Phase 3 — 2026-05-03 — Hub Rénovation Énergétique → Diagnostic.
+      // KW pivot Ahrefs API live (snapshot 2026-05-03) :
+      //   - "audit energetique"      → 1 831 vol, KD 38, CPC $0,90
+      //   - Variants "audit energetique maison" 840, "audit thermique" 108, "audit prix" 100
+      //   - Famille cumulée pivot ~3 200 vol/mois. Section H2 #audit-energetique-obligatoire
+      //     capte la longue traîne (80 vol KD 22).
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/audit-energetique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Sprint S — 2026-05-03 — Labels RGE Qualibat + QualiPAC.
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "qualibat" → 9 344 vol, KD 2, CPC $0,02 ⭐⭐⭐ MASSIVE EASY WIN
+      //   - "qualipac" → 2 619 vol, KD 3, CPC $1,60 ⭐⭐ + intent acheteur PAC RGE
+      //   - Famille cumulée pivots ~12 000 vol/mois.
+      {
+        url: `${SITE_URL}/rge/labels/qualibat`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/rge/labels/qualipac`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      // Sprint U — 2026-05-03 — Labels Qualit'EnR (Qualifelec + QualiSol + QualiBois).
+      // KW pivots Ahrefs API live (snapshot 2026-05-03), tous KD 0 :
+      //   - "qualifelec" → 3 379 vol, KD 0, CPC $0,50 (électriciens IRVE / SPV)
+      //   - "qualisol"   → 908 vol, KD 0, CPC $9,00 (solaire thermique CESI/SSC)
+      //   - "qualibois"  → 575 vol, KD 0, CPC $5,00 (poêle granulés / chaudière biomasse)
+      //   - Famille cumulée +4 862 vol/mois.
+      {
+        url: `${SITE_URL}/rge/labels/qualifelec`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/rge/labels/qualisol`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/rge/labels/qualibois`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      // Sprint V — 2026-05-04 — Cluster isolation (hub + 3 sub-pages).
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "isolation thermique" → 5 747 vol, KD 11 (hub)
+      //   - "isolation combles"   → 4 080 vol, KD 5 + variants 'isolation combles perdus' 2 121 KD 2
+      //   - "isolation exterieure" → 678 vol, KD 4 + 'isolation par exterieur' 533 KD 2 + 'ite isolation' 502 KD 6
+      //   - "isolation interieure" → 248 vol, KD 2 + 'isolation murs' 233 KD 1 + 'iti isolation' 150 KD 1
+      //   - Famille cumulée Sprint V ~19 200 vol/mois adressables.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/combles`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/exterieure-ite`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/interieure`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "aides renovation energetique" 200 KD 63 (hub) + cumul famille
+      //   - "ma prime renov" 56 980 KD 67 / "maprimerenov" 27 985 KD 64 (MPR pivot)
+      //   - "maprimerenov montant" 20 KD 76 + longue traîne (montants)
+      //   - "qui peut beneficier maprimerenov" longue traîne (eligibilite)
+      //   - "mon accompagnateur renov" 236 KD 14 ⭐ (parcours-accompagne)
+      //   - "cee" 20 831 KD 54 / "certificat economie energie" 1 000 KD 47
+      //   - "eco ptz" 5 289 KD 49 / "eco pret a taux zero" 295 KD 47
+      //   - "prime coup de pouce" 951 KD 47 / "coup de pouce chauffage" 1 061 KD 33 ⭐
+      //   - Famille cumulée Vague A ~115 000 vol/mois adressables.
+      {
+        url: `${SITE_URL}/renovation-energetique/aides`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/maprimerenov-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/maprimerenov-2026/montants`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/maprimerenov-2026/eligibilite`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/maprimerenov-2026/parcours-accompagne`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/cee-certificats-economie-energie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/eco-ptz-pret-zero`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/prime-coup-de-pouce`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      // Vague B — 2026-05-04 — Travaux compléments (hub + 2 PAC + cluster chauffage 4 + fenêtres + VMC).
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "renovation energetique" hub /travaux/
+      //   - "pompe a chaleur air air" 6 404 KD 8 ⭐⭐⭐ (air-air-prix)
+      //   - "geothermie" 5 556 KD 12 ⭐⭐⭐ (geothermie)
+      //   - "chauffage" 17 157 KD 10 ⭐⭐⭐ (hub chauffage)
+      //   - "chaudiere a condensation" 794 KD 1 ⭐⭐ (chaudiere-condensation)
+      //   - "poele a granules" 380 KD 16 (poele-granules)
+      //   - "chauffe eau thermodynamique" 28 512 KD 3 ⭐⭐⭐⭐ MEGA (CET)
+      //   - "double vitrage" 4 636 KD 1 / "fenetre double vitrage" 1 937 KD 4 ⭐⭐
+      //   - "vmc double flux" 13 374 KD 2 ⭐⭐⭐⭐ MEGA (VMC)
+      //   - Famille cumulée Vague B ~80 000 vol/mois adressables.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/air-air-prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/geothermie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-condensation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/poele-granules`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chauffe-eau-thermodynamique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/fenetres-double-vitrage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc-double-flux`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      // Vague F (40/40) — 2026-05-04 — Hub menuiseries extérieures (clôture audit STRATEGIE).
+      // KW pivots Ahrefs API live (snapshot 2026-05-04) :
+      //   - "menuiserie exterieure" 200 KD 0 + "porte fenetre prix" 200 KD 2
+      //   - "remplacement menuiserie" 150 + "menuiserie alu prix" 100 + "porte entree prix" 80 KD 2
+      //   - "menuiserie pvc prix" 70 KD 5 + "menuiserie bois prix" 20 KD 0
+      //   - Famille cumulée pivot ~820 vol/mois (KD moyen 1-2)
+      //   - Anti-cannibalisation : /fenetres-double-vitrage/ = focus vitrage seul, ce hub = matériaux + types + portes
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/menuiseries`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      // Vague C — 2026-05-04 — Cluster diagnostic (hub + DPE + thermographie).
+      // KW pivots Ahrefs API live (snapshot 2026-05-03) :
+      //   - "diagnostic energetique" 855 KD 53 (hub)
+      //   - "dpe" 93 963 KD 55 + "dpe location" 6 798 KD 2 ⭐⭐⭐⭐ + "dpe immobilier" 1 585 KD 40
+      //   - "thermographie" 1 037 KD 0 ⭐⭐ + "thermographie infrarouge" 360 KD 0
+      //   - /audit-energetique/ déjà présent (Sprint S' Phase 3)
+      //   - Famille cumulée Vague C ~107 000 vol/mois adressables.
+      //   - Drift slug `audit-energetique-obligatoire` → 301 vers `audit-energetique` (next.config.js)
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.95,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      // Vague D — 2026-05-04 — Sub-pages Passoires thermiques.
+      // KW pivot Ahrefs API live (snapshot 2026-05-04) :
+      //   - /interdiction-location-g-f/ : "dpe interdiction location" 350 KD 3 + "interdiction location dpe f" 300 KD 0
+      //     + "passoire thermique location" 250 KD 6 + "interdiction location dpe g" 150 KD 1
+      //     + "interdiction location passoire thermique" 100 KD 0 — famille cumulée ~1 150 vol/mois (KD 0-6 easy win)
+      //   - /calendrier-2025-2028-2034/ : "loi climat resilience" 150 KD 18 + "passoire thermique 2025" 20
+      //     + "dpe 2025 location" 50 — famille ~370 vol/mois (page support timeline)
+      {
+        url: `${SITE_URL}/renovation-energetique/passoires-thermiques/interdiction-location-g-f`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.95,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/passoires-thermiques/calendrier-2025-2028-2034`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
       },
       // /simulateur-prime-cee → 301 → /simulateur-aides-renovation (next.config.js).
       // Seul le slug canonical est listé pour économiser le crawl budget.
@@ -542,8 +920,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.7,
       },
       {
+        url: `${SITE_URL}/datasets`,
+        lastModified: '2026-05-03',
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      },
+      {
         url: `${SITE_URL}/datasets/rge`,
         lastModified: '2026-04-29',
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      },
+      {
+        url: `${SITE_URL}/datasets/cee-regional-aids`,
+        lastModified: '2026-05-03',
         changeFrequency: 'monthly',
         priority: 0.6,
       },
@@ -711,6 +1101,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'interphone-visiophone-installation-prix',
       'isolation-combles',
       'isolation-exterieure-vs-interieure',
+      'isolation-ite-iti-rge-aides-2026',
       'isolation-phonique-mur-appartement',
       'isolation-thermique',
       'labels-qualifications-artisans',
@@ -1248,6 +1639,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
+  // Sprint AI Wave H 2026-05-03 — Hub /aides/[dept] (30 URLs).
+  // Priorité 0.75 supérieure aux pages dept × aide (0.7) car cette page est
+  // le PARENT canonical du cluster /aides/[dept]/* (PageRank flow descendant).
+  if (id === 'aides-dept-hub') {
+    const { getAllAidesDeptHubSlugs } = await import('@/lib/aides/dept-hub-data')
+    return getAllAidesDeptHubSlugs().map((deptSlug) => ({
+      url: `${SITE_URL}/aides/${deptSlug}`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    }))
+  }
+
   // ── Communes hub (V3 #1 stratégie 140K) ─────────────────────────────
   if (id === 'communes') {
     return [
@@ -1533,6 +1937,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           lastModified: ceeLastmodOperationCity?.get(key),
           changeFrequency: 'weekly',
           priority: 0.6,
+        })
+      }
+    }
+    return result
+  }
+
+  // ── CEE operation × région (/cee/[op]/region/[region]) ─────────────
+  // Sprint AI Wave D Ahrefs 2026-05-03 — cluster ~14 régions × 19 ops.
+  // Pages avec contenu différencié (zone climatique RT2012 + aides régionales
+  // sourcées). Render fait noindex fail-open si 0 provider régional, mais on
+  // déclare TOUTES les URLs au sitemap (Google découvre + apprend qui indexer).
+  if (id === 'cee-operation-region') {
+    const result: MetadataRoute.Sitemap = []
+    for (const code of CEE_OPERATION_CODES) {
+      for (const regionSlug of CEE_REGIONAL_SLUGS) {
+        result.push({
+          url: `${SITE_URL}/cee/${code}/region/${regionSlug}`,
+          lastModified: STATIC_DATE,
+          changeFrequency: 'monthly',
+          priority: 0.55,
         })
       }
     }

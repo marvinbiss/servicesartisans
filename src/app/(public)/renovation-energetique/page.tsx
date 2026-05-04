@@ -365,6 +365,69 @@ export default function RenovationEnergetiqueHub() {
         </div>
       </section>
 
+      {/* Sous-clusters Vagues A-F (40 pages flagship rénovation énergétique) */}
+      <section id="sous-clusters" className="bg-white py-12 md:py-16 border-b border-charcoal-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mb-8">
+            <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
+              Explorer le pillar Rénovation énergétique
+            </h2>
+            <p className="text-charcoal-600 leading-relaxed">
+              4 sous-hubs flagship avec barèmes officiels, sources E-E-A-T (Légifrance, France
+              Rénov’, ADEME) et schémas Article + GovernmentService.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              href="/renovation-energetique/aides"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+            >
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                Aides 2026 (8 pages)
+              </h3>
+              <p className="text-sm text-charcoal-600">
+                MaPrimeRénov’, CEE, éco-PTZ, Coup de pouce, Parcours accompagné — barèmes et
+                démarche.
+              </p>
+            </Link>
+            <Link
+              href="/renovation-energetique/travaux"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+            >
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                Travaux (16 pages)
+              </h3>
+              <p className="text-sm text-charcoal-600">
+                Isolation, PAC, chauffage biomasse, menuiseries, VMC — prix posés et aides
+                cumulables.
+              </p>
+            </Link>
+            <Link
+              href="/renovation-energetique/diagnostic"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+            >
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                Diagnostic (4 pages)
+              </h3>
+              <p className="text-sm text-charcoal-600">
+                DPE, audit énergétique, thermographie — prix, obligations, méthode 3CL-2021.
+              </p>
+            </Link>
+            <Link
+              href="/renovation-energetique/passoires-thermiques"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+            >
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                Passoires thermiques (3 pages)
+              </h3>
+              <p className="text-sm text-charcoal-600">
+                Loi Climat 2021, interdiction location G/F, calendrier 2025-2034, dérogations.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Aides — cartes */}
       <section id="aides" className="bg-white py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">

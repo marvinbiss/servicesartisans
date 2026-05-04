@@ -455,6 +455,10 @@ const nextConfig = {
       { source: '/accueil', destination: '/', permanent: true },
       // P3 simulateur — ancienne route remplacée par /simulateur-aides-renovation
       { source: '/simulateur-prime-cee', destination: '/simulateur-aides-renovation', permanent: true },
+      // Vague C — drift slug audit énergétique : audit prévoyait `audit-energetique-obligatoire`,
+      // page livrée sous `audit-energetique`. 301 vers le slug canonical.
+      // KW longue traîne `audit energetique obligatoire` capturée via H2 #audit-energetique-obligatoire.
+      { source: '/renovation-energetique/diagnostic/audit-energetique-obligatoire', destination: '/renovation-energetique/diagnostic/audit-energetique', permanent: true },
       // BAR-TH-104 abrogée 01/01/2024 par la DGEC — remplacée par BAR-TH-171 (PAC air/eau haute performance, SCOP ≥ 4).
       // Redirect permanent de toutes les URLs legacy vers la fiche en vigueur.
       { source: '/cee/bar-th-104', destination: '/cee/bar-th-171', permanent: true },

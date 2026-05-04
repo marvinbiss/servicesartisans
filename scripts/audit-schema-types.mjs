@@ -202,6 +202,7 @@ function detectSchemaTypes(src) {
   // On ajoute TOUS les types qu'un helper peut produire.
   const helperTypes = {
     getArticleSchema: ['Article'],
+    getFlagshipArticleSchema: ['Article'],
     getBlogPostingSchema: ['BlogPosting'],
     getNewsArticleSchema: ['NewsArticle'],
     getBlogArticleSchema: ['Article', 'NewsArticle'], // dynamique selon <48h

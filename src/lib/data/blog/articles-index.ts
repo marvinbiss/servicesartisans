@@ -95,6 +95,11 @@ const existingEmojis: Record<string, string> = {
   'prix-toiture-refection-complete-2026': '🏠',
   // Bloc 3 Action #3 Ahrefs 2026-05-03 — striking distance "isolation phonique mur mitoyen"
   'isolation-phonique-mur-mitoyen': '🔇',
+  // Vague E Tarifs 2026-05-04 (audit STRATEGIE-RENOVATION-ENERGETIQUE.md)
+  'prix-isolation-combles-2026': '🏠',
+  'prix-chaudiere-condensation-2026': '🔥',
+  'prix-poele-granules-2026': '🔥',
+  'prix-audit-energetique-2026': '📊',
 }
 
 /** Normalize non-accented category names to their accented equivalents */
