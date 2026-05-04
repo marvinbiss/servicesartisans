@@ -33,7 +33,10 @@ import {
   getDeepSectionsFAQPageSchema,
   getDeepSectionsHowToSchemas,
   buildHubRgeGlossarySchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
@@ -426,6 +429,8 @@ export default async function ServicePage({ params }: PageProps) {
   const articleImage = heroImage.src.startsWith('http')
     ? heroImage.src
     : `${SITE_URL}${heroImage.src}`
+  const HUB_AUTHOR = getAuthorForServiceSlug(serviceSlug)
+  const HUB_REVIEWER = getReviewerForAuthor(HUB_AUTHOR)
   const articleSchema = upgradeV2
     ? {
         '@context': 'https://schema.org',
@@ -435,10 +440,14 @@ export default async function ServicePage({ params }: PageProps) {
         datePublished: '2026-01-01T00:00:00+02:00',
         dateModified: dateModifiedIso,
         author: {
-          '@type': 'Organization',
-          name: 'la rédaction ServicesArtisans',
-          url: SITE_URL,
+          '@type': 'Person',
+          name: HUB_AUTHOR.name,
+          jobTitle: HUB_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${HUB_AUTHOR.slug}`,
+          ...(HUB_AUTHOR.methodology &&
+            HUB_AUTHOR.methodology.length > 0 && { skills: HUB_AUTHOR.methodology }),
         },
+        ...(HUB_REVIEWER && { reviewedBy: getReviewedByPersonSchema(HUB_REVIEWER) }),
         publisher: {
           '@type': 'Organization',
           name: 'ServicesArtisans',

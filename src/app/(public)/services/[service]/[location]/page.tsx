@@ -50,7 +50,10 @@ import {
   getBreadcrumbSchema,
   getItemListSchema,
   getEnrichedLocalServiceSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -965,6 +968,10 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   // toujours pour Google Assistant / SGE).
   const dateModifiedIso = monthlyAnchorIso()
   const articleHeadline = `${service.name} à ${location.name} — Artisans vérifiés ${new Date().getFullYear()}`
+  // Tier 5 2026-05-04 — Person author dispatched par service slug (cf.
+  // service-author.ts mapping défendable). reviewedBy auto via cross-review.
+  const SERVICE_AUTHOR = getAuthorForServiceSlug(serviceSlug)
+  const SERVICE_REVIEWER = getReviewerForAuthor(SERVICE_AUTHOR)
   jsonLdSchemas.push({
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -977,11 +984,14 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     isAccessibleForFree: true,
     image: getServiceImageForContext(serviceSlug, locationSlug).src,
     author: {
-      '@type': 'Organization',
-      name: 'Équipe éditoriale ServicesArtisans',
-      url: `${SITE_URL}/a-propos`,
-      '@id': `${SITE_URL}#organization`,
+      '@type': 'Person',
+      name: SERVICE_AUTHOR.name,
+      jobTitle: SERVICE_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${SERVICE_AUTHOR.slug}`,
+      ...(SERVICE_AUTHOR.methodology &&
+        SERVICE_AUTHOR.methodology.length > 0 && { skills: SERVICE_AUTHOR.methodology }),
     },
+    ...(SERVICE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(SERVICE_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

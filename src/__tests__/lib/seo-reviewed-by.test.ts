@@ -45,6 +45,7 @@ import { authors, getReviewerForAuthor, type Author } from '@/lib/data/authors'
 import { getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 
 describe('authors.getReviewerForAuthor', () => {
   it('returns the peer reviewer when reviewerSlug is set', () => {
@@ -205,5 +206,52 @@ describe('blog-schema.getBlogArticleSchema reviewedBy', () => {
   it('does NOT emit reviewedBy for unknown human author', () => {
     const [schema] = getBlogArticleSchema({ ...baseArticle, author: 'Auteur Inconnu' }, 'test-slug')
     expect(schema.reviewedBy).toBeUndefined()
+  })
+})
+
+describe('service-author.getAuthorForServiceSlug', () => {
+  it('maps plombier → jean-pierre-duval (DTU plomberie/chauffage)', () => {
+    expect(getAuthorForServiceSlug('plombier').slug).toBe('jean-pierre-duval')
+  })
+
+  it('maps electricien → marc-lefebvre (NF C 15-100, Qualifelec)', () => {
+    expect(getAuthorForServiceSlug('electricien').slug).toBe('marc-lefebvre')
+  })
+
+  it('maps peintre → isabelle-renault (DTU 59, ITE)', () => {
+    expect(getAuthorForServiceSlug('peintre').slug).toBe('isabelle-renault')
+  })
+
+  it('maps menuisier → thomas-bernard (DTU 36.5)', () => {
+    expect(getAuthorForServiceSlug('menuisier').slug).toBe('thomas-bernard')
+  })
+
+  it('maps pompe-a-chaleur variants → jean-pierre-duval (QualiPAC)', () => {
+    expect(getAuthorForServiceSlug('pompe-a-chaleur').slug).toBe('jean-pierre-duval')
+    expect(getAuthorForServiceSlug('pompe-a-chaleur-air-eau').slug).toBe('jean-pierre-duval')
+    expect(getAuthorForServiceSlug('pompe-a-chaleur-geothermique').slug).toBe('jean-pierre-duval')
+  })
+
+  it('falls back to sophie-martin (généraliste rénovation) for unmapped slugs', () => {
+    expect(getAuthorForServiceSlug('metier-inconnu').slug).toBe('sophie-martin')
+    expect(getAuthorForServiceSlug('').slug).toBe('sophie-martin')
+  })
+
+  it('every dispatched author has a peer reviewer (cross-review contract)', () => {
+    const slugs = [
+      'plombier',
+      'electricien',
+      'peintre',
+      'menuisier',
+      'pompe-a-chaleur',
+      'metier-inconnu',
+    ]
+    for (const slug of slugs) {
+      const author = getAuthorForServiceSlug(slug)
+      expect(
+        getReviewerForAuthor(author),
+        `${slug} → ${author.slug} doit avoir reviewer`
+      ).toBeDefined()
+    }
   })
 })
