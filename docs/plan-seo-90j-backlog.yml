@@ -149,7 +149,7 @@ items:
     blocked_by: []
     human_required: false
     dod: node scripts/audit-blog-ctr-titles.mjs --strict
-    status: pending
+    status: completed
     ahrefs:
       kw_primary: prix [service] 2026
       volume_ahrefs: 28000
