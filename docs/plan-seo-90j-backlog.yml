@@ -1,0 +1,393 @@
+# Plan SEO 90j — backlog priorisé (impact P50 clics/j × effort_heures)
+# Source : stratégie CEO 2026-04-20 (Pilier 3+4) + diagnostic GSC 2026-04-30
+#          + Ahrefs Bloc 1-6 (3349 KW gap, 36 CSV)
+#          + Stratégie rénovation V2 fused 2026-05-04
+#
+# RÈGLE AHREFS-FIRST (mémoire servicesartisans-ahrefs-first-rule) :
+# Chaque item DOIT citer :
+#   - kw_primary : keyword principal cible
+#   - volume_ahrefs : volume mensuel Ahrefs
+#   - kd_ahrefs : keyword difficulty 0-100
+#   - cpc_ahrefs : CPC € (intention commerciale)
+#   - ahrefs_csv_source : chemin CSV + ligne (audit reproductible)
+#   - cluster_pillar : Pilier #1 (annuaire) ou #2 (rénovation)
+#   - leader_rank : leader actuel SERP top 10 (Hellio/Effy/Selectra/...)
+#
+# Convention :
+#   - status : pending | in_progress | completed | blocked | killed
+#   - dod : commande shell qui retourne exit 0 si chantier validé
+#   - impact_clics_j_p50 : projection P50 ajout clics/jour à M+3
+#                          = volume_ahrefs × CTR_p50 × indexation_rate
+#   - effort_hours : estimation Ralph-coder solo (sans review humaine)
+#   - blocked_by : liste IDs items bloquants
+#   - human_required : false = full Ralph auto, true = besoin Marvin
+#
+# Tri impact/effort = ROI horaire. Loop pioche le top item disponible
+# (status=pending, blocked_by tous completed, human_required=false).
+#
+# Budget Ahrefs : 600€+ déjà investis sur 6 Blocs + 36 CSV. Inacceptable
+# de coder une page sans relier au moins 1 KW Ahrefs validé.
+
+meta:
+  pillar_3_seo_offensif:
+    target_clics_j_p90: 2500
+    items: 9
+  pillar_4_authority:
+    target_dr_p90: 18
+    items: 6
+  generated_at: '2026-05-05'
+  baseline_clics_j: 350
+  cible_clics_j_t90: 2000
+  ahrefs_csv_root: docs/audit-ahrefs-2026-05-03/
+  ahrefs_bloc1_root: docs/ahrefs-bloc1-keywords-gap-2026-05-04.md
+  ahrefs_v2_strategy: docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
+
+items:
+  # ================================================================
+  # PILIER 3 — SEO offensif code-only (Ralph full auto)
+  # ================================================================
+  - id: P3-rge-template-upgrade
+    pillar: 3
+    title: '/rge/[s]/[v] full upgrade Sprint 2 pattern (50K URLs)'
+    impact_clics_j_p50: 2500
+    effort_hours: 4
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-rge-template.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'artisan rge [ville]'
+      volume_ahrefs: 8400
+      kd_ahrefs: 12
+      cpc_ahrefs: 2.40
+      cluster_pillar: 1
+      leader_rank: 'Hellio DR 73 / France-Renov DR 75'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/longtail-rge-services.csv:42-180'
+    notes: |
+      Truncate 41→60, Sprint 2 pattern (review prefix + 2026 + 24h),
+      H1 count, AggregateRating fallback dept, Article+Speakable,
+      Government/Financial schema, bloc CEE inline, TldrBlock.
+
+  - id: P3-aides-hub-racine
+    pillar: 3
+    title: 'Hub /aides racine + 12 sous-pages thématiques'
+    impact_clics_j_p50: 1200
+    effort_hours: 8
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-aides-hub.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'aides renovation energetique 2026'
+      volume_ahrefs: 33000
+      kd_ahrefs: 28
+      cpc_ahrefs: 4.80
+      cluster_pillar: 2
+      leader_rank: 'France-Renov #1 / Effy #2 / Selectra #3'
+      ahrefs_csv_source: 'docs/ahrefs-renovation-keywords-extracted-2026-05-04.json:cluster=aides'
+    notes: |
+      12 sous-pages : maprimerenov, cee, eco-ptz, coup-de-pouce,
+      anah, tva-5-5, cee-pro, barometre-aides, calendrier-2026,
+      par-region, cumul, simulateur-eligibilite. Schema GovernmentService.
+
+  - id: P3-vmc-cluster
+    pillar: 3
+    title: 'Cluster VMC (goldmine KD 0.7) — marques + tarifs + installation'
+    impact_clics_j_p50: 1100
+    effort_hours: 10
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-vmc-cluster.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'vmc double flux'
+      volume_ahrefs: 18500
+      kd_ahrefs: 7
+      cpc_ahrefs: 3.20
+      cluster_pillar: 2
+      leader_rank: 'aucun leader fort — easy win'
+      ahrefs_csv_source: 'docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md#vmc-goldmine'
+    notes: |
+      Marques absentes (Aldes, Atlantic, Unelvent, ZehnderHelios).
+      Pages déjà créées sont thin (cf. audit content-depth récent
+      qui flague title too_long sur /renovation-energetique/travaux/vmc/*).
+
+  - id: P3-pac-cluster
+    pillar: 3
+    title: 'Cluster PAC #1 vol 230K — air-eau / air-air / géothermie'
+    impact_clics_j_p50: 2200
+    effort_hours: 16
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-pac-cluster.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'pompe a chaleur prix'
+      volume_ahrefs: 49500
+      kd_ahrefs: 38
+      cpc_ahrefs: 6.40
+      cluster_pillar: 2
+      leader_rank: 'Effy ~72 / Hellio 73 / Engie'
+      ahrefs_csv_source: 'docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md#pac-cluster-1'
+    notes: |
+      Volume cumulé cluster 230K (air-eau 49K, air-air 22K, géo 8K,
+      hybride 6K + déclinaisons prix/aides/installation). Coup de
+      pouce CEE surcouche obligatoire.
+
+  - id: P3-sprint10x-components
+    pillar: 3
+    title: 'Câbler TldrBlock+EnBrefBox+SnippetBait sur villes 5K + hubs 46'
+    impact_clics_j_p50: 950
+    effort_hours: 12
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-component-coverage.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'multiple — applique à tous templates pSEO'
+      volume_ahrefs: null   # cross-template, pas un KW unique
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 1
+      leader_rank: 'n/a'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/longtail-rge-services.csv:all'
+    notes: |
+      Composants existants jamais câblés. CTR boost +0.3-0.7%
+      sur 5K villes pSEO. Audit nouveau vérifie chaque page
+      indexable >500 mots inclut ≥1 des 3 composants.
+
+  - id: P3-google-places-siret-match
+    pillar: 3
+    title: 'Match Google Places SIRET sur 49K fiches RGE'
+    impact_clics_j_p50: 800
+    effort_hours: 10
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-places-coverage.mjs --threshold 80
+    status: pending
+    ahrefs:
+      kw_primary: 'avis [artisan] [ville]'
+      volume_ahrefs: 4200
+      kd_ahrefs: 18
+      cpc_ahrefs: 1.80
+      cluster_pillar: 1
+      leader_rank: 'Pages Jaunes / Trustpilot'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/longtail-rge-services.csv:cluster=avis'
+    notes: |
+      Apporte 45-60K avis externes + 18-25% CTR. Coût ~$60.
+      Cron quotidien delta. Schema AggregateRating fallback Google.
+
+  - id: P3-blog-ctr-rewrite
+    pillar: 3
+    title: 'Rewrite titles + descriptions blog rank 5-7 (12 pages)'
+    impact_clics_j_p50: 250
+    effort_hours: 3
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-blog-ctr-titles.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'prix [service] 2026'
+      volume_ahrefs: 28000   # cumulé 12 articles
+      kd_ahrefs: 24
+      cpc_ahrefs: 3.50
+      cluster_pillar: 1
+      leader_rank: 'Travaux.com / Habitatpresto'
+      ahrefs_csv_source: 'docs/blog-prix-ctr-fix-2026-04-30.md'
+    notes: |
+      Sprint 2 pattern : review prefix + 2026 + 24h + count.
+      Ancres CTR <1% rank 5-7 = bug pure copy.
+
+  - id: P3-cocon-cee-rge
+    pillar: 3
+    title: 'Cocon RGE↔CEE : 10 nouveaux mappings + maillage inverse'
+    impact_clics_j_p50: 600
+    effort_hours: 5
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-cee-rge-mapping.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'prime cee [travaux]'
+      volume_ahrefs: 15800
+      kd_ahrefs: 22
+      cpc_ahrefs: 4.10
+      cluster_pillar: 2
+      leader_rank: 'Effy / Sonergia / Hellio'
+      ahrefs_csv_source: 'docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md#cee-cluster'
+    notes: |
+      Étend Tier 4-5. Helpers getCeeOpsForRgeService + inverse OK.
+      Mapping +5 codes BAR-TH-172/174/143/159 + BAR-EN-108.
+
+  - id: P3-soft404-fix-mass
+    pillar: 3
+    title: 'Fix 12 890 pages 5xx + 112K explorée non indexée'
+    impact_clics_j_p50: 1500
+    effort_hours: 16
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-soft404-coverage.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'multiple — récupération existant'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 1
+      leader_rank: 'n/a (récup existant indexé/déclassé)'
+      ahrefs_csv_source: 'memory:servicesartisans-gsc-diagnostic-2026-04-30'
+    notes: |
+      57% fiches /services/[s]/[v]/[publicId] = template CTR 36%.
+      Investiguer cause (timeout DB ? bailout ?) AVANT autre chantier.
+
+  - id: P3-internal-search-pages
+    pillar: 3
+    title: 'Pages /recherche/[query] indexables top 200 KW longtail'
+    impact_clics_j_p50: 400
+    effort_hours: 8
+    blocked_by: [P3-soft404-fix-mass]
+    human_required: false
+    dod: node scripts/audit-search-pages-coverage.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: '[service] [adjectif] [ville]'
+      volume_ahrefs: 12500
+      kd_ahrefs: 8
+      cpc_ahrefs: 2.10
+      cluster_pillar: 1
+      leader_rank: 'aucun leader (longtail dispersée)'
+      ahrefs_csv_source: 'docs/ahrefs-bloc3-longtail.csv:top-200'
+
+  # ================================================================
+  # PILIER 4 — Authority/Trust (mix auto + humain)
+  # ================================================================
+  - id: P4-schemaorg-cohesion-final
+    pillar: 4
+    title: 'Schema.org cohésion @id+inLanguage+isPartOf (Tiers 22-38)'
+    impact_clics_j_p50: 200
+    effort_hours: 0
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-jsonld-integrity.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: 'cross-cutting — boost AI Overviews + KG'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: 'n/a (technique)'
+      ahrefs_csv_source: 'n/a'
+    notes: |
+      17 commits livrés autonomous loop. 1289 blocs / 0 gap.
+
+  - id: P4-dataset-data-gouv
+    pillar: 4
+    title: 'API publique RGE + dataset data.gouv.fr publication'
+    impact_clics_j_p50: 350
+    effort_hours: 12
+    blocked_by: []
+    human_required: true
+    dod: node scripts/audit-public-api-coverage.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'api rge artisans'
+      volume_ahrefs: 320
+      kd_ahrefs: 6
+      cpc_ahrefs: 0.90
+      cluster_pillar: 0
+      leader_rank: 'data.gouv.fr / france-renov'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/api-data-keywords.csv'
+    notes: |
+      Move 2+3 conquest plan. CC-BY 4.0, page baromètre Schema.org
+      Dataset/Article. DR boost +5-8.
+
+  - id: P4-honest-eeat-extension
+    pillar: 4
+    title: 'Étendre methodology+credentialsBasis aux 130 guides flagship'
+    impact_clics_j_p50: 150
+    effort_hours: 4
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-eeat-honest.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: 'cross-cutting'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: 'n/a'
+      ahrefs_csv_source: 'n/a'
+
+  - id: P4-disavow-spam-extension
+    pillar: 4
+    title: 'Disavow file extension domain spam Tier 2 (45→100 domaines)'
+    impact_clics_j_p50: 100
+    effort_hours: 3
+    blocked_by: []
+    human_required: true
+    dod: cat public/disavow.txt | wc -l | awk '{exit ($1<100)}'
+    status: pending
+    ahrefs:
+      kw_primary: 'cross-cutting — clean trust'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: 'n/a'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/backlinks-spam-tier2.csv'
+
+  - id: P4-barometre-mensuel-publication
+    pillar: 4
+    title: 'Cron baromètre RGE mensuel + page autoritative'
+    impact_clics_j_p50: 250
+    effort_hours: 6
+    blocked_by: [P4-dataset-data-gouv]
+    human_required: false
+    dod: node scripts/audit-barometre-coverage.mjs --strict
+    status: pending
+    ahrefs:
+      kw_primary: 'barometre artisans rge'
+      volume_ahrefs: 480
+      kd_ahrefs: 4
+      cpc_ahrefs: 1.20
+      cluster_pillar: 0
+      leader_rank: 'aucun (créer la catégorie)'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/api-data-keywords.csv'
+
+  - id: P4-wikipedia-entry
+    pillar: 4
+    title: 'Draft Wikipedia ServicesArtisans (auto) + soumission (humain)'
+    impact_clics_j_p50: 80
+    effort_hours: 6
+    blocked_by: []
+    human_required: true
+    dod: test -f docs/wikipedia-draft.md
+    status: pending
+    ahrefs:
+      kw_primary: 'cross-cutting — DR boost'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: 'n/a'
+      ahrefs_csv_source: 'n/a'
+
+  - id: P4-presse-tier1-pitch
+    pillar: 4
+    title: 'Drafts presse Tier 1 (5 sources) + pitch outreach'
+    impact_clics_j_p50: 600
+    effort_hours: 8
+    blocked_by: [P4-barometre-mensuel-publication]
+    human_required: true
+    dod: test -d docs/presse-drafts && ls docs/presse-drafts | wc -l | awk '{exit ($1<5)}'
+    status: pending
+    ahrefs:
+      kw_primary: 'cross-cutting — backlink Tier 1'
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: 'n/a'
+      ahrefs_csv_source: 'docs/audit-ahrefs-2026-05-03/competitor-backlinks-tier1.csv'

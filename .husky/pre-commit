@@ -41,4 +41,6 @@ node scripts/audit-crawl-traps.mjs --strict || exit 1
 node scripts/audit-hreflang-symmetry.mjs --strict || exit 1
 node scripts/audit-cocon-semantique.mjs --strict || exit 1
 node scripts/audit-robots-directives.mjs --strict || exit 1
+node scripts/audit-ahrefs-first-rule.mjs --strict || exit 1
+node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged
