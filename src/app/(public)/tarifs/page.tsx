@@ -12,7 +12,8 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services, villes } from '@/lib/data/france'
@@ -169,6 +170,10 @@ export default async function TarifsPage() {
   const dateModifiedIso = monthlyAnchorIso()
   const totalPrestations = trades.reduce((s, t) => s + t.commonTasks.length, 0)
 
+  // Tier 3 2026-05-04 — claire-dubois (prix/baromètres) sur le hub tarifs.
+  // Reviewer auto = sophie-martin (rénovation/réglementation, peer cross-review).
+  const TARIFS_AUTHOR = authors['claire-dubois']
+  const TARIFS_REVIEWER = getReviewerForAuthor(TARIFS_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -180,12 +185,22 @@ export default async function TarifsPage() {
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
     image: `${SITE_URL}/opengraph-image`,
-    author: {
-      '@type': 'Organization',
-      name: 'Équipe éditoriale ServicesArtisans',
-      url: `${SITE_URL}/a-propos`,
-      '@id': `${SITE_URL}#organization`,
-    },
+    author: TARIFS_AUTHOR
+      ? {
+          '@type': 'Person',
+          name: TARIFS_AUTHOR.name,
+          jobTitle: TARIFS_AUTHOR.role,
+          url: `${SITE_URL}/equipe/${TARIFS_AUTHOR.slug}`,
+          ...(TARIFS_AUTHOR.methodology &&
+            TARIFS_AUTHOR.methodology.length > 0 && { skills: TARIFS_AUTHOR.methodology }),
+        }
+      : {
+          '@type': 'Organization',
+          name: 'Équipe éditoriale ServicesArtisans',
+          url: `${SITE_URL}/a-propos`,
+          '@id': `${SITE_URL}#organization`,
+        },
+    ...(TARIFS_REVIEWER && { reviewedBy: getReviewedByPersonSchema(TARIFS_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

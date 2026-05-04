@@ -20,7 +20,9 @@ import {
   getHowToSchema,
   getServicePricingSchema,
   getDetailedPricingSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { authors as personAuthors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
@@ -252,6 +254,11 @@ export default async function TarifsServicePage({
   const lastModified = await getDynamicLastModifiedByService(service)
 
   const author = getDefaultAuthor()
+  // Tier 3 2026-05-04 — bascule Person claire-dubois (prix/baromètres) si
+  // disponible, fallback sur l'équipe éditoriale historique. reviewedBy =
+  // sophie-martin via cross-review map.
+  const richAuthor = personAuthors['claire-dubois']
+  const richReviewer = getReviewerForAuthor(richAuthor)
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -390,12 +397,22 @@ export default async function TarifsServicePage({
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
     image: getServiceImage(service).src,
-    author: {
-      '@type': 'Person',
-      name: author.name,
-      jobTitle: author.role,
-      url: `${SITE_URL}/a-propos#${author.slug ?? 'equipe'}`,
-    },
+    author: richAuthor
+      ? {
+          '@type': 'Person',
+          name: richAuthor.name,
+          jobTitle: richAuthor.role,
+          url: `${SITE_URL}/equipe/${richAuthor.slug}`,
+          ...(richAuthor.methodology &&
+            richAuthor.methodology.length > 0 && { skills: richAuthor.methodology }),
+        }
+      : {
+          '@type': 'Person',
+          name: author.name,
+          jobTitle: author.role,
+          url: `${SITE_URL}/a-propos#${author.slug ?? 'equipe'}`,
+        },
+    ...(richReviewer && { reviewedBy: getReviewedByPersonSchema(richReviewer) }),
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

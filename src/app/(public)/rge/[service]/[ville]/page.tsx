@@ -18,12 +18,14 @@ import {
   getTopReviewsByDept,
 } from '@/lib/supabase'
 import { villes as staticVilles } from '@/lib/data/france'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
   getItemListSchema,
   getGovernmentServiceSchema,
   getFinancialProductSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import {
   buildAggregateRatingFromProviders,
@@ -423,6 +425,13 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // déclasse les pages qui s'auto-update quotidiennement sans nouveau contenu).
   const monthYear = currentMonthYearFr()
   const monthlyAnchor = monthlyAnchorIso()
+  // Tier 3 2026-05-04 — Person author + reviewedBy. sophie-martin couvre
+  // l'angle rénovation énergétique transversal de la page (RGE = signal
+  // gouvernemental + travaux d'efficacité). Reviewer claire-dubois apporte
+  // la couche fiscale (MaPrimeRénov / CEE / éco-PTZ cumulables citées dans
+  // les sections aides). Cross-review YMYL = signal QRG section 3.4.
+  const RGE_AUTHOR = authors['sophie-martin']
+  const RGE_REVIEWER = getReviewerForAuthor(RGE_AUTHOR)
   const articleSchema = upgradeV2
     ? {
         '@context': 'https://schema.org',
@@ -431,7 +440,17 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         image: [`${SITE_URL}/og-rge-${serviceSlug}.jpg`, `${SITE_URL}/og-default.jpg`],
         datePublished: providers[0]?.created_at ?? '2026-01-01T00:00:00+02:00',
         dateModified: monthlyAnchor,
-        author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+        author: RGE_AUTHOR
+          ? {
+              '@type': 'Person',
+              name: RGE_AUTHOR.name,
+              jobTitle: RGE_AUTHOR.role,
+              url: `${SITE_URL}/equipe/${RGE_AUTHOR.slug}`,
+              ...(RGE_AUTHOR.methodology &&
+                RGE_AUTHOR.methodology.length > 0 && { skills: RGE_AUTHOR.methodology }),
+            }
+          : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+        ...(RGE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(RGE_REVIEWER) }),
         publisher: {
           '@type': 'Organization',
           name: 'ServicesArtisans',
