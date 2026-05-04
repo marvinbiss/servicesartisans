@@ -1,186 +1,34 @@
 {
-  "generatedAt": "2026-05-01T15:08:26.268Z",
+  "generatedAt": "2026-05-04T19:53:07.591Z",
   "source": "OpenAPI (service_role, RLS-bypass)",
   "drifts": [
     {
-      "table": "providers",
-      "column": "specialty_slug"
+      "table": "devis_requests",
+      "column": "pipedrive_last_error"
     },
     {
-      "table": "providers",
-      "column": "services_offered"
+      "table": "devis_requests",
+      "column": "pipedrive_attempts"
     },
     {
-      "table": "providers",
-      "column": "service_prices"
+      "table": "devis_requests",
+      "column": "service_slug"
     },
     {
-      "table": "providers",
-      "column": "opening_hours"
+      "table": "devis_requests",
+      "column": "city_slug"
     },
     {
-      "table": "providers",
-      "column": "phone_secondary"
+      "table": "devis_requests",
+      "column": "email"
     },
     {
-      "table": "providers",
-      "column": "bio"
+      "table": "devis_requests",
+      "column": "phone"
     },
     {
-      "table": "providers",
-      "column": "accepts_new_clients"
-    },
-    {
-      "table": "providers",
-      "column": "free_quote"
-    },
-    {
-      "table": "providers",
-      "column": "available_24h"
-    },
-    {
-      "table": "providers",
-      "column": "intervention_radius_km"
-    },
-    {
-      "table": "providers",
-      "column": "faq"
-    },
-    {
-      "table": "providers",
-      "column": "team_size"
-    },
-    {
-      "table": "cee_dossier_events",
-      "column": "from_status"
-    },
-    {
-      "table": "cee_dossier_events",
-      "column": "to_status"
-    },
-    {
-      "table": "cee_dossier_events",
-      "column": "actor_type"
-    },
-    {
-      "table": "cee_dossiers",
-      "column": "kwhc_estime"
-    },
-    {
-      "table": "cee_dossiers",
-      "column": "prime_estimee_eur"
-    },
-    {
-      "table": "cee_dossiers",
-      "column": "devis_id"
-    },
-    {
-      "table": "cee_dossiers",
-      "column": "delegataire_id"
-    },
-    {
-      "table": "cee_dossiers",
-      "column": "justificatifs"
-    },
-    {
-      "table": "prospection_contacts",
-      "column": "bloctel_listed"
-    },
-    {
-      "table": "prospection_contacts",
-      "column": "consent_proof"
-    },
-    {
-      "table": "prospection_contacts",
-      "column": "bloctel_checked_at"
-    },
-    {
-      "table": "conversations",
-      "column": "quote_id"
-    },
-    {
-      "table": "conversations",
-      "column": "unread_count"
-    },
-    {
-      "table": "messages",
-      "column": "read_at"
-    },
-    {
-      "table": "messages",
-      "column": "message_type"
-    },
-    {
-      "table": "messages",
-      "column": "file_url"
-    },
-    {
-      "table": "messages",
-      "column": "file_name"
-    },
-    {
-      "table": "messages",
-      "column": "file_size"
-    },
-    {
-      "table": "bookings",
-      "column": "client_name"
-    },
-    {
-      "table": "bookings",
-      "column": "client_email"
-    },
-    {
-      "table": "bookings",
-      "column": "client_phone"
-    },
-    {
-      "table": "bookings",
-      "column": "availability_slots"
-    },
-    {
-      "table": "bookings",
-      "column": "artisan_id"
-    },
-    {
-      "table": "bookings",
-      "column": "slot_id"
-    },
-    {
-      "table": "audit_logs",
-      "column": "resource_type"
-    },
-    {
-      "table": "audit_logs",
-      "column": "resource_id"
-    },
-    {
-      "table": "audit_logs",
-      "column": "new_value"
-    },
-    {
-      "table": "audit_logs",
-      "column": "metadata"
-    },
-    {
-      "table": "services",
-      "column": "category"
-    },
-    {
-      "table": "services",
-      "column": "sort_order"
-    },
-    {
-      "table": "cee_operations",
-      "column": "non_cumulable_avec"
-    },
-    {
-      "table": "cee_operations",
-      "column": "public_cible"
-    },
-    {
-      "table": "provider_removal_requests",
-      "column": "requester_siret"
+      "table": "devis_requests",
+      "column": "source"
     }
   ]
 }
