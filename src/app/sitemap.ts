@@ -16,6 +16,7 @@ import { isRemovedByRgePivot, isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge
 // au build pour éviter le silent fallback Tier C en prod.
 assertTierPartitionCoverage()
 import { getQuestionSlugs } from '@/lib/data/questions'
+import { getTopLongTailKeywords } from '@/lib/seo/bloc3-longtail'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
 import {
@@ -1257,6 +1258,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.5,
     }))
 
+    // Sprint 3 vague 4 (2026-05-04) — long-tail Bloc 3 (matching-terms 7 seeds
+    // critiques, 532 KW source CSV). Pre-render cap 50 + ISR pour le reste.
+    // Sitemap expose les top 50 KW (vol≥200 → robots index). Filtre vol>=200
+    // miroite la condition `robots.index = kw.volume >= 200` dans
+    // generateMetadata pour ne pas exposer de pages noindex.
+    const longTailKw = getTopLongTailKeywords(50).filter((k) => k.volume >= 200)
+    const longTailPages: MetadataRoute.Sitemap = longTailKw.map((k) => ({
+      url: `${SITE_URL}/guides/long-tail/${k.slug}`,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.45,
+    }))
+
     // Question pages
     // Questions — STATIC_DATE: Q&A content, stable once published
     const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map((slug) => ({
@@ -1421,6 +1435,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       ...hubPages,
       ...staticPages,
       ...guidePages,
+      ...longTailPages,
       ...questionPages,
       ...comparisonPages,
       ...blogArticlePages,
