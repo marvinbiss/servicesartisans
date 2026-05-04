@@ -264,9 +264,24 @@ export function getServiceSchema(service: {
 // Last item = current page (no `item`). Others emit `item` as a canonical URL
 // string (simplest form accepté par Google/Schema.org, cf tests compliance).
 export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
+  /**
+   * Tier 28 — @id déterministe basé sur l'URL feuille (dernier item).
+   * Permet à Google KG de dédoublonner les BreadcrumbList émises plusieurs
+   * fois sur la même page (ex. `Article` + `WebPage` qui pointent tous
+   * deux vers `breadcrumb`). Sans cet @id, KG considère chaque émission
+   * comme un node distinct, ce qui dilue le signal de profondeur.
+   *
+   * Convention : `${pageUrl}#breadcrumb` — aligné avec ArtisanSchema.tsx
+   * Tier 19 qui utilise déjà cette forme pour le ProfilePage.
+   */
+  const last = items[items.length - 1]
+  const breadcrumbId = last ? `${SITE_URL}${last.url}#breadcrumb` : `${SITE_URL}#breadcrumb-empty`
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': breadcrumbId,
+    numberOfItems: items.length,
     itemListElement: items.map((item, index) => {
       const isLast = index === items.length - 1
       return {

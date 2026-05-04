@@ -220,6 +220,26 @@ describe('getBreadcrumbSchema', () => {
     const elements = schema.itemListElement as Array<Record<string, unknown>>
     expect(elements[0].position).toBe(1)
   })
+
+  it('emits deterministic @id based on leaf URL (Tier 28)', () => {
+    const items = [
+      { name: 'Accueil', url: '/' },
+      { name: 'Services', url: '/services' },
+      { name: 'Plomberie', url: '/services/plomberie' },
+    ]
+    const schema = getBreadcrumbSchema(items)
+    expect(schema['@id']).toBe('https://servicesartisans.fr/services/plomberie#breadcrumb')
+  })
+
+  it('emits numberOfItems matching itemListElement length (Tier 28)', () => {
+    const items = [
+      { name: 'Accueil', url: '/' },
+      { name: 'A', url: '/a' },
+      { name: 'B', url: '/a/b' },
+    ]
+    const schema = getBreadcrumbSchema(items)
+    expect(schema.numberOfItems).toBe(3)
+  })
 })
 
 // ---------- getFAQSchema ----------

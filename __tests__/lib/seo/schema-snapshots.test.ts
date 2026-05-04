@@ -39,6 +39,7 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
     expect(schema).toMatchInlineSnapshot(`
       {
         "@context": "https://schema.org",
+        "@id": "https://servicesartisans.fr/services/plombier/paris#breadcrumb",
         "@type": "BreadcrumbList",
         "itemListElement": [
           {
@@ -59,6 +60,7 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
             "position": 3,
           },
         ],
+        "numberOfItems": 3,
       }
     `)
   })
