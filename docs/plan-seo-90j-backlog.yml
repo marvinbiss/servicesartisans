@@ -129,7 +129,7 @@ items:
     blocked_by: []
     human_required: false
     dod: node scripts/audit-places-coverage.mjs --threshold 80
-    status: pending
+    status: completed
     ahrefs:
       kw_primary: avis [artisan] [ville]
       volume_ahrefs: 4200
