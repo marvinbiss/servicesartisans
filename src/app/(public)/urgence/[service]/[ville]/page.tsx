@@ -31,7 +31,14 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
-import { getBreadcrumbSchema, getFAQSchema, getUrgencyServiceSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getUrgencyServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { SITE_URL, SITE_NAME, PHONE_TEL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { PlatformPhoneLabel } from '@/components/ui/PlatformPhoneLabel'
@@ -802,6 +809,9 @@ async function renderUrgenceServiceVillePage({
     cssSelectors: ['.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],
   })
 
+  // Tier 6 — Person dispatché par service slug + reviewedBy auto.
+  const URG_AUTHOR = getAuthorForServiceSlug(service)
+  const URG_REVIEWER = getReviewerForAuthor(URG_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -813,7 +823,15 @@ async function renderUrgenceServiceVillePage({
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: URG_AUTHOR.name,
+      jobTitle: URG_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${URG_AUTHOR.slug}`,
+      ...(URG_AUTHOR.methodology &&
+        URG_AUTHOR.methodology.length > 0 && { skills: URG_AUTHOR.methodology }),
+    },
+    ...(URG_REVIEWER && { reviewedBy: getReviewedByPersonSchema(URG_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',

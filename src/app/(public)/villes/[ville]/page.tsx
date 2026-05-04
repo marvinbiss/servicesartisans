@@ -28,7 +28,9 @@ import {
   getFAQSchema,
   getEnrichedPlaceSchema,
   getCityServicesListSchema,
+  getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { getProvidersByLocation } from '@/lib/supabase'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -320,6 +322,10 @@ async function renderVillePage({ params }: PageProps) {
       ? cityImage.src
       : `${SITE_URL}${cityImage.src}`
     : `${SITE_URL}/og-default.jpg`
+  // Tier 6 2026-05-04 — Person sophie-martin (généraliste rénovation,
+  // hub multi-métiers ville). Reviewer claire-dubois (aides cumulables citées).
+  const VILLE_AUTHOR = authors['sophie-martin']
+  const VILLE_REVIEWER = getReviewerForAuthor(VILLE_AUTHOR)
   const articleSchema = upgradeV2
     ? {
         '@context': 'https://schema.org',
@@ -328,11 +334,21 @@ async function renderVillePage({ params }: PageProps) {
         image: [articleImage],
         datePublished: '2026-01-01T00:00:00+02:00',
         dateModified: monthlyAnchor,
-        author: {
-          '@type': 'Organization',
-          name: 'la rédaction ServicesArtisans',
-          url: SITE_URL,
-        },
+        author: VILLE_AUTHOR
+          ? {
+              '@type': 'Person',
+              name: VILLE_AUTHOR.name,
+              jobTitle: VILLE_AUTHOR.role,
+              url: `${SITE_URL}/equipe/${VILLE_AUTHOR.slug}`,
+              ...(VILLE_AUTHOR.methodology &&
+                VILLE_AUTHOR.methodology.length > 0 && { skills: VILLE_AUTHOR.methodology }),
+            }
+          : {
+              '@type': 'Organization',
+              name: 'la rédaction ServicesArtisans',
+              url: SITE_URL,
+            },
+        ...(VILLE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(VILLE_REVIEWER) }),
         publisher: {
           '@type': 'Organization',
           name: 'ServicesArtisans',

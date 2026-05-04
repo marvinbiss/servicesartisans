@@ -26,7 +26,9 @@ import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
@@ -609,6 +611,9 @@ async function renderAvisServiceVillePage({
       })
     : null
 
+  // Tier 6 — Person dispatché par service slug + reviewedBy auto.
+  const AVIS_AUTHOR = getAuthorForServiceSlug(service)
+  const AVIS_REVIEWER = getReviewerForAuthor(AVIS_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -620,7 +625,15 @@ async function renderAvisServiceVillePage({
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: AVIS_AUTHOR.name,
+      jobTitle: AVIS_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${AVIS_AUTHOR.slug}`,
+      ...(AVIS_AUTHOR.methodology &&
+        AVIS_AUTHOR.methodology.length > 0 && { skills: AVIS_AUTHOR.methodology }),
+    },
+    ...(AVIS_REVIEWER && { reviewedBy: getReviewedByPersonSchema(AVIS_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',
