@@ -666,6 +666,31 @@ const nextConfig = {
         destination: '/services/:service/:location#tarifs',
         permanent: true,
       },
+
+      // ====== Stratégie 140K — vague 1 #4 (Tier 53, 2026-05-04) ======
+      // /urgence/[s]/[v] → /services/[s]/[v] (~23K URLs 20.5% explorée non indexée)
+      // Similarité d'intent forte avec /services (urgent = sub-segment, pas
+      // une page). Risk d'over-canonicalization minime : /urgence reste utile
+      // comme hub conversion, mais pas par couple service×ville.
+      // Hub /urgence + /urgence/[s] (1-2 seg) restent vivants.
+      {
+        source: '/urgence/:service/:location',
+        destination: '/services/:service/:location',
+        permanent: true,
+      },
+
+      // ====== Stratégie 140K — vague 1 #5 (Tier 53, 2026-05-04) ======
+      // /problemes/[p]/[v] → /services/[s]/[v] (~5.5K URLs 4.9% explorée
+      // non indexée). Low volume mais cohérent avec la consolidation.
+      // Hub /problemes + /problemes/[p] (1-2 seg) restent vivants.
+      // NOTE : on redirige sur /services générique (pas de mapping
+      // probleme→service possible sans overrides custom — ratio coût/bénéfice
+      // négatif vu les 5.5K URLs concernées).
+      {
+        source: '/problemes/:probleme/:ville',
+        destination: '/services',
+        permanent: true,
+      },
     ]
   },
 

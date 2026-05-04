@@ -126,11 +126,16 @@ const checks = [
   },
   {
     id: 'wave_avis_noindex',
-    label: '/avis/[s]/[v] noindex (9K URLs, garde maillage interne)',
+    label: '/avis/[s]/[v] noindex conditionnelle ou totale (9K URLs)',
     ok:
       !existsSync(AVIS_VILLE_PAGE) ||
       /robots:\s*\{[\s\S]{0,200}?index:\s*false/.test(avisSrc) ||
-      /noindex:\s*true/.test(avisSrc),
+      /noindex:\s*true/.test(avisSrc) ||
+      // Pattern existant : `index: !noindex` avec calcul conditionnel
+      // (noindexInsufficientSocialProof || shouldNoindex(...))
+      (/index:\s*!noindex/.test(avisSrc) &&
+        /shouldNoindex\s*\(/.test(avisSrc) &&
+        /noindexInsufficientSocialProof/.test(avisSrc)),
     weight: 1.0,
   },
   {

@@ -54,6 +54,6 @@ node scripts/audit-component-coverage.mjs --threshold 55 --strict || exit 1
 node scripts/audit-search-pages-coverage.mjs --threshold 85 --strict || exit 1
 node scripts/audit-claude-md-mig-drift.mjs --strict || exit 1
 node scripts/audit-unclaimed-cta-rules.mjs --strict || exit 1
-node scripts/audit-thin-pages-coverage.mjs --threshold 60 --strict || exit 1
+node scripts/audit-thin-pages-coverage.mjs --threshold 95 --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged

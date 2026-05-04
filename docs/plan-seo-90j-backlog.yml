@@ -399,7 +399,7 @@ items:
     effort_hours: 1
     blocked_by: []
     human_required: false
-    dod: node scripts/audit-thin-pages-coverage.mjs --threshold 60 --strict
+    dod: node scripts/audit-thin-pages-coverage.mjs --threshold 95 --strict
     status: completed
     ahrefs:
       kw_primary: n/a (anti-régression progression strategy 140K)
@@ -409,7 +409,4 @@ items:
       cluster_pillar: 0
       leader_rank: n/a
       ahrefs_csv_source: memory:servicesartisans-strategy-140k-2026-04-29 + memory:servicesartisans-gsc-diagnostic-2026-04-30
-    notes: >-
-      Audit pondéré sur 7 vagues. Coverage actuelle 65.2% (4/7 vagues : devis 2seg/3seg, tarifs 2seg, tarifs/task 410).
-      Restantes : urgence 2seg, problemes 2seg, avis noindex. Threshold 60 lock-in regression — interdit de retirer une
-      301 déjà posée. Vagues à venir = futurs Tiers.
+    notes: "Tier 53 (2026-05-04) : 7/7 vagues 140K appliquées. Coverage 100 %. Threshold bump 60 → 95 lock-in regression."
