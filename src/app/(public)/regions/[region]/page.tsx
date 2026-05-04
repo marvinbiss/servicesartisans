@@ -178,12 +178,28 @@ export default async function RegionPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/regions/${regionSlug}#article`,
     headline: `Artisans ${getRegionPreposition(region.name)} — annuaire régional`,
     description: `Annuaire d'artisans ${getRegionPreposition(region.name)} : ${deptCount} départements, ${cityCount} villes, ${allServices.length} corps de métier. Profil régional, climat, économie locale.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/regions/${regionSlug}`,
     mainEntityOfPage: `${SITE_URL}/regions/${regionSlug}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Annuaire territorial',
+    keywords: [
+      `artisans ${region.name}`,
+      region.name,
+      'annuaire régional',
+      `${deptCount} départements`,
+      `${cityCount} villes`,
+      'France',
+    ].join(', '),
+    about: [
+      { '@type': 'AdministrativeArea', name: region.name },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Annuaire artisans région' },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: REG_AUTHOR
@@ -197,7 +213,12 @@ export default async function RegionPage({ params }: PageProps) {
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     ...(REG_REVIEWER && { reviewedBy: getReviewedByPersonSchema(REG_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

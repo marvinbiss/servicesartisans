@@ -177,6 +177,7 @@ export default async function TarifsPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/tarifs#article`,
     headline: 'Tarifs Artisans 2026 — Prix par métier en France',
     description: `Guide des tarifs ${trades.length} métiers du bâtiment 2026 : ${totalPrestations} prestations, fourchettes vérifiées, multiplicateur régional, méthodologie publique.`,
     url: `${SITE_URL}/tarifs`,
@@ -184,6 +185,21 @@ export default async function TarifsPage() {
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Tarifs artisans',
+    keywords: [
+      'tarifs artisans',
+      'prix artisans',
+      'France',
+      'guide prix',
+      'fourchette tarifs',
+      'multiplicateur régional',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Tarifs artisans bâtiment' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Prix prestations bâtiment' },
+    ],
     image: `${SITE_URL}/opengraph-image`,
     author: TARIFS_AUTHOR
       ? {

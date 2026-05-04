@@ -176,12 +176,29 @@ export default async function DepartementPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/departements/${dept.slug}#article`,
     headline: `Artisans ${getDeptPreposition(dept.name)} (${dept.code}) — annuaire ${dept.region}`,
     description: `Annuaire d'artisans ${getDeptPreposition(dept.name)} (${dept.code}, ${dept.region}). ${services.length} corps de métier, ${dept.population} habitants, chef-lieu ${dept.chefLieu}.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/departements/${dept.slug}`,
     mainEntityOfPage: `${SITE_URL}/departements/${dept.slug}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Annuaire territorial',
+    keywords: [
+      `artisans ${dept.name}`,
+      `département ${dept.code}`,
+      dept.region,
+      dept.chefLieu,
+      'annuaire départemental',
+      'France',
+    ].join(', '),
+    about: [
+      { '@type': 'AdministrativeArea', name: dept.name },
+      { '@type': 'AdministrativeArea', name: dept.region },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Annuaire artisans département' },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: DEPT_AUTHOR
@@ -195,7 +212,12 @@ export default async function DepartementPage({ params }: PageProps) {
         }
       : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     ...(DEPT_REVIEWER && { reviewedBy: getReviewedByPersonSchema(DEPT_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

@@ -199,6 +199,7 @@ export default async function UrgencePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/urgence#article`,
     headline: `Artisan Urgence — Dépannage rapide ${new Date().getFullYear()}`,
     description: `Plombier, électricien, serrurier, chauffagiste en urgence. Intervention rapide soir & week-end dans ${villes.length}+ villes, devis transparent.`,
     url: `${SITE_URL}/urgence`,
@@ -206,6 +207,21 @@ export default async function UrgencePage() {
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Urgence dépannage',
+    keywords: [
+      'artisan urgence',
+      'dépannage rapide',
+      'plombier urgence',
+      'électricien urgence',
+      'serrurier urgence',
+      'chauffagiste urgence',
+      'soir week-end',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Dépannage urgent bâtiment' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Intervention rapide artisans' },
+    ],
     image: `${SITE_URL}/opengraph-image`,
     author: URG_AUTHOR
       ? {

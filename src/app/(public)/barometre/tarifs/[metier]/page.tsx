@@ -163,6 +163,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonicalUrlPage}#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -172,6 +173,23 @@ export default async function BarometreMetierPage({ params }: PageProps) {
     url: canonicalUrlPage,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre artisans par métier',
+    keywords: [
+      `baromètre ${metier.label}`,
+      metier.label,
+      'France',
+      'volumétrie',
+      'notes moyennes',
+      'top villes',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: metier.label },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: `Statistiques métier ${metier.label}` },
+    ],
     author: {
       '@type': 'Person',
       name: METIER_AUTHOR.name,
@@ -194,7 +212,6 @@ export default async function BarometreMetierPage({ params }: PageProps) {
     },
     image: `${SITE_URL}/opengraph-image`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
-    isAccessibleForFree: true,
   }
 
   return (

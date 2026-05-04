@@ -183,6 +183,7 @@ function getArticleSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${PAGE_URL}#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -200,6 +201,16 @@ function getArticleSchema() {
     dateModified: MODIFIED,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: "Certificats d'économies d'énergie (CEE)",
+    keywords: [
+      'obligé CEE',
+      'délégataire CEE',
+      'mandataire CEE',
+      'PNCEE',
+      "Certificats d'économies d'énergie",
+      'circuit CEE',
+      'loi POPE',
+    ].join(', '),
     author: AUTHOR
       ? {
           '@type': 'Person',

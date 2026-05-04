@@ -660,12 +660,28 @@ async function renderProblemeVillePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/problemes/${probleme}/${ville}#article`,
     headline: h1,
     description: `${problem.name} à ${villeData.name} : diagnostic, actions immédiates, fourchette de coût ${minPrice}-${maxPrice} €. ${problem.averageResponseTime}.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/problemes/${probleme}/${ville}`,
     mainEntityOfPage: `${SITE_URL}/problemes/${probleme}/${ville}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Problèmes & dépannage',
+    keywords: [
+      problem.name,
+      villeData.name,
+      `dépannage ${problem.name.toLowerCase()}`,
+      problem.primaryService,
+      'diagnostic',
+      'coût intervention',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: problem.name },
+      { '@type': 'City', name: villeData.name },
+      { '@type': 'Service', name: problem.primaryService },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
@@ -677,7 +693,12 @@ async function renderProblemeVillePage({
         PROBV_AUTHOR.methodology.length > 0 && { skills: PROBV_AUTHOR.methodology }),
     },
     ...(PROBV_REVIEWER && { reviewedBy: getReviewedByPersonSchema(PROBV_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

@@ -170,12 +170,28 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/problemes/${probleme}#article`,
     headline: h1,
     description: `${problem.name} : ${problem.description.length > 140 ? problem.description.slice(0, 140) + '…' : problem.description} Coût ${problem.estimatedCost.min}-${problem.estimatedCost.max} €.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/problemes/${probleme}`,
     mainEntityOfPage: `${SITE_URL}/problemes/${probleme}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Problèmes & dépannage',
+    keywords: [
+      problem.name,
+      `dépannage ${problem.name.toLowerCase()}`,
+      problem.primaryService,
+      'coût intervention',
+      'délai',
+      'France',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: problem.name },
+      { '@type': 'Service', name: problem.primaryService },
+      { '@type': 'Thing', name: 'Dépannage bâtiment' },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
@@ -187,7 +203,12 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
         PROB_AUTHOR.methodology.length > 0 && { skills: PROB_AUTHOR.methodology }),
     },
     ...(PROB_REVIEWER && { reviewedBy: getReviewedByPersonSchema(PROB_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

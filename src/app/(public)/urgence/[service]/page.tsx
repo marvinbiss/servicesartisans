@@ -316,12 +316,28 @@ export default async function UrgenceServicePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/urgence/${service}#article`,
     headline: `${trade.name} urgence — intervention rapide 24h/7j`,
     description: `Service d'urgence ${trade.name.toLowerCase()} disponible 7j/7 en France. ${trade.averageResponseTime}. Soir, week-end, jours fériés.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/urgence/${service}`,
     mainEntityOfPage: `${SITE_URL}/urgence/${service}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Urgence dépannage',
+    keywords: [
+      `${trade.name} urgence`,
+      `dépannage ${trade.name.toLowerCase()}`,
+      'intervention 24h/7j',
+      'soir week-end',
+      'jours fériés',
+      'France',
+    ].join(', '),
+    about: [
+      { '@type': 'Service', name: `${trade.name} urgence` },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Dépannage urgent' },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
@@ -333,7 +349,12 @@ export default async function UrgenceServicePage({
         URG_S_AUTHOR.methodology.length > 0 && { skills: URG_S_AUTHOR.methodology }),
     },
     ...(URG_S_REVIEWER && { reviewedBy: getReviewedByPersonSchema(URG_S_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

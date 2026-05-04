@@ -74,6 +74,7 @@ export default function BarometreRegionsPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonicalUrl}#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -84,6 +85,22 @@ export default function BarometreRegionsPage() {
     url: canonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre prix artisans',
+    keywords: [
+      'baromètre prix',
+      'artisans',
+      'régions France',
+      'indice prix base 100',
+      'tendances tarifs',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Prix artisans par région' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Indices de prix sectoriels' },
+    ],
     author: BARO_AUTHOR
       ? {
           '@type': 'Person',
@@ -108,7 +125,6 @@ export default function BarometreRegionsPage() {
     },
     image: `${SITE_URL}/opengraph-image`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
-    isAccessibleForFree: true,
   }
 
   const faqSchema = getFAQSchema([

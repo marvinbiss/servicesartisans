@@ -815,12 +815,32 @@ async function renderUrgenceServiceVillePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/urgence/${service}/${villeSlug}#article`,
     headline: `${trade.name} urgence à ${villeData.name} — dépannage 24h/24`,
     description: `Dépannage ${tradeLower} en urgence à ${villeData.name} (${villeData.departement}). Intervention rapide soir et week-end. ${trade.averageResponseTime}.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/urgence/${service}/${villeSlug}`,
     mainEntityOfPage: `${SITE_URL}/urgence/${service}/${villeSlug}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Urgence dépannage',
+    keywords: [
+      `${trade.name} urgence`,
+      `dépannage ${tradeLower}`,
+      villeData.name,
+      `département ${villeData.departementCode}`,
+      'soir week-end',
+      'intervention 24h/24',
+    ].join(', '),
+    about: [
+      {
+        '@type': 'Service',
+        name: `${trade.name} urgence`,
+        areaServed: { '@type': 'City', name: villeData.name },
+      },
+      { '@type': 'City', name: villeData.name },
+      { '@type': 'Thing', name: 'Dépannage urgent' },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {
@@ -832,7 +852,12 @@ async function renderUrgenceServiceVillePage({
         URG_AUTHOR.methodology.length > 0 && { skills: URG_AUTHOR.methodology }),
     },
     ...(URG_REVIEWER && { reviewedBy: getReviewedByPersonSchema(URG_REVIEWER) }),
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '.speakable-summary', '.speakable-faq', '[data-speakable="true"]'],

@@ -120,6 +120,7 @@ export default async function RegionsIndexPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/regions#article`,
     headline: `${regions.length} régions de France — Annuaire artisans 2026`,
     description: `Annuaire artisans dans ${regions.length} régions, ${totalDepartments} départements et ${villes.length} villes. Données SIREN officielles, baromètre régional CC-BY 4.0.`,
     url: `${SITE_URL}/regions`,
@@ -127,6 +128,20 @@ export default async function RegionsIndexPage() {
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Annuaire territorial',
+    keywords: [
+      'régions France',
+      'annuaire artisans',
+      'SIREN',
+      'baromètre régional',
+      `${regions.length} régions`,
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Régions françaises' },
+      { '@type': 'Thing', name: 'Annuaire artisans' },
+    ],
     image: `${SITE_URL}/opengraph-image`,
     author: {
       '@type': 'Organization',

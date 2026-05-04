@@ -67,6 +67,7 @@ export default async function BarometreTarifsPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonicalUrl}#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -76,6 +77,22 @@ export default async function BarometreTarifsPage() {
     url: canonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre artisans par métier',
+    keywords: [
+      'baromètre métiers',
+      'corps de métier bâtiment',
+      'artisans France',
+      'volumétrie sectorielle',
+      'notes moyennes',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Métiers du bâtiment' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Statistiques sectorielles par métier' },
+    ],
     author: BARO_AUTHOR
       ? {
           '@type': 'Person',
@@ -100,7 +117,6 @@ export default async function BarometreTarifsPage() {
     },
     image: `${SITE_URL}/opengraph-image`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
-    isAccessibleForFree: true,
   }
 
   return (

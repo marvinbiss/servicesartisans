@@ -145,6 +145,7 @@ export default async function BarometrePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/barometre#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -154,6 +155,23 @@ export default async function BarometrePage() {
     url: `${SITE_URL}/barometre`,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre artisans France',
+    keywords: [
+      'baromètre artisans',
+      'France',
+      'SIREN',
+      'avis vérifiés',
+      'données ouvertes',
+      'CC-BY 4.0',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Artisans du bâtiment France' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Statistiques sectorielles' },
+    ],
     author: BARO_AUTHOR
       ? {
           '@type': 'Person',
@@ -178,7 +196,6 @@ export default async function BarometrePage() {
     },
     image: `${SITE_URL}/opengraph-image`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
-    isAccessibleForFree: true,
     mainEntity: { '@id': `${SITE_URL}/barometre#dataset` },
   }
 

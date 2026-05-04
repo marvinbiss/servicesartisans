@@ -127,14 +127,34 @@ export default async function BarometreRgePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${canonicalUrl}#article`,
+    url: canonicalUrl,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
     image: `${SITE_URL}/opengraph-image`,
     headline: `Baromètre RGE ${monthLabel} — ${nf(snap.total_rge_active)} artisans certifiés en France`,
+    description: `Snapshot mensuel ${monthLabel} : ${nf(snap.total_rge_active)} artisans RGE actifs en France, expirations, répartition métier et qualifications.`,
     datePublished: snap.captured_at,
     dateModified: snap.captured_at,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre RGE',
+    keywords: [
+      'baromètre RGE',
+      'artisans RGE',
+      'France Rénov',
+      'qualifications RGE',
+      'snapshot mensuel',
+      'CC-BY 4.0',
+      monthLabel,
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Label RGE — Reconnu Garant de l’Environnement' },
+      { '@type': 'Country', name: 'France' },
+      { '@type': 'Thing', name: 'Statistiques RGE' },
+    ],
     author: BARO_AUTHOR
       ? {
           '@type': 'Person',
@@ -148,6 +168,7 @@ export default async function BarometreRgePage() {
     ...(BARO_REVIEWER && { reviewedBy: getReviewedByPersonSchema(BARO_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },

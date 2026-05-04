@@ -389,6 +389,7 @@ export default async function TarifsServicePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}/tarifs/${service}#article`,
     headline: truncateTitle(`Tarifs ${tradeLower} 2026 — Prix en France`, 110),
     description: `Guide tarif ${tradeLower} 2026 : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, ${parsedTasks.length || trade.commonTasks.length} prestations, multiplicateur régional, méthodologie chiffrée.`,
     url: `${SITE_URL}/tarifs/${service}`,
@@ -396,6 +397,21 @@ export default async function TarifsServicePage({
     dateModified: dateModifiedIso,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Tarifs artisans',
+    keywords: [
+      `tarif ${tradeLower}`,
+      `prix ${tradeLower}`,
+      'France',
+      'fourchette tarifs',
+      'multiplicateur régional',
+      'méthodologie',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Service', name: trade.name },
+      { '@type': 'Thing', name: `Tarifs ${tradeLower}` },
+      { '@type': 'Country', name: 'France' },
+    ],
     image: getServiceImage(service).src,
     author: richAuthor
       ? {
@@ -424,7 +440,6 @@ export default async function TarifsServicePage({
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    about: { '@type': 'Service', name: trade.name },
   }
 
   const enBrefPoints = [

@@ -160,6 +160,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${regionCanonicalUrl}#article`,
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
@@ -169,6 +170,22 @@ export default async function BarometreRegionPage({ params }: PageProps) {
     url: regionCanonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Baromètre artisans région',
+    keywords: [
+      'baromètre artisans',
+      region.name,
+      'densité territoriale',
+      'métiers du bâtiment',
+      'SIREN',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'AdministrativeArea', name: region.name },
+      { '@type': 'Thing', name: `Artisans ${region.name}` },
+      { '@type': 'Thing', name: 'Statistiques sectorielles' },
+    ],
     author: BARO_AUTHOR
       ? {
           '@type': 'Person',
@@ -193,7 +210,6 @@ export default async function BarometreRegionPage({ params }: PageProps) {
     },
     image: `${SITE_URL}/opengraph-image`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
-    isAccessibleForFree: true,
   }
 
   return (
