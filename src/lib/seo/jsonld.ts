@@ -365,12 +365,28 @@ export function getFAQSchema(
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    /**
+     * Tier 29 — inLanguage racine + isPartOf #website. AI Overviews +
+     * Bing AI utilisent ces deux champs pour valider la langue de
+     * réponse et l'écosystème éditorial (le FAQPage doit appartenir au
+     * #website pour que la SERP rich snippet « FAQ from
+     * servicesartisans.fr » se déclenche).
+     */
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     mainEntity: faqs.map((q) => ({
       '@type': 'Question',
       name: q.question,
       acceptedAnswer: {
         '@type': 'Answer',
         text: q.answer,
+        /**
+         * Tier 29 — inLanguage sur chaque Answer. Permet à Google de
+         * dédoublonner les Answer entre pages multilingues (utile si
+         * /en/ ou /es/ existent un jour) et à AI Overviews de filtrer
+         * uniquement les Answers fr-FR pour les requêtes en français.
+         */
+        inLanguage: 'fr-FR',
       },
     })),
   }

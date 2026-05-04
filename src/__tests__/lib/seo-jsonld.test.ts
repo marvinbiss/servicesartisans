@@ -259,6 +259,27 @@ describe('getFAQSchema', () => {
     expect(getFAQSchema([])).toBeNull()
   })
 
+  it('emits inLanguage fr-FR + isPartOf #website (Tier 29)', () => {
+    const schema = getFAQSchema([{ question: 'Q?', answer: 'A' }])
+    expect(schema).not.toBeNull()
+    expect(schema!.inLanguage).toBe('fr-FR')
+    expect((schema!.isPartOf as { '@id': string })['@id']).toBe(
+      'https://servicesartisans.fr#website'
+    )
+  })
+
+  it('emits inLanguage on each Answer (Tier 29)', () => {
+    const schema = getFAQSchema([
+      { question: 'Q1?', answer: 'A1' },
+      { question: 'Q2?', answer: 'A2' },
+    ])
+    const mainEntity = schema!.mainEntity as Array<Record<string, unknown>>
+    const a1 = mainEntity[0].acceptedAnswer as Record<string, unknown>
+    const a2 = mainEntity[1].acceptedAnswer as Record<string, unknown>
+    expect(a1.inLanguage).toBe('fr-FR')
+    expect(a2.inLanguage).toBe('fr-FR')
+  })
+
   it('returns null for null input', () => {
     expect(getFAQSchema(null as unknown as { question: string; answer: string }[])).toBeNull()
   })

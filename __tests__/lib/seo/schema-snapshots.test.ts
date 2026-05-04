@@ -162,11 +162,16 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
+        "inLanguage": "fr-FR",
+        "isPartOf": {
+          "@id": "https://servicesartisans.fr#website",
+        },
         "mainEntity": [
           {
             "@type": "Question",
             "acceptedAnswer": {
               "@type": "Answer",
+              "inLanguage": "fr-FR",
               "text": "Entre 45 et 75€/h.",
             },
             "name": "Combien coûte un plombier ?",
