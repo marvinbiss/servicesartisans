@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getAllPagePaths } from '@/lib/seo/orphan-detection'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 300
 
@@ -17,7 +18,7 @@ export const maxDuration = 300
  *
  * Auth: Bearer CRON_SECRET
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-orphan-check', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -213,7 +214,7 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 

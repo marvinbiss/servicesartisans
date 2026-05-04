@@ -18,6 +18,7 @@ import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -147,7 +148,7 @@ async function applyRule3(supabase: SupabaseAdmin, cutoff: string): Promise<numb
   return total
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-rgpd-anonymize', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-rgpd-anonymize',
     async () => {
@@ -195,4 +196,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 3 * * *' },
     }
   )
-}
+})

@@ -10,6 +10,14 @@
  * failing to send is retried max 3 times with a regenerated token, after
  * which it's marked expired.
  *
+ * Backoff transient (audit B/C #6 2026-05-04) :
+ *   Resend 429 (rate limit) ou 5xx (downstream) → erreur TRANSIENT, on
+ *   préserve les `attempts` (sinon 1 burst Resend brûle nos 3 tentatives en
+ *   5 min) et on repousse `scheduled_at` à now()+1h..3h selon attempts.
+ *   Erreur permanente (4xx ≠ 429, validation, bounce hard) → attempts++ comme
+ *   avant. Détection par regex sur error.message (Resend SDK n'expose pas
+ *   le HTTP status code via le wrapper sendEmail).
+ *
  * Triggered by Vercel Cron (see vercel.json): recommended every 15 min.
  */
 
@@ -24,6 +32,30 @@ import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const BATCH_SIZE = 100
 const MAX_ATTEMPTS = 3
+
+const TRANSIENT_PATTERNS = [
+  /429/,
+  /rate.?limit/i,
+  /\b5\d{2}\b/,
+  /timeout/i,
+  /econnreset/i,
+  /etimedout/i,
+  /service unavailable/i,
+  /bad gateway/i,
+  /gateway timeout/i,
+]
+
+function isTransientError(error: string | undefined): boolean {
+  if (!error) return false
+  return TRANSIENT_PATTERNS.some((re) => re.test(error))
+}
+
+function transientBackoffISO(attempts: number): string {
+  // Backoff linéaire 1h × (attempts+1) → 1h, 2h, 3h. Évite de bombarder Resend
+  // pendant un incident sans bloquer trop longtemps en cas de fix rapide.
+  const delayMs = (attempts + 1) * 60 * 60 * 1000
+  return new Date(Date.now() + delayMs).toISOString()
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -146,7 +178,8 @@ export const GET = withCronCheckIn('cron-send-review-invitations', async (reques
   const updates: Array<{
     id: string
     sent_at?: string
-    attempts: number
+    scheduled_at?: string
+    attempts?: number
     last_error?: string
     token_hash?: string
   }> = []
@@ -196,6 +229,16 @@ export const GET = withCronCheckIn('cron-send-review-invitations', async (reques
         id: invitation.id,
         sent_at: new Date().toISOString(),
         attempts: invitation.attempts + 1,
+        token_hash: hash,
+      })
+    } else if (isTransientError(result.error)) {
+      // Transient error (429/5xx/timeout) : on préserve les attempts et on
+      // reschedule. Le burst Resend ne brûle plus nos 3 tentatives en 5 min.
+      failed++
+      updates.push({
+        id: invitation.id,
+        scheduled_at: transientBackoffISO(invitation.attempts),
+        last_error: `transient: ${result.error ?? 'unknown'}`,
         token_hash: hash,
       })
     } else {

@@ -14,6 +14,7 @@ import {
 } from '@/lib/seo/pruning'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Monthly cron: SEO Pruning Audit
@@ -32,7 +33,7 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const maxDuration = 60 // seconds — may need to scan many combinations
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-pruning-audit', async (request: Request) => {
   // Auth: same pattern as all other crons
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
@@ -259,7 +260,7 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})
 
 // ---------------------------------------------------------------------------
 // Recommendation generator

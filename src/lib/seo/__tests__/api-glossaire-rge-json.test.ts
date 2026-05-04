@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { GET, OPTIONS } from '@/app/api/glossaire-rge.json/route'
+import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 
 /**
  * Sprint AC Ahrefs 2026-05-03 — verrou endpoint open-data /api/glossaire-rge.json.
@@ -24,14 +25,16 @@ describe('Sprint AC — /api/glossaire-rge.json open-data endpoint', () => {
     expect(res.headers.get('Content-Type')).toContain('application/ld+json')
   })
 
-  it('payload contient DefinedTermSet + 16 DefinedTerm', async () => {
+  it('payload contient DefinedTermSet + N DefinedTerm (longueur dérivée du glossaire)', async () => {
+    // Sprint AI Ahrefs 2026-05-03 — magic number 16 retiré (cf. Pattern + Test
+    // architecture audits). Source de vérité = `getAllRgeGlossaryEntries()`.
     const res = await GET()
     const body = (await res.json()) as Record<string, unknown>
     expect(body['@context']).toBe('https://schema.org')
     expect(body['@type']).toBe('DefinedTermSet')
     const terms = body.hasDefinedTerm as Array<Record<string, unknown>>
     expect(Array.isArray(terms)).toBe(true)
-    expect(terms.length).toBe(16)
+    expect(terms.length).toBe(getAllRgeGlossaryEntries().length)
   })
 
   it('payload contient license CC-BY 4.0 explicite', async () => {

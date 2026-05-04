@@ -222,6 +222,28 @@ export interface RgeServiceCityListing {
 }
 
 /**
+ * Sprint 2 Phase E 2026-05-04 — filtre opt-in catégorie décret 2014-812.
+ *
+ * Pour les services RGE-only où SERVICE_TO_SPECIALTIES retourne une union
+ * large de specialties (ex: `audit-energetique` inclut `geometre` qui couvre
+ * 88% des cat 17 mais aussi des géomètres-experts pure délimitation), on
+ * applique un filtre additionnel `rge_categories_decret @> [N]` pour ne
+ * remonter QUE les providers ayant explicitement la catégorie pertinente.
+ *
+ * Ce filtre est opt-in : les services historiques (PAC, isolation, etc.)
+ * gardent le comportement legacy (specialty-based seulement) car leur
+ * specialty est déjà discriminante.
+ *
+ * Source : décret n°2014-812 article 1er I (17 catégories), cf. migration 404.
+ *
+ * - 17 = Rénovation globale + Mon Accompagnateur Rénov' + Audit énergétique
+ *   (BET OPQIBI 1905/1911, architectes CNOA, géomètres-experts mention rénov)
+ */
+const RGE_DECRET_FILTER: Partial<Record<RgeAllowedService, number>> = {
+  'audit-energetique': 17,
+}
+
+/**
  * Récupère les artisans RGE actifs pour un couple (service, ville).
  * - pagination 50 par défaut
  * - cache via getCachedData (CACHE_TTL.artisans = 1h)
@@ -246,14 +268,21 @@ export async function getRgeProvidersByServiceAndCity(
 
   const cityValues = getCityValues(ville.name, ville.departementCode)
   const today = new Date().toISOString().slice(0, 10)
+  // Sprint 2 Phase E : filtre catégorie décret opt-in (cf. RGE_DECRET_FILTER).
+  const decretCategory = isRgeAllowedService(serviceSlug)
+    ? RGE_DECRET_FILTER[serviceSlug]
+    : undefined
 
-  const cacheKey = `rge:svc-city:${serviceSlug}:${villeSlug}:${limit}:${offset}`
+  // Cache version v2 quand filtre décret actif → invalide les anciennes
+  // entrées qui ne contenaient pas la coupe par catégorie.
+  const cacheVersion = decretCategory !== undefined ? ':v2' : ''
+  const cacheKey = `rge:svc-city:${serviceSlug}:${villeSlug}:${limit}:${offset}${cacheVersion}`
 
   return getCachedData<RgeServiceCityListing>(
     cacheKey,
     async () => {
       try {
-        const { data, error, count } = await supabase
+        let query = supabase
           .from('providers')
           .select(
             [
@@ -290,6 +319,12 @@ export async function getRgeProvidersByServiceAndCity(
           .eq('is_active', true)
           .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
+
+        if (decretCategory !== undefined) {
+          query = query.contains('rge_categories_decret', [decretCategory])
+        }
+
+        const { data, error, count } = await query
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .order('name')
@@ -340,15 +375,20 @@ export async function getRgeProvidersByServiceAndDepartement(
   if (!specialties || specialties.length === 0) return { providers: [], count: 0 }
 
   const today = new Date().toISOString().slice(0, 10)
+  // Sprint 2 Phase E : filtre catégorie décret opt-in (cf. RGE_DECRET_FILTER).
+  const decretCategory = isRgeAllowedService(serviceSlug)
+    ? RGE_DECRET_FILTER[serviceSlug]
+    : undefined
+  const cacheVersion = decretCategory !== undefined ? ':v2' : ''
   // encodeURIComponent prevents segment ambiguity in cache keys (accents,
   // hyphens, theoretical colons) — see security audit MED finding.
-  const cacheKey = `rge:svc-dept:${serviceSlug}:${encodeURIComponent(departementName)}:${limit}:${offset}`
+  const cacheKey = `rge:svc-dept:${serviceSlug}:${encodeURIComponent(departementName)}:${limit}:${offset}${cacheVersion}`
 
   return getCachedData<RgeServiceCityListing>(
     cacheKey,
     async () => {
       try {
-        const { data, error, count } = await supabase
+        let query = supabase
           .from('providers')
           .select(
             [
@@ -385,6 +425,12 @@ export async function getRgeProvidersByServiceAndDepartement(
           .eq('is_active', true)
           .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
+
+        if (decretCategory !== undefined) {
+          query = query.contains('rge_categories_decret', [decretCategory])
+        }
+
+        const { data, error, count } = await query
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .order('name')
@@ -442,9 +488,13 @@ export async function getRgeCountByServiceAndCityStrict(
 
   const cityValues = getCityValues(ville.name, ville.departementCode)
   const today = new Date().toISOString().slice(0, 10)
+  // Sprint 2 Phase E : filtre catégorie décret opt-in (cf. RGE_DECRET_FILTER).
+  const decretCategory = isRgeAllowedService(serviceSlug)
+    ? RGE_DECRET_FILTER[serviceSlug]
+    : undefined
 
   try {
-    const { count, error } = await supabase
+    let query = supabase
       .from('providers')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
@@ -452,6 +502,12 @@ export async function getRgeCountByServiceAndCityStrict(
       .eq('is_active', true)
       .not('rge_qualifications', 'is', null)
       .gte('rge_valid_until', today)
+
+    if (decretCategory !== undefined) {
+      query = query.contains('rge_categories_decret', [decretCategory])
+    }
+
+    const { count, error } = await query
 
     if (error) throw error
     return { ok: true, count: count ?? 0 }
@@ -480,9 +536,13 @@ export async function getRgeCountByServiceAndDepartementStrict(
   if (!specialties || specialties.length === 0) return { ok: true, count: 0 }
 
   const today = new Date().toISOString().slice(0, 10)
+  // Sprint 2 Phase E : filtre catégorie décret opt-in (cf. RGE_DECRET_FILTER).
+  const decretCategory = isRgeAllowedService(serviceSlug)
+    ? RGE_DECRET_FILTER[serviceSlug]
+    : undefined
 
   try {
-    const { count, error } = await supabase
+    let query = supabase
       .from('providers')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
@@ -490,6 +550,12 @@ export async function getRgeCountByServiceAndDepartementStrict(
       .eq('is_active', true)
       .not('rge_qualifications', 'is', null)
       .gte('rge_valid_until', today)
+
+    if (decretCategory !== undefined) {
+      query = query.contains('rge_categories_decret', [decretCategory])
+    }
+
+    const { count, error } = await query
 
     if (error) throw error
     return { ok: true, count: count ?? 0 }

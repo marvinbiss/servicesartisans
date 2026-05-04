@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Monthly cron: Purge RGPD des contacts de prospection
@@ -70,7 +71,7 @@ function buildAnonymizedPayload(contactId: string): Record<string, unknown> {
   }
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-purge-prospection', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -385,4 +386,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

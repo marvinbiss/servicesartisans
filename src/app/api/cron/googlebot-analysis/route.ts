@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger'
 import { runWeeklyAnalysis } from '@/lib/seo/crawl-analysis'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 60
 
@@ -18,7 +19,7 @@ export const maxDuration = 60
  *
  * Schedule recommandé : chaque lundi à 06:00 UTC
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-googlebot-analysis', async (request: Request) => {
   // ── Auth (même pattern que les autres crons) ────────────────────────
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
@@ -140,4 +141,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

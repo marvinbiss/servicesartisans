@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 60
 
-export async function GET(request: NextRequest) {
+export const GET = withCronCheckIn('cron-voice-stats', async (request: NextRequest) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -70,4 +71,4 @@ export async function GET(request: NextRequest) {
   })
 
   return NextResponse.json({ success: true, data: stats })
-}
+})

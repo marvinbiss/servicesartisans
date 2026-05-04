@@ -6,6 +6,7 @@ import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { computeSitemapDiff, persistSitemapRun, type SitemapRun } from '@/lib/seo/sitemap-diff'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 const RGE_STALE_WARN_DAYS = 7
 const RGE_STALE_CRITICAL_DAYS = 14
@@ -91,7 +92,7 @@ async function checkRgeFreshness(): Promise<RgeFreshness> {
  * Daily cron: Verify all sitemaps return HTTP 200 with valid XML.
  * Alerts via structured logging (visible in Vercel logs).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-sitemap-health', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-sitemap-health',
     async () => {
@@ -249,4 +250,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 6 * * *' },
     }
   )
-}
+})

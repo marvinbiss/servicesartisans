@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 60
 
@@ -16,7 +17,7 @@ export const maxDuration = 60
  * Schedule: daily at 08:00 UTC (après gsc-sync à 07:00 UTC, pour capter le
  * rollup GSC du jour avant de snapshotter).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-metrics-snapshot', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -66,4 +67,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

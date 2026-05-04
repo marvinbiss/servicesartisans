@@ -186,6 +186,19 @@ export default function Page() {
           </article>
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
+          <aside className="my-10 bg-primary-50 border border-primary-200 rounded-xl p-5">
+            <p className="text-sm text-primary-900 m-0">
+              <strong>Vous êtes Mon Accompagnateur Rénov&apos; agréé&nbsp;?</strong> Découvrez le{' '}
+              <Link
+                href="/partenaires/mon-accompagnateur-renov"
+                className="text-primary-700 underline hover:text-primary-800"
+              >
+                partenariat ServicesArtisans pour MAR
+              </Link>{' '}
+              : flux de propriétaires Parcours accompagné pré-qualifiés sur votre zone, leads
+              exclusifs, neutralité commerciale.
+            </p>
+          </aside>
           <section className="my-10">
             <h2 className="font-heading text-xl font-semibold text-sand-900 mb-4">À lire aussi</h2>
             <ul className="grid gap-3 md:grid-cols-2">

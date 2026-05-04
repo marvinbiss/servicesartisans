@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { computeSeoAggregate } from '@/lib/seo/baseline-aggregator'
 import { logger } from '@/lib/logger'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * POST `/api/cron/seo-baseline-snapshot`
@@ -45,7 +46,7 @@ function autoLabel(): string {
   return `auto-${yyyy}-${mm}-${dd}-${hh}${min}`
 }
 
-export async function POST(request: Request) {
+export const POST = withCronCheckIn('cron-seo-baseline-snapshot', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -119,4 +120,4 @@ export async function POST(request: Request) {
     })
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
   }
-}
+})

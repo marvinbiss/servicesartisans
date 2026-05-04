@@ -431,7 +431,7 @@ export default async function HomePage() {
               financer votre rénovation énergétique.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link
               href="/cee"
               className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
@@ -478,8 +478,39 @@ export default async function HomePage() {
                 Trouver un RGE →
               </div>
             </Link>
+            <Link
+              href="/devenir-partenaire-cee"
+              className="group p-5 bg-gradient-to-br from-amber-500/15 to-orange-500/10 hover:from-amber-500/25 hover:to-orange-500/20 border border-amber-400/40 hover:border-amber-300/70 rounded-2xl backdrop-blur transition relative"
+            >
+              <div className="absolute top-3 right-3 px-2 py-0.5 bg-amber-400 text-amber-950 text-[10px] font-bold rounded-full uppercase tracking-wide">
+                Pro
+              </div>
+              <div className="text-xs font-semibold text-amber-300 mb-1">Pour artisans BTP</div>
+              <h3 className="font-heading font-bold text-lg text-white mb-2">
+                Devenir mandataire CEE
+              </h3>
+              <p className="text-sm text-amber-100/85 leading-relaxed">
+                Touchez vos primes CEE 4× plus vite via Sonergia. Flux de chantiers RGE qualifiés,
+                leads exclusifs.
+              </p>
+              <div className="mt-3 text-sm font-semibold text-amber-300 group-hover:text-amber-200 inline-flex items-center gap-1">
+                Devenir partenaire →
+              </div>
+            </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-8">
+            <Link
+              href="/comparatif-primes-cee-2026"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
+            >
+              Comparatif primes CEE
+            </Link>
+            <Link
+              href="/leads-exclusifs-vs-partages"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
+            >
+              Leads exclusifs vs partagés
+            </Link>
             <Link
               href="/rge/qualifications"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"

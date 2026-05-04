@@ -5,6 +5,7 @@ import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { SITE_URL } from '@/lib/seo/config'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 import {
   captureFingerprints,
   classifyDrift,
@@ -42,7 +43,7 @@ const CRITICAL_PATHS = [
  * dernier snapshot connu, alerte Sentry sur drift critical (canonical
  * changed OR noindex flipped).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-canonical-fingerprint', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -123,4 +124,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 7 * * *' },
     }
   )
-}
+})

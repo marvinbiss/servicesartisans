@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 import {
   collectVolatilitySnapshots,
   persistVolatilitySnapshots,
@@ -21,7 +22,7 @@ export const maxDuration = 60
  * Auth-then-monitor : verifyCronSecret AVANT withMonitor pour ne pas
  * polluer le compteur Sentry avec les requêtes non-authentifiées.
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-google-algo-monitor', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -92,4 +93,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '30 6 * * *' },
     }
   )
-}
+})

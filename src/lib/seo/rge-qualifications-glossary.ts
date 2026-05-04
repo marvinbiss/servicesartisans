@@ -25,6 +25,16 @@
  *   - Arrêté Anah 2024-12-23 (RGE obligatoire MaPrimeRénov')
  */
 
+/**
+ * Sprint AI Ahrefs 2026-05-03 — source de vérité unique du path canonique.
+ *
+ * Avant Sprint AI, `${SITE_URL}/rge/glossaire` était hardcodé sur 5+ callsites
+ * (page hubs, routes API, helpers). Tout rename de la route silenciait des
+ * sameAs Schema.org sans warning. Cette constante centralise — le module
+ * étant leaf (zéro import), tout consommateur peut l'importer sans cycle.
+ */
+export const RGE_GLOSSAIRE_PATH = '/rge/glossaire'
+
 export type RgeGlossaryEntry = {
   /** Identifiant slug stable kebab-case (utilisé pour @id et anchors). */
   slug: string

@@ -5,6 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { aggregate, type ProviderRow, type Snapshot } from '@/lib/barometre/rge-aggregate'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Monthly cron: builds the RGE barometer snapshot from `providers` and
@@ -72,7 +73,7 @@ async function upsertSnapshot(snap: Snapshot): Promise<void> {
   if (error) throw new Error(`upsert snapshot failed: ${error.message}`)
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-barometre-rge', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-barometre-rge',
     async () => {
@@ -125,4 +126,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 3 1 * *' },
     }
   )
-}
+})

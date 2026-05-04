@@ -17,6 +17,7 @@ import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { _getCircuitBreakerState } from '@/lib/rate-limiter'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,7 +27,7 @@ const PING_TIMEOUT_MS = 2000
 
 type CheckStatus = 'healthy' | 'degraded' | 'unhealthy'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-redis-health', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -115,4 +116,4 @@ export async function GET(request: Request) {
     },
     { status: status === 'unhealthy' ? 503 : 200 }
   )
-}
+})

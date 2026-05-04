@@ -377,6 +377,16 @@ export default function AidesHubPage() {
             </Link>{' '}
             · Sources officielles citées sur chaque page d&apos;aide.
           </p>
+          <p className="mt-4 text-sm text-charcoal-700">
+            Restez informé des évolutions barèmes :{' '}
+            <Link
+              href="/newsletter/aides-renovation"
+              className="text-emerald-700 underline hover:text-emerald-800 font-medium"
+            >
+              newsletter mensuelle aides rénovation
+            </Link>{' '}
+            (gratuit, désinscription en un clic).
+          </p>
         </div>
       </section>
     </>

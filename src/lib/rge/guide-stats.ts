@@ -169,8 +169,12 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
   const cached = serviceStatsPromises.get(serviceSlug)
   if (cached) return cached
 
+  // Sprint 2 Phase B 2026-05-04 — cache version bumped v1 → v2 (échantillon
+  // 500 → 5000 + topInseeCodes 15 → 100 + slice final 10 → 50). Renforce le
+  // sous-cluster villes du hub /rge/[service] qui peut désormais afficher
+  // jusqu'à 50 villes vs 10 avant.
   const promise = getCachedData<RgeServiceStats>(
-    `rge:guide-stats:service:${serviceSlug}:v1`,
+    `rge:guide-stats:service:${serviceSlug}:v2`,
     async () => {
       try {
         const today = new Date().toISOString().slice(0, 10)
@@ -187,6 +191,9 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
         if (countErr) throw countErr
 
         // Echantillon pour le top villes (agrégation JS sur code INSEE).
+        // Sprint 2 Phase B : limit 500 → 5000 pour couvrir villes secondaires
+        // (Top 10 villes saturaient les 500 lignes échantillonnées et masquaient
+        // la queue moyenne — Lille, Nantes, Reims, Toulon, Le Havre, etc.).
         const { data: sampleRows, error: sampleErr } = await supabase
           .from('providers')
           .select('address_city')
@@ -194,7 +201,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
           .eq('is_active', true)
           .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
-          .limit(500)
+          .limit(5000)
 
         if (sampleErr) throw sampleErr
 
@@ -205,9 +212,12 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
           counts.set(inseeCode, (counts.get(inseeCode) || 0) + 1)
         }
 
+        // Sprint 2 Phase B : 15 → 100 INSEE codes pour avoir marge avant le
+        // join `communes` (certains codes INSEE peuvent ne pas matcher si la
+        // commune est inactive ou drift de slug). Final slice 50 garanti.
         const topInseeCodes = Array.from(counts.entries())
           .sort((a, b) => b[1] - a[1])
-          .slice(0, 15)
+          .slice(0, 100)
           .map(([code, cnt]) => ({ code, cnt }))
 
         if (topInseeCodes.length === 0) {
@@ -235,6 +245,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
           }
         }
 
+        // Sprint 2 Phase B : 10 → 50 villes max (cluster pillar SEO renforcé).
         const topCities: RgeTopCity[] = topInseeCodes
           .map(({ code, cnt }) => {
             const commune = inseeToCommune.get(code)
@@ -242,7 +253,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
             return { slug: commune.slug, name: commune.name, count: cnt }
           })
           .filter((c): c is RgeTopCity => c !== null)
-          .slice(0, 10)
+          .slice(0, 50)
 
         return { total: count ?? 0, topCities }
       } catch (err) {

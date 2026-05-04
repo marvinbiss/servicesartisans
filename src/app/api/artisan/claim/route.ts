@@ -13,16 +13,21 @@ import { createClaim } from '@/lib/services/claims-service'
 
 export const dynamic = 'force-dynamic'
 
+// Audit B/C #2 (2026-05-04) : claim simplifié 5 champs → 2 champs obligatoires
+// (SIREN/SIRET + email). fullName, phone, position deviennent OPTIONNELS pour
+// réduire la friction massive (claim rate 0.002% = 19/970K). L'admin enrichit
+// au moment de la validation via INSEE ou contact direct.
 const claimSchema = z.object({
   providerId: z.string().uuid('ID artisan invalide'),
   siret: z.string().regex(/^\d{9}(\d{5})?$/, 'Entrez un SIREN (9 chiffres) ou SIRET (14 chiffres)'),
-  fullName: z.string().min(2, 'Le nom est requis (min. 2 caractères)'),
   email: z.string().email('Email invalide'),
+  fullName: z.string().min(2).optional().or(z.literal('')),
   phone: z
     .string()
     .transform((v) => v.replace(/[\s.\-()]/g, ''))
-    .pipe(z.string().min(10, 'Numéro de téléphone invalide')),
-  position: z.string().min(2, 'Le poste est requis'),
+    .pipe(z.string().min(10).or(z.literal('')))
+    .optional(),
+  position: z.string().optional().or(z.literal('')),
 })
 
 export async function POST(request: Request) {

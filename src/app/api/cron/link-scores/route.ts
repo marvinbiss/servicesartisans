@@ -3,6 +3,7 @@ import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { buildLinkGraph, getAllPagePaths } from '@/lib/seo/orphan-detection'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 60
 
@@ -244,7 +245,7 @@ const UPSERT_BATCH_SIZE = 500
  * Auth: Bearer CRON_SECRET.
  * Schedule: Daily at ~03:00 UTC (see vercel.json).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-link-scores', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -327,4 +328,4 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ success: false, error: message }, { status: 500 })
   }
-}
+})

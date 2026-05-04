@@ -1,0 +1,31 @@
+rank,competitor,pattern,nKw,totalVol,sampleKw
+1,france_renov,/renovation/chauffage/pompe-chaleur-maison,4,73300,installation pompe a chaleur|pompe a chaleur|installation pompe à chaleur
+2,france_renov,/renovation/chauffage/[long-slug],2,49000,chauffe eau thermodynamique|ballon thermodynamique
+3,effy,/travaux-energetique/chauffe-eau/chauffe-eau-electrique,1,39000,chauffe eau
+4,france_renov,/renovation/isolation/murs-maison,4,38600,isolation exterieur|isolation par l'extérieur|isolation
+5,hellio,/blog/conseils/[long-slug],3,22100,seche linge pompe a chaleur|prise renforcée voiture électrique|chauffage d'appoint économique
+6,sonergia,/conseils-travaux/chauffage/pompe-a-chaleur/[long-slug]/,5,20000,pompe à chaleur prix|pompe a chaleur air eau|entretien pompe à chaleur
+7,selectra,/energie/actualites/marche/[long-slug],1,20000,chauffage
+8,france_renov,/renovation/chauffage,1,20000,chauffage
+9,effy,/travaux-energetique/isolation/isolation-murs/par-l-exterieur/quel-isolant,2,17700,isolation exterieur|isolation exterieur maison
+10,effy,/travaux-energetique/ventilation/vmc-consommation,1,15000,vmc simple flux
+11,hellio,/guide-solaire/types/panneau-plug-and-play,1,14000,panneau solaire plug and play
+12,france_renov,/renovation/isolation/[long-slug],3,12600,isolation mur intérieur|isolation intérieure|isolation interieur
+13,france_renov,/renovation/chauffage/chauffe-eau-solaire,1,12000,chauffe eau solaire
+14,sonergia,/conseils-travaux/isolation/mur/[long-slug]/,2,11400,isolation mur intérieur|isolation interieur
+15,effy,/magazine/[long-slug],2,6500,entretien pompe a chaleur|entretien pompe à chaleur
+16,effy,/travaux-energetique/chauffage/pompe-a-chaleur/prix-pac-air-eau,2,6400,pompe à chaleur prix|pompe a chaleur prix
+17,effy,/travaux-energetique/isolation/peinture/isolante,2,5900,peinture isolante thermique|peinture isolante
+18,sonergia,/conseils-travaux/isolation/isolation-phonique/[long-slug]/,2,5800,isolation phonique mur|isolant phonique mur
+19,effy,/renovation-energetique/[long-slug],3,4700,dpe d|dpe f|dpe c
+20,france_renov,/renovation/isolation/combles-maison,1,4100,isolation combles
+21,effy,/travaux-energetique/isolation/isolation-combles,1,4100,isolation combles
+22,hellio,/[long-slug],2,3600,dpe d|dpe f
+23,selectra,/energie/solaire/camping-car,1,3500,panneau solaire camping car
+24,effy,/travaux-energetique/chauffage/pompe-a-chaleur/installation,1,3300,installation pompe a chaleur
+25,effy,/travaux-energetique/chauffage/pompe-a-chaleur/consommation-electrique,1,3300,consommation pompe a chaleur
+26,effy,/travaux-energetique/chauffage/pompe-a-chaleur/prix-pac-air-air,2,3100,prix pompe a chaleur air air|pompe a chaleur air air prix
+27,france_renov,/annuaires-professionnels/artisan-rge-architecte,1,2600,entreprise de rénovation
+28,hellio,/blog/actualites/[long-slug],1,2300,chaudiere fioul
+29,sonergia,/conseils-travaux/isolation/materiaux-isolants/[long-slug]/,1,2300,isolant polyuréthane
+30,sonergia,/guide-des-aides/reglementation/[long-slug]/,1,2100,dpe d

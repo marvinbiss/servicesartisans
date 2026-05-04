@@ -578,17 +578,21 @@ describe('evaluateGonePath — /rge/[service]/departement/[dept]', () => {
 })
 
 describe('evaluateGonePath — Sprint U /qualifications-rge → 301 /rge/qualifications', () => {
-  it('/qualifications-rge → 301 vers /rge/qualifications', () => {
+  // Sprint AI Ahrefs 2026-05-03 — `cacheControl` ajouté pour permettre
+  // rollback CDN rapide pendant la phase de validation Sprint U.
+  const SHORT_CACHE = 'public, max-age=3600, s-maxage=3600'
+
+  it('/qualifications-rge → 301 vers /rge/qualifications avec TTL CDN court', () => {
     expect(evaluateGonePath('/qualifications-rge')).toEqual({
       gone: false,
-      redirect: { to: '/rge/qualifications', status: 301 },
+      redirect: { to: '/rge/qualifications', status: 301, cacheControl: SHORT_CACHE },
     })
   })
 
-  it('/qualifications-rge/ (trailing slash) → 301 vers /rge/qualifications', () => {
+  it('/qualifications-rge/ (trailing slash) → 301 vers /rge/qualifications avec TTL CDN court', () => {
     expect(evaluateGonePath('/qualifications-rge/')).toEqual({
       gone: false,
-      redirect: { to: '/rge/qualifications', status: 301 },
+      redirect: { to: '/rge/qualifications', status: 301, cacheControl: SHORT_CACHE },
     })
   })
 
@@ -604,17 +608,21 @@ describe('evaluateGonePath — Sprint U /qualifications-rge → 301 /rge/qualifi
 })
 
 describe('evaluateGonePath — Sprint W /comparatifs → 301 /comparaison', () => {
-  it('/comparatifs → 301 vers /comparaison', () => {
+  // Sprint AI Ahrefs 2026-05-03 — `cacheControl` ajouté pour permettre
+  // rollback CDN rapide pendant la phase de validation Sprint W.
+  const SHORT_CACHE = 'public, max-age=3600, s-maxage=3600'
+
+  it('/comparatifs → 301 vers /comparaison avec TTL CDN court', () => {
     expect(evaluateGonePath('/comparatifs')).toEqual({
       gone: false,
-      redirect: { to: '/comparaison', status: 301 },
+      redirect: { to: '/comparaison', status: 301, cacheControl: SHORT_CACHE },
     })
   })
 
-  it('/comparatifs/ (trailing slash) → 301 vers /comparaison', () => {
+  it('/comparatifs/ (trailing slash) → 301 vers /comparaison avec TTL CDN court', () => {
     expect(evaluateGonePath('/comparatifs/')).toEqual({
       gone: false,
-      redirect: { to: '/comparaison', status: 301 },
+      redirect: { to: '/comparaison', status: 301, cacheControl: SHORT_CACHE },
     })
   })
 

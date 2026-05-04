@@ -10,6 +10,7 @@ import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
 import AroundMeGeolocator from '@/components/seo/AroundMeGeolocator'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
@@ -201,6 +202,25 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               'Artisans vérifiés SIREN officiel + qualifications RGE sync ADEME',
               'Devis gratuit sous 24h, sans engagement, lead exclusif',
               '30 villes populaires + couverture nationale 35 000+ communes',
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Sprint AI Wave A Ahrefs 2026-05-03 — EnBrefBox ajouté
+          (audit SEO 10-agents). Capture Featured Snippets +
+          AI Overviews + Speakable Spec. ImmediateAnswerBlock skippé :
+          providerCount n'est pas disponible pour la vue cross-villes
+          (pas de fabriquer de chiffre fake — règle E-E-A-T honnête). */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+          <EnBrefBox
+            summary={`${name} près de chez vous : géolocalisez les artisans vérifiés SIREN dans votre ville en 1 clic. Devis gratuit sous 24h, professionnels qualifiés RGE pour MaPrimeRénov' et CEE quand applicable.`}
+            keyPoints={[
+              `Géolocalisation 1-clic — détection automatique de votre ville`,
+              `Vérification SIREN officielle pour chaque ${nameLc}`,
+              `Devis gratuit sous 24h, lead exclusif (jamais partagé)`,
+              `Couverture France entière — 35 000+ communes`,
             ]}
           />
         </div>

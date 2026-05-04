@@ -15,7 +15,19 @@ import AideDemarche from '@/components/aides/AideDemarche'
 import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
-import { aidesSlugs, getAideBySlug, getCumulableAides, type Aide } from '@/lib/aides/aides-catalog'
+import {
+  aidesCatalog,
+  aidesSlugs,
+  getAideBySlug,
+  getCumulableAides,
+  type Aide,
+} from '@/lib/aides/aides-catalog'
+import {
+  getAidesDeptHubData,
+  getAllAidesDeptHubSlugs,
+  isAidesDeptHubSlug,
+  type AidesDeptHubData,
+} from '@/lib/aides/dept-hub-data'
 import { villes } from '@/lib/data/france'
 import { MAIN_RGE_SERVICES } from '@/lib/rge/pseo-content'
 import { authors } from '@/lib/data/authors'
@@ -28,7 +40,11 @@ import {
   getHowToSchema,
 } from '@/lib/seo/jsonld'
 
-export const dynamicParams = false
+// Sprint AI Wave H 2026-05-03 — passage à dynamicParams=true car le slug peut
+// désormais être soit une aide nationale (ex: maprimerenov), soit un dept
+// hub aggregator (ex: paris). Les 2 ensembles sont disjoints — pas de
+// collision possible. Pre-render exhaustif via generateStaticParams.
+export const dynamicParams = true
 export const revalidate = 86400
 
 const AUTHOR = authors['claire-dubois']
@@ -41,7 +57,12 @@ const CATEGORY_BADGE: Record<Aide['category'], string> = {
 }
 
 export function generateStaticParams() {
-  return aidesSlugs.map((slug) => ({ slug }))
+  // Sprint AI Wave H — pre-render union {12 aides nationales} ∪ {30 dept hubs}.
+  // Les 2 sets sont disjoints par construction (aidesSlugs = noms d'aides type
+  // "maprimerenov", AIDES_INDEXED_DEPTS = slugs INSEE type "paris").
+  const aideParams = aidesSlugs.map((slug) => ({ slug }))
+  const deptParams = getAllAidesDeptHubSlugs().map((slug) => ({ slug }))
+  return [...aideParams, ...deptParams]
 }
 
 type PageProps = {
@@ -56,8 +77,15 @@ function truncate(s: string, max = 60): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const aide = getAideBySlug(slug)
-  if (!aide) return {}
+  if (aide) return metadataForAide(aide, slug)
+  if (isAidesDeptHubSlug(slug)) {
+    const hub = getAidesDeptHubData(slug)
+    if (hub) return metadataForDeptHub(hub)
+  }
+  return {}
+}
 
+function metadataForAide(aide: Aide, slug: string): Metadata {
   const path = `/aides/${slug}`
   // Title brut sans " | SITE_NAME" : le root layout template l'ajoute déjà.
   // Truncate à 43 chars pour rester ≤ 60 chars une fois suffixé.
@@ -82,10 +110,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+function metadataForDeptHub(hub: AidesDeptHubData): Metadata {
+  const path = `/aides/${hub.dept.slug}`
+  const title = truncate(`Aides rénovation ${hub.dept.name} 2026`, 43)
+  const description = truncate(
+    `Toutes les aides rénovation énergétique ${hub.dept.name} (${hub.dept.code}) en 2026 : MaPrimeRénov’, CEE, éco-PTZ, TVA 5,5 %. Cumul + zone climatique ${hub.climate.zone}.`,
+    160
+  )
+  return {
+    title,
+    description,
+    alternates: getAlternates(path),
+    openGraph: {
+      ...getOgDefaults(),
+      locale: 'fr_FR',
+      title: `Aides rénovation ${hub.dept.name} 2026 — ${SITE_NAME}`,
+      description,
+      url: `${SITE_URL}${path}`,
+      type: 'article',
+    },
+  }
+}
+
 export default async function AidePage({ params }: PageProps) {
   const { slug } = await params
   const aide = getAideBySlug(slug)
-  if (!aide) notFound()
+  if (!aide) {
+    if (isAidesDeptHubSlug(slug)) {
+      const hub = getAidesDeptHubData(slug)
+      if (hub) return renderDeptHub(hub)
+    }
+    notFound()
+  }
 
   const path = `/aides/${slug}`
   const url = `${SITE_URL}${path}`
@@ -377,6 +433,284 @@ export default async function AidePage({ params }: PageProps) {
         lastReviewed={aide.lastReviewed}
         author={AUTHOR ? { name: AUTHOR.name } : undefined}
       />
+    </>
+  )
+}
+
+/**
+ * Sprint AI Wave H 2026-05-03 — vue dept hub aggregator (cross-aides).
+ * Rendu lorsque le slug correspond à un dept dans AIDES_INDEXED_DEPTS
+ * plutôt qu'à une aide nationale du catalogue.
+ *
+ * Distribution PageRank : la page distribue vers /aides/[dept]/[aide]
+ * (whitelist 5 aides indexées) + /aides/[aide] nationales + /cee + /devis.
+ */
+function renderDeptHub(hub: AidesDeptHubData) {
+  const path = `/aides/${hub.dept.slug}`
+  const url = `${SITE_URL}${path}`
+  const monthYear = new Date().toLocaleDateString('fr-FR', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/Paris',
+  })
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Aides', url: '/aides' },
+    { name: `Aides ${hub.dept.name}`, url: path },
+  ])
+
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: `Aides rénovation énergétique ${hub.dept.name} 2026`,
+    description: `Toutes les aides rénovation énergétique applicables dans le ${hub.dept.name} (${hub.dept.code}, zone climatique ${hub.climate.zone}) en 2026 : MaPrimeRénov’, CEE, éco-PTZ, TVA 5,5 %, aides régionales.`,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
+    breadcrumb: breadcrumbSchema,
+    dateModified: new Date().toISOString().slice(0, 10),
+    publisher: { '@id': `${SITE_URL}#organization` },
+  }
+
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Aides rénovation ${hub.dept.name} 2026`,
+    numberOfItems: hub.deptIndexedAides.length + 1, // +1 maprimerenov dept-aware
+    itemListElement: [
+      ...hub.deptIndexedAides.map((a, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        url: `${SITE_URL}/aides/${hub.dept.slug}/${a.slug}`,
+        name: `${a.name} ${hub.dept.name}`,
+      })),
+      {
+        '@type': 'ListItem',
+        position: hub.deptIndexedAides.length + 1,
+        url: `${SITE_URL}/aides/${hub.dept.slug}/maprimerenov`,
+        name: `MaPrimeRénov’ ${hub.dept.name}`,
+      },
+    ],
+  }
+
+  const placeSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AdministrativeArea',
+    name: hub.dept.name,
+    additionalProperty: [
+      { '@type': 'PropertyValue', name: 'INSEE department code', value: hub.dept.code },
+      { '@type': 'PropertyValue', name: 'Région', value: hub.dept.region },
+      { '@type': 'PropertyValue', name: 'Zone climatique RT2012', value: hub.climate.zone },
+    ],
+  }
+
+  const tldrBullets = [
+    `${hub.dept.name} (${hub.dept.code}) — chef-lieu ${hub.dept.chefLieu}, région ${hub.dept.region}.`,
+    `Zone climatique RT2012 : ${hub.climate.label} — module les forfaits CEE chauffage / isolation.`,
+    `${aidesCatalog.length} aides nationales applicables (MaPrimeRénov’, CEE, éco-PTZ, TVA 5,5 %, etc.).`,
+    hub.regionalAids.length > 0
+      ? `${hub.regionalAids.length} aide${hub.regionalAids.length > 1 ? 's' : ''} régionale${hub.regionalAids.length > 1 ? 's' : ''} ${hub.dept.region} cumulables.`
+      : `Aucune aide régionale ${hub.dept.region} recensée — focus sur les aides nationales.`,
+    'Artisan certifié RGE obligatoire pour la quasi-totalité des dispositifs.',
+  ]
+
+  return (
+    <>
+      <JsonLd
+        data={[
+          breadcrumbSchema as Record<string, unknown>,
+          webPageSchema as Record<string, unknown>,
+          itemListSchema as Record<string, unknown>,
+          placeSchema as Record<string, unknown>,
+        ]}
+      />
+
+      <Breadcrumb
+        items={[
+          { label: 'Accueil', href: '/' },
+          { label: 'Aides', href: '/aides' },
+          { label: `Aides ${hub.dept.name}` },
+        ]}
+      />
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6">
+        <EnBrefBox
+          summary={`Toutes les aides rénovation énergétique applicables dans le ${hub.dept.name} (${hub.dept.code}) en 2026. Zone climatique ${hub.climate.zone}, ${aidesCatalog.length} aides nationales recensées et ${hub.regionalAids.length} aide${hub.regionalAids.length > 1 ? 's' : ''} régionale${hub.regionalAids.length > 1 ? 's' : ''} ${hub.dept.region}.`}
+          keyPoints={[
+            `Zone climatique RT2012 : ${hub.climate.zone}`,
+            `${aidesCatalog.length} aides nationales (MaPrimeRénov’, CEE, éco-PTZ, TVA 5,5 %, …)`,
+            `${hub.regionalAids.length} aide${hub.regionalAids.length > 1 ? 's' : ''} régionale${hub.regionalAids.length > 1 ? 's' : ''} ${hub.dept.region}`,
+            'Artisans RGE locaux + simulateur d’aides en 2 minutes',
+          ]}
+        />
+      </div>
+
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Sparkles className="w-4 h-4 text-emerald-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-emerald-100">
+              Hub aides {hub.dept.name} · zone {hub.climate.zone}
+            </span>
+          </div>
+          <h1
+            data-speakable="true"
+            className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
+          >
+            Aides rénovation énergétique {hub.dept.name} 2026
+          </h1>
+          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+            {hub.dept.name} (département {hub.dept.code}, région {hub.dept.region}) :{' '}
+            {hub.climate.impact}
+          </p>
+          <LastUpdated
+            label="Catalogue vérifié pour"
+            date={monthYear}
+            className="mt-4 text-emerald-100/90"
+          />
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/simulateur-aides-renovation"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+            >
+              <Calculator className="w-5 h-5" aria-hidden="true" />
+              Simuler mes aides {hub.dept.name}
+            </Link>
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+            >
+              Devis gratuit RGE
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-10 border-b border-charcoal-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <TldrBlock title={`L’essentiel des aides ${hub.dept.name}`} bullets={tldrBullets} />
+        </div>
+      </section>
+
+      <section className="bg-white py-12" aria-labelledby="aides-locales-heading">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2
+            id="aides-locales-heading"
+            className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3"
+          >
+            Aides indexées spécifiquement {hub.dept.name}
+          </h2>
+          <p className="text-charcoal-700 mb-6">
+            Les aides ci-dessous disposent d’une page dédiée au {hub.dept.name} avec barèmes locaux,
+            zone climatique appliquée et conditions précises selon la fiscalité départementale.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Link
+              href={`/aides/${hub.dept.slug}/maprimerenov`}
+              className="group block rounded-xl border border-emerald-200 bg-emerald-50/40 p-5 hover:border-emerald-400 hover:shadow-md transition"
+            >
+              <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+                Subvention nationale · dept-aware
+              </span>
+              <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+                MaPrimeRénov’ {hub.dept.name}
+              </h3>
+              <p className="text-sm text-charcoal-600 leading-relaxed">
+                Barèmes 2026, plafonds revenus appliqués au {hub.dept.name}, démarche officielle
+                Anah.
+              </p>
+            </Link>
+            {hub.deptIndexedAides.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/aides/${hub.dept.slug}/${a.slug}`}
+                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+              >
+                <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+                  {a.category} · dept-aware
+                </span>
+                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+                  {a.name} {hub.dept.name}
+                </h3>
+                <p className="text-sm text-charcoal-600 leading-relaxed">{a.tagline}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {hub.regionalAids.length > 0 && (
+        <section
+          className="bg-emerald-50/40 py-12 border-y border-emerald-100"
+          aria-labelledby="aides-regionales-heading"
+        >
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <h2
+              id="aides-regionales-heading"
+              className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3"
+            >
+              Aides régionales {hub.dept.region} cumulables
+            </h2>
+            <p className="text-charcoal-700 mb-6">
+              Les aides ci-dessous sont émises par la région {hub.dept.region} et cumulables avec
+              les aides nationales (MaPrimeRénov’ + CEE + TVA 5,5 % + éco-PTZ).
+            </p>
+            <ul className="space-y-4">
+              {hub.regionalAids.map((aid) => (
+                <li key={aid.name} className="rounded-xl border border-emerald-200 bg-white p-5">
+                  <div className="flex flex-wrap items-baseline gap-3 mb-2">
+                    <h3 className="font-heading font-bold text-charcoal-900">{aid.name}</h3>
+                    <span className="text-emerald-700 font-semibold">{aid.montant}</span>
+                  </div>
+                  <p className="text-sm text-charcoal-700 leading-relaxed mb-2">{aid.detail}</p>
+                  <a
+                    href={aid.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-emerald-700 underline hover:text-emerald-900"
+                  >
+                    Source officielle
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      <section className="bg-white py-12" aria-labelledby="catalog-national-heading">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2
+            id="catalog-national-heading"
+            className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3"
+          >
+            Toutes les aides nationales applicables {hub.dept.name}
+          </h2>
+          <p className="text-charcoal-700 mb-6">
+            Catalogue complet des aides nationales (subventions, primes privées, prêts, fiscalité).
+            Cliquer pour consulter les barèmes et conditions de chaque aide.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {hub.nationalAides.map((a) => (
+              <Link
+                key={a.slug}
+                href={`/aides/${a.slug}`}
+                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+              >
+                <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+                  {a.category}
+                </span>
+                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+                  {a.name}
+                </h3>
+                <p className="text-sm text-charcoal-600 leading-relaxed">{a.tagline}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   )
 }

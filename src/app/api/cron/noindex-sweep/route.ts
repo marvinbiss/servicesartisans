@@ -25,12 +25,13 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-noindex-sweep', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -94,4 +95,4 @@ export async function GET(request: Request) {
     logger.error('[noindex-sweep] cron failed', error)
     return NextResponse.json({ ok: false, error: 'noindex-sweep cron failure' }, { status: 500 })
   }
-}
+})

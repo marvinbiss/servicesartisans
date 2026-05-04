@@ -20,12 +20,13 @@ import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 
 const HEALTH_CHECK_TIMEOUT_MS = 8000
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-healthcheck', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -82,4 +83,4 @@ export async function GET(request: Request) {
     })
     return NextResponse.json({ healthy: false, error: message, latencyMs }, { status: 503 })
   }
-}
+})

@@ -1,23 +1,28 @@
 /**
  * Page : /renovation-energetique/travaux/pompe-a-chaleur
  *
- * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
- * - "pompe a chaleur prix"        → 1 607 vol, KD 2, CPC $1,10, clicks 1 711 ⭐
- * - "pac air eau prix"            → 126 vol, KD 2, CPC $1,40
- * - "pompe a chaleur"             → ~10K vol estimé (pivot supérieur, KD plus haut)
+ * KW cibles (re-validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
+ * - "pompe a chaleur"             → 56 000 vol, KD 13 (france-renov.gouv.fr #1 — head term)
+ * - "pompe a chaleur prix"        → 1 607 vol, KD 2 (intent prix transactionnel)
+ * - "pac air eau prix"            → 126 vol, KD 2
+ * - "prix pompe a chaleur air eau" → 2 263 vol (sub-page dédiée)
  * - "pompe chaleur prix"          → variant générique
- * - Famille cumulée pivot : ~2 000 vol/mois
+ * - Cluster pivot : 615 KW vol cumulé 230 190/mo, KD moyen 4.6 (cluster #1 Bloc 1)
  *
- * Source : audit Ahrefs API live (cf docs/ahrefs-audit-2026-04/STRATEGIE-RENOVATION-ENERGETIQUE.md
- *          recalibré 2026-05-03 — l'audit du 19/04 surévaluait 10x les volumes)
- * Easy win : OUI (KD ≤ 2 sur KW pivot, vol > 1 500, intent commercial fort CPC > 1 USD)
- * Cluster pillar : Rénovation Énergétique → Travaux → Chauffage
+ * Source : audit Ahrefs Bloc 1 v3 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
+ *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
+ * Easy win : MITIGÉ — head term "pompe a chaleur" KD 13, France-Renov dominant. Long-tail KD 2 OK.
+ * Cluster pillar : Rénovation Énergétique → Travaux → Chauffage → PAC
  *
- * Anti-cannibalisation :
- *   - Source guide /guides/pompe-a-chaleur (710 lignes, technique complet, KW longue traîne)
- *   - Source guide /guides/prix-pompe-chaleur-air-eau-installee (325 lignes, prix détaillés)
- *   - Cette page = HUB pillar (comparaison 3 types, choix dimensionnement, intent transactionnel)
- *   - Maillage descendant vers sub /air-eau-prix/ (KW 'prix pompe a chaleur air eau' 2 263 vol)
+ * Stratégie Bloc 1 :
+ *   - Cette page = hub PAC (comparaison 3 types, dimensionnement, intent transactionnel)
+ *   - Sub-pages /air-eau-prix/, /air-air-prix/, /geothermie/ déjà créées
+ *   - Différenciation vs France-Renov : focus prix marché 2026 + comparatif neutre marques + RGE
+ *
+ * Enrichissement 2026-05-04 :
+ *   - Mise à jour MODIFIED + LastUpdated
+ *   - Re-confirmation KW cibles vs data Bloc 1 réelle (vol 56K confirmé sur "pompe a chaleur")
+ *   - Lien sortant vers hub VMC ajouté (synergie travaux étanchéité)
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -50,7 +55,7 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/pompe-a-chaleur'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-03'
-const MODIFIED = '2026-05-03'
+const MODIFIED = '2026-05-04'
 const AUTHOR_SLUG = 'jean-pierre-duval'
 const AUTHOR_NAME = 'Jean-Pierre Duval'
 
@@ -221,6 +226,11 @@ const relatedPages = [
     label: 'PAC air-eau installée : grille prix',
     href: '/guides/prix-pompe-chaleur-air-eau-installee',
     description: 'Détail par puissance 6-16 kW + cumul aides 2026',
+  },
+  {
+    label: 'Hub VMC',
+    href: '/renovation-energetique/travaux/vmc',
+    description: 'VMC double flux compatible avec PAC, étanchéité air requise',
   },
   {
     label: 'PAC + aides CEE/MaPrimeRénov’ 2026',

@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
 import {
   getOrganizationSchema,
   getBreadcrumbSchema,
@@ -425,6 +426,22 @@ export default async function ServicesPage() {
               'Artisans vérifiés SIREN officiel + sync ADEME pour qualifications RGE',
               'Devis gratuit sous 24h, sans engagement, lead exclusif (1 demande = 1 artisan)',
               'Couverture nationale : 101 départements, 35 000+ communes',
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Sprint AI Wave G Ahrefs 2026-05-03 — EnBrefBox snippet-bait Featured Snippets. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4">
+          <EnBrefBox
+            title="Annuaire artisans en bref"
+            summary={`Annuaire ServicesArtisans : ${staticServicesList.length} métiers du bâtiment couverts en France entière, artisans vérifiés via SIREN officiel + sync hebdomadaire ADEME pour les qualifications RGE. Devis gratuit sous 24h, sans engagement, lead exclusif.`}
+            keyPoints={[
+              `${staticServicesList.length} corps de métier référencés`,
+              `Vérification SIREN automatisée à l'inscription`,
+              `Synchronisation ADEME hebdo (qualifications RGE)`,
+              `Lead exclusif : 1 demande de devis = 1 artisan choisi`,
             ]}
           />
         </div>

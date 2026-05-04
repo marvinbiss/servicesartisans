@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 
+import { logger } from '@/lib/logger'
+import { openDataCorsPreflightResponse } from '@/lib/open-data/cors'
+import { toCsvRow } from '@/lib/seo/csv'
 import { SITE_URL } from '@/lib/seo/config'
-import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
+import { getAllRgeGlossaryEntries, RGE_GLOSSAIRE_PATH } from '@/lib/seo/rge-qualifications-glossary'
 
 /**
  * /api/glossaire-rge.csv — Sprint AF Ahrefs 2026-05-03.
@@ -42,80 +45,70 @@ const LICENSE_URL = 'https://creativecommons.org/licenses/by/4.0/'
 
 const CSV_HEADER = ['slug', 'code', 'name', 'organisme', 'definition', 'term_code', 'canonical_url']
 
-/**
- * Escape une valeur CSV selon RFC 4180.
- *
- * Quote la valeur si elle contient virgule, quote ou newline. Double les
- * quotes internes. Sinon retourne la valeur telle quelle.
- */
-function escapeCsvField(value: string | undefined): string {
-  const v = value ?? ''
-  const needsQuote = /[",\r\n]/.test(v)
-  if (!needsQuote) return v
-  // Double les quotes internes puis quote la valeur entière.
-  return `"${v.replace(/"/g, '""')}"`
-}
-
-function toCsvRow(fields: ReadonlyArray<string | undefined>): string {
-  return fields.map(escapeCsvField).join(',')
-}
+// Sprint AI Ahrefs 2026-05-03 — `escapeCsvField` + `toCsvRow` extraits vers
+// `@/lib/seo/csv` (Next.js App Router refuse tout export non-handler dans
+// route.ts → DEPLOY BLOCKED découvert par audit Build). Module dédié leaf,
+// edge-safe, importable depuis tests sans contrainte route handler.
 
 export async function GET(): Promise<Response> {
-  const entries = getAllRgeGlossaryEntries()
+  // Sprint AI Ahrefs 2026-05-03 — wrap try/catch + logger.error (Adversarial #19).
+  try {
+    const entries = getAllRgeGlossaryEntries()
 
-  // BOM UTF-8 : 3 octets (EF BB BF) encodés en U+FEFF (1 char UTF-16).
-  // Indispensable pour qu'Excel reconnaisse l'encoding sans assistant import.
-  // String.fromCharCode pour éviter d'embarquer un caractère invisible dans
-  // le source (les éditeurs/outils strippent souvent le BOM literal).
-  const bom = String.fromCharCode(0xfeff)
+    // BOM UTF-8 : 3 octets (EF BB BF) encodés en U+FEFF (1 char UTF-16).
+    // Indispensable pour qu'Excel reconnaisse l'encoding sans assistant import.
+    // String.fromCharCode pour éviter d'embarquer un caractère invisible dans
+    // le source (les éditeurs/outils strippent souvent le BOM literal).
+    const bom = String.fromCharCode(0xfeff)
 
-  const headerRow = toCsvRow(CSV_HEADER)
+    const headerRow = toCsvRow(CSV_HEADER)
 
-  const dataRows = entries.map((entry) => {
-    const canonicalUrl = `${SITE_URL}/rge/glossaire#term-${entry.slug}`
-    return toCsvRow([
-      entry.slug,
-      entry.code,
-      entry.name,
-      entry.organisme,
-      entry.definition,
-      entry.termCode,
-      canonicalUrl,
-    ])
-  })
+    const dataRows = entries.map((entry) => {
+      const canonicalUrl = `${SITE_URL}${RGE_GLOSSAIRE_PATH}#term-${entry.slug}`
+      return toCsvRow([
+        entry.slug,
+        entry.code,
+        entry.name,
+        entry.organisme,
+        entry.definition,
+        entry.termCode,
+        canonicalUrl,
+      ])
+    })
 
-  // CRLF entre rangs (RFC 4180 + interopérabilité Excel Windows).
-  const csv = bom + [headerRow, ...dataRows].join('\r\n') + '\r\n'
+    // CRLF entre rangs (RFC 4180 + interopérabilité Excel Windows).
+    const csv = bom + [headerRow, ...dataRows].join('\r\n') + '\r\n'
 
-  return new NextResponse(csv, {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/csv; charset=utf-8',
-      // Déclenche un download direct côté navigateur avec un nom de fichier
-      // explicite (préférable à un viewer in-browser pour un asset open-data).
-      'Content-Disposition': 'attachment; filename="glossaire-rge-servicesartisans.csv"',
-      // Cache CDN 24h + stale-while-revalidate 7j. Cohérent avec /glossaire-rge.json.
-      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-      'CDN-Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-      // CORS permissif : asset open-data réutilisable par tiers.
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      // Asset technique, pas une page SERP. Le SEO se fait via /rge/glossaire.
-      'X-Robots-Tag': 'noindex',
-      // Hint dataset open-data pour crawlers spécialisés.
-      'X-License': LICENSE_URL,
-    },
-  })
+    return new NextResponse(csv, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        // Sprint AI Ahrefs 2026-05-03 (Reviewer agent H3) — `inline` au lieu
+        // de `attachment` : data.gouv.fr et certains parseurs (Power BI URL
+        // dataset, Looker Studio) refusent les URLs CSV en mode `attachment`
+        // car ils preview/parse le contenu before download. Le filename hint
+        // reste ; l'utilisateur final peut Save-As manuellement.
+        'Content-Disposition': 'inline; filename="glossaire-rge-servicesartisans.csv"',
+        // Cache CDN 24h + stale-while-revalidate 7j. Cohérent avec /glossaire-rge.json.
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+        'CDN-Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+        // CORS permissif : asset open-data réutilisable par tiers.
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        // Asset technique, pas une page SERP. Le SEO se fait via /rge/glossaire.
+        'X-Robots-Tag': 'noindex',
+        // Hint dataset open-data pour crawlers spécialisés.
+        'X-License': LICENSE_URL,
+      },
+    })
+  } catch (err) {
+    logger.error('glossaire-rge.csv endpoint failed', err as Error)
+    return new NextResponse('Internal Server Error', { status: 500 })
+  }
 }
 
-export async function OPTIONS(): Promise<NextResponse> {
-  // CORS preflight pour les fetch JS depuis domaines tiers.
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Max-Age': '86400',
-    },
-  })
+export async function OPTIONS(): Promise<Response> {
+  // Sprint AI Ahrefs 2026-05-03 — handler partagé via `openDataCorsPreflightResponse`
+  // (déduplication avec /api/glossaire-rge.json).
+  return openDataCorsPreflightResponse()
 }

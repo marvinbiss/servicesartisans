@@ -19,10 +19,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 export interface CreateClaimInput {
   providerId: string
   siret: string
-  fullName: string
   email: string
-  phone: string
-  position: string
+  fullName?: string
+  phone?: string
+  position?: string
 }
 
 export interface ListClaimsParams {
@@ -114,6 +114,12 @@ export async function createClaim(
   userId: string | null
 ): Promise<ServiceResult<{ message: string }>> {
   const { providerId, siret, fullName, email, phone, position } = input
+  // Audit B/C #2 (2026-05-04) : fullName, phone, position devenus optionnels
+  // côté UI. Stockés tels quels (string vide = absence) pour ne pas forcer
+  // de défaut menteur. Admin enrichit lors de la validation.
+  const claimantName = fullName?.trim() || ''
+  const claimantPhone = phone?.trim() || ''
+  const claimantPosition = position?.trim() || ''
   const adminClient = createAdminClient()
 
   // Duplicate checks — different logic for authenticated vs anonymous
@@ -243,10 +249,10 @@ export async function createClaim(
     provider_id: providerId,
     user_id: userId ?? null,
     siret_provided: isSirenInput ? normalizedStored : normalizedInput,
-    claimant_name: fullName,
+    claimant_name: claimantName,
     claimant_email: email.trim().toLowerCase(),
-    claimant_phone: phone,
-    claimant_position: position,
+    claimant_phone: claimantPhone,
+    claimant_position: claimantPosition,
     status: 'pending',
   })
 
@@ -274,11 +280,11 @@ export async function createClaim(
   }
 
   // Update user profile if authenticated
-  if (userId) {
+  if (userId && claimantName) {
     await adminClient
       .from('profiles')
       .update({
-        full_name: fullName,
+        full_name: claimantName,
         updated_at: new Date().toISOString(),
       })
       .eq('id', userId)

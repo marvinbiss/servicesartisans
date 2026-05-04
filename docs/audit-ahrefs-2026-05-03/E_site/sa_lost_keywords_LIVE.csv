@@ -1,0 +1,25 @@
+rank,priority,keyword,volume,best_position,sum_traffic,keyword_difficulty,cpc_eur,best_position_url,recommended_action
+1,P0_high_value,comment deboucher wc,2200,18,12,2,3,https://servicesartisans.fr/blog/comment-deboucher-wc-guide,moderate_drop — refresh content + internal links + indexnow
+2,P1_quickwin,plomberie urgence,200,4,10,1,170,https://servicesartisans.fr/urgence/plombier/saint-julien-en-genevois,minor_serp_drop — recheck content + indexnow ping
+3,P0_high_value,facadier,2500,22,6,0,119,https://servicesartisans.fr/departements/creuse/facadier,moderate_drop — refresh content + internal links + indexnow
+4,P2_long_tail,vitrier aubergenville,90,7,4,0,0,https://servicesartisans.fr/avis/vitrier/aubergenville,minor_serp_drop — recheck content + indexnow ping
+5,P2_long_tail,cuisiniste pays de la loire,80,8,3,1,0,https://servicesartisans.fr/regions/pays-de-la-loire/cuisiniste,minor_serp_drop — recheck content + indexnow ping
+6,P2_long_tail,vitrier roquevaire,80,10,3,1,0,https://servicesartisans.fr/avis/vitrier/roquevaire,minor_serp_drop — recheck content + indexnow ping
+7,P2_long_tail,serrurier paimpol,90,12,2,0,123,https://servicesartisans.fr/services/serrurier/paimpol,moderate_drop — refresh content + internal links + indexnow
+8,P2_long_tail,installation prise,70,5,2,0,74,https://servicesartisans.fr/blog/comment-installer-prise-electrique,minor_serp_drop — recheck content + indexnow ping
+9,P2_long_tail,domotique villeneuve sur lot,80,11,2,0,0,https://servicesartisans.fr/services/domoticien/villeneuve-sur-lot,moderate_drop — refresh content + internal links + indexnow
+10,P2_long_tail,vitrier viroflay,70,11,2,0,436,https://servicesartisans.fr/tarifs/vitrier/viroflay,moderate_drop — refresh content + internal links + indexnow
+11,P2_long_tail,eric corniglion,100,6,2,0,5,https://servicesartisans.fr/services/solier/vence/eric-corniglion-327758421,minor_serp_drop — recheck content + indexnow ping
+12,P2_long_tail,serrurier mont saint aignan,50,11,1,0,565,https://servicesartisans.fr/services/serrurier/mont-saint-aignan,moderate_drop — refresh content + internal links + indexnow
+13,P2_long_tail,réparation fissure façade angers,50,10,1,0,0,https://servicesartisans.fr/problemes/fissure-mur/angers,minor_serp_drop — recheck content + indexnow ping
+14,P1_quickwin,serrurier sevran,350,20,1,0,733,https://servicesartisans.fr/urgence/serrurier/sevran,moderate_drop — refresh content + internal links + indexnow
+15,P2_long_tail,vitrier gien,70,12,1,0,97,https://servicesartisans.fr/services/vitrier/gien,moderate_drop — refresh content + internal links + indexnow
+16,P2_long_tail,plombier magny le hongre,50,12,1,0,664,https://servicesartisans.fr/avis/plombier/magny-le-hongre,moderate_drop — refresh content + internal links + indexnow
+17,P0_high_value,façadier,1000,28,0,0,101,https://servicesartisans.fr/departements/creuse/facadier,moderate_drop — refresh content + internal links + indexnow
+18,P2_long_tail,serrurier pantin,700,46,0,0,26,https://servicesartisans.fr/tarifs/serrurier/pantin,major_drop — likely content quality or thin page issue
+19,P2_long_tail,serrurier aix-les-bains,600,48,0,2,102,https://servicesartisans.fr/avis/serrurier/aix-les-bains,major_drop — likely content quality or thin page issue
+20,P0_high_value,prix pose carrelage,1700,19,0,3,60,https://servicesartisans.fr/questions/prix-pose-carrelage-m2,moderate_drop — refresh content + internal links + indexnow
+21,P2_long_tail,plombier biarritz,400,50,0,6,150,https://servicesartisans.fr/urgence/plombier/biarritz,major_drop — likely content quality or thin page issue
+22,P2_long_tail,plombier gonesse,200,53,0,0,545,https://servicesartisans.fr/services/plombier/gonesse,unranked_now — page possibly deleted or 404 ; check route alive + redirect
+23,P2_long_tail,prix serrurier,700,37,0,3,133,https://servicesartisans.fr/tarifs/serrurier/vieux-habitants,major_drop — likely content quality or thin page issue
+24,P2_long_tail,plombier besancon,400,45,0,10,88,https://servicesartisans.fr/services/plombier/besancon,major_drop — likely content quality or thin page issue

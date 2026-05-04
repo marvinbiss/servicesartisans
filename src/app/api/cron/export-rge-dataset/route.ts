@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { exportRgeDataset } from '../../../../../scripts/cron/export-rge-dataset'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Sprint 0.4 — Cron mensuel : export du dataset RGE (CSV + NDJSON + Parquet).
@@ -24,7 +25,7 @@ import { exportRgeDataset } from '../../../../../scripts/cron/export-rge-dataset
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-export-rge-dataset', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-export-rge-dataset',
     async () => {
@@ -85,4 +86,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 4 1 * *' },
     }
   )
-}
+})

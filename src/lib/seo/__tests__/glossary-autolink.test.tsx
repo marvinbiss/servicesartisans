@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 import { autoLinkRgeTerms, __resetGlossaryAutolinkCacheForTests } from '../glossary-autolink'
@@ -8,6 +8,14 @@ function render(node: React.ReactNode): string {
 }
 
 describe('autoLinkRgeTerms — Sprint L Ahrefs 2026-05-03', () => {
+  // Sprint AI Ahrefs 2026-05-03 — reset cache IIFE entre tests (Test architecture audit P1).
+  // Le singleton `cached` au niveau module pollue cross-test : si un futur test
+  // mocke `getAllRgeGlossaryEntries()`, l'ordre d'exécution devient critique.
+  // Reset systématique = isolation déterministe.
+  beforeEach(() => {
+    __resetGlossaryAutolinkCacheForTests()
+  })
+
   it('returns text unchanged when no RGE term mention', () => {
     const result = autoLinkRgeTerms('Le chauffage est en panne depuis 3 jours.')
     expect(result).toBe('Le chauffage est en panne depuis 3 jours.')

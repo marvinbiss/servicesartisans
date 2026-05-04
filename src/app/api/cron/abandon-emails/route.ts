@@ -5,6 +5,7 @@ import { getAbandonEmail1 } from '@/lib/email/templates/abandon-email-1'
 import { getAbandonEmail2 } from '@/lib/email/templates/abandon-email-2'
 import { getAbandonEmail3 } from '@/lib/email/templates/abandon-email-3'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
@@ -13,7 +14,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.f
  * Cron job to send recovery email sequences (30min, 24h, 72h).
  * Protected by CRON_SECRET.
  */
-export async function POST(request: NextRequest) {
+export const POST = withCronCheckIn('cron-abandon-emails', async (request: NextRequest) => {
   // Verify cron secret
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
@@ -137,4 +138,4 @@ export async function POST(request: NextRequest) {
     console.error('[abandon-emails] Cron error:', err)
     return NextResponse.json({ error: 'cron failed' }, { status: 500 })
   }
-}
+})

@@ -1,22 +1,30 @@
 /**
  * Page : /renovation-energetique/travaux/isolation/exterieure-ite
  *
- * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
- * - "isolation exterieure"        → 678 vol, KD 4, CPC $1,90, clicks 1 029 ⭐⭐
- * - "isolation par exterieur"     → 533 vol, KD 2, CPC $2,00 ⭐
- * - "ite isolation"               → 502 vol, KD 6, CPC $1,30 ⭐
- * - "isolation murs exterieurs"   → 150 vol, KD 12, CPC $1,20
- * - "ite prix"                    → 90 vol, KD 5
- * - "isolation thermique exterieure" → 88 vol, KD 10
- * - Famille cumulée pivot : ~2 040 vol/mois (CPC $1,30-2,00 = intent commercial fort)
+ * KW cibles (re-validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
+ * - "isolation exterieur"          → 14 000 vol, KD 2 (france-renov.gouv.fr #1 — JACKPOT)
+ * - "isolation par l'extérieur"    → 12 000 vol, KD 2 (effy.fr #1)
+ * - "isolation exterieure"         → 678 vol, KD 4 (longue traîne)
+ * - "isolation par exterieur"      → 533 vol, KD 2
+ * - "ite isolation"                → 502 vol, KD 6
+ * - "isolation murs exterieurs"    → 150 vol, KD 12
+ * - "ite prix"                     → 90 vol, KD 5
+ * - Cluster ITE : 159 KW vol cumulé 64 610/mo, KD moyen 6.1 (Bloc 1)
  *
- * Source : audit Ahrefs API live. Easy win (KD 2-6 sur 1.7K vol cumulé).
- * Easy win : OUI (KD 4 sur KW pivot, intent commercial CPC $1,90)
+ * Source : audit Ahrefs Bloc 1 v3 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
+ *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
+ * Easy win : OUI MEGA — KD 2 sur head term 14K vol, France-Renov dominant (gov), Effy challenger.
+ *            Atout SA : focus prix marché 2026 + comparatif bardage/enduit/vêture + RGE Qualibat 7141.
  * Cluster pillar : Rénovation Énergétique → Travaux → Isolation → ITE
  *
  * Anti-cannibalisation :
  *   - Source guide /guides/isolation-ite-iti-rge-aides-2026 (509 lignes ITE/ITI comparatif)
  *   - Cette page = HUB ITE (techniques bardage/enduit/vêture, prix, aides 75 €/m², ABF)
+ *
+ * Enrichissement 2026-05-04 :
+ *   - Mise à jour MODIFIED + LastUpdated
+ *   - Re-confirmation KW Bloc 1 réelle (vol 14K + 12K sur 2 variants head)
+ *   - Lien sortant vers hub VMC ajouté (synergie post-isolation)
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -197,6 +205,11 @@ const relatedPages = [
   {
     label: 'Trouver un artisan ITE RGE',
     href: '/rge/renovation-energetique',
+  },
+  {
+    label: 'Hub VMC',
+    href: '/renovation-energetique/travaux/vmc',
+    description: 'À installer après isolation lourde (étanchéité air = double flux rentable)',
   },
 ]
 

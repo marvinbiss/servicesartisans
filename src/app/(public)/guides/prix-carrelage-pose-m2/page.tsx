@@ -7,6 +7,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
@@ -145,6 +146,21 @@ export default function Page() {
             </p>
           </header>
           <TldrBlock bullets={tldr} />
+
+          {/* Sprint AI Wave B Ahrefs 2026-05-03 — EnBrefBox snippet-bait
+              keyword "prix pose carrelage" (vol 1700, striking distance 18-22).
+              Capture Featured Snippet + AI Overviews avec answer-box-friendly. */}
+          <EnBrefBox
+            title="Prix pose carrelage 2026 en bref"
+            summary="En 2026, faire poser du carrelage coûte 30 à 80 €/m² pour la pose seule (main-d'œuvre + colle + joints), et 60 à 150 €/m² posé tout compris (fourniture incluse). Pose diagonale, motifs ou grand format ajoutent +15 à +100 % selon complexité."
+            keyPoints={[
+              `Pose simple droite : 30-50 €/m² TTC`,
+              `Pose diagonale : 45-70 €/m² (+30-50 %)`,
+              `Motifs complexes (chevron, opus) : 60-120 €/m² (+60-100 %)`,
+              `Total moyen posé tout compris : 60-150 €/m² selon gamme + préparation`,
+            ]}
+          />
+
           <article className="prose prose-sand max-w-none prose-headings:font-heading prose-headings:text-sand-900 prose-a:text-primary-700 prose-a:no-underline hover:prose-a:underline">
             <h2>Prix pose au m² selon type et difficulté</h2>
             <div className="not-prose bg-white border border-sand-200 rounded-xl my-6 overflow-x-auto">

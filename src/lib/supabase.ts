@@ -458,8 +458,17 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   // Aucun provider ne porte ces specialty values en DB ; on liste les NAF
   // proches qui hébergent les artisans RGE concernés. Le filtre
   // `.not('rge_qualifications', 'is', null)` du listing RGE filtre les non-RGE.
+  // Sprint 2 Phase E 2026-05-04 — `audit-energetique` étendu à `geometre`
+  // (NAF 71.12B Activités d'ingénierie) après diagnostic DB :
+  // - Avant : 124 RGE actifs nationaux, 0 à Lille (page rendue not-found 200)
+  // - 1003 RGE catégorie décret 17 (rénovation globale + accompagnateur)
+  // - Distribution : geometre 881 (88%), diagnostiqueur 104, autres 18
+  // Le filtre additionnel `rge_categories_decret @> [17]` (cf. RGE_DECRET_FILTER
+  // dans service-city-listings.ts) garantit que seuls les géomètres RGE
+  // catégorie 17 (vrais BET audit énergétique OPQIBI 1905/1911) remontent —
+  // pas les géomètres-experts pure délimitation foncière.
   'chauffe-eau-thermodynamique': ['plombier', 'chauffagiste', 'pompe-a-chaleur'],
-  'audit-energetique': ['renovation-energetique', 'diagnostiqueur'],
+  'audit-energetique': ['renovation-energetique', 'diagnostiqueur', 'geometre'],
   ventilation: ['climaticien', 'chauffagiste', 'electricien'],
   fenetres: ['menuisier'],
 

@@ -36,6 +36,9 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
+import TldrBlock from '@/components/flagship/TldrBlock'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getRegionPreposition, getRegionArticle } from '@/lib/geo-strings'
 
@@ -192,6 +195,44 @@ export default async function RegionServicePage({ params }: PageProps) {
     category: trade.name,
   })
 
+  // Sprint M.2 2026-05-03 — Snippet 10x : EnBrefBox / TldrBlock / SnippetBaitSummary
+  // câblés sur ce template (234 combos région×service, 0 composant snippet préalable).
+  // ImmediateAnswerBlock skip volontairement (template statique sans DB providerCount
+  // régional fiable — pas d'invention de stats côté CTR).
+  const enBrefPoints = [
+    `${trade.name} ${getRegionPreposition(region.name)} : tarif moyen ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}x).`,
+    `${deptCount} département${deptCount > 1 ? 's' : ''} couvert${deptCount > 1 ? 's' : ''}, ${cityCount} ville${cityCount > 1 ? 's' : ''} de la région adressables.`,
+    `Climat ${content.profile.climateLabel.toLowerCase()} — typologies bâti et saisonnalité prises en compte.`,
+    'Artisans vérifiés via base SIRENE officielle (INSEE) + sync RGE ADEME quotidien.',
+    'Devis gratuit sous 24 h, lead exclusif (1 demande = 1 artisan retenu).',
+  ]
+
+  const tldrBullets = [
+    `${trade.name} ${getRegionPreposition(region.name)} : ${minPrice}–${maxPrice} ${trade.priceRange.unit} en 2026 (coef ${multiplier.toFixed(2)}x).`,
+    `Couverture ${deptCount} département${deptCount > 1 ? 's' : ''} · ${cityCount} ville${cityCount > 1 ? 's' : ''} de la région.`,
+    `Climat ${content.profile.climateLabel.toLowerCase()} — interventions adaptées à la saisonnalité régionale.`,
+    'Comparez 3 devis d’artisans locaux, gratuit et sans engagement.',
+  ]
+
+  // Top 8 autres métiers de la région avec prix régionaux ajustés (multiplier).
+  // SnippetBaitSummary gère les unités hétérogènes (prose neutre si mix €/h+€/m²).
+  const snippetTrades = otherServices
+    .slice(0, 8)
+    .map((s) => {
+      const t = getTradeContent(s.slug)
+      if (!t) return null
+      return {
+        name: t.name,
+        slug: s.slug,
+        min: Math.round(t.priceRange.min * multiplier),
+        max: Math.round(t.priceRange.max * multiplier),
+        unit: t.priceRange.unit,
+      }
+    })
+    .filter(
+      (x): x is { name: string; slug: string; min: number; max: number; unit: string } => x !== null
+    )
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
@@ -306,6 +347,29 @@ export default async function RegionServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Sprint M.2 2026-05-03 — Snippet 10x : EnBrefBox + TldrBlock + SnippetBait
+          pour Featured Snippets / AI Overviews / [data-speakable]. */}
+      <section className="bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+          <EnBrefBox
+            summary={`${trade.name} ${getRegionPreposition(region.name)} en 2026 : tarif moyen ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}x), ${deptCount} départements et ${cityCount} villes adressables. Artisans vérifiés SIREN, devis gratuit sous 24 h.`}
+            keyPoints={enBrefPoints}
+          />
+          <TldrBlock
+            title={`${trade.name} ${getRegionPreposition(region.name)} — l'essentiel`}
+            bullets={tldrBullets}
+          />
+        </div>
+      </section>
+
+      {snippetTrades.length > 0 && (
+        <section className="bg-sand-50 py-8">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SnippetBaitSummary trades={snippetTrades} />
+          </div>
+        </section>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}

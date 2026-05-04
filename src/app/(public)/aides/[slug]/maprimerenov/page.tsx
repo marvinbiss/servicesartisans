@@ -26,7 +26,7 @@ import {
   CLIMATE_ZONE_LABELS,
   deptToClimateZone,
 } from '@/lib/aides/climate-zones'
-import { getDepartementBySlug } from '@/lib/data/france'
+import { getDepartementBySlug, departements } from '@/lib/data/france'
 import { getDeptPreposition } from '@/lib/geo-strings'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -43,31 +43,14 @@ export const revalidate = 86400
 export const dynamicParams = true
 const CONTENT_UPDATED_AT = '2026-04-29'
 
-const PRERENDER_DEPTS: readonly string[] = [
-  'paris',
-  'nord',
-  'bouches-du-rhone',
-  'rhone',
-  'seine-saint-denis',
-  'yvelines',
-  'hauts-de-seine',
-  'gironde',
-  'haute-garonne',
-  'val-de-marne',
-  'pas-de-calais',
-  'isere',
-  'essonne',
-  'val-doise',
-  'seine-et-marne',
-  'alpes-maritimes',
-  'loire-atlantique',
-  'ille-et-vilaine',
-  'moselle',
-  'finistere',
-]
-
+// Sprint 3 territorial 2026-05-04 — pre-render TOUS les départements (96+).
+// Avant : 20 dépts pré-rendus, 76 en cold-start ISR (TTFB >2s sur premier hit).
+// Après : tous les dépts français (incluant outre-mer) pré-rendus au build.
+// Cible audit STRATEGIE-RENOVATION-ENERGETIQUE.md ligne 238 : "96 pages
+// /aides/[dept]/maprimerenov". On utilise `departements` source de vérité
+// pour ne pas drift si la liste évolue (ajout/retrait dept).
 export function generateStaticParams() {
-  return PRERENDER_DEPTS.map((slug) => ({ slug }))
+  return departements.map((d) => ({ slug: d.slug }))
 }
 
 interface PageProps {

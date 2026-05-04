@@ -1,6 +1,7 @@
 import { SITE_URL, SITE_NAME } from './config'
 import { companyIdentity, isCompanyRegistered, getSocialLinks } from '@/lib/config/company-identity'
 import { hashCode } from '@/lib/seo/location-content'
+import { getAllRgeGlossaryEntries, RGE_GLOSSAIRE_PATH } from '@/lib/seo/rge-qualifications-glossary'
 
 // Schema.org Organization
 export function getOrganizationSchema() {
@@ -309,6 +310,12 @@ export function getFAQSchema(
         '[data-speakable="true"]',
         'details summary',
         'details p',
+        // Sprint AI Ahrefs 2026-05-03 — `details > div` ajouté suite à
+        // l'audit adversarial qui a identifié 54 pages utilisant le pattern
+        // `<details><summary>...</summary><div>...</div></details>` (au lieu
+        // de `<p>` direct). Sans ce selector, le speakable était rejeté
+        // silencieusement par Google sur ces 54 pages (régression du fix Sprint X).
+        'details > div',
         '.faq-question',
         '.faq-answer',
       ],
@@ -1463,7 +1470,14 @@ export function getRgeDefinedTermSetSchema(params: {
       name: t.name,
       description: t.definition,
       termCode: t.termCode ?? t.code,
-      inDefinedTermSet: `${params.pageUrl}#glossary-rge`,
+      // Sprint AI Ahrefs 2026-05-03 (Reviewer C1) — pointer cohérent canonique.
+      // Sur les hubs (Sprints J/M/P), `inDefinedTermSet` doit pointer vers le
+      // DefinedTermSet canonique (`/rge/glossaire#glossary-rge`), pas vers le
+      // hub local. Sans ça, un crawler suivant `inDefinedTermSet` reste sur le
+      // hub au lieu de remonter à l'entité canonique → consolidation cassée.
+      inDefinedTermSet: !isCanonicalPage
+        ? `${canonicalUrl}#glossary-rge`
+        : `${params.pageUrl}#glossary-rge`,
       ...(!isCanonicalPage && {
         sameAs: `${canonicalUrl}#term-${t.slug}`,
       }),
@@ -1472,6 +1486,34 @@ export function getRgeDefinedTermSetSchema(params: {
       }),
     })),
   }
+}
+
+/**
+ * Sprint AI Ahrefs 2026-05-03 — factory pour les hubs RGE/services/CEE.
+ *
+ * Avant Sprint AI, les 3 hubs (`/rge/[s]`, `/services/[s]`, `/cee/[op]`)
+ * dupliquaient le même appel `getRgeDefinedTermSetSchema(...)` en variant
+ * uniquement `name` et `description` (description quasi-identique). Ce helper
+ * factorise et garantit `canonicalEntityBaseUrl` et la description normalisés
+ * sur les 3 callsites.
+ *
+ * Usage : `buildHubRgeGlossarySchema({ pageUrl, hubLabel: 'Pompe à chaleur' })`.
+ */
+export function buildHubRgeGlossarySchema(params: {
+  pageUrl: string
+  hubLabel: string
+  /** Description override optionnel (ex. CEE qui mentionne le code opération). */
+  description?: string
+}): Record<string, unknown> | null {
+  return getRgeDefinedTermSetSchema({
+    pageUrl: params.pageUrl,
+    name: `Glossaire RGE — ${params.hubLabel}`,
+    description:
+      params.description ??
+      `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${params.hubLabel.toLowerCase()}.`,
+    terms: getAllRgeGlossaryEntries(),
+    canonicalEntityBaseUrl: `${SITE_URL}${RGE_GLOSSAIRE_PATH}`,
+  })
 }
 
 // Schema.org HowTo dérivé des deep H2 sections décisionnelles (Sprint G

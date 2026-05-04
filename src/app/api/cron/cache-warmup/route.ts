@@ -4,6 +4,7 @@ import { services, villes, departements } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Cache warmup cron — rotation-based strategy.
@@ -177,7 +178,7 @@ function getRotatingUrls(slot: number): { category: SlotCategory; urls: string[]
   }
 }
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-cache-warmup', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -268,4 +269,4 @@ export async function GET(request: Request) {
     durationMs: duration,
     timestamp: new Date().toISOString(),
   })
-}
+})

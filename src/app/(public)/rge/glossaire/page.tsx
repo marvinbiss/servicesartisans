@@ -82,7 +82,23 @@ export default function RgeGlossairePage() {
     description:
       'Définitions canoniques des qualifications RGE 2026 : QualiPAC, QualiSol, QualiBois, Qualibat 7141/7144/7131, Qualifelec IRVE, OPQIBI 1905, RGE Éco Artisan.',
     url: pageUrl,
-    mainEntityOfPage: pageUrl,
+    // Sprint AI Ahrefs 2026-05-03 (Reviewer C2) — `mainEntityOfPage` doit être
+    // un objet `WebPage` typé avec `@id`, pas une string. La forme string
+    // est tolérée par Schema.org mais Google Rich Results Test ne la résout
+    // pas correctement → l'Article est traité comme orphelin de page.
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Qualifications RGE',
+      sameAs: [
+        'https://france-renov.gouv.fr/',
+        'https://annuaire-rge.ademe.fr/',
+        'https://fr.wikipedia.org/wiki/Reconnu_garant_de_l%27environnement',
+      ],
+    },
     datePublished: '2026-05-03T00:00:00+02:00',
     dateModified: monthlyAnchor,
     author: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
@@ -135,9 +151,12 @@ export default function RgeGlossairePage() {
     speakableCssSelectors: ['h1', '[data-speakable="true"]', 'details summary', 'details p'],
   })
 
+  // Sprint AI Ahrefs 2026-05-03 — cast redondant retiré : `getFAQSchema`
+  // retourne déjà `Record<string, unknown> | null`. Le narrow `if (faqSchema)`
+  // élimine `null` → assignation directe sans cast.
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, articleSchema]
   if (definedTermSetSchema) jsonLdItems.push(definedTermSetSchema)
-  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  if (faqSchema) jsonLdItems.push(faqSchema)
 
   return (
     <main className="min-h-screen bg-white">

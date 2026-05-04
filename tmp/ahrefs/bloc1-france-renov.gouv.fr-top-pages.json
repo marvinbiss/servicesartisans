@@ -1,0 +1,2004 @@
+{
+  "pages": [
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/pompe-chaleur-maison",
+      "sum_traffic": 28253,
+      "keywords": 298,
+      "top_keyword": "pompe a chaleur",
+      "top_keyword_volume": 56000,
+      "top_keyword_best_position": 1,
+      "value": 3914930,
+      "referring_domains": 68
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaires-professionnels/artisan-rge-architecte",
+      "sum_traffic": 18885,
+      "keywords": 646,
+      "top_keyword": "rge",
+      "top_keyword_volume": 13000,
+      "top_keyword_best_position": 1,
+      "value": 1596120,
+      "referring_domains": 2692
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/murs-maison",
+      "sum_traffic": 9721,
+      "keywords": 353,
+      "top_keyword": "isolation exterieur",
+      "top_keyword_volume": 14000,
+      "top_keyword_best_position": 1,
+      "value": 1469194,
+      "referring_domains": 116
+    },
+    {
+      "url": "https://france-renov.gouv.fr/",
+      "sum_traffic": 8589,
+      "keywords": 779,
+      "top_keyword": "france renov",
+      "top_keyword_volume": 7300,
+      "top_keyword_best_position": 1,
+      "value": 863202,
+      "referring_domains": 6809
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/simulation",
+      "sum_traffic": 8211,
+      "keywords": 164,
+      "top_keyword": "ma prime renov",
+      "top_keyword_volume": 57000,
+      "top_keyword_best_position": 4,
+      "value": 1057674,
+      "referring_domains": 115
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/mpr",
+      "sum_traffic": 6085,
+      "keywords": 475,
+      "top_keyword": "ma prime renov",
+      "top_keyword_volume": 57000,
+      "top_keyword_best_position": 8,
+      "value": 791760,
+      "referring_domains": 307
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/chauffe-eau-thermodynamique-maison",
+      "sum_traffic": 5170,
+      "keywords": 182,
+      "top_keyword": "chauffe eau thermodynamique",
+      "top_keyword_volume": 29000,
+      "top_keyword_best_position": 3,
+      "value": 127572,
+      "referring_domains": 24
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/combles-maison",
+      "sum_traffic": 4206,
+      "keywords": 241,
+      "top_keyword": "isolation des combles",
+      "top_keyword_volume": 3600,
+      "top_keyword_best_position": 1,
+      "value": 499224,
+      "referring_domains": 61
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/",
+      "sum_traffic": 4191,
+      "keywords": 344,
+      "top_keyword": "ma prime renov 2026",
+      "top_keyword_volume": 12000,
+      "top_keyword_best_position": 5,
+      "value": 645246,
+      "referring_domains": 548
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/maprimeadapt",
+      "sum_traffic": 4134,
+      "keywords": 420,
+      "top_keyword": "maprimeadapt",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 1,
+      "value": 288352,
+      "referring_domains": 986
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/simulation",
+      "sum_traffic": 3973,
+      "keywords": 691,
+      "top_keyword": "ma prime renov simulation",
+      "top_keyword_volume": 2200,
+      "top_keyword_best_position": 2,
+      "value": 554794,
+      "referring_domains": 2345
+    },
+    {
+      "url": "https://france-renov.gouv.fr/mon-accompagnateur-renov",
+      "sum_traffic": 3371,
+      "keywords": 35,
+      "top_keyword": "mar",
+      "top_keyword_volume": 12000,
+      "top_keyword_best_position": 1,
+      "value": 81661,
+      "referring_domains": 409
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/murs-interieurs-appartement",
+      "sum_traffic": 2754,
+      "keywords": 174,
+      "top_keyword": "isolation mur intérieur",
+      "top_keyword_volume": 7800,
+      "top_keyword_best_position": 5,
+      "value": 119969,
+      "referring_domains": 10
+    },
+    {
+      "url": "https://france-renov.gouv.fr/preparer-projet/dpe-audit",
+      "sum_traffic": 2615,
+      "keywords": 267,
+      "top_keyword": "diagnostic énergétique",
+      "top_keyword_volume": 8600,
+      "top_keyword_best_position": 4,
+      "value": 230973,
+      "referring_domains": 77
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/cee",
+      "sum_traffic": 2587,
+      "keywords": 529,
+      "top_keyword": "cee edf",
+      "top_keyword_volume": 5000,
+      "top_keyword_best_position": 6,
+      "value": 342364,
+      "referring_domains": 277
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/poele-granules",
+      "sum_traffic": 2529,
+      "keywords": 57,
+      "top_keyword": "poele a granule",
+      "top_keyword_volume": 29000,
+      "top_keyword_best_position": 5,
+      "value": 102323,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/maprimeadapt/amo",
+      "sum_traffic": 2191,
+      "keywords": 36,
+      "top_keyword": "amo",
+      "top_keyword_volume": 8400,
+      "top_keyword_best_position": 1,
+      "value": 35142,
+      "referring_domains": 53
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/chauffe-eau-solaire",
+      "sum_traffic": 2160,
+      "keywords": 193,
+      "top_keyword": "chauffe eau solaire",
+      "top_keyword_volume": 12000,
+      "top_keyword_best_position": 3,
+      "value": 144858,
+      "referring_domains": 24
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation",
+      "sum_traffic": 1978,
+      "keywords": 83,
+      "top_keyword": "isolation maison",
+      "top_keyword_volume": 1300,
+      "top_keyword_best_position": 1,
+      "value": 215662,
+      "referring_domains": 51
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/portes-fenetres-maison",
+      "sum_traffic": 1941,
+      "keywords": 238,
+      "top_keyword": "changer fenetre",
+      "top_keyword_volume": 600,
+      "top_keyword_best_position": 2,
+      "value": 331467,
+      "referring_domains": 40
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/energetique",
+      "sum_traffic": 1843,
+      "keywords": 79,
+      "top_keyword": "rénovation énergétique maison",
+      "top_keyword_volume": 1500,
+      "top_keyword_best_position": 1,
+      "value": 187010,
+      "referring_domains": 59
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/combles-perdus",
+      "sum_traffic": 1294,
+      "keywords": 63,
+      "top_keyword": "isolation combles perdus",
+      "top_keyword_volume": 2000,
+      "top_keyword_best_position": 1,
+      "value": 151082,
+      "referring_domains": 7
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage",
+      "sum_traffic": 1167,
+      "keywords": 114,
+      "top_keyword": "type de chauffage",
+      "top_keyword_volume": 500,
+      "top_keyword_best_position": 1,
+      "value": 69302,
+      "referring_domains": 45
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/monte-escaliers",
+      "sum_traffic": 1087,
+      "keywords": 88,
+      "top_keyword": "monte escalier",
+      "top_keyword_volume": 7000,
+      "top_keyword_best_position": 5,
+      "value": 343465,
+      "referring_domains": 32
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/solaire",
+      "sum_traffic": 1051,
+      "keywords": 18,
+      "top_keyword": "chauffage solaire",
+      "top_keyword_volume": 3200,
+      "top_keyword_best_position": 1,
+      "value": 25297,
+      "referring_domains": 17
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/exoneration-fiscale/taxe-fonciere",
+      "sum_traffic": 981,
+      "keywords": 147,
+      "top_keyword": "exonération taxe foncière 2026",
+      "top_keyword_volume": 5500,
+      "top_keyword_best_position": 5,
+      "value": 2665,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://france-renov.gouv.fr/ventilation/ventilation-double-flux",
+      "sum_traffic": 978,
+      "keywords": 75,
+      "top_keyword": "vmc double flux fonctionnement",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 1,
+      "value": 10326,
+      "referring_domains": 10
+    },
+    {
+      "url": "https://france-renov.gouv.fr/contact",
+      "sum_traffic": 863,
+      "keywords": 215,
+      "top_keyword": "ma prime renov numero de telephone",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 63922,
+      "referring_domains": 62
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/maprimerenov-renovation-ampleur",
+      "sum_traffic": 798,
+      "keywords": 338,
+      "top_keyword": "renovation d'ampleur",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 1,
+      "value": 76775,
+      "referring_domains": 348
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/vmc",
+      "sum_traffic": 764,
+      "keywords": 91,
+      "top_keyword": "ventilation",
+      "top_keyword_volume": 4300,
+      "top_keyword_best_position": 2,
+      "value": 43279,
+      "referring_domains": 21
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/pret-taux-0",
+      "sum_traffic": 763,
+      "keywords": 32,
+      "top_keyword": "ptz 2026",
+      "top_keyword_volume": 7400,
+      "top_keyword_best_position": 6,
+      "value": 22563,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/sous-sol-garage",
+      "sum_traffic": 741,
+      "keywords": 57,
+      "top_keyword": "isolation garage",
+      "top_keyword_volume": 1500,
+      "top_keyword_best_position": 4,
+      "value": 22300,
+      "referring_domains": 6
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/depose-cuve-fioul",
+      "sum_traffic": 685,
+      "keywords": 96,
+      "top_keyword": "enlèvement cuve fioul gratuit",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 3,
+      "value": 44545,
+      "referring_domains": 16
+    },
+    {
+      "url": "https://france-renov.gouv.fr/bareme",
+      "sum_traffic": 601,
+      "keywords": 245,
+      "top_keyword": "rfr",
+      "top_keyword_volume": 3100,
+      "top_keyword_best_position": 7,
+      "value": 22680,
+      "referring_domains": 413
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/eco-pret-taux-zero",
+      "sum_traffic": 592,
+      "keywords": 194,
+      "top_keyword": "prêt à taux zéro condition",
+      "top_keyword_volume": 1400,
+      "top_keyword_best_position": 6,
+      "value": 20379,
+      "referring_domains": 299
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/maprimerenov",
+      "sum_traffic": 587,
+      "keywords": 207,
+      "top_keyword": "aide ma prime renov",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 1,
+      "value": 65966,
+      "referring_domains": 510
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/baignoire-douche-appartement",
+      "sum_traffic": 577,
+      "keywords": 35,
+      "top_keyword": "transformer baignoire en douche pour senior",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 1,
+      "value": 49779,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/bons-gestes-energetiques/chauffage",
+      "sum_traffic": 529,
+      "keywords": 57,
+      "top_keyword": "temperature chauffage",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 1,
+      "value": 866,
+      "referring_domains": 11
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/vmc/maison",
+      "sum_traffic": 516,
+      "keywords": 35,
+      "top_keyword": "vmc simple flux",
+      "top_keyword_volume": 15000,
+      "top_keyword_best_position": 12,
+      "value": 8457,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/toitures-terrasses",
+      "sum_traffic": 471,
+      "keywords": 45,
+      "top_keyword": "isolation toit terrasse",
+      "top_keyword_volume": 600,
+      "top_keyword_best_position": 2,
+      "value": 26364,
+      "referring_domains": 9
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/baignoire-douche-maison",
+      "sum_traffic": 459,
+      "keywords": 50,
+      "top_keyword": "remplacer baignoire par douche",
+      "top_keyword_volume": 600,
+      "top_keyword_best_position": 3,
+      "value": 43380,
+      "referring_domains": 11
+    },
+    {
+      "url": "https://france-renov.gouv.fr/la-renovation-globale",
+      "sum_traffic": 439,
+      "keywords": 36,
+      "top_keyword": "renovation globale",
+      "top_keyword_volume": 400,
+      "top_keyword_best_position": 1,
+      "value": 81915,
+      "referring_domains": 24
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/murs-copropriete",
+      "sum_traffic": 396,
+      "keywords": 27,
+      "top_keyword": "comment isoler un mur extérieur",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 1,
+      "value": 17932,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/proprietaire-bailleur",
+      "sum_traffic": 384,
+      "keywords": 68,
+      "top_keyword": "propriétaire bailleur",
+      "top_keyword_volume": 900,
+      "top_keyword_best_position": 3,
+      "value": 18179,
+      "referring_domains": 21
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/maprimerenov-copropriete",
+      "sum_traffic": 356,
+      "keywords": 41,
+      "top_keyword": "ma prime renov copropriété",
+      "top_keyword_volume": 300,
+      "top_keyword_best_position": 1,
+      "value": 11993,
+      "referring_domains": 209
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/electrique-radiateurs-maison",
+      "sum_traffic": 350,
+      "keywords": 100,
+      "top_keyword": "radiateurs electriques",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 9,
+      "value": 28883,
+      "referring_domains": 11
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/chaudiere-granules",
+      "sum_traffic": 346,
+      "keywords": 64,
+      "top_keyword": "chaudiere a pellet",
+      "top_keyword_volume": 700,
+      "top_keyword_best_position": 6,
+      "value": 23585,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/insert-foyer-ferme",
+      "sum_traffic": 327,
+      "keywords": 57,
+      "top_keyword": "insert cheminée",
+      "top_keyword_volume": 5000,
+      "top_keyword_best_position": 13,
+      "value": 10932,
+      "referring_domains": 4
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Pompe%20%C3%A0%20chaleur%20air%2Feau",
+      "sum_traffic": 326,
+      "keywords": 53,
+      "top_keyword": "prime renov pompe a chaleur",
+      "top_keyword_volume": 450,
+      "top_keyword_best_position": 3,
+      "value": 72604,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation",
+      "sum_traffic": 321,
+      "keywords": 24,
+      "top_keyword": "travaux de rénovation",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 1,
+      "value": 13402,
+      "referring_domains": 46
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Chauffe-eau%20thermodynamique",
+      "sum_traffic": 309,
+      "keywords": 24,
+      "top_keyword": "ma prime renov chauffe eau thermodynamique",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 1,
+      "value": 36952,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/dispositif-denormandie",
+      "sum_traffic": 268,
+      "keywords": 8,
+      "top_keyword": "loi denormandie",
+      "top_keyword_volume": 1700,
+      "top_keyword_best_position": 4,
+      "value": 4747,
+      "referring_domains": 9
+    },
+    {
+      "url": "https://france-renov.gouv.fr/receptionner-travaux",
+      "sum_traffic": 258,
+      "keywords": 65,
+      "top_keyword": "réception des travaux",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 3,
+      "value": 3768,
+      "referring_domains": 15
+    },
+    {
+      "url": "https://france-renov.gouv.fr/preparer-projet/trouver-conseiller",
+      "sum_traffic": 255,
+      "keywords": 118,
+      "top_keyword": "espace conseil france renov",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 17573,
+      "referring_domains": 820
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/loc-avantages",
+      "sum_traffic": 251,
+      "keywords": 16,
+      "top_keyword": "loc avantages",
+      "top_keyword_volume": 1100,
+      "top_keyword_best_position": 3,
+      "value": 1020,
+      "referring_domains": 59
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-acceder/rampe-acces-maison",
+      "sum_traffic": 232,
+      "keywords": 39,
+      "top_keyword": "rampe handicapé pente",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 1,
+      "value": 4571,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/regulation/equiper-votre-copropriete-de-compteurs-calorifiques",
+      "sum_traffic": 227,
+      "keywords": 27,
+      "top_keyword": "compteur calories chauffage",
+      "top_keyword_volume": 90,
+      "top_keyword_best_position": 1,
+      "value": 15884,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaire-rge/recherche",
+      "sum_traffic": 213,
+      "keywords": 102,
+      "top_keyword": "annuaire artisan rge",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 4,
+      "value": 19171,
+      "referring_domains": 44
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/gaz-appartement",
+      "sum_traffic": 212,
+      "keywords": 23,
+      "top_keyword": "chauffage au gaz",
+      "top_keyword_volume": 1000,
+      "top_keyword_best_position": 3,
+      "value": 9428,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement/formations",
+      "sum_traffic": 184,
+      "keywords": 10,
+      "top_keyword": "formation rénovation",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 1,
+      "value": 14541,
+      "referring_domains": 7
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/maprimerenov-pour-une-renovation-d-ampleur-les-nouvelles-conditions-au-30-septembre-2025",
+      "sum_traffic": 182,
+      "keywords": 9,
+      "top_keyword": "prime renov 2025",
+      "top_keyword_volume": 4300,
+      "top_keyword_best_position": 8,
+      "value": 20484,
+      "referring_domains": 25
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/calorifugeage-tuyauterie",
+      "sum_traffic": 174,
+      "keywords": 30,
+      "top_keyword": "isolation calorifugeage",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 1,
+      "value": 6542,
+      "referring_domains": 14
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/equipements-solaires-hybrides",
+      "sum_traffic": 169,
+      "keywords": 31,
+      "top_keyword": "panneau solaire hybride",
+      "top_keyword_volume": 1400,
+      "top_keyword_best_position": 10,
+      "value": 22594,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement/qualifications-rge",
+      "sum_traffic": 165,
+      "keywords": 54,
+      "top_keyword": "rge c'est quoi",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 1,
+      "value": 4212,
+      "referring_domains": 124
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/collectivites-locales",
+      "sum_traffic": 165,
+      "keywords": 37,
+      "top_keyword": "aides des collectivités territoriales",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 1,
+      "value": 8639,
+      "referring_domains": 147
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaires-professionnels/accompagnant",
+      "sum_traffic": 158,
+      "keywords": 45,
+      "top_keyword": "trouver un accompagnateur rénov",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 11139,
+      "referring_domains": 174
+    },
+    {
+      "url": "https://france-renov.gouv.fr/chauffagechauffe-eau/la-pompe-chaleur-solarothermique-ou-geothermique",
+      "sum_traffic": 147,
+      "keywords": 41,
+      "top_keyword": "pompe a chaleur geothermique",
+      "top_keyword_volume": 600,
+      "top_keyword_best_position": 7,
+      "value": 14153,
+      "referring_domains": 7
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/vmc/copropriete",
+      "sum_traffic": 144,
+      "keywords": 33,
+      "top_keyword": "vmc appartement",
+      "top_keyword_volume": 600,
+      "top_keyword_best_position": 8,
+      "value": 3249,
+      "referring_domains": 4
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/toiture-copropriete",
+      "sum_traffic": 121,
+      "keywords": 12,
+      "top_keyword": "isolation toiture",
+      "top_keyword_volume": 4700,
+      "top_keyword_best_position": 10,
+      "value": 5313,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/isolation/brise-soleil-verticaux-protections-solaires-mobiles-lames-orientables-opaques-films",
+      "sum_traffic": 119,
+      "keywords": 4,
+      "top_keyword": "brise soleil",
+      "top_keyword_volume": 2800,
+      "top_keyword_best_position": 8,
+      "value": 4105,
+      "referring_domains": 4
+    },
+    {
+      "url": "https://france-renov.gouv.fr/petit-tertiaire-prive",
+      "sum_traffic": 114,
+      "keywords": 14,
+      "top_keyword": "rénovation local professionnel",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 24615,
+      "referring_domains": 18
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/ma-prime-logement-decent",
+      "sum_traffic": 111,
+      "keywords": 18,
+      "top_keyword": "ma prime logement décent",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 1,
+      "value": 324,
+      "referring_domains": 189
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/tva-taux-reduit",
+      "sum_traffic": 111,
+      "keywords": 53,
+      "top_keyword": "tva 10 travaux",
+      "top_keyword_volume": 900,
+      "top_keyword_best_position": 9,
+      "value": 216,
+      "referring_domains": 32
+    },
+    {
+      "url": "https://france-renov.gouv.fr/charte-MAR",
+      "sum_traffic": 110,
+      "keywords": 9,
+      "top_keyword": "logo france renov",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 1,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Po%C3%AAle%20et%20cuisini%C3%A8re%20%C3%A0%20granul%C3%A9s",
+      "sum_traffic": 103,
+      "keywords": 26,
+      "top_keyword": "aide poele a granule",
+      "top_keyword_volume": 450,
+      "top_keyword_best_position": 7,
+      "value": 12152,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-148/Chauffe-eau%20thermodynamique",
+      "sum_traffic": 93,
+      "keywords": 9,
+      "top_keyword": "prime cee ballon thermodynamique",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 1,
+      "value": 10469,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2023-01/Guide-des-aides-financieres-2023.pdf",
+      "sum_traffic": 80,
+      "keywords": 310,
+      "top_keyword": "subvention rénovation maison ancienne 2023",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 8352,
+      "referring_domains": 55
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/planchers-rdc-cave-copropriete",
+      "sum_traffic": 80,
+      "keywords": 10,
+      "top_keyword": "isolation plancher bas",
+      "top_keyword_volume": 1000,
+      "top_keyword_best_position": 8,
+      "value": 4355,
+      "referring_domains": 4
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/regulation/robinets-thermostatiques-appartement",
+      "sum_traffic": 77,
+      "keywords": 16,
+      "top_keyword": "robinet thermostatique",
+      "top_keyword_volume": 8600,
+      "top_keyword_best_position": 8,
+      "value": 1195,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/rehabilitation/vieillissement-handicap",
+      "sum_traffic": 74,
+      "keywords": 12,
+      "top_keyword": "travaux d'adaptation du logement pour les personnes handicapées",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 2918,
+      "referring_domains": 14
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement/differents-metiers/artisans-specialises-isolation",
+      "sum_traffic": 74,
+      "keywords": 23,
+      "top_keyword": "artisan isolation intérieure",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 5,
+      "value": 13324,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/mon-accompagnateur-renov/demande-agrement",
+      "sum_traffic": 66,
+      "keywords": 25,
+      "top_keyword": "devenir mon accompagnateur rénov",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 2893,
+      "referring_domains": 78
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-acceder/chemin-exterieur",
+      "sum_traffic": 66,
+      "keywords": 15,
+      "top_keyword": "norme pmr cheminement exterieur",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 1,
+      "value": 1721,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/taxe-fonciere/communes-eligibles",
+      "sum_traffic": 62,
+      "keywords": 15,
+      "top_keyword": "liste des communes exonération taxe foncière",
+      "top_keyword_volume": 90,
+      "top_keyword_best_position": 1,
+      "value": 451,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/chaudiere-buches",
+      "sum_traffic": 61,
+      "keywords": 24,
+      "top_keyword": "chaudiere bois buche",
+      "top_keyword_volume": 300,
+      "top_keyword_best_position": 11,
+      "value": 2572,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/copropriete",
+      "sum_traffic": 58,
+      "keywords": 13,
+      "top_keyword": "rénovation copropriété",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 1,
+      "value": 3178,
+      "referring_domains": 8
+    },
+    {
+      "url": "https://france-renov.gouv.fr/preparer-projet/mon-accompagnateur-renov",
+      "sum_traffic": 57,
+      "keywords": 25,
+      "top_keyword": "accompagnement rénovation énergétique",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 3070,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/fraudes",
+      "sum_traffic": 57,
+      "keywords": 10,
+      "top_keyword": "arnaque prime renov",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 2,
+      "value": 1717,
+      "referring_domains": 460
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/bareme-revenus",
+      "sum_traffic": 56,
+      "keywords": 56,
+      "top_keyword": "anah plafond de ressources",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 2,
+      "value": 1838,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/avant-de-dire-oui-demandez-un-autre-avis-mefiez-vous-des-arnaques-la-renovation",
+      "sum_traffic": 55,
+      "keywords": 10,
+      "top_keyword": "france rénov avis",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 1,
+      "value": 1810,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Po%C3%AAle%20et%20cuisini%C3%A8re%20%C3%A0%20b%C3%BBches",
+      "sum_traffic": 51,
+      "keywords": 28,
+      "top_keyword": "ma prime renov poele a bois",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 4,
+      "value": 4736,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/regulation/thermostat/maison",
+      "sum_traffic": 51,
+      "keywords": 12,
+      "top_keyword": "ou mettre le thermostat dans une maison",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 1,
+      "value": 354,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/pret-taux-0/eco-ptz",
+      "sum_traffic": 50,
+      "keywords": 17,
+      "top_keyword": "eco ptz residence secondaire",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 4,
+      "value": 1304,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/gaz-maison",
+      "sum_traffic": 49,
+      "keywords": 14,
+      "top_keyword": "chauffage gaz maison",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 3,
+      "value": 3215,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-125/Ventilation%20double%20flux",
+      "sum_traffic": 46,
+      "keywords": 5,
+      "top_keyword": "cee vmc double flux",
+      "top_keyword_volume": 80,
+      "top_keyword_best_position": 1,
+      "value": 5030,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/mandataire/devenir-mandataire-maprimerenov",
+      "sum_traffic": 42,
+      "keywords": 5,
+      "top_keyword": "mandataire ma prime renov",
+      "top_keyword_volume": 90,
+      "top_keyword_best_position": 1,
+      "value": 3606,
+      "referring_domains": 6
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/regulation/robinets-thermostatiques-maison",
+      "sum_traffic": 42,
+      "keywords": 15,
+      "top_keyword": "a quoi sert un robinet thermostatique",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 378,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/francerenov/qui-somme-nous",
+      "sum_traffic": 39,
+      "keywords": 14,
+      "top_keyword": "france rénov contact",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 1,
+      "value": 677,
+      "referring_domains": 14
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-EN-101/Isolation%20de%20combles%20ou%20de%20toiture",
+      "sum_traffic": 37,
+      "keywords": 3,
+      "top_keyword": "prime cee isolation combles",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 3,
+      "value": 5314,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-EN-105/Isolation%20des%20toitures%20terrasses",
+      "sum_traffic": 36,
+      "keywords": 3,
+      "top_keyword": "cee toiture terrasse",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 1,
+      "value": 1633,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/wc-sureleve",
+      "sum_traffic": 32,
+      "keywords": 13,
+      "top_keyword": "toilette surélevé",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 8,
+      "value": 552,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/rehabilitation/logement",
+      "sum_traffic": 31,
+      "keywords": 10,
+      "top_keyword": "aide désamiantage toiture",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 5,
+      "value": 900,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement",
+      "sum_traffic": 31,
+      "keywords": 6,
+      "top_keyword": "emploi rénovation énergétique",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 3,
+      "value": 669,
+      "referring_domains": 13
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/pret-taux-0/pret-avance-renovation",
+      "sum_traffic": 31,
+      "keywords": 6,
+      "top_keyword": "pret avance renovation",
+      "top_keyword_volume": 450,
+      "top_keyword_best_position": 9,
+      "value": 2034,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/contact/rappel",
+      "sum_traffic": 30,
+      "keywords": 32,
+      "top_keyword": "ma prime renov telephone",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 7,
+      "value": 1379,
+      "referring_domains": 7
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/4-regles-dossier-maprimerenov",
+      "sum_traffic": 29,
+      "keywords": 24,
+      "top_keyword": "comment bénéficier de la prime renov",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 2847,
+      "referring_domains": 6
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-EN-101/Isolation%20des%20rampants%20de%20toiture%20ou%20plafonds%20de%20combles",
+      "sum_traffic": 29,
+      "keywords": 2,
+      "top_keyword": "cee isolation toiture",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 1,
+      "value": 2937,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/surtoiture-ventilee",
+      "sum_traffic": 28,
+      "keywords": 6,
+      "top_keyword": "surtoiture",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 5,
+      "value": 1601,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/coup-de-pouce/Pompe%20%C3%A0%20chaleur%20air%2Feau",
+      "sum_traffic": 27,
+      "keywords": 16,
+      "top_keyword": "aide chaudiere",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 8,
+      "value": 4155,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-171/Pompe%20%C3%A0%20chaleur%20air%2Feau",
+      "sum_traffic": 27,
+      "keywords": 3,
+      "top_keyword": "bar th 171",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 3,
+      "value": 3396,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaire-ar/recherche",
+      "sum_traffic": 25,
+      "keywords": 10,
+      "top_keyword": "trouver un accompagnateur rénov",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 2,
+      "value": 1372,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/menuiseries-copropriete",
+      "sum_traffic": 25,
+      "keywords": 8,
+      "top_keyword": "changement fenêtre copropriété",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 3,
+      "value": 3215,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/motorisation-volets-maison",
+      "sum_traffic": 24,
+      "keywords": 9,
+      "top_keyword": "motoriser des volets roulants",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 8,
+      "value": 1372,
+      "referring_domains": 18
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaires-professionnels",
+      "sum_traffic": 24,
+      "keywords": 18,
+      "top_keyword": "france rénov annuaire rge",
+      "top_keyword_volume": 90,
+      "top_keyword_best_position": 3,
+      "value": 728,
+      "referring_domains": 27
+    },
+    {
+      "url": "https://france-renov.gouv.fr/planifier-travaux",
+      "sum_traffic": 23,
+      "keywords": 7,
+      "top_keyword": "planning travaux renovation",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 1358,
+      "referring_domains": 9
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-143/Chauffage%20solaire%20combin%C3%A9",
+      "sum_traffic": 22,
+      "keywords": 2,
+      "top_keyword": "bar th 143",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 3,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides-renovation-logement-falc/maprimerenov",
+      "sum_traffic": 21,
+      "keywords": 3,
+      "top_keyword": "maprimerenov telephone",
+      "top_keyword_volume": 300,
+      "top_keyword_best_position": 7,
+      "value": 2114,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/preparer-projet/dossier-demande-aide",
+      "sum_traffic": 20,
+      "keywords": 14,
+      "top_keyword": "dossier rge particulier",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 1,
+      "value": 2799,
+      "referring_domains": 14
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/maprimerenov-reouverture-du-guichet-la-promulgation-de-la-loi-de-finances",
+      "sum_traffic": 20,
+      "keywords": 3,
+      "top_keyword": "réouverture",
+      "top_keyword_volume": 7700,
+      "top_keyword_best_position": 15,
+      "value": 10982,
+      "referring_domains": 11
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Isolation%20thermique%20des%20toitures%20terrasses",
+      "sum_traffic": 19,
+      "keywords": 12,
+      "top_keyword": "ma prime rénov toiture",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 4,
+      "value": 1855,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-129/Pompe%20%C3%A0%20chaleur%20de%20type%20de%20type%20air%2Fair",
+      "sum_traffic": 18,
+      "keywords": 2,
+      "top_keyword": "bar th 129",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 3,
+      "value": 2674,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-101/Chauffe-eau%20solaire%20individuel%20en%20M%C3%A9tropole",
+      "sum_traffic": 17,
+      "keywords": 2,
+      "top_keyword": "bar th 101",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 2,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Isolation%20des%20rampants%20de%20toiture%20ou%20plafonds%20de%20combles",
+      "sum_traffic": 16,
+      "keywords": 7,
+      "top_keyword": "prime renov isolation toiture",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 4,
+      "value": 1584,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/salubrite/amenagements-interieurs-logement",
+      "sum_traffic": 15,
+      "keywords": 2,
+      "top_keyword": "renovations interieures",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 1,
+      "value": 533,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-172/Pompe%20%C3%A0%20chaleur%20solarothermique",
+      "sum_traffic": 15,
+      "keywords": 2,
+      "top_keyword": "bar th 172",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 3,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/professionnels",
+      "sum_traffic": 15,
+      "keywords": 6,
+      "top_keyword": "logo france renov",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 6,
+      "value": 120,
+      "referring_domains": 6
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/bardage-ventile",
+      "sum_traffic": 14,
+      "keywords": 2,
+      "top_keyword": "bardage ventilé",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 6,
+      "value": 631,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-CONSEIL-CONSEILLER-ENERGIE.pdf",
+      "sum_traffic": 14,
+      "keywords": 6,
+      "top_keyword": "conseiller en énergie",
+      "top_keyword_volume": 80,
+      "top_keyword_best_position": 5,
+      "value": 1077,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/simulation?parcours+d%27aide=%22r%C3%A9novation+%C3%A9nerg%C3%A9tique%22*",
+      "sum_traffic": 14,
+      "keywords": 9,
+      "top_keyword": "nos gestes climat",
+      "top_keyword_volume": 1400,
+      "top_keyword_best_position": 16,
+      "value": 584,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Ventilation%20double%20flux",
+      "sum_traffic": 13,
+      "keywords": 8,
+      "top_keyword": "vmc double flux prime renov",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 6,
+      "value": 1444,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement/differents-metiers/artisans-chauffagistes",
+      "sum_traffic": 12,
+      "keywords": 2,
+      "top_keyword": "chauffagistes",
+      "top_keyword_volume": 200,
+      "top_keyword_best_position": 6,
+      "value": 1270,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter",
+      "sum_traffic": 12,
+      "keywords": 8,
+      "top_keyword": "adaptation domicile personnes âgées",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 2,
+      "value": 451,
+      "referring_domains": 20
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/electrique-emetteurs-appartement",
+      "sum_traffic": 11,
+      "keywords": 3,
+      "top_keyword": "emetteur electrique",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 1,
+      "value": 487,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/proprietaire-occupant",
+      "sum_traffic": 10,
+      "keywords": 4,
+      "top_keyword": "propriétaire occupant",
+      "top_keyword_volume": 80,
+      "top_keyword_best_position": 3,
+      "value": 0,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-137/Raccordement%20%C3%A0%20un%20r%C3%A9seau%20de%20chaleur",
+      "sum_traffic": 10,
+      "keywords": 2,
+      "top_keyword": "bar th 137",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 4,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-TH-112/Appareil%20ind%C3%A9pendant%20de%20chauffage%20au%20bois",
+      "sum_traffic": 10,
+      "keywords": 2,
+      "top_keyword": "bar th 112",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides",
+      "sum_traffic": 10,
+      "keywords": 2,
+      "top_keyword": "aides à la rénovation énergétique",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 6,
+      "value": 1111,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/christiane-nous-n-avons-plus-besoin-de-chauffer-la-journee",
+      "sum_traffic": 9,
+      "keywords": 1,
+      "top_keyword": "dechauffer",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 6,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/coup-de-pouce",
+      "sum_traffic": 8,
+      "keywords": 5,
+      "top_keyword": "coup de pouce chauffage locataire",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 7,
+      "value": 940,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-EN-102/Isolation%20des%20murs",
+      "sum_traffic": 8,
+      "keywords": 2,
+      "top_keyword": "bar en 102",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 5,
+      "value": 1170,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee",
+      "sum_traffic": 8,
+      "keywords": 4,
+      "top_keyword": "certificats d'économies d'énergie",
+      "top_keyword_volume": 400,
+      "top_keyword_best_position": 11,
+      "value": 95,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/regulation",
+      "sum_traffic": 8,
+      "keywords": 6,
+      "top_keyword": "régulation",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 15,
+      "value": 136,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/mentions-legales",
+      "sum_traffic": 8,
+      "keywords": 5,
+      "top_keyword": "ma prime renov adresse postale",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 1,
+      "value": 151,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/recrutement/differents-metiers/assistance-maitrise-ouvrage",
+      "sum_traffic": 8,
+      "keywords": 10,
+      "top_keyword": "assistance maitrise d ouvrage batiment",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 4,
+      "value": 210,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/securite/installer-renover-reseaux-eau-gaz-electricite",
+      "sum_traffic": 8,
+      "keywords": 1,
+      "top_keyword": "rénovation électricité",
+      "top_keyword_volume": 250,
+      "top_keyword_best_position": 8,
+      "value": 268,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-ENCADREMENT-CHEF-DE-CHANTIER.pdf",
+      "sum_traffic": 7,
+      "keywords": 3,
+      "top_keyword": "fiche de poste chef de chantier",
+      "top_keyword_volume": 90,
+      "top_keyword_best_position": 5,
+      "value": 308,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie",
+      "sum_traffic": 7,
+      "keywords": 4,
+      "top_keyword": "perte d'autonomie solution",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 8,
+      "value": 47,
+      "referring_domains": 16
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Chauffe-eau%20solaire%20individuel%20en%20M%C3%A9tropole",
+      "sum_traffic": 7,
+      "keywords": 10,
+      "top_keyword": "prime chauffe eau solaire",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 9,
+      "value": 755,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/cee/BAR-EN-104/Remplacement%20de%20simple%20vitrage",
+      "sum_traffic": 7,
+      "keywords": 5,
+      "top_keyword": "cee changement fenetre",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 5,
+      "value": 965,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/regulation/thermostat",
+      "sum_traffic": 7,
+      "keywords": 8,
+      "top_keyword": "installation thermostat",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 4,
+      "value": 404,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-GROS-OEUVRE-FACADIER.pdf",
+      "sum_traffic": 6,
+      "keywords": 5,
+      "top_keyword": "façadier peintre",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 8,
+      "value": 354,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/annuaire-rge/identifier",
+      "sum_traffic": 6,
+      "keywords": 6,
+      "top_keyword": "annuaire rge france renov",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 5,
+      "value": 168,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/mandataire/bonnes-pratiques-professionnels",
+      "sum_traffic": 5,
+      "keywords": 3,
+      "top_keyword": "ma prime rénov devis signé ou pas",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 1,
+      "value": 251,
+      "referring_domains": 7
+    },
+    {
+      "url": "https://france-renov.gouv.fr/pour-un-logement-sain/traiter-votre-logement-contre-les-risques-sanitaires",
+      "sum_traffic": 5,
+      "keywords": 2,
+      "top_keyword": "traitement humidité maison",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 7,
+      "value": 618,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Foyer%20ferm%C3%A9%20et%20insert%20%C3%A0%20b%C3%BBches%20ou%20%C3%A0%20granul%C3%A9s",
+      "sum_traffic": 5,
+      "keywords": 5,
+      "top_keyword": "ma prime renov insert bois",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 3,
+      "value": 745,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/foire-aux-questions",
+      "sum_traffic": 4,
+      "keywords": 7,
+      "top_keyword": "ma prime rénov compromis de vente",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 7,
+      "value": 225,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Remplacement%20de%20simple%20vitrage",
+      "sum_traffic": 4,
+      "keywords": 2,
+      "top_keyword": "maprimerenov changement fenetre",
+      "top_keyword_volume": 80,
+      "top_keyword_best_position": 9,
+      "value": 319,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-CONSEIL-DOMOTICIEN.pdf",
+      "sum_traffic": 4,
+      "keywords": 1,
+      "top_keyword": "domoticien",
+      "top_keyword_volume": 350,
+      "top_keyword_best_position": 7,
+      "value": 47,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/contact/rappel/confirmation",
+      "sum_traffic": 4,
+      "keywords": 7,
+      "top_keyword": "france renov contact",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 1,
+      "value": 117,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-EQUIPEMENT-TECHNIQUE-PLOMBIER-CHAUFFAGISTE.pdf",
+      "sum_traffic": 4,
+      "keywords": 2,
+      "top_keyword": "fiche métier plombier chauffagiste",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 9,
+      "value": 74,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Chauffage%20solaire%20combin%C3%A9",
+      "sum_traffic": 4,
+      "keywords": 1,
+      "top_keyword": "système solaire combiné ma prime rénov",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 6,
+      "value": 751,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/poele-buches",
+      "sum_traffic": 4,
+      "keywords": 3,
+      "top_keyword": "poele a bois france",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 7,
+      "value": 177,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://france-renov.gouv.fr/salubrite/traiter-vos-parties-communes-contre-les-risques-sanitaires",
+      "sum_traffic": 3,
+      "keywords": 2,
+      "top_keyword": "peinture partie commune immeuble",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 8,
+      "value": null,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/collectivites/reseaux-chaleur",
+      "sum_traffic": 3,
+      "keywords": 2,
+      "top_keyword": "réseaux de chaleur",
+      "top_keyword_volume": 150,
+      "top_keyword_best_position": 10,
+      "value": 110,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/pah-caf",
+      "sum_traffic": 3,
+      "keywords": 6,
+      "top_keyword": "prêt travaux caf",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 6,
+      "value": 80,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-EQUIPEMENT-TECHNIQUE-IETC.pdf",
+      "sum_traffic": 3,
+      "keywords": 2,
+      "top_keyword": "equipement thermique",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 7,
+      "value": null,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/actualites/un-nouveau-guide-pour-comprendre-maprimeadapt-et-preparer-votre-projet-d-adaptation",
+      "sum_traffic": 3,
+      "keywords": 2,
+      "top_keyword": "ma prime adapt france rénov",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/D%C3%A9pose%20de%20cuve%20%C3%A0%20fioul",
+      "sum_traffic": 3,
+      "keywords": 6,
+      "top_keyword": "ma prime rénov cuve fioul",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 11,
+      "value": 173,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-GROS-OEUVRE-FINITION-PLATRIER-PLAQUISTE.pdf",
+      "sum_traffic": 3,
+      "keywords": 1,
+      "top_keyword": "fiche métier plaquiste",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 10,
+      "value": 81,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/securite/effectuer-des-travaux-de-gros-oeuvre-dans-vos-parties-communes",
+      "sum_traffic": 3,
+      "keywords": 3,
+      "top_keyword": "gros travaux copropriété",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/exoneration-fiscale",
+      "sum_traffic": 3,
+      "keywords": 1,
+      "top_keyword": "exonération fiscale",
+      "top_keyword_volume": 350,
+      "top_keyword_best_position": 7,
+      "value": 74,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/raccordement-urbain-copropriete",
+      "sum_traffic": 3,
+      "keywords": 2,
+      "top_keyword": "chauffage immeuble",
+      "top_keyword_volume": 50,
+      "top_keyword_best_position": 5,
+      "value": 84,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-acceder/elargir-porte-maison",
+      "sum_traffic": 2,
+      "keywords": 3,
+      "top_keyword": "agrandir une porte",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 4,
+      "value": null,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/mentions-legales",
+      "sum_traffic": 2,
+      "keywords": 3,
+      "top_keyword": "valérie mancret-taylor",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 8,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-GROS-OEUVRE-COUVREUR.pdf",
+      "sum_traffic": 2,
+      "keywords": 1,
+      "top_keyword": "fiche métier couvreur",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 8,
+      "value": 35,
+      "referring_domains": 20
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/autonomie-adapter/barre-douche",
+      "sum_traffic": 2,
+      "keywords": 3,
+      "top_keyword": "installation barre de douche",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 3,
+      "value": 18,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/formulaire-de-contact",
+      "sum_traffic": 2,
+      "keywords": 1,
+      "top_keyword": "formulaire rge",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 8,
+      "value": 36,
+      "referring_domains": 5
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/syst%C3%A8me-electrique-copropriete",
+      "sum_traffic": 2,
+      "keywords": 2,
+      "top_keyword": "éclairage partie commune immeuble",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 6,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/isolation/protection-solaire-toiture",
+      "sum_traffic": 2,
+      "keywords": 3,
+      "top_keyword": "pare soleil fenetre de toit",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 8,
+      "value": 50,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/bons-gestes-energetiques/eau-chaude",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "eau chaude sanitaire",
+      "top_keyword_volume": 800,
+      "top_keyword_best_position": 19,
+      "value": 28,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Pompe%20%C3%A0%20chaleur%20g%C3%A9othermique",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "aide geothermie",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 11,
+      "value": 99,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/raccordement-urbain-maison",
+      "sum_traffic": 1,
+      "keywords": 2,
+      "top_keyword": "raccordement réseau de chaleur",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 3,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/preparer-projet",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "france projet",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 9,
+      "value": null,
+      "referring_domains": 2
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/Audit%20%C3%A9nerg%C3%A9tique",
+      "sum_traffic": 1,
+      "keywords": 4,
+      "top_keyword": "audit énergétique ma prime rénov",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 9,
+      "value": 69,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/securite/securiser-logement",
+      "sum_traffic": 1,
+      "keywords": 2,
+      "top_keyword": "sécuriser appartement",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 7,
+      "value": 391,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://france-renov.gouv.fr/espaces-conseil-fr/recherche",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "espace conseil",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 50
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "ma prime renov.gouv.fr",
+      "top_keyword_volume": 700,
+      "top_keyword_best_position": 27,
+      "value": 103,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/api-doc",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "aide api",
+      "top_keyword_volume": 40,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/chauffage/chauffe-eau-appartement",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "chauffe eau appartement",
+      "top_keyword_volume": 70,
+      "top_keyword_best_position": 12,
+      "value": 41,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/simulation?&depuisModule=oui",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "france renov simulation",
+      "top_keyword_volume": 60,
+      "top_keyword_best_position": 1,
+      "value": 201,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/renovation/salubrite",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "salubrité",
+      "top_keyword_volume": 1100,
+      "top_keyword_best_position": 6,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/aides/ma-prime-renov/undefined",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "prime renov gouv",
+      "top_keyword_volume": 500,
+      "top_keyword_best_position": 27,
+      "value": 74,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/landingpageMPA",
+      "sum_traffic": 1,
+      "keywords": 2,
+      "top_keyword": "prime renov gouv",
+      "top_keyword_volume": 500,
+      "top_keyword_best_position": 25,
+      "value": 106,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/artisan-rge-architecte",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "mieux pour moi",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/rechercher",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "annuaire france renov",
+      "top_keyword_volume": 20,
+      "top_keyword_best_position": 8,
+      "value": 18,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/collectivites/renovation-batiments",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "rénovation des bâtiments",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 3,
+      "value": null,
+      "referring_domains": 3
+    },
+    {
+      "url": "https://mesaides.france-renov.gouv.fr/locales/essonne",
+      "sum_traffic": 1,
+      "keywords": 3,
+      "top_keyword": "aide essonne",
+      "top_keyword_volume": 10,
+      "top_keyword_best_position": 5,
+      "value": null,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-ENCADREMENT-CONDUCTEURTRAVAUX.pdf",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "fiche de poste conducteur de travaux pdf",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 8,
+      "value": 51,
+      "referring_domains": 0
+    },
+    {
+      "url": "https://france-renov.gouv.fr/sites/default/files/2022-09/FICHE-METIER-CONCEPTION-ET-ETUDES-GENIECLIMATIQUE_0.pdf",
+      "sum_traffic": 1,
+      "keywords": 1,
+      "top_keyword": "master génie climatique",
+      "top_keyword_volume": 30,
+      "top_keyword_best_position": 10,
+      "value": 42,
+      "referring_domains": 1
+    },
+    {
+      "url": "https://france-renov.gouv.fr/aides/loc-avantages/intermediation-locative-bailleurs",
+      "sum_traffic": 0,
+      "keywords": 2,
+      "top_keyword": "intermediation locative",
+      "top_keyword_volume": 100,
+      "top_keyword_best_position": 6,
+      "value": 0,
+      "referring_domains": 7
+    }
+  ]
+}

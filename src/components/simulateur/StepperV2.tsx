@@ -240,6 +240,10 @@ export default function StepperV2() {
   const router = useRouter()
   const hydratedRef = useRef(false)
   const sectionRef = useRef<HTMLElement>(null)
+  // Track le dernier écran visité pour l'event drop-off au unmount.
+  // Si l'utilisateur quitte avant 'contact' (= submit), on capture l'abandon.
+  const lastScreenRef = useRef<ScreenId>('logement')
+  const submittedRef = useRef(false)
 
   // Hydrate
   useEffect(() => {
@@ -247,6 +251,21 @@ export default function StepperV2() {
     if (loaded) dispatch({ type: 'HYDRATE', value: loaded })
     hydratedRef.current = true
     capture(EVENT.SIMULATEUR_STARTED, { version: 'v2', resumed: Boolean(loaded) })
+  }, [])
+
+  // Track abandon : event au démontage du stepper si pas de submit.
+  // Audit B/C #5 (2026-05-04) : visibility funnel critique pour identifier
+  // les écrans à plus fort drop-off (revenus / contact / surface_isolation).
+  useEffect(() => {
+    return () => {
+      if (submittedRef.current) return
+      // Évite le faux positif sur écran 'logement' = bounce avant interaction.
+      if (lastScreenRef.current === 'logement') return
+      capture(EVENT.SIMULATEUR_STEP_DROPPED, {
+        screen: lastScreenRef.current,
+        version: 'v2',
+      })
+    }
   }, [])
 
   // Persist
@@ -263,6 +282,7 @@ export default function StepperV2() {
       const top = el.getBoundingClientRect().top + window.scrollY - 16
       window.scrollTo({ top, behavior: 'smooth' })
     }
+    lastScreenRef.current = state.screen
     capture(EVENT.SIMULATEUR_STEP_COMPLETED, { screen: state.screen, version: 'v2' })
   }, [state.screen])
 
@@ -379,6 +399,7 @@ export default function StepperV2() {
       }
       const { publicId } = (await res.json()) as { publicId: string }
       if (typeof window !== 'undefined') window.localStorage.removeItem(LS_KEY)
+      submittedRef.current = true
       capture(EVENT.SIMULATEUR_SUBMITTED, {
         version: 'v2',
         objectif: state.objectif,

@@ -12,10 +12,10 @@ import {
 
 describe('service-intents — classification', () => {
   it('classifies URGENCE services correctly', () => {
+    // Pivot full RGE 2026-05-03 : serrurier/vitrier retirés de URGENCE_SERVICES
+    // (slugs commodity hors RGE — voir src/lib/seo/service-intents.ts).
     expect(getServiceIntent('plombier')).toBe('urgence')
-    expect(getServiceIntent('serrurier')).toBe('urgence')
     expect(getServiceIntent('electricien')).toBe('urgence')
-    expect(getServiceIntent('vitrier')).toBe('urgence')
     expect(getServiceIntent('ramoneur')).toBe('urgence')
   })
 
@@ -34,10 +34,13 @@ describe('service-intents — classification', () => {
   })
 
   it('defaults to TRAVAUX for unclassified slugs', () => {
+    // Pivot full RGE 2026-05-03 : carreleur retiré du catalog ; le test garde
+    // sa valeur en tant que slug 'unknown' qui doit retomber sur travaux
+    // (le helper ne valide pas l'existence du slug, juste sa classification).
     expect(getServiceIntent('peintre-en-batiment')).toBe('travaux')
     expect(getServiceIntent('menuisier')).toBe('travaux')
-    expect(getServiceIntent('carreleur')).toBe('travaux')
     expect(getServiceIntent('macon')).toBe('travaux')
+    expect(getServiceIntent('salle-de-bain')).toBe('travaux')
     expect(getServiceIntent('paysagiste')).toBe('travaux')
     expect(getServiceIntent('demenageur')).toBe('travaux')
     expect(getServiceIntent('unknown-service')).toBe('travaux')

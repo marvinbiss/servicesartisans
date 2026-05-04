@@ -147,14 +147,30 @@ const CLUSTERS = [
   {
     icon: Wind,
     name: 'Ventilation',
-    href: '/renovation-energetique/travaux/vmc-double-flux',
-    headline: 'VMC double flux',
+    href: '/renovation-energetique/travaux/vmc',
+    headline: 'VMC (4 familles)',
     detail:
-      'Récupère 70-90 % de la chaleur de l’air extrait. Indispensable après isolation pour éviter humidité et qualité air.',
+      'Hub VMC complet : auto, hygroréglable, double flux, double flux thermo. Cluster #1 Bloc 1 (215 KW, vol 127K, KD 0.7). Indispensable après isolation.',
     pages: [
       {
-        label: 'VMC double flux (13K vol)',
+        label: 'Hub VMC (vol 8.1K + sub-pages)',
+        href: '/renovation-energetique/travaux/vmc',
+      },
+      {
+        label: 'VMC simple flux (15K vol KD 2)',
+        href: '/renovation-energetique/travaux/vmc/simple-flux',
+      },
+      {
+        label: 'VMC hygroréglable (14K vol KD 1)',
+        href: '/renovation-energetique/travaux/vmc/hygroreglable',
+      },
+      {
+        label: 'VMC double flux (13K vol KD 2)',
         href: '/renovation-energetique/travaux/vmc-double-flux',
+      },
+      {
+        label: 'Installation VMC (1.2K vol KD 0)',
+        href: '/renovation-energetique/travaux/vmc/installation',
       },
     ],
   },

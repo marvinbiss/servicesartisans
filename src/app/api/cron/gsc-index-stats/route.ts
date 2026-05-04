@@ -7,6 +7,7 @@ import {
   type GSCSearchPerformance,
 } from '@/lib/seo/gsc-client'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /** Seuil critique : en dessous, alerte systémique */
 const INDEXATION_RATIO_THRESHOLD = 0.6
@@ -24,7 +25,7 @@ const INDEXATION_RATIO_THRESHOLD = 0.6
  * Les résultats sont stockés dans la table `seo_metrics` si elle existe,
  * sinon loggés en structured logging (visibles dans Vercel Logs).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-gsc-index-stats', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -187,4 +188,4 @@ export async function GET(request: Request) {
       : null,
     timestamp: new Date().toISOString(),
   })
-}
+})

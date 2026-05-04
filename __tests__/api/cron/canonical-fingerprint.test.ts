@@ -20,6 +20,7 @@ vi.mock('@sentry/nextjs', () => ({
 const mockHeartbeat = vi.fn()
 vi.mock('@/lib/monitoring/heartbeat', () => ({
   pingHeartbeat: (...args: unknown[]) => mockHeartbeat(...args),
+  pingHeartbeatStage: () => Promise.resolve(),
 }))
 
 const mockUpsert = vi.fn()

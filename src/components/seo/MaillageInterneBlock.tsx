@@ -143,8 +143,20 @@ function buildAidesFinancieres(props: MaillageInterneProps): InternalLink[] {
   const links: InternalLink[] = []
   const rgeEligible = isRGEEligible(props.serviceSlug)
 
-  // RGE directory link (devis + tarifs intents, if RGE-eligible service)
-  if (rgeEligible && (props.currentIntent === 'devis' || props.currentIntent === 'tarifs')) {
+  // Sprint 2 Phase C 2026-05-04 — câblage réciproque /services/[s]/[v] →
+  // /rge/[s]/[v]. Avant : seul devis/tarifs/urgence pointaient vers RGE,
+  // l'intent `services` (default des 50K URLs /services/[s]/[v]) ne linkait
+  // jamais. Conséquence : les 50K URLs /rge/[s]/[v] (cluster RGE) recevaient
+  // PageRank uniquement via le hub /rge/[service] (top 50 villes max), les
+  // 49 950 autres restaient "dead-end". Ajouter le lien sur intent services
+  // crée une paire 1:1 entre les deux clusters et booste massivement le
+  // PageRank flow vers les pages profondes RGE.
+  if (
+    rgeEligible &&
+    (props.currentIntent === 'devis' ||
+      props.currentIntent === 'tarifs' ||
+      props.currentIntent === 'services')
+  ) {
     links.push({
       href: `/rge/${props.serviceSlug}/${props.villeSlug}`,
       label: `Artisans RGE ${props.serviceName.toLowerCase()} à ${props.villeName}`,

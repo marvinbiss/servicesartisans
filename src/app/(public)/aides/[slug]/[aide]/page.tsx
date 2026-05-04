@@ -18,7 +18,7 @@ import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
 import { authors } from '@/lib/data/authors'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
-import { getDepartementBySlug, getVillesByDepartement } from '@/lib/data/france'
+import { getDepartementBySlug, getVillesByDepartement, departements } from '@/lib/data/france'
 import {
   aidesSlugs as ALL_AIDES_SLUGS,
   getAideBySlug as resolveAide,
@@ -40,7 +40,7 @@ export const revalidate = 86_400
 
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-const PRERENDER_DEPTS: readonly string[] = [
+const PRERENDER_TOP10_DEPTS: readonly string[] = [
   'paris',
   'nord',
   'bouches-du-rhone',
@@ -54,11 +54,23 @@ const PRERENDER_DEPTS: readonly string[] = [
 ]
 
 export function generateStaticParams() {
-  // V3 #3 stratégie 140K — pre-render top 10 dépts × 11 aides hors MPR
-  // (la route /aides/[dept]/maprimerenov est statique et prend la priorité).
-  // Total pre-renders : ~110. Reste ISR on-demand.
-  const otherAides = aidesSlugs.filter((s) => s !== 'maprimerenov')
-  return PRERENDER_DEPTS.flatMap((slug) => otherAides.map((aide) => ({ slug, aide })))
+  // Sprint 3 territorial 2026-05-04 — pre-render asymétrique :
+  // - CEE × TOUS dépts (96+) : audit STRATEGIE l.238 prescrit la couverture
+  //   territoriale complète CEE en plus de MPR (deux aides cumulables avec
+  //   volume search élevé sur tous les dépts). Cohérent avec
+  //   AIDES_TERRITORIAL_FULL_COVERAGE qui les indexe tous.
+  // - Autres aides (eco-ptz, tva-5-5, aide-pac, aide-isolation, …) × top 10 dépts :
+  //   conserve la stratégie 140K vague 2 #11 (anti-thin content sur les
+  //   aides à volume search faible hors top 30 dépts).
+  // - maprimerenov : déjà servi par /aides/[slug]/maprimerenov (route dédiée),
+  //   exclu ici pour éviter doublon.
+  // Total pre-renders : ~96 (CEE) + 10 × 10 (autres aides) = ~196.
+  const ceeParams = departements.map((d) => ({ slug: d.slug, aide: 'cee' }))
+  const otherAides = aidesSlugs.filter((s) => s !== 'maprimerenov' && s !== 'cee')
+  const otherParams = PRERENDER_TOP10_DEPTS.flatMap((slug) =>
+    otherAides.map((aide) => ({ slug, aide }))
+  )
+  return [...ceeParams, ...otherParams]
 }
 
 interface PageProps {

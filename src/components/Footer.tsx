@@ -47,7 +47,10 @@ const navigationLinks = [
   { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'Devenir partenaire', href: '/inscription-artisan' },
+  { name: 'Inscription artisan', href: '/inscription-artisan' },
+  { name: 'Devenir partenaire CEE', href: '/devenir-partenaire-cee' },
+  { name: 'Comparatif primes CEE', href: '/comparatif-primes-cee-2026' },
+  { name: 'Leads exclusifs vs partagés', href: '/leads-exclusifs-vs-partages' },
 ]
 
 export default function Footer() {

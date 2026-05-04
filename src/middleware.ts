@@ -170,11 +170,14 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       const host = request.headers.get('host') || 'servicesartisans.fr'
       const target = `https://${host}${goneDecision.redirect.to}`
       const response = NextResponse.redirect(target, goneDecision.redirect.status)
-      response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
-      response.headers.set(
-        'CDN-Cache-Control',
+      // Sprint AI Ahrefs 2026-05-03 — Cache-Control par-redirect.
+      // Si le decision fournit un override (cas Sprints U/W récents), on l'utilise.
+      // Sinon, default 24h (TTL legacy stable, sans purge fréquente).
+      const cacheControl =
+        goneDecision.redirect.cacheControl ??
         'public, s-maxage=86400, stale-while-revalidate=604800'
-      )
+      response.headers.set('Cache-Control', cacheControl)
+      response.headers.set('CDN-Cache-Control', cacheControl)
       return response
     }
   }

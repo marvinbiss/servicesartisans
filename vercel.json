@@ -178,6 +178,10 @@
     {
       "path": "/api/cron/export-rge-dataset",
       "schedule": "0 4 1 * *"
+    },
+    {
+      "path": "/api/cron/pipedrive-dead-letter-review",
+      "schedule": "0 7 * * 1"
     }
   ]
 }

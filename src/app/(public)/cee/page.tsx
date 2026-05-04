@@ -38,6 +38,8 @@ import {
 } from '@/lib/cee/catalogue'
 import { CEE_CATALOG_UPDATED_AT } from '@/lib/cee/operation-guides-content'
 import LastUpdated from '@/components/seo/LastUpdated'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
 
 export const revalidate = 86400
 
@@ -237,6 +239,27 @@ export default async function CeeHubPage() {
               Guide aides 2026
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Sprint AI Wave F 2026-05-03 — EnBrefBox snippet-bait sur le hub CEE.
+          Pose les chiffres clés dès le fold pour Featured Snippets sur les
+          requêtes "prime CEE 2026", "calcul prime CEE", "période P6". */}
+      <section aria-labelledby="en-bref-cee" className="bg-white border-b border-charcoal-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+          <h2 id="en-bref-cee" className="sr-only">
+            En bref : primes CEE 2026
+          </h2>
+          <EnBrefBox
+            summary="Les Certificats d'Économies d'Énergie (CEE) financent vos travaux d'isolation, chauffage et ventilation. Période P6 (2026-2030) : 1 050 TWhc/an d'obligation. Cumulables avec MaPrimeRénov', TVA 5,5 % et éco-PTZ. Versement obligés 4-12 sem."
+            keyPoints={[
+              `${totalOps > 0 ? totalOps : 19} opérations standardisées DGEC couvertes en 2026`,
+              'Cumul possible : MaPrimeRénov’ + CEE + TVA 5,5 % + éco-PTZ',
+              'Précarité énergétique : cours ~2× supérieurs au segment classique',
+              'Obligation RGE à la signature du devis (qualifications COFRAC)',
+              'Versement par obligé / délégataire en 4 à 12 semaines',
+            ]}
+          />
         </div>
       </section>
 
@@ -543,6 +566,22 @@ export default async function CeeHubPage() {
             ))}
           </ol>
         </div>
+      </section>
+
+      {/* Sprint AI Wave F 2026-05-03 — TldrBlock pre-FAQ pour Speakable + AEO. */}
+      <section aria-labelledby="essentiel-cee" className="max-w-4xl mx-auto px-4 sm:px-6 pt-14">
+        <h2 id="essentiel-cee" className="sr-only">
+          L’essentiel sur les primes CEE 2026
+        </h2>
+        <TldrBlock
+          bullets={[
+            "Les CEE sont un dispositif obligatoire (loi POPE 2005) financé par les vendeurs d'énergie, pas par l'État.",
+            'Cumulables avec MaPrimeRénov’, TVA 5,5 % et éco-PTZ — total ≤ 100 % du coût TTC.',
+            'Coup de pouce Chauffage (PAC, biomasse) et Coup de pouce Isolation = opérations les plus rentables.',
+            'Artisan RGE obligatoire à la signature du devis (Qualibat, QualiPAC, Qualifelec…).',
+            'Délai versement standard : 4-12 semaines après dossier complet (photos avant/après géotaggées requises).',
+          ]}
+        />
       </section>
 
       {/* FAQ */}

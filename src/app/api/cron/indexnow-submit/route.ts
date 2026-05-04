@@ -13,6 +13,7 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 /** CEE operation codes — source unique : src/lib/cee/operation-codes.ts (leaf). */
 import { CEE_OPERATION_CODES } from '@/lib/cee/operation-codes'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 const TOP_CITIES = [
   'paris',
@@ -127,7 +128,7 @@ export const maxDuration = 60
  * - RGE pSEO: /artisans-rge/{city} top 30 + /rge/{service}/{city} 14×10 (rotated)
  * - Guides: all guide pages, once per week (Sundays)
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-indexnow-submit', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-indexnow-submit',
     async () => {
@@ -518,4 +519,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '15 6 * * *' },
     }
   )
-}
+})

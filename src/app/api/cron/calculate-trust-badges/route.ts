@@ -16,12 +16,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 200
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request: Request) => {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -201,4 +202,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

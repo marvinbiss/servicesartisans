@@ -35,6 +35,7 @@ import {
   getRgeProvidersByServiceAndDepartement,
   getRgeCountByServiceAndCityStrict,
   isRgeAllowedService,
+  RGE_ALLOWED_SERVICES,
   RGE_QUALIFICATION_LABELS,
   resolveRgeServiceDisplayName,
 } from '@/lib/rge/service-city-listings'
@@ -81,22 +82,18 @@ export const dynamicParams = true
 // Slug guard (comme services/[service]/[location])
 const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
 
-// Top 10 services énergétiques pré-rendus (subset de l'allowlist) × top 20 villes
-// = 200 pages statiques au build ; le reste passe par ISR on-demand.
-// 2026-05-02 : +chauffe-eau-thermodynamique +audit-energetique (flagship CEE pivot RGE).
-const PRERENDER_SERVICES: string[] = [
-  'pompe-a-chaleur',
-  'panneaux-solaires',
-  'isolation-thermique',
-  'chauffagiste',
-  'electricien',
-  'renovation-energetique',
-  'menuisier',
-  'couvreur',
-  'chauffe-eau-thermodynamique',
-  'audit-energetique',
-]
-const PRERENDER_CITIES_COUNT = 20
+// Sprint 2 Phase D 2026-05-04 — PRERENDER étendu 200 → 1 140 pages.
+// Avant : 10 services × 20 villes (200) — 99,6 % des 50 K URLs en cold-start ISR.
+// Après : 19 services (toute l'allowlist) × 60 villes top staticVilles = 1 140
+// pages statiques au build. Couvre les top 60 villes France pour CHAQUE service
+// RGE éligible (audit-energetique, ventilation, fenetres, borne-recharge,
+// chauffe-eau-thermodynamique inclus).
+// Trade-off build time : ~5x pages générées sur cette route, ISR on-demand
+// reste pour le reste (35K communes). RAPPORT-FINAL audit ligne 520 : la fix
+// cold-start ISR top villes = TOP_CITIES_COUNT≥100 — on cale à 60 d'abord
+// pour mesurer build time, monter à 100 si OK.
+const PRERENDER_SERVICES: string[] = [...RGE_ALLOWED_SERVICES]
+const PRERENDER_CITIES_COUNT = 60
 
 export function generateStaticParams() {
   const topCities = staticVilles.slice(0, PRERENDER_CITIES_COUNT)
@@ -181,6 +178,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const reviewPrefix = aggregateRating
     ? `${aggregateRating.ratingValue}★ (${aggregateRating.reviewCount} avis) · `
     : ''
+  // Sprint AI Wave E 2026-05-03 — compact prefix pour récupérer la review-prefix
+  // CTR sur les combinaisons serviceName+villeName trop longues (Chauffagiste
+  // Marseille, Pompe à chaleur Lyon, etc.). Sans ça, le selector tombait au
+  // filet sans étoile en SERP. On n'injecte cette variante que si on a une
+  // vraie note — sinon elle dupliquerait le filet.
+  const compactPrefixVariant = aggregateRating
+    ? [`${aggregateRating.ratingValue}★ · ${serviceName} RGE ${villeName}`]
+    : []
   const svcLower = serviceName.toLowerCase()
   const titleVariants = upgradeV2
     ? [
@@ -189,6 +194,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${reviewPrefix}${serviceName} RGE ${villeName} — Aides 2026`,
         `${reviewPrefix}${serviceName} RGE ${villeName} 2026`,
         `${reviewPrefix}${serviceName} RGE ${villeName}`,
+        ...compactPrefixVariant,
         `${serviceName} RGE ${villeName}`,
       ]
     : [

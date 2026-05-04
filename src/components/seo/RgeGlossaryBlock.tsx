@@ -4,15 +4,18 @@ import { ShieldCheck, ArrowRight } from 'lucide-react'
 import {
   type RgeGlossaryEntry,
   getAllRgeGlossaryEntries,
+  RGE_GLOSSAIRE_PATH,
 } from '@/lib/seo/rge-qualifications-glossary'
 
 /**
  * URL canonique de la page hébergeant le DefinedTermSet RGE complet
  * (Sprint O Ahrefs 2026-05-03). Référencée comme target des "Voir
- * glossaire complet" depuis chaque hub, et comme `mainEntityOfPage`
- * pour les liens externes.
+ * glossaire complet" depuis chaque hub.
+ *
+ * Sprint AI Ahrefs 2026-05-03 — alias local de la constante centralisée
+ * `RGE_GLOSSAIRE_PATH` (source de vérité unique dans rge-qualifications-glossary).
  */
-const RGE_GLOSSAIRE_CANONICAL_PATH = '/rge/glossaire'
+const RGE_GLOSSAIRE_CANONICAL_PATH = RGE_GLOSSAIRE_PATH
 
 /**
  * RgeGlossaryBlock — Sprint K Ahrefs 2026-05-03.

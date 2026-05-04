@@ -382,6 +382,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // Sprint 3 territorial 2026-05-04 — pages cluster aides par région.
+      // /aides/[region]/renovation × 13 régions métropolitaines couvertes par
+      // REGIONAL_DATA (ile-de-france, auvergne-rhone-alpes, provence-alpes,
+      // occitanie, nouvelle-aquitaine, hauts-de-france, grand-est,
+      // pays-de-la-loire, bretagne, normandie, bourgogne-franche-comte,
+      // centre-val-de-loire, corse). Priority 0.7 = enfant direct du hub
+      // /aides/par-region (priority 0.75). Outre-mer exclu (CEE GUSE distinct).
+      ...CEE_REGIONAL_SLUGS.map((regionSlug) => ({
+        url: `${SITE_URL}/aides/${regionSlug}/renovation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      })),
       // Sprint O 2026-05-03 — hub time-bound calendrier aides 2026.
       // Volume estimé 1.5-3K req/mois (pic novembre-mars), zéro concurrence
       // française sur "calendrier aides rénovation 2026" (audit 2026-05-03).
@@ -647,6 +660,33 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.9,
       },
+      // Vague 1 cluster VMC (2026-05-04) — Bloc 1 Ahrefs : 215 KW, vol 127 800/mo, KD moyen 0.7.
+      // Hub VMC + 3 sub-pages (simple flux 15K vol KD 2, hygro 14K KD 1, installation 1.2K KD 0).
+      // Cf. docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.92,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/simple-flux`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/hygroreglable`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Vague F (40/40) — 2026-05-04 — Hub menuiseries extérieures (clôture audit STRATEGIE).
       // KW pivots Ahrefs API live (snapshot 2026-05-04) :
       //   - "menuiserie exterieure" 200 KD 0 + "porte fenetre prix" 200 KD 2
@@ -712,6 +752,47 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.8,
+      },
+      // Sprint 4 — Action 17 : Newsletter dédiée segment 'aides-renovation'.
+      // Source `aides-renovation` tracée en DB (newsletter_subscribers.source).
+      {
+        url: `${SITE_URL}/newsletter/aides-renovation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      },
+      // Sprint 4 — Action 15 : Calculateur géo-localisé top 100 villes.
+      // Variantes locales du simulateur racine. dynamicParams=true accepte
+      // l'ISR au-delà des 100 prerendered.
+      ...[...villes]
+        .sort((a, b) => {
+          const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
+          const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
+          return popB - popA
+        })
+        .slice(0, 100)
+        .map((v) => ({
+          url: `${SITE_URL}/simulateur-aides-renovation/${v.slug}`,
+          lastModified: STATIC_DATE,
+          changeFrequency: 'monthly' as const,
+          priority: 0.65,
+        })),
+      // Sprint 4 — Action 16 : Carte artisans RGE par région métropolitaine.
+      // 13 régions (outre-mer exclu, dispositif CEE GUSE distinct).
+      ...CEE_REGIONAL_SLUGS.map((regionSlug) => ({
+        url: `${SITE_URL}/carte-artisans-rge/${regionSlug}`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      })),
+      // Sprint 4 — Action 18 : Page partenariat B2B Mon Accompagnateur Rénov'.
+      // Cible outreach réseau MAR ANAH (~800 agréés). Pas de KW grand public,
+      // intent professionnel pure (lead-gen partenariat).
+      {
+        url: `${SITE_URL}/partenaires/mon-accompagnateur-renov`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly' as const,
+        priority: 0.55,
       },
       {
         url: `${SITE_URL}/devenir-partenaire-cee`,

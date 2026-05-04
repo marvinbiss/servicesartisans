@@ -2,13 +2,14 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * GET /api/cron/seo-monitor
  * Dashboard endpoint: aggregated SEO metrics from seo_page_scores.
  * Protected by CRON_SECRET (not publicly exposed).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-seo-monitor', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -205,4 +206,4 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ error: 'Échec du moniteur SEO', message }, { status: 500 })
   }
-}
+})

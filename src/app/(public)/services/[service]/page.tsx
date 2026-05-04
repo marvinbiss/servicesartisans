@@ -32,12 +32,12 @@ import {
   getDeepSectionsTechArticleSchema,
   getDeepSectionsFAQPageSchema,
   getDeepSectionsHowToSchemas,
-  getRgeDefinedTermSetSchema,
+  buildHubRgeGlossarySchema,
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
-import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
+import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -106,6 +106,10 @@ interface ServiceProvider {
   stable_id?: string
   address_city?: string
   address_postal_code?: string
+  // Sprint N 2026-05-03 — exposés pour AggregateRating SEED interne. Le SELECT
+  // DB (PROVIDER_LIST_SELECT) les retourne déjà ; le type local était incomplet.
+  rating_average?: number | string | null
+  review_count?: number | null
   provider_locations?: Array<{
     location?: { name: string; slug: string } | null
   }>
@@ -356,6 +360,15 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
+  // Sprint N 2026-05-03 — AggregateRating SEED interne sur le hub /services/[s].
+  // Source : recentProviders (échantillon top 12, déjà fetché au-dessus).
+  // `buildAggregateRatingFromProviders` filtre les providers sans avis (Google rich
+  // snippet policy strict) et pondère par review_count → ratingValue + reviewCount
+  // numériques injectés directement en params du helper Schema.org existant.
+  // Pas de Google Places fallback ici : ce serait du listing-level cross-source
+  // qui viole la policy (cf. ArtisanSchema l. 209 : OK fiche, KO listing).
+  const pageAggregateRating = buildAggregateRatingFromProviders(recentProviders)
+
   const pricingSchema = trade
     ? getServicePricingSchema({
         serviceName: service.name,
@@ -367,6 +380,10 @@ export default async function ServicePage({ params }: PageProps) {
         priceUnit: trade.priceRange.unit,
         offerCount: totalProviderCount || trade.commonTasks.length,
         url: `${SITE_URL}/services/${serviceSlug}`,
+        ...(pageAggregateRating && {
+          ratingValue: Number(pageAggregateRating.ratingValue),
+          reviewCount: Number(pageAggregateRating.reviewCount),
+        }),
       })
     : null
 
@@ -472,14 +489,9 @@ export default async function ServicePage({ params }: PageProps) {
   const isRgeEligibleService = isRgeAllowedService(serviceSlug)
   // Sprint Z Ahrefs 2026-05-03 — sameAs vers /rge/glossaire (entité canonique
   // Sprint O) consolide l'autorité topical des 4 hubs DefinedTermSet.
+  // Sprint AI Ahrefs 2026-05-03 — factor via `buildHubRgeGlossarySchema`.
   const servicesRgeGlossarySchema = isRgeEligibleService
-    ? getRgeDefinedTermSetSchema({
-        pageUrl,
-        name: `Glossaire RGE — ${service.name}`,
-        description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${service.name.toLowerCase()}.`,
-        terms: getAllRgeGlossaryEntries(),
-        canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
-      })
+    ? buildHubRgeGlossarySchema({ pageUrl, hubLabel: service.name })
     : null
 
   // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page

@@ -15,8 +15,9 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-send-review-requests', async (request: Request) => {
   const authHeader = request.headers.get('authorization')
   if (!verifyCronSecret(authHeader)) {
     logger.warn('[Review Cron] Unauthorized access attempt')
@@ -32,4 +33,4 @@ export async function GET(request: Request) {
     message: 'Use /api/cron/send-review-invitations instead',
     sentCount: 0,
   })
-}
+})

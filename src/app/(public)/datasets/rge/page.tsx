@@ -201,10 +201,14 @@ export default async function DatasetRgePage() {
   const monthLabel = formatMonth(meta.yearmonth)
   const generatedAtLong = formatDateLong(meta.generatedAt)
 
+  // Sprint AI Ahrefs 2026-05-03 (Reviewer datasets agent HIGH) — paths relatifs
+  // obligatoires : `getBreadcrumbSchema` préfixe lui-même `${SITE_URL}`.
+  // Avant ce fix, `${SITE_URL}${SITE_URL}/datasets` produisait des URLs
+  // doublées dans le BreadcrumbList → Google Rich Results invalide.
   const breadcrumbs = [
-    { name: 'Accueil', url: SITE_URL },
-    { name: 'Datasets', url: `${SITE_URL}/datasets` },
-    { name: `RGE ${monthLabel}`, url: canonicalUrl },
+    { name: 'Accueil', url: '/' },
+    { name: 'Datasets', url: '/datasets' },
+    { name: `RGE ${monthLabel}`, url: '/datasets/rge' },
   ]
 
   const datasetSchema = {

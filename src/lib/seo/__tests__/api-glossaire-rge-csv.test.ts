@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { GET, OPTIONS } from '@/app/api/glossaire-rge.csv/route'
+import { escapeCsvField } from '@/lib/seo/csv'
 import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 
 /**
@@ -33,10 +34,13 @@ describe('Sprint AF — /api/glossaire-rge.csv open-data endpoint', () => {
     expect(contentType).toContain('charset=utf-8')
   })
 
-  it('Content-Disposition déclenche download avec filename explicite', async () => {
+  it('Content-Disposition `inline` (data.gouv.fr / BI tools preview-friendly) avec filename hint', async () => {
+    // Sprint AI Ahrefs 2026-05-03 — pivoté `attachment` → `inline` : certains
+    // parseurs/dataset platforms refusent le mode `attachment` (Power BI URL,
+    // Looker Studio) car ils tentent de preview/parse avant download.
     const res = await GET()
     const cd = res.headers.get('Content-Disposition')
-    expect(cd).toContain('attachment')
+    expect(cd).toContain('inline')
     expect(cd).toContain('filename="glossaire-rge-servicesartisans.csv"')
   })
 
@@ -58,14 +62,48 @@ describe('Sprint AF — /api/glossaire-rge.csv open-data endpoint', () => {
     expect(lines[0]).toBe('slug,code,name,organisme,definition,term_code,canonical_url')
   })
 
-  it('contient 16 lignes de données (1 par qualification RGE)', async () => {
+  it('contient une ligne de données par qualification RGE (longueur dérivée du glossaire)', async () => {
+    // Sprint AI Ahrefs 2026-05-03 — magic number 16 retiré. La source de
+    // vérité est `getAllRgeGlossaryEntries()` ; ajouter une qualification
+    // ne doit pas casser ce test avec un message opaque "expected N to be 16".
     const res = await GET()
     const body = await res.text()
     const expected = getAllRgeGlossaryEntries().length
-    expect(expected).toBe(16)
+    expect(expected).toBeGreaterThan(0)
     // BOM strip par TextDecoder + drop trailing CRLF + split. Ligne 0 = header.
     const lines = body.replace(/\r\n$/, '').split('\r\n')
     expect(lines.length).toBe(1 + expected)
+  })
+
+  // Sprint AI Ahrefs 2026-05-03 — verrou explicite sur la branche
+  // RFC 4180 quote-doubling (`"` interne → `""`). Aucune définition RGE
+  // actuelle ne contient de `"`, la branche était dead-untested.
+  describe('escapeCsvField — RFC 4180 quote-doubling', () => {
+    it('ne quote PAS une valeur sans caractère spécial', () => {
+      expect(escapeCsvField('qualipac')).toBe('qualipac')
+    })
+
+    it('quote une valeur contenant une virgule', () => {
+      expect(escapeCsvField('air/eau, air/air')).toBe('"air/eau, air/air"')
+    })
+
+    it('quote une valeur contenant un CR ou LF', () => {
+      expect(escapeCsvField('ligne1\r\nligne2')).toBe('"ligne1\r\nligne2"')
+    })
+
+    it('double les quotes internes ET quote la valeur entière', () => {
+      // RFC 4180 §2.5 : `Il a dit "bonjour"` → `"Il a dit ""bonjour"""`
+      expect(escapeCsvField('Il a dit "bonjour"')).toBe('"Il a dit ""bonjour"""')
+    })
+
+    it('gère une valeur uniquement composée de quotes', () => {
+      expect(escapeCsvField('"')).toBe('""""')
+      expect(escapeCsvField('""')).toBe('""""""')
+    })
+
+    it('gère undefined comme chaîne vide non-quotée', () => {
+      expect(escapeCsvField(undefined)).toBe('')
+    })
   })
 
   it('escape RFC 4180 : les definitions contenant virgules sont quotées', async () => {

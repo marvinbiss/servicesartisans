@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
 
+import { logger } from '@/lib/logger'
+import { openDataCorsPreflightResponse } from '@/lib/open-data/cors'
 import { SITE_URL } from '@/lib/seo/config'
 import { getRgeDefinedTermSetSchema } from '@/lib/seo/jsonld'
-import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
+import { getAllRgeGlossaryEntries, RGE_GLOSSAIRE_PATH } from '@/lib/seo/rge-qualifications-glossary'
 
 /**
  * /api/glossaire-rge.json — Sprint AC Ahrefs 2026-05-03.
@@ -44,67 +46,73 @@ const OFFICIAL_SOURCES = [
 ]
 
 export async function GET(): Promise<NextResponse> {
-  const entries = getAllRgeGlossaryEntries()
-  const canonicalUrl = `${SITE_URL}/rge/glossaire`
-  const apiUrl = `${SITE_URL}/api/glossaire-rge.json`
+  // Sprint AI Ahrefs 2026-05-03 — wrap try/catch + logger.error (Adversarial #19).
+  // logger.error forward auto à Sentry depuis le fix observability 2026-04-30.
+  // Sans ce wrap, une throw improbable de getAllRgeGlossaryEntries (leaf pur)
+  // remonterait en 500 silencieux Edge, sans trace Sentry.
+  try {
+    const entries = getAllRgeGlossaryEntries()
+    const canonicalUrl = `${SITE_URL}${RGE_GLOSSAIRE_PATH}`
+    const apiUrl = `${SITE_URL}/api/glossaire-rge.json`
 
-  const definedTermSet = getRgeDefinedTermSetSchema({
-    pageUrl: canonicalUrl,
-    name: 'Glossaire RGE — qualifications officielles 2026',
-    description:
-      "Vocabulaire canonique des 16 qualifications RGE reconnues par l'État pour MaPrimeRénov' et les primes CEE en 2026.",
-    terms: entries,
-  })
+    const definedTermSet = getRgeDefinedTermSetSchema({
+      pageUrl: canonicalUrl,
+      name: 'Glossaire RGE — qualifications officielles 2026',
+      description:
+        "Vocabulaire canonique des 16 qualifications RGE reconnues par l'État pour MaPrimeRénov' et les primes CEE en 2026.",
+      terms: entries,
+    })
 
-  // Enrichit avec métadonnées dataset (license, creator, isBasedOn).
-  // Conformes data.gouv.fr / Schema.org Dataset best practices.
-  const payload = {
-    ...definedTermSet,
-    license: LICENSE_URL,
-    creator: {
-      '@type': 'Organization',
-      name: 'ServicesArtisans',
-      url: SITE_URL,
-    },
-    dateModified: new Date().toISOString().slice(0, 10),
-    isBasedOn: OFFICIAL_SOURCES,
-    url: apiUrl,
-    distribution: {
-      '@type': 'DataDownload',
-      encodingFormat: 'application/ld+json',
-      contentUrl: apiUrl,
-    },
+    // Enrichit avec métadonnées dataset (license, creator, isBasedOn).
+    // Conformes data.gouv.fr / Schema.org Dataset best practices.
+    const payload = {
+      ...definedTermSet,
+      license: LICENSE_URL,
+      creator: {
+        '@type': 'Organization',
+        name: 'ServicesArtisans',
+        url: SITE_URL,
+      },
+      dateModified: new Date().toISOString().slice(0, 10),
+      isBasedOn: OFFICIAL_SOURCES,
+      url: apiUrl,
+      distribution: {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/ld+json',
+        contentUrl: apiUrl,
+      },
+    }
+
+    return NextResponse.json(payload, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/ld+json; charset=utf-8',
+        // Cache CDN 24h + stale-while-revalidate 7j. Les données changent
+        // rarement (1-2 fois/an quand un nouveau code Qualibat sort).
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+        'CDN-Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+        // CORS permissif : c'est un asset open-data. Permet aux widgets,
+        // dashboards externes et fetch JS de tiers de l'embed.
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        // Asset technique, pas une page SERP. Le SEO se fait via
+        // /rge/glossaire (page HTML canonique Sprint O).
+        'X-Robots-Tag': 'noindex',
+        // Hint dataset open-data pour crawlers spécialisés.
+        'X-License': LICENSE_URL,
+      },
+    })
+  } catch (err) {
+    logger.error('glossaire-rge.json endpoint failed', err as Error)
+    return NextResponse.json(
+      { error: 'internal_error', message: 'Glossaire RGE temporairement indisponible.' },
+      { status: 500 }
+    )
   }
-
-  return NextResponse.json(payload, {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/ld+json; charset=utf-8',
-      // Cache CDN 24h + stale-while-revalidate 7j. Les données changent
-      // rarement (1-2 fois/an quand un nouveau code Qualibat sort).
-      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-      'CDN-Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-      // CORS permissif : c'est un asset open-data. Permet aux widgets,
-      // dashboards externes et fetch JS de tiers de l'embed.
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      // Asset technique, pas une page SERP. Le SEO se fait via
-      // /rge/glossaire (page HTML canonique Sprint O).
-      'X-Robots-Tag': 'noindex',
-      // Hint dataset open-data pour crawlers spécialisés.
-      'X-License': LICENSE_URL,
-    },
-  })
 }
 
-export async function OPTIONS(): Promise<NextResponse> {
-  // CORS preflight pour les fetch JS depuis domaines tiers.
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Max-Age': '86400',
-    },
-  })
+export async function OPTIONS(): Promise<Response> {
+  // Sprint AI Ahrefs 2026-05-03 — handler partagé via `openDataCorsPreflightResponse`
+  // (déduplication avec /api/glossaire-rge.csv).
+  return openDataCorsPreflightResponse()
 }

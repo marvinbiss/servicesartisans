@@ -34,11 +34,12 @@ import { aidesCatalog } from '@/lib/aides/aides-catalog'
 import { computeFreshnessReport, CI_FAIL_THRESHOLD_DAYS } from '@/lib/aides/freshness'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { logger } from '@/lib/logger'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-check-aides-freshness', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -88,4 +89,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

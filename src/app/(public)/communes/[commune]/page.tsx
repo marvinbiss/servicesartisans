@@ -33,6 +33,9 @@ import {
 import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
 import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { buildCommuneSnippetData } from './snippet-helpers'
 
 export const dynamicParams = true
 export const revalidate = 86_400
@@ -164,7 +167,12 @@ async function renderCommunePage({ params }: PageProps) {
   const datasetSchema = buildDatasetSchema(commune, slug)
 
   // Sprint ULTRA — signal YMYL freshness sur 35K URLs INSEE.
-  // Pas d'EnBref/Tldr pour éviter padding sur communes data-sparse.
+  // Sprint AI Wave F 2026-05-03 — EnBref/Tldr réintroduits MAIS gated par
+  // `buildCommuneSnippetData` qui retourne null si <3 signaux data réels.
+  // Préserve le principe historique (« pas de padding sur communes
+  // data-sparse ») tout en captant le snippet-bait sur les communes riches
+  // (les seules réellement indexables via `isCommuneQualified`).
+  const snippetData = buildCommuneSnippetData(commune)
   const monthlyAnchor = monthlyAnchorIso()
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -222,6 +230,15 @@ async function renderCommunePage({ params }: PageProps) {
             </p>
           </header>
 
+          {snippetData && (
+            <section aria-labelledby="en-bref-commune" className="mb-8">
+              <h2 id="en-bref-commune" className="sr-only">
+                En bref : {commune.name}
+              </h2>
+              <EnBrefBox summary={snippetData.summary} keyPoints={snippetData.bullets} />
+            </section>
+          )}
+
           <DemographicsSection commune={commune} />
           <ClimateSection commune={commune} />
           <GeorisquesSection commune={commune} />
@@ -263,6 +280,15 @@ async function renderCommunePage({ params }: PageProps) {
               villeSlug={slug}
             />
           </section>
+
+          {snippetData && (
+            <section aria-labelledby="essentiel-commune" className="mb-8">
+              <h2 id="essentiel-commune" className="sr-only">
+                L’essentiel sur {commune.name}
+              </h2>
+              <TldrBlock bullets={snippetData.bullets} />
+            </section>
+          )}
 
           <ServicesCallToActionSection commune={commune} />
           <RelatedHubsCommuneSection commune={commune} />

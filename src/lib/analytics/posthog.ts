@@ -2,8 +2,9 @@
 // the browser client is initialized by PostHogProvider (client component) AND
 // the user has granted analytics consent (RGPD).
 //
-// Stick to the 10 events documented in docs/OBSERVABILITY.md. Adding a new
-// event means retiring an old one — the point is signal, not volume.
+// Catalogue étendu B/C #5 (audit 2026-05-04) : ajout des events nécessaires
+// pour reconstruire les funnels complets côté GTM/GA4/PostHog. La règle
+// "signal, not volume" reste — chaque event est typé, déduplique au backend.
 
 import type { PostHog } from 'posthog-js'
 
@@ -16,10 +17,20 @@ export const EVENT = {
   // Simulateur funnel
   SIMULATEUR_STARTED: 'simulateur_started',
   SIMULATEUR_STEP_COMPLETED: 'simulateur_step_completed',
+  SIMULATEUR_STEP_DROPPED: 'simulateur_step_dropped',
   SIMULATEUR_SUBMITTED: 'simulateur_submitted',
   // Artisan claim
   ARTISAN_CLAIM_STARTED: 'artisan_claim_started',
   ARTISAN_CLAIM_SUCCEEDED: 'artisan_claim_succeeded',
+  ARTISAN_CLAIM_COMPLETED_ADMIN: 'artisan_claim_completed_admin_approved',
+  // Partenariat CEE B2B
+  PARTNER_CEE_PAGE_VIEWED: 'partner_cee_page_viewed',
+  PARTNER_CEE_STARTED: 'partner_cee_started',
+  PARTNER_CEE_SUBMITTED: 'partner_cee_submitted',
+  // Phone reveal (artisan claimed)
+  PHONE_REVEALED: 'phone_revealed',
+  // Lead dispatch
+  LEAD_DISPATCHED_NO_ARTISAN: 'lead_dispatched_no_artisan',
   // Search
   SEARCH_PERFORMED: 'search_performed',
 } as const

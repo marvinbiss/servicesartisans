@@ -17,6 +17,7 @@ import {
   MAX_SYNC_ATTEMPTS,
 } from '@/lib/integrations/pipedrive'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -27,7 +28,7 @@ export const maxDuration = 60
 const LOOKBACK_DAYS = 30
 const BATCH_SIZE = 50
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-pipedrive-retry', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-pipedrive-retry',
     async () => {
@@ -94,4 +95,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '30 */6 * * *' },
     }
   )
-}
+})

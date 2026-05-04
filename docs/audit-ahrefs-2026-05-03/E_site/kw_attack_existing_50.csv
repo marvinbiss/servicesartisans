@@ -1,0 +1,51 @@
+rank,keyword,volume,kd,cluster,matchedRoute,matchedFile,bestCompetitor,reason
+1,pompe a chaleur,56000,13,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+2,chauffe eau thermodynamique,31000,9,chauffe-eau,/cee/bar-th-148,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+3,poêle à granulés,16000,11,poele,/cee/bar-th-112,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+4,isolation par l'extérieur,13000,5,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+5,granulés de bois,13000,8,poele,/cee/bar-th-112,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+6,chauffe eau solaire,12000,6,chauffe-eau,/cee/bar-th-148,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+7,pompe a chaleur air eau,11000,12,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,sonergia,cluster→hub
+8,isolation phonique,8300,7,isolation-phonique,/blog,src/app/(public)/blog/page.tsx,sonergia,cluster→hub
+9,isolant thermique,8200,1,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+10,isolation,7900,4,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+11,pompe a chaleur air air,7100,8,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+12,chauffe-eau thermodynamique,7100,7,chauffe-eau,/cee/bar-th-148,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+13,pergola solaire,5900,1,solaire,/services/panneaux-solaires,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+14,isolation thermique,5700,11,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+15,isolation toiture,4700,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+16,vmc simple flux hygroréglable,4600,0,ventilation,/cee/bar-th-127,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+17,ventilation,4300,4,ventilation,/cee/bar-th-127,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+18,isolation phonique mur,3500,0,isolation-phonique,/blog,src/app/(public)/blog/page.tsx,sonergia,cluster→hub
+19,pompe à chaleur air air,3400,5,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+20,chauffage solaire,3200,7,solaire,/services/panneaux-solaires,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+21,installation pompe à chaleur,3000,1,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+22,isolant mince,2800,0,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+23,fonctionnement pompe a chaleur,2500,3,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+24,panneaux solaires plug and play,2200,15,solaire,/services/panneaux-solaires,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+25,isolation mur exterieur,2200,5,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+26,isolation extérieure,2200,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+27,isolation combles perdus,2000,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+28,chauffe-eau solaire,2000,6,chauffe-eau,/cee/bar-th-148,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+29,isolation plafond garage,1800,0,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+30,pompe a chaleur eau eau,1700,0,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,sonergia,cluster→hub
+31,meilleur isolant thermique,1700,1,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+32,ballon solaire,1600,7,solaire,/services/panneaux-solaires,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+33,isolation extérieure maison,1600,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+34,chaudiere a granule,1500,2,poele,/cee/bar-th-112,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+35,isolation garage,1500,0,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+36,granulés bois,1500,6,poele,/cee/bar-th-112,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+37,isolation thermique extérieure,1400,1,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+38,isolation thermique par l'extérieur,1400,8,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+39,isolation maison,1300,12,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+40,isolation des murs par l'intérieur,1100,4,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+41,chauffage pompe à chaleur,1100,14,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+42,isolation comble,1100,4,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+43,ballon eau chaude solaire,1100,7,solaire,/services/panneaux-solaires,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+44,isolation plancher bas,1000,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+45,pompe à chaleur installation,1000,12,pompe-a-chaleur,/services/pompe-a-chaleur,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+46,chauffage au gaz,1000,0,chauffage,/services/chauffagiste,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+47,isolation sous sol,900,0,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,sonergia,cluster→hub
+48,entreprise isolation,900,5,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub
+49,chauffage thermodynamique,900,6,chauffe-eau,/cee/bar-th-148,src/app/(public)/cee/[operation]/page.tsx,none,cluster→hub
+50,isolation par l'intérieur,900,2,isolation,/services/isolation-thermique,src/app/(public)/services/[service]/page.tsx,none,cluster→hub

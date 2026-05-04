@@ -115,6 +115,24 @@ export function getSprintVCanonicalRgeUrls(): string[] {
 }
 
 /**
+ * Sprint AI Wave D Ahrefs 2026-05-03 — IndexNow URLs cluster CEE×région.
+ * Retourne tous les paths /cee/[op]/region/[region] pour bootstrap initial
+ * via le script `indexnow-cee-region-2026-05-03.ts`.
+ */
+export function getCeeRegionalUrls(
+  ops: ReadonlyArray<string>,
+  regions: ReadonlyArray<string>
+): string[] {
+  const urls: string[] = []
+  for (const op of ops) {
+    for (const region of regions) {
+      urls.push(`/cee/${op.toLowerCase()}/region/${region}`)
+    }
+  }
+  return urls
+}
+
+/**
  * Build the list of affected URLs when a provider changes.
  * Inclut TOUS les templates pSEO qui consomment rating_average / review_count
  * pour émettre Schema.org aggregateRating (étoiles SERP). Étendu 2026-04-22

@@ -10,13 +10,12 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
+  buildHubRgeGlossarySchema,
   getBreadcrumbSchema,
   getFAQSchema,
   getFinancialProductSchema,
   getGovernmentServiceSchema,
-  getRgeDefinedTermSetSchema,
 } from '@/lib/seo/jsonld'
-import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
@@ -309,12 +308,12 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   // Overviews + Bing de citer la définition exacte (cohérent Sprints J + M).
   // Sprint Z Ahrefs 2026-05-03 — sameAs vers /rge/glossaire (entité canonique
   // Sprint O) consolide l'autorité topical des 4 hubs DefinedTermSet.
-  const ceeRgeGlossarySchema = getRgeDefinedTermSetSchema({
+  // Sprint AI Ahrefs 2026-05-03 — factor via `buildHubRgeGlossarySchema`
+  // (description override car CEE mentionne le code opération).
+  const ceeRgeGlossarySchema = buildHubRgeGlossarySchema({
     pageUrl: `${SITE_URL}${path}`,
-    name: `Glossaire RGE — Prime CEE ${operation.code}`,
+    hubLabel: `Prime CEE ${operation.code}`,
     description: `Définitions officielles des qualifications RGE applicables à la prime CEE ${operation.code} (${operation.nom}).`,
-    terms: getAllRgeGlossaryEntries(),
-    canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
   })
 
   const jsonLdItems: Record<string, unknown>[] = [
@@ -323,7 +322,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     governmentServiceSchema as Record<string, unknown>,
     financialProductSchema as Record<string, unknown>,
   ]
-  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  // Sprint AI Ahrefs 2026-05-03 — cast redondant retiré (getFAQSchema typed déjà).
+  if (faqSchema) jsonLdItems.push(faqSchema)
   if (ceeRgeGlossarySchema) jsonLdItems.push(ceeRgeGlossarySchema)
 
   return (
@@ -545,7 +545,10 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           Place après "Métiers RGE qualifiés" (continuité éditoriale : liste
           des métiers → définitions des certifications). */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
-        <RgeGlossaryBlock entries={getAllRgeGlossaryEntries()} />
+        {/* Sprint AI Ahrefs 2026-05-03 — entries omis : RgeGlossaryBlock
+            utilise `getAllRgeGlossaryEntries()` comme default param. Évite
+            le double appel `Object.values()` à chaque render RSC. */}
+        <RgeGlossaryBlock />
       </section>
 
       {/* Top villes */}

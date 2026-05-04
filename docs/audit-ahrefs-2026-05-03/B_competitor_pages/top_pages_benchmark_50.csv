@@ -1,0 +1,51 @@
+rank,cluster,saAttackPriority,competitor,dr,url,urlPattern,topKeyword,volume,position,traffic,saRouteRecommendation
+1,autre,P0,selectra,78,https://selectra.info/energie/fournisseurs/cdiscount/contact,/energie/fournisseurs/cdiscount,numéro cdiscount 09 70 80,9500,2,6766,/
+2,aides-cee,P0,hellio,73,https://particulier.hellio.com/blog/financement/plafond-cheque-energie,/blog/financement/plafond-cheque-energie,plafond cheque energie,2600,1,2636,/aides
+3,autre,P0,hellio,73,https://copropriete.hellio.com/blog/conseils/robinet-thermostatique,/blog/conseils/robinet-thermostatique,robinet thermostatique,8600,1,2219,/
+4,pompe-a-chaleur,P2,hellio,73,https://particulier.hellio.com/blog/conseils/seche-linge-pompe-chaleur-condensation,/blog/conseils/[long-slug],seche linge pompe a chaleur,17000,9,2071,/services/pompe-a-chaleur
+5,aides-cee,P1,hellio,73,https://particulier.hellio.com/blog/financement/date-cheque-energie,/blog/financement/date-cheque-energie,chèque énergie 2025 date de versement,18000,5,1983,/aides
+6,isolation,P1,sonergia,49,https://sonergia.fr/conseils-travaux/isolation/isolation-phonique/comment-isoler-phoniquement-un-mur-entre-voisins/,/conseils-travaux/isolation/isolation-phonique,isolation phonique mur,3500,4,1854,/services/isolation-thermique
+7,diagnostic,P0,hellio,73,https://faq.hellio.com/location-logement-classe-e-dpe,/location-logement-classe-e-dpe,dpe e location,1400,1,1791,/diagnostic
+8,autre,P1,selectra,78,https://selectra.info/energie/guides/comprendre/kw-cv,/energie/guides/comprendre,kw en cv,7600,5,1680,/
+9,chauffage,P2,selectra,78,https://selectra.info/energie/propane/bouteilles/taille-13kg,/energie/propane/bouteilles,prix bouteille de gaz butane 13 kg,2400,6,1626,/services/chauffagiste
+10,aides-cee,P2,hellio,73,https://particulier.hellio.com/blog/financement/ma-prime-renov,/blog/financement/ma-prime-renov,ma prime renov,57000,10,1594,/aides
+11,diagnostic,P1,hellio,73,https://copropriete.hellio.com/blog/actualites/interdiction-location-dpe-f-g,/blog/actualites/interdiction-location-dpe-f-g,dpe f location,900,1,1436,/diagnostic
+12,autre,P1,selectra,78,https://selectra.info/energie,/energie,selectra energie,500,1,1408,/
+13,chauffage,P1,selectra,78,https://selectra.info/energie/propane/fournisseurs/carrefour,/energie/propane/fournisseurs,prix bouteille de gaz butane 13 kg carrefour,600,1,1323,/services/chauffagiste
+14,chauffage,P2,selectra,78,https://selectra.info/energie/propane/fournisseurs/antargaz/bouteilles/butane-calypso,/energie/propane/fournisseurs,bouteille de gaz calypso prix,400,1,1187,/services/chauffagiste
+15,chauffage,P0,selectra,78,https://selectra.info/energie/propane/fournisseurs/clairgaz/bouteilles,/energie/propane/fournisseurs,prix bouteille de gaz propane 13 kg leclerc,1000,1,1162,/services/chauffagiste
+16,autre,P2,selectra,78,https://selectra.info/finance/guides/banque-en-ligne/depot-argent,/finance/guides/banque-en-ligne,boursorama depot espece,350,1,1109,/
+17,autre,P0,selectra,78,https://selectra.info/energie/eau/prix,/energie/eau/prix,prix eau m3 par ville,1600,1,1075,/
+18,solaire,P2,hellio,73,https://particulier.hellio.com/guide-solaire/types/panneau-plug-and-play,/guide-solaire/types/panneau-plug-and-play,panneau solaire plug and play,14000,9,1009,/services/panneaux-solaires
+19,autre,P2,selectra,78,https://entreprises.selectra.info/energie/electricite/compteurs/kva-kw,/energie/electricite/compteurs,conversion kva kw,250,1,995,/
+20,travaux,P1,hellio,73,https://copropriete.hellio.com/blog/renovation-energetique/prix-ravalement-facade,/blog/renovation-energetique/prix-ravalement-facade,prix ravalement façade maison 100m2,600,1,989,/travaux
+21,autre,P2,selectra,78,https://entreprises.selectra.info/energie/electricite/compteurs/kw-w,/energie/electricite/compteurs,watt en kwh,350,2,982,/
+22,autre,P1,hellio,73,https://copropriete.hellio.com/blog/actualites/dates-chauffage-collectif,/blog/actualites/dates-chauffage-collectif,chauffage collectif date,1500,3,963,/
+23,pompe-a-chaleur,P1,sonergia,49,https://sonergia.fr/conseils-travaux/chauffage/pompe-a-chaleur/prix-pompe-a-chaleur-air-eau-quel-budget-moyen-prevoir/,/conseils-travaux/chauffage/pompe-a-chaleur,pompe a chaleur air eau,11000,5,959,/services/pompe-a-chaleur
+24,autre,P1,selectra,78,https://entreprises.selectra.info/energie/electricite/consuel-pro,/energie/electricite/consuel-pro,consuel pro,7600,4,955,/
+25,aides-cee,P2,hellio,73,https://particulier.hellio.com/blog/financement/qui-a-droit-cheque-energie,/blog/financement/qui-a-droit-cheque-energie,qui a droit au cheque energie,1300,6,947,/aides
+26,diagnostic,P1,hellio,73,https://faq.hellio.com/location-logement-classe-f-dpe,/location-logement-classe-f-dpe,dpe f,1500,4,902,/diagnostic
+27,isolation,P2,sonergia,49,https://sonergia.fr/conseils-travaux/isolation/mur/quelle-epaisseur-pour-lisolation-dun-mur-interieur/,/conseils-travaux/isolation/mur,isolation mur intérieur,7800,10,894,/services/isolation-thermique
+28,solaire,P1,hellio,73,https://particulier.hellio.com/guide-solaire/utilisation/panneau-solaire-voiture/ombriere-photovoltaique,/guide-solaire/utilisation/panneau-solaire-voiture,ombrière photovoltaique,1400,1,849,/services/panneaux-solaires
+29,autre,P2,selectra,78,https://selectra.info/energie/fournisseurs/plenitude,/energie/fournisseurs/plenitude,plenitude energie,12000,7,822,/
+30,autre,P2,selectra,78,https://selectra.info/energie/fournisseurs/es-strasbourg/telephone,/energie/fournisseurs/es-strasbourg,es strasbourg,38000,9,801,/
+31,autre,P1,selectra,78,https://selectra.info/energie/propane/fournisseurs/butagaz/bouteilles/butane-le-cube,/energie/propane/fournisseurs,prix cube butagaz leclerc,600,1,799,/
+32,aides-cee,P1,hellio,73,https://particulier.hellio.com/blog/conseils/prise-renforcee-voiture-electrique,/blog/conseils/[long-slug],prise renforcée,3800,5,791,/aides
+33,aides-cee,P1,selectra,78,https://selectra.info/telecom/aide/changer-numero,/telecom/aide/changer-numero,comment changer de numéro de téléphone,900,1,786,/aides
+34,chauffage,P1,selectra,78,https://selectra.info/energie/propane/fournisseurs/u-energie/bouteilles,/energie/propane/fournisseurs,prix bouteille de gaz super u,900,3,764,/services/chauffagiste
+35,aides-cee,P1,hellio,73,https://faq.hellio.com/definition-zone-climatique-cee,/definition-zone-climatique-cee,h1 h2 h3,900,1,749,/aides
+36,solaire,P1,hellio,73,https://particulier.hellio.com/guide-solaire/aides/prix-panneau-solaire/gratuit,/guide-solaire/aides/prix-panneau-solaire,aide panneau solaire,3700,4,744,/services/panneaux-solaires
+37,diagnostic,P2,hellio,73,https://faq.hellio.com/interdiction-location-logements-g,/[long-slug],dpe g location,400,1,727,/diagnostic
+38,autre,P2,selectra,78,https://entreprises.selectra.info/energie/electricite/compteurs/kva-amperes,/energie/electricite/compteurs,kva en ampere,400,1,698,/
+39,aides-cee,P1,hellio,73,https://particulier.hellio.com/blog/financement/maprimerenov-2025,/blog/financement/maprimerenov-2025,ma prime rénov 2025,4100,5,689,/aides
+40,chauffage,P1,hellio,73,https://particulier.hellio.com/blog/actualites/interdiction-chaudieres-fioul,/blog/actualites/interdiction-chaudieres-fioul,chaudiere fioul,2300,5,684,/services/chauffagiste
+41,autre,P1,selectra,78,https://entreprises.selectra.info/energie/electricite/compteurs/puissance/facteur,/energie/electricite/compteurs,facteur de puissance,800,1,642,/
+42,simulateur,P2,hellio,73,https://particulier.hellio.com/blog/financement/simulation-cheque-energie,/blog/financement/simulation-cheque-energie,chèque énergie 2025 simulation,5000,8,611,/simulateur-aides-renovation
+43,diagnostic,P1,hellio,73,https://faq.hellio.com/location-logement-classe-d,/location-logement-classe-d,dpe d,2100,5,605,/diagnostic
+44,solaire,P1,sonergia,49,https://sonergia.fr/conseils-travaux/solaire/panneaux-photovoltaiques/comment-suivre-sa-production-photovoltaique/,/conseils-travaux/solaire/panneaux-photovoltaiques,index injection linky,500,1,558,/services/panneaux-solaires
+45,isolation,P2,sonergia,49,https://sonergia.fr/conseils-travaux/isolation/mur/quelle-isolation-mince-pour-les-murs-interieurs/,/conseils-travaux/isolation/mur,isolation mur interieur mince,350,1,554,/services/isolation-thermique
+46,diagnostic,P1,hellio,73,https://copropriete.hellio.com/blog/conseils/dpe-collectif,/blog/conseils/dpe-collectif,dpe collectif,900,3,493,/diagnostic
+47,travaux,P1,hellio,73,https://copropriete.hellio.com/blog/renovation-energetique/relamping,/blog/renovation-energetique/relamping,relamping,1600,1,472,/travaux
+48,aides-cee,P2,hellio,73,https://particulier.hellio.com/blog/financement/maprimerenov-2026,/blog/financement/maprimerenov-2026,ma prime renov 2026,12000,9,470,/aides
+49,solaire,P2,hellio,73,https://particulier.hellio.com/guide-solaire/aides/prix-panneau-solaire/tarif-rachat-photovoltaique/edf-oa,/guide-solaire/aides/prix-panneau-solaire,oa,3900,7,468,/services/panneaux-solaires
+50,isolation,P1,sonergia,49,https://sonergia.fr/conseils-travaux/isolation/sol/comment-realiser-lisolation-dun-sous-sol-humide-les-solutions/,/conseils-travaux/isolation/sol,isolation sous sol,900,4,451,/services/isolation-thermique

@@ -13,11 +13,12 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getRgeHealthMetrics } from '@/lib/monitoring/rge-health'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-rge-health', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -48,4 +49,4 @@ export async function GET(request: Request) {
     logger.error('[rge-health] cron failed', error)
     return NextResponse.json({ ok: false, error: 'rge-health cron failure' }, { status: 500 })
   }
-}
+})

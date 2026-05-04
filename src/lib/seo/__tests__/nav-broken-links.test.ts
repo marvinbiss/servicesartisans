@@ -43,6 +43,16 @@ const NAV_COMPONENTS = [
   // initial. DynamicFooterLinks idem (~12 hrefs rotatifs).
   join(REPO_ROOT, 'src', 'components', 'seo', 'FooterClusterLinks.tsx'),
   join(REPO_ROOT, 'src', 'components', 'seo', 'DynamicFooterLinks.tsx'),
+  // Sprint AI Ahrefs 2026-05-03 — étendu (audit adversarial MEDIUM #12).
+  // Composants de navigation transverses qui rendent des hrefs statiques sur
+  // de nombreuses pages. Sans ce verrou, un futur lien hardcodé vers une
+  // route inexistante (ex: `/qualifications-rge` réintroduit) passerait
+  // inaperçu jusqu'au prochain audit GSC.
+  join(REPO_ROOT, 'src', 'components', 'Breadcrumb.tsx'),
+  join(REPO_ROOT, 'src', 'components', 'seo', 'RelatedHubs.tsx'),
+  join(REPO_ROOT, 'src', 'components', 'seo', 'BlogClusterLinks.tsx'),
+  join(REPO_ROOT, 'src', 'components', 'seo', 'BlogServiceCityLinks.tsx'),
+  join(REPO_ROOT, 'src', 'components', 'seo', 'DeepPageLinks.tsx'),
 ]
 
 function extractStaticHrefs(filePath: string): string[] {
@@ -135,15 +145,6 @@ describe('Sprint W — verrou sitewide anti-lien-cassé sur nav components', () 
     const fileName = filePath.split(/[\\/]/).pop() ?? filePath
     describe(fileName, () => {
       const hrefs = extractStaticHrefs(filePath)
-
-      // Sprint W-fix Ahrefs 2026-05-03 — sanity check optionnel.
-      // Certains composants (DynamicFooterLinks) n'ont QUE des hrefs
-      // dynamiques (template literals avec données DB). 0 hrefs statiques
-      // est un cas légitime — le test broken-links reste pertinent au cas
-      // où on en ajouterait à l'avenir.
-      it(`extraction hrefs statiques OK (peut être 0 si composant full-dynamique)`, () => {
-        expect(hrefs.length).toBeGreaterThanOrEqual(0)
-      })
 
       it(`tous les hrefs résolvent vers une route existante OU un redirect 301 connu`, () => {
         const broken: string[] = []

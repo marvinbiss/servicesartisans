@@ -78,8 +78,30 @@ export const AIDES_INDEXED_SLUGS: ReadonlySet<string> = new Set([
 ])
 
 /**
+ * Sprint 3 territorial 2026-05-04 — aides cumulables MaPrimeRénov' + CEE.
+ *
+ * Audit STRATEGIE-RENOVATION-ENERGETIQUE.md prescrit Sprint 3 = 96 dépts ×
+ * 2 aides (maprimerenov + cee). Ces 2 aides ont volume search élevé sur
+ * TOUS les dépts (pas juste le top 30) car requêtes type
+ * "maprimerenov [dept]" / "prime CEE [dept]" sont massivement recherchées.
+ *
+ * Pour ces 2 aides UNIQUEMENT, on lève la restriction top 30 dépts —
+ * tous les départements indexés via la route /aides/[slug]/[aide].
+ *
+ * Note : `maprimerenov` est aussi servi par /aides/[slug]/maprimerenov/
+ * (route dédiée, plus enrichie). Cette whitelist couvre la route fallback
+ * /aides/[slug]/[aide] qui reste indexable pour cohérence sitemap.
+ */
+export const AIDES_TERRITORIAL_FULL_COVERAGE: ReadonlySet<string> = new Set(['cee', 'maprimerenov'])
+
+/**
  * Combo (dept, aide) éligible au sitemap.
+ *
+ * Sprint 3 territorial : si l'aide est dans `AIDES_TERRITORIAL_FULL_COVERAGE`,
+ * tous les départements (96+) sont indexables. Sinon, fallback sur la
+ * whitelist top 30 dépts × 5 aides à fort volume.
  */
 export function isAidesDeptIndexable(deptSlug: string, aideSlug: string): boolean {
+  if (AIDES_TERRITORIAL_FULL_COVERAGE.has(aideSlug)) return true
   return AIDES_INDEXED_DEPTS.has(deptSlug) && AIDES_INDEXED_SLUGS.has(aideSlug)
 }

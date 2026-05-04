@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const maxDuration = 60
 
@@ -13,7 +14,7 @@ export const maxDuration = 60
  * Security: requires Bearer CRON_SECRET in Authorization header.
  * Schedule: daily at 07:00 UTC (after GSC data refresh).
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-gsc-sync', async (request: Request) => {
   // ── Auth ───────────────────────────────────────────────────────────────
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
@@ -77,4 +78,4 @@ export async function GET(request: Request) {
       { status: 500 }
     )
   }
-}
+})

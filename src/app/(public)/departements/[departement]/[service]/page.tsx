@@ -40,6 +40,9 @@ import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import TldrBlock from '@/components/flagship/TldrBlock'
+import { currentMonthYearFr } from '@/lib/seo/sprint-helpers'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -227,6 +230,32 @@ export default async function DeptServicePage({ params }: PageProps) {
         }
       : null
 
+  // Sprint AI Wave F 2026-05-03 — snippet-bait pour 10K URLs
+  // /departements/[dept]/[service]. Featured Snippets + Speakable.
+  // EnBrefBox = bullets chiffrés au-dessus du fold ; TldrBlock = synthèse
+  // pre-FAQ. Les deux composants tirent uniquement de la data déjà computée
+  // (multiplier, reviewStats, villesDuDepartement) → 0 fetch supplémentaire.
+  const monthYear = currentMonthYearFr()
+  const villesCount = villesDuDepartement.length || dept.villes.length
+  const ratingSummary =
+    reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0
+      ? `Note moyenne ${Number(reviewStats.avg_rating).toFixed(1)}/5 sur ${reviewStats.review_count} avis vérifiés.`
+      : null
+  const enBrefSummary = `${trade.name} ${getDeptPreposition(dept.name)} (${dept.code}) — tarif ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés SIREN.${ratingSummary ? ` ${ratingSummary}` : ''}`
+  const enBrefPoints = [
+    `Tarif ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}×)`,
+    `${villesCount} villes couvertes dans le ${dept.name}`,
+    `Devis gratuit, réponse moyenne ${trade.averageResponseTime}`,
+    'Artisans vérifiés SIREN, sans engagement',
+  ]
+  const tldrBullets = [
+    `${trade.name} ${getDeptPreposition(dept.name)} : ${minPrice}–${maxPrice} ${trade.priceRange.unit} (${monthYear}).`,
+    `Coefficient régional ${dept.region} : ${multiplier.toFixed(2)}× le tarif national.`,
+    ratingSummary ?? `Artisans référencés via SIREN officiel et label RGE le cas échéant.`,
+    `Réponse devis sous ${trade.averageResponseTime}, sans engagement.`,
+    `${villesCount} villes du ${dept.name} couvertes — chef-lieu ${dept.chefLieu}.`,
+  ]
+
   return (
     <div className="min-h-screen bg-sand-50">
       <JsonLd
@@ -359,6 +388,14 @@ export default async function DeptServicePage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Sprint AI Wave F — EnBrefBox snippet-bait au-dessus du fold (10K URLs) */}
+        <section aria-labelledby="en-bref-dept-svc" className="mb-10">
+          <h2 id="en-bref-dept-svc" className="sr-only">
+            En bref : {trade.name} {getDeptPreposition(dept.name)}
+          </h2>
+          <EnBrefBox summary={enBrefSummary} keyPoints={enBrefPoints} />
+        </section>
+
         {/* ─── HERO CTA ───────────────────────────────────────── */}
         <GeoPageCTA
           title={`Besoin d'un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)} ?`}
@@ -628,6 +665,14 @@ export default async function DeptServicePage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+        </section>
+
+        {/* Sprint AI Wave F — TldrBlock pre-FAQ pour Speakable + Featured Snippets */}
+        <section aria-labelledby="essentiel-dept-svc" className="mb-10">
+          <h2 id="essentiel-dept-svc" className="sr-only">
+            L’essentiel {trade.name} {getDeptPreposition(dept.name)}
+          </h2>
+          <TldrBlock bullets={tldrBullets} />
         </section>
 
         {/* ─── FAQ ──────────────────────────────────────────── */}

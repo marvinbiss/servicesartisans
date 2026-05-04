@@ -5,6 +5,7 @@ import { syncRgeFromAdeme } from '@/lib/rge/sync'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 /**
  * Weekly cron: sync RGE certifications from ADEME API into providers table.
@@ -23,7 +24,7 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 export const maxDuration = 300 // 5 minutes — nécessite Vercel Pro
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-rge-sync', async (request: Request) => {
   return await Sentry.withMonitor(
     'cron-rge-sync',
     async () => {
@@ -100,4 +101,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '0 2 * * 0' },
     }
   )
-}
+})

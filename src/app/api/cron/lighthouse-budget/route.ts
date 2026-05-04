@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { SITE_URL } from '@/lib/seo/config'
 import { auditUrls, makePsiFetcher, persistLighthouseScores } from '@/lib/seo/lighthouse-monitor'
+import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 export const dynamic = 'force-dynamic'
 // 20 PSI calls × ~10s ≈ 200s. maxDuration 300 + deadline guard 250s laisse
@@ -34,7 +35,7 @@ const CRITICAL_URLS = [
  * Audit Lighthouse via PSI API sur 10 URLs SEO-critiques en mobile + desktop.
  * Alerte Sentry si severity=critical sur n'importe quelle combo.
  */
-export async function GET(request: Request) {
+export const GET = withCronCheckIn('cron-lighthouse-budget', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
   }
@@ -123,4 +124,4 @@ export async function GET(request: Request) {
       schedule: { type: 'crontab', value: '45 6 * * *' },
     }
   )
-}
+})

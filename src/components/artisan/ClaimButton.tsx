@@ -14,8 +14,9 @@ interface ClaimButtonProps {
 export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonProps) {
   const [showModal, setShowModal] = useState(false)
   const [siret, setSiret] = useState('')
-  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
+  const [showOptional, setShowOptional] = useState(false)
+  const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [position, setPosition] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -78,32 +79,18 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
     return value.replace(/[^\d+]/g, '').slice(0, 15)
   }
 
-  const isFormValid =
-    (siret.length === 9 || siret.length === 14) &&
-    fullName.trim().length >= 2 &&
-    email.includes('@') &&
-    phone.replace(/\D/g, '').length >= 10 &&
-    position.trim().length >= 2
+  // Audit B/C #2 (2026-05-04) : claim 5 champs → 2 obligatoires (SIREN + email).
+  // Cible : claim rate 0.002% (19/970K) → 0.05-0.2% = 485-1940 supply unlocks.
+  // fullName/phone/position restent OPTIONNELS, accessibles via le toggle "Détails".
+  const isFormValid = (siret.length === 9 || siret.length === 14) && email.includes('@')
 
   const handleClaim = async () => {
     if (siret.length !== 9 && siret.length !== 14) {
       setError('Entrez votre SIREN (9 chiffres) ou SIRET (14 chiffres)')
       return
     }
-    if (fullName.trim().length < 2) {
-      setError('Veuillez entrer votre nom complet')
-      return
-    }
     if (!email.includes('@')) {
       setError('Veuillez entrer une adresse email valide')
-      return
-    }
-    if (phone.replace(/\D/g, '').length < 10) {
-      setError('Veuillez entrer un numéro de téléphone valide')
-      return
-    }
-    if (position.trim().length < 2) {
-      setError("Veuillez indiquer votre poste dans l'entreprise")
       return
     }
 
@@ -117,10 +104,12 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
         body: JSON.stringify({
           providerId,
           siret,
-          fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
-          phone: phone.trim().replace(/[\s.\-()]/g, ''),
-          position: position.trim(),
+          ...(fullName.trim() && { fullName: fullName.trim() }),
+          ...(phone.replace(/\D/g, '').length >= 10 && {
+            phone: phone.trim().replace(/[\s.\-()]/g, ''),
+          }),
+          ...(position.trim() && { position: position.trim() }),
         }),
       })
 
@@ -227,8 +216,9 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 </div>
 
                 <p className="text-sm text-charcoal-600 mb-4">
-                  Remplissez vos coordonnées et votre SIREN ou SIRET pour prouver que vous êtes le
-                  propriétaire de cette entreprise.
+                  Pour revendiquer cette fiche, deux infos suffisent :
+                  <strong> votre SIREN/SIRET</strong> et <strong>votre email pro</strong>. Nous vous
+                  contactons sous 24h pour finaliser.
                 </p>
 
                 {error && (
@@ -239,81 +229,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                 )}
 
                 <div className="space-y-3">
-                  {/* Nom complet */}
-                  <div>
-                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                      Nom complet <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => {
-                        setFullName(e.target.value)
-                        setError(null)
-                      }}
-                      placeholder="Jean Dupont"
-                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                      Email professionnel <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      inputMode="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value)
-                        setError(null)
-                      }}
-                      placeholder="jean@monentreprise.fr"
-                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  {/* Téléphone */}
-                  <div>
-                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                      Téléphone <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      inputMode="tel"
-                      value={phone}
-                      onChange={(e) => {
-                        setPhone(formatPhone(e.target.value))
-                        setError(null)
-                      }}
-                      placeholder="06 12 34 56 78"
-                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  {/* Poste */}
-                  <div>
-                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                      Poste / Fonction <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={position}
-                      onChange={(e) => {
-                        setPosition(e.target.value)
-                        setError(null)
-                      }}
-                      placeholder="Gérant, Artisan plombier, Chef d'entreprise..."
-                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                      disabled={isLoading}
-                    />
-                  </div>
-
-                  {/* SIREN / SIRET */}
+                  {/* SIREN / SIRET — obligatoire */}
                   <div>
                     <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       SIREN ou SIRET <span className="text-red-500">*</span>
@@ -340,6 +256,96 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                       </a>
                     </p>
                   </div>
+
+                  {/* Email — obligatoire */}
+                  <div>
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                      Email professionnel <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      inputMode="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value)
+                        setError(null)
+                      }}
+                      placeholder="jean@monentreprise.fr"
+                      className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  {/* Toggle infos optionnelles — pour les artisans qui veulent
+                      accélérer la validation en partageant directement leurs
+                      coordonnées. Permet de garder l'option "claim minimal"
+                      sans perdre le canal pour ceux qui sont prêts à donner +. */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowOptional((v) => !v)}
+                      className="text-sm text-amber-700 hover:text-amber-800 font-medium underline-offset-2 hover:underline"
+                      disabled={isLoading}
+                    >
+                      {showOptional
+                        ? '− Masquer les infos optionnelles'
+                        : '+ Ajouter mes coordonnées (facultatif, accélère la validation)'}
+                    </button>
+                  </div>
+
+                  {showOptional && (
+                    <div className="space-y-3 pt-2 border-t border-sand-200">
+                      <div>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                          Nom complet
+                        </label>
+                        <input
+                          type="text"
+                          value={fullName}
+                          onChange={(e) => {
+                            setFullName(e.target.value)
+                            setError(null)
+                          }}
+                          placeholder="Jean Dupont"
+                          className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                          disabled={isLoading}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                          Téléphone
+                        </label>
+                        <input
+                          type="tel"
+                          inputMode="tel"
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(formatPhone(e.target.value))
+                            setError(null)
+                          }}
+                          placeholder="06 12 34 56 78"
+                          className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                          disabled={isLoading}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                          Poste / Fonction
+                        </label>
+                        <input
+                          type="text"
+                          value={position}
+                          onChange={(e) => {
+                            setPosition(e.target.value)
+                            setError(null)
+                          }}
+                          placeholder="Gérant, Artisan plombier, Chef d'entreprise..."
+                          className="w-full px-3 py-2.5 border border-sand-400 rounded-xl text-charcoal-900 placeholder-charcoal-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-3 mt-5">

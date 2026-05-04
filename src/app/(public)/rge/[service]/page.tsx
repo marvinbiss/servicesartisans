@@ -17,18 +17,27 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
+  buildHubRgeGlossarySchema,
   getBreadcrumbSchema,
   getCollectionPageSchema,
   getDeepSectionsFAQPageSchema,
   getDeepSectionsHowToSchemas,
   getDeepSectionsTechArticleSchema,
   getFAQSchema,
-  getRgeDefinedTermSetSchema,
 } from '@/lib/seo/jsonld'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
-import { getAllRgeGlossaryEntries } from '@/lib/seo/rge-qualifications-glossary'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
+// Sprint AI Wave A Ahrefs 2026-05-03 — câblage snippet-bait sur /rge/[service]
+// (audit SEO 10-agents : hub critique 0/4 composants snippet-bait câblés).
+import TldrBlock from '@/components/flagship/TldrBlock'
+import EnBrefBox from '@/components/seo/EnBrefBox'
+import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
+import {
+  buildRgeServiceTldrBullets,
+  buildRgeServiceEnBrefPoints,
+  buildRgeServiceEnBrefSummary,
+} from './sprint-helpers'
 import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import {
   RGE_ALLOWED_SERVICES,
@@ -116,7 +125,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   ])
 
   const total = stats.total || 0
-  const topCities = stats.topCities.slice(0, 12)
+  // Sprint 2 Phase B 2026-05-04 — sous-cluster villes étendu 12 → 50.
+  // Renforce cluster pillar SEO (hub /rge/[service] → 50 sous-pages
+  // /rge/[service]/[ville]) + distribue PageRank vers les pages profondes.
+  // ItemList Schema émet automatiquement les 50 ListItem (carrousel SERP).
+  const topCities = stats.topCities.slice(0, 50)
   const hasStats = total > 0
 
   // Cross-linking éditorial vers les guides RGE qualif et CEE débloquées.
@@ -219,17 +232,16 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
   // /rge/glossaire (entité canonique Sprint O). Émet sameAs sur chaque
   // DefinedTerm + sur le DefinedTermSet → consolide l'autorité topical
   // au lieu de la disperser entre les 4 hubs (J/M/P/O).
-  const rgeGlossarySchema = getRgeDefinedTermSetSchema({
+  // Sprint AI Ahrefs 2026-05-03 — factor via `buildHubRgeGlossarySchema`.
+  const rgeGlossarySchema = buildHubRgeGlossarySchema({
     pageUrl: `${SITE_URL}${pagePath}`,
-    name: `Glossaire RGE — ${content.h1}`,
-    description: `Définitions officielles des qualifications RGE et primes CEE applicables au métier ${content.h1.toLowerCase()}.`,
-    terms: getAllRgeGlossaryEntries(),
-    canonicalEntityBaseUrl: `${SITE_URL}/rge/glossaire`,
+    hubLabel: content.h1,
   })
 
   const jsonLdItems: Record<string, unknown>[] = [breadcrumbSchema, collectionSchema]
   if (itemListSchema) jsonLdItems.push(itemListSchema as Record<string, unknown>)
-  if (faqSchema) jsonLdItems.push(faqSchema as Record<string, unknown>)
+  // Sprint AI Ahrefs 2026-05-03 — cast redondant retiré (getFAQSchema typed déjà).
+  if (faqSchema) jsonLdItems.push(faqSchema)
   if (deepSectionsTechArticleSchema) jsonLdItems.push(deepSectionsTechArticleSchema)
   if (deepSectionsFAQSchema) jsonLdItems.push(deepSectionsFAQSchema)
   if (deepSectionsHowToSchemas.length > 0) jsonLdItems.push(...deepSectionsHowToSchemas)
@@ -291,6 +303,44 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Sprint AI Wave A Ahrefs 2026-05-03 — TL;DR + En bref + Immediate
+          Answer pour Featured Snippets, AI Overviews et Speakable. Câblés
+          juste après le hero (above-fold) — Google extrait préférentiellement
+          le contenu structuré court en haut de page. */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+        <TldrBlock
+          bullets={buildRgeServiceTldrBullets({
+            content,
+            total,
+            qualifLabel: label?.label ?? null,
+            qualifOrganisme: label?.organisme ?? null,
+            topCitiesCount: topCities.length,
+          })}
+        />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-2">
+        <EnBrefBox
+          summary={buildRgeServiceEnBrefSummary({
+            content,
+            total,
+            qualifLabel: label?.label ?? null,
+          })}
+          keyPoints={buildRgeServiceEnBrefPoints({ content, total })}
+        />
+      </div>
+
+      {hasStats && (
+        <div className="pt-2 pb-2">
+          <ImmediateAnswerBlock
+            serviceName={content.h1}
+            villeName="France"
+            trade={null}
+            providerCount={total}
+          />
+        </div>
+      )}
 
       {/* Bloc stats contextualisées */}
       <section className="bg-white border-b border-charcoal-100">
@@ -512,20 +562,23 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               Classement des villes françaises par nombre d&apos;artisans RGE actifs pour ce métier.
               Cliquez sur une ville pour accéder à l&apos;annuaire local.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {topCities.map((city) => (
                 <Link
                   key={city.slug}
                   href={`/rge/${serviceSlug}/${city.slug}`}
-                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <MapPin
+                      className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span className="text-sm font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
                       {city.name}
                     </span>
                   </div>
-                  <span className="text-sm font-semibold text-charcoal-900 tabular-nums ml-2">
+                  <span className="text-xs font-semibold text-charcoal-900 tabular-nums ml-2">
                     {city.count.toLocaleString('fr-FR')}
                   </span>
                 </Link>

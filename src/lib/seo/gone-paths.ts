@@ -203,7 +203,13 @@ export interface GonePathDecision {
     | 'ville_slug_malformed'
     | 'tarifs_task_deprecated'
     | 'problem_slug_unknown'
-  redirect?: { to: string; status: 301 }
+  /**
+   * Sprint AI Ahrefs 2026-05-03 — Cache-Control optionnel pour 301 récents.
+   * Si fourni, override le default `s-maxage=86400` du middleware. Permet aux
+   * 301 nouvellement ajoutés (Sprints U/W) d'avoir un TTL CDN court (1h)
+   * pendant la phase de validation, sans toucher aux legacy redirects stables.
+   */
+  redirect?: { to: string; status: 301; cacheControl?: string }
 }
 
 function validateVilleSlug(ville: string): GonePathDecision {
@@ -441,6 +447,10 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
       redirect: {
         to: '/comparaison',
         status: 301,
+        // Sprint AI Ahrefs 2026-05-03 — TTL CDN court (1h) pendant la phase
+        // de validation Sprint W. Permet rollback rapide sans purge manuelle
+        // Vercel si le 301 cause un effet inattendu.
+        cacheControl: 'public, max-age=3600, s-maxage=3600',
       },
     }
   }
@@ -459,6 +469,10 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
       redirect: {
         to: '/rge/qualifications',
         status: 301,
+        // Sprint AI Ahrefs 2026-05-03 — TTL CDN court (1h) pendant la phase
+        // de validation Sprint U. Permet rollback rapide sans purge manuelle
+        // Vercel si le 301 cause un effet inattendu.
+        cacheControl: 'public, max-age=3600, s-maxage=3600',
       },
     }
   }

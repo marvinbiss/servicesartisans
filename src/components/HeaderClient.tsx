@@ -307,6 +307,21 @@ export default function HeaderClient({
           >
             Glossaire
           </Link>
+          <div className="h-px bg-sand-200 my-1" />
+          <Link
+            href="/devenir-partenaire-cee"
+            className="block px-4 py-2.5 text-sm font-semibold text-amber-700 hover:text-amber-800 hover:bg-amber-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Pour artisans : devenir partenaire CEE
+          </Link>
+          <Link
+            href="/inscription-artisan"
+            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Inscription artisan
+          </Link>
         </div>
       )}
     </div>
