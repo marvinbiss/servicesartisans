@@ -199,6 +199,8 @@ export default function PompeAChaleurAidesComparatifPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${PAGE_URL}#article`,
+    url: PAGE_URL,
     headline: TITLE,
     description: DESCRIPTION,
     image: [`${SITE_URL}/og-default.jpg`],
@@ -206,6 +208,24 @@ export default function PompeAChaleurAidesComparatifPage() {
     dateModified: `${REVIEWED_AT}T00:00:00+02:00`,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Aides à la rénovation énergétique',
+    keywords: [
+      'aides pompe à chaleur',
+      'PAC',
+      'PAC air-eau',
+      'PAC géothermique',
+      "MaPrimeRénov'",
+      'Coup de pouce CEE',
+      'QualiPAC',
+      'comparatif',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Pompe à chaleur' },
+      { '@type': 'Thing', name: "MaPrimeRénov' PAC" },
+      { '@type': 'Thing', name: 'Coup de pouce chauffage' },
+      { '@type': 'Thing', name: 'Qualification QualiPAC' },
+    ],
     author: AUTHOR
       ? {
           '@type': 'Person',
@@ -219,6 +239,7 @@ export default function PompeAChaleurAidesComparatifPage() {
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },

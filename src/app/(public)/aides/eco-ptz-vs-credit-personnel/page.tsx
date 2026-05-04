@@ -174,6 +174,8 @@ export default function EcoPtzVsCreditPage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${PAGE_URL}#article`,
+    url: PAGE_URL,
     headline: TITLE,
     description: DESCRIPTION,
     image: [`${SITE_URL}/og-default.jpg`],
@@ -181,6 +183,19 @@ export default function EcoPtzVsCreditPage() {
     dateModified: `${REVIEWED_AT}T00:00:00+02:00`,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Aides à la rénovation énergétique',
+    keywords: [
+      'éco-PTZ',
+      'crédit personnel travaux',
+      'prêt rénovation',
+      'comparatif financement',
+      'TAEG',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Éco-PTZ — Prêt à taux zéro' },
+      { '@type': 'Thing', name: 'Crédit personnel travaux' },
+    ],
     author: AUTHOR
       ? {
           '@type': 'Person',
@@ -194,6 +209,7 @@ export default function EcoPtzVsCreditPage() {
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },

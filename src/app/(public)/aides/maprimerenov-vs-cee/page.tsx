@@ -167,6 +167,8 @@ export default function MaprimerenovVsCeePage() {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${PAGE_URL}#article`,
+    url: PAGE_URL,
     headline: TITLE,
     description: DESCRIPTION,
     image: [`${SITE_URL}/og-default.jpg`],
@@ -174,6 +176,19 @@ export default function MaprimerenovVsCeePage() {
     dateModified: `${REVIEWED_AT}T00:00:00+02:00`,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
+    articleSection: 'Aides à la rénovation énergétique',
+    keywords: [
+      "MaPrimeRénov'",
+      'CEE',
+      "Certificats d'économies d'énergie",
+      'comparatif aides',
+      'cumul aides',
+      '2026',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: "MaPrimeRénov'" },
+      { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
+    ],
     author: AUTHOR
       ? {
           '@type': 'Person',
@@ -187,6 +202,7 @@ export default function MaprimerenovVsCeePage() {
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
       url: SITE_URL,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
