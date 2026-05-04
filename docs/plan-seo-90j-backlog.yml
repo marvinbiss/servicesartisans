@@ -209,7 +209,8 @@ items:
     blocked_by: []
     human_required: false
     dod: node scripts/audit-cee-rge-mapping.mjs --strict
-    status: pending
+    status: completed
+    completed_at: '2026-05-05'
     ahrefs:
       kw_primary: 'prime cee [travaux]'
       volume_ahrefs: 15800
