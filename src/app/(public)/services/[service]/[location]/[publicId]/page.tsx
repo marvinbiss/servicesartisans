@@ -11,6 +11,7 @@ import {
   getServiceBySlug,
   getLocationBySlug,
   getProviderCountByServiceAndLocation,
+  supabase,
 } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
@@ -440,7 +441,10 @@ interface ReviewRow {
 // Fetch similar artisans (same specialty, same department)
 async function getSimilarArtisans(providerId: string, specialty: string, postalCode?: string) {
   try {
-    const { supabase } = await import('@/lib/supabase')
+    // Tier 0 bleeding stop 2026-05-04 : `await import()` dynamic remplacé par
+    // import statique en haut du fichier — économise 200ms-1s de module
+    // resolution sur cold start ISR (×950 K fiches), contribution directe
+    // au timeout 30s qui produit les 5xx GSC.
     const deptCode = postalCode && postalCode.length >= 2 ? postalCode.substring(0, 2) : null
 
     let query = supabase
@@ -489,7 +493,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 // Fetch reviews for provider (only real reviews from database)
 async function getProviderReviews(providerId: string, serviceName?: string): Promise<Review[]> {
   try {
-    const { supabase } = await import('@/lib/supabase')
+    // Tier 0 bleeding stop 2026-05-04 : import statique (cf. getSimilarArtisans).
     const { data: reviews } = await supabase
       .from('reviews')
       .select(
@@ -903,13 +907,31 @@ async function renderProviderPage({ params }: PageProps) {
   // Convert to Artisan format
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
-  // Fetch reviews and similar artisans in parallel (graceful degradation)
+  // Fetch reviews and similar artisans in parallel (graceful degradation).
+  // Tier 0 bleeding stop 2026-05-04 : race contre un timeout 6s par lookup
+  // pour éviter qu'un Supabase ralenti ne consomme les 30s de la function
+  // Vercel et déclenche un 504/5xx visible GSC. Memory `gsc-diagnostic`
+  // documente 12 890 pages 5xx dont 57 % sur ce template — root cause
+  // probable = cold ISR + DB lente + 0 fallback de timeout côté code.
+  // Sans race, le sub-fetch peut prendre 12-25s en p99, le tree React n'est
+  // alors jamais flushé → 504. Avec race, on dégrade en page complète avec
+  // section reviews/similar vide (deja cas géré via initial value [] + UI).
+  const RACE_MS = 6000
+  const raceTimeout = <T,>(p: Promise<T>, fallback: T): Promise<T> =>
+    Promise.race<T>([p, new Promise<T>((resolve) => setTimeout(() => resolve(fallback), RACE_MS))])
+
   let reviews: Review[] = []
   let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
   try {
     ;[reviews, similarArtisans] = await Promise.all([
-      getProviderReviews(provider.id, service?.name || artisan.specialty),
-      getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
+      raceTimeout(
+        getProviderReviews(provider.id, service?.name || artisan.specialty),
+        [] as Review[]
+      ),
+      raceTimeout(
+        getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
+        [] as Awaited<ReturnType<typeof getSimilarArtisans>>
+      ),
     ])
   } catch {
     // Graceful degradation — page renders without reviews/similar artisans

@@ -10,6 +10,9 @@
     "src/app/**/*.tsx": {
       "maxDuration": 30
     },
+    "src/app/(public)/services/[service]/[location]/[publicId]/page.tsx": {
+      "maxDuration": 60
+    },
     "src/app/api/cron/**/*.ts": {
       "maxDuration": 60
     },

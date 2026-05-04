@@ -255,9 +255,16 @@ export default function ServiceLocationPageClient({
           {/* Title & View toggle */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 tracking-tight">
+              {/* Tier 0 bleeding stop 2026-05-04 : downgrade <h1> → <p>.
+                  Le H1 SSR canonical vit dans page.tsx ligne ~1139 (server
+                  component, prioritaire Googlebot). Avoir 2 H1 sur la même
+                  URL produit le bug "Multiple H1 tags 8 207 pages" (audit
+                  Ahrefs site_audit_issues_2026-05). Cette barre sticky
+                  mobile garde le même rendu visuel mais ne pollue plus le
+                  signal hierarchical headings. */}
+              <p className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 tracking-tight">
                 {h1Text || `${service.name} à ${location.name}`}
-              </h1>
+              </p>
               {(location.department_name || location.postal_code) && (
                 <p className="text-charcoal-500 text-sm flex items-center gap-1 mt-1">
                   <MapPin className="w-4 h-4" />
