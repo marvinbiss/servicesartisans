@@ -12,8 +12,9 @@ import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
+  getCeeGovServiceSchema,
   getFAQSchema,
-  getGovernmentServiceSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
@@ -243,39 +244,14 @@ export default function MaprimerenovVsCeePage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: "MaPrimeRénov'",
-            description:
-              "Aide forfaitaire de l'État versée par l'Anah pour la rénovation énergétique des logements (parcours par geste et parcours accompagné).",
-            url: `${SITE_URL}/aides/maprimerenov-vs-cee`,
-            serviceType: 'Aide à la rénovation énergétique',
-            audience:
-              "Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et départements d'outre-mer",
-            temporalCoverage: '2026-01-01/2026-12-31',
-            sameAs: [
-              'https://www.maprimerenov.gouv.fr/',
-              'https://france-renov.gouv.fr/aides/maprimerenov',
-              'https://www.anah.gouv.fr/proprietaires/proprietaires-occupants',
-            ],
-            serviceOperator: {
-              name: "Agence nationale de l'habitat (Anah)",
-              url: 'https://www.anah.gouv.fr/',
-            },
-          }) as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: "Certificats d'économies d'énergie (CEE)",
-            description:
-              "Dispositif obligeant les fournisseurs d'énergie à financer les économies d'énergie chez les particuliers et les entreprises (article L221-1 du code de l'énergie).",
-            url: `${SITE_URL}/aides/maprimerenov-vs-cee`,
-            serviceType: 'Aide à la rénovation énergétique privée',
-            audience: 'Propriétaires occupants, bailleurs, copropriétés et entreprises',
-            temporalCoverage: '2026-01-01/2030-12-31',
-            sameAs: [
-              'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
-              'https://france-renov.gouv.fr/aides/cee',
-              'https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000023983208/LEGISCTA000023985322/',
-            ],
-          }) as Record<string, unknown>,
+          getMaPrimeRenovGovServiceSchema(`${SITE_URL}/aides/maprimerenov-vs-cee`) as Record<
+            string,
+            unknown
+          >,
+          getCeeGovServiceSchema(`${SITE_URL}/aides/maprimerenov-vs-cee`) as Record<
+            string,
+            unknown
+          >,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />

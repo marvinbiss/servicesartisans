@@ -12,8 +12,9 @@ import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getBreadcrumbSchema,
+  getCoupDePouceGovServiceSchema,
   getFAQSchema,
-  getGovernmentServiceSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
@@ -250,39 +251,12 @@ export default function MprVsCoupDePoucePage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: "MaPrimeRénov'",
-            description:
-              "Aide forfaitaire de l'État versée par l'Anah pour la rénovation énergétique des logements (parcours par geste et parcours accompagné).",
-            url: `${SITE_URL}/aides/maprimerenov-vs-coup-de-pouce`,
-            serviceType: 'Aide à la rénovation énergétique',
-            audience:
-              "Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et départements d'outre-mer",
-            temporalCoverage: '2026-01-01/2026-12-31',
-            sameAs: [
-              'https://www.maprimerenov.gouv.fr/',
-              'https://france-renov.gouv.fr/aides/maprimerenov',
-              'https://www.anah.gouv.fr/proprietaires/proprietaires-occupants',
-            ],
-            serviceOperator: {
-              name: "Agence nationale de l'habitat (Anah)",
-              url: 'https://www.anah.gouv.fr/',
-            },
-          }) as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: 'Coup de pouce CEE',
-            description:
-              "Bonifications contractuelles des primes CEE sous chartes signées avec la DGEC (chauffage, rénovation d'ampleur, bâtiments collectifs).",
-            url: `${SITE_URL}/aides/maprimerenov-vs-coup-de-pouce`,
-            serviceType: 'Bonification CEE à la rénovation énergétique',
-            audience:
-              'Ménages aux revenus modestes et très modestes, propriétaires bailleurs, copropriétés et bailleurs sociaux',
-            temporalCoverage: '2026-01-01/2030-12-31',
-            sameAs: [
-              'https://www.ecologie.gouv.fr/coup-pouce-economies-denergie',
-              'https://france-renov.gouv.fr/aides/coup-de-pouce-economies-denergie',
-            ],
-          }) as Record<string, unknown>,
+          getMaPrimeRenovGovServiceSchema(
+            `${SITE_URL}/aides/maprimerenov-vs-coup-de-pouce`
+          ) as Record<string, unknown>,
+          getCoupDePouceGovServiceSchema(
+            `${SITE_URL}/aides/maprimerenov-vs-coup-de-pouce`
+          ) as Record<string, unknown>,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />

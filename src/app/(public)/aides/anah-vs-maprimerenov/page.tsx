@@ -22,7 +22,7 @@ import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/con
 import {
   getBreadcrumbSchema,
   getFAQSchema,
-  getGovernmentServiceSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
@@ -261,26 +261,10 @@ export default function AnahVsMaprimerenovPage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: "MaPrimeRénov'",
-            description:
-              "Aide forfaitaire de l'État versée par l'Anah pour les travaux de rénovation énergétique du logement (parcours par geste et parcours accompagné depuis 2024). Barème calculé selon le revenu fiscal de référence et le saut DPE.",
-            url: `${SITE_URL}/aides/anah-vs-maprimerenov`,
-            serviceType: 'Aide à la rénovation énergétique',
-            audience:
-              "Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et départements d'outre-mer",
-            temporalCoverage: '2026-01-01/2026-12-31',
-            sameAs: [
-              'https://www.maprimerenov.gouv.fr/',
-              'https://france-renov.gouv.fr/aides/maprimerenov',
-              'https://www.anah.gouv.fr/proprietaires/proprietaires-occupants',
-              'https://www.service-public.fr/particuliers/vosdroits/F35083',
-            ],
-            serviceOperator: {
-              name: "Agence nationale de l'habitat (Anah)",
-              url: 'https://www.anah.gouv.fr/',
-            },
-          }) as Record<string, unknown>,
+          getMaPrimeRenovGovServiceSchema(`${SITE_URL}/aides/anah-vs-maprimerenov`) as Record<
+            string,
+            unknown
+          >,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />

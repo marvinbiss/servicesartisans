@@ -764,6 +764,102 @@ export function getGovernmentServiceSchema(params: {
   }
 }
 
+/**
+ * Tier 24 — factories GovernmentService canoniques pour les 4 dispositifs
+ * publics les plus cités sur le site (MaPrimeRénov', CEE, Coup de pouce CEE,
+ * éco-PTZ). Chaque factory embarque les sameAs gouv.fr / Service-public /
+ * Légifrance / ADEME, l'audience cible, le serviceOperator officiel et le
+ * temporalCoverage 2026/2030 selon la durée du dispositif. Les pages
+ * éditoriales doivent appeler ces factories plutôt que dupliquer inline,
+ * pour qu'une mise à jour réglementaire (URL gouv.fr renommée, sameAs
+ * étendu, opérateur changé) ne nécessite qu'une seule édition.
+ *
+ * Chaque factory accepte uniquement le `url` de la page consommatrice ;
+ * laisser une `description`/`audience` override est volontairement absent
+ * pour préserver la cohérence entité (Knowledge Graph dédoublonne sur
+ * le triplet name+sameAs+description).
+ */
+
+export function getMaPrimeRenovGovServiceSchema(url: string) {
+  return getGovernmentServiceSchema({
+    name: "MaPrimeRénov'",
+    description:
+      "Aide forfaitaire de l'État versée par l'Anah pour les travaux de rénovation énergétique du logement (parcours par geste et parcours accompagné depuis 2024). Barème calculé selon le revenu fiscal de référence et le saut DPE.",
+    url,
+    serviceType: 'Aide à la rénovation énergétique',
+    audience:
+      "Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et départements d'outre-mer",
+    temporalCoverage: '2026-01-01/2026-12-31',
+    sameAs: [
+      'https://www.maprimerenov.gouv.fr/',
+      'https://france-renov.gouv.fr/aides/maprimerenov',
+      'https://www.anah.gouv.fr/proprietaires/proprietaires-occupants',
+      'https://www.service-public.fr/particuliers/vosdroits/F35083',
+    ],
+    serviceOperator: {
+      name: "Agence nationale de l'habitat (Anah)",
+      url: 'https://www.anah.gouv.fr/',
+    },
+  })
+}
+
+export function getCeeGovServiceSchema(url: string) {
+  return getGovernmentServiceSchema({
+    name: "Certificats d'économies d'énergie (CEE)",
+    description:
+      "Dispositif obligeant les fournisseurs d'énergie à financer les économies d'énergie chez les particuliers et les entreprises (article L221-1 du code de l'énergie).",
+    url,
+    serviceType: 'Aide à la rénovation énergétique privée',
+    audience: 'Propriétaires occupants, bailleurs, copropriétés et entreprises',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie',
+      'https://france-renov.gouv.fr/aides/cee',
+      'https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000023983208/LEGISCTA000023985322/',
+      'https://www.service-public.fr/particuliers/vosdroits/F1985',
+    ],
+  })
+}
+
+export function getCoupDePouceGovServiceSchema(url: string) {
+  return getGovernmentServiceSchema({
+    name: 'Coup de pouce CEE',
+    description:
+      "Bonifications contractuelles des primes CEE instituées par arrêté au titre de l'article L221-7 du code de l'énergie : chartes Chauffage résidentiel individuel, Rénovation d'ampleur, Rénovation performante de bâtiment résidentiel collectif et Chauffage des bâtiments collectifs et tertiaires.",
+    url,
+    serviceType: 'Bonification CEE à la rénovation énergétique',
+    audience:
+      'Ménages aux revenus modestes et très modestes, propriétaires bailleurs, copropriétés et bailleurs sociaux',
+    temporalCoverage: '2026-01-01/2030-12-31',
+    sameAs: [
+      'https://www.ecologie.gouv.fr/coup-pouce-economies-denergie',
+      'https://france-renov.gouv.fr/aides/coup-de-pouce-economies-denergie',
+    ],
+  })
+}
+
+export function getEcoPtzGovServiceSchema(url: string) {
+  return getGovernmentServiceSchema({
+    name: 'Éco-prêt à taux zéro (éco-PTZ)',
+    description:
+      "Prêt sans intérêt distribué par les banques conventionnées avec l'État pour financer les travaux d'amélioration de la performance énergétique du logement (isolation, chauffage, VMC, audit énergétique). Plafond jusqu'à 50 000 € pour un bouquet performance globale, durée de remboursement jusqu'à 20 ans.",
+    url,
+    serviceType: 'Prêt aidé à la rénovation énergétique',
+    audience:
+      'Propriétaires occupants, bailleurs et syndicats de copropriétaires de logements achevés depuis plus de 2 ans en France',
+    temporalCoverage: '2026-01-01/2027-12-31',
+    sameAs: [
+      'https://www.service-public.fr/particuliers/vosdroits/F19905',
+      'https://france-renov.gouv.fr/aides/eco-ptz',
+      'https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044881907/',
+    ],
+    serviceOperator: {
+      name: 'Direction générale du Trésor',
+      url: 'https://www.tresor.economie.gouv.fr/',
+    },
+  })
+}
+
 // Schema.org LoanOrCredit (for loan/credit pages: éco-PTZ, prêt travaux)
 export function getLoanOrCreditSchema(params: {
   name: string

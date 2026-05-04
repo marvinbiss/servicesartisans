@@ -22,7 +22,7 @@ import { SITE_NAME, SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/con
 import {
   getBreadcrumbSchema,
   getFAQSchema,
-  getGovernmentServiceSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
@@ -233,26 +233,9 @@ export default function AideIsolationVsCreditImpotPage() {
         data={[
           breadcrumbSchema as Record<string, unknown>,
           articleSchema as Record<string, unknown>,
-          getGovernmentServiceSchema({
-            name: "MaPrimeRénov' Isolation",
-            description:
-              "Aide forfaitaire de l'État pour l'isolation thermique des combles, murs, toitures et planchers bas. Le crédit d'impôt transition énergétique (CITE) qui la précédait a été remplacé en 2020.",
-            url: `${SITE_URL}/aides/aide-isolation-vs-credit-impot`,
-            serviceType: 'Aide à la rénovation énergétique — isolation',
-            audience:
-              'Propriétaires occupants, propriétaires bailleurs et copropriétés en France métropolitaine et DOM',
-            temporalCoverage: '2026-01-01/2026-12-31',
-            sameAs: [
-              'https://www.maprimerenov.gouv.fr/',
-              'https://france-renov.gouv.fr/aides/maprimerenov',
-              'https://france-renov.gouv.fr/travaux/isolation',
-              'https://www.service-public.fr/particuliers/vosdroits/F35083',
-            ],
-            serviceOperator: {
-              name: "Agence nationale de l'habitat (Anah)",
-              url: 'https://www.anah.gouv.fr/',
-            },
-          }) as Record<string, unknown>,
+          getMaPrimeRenovGovServiceSchema(
+            `${SITE_URL}/aides/aide-isolation-vs-credit-impot`
+          ) as Record<string, unknown>,
           ...(faqSchema ? [faqSchema as Record<string, unknown>] : []),
         ]}
       />
