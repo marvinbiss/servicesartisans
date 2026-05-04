@@ -439,7 +439,7 @@ items:
     effort_hours: 1
     blocked_by: []
     human_required: false
-    dod: node scripts/audit-cron-sentry-coverage.mjs --threshold 75 --strict
+    dod: node scripts/audit-cron-sentry-coverage.mjs --threshold 95 --strict
     status: completed
     ahrefs:
       kw_primary: n/a (anti-régression observability)
@@ -450,7 +450,6 @@ items:
       leader_rank: n/a
       ahrefs_csv_source: memory:servicesartisans-audit-architecture-2026-04-12
     notes: >-
-      Memory baseline 14/45 OK (31%), état actuel 35/45 = 77.8%. 0 silent catch détecté. 10 crons restants sans
-      observability (cache-warmup 273 LOC, canonical-fingerprint 128, claim-auto-approve 191, google-algo-monitor,
-      lighthouse-budget, send-review-invitations 271, voice-lead-expiry, voice-stats, abandon-emails, indexnow-submit).
-      Threshold 75 lock-in regression. Wiring restant = futurs Tiers.
+      Tier 57 (2026-05-04) : audit reconnait withCronCheckIn wrapper qui fournit déjà Sentry.captureCheckIn +
+      healthchecks.io heartbeat + try/catch externe. 45/45 crons utilisent ce wrapper = 100% observable. Threshold bump
+      75 → 95 lock-in regression. 0 silent catch. Memory baseline 31% obsolete depuis commits audit-10-agents 25/04.

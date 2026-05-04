@@ -81,11 +81,18 @@ const results = cronRoutes.map((path) => {
   const hasSentryCapture = /Sentry\.(captureException|captureMessage)\(/.test(src)
   const hasLoggerError = /logger\.error\(/.test(src)
 
+  // Wrapper `withCronCheckIn(monitorSlug, handler)` fournit déjà :
+  //   - try/catch externe sur le handler
+  //   - Sentry.captureCheckIn (status: 'in_progress' / 'ok' / 'error')
+  //   - healthchecks.io heartbeat ping (defense-in-depth observability)
+  // Cf. src/lib/monitoring/sentry-checkin.ts — un cron wrappé est
+  // automatiquement observable, même sans try/catch interne.
+  const hasCronCheckInWrapper = /withCronCheckIn\(/.test(src)
+
   const observable =
-    hasCatch && (hasSentryCapture || hasLoggerError) && !hasSilentCatch
-  // Cas particulier : cron très simple sans catch (ex. healthcheck) — on ne
-  // marque pas comme échec si la logique est triviale (≤ 30 LOC). Heuristique
-  // pour éviter faux positifs.
+    hasCronCheckInWrapper ||
+    (hasCatch && (hasSentryCapture || hasLoggerError) && !hasSilentCatch)
+
   const loc = src.split(/\r?\n/).length
   const isSimpleHealthcheck = loc < 60 && /Response\.(json|ok)/.test(src) && !hasCatch
 
@@ -97,6 +104,7 @@ const results = cronRoutes.map((path) => {
     hasSilentCatch,
     hasSentryCapture,
     hasLoggerError,
+    hasCronCheckInWrapper,
     observable: observable || isSimpleHealthcheck,
     simpleHealthcheck: isSimpleHealthcheck,
   }
