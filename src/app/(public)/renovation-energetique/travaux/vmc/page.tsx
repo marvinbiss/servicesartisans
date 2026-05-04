@@ -1,22 +1,30 @@
 /**
- * Page : /renovation-energetique/travaux/vmc (HUB cluster VMC)
+ * /renovation-energetique/travaux/vmc — hub VMC cluster (Pilier 2).
  *
- * KW cibles (validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
- * - "vmc"                          → 8 100 vol, KD 1 (parent générique)
- * - "vmc simple flux"              → 15 000 vol, KD 2 (effy.fr #2)
- * - "vmc hygroreglable"            → 14 000 vol, KD 1 (quelleenergie.fr #2)
- * - "vmc double flux"              → 13 374 vol, KD 2 (page existante)
- * - "vmc prix"                     → 1 600 vol, KD 0
- * - "vmc installation"             → 1 200 vol, KD 0
+ * @kw-primary    vmc double flux
+ * @kw-volume     18500
+ * @kw-kd         7
+ * @kw-cpc        3.20
+ * @cluster       2
+ * @ahrefs-source docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md#vmc-goldmine
+ * @backlog-item  P3-vmc-cluster
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — GOLDMINE KD 0.7)
+ *
+ * KW cibles validés Bloc 1 v3 (country=fr) :
+ * - "vmc"               → 8 100 vol, KD 1 (parent générique)
+ * - "vmc simple flux"   → 15 000 vol, KD 2 (effy.fr #2)
+ * - "vmc hygroreglable" → 14 000 vol, KD 1 (quelleenergie.fr #2)
+ * - "vmc double flux"   → 13 374 vol, KD 2 (sub-page dédiée)
+ * - "vmc prix"          → 1 600 vol, KD 0
+ * - "vmc installation"  → 1 200 vol, KD 0
  * - Cluster cumulé : 215 KW, vol 127 800/mo, KD moyen 0.7 (GOLDMINE)
  *
- * Source : audit Ahrefs Bloc 1 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
- *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
- * Easy win : OUI MEGA — KD moyen 0.7 sur tout le cluster.
- *            Aucun page SA dédiée hub avant ce sprint.
- *            Concurrence : Effy, Aldes, Atlantic, Helios.
- *            Atout SA : artisans RGE Qualibat 8721 + simulateur aides + comparatif neutre.
- * Cluster pillar : Rénovation Énergétique → Travaux → VMC (hub)
+ * Easy win : OUI MEGA — pas de leader fort sur cluster KD 0.7.
+ * Concurrence : Effy, Aldes, Atlantic, Helios. Atout SA : artisans RGE
+ * Qualibat 8721 + simulateur aides + comparatif neutre.
+ *
+ * Marques principales couvertes : Aldes, Atlantic, Helios, Unelvent,
+ * Zehnder (top 5 marché VMC France).
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'

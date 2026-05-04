@@ -1,19 +1,24 @@
 /**
- * Page : /renovation-energetique/travaux/vmc/simple-flux
+ * /renovation-energetique/travaux/vmc/simple-flux — sub-page VMC simple flux.
  *
- * KW cibles (validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
- * - "vmc simple flux"              → 15 000 vol, KD 2 (effy.fr #2 — JACKPOT)
- * - "vmc simple flux prix"         → 1 200 vol, KD 0
+ * @kw-primary    vmc simple flux
+ * @kw-volume     15000
+ * @kw-kd         2
+ * @kw-cpc        2.80
+ * @cluster       2
+ * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
+ * @backlog-item  P3-vmc-cluster
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — JACKPOT)
+ *
+ * Famille cumulée ~18 000 vol/mois :
+ * - "vmc simple flux"               → 15 000 vol, KD 2 (effy.fr #2)
+ * - "vmc simple flux prix"          → 1 200 vol, KD 0
  * - "vmc simple flux hygroreglable" → 880 vol, KD 1
- * - "vmc simple flux autoreglable" → 480 vol, KD 0
- * - "vmc simple flux maison"       → 320 vol, KD 0
- * - Famille cumulée : ~18 000 vol/mois (KD 0-2 = MEGA EASY WIN)
+ * - "vmc simple flux autoreglable"  → 480 vol, KD 0
+ * - "vmc simple flux maison"        → 320 vol, KD 0
  *
- * Source : audit Ahrefs Bloc 1 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
- *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
- * Easy win : OUI MEGA — Effy seul rank top 5, France-Renov pas dédiée.
- *            Atout SA : comparatif neutre auto vs hygro + simulateur aides + RGE Qualibat 8721.
- * Cluster pillar : Rénovation Énergétique → Travaux → VMC → Simple flux
+ * Easy win : OUI MEGA — Effy seul top 5, France-Renov pas dédiée.
+ * Atout SA : comparatif neutre + simulateur + RGE Qualibat 8721.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'

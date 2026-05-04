@@ -1,20 +1,25 @@
 /**
- * Page : /renovation-energetique/travaux/vmc/installation
+ * /renovation-energetique/travaux/vmc/installation — guide installation VMC.
  *
- * KW cibles (validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
- * - "vmc installation"             → 1 200 vol, KD 0
- * - "installation vmc prix"        → 880 vol, KD 0
- * - "pose vmc"                     → 720 vol, KD 0
- * - "remplacement vmc"             → 480 vol, KD 1
- * - "installer une vmc"            → 320 vol, KD 0
- * - "vmc neuf prix"                → 200 vol, KD 0
- * - Famille cumulée : ~3 800 vol/mois (KD 0-1 = QUICK WIN)
+ * @kw-primary    vmc installation
+ * @kw-volume     1200
+ * @kw-kd         0
+ * @kw-cpc        2.10
+ * @cluster       2
+ * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
+ * @backlog-item  P3-vmc-cluster
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — QUICK WIN)
  *
- * Source : audit Ahrefs Bloc 1 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
- *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
- * Easy win : OUI — KD 0 sur tous les KW principaux. Page how-to + check-list.
- *            Atout SA : guide étapes + tarifs détaillés + checklist devis + RGE Qualibat 8721.
- * Cluster pillar : Rénovation Énergétique → Travaux → VMC → Installation
+ * Famille cumulée ~3 800 vol/mois (KD 0-1) :
+ * - "vmc installation"      → 1 200 vol, KD 0
+ * - "installation vmc prix" → 880 vol, KD 0
+ * - "pose vmc"              → 720 vol, KD 0
+ * - "remplacement vmc"      → 480 vol, KD 1
+ * - "installer une vmc"     → 320 vol, KD 0
+ * - "vmc neuf prix"         → 200 vol, KD 0
+ *
+ * Easy win : OUI — KD 0 sur tous KW. Page how-to + check-list.
+ * Atout SA : guide étapes + tarifs + checklist devis + RGE Qualibat 8721.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'

@@ -1,19 +1,24 @@
 /**
- * Page : /renovation-energetique/travaux/vmc/hygroreglable
+ * /renovation-energetique/travaux/vmc/hygroreglable — sub-page VMC hygro.
  *
- * KW cibles (validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
- * - "vmc hygroreglable"            → 14 000 vol, KD 1 (quelleenergie.fr #2 — JACKPOT)
- * - "vmc hygroreglable type a"     → 720 vol, KD 0
- * - "vmc hygroreglable type b"     → 880 vol, KD 0
- * - "vmc hygro b"                  → 480 vol, KD 0
- * - "prix vmc hygroreglable"       → 320 vol, KD 0
- * - Famille cumulée : ~16 400 vol/mois (KD 0-1 = MEGA EASY WIN)
+ * @kw-primary    vmc hygroreglable
+ * @kw-volume     14000
+ * @kw-kd         1
+ * @kw-cpc        2.40
+ * @cluster       2
+ * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
+ * @backlog-item  P3-vmc-cluster
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — JACKPOT KD 1)
  *
- * Source : audit Ahrefs Bloc 1 (cf docs/ahrefs-bloc1-keywords-gap-2026-05-04.md)
- *          + fusion stratégique docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md
- * Easy win : OUI MEGA — KD 1 sur head term 14K vol, leader 1 absent (gov absent).
- *            Atout SA : approfondissement type A vs B + débits réglementaires + RGE 8721.
- * Cluster pillar : Rénovation Énergétique → Travaux → VMC → Hygroréglable
+ * Famille cumulée ~16 400 vol/mois :
+ * - "vmc hygroreglable"        → 14 000 vol, KD 1 (quelleenergie.fr #2)
+ * - "vmc hygroreglable type a" → 720 vol, KD 0
+ * - "vmc hygroreglable type b" → 880 vol, KD 0
+ * - "vmc hygro b"              → 480 vol, KD 0
+ * - "prix vmc hygroreglable"   → 320 vol, KD 0
+ *
+ * Easy win : OUI MEGA — KD 1 head term 14K vol, leader 1 absent (gov absent).
+ * Atout SA : approfondissement type A vs B + débits réglementaires + RGE 8721.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
