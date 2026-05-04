@@ -441,6 +441,15 @@ export function getHowToSchema(
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
+    /**
+     * Tier 30 — inLanguage racine + isPartOf #website. Aligne le HowTo
+     * sur les conventions de FAQPage (Tier 29) : Google + Bing AI utilisent
+     * ce duo pour valider l'écosystème éditorial et la langue cible des
+     * Steps. AI Overviews préfère les HowTo qui se rattachent
+     * explicitement à leur Organisation source.
+     */
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': `${SITE_URL}#website` },
     ...(options?.name && { name: options.name }),
     ...(options?.description && { description: options.description }),
     ...(options?.totalTime && { totalTime: options.totalTime }),
@@ -449,6 +458,11 @@ export function getHowToSchema(
       position: index + 1,
       name: step.name,
       text: step.text,
+      /**
+       * Tier 30 — inLanguage par Step. Permet à AI Overviews de citer un
+       * Step précis (ex. step 3 d'un guide PAC) sans confusion de langue.
+       */
+      inLanguage: 'fr-FR',
       ...(step.image && { image: step.image }),
     })),
   }

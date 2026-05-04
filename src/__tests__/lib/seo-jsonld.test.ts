@@ -315,6 +315,24 @@ describe('getHowToSchema', () => {
     expect(schemaSteps[0].position).toBe(1)
     expect(schemaSteps[1].position).toBe(2)
   })
+
+  it('emits inLanguage fr-FR + isPartOf #website (Tier 30)', () => {
+    const schema = getHowToSchema([{ name: 'A', text: 'B' }])
+    expect(schema!.inLanguage).toBe('fr-FR')
+    expect((schema!.isPartOf as { '@id': string })['@id']).toBe(
+      'https://servicesartisans.fr#website'
+    )
+  })
+
+  it('emits inLanguage on each HowToStep (Tier 30)', () => {
+    const schema = getHowToSchema([
+      { name: 'A', text: 'first' },
+      { name: 'B', text: 'second' },
+    ])
+    const schemaSteps = schema!.step as Array<Record<string, unknown>>
+    expect(schemaSteps[0].inLanguage).toBe('fr-FR')
+    expect(schemaSteps[1].inLanguage).toBe('fr-FR')
+  })
 })
 
 // ---------- getAvisHubSchema ----------
