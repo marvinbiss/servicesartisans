@@ -1,3 +1,23 @@
+/**
+ * /aides — hub racine rénovation énergétique (Pilier 2 stratégie CEO).
+ *
+ * @kw-primary    aides renovation energetique 2026
+ * @kw-volume     33000
+ * @kw-kd         28
+ * @kw-cpc        4.80
+ * @cluster       2
+ * @ahrefs-source docs/ahrefs-renovation-keywords-extracted-2026-05-04.json:cluster=aides
+ * @backlog-item  P3-aides-hub-racine
+ * @snapshot      2026-05-04 (Ahrefs renovation keywords + V2 fused)
+ *
+ * Patterns DoD (cf. scripts/audit-aides-hub.mjs) :
+ *   - 12 sous-pages dans aidesCatalog (route /aides/[slug] dynamique)
+ *   - ≥6 pages comparatives statiques (anah-vs-maprimerenov, etc.)
+ *   - WebPage @id + inLanguage + isPartOf #website
+ *   - ItemList hub ≥10 items
+ *   - TldrBlock + EnBrefBox rendered
+ *   - Auteur+reviewer (E-E-A-T YMYL aide financière)
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Calculator, Compass, ShieldCheck } from 'lucide-react'
