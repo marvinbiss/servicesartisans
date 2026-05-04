@@ -297,7 +297,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   })
 
   // First-fitting via helper partagé (Sprint 2 pattern, voir title-selector.ts).
-  const title = selectFittingTitle(titleVariants, seoHash, 41)
+  // Sprint 5 vague 4 — maxLen 41 → 60 pour récupérer les variants review-prefix
+  // riches sur les ~50K pages /services/[service]/[location]. 60 = limite
+  // Google SERP desktop (mobile blended ~58) sans perte signal sémantique.
+  const title = selectFittingTitle(titleVariants, seoHash, 60)
 
   // FS-bait : intent-routed builder (urgence / renovation / travaux). Pattern
   // structuré pour Featured Snippet + PAA (count en début, signal aide en fin).

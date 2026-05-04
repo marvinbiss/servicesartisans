@@ -128,7 +128,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `Artisans ${ville.name} 2026`,
         `Artisans ${ville.name}`,
       ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Sprint 5 vague 4 — maxLen 41 → 60 pour récupérer les variants review-prefix
+  // riches sur les 35K pages /villes/[ville]. 60 = limite Google SERP desktop
+  // (mobile blended ~58), au-delà tronqué visuel sans perte de signal sémantique.
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   // FS-bait : count global + count métiers (PAA "Combien d'artisans à X").
   const description = buildVilleHubFsBait({

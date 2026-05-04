@@ -204,7 +204,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${serviceName} RGE ${villeName}`,
       ]
   const titleHash = hashCode(`rge-title-${serviceSlug}-${villeSlug}`)
-  const title = selectFittingTitle(titleVariants, titleHash, 41)
+  // Sprint 5 vague 4 (2026-05-04) : maxLen 41 → 60. Audit SEO 10-agents
+  // 2026-04-28 : variants riches "review prefix + count + service + ville
+  // + MaPrimeRénov 2026" tronqués à 41 → recall fréquent au filet sec
+  // `${serviceName} RGE ${villeName}` qui perd review-prefix CTR. 60 =
+  // limite Google SERP desktop (mobile blended ~58), au-delà tronqué visuel
+  // sans perte de signal sémantique (Google indexe l'intégralité du <title>).
+  const title = selectFittingTitle(titleVariants, titleHash, 60)
 
   // FS-bait : count + price + "MaPrimeRénov' 11 000 €" structuré pour PAA financial.
   // pluralTerm corrige les noms composés ("pompes à chaleur" et non "pompe à chaleurs").

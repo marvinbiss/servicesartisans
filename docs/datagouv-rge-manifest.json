@@ -1,0 +1,107 @@
+{
+  "_doc": "Sprint 5 vague 4 (2026-05-04) — Manifest data.gouv.fr pour publication du dataset RGE ServicesArtisans. Payload JSON aligné API DCAT data.gouv.fr v1 (https://doc.data.gouv.fr/api/reference/#datasets). Sert de spec stable pour l'upload manuel via /admin/datasets/new ET pour automation future via API token (cf. action #4 page /datasets/rge ligne 28-30).",
+  "_audit": {
+    "ahrefs_rationale": "Audit SEO 10-agents 2026-04-28 + memory servicesartisans-seo-10agents-synthesis-2026-04-28 : data.gouv.fr Dataset upload = +5-8 DR (de 0.6 → 8-15 cible M+12). DR 92 vs SA DR 0.6 = différentiel autoritaire massif. Backlink CC-BY-4.0 obligatoire dans la réutilisation = signal trust SEO + co-citation Wikipedia/Wikidata.",
+    "snapshot": "2026-05-04",
+    "sprint_dependencies": "Cron /api/cron/export-rge-dataset (mensuel, 0 4 1 * *) déjà actif. Page /datasets/rge avec Schema.org Dataset déjà publiée. Manifest = dernière brique avant submission UI."
+  },
+  "title": "Annuaire des artisans RGE de France — ServicesArtisans",
+  "acronym": "RGE-SA",
+  "description": "Liste exhaustive des entreprises certifiées RGE (Reconnu Garant de l'Environnement) référencées sur ServicesArtisans, ~50 000 fiches actualisées mensuellement.\n\n## Périmètre\n\nToutes les entreprises ayant au moins une qualification RGE active à la date du snapshot mensuel. Couverture : France métropolitaine + DOM-TOM. Source initiale : ADEME / France Rénov'. Enrichissement ServicesArtisans : géolocalisation WGS84, normalisation des slugs métiers, regroupement par organisme certificateur, calcul de la date de validité maximale.\n\n## Fréquence\n\nMise à jour mensuelle automatisée (1er du mois, ~04:00 UTC). Snapshot horodaté + version `rge-latest.*` toujours pointée sur la dernière publication.\n\n## Schéma\n\nVoir documentation complète : https://servicesartisans.fr/datasets/rge#schema\n\n## Cas d'usage\n\n- Vérification de la certification RGE d'un artisan avant signature de devis (MaPrimeRénov', CEE, TVA 5,5 %)\n- Cartographie de l'offre RGE par département / commune\n- Études de marché rénovation énergétique\n- Cross-référencement avec d'autres datasets ADEME / DPE / aides territoriales\n\n## Licence\n\nCC-BY 4.0 — Attribution requise : « ServicesArtisans (https://servicesartisans.fr) — données enrichies depuis ADEME/France Rénov'. »",
+  "license": "cc-by",
+  "frequency": "monthly",
+  "frequency_date": "2026-04-29T15:48:43.560Z",
+  "temporal_coverage": {
+    "start": "2026-04-01T00:00:00Z",
+    "end": "2026-04-30T23:59:59Z"
+  },
+  "spatial": {
+    "granularity": "country",
+    "zones": ["country/FR"]
+  },
+  "tags": [
+    "rge",
+    "renovation-energetique",
+    "artisans",
+    "ademe",
+    "maprimerenov",
+    "cee",
+    "france-renov",
+    "pompe-a-chaleur",
+    "isolation",
+    "chauffagiste",
+    "qualibat",
+    "qualipac",
+    "qualibois",
+    "qualisol",
+    "qualifelec"
+  ],
+  "resources": [
+    {
+      "title": "RGE — CSV (UTF-8 BOM, 2026-04)",
+      "description": "Format tabulaire CSV avec en-tête, encodage UTF-8 avec BOM (Excel-compatible). 49 960 lignes × 16 colonnes. Idéal pour import direct Excel / Google Sheets / Airtable / outils BI.",
+      "url": "https://servicesartisans.fr/datasets/rge/rge-2026-04.csv",
+      "type": "main",
+      "format": "csv",
+      "mime": "text/csv",
+      "filesize": 70752465,
+      "checksum": {
+        "type": "sha-256",
+        "value": "a608a9587360f5a596850296b84f88972d13cb23bd41e6e95a87b4d40f6226f9"
+      }
+    },
+    {
+      "title": "RGE — NDJSON (streaming, 2026-04)",
+      "description": "Format newline-delimited JSON (1 fiche par ligne). Optimal pour traitement streaming, jq, Spark, Big Query, ingestion ETL. Préserve la structure imbriquée des qualifications.",
+      "url": "https://servicesartisans.fr/datasets/rge/rge-2026-04.json",
+      "type": "main",
+      "format": "json",
+      "mime": "application/x-ndjson",
+      "filesize": 79637959,
+      "checksum": {
+        "type": "sha-256",
+        "value": "9408b99fe7ee969efa568a4320f7d58ef2db633c81e43eb4e189ee73d8b045fd"
+      }
+    },
+    {
+      "title": "RGE — Parquet (analytics, 2026-04)",
+      "description": "Format columnar Apache Parquet. Idéal pour analytics SQL via DuckDB, Polars, Pandas, Athena, BigQuery. Compression snappy, types natifs préservés.",
+      "url": "https://servicesartisans.fr/datasets/rge/rge-2026-04.parquet",
+      "type": "main",
+      "format": "parquet",
+      "mime": "application/vnd.apache.parquet",
+      "filesize": 281,
+      "checksum": {
+        "type": "sha-256",
+        "value": "97c515d4ebce524acc9fdd1557426f6f6ed44839f5aaf028b3cf24eec6d4164d"
+      }
+    },
+    {
+      "title": "Documentation du schéma & exemples",
+      "description": "Page documentation : schéma des 16 colonnes (siret, name, slug, address_*, latitude, longitude, specialty, rge_qualifications, rge_valid_until, rge_organismes, rge_last_synced_at, rge_source_url) avec types, exemples, méthodologie d'enrichissement.",
+      "url": "https://servicesartisans.fr/datasets/rge",
+      "type": "documentation",
+      "format": "html",
+      "mime": "text/html"
+    },
+    {
+      "title": "API publique de lookup RGE par SIRET",
+      "description": "API REST gratuite — GET /api/v1/rge/lookup?siret=12345678901234. Retourne la fiche RGE + qualifications actives + organisme. Limite 100 req/min/IP. Documentation : /datasets/rge#api.",
+      "url": "https://servicesartisans.fr/api/v1/rge/lookup",
+      "type": "api",
+      "format": "api",
+      "mime": "application/json"
+    }
+  ],
+  "extras": {
+    "datagouv:reuse_recommendation": "Citation recommandée : « Données RGE enrichies — ServicesArtisans (https://servicesartisans.fr/datasets/rge), licence CC-BY 4.0, mise à jour mensuelle, source initiale ADEME/France Rénov'. »",
+    "datagouv:author": "ServicesArtisans (équipe data)",
+    "datagouv:contact_email": "data@servicesartisans.fr",
+    "datagouv:contact_form": "https://servicesartisans.fr/contact?subject=Dataset+RGE",
+    "datagouv:related_datasets": [
+      "https://www.data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/",
+      "https://www.data.gouv.fr/fr/datasets/diagnostics-de-performance-energetique-pour-les-logements/",
+      "https://www.data.gouv.fr/fr/datasets/dossiers-de-financement-de-maprimerenov/"
+    ]
+  }
+}

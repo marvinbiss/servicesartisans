@@ -179,7 +179,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${serviceName} : Tarifs 2026 + Devis Gratuit`,
         `${serviceName} 2026 — Artisans Vérifiés en France`,
       ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 41)
+  // Sprint 5 vague 4 — maxLen 41 → 60 pour récupérer les variants review-prefix
+  // riches sur les 46 hubs /services/[service]. 60 = limite Google SERP desktop.
+  const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
