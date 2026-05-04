@@ -235,6 +235,12 @@ export function getServiceSchema(service: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    /**
+     * Tier 32 — inLanguage racine. Aligne Service sur les conventions
+     * Tier 29-31 : AI Overviews filtre les Service nodes sans langue
+     * déclarée pour les requêtes francophones pures.
+     */
+    inLanguage: 'fr-FR',
     name: service.name,
     description: service.description,
     ...(service.image ? { image: service.image } : {}),
@@ -245,6 +251,7 @@ export function getServiceSchema(service: {
         }
       : {
           '@type': 'Organization',
+          '@id': `${SITE_URL}#organization`,
           name: SITE_NAME,
         },
     areaServed: service.areaServed
@@ -643,6 +650,15 @@ export function getServicePricingSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    /**
+     * Tier 32 — @id déterministe basé sur l'URL canonique tarifaire.
+     * Le suffixe `#service-pricing` distingue ce node Service-pricing
+     * des autres Service émis sur la même page (ex. /tarifs/[service]
+     * peut aussi émettre un Service générique). Permet à Google KG de
+     * dédoublonner et d'attribuer correctement les Offers.
+     */
+    '@id': `${params.url}#service-pricing`,
+    inLanguage: 'fr-FR',
     name: params.location
       ? `${params.serviceName} à ${params.location}`
       : `${params.serviceName} en France`,
@@ -692,6 +708,13 @@ export function getLocalServiceSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    /**
+     * Tier 32 — @id déterministe `${url}#local-service`. Permet de
+     * coexister sans conflit avec un getServiceSchema émis sur la même
+     * page (ex. service générique + service localisé) : KG dédoublonne
+     * sur l'@id, deux Service distincts = deux entités distinctes.
+     */
+    '@id': `${params.url}#local-service`,
     name: `${params.serviceName} à ${params.cityName}`,
     description: params.description,
     url: params.url,
@@ -1255,6 +1278,14 @@ export function getEnrichedLocalServiceSchema(params: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
+    /**
+     * Tier 32 — @id `${url}#enriched-local-service`. Se distingue du
+     * `#local-service` (Service basique) émis par getLocalServiceSchema
+     * et du `#service-pricing` émis par getServicePricingSchema. Trois
+     * Service nodes peuvent coexister sur la même page (basique +
+     * tarifaire + enrichi) sans collision KG.
+     */
+    '@id': `${params.url}#enriched-local-service`,
     name: `${params.serviceName} à ${params.cityName}`,
     description: params.description,
     url: params.url,

@@ -79,8 +79,10 @@ describe('Schema.org snapshots — jsonld.ts core helpers', () => {
           "name": "France",
         },
         "description": "Plombier qualifié à Paris",
+        "inLanguage": "fr-FR",
         "name": "Plombier Paris",
         "provider": {
+          "@id": "https://servicesartisans.fr#organization",
           "@type": "Organization",
           "name": "ServicesArtisans",
         },
