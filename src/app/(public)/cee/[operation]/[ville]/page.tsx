@@ -331,10 +331,33 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}${path}#article`,
+    url: `${SITE_URL}${path}`,
     headline: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} — Guide ${monthYear}`,
+    description: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} : conditions, montants, artisans RGE qualifiés et démarche pas à pas.`,
     image: [`${SITE_URL}/og-cee-${operation.code.toLowerCase()}.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: "Certificats d'économies d'énergie (CEE)",
+    keywords: [
+      `Prime CEE ${operation.code}`,
+      operation.nom,
+      villeName,
+      'CEE',
+      'rénovation énergétique',
+      ...(operation.coup_de_pouce ? ['Coup de pouce'] : []),
+      ...(operation.rge_qualifications_requises[0]
+        ? [operation.rge_qualifications_requises[0]]
+        : []),
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: `Opération CEE ${operation.code}` },
+      { '@type': 'Thing', name: operation.nom },
+      { '@type': 'City', name: villeName },
+      { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
+    ],
     author: AUTHOR
       ? {
           '@type': 'Person',
@@ -348,6 +371,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },

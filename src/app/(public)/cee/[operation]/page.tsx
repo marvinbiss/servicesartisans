@@ -216,6 +216,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}${path}#article`,
     image: `${SITE_URL}/opengraph-image`,
     headline: `Prime CEE ${operation.nom} (${operation.code})`,
     description: `Prime CEE ${operation.nom} : conditions, qualifications RGE, villes couvertes.`,
@@ -223,6 +224,25 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
     mainEntityOfPage: `${SITE_URL}${path}`,
     datePublished: '2026-01-15T00:00:00+02:00',
     dateModified: monthlyAnchor,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: "Certificats d'économies d'énergie (CEE)",
+    keywords: [
+      `Prime CEE ${operation.code}`,
+      operation.nom,
+      'CEE',
+      'rénovation énergétique',
+      ...(operation.coup_de_pouce ? ['Coup de pouce'] : []),
+      ...(operation.precarite_eligible ? ['précarité énergétique'] : []),
+      ...(operation.rge_qualifications_requises[0]
+        ? [operation.rge_qualifications_requises[0]]
+        : []),
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: `Opération CEE ${operation.code}` },
+      { '@type': 'Thing', name: operation.nom },
+      { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
+    ],
     author: AUTHOR
       ? {
           '@type': 'Person',
@@ -234,7 +254,12 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         }
       : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
-    publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

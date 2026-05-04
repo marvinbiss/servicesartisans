@@ -102,12 +102,29 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}${path}#article`,
     image: `${SITE_URL}/opengraph-image`,
     headline: guide.h1,
     description: guide.metaDescription,
     url: `${SITE_URL}${path}`,
     mainEntityOfPage: `${SITE_URL}${path}`,
     inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: "Certificats d'économies d'énergie (CEE)",
+    keywords: [
+      `Prime CEE ${guide.code}`,
+      ...(operation?.nom ? [operation.nom] : []),
+      'CEE',
+      'rénovation énergétique',
+      "MaPrimeRénov'",
+      'Coup de pouce',
+      ...(guide.rgeRequises.length > 0 ? [guide.rgeRequises[0]] : []),
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: `Prime CEE ${guide.code}` },
+      ...(operation?.nom ? [{ '@type': 'Thing', name: operation.nom }] : []),
+      { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
+    ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: AUTHOR
@@ -121,7 +138,12 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
         }
       : { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
     ...(REVIEWER && { reviewedBy: getReviewedByPersonSchema(REVIEWER) }),
-    publisher: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+    },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],

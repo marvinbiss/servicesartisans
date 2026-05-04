@@ -181,10 +181,32 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${SITE_URL}${pagePath}#article`,
+    url: `${SITE_URL}${pagePath}`,
     headline: `Artisans RGE certifiés à ${ville.name} — ${monthYear}`,
+    description: `Liste des artisans RGE actifs à ${ville.name} : qualifications, certifications ADEME / France Rénov', éligibilité MaPrimeRénov' et CEE.`,
     image: [`${SITE_URL}/og-rge-default.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
+    inLanguage: 'fr-FR',
+    isAccessibleForFree: true,
+    articleSection: 'Rénovation énergétique',
+    keywords: [
+      'artisan RGE',
+      ville.name,
+      "MaPrimeRénov'",
+      'CEE',
+      'Éco-PTZ',
+      'rénovation énergétique',
+      'France Rénov',
+      'ADEME',
+    ].join(', '),
+    about: [
+      { '@type': 'Thing', name: 'Label RGE — Reconnu Garant de l’Environnement' },
+      { '@type': 'City', name: ville.name },
+      { '@type': 'Thing', name: "MaPrimeRénov'" },
+      { '@type': 'Thing', name: "CEE — Certificats d'économies d'énergie" },
+    ],
     author: ART_RGE_AUTHOR
       ? {
           '@type': 'Person',
@@ -198,6 +220,7 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
     ...(ART_RGE_REVIEWER && { reviewedBy: getReviewedByPersonSchema(ART_RGE_REVIEWER) }),
     publisher: {
       '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
       name: 'ServicesArtisans',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
     },
