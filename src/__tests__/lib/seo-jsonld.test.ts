@@ -10,6 +10,7 @@ vi.mock('@/lib/config/company-identity', () => ({
   companyIdentity: {
     email: 'contact@servicesartisans.fr',
     phone: '07 56 87 27 87',
+    tagline: 'Le premier annuaire 100% artisans RGE certifiés',
     legalName: null,
     address: null,
     foundingDate: null,
@@ -86,6 +87,29 @@ describe('getOrganizationSchema', () => {
     expect((schema.contactPoint as Record<string, unknown>).email).toBe(
       'contact@servicesartisans.fr'
     )
+  })
+
+  it('emits Brand entity with @id, slogan and logo (Tier 26)', () => {
+    const schema = getOrganizationSchema()
+    expect(schema.brand).toBeDefined()
+    const brand = schema.brand as Record<string, unknown>
+    expect(brand['@type']).toBe('Brand')
+    expect(brand['@id']).toBe('https://servicesartisans.fr#brand')
+    expect(brand.slogan).toBeDefined()
+  })
+
+  it('emits hasOfferCatalog pointing to /services (Tier 26)', () => {
+    const schema = getOrganizationSchema()
+    expect(schema.hasOfferCatalog).toBeDefined()
+    const catalog = schema.hasOfferCatalog as Record<string, unknown>
+    expect(catalog['@type']).toBe('OfferCatalog')
+    expect(catalog.url).toBe('https://servicesartisans.fr/services')
+  })
+
+  it('emits disambiguatingDescription for KG entity disambiguation (Tier 26)', () => {
+    const schema = getOrganizationSchema()
+    expect(schema.disambiguatingDescription).toBeDefined()
+    expect(typeof schema.disambiguatingDescription).toBe('string')
   })
 })
 

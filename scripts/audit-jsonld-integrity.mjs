@@ -46,6 +46,7 @@ const CONFIG_FILE = 'config.ts' // allowlist pour hardcoded domain
 const ALLOWED_TYPES = new Set([
   // Core
   'Thing',
+  'Brand',
   'Organization',
   'GovernmentOrganization',
   'WebSite',

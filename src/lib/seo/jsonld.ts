@@ -123,6 +123,46 @@ export function getOrganizationSchema() {
       foundingDate: companyIdentity.foundingDate,
       ...(companyIdentity.tvaIntracom && { vatID: companyIdentity.tvaIntracom }),
     }),
+    /**
+     * Tier 26 — entité Brand attachée à l'Organization. Permet à Google KG
+     * de différencier la marque (ServicesArtisans) de la personne morale
+     * (SAS éditrice) quand celle-ci sera immatriculée. Logo et slogan
+     * dupliqués au niveau Brand pour que la SERP brand panel pioche au
+     * bon endroit même si l'Organization est tronquée.
+     */
+    brand: {
+      '@type': 'Brand',
+      '@id': `${SITE_URL}#brand`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      slogan: companyIdentity.tagline,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icons/icon-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    /**
+     * Tier 26 — catalogue d'offres pointant vers le hub /services. Donne
+     * à Google + AI Overviews une porte d'entrée structurée vers les
+     * 46 catégories métier référencées sur le site, sans dupliquer ici
+     * la liste détaillée (le hub la rend canoniquement).
+     */
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      '@id': `${SITE_URL}/services#catalog`,
+      name: 'Catalogue des services artisans RGE',
+      url: `${SITE_URL}/services`,
+    },
+    /**
+     * Tier 26 — désambiguation Knowledge Graph. Plusieurs entités peuvent
+     * porter "ServicesArtisans" en raison sociale : on précise ici que
+     * l'entité Schema.org est l'éditeur de l'annuaire en ligne, distinct
+     * de toute autre raison sociale homonyme.
+     */
+    disambiguatingDescription:
+      "Plateforme éditrice de l'annuaire en ligne servicesartisans.fr — annuaire des artisans RGE certifiés en France pour la rénovation énergétique éligible MaPrimeRénov' et CEE.",
   }
 }
 
