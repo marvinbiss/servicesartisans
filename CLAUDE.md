@@ -33,8 +33,13 @@ Avant chaque deploy: `npm run build` en local. Jamais de build cassé sur Vercel
 | `bookings`        | artisan_id, provider_id, client_id, status, scheduled_date, slot_id                                                                            | artisan_id = auth.uid() FK profiles           |
 | `audit_logs`      | user_id, action, resource_type, resource_id, old_value, new_value, metadata                                                                    | FK vers auth.users (PAS profiles)             |
 
-**Colonnes SUPPRIMEES de providers** — ne jamais référencer:
-`is_premium`, `trust_badge`, `trust_score`, `company_name`, `hourly_rate_min`, `hourly_rate_max`, `emergency_available`, `certifications`, `insurance`, `payment_methods`, `languages`, `avatar_url`
+**Colonnes SUPPRIMEES de providers** (drop mig 100, jamais ré-ajoutées) — ne jamais référencer:
+`is_premium`, `trust_badge`, `trust_score`, `company_name`, `avg_response_time_hours`, `response_rate`, `years_on_platform`, `response_time`, `intervention_zone`, `video_enabled`, `video_price`
+
+**Colonnes ré-ajoutées par mig 306** (vivantes en DB, voir memory `servicesartisans-mig306-status-2026-04-28`) :
+`bio`, `team_size`, `services_offered`, `service_prices`, `faq`, `opening_hours`, `intervention_radius_km`, `phone_secondary`, `hourly_rate_min`, `hourly_rate_max`, `accepts_new_clients`, `free_quote`, `emergency_available`, `available_24h`, `certifications`, `insurance`, `payment_methods`, `languages`, `avatar_url`
+
+⚠️ Ces colonnes existent en DB MAIS ne sont actuellement PAS lues par `PROVIDER_DETAIL_SELECT`. Avant de les wirer côté SELECT, vérifier impact perf + cohérence types.
 
 ### Migrations — règle search_path (CVE-2018-1058)
 
