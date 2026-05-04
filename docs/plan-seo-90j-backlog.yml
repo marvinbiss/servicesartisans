@@ -108,7 +108,7 @@ items:
     blocked_by: []
     human_required: false
     dod: node scripts/audit-component-coverage.mjs --strict
-    status: pending
+    status: completed
     ahrefs:
       kw_primary: multiple — applique à tous templates pSEO
       volume_ahrefs: null

@@ -50,5 +50,6 @@ node scripts/audit-vmc-cluster.mjs --strict || exit 1
 node scripts/audit-soft404-coverage.mjs --strict || exit 1
 node scripts/audit-blog-ctr-titles.mjs --strict || exit 1
 node scripts/audit-places-coverage.mjs --threshold 80 || exit 1
+node scripts/audit-component-coverage.mjs --threshold 55 --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged
