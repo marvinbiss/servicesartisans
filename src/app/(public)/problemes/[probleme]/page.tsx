@@ -19,7 +19,9 @@ import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
@@ -162,6 +164,9 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
   // HowTo JSON-LD removed — Google no longer supports HowTo rich results
   const howToSchema = null
 
+  // Tier 7 — Person dispatché via problem.primaryService → Author spécialiste.
+  const PROB_AUTHOR = getAuthorForServiceSlug(problem.primaryService)
+  const PROB_REVIEWER = getReviewerForAuthor(PROB_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -173,7 +178,15 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: PROB_AUTHOR.name,
+      jobTitle: PROB_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${PROB_AUTHOR.slug}`,
+      ...(PROB_AUTHOR.methodology &&
+        PROB_AUTHOR.methodology.length > 0 && { skills: PROB_AUTHOR.methodology }),
+    },
+    ...(PROB_REVIEWER && { reviewedBy: getReviewedByPersonSchema(PROB_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',

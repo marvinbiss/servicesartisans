@@ -27,7 +27,14 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
-import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getHowToSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
+import { getAuthorForServiceSlug } from '@/lib/data/service-author'
+import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/data/problems'
 import { isProblemeIndexable } from '@/lib/seo/problemes-whitelist'
@@ -647,6 +654,9 @@ async function renderProblemeVillePage({
     },
   }
 
+  // Tier 7 — Person dispatché via problem.primaryService.
+  const PROBV_AUTHOR = getAuthorForServiceSlug(problem.primaryService)
+  const PROBV_REVIEWER = getReviewerForAuthor(PROBV_AUTHOR)
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -658,7 +668,15 @@ async function renderProblemeVillePage({
     inLanguage: 'fr-FR',
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    author: {
+      '@type': 'Person',
+      name: PROBV_AUTHOR.name,
+      jobTitle: PROBV_AUTHOR.role,
+      url: `${SITE_URL}/equipe/${PROBV_AUTHOR.slug}`,
+      ...(PROBV_AUTHOR.methodology &&
+        PROBV_AUTHOR.methodology.length > 0 && { skills: PROBV_AUTHOR.methodology }),
+    },
+    ...(PROBV_REVIEWER && { reviewedBy: getReviewedByPersonSchema(PROBV_REVIEWER) }),
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     speakable: {
       '@type': 'SpeakableSpecification',
