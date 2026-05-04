@@ -16,6 +16,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode } from '@/lib/cee/catalogue'
 import { CEE_OPERATIONS_WITH_GUIDE, getCeeOperationGuide } from '@/lib/cee/operation-guides-content'
@@ -125,6 +126,9 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       ...(operation?.nom ? [{ '@type': 'Thing', name: operation.nom }] : []),
       { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics(
+      `CEE ${guide.code} ${operation?.nom ?? ''} MaPrimeRénov ${guide.rgeRequises.join(' ')}`
+    ),
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: AUTHOR

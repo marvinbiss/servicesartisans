@@ -15,6 +15,7 @@ import {
   getItemListSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 
 const ART_RGE_AUTHOR = authors['sophie-martin']
@@ -207,6 +208,9 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
       { '@type': 'Thing', name: "MaPrimeRénov'" },
       { '@type': 'Thing', name: "CEE — Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics(
+      `RGE ${ville.name} MaPrimeRénov CEE éco-PTZ rénovation énergétique`
+    ),
     author: ART_RGE_AUTHOR
       ? {
           '@type': 'Person',

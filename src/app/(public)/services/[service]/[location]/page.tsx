@@ -52,6 +52,7 @@ import {
   getEnrichedLocalServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
@@ -1025,6 +1026,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       },
       { '@type': 'City', name: location.name },
     ],
+    ...spreadCitationsForTopics(`${service.name} ${trade?.name ?? ''} ${location.name}`),
   })
 
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé

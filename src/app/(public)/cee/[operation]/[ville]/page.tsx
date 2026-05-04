@@ -37,6 +37,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getArtisanUrl } from '@/lib/utils'
@@ -358,6 +359,9 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
       { '@type': 'City', name: villeName },
       { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics(
+      `CEE ${operation.code} ${operation.nom} ${villeName} ${operation.coup_de_pouce ? 'coup de pouce' : ''}`
+    ),
     author: AUTHOR
       ? {
           '@type': 'Person',

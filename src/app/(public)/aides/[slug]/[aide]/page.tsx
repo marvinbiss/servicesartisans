@@ -34,6 +34,7 @@ import {
   getPlaceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 export const dynamicParams = true
 export const revalidate = 86_400
@@ -223,6 +224,7 @@ export default async function AideDeptPage({ params }: PageProps) {
       { '@type': 'Thing', name: aide.category },
       { '@type': 'AdministrativeArea', name: dept.name },
     ],
+    ...spreadCitationsForTopics(`${aide.name} ${aide.category} ${dept.name}`),
     author: {
       '@type': 'Person',
       name: author.name,

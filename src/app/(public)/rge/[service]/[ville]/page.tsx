@@ -27,6 +27,7 @@ import {
   getFinancialProductSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   buildAggregateRatingFromProviders,
   type PageAggregateRating,
@@ -461,6 +462,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           { '@type': 'Thing', name: "MaPrimeRénov'" },
           { '@type': 'Thing', name: "CEE — Certificats d'économies d'énergie" },
         ],
+        ...spreadCitationsForTopics(
+          `RGE ${serviceName} ${villeName} MaPrimeRénov CEE rénovation énergétique`
+        ),
         author: RGE_AUTHOR
           ? {
               '@type': 'Person',

@@ -18,6 +18,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
@@ -243,6 +244,9 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       { '@type': 'Thing', name: operation.nom },
       { '@type': 'Thing', name: "Certificats d'économies d'énergie" },
     ],
+    ...spreadCitationsForTopics(
+      `CEE ${operation.code} ${operation.nom} ${operation.coup_de_pouce ? 'coup de pouce' : ''} ${operation.rge_qualifications_requises.join(' ')}`
+    ),
     author: AUTHOR
       ? {
           '@type': 'Person',

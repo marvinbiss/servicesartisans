@@ -27,6 +27,7 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -643,6 +644,7 @@ async function renderAvisServiceVillePage({
       { '@type': 'City', name: villeData.name },
       { '@type': 'Thing', name: `Avis ${tradeLower}` },
     ],
+    ...spreadCitationsForTopics(`${trade.name} ${tradeLower} ${villeData.name}`),
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
     author: {

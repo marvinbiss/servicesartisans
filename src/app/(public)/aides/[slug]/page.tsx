@@ -40,6 +40,7 @@ import {
   getHowToSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 // Sprint AI Wave H 2026-05-03 — passage à dynamicParams=true car le slug peut
 // désormais être soit une aide nationale (ex: maprimerenov), soit un dept
@@ -227,6 +228,9 @@ export default async function AidePage({ params }: PageProps) {
       { '@type': 'Thing', name: aide.category },
       ...cumulables.slice(0, 3).map((c) => ({ '@type': 'Thing', name: c.name })),
     ],
+    ...spreadCitationsForTopics(
+      `${aide.name} ${aide.category} ${cumulables.map((c) => c.name).join(' ')}`
+    ),
     author: AUTHOR
       ? {
           '@type': 'Person',

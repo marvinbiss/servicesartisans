@@ -38,6 +38,7 @@ import {
   getPlaceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -238,6 +239,9 @@ export default async function MprDeptPage({ params }: PageProps) {
       { '@type': 'Thing', name: 'Anah — Agence nationale de l’habitat' },
       ...cumulables.slice(0, 3).map((c) => ({ '@type': 'Thing', name: c.name })),
     ],
+    ...spreadCitationsForTopics(
+      `MaPrimeRénov ${dept.name} CEE éco-PTZ TVA RGE ${cumulables.map((c) => c.name).join(' ')}`
+    ),
     author: {
       '@type': 'Person',
       name: author.name,

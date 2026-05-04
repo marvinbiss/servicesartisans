@@ -59,6 +59,7 @@ import {
   getGovernmentServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 
 export const revalidate = 86400
 export const dynamicParams = false
@@ -208,6 +209,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
       { '@type': 'AdministrativeArea', name: reg.name },
       { '@type': 'Thing', name: `Zone climatique ${reg.climateZone}` },
     ],
+    ...spreadCitationsForTopics(`MaPrimeRénov CEE éco-PTZ TVA ${reg.name} rénovation énergétique`),
     author: {
       '@type': 'Person',
       name: author.name,

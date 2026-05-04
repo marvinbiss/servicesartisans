@@ -123,3 +123,40 @@ export function getAuthorityCitations(topics: readonly string[]): string[] {
   }
   return out
 }
+
+/**
+ * Tier 21 — auto-résolution depuis un haystack textuel (section, keywords,
+ * tags). Évite à chaque route inline de répéter la regex topic-detection.
+ * Retourne un array de citations (vide si aucun topic ne matche).
+ *
+ * Usage typique inline :
+ *   ...spreadCitations(`${section} ${keywords.join(' ')}`)
+ * où spreadCitations() ci-dessous est le wrapper conditionnel pour Schema.org.
+ */
+export function resolveCitationsFromText(haystackInput: string): string[] {
+  const haystack = haystackInput.toLowerCase()
+  const topics: string[] = []
+  if (/maprimer[ée]nov/.test(haystack)) topics.push('maprimerenov')
+  if (/\bcee\b|certificat.*[ée]conomie/.test(haystack)) topics.push('cee')
+  if (/\brge\b|qualibat|qualipac|qualibois|qualifelec|qualisol/.test(haystack)) topics.push('rge')
+  if (/[ée]co[ -]ptz|prêt à taux z[eé]ro/.test(haystack)) topics.push('eco-ptz')
+  if (/tva.*5,?5|tva r[eé]duite/.test(haystack)) topics.push('tva')
+  if (/pompe à chaleur|\bpac\b/.test(haystack)) topics.push('pac')
+  if (/coup de pouce/.test(haystack)) topics.push('coup-de-pouce')
+  if (/isolation|\bite\b|\biti\b/.test(haystack)) topics.push('isolation')
+  return getAuthorityCitations(topics)
+}
+
+/**
+ * Wrapper Schema.org-friendly. Retourne `{ citation: [...] }` si au moins
+ * un topic matche, sinon `{}`. Conçu pour être spread dans un Article
+ * Schema.org object literal — pas d'effet visible si rien ne matche, donc
+ * safe à câbler partout. Voir flagship-schema.ts / blog-schema.ts pour
+ * l'auto-injection en helper.
+ */
+export function spreadCitationsForTopics(
+  haystack: string
+): { citation: string[] } | Record<string, never> {
+  const list = resolveCitationsFromText(haystack)
+  return list.length > 0 ? { citation: list } : {}
+}
