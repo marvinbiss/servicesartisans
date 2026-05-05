@@ -4,6 +4,22 @@ import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib
 import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 
+// React.cache() request-scope dedup — best-effort. Sous Next.js RSC il agrège
+// les appels duplicate au sein du même render (generateMetadata + page render).
+// Hors contexte RSC (vitest, scripts node), `cache` n'est pas exporté → on
+// retombe sur un identity wrapper. Le getCachedData process-cache reste actif.
+type CacheFn = <Fn extends (...args: never[]) => unknown>(fn: Fn) => Fn
+let requestCache: CacheFn = (fn) => fn
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const reactPkg = require('react') as { cache?: CacheFn }
+  if (typeof reactPkg.cache === 'function') {
+    requestCache = reactPkg.cache
+  }
+} catch {
+  // react indisponible côté script — identity wrapper suffit
+}
+
 /**
  * Should we skip DB queries?
  * Only skip if explicitly requested AND Supabase env vars are missing.
@@ -491,64 +507,75 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
  * (`providers.address_department` stocke le code, pas le nom — bug fixé
  * 2026-05-05 après audit /rge/pompe-a-chaleur/paris).
  */
-export async function getReviewStatsByDept(
-  serviceSlug: string,
-  departmentCode: string
-): Promise<{ review_count: number; avg_rating: number; latest_review_at: string | null } | null> {
-  if (IS_BUILD) return null
+export const getReviewStatsByDept = requestCache(
+  async (
+    serviceSlug: string,
+    departmentCode: string
+  ): Promise<{
+    review_count: number
+    avg_rating: number
+    latest_review_at: string | null
+  } | null> => {
+    // React cache() dedupe l'appel duplicate au sein d'un même request render
+    // (generateMetadata + page render appellent les 2 helpers — sans `cache()`
+    // on touche le process-wide Map JS deux fois, avec on touche zéro fois la
+    // 2e). Le getCachedData process-cache reste actif pour les requests
+    // suivants (cross-request).
+    if (IS_BUILD) return null
 
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-  if (!specialties || specialties.length === 0) return null
+    const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+    if (!specialties || specialties.length === 0) return null
 
-  const cacheKey = `review-stats-dept:${serviceSlug}:${departmentCode}`
+    const cacheKey = `review-stats-dept:${serviceSlug}:${departmentCode}`
 
-  return getCachedData(
-    cacheKey,
-    async () => {
-      try {
-        return await retryWithBackoff(async () => {
-          const { data, error } = await supabase
-            .from('review_stats_by_dept')
-            .select('review_count, avg_rating, latest_review_at')
-            .eq('address_department', departmentCode)
-            .in('specialty_slug', specialties)
+    return getCachedData(
+      cacheKey,
+      async () => {
+        try {
+          return await retryWithBackoff(async () => {
+            const { data, error } = await supabase
+              .from('review_stats_by_dept')
+              .select('review_count, avg_rating, latest_review_at')
+              .eq('address_department', departmentCode)
+              .in('specialty_slug', specialties)
 
-          if (error) throw error
-          if (!data || data.length === 0) return null
+            if (error) throw error
+            if (!data || data.length === 0) return null
 
-          // Aggregate across specialties (a service can map to multiple)
-          const totalCount = data.reduce((sum, r) => sum + (r.review_count ?? 0), 0)
-          if (totalCount === 0) return null
+            // Aggregate across specialties (a service can map to multiple)
+            const totalCount = data.reduce((sum, r) => sum + (r.review_count ?? 0), 0)
+            if (totalCount === 0) return null
 
-          const weightedSum = data.reduce(
-            (sum, r) => sum + (r.avg_rating ?? 0) * (r.review_count ?? 0),
-            0
-          )
-          const avgRating = Math.round((weightedSum / totalCount) * 10) / 10
+            const weightedSum = data.reduce(
+              (sum, r) => sum + (r.avg_rating ?? 0) * (r.review_count ?? 0),
+              0
+            )
+            const avgRating = Math.round((weightedSum / totalCount) * 10) / 10
 
-          // Latest review across all matching specialties
-          const latestReviewAt = data.reduce<string | null>((latest, r) => {
-            if (!r.latest_review_at) return latest
-            if (!latest) return r.latest_review_at
-            return r.latest_review_at > latest ? r.latest_review_at : latest
-          }, null)
+            // Latest review across all matching specialties
+            const latestReviewAt = data.reduce<string | null>((latest, r) => {
+              if (!r.latest_review_at) return latest
+              if (!latest) return r.latest_review_at
+              return r.latest_review_at > latest ? r.latest_review_at : latest
+            }, null)
 
-          return {
-            review_count: totalCount,
-            avg_rating: avgRating,
-            latest_review_at: latestReviewAt,
-          }
-        }, `getReviewStatsByDept(${serviceSlug}, ${departmentCode})`)
-      } catch (err) {
-        logger.error(`[getReviewStatsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
-          error: err instanceof Error ? err.message : err,
-        })
-        return null
-      }
-    },
-    CACHE_TTL.artisans
-  )
-}
+            return {
+              review_count: totalCount,
+              avg_rating: avgRating,
+              latest_review_at: latestReviewAt,
+            }
+          }, `getReviewStatsByDept(${serviceSlug}, ${departmentCode})`)
+        } catch (err) {
+          logger.error(`[getReviewStatsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
+            error: err instanceof Error ? err.message : err,
+          })
+          return null
+        }
+      },
+      CACHE_TTL.artisans
+    )
+  }
+)
 
 // ---------------------------------------------------------------------------
 // Top reviews by department (direct query on reviews + providers)
@@ -567,80 +594,79 @@ interface DeptReview {
 /**
  * `departmentCode` = CODE INSEE 2-3 chars (DB column stocke le code).
  */
-export async function getTopReviewsByDept(
-  serviceSlug: string,
-  departmentCode: string,
-  limit?: number
-): Promise<DeptReview[]> {
-  if (IS_BUILD) return []
+export const getTopReviewsByDept = requestCache(
+  async (serviceSlug: string, departmentCode: string, limit?: number): Promise<DeptReview[]> => {
+    // React cache() dedupe au sein du request render (cf. getReviewStatsByDept).
+    if (IS_BUILD) return []
 
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-  if (!specialties || specialties.length === 0) return []
+    const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+    if (!specialties || specialties.length === 0) return []
 
-  const effectiveLimit = Math.min(Math.max(limit ?? 3, 1), 10)
-  const cacheKey = `top-reviews-dept:${serviceSlug}:${departmentCode}:${effectiveLimit}`
+    const effectiveLimit = Math.min(Math.max(limit ?? 3, 1), 10)
+    const cacheKey = `top-reviews-dept:${serviceSlug}:${departmentCode}:${effectiveLimit}`
 
-  return getCachedData(
-    cacheKey,
-    async () => {
-      try {
-        return await retryWithBackoff(async () => {
-          // Two-step query: Supabase JS doesn't support cross-table WHERE filters,
-          // so we first get provider IDs, then fetch their reviews.
+    return getCachedData(
+      cacheKey,
+      async () => {
+        try {
+          return await retryWithBackoff(async () => {
+            // Two-step query: Supabase JS doesn't support cross-table WHERE filters,
+            // so we first get provider IDs, then fetch their reviews.
 
-          // Step 1: Get provider IDs for this department + specialties
-          const { data: providers, error: provError } = await supabase
-            .from('providers')
-            .select('id')
-            .eq('address_department', departmentCode)
-            .in('specialty', specialties)
-            .eq('is_active', true)
-            .limit(500)
+            // Step 1: Get provider IDs for this department + specialties
+            const { data: providers, error: provError } = await supabase
+              .from('providers')
+              .select('id')
+              .eq('address_department', departmentCode)
+              .in('specialty', specialties)
+              .eq('is_active', true)
+              .limit(500)
 
-          if (provError) throw provError
-          if (!providers || providers.length === 0) return []
+            if (provError) throw provError
+            if (!providers || providers.length === 0) return []
 
-          const providerIds = providers.map((p) => p.id)
+            const providerIds = providers.map((p) => p.id)
 
-          // Step 2: Get top reviews for those providers
-          const { data: reviews, error: revError } = await supabase
-            .from('reviews')
-            .select(
-              'id, rating, content, created_at, author_name, provider:provider_id(name, address_city)'
-            )
-            .eq('status', 'published')
-            .in('provider_id', providerIds)
-            .order('rating', { ascending: false })
-            .order('created_at', { ascending: false })
-            .limit(effectiveLimit)
+            // Step 2: Get top reviews for those providers
+            const { data: reviews, error: revError } = await supabase
+              .from('reviews')
+              .select(
+                'id, rating, content, created_at, author_name, provider:provider_id(name, address_city)'
+              )
+              .eq('status', 'published')
+              .in('provider_id', providerIds)
+              .order('rating', { ascending: false })
+              .order('created_at', { ascending: false })
+              .limit(effectiveLimit)
 
-          if (revError) throw revError
-          if (!reviews || reviews.length === 0) return []
+            if (revError) throw revError
+            if (!reviews || reviews.length === 0) return []
 
-          return reviews.map((r) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const prov = r.provider as any
-            return {
-              id: r.id,
-              rating: r.rating,
-              comment: r.content,
-              created_at: r.created_at,
-              author_name: r.author_name,
-              provider_name: prov?.name ?? 'Artisan',
-              provider_city: prov?.address_city ?? null,
-            }
+            return reviews.map((r) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const prov = r.provider as any
+              return {
+                id: r.id,
+                rating: r.rating,
+                comment: r.content,
+                created_at: r.created_at,
+                author_name: r.author_name,
+                provider_name: prov?.name ?? 'Artisan',
+                provider_city: prov?.address_city ?? null,
+              }
+            })
+          }, `getTopReviewsByDept(${serviceSlug}, ${departmentCode})`)
+        } catch (err) {
+          logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
+            error: err instanceof Error ? err.message : err,
           })
-        }, `getTopReviewsByDept(${serviceSlug}, ${departmentCode})`)
-      } catch (err) {
-        logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
-          error: err instanceof Error ? err.message : err,
-        })
-        return []
-      }
-    },
-    CACHE_TTL.artisans
-  )
-}
+          return []
+        }
+      },
+      CACHE_TTL.artisans
+    )
+  }
+)
 
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
