@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Iban step — unit tests
  * Happy path + error path + validation + a11y

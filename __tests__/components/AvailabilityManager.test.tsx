@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — AvailabilityManager
  * Couvre : état vide, formulaire, validation fin <= début.

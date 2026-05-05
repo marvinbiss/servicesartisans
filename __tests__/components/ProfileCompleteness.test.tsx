@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — ProfileCompleteness
  * Couvre : score 0%, score 100% (retourne null), score partiel, liens vers les tabs.

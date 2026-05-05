@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — Admin Dashboard Components
  * Covers: StatsGrid, RecentActivity, PendingReports, ActivityChart

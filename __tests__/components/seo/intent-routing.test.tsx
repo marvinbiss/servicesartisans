@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests composants intent routing — UrgencyBlock + ServiceIntentReroute
  * ---------------------------------------------------------------------

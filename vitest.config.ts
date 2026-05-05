@@ -6,7 +6,13 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom',
+    // Default 'node' (rapide). Les tests qui ont besoin du DOM s'opt-in
+    // explicitement via `// @vitest-environment jsdom` en haut du fichier.
+    // Tous les .test.tsx ont été annotés (37 fichiers) + 1 test .ts qui
+    // utilise renderHook (useDevisForm). Vitest 4 ne supporte plus
+    // environmentMatchGlobs — l'annotation par fichier est la voie idiomatique.
+    // Gain mesuré : 105s → 55s (1.9x speedup, fix dette technique #7 2026-05-05).
+    environment: 'node',
     setupFiles: ['./src/test/setup.ts'],
     include: [
       'src/**/*.test.{ts,tsx}',

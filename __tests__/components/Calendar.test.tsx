@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — Calendar (Dashboard Artisan)
  * Couvre : grille 7 colonnes, navigation mois, bookings badges,

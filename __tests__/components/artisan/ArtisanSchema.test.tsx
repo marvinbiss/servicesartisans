@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests ArtisanSchema — fallback Google Places aggregateRating + sameAs.
  *

@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests de rendu RgeBadge.
  * Utilise @testing-library/react (déjà utilisé par d'autres tests — cf. TrustBadge).

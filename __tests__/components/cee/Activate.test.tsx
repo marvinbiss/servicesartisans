@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Activate step — unit tests
  * Happy path + error path + checklist states

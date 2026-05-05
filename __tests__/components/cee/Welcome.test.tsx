@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Welcome step — unit tests
  * Happy path + error path + accessibility

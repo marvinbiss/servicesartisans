@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests ProviderCard — rel="nofollow" PageRank sculpting
  * -------------------------------------------------------

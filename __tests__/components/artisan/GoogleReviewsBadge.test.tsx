@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests rendu GoogleReviewsBadge — 5 guards parallèles à
  * ArtisanSchema fallback aggregateRating. Si l'un diverge, ce test l'attrape.

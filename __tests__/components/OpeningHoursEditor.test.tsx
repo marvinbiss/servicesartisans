@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — OpeningHoursEditor
  * Couvre : valeurs par défaut, toggle jour, "appliquer aux jours ouvrés",

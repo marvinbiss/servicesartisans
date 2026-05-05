@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Convention step — unit tests
  * Happy path + error path + signed state

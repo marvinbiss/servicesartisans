@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — InterventionZoneEditor
  * Couvre : slider, presets, affichage ville, callback onChange.

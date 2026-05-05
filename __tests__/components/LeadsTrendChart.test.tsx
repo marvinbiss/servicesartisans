@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Tests — LeadsTrendChart
  * Couvre : pas de données → null, avec données → rendu sans crash, memo.

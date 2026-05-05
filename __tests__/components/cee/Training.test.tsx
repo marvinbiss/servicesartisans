@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /**
  * Training step — unit tests
  * Happy path + error path + certification + a11y
