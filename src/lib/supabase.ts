@@ -610,51 +610,37 @@ export const getTopReviewsByDept = requestCache(
       async () => {
         try {
           return await retryWithBackoff(async () => {
-            // Two-step query: Supabase JS doesn't support cross-table WHERE filters,
-            // so we first get provider IDs, then fetch their reviews.
-
-            // Step 1: Get provider IDs for this department + specialties
-            const { data: providers, error: provError } = await supabase
-              .from('providers')
-              .select('id')
-              .eq('address_department', departmentCode)
-              .in('specialty', specialties)
-              .eq('is_active', true)
-              .limit(500)
-
-            if (provError) throw provError
-            if (!providers || providers.length === 0) return []
-
-            const providerIds = providers.map((p) => p.id)
-
-            // Step 2: Get top reviews for those providers
-            const { data: reviews, error: revError } = await supabase
-              .from('reviews')
-              .select(
-                'id, rating, content, created_at, author_name, provider:provider_id(name, address_city)'
-              )
-              .eq('status', 'published')
-              .in('provider_id', providerIds)
-              .order('rating', { ascending: false })
-              .order('created_at', { ascending: false })
-              .limit(effectiveLimit)
-
-            if (revError) throw revError
-            if (!reviews || reviews.length === 0) return []
-
-            return reviews.map((r) => {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const prov = r.provider as any
-              return {
-                id: r.id,
-                rating: r.rating,
-                comment: r.content,
-                created_at: r.created_at,
-                author_name: r.author_name,
-                provider_name: prov?.name ?? 'Artisan',
-                provider_city: prov?.address_city ?? null,
-              }
+            // Server-side JOIN via RPC (migration 503). Avant : 2 queries client
+            // dont un .in('provider_id', [≤500 UUIDs]) qui générait une query
+            // string ~18 KB → undici HeadersOverflowError (UND_ERR_HEADERS_OVERFLOW).
+            const { data, error } = await supabase.rpc('get_top_reviews_by_dept', {
+              p_specialties: specialties,
+              p_department_code: departmentCode,
+              p_limit: effectiveLimit,
             })
+
+            if (error) throw error
+            if (!data || data.length === 0) return []
+
+            return (
+              data as Array<{
+                id: string
+                rating: number
+                comment: string | null
+                created_at: string
+                author_name: string | null
+                provider_name: string | null
+                provider_city: string | null
+              }>
+            ).map((r) => ({
+              id: r.id,
+              rating: r.rating,
+              comment: r.comment,
+              created_at: r.created_at,
+              author_name: r.author_name,
+              provider_name: r.provider_name ?? 'Artisan',
+              provider_city: r.provider_city ?? null,
+            }))
           }, `getTopReviewsByDept(${serviceSlug}, ${departmentCode})`)
         } catch (err) {
           logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
