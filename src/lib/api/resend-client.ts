@@ -439,6 +439,13 @@ export async function sendClaimApprovedEmail(params: {
     Ce lien est valable pendant 24 heures. Après ce délai, vous pourrez utiliser la fonction "Mot de passe oublié" pour en générer un nouveau.
   </p>
 
+  <h3 style="color: #333; margin-top: 32px;">Vos 3 prochaines étapes</h3>
+  <ol style="padding-left: 20px; color: #333;">
+    <li style="margin-bottom: 10px;"><strong>Complétez votre fiche</strong> — bio, photos, certifications RGE/Qualibat. Plus c'est précis, plus vous attirez de devis qualifiés.</li>
+    <li style="margin-bottom: 10px;"><strong>Vérifiez vos coordonnées</strong> — téléphone et email pro pour ne rater aucun lead. Les leads sont exclusifs : 1 lead = 1 artisan, jamais partagés.</li>
+    <li style="margin-bottom: 10px;"><strong>Activez les notifications</strong> — SMS et email pour être alerté en moins de 5 min sur chaque devis dans votre zone.</li>
+  </ol>
+
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
@@ -454,6 +461,74 @@ export async function sendClaimApprovedEmail(params: {
     subject: `Votre fiche "${providerName}" a été validée - ServicesArtisans`,
     html,
     tags: [{ name: 'type', value: 'claim_approved' }],
+  })
+}
+
+/**
+ * Send claim rejected email — explique le motif + propose un retry path.
+ * Funnel claim 2026-05-05 : avant, le rejet était silencieux côté artisan,
+ * il ne savait pas qu'il pouvait corriger et resoumettre.
+ */
+export async function sendClaimRejectedEmail(params: {
+  to: string
+  name: string
+  providerName: string
+  rejectionReason: string | null
+  retryLink: string
+}): Promise<EmailResult> {
+  const { to, name, providerName, rejectionReason, retryLink } = params
+  const greeting = name ? `Bonjour ${name}` : 'Bonjour'
+  const reasonBlock = rejectionReason
+    ? `<div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
+        <strong style="color: #92400e;">Motif du rejet :</strong><br>
+        <span style="color: #78350f;">${rejectionReason}</span>
+      </div>`
+    : `<p style="color: #666;">Notre équipe n'a pas pu valider votre demande en l'état.</p>`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #f59e0b; margin: 0;">ServicesArtisans</h1>
+  </div>
+
+  <h2 style="color: #333;">${greeting},</h2>
+
+  <p>Votre demande de revendication pour <strong>${providerName}</strong> n'a pas pu être validée.</p>
+
+  ${reasonBlock}
+
+  <p>Ce n'est pas définitif : vous pouvez resoumettre une nouvelle demande avec les informations corrigées (SIREN/SIRET vérifié, email pro, justificatifs si besoin).</p>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="${retryLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+      Resoumettre ma demande
+    </a>
+  </div>
+
+  <p style="color: #666; font-size: 14px;">
+    Si vous avez un doute sur le motif ou un justificatif particulier (extrait Kbis, certification RGE), répondez à cet email — un membre de l'équipe vous accompagnera.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="color: #999; font-size: 12px; text-align: center;">
+    ServicesArtisans - La plateforme des artisans RGE certifiés<br>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+  </p>
+</body>
+</html>
+  `
+
+  return sendEmail({
+    to,
+    subject: `Votre demande pour "${providerName}" - action nécessaire`,
+    html,
+    tags: [{ name: 'type', value: 'claim_rejected' }],
   })
 }
 

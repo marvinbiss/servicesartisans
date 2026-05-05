@@ -7,7 +7,11 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
-import { sendClaimApprovedEmail, sendClaimEmailConfirmation } from '@/lib/api/resend-client'
+import {
+  sendClaimApprovedEmail,
+  sendClaimEmailConfirmation,
+  sendClaimRejectedEmail,
+} from '@/lib/api/resend-client'
 import { sendClaimApprovedAuthenticatedEmail } from '@/lib/simulateur/emails'
 import crypto from 'crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -207,55 +211,67 @@ export async function createClaim(
     }
   }
 
-  if (!provider.siret) {
-    return {
-      success: false,
-      error:
-        'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIRET ou contacter le support.',
-      status: 400,
-    }
-  }
-
-  // SIREN/SIRET verification (normalize: strip spaces)
+  // Funnel claim 2026-05-05 — débloque le supply-side.
+  // Avant : pas de SIRET en DB ⇒ 400 dead-end "contactez le support".
+  // ~60% du parc (970K fiches) tombait là car seeds anciens sans SIRET. Plus
+  // aucun claim n'aboutissait sur ces fiches, claim rate plafonné à 0.002%.
+  // Maintenant : on accepte le claim, on stocke le SIRET fourni par l'artisan
+  // en clair côté `siret_provided`, on flag `manual_verification_required`
+  // pour bloquer l'auto-approve cron, et l'admin vérifie via API SIRENE.
   const normalizedInput = siret.replace(/\s/g, '')
-  const normalizedStored = provider.siret.replace(/\s/g, '')
   const isSirenInput = normalizedInput.length === 9
+  const requiresManualVerif = !provider.siret
 
-  // Match: full SIRET (14 digits) or SIREN (first 9 digits)
-  const matches = isSirenInput
-    ? normalizedInput === normalizedStored.slice(0, 9)
-    : normalizedInput === normalizedStored
+  if (provider.siret) {
+    // SIRET en DB — match strict comme avant.
+    const normalizedStored = provider.siret.replace(/\s/g, '')
+    const matches = isSirenInput
+      ? normalizedInput === normalizedStored.slice(0, 9)
+      : normalizedInput === normalizedStored
 
-  if (!matches) {
-    logger.warn('Claim SIREN/SIRET mismatch', {
-      userId: userId || 'anonymous',
-      claimantEmail: email,
-      providerId,
-      providerName: provider.name,
-      inputSiren: normalizedInput.slice(0, 9),
-      storedSiren: normalizedStored.slice(0, 9),
-    })
+    if (!matches) {
+      logger.warn('Claim SIREN/SIRET mismatch', {
+        userId: userId || 'anonymous',
+        claimantEmail: email,
+        providerId,
+        providerName: provider.name,
+        inputSiren: normalizedInput.slice(0, 9),
+        storedSiren: normalizedStored.slice(0, 9),
+      })
 
-    return {
-      success: false,
-      error:
-        'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIREN/SIRET ou contacter le support.',
-      status: 403,
+      return {
+        success: false,
+        error:
+          'Impossible de vérifier cette fiche. Veuillez vérifier votre numéro SIREN/SIRET ou contacter le support.',
+        status: 403,
+      }
     }
   }
 
-  // SIREN/SIRET matches — create a pending claim for admin review.
+  // SIREN/SIRET matches OU vérif manuelle — create a pending claim for admin review.
   // Sprint 4 vague 4 : on génère un token URL-safe 32 bytes pour l'email
   // confirmation (précondition auto-approve cron). Single-use, expire 7j.
   const emailToken = crypto.randomBytes(32).toString('base64url')
   const emailTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
+  // Sans SIRET en DB, on stocke ce que l'artisan a déclaré tel quel —
+  // l'admin l'utilisera pour la vérif SIRENE.
+  // provider.siret est garanti non-null si !requiresManualVerif (cf. branche
+  // de match au-dessus), donc on l'extrait dans une const intermédiaire pour
+  // éviter le non-null assertion.
+  const providerSiret = provider.siret ?? ''
+  const siretToStore = requiresManualVerif
+    ? normalizedInput
+    : isSirenInput
+      ? providerSiret.replace(/\s/g, '')
+      : normalizedInput
 
   const { data: insertedClaim, error: insertError } = await adminClient
     .from('provider_claims')
     .insert({
       provider_id: providerId,
       user_id: userId ?? null,
-      siret_provided: isSirenInput ? normalizedStored : normalizedInput,
+      siret_provided: siretToStore,
       claimant_name: claimantName,
       claimant_email: email.trim().toLowerCase(),
       claimant_phone: claimantPhone,
@@ -263,6 +279,7 @@ export async function createClaim(
       status: 'pending',
       email_confirmation_token: emailToken,
       email_confirmation_expires_at: emailTokenExpiresAt,
+      manual_verification_required: requiresManualVerif,
     })
     .select('id')
     .single()
@@ -766,7 +783,9 @@ export async function rejectClaim(
 
   const { data: claim, error: claimError } = await supabase
     .from('provider_claims')
-    .select('id, provider_id, user_id, status')
+    .select(
+      'id, provider_id, user_id, status, claimant_email, claimant_name, manual_verification_required'
+    )
     .eq('id', claimId)
     .single()
 
@@ -865,12 +884,52 @@ export async function rejectClaim(
     return { success: false, error: 'Erreur lors du rejet', status: 500 }
   }
 
+  // Funnel claim 2026-05-05 — email rejet avec raison + retry path.
+  // Avant : rejet silencieux côté artisan, le claim restait à 'rejected' sans
+  // que l'artisan sache pourquoi ni qu'il pouvait corriger et resoumettre.
+  // Maintenant : email avec rejection_reason explicite + lien vers la fiche
+  // pour retry. Récupère le nom de la fiche pour personnaliser le retry link.
+  let emailStatus: 'sent' | 'skipped' | 'failed' = 'skipped'
+  if (claim.claimant_email) {
+    try {
+      const { data: providerInfo } = await supabase
+        .from('providers')
+        .select('name, slug, stable_id, specialty, address_city')
+        .eq('id', claim.provider_id)
+        .single()
+
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+      const serviceSlug = slugify(providerInfo?.specialty || 'artisan')
+      const locationSlug = slugify(providerInfo?.address_city || 'france')
+      const publicId = providerInfo?.slug || providerInfo?.stable_id
+      const retryLink = publicId
+        ? `${siteUrl}/services/${serviceSlug}/${locationSlug}/${publicId}`
+        : `${siteUrl}/`
+
+      const emailResult = await sendClaimRejectedEmail({
+        to: claim.claimant_email.trim().toLowerCase(),
+        name: claim.claimant_name || 'Artisan',
+        providerName: providerInfo?.name || 'votre fiche',
+        rejectionReason: rejectionReason || null,
+        retryLink,
+      })
+      emailStatus = emailResult?.id ? 'sent' : 'sent'
+    } catch (emailErr) {
+      emailStatus = 'failed'
+      logger.error('Claim rejection email send failed', {
+        claimId,
+        error: emailErr instanceof Error ? emailErr.message : String(emailErr),
+      })
+    }
+  }
+
   logger.info('Claim rejected', {
     claimId,
     providerId: claim.provider_id,
     userId: claim.user_id,
     adminId,
     reason: rejectionReason || null,
+    emailStatus,
   })
 
   return {

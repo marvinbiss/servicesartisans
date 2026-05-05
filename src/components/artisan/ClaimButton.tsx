@@ -8,10 +8,13 @@ import { capture, EVENT } from '@/lib/analytics/posthog'
 interface ClaimButtonProps {
   providerId: string
   providerName: string
-  hasSiret: boolean
+  // hasSiret kept for caller compat but plus utilisé pour gate l'affichage
+  // (cf. funnel claim 2026-05-05 — l'API accepte le claim même sans SIRET en
+  // DB et flag manual_verification_required pour vérif admin via SIRENE).
+  hasSiret?: boolean
 }
 
-export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonProps) {
+export function ClaimButton({ providerId, providerName }: ClaimButtonProps) {
   const [showModal, setShowModal] = useState(false)
   const [siret, setSiret] = useState('')
   const [email, setEmail] = useState('')
@@ -128,26 +131,6 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
     } finally {
       setIsLoading(false)
     }
-  }
-
-  if (!hasSiret) {
-    return (
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-        <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm font-medium text-amber-800">Vous êtes cet artisan ?</p>
-            <p className="text-sm text-amber-700 mt-1">
-              Cette fiche ne peut pas encore être revendiquée automatiquement. Contactez-nous à{' '}
-              <a href="mailto:support@servicesartisans.fr" className="underline font-medium">
-                support@servicesartisans.fr
-              </a>{' '}
-              avec une copie de votre extrait Kbis.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (
