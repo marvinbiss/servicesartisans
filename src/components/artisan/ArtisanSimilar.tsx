@@ -58,7 +58,7 @@ export function ArtisanSimilar({
         <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           {!isClaimed
-            ? `Professionnels vérifiés disponibles à ${_artisan.city}`
+            ? `Artisans RGE certifiés disponibles à ${_artisan.city}`
             : 'Artisans similaires'}
         </h2>
         <p className="text-charcoal-600 mb-4">
@@ -99,7 +99,7 @@ export function ArtisanSimilar({
         <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           {!isClaimed
-            ? `Professionnels vérifiés disponibles à ${_artisan.city}`
+            ? `Artisans RGE certifiés disponibles à ${_artisan.city}`
             : 'Artisans similaires'}
         </h2>
 

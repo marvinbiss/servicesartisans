@@ -18,7 +18,7 @@ const steps: Step[] = [
   {
     icon: <Send className="h-5 w-5" aria-hidden="true" />,
     title: 'Nous contactons les artisans',
-    description: 'Votre demande est transmise aux professionnels qualifiés proches de chez vous.',
+    description: 'Votre demande est transmise aux artisans RGE certifiés proches de chez vous.',
     duration: 'Instantané',
   },
   {

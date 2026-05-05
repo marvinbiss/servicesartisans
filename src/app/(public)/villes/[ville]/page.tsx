@@ -254,7 +254,7 @@ async function renderVillePage({ params }: PageProps) {
       typeof ville.population === 'number'
         ? ville.population
         : parseInt(String(ville.population).replace(/\s/g, ''), 10) || undefined,
-    description: `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). ${services.length} corps de métier : plombiers, électriciens, serruriers et plus.`,
+    description: `Trouvez des artisans RGE certifiés à ${ville.name} (${ville.departementCode}). ${services.length} corps de métier RGE pour la rénovation énergétique.`,
     image: cityImage?.src,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -364,9 +364,9 @@ async function renderVillePage({ params }: PageProps) {
 
   // En bref bullets — adaptés à la ville
   const enBrefPoints: string[] = [
-    `${services.length} corps de métier disponibles à ${ville.name}`,
+    `${services.length} corps de métier RGE disponibles à ${ville.name}`,
     'Devis gratuits, réponse 24h',
-    'Artisans vérifiés SIREN officiel',
+    'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit’EnR)',
   ]
   if (rgeCount > 0) {
     enBrefPoints.push(`${rgeCount} artisan${rgeCount > 1 ? 's' : ''} RGE pour MaPrimeRénov’`)
@@ -459,11 +459,11 @@ async function renderVillePage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-ville-${ville.slug}`))
               const h1Templates = [
-                `Artisans à ${ville.name}`,
-                `Artisans à ${ville.name} (${ville.departementCode}) : pros qualifiés`,
-                `${ville.name} : artisans qualifiés pour vos travaux`,
-                `Artisans à ${ville.name}, ${ville.departement}`,
-                `${services.length} corps de métier à ${ville.name}`,
+                `Artisans RGE à ${ville.name}`,
+                `Artisans RGE certifiés à ${ville.name} (${ville.departementCode})`,
+                `${ville.name} : artisans RGE certifiés pour vos travaux`,
+                `Artisans RGE à ${ville.name}, ${ville.departement}`,
+                `${services.length} corps de métier RGE à ${ville.name}`,
               ]
               return (
                 <h1
@@ -564,7 +564,7 @@ async function renderVillePage({ params }: PageProps) {
       {upgradeV2 && villeProviders.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <EnBrefBox
-            summary={`Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}) : ${services.length} corps de métier disponibles, devis gratuits sous 24h, professionnels vérifiés SIREN. ${rgeCount > 0 ? `${rgeCount} certifié${rgeCount > 1 ? 's' : ''} RGE pour MaPrimeRénov’.` : ''}`.trim()}
+            summary={`Trouvez des artisans RGE certifiés à ${ville.name} (${ville.departementCode}) : ${services.length} corps de métier RGE, devis gratuits sous 24h, qualifications synchronisées avec la base ADEME. ${rgeCount > 0 ? `${rgeCount} artisan${rgeCount > 1 ? 's' : ''} RGE éligibles MaPrimeRénov’.` : ''}`.trim()}
             keyPoints={enBrefPoints}
           />
         </div>
@@ -1071,10 +1071,10 @@ async function renderVillePage({ params }: PageProps) {
         />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d'un artisan à {ville.name} ?
+            Besoin d'un artisan RGE à {ville.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés.
+            Décrivez votre projet et recevez des devis gratuits d'artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -1138,10 +1138,11 @@ async function renderVillePage({ params }: PageProps) {
               Méthodologie éditoriale
             </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les données de cette page sont issues de sources publiques (INSEE, base SIRENE). Les
-              profils climatiques et économiques sont des estimations régionales. ServicesArtisans
-              est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas
-              les prestations des artisans référencés.
+              Les données de cette page sont issues de sources publiques (INSEE, base SIRENE, base
+              ADEME france-renov.gouv.fr pour le RGE). Les profils climatiques et économiques sont
+              des estimations régionales. ServicesArtisans est un annuaire indépendant — nous ne
+              réalisons pas de travaux et ne garantissons pas les prestations des artisans RGE
+              certifiés.
             </p>
           </div>
         </div>

@@ -316,8 +316,9 @@ export default async function ResultatPage({ params }: PageParams) {
             Prochaine étape : confirmez vos aides avec un devis RGE
           </h2>
           <p className="text-sm text-charcoal-600 mb-4">
-            Pour débloquer vos aides, vous avez besoin d&apos;un devis d&apos;un artisan certifié
-            RGE. Nous vous mettons en relation avec un professionnel qualifié près de chez vous.
+            Pour débloquer vos aides, vous avez besoin d&apos;un devis d&apos;un artisan RGE
+            certifié. Nous vous mettons en relation avec un artisan RGE certifié (Qualibat,
+            Qualifelec, QualiPAC, Qualit&apos;EnR) près de chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link

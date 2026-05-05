@@ -543,7 +543,7 @@ export default async function CeeHubPage() {
               {
                 n: 2,
                 title: 'Choisir un artisan RGE',
-                text: 'La qualification RGE de l’entreprise doit être active à la signature du devis. Utilisez nos pages ville pour trouver les artisans qualifiés et vérifiés.',
+                text: 'La qualification RGE de l’entreprise doit être active à la signature du devis. Utilisez nos pages ville pour trouver des artisans RGE certifiés.',
               },
               {
                 n: 3,

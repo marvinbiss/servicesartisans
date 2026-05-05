@@ -394,12 +394,11 @@ export default async function AProposPage() {
               données personnelles.
             </p>
             <p>
-              Chaque professionnel référencé sur ServicesArtisans est un artisan RGE actif. Nous
-              vérifions chaque semaine la validité de la certification RGE via la base ADEME, le
-              numéro SIRET via SIRENE, demandons les attestations d&apos;assurance RC
-              professionnelle et de garantie décennale pour les métiers du bâtiment, et ne publions
-              que des avis authentiques de clients ayant réellement fait appel à un artisan via la
-              plateforme.
+              Chaque artisan RGE certifié référencé sur ServicesArtisans est actif. Nous vérifions
+              chaque semaine la validité de la certification RGE via la base ADEME, le numéro SIRET
+              via SIRENE, demandons les attestations d&apos;assurance RC professionnelle et de
+              garantie décennale pour les métiers du bâtiment, et ne publions que des avis
+              authentiques de clients ayant réellement fait appel à un artisan via la plateforme.
             </p>
           </div>
 
@@ -620,7 +619,7 @@ export default async function AProposPage() {
                 <p className="text-charcoal-600 mb-6">
                   Nous synchronisons la base ADEME france-renov.gouv.fr et l&apos;API Annuaire des
                   Entreprises pour constituer le répertoire de référence des artisans RGE certifiés
-                  en France. Les premiers professionnels référencés seront bientôt accessibles.
+                  en France. Les premiers artisans RGE certifiés seront bientôt accessibles.
                 </p>
                 <Link
                   href="/inscription-artisan"

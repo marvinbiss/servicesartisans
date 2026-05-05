@@ -161,7 +161,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: `Prime CEE ${op.code} en ${reg.name} 2026 — guide régional`,
-    description: `Forfaits modulés zone ${reg.climateZone}, aides régionales cumulables, top villes artisans qualifiés.`,
+    description: `Forfaits modulés zone ${reg.climateZone}, aides régionales cumulables, top villes artisans RGE certifiés.`,
     url: pageUrl,
     mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
     datePublished: '2026-05-03T00:00:00+02:00',

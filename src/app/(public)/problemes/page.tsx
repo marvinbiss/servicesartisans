@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     title: 'Problèmes Courants — Solutions',
     description:
-      'Identifiez votre problème et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et artisans référencés.',
+      'Identifiez votre problème et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et artisans RGE certifiés.',
     url: `${SITE_URL}/problemes`,
     type: 'website',
     images: [
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Problèmes Courants — Solutions',
     description:
-      'Identifiez votre problème et trouvez la solution adaptée avec nos artisans référencés.',
+      'Identifiez votre problème et trouvez la solution adaptée avec nos artisans RGE certifiés.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -157,7 +157,7 @@ const howSteps = [
     icon: Wrench,
     title: 'Contactez un artisan',
     description:
-      'Demandez un devis gratuit auprès d’artisans référencés spécialisés dans votre type de problème.',
+      'Demandez un devis gratuit auprès d’artisans RGE certifiés spécialisés dans votre type de problème.',
   },
 ]
 
@@ -246,14 +246,14 @@ export default function ProblemesPage() {
               </span>
             </h1>
             <p className="text-lg text-charcoal-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Identifiez votre problème, suivez nos conseils d'urgence et trouvez un artisan
-              référencé pour intervenir rapidement. Fiches complètes avec symptômes, coûts et
+              Identifiez votre problème, suivez nos conseils d'urgence et trouvez un artisan RGE
+              certifié pour intervenir rapidement. Fiches complètes avec symptômes, coûts et
               prévention.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-white/80">Artisans référencés</span>
+                <span className="text-sm text-white/80">Artisans RGE certifiés</span>
               </div>
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" />
@@ -422,8 +422,8 @@ export default function ProblemesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Besoin d'un artisan ?</h2>
           <p className="text-xl text-amber-100/90 mb-8 max-w-2xl mx-auto">
-            Demandez un devis gratuit et recevez jusqu'à 3 propositions d'artisans référencés dans
-            votre région.
+            Demandez un devis gratuit et recevez jusqu'à 3 propositions d'artisans RGE certifiés
+            dans votre région.
           </p>
           <Link
             href="/devis"

@@ -22,7 +22,7 @@ export function getOrganizationSchema() {
       height: 512,
     },
     description:
-      "Annuaire d'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.",
+      "Annuaire d'artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Données SIREN officielles, éligibles MaPrimeRénov' et CEE.",
     slogan: companyIdentity.tagline,
     // Verifiable topic entities — each knowsAbout item is a Thing node linked
     // to the canonical Wikipedia page via sameAs. Google's entity graph uses
@@ -568,7 +568,7 @@ export function getPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     isPartOf: { '@id': `${SITE_URL}#website` },
     ...(city.image ? { image: city.image } : {}),
-    description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
+    description: city.description || `Trouvez des artisans RGE certifiés à ${city.name}`,
     ...(city.region || city.department
       ? {
           containedInPlace: [
@@ -1447,7 +1447,7 @@ export function getEnrichedPlaceSchema(city: {
     url: `${SITE_URL}/villes/${city.slug}`,
     isPartOf: { '@id': `${SITE_URL}#website` },
     ...(city.image ? { image: city.image } : {}),
-    description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
+    description: city.description || `Trouvez des artisans RGE certifiés à ${city.name}`,
     ...(city.region || city.department
       ? {
           containedInPlace: [

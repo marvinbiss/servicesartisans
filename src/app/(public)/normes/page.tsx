@@ -429,7 +429,7 @@ export default function NormesPage() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez des professionnels qualifiés et certifiés près de chez vous. Ils connaissent et appliquent les DTU et normes en vigueur.'
+                "Trouvez des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Ils connaissent et appliquent les DTU et normes en vigueur."
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -3,7 +3,7 @@ import { services as staticServicesList, getVilleBySlug } from '@/lib/data/franc
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — Artisan qualifié près de chez vous'
+export const alt = 'ServicesArtisans — Artisan RGE certifié près de chez vous'
 export const size = {
   width: 1200,
   height: 630,

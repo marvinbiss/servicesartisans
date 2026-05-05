@@ -578,27 +578,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const tHash = Math.abs(hashCode(`sq-title-${serviceSlug}-${locationSlug}-${publicId}`))
     const titleTemplates = hasProviders
       ? [
-          `${staticSvc.name} à ${quartierName}, ${ville.name} — ${providerCount} pros`,
-          `${providerCount} ${svcLower}s à ${quartierName} (${ville.name})`,
-          `${staticSvc.name} ${quartierName} ${ville.name} : devis gratuit`,
-          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+          `${staticSvc.name} à ${quartierName}, ${ville.name} — ${providerCount} pros RGE`,
+          `${providerCount} ${svcLower}s RGE à ${quartierName} (${ville.name})`,
+          `${staticSvc.name} ${quartierName} ${ville.name} : devis RGE gratuit`,
+          `Trouver un ${svcLower} RGE à ${quartierName}, ${ville.name}`,
         ]
       : [
           `${staticSvc.name} à ${quartierName}, ${ville.name} — Devis gratuit`,
-          `${svcLower} à ${quartierName} (${ville.name}) : artisans vérifiés`,
-          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+          `${svcLower} à ${quartierName} (${ville.name}) : artisans RGE certifiés`,
+          `Trouver un ${svcLower} RGE à ${quartierName}, ${ville.name}`,
         ]
     const title = truncateTitle(titleTemplates[tHash % titleTemplates.length])
 
     const dHash = Math.abs(hashCode(`sq-desc-${serviceSlug}-${locationSlug}-${publicId}`))
     const descTemplates = hasProviders
       ? [
-          `${providerCount} ${svcLower}s référencés à ${quartierName}, ${ville.name} (${ville.departementCode}). Devis gratuit ${getRegionPreposition(ville.region)}.`,
-          `Comparez les ${svcLower}s à ${quartierName} (${ville.name}). ${providerCount} artisans vérifiés SIREN. Devis gratuit.`,
+          `${providerCount} ${svcLower}s RGE certifiés à ${quartierName}, ${ville.name} (${ville.departementCode}). Devis gratuit ${getRegionPreposition(ville.region)}.`,
+          `Comparez les ${svcLower}s à ${quartierName} (${ville.name}). ${providerCount} artisans RGE certifiés (SIREN + ADEME). Devis gratuit.`,
         ]
       : [
-          `Trouvez un ${svcLower} qualifié à ${quartierName}, ${ville.name} (${ville.departementCode}). Artisans vérifiés, devis gratuit.`,
-          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans référencés ${getRegionPreposition(ville.region)}. Devis gratuit.`,
+          `Trouvez un ${svcLower} RGE certifié à ${quartierName}, ${ville.name} (${ville.departementCode}). Artisans RGE certifiés, devis gratuit.`,
+          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans RGE certifiés ${getRegionPreposition(ville.region)}. Devis gratuit.`,
         ]
     const description = descTemplates[dHash % descTemplates.length]
 

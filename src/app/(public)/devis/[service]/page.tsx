@@ -57,7 +57,7 @@ export async function generateMetadata({
   const titleTemplates = [
     `Devis ${tradeLower} gratuit 2026 — Comparez`,
     `Devis ${tradeLower} en ligne — Gratuit 2026`,
-    `Devis ${tradeLower} gratuit — Artisans vérifiés`,
+    `Devis ${tradeLower} gratuit — Artisans RGE certifiés`,
     `Devis ${tradeLower} 2026 : comparez les prix`,
     `Devis ${tradeLower} : gratuit et sans engagement`,
   ]
@@ -169,8 +169,8 @@ export default async function DevisServicePage({
     const h1Hash = Math.abs(hashCode(`devis-h1-${service}`))
     const h1Templates = [
       `Devis ${trade.name} gratuit`,
-      `Devis ${tradeLower} — Comparez les artisans qualifiés`,
-      `Devis ${tradeLower} : comparez jusqu'à 3 artisans`,
+      `Devis ${tradeLower} — Comparez les artisans RGE certifiés`,
+      `Devis ${tradeLower} : comparez jusqu'à 3 artisans RGE`,
       `Devis gratuit ${tradeLower} — Sans engagement`,
       `${trade.name} : obtenez votre devis gratuit`,
     ]

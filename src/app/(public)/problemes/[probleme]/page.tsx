@@ -581,7 +581,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Besoin d'un {tradeName.toLowerCase()} ?</h2>
           <p className="text-xl opacity-90 mb-8">
-            Demandez un devis gratuit et comparez les artisans référencés près de chez vous.
+            Demandez un devis gratuit et comparez les artisans RGE certifiés près de chez vous.
           </p>
           <Link
             href={`/devis/${problem.primaryService}`}

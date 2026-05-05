@@ -9,8 +9,8 @@ interface TrustGuaranteeProps {
 const guarantees = [
   {
     icon: Shield,
-    title: 'Artisans vérifiés',
-    description: 'SIRET contrôlé, assurance vérifiée',
+    title: 'Artisans RGE certifiés',
+    description: 'SIRET contrôlé, RGE vérifié ADEME',
   },
   {
     icon: CheckCircle,

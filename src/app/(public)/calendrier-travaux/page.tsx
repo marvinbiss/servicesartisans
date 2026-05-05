@@ -433,7 +433,7 @@ export default function CalendrierTravauxPage() {
             </h2>
             <p className="text-amber-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez un artisan qualifié près de chez vous et demandez un devis gratuit pour vos travaux, quelle que soit la saison.'
+                'Trouvez un artisan RGE certifié près de chez vous et demandez un devis gratuit pour vos travaux, quelle que soit la saison.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

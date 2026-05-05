@@ -120,7 +120,11 @@ export default async function BarometreRgePage() {
     variableMeasured: [
       { '@type': 'PropertyValue', name: 'Artisans RGE actifs', value: snap.total_rge_active },
       { '@type': 'PropertyValue', name: 'Artisans RGE expirés', value: snap.total_rge_expired },
-      { '@type': 'PropertyValue', name: 'Total artisans référencés', value: snap.total_providers },
+      {
+        '@type': 'PropertyValue',
+        name: 'Total artisans RGE certifiés',
+        value: snap.total_providers,
+      },
     ],
   }
 

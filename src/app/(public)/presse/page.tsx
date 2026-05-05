@@ -13,7 +13,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Espace presse',
   description:
-    "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans référencés SIREN en France.",
+    "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France.",
   // Indexation activée : les journalistes recherchent "espace presse [marque]"
   // sur Google + Sprint RP outreach (avant SIRET) nécessite que la page soit
   // découvrable. Schema.org Organization + WebPage déjà déclarés via layout.
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Espace presse',
     description:
-      "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans référencés SIREN en France.",
+      "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France.",
     url: `${SITE_URL}/presse`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Espace presse',
     description:
-      "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans référencés SIREN en France.",
+      "Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l'annuaire d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France.",
   },
 }
 

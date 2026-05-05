@@ -72,7 +72,7 @@ export default function VilleHeroCTA({
               Besoin d&apos;un artisan à {locationLabel} ?
             </p>
             <p className="text-charcoal-600 text-sm mt-1">
-              Devis gratuit d&apos;artisans vérifiés près de chez vous
+              Devis gratuit d&apos;artisans RGE certifiés près de chez vous
             </p>
           </div>
           <button

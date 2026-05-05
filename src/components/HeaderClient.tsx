@@ -352,7 +352,7 @@ export default function HeaderClient({
                 clipRule="evenodd"
               />
             </svg>
-            Artisans vérifiés SIREN — Service 100% gratuit
+            Artisans RGE certifiés — Service 100% gratuit
           </span>
         </div>
 

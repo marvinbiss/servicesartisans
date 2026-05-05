@@ -133,7 +133,7 @@ export default function SeoContent({
                 <p>
                   Vous recherchez un {service.name.toLowerCase()} à {location.name} (
                   {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
-                  {providerCount} professionnels qualifiés dans votre ville.
+                  {providerCount} artisans RGE certifiés dans votre ville.
                   {location.department_name &&
                     ` Notre annuaire couvre l'ensemble du département ${location.department_name} (${location.department_code}).`}
                 </p>
@@ -176,7 +176,7 @@ export default function SeoContent({
                       >
                         demandez un devis gratuit {service.name.toLowerCase()} à {location.name}
                       </Link>{' '}
-                      directement auprès d'artisans vérifiés.
+                      directement auprès d'artisans RGE certifiés.
                     </p>
                   </>
                 )}

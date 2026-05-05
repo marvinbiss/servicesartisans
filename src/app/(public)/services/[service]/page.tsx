@@ -633,7 +633,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-accent-400" />
-              <span className="text-sm text-sand-200 font-medium">Artisans vérifiés</span>
+              <span className="text-sm text-sand-200 font-medium">Artisans RGE certifiés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Star className="w-4 h-4 text-secondary-400" />
@@ -969,10 +969,11 @@ export default async function ServicePage({ params }: PageProps) {
             </h2>
             <p className="text-charcoal-700 leading-relaxed">
               Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail
-              conforme aux normes en vigueur et couvert par une assurance décennale. Un artisan
-              qualifié dispose de l'expérience, de l'outillage adapté et des certifications
-              nécessaires pour réaliser vos travaux en toute sécurité. De plus, recourir à un
-              professionnel référencé vous protège en cas de malfaçon.
+              conforme aux normes en vigueur et couvert par une assurance décennale. Un artisan RGE
+              certifié dispose de l'expérience, de l'outillage adapté et des qualifications RGE
+              (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) nécessaires pour réaliser vos travaux en
+              toute sécurité et en éligibilité aux aides MaPrimeRénov' / CEE. De plus, recourir à un
+              artisan RGE certifié vous protège en cas de malfaçon.
             </p>
 
             <h2 className="text-xl font-heading font-semibold text-charcoal-900">
@@ -1200,8 +1201,8 @@ export default async function ServicePage({ params }: PageProps) {
               Obtenir mon devis {service.name.toLowerCase()} gratuit
             </h2>
             <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
-              Comparez les artisans vérifiés près de chez vous et recevez des devis personnalisés,
-              gratuits et sans engagement.
+              Comparez les artisans RGE certifiés près de chez vous et recevez des devis
+              personnalisés, gratuits et sans engagement.
             </p>
             <Link
               href={`/devis/${serviceSlug}`}
@@ -1249,9 +1250,10 @@ export default async function ServicePage({ params }: PageProps) {
             </h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
               Les tarifs et informations présentés sont indicatifs, basés sur des moyennes
-              nationales et régionales. Les artisans sont référencés via leur numéro SIREN.
-              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne
-              garantissons pas les prestations.
+              nationales et régionales. Les artisans sont RGE certifiés (Qualibat, Qualifelec,
+              QualiPAC, Qualit'EnR) et référencés via leur numéro SIREN, avec qualifications
+              vérifiées sur la base ADEME france-renov.gouv.fr. ServicesArtisans est un annuaire
+              indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
             </p>
           </div>
         </div>

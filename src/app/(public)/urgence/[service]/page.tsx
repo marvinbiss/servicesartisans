@@ -156,7 +156,7 @@ export async function generateMetadata({
   const descTemplates = [
     `Besoin d'un ${tradeLower} en urgence ? Disponible selon les artisans de votre secteur partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
     `${trade.name} urgence : dépannage rapide jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
-    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans qualifiés, devis gratuit.`,
+    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans référencés SIREN, devis gratuit.`,
     `Dépannage ${tradeLower} en urgence, y compris le week-end. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
     `${trade.name} d'urgence soir & week-end : artisans disponibles partout en France. Devis rapide, intervention ${trade.averageResponseTime}.`,
   ]

@@ -450,7 +450,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
               Trouver un professionnel
             </h2>
             <p className="text-charcoal-600 mb-6">
-              Pour concrétiser votre projet, trouvez un artisan qualifié et comparez les tarifs.
+              Pour concrétiser votre projet, trouvez un artisan RGE certifié et comparez les tarifs.
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {comparisonServiceMap[slug].map((svc) => (
@@ -501,7 +501,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez des professionnels qualifiés près de chez vous et demandez un devis gratuit pour concrétiser votre projet.'
+                'Trouvez des artisans RGE certifiés près de chez vous et demandez un devis gratuit pour concrétiser votre projet.'
               }
             </p>
             <Link

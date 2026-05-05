@@ -17,12 +17,12 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 export const metadata: Metadata = {
   title: 'Garantie — Notre engagement qualité',
   description:
-    'Artisans vérifiés, devis gratuits et sans engagement, données protégées. Découvrez les garanties ServicesArtisans pour vos travaux en toute confiance.',
+    'Artisans RGE certifiés, devis gratuits et sans engagement, données protégées. Découvrez les garanties ServicesArtisans pour vos travaux en toute confiance.',
   alternates: getAlternates(`/garantie`),
   robots: { index: true, follow: true },
   openGraph: {
     title: 'Garantie ServicesArtisans — Notre engagement qualité',
-    description: 'Artisans vérifiés, devis gratuits et sans engagement, données protégées.',
+    description: 'Artisans RGE certifiés, devis gratuits et sans engagement, données protégées.',
     url: `${SITE_URL}/garantie`,
     siteName: 'ServicesArtisans',
   },
@@ -33,9 +33,9 @@ export const revalidate = false
 const guarantees = [
   {
     icon: Shield,
-    title: 'Artisans vérifiés',
+    title: 'Artisans RGE certifiés',
     description:
-      "Chaque artisan référencé est contrôlé via les données officielles SIREN/SIRET. Nous vérifions que l'entreprise est enregistrée, en activité, et correspond bien à la catégorie de métier déclarée.",
+      "Chaque artisan RGE certifié est contrôlé via les données officielles SIREN/SIRET et la base ADEME (france-renov.gouv.fr). Nous vérifions que l'entreprise est enregistrée, en activité, que sa qualification RGE est en cours de validité, et que son code NAF correspond bien à la catégorie de métier déclarée.",
     color: 'bg-green-100 text-green-600',
   },
   {
@@ -231,7 +231,7 @@ export default function GarantiePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-primary-100 mb-6 max-w-lg mx-auto">
-            Devis gratuit et sans engagement d'artisans vérifiés.
+            Devis gratuit et sans engagement d'artisans RGE certifiés.
           </p>
           <Link
             href="/devis"

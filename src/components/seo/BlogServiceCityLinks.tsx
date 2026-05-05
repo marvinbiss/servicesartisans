@@ -82,7 +82,7 @@ export default function BlogServiceCityLinks({ articleSlug }: BlogServiceCityLin
             Trouver un artisan près de chez vous
           </h3>
           <p className="text-sm text-charcoal-500 mb-6">
-            Comparez les artisans vérifiés dans votre ville et obtenez des devis gratuits.
+            Comparez les artisans RGE certifiés dans votre ville et obtenez des devis gratuits.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2">
@@ -146,7 +146,7 @@ export default function BlogServiceCityLinks({ articleSlug }: BlogServiceCityLin
           Services populaires
         </h3>
         <p className="text-sm text-charcoal-500 mb-6">
-          Trouvez un artisan vérifié près de chez vous.
+          Trouvez un artisan RGE certifié près de chez vous.
         </p>
 
         <div className="flex flex-wrap gap-2">

@@ -82,7 +82,7 @@ export function UnclaimedSidebarCTA({
         <div className="space-y-2 mb-5 pb-5 border-b border-sand-200">
           <div className="flex items-center gap-2 text-sm text-charcoal-600">
             <CheckCircle className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
-            Artisans vérifiés
+            Artisans RGE certifiés
           </div>
           <div className="flex items-center gap-2 text-sm text-charcoal-600">
             <CheckCircle className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />

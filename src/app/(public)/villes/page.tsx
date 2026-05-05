@@ -14,12 +14,12 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par Ville — Annuaire France',
-  description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
+  title: 'Artisans RGE par Ville — Annuaire France',
+  description: `Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
   alternates: getAlternates(`/villes`),
   openGraph: {
-    title: 'Artisans par Ville — Annuaire par commune en France',
-    description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements.`,
+    title: 'Artisans RGE par Ville — Annuaire par commune en France',
+    description: `Trouvez un artisan RGE certifié dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements.`,
     url: `${SITE_URL}/villes`,
     type: 'website',
     images: [
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Artisans par Ville — Annuaire par commune en France',
-    description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, Annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
+    title: 'Artisans RGE par Ville — Annuaire par commune en France',
+    description: `Trouvez un artisan RGE certifié dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
   },
 }
 
@@ -79,7 +79,7 @@ export default async function VillesIndexPage() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Artisans par ville en France',
-    description: `Annuaire d'artisans référencés dans ${villes.length} villes de France.`,
+    description: `Annuaire d'artisans RGE certifiés dans ${villes.length} villes de France.`,
     url: `${SITE_URL}/villes`,
     numberOfItems: villes.length,
     breadcrumb: {
@@ -94,7 +94,7 @@ export default async function VillesIndexPage() {
   const faqSchema = getFAQSchema([
     {
       question: 'Combien de villes sont couvertes par ServicesArtisans ?',
-      answer: `Notre annuaire couvre ${villes.length} communes de France métropolitaine et d'outre-mer, dans ${regions.length} régions et ${departements.length} départements. Chaque page ville liste les artisans référencés par corps de métier.`,
+      answer: `Notre annuaire couvre ${villes.length} communes de France métropolitaine et d'outre-mer, dans ${regions.length} régions et ${departements.length} départements. Chaque page ville liste les artisans RGE certifiés par corps de métier.`,
     },
     {
       question: 'Ma commune n’apparaît pas : que faire ?',
@@ -104,12 +104,12 @@ export default async function VillesIndexPage() {
     {
       question: 'Les artisans proposés interviennent-ils uniquement dans la ville ?',
       answer:
-        "Non. Les artisans référencés sur une page ville interviennent typiquement dans toute la zone de chalandise (commune + communes limitrophes + département dans certains cas). Le rayon d'intervention exact est précisé sur chaque fiche artisan.",
+        "Non. Les artisans RGE certifiés sur une page ville interviennent typiquement dans toute la zone de chalandise (commune + communes limitrophes + département dans certains cas). Le rayon d'intervention exact est précisé sur chaque fiche artisan.",
     },
     {
       question: 'Comment sont choisies les villes principales mises en avant ?',
       answer:
-        "Les villes mises en avant dans chaque région sont triées par volume d'artisans référencés et par volumétrie de recherches des utilisateurs. Les métropoles régionales (Paris, Lyon, Marseille, Toulouse, Bordeaux, Nantes, Lille, Strasbourg, Nice, Montpellier) sont systématiquement visibles.",
+        "Les villes mises en avant dans chaque région sont triées par volume d'artisans RGE certifiés et par volumétrie de recherches des utilisateurs. Les métropoles régionales (Paris, Lyon, Marseille, Toulouse, Bordeaux, Nantes, Lille, Strasbourg, Nice, Montpellier) sont systématiquement visibles.",
     },
     {
       question: 'Puis-je filtrer les artisans par note ou par RGE ?',
@@ -171,8 +171,9 @@ export default async function VillesIndexPage() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-charcoal-400 max-w-2xl mx-auto leading-relaxed">
-              Des artisans référencés dans plus de {villes.length} villes de France. Trouvez un
-              professionnel qualifié près de chez vous.
+              Des artisans RGE certifiés dans plus de {villes.length} villes de France. Trouvez un
+              professionnel qualifié RGE (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR) près de
+              chez vous.
             </p>
           </div>
 
@@ -211,7 +212,7 @@ export default async function VillesIndexPage() {
             bullets={[
               `${villes.length}+ villes couvertes en France métropolitaine et outre-mer`,
               `${departements.length} départements, ${regions.length} régions — couverture nationale`,
-              'Artisans vérifiés SIREN officiel, qualifications RGE sync ADEME quotidien',
+              'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit’EnR) — SIREN officiel, sync ADEME quotidien',
               'Devis gratuit sous 24h, lead exclusif (1 demande = 1 artisan)',
             ]}
           />
@@ -302,7 +303,7 @@ export default async function VillesIndexPage() {
             Besoin d'un artisan ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
+            Décrivez votre projet et recevez des devis gratuits d&apos;artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

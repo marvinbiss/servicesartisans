@@ -13,14 +13,14 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Carrières — Rejoignez notre équipe',
   description:
-    "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans de France basé sur les données SIREN.",
+    "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans RGE certifiés de France, basé sur la base ADEME et les données SIREN.",
   alternates: {
     canonical: `${SITE_URL}/carrieres`,
   },
   openGraph: {
     title: 'Carrières — Rejoignez notre équipe',
     description:
-      "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans de France basé sur les données SIREN.",
+      "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans RGE certifiés de France, basé sur la base ADEME et les données SIREN.",
     url: `${SITE_URL}/carrieres`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Carrières — Rejoignez notre équipe',
     description:
-      "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans de France basé sur les données SIREN.",
+      "Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l'annuaire des artisans RGE certifiés de France, basé sur la base ADEME et les données SIREN.",
   },
   robots: {
     index: false,
@@ -102,8 +102,8 @@ export default async function CarrieresPage() {
             Carrières
           </h1>
           <p className="text-xl text-charcoal-400 max-w-3xl">
-            Rejoignez une équipe passionnée qui construit l'annuaire des artisans de France basé sur
-            les données SIREN officielles.
+            Rejoignez une équipe passionnée qui construit l'annuaire des artisans RGE certifiés de
+            France, basé sur la base ADEME france-renov.gouv.fr et les données SIREN officielles.
           </p>
         </div>
       </section>

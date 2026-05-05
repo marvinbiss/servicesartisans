@@ -483,7 +483,7 @@ export default async function TarifsPage() {
                 {
                   n: 4,
                   title: "Vérifiez l'artisan",
-                  text: 'Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.',
+                  text: "Un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) avec SIRET, assurance et qualifications ADEME vous protège contre les malfaçons et les arnaques, et vous donne accès aux aides MaPrimeRénov' / CEE.",
                 },
               ].map(({ n, title, text }) => (
                 <div key={n} className="text-center p-6">

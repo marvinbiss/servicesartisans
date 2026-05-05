@@ -969,7 +969,8 @@ export default async function BlogArticlePage({ params }: PageProps) {
                           Besoin d'un professionnel ?
                         </p>
                         <p className="text-sm text-charcoal-600">
-                          Devis gratuit et sans engagement d'artisans vérifiés près de chez vous.
+                          Devis gratuit et sans engagement d'artisans RGE certifiés près de chez
+                          vous.
                         </p>
                       </div>
                       <Link

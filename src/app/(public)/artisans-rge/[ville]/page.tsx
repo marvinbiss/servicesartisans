@@ -296,7 +296,7 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
           </p>
           <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl">
             Le label RGE est délivré par des organismes accrédités (Qualibat, Qualit&apos;EnR,
-            Qualifelec, Certibat…) aux artisans qualifiés pour les travaux de rénovation
+            Qualifelec, Certibat…) aux artisans RGE certifiés pour les travaux de rénovation
             énergétique. C&apos;est la condition
             <strong> indispensable</strong> pour faire bénéficier vos clients de{' '}
             <strong>MaPrimeRénov&apos;</strong>, des{' '}

@@ -146,7 +146,7 @@ export function generateHowToSchema(options: HowToOptions): Record<string, unkno
     name: `Comment décrire son projet de ${svcLower}${locationSuffix}`,
     description:
       description ||
-      `Guide en 5 étapes pour obtenir des devis gratuits de ${svcLower}s qualifiés${locationSuffix} sur ${SITE_NAME}.`,
+      `Guide en 5 étapes pour obtenir des devis gratuits de ${svcLower}s RGE certifiés${locationSuffix} sur ${SITE_NAME}.`,
     inLanguage: 'fr-FR',
     isPartOf: { '@id': `${SITE_URL}#website` },
     ...(totalTime ? { totalTime } : { totalTime: 'PT10M' }),

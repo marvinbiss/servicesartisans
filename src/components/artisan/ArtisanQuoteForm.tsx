@@ -269,7 +269,9 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           <FileText className="w-5 h-5" aria-hidden="true" />
           Devis gratuit en 2 min
         </h2>
-        <p className="text-primary-100 text-sm mt-1">Réponse rapide de professionnels qualifiés</p>
+        <p className="text-primary-100 text-sm mt-1">
+          Réponse rapide d&apos;artisans RGE certifiés
+        </p>
       </div>
 
       {/* Content */}

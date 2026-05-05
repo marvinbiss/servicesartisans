@@ -118,8 +118,8 @@ export default function BadgePage() {
               Affichez votre badge Artisan Vérifié
             </h1>
             <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
-              Montrez à vos clients que vous êtes un professionnel vérifié. Copiez le code
-              ci-dessous et intégrez-le sur votre site web.
+              Montrez à vos clients que vous êtes un artisan RGE certifié. Copiez le code ci-dessous
+              et intégrez-le sur votre site web.
             </p>
           </div>
         </div>

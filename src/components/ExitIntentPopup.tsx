@@ -25,7 +25,7 @@ interface ExitIntentPopupProps {
 export default function ExitIntentPopup({
   sessionKey = 'sa:exit-intent-shown',
   title = 'Avant de partir...',
-  description = "Devis gratuit et sans engagement d'artisans qualifiés près de chez vous.",
+  description = "Devis gratuit et sans engagement d'artisans RGE certifiés près de chez vous.",
   ctaText = 'Recevoir mes devis gratuits',
   ctaHref = '/devis',
   onCtaClick,

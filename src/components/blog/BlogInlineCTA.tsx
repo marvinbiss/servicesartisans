@@ -38,7 +38,8 @@ export default function BlogInlineCTA({ service, ville }: BlogInlineCTAProps) {
               Besoin d&apos;un professionnel ?
             </p>
             <p className="text-sm text-charcoal-600">
-              Devis gratuit et sans engagement d&apos;artisans vérifiés{ville ? ` à ${ville}` : ''}.
+              Devis gratuit et sans engagement d&apos;artisans RGE certifiés
+              {ville ? ` à ${ville}` : ''}.
             </p>
           </div>
           <div className="flex items-center gap-3">

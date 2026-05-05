@@ -15,8 +15,8 @@ const guarantees: Guarantee[] = [
   },
   {
     icon: <Shield className="h-5 w-5 text-accent-600 shrink-0" aria-hidden="true" />,
-    title: 'Artisans vérifiés SIREN',
-    description: 'Chaque artisan est vérifié via les données officielles INSEE.',
+    title: 'Artisans RGE certifiés',
+    description: 'Chaque artisan est vérifié SIREN (INSEE) et RGE (base ADEME).',
   },
   {
     icon: <Lock className="h-5 w-5 text-accent-600 shrink-0" aria-hidden="true" />,

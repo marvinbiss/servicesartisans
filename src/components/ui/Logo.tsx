@@ -108,7 +108,7 @@ export default function Logo({
 export function Tagline({ className }: { className?: string }) {
   return (
     <p className={clsx('text-charcoal-600', className)}>
-      Trouvez des artisans qualifiés près de chez vous
+      Trouvez des artisans RGE certifiés près de chez vous
     </p>
   )
 }

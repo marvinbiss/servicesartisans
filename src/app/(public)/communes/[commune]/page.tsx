@@ -504,8 +504,9 @@ function ServicesCallToActionSection({ commune }: { commune: CommuneData }) {
         <Leaf className="h-6 w-6" /> Trouver un artisan près de {commune.name}
       </h2>
       <p className="mb-4 text-charcoal-700">
-        Les artisans référencés interviennent depuis <strong>{fallbackVille.name}</strong> et les
-        communes alentour. Sélectionnez le métier qui vous intéresse :
+        Les artisans RGE certifiés référencés sur la plateforme interviennent depuis{' '}
+        <strong>{fallbackVille.name}</strong> et les communes alentour. Sélectionnez le métier qui
+        vous intéresse :
       </p>
       <ul className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {TIER_A_SERVICES.map((svc) => {

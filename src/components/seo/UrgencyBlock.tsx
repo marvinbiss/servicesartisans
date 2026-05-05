@@ -49,7 +49,7 @@ export default function UrgencyBlock({
   const activeLabel =
     providerCount > 0
       ? `${providerCount} artisan${providerCount > 1 ? 's' : ''} disponible${providerCount > 1 ? 's' : ''}`
-      : `Artisans vérifiés${villeName ? ` à ${villeName}` : ''}`
+      : `Artisans RGE certifiés${villeName ? ` à ${villeName}` : ''}`
   const headerId = `urgency-${serviceName.toLowerCase().replace(/\s+/g, '-')}-${villeName.toLowerCase().replace(/\s+/g, '-')}`
 
   return (

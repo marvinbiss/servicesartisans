@@ -112,7 +112,7 @@ export async function generateMetadata({
     chauffagiste: {
       title: 'Tarif chauffagiste 2026 : combien ça coûte ? + Devis Gratuit',
       description:
-        'Prix chauffagiste 2026 : installation chaudière, entretien, dépannage. Comparez les devis gratuits et choisissez un artisan qualifié RGE.',
+        'Prix chauffagiste 2026 : installation chaudière, entretien, dépannage. Comparez les devis gratuits et choisissez un artisan RGE certifié (Qualibat, QualiPAC).',
     },
     menuisier: {
       title: 'Combien coûte un menuisier en 2026 ? Prix + Devis Gratuit',
@@ -127,7 +127,7 @@ export async function generateMetadata({
     couvreur: {
       title: 'Combien coûte un couvreur en 2026 ? Prix + Devis Gratuit',
       description:
-        'Tarifs couvreur 2026 : réfection toiture, isolation, démoussage. Comparez les devis gratuits et choisissez un artisan qualifié et assuré.',
+        'Tarifs couvreur 2026 : réfection toiture, isolation, démoussage. Comparez les devis gratuits et choisissez un artisan RGE certifié (Qualibat) et assuré.',
     },
     macon: {
       title: 'Tarif maçon 2026 : prix au m² + prestations + Devis Gratuit',

@@ -111,7 +111,7 @@ export default async function ArtisansPage() {
 
   const faqSchema = getFAQSchema([
     {
-      question: 'Comment sont sélectionnés les artisans référencés ?',
+      question: 'Comment sont sélectionnés les artisans RGE certifiés ?',
       answer:
         "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR, QualiBois, QualiSol, QualiPV. Chaque fiche est vérifiée SIRET via SIRENE/INSEE et synchronisée chaque semaine avec la base ADEME officielle (france-renov.gouv.fr). Les fiches dont le RGE expire ou en cessation d'activité sont automatiquement masquées.",
     },

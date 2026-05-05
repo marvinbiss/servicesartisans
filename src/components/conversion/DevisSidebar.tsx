@@ -160,7 +160,7 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
       <div className="bg-accent-50 rounded-2xl border border-accent-100 p-5">
         <div className="space-y-3">
           {[
-            { icon: Shield, text: 'Artisans vérifiés SIREN' },
+            { icon: Shield, text: 'Artisans RGE certifiés' },
             { icon: Clock, text: '100 % gratuit et sans engagement' },
             { icon: CheckCircle, text: 'Réponse rapide' },
           ].map((badge) => {

@@ -331,7 +331,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             <span className="hidden sm:inline text-charcoal-200">|</span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-accent-500" />
-              Artisans vérifiés SIREN
+              Artisans RGE certifiés
             </span>
             <span className="hidden sm:inline text-charcoal-200">|</span>
             <span className="inline-flex items-center gap-1.5">
@@ -613,7 +613,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
                 >
-                  Artisans vérifiés près de chez vous.
+                  Artisans RGE certifiés près de chez vous.
                 </h2>
               </div>
               <Link
@@ -739,7 +739,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="absolute inset-0">
             <Image
               src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
-              alt="Artisan qualifié sur un chantier de construction en France"
+              alt="Artisan RGE certifié sur un chantier de rénovation énergétique en France"
               fill
               loading="lazy"
               sizes="100vw"

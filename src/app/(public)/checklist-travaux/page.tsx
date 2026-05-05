@@ -611,7 +611,7 @@ export default function ChecklistTravauxPage() {
                 Demander un devis
               </h3>
               <p className="text-sm text-charcoal-600">
-                Devis gratuit et sans engagement d'artisans qualifiés près de chez vous.
+                Devis gratuit et sans engagement d'artisans RGE certifiés près de chez vous.
               </p>
             </Link>
             <Link
@@ -634,7 +634,7 @@ export default function ChecklistTravauxPage() {
             </h2>
             <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez des artisans qualifiés et certifiés près de chez vous. Devis gratuit et sans engagement.'
+                'Trouvez des artisans RGE certifiés près de chez vous. Devis gratuit et sans engagement.'
               }
             </p>
             <Link

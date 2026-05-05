@@ -134,7 +134,7 @@ export default function OutilsPage() {
     {
       question: 'Puis-je sauvegarder ou partager mes résultats ?',
       answer:
-        "Oui. Vous pouvez imprimer ou télécharger un récapitulatif PDF de votre estimation. Vous pouvez aussi transformer directement votre estimation en demande de devis auprès d'un artisan qualifié de votre secteur — toujours gratuitement.",
+        "Oui. Vous pouvez imprimer ou télécharger un récapitulatif PDF de votre estimation. Vous pouvez aussi transformer directement votre estimation en demande de devis auprès d'un artisan RGE certifié de votre secteur — toujours gratuitement.",
     },
     {
       question: 'Quels autres outils sont en préparation ?',

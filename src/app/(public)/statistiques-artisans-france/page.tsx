@@ -190,7 +190,7 @@ const variationMoyenne = getVariationMoyenne()
 // ---------------------------------------------------------------------------
 
 const pageTitle = 'Statistiques Artisans France 2026'
-const pageDescription = `${(totalArtisans / 1000).toFixed(0)}k+ artisans référencés. Chiffres clés du marché artisanal France : répartition géo, tarifs moyens, rénovation, emploi 2026.`
+const pageDescription = `Chiffres clés du marché artisanal France 2026 : ~1,3M d'artisans (estimation INSEE/CMA), répartition géographique, tarifs moyens, rénovation énergétique, emploi. Sources officielles.`
 const pageUrl = `${SITE_URL}/statistiques-artisans-france`
 
 export const metadata: Metadata = {
@@ -488,36 +488,90 @@ export default function StatistiquesArtisansFrancePage() {
             </h1>
 
             <p className="text-lg md:text-xl text-primary-100 max-w-3xl mb-10">
-              Toutes les données essentielles sur le marché artisanal français : nombre d'artisans,
+              Données macro-économiques sur le marché artisanal français : estimations INSEE/CMA,
               répartition géographique, tarifs moyens par métier, rénovation énergétique et
-              perspectives 2026. Données actualisées, sources officielles.
+              perspectives 2026. Sources officielles, chiffres actualisés.
             </p>
 
             {/* Hero stat counters */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">1,3M</p>
-                <p className="text-sm text-primary-100 mt-1">Artisans en France</p>
+                <p className="text-3xl md:text-4xl font-bold">~1,3M</p>
+                <p className="text-sm text-primary-100 mt-1">Artisans en France (CMA 2025)</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">300 Md€</p>
-                <p className="text-sm text-primary-100 mt-1">Chiffre d'affaires</p>
+                <p className="text-sm text-primary-100 mt-1">Chiffre d'affaires (U2P/ISM)</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">
                   {totalArtisans.toLocaleString('fr-FR')}
                 </p>
-                <p className="text-sm text-primary-100 mt-1">Artisans référencés</p>
+                <p className="text-sm text-primary-100 mt-1">
+                  Artisans estimés (INSEE/CMA, 101 dépts)
+                </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">101</p>
                 <p className="text-sm text-primary-100 mt-1">Départements couverts</p>
               </div>
             </div>
+
+            {/* Disclaimer marché vs plateforme */}
+            <p className="text-xs text-primary-200 mt-6 max-w-3xl">
+              Les chiffres présentés ici sont des{' '}
+              <strong>estimations du marché artisanal français</strong> (sources INSEE, CMA, CAPEB,
+              U2P), pas des compteurs internes à ServicesArtisans. Pour notre base interne, voir
+              l'encart « Sur ServicesArtisans » ci-dessous.
+            </p>
           </div>
         </header>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          {/* Encart ServicesArtisans : disambiguation marché vs plateforme */}
+          <aside
+            className="mb-12 bg-green-50 border border-green-200 rounded-xl p-6"
+            aria-label="Périmètre ServicesArtisans"
+          >
+            <h2 className="text-lg font-bold text-green-900 mb-2 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-green-700" />
+              Sur ServicesArtisans : le réseau d'artisans RGE certifiés
+            </h2>
+            <p className="text-sm text-green-800 mb-3">
+              ServicesArtisans est spécialisé sur la <strong>rénovation énergétique</strong>. Notre
+              base recense environ <strong>50 000 fiches d'artisans RGE</strong> issues du registre
+              officiel{' '}
+              <a
+                href="https://france-renov.gouv.fr/annuaire-rge"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-green-900"
+              >
+                france-renov.gouv.fr
+              </a>{' '}
+              (qualifications Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Les chiffres présentés
+              sur cette page sont des{' '}
+              <strong>estimations du marché artisanal français global</strong> (1,3M d'entreprises
+              tous métiers confondus) — distincts du périmètre de notre plateforme.
+            </p>
+            <div className="flex flex-wrap gap-3 text-xs">
+              <Link
+                href="/rge"
+                className="inline-flex items-center gap-1 bg-white text-green-800 border border-green-300 px-3 py-1.5 rounded-full hover:bg-green-100 transition-colors"
+              >
+                Annuaire RGE
+                <ArrowUpRight className="w-3 h-3" />
+              </Link>
+              <Link
+                href="/renovation-energetique"
+                className="inline-flex items-center gap-1 bg-white text-green-800 border border-green-300 px-3 py-1.5 rounded-full hover:bg-green-100 transition-colors"
+              >
+                Guide rénovation énergétique
+                <ArrowUpRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </aside>
+
           {/* Table of Contents */}
           <nav
             className="mb-16 bg-sand-50 rounded-xl p-6 border border-sand-300"
@@ -593,8 +647,8 @@ export default function StatistiquesArtisansFrancePage() {
               />
               <StatCard
                 value={`${totalArtisans.toLocaleString('fr-FR')}`}
-                label="Artisans référencés dans notre base"
-                source="Données SIRENE, ServicesArtisans"
+                label="Artisans estimés en France (101 départements)"
+                source="Calcul ServicesArtisans sur ratios INSEE/CMA/CAPEB"
                 icon={Users}
                 accent="blue"
               />
@@ -1272,15 +1326,15 @@ export default function StatistiquesArtisansFrancePage() {
                   </p>
                 </Link>
                 <Link
-                  href="/services"
+                  href="/rge"
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/20 transition-colors group"
                 >
                   <h3 className="font-bold mb-1 flex items-center gap-2">
-                    Annuaire par métier
+                    Annuaire RGE
                     <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </h3>
                   <p className="text-sm text-primary-100">
-                    Trouvez un artisan qualifié près de chez vous
+                    Artisans certifiés RGE pour votre rénovation énergétique
                   </p>
                 </Link>
                 <Link

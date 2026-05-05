@@ -1261,7 +1261,7 @@ export default function DevisForm({
                   <Check className="w-3.5 h-3.5" /> Sans engagement
                 </span>
                 <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Artisans vérifiés SIREN
+                  <Check className="w-3.5 h-3.5" /> Artisans RGE certifiés
                 </span>
               </div>
 

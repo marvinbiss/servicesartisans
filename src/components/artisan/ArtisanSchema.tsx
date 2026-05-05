@@ -30,7 +30,7 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       height: 512,
     },
     description:
-      'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
+      'Plateforme de mise en relation entre particuliers et artisans RGE certifiés en France',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',

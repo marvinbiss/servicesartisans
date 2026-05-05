@@ -486,7 +486,7 @@ export default function GlossairePage() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Maintenant que vous maîtrisez le vocabulaire, trouvez un professionnel qualifié près de chez vous et demandez un devis gratuit.'
+                'Maintenant que vous maîtrisez le vocabulaire, trouvez un artisan RGE certifié près de chez vous et demandez un devis gratuit.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

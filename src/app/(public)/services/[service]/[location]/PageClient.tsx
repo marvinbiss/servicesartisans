@@ -489,8 +489,8 @@ export default function ServiceLocationPageClient({
                   Aucun {service.name.toLowerCase()} référencé à {location.name} pour le moment
                 </h2>
                 <p className="text-charcoal-500 max-w-md mb-8">
-                  Demandez un devis et nous rechercherons un professionnel qualifié pour vous dans
-                  les plus brefs délais.
+                  Demandez un devis et nous rechercherons un artisan RGE certifié pour vous dans les
+                  plus brefs délais.
                 </p>
                 <Link
                   href={`/services/${serviceSlug || service.slug}/${locationSlug || ''}`}

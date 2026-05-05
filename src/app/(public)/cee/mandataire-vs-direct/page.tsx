@@ -505,8 +505,8 @@ export default function MandataireVsDirectPage() {
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Pour un artisan qualifié RGE qui réalise des travaux éligibles au dispositif CEE, le
-            choix du partenaire — mandataire ou délégataire direct — est opérationnel avant d’être
+            Pour un artisan RGE qui réalise des travaux éligibles au dispositif CEE, le choix du
+            partenaire — mandataire ou délégataire direct — est opérationnel avant d’être
             commercial. Trois critères font la différence au quotidien&nbsp;: la facilité
             d’instruction des dossiers, le délai de versement de la prime au client final, et la
             qualité du contrôle qualité imposé avant dépôt au PNCEE.

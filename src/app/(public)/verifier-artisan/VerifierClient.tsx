@@ -237,7 +237,9 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
                 className="flex items-center justify-between bg-white rounded-xl p-5 shadow-sm border border-sand-300 hover:border-primary-300 hover:shadow-md transition-all group"
               >
                 <div>
-                  <p className="font-semibold text-charcoal-900">Trouver des artisans vérifiés</p>
+                  <p className="font-semibold text-charcoal-900">
+                    Trouver des artisans RGE certifiés
+                  </p>
                   <p className="text-sm text-charcoal-500">Près de chez vous</p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-charcoal-400 group-hover:text-primary-400 transition-colors" />
@@ -375,11 +377,11 @@ export default function VerifierClient({ faqItems }: VerifierClientProps) {
       <section className="py-16 bg-gradient-to-r from-primary-500 to-primary-600">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-white mb-4">
-            Trouvez un artisan vérifié sur ServicesArtisans
+            Trouvez un artisan RGE certifié sur ServicesArtisans
           </h2>
           <p className="text-primary-100 mb-8 text-lg">
-            Des milliers d{"'"}artisans référencés par données SIREN officielles dans toute la
-            France.
+            Près de 50 000 artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit{"'"}EnR),
+            référencés par données SIREN officielles et base ADEME, dans toute la France.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

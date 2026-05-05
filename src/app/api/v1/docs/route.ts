@@ -161,7 +161,7 @@ curl "${SITE_URL}/api/v1/rge/search?specialty=pompe-a-chaleur&limit=50"</code></
 
     <h2>Cache</h2>
     <p>Les réponses sont mises en cache pendant 1 heure avec un <code>stale-while-revalidate</code> de 24 heures.
-    Les données sont agrégées quotidiennement depuis notre base de 940 000+ artisans.</p>
+    Les données sont agrégées quotidiennement depuis notre base d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) synchronisée hebdomadairement avec l'ADEME.</p>
 
     <h2>Limitations</h2>
     <p>Pas de clé API requise. Rate limit : 60 requêtes/minute par IP. Usage commercial : nous contacter.</p>

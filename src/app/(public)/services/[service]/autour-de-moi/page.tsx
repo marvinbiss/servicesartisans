@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const url = `${SITE_URL}${path}`
   const title = `${name} autour de moi — trouver un ${name.toLowerCase()} proche | ${SITE_NAME}`
   const titleRoot = `${name} autour de moi — trouver un ${name.toLowerCase()} proche`
-  const description = `Trouvez un ${name.toLowerCase()} près de chez vous. Géolocalisation + 30 villes les plus demandées. Devis gratuit 24h, artisans vérifiés SIREN.`
+  const description = `Trouvez un ${name.toLowerCase()} RGE certifié près de chez vous. Géolocalisation + 30 villes les plus demandées. Devis gratuit 24h, artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).`
   return {
     title: titleRoot,
     description,
@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     [
       {
         question: `Comment trouver un ${nameLc} près de chez moi ?`,
-        answer: `Cliquez sur "Trouver un ${nameLc} près de moi" pour détecter automatiquement votre commune, ou choisissez parmi les 30 villes listées sur cette page. Vous serez redirigé·e vers la page dédiée à votre ville avec les artisans vérifiés et les tarifs locaux.`,
+        answer: `Cliquez sur "Trouver un ${nameLc} près de moi" pour détecter automatiquement votre commune, ou choisissez parmi les 30 villes listées sur cette page. Vous serez redirigé·e vers la page dédiée à votre ville avec les artisans RGE certifiés et les tarifs locaux.`,
       },
       {
         question: `La géolocalisation est-elle obligatoire ?`,
@@ -125,11 +125,11 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       },
       {
         question: `Combien coûte un devis ?`,
-        answer: `Les devis sont 100% gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans vérifiés (SIREN contrôlé) sous 24h.`,
+        answer: `Les devis sont 100% gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans RGE certifiés (SIREN contrôlé + RGE vérifié ADEME) sous 24h.`,
       },
       {
         question: `Combien d'artisans ${nameLc}s référencez-vous ?`,
-        answer: `Plusieurs milliers d'artisans ${nameLc}s actifs en France, couverts par une base SIRENE mise à jour quotidiennement. Chaque fiche affiche l'ancienneté de l'entreprise et les qualifications RGE le cas échéant.`,
+        answer: `Près de 50 000 artisans RGE certifiés actifs en France, synchronisés avec la base ADEME (france-renov.gouv.fr) et la base SIRENE de l'INSEE quotidiennement. Chaque fiche affiche les qualifications RGE en cours de validité (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).`,
       },
     ],
     {
@@ -180,7 +180,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-charcoal-600">
             <span className="inline-flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-primary-500" /> Artisans vérifiés SIREN
+              <Shield className="w-4 h-4 text-primary-500" /> Artisans RGE certifiés
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-primary-500" /> Devis 24h
@@ -198,8 +198,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           <TldrBlock
             title={`${name} autour de moi — l'essentiel`}
             bullets={[
-              `Géolocalisation 1-clic : trouve un ${nameLc} proche de chez vous`,
-              'Artisans vérifiés SIREN officiel + qualifications RGE sync ADEME',
+              `Géolocalisation 1-clic : trouve un ${nameLc} RGE certifié proche de chez vous`,
+              'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit’EnR) — sync ADEME + SIREN officiel',
               'Devis gratuit sous 24h, sans engagement, lead exclusif',
               '30 villes populaires + couverture nationale 35 000+ communes',
             ]}
@@ -215,10 +215,10 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
           <EnBrefBox
-            summary={`${name} près de chez vous : géolocalisez les artisans vérifiés SIREN dans votre ville en 1 clic. Devis gratuit sous 24h, professionnels qualifiés RGE pour MaPrimeRénov' et CEE quand applicable.`}
+            summary={`${name} près de chez vous : géolocalisez les artisans RGE certifiés dans votre ville en 1 clic. Devis gratuit sous 24h, qualifications RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) éligibles MaPrimeRénov' et CEE.`}
             keyPoints={[
               `Géolocalisation 1-clic — détection automatique de votre ville`,
-              `Vérification SIREN officielle pour chaque ${nameLc}`,
+              `Vérification SIREN officielle + RGE ADEME pour chaque ${nameLc}`,
               `Devis gratuit sous 24h, lead exclusif (jamais partagé)`,
               `Couverture France entière — 35 000+ communes`,
             ]}
@@ -232,8 +232,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             {name}s par ville — 30 villes populaires
           </h2>
           <p className="text-charcoal-600 mb-8 max-w-2xl">
-            Sélectionnez votre ville pour voir les artisans {nameLc}s référencés, les tarifs locaux
-            et les artisans RGE éligibles aux aides.
+            Sélectionnez votre ville pour voir les artisans {nameLc}s RGE certifiés, les tarifs
+            locaux et les aides MaPrimeRénov&apos; / CEE applicables.
           </p>
           <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {cities.map((c) => (
@@ -270,11 +270,11 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               },
               {
                 q: `Combien coûte un devis ?`,
-                a: `Les devis sont 100 % gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans vérifiés (SIREN contrôlé) sous 24h.`,
+                a: `Les devis sont 100 % gratuits et sans engagement. Vous recevez plusieurs propositions d'artisans RGE certifiés (SIREN contrôlé + RGE vérifié ADEME) sous 24h.`,
               },
               {
-                q: `Qu'est-ce qu'un artisan vérifié SIREN ?`,
-                a: `Chaque fiche artisan est rattachée à un numéro SIREN officiel validé auprès de l'INSEE. Nous vérifions l'activité, l'ancienneté et, le cas échéant, les qualifications RGE.`,
+                q: `Qu'est-ce qu'un artisan RGE certifié ?`,
+                a: `Chaque fiche artisan est rattachée à un numéro SIREN officiel validé auprès de l'INSEE et à une qualification RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en cours de validité, vérifiée chaque semaine sur la base ADEME (france-renov.gouv.fr).`,
               },
             ].map((item) => (
               <details

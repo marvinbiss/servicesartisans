@@ -3,7 +3,7 @@ import { services as staticServicesList } from '@/lib/data/france'
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — Artisans qualifiés en France'
+export const alt = 'ServicesArtisans — Artisans RGE certifiés en France'
 export const size = {
   width: 1200,
   height: 630,
@@ -93,7 +93,7 @@ export default async function Image({ params }: { params: Promise<{ service: str
             textAlign: 'center',
           }}
         >
-          {`Artisans qualifiés en France`}
+          {`Artisans RGE certifiés en France`}
         </div>
 
         {/* Sub-subtitle */}

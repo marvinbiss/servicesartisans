@@ -821,11 +821,11 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     })
     combinedFaq.push({
       question: `Comment trouver un ${svcLowerFaq} fiable à ${location.name} ?`,
-      answer: `Pour trouver un ${svcLowerFaq} de confiance à ${location.name}, vérifiez son numéro SIREN, consultez les avis clients et demandez plusieurs devis. ServicesArtisans référence uniquement des artisans vérifiés à ${location.name}${location.department_name ? ` (${location.department_name})` : ''} et permet de comparer les profils, avis et tarifs gratuitement.`,
+      answer: `Pour trouver un ${svcLowerFaq} de confiance à ${location.name}, vérifiez son numéro SIREN, sa qualification RGE, consultez les avis clients et demandez plusieurs devis. ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) à ${location.name}${location.department_name ? ` (${location.department_name})` : ''} et permet de comparer les profils, avis et tarifs gratuitement.`,
     })
     combinedFaq.push({
       question: `Quel est le délai d'intervention d'un ${svcLowerFaq} à ${location.name} ?`,
-      answer: `Le délai moyen d'intervention d'un ${svcLowerFaq} à ${location.name} est de ${trade.averageResponseTime}. Ce délai peut varier selon la saison et la demande locale.${trade.emergencyInfo ? ` En cas d'urgence, certains artisans référencés sur ServicesArtisans proposent une intervention rapide 24h/24.` : ` Sur ServicesArtisans, vous pouvez contacter directement les artisans disponibles pour obtenir un rendez-vous rapide.`}`,
+      answer: `Le délai moyen d'intervention d'un ${svcLowerFaq} à ${location.name} est de ${trade.averageResponseTime}. Ce délai peut varier selon la saison et la demande locale.${trade.emergencyInfo ? ` En cas d'urgence, certains artisans RGE certifiés sur ServicesArtisans proposent une intervention rapide 24h/24.` : ` Sur ServicesArtisans, vous pouvez contacter directement les artisans RGE certifiés disponibles pour obtenir un rendez-vous rapide.`}`,
     })
     if (totalProviderCount > 0) {
       combinedFaq.push({
@@ -972,7 +972,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   // une racine Article bien typée (le Service/LocalBusiness ne suffit pas
   // toujours pour Google Assistant / SGE).
   const dateModifiedIso = monthlyAnchorIso()
-  const articleHeadline = `${service.name} à ${location.name} — Artisans vérifiés ${new Date().getFullYear()}`
+  const articleHeadline = `${service.name} à ${location.name} — Artisans RGE certifiés ${new Date().getFullYear()}`
   // Tier 5 2026-05-04 — Person author dispatched par service slug (cf.
   // service-author.ts mapping défendable). reviewedBy auto via cross-review.
   const SERVICE_AUTHOR = getAuthorForServiceSlug(serviceSlug)
@@ -1038,7 +1038,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     getEnrichedLocalServiceSchema({
       serviceName: trade?.name || service.name,
       serviceType: trade?.name || service.name,
-      description: `${service.name} à ${location.name} — artisans référencés SIREN. Devis gratuit.`,
+      description: `${service.name} à ${location.name} — artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), SIREN officiel. Devis gratuit.`,
       cityName: location.name,
       regionName: location.region_name || '',
       departmentName: location.department_name || '',
@@ -1337,7 +1337,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <GeoPageCTA
           title={`Besoin d'un ${service.name.toLowerCase()} à ${location.name} ?`}
-          subtitle={`Devis gratuit et sans engagement d'artisans vérifiés`}
+          subtitle={`Devis gratuit et sans engagement d'artisans RGE certifiés`}
           service={serviceSlug}
           ville={location.name}
           variant="hero"
@@ -1655,7 +1655,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
               Devis gratuit de {service.name.toLowerCase()} à {location.name}
             </h2>
             <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
-              Comparez les profils et obtenez un devis personnalisé d'artisans vérifiés à{' '}
+              Comparez les profils et obtenez un devis personnalisé d'artisans RGE certifiés à{' '}
               {location.name}.
             </p>
             <Link

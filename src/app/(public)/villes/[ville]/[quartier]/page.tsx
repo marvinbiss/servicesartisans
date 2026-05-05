@@ -69,24 +69,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleHash = Math.abs(hashCode(`title-quartier-${villeSlug}-${quartierSlug}`))
   // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
-    `Artisans à ${quartierName}, ${ville.name}`,
-    `${quartierName} (${ville.name}) — Artisans`,
-    `Trouver un artisan à ${quartierName}`,
-    `${quartierName}, ${ville.name} : devis gratuit`,
-    `Artisans qualifiés — ${quartierName}`,
-    `Artisans ${quartierName} ${ville.name}`,
-    `Artisans ${quartierName}`,
+    `Artisans RGE à ${quartierName}, ${ville.name}`,
+    `${quartierName} (${ville.name}) — Artisans RGE`,
+    `Trouver un artisan RGE à ${quartierName}`,
+    `${quartierName}, ${ville.name} : devis RGE gratuit`,
+    `Artisans RGE certifiés — ${quartierName}`,
+    `Artisans RGE ${quartierName} ${ville.name}`,
+    `Artisans RGE ${quartierName}`,
   ]
   // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
   const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const descHash = Math.abs(hashCode(`desc-quartier-${villeSlug}-${quartierSlug}`))
   const descTemplates = [
-    `Trouvez un artisan qualifié à ${quartierName}, ${ville.name}. ${metaContent.profile.eraLabel}, ${services.length} corps de métier. Devis gratuits.`,
-    `${quartierName} à ${ville.name} (${ville.departementCode}) : artisans référencés SIREN. ${metaContent.profile.eraLabel}. Comparez les devis.`,
-    `Artisans à ${quartierName}, ${ville.name}. ${metaContent.profile.densityLabel}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit en ligne.`,
-    `${services.length} métiers à ${quartierName} (${ville.name}). ${ville.departement}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit.`,
-    `Tous les artisans de ${quartierName}, ${ville.name} (${ville.departementCode}). ${metaContent.profile.eraLabel}. Comparez gratuitement.`,
+    `Trouvez un artisan RGE certifié à ${quartierName}, ${ville.name}. ${metaContent.profile.eraLabel}, ${services.length} corps de métier RGE. Devis gratuits.`,
+    `${quartierName} à ${ville.name} (${ville.departementCode}) : artisans RGE certifiés (SIREN + ADEME). ${metaContent.profile.eraLabel}. Comparez les devis.`,
+    `Artisans RGE à ${quartierName}, ${ville.name}. ${metaContent.profile.densityLabel}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit en ligne.`,
+    `${services.length} métiers RGE à ${quartierName} (${ville.name}). ${ville.departement}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit.`,
+    `Tous les artisans RGE certifiés de ${quartierName}, ${ville.name} (${ville.departementCode}). ${metaContent.profile.eraLabel}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -158,7 +158,7 @@ export default async function QuartierPage({ params }: PageProps) {
   ])
   const collectionSchema = getCollectionPageSchema({
     name: `Artisans à ${quartierName}, ${ville.name}`,
-    description: `Annuaire d'artisans qualifiés dans le quartier ${quartierName} à ${ville.name}. ${services.length} corps de métier disponibles.`,
+    description: `Annuaire d'artisans RGE certifiés dans le quartier ${quartierName} à ${ville.name}. ${services.length} corps de métier RGE disponibles.`,
     url: `/villes/${villeSlug}/${quartierSlug}`,
     itemCount: services.length,
   })
@@ -238,11 +238,11 @@ export default async function QuartierPage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-quartier-${ville.slug}-${quartierSlug}`))
               const h1Templates = [
-                `Artisans à ${quartierName}, ${ville.name}`,
-                `Artisans à ${quartierName} (${ville.name}) : pros qualifiés`,
-                `${quartierName}, ${ville.name} : artisans qualifiés`,
-                `Artisans dans le quartier ${quartierName} à ${ville.name}`,
-                `${ville.name} ${quartierName} — artisans de confiance`,
+                `Artisans RGE à ${quartierName}, ${ville.name}`,
+                `Artisans RGE à ${quartierName} (${ville.name}) : pros certifiés`,
+                `${quartierName}, ${ville.name} : artisans RGE certifiés`,
+                `Artisans RGE dans le quartier ${quartierName} à ${ville.name}`,
+                `${ville.name} ${quartierName} — artisans RGE de confiance`,
               ]
               return (
                 <h1
@@ -303,9 +303,9 @@ export default async function QuartierPage({ params }: PageProps) {
           <TldrBlock
             title={`Artisans à ${quartierName} (${ville.name}) — l'essentiel`}
             bullets={[
-              `${services.length} corps de métier disponibles dans le quartier ${quartierName}`,
+              `${services.length} corps de métier RGE disponibles dans le quartier ${quartierName}`,
               `${content.profile.eraLabel}, ${content.profile.densityLabel.toLowerCase()} — typologies bâti adaptées`,
-              'Artisans vérifiés SIREN officiel, RGE sync ADEME quotidien',
+              'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit’EnR) — sync ADEME quotidien',
               'Devis gratuit sous 24h, lead exclusif (1 demande = 1 artisan)',
             ]}
           />
@@ -615,7 +615,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 </>
               )}{' '}
               ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne
-              garantissons pas les prestations des artisans référencés.
+              garantissons pas les prestations des artisans RGE certifiés.
             </p>
             {content.dataDriven?.dataSources && content.dataDriven.dataSources.length > 0 && (
               <p className="text-xs text-charcoal-400 mt-2">
@@ -722,8 +722,8 @@ export default async function QuartierPage({ params }: PageProps) {
             const ctaHash = Math.abs(hashCode(`cta-${villeSlug}-${quartierSlug}`))
             const ctaTemplates = [
               {
-                h: `Besoin d'un artisan à ${quartierName} ?`,
-                p: `Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés à ${ville.name}.`,
+                h: `Besoin d'un artisan RGE à ${quartierName} ?`,
+                p: `Décrivez votre projet et recevez des devis gratuits d'artisans RGE certifiés à ${ville.name}.`,
               },
               {
                 h: `Travaux sur du ${content.profile.eraLabel.toLowerCase()} à ${quartierName} ?`,

@@ -183,11 +183,11 @@ export default async function ServiceQuartierPage({
   // 7. Varied H1
   const h1Hash = Math.abs(hashCode(`h1-sq-${serviceSlug}-${locationSlug}-${quartierSlug}`))
   const h1Templates = [
-    `${service.name} à ${quartierName}, ${ville.name}`,
-    `${service.name} — Quartier ${quartierName}, ${ville.name}`,
-    `Trouvez un ${svcLower} à ${quartierName} (${ville.name})`,
-    `${service.name} à ${quartierName} : artisans vérifiés`,
-    `${svcLower.charAt(0).toUpperCase() + svcLower.slice(1)}s de confiance à ${quartierName}, ${ville.name}`,
+    `${service.name} RGE à ${quartierName}, ${ville.name}`,
+    `${service.name} RGE — Quartier ${quartierName}, ${ville.name}`,
+    `Trouvez un ${svcLower} RGE à ${quartierName} (${ville.name})`,
+    `${service.name} à ${quartierName} : artisans RGE certifiés`,
+    `${svcLower.charAt(0).toUpperCase() + svcLower.slice(1)}s RGE de confiance à ${quartierName}, ${ville.name}`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 

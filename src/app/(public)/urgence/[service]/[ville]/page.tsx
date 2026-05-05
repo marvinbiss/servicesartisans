@@ -547,7 +547,7 @@ export async function generateMetadata({
   const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
   const descTemplates = [
     `Urgence ${tradeLower} à ${villeData.name} ${priceTag} : intervention rapide 24h/24, week-end inclus. ${trade.averageResponseTime}. Artisans RGE certifiés, devis gratuit.${descReviewSnippet}`,
-    `Dépannage ${tradeLower} urgent à ${villeData.name} ${priceTag} : disponible nuit, soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.${descReviewSnippet}`,
+    `Dépannage ${tradeLower} urgent à ${villeData.name} ${priceTag} : disponible nuit, soir et week-end. ${trade.averageResponseTime}. Artisans RGE certifiés.${descReviewSnippet}`,
     `${trade.name} d'urgence à ${villeData.name} ${priceTag} : intervention rapide 7j/7. Artisans RGE certifiés à proximité. Devis gratuit.${descReviewSnippet}`,
     `Besoin d'un ${tradeLower} en urgence à ${villeData.name} ? Tarifs ${priceTag}, intervention rapide soir et week-end. ${trade.averageResponseTime}.${descReviewSnippet}`,
     `Urgence ${tradeLower} ${villeData.name} ${priceTag} : artisans disponibles pour intervention immédiate 24h/24. ${trade.averageResponseTime}. Devis gratuit.${descReviewSnippet}`,

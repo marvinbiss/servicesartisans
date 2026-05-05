@@ -388,7 +388,7 @@ export default function AvantApresPage() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez les artisans qualifiés pour réaliser votre propre transformation. Devis gratuit et sans engagement.'
+                'Trouvez les artisans RGE certifiés pour réaliser votre propre transformation. Devis gratuit et sans engagement.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

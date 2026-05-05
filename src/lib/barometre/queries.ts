@@ -7,6 +7,18 @@
  * utilisant ces données soient éligibles au CDN caching (ISR).
  * Sans ce wrapper, les appels Supabase JS (fetch tiers) ne passent pas par le
  * cache Next.js, ce qui force un rendu dynamique à chaque requête.
+ *
+ * ⚠️ PIVOT FULL RGE 2026-05-05 — la table source `barometre_stats` agrège TOUS
+ * les providers actifs (RGE + non-RGE), pas uniquement les artisans RGE certifiés.
+ * Toutes les fonctions de ce module retournent donc des `nb_artisans` qui ne sont
+ * PAS RGE-filtered. Pour les pages publiques qui doivent afficher un compte
+ * RGE-only, utiliser `getProviderCount()` / `getProviderCountByDepartment()` /
+ * `getProviderCountByRegion()` de `@/lib/data/stats.ts` (RGE-default depuis
+ * 2026-05-05). Workaround temporaire en place sur le baromètre national :
+ * si totalArtisans > 75 000 → fallback ~50 000 (cf. Vague 2).
+ *
+ * Roadmap : ajouter colonne `nb_artisans_rge` à `barometre_stats` + recron pour
+ * supprimer le workaround et exposer la valeur RGE directement.
  */
 
 import { unstable_cache } from 'next/cache'
@@ -161,7 +173,24 @@ export async function getStatsByDepartement(deptCode: string): Promise<Barometre
   })(deptCode)
 }
 
-/** Stats globales nationales (somme de tous les métiers niveau national) */
+/**
+ * Stats globales nationales (somme de tous les métiers niveau national).
+ *
+ * ⚠️ PIVOT FULL RGE 2026-05-05 — la table `barometre_stats` n'est PAS RGE-only :
+ * `nb_artisans` agrège tous providers actifs (RGE + non-RGE), pas juste les
+ * RGE certifiés. La fonction renvoie donc un `totalArtisans` qui inclut des
+ * artisans hors-RGE. Les consumers SSR/UI publics doivent :
+ *   1) soit re-borner la valeur (workaround Vague 2 : si totalArtisans > 75 000,
+ *      remplacer par ~50 000 estimation RGE),
+ *   2) soit re-filtrer côté DB en utilisant `getProviderCount()` de
+ *      `@/lib/data/stats.ts` (RGE-default) pour le tile "X artisans".
+ *
+ * `tauxVerifGlobal` reflète la verification SIREN, PAS la certification RGE.
+ *
+ * Tant que la table `barometre_stats` n'a pas une colonne `nb_artisans_rge`
+ * dédiée + un cron de resync, ne JAMAIS afficher `totalArtisans` brut sur une
+ * page publique sans encadrement copy "tous corps de métier confondus".
+ */
 async function _getNationalStats(): Promise<NationalStats> {
   try {
     const supabase = createAdminClient()

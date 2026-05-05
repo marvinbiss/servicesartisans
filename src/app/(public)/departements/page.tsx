@@ -19,14 +19,14 @@ import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Artisans par Département',
+  title: 'Artisans RGE par Département',
   description:
-    "Annuaire d'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous. Devis gratuits, sans engagement.",
+    "Annuaire d'artisans RGE certifiés dans les 101 départements français. Trouvez un artisan RGE certifié près de chez vous pour vos travaux de rénovation énergétique. Devis gratuits, sans engagement.",
   alternates: getAlternates(`/departements`),
   openGraph: {
-    title: 'Artisans par Département — 101 Départements',
+    title: 'Artisans RGE par Département — 101 Départements',
     description:
-      "Annuaire d'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.",
+      "Annuaire d'artisans RGE certifiés dans les 101 départements français. Trouvez un artisan RGE certifié près de chez vous.",
     url: `${SITE_URL}/departements`,
     type: 'website',
     images: [
@@ -34,15 +34,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Artisans par département',
+        alt: 'ServicesArtisans — Artisans RGE par département',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Artisans par Département — 101 Départements',
+    title: 'Artisans RGE par Département — 101 Départements',
     description:
-      "Annuaire d'artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.",
+      "Annuaire d'artisans RGE certifiés dans les 101 départements français. Trouvez un artisan RGE certifié près de chez vous.",
   },
 }
 
@@ -73,8 +73,8 @@ export default async function DepartementsIndexPage() {
     { name: 'Départements', url: '/departements' },
   ])
   const collectionPageSchema = getCollectionPageSchema({
-    name: `Artisans par département — 101 départements français`,
-    description: `Annuaire de ${formatProviderCount(artisanCount)} artisans référencés dans les 101 départements métropolitains et d'outre-mer.`,
+    name: `Artisans RGE par département — 101 départements français`,
+    description: `Annuaire de ${formatProviderCount(artisanCount)} artisans RGE certifiés dans les 101 départements métropolitains et d'outre-mer.`,
     url: '/departements',
     itemCount: departements.length,
   })
@@ -82,26 +82,28 @@ export default async function DepartementsIndexPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     '@id': `${SITE_URL}/departements#article`,
-    headline: 'Annuaire artisans par département — 101 départements français',
-    description: `Annuaire de ${formatProviderCount(artisanCount)} artisans référencés dans les 101 départements métropolitains et d'outre-mer. Recherche par région, métier et département.`,
+    headline: 'Annuaire artisans RGE par département — 101 départements français',
+    description: `Annuaire de ${formatProviderCount(artisanCount)} artisans RGE certifiés dans les 101 départements métropolitains et d'outre-mer. Recherche par région, métier et département pour vos travaux de rénovation énergétique.`,
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/departements`,
     mainEntityOfPage: `${SITE_URL}/departements`,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    articleSection: 'Annuaire territorial',
+    articleSection: 'Annuaire territorial RGE',
     keywords: [
       'départements France',
-      'annuaire artisans',
+      'annuaire artisans RGE',
+      'artisans RGE certifiés',
       '101 départements',
       'métropole DROM',
       'SIRET',
       'RGE ADEME',
+      'rénovation énergétique',
     ].join(', '),
     about: [
       { '@type': 'Country', name: 'France' },
       { '@type': 'Thing', name: 'Départements français' },
-      { '@type': 'Thing', name: 'Annuaire artisans territorial' },
+      { '@type': 'Thing', name: 'Annuaire artisans RGE territorial' },
     ],
     datePublished: '2026-01-15T08:00:00+02:00',
     dateModified: monthlyAnchorIso(),
@@ -125,34 +127,34 @@ export default async function DepartementsIndexPage() {
 
   const enBrefPoints: string[] = [
     `${departements.length} départements couverts (96 métropolitains + 5 DROM)`,
-    `${formatProviderCount(artisanCount)} artisans référencés en France`,
+    `${formatProviderCount(artisanCount)} artisans RGE certifiés en France`,
     `${regions.length} régions · ${services.length} corps de métier`,
     `Vérification SIRET INSEE + qualifications RGE ADEME synchronisées quotidiennement`,
   ]
 
   const tldrBullets: string[] = [
-    `${departements.length} départements français couverts (métropole + DROM 971/972/973/974/976) — annuaire de ${formatProviderCount(artisanCount)} artisans référencés.`,
-    `Sélectionner un département → page dédiée listant les artisans par métier (plombier, électricien, chauffagiste, menuisier...) avec coordonnées + certifications RGE + avis vérifiés.`,
+    `${departements.length} départements français couverts (métropole + DROM 971/972/973/974/976) — annuaire de ${formatProviderCount(artisanCount)} artisans RGE certifiés.`,
+    `Sélectionner un département → page dédiée listant les artisans RGE par métier (chauffagiste, pompe à chaleur, isolation, plombier, électricien...) avec coordonnées + certifications RGE + avis vérifiés.`,
     `Sources : SIRENE INSEE (vérification SIRET), ADEME (qualifications RGE), data.gouv.fr (DVF, Géorisques, Météo-France) — synchronisation quotidienne.`,
-    `Notre rôle : mise en relation gratuite avec un artisan vérifié, devis sous 24 h, sans engagement.`,
+    `Notre rôle : mise en relation gratuite avec un artisan RGE certifié, devis sous 24 h, sans engagement.`,
   ]
 
   const faqSchema = getFAQSchema([
     {
-      question: 'Comment trouver un artisan dans mon département ?',
-      answer: `Sélectionnez votre département dans la liste ci-dessus (classement par région). La page départementale liste les artisans par métier (plombier, électricien, chauffagiste, menuisier...) avec leurs coordonnées, certifications RGE et avis vérifiés. ${SITE_NAME} synchronise quotidiennement les bases SIRENE et ADEME pour garantir l'exactitude des données.`,
+      question: 'Comment trouver un artisan RGE dans mon département ?',
+      answer: `Sélectionnez votre département dans la liste ci-dessus (classement par région). La page départementale liste les artisans RGE certifiés par métier (chauffagiste, pompe à chaleur, isolation, plombier, électricien...) avec leurs coordonnées, certifications RGE et avis vérifiés. ${SITE_NAME} synchronise quotidiennement les bases SIRENE et ADEME pour garantir l'exactitude des données.`,
     },
     {
-      question: "Combien d'artisans sont référencés sur ServicesArtisans ?",
-      answer: `${formatProviderCount(artisanCount)} artisans actifs sont référencés dans les 101 départements français métropolitains et d'outre-mer. Toutes les entreprises sont vérifiées via leur numéro SIRET à l'INSEE et, pour celles certifiées RGE, via la base officielle de l'ADEME (france-renov.gouv.fr).`,
+      question: "Combien d'artisans RGE sont référencés sur ServicesArtisans ?",
+      answer: `${formatProviderCount(artisanCount)} artisans actifs sont référencés dans les 101 départements français métropolitains et d'outre-mer. Toutes les entreprises sont vérifiées via leur numéro SIRET à l'INSEE et, pour les artisans RGE certifiés, via la base officielle de l'ADEME (france-renov.gouv.fr).`,
     },
     {
       question: 'Les artisans sont-ils certifiés RGE ?',
-      answer: `${rgeActiveCount} artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement) à ce jour. Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier + RGE pour trouver un artisan éligible aux aides.`,
+      answer: `${rgeActiveCount} artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement) à ce jour. Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier RGE pour trouver un artisan RGE certifié éligible aux aides.`,
     },
     {
       question: "Les départements d'outre-mer sont-ils couverts ?",
-      answer: `Oui, les 5 DROM (Guadeloupe 971, Martinique 972, Guyane 973, La Réunion 974, Mayotte 976) sont couverts avec un annuaire d'artisans locaux. Les barèmes d'aides (MaPrimeRénov', CEE) sont adaptés aux spécificités ultramarines : zones climatiques C1/C2/C3 distinctes, plafonds de ressources majorés.`,
+      answer: `Oui, les 5 DROM (Guadeloupe 971, Martinique 972, Guyane 973, La Réunion 974, Mayotte 976) sont couverts avec un annuaire d'artisans RGE certifiés locaux. Les barèmes d'aides (MaPrimeRénov', CEE) sont adaptés aux spécificités ultramarines : zones climatiques C1/C2/C3 distinctes, plafonds de ressources majorés.`,
     },
   ])
 
@@ -246,8 +248,8 @@ export default async function DepartementsIndexPage() {
             </h1>
             <p className="text-lg md:text-xl text-charcoal-400 max-w-2xl mx-auto leading-relaxed">
               {artisanCount > 0
-                ? `${formatProviderCount(artisanCount)} artisans référencés`
-                : "Des milliers d'artisans référencés"}{' '}
+                ? `${formatProviderCount(artisanCount)} artisans RGE certifiés`
+                : "Des milliers d'artisans RGE certifiés"}{' '}
               dans tous les départements français. Recherche gratuite, devis sans engagement.
             </p>
           </div>
@@ -274,7 +276,7 @@ export default async function DepartementsIndexPage() {
                 <div className="text-xl font-bold text-white">
                   {artisanCount > 0 ? formatProviderCount(artisanCount) : '—'}
                 </div>
-                <div className="text-xs text-charcoal-400">Artisans référencés</div>
+                <div className="text-xs text-charcoal-400">Artisans RGE certifiés</div>
               </div>
             </div>
           </div>
@@ -301,7 +303,7 @@ export default async function DepartementsIndexPage() {
             Tous les départements par région
           </h2>
           <p className="text-charcoal-500 max-w-lg mx-auto">
-            Sélectionnez un département pour accéder aux artisans de votre secteur.
+            Sélectionnez un département pour accéder aux artisans RGE certifiés de votre secteur.
           </p>
         </div>
 
@@ -359,10 +361,10 @@ export default async function DepartementsIndexPage() {
         />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-semibold text-white mb-4 tracking-tight">
-            Besoin d'un artisan ?
+            Besoin d'un artisan RGE ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
+            Décrivez votre projet et recevez des devis gratuits d'artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

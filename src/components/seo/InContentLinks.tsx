@@ -420,7 +420,7 @@ const snippetHubService: SnippetFn = (ctx) => {
       >
         annuaire {ctx.serviceLower} en France
       </Link>{' '}
-      pour trouver un professionnel vérifié dans votre ville.
+      pour trouver un artisan RGE certifié dans votre ville.
     </>,
     <>
       Besoin d&#39;un {ctx.serviceLower} ailleurs en France ? Notre{' '}

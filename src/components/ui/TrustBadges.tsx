@@ -9,7 +9,7 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Database,
       label: 'Données SIREN officielles',
-      description: "Chaque artisan vérifié via les registres officiels de l'État",
+      description: 'Chaque artisan RGE vérifié via les registres officiels (INSEE + ADEME)',
       color: 'text-primary-500',
       bgColor: 'bg-primary-50',
     },

@@ -406,7 +406,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
                 </h3>
               </div>
               <p className="text-sm text-charcoal-500">
-                Devis gratuit et sans engagement de professionnels vérifiés.
+                Devis gratuit et sans engagement d'artisans RGE certifiés.
               </p>
             </Link>
           </div>

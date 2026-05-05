@@ -129,7 +129,7 @@ export default function ComparaisonPage() {
     {
       question: 'Comment obtenir un devis après avoir choisi une solution ?',
       answer:
-        "Depuis chaque comparatif, vous pouvez demander un devis gratuit auprès d'artisans qualifiés (RGE si travaux d'économie d'énergie). Le devis est exclusif : un seul artisan reçoit votre demande, pas de mise en concurrence sauvage. La réponse intervient en 24 à 48 h ouvrées.",
+        "Depuis chaque comparatif, vous pouvez demander un devis gratuit auprès d'artisans RGE certifiés. Le devis est exclusif : un seul artisan reçoit votre demande, pas de mise en concurrence sauvage. La réponse intervient en 24 à 48 h ouvrées.",
     },
   ])
 
@@ -234,9 +234,7 @@ export default function ComparaisonPage() {
               {"Besoin d'un artisan pour vos travaux ?"}
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
-              {
-                'Trouvez des professionnels qualifiés près de chez vous et demandez un devis gratuit.'
-              }
+              {'Trouvez des artisans RGE certifiés près de chez vous et demandez un devis gratuit.'}
             </p>
             <Link
               href="/devis"

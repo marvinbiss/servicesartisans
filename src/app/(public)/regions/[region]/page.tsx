@@ -168,7 +168,7 @@ export default async function RegionPage({ params }: PageProps) {
   ])
   const collectionSchema = getCollectionPageSchema({
     name: `Artisans ${getRegionPreposition(region.name)}`,
-    description: `Trouvez un artisan qualifié ${getRegionPreposition(region.name)}. ${deptCount} départements, ${cityCount} villes couvertes.`,
+    description: `Trouvez un artisan RGE certifié ${getRegionPreposition(region.name)}. ${deptCount} départements, ${cityCount} villes couvertes.`,
     url: `/regions/${regionSlug}`,
     itemCount: cityCount,
   })
@@ -238,7 +238,7 @@ export default async function RegionPage({ params }: PageProps) {
     `Annuaire d'artisans ${getRegionArticle(region.name)} — ${deptCount} départements, ${cityCount} villes, ${allServices.length} corps de métier.`,
     `Profil régional : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.geoLabel.toLowerCase()}, ${content.profile.economyLabel.toLowerCase()}.`,
     `Maillage territorial : couverture des ${deptCount} départements via ${cityCount} villes, du chef-lieu de région aux communes périphériques.`,
-    `Notre rôle : mise en relation gratuite avec un artisan vérifié SIREN, devis sous 24 h, sans engagement.`,
+    `Notre rôle : mise en relation gratuite avec un artisan RGE certifié, devis sous 24 h, sans engagement.`,
   ]
 
   return (
@@ -299,11 +299,11 @@ export default async function RegionPage({ params }: PageProps) {
             {(() => {
               const h1Hash = Math.abs(hashCode(`h1-region-${region.slug}`))
               const h1Templates = [
-                `Artisans ${getRegionPreposition(region.name)}`,
-                `Artisans ${getRegionPreposition(region.name)} : annuaire par ville`,
-                `${region.name} : artisans par département`,
-                `Artisans qualifiés ${getRegionPreposition(region.name)}`,
-                `Tous les artisans ${getRegionArticle(region.name)}`,
+                `Artisans RGE ${getRegionPreposition(region.name)}`,
+                `Artisans RGE ${getRegionPreposition(region.name)} : annuaire par ville`,
+                `${region.name} : artisans RGE par département`,
+                `Artisans RGE certifiés ${getRegionPreposition(region.name)}`,
+                `Tous les artisans RGE ${getRegionArticle(region.name)}`,
               ]
               return (
                 <h1

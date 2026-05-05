@@ -195,7 +195,7 @@ export default function WidgetPage() {
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
                 <div style={{ marginTop: 10, fontSize: 10, color: '#a09a92' }}>
-                  Professionnel référencé sur <span style={{ color: '#E86B4B' }}>{SITE_NAME}</span>
+                  Artisan RGE certifié sur <span style={{ color: '#E86B4B' }}>{SITE_NAME}</span>
                 </div>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function WidgetPage() {
             {[
               {
                 title: 'Renforcez votre crédibilité',
-                desc: "Montrez à vos visiteurs que vous êtes un professionnel référencé sur l'annuaire ServicesArtisans, basé sur les données SIREN officielles.",
+                desc: "Montrez à vos visiteurs que vous êtes un artisan RGE certifié sur l'annuaire ServicesArtisans, basé sur les données SIREN officielles et la base ADEME france-renov.gouv.fr.",
               },
               {
                 title: 'Améliorez votre SEO',
