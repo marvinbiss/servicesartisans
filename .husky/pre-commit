@@ -1,76 +1,23 @@
 #!/usr/bin/env sh
-sh scripts/gitleaks-precommit.sh || exit 1
-node scripts/check-migration-unique.mjs || exit 1
-node scripts/audit-migration-search-path.mjs || exit 1
-node scripts/audit-rls-coverage.mjs --strict || exit 1
-node scripts/audit-canonicals.mjs --strict || exit 1
-node scripts/audit-revalidate.mjs --strict || exit 1
-node scripts/audit-robots-sitemaps.mjs --strict || exit 1
-node scripts/audit-sitemap-coverage.mjs --strict || exit 1
-node scripts/audit-hreflang.mjs --strict || exit 1
-node scripts/audit-jsonld.mjs --strict || exit 1
-node scripts/audit-orphan-pages.mjs --strict || exit 1
-node scripts/audit-meta-quality.mjs --strict || exit 1
-node scripts/audit-dynamic-meta.mjs --strict || exit 1
-node scripts/audit-redirects.mjs --strict || exit 1
-node scripts/audit-noindex-sitemap.mjs --strict || exit 1
-node scripts/audit-internal-links-404.mjs --strict || exit 1
-node scripts/audit-jsonld-integrity.mjs --strict || exit 1
-node scripts/audit-jsonld-escape.mjs --strict || exit 1
-node scripts/audit-sitemap-unicity.mjs --strict || exit 1
-node scripts/audit-opengraph.mjs --strict || exit 1
-node scripts/audit-breadcrumbs.mjs --strict || exit 1
-node scripts/audit-image-alt.mjs --strict || exit 1
-node scripts/audit-h1-uniqueness.mjs --strict || exit 1
-node scripts/audit-anchor-text.mjs --strict || exit 1
-node scripts/audit-schema-types.mjs --strict || exit 1
-node scripts/audit-link-depth.mjs --strict || exit 1
-node scripts/audit-external-links.mjs --strict || exit 1
-node scripts/audit-url-normalization.mjs --strict || exit 1
-node scripts/audit-favicon-viewport.mjs --strict || exit 1
-node scripts/audit-html-lang.mjs --strict || exit 1
-node scripts/audit-heading-hierarchy.mjs --strict || exit 1
-node scripts/audit-content-depth.mjs --strict || exit 1
-node scripts/audit-aria-landmarks.mjs --strict || exit 1
-node scripts/audit-schema-required-fields.mjs --strict || exit 1
-node scripts/audit-near-duplicates.mjs --strict || exit 1
-node scripts/audit-crawl-budget.mjs --strict || exit 1
-node scripts/audit-core-web-vitals.mjs --strict || exit 1
-node scripts/audit-eeat-dom-signals.mjs --strict || exit 1
-node scripts/audit-crawl-traps.mjs --strict || exit 1
-node scripts/audit-hreflang-symmetry.mjs --strict || exit 1
-node scripts/audit-cocon-semantique.mjs --strict || exit 1
-node scripts/audit-robots-directives.mjs --strict || exit 1
-node scripts/audit-ahrefs-first-rule.mjs --strict || exit 1
-node scripts/audit-rge-template.mjs --strict || exit 1
-node scripts/audit-aides-hub.mjs --strict || exit 1
-node scripts/audit-pac-cluster.mjs --strict || exit 1
-node scripts/audit-cee-rge-mapping.mjs --strict || exit 1
-node scripts/audit-vmc-cluster.mjs --strict || exit 1
-node scripts/audit-soft404-coverage.mjs --strict || exit 1
-node scripts/audit-blog-ctr-titles.mjs --strict || exit 1
-node scripts/audit-places-coverage.mjs --threshold 80 || exit 1
-node scripts/audit-component-coverage.mjs --threshold 55 --strict || exit 1
-node scripts/audit-search-pages-coverage.mjs --threshold 85 --strict || exit 1
-node scripts/audit-claude-md-mig-drift.mjs --strict || exit 1
-node scripts/audit-unclaimed-cta-rules.mjs --strict || exit 1
-node scripts/audit-thin-pages-coverage.mjs --threshold 95 --strict || exit 1
-node scripts/audit-funnel-devis-fail-soft.mjs --strict || exit 1
-node scripts/audit-cron-sentry-coverage.mjs --threshold 95 --strict || exit 1
-node scripts/audit-lead-exclusivity-rules.mjs --strict || exit 1
-node scripts/audit-webhook-signatures.mjs --strict || exit 1
-node scripts/audit-pipedrive-3-canaux.mjs --strict || exit 1
-node scripts/audit-rls-pii-tables.mjs --strict || exit 1
-node scripts/audit-schema-cohesion.mjs --strict || exit 1
-node scripts/audit-indexnow-coverage.mjs --strict || exit 1
-node scripts/audit-middleware-invariants.mjs --strict || exit 1
-node scripts/audit-rge-atomic-swap.mjs --strict || exit 1
-node scripts/audit-reviews-flywheel.mjs --strict || exit 1
-node scripts/audit-rate-limit-failopen.mjs --strict || exit 1
-node scripts/audit-cee-mandataire-flow.mjs --strict || exit 1
-node scripts/audit-provider-claim-flow.mjs --strict || exit 1
-node scripts/audit-rge-cee-linking.mjs --strict || exit 1
-node scripts/audit-authors-honest-eeat.mjs --strict || exit 1
-node scripts/audit-platform-invariants.mjs --strict || exit 1
-node scripts/loop-kill-switch.mjs --strict || exit 1
+# Pre-commit hook — sécurité + audits parallèles + lint staged.
+#
+# Architecture (2026-05-05 fix dette technique #1) :
+#   1. Fast-fail security : gitleaks scan staged secrets
+#   2. Migration uniqueness : pas de double numéro
+#   3. Audits anti-régression PARALLÈLES : la liste source-de-vérité est
+#      `.husky/audits.list` (un audit par ligne). L'orchestrateur
+#      `scripts/run-audits-parallel.mjs` lit ce fichier et spawn tous les
+#      audits en parallèle. Speedup mesuré 5.2x (18.4s → 3.6s sur 71 audits).
+#   4. Loop kill-switch : sentinelle ahrefs gaps + bloat + drift.
+#      DOIT rester séquentiel après les audits (lit plan-coverage).
+#   5. lint-staged : ESLint + Prettier sur les fichiers stagés.
+#
+# Pour ajouter/désactiver un audit : éditer `.husky/audits.list` (pas ce fichier).
+
+set -e
+
+sh scripts/gitleaks-precommit.sh
+node scripts/check-migration-unique.mjs
+node scripts/run-audits-parallel.mjs --strict
+node scripts/loop-kill-switch.mjs --strict
 npx lint-staged

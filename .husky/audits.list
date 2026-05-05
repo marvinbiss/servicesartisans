@@ -1,0 +1,78 @@
+# Pre-commit audit list — single source of truth.
+# Format : un audit par ligne, args inclus. Lignes vides ou `#` ignorées.
+# Tous ces audits sont exécutés EN PARALLÈLE par scripts/run-audits-parallel.mjs.
+#
+# Ajouter un audit : append `audit-XXX.mjs [--args]` ci-dessous.
+# Désactiver temporairement : préfixer la ligne par `#`.
+
+audit-migration-search-path.mjs
+audit-rls-coverage.mjs --strict
+audit-canonicals.mjs --strict
+audit-revalidate.mjs --strict
+audit-robots-sitemaps.mjs --strict
+audit-sitemap-coverage.mjs --strict
+audit-hreflang.mjs --strict
+audit-jsonld.mjs --strict
+audit-orphan-pages.mjs --strict
+audit-meta-quality.mjs --strict
+audit-dynamic-meta.mjs --strict
+audit-redirects.mjs --strict
+audit-noindex-sitemap.mjs --strict
+audit-internal-links-404.mjs --strict
+audit-jsonld-integrity.mjs --strict
+audit-jsonld-escape.mjs --strict
+audit-sitemap-unicity.mjs --strict
+audit-opengraph.mjs --strict
+audit-breadcrumbs.mjs --strict
+audit-image-alt.mjs --strict
+audit-h1-uniqueness.mjs --strict
+audit-anchor-text.mjs --strict
+audit-schema-types.mjs --strict
+audit-link-depth.mjs --strict
+audit-external-links.mjs --strict
+audit-url-normalization.mjs --strict
+audit-favicon-viewport.mjs --strict
+audit-html-lang.mjs --strict
+audit-heading-hierarchy.mjs --strict
+audit-content-depth.mjs --strict
+audit-aria-landmarks.mjs --strict
+audit-schema-required-fields.mjs --strict
+audit-near-duplicates.mjs --strict
+audit-crawl-budget.mjs --strict
+audit-core-web-vitals.mjs --strict
+audit-eeat-dom-signals.mjs --strict
+audit-crawl-traps.mjs --strict
+audit-hreflang-symmetry.mjs --strict
+audit-cocon-semantique.mjs --strict
+audit-robots-directives.mjs --strict
+audit-ahrefs-first-rule.mjs --strict
+audit-rge-template.mjs --strict
+audit-aides-hub.mjs --strict
+audit-pac-cluster.mjs --strict
+audit-cee-rge-mapping.mjs --strict
+audit-vmc-cluster.mjs --strict
+audit-soft404-coverage.mjs --strict
+audit-blog-ctr-titles.mjs --strict
+audit-places-coverage.mjs --threshold 80
+audit-component-coverage.mjs --threshold 55 --strict
+audit-search-pages-coverage.mjs --threshold 85 --strict
+audit-claude-md-mig-drift.mjs --strict
+audit-unclaimed-cta-rules.mjs --strict
+audit-thin-pages-coverage.mjs --threshold 95 --strict
+audit-funnel-devis-fail-soft.mjs --strict
+audit-cron-sentry-coverage.mjs --threshold 95 --strict
+audit-lead-exclusivity-rules.mjs --strict
+audit-webhook-signatures.mjs --strict
+audit-pipedrive-3-canaux.mjs --strict
+audit-rls-pii-tables.mjs --strict
+audit-schema-cohesion.mjs --strict
+audit-indexnow-coverage.mjs --strict
+audit-middleware-invariants.mjs --strict
+audit-rge-atomic-swap.mjs --strict
+audit-reviews-flywheel.mjs --strict
+audit-rate-limit-failopen.mjs --strict
+audit-cee-mandataire-flow.mjs --strict
+audit-provider-claim-flow.mjs --strict
+audit-rge-cee-linking.mjs --strict
+audit-authors-honest-eeat.mjs --strict
+audit-platform-invariants.mjs --strict
