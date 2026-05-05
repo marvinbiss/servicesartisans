@@ -517,6 +517,36 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-provider-claim-flow
+    pillar: 3
+    title: Anti-régression flow revendication fiche artisan (supply-side Pillar #1)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-provider-claim-flow.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (supply pipeline)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:architecture + ceo-strategy-2026-04-20 (Pillar #1 supply 19/970K)
+    notes: >-
+      9 patterns lock-in pipeline revendication fiche artisan : (1) mig 314
+      provider_claims présente, (2) CHECK status IN ('pending','approved',
+      'rejected') canonical, (3) siret_provided NOT NULL + rejection_reason,
+      (4) aucune mig >314 ne touche provider_claims status avec valeurs
+      hors-canonical, (5) /api/artisan/claim valide regex SIRET 9/14 chiffres,
+      (6) approveClaim update providers SET user_id + claimed_at + claimed_by,
+      (7) approveClaim filtre .is('user_id', null) anti-race, (8) cron
+      claim-auto-approve appelle approveClaim, (9) /api/admin/claims gated
+      requirePermission. 100% pondéré 14/14. Régression = supply-side
+      Pillar #1 cassé OU race condition double claim sur même fiche OU
+      bypass workflow d'approbation = fiches volées par tiers.
   - id: P3-cee-mandataire-flow
     pillar: 3
     title: Anti-régression flow Mandataire CEE (cee_mandats + Yousign + R.221-1)
