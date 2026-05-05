@@ -11,9 +11,7 @@ import {
   Droplets,
   Wind,
   Thermometer,
-  Sparkles,
   ArrowRight,
-  TrendingUp,
   Award,
   MapPin,
   Axe,
@@ -27,6 +25,8 @@ import {
   PlugZap,
   Factory,
   ClipboardCheck,
+  CheckCircle2,
+  Sparkles,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import TldrBlock from '@/components/flagship/TldrBlock'
@@ -46,10 +46,8 @@ import { services as staticServicesList } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
-// Set of valid service slugs that have dedicated pages
 const validServiceSlugs = new Set(staticServicesList.map((s) => s.slug))
 
-// ISR: Revalidate every hour
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
@@ -83,11 +81,58 @@ export const metadata: Metadata = {
   },
 }
 
-const allServices = [
+type ServiceCategoryColor = 'primary' | 'accent' | 'secondary' | 'sand'
+
+interface ServiceItem {
+  name: string
+  slug: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+}
+
+interface ServiceCategory {
+  category: string
+  icon: React.ComponentType<{ className?: string }>
+  color: ServiceCategoryColor
+  services: ServiceItem[]
+}
+
+const allServices: ServiceCategory[] = [
+  {
+    category: 'Énergie & Rénovation',
+    icon: Leaf,
+    color: 'accent',
+    services: [
+      {
+        name: 'Pompe à chaleur',
+        slug: 'pompe-a-chaleur',
+        icon: Thermometer,
+        description: 'Installation et entretien PAC',
+      },
+      {
+        name: 'Panneaux solaires',
+        slug: 'panneaux-solaires',
+        icon: Sun,
+        description: 'Photovoltaïque et solaire thermique',
+      },
+      {
+        name: 'Isolation thermique',
+        slug: 'isolation-thermique',
+        icon: Snowflake,
+        description: 'ITE, ITI, combles, planchers',
+      },
+      {
+        name: 'Rénovation énergétique',
+        slug: 'renovation-energetique',
+        icon: Leaf,
+        description: "Audit, travaux globaux, aides MaPrimeRénov'",
+      },
+    ],
+  },
   {
     category: 'Plomberie & Chauffage',
     icon: Droplets,
-    color: 'blue',
+    color: 'primary',
     services: [
       {
         name: 'Plombier',
@@ -124,7 +169,7 @@ const allServices = [
   {
     category: 'Électricité & Domotique',
     icon: Zap,
-    color: 'amber',
+    color: 'secondary',
     services: [
       {
         name: 'Électricien',
@@ -143,7 +188,7 @@ const allServices = [
   {
     category: 'Gros œuvre & Maçonnerie',
     icon: HardHat,
-    color: 'orange',
+    color: 'sand',
     services: [
       {
         name: 'Maçon',
@@ -184,9 +229,9 @@ const allServices = [
     ],
   },
   {
-    category: 'Menuiserie & Agencement',
+    category: 'Menuiserie & Finitions',
     icon: Hammer,
-    color: 'violet',
+    color: 'primary',
     services: [
       {
         name: 'Menuisier',
@@ -194,13 +239,6 @@ const allServices = [
         icon: Hammer,
         description: 'Fenêtres, portes, escaliers, placards',
       },
-    ],
-  },
-  {
-    category: 'Finitions & Revêtements',
-    icon: PaintBucket,
-    color: 'pink',
-    services: [
       {
         name: 'Peintre en bâtiment',
         slug: 'peintre-en-batiment',
@@ -216,40 +254,9 @@ const allServices = [
     ],
   },
   {
-    category: 'Énergie & Rénovation',
-    icon: Leaf,
-    color: 'emerald',
-    services: [
-      {
-        name: 'Pompe à chaleur',
-        slug: 'pompe-a-chaleur',
-        icon: Thermometer,
-        description: 'Installation et entretien PAC',
-      },
-      {
-        name: 'Panneaux solaires',
-        slug: 'panneaux-solaires',
-        icon: Sun,
-        description: 'Photovoltaïque et solaire thermique',
-      },
-      {
-        name: 'Isolation thermique',
-        slug: 'isolation-thermique',
-        icon: Snowflake,
-        description: 'ITE, ITI, combles, planchers',
-      },
-      {
-        name: 'Rénovation énergétique',
-        slug: 'renovation-energetique',
-        icon: Leaf,
-        description: "Audit, travaux globaux, aides MaPrimeRénov'",
-      },
-    ],
-  },
-  {
     category: 'Diagnostics & Expertises',
     icon: ClipboardCheck,
-    color: 'blue',
+    color: 'accent',
     services: [
       {
         name: 'Diagnostiqueur',
@@ -259,24 +266,36 @@ const allServices = [
       },
     ],
   },
-  // Pivot pure-play BTP énergétique 2026-05-02 : 4 catégories retirées
-  // (Sécurité→alarme retiré, Extérieur & Jardin = jardinier/paysagiste,
-  // Hygiène = nettoyage, Déménagement = demenageur). Hors thèse SA.
 ]
 
-const colorClasses: Record<string, { bg: string; icon: string; hover: string }> = {
-  blue: { bg: 'bg-primary-50', icon: 'text-primary-500', hover: 'group-hover:bg-primary-100' },
-  amber: {
-    bg: 'bg-secondary-50',
-    icon: 'text-secondary-600',
-    hover: 'group-hover:bg-secondary-100',
+const colorTokens: Record<
+  ServiceCategoryColor,
+  { tile: string; icon: string; chip: string; ring: string }
+> = {
+  primary: {
+    tile: 'bg-primary-50',
+    icon: 'text-primary-500',
+    chip: 'bg-primary-500/10 text-primary-700 border-primary-200',
+    ring: 'group-hover:border-primary-300',
   },
-  green: { bg: 'bg-accent-50', icon: 'text-accent-600', hover: 'group-hover:bg-accent-100' },
-  orange: { bg: 'bg-primary-50', icon: 'text-primary-400', hover: 'group-hover:bg-primary-100' },
-  violet: { bg: 'bg-sand-100', icon: 'text-charcoal-600', hover: 'group-hover:bg-sand-200' },
-  pink: { bg: 'bg-primary-50', icon: 'text-primary-300', hover: 'group-hover:bg-primary-100' },
-  emerald: { bg: 'bg-accent-50', icon: 'text-accent-500', hover: 'group-hover:bg-accent-100' },
-  slate: { bg: 'bg-sand-100', icon: 'text-charcoal-500', hover: 'group-hover:bg-sand-200' },
+  accent: {
+    tile: 'bg-accent-50',
+    icon: 'text-accent-600',
+    chip: 'bg-accent-500/10 text-accent-700 border-accent-200',
+    ring: 'group-hover:border-accent-300',
+  },
+  secondary: {
+    tile: 'bg-secondary-50',
+    icon: 'text-secondary-600',
+    chip: 'bg-secondary-500/10 text-secondary-800 border-secondary-200',
+    ring: 'group-hover:border-secondary-300',
+  },
+  sand: {
+    tile: 'bg-sand-100',
+    icon: 'text-charcoal-700',
+    chip: 'bg-sand-200 text-charcoal-700 border-sand-300',
+    ring: 'group-hover:border-charcoal-300',
+  },
 }
 
 export default async function ServicesPage() {
@@ -301,7 +320,6 @@ export default async function ServicesPage() {
     )
   }
 
-  // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Services', url: '/services' },
@@ -309,7 +327,6 @@ export default async function ServicesPage() {
 
   const organizationSchema = getOrganizationSchema()
 
-  // ItemList schema: flat list of all services with their URLs
   const allServiceItems = allServices.flatMap((category) =>
     category.services.filter((s) => validServiceSlugs.has(s.slug))
   )
@@ -353,72 +370,105 @@ export default async function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-sand-50">
-      {/* JSON-LD */}
       <JsonLd data={[breadcrumbSchema, organizationSchema, itemListSchema, faqSchema]} />
 
-      {/* Premium Hero — Charcoal + Terracotta */}
-      <section className="relative bg-gradient-hero text-white py-20 overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary-500/5 to-accent-500/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Trust badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
-            <Award className="w-4 h-4 text-secondary-400" />
-            <span className="text-sm font-medium text-white/90">
-              {staticServicesList.length} métiers du bâtiment
-            </span>
+      {/* HERO — épuré façon Hellio/Effy */}
+      <section className="px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
+        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-charcoal-900 text-white overflow-hidden relative">
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary-500/15 blur-3xl" />
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-accent-500/10 blur-3xl" />
           </div>
 
-          <h1
-            data-speakable="true"
-            className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
-          >
-            Tous nos{' '}
-            <span className="bg-gradient-terra bg-clip-text text-transparent">services</span>{' '}
-            artisans
-          </h1>
-          <p className="text-xl text-sand-300 max-w-2xl mx-auto mb-6">
-            Trouvez l'artisan RGE certifié idéal pour vos travaux de rénovation énergétique.
-            Qualibat, Qualifelec, QualiPAC — devis gratuits éligibles MaPrimeRénov' & CEE.
-          </p>
+          <div className="relative px-6 md:px-12 lg:px-16 py-16 md:py-24">
+            <div className="mb-6">
+              <Breadcrumb
+                items={[{ label: 'Services' }]}
+                className="text-charcoal-300 [&_a]:text-charcoal-300 [&_a:hover]:text-primary-300"
+              />
+            </div>
 
-          {/* GeoPageCTA above the fold */}
-          <div className="max-w-2xl mx-auto mb-10">
-            <GeoPageCTA
-              title="Trouvez votre artisan en 2 minutes"
-              subtitle="Devis gratuit et sans engagement d'artisans RGE certifiés"
-            />
-          </div>
+            <div className="max-w-3xl">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 text-sm font-medium text-white/90 mb-6">
+                <Award className="w-4 h-4 text-secondary-400" aria-hidden="true" />
+                {staticServicesList.length} métiers RGE référencés
+              </span>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8">
-            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-              <TrendingUp className="w-5 h-5 text-primary-300" />
-              <div className="text-left">
-                <div className="text-2xl font-bold text-white">2h</div>
-                <div className="text-xs text-sand-400">Temps de réponse</div>
+              <h1
+                data-speakable="true"
+                className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-6"
+              >
+                Tous les métiers du bâtiment,
+                <br className="hidden md:block" />{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-400 to-secondary-400">
+                  100 % artisans RGE certifiés.
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl text-charcoal-200 leading-relaxed max-w-2xl mb-10">
+                Plombier, chauffagiste, couvreur, isolation, pompe à chaleur, panneaux solaires —
+                tous nos artisans sont qualifiés Qualibat, Qualifelec, QualiPAC ou Qualit&apos;EnR.
+                Devis gratuit éligible MaPrimeRénov&apos; et CEE.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/devis"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-primary-400 hover:bg-primary-500 text-white font-semibold shadow-cta hover:shadow-cta-hover transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900 focus-visible:ring-primary-300"
+                >
+                  Obtenir mon devis gratuit
+                  <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="#metiers"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold backdrop-blur-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                >
+                  Voir les {allServiceItems.length} métiers
+                </Link>
               </div>
+            </div>
+
+            {/* Stats bento */}
+            <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              {[
+                { value: '49 000+', label: 'Artisans RGE actifs' },
+                { value: '101', label: 'Départements couverts' },
+                { value: '24 h', label: 'Délai moyen devis' },
+                { value: '100 %', label: 'SIREN vérifiés INSEE' },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 px-5 py-5"
+                >
+                  <div className="font-heading text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                    {s.value}
+                  </div>
+                  <div className="text-sm text-charcoal-300 mt-1">{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Breadcrumb + Navigation */}
+      {/* GeoPageCTA + GeographicNavigation */}
+      <section className="bg-sand-50 border-b border-sand-200 mt-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <GeoPageCTA
+            title="Trouvez votre artisan RGE en 2 minutes"
+            subtitle="Devis gratuit et sans engagement d'artisans RGE certifiés"
+          />
+        </div>
+      </section>
+
       <section className="bg-white border-b border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Breadcrumb items={[{ label: 'Services' }]} className="mb-4" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <GeographicNavigation />
         </div>
       </section>
 
-      {/* Sprint 10x — TldrBlock featured snippets / AI Overviews. */}
+      {/* TldrBlock + EnBrefBox */}
       <section className="bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <TldrBlock
             title="L'essentiel des services artisans RGE 2026"
             bullets={[
@@ -431,7 +481,6 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      {/* Sprint AI Wave G Ahrefs 2026-05-03 — EnBrefBox snippet-bait Featured Snippets. */}
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4">
           <EnBrefBox
@@ -447,168 +496,277 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20">
+      {/* CATALOGUE — bento par catégorie, blocs aérés */}
+      <section id="metiers" className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {allServices.map((category) => {
-            const CategoryIcon = category.icon
-            const colors = colorClasses[category.color]
+          <div className="text-center mb-16">
+            <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
+              Catalogue
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight text-charcoal-900 mb-4">
+              Quel métier pour vos travaux&nbsp;?
+            </h2>
+            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+              {allServiceItems.length} corps de métier RGE certifiés, organisés par grandes
+              familles. Cliquez sur un métier pour voir les artisans dans votre ville.
+            </p>
+          </div>
 
-            return (
-              <div key={category.category} className="mb-16">
-                <div className="flex items-center gap-4 mb-8">
-                  <div
-                    className={`w-14 h-14 ${colors.bg} rounded-2xl flex items-center justify-center shadow-sm`}
-                  >
-                    <CategoryIcon className={`w-7 h-7 ${colors.icon}`} />
-                  </div>
-                  <div>
-                    <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
-                      {category.category}
-                    </h2>
-                    <p className="text-sm text-charcoal-500">
-                      {category.services.length} services disponibles
-                    </p>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-                  {category.services.map((service) => {
-                    const Icon = service.icon
-                    const hasPage = validServiceSlugs.has(service.slug)
+          <div className="space-y-14 md:space-y-20">
+            {allServices.map((category) => {
+              const CategoryIcon = category.icon
+              const tokens = colorTokens[category.color]
 
-                    if (hasPage) {
-                      return (
-                        <Link
-                          key={service.slug}
-                          href={`/services/${service.slug}`}
-                          className="group relative bg-white rounded-2xl border border-sand-200 p-6 hover:border-primary-200 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1"
-                        >
-                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-sand-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                          <div className="relative">
+              return (
+                <div key={category.category}>
+                  <div className="flex items-center gap-4 mb-8">
+                    <div
+                      className={`w-14 h-14 rounded-2xl ${tokens.tile} flex items-center justify-center shadow-sm`}
+                      aria-hidden="true"
+                    >
+                      <CategoryIcon className={`w-7 h-7 ${tokens.icon}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-xl md:text-2xl font-bold tracking-tight text-charcoal-900">
+                        {category.category}
+                      </h3>
+                      <p className="text-sm text-charcoal-500">
+                        {category.services.length} métiers disponibles
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {category.services.map((service) => {
+                      const Icon = service.icon
+                      const hasPage = validServiceSlugs.has(service.slug)
+                      const cardBase =
+                        'group relative rounded-3xl bg-white border border-sand-200 p-6 transition-all duration-300'
+
+                      if (hasPage) {
+                        return (
+                          <Link
+                            key={service.slug}
+                            href={`/services/${service.slug}`}
+                            className={`${cardBase} hover:shadow-card-hover hover:-translate-y-0.5 ${tokens.ring}`}
+                            aria-label={`Voir les artisans RGE certifiés ${service.name}`}
+                          >
                             <div
-                              className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}
+                              className={`w-12 h-12 rounded-2xl ${tokens.tile} flex items-center justify-center mb-5`}
+                              aria-hidden="true"
                             >
-                              <Icon className={`w-6 h-6 ${colors.icon}`} />
+                              <Icon className={`w-6 h-6 ${tokens.icon}`} />
                             </div>
-                            <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-2">
+                            <h4 className="font-heading text-lg font-bold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-2">
                               {service.name}
-                            </h3>
+                            </h4>
                             <p className="text-sm text-charcoal-500 leading-relaxed">
                               {service.description}
                             </p>
-                          </div>
-                          <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-charcoal-300 group-hover:text-primary-400 group-hover:translate-x-1 transition-all" />
-                        </Link>
-                      )
-                    }
+                            <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-500 group-hover:gap-2.5 transition-all">
+                              Voir les artisans
+                              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                            </div>
+                          </Link>
+                        )
+                      }
 
-                    return (
-                      <div
-                        key={service.slug}
-                        className="relative bg-white rounded-2xl border border-sand-200 p-6 opacity-75"
-                      >
-                        <div className="absolute top-3 right-3 text-xs bg-sand-200 text-charcoal-500 px-2 py-1 rounded-full">
-                          Bientôt
-                        </div>
+                      return (
                         <div
-                          className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}
+                          key={service.slug}
+                          className={`${cardBase} opacity-70`}
+                          aria-label={`${service.name} — bientôt disponible`}
                         >
-                          <Icon className={`w-6 h-6 ${colors.icon}`} />
+                          <span
+                            className={`absolute top-4 right-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${tokens.chip}`}
+                          >
+                            Bientôt
+                          </span>
+                          <div
+                            className={`w-12 h-12 rounded-2xl ${tokens.tile} flex items-center justify-center mb-5`}
+                            aria-hidden="true"
+                          >
+                            <Icon className={`w-6 h-6 ${tokens.icon}`} />
+                          </div>
+                          <h4 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
+                            {service.name}
+                          </h4>
+                          <p className="text-sm text-charcoal-500 leading-relaxed">
+                            {service.description}
+                          </p>
                         </div>
-                        <h3 className="font-semibold text-charcoal-900 mb-2">{service.name}</h3>
-                        <p className="text-sm text-charcoal-500 leading-relaxed">
-                          {service.description}
-                        </p>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
-
-          {/* Maillage interne: Villes populaires */}
-          <div className="mt-16 pt-12 border-t border-sand-300">
-            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 flex items-center gap-3 tracking-tight">
-              <MapPin className="w-6 h-6 text-primary-400" />
-              Trouvez un artisan par ville
-            </h2>
-            <PopularCitiesLinks showTitle={false} limit={10} />
+              )
+            })}
           </div>
+        </div>
+      </section>
 
-          {/* Liens contextuels : carte, réalisations, badge */}
-          <div className="mt-12 pt-10 border-t border-sand-200">
-            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-5 tracking-tight">
-              Explorez aussi
-            </h2>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <Link
-                href="/carte-artisans"
-                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
-              >
-                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
-                  Carte des artisans
-                </h3>
-                <p className="text-sm text-charcoal-500">
-                  Visualisez la couverture nationale dans les 101 départements.
-                </p>
-              </Link>
-              <Link
-                href="/avant-apres"
-                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
-              >
-                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
-                  Avant / Après travaux
-                </h3>
-                <p className="text-sm text-charcoal-500">
-                  12 transformations de rénovation avec budgets et durées.
-                </p>
-              </Link>
-              <Link
-                href="/badge-artisan"
-                className="group bg-white rounded-2xl border border-sand-200 p-5 hover:border-primary-200 hover:shadow-card-hover transition-all"
-              >
-                <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors mb-1">
-                  Badge Artisan Vérifié
-                </h3>
-                <p className="text-sm text-charcoal-500">
-                  Générez votre badge de certification gratuit pour votre site.
-                </p>
-              </Link>
+      {/* ENGAGEMENTS — gros bloc accent comme Hellio */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-20 md:pb-28">
+        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-accent-700 text-white overflow-hidden relative">
+          <div className="absolute inset-0 pointer-events-none opacity-[0.06]" aria-hidden="true">
+            <div className="absolute inset-0 bg-hero-pattern" />
+          </div>
+          <div className="relative grid lg:grid-cols-12 gap-10 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+            <div className="lg:col-span-5">
+              <span className="inline-block text-xs font-bold text-accent-200 tracking-[0.18em] uppercase mb-3">
+                Nos engagements
+              </span>
+              <h2 className="font-heading text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+                Pourquoi choisir un artisan RGE certifié&nbsp;?
+              </h2>
+              <p className="mt-5 text-accent-100/90 leading-relaxed text-lg">
+                La mention RGE est délivrée par des organismes accrédités COFRAC. Elle conditionne
+                l&apos;accès aux aides publiques et garantit le sérieux technique de l&apos;artisan.
+              </p>
+            </div>
+            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+              {[
+                {
+                  title: "Aides MaPrimeRénov' débloquées",
+                  desc: 'La qualification RGE active à la signature du devis ouvre droit à toutes les aides Anah.',
+                },
+                {
+                  title: 'Primes CEE versées',
+                  desc: 'Effy, Sonergia, TotalEnergies, EDF — primes calculées et versées par les délégataires obligés.',
+                },
+                {
+                  title: 'TVA à 5,5 %',
+                  desc: 'Taux réduit appliqué directement sur la facture pour les travaux énergétiques éligibles.',
+                },
+                {
+                  title: 'Éco-PTZ jusqu’à 50 000 €',
+                  desc: 'Prêt à taux zéro pour la rénovation globale, conditionné au recours à un artisan RGE.',
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-3xl bg-white/10 backdrop-blur-sm border border-white/15 p-6"
+                >
+                  <CheckCircle2 className="w-6 h-6 text-secondary-300 mb-3" aria-hidden="true" />
+                  <div className="font-heading font-bold text-lg mb-1.5">{item.title}</div>
+                  <p className="text-sm text-accent-100/80 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Premium CTA */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-500/15 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/20 backdrop-blur-sm rounded-full border border-primary-400/30 mb-6">
-            <Sparkles className="w-4 h-4 text-primary-300" />
-            <span className="text-sm font-medium text-primary-200">
-              Devis gratuit en quelques clics
-            </span>
+      {/* MAILLAGE INTERNE — villes + ressources */}
+      <section className="bg-white border-t border-sand-200 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-5">
+              <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
+                Maillage géographique
+              </span>
+              <h2 className="font-heading text-3xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-4">
+                Trouvez un artisan par ville.
+              </h2>
+              <p className="text-charcoal-600 leading-relaxed mb-6">
+                Couverture nationale&nbsp;: 35 000+ communes, 101 départements. Cliquez sur une
+                grande ville pour découvrir les artisans RGE disponibles.
+              </p>
+              <Link
+                href="/villes"
+                className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold transition-colors"
+              >
+                Voir toutes les villes <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="lg:col-span-7">
+              <div className="rounded-3xl bg-sand-50 border border-sand-200 p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-5 text-charcoal-700">
+                  <MapPin className="w-5 h-5 text-primary-500" aria-hidden="true" />
+                  <span className="text-sm font-semibold">Top villes</span>
+                </div>
+                <PopularCitiesLinks showTitle={false} limit={10} />
+              </div>
+            </div>
           </div>
 
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-            Vous ne trouvez pas votre métier ?
-          </h2>
-          <p className="text-xl text-sand-300 mb-10 max-w-xl mx-auto">
-            Contactez-nous et nous vous aiderons à trouver le bon artisan pour votre projet.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-primary-400 hover:bg-primary-500 text-white font-bold rounded-xl transition-all shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5"
-          >
-            Nous contacter
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="mt-14 pt-12 border-t border-sand-200">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal-900 mb-8">
+              Explorer également
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                {
+                  href: '/carte-artisans',
+                  title: 'Carte des artisans',
+                  desc: 'Visualisez la couverture nationale dans les 101 départements.',
+                },
+                {
+                  href: '/avant-apres',
+                  title: 'Avant / Après travaux',
+                  desc: '12 transformations de rénovation avec budgets et durées.',
+                },
+                {
+                  href: '/badge-artisan',
+                  title: 'Badge Artisan Vérifié',
+                  desc: 'Générez votre badge de certification gratuit pour votre site.',
+                },
+              ].map((card) => (
+                <Link
+                  key={card.href}
+                  href={card.href}
+                  className="group rounded-3xl bg-white border border-sand-200 p-6 hover:border-primary-200 hover:shadow-card-hover transition-all duration-300"
+                >
+                  <h3 className="font-heading font-bold text-lg text-charcoal-900 group-hover:text-primary-500 transition-colors mb-2">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-charcoal-500 leading-relaxed">{card.desc}</p>
+                  <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-500 group-hover:gap-2.5 transition-all">
+                    Découvrir <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-20 md:pb-28">
+        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-primary-500 via-primary-500 to-primary-700 text-white overflow-hidden relative">
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-secondary-400/15 blur-3xl" />
+          </div>
+          <div className="relative px-6 md:px-12 lg:px-20 py-16 md:py-20 grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/20 text-sm font-medium text-white mb-5">
+                <Sparkles className="w-4 h-4 text-secondary-300" aria-hidden="true" />
+                Devis gratuit en 30 secondes
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-5">
+                Vous ne trouvez pas votre métier&nbsp;?
+              </h2>
+              <p className="text-lg text-primary-50/95 leading-relaxed max-w-xl">
+                Décrivez votre projet&nbsp;: nous orienterons votre demande vers l&apos;artisan RGE
+                certifié le plus pertinent dans votre secteur.
+              </p>
+            </div>
+            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end">
+              <Link
+                href="/devis"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-white text-primary-700 font-bold shadow-cta hover:bg-sand-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-white"
+              >
+                Demander un devis
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-secondary-500 hover:bg-secondary-400 text-charcoal-900 font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-secondary-300"
+              >
+                Nous contacter
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

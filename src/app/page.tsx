@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { ArrowRight, MapPin, Search, Sparkles, ShieldCheck } from 'lucide-react'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { GeographicNavigation } from '@/components/InternalLinks'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
@@ -25,12 +26,11 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
   ssr: false,
 })
 
-export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 24h
+export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : "Des milliers d'"
-  // Pivot full RGE 2026-05-03 : repositionnement « 100% artisans RGE certifiés ».
   const absoluteTitle = `ServicesArtisans — Le 1er annuaire 100% artisans RGE certifiés`
   const metaDescription = `Le premier annuaire 100% artisans RGE certifiés en France : ${countStr} professionnels Qualibat, Qualifelec, QualiPAC pour vos travaux de rénovation énergétique. Éligibles MaPrimeRénov & CEE. Devis gratuit.`
   return {
@@ -85,7 +85,6 @@ export default async function HomePage() {
     )
   }
 
-  // JSON-LD structured data for homepage (WebSite already emitted by root layout)
   const faqSchema = getFAQSchema(faqItems)
   const itemListSchema = getItemListSchema({
     name: 'Services artisans populaires en France',
@@ -138,13 +137,10 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Homepage-specific JSON-LD: WebPage + FAQ + ItemList + AggregateRating */}
+    <div className="min-h-screen bg-sand-50">
       <JsonLd data={[webPageSchema, faqSchema, itemListSchema, aggregateRatingSchema]} />
 
-      {/* H1 visible above-fold — brand-first pour ranking exact match.
-          Le hero ClayHeroSearch n'a pas de H1 propre, donc on en émet un
-          ici en bandeau sobre, accessible et indexable. */}
+      {/* H1 visible above-fold — brand-first pour ranking exact match */}
       <header className="bg-white border-b border-sand-200">
         <div className="max-w-6xl mx-auto px-4 py-5 md:py-6">
           <h1 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 tracking-tight text-center md:text-left">
@@ -153,10 +149,8 @@ export default async function HomePage() {
         </div>
       </header>
 
-      {/* ─── TRUST BAR — indicateurs clés (artisans, avis, SIREN, départements) ─── */}
       <TrustBar />
 
-      {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
       <ClayHomePage
         stats={homepageData}
         serviceCounts={homepageData.serviceCounts}
@@ -164,68 +158,53 @@ export default async function HomePage() {
         recentReviews={homepageData.recentReviews}
       />
 
-      {/* ─── RECENT SEARCHES (personalization) ─────────────── */}
-      <section className="py-6 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <RecentSearches />
+      {/* RECENT SEARCHES + SOCIAL PROOF — bento clair */}
+      <section className="bg-white py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-4">
+          <div className="rounded-3xl bg-sand-50 border border-sand-200 p-6">
+            <RecentSearches />
+          </div>
+          <div className="rounded-3xl bg-sand-50 border border-sand-200 p-6">
+            <SocialProofBanner variant="card" />
+          </div>
         </div>
       </section>
 
-      {/* ─── SOCIAL PROOF ────────────────────────────────────── */}
-      <section className="py-6 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <SocialProofBanner variant="card" />
-        </div>
-      </section>
-
-      {/* ─── SIMULATEUR AIDES RÉNOVATION (MASTER-PLAN-00 Sprint 1 — ICE 648)
-          Surfacer le simulateur officiel en homepage : amplifie la conversion
-          sur le trafic pSEO (villes/services) et capte l'intent "aides
-          rénovation énergétique" directement dès l'entrée. */}
-      <section className="py-10 bg-white border-t border-sand-200">
-        <div className="max-w-4xl mx-auto px-4">
+      {/* SIMULATEUR AIDES RÉNOVATION — bandeau dédié */}
+      <section className="bg-sand-50 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SimulateurCTA variant="banner" />
         </div>
       </section>
 
-      {/* ─── SERVICE × CITY MATRIX (60 money page links) ─────── */}
-      <section className="py-16 bg-white border-t border-sand-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-400 rounded-full text-sm font-medium mb-5">
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
+      {/* SERVICE × VILLE MATRIX — bento aéré */}
+      <section className="bg-white py-20 md:py-24 border-y border-sand-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-primary-600 text-xs font-bold tracking-[0.18em] uppercase mb-4">
+              <Search className="w-3.5 h-3.5" aria-hidden="true" />
               Recherche rapide
-            </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-2 tracking-tight">
-              Trouvez un artisan près de chez vous
+            </span>
+            <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight text-charcoal-900 mb-4">
+              Trouvez un artisan RGE près de chez vous.
             </h2>
-            <p className="text-charcoal-500 max-w-lg mx-auto">
-              Accédez directement aux artisans les plus demandés dans les grandes villes de France
+            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+              Accès direct aux artisans RGE certifiés des grandes villes pour les métiers les plus
+              demandés.
             </p>
           </div>
-          <div className="overflow-x-auto -mx-4 px-4">
-            <table className="w-full text-sm border-collapse">
+
+          <div className="rounded-3xl bg-sand-50 border border-sand-200 p-4 md:p-6 overflow-x-auto">
+            <table className="w-full text-sm">
               <thead>
                 <tr>
-                  <th className="text-left py-3 px-3 text-charcoal-500 font-medium text-xs uppercase tracking-wider border-b border-sand-200">
+                  <th className="text-left py-3 px-3 text-charcoal-500 font-semibold text-xs uppercase tracking-wider border-b border-sand-300">
                     Métier
                   </th>
                   {TOP_CITIES.slice(0, 6).map((city) => (
                     <th
                       key={city.slug}
-                      className="text-center py-3 px-2 text-charcoal-500 font-medium text-xs uppercase tracking-wider border-b border-sand-200"
+                      className="text-center py-3 px-2 text-charcoal-500 font-semibold text-xs uppercase tracking-wider border-b border-sand-300"
                     >
                       {city.name}
                     </th>
@@ -233,19 +212,19 @@ export default async function HomePage() {
                 </tr>
               </thead>
               <tbody>
-                {TOP_SERVICES.map((service, si) => (
-                  <tr key={service.slug} className={si % 2 === 0 ? 'bg-sand-50/50' : ''}>
-                    <td className="py-2.5 px-3 font-medium text-charcoal-800 whitespace-nowrap border-b border-sand-100">
+                {TOP_SERVICES.map((service) => (
+                  <tr key={service.slug} className="hover:bg-white transition-colors">
+                    <td className="py-3 px-3 font-semibold text-charcoal-900 whitespace-nowrap border-b border-sand-200">
                       {service.name}
                     </td>
                     {TOP_CITIES.slice(0, 6).map((city, ci) => (
                       <td
                         key={city.slug}
-                        className="py-2.5 px-2 text-center border-b border-sand-100"
+                        className="py-3 px-2 text-center border-b border-sand-200"
                       >
                         <Link
                           href={`/services/${service.slug}/${city.slug}`}
-                          className="text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+                          className="text-primary-500 hover:text-primary-700 hover:underline transition-colors"
                         >
                           {ci % 3 === 0
                             ? `${service.name} ${city.name}`
@@ -263,24 +242,28 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── TARIFS POPULAIRES (18 money page links) ──────────── */}
-      <section className="py-12 bg-sand-50 border-t border-sand-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 tracking-tight">
-              Tarifs artisans par ville
+      {/* TARIFS POPULAIRES — chips arrondis */}
+      <section className="bg-sand-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
+              Tarifs par ville
+            </span>
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+              Grilles tarifaires des métiers les plus demandés.
             </h2>
-            <p className="text-charcoal-500 mt-2 text-sm max-w-lg mx-auto">
-              Consultez les grilles tarifaires des métiers les plus demandés
+            <p className="text-charcoal-600 max-w-xl mx-auto">
+              Tarifs moyens d&apos;artisans RGE certifiés, mis à jour chaque mois.
             </p>
           </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {TOP_SERVICES.slice(0, 6).map((service) =>
               TOP_CITIES.slice(0, 3).map((city) => (
                 <Link
                   key={`tarif-${service.slug}-${city.slug}`}
                   href={`/services/${service.slug}/${city.slug}`}
-                  className="flex items-center justify-center px-3 py-2.5 text-sm text-charcoal-700 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-xl border border-sand-200 transition-colors text-center"
+                  className="flex items-center justify-center text-center px-4 py-3 text-sm text-charcoal-700 bg-white hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 rounded-2xl border border-sand-200 transition-colors"
                 >
                   Tarif {service.name.toLowerCase()} {city.name}
                 </Link>
@@ -290,37 +273,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
-      <section className="py-16 bg-sand-100">
-        <div className="max-w-6xl mx-auto px-4">
+      {/* COUVERTURE NATIONALE */}
+      <section className="bg-white py-20 border-y border-sand-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <GeographicSectionWrapper>
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-400 rounded-full text-sm font-medium mb-5">
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-50 border border-accent-100 text-accent-700 text-xs font-bold tracking-[0.18em] uppercase mb-4">
+                <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                 Couverture nationale
-              </div>
-              <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-2 text-center tracking-tight">
-                Artisans partout en France
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight text-charcoal-900 mb-4">
+                Artisans partout en France.
               </h2>
-              <p className="text-charcoal-500 text-center max-w-lg mx-auto">
-                Trouvez des professionnels dans votre région, département ou ville.
+              <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
+                Trouvez des professionnels RGE certifiés dans votre région, département ou ville.
               </p>
             </div>
             <GeographicNavigation />
@@ -328,215 +294,215 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── EXPLORE & RESOURCES (merged) ─────────────────────── */}
-      <section className="py-12 bg-white border-t border-sand-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 tracking-tight">
-              Explorer et préparer vos travaux
-            </h2>
-            <p className="text-charcoal-500 mt-2 text-sm max-w-lg mx-auto">
-              Guides, tarifs, avis et outils pour bien choisir votre artisan
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/avis"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Avis artisans
-            </Link>
-            <Link
-              href="/tarifs"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Tarifs artisans
-            </Link>
-            <Link
-              href="/urgence"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Urgence artisan
-            </Link>
-            <Link
-              href="/guides"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Guides travaux
-            </Link>
-            <Link
-              href="/barometre"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Baromètre prix
-            </Link>
-            <Link
-              href="/faq"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              FAQ
-            </Link>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Blog
-            </Link>
-            <Link
-              href="/carte-artisans"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Carte des artisans
-            </Link>
-            <Link
-              href="/avant-apres"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Avant / Après
-            </Link>
-            <Link
-              href="/badge-artisan"
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-charcoal-700 bg-sand-50 hover:bg-primary-50 hover:text-primary-600 rounded-full border border-sand-200 transition-colors"
-            >
-              Badge Artisan
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── RÉNOVATION ÉNERGÉTIQUE — CEE / RGE / ADEME ─────── */}
-      <section className="py-16 bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white border-t border-emerald-900">
-        <div className="max-w-6xl mx-auto px-4">
+      {/* EXPLORER & RESSOURCES — chips */}
+      <section className="bg-sand-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/20 border border-emerald-400/30 rounded-full text-sm font-medium text-emerald-100 mb-5">
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-              Rénovation énergétique 2026
-            </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2 tracking-tight">
-              Jusqu'à 15&nbsp;000&nbsp;€ d'aides pour vos travaux
+            <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
+              Explorer
+            </span>
+            <h2 className="font-heading text-2xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+              Préparer vos travaux.
             </h2>
-            <p className="text-emerald-100/90 max-w-2xl mx-auto">
-              Primes CEE, MaPrimeRénov', artisans RGE certifiés : tout ce qu'il faut savoir pour
-              financer votre rénovation énergétique.
+            <p className="text-charcoal-600 max-w-xl mx-auto">
+              Guides, tarifs, avis et outils pour bien choisir votre artisan.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link
-              href="/cee"
-              className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
-            >
-              <div className="text-xs font-semibold text-emerald-300 mb-1">19 opérations</div>
-              <h3 className="font-heading font-bold text-lg text-white mb-2">Primes CEE 2026</h3>
-              <p className="text-sm text-emerald-100/80 leading-relaxed">
-                PAC, isolation, poêle, chaudière biomasse… Montants classiques et précarité par
-                opération.
-              </p>
-              <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
-                Voir le catalogue →
-              </div>
-            </Link>
-            <Link
-              href="/cee/guides"
-              className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
-            >
-              <div className="text-xs font-semibold text-emerald-300 mb-1">10 guides détaillés</div>
-              <h3 className="font-heading font-bold text-lg text-white mb-2">Guides primes CEE</h3>
-              <p className="text-sm text-emerald-100/80 leading-relaxed">
-                Conditions techniques, cumul MaPrimeRénov' et pièges à éviter, opération par
-                opération.
-              </p>
-              <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
-                Lire les guides →
-              </div>
-            </Link>
-            <Link
-              href="/rge"
-              className="group p-5 bg-white/5 hover:bg-white/10 border border-emerald-400/20 hover:border-emerald-300/50 rounded-2xl backdrop-blur transition"
-            >
-              <div className="text-xs font-semibold text-emerald-300 mb-1">
-                Source ADEME officielle
-              </div>
-              <h3 className="font-heading font-bold text-lg text-white mb-2">
-                Annuaire artisans RGE
-              </h3>
-              <p className="text-sm text-emerald-100/80 leading-relaxed">
-                QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV : artisans RGE certifiés par
-                métier et par ville.
-              </p>
-              <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
-                Trouver un RGE →
-              </div>
-            </Link>
-            <Link
-              href="/devenir-partenaire-cee"
-              className="group p-5 bg-gradient-to-br from-amber-500/15 to-orange-500/10 hover:from-amber-500/25 hover:to-orange-500/20 border border-amber-400/40 hover:border-amber-300/70 rounded-2xl backdrop-blur transition relative"
-            >
-              <div className="absolute top-3 right-3 px-2 py-0.5 bg-amber-400 text-amber-950 text-[10px] font-bold rounded-full uppercase tracking-wide">
-                Pro
-              </div>
-              <div className="text-xs font-semibold text-amber-300 mb-1">Pour artisans BTP</div>
-              <h3 className="font-heading font-bold text-lg text-white mb-2">
-                Devenir mandataire CEE
-              </h3>
-              <p className="text-sm text-amber-100/85 leading-relaxed">
-                Touchez vos primes CEE 4× plus vite via Sonergia. Flux de chantiers RGE certifiés,
-                leads exclusifs.
-              </p>
-              <div className="mt-3 text-sm font-semibold text-amber-300 group-hover:text-amber-200 inline-flex items-center gap-1">
-                Devenir partenaire →
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3 mt-8">
-            <Link
-              href="/comparatif-primes-cee-2026"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
-            >
-              Comparatif primes CEE
-            </Link>
-            <Link
-              href="/leads-exclusifs-vs-partages"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
-            >
-              Leads exclusifs vs partagés
-            </Link>
-            <Link
-              href="/rge/qualifications"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
-            >
-              Qualifications RGE
-            </Link>
-            <Link
-              href="/rge/sources"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
-            >
-              Sources &amp; méthodologie
-            </Link>
-            <Link
-              href="/ademe"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-100 border border-emerald-400/30 bg-emerald-800/30 hover:bg-emerald-800/50 rounded-full transition"
-            >
-              Données ADEME
-            </Link>
+
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {[
+              { href: '/avis', label: 'Avis artisans' },
+              { href: '/tarifs', label: 'Tarifs artisans' },
+              { href: '/urgence', label: 'Urgence artisan' },
+              { href: '/guides', label: 'Guides travaux' },
+              { href: '/barometre', label: 'Baromètre prix' },
+              { href: '/faq', label: 'FAQ' },
+              { href: '/blog', label: 'Blog' },
+              { href: '/carte-artisans', label: 'Carte des artisans' },
+              { href: '/avant-apres', label: 'Avant / Après' },
+              { href: '/badge-artisan', label: 'Badge Artisan' },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-charcoal-700 bg-white hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 rounded-full border border-sand-200 transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Popular links handled by site-wide Footer — no duplication needed */}
+      {/* RÉNOVATION ÉNERGÉTIQUE — gros bento accent comme Hellio */}
+      <section className="px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white overflow-hidden relative">
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute -top-40 -right-40 w-[28rem] h-[28rem] rounded-full bg-accent-400/15 blur-3xl" />
+            <div className="absolute -bottom-32 -left-24 w-80 h-80 rounded-full bg-secondary-500/10 blur-3xl" />
+          </div>
 
-      {/* ─── CONVERSION BOOSTERS ───────────────────────────── */}
+          <div className="relative px-6 md:px-12 lg:px-16 py-16 md:py-20">
+            <div className="text-center mb-14 max-w-3xl mx-auto">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-500/15 backdrop-blur-sm border border-secondary-400/30 text-sm font-medium text-secondary-200 mb-5">
+                <Sparkles className="w-4 h-4" aria-hidden="true" />
+                Rénovation énergétique 2026
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.05] mb-5">
+                Jusqu&apos;à 15 000 €
+                <br className="hidden md:block" />{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-300 to-primary-300">
+                  d&apos;aides pour vos travaux.
+                </span>
+              </h2>
+              <p className="text-lg text-accent-100/95 leading-relaxed">
+                Primes CEE, MaPrimeRénov&apos;, artisans RGE certifiés&nbsp;: tout pour financer
+                votre rénovation énergétique.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link
+                href="/cee"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+              >
+                <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
+                  19 opérations
+                </div>
+                <h3 className="font-heading font-bold text-xl text-white mb-3">Primes CEE 2026</h3>
+                <p className="text-sm text-accent-100/85 leading-relaxed">
+                  PAC, isolation, poêle, chaudière biomasse… Montants classiques et précarité par
+                  opération.
+                </p>
+                <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-300 group-hover:gap-2.5 transition-all">
+                  Voir le catalogue <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </div>
+              </Link>
+
+              <Link
+                href="/cee/guides"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+              >
+                <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
+                  10 guides détaillés
+                </div>
+                <h3 className="font-heading font-bold text-xl text-white mb-3">
+                  Guides primes CEE
+                </h3>
+                <p className="text-sm text-accent-100/85 leading-relaxed">
+                  Conditions techniques, cumul MaPrimeRénov&apos; et pièges à éviter, opération par
+                  opération.
+                </p>
+                <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-300 group-hover:gap-2.5 transition-all">
+                  Lire les guides <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </div>
+              </Link>
+
+              <Link
+                href="/rge"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+              >
+                <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
+                  Source ADEME
+                </div>
+                <h3 className="font-heading font-bold text-xl text-white mb-3">
+                  Annuaire artisans RGE
+                </h3>
+                <p className="text-sm text-accent-100/85 leading-relaxed">
+                  QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV — artisans RGE certifiés par
+                  métier et par ville.
+                </p>
+                <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-300 group-hover:gap-2.5 transition-all">
+                  Trouver un RGE <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </div>
+              </Link>
+
+              <Link
+                href="/devenir-partenaire-cee"
+                className="group p-7 rounded-3xl bg-gradient-to-br from-secondary-500/20 to-primary-500/15 hover:from-secondary-500/30 hover:to-primary-500/25 border border-secondary-400/40 backdrop-blur-sm transition-all hover:-translate-y-0.5 relative"
+              >
+                <span className="absolute top-4 right-4 px-2.5 py-0.5 bg-secondary-400 text-charcoal-900 text-[10px] font-bold rounded-full uppercase tracking-wide">
+                  Pro
+                </span>
+                <div className="text-xs font-semibold text-secondary-200 mb-2 uppercase tracking-wider">
+                  Pour artisans BTP
+                </div>
+                <h3 className="font-heading font-bold text-xl text-white mb-3">
+                  Devenir mandataire CEE
+                </h3>
+                <p className="text-sm text-secondary-100/90 leading-relaxed">
+                  Touchez vos primes CEE 4× plus vite via Sonergia. Flux de chantiers RGE certifiés,
+                  leads exclusifs.
+                </p>
+                <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-200 group-hover:gap-2.5 transition-all">
+                  Devenir partenaire <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </div>
+              </Link>
+            </div>
+
+            {/* Liens secondaires arrondis */}
+            <div className="flex flex-wrap justify-center gap-2.5 mt-12">
+              {[
+                { href: '/comparatif-primes-cee-2026', label: 'Comparatif primes CEE' },
+                { href: '/leads-exclusifs-vs-partages', label: 'Leads exclusifs vs partagés' },
+                { href: '/rge/qualifications', label: 'Qualifications RGE' },
+                { href: '/rge/sources', label: 'Sources & méthodologie' },
+                { href: '/ademe', label: 'Données ADEME' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-accent-100 border border-white/20 bg-white/5 hover:bg-white/10 rounded-full transition"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL — bandeau primary */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white overflow-hidden relative">
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-secondary-400/20 blur-3xl" />
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-accent-500/15 blur-3xl" />
+          </div>
+
+          <div className="relative px-6 md:px-12 lg:px-20 py-16 md:py-20 grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/20 text-sm font-medium text-white mb-5">
+                <ShieldCheck className="w-4 h-4 text-secondary-300" aria-hidden="true" />
+                Devis gratuit en 30 secondes
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-5">
+                Prêt à lancer vos travaux&nbsp;?
+              </h2>
+              <p className="text-lg text-primary-50/95 leading-relaxed max-w-xl">
+                Décrivez votre projet en 2 minutes, recevez un devis gratuit d&apos;un artisan RGE
+                certifié de votre secteur. Lead exclusif, sans engagement.
+              </p>
+            </div>
+            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end">
+              <Link
+                href="/devis"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-primary-700 font-bold shadow-cta hover:bg-sand-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-white"
+              >
+                Demander un devis
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/services"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-secondary-500 hover:bg-secondary-400 text-charcoal-900 font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-secondary-300"
+              >
+                Voir les services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <StickyMobileCTA ctaText="Devis gratuit en 30s" />
       <ExitIntentPopup />
     </div>
