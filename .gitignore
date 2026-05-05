@@ -82,6 +82,7 @@ Diag/
 .claude/skills/
 scripts/.enrich-top40-progress.json
 docs/supply-activation-2026-04-20/
+docs/supply/*.csv
 
 # Generated runtime artefacts
 .cache/
