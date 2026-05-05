@@ -315,13 +315,28 @@ export async function getLastReviewByService(): Promise<LastmodMap> {
     if (revErr || !reviews || reviews.length === 0) return map
 
     // Step 2: Get provider specialties for these provider ids
+    // Chunk to avoid PostgREST URL > 8KB (nginx upstream rejette en 400
+    // "Request Header Or Cookie Too Large") + undici header overflow 16KB.
+    // 100 UUIDs × 37 chars ≈ 3.7 KB → safe.
     const providerIds = Array.from(new Set(reviews.map((r) => r.provider_id)))
-    const { data: providers, error: provErr } = await supabase
-      .from('providers')
-      .select('id, specialty')
-      .in('id', providerIds)
+    const CHUNK_SIZE = 100
+    const chunks: string[][] = []
+    for (let i = 0; i < providerIds.length; i += CHUNK_SIZE) {
+      chunks.push(providerIds.slice(i, i + CHUNK_SIZE))
+    }
 
-    if (provErr || !providers) return map
+    const chunkResults = await Promise.all(
+      chunks.map(async (chunk) => {
+        const { data, error } = await supabase
+          .from('providers')
+          .select('id, specialty')
+          .in('id', chunk)
+        if (error) return []
+        return (data || []) as Array<{ id: string; specialty: string | null }>
+      })
+    )
+    const providers = chunkResults.flat()
+    if (providers.length === 0) return map
 
     const specialtyById = new Map<string, string>()
     for (const p of providers) {
