@@ -51,6 +51,10 @@ import {
   getItemListSchema,
   getEnrichedLocalServiceSchema,
   getReviewedByPersonSchema,
+  getMaPrimeRenovGovServiceSchema,
+  getCeeGovServiceSchema,
+  getEcoPtzGovServiceSchema,
+  getFinancialProductSchema,
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
@@ -1036,6 +1040,35 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     ],
     ...spreadCitationsForTopics(`${service.name} ${trade?.name ?? ''} ${location.name}`),
   })
+
+  // YMYL E-E-A-T 2026-05-05 — sur les services rénovation énergétique, on
+  // déclare le rattachement aux dispositifs publics (GovernmentService) et
+  // aux produits financiers (FinancialProduct). Source de vérité Knowledge
+  // Graph officiel : factories canoniques + sameAs gouv.fr / Anah / Légifrance
+  // / france-renov. Aligne le signal "official aid eligible" avec ce que
+  // Hellio / Effy / Selectra émettent et qui leur donne l'edge SERP YMYL.
+  // Ne s'applique qu'aux services classés `renovation` dans service-intents
+  // (chauffagiste, pompe-a-chaleur, isolation-thermique, panneaux-solaires…).
+  if (pageIntent === 'renovation') {
+    const pageUrl = `${SITE_URL}/services/${serviceSlug}/${locationSlug}`
+    jsonLdSchemas.push(
+      getMaPrimeRenovGovServiceSchema(pageUrl),
+      getCeeGovServiceSchema(pageUrl),
+      getEcoPtzGovServiceSchema(pageUrl)
+    )
+    // FinancialProduct dédié au service courant — donne à Google une entité
+    // "produit aidé" avec catégorie + fourchette de prix locale.
+    if (trade) {
+      jsonLdSchemas.push(
+        getFinancialProductSchema({
+          name: `Aide à la rénovation énergétique — ${service.name} à ${location.name}`,
+          description: `Financement public combiné MaPrimeRénov' + CEE pour ${service.name.toLowerCase()} à ${location.name}. Cumul possible avec éco-PTZ. Tarif indicatif ${Math.round(trade.priceRange.min * pricingMultiplier)}–${Math.round(trade.priceRange.max * pricingMultiplier)}€ ${trade.priceRange.unit}.`,
+          url: pageUrl,
+          category: 'Government Grant',
+        })
+      )
+    }
+  }
 
   // Schema enrichi avec OfferCatalog, AggregateRating et areaServed détaillé
   jsonLdSchemas.push(
