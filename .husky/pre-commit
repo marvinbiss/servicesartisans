@@ -66,5 +66,7 @@ node scripts/audit-indexnow-coverage.mjs --strict || exit 1
 node scripts/audit-middleware-invariants.mjs --strict || exit 1
 node scripts/audit-rge-atomic-swap.mjs --strict || exit 1
 node scripts/audit-reviews-flywheel.mjs --strict || exit 1
+node scripts/audit-rate-limit-failopen.mjs --strict || exit 1
+node scripts/audit-cee-mandataire-flow.mjs --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged

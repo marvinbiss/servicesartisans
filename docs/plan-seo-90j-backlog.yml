@@ -517,6 +517,64 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-cee-mandataire-flow
+    pillar: 3
+    title: Anti-régression flow Mandataire CEE (cee_mandats + Yousign + R.221-1)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-cee-mandataire-flow.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (pivot business mandataire CEE)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:project-mandataire-cee + audit-2026-04-14 + architecture-double-societe
+    notes: >-
+      7 patterns lock-in pivot CEO mandataire CEE Sonergia (marge 1 870€/
+      chantier, viable dès 150 doss/mois P50) : (1) mig 428 cee_leads +
+      cee_mandats, (2) colonnes critiques (lead_id NOT NULL FK / status /
+      yousign_envelope_id / mandat_pdf_url / mandat_mentions JSONB / signed_at /
+      retractation_possible_jusque / expires_at), (3) CHECK status IN
+      ('pending'/'signe'/'retracte'/'depose'/'valide'/'refuse'/'annule'),
+      (4) expires_at DEFAULT 10 years (conservation R.221-1), (5) RLS
+      enabled, (6) webhook Yousign signature_request?.status==='done' →
+      convention_signed, (7) mig 433 security patches SECURITY DEFINER +
+      search_path. 100% pondéré 11/11. Régression = sanctions DGCCRF +
+      perte agrément + revenue stream stoppé.
+  - id: P3-rate-limit-failopen
+    pillar: 3
+    title: Anti-régression politique failOpen Upstash rate-limiter
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-rate-limit-failopen.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (incident lock-in)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:upstash-rate-limit-fix-2026-04-22
+    notes: >-
+      4 patterns lock-in politique failOpen post-incident 22/04 (commit
+      `3ab150da`) : (1) commentaire POLITIQUE 2026-04-22 documenté,
+      (2) checkRateLimit lit config.failOpen + bascule memoryLimiter,
+      (3) 16 endpoints user-facing business-critical avec failOpen:true
+      (auth/signin/api/booking/reviews/devis/contact/upload/search/newsletter/
+      inscription/ceeEstimate/estimation/estimationLead/vapiWebhook/webhook),
+      (4) 5 endpoints sensibles SANS failOpen (payment/gdpr/ai/verify/geocode).
+      100% pondéré 6.5/6.5. Régression = funnel devis 6h+ bloqué sur glitch
+      Upstash OU bypass anti-fraude/coûts API.
   - id: P3-reviews-flywheel
     pillar: 3
     title: Anti-régression flywheel reviews (devis → invitation HMAC → review)
