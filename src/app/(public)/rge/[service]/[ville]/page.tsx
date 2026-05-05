@@ -174,10 +174,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // financières YMYL) et un volume de search/click bien meilleur.
   const countStrict = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
   let hasDeptFallback = false
-  if (countStrict.ok && countStrict.count === 0 && location.department_name) {
+  // 2026-05-05 — passage au CODE département (DB stocke `address_department='75'`,
+  // pas `'Paris'` ; passer le nom rendait toutes les pages thin noindex).
+  if (countStrict.ok && countStrict.count === 0 && location.department_code) {
     const deptListing = await getRgeProvidersByServiceAndDepartement(
       serviceSlug,
-      location.department_name,
+      location.department_code,
       { limit: 1 }
     ).catch(() => ({ providers: [], count: 0 }))
     hasDeptFallback = deptListing.count > 0
@@ -329,10 +331,10 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   // département a bien des artisans. La page reste utile + indexable.
   const confirmedEmpty = await getRgeCountByServiceAndCityStrict(serviceSlug, villeSlug)
   if (confirmedEmpty.ok && confirmedEmpty.count === 0 && count === 0) {
-    if (location.department_name) {
+    if (location.department_code) {
       const deptListing = await getRgeProvidersByServiceAndDepartement(
         serviceSlug,
-        location.department_name,
+        location.department_code,
         { limit: 50 }
       ).catch(() => ({ providers: [], count: 0 }))
       if (deptListing.count > 0) {
@@ -387,23 +389,23 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
   let deptStats: { review_count: number; avg_rating: number } | null = null
   let deptReviews: Awaited<ReturnType<typeof getTopReviewsByDept>> = []
   let fallbackDeptUsed = false
-  if (upgradeV2 && !aggregateRating && location.department_name) {
+  if (upgradeV2 && !aggregateRating && location.department_code) {
     const [stats, reviews] = await Promise.all([
-      getReviewStatsByDept(serviceSlug, location.department_name).catch((err: unknown) => {
+      getReviewStatsByDept(serviceSlug, location.department_code).catch((err: unknown) => {
         logger.error('rge_service_ville.review_stats_dept_error', err as Error, {
           route: 'rge/[service]/[ville]',
           service: serviceSlug,
           ville: villeSlug,
-          dept: location.department_name,
+          dept: location.department_code,
         })
         return null
       }),
-      getTopReviewsByDept(serviceSlug, location.department_name, 5).catch((err: unknown) => {
+      getTopReviewsByDept(serviceSlug, location.department_code, 5).catch((err: unknown) => {
         logger.error('rge_service_ville.top_reviews_dept_error', err as Error, {
           route: 'rge/[service]/[ville]',
           service: serviceSlug,
           ville: villeSlug,
-          dept: location.department_name,
+          dept: location.department_code,
         })
         return []
       }),

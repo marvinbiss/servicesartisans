@@ -7,6 +7,9 @@ import { getAbandonEmail3 } from '@/lib/email/templates/abandon-email-3'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 /**

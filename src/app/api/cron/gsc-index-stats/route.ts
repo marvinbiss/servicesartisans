@@ -9,6 +9,9 @@ import {
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 /** Seuil critique : en dessous, alerte systémique */
 const INDEXATION_RATIO_THRESHOLD = 0.6
 

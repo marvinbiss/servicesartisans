@@ -48,11 +48,15 @@ import { transitionCeeDossierStatus } from '@/lib/cee/dossiers'
 import { getJustificatifsGap } from '@/lib/cee/justificatifs'
 import type { CeeDossierStatus } from '@/lib/cee/dossier-types'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 // ---------------------------------------------------------------------------
 // Constantes
 // ---------------------------------------------------------------------------
 
 /** Borne dure par run pour éviter qu'un cron bloque > maxDuration. */
+
 const MAX_DOSSIERS_PER_RUN = 500
 
 /** Âge minimum pour la règle A (détection justificatifs manquants). */

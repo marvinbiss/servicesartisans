@@ -4,11 +4,15 @@ import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/cron/seo-monitor
  * Dashboard endpoint: aggregated SEO metrics from seo_page_scores.
  * Protected by CRON_SECRET (not publicly exposed).
  */
+
 export const GET = withCronCheckIn('cron-seo-monitor', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })

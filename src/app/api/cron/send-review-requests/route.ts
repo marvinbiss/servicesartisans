@@ -17,6 +17,9 @@ import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 export const GET = withCronCheckIn('cron-send-review-requests', async (request: Request) => {
   const authHeader = request.headers.get('authorization')
   if (!verifyCronSecret(authHeader)) {

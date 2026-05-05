@@ -41,6 +41,24 @@ Avant chaque deploy: `npm run build` en local. Jamais de build cassé sur Vercel
 
 ⚠️ Ces colonnes existent en DB MAIS ne sont actuellement PAS lues par `PROVIDER_DETAIL_SELECT`. Avant de les wirer côté SELECT, vérifier impact perf + cohérence types.
 
+### `providers.address_department` = CODE INSEE (pas le nom) — ‼️
+
+`address_department` stocke le **CODE INSEE 2-3 chars** : `'75'`, `'69'`, `'2A'`, `'974'`. **Jamais le nom**. Source seeding sirene `codePostalEtablissement.substring(0,2)`.
+
+```ts
+// ❌ BUG : silencieusement 0 row
+.eq('address_department', 'Paris')
+.eq('address_department', location.department_name)
+.eq('address_department', villeData.departement)
+
+// ✅ Correct
+.eq('address_department', '75')
+.eq('address_department', location.department_code)
+.eq('address_department', villeData.departementCode)
+```
+
+Hook anti-régression : `scripts/audit-dept-code-not-name.mjs --strict` (pre-commit). Voir post-mortem `servicesartisans-dept-code-bug-2026-05-05.md`.
+
 ### Migrations — règle search_path (CVE-2018-1058)
 
 Toute `CREATE [OR REPLACE] FUNCTION` dans `public` ou `app` DOIT pinner son `search_path` :

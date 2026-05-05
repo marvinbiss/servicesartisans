@@ -486,16 +486,21 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
 // Review stats by department (materialized view)
 // ---------------------------------------------------------------------------
 
+/**
+ * `departmentCode` = CODE INSEE 2-3 chars ('75', '69', '2A'), aligné DB
+ * (`providers.address_department` stocke le code, pas le nom — bug fixé
+ * 2026-05-05 après audit /rge/pompe-a-chaleur/paris).
+ */
 export async function getReviewStatsByDept(
   serviceSlug: string,
-  departmentName: string
+  departmentCode: string
 ): Promise<{ review_count: number; avg_rating: number; latest_review_at: string | null } | null> {
   if (IS_BUILD) return null
 
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) return null
 
-  const cacheKey = `review-stats-dept:${serviceSlug}:${departmentName}`
+  const cacheKey = `review-stats-dept:${serviceSlug}:${departmentCode}`
 
   return getCachedData(
     cacheKey,
@@ -505,7 +510,7 @@ export async function getReviewStatsByDept(
           const { data, error } = await supabase
             .from('review_stats_by_dept')
             .select('review_count, avg_rating, latest_review_at')
-            .eq('address_department', departmentName)
+            .eq('address_department', departmentCode)
             .in('specialty_slug', specialties)
 
           if (error) throw error
@@ -533,9 +538,9 @@ export async function getReviewStatsByDept(
             avg_rating: avgRating,
             latest_review_at: latestReviewAt,
           }
-        }, `getReviewStatsByDept(${serviceSlug}, ${departmentName})`)
+        }, `getReviewStatsByDept(${serviceSlug}, ${departmentCode})`)
       } catch (err) {
-        logger.error(`[getReviewStatsByDept] FAILED for ${serviceSlug}/${departmentName}:`, {
+        logger.error(`[getReviewStatsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
           error: err instanceof Error ? err.message : err,
         })
         return null
@@ -559,9 +564,12 @@ interface DeptReview {
   provider_city: string | null
 }
 
+/**
+ * `departmentCode` = CODE INSEE 2-3 chars (DB column stocke le code).
+ */
 export async function getTopReviewsByDept(
   serviceSlug: string,
-  departmentName: string,
+  departmentCode: string,
   limit?: number
 ): Promise<DeptReview[]> {
   if (IS_BUILD) return []
@@ -570,7 +578,7 @@ export async function getTopReviewsByDept(
   if (!specialties || specialties.length === 0) return []
 
   const effectiveLimit = Math.min(Math.max(limit ?? 3, 1), 10)
-  const cacheKey = `top-reviews-dept:${serviceSlug}:${departmentName}:${effectiveLimit}`
+  const cacheKey = `top-reviews-dept:${serviceSlug}:${departmentCode}:${effectiveLimit}`
 
   return getCachedData(
     cacheKey,
@@ -584,7 +592,7 @@ export async function getTopReviewsByDept(
           const { data: providers, error: provError } = await supabase
             .from('providers')
             .select('id')
-            .eq('address_department', departmentName)
+            .eq('address_department', departmentCode)
             .in('specialty', specialties)
             .eq('is_active', true)
             .limit(500)
@@ -622,9 +630,9 @@ export async function getTopReviewsByDept(
               provider_city: prov?.address_city ?? null,
             }
           })
-        }, `getTopReviewsByDept(${serviceSlug}, ${departmentName})`)
+        }, `getTopReviewsByDept(${serviceSlug}, ${departmentCode})`)
       } catch (err) {
-        logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentName}:`, {
+        logger.error(`[getTopReviewsByDept] FAILED for ${serviceSlug}/${departmentCode}:`, {
           error: err instanceof Error ? err.message : err,
         })
         return []
@@ -641,7 +649,7 @@ export async function getProvidersByServiceAndLocation(
     limit = 50,
     offset = 0,
     postalCode,
-    rgeOnly = false,
+    rgeOnly = true, // 2026-05-05 pivot full RGE — public listings = RGE certifiés only
   }: { limit?: number; offset?: number; postalCode?: string; rgeOnly?: boolean } = {}
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
@@ -738,18 +746,22 @@ export async function getProvidersByServiceAndLocation(
  * Used when a service×city page has 0 local providers — we show artisans
  * from the same département instead of an empty page.
  */
+/**
+ * `departmentCode` = CODE INSEE 2-3 chars (DB column stocke le code).
+ * Default `rgeOnly: true` depuis pivot 2026-05-05 (SA = annuaire RGE).
+ */
 export async function getProvidersByServiceAndDepartment(
   serviceSlug: string,
-  departmentName: string,
+  departmentCode: string,
   options?: { limit?: number; rgeOnly?: boolean }
 ) {
   if (IS_BUILD) return []
 
   const limit = options?.limit ?? 6
-  const rgeOnly = options?.rgeOnly ?? false
+  const rgeOnly = options?.rgeOnly ?? true
   // encodeURIComponent prevents segment ambiguity from special chars (accents,
   // hyphens, theoretical colons) in cache keys — see security audit MED finding.
-  const cacheKey = `providers:svc-dept:${serviceSlug}:${encodeURIComponent(departmentName)}:${limit}${rgeOnly ? ':rge' : ''}`
+  const cacheKey = `providers:svc-dept:${serviceSlug}:${encodeURIComponent(departmentCode)}:${limit}${rgeOnly ? ':rge' : ''}`
   const todayIso = new Date().toISOString().slice(0, 10)
 
   return getCachedData(
@@ -764,7 +776,7 @@ export async function getProvidersByServiceAndDepartment(
             .from('providers')
             .select(PROVIDER_LIST_SELECT)
             .in('specialty', specialties)
-            .eq('address_department', departmentName)
+            .eq('address_department', departmentCode)
             .eq('is_active', true)
 
           if (rgeOnly) {
@@ -779,10 +791,10 @@ export async function getProvidersByServiceAndDepartment(
 
           if (error) throw error
           return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-        }, `getProvidersByServiceAndDepartment(${serviceSlug}, ${departmentName})`)
+        }, `getProvidersByServiceAndDepartment(${serviceSlug}, ${departmentCode})`)
       } catch (err) {
         logger.error(
-          `[getProvidersByServiceAndDepartment] FAILED for ${serviceSlug}/${departmentName}:`,
+          `[getProvidersByServiceAndDepartment] FAILED for ${serviceSlug}/${departmentCode}:`,
           { error: err instanceof Error ? err.message : err }
         )
         return []
@@ -847,7 +859,7 @@ export async function hasProvidersByServiceAndLocation(
 export async function getProviderCountByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
-  { rgeOnly = false }: { rgeOnly?: boolean } = {}
+  { rgeOnly = true }: { rgeOnly?: boolean } = {} // 2026-05-05 pivot full RGE
 ): Promise<number> {
   // Fail open: default to 1 during build so pages are indexed (not noindexed).
   // ISR will correct with the real DB count on first revalidation.
@@ -902,7 +914,7 @@ export async function getProviderCountByServiceAndLocation(
 export async function getProviderCountByServiceAndLocationStrict(
   serviceSlug: string,
   locationSlug: string,
-  { rgeOnly = false }: { rgeOnly?: boolean } = {}
+  { rgeOnly = true }: { rgeOnly?: boolean } = {} // 2026-05-05 pivot full RGE
 ): Promise<{ ok: true; count: number } | { ok: false }> {
   if (IS_BUILD) return { ok: true, count: 1 }
 
@@ -984,34 +996,51 @@ export async function getRgeProviderCountByServiceAndLocation(
   )
 }
 
-export async function getProvidersByLocation(locationSlug: string) {
+/**
+ * Liste de tous les providers d'une ville (toutes spécialités).
+ * 2026-05-05 pivot full RGE — default `rgeOnly: true`. Admin/debug peut
+ * passer `{ rgeOnly: false }` pour bypass.
+ */
+export async function getProvidersByLocation(
+  locationSlug: string,
+  options: { rgeOnly?: boolean } = {}
+) {
   if (IS_BUILD) return [] // Skip during build
 
   // Use STATIC data for location — no DB needed
   const ville = getVilleBySlugImport(locationSlug)
   if (!ville) return []
 
+  const rgeOnly = options.rgeOnly ?? true
   const cityValues = getCityValues(ville.name, ville.departementCode)
+  const todayIso = new Date().toISOString().slice(0, 10)
 
   return getCachedData(
-    `providers:location:${locationSlug}`,
+    `providers:location:${locationSlug}${rgeOnly ? ':rge' : ''}`,
     async () => {
       try {
-        return await retryWithBackoff(async () => {
-          const { data, error } = await supabase
-            .from('providers')
-            .select(PROVIDER_LIST_SELECT)
-            .in('address_city', cityValues)
-            .eq('is_active', true)
-            .order('rge_valid_until', { ascending: false, nullsFirst: false })
-            .order('phone', { ascending: false, nullsFirst: false })
-            .order('is_verified', { ascending: false })
-            .order('name')
-            .limit(500)
+        return await retryWithBackoff(
+          async () => {
+            let query = supabase
+              .from('providers')
+              .select(PROVIDER_LIST_SELECT)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+            if (rgeOnly) {
+              query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            }
+            const { data, error } = await query
+              .order('rge_valid_until', { ascending: false, nullsFirst: false })
+              .order('phone', { ascending: false, nullsFirst: false })
+              .order('is_verified', { ascending: false })
+              .order('name')
+              .limit(500)
 
-          if (error) throw error
-          return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-        }, `getProvidersByLocation(${locationSlug})`)
+            if (error) throw error
+            return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+          },
+          `getProvidersByLocation(${locationSlug}${rgeOnly ? ', rge' : ''})`
+        )
       } catch (err) {
         logger.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, {
           error: err instanceof Error ? err.message : err,
@@ -1054,21 +1083,37 @@ export async function getAllProviders() {
   )
 }
 
-export async function getProvidersByService(serviceSlug: string, limit?: number) {
+/**
+ * Liste des providers pour un service. Default RGE-only depuis pivot
+ * 2026-05-05 (SA = annuaire 100% RGE certifiés). Les pages publiques
+ * ne doivent référencer QUE des artisans RGE — admin peut passer
+ * `{ rgeOnly: false }` pour bypass.
+ */
+export async function getProvidersByService(
+  serviceSlug: string,
+  limit?: number,
+  options: { rgeOnly?: boolean } = {}
+) {
   if (IS_BUILD) return [] // Skip during build
 
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) return []
 
+  const rgeOnly = options.rgeOnly ?? true
   const effectiveLimit = limit || 50
+  const todayIso = new Date().toISOString().slice(0, 10)
   try {
     return await withTimeout(
       (async () => {
-        const { data, error } = await supabase
+        let query = supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .eq('is_active', true)
+        if (rgeOnly) {
+          query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+        }
+        const { data, error } = await query
           .order('rge_valid_until', { ascending: false, nullsFirst: false })
           .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
@@ -1078,30 +1123,43 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
         return resolveProviderCities((data || []) as unknown as ProviderListRow[])
       })(),
       QUERY_TIMEOUT_MS,
-      `getProvidersByService(${serviceSlug})`
+      `getProvidersByService(${serviceSlug}${rgeOnly ? ', rge' : ''})`
     )
   } catch {
     return []
   }
 }
 
-export async function getProviderCountByService(serviceSlug: string): Promise<number> {
+/**
+ * Comptage providers pour un service. Default RGE-only depuis pivot
+ * 2026-05-05.
+ */
+export async function getProviderCountByService(
+  serviceSlug: string,
+  options: { rgeOnly?: boolean } = {}
+): Promise<number> {
   if (IS_BUILD) return 0
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) return 0
+  const rgeOnly = options.rgeOnly ?? true
+  const todayIso = new Date().toISOString().slice(0, 10)
   try {
     return await withTimeout(
       (async () => {
-        const { count, error } = await supabase
+        let query = supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .eq('is_active', true)
+        if (rgeOnly) {
+          query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+        }
+        const { count, error } = await query
         if (error) throw error
         return count ?? 0
       })(),
       QUERY_TIMEOUT_MS,
-      `getProviderCountByService(${serviceSlug})`
+      `getProviderCountByService(${serviceSlug}${rgeOnly ? ', rge' : ''})`
     )
   } catch {
     return 0

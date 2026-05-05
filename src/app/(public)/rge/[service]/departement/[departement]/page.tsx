@@ -65,7 +65,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Vague 1.1 — stratégie 410 fail-open : count=0 confirmé → noindex dans les
   // metadata ; erreur transitoire → on reste indexable (ISR corrige).
-  const countStrict = await getRgeCountByServiceAndDepartementStrict(serviceSlug, dept.name)
+  // 2026-05-05 — passage au CODE département (DB stocke '75', pas 'Paris').
+  const countStrict = await getRgeCountByServiceAndDepartementStrict(serviceSlug, dept.code)
   const isNoindex = countStrict.ok && countStrict.count === 0
 
   // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
@@ -128,7 +129,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
   const { providers, count } = await getRgeProvidersByServiceAndDepartement(
     serviceSlug,
-    dept.name,
+    dept.code,
     { limit: 50 }
   )
 

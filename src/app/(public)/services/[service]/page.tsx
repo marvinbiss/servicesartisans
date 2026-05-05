@@ -163,24 +163,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Sprint 0.2 — pattern Sprint 2 : "{count} {svc} France · {priceMin}–{priceMax} {unit} · 2026"
   // pour gagner du CTR. Truncate à 41 base : avec le template root
   // "%s | ServicesArtisans" (+19) → final 60 chars, sous la limite Google.
+  // 2026-05-05 pivot full RGE — labels titres alignés "RGE certifiés"
   const titleTemplates = upgradeV2
     ? [
         tradeMeta && providerCount > 0
-          ? `${providerCount}+ ${svcLower} France · ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · 2026`
-          : `${countLabel} ${svcLower} France 2026 · Devis 24h`,
-        `${serviceName} 2026 — ${countLabel} artisans vérifiés, devis 24h`,
-        `${serviceName} France 2026 — Comparez, devis gratuit`,
+          ? `${providerCount}+ ${svcLower} RGE France · ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · 2026`
+          : `${countLabel} ${svcLower} RGE France 2026 · Devis 24h`,
+        `${serviceName} RGE 2026 — ${countLabel} artisans certifiés, devis 24h`,
+        `${serviceName} RGE France 2026 — Comparez, devis gratuit`,
         tradeMeta
-          ? `${serviceName} ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · Devis gratuit 2026`
-          : `${serviceName} : Tarifs 2026 + Devis gratuit`,
-        `${serviceName} 2026 — Artisans vérifiés SIREN en France`,
+          ? `${serviceName} RGE ${tradeMeta.priceRange.min}–${tradeMeta.priceRange.max} ${tradeMeta.priceRange.unit} · Devis gratuit 2026`
+          : `${serviceName} RGE : Tarifs 2026 + Devis gratuit`,
+        `${serviceName} 2026 — Artisans RGE certifiés en France`,
       ]
     : [
-        `${serviceName} France 2026 : Devis Gratuit`,
-        `${serviceName} : Artisans Vérifiés + Devis Gratuit`,
-        `${serviceName} France 2026 — Comparez + Devis`,
-        `${serviceName} : Tarifs 2026 + Devis Gratuit`,
-        `${serviceName} 2026 — Artisans Vérifiés en France`,
+        `${serviceName} RGE France 2026 : Devis Gratuit`,
+        `${serviceName} : Artisans RGE certifiés + Devis Gratuit`,
+        `${serviceName} RGE France 2026 — Comparez + Devis`,
+        `${serviceName} RGE : Tarifs 2026 + Devis Gratuit`,
+        `${serviceName} 2026 — Artisans RGE certifiés en France`,
       ]
   // Sprint 5 vague 4 — maxLen 41 → 60 pour récupérer les variants review-prefix
   // riches sur les 46 hubs /services/[service]. 60 = limite Google SERP desktop.
@@ -188,11 +189,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
-    `${serviceName} : ${countLabel} artisans vérifiés SIREN en France. Tarifs, avis clients et devis gratuit sans engagement.`,
-    `Comparez ${countLabel} ${svcLower}s certifiés en France : tarifs, avis vérifiés, certifications. Devis gratuit, réponse rapide.`,
-    `Annuaire ${svcLower}s vérifiés SIREN en France. Prix, avis clients, certifications. Devis gratuit en ligne sans engagement.`,
-    `${serviceName} dans ${departements.length} départements : ${countLabel} artisans référencés, tarifs indicatifs, avis vérifiés. Devis gratuit.`,
-    `${serviceName} France 2026 : comparez ${countLabel} artisans qualifiés. Prix, certifications vérifiées, devis gratuit en ligne.`,
+    `${serviceName} : ${countLabel} artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC). Tarifs, avis clients et devis gratuit sans engagement.`,
+    `Comparez ${countLabel} ${svcLower}s RGE certifiés en France : tarifs, avis vérifiés, certifications RGE actives. Devis gratuit, réponse rapide.`,
+    `Annuaire 100% ${svcLower}s RGE certifiés en France. Prix, avis clients, certifications ADEME. Devis gratuit en ligne sans engagement.`,
+    `${serviceName} dans ${departements.length} départements : ${countLabel} artisans RGE certifiés, tarifs indicatifs, avis vérifiés. Devis gratuit.`,
+    `${serviceName} France 2026 : comparez ${countLabel} artisans RGE certifiés. Prix, certifications RGE vérifiées, devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -594,7 +595,9 @@ export default async function ServicePage({ params }: PageProps) {
             className="text-sand-500 mt-3"
           />
 
-          {/* Stats — Large gradient numbers */}
+          {/* Stats — Large gradient numbers
+              2026-05-05 pivot full RGE — totalProviderCount déjà RGE-only
+              (rgeOnly default true sur getProviderCountByService). */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
               <LiveProviderCount
@@ -602,7 +605,7 @@ export default async function ServicePage({ params }: PageProps) {
                 serviceSlug={serviceSlug}
                 className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra"
               />
-              <span className="text-sm text-sand-400 mt-1">artisans référencés</span>
+              <span className="text-sm text-sand-400 mt-1">artisans RGE certifiés</span>
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
@@ -614,7 +617,7 @@ export default async function ServicePage({ params }: PageProps) {
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
                 100%
               </span>
-              <span className="text-sm text-sand-400 mt-1">données SIREN</span>
+              <span className="text-sm text-sand-400 mt-1">RGE certifiés</span>
             </div>
             {trade && (
               <div className="flex flex-col">
@@ -692,7 +695,7 @@ export default async function ServicePage({ params }: PageProps) {
       {upgradeV2 && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <EnBrefBox
-            summary={`${service.name} en France 2026 : ${countLabelForSummary(totalProviderCount)} artisans vérifiés SIREN, devis gratuits sous 24h${trade ? `, fourchette de prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}` : ''}.`}
+            summary={`${service.name} en France 2026 : ${countLabelForSummary(totalProviderCount)} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuits sous 24h${trade ? `, fourchette de prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}` : ''}.`}
             keyPoints={buildEnBrefPoints({
               serviceName: service.name,
               providerCount: totalProviderCount,
@@ -717,7 +720,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans référencés et vérifiés SIREN dans ${villes.length.toLocaleString('fr-FR')}+ villes. Devis gratuit, données officielles INSEE.`}
+            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans ${villes.length.toLocaleString('fr-FR')}+ villes. Devis gratuit, données officielles ADEME.`}
           />
         </div>
       )}

@@ -6,6 +6,9 @@ import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 /**
  * Cache warmup cron — rotation-based strategy.
  * Runs every 2h (12 runs/day). Covers 20,000+ strategic pages in 24h.

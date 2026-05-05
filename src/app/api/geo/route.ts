@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force dynamic rendering — GET handler reads request.headers (cron-secret / IP / origin).
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/geo — IP-based geolocation fallback
  * Uses Vercel headers first, then ipapi.co as fallback for dev

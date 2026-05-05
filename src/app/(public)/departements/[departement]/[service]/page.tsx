@@ -119,10 +119,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`desc-dept-svc-${deptSlug}-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} qualifié ${getDeptPreposition(dept.name)} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés.`,
-    `${trade.name} ${getDeptPreposition(dept.name)} : comparez les devis de professionnels référencés SIREN. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuit.`,
-    `Besoin d’un ${trade.name.toLowerCase()} ${getDeptPreposition(dept.name)} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Artisans certifiés, devis gratuits en ligne.`,
-    `${dept.name} (${dept.code}) : ${trade.name.toLowerCase()} disponible. Tarifs de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement.`,
+    `Trouvez un ${trade.name.toLowerCase()} RGE certifié ${getDeptPreposition(dept.name)} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans RGE vérifiés.`,
+    `${trade.name} RGE ${getDeptPreposition(dept.name)} : comparez les devis d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC). ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuit.`,
+    `Besoin d’un ${trade.name.toLowerCase()} RGE ${getDeptPreposition(dept.name)} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Artisans RGE certifiés, devis gratuits en ligne.`,
+    `${dept.name} (${dept.code}) : ${trade.name.toLowerCase()} RGE disponible. Tarifs de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -274,7 +274,7 @@ export default async function DeptServicePage({ params }: PageProps) {
     reviewStats && reviewStats.avg_rating > 0 && reviewStats.review_count > 0
       ? `Note moyenne ${Number(reviewStats.avg_rating).toFixed(1)}/5 sur ${reviewStats.review_count} avis vérifiés.`
       : null
-  const enBrefSummary = `${trade.name} ${getDeptPreposition(dept.name)} (${dept.code}) — tarif ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés SIREN.${ratingSummary ? ` ${ratingSummary}` : ''}`
+  const enBrefSummary = `${trade.name} RGE ${getDeptPreposition(dept.name)} (${dept.code}) — tarif ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC).${ratingSummary ? ` ${ratingSummary}` : ''}`
   const enBrefPoints = [
     `Tarif ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}×)`,
     `${villesCount} villes couvertes dans le ${dept.name}`,

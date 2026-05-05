@@ -518,7 +518,8 @@ export async function generateMetadata({
   const priceTag = `dès ${minPrice}€`
 
   // Sprint 2 CTR — short review prefix (titles already carry urgency signals, tight budget)
-  const metaReviewStats = await getReviewStatsByDept(service, villeData.departement).catch(
+  // 2026-05-05 — DB stocke address_department en CODE INSEE.
+  const metaReviewStats = await getReviewStatsByDept(service, villeData.departementCode).catch(
     () => null
   )
   const hasReviewProof = !!(metaReviewStats && metaReviewStats.review_count >= 5)
@@ -545,9 +546,9 @@ export async function generateMetadata({
 
   const descHash = Math.abs(hashCode(`urgence-ville-desc-${service}-${villeSlug}`))
   const descTemplates = [
-    `Urgence ${tradeLower} à ${villeData.name} ${priceTag} : intervention rapide 24h/24, week-end inclus. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.${descReviewSnippet}`,
+    `Urgence ${tradeLower} à ${villeData.name} ${priceTag} : intervention rapide 24h/24, week-end inclus. ${trade.averageResponseTime}. Artisans RGE certifiés, devis gratuit.${descReviewSnippet}`,
     `Dépannage ${tradeLower} urgent à ${villeData.name} ${priceTag} : disponible nuit, soir et week-end. ${trade.averageResponseTime}. Artisans vérifiés.${descReviewSnippet}`,
-    `${trade.name} d'urgence à ${villeData.name} ${priceTag} : intervention rapide 7j/7. Professionnels référencés à proximité. Devis gratuit.${descReviewSnippet}`,
+    `${trade.name} d'urgence à ${villeData.name} ${priceTag} : intervention rapide 7j/7. Artisans RGE certifiés à proximité. Devis gratuit.${descReviewSnippet}`,
     `Besoin d'un ${tradeLower} en urgence à ${villeData.name} ? Tarifs ${priceTag}, intervention rapide soir et week-end. ${trade.averageResponseTime}.${descReviewSnippet}`,
     `Urgence ${tradeLower} ${villeData.name} ${priceTag} : artisans disponibles pour intervention immédiate 24h/24. ${trade.averageResponseTime}. Devis gratuit.${descReviewSnippet}`,
   ]
@@ -649,22 +650,23 @@ async function renderUrgenceServiceVillePage({
   })
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
+  // 2026-05-05 — DB stocke address_department en CODE INSEE.
   const [reviewStats, topReviews, dynamicLastMod] = await Promise.all([
-    getReviewStatsByDept(service, villeData.departement).catch((err: unknown) => {
+    getReviewStatsByDept(service, villeData.departementCode).catch((err: unknown) => {
       logger.error('urgence_service_ville.review_stats_error', err as Error, {
         route: 'urgence/[service]/[ville]',
         service,
         ville: villeSlug,
-        dept: villeData.departement,
+        dept: villeData.departementCode,
       })
       return null
     }),
-    getTopReviewsByDept(service, villeData.departement).catch((err: unknown) => {
+    getTopReviewsByDept(service, villeData.departementCode).catch((err: unknown) => {
       logger.error('urgence_service_ville.top_reviews_error', err as Error, {
         route: 'urgence/[service]/[ville]',
         service,
         ville: villeSlug,
-        dept: villeData.departement,
+        dept: villeData.departementCode,
       })
       return []
     }),
@@ -692,7 +694,7 @@ async function renderUrgenceServiceVillePage({
   )
   let isFallback = false
   if (providers.length === 0) {
-    providers = await getProvidersByServiceAndDepartment(service, villeData.departement, {
+    providers = await getProvidersByServiceAndDepartment(service, villeData.departementCode, {
       limit: 6,
     })
     isFallback = providers.length > 0
@@ -1011,7 +1013,7 @@ async function renderUrgenceServiceVillePage({
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4" />
-              <span className="text-sm">Artisans référencés</span>
+              <span className="text-sm">Artisans RGE certifiés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <CheckCircle className="w-4 h-4" />

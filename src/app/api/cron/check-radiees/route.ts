@@ -6,6 +6,9 @@ import { SIRENE_CONFIG } from '@/lib/sirene/config'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 /**
  * Cron: Vérifie les SIRET en DB via l'API INSEE SIRENE.
  * Désactive les providers dont l'établissement est radié (fermé).

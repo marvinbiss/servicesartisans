@@ -5,6 +5,9 @@ import { logger } from '@/lib/logger'
 import { timingSafeStringEqual } from '@/lib/auth/timing-safe-equal'
 import { readJsonBodyWithCap } from '@/lib/auth/read-body-with-cap'
 
+// Force dynamic rendering — GET handler reads request.headers (cron-secret / IP / origin).
+export const dynamic = 'force-dynamic'
+
 // Schema pour revalidation single path (rétrocompatible)
 const revalidateSingleSchema = z.object({
   path: z.string().min(1, 'Path requis'),

@@ -76,3 +76,6 @@ audit-provider-claim-flow.mjs --strict
 audit-rge-cee-linking.mjs --strict
 audit-authors-honest-eeat.mjs --strict
 audit-platform-invariants.mjs --strict
+audit-dept-code-not-name.mjs --strict
+audit-cron-force-dynamic.mjs --strict
+audit-public-rge-only.mjs --strict

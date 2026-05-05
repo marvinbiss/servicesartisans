@@ -13,10 +13,13 @@ interface TrustBarProps {
 export default async function TrustBar({ className = '' }: TrustBarProps) {
   const stats = await getSiteStats()
 
+  // 2026-05-05 pivot full RGE — labels alignés sur "100% RGE certifiés"
+  // (Qualibat, Qualifelec, QualiPAC, Qualit'EnR…). artisanCount déjà filtré
+  // RGE-only en amont via getSiteStats.
   const artisanLabel =
     stats.artisanCount > 0
-      ? `${formatProviderCount(stats.artisanCount)}+ artisans référencés`
-      : '45 000+ artisans référencés'
+      ? `${formatProviderCount(stats.artisanCount)}+ artisans RGE certifiés`
+      : '45 000+ artisans RGE certifiés'
 
   const reviewLabel =
     stats.reviewCount > 0
@@ -37,7 +40,7 @@ export default async function TrustBar({ className = '' }: TrustBarProps) {
     },
     {
       icon: <ShieldCheck className="h-4 w-4 text-primary-600 shrink-0" aria-hidden="true" />,
-      label: 'Données SIREN officielles',
+      label: 'RGE vérifié ADEME',
     },
     {
       icon: <MapPin className="h-4 w-4 text-primary-600 shrink-0" aria-hidden="true" />,

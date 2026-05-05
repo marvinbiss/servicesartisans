@@ -448,16 +448,17 @@ export async function generateMetadata({
   }
 
   // Sprint 2 CTR — short prefix + 2026 modifier (tight title budget)
+  // 2026-05-05 — DB stocke address_department en CODE INSEE.
   const reviewStats = await getReviewStatsByDept(
     problem.primaryService,
-    villeData.departement
+    villeData.departementCode
   ).catch((err: unknown) => {
     logger.error('probleme_ville.review_stats_metadata_error', err as Error, {
       route: 'problemes/[probleme]/[ville]',
       probleme,
       ville,
       service: problem.primaryService,
-      dept: villeData.departement,
+      dept: villeData.departementCode,
     })
     return null
   })
@@ -486,7 +487,7 @@ export async function generateMetadata({
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 
-  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} €. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.${descReviewSnippet}`
+  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} €. Diagnostic, conseils d'urgence et artisans RGE certifiés. ${problem.averageResponseTime}.${descReviewSnippet}`
 
   return {
     title,

@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!dept) return { title: 'Département non trouvé' }
 
   const metaContent = generateDepartementContent(dept)
-  const artisanCount = await getProviderCountByDepartment(dept.name)
+  const artisanCount = await getProviderCountByDepartment(dept.code)
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
   const countPrefix = artisanCount >= 50 ? `${formatProviderCount(artisanCount)} ` : ''
@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
     `Trouvez des artisans qualifiés ${getDeptPreposition(dept.name)} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
-    `${dept.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `${dept.name} : ${artisanStr}annuaire d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC). ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
     `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${artisanStr}${dept.population} hab., chef-lieu ${dept.chefLieu}. Devis gratuits en ligne.`,
     `${artisanStr}${services.length} corps de métier ${getDeptPreposition(dept.name)}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
     `Tous les artisans ${getDeptArticle(dept.name)} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
@@ -128,7 +128,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const villesDuDepartement = getVillesByDepartement(dept.code)
   const content = generateDepartementContent(dept)
-  const deptArtisanCount = await getProviderCountByDepartment(dept.name)
+  const deptArtisanCount = await getProviderCountByDepartment(dept.code)
 
   // Other departments in the same region
   const siblingDepts = departements.filter((d) => d.region === dept.region && d.slug !== dept.slug)
@@ -166,7 +166,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const collectionPageSchema = getCollectionPageSchema({
     name: `Artisans en ${dept.name} (${dept.code})`,
-    description: `Trouvez des artisans qualifiés ${getDeptPreposition(dept.name)} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
+    description: `Trouvez des artisans RGE certifiés ${getDeptPreposition(dept.name)} (${dept.code}). ${services.length} corps de métier, artisans RGE Qualibat / Qualifelec / QualiPAC.`,
     url: `/departements/${dept.slug}`,
     itemCount: services.length,
   })
@@ -234,7 +234,7 @@ export default async function DepartementPage({ params }: PageProps) {
   ]
 
   const tldrBullets: string[] = [
-    `Annuaire d'artisans ${getDeptArticle(dept.name)} (${dept.code}) — ${services.length} corps de métier, ${formatProviderCount(deptArtisanCount || 0)} pros référencés.`,
+    `Annuaire d'artisans RGE ${getDeptArticle(dept.name)} (${dept.code}) — ${services.length} corps de métier, ${formatProviderCount(deptArtisanCount || 0)} pros RGE certifiés.`,
     `Profil départemental : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.housingLabel.toLowerCase()}, ${content.profile.economyLabel.toLowerCase()}.`,
     `Maillage : ${villesDuDepartement.length || dept.villes.length} villes du ${dept.code} couvertes, du chef-lieu ${dept.chefLieu} aux communes périphériques.`,
     `Notre rôle : mise en relation gratuite avec un artisan vérifié SIREN, devis sous 24 h, sans engagement.`,

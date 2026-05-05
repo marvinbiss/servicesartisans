@@ -136,17 +136,19 @@ interface AvisReview {
 async function getTopProviders(
   cityName: string,
   serviceSlug: string,
-  departmentName: string
+  departmentCode: string
 ): Promise<AvisProvider[]> {
   if (IS_BUILD) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
+    const todayIso = new Date().toISOString().slice(0, 10)
 
     // Specialty slugs for this service (for RPC fallback)
     const specialtySlugs = SERVICE_TO_SPECIALTIES[serviceSlug] ?? [serviceSlug]
 
-    // 1) Try city-level first — all active providers (no review_count filter)
+    // 1) Try city-level first — RGE certifiés actifs uniquement
+    // 2026-05-05 pivot full RGE — public listing = RGE only.
     const { data: cityData } = await supabase
       .from('providers')
       .select(
@@ -155,25 +157,40 @@ async function getTopProviders(
       .eq('is_active', true)
       .in('address_city', getCityValues(cityName))
       .in('specialty_slug', specialtySlugs)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', todayIso)
       .order('rating_average', { ascending: false, nullsFirst: false })
       .order('review_count', { ascending: false, nullsFirst: false })
       .limit(6)
 
     if (cityData && cityData.length >= 2) return cityData
 
-    // 2) Fallback: department-level via RPC (indexed, fast)
+    // 2) Fallback: department-level via RPC (indexed, fast).
+    // 2026-05-05 — DB stocke `address_department` en CODE INSEE. Le RPC
+    // ne supporte pas le filtre RGE — on filtre côté client après fetch.
     const { data: deptData } = await supabase.rpc('get_providers_by_dept', {
       p_specialty_slugs: specialtySlugs,
-      p_department: departmentName,
-      p_limit: 6,
+      p_department: departmentCode,
+      p_limit: 50,
     })
 
-    if (deptData && deptData.length > 0) {
+    type RpcRow = AvisProvider & {
+      rge_qualifications?: unknown
+      rge_valid_until?: string | null
+    }
+    const deptRgeFiltered = (deptData ?? []).filter((p: RpcRow) => {
+      const quals = p.rge_qualifications
+      const validUntil = p.rge_valid_until
+      const hasQuals = Array.isArray(quals) ? quals.length > 0 : quals != null && quals !== ''
+      return hasQuals && validUntil != null && validUntil >= todayIso
+    })
+
+    if (deptRgeFiltered.length > 0) {
       // Merge: city providers first, then dept providers (deduplicated)
       const cityIds = new Set((cityData ?? []).map((p) => p.id))
       const merged = [
         ...(cityData ?? []),
-        ...deptData.filter((p: AvisProvider) => !cityIds.has(p.id)),
+        ...deptRgeFiltered.filter((p: RpcRow) => !cityIds.has(p.id)),
       ]
       return merged.slice(0, 6)
     }
@@ -262,13 +279,13 @@ export async function generateMetadata({
 
   // Sprint 2 CTR Attack — fetch dept review stats once for both metadata + noindex gate.
   // Fail-open: null stats => no proof prefix + hasReviews defaults to true (keep indexed).
-  const reviewStats = await getReviewStatsByDept(service, villeData.departement).catch(
+  const reviewStats = await getReviewStatsByDept(service, villeData.departementCode).catch(
     (err: unknown) => {
       logger.error('avis_service_ville.review_stats_metadata_error', err as Error, {
         route: 'avis/[service]/[ville]',
         service,
         ville,
-        dept: villeData.departement,
+        dept: villeData.departementCode,
       })
       return null
     }
@@ -288,7 +305,7 @@ export async function generateMetadata({
   // longues villes (Saint-Just-en-Chaussée, Verneuil-d'Avre…).
   const titleTemplates = [
     `${reviewPrefix}Avis ${trade.name} ${villeData.name} 2026 — Tarifs ${priceTag}`,
-    `${reviewPrefix}Avis ${tradeLower} à ${villeData.name} — Pros vérifiés 2026`,
+    `${reviewPrefix}Avis ${tradeLower} à ${villeData.name} — RGE certifiés 2026`,
     `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Tarifs ${priceTag}`,
     `${reviewPrefix}Avis ${trade.name} ${villeData.name} — Top artisans 2026`,
     `${reviewPrefix}Avis ${tradeLower} ${villeData.name} 2026 — Prix ${priceTag}`,
@@ -329,7 +346,7 @@ export async function generateMetadata({
   // des artisans, la page rend bien un listing utile — ne pas noindex.
   const hasFallbackDept = hasProviders
     ? false
-    : await hasDeptProviderFallback(service, villeData.departement)
+    : await hasDeptProviderFallback(service, villeData.departementCode)
 
   // Stratégie 140K V1 #5 (2026-04-29) : seuil strict 3 avis minimum (au niveau
   // département, source `getReviewStatsByDept`). Sans social proof minimal,
@@ -430,9 +447,11 @@ async function renderAvisServiceVillePage({
   // Cascade: city-level first, fallback to department-level (all active, no review filter)
   // Fail-open : un throw imprévu (timeout Redis, RLS, etc.) ne doit jamais
   // causer un 500 sur cette page indexée par Googlebot. Audit 2026-04-25.
-  const topProviders = await getTopProviders(villeData.name, service, villeData.departement).catch(
-    () => [] as Awaited<ReturnType<typeof getTopProviders>>
-  )
+  const topProviders = await getTopProviders(
+    villeData.name,
+    service,
+    villeData.departementCode
+  ).catch(() => [] as Awaited<ReturnType<typeof getTopProviders>>)
   // reviews.provider_id references providers.id directly
   const providerIds = topProviders.map((p) => p.id).filter((pid): pid is string => !!pid)
   const reviews = await getRecentReviews(providerIds).catch((err: unknown) => {
@@ -446,22 +465,23 @@ async function renderAvisServiceVillePage({
   })
 
   // Enrichment data (social proof, freshness, AEO) — fail-open
+  // 2026-05-05 — DB stocke address_department en CODE INSEE.
   const [reviewStats, topReviewsDept, dynamicLastMod] = await Promise.all([
-    getReviewStatsByDept(service, villeData.departement).catch((err: unknown) => {
+    getReviewStatsByDept(service, villeData.departementCode).catch((err: unknown) => {
       logger.error('avis_service_ville.review_stats_render_error', err as Error, {
         route: 'avis/[service]/[ville]',
         service,
         ville: villeSlug,
-        dept: villeData.departement,
+        dept: villeData.departementCode,
       })
       return null
     }),
-    getTopReviewsByDept(service, villeData.departement).catch((err: unknown) => {
+    getTopReviewsByDept(service, villeData.departementCode).catch((err: unknown) => {
       logger.error('avis_service_ville.top_reviews_error', err as Error, {
         route: 'avis/[service]/[ville]',
         service,
         ville: villeSlug,
-        dept: villeData.departement,
+        dept: villeData.departementCode,
       })
       return []
     }),
@@ -826,7 +846,7 @@ async function renderAvisServiceVillePage({
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
-                <span>Artisans référencés</span>
+                <span>Artisans RGE certifiés</span>
               </div>
               {commune?.nb_entreprises_artisanales && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">

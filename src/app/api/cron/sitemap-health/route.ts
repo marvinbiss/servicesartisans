@@ -8,6 +8,9 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { computeSitemapDiff, persistSitemapRun, type SitemapRun } from '@/lib/seo/sitemap-diff'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 const RGE_STALE_WARN_DAYS = 7
 const RGE_STALE_CRITICAL_DAYS = 14
 

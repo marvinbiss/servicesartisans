@@ -12,14 +12,20 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
-/** Nombre total d'artisans actifs dans la base */
+/**
+ * Nombre total d'artisans RGE actifs dans la base.
+ * 2026-05-05 pivot full RGE — comptait tous providers actifs avant.
+ */
 async function _getProviderCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
+    const todayIso = new Date().toISOString().slice(0, 10)
     const { count } = await supabase
       .from('providers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', todayIso)
     return count ?? 0
   } catch {
     return 0
@@ -48,17 +54,31 @@ export async function getProviderCountByRegion(regionName: string): Promise<numb
   }
 }
 
-/** Nombre d'artisans actifs dans un département (par nom de département) */
-export async function getProviderCountByDepartment(deptName: string): Promise<number> {
+/**
+ * Nombre d'artisans RGE actifs dans un département.
+ * `deptCode` = CODE INSEE 2-3 chars ('75', '69', '2A'). DB stocke le code,
+ * pas le nom — bug fixé 2026-05-05.
+ * 2026-05-05 pivot full RGE — default `rgeOnly: true`.
+ */
+export async function getProviderCountByDepartment(
+  deptCode: string,
+  options: { rgeOnly?: boolean } = {}
+): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
+  const rgeOnly = options.rgeOnly ?? true
   try {
     const supabase = createAdminClient()
-    const { count } = await supabase
+    const todayIso = new Date().toISOString().slice(0, 10)
+    let query = supabase
       .from('providers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      .eq('address_department', deptName)
+      .eq('address_department', deptCode)
+    if (rgeOnly) {
+      query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+    }
+    const { count } = await query
     return count ?? 0
   } catch {
     return 1 // Fail open: default to indexed. ISR will correct with real DB data.
@@ -103,13 +123,28 @@ export interface HomepageData extends SiteStats {
   recentReviews: HomepageReview[]
 }
 
-/** Toutes les stats du site en un seul appel (pour la homepage) */
-export async function getSiteStats(): Promise<SiteStats> {
+/**
+ * Toutes les stats du site en un seul appel (pour la homepage).
+ *
+ * 2026-05-05 — wrappé `unstable_cache` (revalidate 1h) car l'absence de cache
+ * faisait rejouer 4 count-queries sur `providers` (970K rows) à chaque cold
+ * ISR de la homepage. LCP cold = 9.6s observé en Lighthouse prod.
+ */
+async function _getSiteStats(): Promise<SiteStats> {
   try {
     const supabase = createAdminClient()
+    const todayIso = new Date().toISOString().slice(0, 10)
 
+    // 2026-05-05 pivot full RGE — artisanCount = artisans RGE actifs uniquement
+    // (non plus tous providers actifs). Aligne homepage TrustBar + barometres
+    // sur le positionnement "annuaire 100% RGE certifiés".
     const [providerRes, reviewCountRes, ratingsRes, deptRes] = await Promise.all([
-      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso),
       supabase
         .from('reviews')
         .select('*', { count: 'exact', head: true })
@@ -142,6 +177,11 @@ export async function getSiteStats(): Promise<SiteStats> {
   }
 }
 
+export const getSiteStats = unstable_cache(_getSiteStats, ['site-stats'], {
+  revalidate: 3600,
+  tags: ['providers', 'reviews'],
+})
+
 // Pivot full RGE 2026-05-03 : serrurier retiré (commodity hors RGE) — homepage
 // met désormais en avant 8 métiers RGE-canonical (catalog SSoT).
 const HOMEPAGE_SERVICE_SLUGS = [
@@ -155,8 +195,15 @@ const HOMEPAGE_SERVICE_SLUGS = [
   'isolation-thermique',
 ]
 
-/** Données complètes pour la homepage : stats + providers + avis + compteurs */
-export async function getHomepageData(): Promise<HomepageData> {
+/**
+ * Données complètes pour la homepage : stats + providers + avis + compteurs.
+ *
+ * 2026-05-05 — wrappé `unstable_cache` 1h. La query `serviceCounts` pull TOUS
+ * les rows providers matchant les 8 slugs (potentiellement 200K+) juste pour
+ * faire un .reduce en JS — on conserve la logique tant qu'on n'a pas un index
+ * dédié, mais on amortit le coût sur 1h via le cache.
+ */
+async function _getHomepageData(): Promise<HomepageData> {
   const stats = await getSiteStats()
 
   if (IS_BUILD) {
@@ -167,22 +214,19 @@ export async function getHomepageData(): Promise<HomepageData> {
     const supabase = createAdminClient()
 
     const [countsResults, providersRes, reviewsRes] = await Promise.all([
-      // Batch: single query instead of N+1 sequential calls
-      supabase
-        .from('providers')
-        .select('specialty')
-        .eq('is_active', true)
-        .in('specialty', HOMEPAGE_SERVICE_SLUGS)
-        .then(({ data }) => {
-          const counts = new Map<string, number>()
-          for (const slug of HOMEPAGE_SERVICE_SLUGS) counts.set(slug, 0)
-          if (data) {
-            for (const row of data) {
-              if (row.specialty) counts.set(row.specialty, (counts.get(row.specialty) || 0) + 1)
-            }
-          }
-          return Array.from(counts.entries()) as [string, number][]
-        }),
+      // 2026-05-05 — passé de SELECT-rows-and-reduce (200K rows ~3s) à 8
+      // HEAD-count parallèles (~50ms total, indexed). Le résultat est cached
+      // 1h via unstable_cache.
+      Promise.all(
+        HOMEPAGE_SERVICE_SLUGS.map((slug) =>
+          supabase
+            .from('providers')
+            .select('*', { count: 'exact', head: true })
+            .eq('is_active', true)
+            .eq('specialty', slug)
+            .then(({ count }) => [slug, count ?? 0] as [string, number])
+        )
+      ),
       supabase
         .from('providers')
         .select(
@@ -223,3 +267,8 @@ export async function getHomepageData(): Promise<HomepageData> {
     return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
   }
 }
+
+export const getHomepageData = unstable_cache(_getHomepageData, ['homepage-data'], {
+  revalidate: 3600,
+  tags: ['providers', 'reviews'],
+})

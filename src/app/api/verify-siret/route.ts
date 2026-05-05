@@ -18,6 +18,9 @@ import {
   lookupSiren,
 } from '@/lib/services/siret-service'
 
+// Force dynamic rendering — GET handler reads request.headers (cron-secret / IP / origin).
+export const dynamic = 'force-dynamic'
+
 // ─── Main handler ───────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {

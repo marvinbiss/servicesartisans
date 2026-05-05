@@ -4,6 +4,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 export const maxDuration = 60
 
 /**

@@ -355,14 +355,17 @@ export async function getRgeProvidersByServiceAndCity(
 
 /**
  * Récupère les artisans RGE actifs pour un couple (service, département).
- * Filtrage par `address_department` (nom du département, ex: "Bouches-du-Rhône").
+ * Filtrage par `address_department` (CODE INSEE 2-3 chars : "75", "69", "2A").
+ * Le seeding sirene stocke `codePostalEtablissement.substring(0,2)` → code,
+ * pas un nom. Passer un nom ("Paris") renvoie 0 silencieusement et noindex
+ * massivement les pages /rge — bug confirmé 2026-05-05.
  * - pagination 50 par défaut
  * - cache via getCachedData (CACHE_TTL.artisans = 1h)
  * - fail-safe : retourne liste vide sur erreur (la page passe en noindex)
  */
 export async function getRgeProvidersByServiceAndDepartement(
   serviceSlug: string,
-  departementName: string,
+  departementCode: string,
   { limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}
 ): Promise<RgeServiceCityListing> {
   if (IS_BUILD) return { providers: [], count: 1 } // fail-open: keep pages indexed during build
@@ -382,7 +385,7 @@ export async function getRgeProvidersByServiceAndDepartement(
   const cacheVersion = decretCategory !== undefined ? ':v2' : ''
   // encodeURIComponent prevents segment ambiguity in cache keys (accents,
   // hyphens, theoretical colons) — see security audit MED finding.
-  const cacheKey = `rge:svc-dept:${serviceSlug}:${encodeURIComponent(departementName)}:${limit}:${offset}${cacheVersion}`
+  const cacheKey = `rge:svc-dept:${serviceSlug}:${encodeURIComponent(departementCode)}:${limit}:${offset}${cacheVersion}`
 
   return getCachedData<RgeServiceCityListing>(
     cacheKey,
@@ -421,7 +424,7 @@ export async function getRgeProvidersByServiceAndDepartement(
             { count: 'exact' }
           )
           .in('specialty', specialties)
-          .eq('address_department', departementName)
+          .eq('address_department', departementCode)
           .eq('is_active', true)
           .not('rge_qualifications', 'is', null)
           .gte('rge_valid_until', today)
@@ -448,7 +451,7 @@ export async function getRgeProvidersByServiceAndDepartement(
         return { providers, count: count ?? providers.length }
       } catch (err) {
         notifyFailOpen('rge-list-by-service-dept', err, {
-          key: `${serviceSlug}:${departementName}`,
+          key: `${serviceSlug}:${departementCode}`,
         })
         return { providers: [], count: 0 }
       }
@@ -523,10 +526,11 @@ export async function getRgeCountByServiceAndCityStrict(
 /**
  * Variante stricte pour le couple (service, département).
  * Même sémantique que `getRgeCountByServiceAndCityStrict`.
+ * `departementCode` = CODE INSEE 2-3 chars ('75', '69', '2A'), aligné DB.
  */
 export async function getRgeCountByServiceAndDepartementStrict(
   serviceSlug: string,
-  departementName: string
+  departementCode: string
 ): Promise<{ ok: true; count: number } | { ok: false }> {
   if (IS_BUILD) return { ok: true, count: 1 }
 
@@ -546,7 +550,7 @@ export async function getRgeCountByServiceAndDepartementStrict(
       .from('providers')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
-      .eq('address_department', departementName)
+      .eq('address_department', departementCode)
       .eq('is_active', true)
       .not('rge_qualifications', 'is', null)
       .gte('rge_valid_until', today)
@@ -561,7 +565,7 @@ export async function getRgeCountByServiceAndDepartementStrict(
     return { ok: true, count: count ?? 0 }
   } catch (err) {
     logger.warn(
-      `[getRgeCountByServiceAndDepartementStrict] transient error for ${serviceSlug}/${departementName}`,
+      `[getRgeCountByServiceAndDepartementStrict] transient error for ${serviceSlug}/${departementCode}`,
       { error: err instanceof Error ? err.message : err }
     )
     return { ok: false }

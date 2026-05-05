@@ -13,7 +13,6 @@ import {
   ArrowRight,
   FileText,
   SearchX,
-  ShieldCheck,
   Star,
   Leaf,
 } from 'lucide-react'
@@ -59,7 +58,7 @@ export default function ServiceLocationPageClient({
   serviceSlug,
   locationSlug,
   recentDevisCount = 0,
-  rgeOnly = false,
+  rgeOnly = true, // 2026-05-05 pivot full RGE — default on côté serveur
 }: ServiceLocationPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -274,20 +273,17 @@ export default function ServiceLocationPageClient({
                 </p>
               )}
 
-              {/* Reassurance bar */}
+              {/* Reassurance bar
+                  2026-05-05 pivot full RGE — `liveCount` est désormais déjà
+                  RGE-only (rgeOnly default true côté listing). On unifie les
+                  deux compteurs en "artisans RGE certifiés" pour ne plus
+                  surcompter "artisans vérifiés" + "certifiés RGE". */}
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3">
                 {liveCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
-                    <ShieldCheck className="w-4 h-4 text-accent-500" />
-                    <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan
-                    {liveCount > 1 ? 's' : ''} vérifié{liveCount > 1 ? 's' : ''}
-                  </span>
-                )}
-                {rgeCount > 0 && (
-                  <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <Leaf className="w-4 h-4 text-emerald-600" />
-                    <span className="font-semibold text-charcoal-900">{rgeCount}</span> certifié
-                    {rgeCount > 1 ? 's' : ''} RGE
+                    <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan
+                    {liveCount > 1 ? 's' : ''} RGE certifié{liveCount > 1 ? 's' : ''}
                   </span>
                 )}
                 {avgRating && (

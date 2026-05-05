@@ -115,7 +115,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           : `${ville.name} 2026 — ${services.length} métiers d’artisans, devis 24h`,
         `Artisans ${ville.name} (${ville.departementCode}) 2026 — Devis gratuit 24h`,
         `${ville.name} 2026 : ${services.length} métiers, devis 24h, RGE certifiés`,
-        `${ville.name} (${ville.departementCode}) — Annuaire artisans vérifiés 2026`,
+        `${ville.name} (${ville.departementCode}) — Annuaire artisans RGE 2026`,
         `Artisans ${ville.name} 2026 — Devis 24h`,
         `Artisans ${ville.name} 2026`,
         `Artisans ${ville.name}`,

@@ -13,6 +13,7 @@ import {
   getRgeProviderCountByServiceAndLocation,
 } from '@/lib/supabase'
 import ServiceLocationPageClient from './PageClient'
+import SimpleView from './_components/SimpleView'
 import SeoContent from './_components/SeoContent'
 import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
@@ -222,7 +223,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   let serviceName = ''
   let locationName = ''
   let departmentCode = ''
-  let departmentName = ''
   // Fail open: default to indexed. ISR will correct if truly 0 providers.
   let providerCount = 1
 
@@ -238,7 +238,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (location) {
       locationName = location.name
       departmentCode = location.department_code || ''
-      departmentName = location.department_name || ''
     }
 
     providerCount = count
@@ -250,7 +249,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (ville) {
       locationName = ville.name
       departmentCode = ville.departementCode
-      departmentName = ville.departement
     }
     providerCount = 1 // Fail open: default to indexed. ISR will correct if truly 0 providers.
   }
@@ -261,20 +259,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Sprint 2 CTR Attack — inject review social proof into title/desc when threshold met.
   // Fail-open: if DB hiccups or no reviews, fall through to existing templates.
-  const reviewStats =
-    departmentName || departmentCode
-      ? await getReviewStatsByDept(serviceSlug, departmentName || departmentCode).catch(
-          (err: unknown) => {
-            logger.error('service_location.review_stats_metadata_error', err as Error, {
-              route: 'services/[service]/[location]',
-              service: serviceSlug,
-              location: locationSlug,
-              dept: departmentName || departmentCode,
-            })
-            return null
-          }
-        )
-      : null
+  // 2026-05-05 — DB stocke `address_department` en CODE ('75', '69'), pas en
+  // nom ; passer le nom rendait reviewStats systématiquement null.
+  const reviewStats = departmentCode
+    ? await getReviewStatsByDept(serviceSlug, departmentCode).catch((err: unknown) => {
+        logger.error('service_location.review_stats_metadata_error', err as Error, {
+          route: 'services/[service]/[location]',
+          service: serviceSlug,
+          location: locationSlug,
+          dept: departmentCode,
+        })
+        return null
+      })
+    : null
   const hasReviewProof = !!(reviewStats && reviewStats.review_count >= 5)
   const reviewPrefix =
     hasReviewProof && reviewStats
@@ -337,7 +334,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // are absent but the department-level fallback yields ≥1 artisan, the
     // page renders an active listing — must NOT be noindex'd.
     // See `renderServiceLocationPage` providersResult fallback (page.tsx).
-    hasFallbackDept = await hasDeptProviderFallback(serviceSlug, departmentName)
+    hasFallbackDept = await hasDeptProviderFallback(serviceSlug, departmentCode)
   }
   // Critère hasUniqueData restreint au fallback département (audit GSC 2026-04-30).
   //
@@ -423,7 +420,7 @@ function generateJsonLd(
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: `${service.name} à ${location.name}`,
-    description: `Trouvez un ${svcLower} qualifié à ${location.name}. Artisans vérifiés SIREN, devis gratuit et avis clients.`,
+    description: `Trouvez un ${svcLower} RGE certifié à ${location.name}. Artisans RGE (Qualibat, Qualifelec, QualiPAC), devis gratuit et avis clients.`,
     image: getServiceImageForContext(serviceSlug, locationSlug).src,
     address: {
       '@type': 'PostalAddress',
@@ -550,7 +547,13 @@ export default async function ServiceLocationPage(props: PageProps) {
 async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
   const resolvedSearchParams = searchParams ? await searchParams : {}
-  const rgeOnly = resolvedSearchParams.rge === '1'
+  // 2026-05-05 pivot full RGE — listing par défaut RGE certifiés uniquement.
+  // `?rge=0` désactive le filtre (admin/debug). Toute autre valeur = RGE-only.
+  const rgeOnly = resolvedSearchParams.rge !== '0'
+  // 2026-05-05 simplification — `?simple=1` rend la variante 8 blocs (vs 48
+  // dans la version full). Permet A/B sans détruire l'historique. Voir
+  // `_components/SimpleView.tsx` pour la justification (synthèse 5-agents).
+  const useSimpleView = resolvedSearchParams.simple === '1'
 
   // Early reject: invalid slugs (XSS attempts, random strings, special chars)
   if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
@@ -642,7 +645,10 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   const location: LocationType = resolvedLocation
 
   const trade = getTradeContent(serviceSlug)
-  const deptName = location.department_name || getVilleBySlug(locationSlug)?.departement
+  // 2026-05-05 — `address_department` DB stocke le CODE INSEE ('75', '69').
+  // Toutes les queries dept (getProvidersByServiceAndDepartment, getReviewStatsByDept,
+  // getTopReviewsByDept) doivent recevoir le code, pas le nom.
+  const deptCode = location.department_code || getVilleBySlug(locationSlug)?.departementCode
 
   // 2. Fetch ALL async data in a single parallel batch
   const [providersResult, communeData, recentDevisCount, reviewStats, topReviews, dynamicLastMod] =
@@ -675,22 +681,20 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
         let providers = directProviders
         let isFallback = false
         if (providers.length === 0 && totalProviderCount <= 0) {
-          if (deptName) {
+          if (deptCode) {
             // Vercel logs 2026-05-01 : 5+ URLs/h en `[TypeError: fetch failed]`
             // (limans, valence, cadenet, carros, solier/80379…). Sans .catch
             // ici, l'IIFE rejette → Promise.all global rejette → outer catch
             // ligne ~502 → notFound() avec body "Page non trouvée" alors que
-            // ce n'est qu'un timeout réseau Supabase transient. Le commit
-            // 7bcbfe9fd a catché getProvidersByServiceAndLocation mais pas
-            // ce fallback département (cascade fix oubliée).
-            providers = await getProvidersByServiceAndDepartment(serviceSlug, deptName, {
+            // ce n'est qu'un timeout réseau Supabase transient.
+            providers = await getProvidersByServiceAndDepartment(serviceSlug, deptCode, {
               limit: 6,
             }).catch((err: unknown) => {
               logger.error('service_location.dept_fallback_fetch_error', err as Error, {
                 route: 'services/[service]/[location]',
                 service: serviceSlug,
                 location: locationSlug,
-                dept: deptName,
+                dept: deptCode,
               })
               return [] as Awaited<ReturnType<typeof getProvidersByServiceAndDepartment>>
             })
@@ -729,29 +733,29 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
         }
       })(),
       // Social proof: department reviews
-      deptName
-        ? getReviewStatsByDept(serviceSlug, deptName).catch((err: unknown) => {
+      deptCode
+        ? getReviewStatsByDept(serviceSlug, deptCode).catch((err: unknown) => {
             logger.error('service_location.review_stats_render_error', err as Error, {
               route: 'services/[service]/[location]',
               service: serviceSlug,
               location: locationSlug,
-              dept: deptName,
+              dept: deptCode,
             })
             return null
           })
         : Promise.resolve(null),
-      deptName
-        ? getTopReviewsByDept(serviceSlug, deptName).catch((err: unknown) => {
+      deptCode
+        ? getTopReviewsByDept(serviceSlug, deptCode).catch((err: unknown) => {
             logger.error('service_location.top_reviews_error', err as Error, {
               route: 'services/[service]/[location]',
               service: serviceSlug,
               location: locationSlug,
-              dept: deptName,
+              dept: deptCode,
             })
             return []
           })
         : Promise.resolve([] as Awaited<ReturnType<typeof getTopReviewsByDept>>),
-      deptName
+      deptCode
         ? getDynamicLastModified(serviceSlug, location.department_code || '').catch(
             (err: unknown) => {
               logger.error('service_location.last_modified_error', err as Error, {
@@ -813,7 +817,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   if (trade) {
     combinedFaq.push({
       question: `Combien coûte un ${svcLowerFaq} à ${location.name} ?`,
-      answer: `À ${location.name}, les tarifs d'un ${svcLowerFaq} varient généralement entre ${Math.round(trade.priceRange.min * pricingMultiplier)}€ et ${Math.round(trade.priceRange.max * pricingMultiplier)}€ ${trade.priceRange.unit}. Ces prix dépendent de la complexité des travaux, de l'accessibilité et des matériaux. Sur ServicesArtisans, vous pouvez comparer gratuitement les devis de ${svcLowerFaq}s vérifiés SIREN à ${location.name}.`,
+      answer: `À ${location.name}, les tarifs d'un ${svcLowerFaq} varient généralement entre ${Math.round(trade.priceRange.min * pricingMultiplier)}€ et ${Math.round(trade.priceRange.max * pricingMultiplier)}€ ${trade.priceRange.unit}. Ces prix dépendent de la complexité des travaux, de l'accessibilité et des matériaux. Sur ServicesArtisans, vous pouvez comparer gratuitement les devis de ${svcLowerFaq}s RGE certifiés à ${location.name}.`,
     })
     combinedFaq.push({
       question: `Comment trouver un ${svcLowerFaq} fiable à ${location.name} ?`,
@@ -825,8 +829,8 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     })
     if (totalProviderCount > 0) {
       combinedFaq.push({
-        question: `Combien de ${svcLowerFaq}s sont disponibles à ${location.name} ?`,
-        answer: `${location.name} compte actuellement ${totalProviderCount} ${svcLowerFaq}${totalProviderCount > 1 ? 's' : ''} référencé${totalProviderCount > 1 ? 's' : ''} sur ServicesArtisans, tous vérifiés SIREN.${averageRating ? ` La note moyenne des artisans est de ${averageRating.toFixed(1)}/5.` : ''} Demandez un devis gratuit pour comparer leurs offres.`,
+        question: `Combien de ${svcLowerFaq}s RGE sont disponibles à ${location.name} ?`,
+        answer: `${location.name} compte actuellement ${totalProviderCount} ${svcLowerFaq}${totalProviderCount > 1 ? 's' : ''} RGE certifié${totalProviderCount > 1 ? 's' : ''} sur ServicesArtisans (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).${averageRating ? ` La note moyenne des artisans est de ${averageRating.toFixed(1)}/5.` : ''} Demandez un devis gratuit pour comparer leurs offres.`,
       })
     }
   }
@@ -978,7 +982,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     '@type': 'Article',
     '@id': `${SITE_URL}/services/${serviceSlug}/${locationSlug}#article`,
     headline: articleHeadline.slice(0, 110),
-    description: `Trouver un ${service.name.toLowerCase()} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''} : ${totalProviderCount > 0 ? `${totalProviderCount} artisans vérifiés SIREN` : 'artisans qualifiés du département'}, devis gratuit en 24h.`,
+    description: `Trouver un ${service.name.toLowerCase()} RGE à ${location.name}${location.department_code ? ` (${location.department_code})` : ''} : ${totalProviderCount > 0 ? `${totalProviderCount} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC)` : 'artisans RGE certifiés du département'}, devis gratuit en 24h.`,
     url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
     datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
@@ -1070,7 +1074,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   const tldrBullets: string[] = []
   if (totalProviderCount > 0) {
     tldrBullets.push(
-      `${totalProviderCount} ${service.name.toLowerCase()}${totalProviderCount > 1 ? 's' : ''} vérifié${totalProviderCount > 1 ? 's' : ''} SIREN à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`
+      `${totalProviderCount} ${service.name.toLowerCase()}${totalProviderCount > 1 ? 's' : ''} RGE certifié${totalProviderCount > 1 ? 's' : ''} à ${location.name}${location.department_code ? ` (${location.department_code})` : ''}`
     )
   }
   if (averageRating && totalReviews && averageRating > 0 && totalReviews > 0) {
@@ -1122,6 +1126,37 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     )
   } else {
     enBrefPoints.push('Devis gratuit en moins de 24 h, sans engagement')
+  }
+
+  // Variante simple opt-in (`?simple=1`) — 8 blocs vs 48 dans la version full.
+  // Toutes les données déjà calculées sont passées telles quelles : zéro
+  // refetch, zéro divergence schema. Cf. _components/SimpleView.tsx.
+  if (useSimpleView) {
+    const speakableSummary = tldrBullets.length > 0 ? tldrBullets.join(' · ') : undefined
+    return (
+      <SimpleView
+        service={service}
+        location={location}
+        serviceSlug={serviceSlug}
+        locationSlug={locationSlug}
+        providers={(providers || []).slice(0, 10) as unknown as Provider[]}
+        totalProviderCount={totalProviderCount}
+        rgeProviderCount={rgeProviderCount}
+        recentDevisCount={recentDevisCount}
+        rgeOnly={rgeOnly}
+        h1Text={h1Text}
+        combinedFaq={combinedFaq}
+        reviewStats={reviewStats}
+        topReviews={topReviews}
+        communeData={communeData}
+        averageRating={averageRating}
+        totalReviews={totalReviews}
+        jsonLdSchemas={jsonLdSchemas}
+        speakableSummary={speakableSummary}
+        trade={trade ?? null}
+        pricingMultiplier={pricingMultiplier}
+      />
+    )
   }
 
   return (
@@ -1353,7 +1388,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       {trade && (
         <div className="speakable-summary max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <SpeakableAnswerBox
-            answer={`${trade.name} à ${location.name} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans vérifiés SIREN disponibles dans le ${location.department_code}. Délai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
+            answer={`${trade.name} à ${location.name} : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) disponibles dans le ${location.department_code}. Délai moyen : ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Urgences disponibles 24h/24.' : ''}`}
           />
         </div>
       )}

@@ -28,13 +28,18 @@ import { getProvidersByServiceAndDepartment } from '@/lib/supabase'
 
 const DEPT_FALLBACK_INDEX_THRESHOLD = 3
 
+/**
+ * `departmentCode` = CODE INSEE 2-3 chars ('75', '69', '2A'). DB stocke le
+ * code, pas le nom — passer un nom renvoie 0 silencieusement (bug fixé
+ * 2026-05-05).
+ */
 export async function hasDeptProviderFallback(
   serviceSlug: string,
-  departmentName: string | null | undefined
+  departmentCode: string | null | undefined
 ): Promise<boolean> {
-  if (!departmentName) return false
+  if (!departmentCode) return false
   try {
-    const fallback = await getProvidersByServiceAndDepartment(serviceSlug, departmentName, {
+    const fallback = await getProvidersByServiceAndDepartment(serviceSlug, departmentCode, {
       limit: DEPT_FALLBACK_INDEX_THRESHOLD,
     })
     return fallback.length >= DEPT_FALLBACK_INDEX_THRESHOLD

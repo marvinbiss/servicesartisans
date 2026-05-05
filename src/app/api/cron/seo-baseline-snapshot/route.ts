@@ -6,6 +6,9 @@ import { computeSeoAggregate } from '@/lib/seo/baseline-aggregator'
 import { logger } from '@/lib/logger'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 /**
  * POST `/api/cron/seo-baseline-snapshot`
  *

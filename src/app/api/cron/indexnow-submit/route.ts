@@ -15,6 +15,9 @@ import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { CEE_OPERATION_CODES } from '@/lib/cee/operation-codes'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
+// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
+export const dynamic = 'force-dynamic'
+
 const TOP_CITIES = [
   'paris',
   'marseille',
