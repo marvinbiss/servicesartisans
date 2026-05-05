@@ -35,10 +35,16 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .gte('created_at', startOfMonth.toISOString())
 
+    // 2026-05-05 pivot full RGE — endpoint public consommé par SocialProofBanner.
+    // active_providers doit refléter UNIQUEMENT les artisans RGE certifiés actifs
+    // pour rester cohérent avec le repositionnement "100% RGE certifiés".
+    const todayIso = now.toISOString().slice(0, 10)
     let providerQuery = supabase
       .from('providers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', todayIso)
 
     if (service) {
       weekQuery = weekQuery.ilike('service_name', `%${service}%`)

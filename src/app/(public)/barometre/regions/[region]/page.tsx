@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getBarometreRegionBySlug(regionSlug)
   if (!region) return { title: 'Région non trouvée' }
 
-  const title = `Baromètre Artisans ${region.name} 2026 — Stats + Prix`
-  const description = `Baromètre 2026 des artisans ${getRegionPreposition(region.name)} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Données actualisées ${SITE_NAME}.`
+  const title = `Baromètre Artisans RGE ${region.name} 2026 — Stats + Prix`
+  const description = `Baromètre 2026 des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) ${getRegionPreposition(region.name)} : top métiers, ${region.departements.length} départements, notes moyennes et taux de vérification. Source ADEME, données actualisées ${SITE_NAME}.`
   const canonicalUrl = `${SITE_URL}/barometre/regions/${regionSlug}`
 
   return {
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: `${SITE_URL}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `Artisans ${getRegionPreposition(region.name)}`,
+          alt: `Artisans RGE certifiés ${getRegionPreposition(region.name)}`,
         },
       ],
     },
@@ -110,11 +110,11 @@ export default async function BarometreRegionPage({ params }: PageProps) {
 
   const faqItems = [
     {
-      question: `Combien d'artisans sont référencés ${getRegionPreposition(region.name)} ?`,
+      question: `Combien d'artisans RGE sont référencés ${getRegionPreposition(region.name)} ?`,
       answer:
         totalArtisans > 0
-          ? `Notre annuaire recense ${totalArtisans.toLocaleString('fr-FR')} artisans actifs ${getRegionPreposition(region.name)}, répartis dans ${region.departements.length} départements et couvrant plus de ${stats.length} corps de métier.`
-          : `Des milliers d'artisans du bâtiment sont référencés ${getRegionPreposition(region.name)} dans notre annuaire.`,
+          ? `Notre annuaire recense ${totalArtisans.toLocaleString('fr-FR')} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) actifs ${getRegionPreposition(region.name)}, répartis dans ${region.departements.length} départements et couvrant plus de ${stats.length} corps de métier RGE.`
+          : `Tous les artisans RGE certifiés ${getRegionPreposition(region.name)} sont référencés dans notre annuaire (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).`,
     },
     {
       question: `Quel est l'indice de prix ${getRegionPreposition(region.name)} ?`,
@@ -123,14 +123,14 @@ export default async function BarometreRegionPage({ params }: PageProps) {
         : `Consultez notre baromètre des prix pour connaître l'indice régional ${getRegionPreposition(region.name)}.`,
     },
     {
-      question: `Quels sont les métiers les plus demandés ${getRegionPreposition(region.name)} ?`,
+      question: `Quels sont les métiers RGE les plus demandés ${getRegionPreposition(region.name)} ?`,
       answer:
         stats.length > 0
-          ? `Les métiers les plus représentés ${getRegionPreposition(region.name)} sont : ${stats
+          ? `Les métiers RGE les plus représentés ${getRegionPreposition(region.name)} sont : ${stats
               .slice(0, 5)
               .map((s) => s.metier)
-              .join(', ')}. Ces données reflètent la demande locale en services artisanaux.`
-          : `Consultez le détail par métier pour connaître les artisans les plus représentés ${getRegionPreposition(region.name)}.`,
+              .join(', ')}. Ces données reflètent la demande locale en rénovation énergétique.`
+          : `Consultez le détail par métier pour connaître les artisans RGE les plus représentés ${getRegionPreposition(region.name)}.`,
     },
   ]
 
@@ -150,8 +150,8 @@ export default async function BarometreRegionPage({ params }: PageProps) {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: `Baromètre des Artisans ${getRegionPreposition(region.name)} — 2026`,
-    description: `Statistiques agrégées de ${totalArtisans.toLocaleString('fr-FR')} artisans ${getRegionPreposition(region.name)} : répartition métier, volumétrie, notes moyennes.`,
+    name: `Baromètre des Artisans RGE ${getRegionPreposition(region.name)} — 2026`,
+    description: `Statistiques agrégées de ${totalArtisans.toLocaleString('fr-FR')} artisans RGE certifiés ${getRegionPreposition(region.name)} : répartition métier, volumétrie, notes moyennes. Source ADEME france-renov.gouv.fr.`,
     creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     temporalCoverage: '2026',
     spatialCoverage: { '@type': 'AdministrativeArea', name: region.name },
@@ -165,26 +165,29 @@ export default async function BarometreRegionPage({ params }: PageProps) {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    headline: `Baromètre des Artisans ${getRegionPreposition(region.name)} — 2026`,
-    description: `Étude agrégée ${SITE_NAME} sur ${totalArtisans.toLocaleString('fr-FR')} artisans ${getRegionPreposition(region.name)} : métiers les plus représentés, densité territoriale.`,
+    headline: `Baromètre des Artisans RGE ${getRegionPreposition(region.name)} — 2026`,
+    description: `Étude agrégée ${SITE_NAME} sur ${totalArtisans.toLocaleString('fr-FR')} artisans RGE certifiés ${getRegionPreposition(region.name)} : métiers les plus représentés, densité territoriale, qualifications RGE.`,
     url: regionCanonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    articleSection: 'Baromètre artisans région',
+    articleSection: 'Baromètre artisans RGE région',
     keywords: [
-      'baromètre artisans',
+      'baromètre artisans RGE',
       region.name,
+      'Qualibat',
+      'QualiPAC',
       'densité territoriale',
-      'métiers du bâtiment',
+      'rénovation énergétique',
       'SIREN',
+      'ADEME',
       '2026',
     ].join(', '),
     about: [
       { '@type': 'AdministrativeArea', name: region.name },
-      { '@type': 'Thing', name: `Artisans ${region.name}` },
-      { '@type': 'Thing', name: 'Statistiques sectorielles' },
+      { '@type': 'Thing', name: `Artisans RGE certifiés ${region.name}` },
+      { '@type': 'Thing', name: 'Statistiques rénovation énergétique' },
     ],
     author: BARO_AUTHOR
       ? {
@@ -254,12 +257,12 @@ export default async function BarometreRegionPage({ params }: PageProps) {
               )}
             </div>
             <p className="text-lg text-charcoal-600">
-              Baromètre des artisans {getRegionPreposition(region.name)} :{' '}
+              Baromètre des artisans RGE certifiés {getRegionPreposition(region.name)} :{' '}
               {region.departements.length} départements,
               {totalArtisans > 0
-                ? ` ${totalArtisans.toLocaleString('fr-FR')} artisans référencés,`
+                ? ` ${totalArtisans.toLocaleString('fr-FR')} artisans RGE référencés,`
                 : ''}{' '}
-              données actualisées quotidiennement.
+              données ADEME actualisées quotidiennement.
             </p>
           </div>
         </header>
@@ -272,7 +275,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
               <div className="text-2xl font-bold text-charcoal-900">
                 {totalArtisans > 0 ? totalArtisans.toLocaleString('fr-FR') : '--'}
               </div>
-              <div className="text-xs text-charcoal-500 mt-1">Artisans</div>
+              <div className="text-xs text-charcoal-500 mt-1">Artisans RGE</div>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
               <Star className="w-5 h-5 text-amber-500 mx-auto mb-2" />
@@ -300,7 +303,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
         {stats.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
             <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
-              Top métiers {getRegionPreposition(region.name)}
+              Top métiers RGE {getRegionPreposition(region.name)}
             </h2>
             <div className="space-y-3">
               {stats.slice(0, 15).map((row, idx) => {

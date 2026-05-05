@@ -107,8 +107,8 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-accent-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Artisans référencés SIREN</p>
-                <p className="text-sand-500 text-xs mt-0.5">Identité vérifiée</p>
+                <p className="text-white font-semibold text-sm">Artisans RGE certifiés</p>
+                <p className="text-sand-500 text-xs mt-0.5">Qualibat, Qualifelec, QualiPAC</p>
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">

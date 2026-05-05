@@ -180,7 +180,7 @@ const snippetDevis: SnippetFn = (ctx) => {
       >
         demandez un devis {ctx.serviceLower} à {ctx.villeName}
       </Link>
-      . Vous recevrez jusqu&#39;à 3 propositions de professionnels vérifiés.
+      . Vous recevrez jusqu&#39;à 3 propositions d&#39;artisans RGE certifiés.
     </>,
     <>
       Besoin d&#39;un chiffrage précis ?{' '}
@@ -190,7 +190,7 @@ const snippetDevis: SnippetFn = (ctx) => {
       >
         Obtenez un devis {ctx.serviceLower} gratuit à {ctx.villeName}
       </Link>{' '}
-      en quelques clics, directement auprès d&#39;artisans référencés.
+      en quelques clics, directement auprès d&#39;artisans RGE certifiés.
     </>,
     <>
       Comparez les prix en demandant un{' '}
@@ -311,14 +311,14 @@ const snippetDepartement: SnippetFn = (ctx) => {
       et comparez les profils.
     </>,
     <>
-      Besoin d&#39;un professionnel ailleurs dans le {ctx.departement} ? Tous les{' '}
+      Besoin d&#39;un artisan RGE ailleurs dans le {ctx.departement} ? Tous les{' '}
       <Link
         href={`/departements/${ctx.departementSlug}/${ctx.serviceSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
         {ctx.serviceLower}s du département
       </Link>{' '}
-      sont référencés sur notre plateforme.
+      sont RGE certifiés sur notre plateforme.
     </>,
   ]
   return variants[ctx.variantSeed % variants.length]
@@ -456,9 +456,9 @@ const snippetServiceVille: SnippetFn = (ctx) => {
         href={`/services/${ctx.serviceSlug}/${ctx.villeSlug}`}
         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
       >
-        {ctx.serviceLower}s référencés à {ctx.villeName}
+        {ctx.serviceLower}s RGE certifiés à {ctx.villeName}
       </Link>{' '}
-      sont vérifiés SIREN pour votre tranquillité.
+      sont vérifiés ADEME + SIREN pour votre tranquillité.
     </>,
   ]
   return variants[ctx.variantSeed % variants.length]
@@ -491,7 +491,7 @@ const snippetMoneyPage: SnippetFn = (ctx) => {
       >
         {ctx.serviceLower}s à {cityData.name}
       </Link>
-      , où de nombreux professionnels sont référencés.
+      , où de nombreux artisans RGE certifiés sont référencés.
     </>,
     <>
       Parmi les villes les plus recherchées, découvrez les{' '}

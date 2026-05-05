@@ -68,7 +68,7 @@ export default function DesktopMegaMenus({
                   Tous nos services artisans
                 </h3>
                 <p className="text-charcoal-300 text-sm mt-0.5">
-                  {allServicesCount} métiers, des milliers d'artisans qualifiés partout en France
+                  {allServicesCount} métiers, artisans RGE certifiés partout en France
                 </p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
@@ -78,7 +78,7 @@ export default function DesktopMegaMenus({
                     {artisanCount > 0
                       ? `${artisanCount.toLocaleString('fr-FR')}+`
                       : "Des milliers d'artisans"}{' '}
-                    référencés
+                    RGE certifiés
                   </span>
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default function DesktopMegaMenus({
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-charcoal-900">
                   <ShieldCheck className="w-4 h-4 text-green-500" />
-                  Artisans référencés dans chaque ville
+                  Artisans RGE certifiés dans chaque ville
                 </div>
               </div>
             </div>

@@ -37,17 +37,29 @@ export const getProviderCount = unstable_cache(_getProviderCount, ['provider-cou
   tags: ['providers'],
 })
 
-/** Nombre d'artisans actifs dans une région (par nom de région) */
-export async function getProviderCountByRegion(regionName: string): Promise<number> {
+/**
+ * Nombre d'artisans RGE actifs dans une région (par nom de région).
+ * 2026-05-05 pivot full RGE — default `rgeOnly: true`.
+ */
+export async function getProviderCountByRegion(
+  regionName: string,
+  options: { rgeOnly?: boolean } = {}
+): Promise<number> {
   // Fail open at build: default to indexed. ISR will correct with real DB data.
   if (IS_BUILD) return 1
+  const rgeOnly = options.rgeOnly ?? true
   try {
     const supabase = createAdminClient()
-    const { count } = await supabase
+    const todayIso = new Date().toISOString().slice(0, 10)
+    let query = supabase
       .from('providers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
       .eq('address_region', regionName)
+    if (rgeOnly) {
+      query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+    }
+    const { count } = await query
     return count ?? 0
   } catch {
     return 1 // Fail open: default to indexed. ISR will correct with real DB data.
@@ -213,10 +225,13 @@ async function _getHomepageData(): Promise<HomepageData> {
   try {
     const supabase = createAdminClient()
 
+    const todayIso = new Date().toISOString().slice(0, 10)
+
     const [countsResults, providersRes, reviewsRes] = await Promise.all([
       // 2026-05-05 — passé de SELECT-rows-and-reduce (200K rows ~3s) à 8
       // HEAD-count parallèles (~50ms total, indexed). Le résultat est cached
       // 1h via unstable_cache.
+      // 2026-05-05 pivot full RGE — counts homepage filtrés RGE-only.
       Promise.all(
         HOMEPAGE_SERVICE_SLUGS.map((slug) =>
           supabase
@@ -224,9 +239,12 @@ async function _getHomepageData(): Promise<HomepageData> {
             .select('*', { count: 'exact', head: true })
             .eq('is_active', true)
             .eq('specialty', slug)
+            .not('rge_qualifications', 'is', null)
+            .gte('rge_valid_until', todayIso)
             .then(({ count }) => [slug, count ?? 0] as [string, number])
         )
       ),
+      // 2026-05-05 pivot full RGE — topProviders homepage = RGE certifiés only.
       supabase
         .from('providers')
         .select(
@@ -237,6 +255,8 @@ async function _getHomepageData(): Promise<HomepageData> {
         .not('rating_average', 'is', null)
         .not('address_city', 'is', null)
         .not('specialty', 'is', null)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso)
         .gt('review_count', 2)
         .lt('review_count', 500)
         .gte('rating_average', 4)

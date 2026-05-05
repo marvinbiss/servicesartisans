@@ -21,15 +21,15 @@ import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 const canonicalUrl = `${SITE_URL}/barometre/regions`
 
 export const metadata: Metadata = {
-  title: `Baromètre par région — Artisans en France`,
+  title: `Baromètre par région — Artisans RGE en France`,
   description:
-    'Découvrez les statistiques des artisans par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie. Indices de prix, volumes et tendances 2026.',
+    "Découvrez les statistiques des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie. Indices de prix, volumes et tendances 2026.",
   alternates: getAlternates('/barometre/regions'),
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',
     title: `Baromètre par région | ${SITE_NAME}`,
-    description: 'Statistiques des artisans par région en France.',
+    description: 'Statistiques des artisans RGE certifiés par région en France.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -53,9 +53,9 @@ export default function BarometreRegionsPage() {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Indices régionaux des prix artisans — France 2026',
+    name: 'Indices régionaux des prix artisans RGE — France 2026',
     description:
-      'Indices de prix par région métropolitaine (base 100 = moyenne nationale) calculés sur les devis réels transmis par notre réseau d’artisans sur l’année en cours.',
+      'Indices de prix par région métropolitaine (base 100 = moyenne nationale) calculés sur les devis réels transmis par notre réseau d’artisans RGE certifiés sur l’année en cours.',
     creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     temporalCoverage: '2026',
@@ -67,7 +67,7 @@ export default function BarometreRegionsPage() {
     variableMeasured: [
       'Indice régional de prix (base 100)',
       'Nombre de départements',
-      'Nombre d’artisans référencés',
+      'Nombre d’artisans RGE certifiés',
     ],
   }
 
@@ -79,9 +79,9 @@ export default function BarometreRegionsPage() {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    headline: 'Baromètre des prix artisans par région — France 2026',
+    headline: 'Baromètre des prix artisans RGE par région — France 2026',
     description:
-      'Analyse comparée des prix des artisans du bâtiment par région : indices base 100, volumétrie et tendances 2026.',
+      "Analyse comparée des prix des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) par région : indices base 100, volumétrie et tendances 2026.",
     url: canonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
@@ -90,16 +90,18 @@ export default function BarometreRegionsPage() {
     articleSection: 'Baromètre prix artisans',
     keywords: [
       'baromètre prix',
-      'artisans',
+      'artisans RGE',
+      'Qualibat',
+      'QualiPAC',
       'régions France',
       'indice prix base 100',
       'tendances tarifs',
       '2026',
     ].join(', '),
     about: [
-      { '@type': 'Thing', name: 'Prix artisans par région' },
+      { '@type': 'Thing', name: 'Prix artisans RGE par région' },
       { '@type': 'Country', name: 'France' },
-      { '@type': 'Thing', name: 'Indices de prix sectoriels' },
+      { '@type': 'Thing', name: 'Indices de prix rénovation énergétique' },
     ],
     author: BARO_AUTHOR
       ? {
@@ -136,7 +138,7 @@ export default function BarometreRegionsPage() {
     {
       question: 'Comment sont calculés ces indices ?',
       answer:
-        "Les indices sont calculés à partir des devis signés transmis par notre réseau d'artisans et pondérés par la volumétrie de chaque métier. Les données sont mises à jour tous les trimestres à partir d'un échantillon glissant de 12 mois.",
+        "Les indices sont calculés à partir des devis signés transmis par notre réseau d'artisans RGE certifiés et pondérés par la volumétrie de chaque métier. Les données sont mises à jour tous les trimestres à partir d'un échantillon glissant de 12 mois.",
     },
     {
       question: 'Quelle région de France a les prix les plus élevés ?',
@@ -184,11 +186,12 @@ export default function BarometreRegionsPage() {
               data-speakable="true"
               className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4"
             >
-              Baromètre par région
+              Baromètre RGE par région
             </h1>
             <p className="text-lg text-charcoal-600 leading-relaxed">
-              Découvrez les statistiques des artisans du bâtiment pour chaque région de France.
-              Indices de prix, métiers les plus représentés et données départementales.
+              Découvrez les statistiques des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC,
+              Qualit&apos;EnR) pour chaque région de France. Indices de prix, métiers les plus
+              représentés et données départementales.
             </p>
           </div>
         </header>

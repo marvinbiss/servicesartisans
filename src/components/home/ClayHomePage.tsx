@@ -266,7 +266,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
               </span>
-              {countStr} artisans disponibles aujourd'hui
+              {countStr} artisans RGE certifiés disponibles aujourd'hui
             </div>
           </div>
 
@@ -276,7 +276,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
             aria-hidden="true"
           >
-            Recevez 3 devis d&apos;artisans vérifiés aujourd&apos;hui
+            Recevez 3 devis d&apos;artisans RGE certifiés aujourd&apos;hui
           </h2>
 
           <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
@@ -296,7 +296,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
               <span className="inline-flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-accent-500" />
-                {countStr} artisans vérifiés
+                {countStr} artisans RGE certifiés
               </span>
               <span className="text-charcoal-200">·</span>
               <span>100% gratuit</span>
@@ -420,7 +420,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                 style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
               >
-                Devis gratuit en 2 min — 48h réponse garantie — 100% artisans vérifiés
+                Devis gratuit en 2 min — 48h réponse garantie — 100% artisans RGE certifiés
               </h2>
             </div>
 
@@ -447,7 +447,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 {
                   n: '2',
                   title: 'Recevez des devis',
-                  desc: "Jusqu'à 3 artisans vérifiés vous contactent rapidement. Gratuit.",
+                  desc: "Jusqu'à 3 artisans RGE certifiés vous contactent rapidement. Gratuit.",
                   icon: Clock,
                 },
                 {
@@ -497,7 +497,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               {[
                 {
                   value: countStr,
-                  label: 'artisans vérifiés',
+                  label: 'artisans RGE certifiés',
                   icon: ShieldCheck,
                   color: 'text-accent-600',
                 },

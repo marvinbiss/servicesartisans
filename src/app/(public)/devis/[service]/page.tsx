@@ -65,10 +65,10 @@ export async function generateMetadata({
 
   const descHash = Math.abs(hashCode(`devis-desc-${service}`))
   const descTemplates = [
-    `Demandez un devis ${tradeLower} gratuit. Comparez jusqu'à 3 artisans référencés. Prix : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. 100 % gratuit.`,
-    `Devis ${tradeLower} en ligne : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les offres de professionnels qualifiés. 100 % gratuit.`,
-    `Obtenez un devis gratuit pour ${tradeLower}. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Artisans vérifiés, sans engagement.`,
-    `Devis gratuit ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 propositions d'artisans qualifiés.`,
+    `Demandez un devis ${tradeLower} gratuit. Comparez jusqu'à 3 artisans RGE certifiés. Prix : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. 100 % gratuit.`,
+    `Devis ${tradeLower} en ligne : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les offres d'artisans RGE certifiés. 100 % gratuit.`,
+    `Obtenez un devis gratuit pour ${tradeLower}. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Artisans RGE certifiés, sans engagement.`,
+    `Devis gratuit ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 propositions d'artisans RGE certifiés.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -122,7 +122,7 @@ export default async function DevisServicePage({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `Devis ${trade.name} en France`,
-    description: `Demandez un devis gratuit pour ${tradeLower}. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans référencés.`,
+    description: `Demandez un devis gratuit pour ${tradeLower}. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC).`,
     provider: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
@@ -145,7 +145,7 @@ export default async function DevisServicePage({
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `Devis ${tradeLower} par ville`,
-    description: `Demandez un devis ${tradeLower} gratuit. Comparez les artisans référencés par ville. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    description: `Demandez un devis ${tradeLower} gratuit. Comparez les artisans RGE certifiés par ville. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
     url: `${SITE_URL}/devis/${service}`,
     mainEntity: {
       '@type': 'ItemList',
@@ -185,7 +185,7 @@ export default async function DevisServicePage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: truncateTitle(`${h1Text} — ${new Date().getFullYear()}`, 110),
-    description: `Devis gratuit ${tradeLower}. Fourchette ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 artisans vérifiés sous 24 h.`,
+    description: `Devis gratuit ${tradeLower}. Fourchette ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu'à 3 artisans RGE certifiés sous 24 h.`,
     url: `${SITE_URL}/devis/${service}`,
     datePublished: PUBLISHED_DATE,
     dateModified: dateModifiedIso,
@@ -214,18 +214,18 @@ export default async function DevisServicePage({
 
   const enBrefPoints = [
     `Devis gratuit, sans engagement — réponse sous 24 h`,
-    `Jusqu'à 3 propositions d'artisans vérifiés SIREN`,
+    `Jusqu'à 3 propositions d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC)`,
     `Fourchette indicative ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
     trade.certifications.length > 0
       ? `Certifications : ${trade.certifications.slice(0, 2).join(', ')}`
-      : 'Tous les artisans sont assurés et vérifiés',
+      : "Tous les artisans sont RGE certifiés (éligibilité MaPrimeRénov' & CEE)",
   ]
 
   const tldrBullets = [
     `Devis ${tradeLower} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en moyenne, fourchette indicative incluant main-d'œuvre.`,
-    `Vous remplissez le formulaire (3 min) → 3 artisans qualifiés vous recontactent sous 24 h avec un devis détaillé.`,
+    `Vous remplissez le formulaire (3 min) → 3 artisans RGE certifiés vous recontactent sous 24 h avec un devis détaillé.`,
     `100 % gratuit, sans engagement, sans abonnement. Vous comparez et choisissez librement.`,
-    `Avant signature : vérifier SIRET, assurance décennale, et comparer au moins 3 devis détaillés.`,
+    `Avant signature : vérifier SIRET, assurance décennale et qualification RGE active, et comparer au moins 3 devis détaillés.`,
   ]
 
   return (
@@ -248,8 +248,8 @@ export default async function DevisServicePage({
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Devis gratuit de {tradeLower}s référencés et vérifiés. Prix indicatif :{' '}
-            {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+            Devis gratuit de {tradeLower}s RGE certifiés (Qualibat, Qualifelec, QualiPAC). Prix
+            indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"

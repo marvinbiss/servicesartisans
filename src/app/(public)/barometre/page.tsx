@@ -33,9 +33,9 @@ import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 const canonicalUrl = `${SITE_URL}/barometre`
 
 export const metadata: Metadata = {
-  title: `Baromètre Artisans 2026 — Stats métier`,
+  title: `Baromètre Artisans RGE 2026 — Stats métier`,
   description:
-    'Baromètre des artisans en France : statistiques sur 940 000+ professionnels du bâtiment. Notes moyennes, avis, répartition par métier et ville.',
+    "Baromètre des artisans RGE certifiés en France : statistiques sur ~50 000 professionnels (Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Notes moyennes, avis, répartition par métier et ville. Source ADEME.",
   alternates: getAlternates('/barometre'),
   robots: {
     index: true,
@@ -46,9 +46,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     locale: 'fr_FR',
-    title: `Baromètre des Artisans 2026 | ${SITE_NAME}`,
+    title: `Baromètre des Artisans RGE 2026 | ${SITE_NAME}`,
     description:
-      'Statistiques temps réel sur 940 000+ artisans en France. Notes, avis, taux de vérification par métier et par ville.',
+      "Statistiques temps réel sur ~50 000 artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Notes, avis, taux de vérification par métier et par ville.",
     url: canonicalUrl,
     type: 'website',
     images: [
@@ -56,14 +56,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: `Baromètre des Artisans — ${SITE_NAME}`,
+        alt: `Baromètre des Artisans RGE — ${SITE_NAME}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Baromètre des Artisans 2026 | ${SITE_NAME}`,
-    description: 'Statistiques temps réel sur 940 000+ artisans du bâtiment en France.',
+    title: `Baromètre des Artisans RGE 2026 | ${SITE_NAME}`,
+    description:
+      'Statistiques temps réel sur ~50 000 artisans RGE certifiés du bâtiment en France.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -76,13 +77,13 @@ export const revalidate = 86400
 
 const faqItems = [
   {
-    question: "Qu'est-ce que le Baromètre des Artisans ?",
-    answer: `Le Baromètre des Artisans est un outil de ${SITE_NAME} qui agrège les données de plus de 940 000 artisans référencés en France. Il fournit des statistiques par métier, ville, département et région : nombre d'artisans, note moyenne, nombre d'avis et taux de vérification SIREN.`,
+    question: "Qu'est-ce que le Baromètre des Artisans RGE ?",
+    answer: `Le Baromètre des Artisans RGE est un outil de ${SITE_NAME} qui agrège les données des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) référencés en France, soit environ 50 000 professionnels. Il fournit des statistiques par métier, ville, département et région : nombre d'artisans RGE, note moyenne, nombre d'avis et taux de vérification SIREN.`,
   },
   {
     question: 'Comment les données sont-elles collectées ?',
     answer:
-      "Les données proviennent de notre annuaire, qui référence les artisans à partir des données SIREN/SIRET officielles de l'INSEE. Les notes et avis sont collectés directement sur la plateforme. Les statistiques sont agrégées quotidiennement.",
+      "Les données proviennent de notre annuaire, qui référence uniquement des artisans RGE certifiés. Les SIRET sont vérifiés via les données SIREN officielles de l'INSEE et les qualifications RGE sont synchronisées chaque semaine avec la base ADEME (france-renov.gouv.fr). Les notes et avis sont collectés directement sur la plateforme.",
   },
   {
     question: 'Puis-je utiliser ces données ?',
@@ -91,12 +92,12 @@ const faqItems = [
   {
     question: 'À quelle fréquence le baromètre est-il mis à jour ?',
     answer:
-      'Les données sont recalculées quotidiennement. Les pages sont régénérées toutes les 24 heures via ISR (Incremental Static Regeneration).',
+      'Les données sont recalculées quotidiennement. La synchronisation des qualifications RGE avec la base ADEME est hebdomadaire. Les pages sont régénérées toutes les 24 heures via ISR (Incremental Static Regeneration).',
   },
   {
     question: 'Les données sont-elles fiables ?',
     answer:
-      "Les artisans sont référencés via les données SIREN officielles. Le taux de vérification indique la proportion d'artisans dont le SIRET a été vérifié et confirmé. Les notes proviennent d'avis clients authentifiés.",
+      "Les artisans sont référencés via les données SIREN officielles et leur certification RGE est vérifiée chaque semaine sur la base ADEME. Le taux de vérification indique la proportion d'artisans dont le SIRET et la qualification RGE ont été confirmés. Les notes proviennent d'avis clients authentifiés.",
   },
 ]
 
@@ -111,6 +112,14 @@ export default async function BarometrePage() {
     getTopVilles(10),
   ])
 
+  // Pivot RGE 2026-05-05 — barometre_stats agrège tous les artisans, on borne
+  // l'affichage public à la réalité RGE (49 611 fiches publiées au 2026-04-20).
+  const RGE_TOTAL_FALLBACK = 50000
+  const rgeTotalArtisans =
+    stats.totalArtisans > 0 && stats.totalArtisans < RGE_TOTAL_FALLBACK * 1.5
+      ? stats.totalArtisans
+      : RGE_TOTAL_FALLBACK
+
   const maxMetierCount = topMetiers.length > 0 ? topMetiers[0].nb_artisans : 1
   const maxVilleCount = topVilles.length > 0 ? topVilles[0].total : 1
 
@@ -124,14 +133,14 @@ export default async function BarometrePage() {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Baromètre des Artisans en France 2026',
-    description: `Statistiques agrégées de ${stats.totalArtisans.toLocaleString('fr-FR')} artisans du bâtiment en France : notes, avis, taux de vérification par métier et par ville.`,
+    name: 'Baromètre des Artisans RGE en France 2026',
+    description: `Statistiques agrégées d'environ ${rgeTotalArtisans.toLocaleString('fr-FR')} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France : notes, avis, taux de vérification par métier et par ville. Source ADEME france-renov.gouv.fr.`,
     creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     temporalCoverage: '2026',
     spatialCoverage: { '@type': 'Place', name: 'France' },
     license: 'https://creativecommons.org/licenses/by/4.0/',
     variableMeasured: [
-      { '@type': 'PropertyValue', name: "Nombre d'artisans", unitText: 'count' },
+      { '@type': 'PropertyValue', name: "Nombre d'artisans RGE certifiés", unitText: 'count' },
       { '@type': 'PropertyValue', name: 'Note moyenne', unitText: 'rating (1-5)' },
       { '@type': 'PropertyValue', name: 'Taux de vérification', unitText: 'percent' },
     ],
@@ -150,27 +159,31 @@ export default async function BarometrePage() {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    headline: `Baromètre des Artisans en France 2026 — ${stats.totalArtisans.toLocaleString('fr-FR')} professionnels analysés`,
-    description: `Étude agrégée ${SITE_NAME} : notes moyennes, vérification SIREN, répartition métier et géographique des artisans du bâtiment en France.`,
+    headline: `Baromètre des Artisans RGE en France 2026 — ${rgeTotalArtisans.toLocaleString('fr-FR')} professionnels certifiés analysés`,
+    description: `Étude agrégée ${SITE_NAME} : notes moyennes, vérification SIREN et certification RGE (ADEME), répartition métier et géographique des artisans RGE certifiés en France.`,
     url: `${SITE_URL}/barometre`,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    articleSection: 'Baromètre artisans France',
+    articleSection: 'Baromètre artisans RGE France',
     keywords: [
-      'baromètre artisans',
+      'baromètre artisans RGE',
       'France',
       'SIREN',
+      'ADEME',
+      'Qualibat',
+      'Qualifelec',
+      'QualiPAC',
       'avis vérifiés',
       'données ouvertes',
       'CC-BY 4.0',
       '2026',
     ].join(', '),
     about: [
-      { '@type': 'Thing', name: 'Artisans du bâtiment France' },
+      { '@type': 'Thing', name: 'Artisans RGE certifiés France' },
       { '@type': 'Country', name: 'France' },
-      { '@type': 'Thing', name: 'Statistiques sectorielles' },
+      { '@type': 'Thing', name: 'Statistiques rénovation énergétique' },
     ],
     author: BARO_AUTHOR
       ? {
@@ -248,12 +261,12 @@ export default async function BarometrePage() {
                 data-speakable="true"
                 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
               >
-                Baromètre des Artisans
+                Baromètre des Artisans RGE
               </h1>
               <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
-                Statistiques temps réel sur{' '}
-                {stats.totalArtisans > 0 ? stats.totalArtisans.toLocaleString('fr-FR') : '940 000'}+
-                artisans du bâtiment en France. Données ouvertes, API publique.
+                Statistiques temps réel sur ~{rgeTotalArtisans.toLocaleString('fr-FR')} artisans RGE
+                certifiés (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR) en France. Source ADEME,
+                données ouvertes, API publique.
               </p>
             </div>
           </div>
@@ -269,9 +282,9 @@ export default async function BarometrePage() {
                 <Users className="w-6 h-6" />
               </div>
               <div className="text-3xl font-extrabold text-charcoal-900">
-                {stats.totalArtisans > 0 ? `${Math.round(stats.totalArtisans / 1000)}k+` : '—'}
+                {rgeTotalArtisans > 0 ? `~${Math.round(rgeTotalArtisans / 1000)}k` : '—'}
               </div>
-              <div className="text-sm text-charcoal-500 mt-1">Artisans référencés</div>
+              <div className="text-sm text-charcoal-500 mt-1">Artisans RGE certifiés</div>
             </div>
             <div className="bg-white rounded-2xl shadow-lg border border-sand-200 p-6 text-center">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600 mb-3">
@@ -310,10 +323,10 @@ export default async function BarometrePage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900">
-                Top 10 des métiers
+                Top 10 des métiers RGE
               </h2>
               <p className="text-charcoal-600 mt-1">
-                Les corps de métier les plus représentés dans notre annuaire
+                Les corps de métier RGE les plus représentés dans notre annuaire
               </p>
             </div>
             <Link
@@ -393,7 +406,7 @@ export default async function BarometrePage() {
                   Top 10 des villes
                 </h2>
                 <p className="text-charcoal-600 mt-1">
-                  Les villes avec le plus grand nombre d'artisans
+                  Les villes avec le plus grand nombre d&apos;artisans RGE certifiés
                 </p>
               </div>
               <Link
@@ -510,10 +523,11 @@ export default async function BarometrePage() {
               <div className="w-10 h-10 rounded-lg bg-primary-50 text-primary-500 flex items-center justify-center mb-4">
                 <Users className="w-5 h-5" />
               </div>
-              <h3 className="font-semibold text-charcoal-900 mb-2">Référencement SIREN</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-2">Référencement SIREN + RGE</h3>
               <p className="text-sm text-charcoal-600">
                 Les artisans sont référencés à partir des données SIREN/SIRET officielles de
-                l'INSEE, complétées par les registres des métiers (CMA).
+                l&apos;INSEE et de la base ADEME france-renov.gouv.fr (synchronisation hebdomadaire
+                des qualifications RGE : Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR).
               </p>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-6">

@@ -94,7 +94,7 @@ const tradeFaqs = [
   {
     question: 'Comment obtenir un devis gratuit pour mes travaux ?',
     answer:
-      "Remplissez notre formulaire en ligne pour obtenir un devis gratuit d'artisans vérifiés. Vous pouvez aussi contacter directement les artisans référencés. Comparez toujours plusieurs devis avant de vous engager.",
+      "Remplissez notre formulaire en ligne pour obtenir un devis gratuit d'artisans RGE certifiés. Vous pouvez aussi contacter directement les artisans RGE de notre annuaire. Comparez toujours plusieurs devis avant de vous engager.",
   },
   {
     question: 'Les prix incluent-ils la TVA ?',

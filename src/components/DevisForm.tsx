@@ -844,7 +844,7 @@ export default function DevisForm({
 
               <div className="flex items-center gap-2 text-charcoal-400">
                 <Users className="w-4 h-4 flex-shrink-0" />
-                <p className="text-sm">Des artisans qualifiés référencés sur notre plateforme</p>
+                <p className="text-sm">Des artisans RGE certifiés sur notre plateforme</p>
               </div>
 
               <CeePrimeEstimateCard

@@ -9,14 +9,14 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Database,
       label: 'Données SIREN officielles',
-      description: "Chaque artisan référencé via les registres officiels de l'État",
+      description: "Chaque artisan vérifié via les registres officiels de l'État",
       color: 'text-primary-500',
       bgColor: 'bg-primary-50',
     },
     {
       icon: Shield,
-      label: 'Artisans référencés SIREN',
-      description: "Base d'artisans référencés via les données officielles de France",
+      label: 'Artisans RGE certifiés',
+      description: "Qualifications RGE actives (Qualibat, Qualifelec, QualiPAC, Qualit'EnR)",
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
@@ -167,8 +167,8 @@ export function AvailabilityBadge({ count = 0 }: { count?: number }) {
       </span>
       <span className="text-sm text-white/80 font-medium">
         {count > 0
-          ? `${count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France`
-          : 'Artisans référencés via données SIREN officielles'}
+          ? `${count.toLocaleString('fr-FR')}+ artisans RGE certifiés dans toute la France`
+          : 'Artisans RGE certifiés via ADEME (Qualibat, Qualifelec, QualiPAC)'}
       </span>
     </motion.div>
   )

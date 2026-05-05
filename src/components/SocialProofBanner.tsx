@@ -182,7 +182,7 @@ export function SocialProofBanner({
         {providerCount > 0 && (
           <span className="flex items-center gap-1">
             <Users className="w-3.5 h-3.5" />
-            {providerDisplay} artisans actifs
+            {providerDisplay} artisans RGE certifiés
           </span>
         )}
       </div>
@@ -215,7 +215,7 @@ export function SocialProofBanner({
             <div className="flex items-center gap-2 mt-3 pt-3 border-t border-primary-100">
               <Users className="w-4 h-4 text-accent-600" />
               <span className="text-sm text-charcoal-600">
-                {providerDisplay} artisans disponibles{ville ? ` à ${ville}` : ''}
+                {providerDisplay} artisans RGE certifiés{ville ? ` à ${ville}` : ''}
               </span>
             </div>
           )}
@@ -257,7 +257,7 @@ export function SocialProofBanner({
                 <p className="text-lg font-heading font-bold text-charcoal-900" aria-live="polite">
                   {providerDisplay}
                 </p>
-                <p className="text-xs text-charcoal-500">artisans disponibles</p>
+                <p className="text-xs text-charcoal-500">artisans RGE certifiés</p>
               </div>
             </div>
           )}
@@ -273,7 +273,7 @@ export function SocialProofBanner({
         </div>
         {ville && (
           <p className="text-xs text-primary-500 mt-2">
-            Artisans disponibles à {ville} et alentours
+            Artisans RGE certifiés à {ville} et alentours
           </p>
         )}
       </div>

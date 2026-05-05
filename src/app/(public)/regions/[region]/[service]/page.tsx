@@ -71,12 +71,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${serviceSlug}`))
   // Sprint 2 — variants gradués + first-fitting via title-selector partagé.
   const titleTemplates = [
-    `${trade.name} ${region.name} 2026 — Devis Gratuit 24h`,
+    `${trade.name} RGE ${region.name} 2026 — Devis Gratuit 24h`,
     `${trade.name} ${region.name} 2026 — ${deptCount} départements`,
-    `${trade.name} ${getRegionPreposition(region.name)} 2026 : pros référencés SIREN`,
-    `${trade.name} ${region.name} 2026 — Tarifs + Devis Gratuit`,
-    `${trade.name} ${region.name} 2026 : comparez les pros`,
-    `${trade.name} ${region.name} 2026`,
+    `${trade.name} RGE ${getRegionPreposition(region.name)} 2026 : pros certifiés`,
+    `${trade.name} RGE ${region.name} 2026 — Tarifs + Devis Gratuit`,
+    `${trade.name} ${region.name} 2026 : comparez les pros RGE`,
+    `${trade.name} RGE ${region.name} 2026`,
     `${trade.name} ${region.name}`,
   ]
   // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${serviceSlug}`))
   const descTemplates = [
     `Trouvez un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
-    `${trade.name} ${getRegionPreposition(region.name)} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${deptCount} départements.`,
+    `${trade.name} ${getRegionPreposition(region.name)} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans RGE certifiés dans ${deptCount} départements.`,
     `Besoin d’un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
     `${region.name} : ${trade.name.toLowerCase()} disponible dans ${deptCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
   ]
@@ -204,7 +204,7 @@ export default async function RegionServicePage({ params }: PageProps) {
     `${trade.name} ${getRegionPreposition(region.name)} : tarif moyen ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}x).`,
     `${deptCount} département${deptCount > 1 ? 's' : ''} couvert${deptCount > 1 ? 's' : ''}, ${cityCount} ville${cityCount > 1 ? 's' : ''} de la région adressables.`,
     `Climat ${content.profile.climateLabel.toLowerCase()} — typologies bâti et saisonnalité prises en compte.`,
-    'Artisans vérifiés via base SIRENE officielle (INSEE) + sync RGE ADEME quotidien.',
+    'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) — sync ADEME hebdo + SIREN INSEE.',
     'Devis gratuit sous 24 h, lead exclusif (1 demande = 1 artisan retenu).',
   ]
 
@@ -338,7 +338,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Shield className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <span className="text-sm font-medium">Artisans RGE certifiés</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" />
@@ -354,7 +354,7 @@ export default async function RegionServicePage({ params }: PageProps) {
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
           <EnBrefBox
-            summary={`${trade.name} ${getRegionPreposition(region.name)} en 2026 : tarif moyen ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}x), ${deptCount} départements et ${cityCount} villes adressables. Artisans vérifiés SIREN, devis gratuit sous 24 h.`}
+            summary={`${trade.name} ${getRegionPreposition(region.name)} en 2026 : tarif moyen ${minPrice}–${maxPrice} ${trade.priceRange.unit} (coefficient régional ${multiplier.toFixed(2)}x), ${deptCount} départements et ${cityCount} villes adressables. Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuit sous 24 h.`}
             keyPoints={enBrefPoints}
           />
           <TldrBlock
@@ -376,7 +376,7 @@ export default async function RegionServicePage({ params }: PageProps) {
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
           title={`Besoin d'un ${trade.name.toLowerCase()} ${getRegionPreposition(region.name)} ?`}
-          subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
+          subtitle="Devis gratuit et sans engagement d'artisans RGE certifiés"
           service={serviceSlug}
         />
 
@@ -672,7 +672,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             Besoin d'un {trade.name.toLowerCase()} {getRegionPreposition(region.name)} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Devis gratuit et sans engagement de professionnels qualifiés.
+            Devis gratuit et sans engagement d'artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

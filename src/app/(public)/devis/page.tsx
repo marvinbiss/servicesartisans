@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
+    title: 'Devis Artisan RGE Gratuit 2026 — Réponse 24h · 3 Offres',
     description:
-      'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
+      'Demandez un devis artisan RGE certifié gratuit. Qualibat, Qualifelec, QualiPAC. 100% gratuit, sans engagement.',
     url: `${SITE_URL}/devis`,
     type: 'website',
     images: [
@@ -44,15 +44,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Devis gratuit',
+        alt: 'ServicesArtisans — Devis artisan RGE gratuit',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Devis Artisan Gratuit 2026 — Réponse 24h · 3 Offres',
+    title: 'Devis Artisan RGE Gratuit 2026 — Réponse 24h · 3 Offres',
     description:
-      'Demandez un devis artisan gratuit. Artisans vérifiés, 100% gratuit, sans engagement.',
+      'Demandez un devis artisan RGE certifié gratuit. Qualibat, Qualifelec, QualiPAC. 100% gratuit, sans engagement.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -74,9 +74,9 @@ const faqItems = [
       "Un conseiller vous rappelle rapidement après l'envoi de votre demande. En cas d'urgence, précisez-le dans le formulaire pour accélérer le traitement.",
   },
   {
-    question: 'Comment les artisans sont-ils référencés ?',
+    question: 'Comment les artisans sont-ils sélectionnés ?',
     answer:
-      "Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous contrôlons leur numéro d'entreprise et leur activité déclarée auprès des données officielles de l'INSEE.",
+      "ServicesArtisans est le 1er annuaire 100% artisans RGE certifiés. Chaque artisan affiché est qualifié RGE (Qualibat, Qualifelec, QualiPAC ou Qualit'EnR) — qualifications synchronisées hebdomadairement avec la base officielle ADEME france-renov.gouv.fr — et son SIRET est vérifié auprès de l'INSEE.",
   },
   {
     question: "Suis-je obligé d'accepter un devis ?",
@@ -163,15 +163,15 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
   }
 
   const enBrefPoints = [
-    `${tradeCount}+ métiers du bâtiment couverts`,
+    `${tradeCount}+ métiers RGE couverts (rénovation énergétique)`,
     `${villesCount}+ villes — réponse sous 24 h`,
     `Jusqu'à 3 devis par demande, 100 % gratuit`,
-    `Artisans vérifiés SIREN, sans engagement`,
+    `Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), sans engagement`,
   ]
 
   const tldrBullets = [
-    `Service de mise en relation gratuit : vous remplissez le formulaire (3 min) → 3 artisans vérifiés vous recontactent sous 24 h.`,
-    `${tradeCount}+ métiers du bâtiment couverts dans ${villesCount}+ communes françaises.`,
+    `Service de mise en relation gratuit : vous remplissez le formulaire (3 min) → 3 artisans RGE certifiés vous recontactent sous 24 h.`,
+    `${tradeCount}+ métiers RGE couverts dans ${villesCount}+ communes françaises (éligibilité MaPrimeRénov' & CEE).`,
     `Vous comparez les devis librement, sans abonnement, sans obligation d'accepter.`,
     `Données partagées avec les artisans : nom, téléphone, description du projet — pas l'e-mail. Aucune revente à des tiers.`,
   ]
@@ -200,7 +200,8 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
             Recevez vos devis gratuits
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Devis gratuit d'artisans vérifiés SIREN — sans engagement
+            Devis gratuit d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) — sans
+            engagement
           </p>
           <p className="text-charcoal-500 mt-2 text-sm font-medium">
             ★ 4.8/5 — Plus de 23 000 demandes traitées

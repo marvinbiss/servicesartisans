@@ -15,24 +15,24 @@ const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), {
 export const revalidate = 3600 // ISR - revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'Annuaire Artisans France — SIREN Vérifiés',
+  title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
   description:
-    'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
+    "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Pompe à chaleur, isolation, photovoltaïque, plomberie et 40+ métiers RGE. Données SIREN officielles + certification RGE vérifiée ADEME.",
   alternates: getAlternates(`/artisans`),
   openGraph: {
     locale: 'fr_FR',
-    title: 'Annuaire Artisans France — SIREN Vérifiés',
+    title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
     description:
-      'Trouvez un artisan qualifié parmi les professionnels référencés en France. Données SIREN officielles.',
+      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) parmi les professionnels référencés en France. Données SIREN officielles et certification RGE vérifiée ADEME.",
     url: `${SITE_URL}/artisans`,
     siteName: 'ServicesArtisans',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Annuaire Artisans France — SIREN Vérifiés',
+    title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
     description:
-      'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
+      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Données SIREN officielles + certification RGE vérifiée ADEME.",
   },
 }
 
@@ -47,6 +47,7 @@ async function getRecentProviders(limit = 50) {
     }
 
     const supabase = createClient(url, key)
+    const today = new Date().toISOString().split('T')[0]
 
     const { data, error } = await supabase
       .from('providers')
@@ -54,6 +55,8 @@ async function getRecentProviders(limit = 50) {
         'id, stable_id, name, slug, specialty, address_street, address_postal_code, address_city, address_region, is_verified, is_active, phone, siret, rating_average, review_count'
       )
       .eq('is_active', true)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', today)
       .order('phone', { ascending: false, nullsFirst: false })
       .order('is_verified', { ascending: false })
       .limit(limit)
@@ -66,13 +69,15 @@ async function getRecentProviders(limit = 50) {
       }
     }
 
-    // Get total count — use estimated count to avoid timeout on 743K+ rows
+    // Get total count — RGE-only (~49 611 fiches publiées)
     let totalCount = data?.length ?? 0
     try {
       const { count } = await supabase
         .from('providers')
         .select('id', { count: 'estimated', head: true })
         .eq('is_active', true)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', today)
       if (count && count > 0) totalCount = count
     } catch {
       // Count failed — use 0 to avoid displaying false numbers
@@ -108,12 +113,12 @@ export default async function ArtisansPage() {
     {
       question: 'Comment sont sélectionnés les artisans référencés ?',
       answer:
-        "Les artisans sont collectés à partir des données publiques SIRENE (INSEE) avec un code NAF bâtiment (41-43). Chaque fiche est vérifiée SIRET, enrichie des qualifications RGE officielles (via france-renov.gouv.fr, sync hebdo) et des avis clients vérifiés. Les fiches en cessation d'activité sont automatiquement masquées.",
+        "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR, QualiBois, QualiSol, QualiPV. Chaque fiche est vérifiée SIRET via SIRENE/INSEE et synchronisée chaque semaine avec la base ADEME officielle (france-renov.gouv.fr). Les fiches dont le RGE expire ou en cessation d'activité sont automatiquement masquées.",
     },
     {
       question: 'Comment savoir si un artisan est qualifié RGE ?',
       answer:
-        "Chaque fiche artisan affiche les qualifications RGE en cours de validité (QualiPAC, QualiBois, Qualibat, Qualifelec, QualiSol, QualiPV), leur numéro, leur domaine et leur date d'expiration. Ces données proviennent de la base officielle ADEME et sont synchronisées chaque semaine.",
+        "Tous les artisans référencés sur ServicesArtisans sont RGE certifiés. Chaque fiche affiche les qualifications RGE en cours de validité (QualiPAC, QualiBois, Qualibat, Qualifelec, QualiSol, QualiPV, Qualit'EnR), leur numéro, leur domaine et leur date d'expiration. Ces données proviennent de la base officielle ADEME et sont synchronisées chaque semaine.",
     },
     {
       question: 'Les avis sont-ils vraiment authentiques ?',
@@ -121,14 +126,14 @@ export default async function ArtisansPage() {
         "Oui. Seuls les clients ayant fait une demande de devis via notre plateforme peuvent laisser un avis, après la fin du chantier. Nous utilisons un token HMAC signé lié à l'identifiant du devis pour empêcher la fabrication d'avis fictifs. Les avis suspects sont modérés et retirés.",
     },
     {
-      question: 'Comment contacter un artisan ?',
+      question: 'Comment contacter un artisan RGE ?',
       answer:
-        "Depuis chaque fiche, vous pouvez demander un devis gratuit en précisant votre besoin, votre ville et vos coordonnées. L'artisan vous recontacte sous 24 à 48 h ouvrées. Pour les urgences, utilisez la ligne d'assistance téléphonique dédiée. Nous ne partageons jamais votre demande avec plusieurs artisans en parallèle.",
+        "Depuis chaque fiche, vous pouvez demander un devis gratuit en précisant votre besoin, votre ville et vos coordonnées. L'artisan RGE vous recontacte sous 24 à 48 h ouvrées. Pour les urgences, utilisez la ligne d'assistance téléphonique dédiée. Nous ne partageons jamais votre demande avec plusieurs artisans en parallèle : 1 demande = 1 artisan.",
     },
     {
       question: 'Un artisan peut-il modifier ou revendiquer sa fiche ?',
       answer:
-        "Oui. Un artisan avec un SIRET actif peut revendiquer sa fiche gratuitement : création de compte, vérification SIRET via provider_claims, modification des informations (description, photos, horaires, zones d'intervention). La revendication est validée par notre équipe admin sous 48 h.",
+        "Oui. Un artisan RGE avec un SIRET actif et une qualification RGE en cours de validité peut revendiquer sa fiche gratuitement : création de compte, vérification SIRET via provider_claims, modification des informations (description, photos, horaires, zones d'intervention). La revendication est validée par notre équipe admin sous 48 h.",
     },
   ])
 
@@ -153,8 +158,8 @@ export default async function ArtisansPage() {
             <Users className="w-4 h-4 text-amber-400" />
             <span className="text-sm font-medium text-amber-300">
               {count > 0
-                ? `${count.toLocaleString('fr-FR')} artisans référencés`
-                : 'Annuaire des artisans'}
+                ? `${count.toLocaleString('fr-FR')} artisans RGE certifiés`
+                : 'Annuaire des artisans RGE'}
             </span>
           </div>
           <h1
@@ -163,14 +168,14 @@ export default async function ArtisansPage() {
           >
             Artisans{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-              qualifiés
+              RGE certifiés
             </span>{' '}
             près de chez vous
           </h1>
           <p className="text-lg md:text-xl text-charcoal-300 max-w-3xl mx-auto mb-8">
             {count > 0
-              ? `Plus de ${Math.floor(count / 1000) * 1000} professionnels du bâtiment dans toute la France. Plombier, électricien, maçon, couvreur et 40+ métiers.`
-              : 'Des milliers de professionnels du bâtiment dans toute la France.'}
+              ? `Plus de ${Math.floor(count / 1000) * 1000} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans toute la France. Pompe à chaleur, isolation, photovoltaïque, plomberie et 40+ métiers RGE.`
+              : "Tous les artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans toute la France."}
           </p>
 
           {/* Quick search links */}
@@ -197,11 +202,13 @@ export default async function ArtisansPage() {
                 <div className="text-2xl md:text-3xl font-bold text-charcoal-900">
                   {count.toLocaleString('fr-FR')}
                 </div>
-                <div className="text-sm text-charcoal-900 mt-1">Artisans référencés</div>
+                <div className="text-sm text-charcoal-900 mt-1">Artisans RGE certifiés</div>
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-charcoal-900">46</div>
-                <div className="text-sm text-charcoal-900 mt-1">Métiers couverts</div>
+                <div className="text-2xl md:text-3xl font-bold text-charcoal-900">4</div>
+                <div className="text-sm text-charcoal-900 mt-1">
+                  Labels RGE (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR)
+                </div>
               </div>
               <div>
                 <div className="text-2xl md:text-3xl font-bold text-charcoal-900">101</div>
@@ -229,11 +236,11 @@ export default async function ArtisansPage() {
       {/* Providers listing */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-2">
-          Artisans récemment référencés
+          Artisans RGE récemment référencés
         </h2>
         <p className="text-charcoal-900 mb-8">
           {providers.length > 0
-            ? `${providers.length} artisans affichés sur ${count.toLocaleString('fr-FR')} au total`
+            ? `${providers.length} artisans RGE affichés sur ${count.toLocaleString('fr-FR')} au total`
             : 'Chargement en cours...'}
         </p>
 
@@ -272,7 +279,7 @@ export default async function ArtisansPage() {
                           <span
                             className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
                             style={{ backgroundColor: '#1877f2' }}
-                            title="Artisan vérifié"
+                            title="Artisan RGE certifié vérifié"
                           >
                             <svg
                               className="w-3 h-3 text-white"
@@ -369,7 +376,9 @@ export default async function ArtisansPage() {
       {/* Browse by service */}
       <section className="bg-sand-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-charcoal-900 mb-6">Rechercher par métier</h2>
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
+            Rechercher un artisan RGE par métier
+          </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {staticServicesList.map((s) => (
               <Link

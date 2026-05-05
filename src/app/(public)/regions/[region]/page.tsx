@@ -80,9 +80,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleTemplates = [
     `${countPrefix}Artisans ${region.name} 2026 — Devis gratuit 24h`,
     `Artisan ${region.name} 2026 — ${deptCount} dép., ${cityCount} villes`,
-    `${region.name} 2026 : ${countPrefix || 'artisans qualifiés'} — Devis`,
+    `${region.name} 2026 : ${countPrefix || 'artisans RGE certifiés'} — Devis`,
     `Artisans ${getRegionPreposition(region.name)} 2026 — Comparez ${countPrefix}`,
-    `${region.name} 2026 — Annuaire ${countPrefix}artisans vérifiés`,
+    `${region.name} 2026 — Annuaire ${countPrefix}artisans RGE certifiés`,
     `Artisans ${region.name} 2026`,
     `Artisans ${region.name}`,
   ]
@@ -93,7 +93,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
     `Trouvez un artisan ${getRegionPreposition(region.name)}. ${artisanStr}${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
-    `${region.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `${region.name} : ${artisanStr}annuaire d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC). ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
     `Artisans ${getRegionPreposition(region.name)} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
     `Tous les artisans ${getRegionArticle(region.name)}. ${artisanStr}${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
     `${region.name} — ${deptCount} dép., ${cityCount} villes${artisanCount > 0 ? `, ${formatProviderCount(artisanCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
@@ -397,7 +397,7 @@ export default async function RegionPage({ params }: PageProps) {
         {/* ─── CTA CONVERSION — above the fold ─────────────── */}
         <GeoPageCTA
           title={`Besoin d'un artisan ${getRegionPreposition(region.name)} ?`}
-          subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
+          subtitle="Devis gratuit et sans engagement d'artisans RGE certifiés"
         />
 
         {/* ─── PROFIL RÉGIONAL ──────────────────────────────── */}
@@ -797,7 +797,7 @@ export default async function RegionPage({ params }: PageProps) {
             Besoin d'un artisan {getRegionPreposition(region.name)} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Devis gratuit et sans engagement de professionnels qualifiés.
+            Devis gratuit et sans engagement d'artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

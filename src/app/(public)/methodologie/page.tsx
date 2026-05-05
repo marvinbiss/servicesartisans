@@ -108,9 +108,9 @@ export default function MethodologiePage() {
         "Les fourchettes de prix proviennent de données de marché réelles : prix de référence nationaux, bases professionnelles (CAPEB, FFB, observatoires des prix) et devis réels signés via notre plateforme. Nous appliquons des multiplicateurs départementaux pour refléter les écarts régionaux et affichons toujours une fourchette basse/haute. En l'absence de données fiables, nous préférons ne pas afficher de prix plutôt qu'une estimation douteuse.",
     },
     {
-      question: 'Comment sont vérifiés les artisans référencés ?',
+      question: 'Comment sont vérifiés les artisans RGE certifiés ?',
       answer:
-        "Vérification SIRET via l'API SIRENE officielle (entreprise active, NAF cohérent avec le métier), sync hebdomadaire avec la base ADEME pour les qualifications RGE, demande d'attestation décennale à la revendication. Les artisans ne peuvent pas acheter leur position dans les résultats : le classement est basé sur des critères objectifs (localisation, qualifications, note moyenne, nombre d'avis).",
+        "Pivot full RGE 2026-05-05 : ServicesArtisans n'affiche publiquement que des artisans RGE certifiés. Vérification SIRET via l'API SIRENE officielle (entreprise active, NAF cohérent avec le métier), sync hebdomadaire avec la base ADEME france-renov.gouv.fr pour les qualifications RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) — qualifications expirées désactivées sous 24h, demande d'attestation décennale à la revendication. Les artisans ne peuvent pas acheter leur position dans les résultats : le classement est basé sur des critères objectifs (localisation, qualifications, note moyenne, nombre d'avis).",
     },
     {
       question: 'Les avis peuvent-ils être supprimés à la demande d’un artisan ?',

@@ -20,14 +20,14 @@ export const revalidate = 86400
 const PUBLISHED_DATE = getPublishedDate('/regions')
 
 export const metadata: Metadata = {
-  title: 'Artisans par Région — 18 Régions',
+  title: 'Artisans RGE par Région — 18 Régions',
   description:
-    'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
+    'Explorez les artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans les 18 régions de France. Métiers RGE rénovation énergétique. Recherche gratuite, devis sans engagement.',
   alternates: getAlternates(`/regions`),
   openGraph: {
-    title: 'Artisans par Région — 18 Régions',
+    title: 'Artisans RGE par Région — 18 Régions',
     description:
-      'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+      "Explorez les artisans RGE certifiés dans les 18 régions de France. Éligibilité MaPrimeRénov' & CEE.",
     url: `${SITE_URL}/regions`,
     type: 'website',
     images: [
@@ -35,15 +35,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Artisans par région',
+        alt: 'ServicesArtisans — Artisans RGE par région',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Artisans par Région — 18 Régions',
+    title: 'Artisans RGE par Région — 18 Régions',
     description:
-      'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+      'Explorez les artisans RGE certifiés dans les 18 régions de France. Métiers rénovation énergétique.',
   },
 }
 
@@ -76,8 +76,9 @@ export default async function RegionsIndexPage() {
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Artisans par région en France',
-    description: "Annuaire d'artisans référencés dans les 18 régions françaises.",
+    name: 'Artisans RGE certifiés par région en France',
+    description:
+      'Annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans les 18 régions françaises.',
     url: `${SITE_URL}/regions`,
     numberOfItems: regions.length,
     breadcrumb: {
@@ -97,12 +98,12 @@ export default async function RegionsIndexPage() {
     {
       question: 'Les DOM-TOM sont-ils inclus ?',
       answer:
-        "Oui. Les cinq régions d'outre-mer (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) sont intégrées à l'annuaire, avec les départements et artisans référencés localement. La couverture est cependant moins dense qu'en métropole en raison du nombre plus limité d'artisans ayant rejoint notre réseau.",
+        "Oui. Les cinq régions d'outre-mer (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) sont intégrées à l'annuaire, avec les départements et artisans RGE certifiés localement. La couverture est cependant moins dense qu'en métropole en raison du nombre plus limité d'artisans qualifiés RGE actifs.",
     },
     {
-      question: 'Quelle région compte le plus d’artisans ?',
+      question: 'Quelle région compte le plus d’artisans RGE ?',
       answer:
-        "L'Île-de-France, Auvergne-Rhône-Alpes et Provence-Alpes-Côte d'Azur sont les trois régions les plus densément couvertes en volume d'artisans référencés. Ces régions concentrent à la fois la plus forte demande de rénovation et les plus grands bassins d'emploi BTP.",
+        "L'Île-de-France, Auvergne-Rhône-Alpes et Provence-Alpes-Côte d'Azur sont les trois régions les plus densément couvertes en volume d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC). Ces régions concentrent à la fois la plus forte demande de rénovation énergétique et les plus grands bassins d'emploi BTP qualifiés.",
     },
     {
       question: 'Peut-on comparer les prix entre régions ?',
@@ -172,7 +173,7 @@ export default async function RegionsIndexPage() {
   const tldrBullets = [
     `${regions.length} régions de France couvertes : ${totalDepartments} départements et ${villes.length}+ communes accessibles via leurs URLs canoniques.`,
     `DOM-TOM inclus (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) avec densité moindre qu'en métropole.`,
-    `Île-de-France, Auvergne-Rhône-Alpes et PACA concentrent la plus forte densité d'artisans référencés.`,
+    `Île-de-France, Auvergne-Rhône-Alpes et PACA concentrent la plus forte densité d'artisans RGE certifiés.`,
     `Baromètre régional disponible sur /barometre/regions — indices de prix par métier et région, mis à jour trimestriellement.`,
   ]
 
@@ -229,8 +230,8 @@ export default async function RegionsIndexPage() {
               , un réseau national
             </h1>
             <p className="text-lg md:text-xl text-charcoal-400 max-w-2xl mx-auto leading-relaxed">
-              Des artisans référencés via les données SIREN dans toutes les régions de France.
-              Explorez l'annuaire des artisans du bâtiment.
+              Des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans toutes les régions de
+              France. Explorez l'annuaire 100% RGE pour vos travaux de rénovation énergétique.
             </p>
           </div>
 
@@ -282,7 +283,8 @@ export default async function RegionsIndexPage() {
             Choisissez votre région
           </h2>
           <p className="text-charcoal-500 max-w-lg mx-auto">
-            Chaque région dispose d'artisans qualifiés pour tous vos projets de travaux.
+            Chaque région dispose d'artisans RGE certifiés pour tous vos projets de rénovation
+            énergétique.
           </p>
         </div>
 
@@ -367,7 +369,7 @@ export default async function RegionsIndexPage() {
             Besoin d'un artisan ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
+            Décrivez votre projet et recevez des devis gratuits d'artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

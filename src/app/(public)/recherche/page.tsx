@@ -12,14 +12,14 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Rechercher un artisan qualifié',
+  title: 'Rechercher un artisan RGE certifié',
   description:
-    "Recherchez un artisan qualifié près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit. Des milliers d'artisans référencés en France.",
+    "Recherchez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC) près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit éligible MaPrimeRénov' et CEE.",
   alternates: getAlternates(`/recherche`),
   openGraph: {
-    title: 'Rechercher un artisan — Trouvez le bon professionnel',
+    title: 'Rechercher un artisan RGE — Trouvez le bon professionnel',
     description:
-      "Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d'artisans référencés.",
+      "Comparez les avis, les tarifs et obtenez des devis gratuits d'artisans RGE certifiés.",
     url: `${SITE_URL}/recherche`,
     type: 'website',
     images: [
@@ -27,14 +27,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Recherche artisan',
+        alt: 'ServicesArtisans — Recherche artisan RGE',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rechercher un artisan',
-    description: 'Comparez les avis, les tarifs et obtenez des devis gratuits.',
+    title: 'Rechercher un artisan RGE certifié',
+    description:
+      "Comparez les avis, les tarifs et obtenez des devis gratuits d'artisans RGE certifiés.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -66,17 +67,18 @@ export default function RecherchePage() {
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 data-speakable="true" className="font-heading text-4xl md:text-5xl font-bold mb-4">
-            Rechercher un artisan
+            Rechercher un artisan RGE certifié
           </h1>
           <p className="text-xl text-primary-100/80 mb-10 max-w-2xl mx-auto">
-            Trouvez le professionnel idéal pour votre projet. Comparez les avis, les tarifs et
-            demandez des devis gratuits.
+            Trouvez l'artisan RGE qualifié (Qualibat, Qualifelec, QualiPAC) idéal pour votre projet
+            de rénovation énergétique. Comparez les avis, les tarifs et demandez des devis gratuits
+            éligibles MaPrimeRénov' & CEE.
           </p>
           <HeroSearch />
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4 text-green-400" />
-              <span className="text-sm text-white/80">Artisans référencés</span>
+              <span className="text-sm text-white/80">Artisans RGE certifiés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Star className="w-4 h-4 text-amber-400" />
@@ -171,9 +173,11 @@ export default function RecherchePage() {
       {/* CTA */}
       <section className="py-16 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Besoin d'un artisan rapidement ?</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Besoin d'un artisan RGE rapidement ?
+          </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Décrivez votre projet et obtenez un devis gratuit d'artisans qualifiés.
+            Décrivez votre projet et obtenez un devis gratuit d'artisans RGE certifiés.
           </p>
           <Link
             href="/services"

@@ -184,7 +184,7 @@ export default function ImmediateAnswerBlock({
           {/* Fallback: no providers */}
           {!hasProviders && (
             <p className="text-sm text-charcoal-400 mt-4 italic">
-              Aucun artisan référencé pour le moment à {villeName}.
+              Aucun artisan RGE certifié pour le moment à {villeName}.
             </p>
           )}
         </div>
@@ -192,10 +192,10 @@ export default function ImmediateAnswerBlock({
         {/* Source attribution for LLM citation */}
         <div className="px-5 pb-3 pt-1 border-t border-sand-100">
           <p className="text-xs text-charcoal-400" data-speakable="true">
-            Source : <strong>ServicesArtisans</strong> — Données vérifiées SIREN/SIRET, mise à jour
-            quotidienne.
+            Source : <strong>ServicesArtisans</strong> — Données vérifiées SIREN/SIRET + RGE ADEME,
+            mise à jour quotidienne.
             {hasProviders &&
-              ` ${providerCount} ${svcLower}${providerCount > 1 ? 's' : ''} référencé${providerCount > 1 ? 's' : ''} à ${villeName}.`}
+              ` ${providerCount} ${svcLower}${providerCount > 1 ? 's' : ''} RGE certifié${providerCount > 1 ? 's' : ''} à ${villeName}.`}
           </p>
         </div>
       </div>

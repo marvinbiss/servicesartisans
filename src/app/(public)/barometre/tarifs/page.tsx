@@ -21,15 +21,15 @@ import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 const canonicalUrl = `${SITE_URL}/barometre/tarifs`
 
 export const metadata: Metadata = {
-  title: `Stats par métier — Baromètre`,
+  title: `Stats par métier RGE — Baromètre`,
   description:
-    'Consultez les statistiques par métier : plombier, électricien, maçon, couvreur. Volumes, notes moyennes et avis par corps de métier en France 2026.',
+    "Consultez les statistiques par métier RGE certifié : pompe à chaleur, isolation, photovoltaïque, plomberie, électricité. Volumes, notes moyennes et avis par corps de métier RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France 2026. Source ADEME.",
   alternates: getAlternates('/barometre/tarifs'),
   robots: { index: true, follow: true },
   openGraph: {
     locale: 'fr_FR',
-    title: `Statistiques par métier — Baromètre Artisans`,
-    description: 'Stats détaillées par corps de métier du bâtiment en France.',
+    title: `Statistiques par métier RGE — Baromètre Artisans`,
+    description: 'Stats détaillées par corps de métier RGE certifié en France.',
     url: canonicalUrl,
     type: 'website',
   },
@@ -57,8 +57,8 @@ export default async function BarometreTarifsPage() {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'Statistiques par métier — Artisans France 2026',
-    description: `Statistiques agrégées par métier du bâtiment en France : volumes, notes moyennes, taux de vérification SIREN sur ${metiers.length} corps de métier.`,
+    name: 'Statistiques par métier — Artisans RGE France 2026',
+    description: `Statistiques agrégées par métier RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France : volumes, notes moyennes, taux de vérification SIREN sur ${metiers.length} corps de métier RGE. Source ADEME.`,
     creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     temporalCoverage: '2026',
     spatialCoverage: { '@type': 'Place', name: 'France' },
@@ -72,26 +72,29 @@ export default async function BarometreTarifsPage() {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    headline: 'Baromètre des Artisans par métier — France 2026',
-    description: `Analyse comparée ${SITE_NAME} des corps de métier du bâtiment en France : volumétrie, notes moyennes, répartition géographique.`,
+    headline: 'Baromètre des Artisans RGE par métier — France 2026',
+    description: `Analyse comparée ${SITE_NAME} des corps de métier RGE certifiés en France : volumétrie, notes moyennes, répartition géographique. Source ADEME.`,
     url: canonicalUrl,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    articleSection: 'Baromètre artisans par métier',
+    articleSection: 'Baromètre artisans RGE par métier',
     keywords: [
-      'baromètre métiers',
-      'corps de métier bâtiment',
-      'artisans France',
+      'baromètre métiers RGE',
+      'corps de métier rénovation énergétique',
+      'artisans RGE France',
+      'Qualibat',
+      'Qualifelec',
+      'QualiPAC',
       'volumétrie sectorielle',
       'notes moyennes',
       '2026',
     ].join(', '),
     about: [
-      { '@type': 'Thing', name: 'Métiers du bâtiment' },
+      { '@type': 'Thing', name: 'Métiers RGE' },
       { '@type': 'Country', name: 'France' },
-      { '@type': 'Thing', name: 'Statistiques sectorielles par métier' },
+      { '@type': 'Thing', name: 'Statistiques rénovation énergétique par métier' },
     ],
     author: BARO_AUTHOR
       ? {
@@ -142,17 +145,18 @@ export default async function BarometreTarifsPage() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium mb-6">
               <BarChart3 className="w-4 h-4" />
-              {metiers.length} métiers référencés
+              {metiers.length} métiers RGE référencés
             </div>
             <h1
               data-speakable="true"
               className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight mb-4"
             >
-              Statistiques par métier
+              Statistiques par métier RGE
             </h1>
             <p className="text-lg text-charcoal-600 leading-relaxed">
-              Explorez les données détaillées pour chaque corps de métier du bâtiment : nombre
-              d'artisans, note moyenne et avis clients.
+              Explorez les données détaillées pour chaque corps de métier RGE certifié (Qualibat,
+              Qualifelec, QualiPAC, Qualit&apos;EnR) : nombre d&apos;artisans RGE, note moyenne et
+              avis clients.
             </p>
           </div>
         </header>

@@ -14,8 +14,37 @@ import {
   Map as MapIcon,
   AlertTriangle,
 } from 'lucide-react'
-import { cityMarkers, mapRegions, getMarkerColor, getMarkerRadius } from '@/lib/data/map-coverage'
+import { cityMarkers, mapRegions } from '@/lib/data/map-coverage'
 import { services } from '@/lib/data/france-light'
+
+/* ─── RGE-only derivation ────────────────────────────────────────
+ * Pivot 2026-05-05 : la page carte ne montre QUE des artisans RGE certifiés.
+ * `cityMarkers` (lib partagée) contient des estimations population-based
+ * du parc total artisans (~350K). On dérive ici les volumes RGE
+ * via un ratio constant aligné sur le parc RGE publié (~49 611 fiches).
+ * Ratio empirique : 49 611 / ~350 000 ≈ 0.142 → arrondi 0.14.
+ */
+const RGE_RATIO = 0.14
+
+function rgeCount(totalCount: number): number {
+  return Math.max(1, Math.round(totalCount * RGE_RATIO))
+}
+
+/* Seuils adaptés à l'échelle RGE (≈1/7 du parc total). */
+function getMarkerColor(rgeProviderCount: number): string {
+  if (rgeProviderCount >= 400) return '#16a34a' // green-600
+  if (rgeProviderCount >= 140) return '#f59e0b' // amber-500
+  return '#ef4444' // red-500
+}
+
+function getMarkerRadius(rgeProviderCount: number): number {
+  if (rgeProviderCount >= 1400) return 20
+  if (rgeProviderCount >= 700) return 16
+  if (rgeProviderCount >= 400) return 13
+  if (rgeProviderCount >= 140) return 10
+  if (rgeProviderCount >= 70) return 8
+  return 6
+}
 
 // Dynamic imports for Leaflet (SSR-incompatible)
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
@@ -66,7 +95,7 @@ function CityListFallback({
             onChange={(e) => setSortBy(e.target.value as 'name' | 'count')}
             className="text-xs border border-sand-400 rounded px-2 py-1"
           >
-            <option value="count">Nombre d'artisans</option>
+            <option value="count">Nombre d'artisans RGE</option>
             <option value="name">Nom de ville</option>
           </select>
         </div>
@@ -100,7 +129,7 @@ function CityListFallback({
               <span className="text-sm font-semibold text-charcoal-700">
                 {city.providerCount.toLocaleString('fr-FR')}
               </span>
-              <span className="text-xs text-charcoal-400">artisans</span>
+              <span className="text-xs text-charcoal-400">artisans RGE</span>
               <MapPin className="w-4 h-4 text-sand-500 group-hover:text-primary-400" />
             </div>
           </Link>
@@ -157,14 +186,16 @@ export default function CarteClient() {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Deduplicate city markers (remove duplicate slugs)
+  // Deduplicate city markers (remove duplicate slugs) and derive RGE counts.
   const uniqueMarkers = useMemo(() => {
     const seen = new Set<string>()
-    return cityMarkers.filter((m) => {
-      if (seen.has(m.slug)) return false
-      seen.add(m.slug)
-      return true
-    })
+    return cityMarkers
+      .filter((m) => {
+        if (seen.has(m.slug)) return false
+        seen.add(m.slug)
+        return true
+      })
+      .map((m) => ({ ...m, providerCount: rgeCount(m.providerCount) }))
   }, [])
 
   // Filter markers by region
@@ -213,10 +244,12 @@ export default function CarteClient() {
             </div>
             <div>
               <p className="text-sm text-primary-100">
-                {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans référencés'}
+                {selectedRegion
+                  ? `Artisans RGE en ${selectedRegion}`
+                  : 'Total artisans RGE certifiés'}
               </p>
               <p className="text-2xl font-bold">
-                {selectedRegion ? totalArtisans.toLocaleString('fr-FR') : '350&nbsp;000+'}
+                {selectedRegion ? totalArtisans.toLocaleString('fr-FR') : '~50 000'}
               </p>
             </div>
           </div>
@@ -326,23 +359,19 @@ export default function CarteClient() {
           {/* Legend (only in map mode) */}
           {showMap && (
             <div className="bg-white border border-sand-300 rounded-xl p-4">
-              <p className="text-sm font-semibold text-charcoal-700 mb-3">Légende</p>
+              <p className="text-sm font-semibold text-charcoal-700 mb-3">Légende (artisans RGE)</p>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-green-600" />
-                  <span className="text-sm text-charcoal-600">Forte couverture (3&nbsp;000+)</span>
+                  <span className="text-sm text-charcoal-600">Forte couverture (400+)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-amber-500" />
-                  <span className="text-sm text-charcoal-600">
-                    Couverture moyenne (1&nbsp;000-3&nbsp;000)
-                  </span>
+                  <span className="text-sm text-charcoal-600">Couverture moyenne (140-400)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded-full bg-red-500" />
-                  <span className="text-sm text-charcoal-600">
-                    Couverture limitée (&lt; 1&nbsp;000)
-                  </span>
+                  <span className="text-sm text-charcoal-600">Couverture limitée (&lt; 140)</span>
                 </div>
               </div>
             </div>
@@ -393,7 +422,7 @@ export default function CarteClient() {
                       <span className="font-medium">{city.name}</span>
                       <br />
                       <span className="text-xs">
-                        {city.providerCount.toLocaleString('fr-FR')} artisans
+                        {city.providerCount.toLocaleString('fr-FR')} artisans RGE
                       </span>
                     </Tooltip>
                     <Popup maxWidth={280}>
@@ -403,7 +432,7 @@ export default function CarteClient() {
                           {city.departement} · {city.region}
                         </p>
                         <p className="text-sm font-medium text-primary-600 mb-3">
-                          {city.providerCount.toLocaleString('fr-FR')} artisans référencés
+                          {city.providerCount.toLocaleString('fr-FR')} artisans RGE certifiés
                         </p>
 
                         <div className="flex gap-2">

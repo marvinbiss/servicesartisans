@@ -23,9 +23,9 @@ import { CmsContent } from '@/components/CmsContent'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const metadata: Metadata = {
-  title: 'Comment ça marche — Trouvez un artisan',
+  title: 'Comment ça marche — Trouvez un artisan RGE certifié',
   description:
-    'Recherchez, comparez et contactez un artisan en 3 étapes. Des milliers de professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
+    "Recherchez, comparez et contactez un artisan RGE certifié en 3 étapes. Annuaire 100% RGE (Qualibat, Qualifelec, QualiPAC) dans 101 départements. Éligibilité MaPrimeRénov' & CEE.",
   alternates: getAlternates('/comment-ca-marche'),
   robots: {
     index: true,
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Comment ça marche — Trouvez un artisan',
+    title: 'Comment ça marche — Trouvez un artisan RGE certifié',
     description:
-      'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit, sans inscription.',
+      'Recherchez, comparez et contactez un artisan RGE certifié en 3 étapes. 100% gratuit, sans inscription.',
     url: `${SITE_URL}/comment-ca-marche`,
     type: 'website',
     images: [
@@ -51,8 +51,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Comment ça marche — Trouvez un artisan',
-    description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit.',
+    title: 'Comment ça marche — Trouvez un artisan RGE certifié',
+    description:
+      'Recherchez, comparez et contactez un artisan RGE certifié en 3 étapes. 100% gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -65,12 +66,12 @@ const steps = [
     icon: Search,
     title: 'Recherchez',
     description:
-      "Trouvez le bon professionnel en quelques secondes dans notre annuaire d'artisans. Recherchez par type de service et par ville dans les 101 départements français.",
+      "Trouvez l'artisan RGE certifié près de chez vous dans notre annuaire 100% RGE. Recherchez par type de service et par ville dans les 101 départements français.",
     details: [
-      "Des milliers d'artisans référencés en France",
-      'Recherche par métier : plombier, électricien, couvreur…',
+      'Annuaire 100% artisans RGE certifiés en France',
+      'Recherche par métier RGE : pompe à chaleur, isolation, chauffagiste…',
       'Filtrage par ville et département',
-      'Résultats instantanés et à jour',
+      'Qualifications RGE synchronisées chaque semaine avec la base ADEME',
     ],
     gradient: 'from-primary-400 to-primary-600',
   },
@@ -79,11 +80,11 @@ const steps = [
     icon: CheckCircle,
     title: 'Comparez',
     description:
-      'Consultez les profils détaillés des artisans avec leurs données officielles. Comparez les entreprises en toute transparence grâce aux données SIREN gouvernementales.',
+      "Consultez les profils détaillés avec qualifications RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) et données SIREN officielles. Comparez les entreprises en toute transparence.",
     details: [
-      'Profils référencés avec numéro SIRET',
-      "Données issues de l'API gouvernementale SIREN",
-      'Certifications et qualifications affichées',
+      'Qualifications RGE vérifiées (source ADEME france-renov.gouv.fr)',
+      "Profils enrichis avec SIRET via l'API gouvernementale SIREN",
+      "Éligibilité MaPrimeRénov' et CEE confirmée",
       "Informations sur l'entreprise (date de création, statut)",
     ],
     gradient: 'from-emerald-500 to-emerald-700',
@@ -113,9 +114,9 @@ const trustReasons = [
   },
   {
     icon: MapPin,
-    title: "Des milliers d'artisans dans 101 départements",
+    title: 'Des artisans RGE certifiés dans 101 départements',
     description:
-      "Un annuaire d'artisans référencés via les données SIREN officielles. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.",
+      "Annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) référencés via les données SIREN officielles + base ADEME. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.",
   },
   {
     icon: Star,
@@ -252,11 +253,12 @@ export default async function CommentCaMarchePage() {
                 data-speakable="true"
                 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]"
               >
-                Artisan référencé en 3 étapes
+                Trouver un artisan RGE certifié en 3 étapes
               </h1>
               <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
-                Recherchez, comparez et contactez des artisans référencés grâce aux données
-                officielles SIREN. Service 100% gratuit, sans inscription.
+                Recherchez, comparez et contactez des artisans RGE certifiés (Qualibat, Qualifelec,
+                QualiPAC) grâce aux données officielles ADEME et SIREN. Service 100% gratuit, sans
+                inscription.
               </p>
               <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Link
@@ -286,7 +288,7 @@ export default async function CommentCaMarchePage() {
                 Comment trouver un artisan sur ServicesArtisans ?
               </h2>
               <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
-                Un processus simple et transparent pour trouver des professionnels qualifiés dans
+                Un processus simple et transparent pour trouver des artisans RGE certifiés dans
                 votre région
               </p>
             </div>
@@ -453,7 +455,7 @@ export default async function CommentCaMarchePage() {
               >
                 <h3 className="font-semibold text-charcoal-900 mb-2">Demander un devis</h3>
                 <p className="text-charcoal-600 text-sm mb-3">
-                  Recevez des devis gratuits et sans engagement de la part d'artisans référencés.
+                  Recevez des devis gratuits et sans engagement de la part d'artisans RGE certifiés.
                 </p>
                 <span className="text-primary-500 text-sm font-medium inline-flex items-center gap-1">
                   Demander un devis <ArrowRight className="w-4 h-4" />
@@ -478,9 +480,11 @@ export default async function CommentCaMarchePage() {
         {/* CTA */}
         <section className="py-20 bg-primary-500">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Prêt à trouver votre artisan ?</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Prêt à trouver votre artisan RGE ?
+            </h2>
             <p className="text-xl text-primary-100 mb-8">
-              Des milliers d'artisans référencés vous attendent sur ServicesArtisans
+              Le 1er annuaire 100% artisans RGE certifiés vous attend sur ServicesArtisans
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

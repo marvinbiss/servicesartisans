@@ -224,7 +224,7 @@ export default async function BarometreRgePage() {
             <div className="rounded-xl border border-slate-200 bg-white p-5">
               <MapPin className="h-5 w-5 text-blue-600" />
               <p className="mt-3 text-3xl font-bold text-slate-900">{nf(snap.total_providers)}</p>
-              <p className="mt-1 text-sm text-slate-600">Artisans total référencés</p>
+              <p className="mt-1 text-sm text-slate-600">Artisans RGE total référencés</p>
             </div>
           </section>
 

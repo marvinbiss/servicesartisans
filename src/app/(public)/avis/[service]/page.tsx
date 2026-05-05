@@ -67,17 +67,17 @@ export async function generateMetadata({
   if (stats.totalReviews > 0 && stats.avgRating > 0) {
     const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `${stats.avgRating}★ Avis ${trade.name} 2026 — ${stats.totalReviews} avis vérifiés`,
-      `Avis ${trade.name} 2026 : ${stats.avgRating}/5 sur ${stats.totalReviews} clients`,
-      `${trade.name} : ${stats.avgRating}★ (${stats.totalReviews} avis) — Pros 2026`,
+      `${stats.avgRating}★ Avis ${trade.name} RGE 2026 — ${stats.totalReviews} avis vérifiés`,
+      `Avis ${trade.name} RGE 2026 : ${stats.avgRating}/5 sur ${stats.totalReviews} clients`,
+      `${trade.name} RGE : ${stats.avgRating}★ (${stats.totalReviews} avis) — Pros certifiés 2026`,
     ]
     title = titleTemplates[titleHash % titleTemplates.length]
   } else {
     const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `Avis ${trade.name} 2026 — Témoignages clients vérifiés`,
-      `Avis ${trade.name} 2026 — Comparez les pros + Devis 24h`,
-      `${trade.name} 2026 : avis et recommandations vérifiés`,
+      `Avis ${trade.name} RGE 2026 — Témoignages clients vérifiés`,
+      `Avis ${trade.name} RGE 2026 — Comparez les pros certifiés + Devis 24h`,
+      `${trade.name} RGE 2026 : avis et recommandations vérifiés`,
     ]
     title = titleTemplates[titleHash % titleTemplates.length]
   }
@@ -88,9 +88,9 @@ export async function generateMetadata({
       : ''
   const descHash = Math.abs(hashCode(`avis-desc-${service}`))
   const descTemplates = [
-    `${ratingSnippet}Avis ${tradeLower}s vérifiés. Comparez les profils, certifications et tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `${ratingSnippet}Avis ${tradeLower} : tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications et retours clients vérifiés.`,
-    `${ratingSnippet}${trade.name} de confiance : avis vérifiés, prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
+    `${ratingSnippet}Avis ${tradeLower}s RGE certifiés. Comparez les profils, certifications RGE vérifiées ADEME et tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `${ratingSnippet}Avis ${tradeLower} RGE : tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certification RGE vérifiée ADEME et retours clients vérifiés.`,
+    `${ratingSnippet}${trade.name} RGE de confiance : avis vérifiés, certification ADEME, prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -169,7 +169,10 @@ async function getServiceStats(serviceSlug: string) {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Get top providers for this specific service by specialty
+    // RGE-only filter: only RGE-certified, currently valid providers
+    const todayIso = new Date().toISOString().split('T')[0]
+
+    // Get top RGE providers for this specific service by specialty
     const { data: providers } = await supabase
       .from('providers')
       .select(
@@ -178,6 +181,8 @@ async function getServiceStats(serviceSlug: string) {
       .eq('is_active', true)
       .in('specialty', specialties)
       .gt('review_count', 0)
+      .not('rge_qualifications', 'is', null)
+      .gte('rge_valid_until', todayIso)
       .order('rating_average', { ascending: false, nullsFirst: false })
       .order('review_count', { ascending: false })
       .limit(6)
@@ -261,19 +266,19 @@ export default async function AvisServicePage({
   // Merge trade FAQ + review-specific FAQ
   const reviewFaqItems = [
     {
-      question: `Comment choisir un bon ${tradeLower} ?`,
-      answer: `Pour choisir un bon ${tradeLower}, vérifiez ses certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}), comparez les avis clients et demandez plusieurs devis. Les tarifs habituels vont de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+      question: `Comment choisir un bon ${tradeLower} RGE ?`,
+      answer: `Pour choisir un bon ${tradeLower} RGE, vérifiez sa certification RGE (validée ADEME via france-renov.gouv.fr) et ses qualifications complémentaires (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}), comparez les avis clients et demandez plusieurs devis. Les tarifs habituels vont de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Combien coûte un ${tradeLower} ?`,
-      answer: `Les tarifs d’un ${tradeLower} varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l’intervention et votre région. Demandez plusieurs devis pour comparer.`,
+      question: `Combien coûte un ${tradeLower} RGE ?`,
+      answer: `Les tarifs d’un ${tradeLower} RGE varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l’intervention et votre région. La certification RGE ouvre l’accès à MaPrimeRénov’ et aux CEE. Demandez plusieurs devis pour comparer.`,
     },
     {
-      question: `Quelles certifications vérifier pour un ${tradeLower} ?`,
+      question: `Quelles certifications vérifier pour un ${tradeLower} RGE ?`,
       answer:
         trade.certifications.length > 0
-          ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
-          : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
+          ? `Pour un ${tradeLower} RGE, vérifiez d’abord la certification RGE en cours de validité (ADEME), puis les qualifications spécifiques : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
+          : `Vérifiez la certification RGE en cours de validité (ADEME) ainsi que l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} RGE sérieux fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -296,8 +301,9 @@ export default async function AvisServicePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: `Avis ${trade.name} — comment bien choisir un ${tradeLower}`,
-    description: `Avis et recommandations pour bien choisir votre ${tradeLower}. Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, critères de sélection.`,
+    headline: `Avis ${trade.name} RGE — comment bien choisir un ${tradeLower} certifié`,
+    description: `Avis et recommandations pour bien choisir votre ${tradeLower} RGE certifié. Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certification RGE vérifiée ADEME, critères de sélection.`,
+    articleSection: 'Avis artisans RGE',
     image: `${SITE_URL}/opengraph-image`,
     url: `${SITE_URL}/avis/${service}`,
     mainEntityOfPage: `${SITE_URL}/avis/${service}`,
@@ -314,28 +320,28 @@ export default async function AvisServicePage({
 
   const enBrefPoints: string[] = [
     serviceStats.totalReviews > 0
-      ? `Note moyenne ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés en France`
-      : `Avis et critères de choix pour ${tradeLower} : qualifications, tarifs, fiabilité`,
+      ? `Note moyenne ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés d'artisans RGE certifiés en France`
+      : `Avis et critères de choix pour ${tradeLower} RGE : certification ADEME, qualifications, tarifs, fiabilité`,
     `Tarifs nationaux : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}`,
     trade.certifications.length > 0
-      ? `Certifications à vérifier : ${trade.certifications.slice(0, 3).join(', ')}`
-      : `Assurance décennale + RC pro obligatoires`,
+      ? `Certifications à vérifier : RGE (ADEME) + ${trade.certifications.slice(0, 3).join(', ')}`
+      : `Certification RGE (ADEME) + assurance décennale + RC pro obligatoires`,
     serviceStats.providers.length > 0
-      ? `${serviceStats.providers.length} ${tradeLower}${serviceStats.providers.length > 1 ? 's' : ''} dans le top national`
+      ? `${serviceStats.providers.length} ${tradeLower}${serviceStats.providers.length > 1 ? 's' : ''} RGE dans le top national`
       : `Délai de réponse moyen : ${trade.averageResponseTime}`,
   ]
 
   const tldrBullets: string[] = [
-    `Avis ${tradeLower}${serviceStats.totalReviews > 0 ? ` — ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés` : ' — recommandations clients vérifiées'}, tarifs ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `Critères clés : qualifications obligatoires (${trade.certifications.length > 0 ? trade.certifications.slice(0, 2).join(', ') : 'décennale + RC pro'}), transparence devis, ponctualité, qualité des finitions.`,
-    `Méthode : comparer 2-3 devis détaillés, demander photos de réalisations, vérifier SIREN actif, lire les avis avec commentaires longs (plus fiables).`,
-    `Notre rôle : mise en relation gratuite avec un ${tradeLower} référencé près de chez vous, devis sous 24 h, sans engagement.`,
+    `Avis ${tradeLower} RGE certifié${serviceStats.totalReviews > 0 ? ` — ${serviceStats.avgRating.toFixed(1)}/5 sur ${serviceStats.totalReviews} avis vérifiés` : ' — recommandations clients vérifiées'}, tarifs ${trade.priceRange.min}-${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `Critères clés : certification RGE en cours de validité (ADEME), qualifications complémentaires (${trade.certifications.length > 0 ? trade.certifications.slice(0, 2).join(', ') : 'décennale + RC pro'}), transparence devis, ponctualité, qualité des finitions.`,
+    `Méthode : comparer 2-3 devis détaillés, demander photos de réalisations, vérifier la certification RGE et le SIREN actif, lire les avis avec commentaires longs (plus fiables).`,
+    `Notre rôle : mise en relation gratuite avec un ${tradeLower} RGE certifié près de chez vous, devis sous 24 h, sans engagement.`,
   ]
 
   const serviceSchema = getAvisHubSchema({
     serviceName: trade.name,
     serviceSlug: service,
-    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans référencés.`,
+    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} RGE certifié de confiance. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans RGE certifiés ADEME.`,
     url: `${SITE_URL}/avis/${service}`,
     ratingValue: serviceStats.avgRating,
     reviewCount: serviceStats.totalReviews,
@@ -371,9 +377,9 @@ export default async function AvisServicePage({
   const h = (seed: string) => Math.abs(hashCode(`avis-editorial-${service}-${seed}`))
 
   const introVariants = [
-    `Choisir un ${tradeLower} de confiance est une étape déterminante pour la réussite de vos travaux. Les avis clients constituent aujourd'hui le premier réflexe des particuliers avant de contacter un professionnel. En consultant les retours d'expérience d'autres clients, vous pouvez évaluer la qualité du travail, le respect des délais et la transparence tarifaire de chaque artisan. Sur ServicesArtisans, chaque avis est associé à un profil vérifié via les données SIREN officielles, ce qui garantit l'authenticité des témoignages. Que vous ayez besoin d'une intervention ponctuelle ou d'un chantier complet, les retours d'expérience vous aident à identifier les artisans les plus fiables de votre région. Ne laissez pas le hasard décider : comparez les profils, lisez les commentaires détaillés et faites un choix éclairé.`,
-    `Trouver un ${tradeLower} fiable n'est pas toujours simple, surtout quand il s'agit de travaux importants. Les avis vérifiés jouent un rôle essentiel : ils vous permettent de comparer objectivement les professionnels avant de faire votre choix. Un artisan bien noté par ses clients précédents inspire confiance. Sur notre plateforme, les profils sont référencés à partir des registres officiels (SIREN), et les avis reflètent des interventions réelles. Consultez les retours clients pour faire un choix éclairé. Chaque témoignage vous apporte des informations concrètes sur la qualité de service, les tarifs pratiqués et le professionnalisme de l'artisan. C'est le meilleur moyen de trouver un prestataire à la hauteur de vos attentes.`,
-    `Les avis clients sont devenus un critère incontournable pour sélectionner un ${tradeLower}. Avant d'engager un professionnel, prendre le temps de lire les témoignages d'autres particuliers permet d'éviter les mauvaises surprises. Qualité des finitions, ponctualité, respect du devis initial : autant d'éléments que seuls les retours d'expérience peuvent révéler. ServicesArtisans référence les artisans via les données SIREN officielles et recueille des avis authentiques pour vous aider dans votre décision. En France, le secteur du bâtiment compte des centaines de milliers de professionnels : les avis clients sont votre meilleur filtre pour distinguer les artisans sérieux des autres.`,
+    `Choisir un ${tradeLower} RGE certifié est une étape déterminante pour la réussite de vos travaux et l'accès aux aides (MaPrimeRénov', CEE). Les avis clients constituent aujourd'hui le premier réflexe des particuliers avant de contacter un professionnel. En consultant les retours d'expérience d'autres clients, vous pouvez évaluer la qualité du travail, le respect des délais et la transparence tarifaire de chaque artisan. Sur ServicesArtisans, chaque profil est vérifié via les données SIREN officielles et la certification RGE est validée auprès de l'ADEME (france-renov.gouv.fr), ce qui garantit l'authenticité des témoignages et l'éligibilité aux aides. Que vous ayez besoin d'une intervention ponctuelle ou d'un chantier complet, les retours d'expérience vous aident à identifier les artisans RGE les plus fiables de votre région. Ne laissez pas le hasard décider : comparez les profils, lisez les commentaires détaillés et faites un choix éclairé.`,
+    `Trouver un ${tradeLower} RGE fiable n'est pas toujours simple, surtout quand il s'agit de travaux importants ouvrant droit à MaPrimeRénov'. Les avis vérifiés jouent un rôle essentiel : ils vous permettent de comparer objectivement les professionnels certifiés avant de faire votre choix. Un artisan RGE bien noté par ses clients précédents inspire confiance. Sur notre plateforme, les profils sont référencés à partir des registres officiels (SIREN, certification RGE vérifiée ADEME), et les avis reflètent des interventions réelles. Consultez les retours clients pour faire un choix éclairé. Chaque témoignage vous apporte des informations concrètes sur la qualité de service, les tarifs pratiqués et le professionnalisme de l'artisan. C'est le meilleur moyen de trouver un prestataire RGE à la hauteur de vos attentes.`,
+    `Les avis clients sont devenus un critère incontournable pour sélectionner un ${tradeLower} RGE. Avant d'engager un professionnel certifié, prendre le temps de lire les témoignages d'autres particuliers permet d'éviter les mauvaises surprises. Qualité des finitions, ponctualité, respect du devis initial : autant d'éléments que seuls les retours d'expérience peuvent révéler. ServicesArtisans référence les artisans via les données SIREN officielles et la certification RGE vérifiée ADEME, puis recueille des avis authentiques pour vous aider dans votre décision. En France, le secteur du bâtiment compte des centaines de milliers de professionnels : les avis clients sont votre meilleur filtre pour distinguer les artisans RGE sérieux des autres.`,
   ]
 
   const analysisVariants = [
@@ -476,18 +482,19 @@ export default async function AvisServicePage({
               {(() => {
                 const h1Hash = Math.abs(hashCode(`avis-h1-${service}`))
                 const h1Templates = [
-                  `Avis ${tradeLower} — Comment bien choisir`,
-                  `Avis ${tradeLower} : conseils pour bien choisir`,
-                  `Avis ${tradeLower} : comparez les professionnels`,
-                  `${trade.name} : avis vérifiés et recommandations`,
-                  `${trade.name} de confiance : avis vérifiés`,
+                  `Avis ${tradeLower} RGE — Comment bien choisir un certifié`,
+                  `Avis ${tradeLower} RGE : conseils pour bien choisir`,
+                  `Avis ${tradeLower} RGE : comparez les professionnels certifiés`,
+                  `${trade.name} RGE : avis vérifiés et recommandations`,
+                  `${trade.name} RGE de confiance : avis vérifiés`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
             <p className="text-xl text-charcoal-400 max-w-3xl mx-auto mb-4">
-              Consultez les avis et recommandations pour bien choisir votre {tradeLower}. Prix
-              indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+              Consultez les avis et recommandations pour bien choisir votre {tradeLower} RGE
+              certifié. Certification RGE vérifiée ADEME. Prix indicatif : {trade.priceRange.min} à{' '}
+              {trade.priceRange.max} {trade.priceRange.unit}.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -515,7 +522,7 @@ export default async function AvisServicePage({
                 className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
-                Comparer les artisans
+                Comparer les artisans RGE
               </Link>
             </div>
           </div>
@@ -540,17 +547,17 @@ export default async function AvisServicePage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-gray max-w-none">
             <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">
-              Pourquoi consulter les avis avant de choisir un {tradeLower} ?
+              Pourquoi consulter les avis avant de choisir un {tradeLower} RGE ?
             </h2>
             <p className="text-charcoal-700 leading-relaxed mb-6">{editorialIntro}</p>
 
             <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-8">
-              Ce que les clients regardent chez un {tradeLower}
+              Ce que les clients regardent chez un {tradeLower} RGE
             </h2>
             <p className="text-charcoal-700 leading-relaxed mb-6">{editorialAnalysis}</p>
 
             <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-8">
-              Nos conseils pour bien choisir votre {tradeLower}
+              Nos conseils pour bien choisir votre {tradeLower} RGE certifié
             </h2>
             <p className="text-charcoal-700 leading-relaxed">{editorialConseil}</p>
           </div>
@@ -597,10 +604,10 @@ export default async function AvisServicePage({
         <section className="py-12 bg-sand-50">
           <div className="max-w-5xl mx-auto px-4">
             <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
-              {trade.name}s les mieux notés en France
+              {trade.name}s RGE les mieux notés en France
             </h2>
             <p className="text-charcoal-900 text-center mb-8 max-w-lg mx-auto">
-              Classement basé sur les avis clients vérifiés.
+              Classement basé sur les avis clients vérifiés. Tous certifiés RGE (vérifié ADEME).
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {serviceStats.providers.map((provider, i) => (
@@ -809,7 +816,7 @@ export default async function AvisServicePage({
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 text-center">
-            Avis {tradeLower} par ville
+            Avis {tradeLower} RGE par ville
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {topCities.map((ville) => (
@@ -819,7 +826,7 @@ export default async function AvisServicePage({
                 className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
-                  Avis {tradeLower} à {ville.name}
+                  Avis {tradeLower} RGE à {ville.name}
                 </div>
               </Link>
             ))}
@@ -829,7 +836,7 @@ export default async function AvisServicePage({
               href="/villes"
               className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm"
             >
-              Voir les avis {tradeLower} dans toutes les villes ({villes.length})
+              Voir les avis {tradeLower} RGE dans toutes les villes ({villes.length})
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -847,7 +854,7 @@ export default async function AvisServicePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
-            Questions fréquentes — Avis {trade.name}
+            Questions fréquentes — Avis {trade.name} RGE
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
@@ -871,10 +878,10 @@ export default async function AvisServicePage({
       <section className="py-20 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Prêt à trouver votre {tradeLower}&nbsp;?
+            Prêt à trouver votre {tradeLower} RGE certifié&nbsp;?
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Demandez un devis gratuit et comparez les artisans près de chez vous.
+            Demandez un devis gratuit et comparez les artisans RGE certifiés près de chez vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -888,7 +895,7 @@ export default async function AvisServicePage({
               href={`/services/${service}`}
               className="inline-flex items-center gap-2 bg-primary-400 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-300 transition-colors text-lg border border-primary-300"
             >
-              Trouver un {tradeLower}
+              Trouver un {tradeLower} RGE certifié
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -1037,7 +1044,7 @@ export default async function AvisServicePage({
               href="/notre-processus-de-verification"
               className="text-primary-500 hover:text-primary-800"
             >
-              Comment nous référençons les artisans
+              Comment nous référençons les artisans RGE
             </Link>
             <Link href="/politique-avis" className="text-primary-500 hover:text-primary-800">
               Notre politique des avis
@@ -1101,9 +1108,10 @@ export default async function AvisServicePage({
             </h3>
             <p className="text-xs text-charcoal-900 leading-relaxed">
               Les informations présentées sur cette page sont indicatives et destinées à vous aider
-              dans le choix d'un artisan. Les prix affichés sont des fourchettes basées sur des
+              dans le choix d'un artisan RGE certifié. La certification RGE est vérifiée auprès de
+              l'ADEME (france-renov.gouv.fr). Les prix affichés sont des fourchettes basées sur des
               moyennes constatées en France. Seul un devis personnalisé fait foi. ServicesArtisans
-              est un annuaire indépendant.
+              est un annuaire indépendant d'artisans RGE.
             </p>
           </div>
         </div>

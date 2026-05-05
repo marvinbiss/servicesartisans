@@ -638,7 +638,7 @@ export default async function TarifsServicePage({
             answer={`Tarifs ${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks
               .slice(0, 3)
               .map((t) => t.split(':')[0].trim())
-              .join('. ')}. Prix constatés auprès de 940 000+ artisans référencés.`}
+              .join('. ')}. Prix constatés auprès d'artisans RGE certifiés de notre annuaire.`}
           />
 
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">

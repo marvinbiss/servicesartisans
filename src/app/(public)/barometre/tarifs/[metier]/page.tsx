@@ -48,8 +48,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countStr = count > 0 ? `${count.toLocaleString('fr-FR')} ` : ''
   const noteStr = stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}★ · ` : ''
 
-  const title = `${noteStr}${metier.label} France 2026 — ${countStr}artisans + stats`
-  const description = `Baromètre ${metier.label.toLowerCase()} 2026 : ${countStr}artisans référencés en France, note moyenne ${stats?.note_moyenne?.toFixed(1) ?? '--'}/5, ${(stats?.nb_avis ?? 0).toLocaleString('fr-FR')} avis vérifiés. Statistiques par ville et département.`
+  const title = `${noteStr}${metier.label} RGE France 2026 — ${countStr}artisans certifiés + stats`
+  const description = `Baromètre ${metier.label.toLowerCase()} RGE 2026 : ${countStr}artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) référencés en France, note moyenne ${stats?.note_moyenne?.toFixed(1) ?? '--'}/5, ${(stats?.nb_avis ?? 0).toLocaleString('fr-FR')} avis vérifiés. Statistiques par ville et département. Source ADEME.`
   const canonicalUrl = `${SITE_URL}/barometre/tarifs/${metierSlug}`
 
   return {
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: `${SITE_URL}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: `${metier.label} — Baromètre ${SITE_NAME}`,
+          alt: `${metier.label} RGE — Baromètre ${SITE_NAME}`,
         },
       ],
     },
@@ -89,24 +89,24 @@ function generateFAQ(metier: { label: string; slug: string }, stats: BarometreSt
   const label = metier.label.toLowerCase()
   return [
     {
-      question: `Combien de ${label}s sont référencés en France ?`,
+      question: `Combien de ${label}s RGE sont référencés en France ?`,
       answer: stats
-        ? `Notre annuaire recense ${stats.nb_artisans.toLocaleString('fr-FR')} ${label}s actifs en France, répartis dans toutes les régions métropolitaines. Ce chiffre est mis à jour quotidiennement.`
-        : `Des milliers de ${label}s sont référencés dans notre annuaire, couvrant l'ensemble du territoire français.`,
+        ? `Notre annuaire recense ${stats.nb_artisans.toLocaleString('fr-FR')} ${label}s RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) actifs en France, répartis dans toutes les régions métropolitaines. Ce chiffre est mis à jour quotidiennement et synchronisé chaque semaine avec la base ADEME.`
+        : `Tous les ${label}s RGE certifiés de France sont référencés dans notre annuaire, couvrant l'ensemble du territoire.`,
     },
     {
-      question: `Quelle est la note moyenne des ${label}s ?`,
+      question: `Quelle est la note moyenne des ${label}s RGE ?`,
       answer: stats?.note_moyenne
-        ? `La note moyenne des ${label}s sur ${SITE_NAME} est de ${stats.note_moyenne.toFixed(1)}/5, basée sur ${stats.nb_avis.toLocaleString('fr-FR')} avis clients vérifiés.`
-        : `Les ${label}s sont évalués par les clients après chaque intervention. Consultez les fiches individuelles pour voir les notes détaillées.`,
+        ? `La note moyenne des ${label}s RGE sur ${SITE_NAME} est de ${stats.note_moyenne.toFixed(1)}/5, basée sur ${stats.nb_avis.toLocaleString('fr-FR')} avis clients vérifiés.`
+        : `Les ${label}s RGE sont évalués par les clients après chaque intervention. Consultez les fiches individuelles pour voir les notes détaillées.`,
     },
     {
-      question: `Comment trouver un ${label} vérifié près de chez moi ?`,
-      answer: `Utilisez notre moteur de recherche sur ${SITE_NAME} : entrez "${metier.label}" et votre ville. Les artisans vérifiés (SIRET confirmé) sont clairement identifiés avec un badge.`,
+      question: `Comment trouver un ${label} RGE certifié près de chez moi ?`,
+      answer: `Utilisez notre moteur de recherche sur ${SITE_NAME} : entrez "${metier.label}" et votre ville. Tous les artisans référencés sont RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) et leur SIRET est vérifié.`,
     },
     {
-      question: `Les données du baromètre ${label} sont-elles fiables ?`,
-      answer: `Oui. Les artisans sont référencés via les données SIREN/SIRET officielles. Les notes proviennent d'avis clients authentifiés et modérés. Les statistiques sont recalculées quotidiennement.`,
+      question: `Les données du baromètre ${label} RGE sont-elles fiables ?`,
+      answer: `Oui. Les artisans sont référencés via les données SIREN/SIRET officielles et leur certification RGE est vérifiée chaque semaine sur la base ADEME (france-renov.gouv.fr). Les notes proviennent d'avis clients authentifiés et modérés. Les statistiques sont recalculées quotidiennement.`,
     },
   ]
 }
@@ -144,14 +144,14 @@ export default async function BarometreMetierPage({ params }: PageProps) {
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: `Statistiques ${metier.label} — France 2026`,
-    description: `Baromètre ${metier.label.toLowerCase()} 2026 : ${totalArtisans.toLocaleString('fr-FR')} artisans référencés, note moyenne, avis vérifiés, répartition géographique.`,
+    name: `Statistiques ${metier.label} RGE — France 2026`,
+    description: `Baromètre ${metier.label.toLowerCase()} RGE 2026 : ${totalArtisans.toLocaleString('fr-FR')} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) référencés, note moyenne, avis vérifiés, répartition géographique. Source ADEME france-renov.gouv.fr.`,
     creator: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     temporalCoverage: '2026',
     spatialCoverage: { '@type': 'Place', name: 'France' },
     license: 'https://creativecommons.org/licenses/by/4.0/',
     variableMeasured: [
-      { '@type': 'PropertyValue', name: "Nombre d'artisans", unitText: 'count' },
+      { '@type': 'PropertyValue', name: "Nombre d'artisans RGE certifiés", unitText: 'count' },
       { '@type': 'PropertyValue', name: 'Note moyenne', unitText: 'rating (1-5)' },
       { '@type': 'PropertyValue', name: "Nombre d'avis", unitText: 'count' },
     ],
@@ -168,27 +168,30 @@ export default async function BarometreMetierPage({ params }: PageProps) {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '[data-speakable="true"]'],
     },
-    headline: `Baromètre ${metier.label} — France 2026`,
-    description: `Analyse ${SITE_NAME} du métier de ${metier.label.toLowerCase()} en France : ${totalArtisans.toLocaleString('fr-FR')} professionnels, notes moyennes, top villes.`,
+    headline: `Baromètre ${metier.label} RGE — France 2026`,
+    description: `Analyse ${SITE_NAME} du métier de ${metier.label.toLowerCase()} RGE certifié en France : ${totalArtisans.toLocaleString('fr-FR')} professionnels RGE, notes moyennes, top villes. Source ADEME.`,
     url: canonicalUrlPage,
     datePublished: lastUpdated,
     dateModified: lastUpdated,
     inLanguage: 'fr-FR',
     isAccessibleForFree: true,
-    articleSection: 'Baromètre artisans par métier',
+    articleSection: 'Baromètre artisans RGE par métier',
     keywords: [
-      `baromètre ${metier.label}`,
+      `baromètre ${metier.label} RGE`,
       metier.label,
       'France',
       'volumétrie',
       'notes moyennes',
       'top villes',
+      'Qualibat',
+      'QualiPAC',
+      'ADEME',
       '2026',
     ].join(', '),
     about: [
-      { '@type': 'Thing', name: metier.label },
+      { '@type': 'Thing', name: `${metier.label} RGE certifié` },
       { '@type': 'Country', name: 'France' },
-      { '@type': 'Thing', name: `Statistiques métier ${metier.label}` },
+      { '@type': 'Thing', name: `Statistiques métier ${metier.label} RGE` },
     ],
     author: {
       '@type': 'Person',
@@ -249,12 +252,13 @@ export default async function BarometreMetierPage({ params }: PageProps) {
                 data-speakable="true"
                 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight"
               >
-                {metier.label} en France
+                {metier.label} RGE en France
               </h1>
             </div>
             <p className="text-lg text-charcoal-600">
-              Statistiques détaillées des {metier.label.toLowerCase()}s référencés sur {SITE_NAME}.
-              Données agrégées à partir de notre base de 940 000+ artisans.
+              Statistiques détaillées des {metier.label.toLowerCase()}s RGE certifiés référencés sur{' '}
+              {SITE_NAME}. Données agrégées à partir de notre base d&apos;artisans RGE (Qualibat,
+              Qualifelec, QualiPAC, Qualit&apos;EnR) synchronisée chaque semaine avec l&apos;ADEME.
             </p>
           </div>
         </header>
@@ -267,7 +271,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
               <div className="text-2xl font-bold text-charcoal-900">
                 {stats ? stats.nb_artisans.toLocaleString('fr-FR') : '--'}
               </div>
-              <div className="text-xs text-charcoal-500 mt-1">Artisans référencés</div>
+              <div className="text-xs text-charcoal-500 mt-1">Artisans RGE certifiés</div>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
               <Star className="w-5 h-5 text-amber-500 mx-auto mb-2" />
@@ -296,7 +300,9 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         {/* Tableau des villes */}
         {villeStats.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">{metier.label} par ville</h2>
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
+              {metier.label} RGE par ville
+            </h2>
             <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -410,7 +416,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
         <section className="bg-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-charcoal-900 mb-4">
-              Trouver un {metier.label.toLowerCase()}
+              Trouver un {metier.label.toLowerCase()} RGE certifié
             </h2>
             <div className="flex flex-wrap gap-2">
               {TOP_VILLES.slice(0, 10).map((ville) => (

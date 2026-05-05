@@ -27,9 +27,9 @@ const CarteClient = dynamic(() => import('./CarteClient'), {
 })
 
 export const metadata: Metadata = {
-  title: 'Carte des artisans en France',
+  title: 'Carte des artisans RGE certifiés en France',
   description:
-    'Visualisez la couverture des artisans référencés en France dans 101 départements. Trouvez un artisan près de chez vous.',
+    'Visualisez la couverture des artisans RGE certifiés en France dans 101 départements. Trouvez un artisan RGE près de chez vous.',
   alternates: getAlternates('/carte-artisans'),
   robots: {
     index: true,
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Carte des artisans en France',
+    title: 'Carte des artisans RGE certifiés en France',
     description:
-      'Visualisez la couverture des artisans référencés en France dans 101 départements.',
+      'Visualisez la couverture des artisans RGE certifiés en France dans 101 départements.',
     url: `${SITE_URL}/carte-artisans`,
     type: 'website',
     images: [
@@ -50,14 +50,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Carte des artisans en France',
+        alt: 'ServicesArtisans — Carte des artisans RGE certifiés en France',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Carte des artisans en France',
-    description: 'Visualisez la couverture des artisans en France dans 101 départements.',
+    title: 'Carte des artisans RGE certifiés en France',
+    description:
+      'Visualisez la couverture des artisans RGE certifiés en France dans 101 départements.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -65,11 +66,11 @@ export const metadata: Metadata = {
 export const revalidate = 86400
 
 export default function CarteArtisansPage() {
-  const breadcrumbItems = [{ label: 'Carte des artisans' }]
+  const breadcrumbItems = [{ label: 'Carte des artisans RGE' }]
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Carte des artisans', url: '/carte-artisans' },
+    { name: 'Carte des artisans RGE', url: '/carte-artisans' },
   ])
 
   const organizationSchema = getOrganizationSchema()
@@ -90,11 +91,12 @@ export default function CarteArtisansPage() {
               data-speakable="true"
               className="text-3xl sm:text-4xl font-extrabold font-heading mb-3"
             >
-              Carte des artisans en France
+              Carte des artisans RGE certifiés en France
             </h1>
             <p className="text-primary-100 text-lg max-w-2xl">
-              Explorez la couverture des artisans référencés sur notre plateforme dans les 101
-              départements. Cliquez sur une ville pour découvrir les professionnels disponibles.
+              Explorez la couverture des artisans RGE certifiés (Reconnu Garant de l'Environnement)
+              sur notre plateforme dans les 101 départements. Cliquez sur une ville pour découvrir
+              les professionnels disponibles.
             </p>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default function CarteArtisansPage() {
         <div className="bg-white border-t border-sand-200">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <h2 className="text-2xl font-bold text-charcoal-900 font-heading mb-8 text-center">
-              Une couverture nationale complète
+              Une couverture RGE nationale complète
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
@@ -117,18 +119,18 @@ export default function CarteArtisansPage() {
                 </div>
                 <h3 className="font-semibold text-charcoal-900 mb-2">Départements couverts</h3>
                 <p className="text-sm text-charcoal-600">
-                  Métropole et outre-mer, nos artisans interviennent dans tous les départements
-                  français.
+                  Métropole et outre-mer, nos artisans RGE certifiés interviennent dans tous les
+                  départements français.
                 </p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-green-600">{services.length}</span>
                 </div>
-                <h3 className="font-semibold text-charcoal-900 mb-2">Métiers du bâtiment</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-2">Métiers RGE</h3>
                 <p className="text-sm text-charcoal-600">
-                  Plombiers, électriciens, maçons, couvreurs, peintres et bien d'autres corps de
-                  métier.
+                  Pompe à chaleur, isolation, chauffagiste RGE, photovoltaïque, audit énergétique et
+                  autres qualifications RGE.
                 </p>
               </div>
               <div className="text-center">

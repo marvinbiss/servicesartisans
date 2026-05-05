@@ -71,7 +71,8 @@ export default async function HomePage() {
     return (
       <div className="min-h-screen">
         <h1 className="sr-only">
-          {cmsPage.title || 'ServicesArtisans — annuaire des artisans français vérifiés SIREN'}
+          {cmsPage.title ||
+            'ServicesArtisans — le 1er annuaire 100% artisans RGE certifiés en France'}
         </h1>
         <section className="py-12">
           <div className="max-w-6xl mx-auto px-4">

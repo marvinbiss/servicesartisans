@@ -809,38 +809,51 @@ export async function getProvidersByServiceAndDepartment(
  * Lightweight check: does this service+location combo have any providers?
  * Uses head:true + count:exact to avoid fetching rows — much faster than
  * getProvidersByServiceAndLocation during static generation.
+ * 2026-05-05 pivot full RGE — default `rgeOnly: true` (page publique noindex
+ * si 0 RGE certifiés). Admin/debug peut bypass via `{ rgeOnly: false }`.
  */
 export async function hasProvidersByServiceAndLocation(
   serviceSlug: string,
-  locationSlug: string
+  locationSlug: string,
+  options: { rgeOnly?: boolean } = {}
 ): Promise<boolean> {
   // Fail open: assume providers exist during build so pages are indexed by default.
   // ISR will correct to noindex if truly 0 providers on first revalidation.
   if (IS_BUILD) return true
 
+  const rgeOnly = options.rgeOnly ?? true
+
   return getCachedData(
-    `has-providers:svc-loc:${serviceSlug}:${locationSlug}`,
+    `has-providers:svc-loc:${serviceSlug}:${locationSlug}${rgeOnly ? ':rge' : ''}`,
     async () => {
       try {
-        return await retryWithBackoff(async () => {
-          const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-          if (!specialties || specialties.length === 0) return false
+        return await retryWithBackoff(
+          async () => {
+            const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+            if (!specialties || specialties.length === 0) return false
 
-          const ville = getVilleBySlugImport(locationSlug)
-          const cityName = ville?.name
-          if (!cityName) return false
+            const ville = getVilleBySlugImport(locationSlug)
+            const cityName = ville?.name
+            if (!cityName) return false
 
-          const cityValues = getCityValues(cityName, ville?.departementCode)
-          const { count, error } = await supabase
-            .from('providers')
-            .select('id', { count: 'exact', head: true })
-            .in('specialty', specialties)
-            .in('address_city', cityValues)
-            .eq('is_active', true)
+            const cityValues = getCityValues(cityName, ville?.departementCode)
+            let query = supabase
+              .from('providers')
+              .select('id', { count: 'exact', head: true })
+              .in('specialty', specialties)
+              .in('address_city', cityValues)
+              .eq('is_active', true)
+            if (rgeOnly) {
+              const todayIso = new Date().toISOString().slice(0, 10)
+              query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            }
+            const { count, error } = await query
 
-          if (error) throw error
-          return (count ?? 0) > 0
-        }, `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`)
+            if (error) throw error
+            return (count ?? 0) > 0
+          },
+          `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug}${rgeOnly ? ', rge' : ''})`
+        )
       } catch {
         // On any failure, conservatively return false (noindex)
         return false
@@ -1217,21 +1230,36 @@ export async function getDevisCountByDept(
   )
 }
 
-export async function getLocationsByService(serviceSlug: string) {
+/**
+ * 2026-05-05 pivot full RGE — default `rgeOnly: true`. Liste les villes où il
+ * y a au moins un artisan RGE actif pour ce service.
+ */
+export async function getLocationsByService(
+  serviceSlug: string,
+  options: { rgeOnly?: boolean } = {}
+) {
   if (IS_BUILD) return [] // Skip during build
 
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) return []
 
+  const rgeOnly = options.rgeOnly ?? true
+  const todayIso = new Date().toISOString().slice(0, 10)
+
   return retryWithBackoff(async () => {
     // Step 1: get distinct cities from active providers with this specialty
-    const { data: providerCities, error: citiesError } = await supabase
+    let citiesQuery = supabase
       .from('providers')
       .select('address_city')
       .in('specialty', specialties)
       .eq('is_active', true)
       .not('address_city', 'is', null)
-      .limit(500)
+    if (rgeOnly) {
+      citiesQuery = citiesQuery
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso)
+    }
+    const { data: providerCities, error: citiesError } = await citiesQuery.limit(500)
 
     if (citiesError) throw citiesError
     if (!providerCities || providerCities.length === 0) return []

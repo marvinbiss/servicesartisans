@@ -23,9 +23,9 @@ export const revalidate = 86400 // 24h
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 export const metadata: Metadata = {
-  title: 'Avis Artisans Vérifiés 2026',
+  title: 'Avis Artisans RGE Certifiés 2026',
   description:
-    'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
+    'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
   alternates: getAlternates('/avis'),
   robots: {
     index: true,
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
+    title: 'Avis Artisans RGE Certifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -45,22 +45,22 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Avis artisans',
+        alt: 'ServicesArtisans — Avis artisans RGE certifiés',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis Artisans Vérifiés 2026 — Choisir un pro de confiance',
+    title: 'Avis Artisans RGE Certifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, recommandations et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const trustBadges = [
   { icon: Star, label: 'Avis vérifiés', sublabel: 'Clients authentiques' },
-  { icon: Shield, label: 'Artisans référencés', sublabel: 'SIREN contrôlé' },
+  { icon: Shield, label: 'Artisans RGE certifiés', sublabel: 'Certification ADEME' },
   { icon: Users, label: 'Comparaison gratuite', sublabel: 'Sans engagement' },
 ]
 
@@ -70,7 +70,7 @@ const howSteps = [
     icon: Search,
     title: 'Consultez les profils',
     description:
-      'Explorez les profils d’artisans référencés près de chez vous et consultez leurs compétences.',
+      'Explorez les profils d’artisans RGE certifiés près de chez vous et consultez leurs compétences.',
   },
   {
     number: '2',
@@ -97,7 +97,7 @@ const faqItems = [
   {
     question: 'Puis-je laisser un avis&nbsp;?',
     answer:
-      'Oui, tout client ayant fait appel à un artisan référencé peut déposer un avis. Celui-ci sera publié après vérification de la mise en relation.',
+      'Oui, tout client ayant fait appel à un artisan RGE certifié peut déposer un avis. Celui-ci sera publié après vérification de la mise en relation.',
   },
   {
     question: 'Les artisans peuvent-ils supprimer un avis négatif&nbsp;?',
@@ -135,21 +135,28 @@ async function getPlatformStats() {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
+    // RGE-only filter: only count RGE-certified, currently valid providers
+    const todayIso = new Date().toISOString().split('T')[0]
+
     // Run all queries in parallel
     const [providerCountResult, statsResult, topReviewsResult] = await Promise.all([
-      // Get total providers with reviews
+      // Get total RGE providers with reviews
       supabase
         .from('providers')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true)
-        .gt('review_count', 0),
+        .gt('review_count', 0)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso),
 
-      // Get total review count and average rating
+      // Get total review count and average rating (RGE only)
       supabase
         .from('providers')
         .select('rating_average, review_count')
         .eq('is_active', true)
-        .gt('review_count', 0),
+        .gt('review_count', 0)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso),
 
       // Get top recent reviews for JSON-LD schema
       supabase
@@ -305,15 +312,15 @@ export default async function AvisPage() {
               data-speakable="true"
               className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
             >
-              Avis artisans —{' '}
+              Avis artisans RGE —{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-cyan-300">
-                professionnels
+                professionnels certifiés
               </span>{' '}
               de confiance
             </h1>
             <p className="text-lg text-charcoal-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Consultez les avis vérifiés, comparez les profils et choisissez l'artisan qui
-              correspond à votre projet.
+              Consultez les avis vérifiés des clients d'artisans RGE certifiés, comparez les profils
+              et choisissez le pro qui correspond à votre projet.
             </p>
 
             {/* Trust badges */}
@@ -381,7 +388,7 @@ export default async function AvisPage() {
               Comment ça marche&nbsp;?
             </h2>
             <p className="text-charcoal-900 max-w-lg mx-auto">
-              Trois étapes pour trouver un artisan de confiance près de chez vous.
+              Trois étapes pour trouver un artisan RGE certifié près de chez vous.
             </p>
           </div>
 
@@ -641,11 +648,11 @@ export default async function AvisPage() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-3">
-            Besoin d'un artisan de confiance&nbsp;?
+            Besoin d'un artisan RGE certifié&nbsp;?
           </h2>
           <p className="text-charcoal-900 mb-6 max-w-md mx-auto">
             Comparez les avis, consultez les profils et demandez un devis gratuit auprès d'artisans
-            référencés.
+            RGE certifiés.
           </p>
           <Link
             href="/devis"

@@ -53,12 +53,12 @@ const validServiceSlugs = new Set(staticServicesList.map((s) => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les Métiers Artisans 2026',
-  description: `${staticServicesList.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur. Artisans vérifiés SIREN, devis gratuit.`,
+  title: 'Tous les Métiers RGE Artisans 2026',
+  description: `${staticServicesList.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, peintre, couvreur, plombier, électricien. Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuit.`,
   alternates: getAlternates('/services'),
   openGraph: {
-    title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers du bâtiment. Artisans référencés dans 101 départements. Trouvez un professionnel qualifié, devis gratuit.`,
+    title: 'Tous les Métiers RGE Artisans 2026 — Devis Gratuit 24h',
+    description: `${staticServicesList.length} métiers RGE du bâtiment. Artisans RGE certifiés dans 101 départements. Trouvez un professionnel qualifié RGE, devis gratuit éligible MaPrimeRénov' & CEE.`,
     url: `${SITE_URL}/services`,
     images: [
       {
@@ -314,8 +314,8 @@ export default async function ServicesPage() {
     category.services.filter((s) => validServiceSlugs.has(s.slug))
   )
   const itemListSchema = getItemListSchema({
-    name: 'Tous les métiers artisans',
-    description: `${allServiceItems.length} métiers du bâtiment : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier. Artisans vérifiés SIREN dans 101 départements.`,
+    name: 'Tous les métiers RGE artisans',
+    description: `${allServiceItems.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, peintre, couvreur, plombier, électricien, menuisier. Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans 101 départements.`,
     url: '/services',
     items: allServiceItems.map((s, index) => ({
       name: s.name,
@@ -326,13 +326,13 @@ export default async function ServicesPage() {
 
   const faqSchema = getFAQSchema([
     {
-      question: 'Comment trouver un artisan qualifié pour mes travaux ?',
-      answer: `Sélectionnez votre métier parmi les ${allServiceItems.length} corps de métier référencés, puis votre ville ou département. Chaque artisan est vérifié SIREN auprès de l'INSEE et sa qualification RGE (si applicable) est synchronisée hebdomadairement avec la base officielle ADEME france-renov.gouv.fr.`,
+      question: 'Comment trouver un artisan RGE certifié pour mes travaux ?',
+      answer: `Sélectionnez votre métier parmi les ${allServiceItems.length} corps de métier RGE de l'annuaire, puis votre ville ou département. Chaque artisan affiché est RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) — qualifications synchronisées hebdomadairement avec la base officielle ADEME france-renov.gouv.fr — et son SIRET est vérifié auprès de l'INSEE.`,
     },
     {
-      question: 'Les artisans sont-ils vraiment vérifiés ?',
+      question: 'Les artisans sont-ils vraiment RGE certifiés ?',
       answer:
-        "Oui. Chaque fiche artisan est liée à un SIRET actif vérifié auprès de l'INSEE (base Sirene). Pour les travaux d'économie d'énergie, nous affichons également la qualification RGE (QualiPAC, QualiBois, Qualibat, Qualifelec) issue de la base officielle ADEME. Les fiches avec SIRET inactif ou en cessation sont automatiquement masquées.",
+        "Oui. Pivot full RGE 2026-05-05 : ServicesArtisans n'affiche publiquement que des artisans RGE certifiés. Chaque fiche artisan est liée à un SIRET actif vérifié auprès de l'INSEE (base Sirene) ET à une qualification RGE valide (QualiPAC, QualiBois, Qualibat, Qualifelec, Qualit'EnR) issue de la base officielle ADEME france-renov.gouv.fr — synchronisée chaque semaine. Les fiches avec SIRET inactif, en cessation, ou avec qualification RGE expirée sont automatiquement masquées.",
     },
     {
       question: 'Dois-je payer pour obtenir un devis ?',
@@ -383,15 +383,15 @@ export default async function ServicesPage() {
             artisans
           </h1>
           <p className="text-xl text-sand-300 max-w-2xl mx-auto mb-6">
-            Trouvez le professionnel idéal pour tous vos travaux. Artisans référencés, devis
-            gratuits.
+            Trouvez l'artisan RGE certifié idéal pour vos travaux de rénovation énergétique.
+            Qualibat, Qualifelec, QualiPAC — devis gratuits éligibles MaPrimeRénov' & CEE.
           </p>
 
           {/* GeoPageCTA above the fold */}
           <div className="max-w-2xl mx-auto mb-10">
             <GeoPageCTA
               title="Trouvez votre artisan en 2 minutes"
-              subtitle="Devis gratuit et sans engagement d'artisans vérifiés"
+              subtitle="Devis gratuit et sans engagement d'artisans RGE certifiés"
             />
           </div>
 
@@ -420,11 +420,11 @@ export default async function ServicesPage() {
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <TldrBlock
-            title="L'essentiel des services artisans 2026"
+            title="L'essentiel des services artisans RGE 2026"
             bullets={[
-              `${staticServicesList.length} métiers du bâtiment couverts (plombier, électricien, chauffagiste, etc.)`,
-              'Artisans vérifiés SIREN officiel + sync ADEME pour qualifications RGE',
-              'Devis gratuit sous 24h, sans engagement, lead exclusif (1 demande = 1 artisan)',
+              `${staticServicesList.length} métiers RGE du bâtiment couverts (pompe à chaleur, isolation, chauffagiste, etc.)`,
+              "Annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) — sync ADEME hebdomadaire",
+              "Devis gratuit sous 24h, sans engagement, lead exclusif (1 demande = 1 artisan), éligible MaPrimeRénov' & CEE",
               'Couverture nationale : 101 départements, 35 000+ communes',
             ]}
           />
@@ -435,12 +435,12 @@ export default async function ServicesPage() {
       <section className="bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4">
           <EnBrefBox
-            title="Annuaire artisans en bref"
-            summary={`Annuaire ServicesArtisans : ${staticServicesList.length} métiers du bâtiment couverts en France entière, artisans vérifiés via SIREN officiel + sync hebdomadaire ADEME pour les qualifications RGE. Devis gratuit sous 24h, sans engagement, lead exclusif.`}
+            title="Annuaire artisans RGE en bref"
+            summary={`Le 1er annuaire 100% artisans RGE certifiés en France : ${staticServicesList.length} métiers RGE couverts (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), sync hebdomadaire ADEME pour les qualifications + SIREN officiel. Devis gratuit sous 24h, sans engagement, lead exclusif, éligible MaPrimeRénov' & CEE.`}
             keyPoints={[
-              `${staticServicesList.length} corps de métier référencés`,
+              `${staticServicesList.length} corps de métier RGE référencés`,
+              `Qualifications RGE synchronisées chaque semaine avec la base ADEME`,
               `Vérification SIREN automatisée à l'inscription`,
-              `Synchronisation ADEME hebdo (qualifications RGE)`,
               `Lead exclusif : 1 demande de devis = 1 artisan choisi`,
             ]}
           />

@@ -16,9 +16,9 @@ import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: "À propos — Annuaire d'artisans gratuit",
+  title: "À propos — Annuaire d'artisans RGE certifiés",
   description:
-    "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable pour trouver un artisan.",
+    "ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN. Annuaire gratuit et transparent.",
   alternates: getAlternates('/a-propos'),
   robots: {
     index: true,
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: "À propos — Annuaire d'artisans en France",
+    title: "À propos — Annuaire d'artisans RGE certifiés en France",
     description:
-      "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.",
+      "ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN.",
     url: `${SITE_URL}/a-propos`,
     type: 'website',
     images: [
@@ -38,15 +38,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans — Annuaire des artisans en France',
+        alt: 'ServicesArtisans — Annuaire des artisans RGE certifiés en France',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "À propos — Annuaire d'artisans en France",
+    title: "À propos — Annuaire d'artisans RGE certifiés en France",
     description:
-      "ServicesArtisans référence des milliers d'artisans grâce aux données ouvertes du gouvernement.",
+      "ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME.",
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -62,43 +62,30 @@ async function getStats() {
   if (IS_BUILD) return FALLBACK_STATS
   try {
     const supabase = createAdminClient()
+    const today = new Date().toISOString().split('T')[0]
 
-    // Try materialized view first (single query ~5ms vs 3 queries O(n))
-    try {
-      const { data: stats, error } = await Promise.race([
-        supabase
-          .from('mv_provider_stats')
-          .select('active_count, unique_cities, total_reviews, providers_with_reviews')
-          .single(),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('getStats MV timeout')), 6_000)
-        ),
-      ])
-
-      if (!error && stats) {
-        return {
-          artisanCount: stats.active_count || FALLBACK_STATS.artisanCount,
-          reviewCount: stats.total_reviews || FALLBACK_STATS.reviewCount,
-          cityCount: stats.unique_cities || FALLBACK_STATS.cityCount,
-        }
-      }
-    } catch {
-      // MV not available — fall through to legacy queries
-    }
-
-    // Fallback: legacy 3-query approach if MV doesn't exist yet
+    // RGE-only counts — pivot 2026-05-05
     const result = await Promise.race([
       Promise.all([
         supabase
           .from('providers')
           .select('*', { count: 'exact', head: true })
-          .eq('is_active', true),
+          .eq('is_active', true)
+          .not('rge_qualifications', 'is', null)
+          .gte('rge_valid_until', today),
         supabase
           .from('providers')
           .select('review_count')
           .eq('is_active', true)
+          .not('rge_qualifications', 'is', null)
+          .gte('rge_valid_until', today)
           .gt('review_count', 0),
-        supabase.from('providers').select('address_city').eq('is_active', true),
+        supabase
+          .from('providers')
+          .select('address_city')
+          .eq('is_active', true)
+          .not('rge_qualifications', 'is', null)
+          .gte('rge_valid_until', today),
       ]),
       new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('getStats timeout')), 6_000)
@@ -123,9 +110,9 @@ async function getStats() {
 const verificationSteps = [
   {
     icon: Database,
-    title: 'Données SIREN officielles',
+    title: 'Données SIREN officielles et certification RGE vérifiée ADEME',
     description:
-      "Chaque artisan provient de l'API Annuaire des Entreprises du gouvernement. Numéro SIREN, activité et adresse sont issus des données publiques officielles.",
+      "Chaque artisan provient de l'API Annuaire des Entreprises du gouvernement. Sa certification RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) est vérifiée chaque semaine sur la base ADEME france-renov.gouv.fr.",
   },
   {
     icon: Shield,
@@ -314,7 +301,7 @@ export default async function AProposPage() {
   const faqSchema = getFAQSchema([
     {
       question: 'Qui est ServicesArtisans ?',
-      answer: `${companyIdentity.legalName} édite la plateforme ServicesArtisans, annuaire national d'artisans du bâtiment fondé sur les données ouvertes SIRENE (INSEE) et la base ADEME france-renov.gouv.fr. Notre objectif : offrir aux particuliers un annuaire 100 % gratuit, transparent et vérifiable.`,
+      answer: `${companyIdentity.legalName} édite la plateforme ServicesArtisans, annuaire national d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) fondé sur les données ouvertes SIRENE (INSEE) et la base ADEME france-renov.gouv.fr. Notre objectif : offrir aux particuliers un annuaire 100 % gratuit, transparent et vérifiable.`,
     },
     {
       question: "L'utilisation du service est-elle payante ?",
@@ -322,19 +309,19 @@ export default async function AProposPage() {
         "Non, le service est 100 % gratuit pour les particuliers : consultation de l'annuaire, demande de devis, consultation des avis. Les artisans peuvent revendiquer leur fiche gratuitement ; certaines options (mise en avant, accès à l'espace Pro) peuvent être payantes côté professionnel.",
     },
     {
-      question: 'Comment les artisans sont-ils collectés ?',
+      question: 'Comment les artisans sont-ils sélectionnés ?',
       answer:
-        "Les artisans sont référencés à partir des données publiques SIRENE (INSEE) avec le code NAF bâtiment puis enrichis avec les qualifications RGE officielles (synchronisation hebdomadaire avec la base ADEME). Les fiches en cessation d'activité sont automatiquement masquées.",
+        "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR. La certification est vérifiée chaque semaine via la base ADEME officielle (france-renov.gouv.fr) et le SIRET via SIRENE/INSEE. Les fiches dont le RGE expire ou en cessation d'activité sont automatiquement masquées.",
     },
     {
       question: 'Les leads sont-ils exclusifs ?',
       answer:
-        "Oui. C'est un engagement non-négociable : 1 demande de devis = 1 artisan, jamais partagé. C'est ce qui différencie ServicesArtisans des plateformes comme Travaux.com ou Habitatpresto où votre demande est envoyée à 3-5 artisans simultanément.",
+        "Oui. C'est un engagement non-négociable : 1 demande de devis = 1 artisan RGE, jamais partagé. C'est ce qui différencie ServicesArtisans des plateformes comme Travaux.com ou Habitatpresto où votre demande est envoyée à 3-5 artisans simultanément.",
     },
     {
       question: 'Comment signaler une erreur ou une fiche suspecte ?',
       answer:
-        "Chaque fiche artisan comporte un lien de signalement. Vous pouvez également contacter notre équipe via /contact. Nous traitons les signalements sous 48 h ouvrées, avec suspension immédiate de la fiche en cas de doute sérieux sur l'identité ou les qualifications.",
+        "Chaque fiche artisan comporte un lien de signalement. Vous pouvez également contacter notre équipe via /contact. Nous traitons les signalements sous 48 h ouvrées, avec suspension immédiate de la fiche en cas de doute sérieux sur l'identité ou les qualifications RGE.",
     },
   ])
 
@@ -375,11 +362,12 @@ export default async function AProposPage() {
               À propos de ServicesArtisans
             </h1>
             <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
-              ServicesArtisans est l&apos;annuaire gratuit des artisans en France, construit à
-              partir des données ouvertes du gouvernement.
+              ServicesArtisans est l&apos;annuaire gratuit des artisans RGE certifiés en France
+              (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR), construit à partir des données
+              ouvertes du gouvernement et de la base ADEME.
               {stats.artisanCount > 0
-                ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,`
-                : ' Des milliers de professionnels référencés,'}{' '}
+                ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ artisans RGE certifiés,`
+                : ' Tous les artisans RGE certifiés de France,'}{' '}
               accessibles gratuitement.
             </p>
           </div>
@@ -393,10 +381,11 @@ export default async function AProposPage() {
           <div className="prose prose-lg text-charcoal-700 max-w-none space-y-4">
             <p>
               ServicesArtisans a pour mission de faciliter la mise en relation entre particuliers et
-              artisans qualifiés partout en France. Notre annuaire référence des milliers de
-              professionnels du bâtiment, de la rénovation et des services, en s&apos;appuyant
-              exclusivement sur les données officielles du registre SIREN via l&apos;API Annuaire
-              des Entreprises du gouvernement.
+              artisans <strong>RGE certifiés</strong> partout en France. Notre annuaire référence
+              uniquement des professionnels du bâtiment titulaires d&apos;une qualification RGE
+              (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR) en cours de validité, en
+              s&apos;appuyant sur les données officielles du registre SIREN (INSEE) et de la base
+              ADEME france-renov.gouv.fr.
             </p>
             <p>
               Nous croyons que trouver un artisan de confiance ne devrait pas être compliqué.
@@ -405,8 +394,9 @@ export default async function AProposPage() {
               données personnelles.
             </p>
             <p>
-              Chaque professionnel référencé sur ServicesArtisans est issu des registres officiels.
-              Nous vérifions les numéros SIRET, demandons les attestations d&apos;assurance RC
+              Chaque professionnel référencé sur ServicesArtisans est un artisan RGE actif. Nous
+              vérifions chaque semaine la validité de la certification RGE via la base ADEME, le
+              numéro SIRET via SIRENE, demandons les attestations d&apos;assurance RC
               professionnelle et de garantie décennale pour les métiers du bâtiment, et ne publions
               que des avis authentiques de clients ayant réellement fait appel à un artisan via la
               plateforme.
@@ -447,11 +437,12 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-charcoal-900 mb-4">
-              Comment nous référençons les artisans
+              Comment nous référençons les artisans RGE certifiés
             </h2>
             <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
-              Chaque artisan référencé sur la plateforme passe par un processus de vérification en
-              plusieurs étapes.
+              Chaque artisan RGE certifié référencé sur la plateforme passe par un processus de
+              vérification en plusieurs étapes, dont une synchronisation hebdomadaire avec la base
+              ADEME.
             </p>
           </div>
 
@@ -497,8 +488,9 @@ export default async function AProposPage() {
                       <span className="text-primary-500 text-xs font-bold">1</span>
                     </div>
                     <p>
-                      Données artisans issues de l'<strong>API Annuaire des Entreprises</strong> du
-                      gouvernement (données ouvertes SIREN).
+                      Données artisans issues de l&apos;
+                      <strong>API Annuaire des Entreprises</strong> du gouvernement (SIREN) et de la{' '}
+                      <strong>base ADEME france-renov.gouv.fr</strong> pour la certification RGE.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
@@ -595,13 +587,15 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {hasArtisans ? (
             <>
-              <h2 className="text-3xl font-bold text-charcoal-900 mb-8">L'annuaire en chiffres</h2>
+              <h2 className="text-3xl font-bold text-charcoal-900 mb-8">
+                L&apos;annuaire RGE en chiffres
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
                 <div>
                   <div className="text-3xl font-bold text-primary-500">
                     {stats.artisanCount.toLocaleString('fr-FR')}
                   </div>
-                  <div className="text-charcoal-600 mt-1">Artisans référencés</div>
+                  <div className="text-charcoal-600 mt-1">Artisans RGE certifiés</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-primary-500">{stats.cityCount}</div>
@@ -621,12 +615,12 @@ export default async function AProposPage() {
             <div className="max-w-xl mx-auto">
               <div className="bg-primary-50 border border-primary-200 rounded-2xl p-8">
                 <h2 className="text-2xl font-bold text-charcoal-900 mb-3">
-                  Annuaire en cours de constitution
+                  Annuaire RGE en cours de constitution
                 </h2>
                 <p className="text-charcoal-600 mb-6">
-                  Nous importons les données de l'API Annuaire des Entreprises pour constituer le
-                  plus grand répertoire d'artisans de France. Les premiers professionnels référencés
-                  seront bientôt accessibles.
+                  Nous synchronisons la base ADEME france-renov.gouv.fr et l&apos;API Annuaire des
+                  Entreprises pour constituer le répertoire de référence des artisans RGE certifiés
+                  en France. Les premiers professionnels référencés seront bientôt accessibles.
                 </p>
                 <Link
                   href="/inscription-artisan"
