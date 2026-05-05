@@ -57,5 +57,8 @@ node scripts/audit-unclaimed-cta-rules.mjs --strict || exit 1
 node scripts/audit-thin-pages-coverage.mjs --threshold 95 --strict || exit 1
 node scripts/audit-funnel-devis-fail-soft.mjs --strict || exit 1
 node scripts/audit-cron-sentry-coverage.mjs --threshold 95 --strict || exit 1
+node scripts/audit-lead-exclusivity-rules.mjs --strict || exit 1
+node scripts/audit-webhook-signatures.mjs --strict || exit 1
+node scripts/audit-pipedrive-3-canaux.mjs --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged

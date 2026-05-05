@@ -453,3 +453,67 @@ items:
       Tier 57 (2026-05-04) : audit reconnait withCronCheckIn wrapper qui fournit déjà Sentry.captureCheckIn +
       healthchecks.io heartbeat + try/catch externe. 45/45 crons utilisent ce wrapper = 100% observable. Threshold bump
       75 → 95 lock-in regression. 0 silent catch. Memory baseline 31% obsolete depuis commits audit-10-agents 25/04.
+  - id: P3-lead-exclusivity-rules
+    pillar: 3
+    title: Anti-régression lead exclusivity (1 lead = 1 artisan)
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-lead-exclusivity-rules.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: n/a (anti-régression)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:servicesartisans-lead-exclusivity-cleanup-2026-04-18
+    notes: >-
+      Lock-in trigger trg_lead_exclusivity + UNIQUE INDEX uniq_lead_assignments_active_lead_id + CHECK
+      max_artisans_per_lead=1. 8 patterns scan migrations 455 + post-455 (anti DROP TRIGGER + anti widen CHECK). Memory
+      baseline 14 leads avec 3 assignments — invariant restauré, ce DoD garde-régression.
+  - id: P3-webhook-signatures
+    pillar: 3
+    title: Anti-régression webhook signatures P0 sécurité
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-webhook-signatures.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: n/a (anti-régression)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:ahrefs-deep-audit-vague4-2026-05-04 + audit-10-agents-2026-04-25
+    notes: >-
+      4 webhooks scannés, tous OK : Twilio (×2 status+incoming), Yousign (verifyYousignWebhook HMAC),
+      provider-seo-refresh (verifyProviderSeoSignature HMAC). Lock-in vs forge attacks. Memory P0 vague 4 confirmée
+      fixée par audit 10-agents 25/04.
+  - id: P3-pipedrive-3-canaux
+    pillar: 3
+    title: Anti-régression architecture Pipedrive 3 canaux
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-pipedrive-3-canaux.mjs --strict
+    status: completed
+    ahrefs:
+      kw_primary: n/a (anti-régression)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:servicesartisans-pipedrive-3-canaux + CLAUDE.md
+    notes: >-
+      3 canaux distincts validés : /api/devis (servicesartisans.fr), /api/simulateur/submit (simulateur-aides),
+      /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
+      PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
+      patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
