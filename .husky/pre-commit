@@ -70,5 +70,6 @@ node scripts/audit-rate-limit-failopen.mjs --strict || exit 1
 node scripts/audit-cee-mandataire-flow.mjs --strict || exit 1
 node scripts/audit-provider-claim-flow.mjs --strict || exit 1
 node scripts/audit-rge-cee-linking.mjs --strict || exit 1
+node scripts/audit-authors-honest-eeat.mjs --strict || exit 1
 node scripts/loop-kill-switch.mjs --strict || exit 1
 npx lint-staged

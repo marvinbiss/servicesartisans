@@ -517,6 +517,34 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-authors-honest-eeat
+    pillar: 3
+    title: Anti-régression honnêteté E-E-A-T fiches auteurs (no fantasmed certifs)
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-authors-honest-eeat.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (E-E-A-T compliance YMYL)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:authors-honest-eeat-2026-04-20 (commit 8618f552)
+    notes: >-
+      5 patterns lock-in honnêteté E-E-A-T auteurs (130+ flagship guides
+      affectés) : (1) Type Author = methodology: string[] + credentialsBasis:
+      string, (2) aucun champ certifications top-level (les certifs OPQTECC/
+      Qualibat 6111/CFAI/ENSAD/QualiPAC/Qualifelec sont organisationnelles,
+      pas personnelles → claim individuel = trompeur YMYL), (3) aucune URL
+      linkedin.com/in/ (LinkedIn handles fake retirés), (4) chaque auteur
+      a methodology[] ≥2 entries + credentialsBasis ≥20 chars, (5) ≥4
+      auteurs (6 détectés). 100% pondéré 8/8. Régression = pénalité Helpful
+      Content System sur 130+ guides + Knowledge Graph trust drop.
   - id: P3-rge-cee-linking
     pillar: 3
     title: Anti-régression maillage RGE↔CEE + PageRank sculpting nofollow
