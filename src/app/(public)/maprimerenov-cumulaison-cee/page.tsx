@@ -54,7 +54,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'Forfait MaPrimeRénov’ selon profil (bleu/jaune/violet/rose). Coup de pouce Isolation actif en 2026.',
+    note: 'Forfait MPR selon profil. Coup de pouce Isolation actif en 2026.',
   },
   {
     famille: 'Isolation des murs (ITE ou ITI)',
@@ -63,7 +63,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
-    note: 'MPR par geste plafonnée en surface (100 m² en ITE). Bonifications en parcours accompagné.',
+    note: 'MPR par geste plafonnée en surface (100 m² en ITE).',
   },
   {
     famille: 'Isolation des planchers bas',
@@ -72,7 +72,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'Résistance thermique minimale exigée (R ≥ 3 m².K/W). Coup de pouce Isolation applicable.',
+    note: 'R ≥ 3 m².K/W exigé. Coup de pouce Isolation applicable.',
   },
   {
     famille: 'Fenêtres et parois vitrées',
@@ -81,7 +81,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'conditionnel',
     cee: 'oui',
     coupDePouce: false,
-    note: 'MPR réservée au remplacement d’un simple vitrage par du double vitrage performant. Hors parcours accompagné sinon.',
+    note: 'MPR limitée au remplacement simple → double vitrage performant.',
   },
   {
     famille: 'Pompe à chaleur air/eau haute performance',
@@ -90,7 +90,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'Forfait MPR majeur pour les profils bleu et jaune. Coup de pouce Chauffage actif (sortie chaudière fossile).',
+    note: 'Forfait MPR majeur (bleu/jaune). Coup de pouce Chauffage actif.',
   },
   {
     famille: 'Pompe à chaleur air/air (climatisation réversible)',
@@ -108,7 +108,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
-    note: 'COP minimal exigé. Forfait MPR stable sur tous les profils de revenus.',
+    note: 'COP minimal exigé. Forfait MPR stable sur tous profils.',
   },
   {
     famille: 'Chaudière biomasse (granulés, bûches)',
@@ -117,7 +117,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'Label Flamme Verte 7\u202f\u00e9toiles requis. Coup de pouce Chauffage cumulable avec le forfait MPR.',
+    note: 'Label Flamme Verte 7 étoiles requis. Coup de pouce cumulable.',
   },
   {
     famille: 'Poêle à bois ou à granulés',
@@ -126,7 +126,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'Rendement minimal 75\u202f% et émissions de particules encadrées.',
+    note: 'Rendement minimal 75 % et émissions de particules encadrées.',
   },
   {
     famille: 'VMC double flux',
@@ -135,7 +135,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'conditionnel',
     cee: 'oui',
     coupDePouce: false,
-    note: 'MPR surtout mobilisée en Parcours Accompagné (geste isolé faiblement soutenu).',
+    note: 'MPR mobilisée surtout en Parcours Accompagné.',
   },
   {
     famille: 'Pompe à chaleur eau/eau haute performance',
@@ -144,7 +144,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: true,
-    note: 'PAC géothermique sur nappe. Remplace depuis le 01/01/2024 la BAR-TH-106 chaudière gaz (abrogée, fossiles exclus MPR depuis 2023).',
+    note: 'PAC géothermique sur nappe. Remplace BAR-TH-106 (gaz, abrogée).',
   },
   {
     famille: 'PAC hybride (PAC + chaudière gaz)',
@@ -153,7 +153,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'non',
     cee: 'oui',
     coupDePouce: false,
-    note: 'Présence d’une chaudière gaz → exclusion MaPrimeRénov’ par le décret fossiles.',
+    note: 'Présence chaudière gaz → exclusion MPR (décret fossiles).',
   },
   {
     famille: 'Système solaire combiné (SSC)',
@@ -162,7 +162,7 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
-    note: 'Forfait MPR élevé. Compatible avec un chauffage d’appoint bois.',
+    note: 'Forfait MPR élevé. Compatible avec un appoint bois.',
   },
   {
     famille: 'Rénovation d’ampleur maison individuelle',
@@ -171,46 +171,45 @@ const FAMILLES: FamilleRow[] = [
     mpr: 'oui',
     cee: 'oui',
     coupDePouce: false,
-    note: 'Remplace depuis 2024 l’ancienne BAR-TH-164. Parcours Accompagné obligatoire. Forfait MPR dédié + CEE rénovation d’ampleur (un seul dossier).',
+    note: 'Remplace BAR-TH-164 depuis 2024. Parcours Accompagné obligatoire.',
   },
 ]
 
 const FAQ: Array<{ question: string; answer: string }> = [
   {
-    question:
-      'Puis-je cumuler MaPrimeRénov’, la prime CEE et l’Éco-PTZ sur le même chantier\u202f?',
+    question: 'Puis-je cumuler MaPrimeRénov’, la prime CEE et l’Éco-PTZ sur le même chantier ?',
     answer:
-      'Oui, les trois dispositifs sont cumulables et c’est même une pratique courante. MaPrimeRénov’ est une aide publique versée par l’Anah, la prime CEE est une aide privée financée par les obligés (Effy, Sonergia, TotalEnergies, EDF, Engie…), et l’Éco-prêt à taux zéro (jusqu’à 50\u202f000\u202f€ sur 20 ans) est un crédit bancaire sans intérêts. Les trois peuvent s’additionner sur le même devis, sous trois conditions : l’entreprise est RGE à la date de signature du devis, le total des aides ne dépasse pas 100\u202f% du coût TTC du chantier, et un reste à charge minimum est conservé (règle de l’arrêté du 14 janvier 2020 modifié). En pratique, l’Éco-PTZ finance justement le reste à charge.',
+      'Oui, les trois sont cumulables et c’est courant. MPR (aide publique Anah) + prime CEE (aide privée des obligés Effy, Sonergia, TotalEnergies, EDF, Engie…) + Éco-PTZ (crédit bancaire sans intérêts jusqu’à 50 000 € sur 20 ans). Trois conditions : RGE à la date du devis, total des aides ≤ 100 % du coût TTC, reste à charge minimum conservé (arrêté du 14 janvier 2020 modifié). En pratique, l’Éco-PTZ finance le reste à charge.',
   },
   {
-    question: 'La prime CEE est-elle imposable\u202f?',
+    question: 'La prime CEE est-elle imposable ?',
     answer:
-      'Non. La prime CEE versée à un particulier pour des travaux d’économies d’énergie dans sa résidence principale ou secondaire n’est pas soumise à l’impôt sur le revenu. C’est juridiquement une aide et non un revenu. MaPrimeRénov’ n’est pas non plus imposable. Les deux sommes n’ont donc pas à figurer dans la déclaration annuelle de revenus, sauf cas très particuliers des locations meublées soumises à BIC, pour lesquels il faut se rapprocher d’un expert-comptable.',
+      'Non. La prime CEE versée à un particulier pour des travaux dans sa résidence principale ou secondaire est juridiquement une aide, pas un revenu — donc non imposable. MaPrimeRénov’ non plus. Aucune des deux ne figure dans la déclaration annuelle, sauf cas particulier des locations meublées BIC (consulter un expert-comptable).',
   },
   {
-    question: 'Mon artisan propose un «\u202freste à charge zéro\u202f». Est-ce légal\u202f?',
+    question: 'Mon artisan propose un « reste à charge zéro ». Est-ce légal ?',
     answer:
-      'Non, c’est un signal d’alarme. Depuis l’arrêté du 14 janvier 2020 modifié et la loi Climat et Résilience, un reste à charge minimum du ménage est obligatoire dès lors que MaPrimeRénov’ est mobilisée. Seul le segment très précaire, sur quelques opérations fortement bonifiées, peut approcher d’un cumul proche de 100\u202f%, sans jamais l’atteindre légalement. Un commercial qui promet «\u202f1\u202f€\u202f» ou «\u202f0\u202f€\u202f» de reste à charge sur un geste isolé en dehors de ce cadre détourne le dispositif. Avant de signer, vérifiez la qualification RGE de l’entreprise sur france-renov.gouv.fr et ne versez jamais d’acompte avant l’accord écrit de MaPrimeRénov’.',
+      'Non, signal d’alarme. Depuis l’arrêté du 14 janvier 2020 modifié et la loi Climat et Résilience, un reste à charge minimum est obligatoire dès lors que MPR est mobilisée. Seul le segment très précaire sur opérations fortement bonifiées peut s’en approcher, sans l’atteindre. Toute promesse de « 1 € » ou « 0 € » hors cadre détourne le dispositif. Vérifiez le RGE sur france-renov.gouv.fr et ne versez jamais d’acompte avant l’accord écrit MPR.',
   },
   {
-    question: 'Combien de temps entre le dépôt du dossier et le versement des aides\u202f?',
+    question: 'Combien de temps entre le dépôt du dossier et le versement des aides ?',
     answer:
-      'Pour MaPrimeRénov’, comptez 2 à 4 mois en moyenne entre l’envoi du dossier complet à l’Anah et le versement sur votre compte bancaire, avec des pics pouvant aller à 6 mois en période de forte affluence. Pour la prime CEE, le délai dépend de l’obligé ou délégataire : 4 à 12 semaines après réception du dossier complet (facture acquittée, attestation sur l’honneur, photos géotaggées obligatoires depuis la loi du 30 juin 2025). Les délégataires spécialisés (Effy, Sonergia) sont historiquement plus rapides que les obligés généralistes. En Parcours Accompagné, le versement MPR est échelonné selon l’avancement des travaux.',
+      'MPR : 2 à 4 mois en moyenne (jusqu’à 6 mois en période de forte affluence). Prime CEE : 4 à 12 semaines après dossier complet (facture acquittée, attestation sur l’honneur, photos géotaggées obligatoires depuis la loi du 30 juin 2025). Les délégataires spécialisés (Effy, Sonergia) sont en général plus rapides que les obligés généralistes. En Parcours Accompagné, le versement MPR est échelonné selon l’avancement.',
   },
   {
-    question: 'Qu’est-ce que «\u202fMon Accompagnateur Rénov’\u202f» et est-ce obligatoire\u202f?',
+    question: 'Qu’est-ce que « Mon Accompagnateur Rénov’ » et est-ce obligatoire ?',
     answer:
-      'Mon Accompagnateur Rénov’ est un tiers agréé par l’État (décret n°\u202f2022-1035 du 22 juillet 2022) qui accompagne le ménage dans toutes les étapes de la rénovation: audit énergétique, choix des travaux, aide au montage des dossiers, suivi de chantier, réception. Il est obligatoire pour tout dossier en Parcours Accompagné MaPrimeRénov’ (bouquet de travaux avec gain énergétique ≥\u202f35\u202f%). Il reste facultatif pour MaPrimeRénov’ par geste, sauf cas particuliers (dossiers majorés pour les ménages très modestes ou sortie de passoire énergétique). Son coût peut être pris en charge partiellement par l’Anah (jusqu’à 2\u202f000\u202f€ pour les ménages bleu).',
+      'Tiers agréé par l’État (décret n° 2022-1035 du 22 juillet 2022) qui accompagne le ménage : audit, choix des travaux, montage des dossiers, suivi de chantier, réception. Obligatoire pour tout Parcours Accompagné MPR (bouquet ≥ 35 % de gain). Facultatif en parcours par geste, sauf cas particuliers (dossiers majorés très modestes, sortie de passoire). Coût en partie pris en charge par l’Anah (jusqu’à 2 000 € pour les ménages bleu).',
   },
   {
-    question: 'Si mes travaux dépassent le plafond d’aides, qui paie la différence\u202f?',
+    question: 'Si mes travaux dépassent le plafond d’aides, qui paie la différence ?',
     answer:
-      'Le ménage, via ses fonds propres ou un financement bancaire. Plusieurs outils limitent l’impact: l’Éco-PTZ (50\u202f000\u202f€ maximum sur 20 ans, sans intérêts), le prêt avance rénovation pour les propriétaires âgés, les aides locales (régions, départements, intercommunalités), la TVA à taux réduit 5,5\u202f% qui s’applique de plein droit à toute opération d’économies d’énergie éligible CGI art.\u202f278-0 bis A, et parfois des prêts employeurs Action Logement. La règle d’or reste de bâtir le plan de financement «\u202ftoutes aides comprises\u202f\u00bb avant la signature du devis, jamais après.',
+      'Le ménage. Plusieurs outils limitent l’impact : Éco-PTZ (50 000 € sur 20 ans sans intérêts), prêt avance rénovation pour propriétaires âgés, aides locales (régions/départements/intercommunalités), TVA à 5,5 % (CGI art. 278-0 bis A), prêts employeurs Action Logement. Règle d’or : bâtir le plan de financement « toutes aides comprises » avant la signature du devis, jamais après.',
   },
   {
     question: 'Dois-je déposer le dossier CEE avant ou après MaPrimeRénov’?',
     answer:
-      'MaPrimeRénov’ d’abord, systématiquement. L’ordre chronologique est imposé: dépôt du devis sur maprimerenov.gouv.fr → accord écrit de l’Anah (indispensable avant toute signature) → signature du devis et de l’attestation sur l’honneur CEE → travaux → facture acquittée → dépôt MaPrimeRénov’ final et dépôt CEE auprès du délégataire. Signer le devis avant l’accord MPR est une erreur fréquente qui rend le dossier inéligible. Côté CEE, la date de signature du devis fige le cours de la prime (en €/MWh cumac) pour toute la durée du chantier.',
+      'MPR d’abord. Ordre imposé : dépôt devis sur maprimerenov.gouv.fr → accord Anah → signature devis + attestation sur l’honneur CEE → travaux → facture acquittée → dépôt MPR final + dépôt CEE chez le délégataire. Signer le devis avant l’accord MPR rend le dossier inéligible. Côté CEE, la date de signature fige le cours de la prime (€/MWh cumac).',
   },
 ]
 
@@ -358,11 +357,9 @@ export default function MaprimeRenovCumulCeePage() {
             className="justify-start mt-2 text-emerald-50/80"
           />
           <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
-            Peut-on cumuler MaPrimeRénov’ et la prime CEE&nbsp;? Oui, dans la grande majorité des
-            cas, et c’est même prévu explicitement par la réglementation. Ce guide détaille les
-            règles générales, les exceptions (pompe à chaleur air/air, chaudière gaz, PAC hybride),
-            les plafonds 2026 et la procédure à suivre pour obtenir les deux aides sur le même
-            chantier.
+            Peut-on cumuler MaPrimeRénov’ et la prime CEE&nbsp;? Oui dans la majorité des cas, et
+            c’est même prévu par les textes. Ce guide détaille les règles, exceptions (PAC air/air,
+            chaudière gaz, PAC hybride), plafonds 2026 et procédure pour obtenir les deux aides.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -413,58 +410,45 @@ export default function MaprimeRenovCumulCeePage() {
           1. Quel est le principe du cumul MaPrimeRénov' + CEE en 2026 ?
         </h2>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          MaPrimeRénov’ et les Certificats d’Économies d’Énergie (CEE) sont deux dispositifs d’aide
-          à la rénovation énergétique distincts, qui coexistent depuis la fusion du crédit d’impôt
-          transition énergétique dans MaPrimeRénov’ en 2020 (décret n°&nbsp;2020-26). Les textes
-          réglementaires, en particulier l’arrêté du 14 janvier 2020 modifié et l’arrêté du 22
-          décembre 2014 modifié pour les CEE, prévoient explicitement leur cumul. C’est la règle, et
-          non l’exception.
+          MaPrimeRénov’ et les Certificats d’Économies d’Énergie (CEE) sont deux dispositifs
+          distincts qui coexistent depuis la fusion du CITE dans MPR en 2020 (décret
+          n°&nbsp;2020-26). Les arrêtés du 14 janvier 2020 modifié (MPR) et du 22 décembre 2014
+          modifié (CEE) prévoient explicitement leur cumul&nbsp;: c’est la règle.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          MaPrimeRénov’ est une aide publique, financée par l’État et versée par l’Agence nationale
-          de l’habitat (Anah). Elle s’adresse aux propriétaires occupants, aux bailleurs et aux
-          copropriétés. Son barème est segmenté en quatre profils de revenus, identifiés par un code
-          couleur officiel&nbsp;:
+          <strong>MaPrimeRénov’</strong> est une aide publique versée par l’Anah aux propriétaires
+          occupants, bailleurs et copropriétés. Barème segmenté en 4 profils&nbsp;:
         </p>
         <ul className="list-disc pl-6 text-charcoal-700 leading-relaxed mb-4 space-y-1">
           <li>
-            <strong>Bleu</strong> — ménages très modestes (forfaits les plus élevés)&nbsp;;
+            <strong>Bleu</strong> — très modestes (forfaits maximaux)
           </li>
           <li>
-            <strong>Jaune</strong> — ménages modestes&nbsp;;
+            <strong>Jaune</strong> — modestes
           </li>
           <li>
-            <strong>Violet</strong> — ménages aux revenus intermédiaires&nbsp;;
+            <strong>Violet</strong> — intermédiaires
           </li>
           <li>
-            <strong>Rose</strong> — ménages aisés (forfaits les plus restreints, essentiellement
-            ouverts au Parcours Accompagné et à l’isolation).
+            <strong>Rose</strong> — aisés (essentiellement Parcours Accompagné et isolation)
           </li>
         </ul>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Les plafonds de revenu fiscal de référence sont publiés chaque année sur{' '}
-          <strong>maprimerenov.gouv.fr</strong> et varient selon la composition du foyer et la zone
-          géographique (Île-de-France ou reste du territoire). Le dispositif est piloté par France
-          Rénov’ et non plus «&nbsp;directement par l’Anah&nbsp;» comme c’était le cas en 2020.
+          Plafonds de revenu fiscal publiés chaque année sur <strong>maprimerenov.gouv.fr</strong>,
+          variables selon foyer et zone (Île-de-France ou autre). Pilotage France Rénov’.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Les CEE sont un dispositif distinct, privé dans leur financement mais encadré par l’État.
-          Les vendeurs d’énergie (EDF, Engie, TotalEnergies, Auchan, Leclerc, BP…) sont dits
-          «&nbsp;obligés&nbsp;» par la loi POPE de 2005&nbsp;: ils doivent financer des travaux
-          d’économies d’énergie chez les particuliers, sous peine de pénalités. Le pilotage est
-          assuré par la Direction générale de l’énergie et du climat (DGEC) et par le Pôle national
-          des CEE (PNCEE). La période P6 (2026-2030) a démarré le 1er janvier 2026 avec une
-          obligation annuelle de 1&nbsp;050 TWhc, dont 280 TWhc réservés au segment précarité
-          énergétique.
+          <strong>Les CEE</strong> sont un dispositif privé encadré par l’État. Les vendeurs
+          d’énergie (EDF, Engie, TotalEnergies, Auchan, Leclerc, BP…) sont «&nbsp;obligés&nbsp;» par
+          la loi POPE de 2005 de financer des travaux chez les particuliers. Pilotage DGEC + PNCEE.
+          Période P6 (2026-2030) démarrée le 1<sup>er</sup> janvier 2026 avec 1&nbsp;050 TWhc/an,
+          dont 280 TWhc réservés à la précarité énergétique.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Les deux aides ne se parlent pas directement dans le calcul, mais elles s’additionnent sur
-          le plan de financement du ménage. Sur une pompe à chaleur air/eau de 14&nbsp;000&nbsp;€
-          TTC, un ménage du profil bleu peut par exemple toucher une part MaPrimeRénov’ de l’ordre
-          de 5&nbsp;000&nbsp;€ et une prime CEE «&nbsp;Coup de pouce Chauffage&nbsp;» de plusieurs
-          milliers d’euros supplémentaires&nbsp;; les montants exacts dépendent du gain énergétique
-          calculé, du barème en vigueur et du délégataire choisi. Les barèmes n’étant pas figés, ce
-          guide renvoie systématiquement vers les simulateurs officiels pour les chiffres.
+          Les deux aides s’additionnent sur le plan de financement. Exemple PAC air/eau de
+          14&nbsp;000&nbsp;€ TTC, ménage bleu&nbsp;: ~5&nbsp;000&nbsp;€ MPR + plusieurs milliers €
+          via Coup de pouce Chauffage. Montants exacts variables (gain énergétique, barème,
+          délégataire) — voir simulateurs officiels.
         </p>
         <div className="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-r-xl mb-4">
           <div className="flex items-start gap-3">
@@ -477,10 +461,9 @@ export default function MaprimeRenovCumulCeePage() {
                 Décret 2022-1649 — exclusion des énergies fossiles
               </div>
               <p className="text-sm text-amber-900/90 mt-1 leading-relaxed">
-                Depuis le 1er janvier 2023, les équipements fonctionnant au gaz ou au fioul sont
-                exclus de MaPrimeRénov’. Les chaudières gaz à condensation, les PAC hybrides
-                contenant un générateur gaz et la climatisation réversible (PAC air/air) ne
-                bénéficient donc <strong>que</strong> de la prime CEE, jamais de MaPrimeRénov’.
+                Depuis le 1<sup>er</sup> janvier 2023, les équipements gaz ou fioul sont exclus de
+                MPR. Les chaudières gaz à condensation, PAC hybrides à générateur gaz et PAC air/air
+                n’ont <strong>que</strong> la prime CEE.
               </p>
             </div>
           </div>
@@ -494,10 +477,9 @@ export default function MaprimeRenovCumulCeePage() {
             2. Quelles sont les deux voies MaPrimeRénov’ en 2026 ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-6">
-            Depuis la réforme de 2024, MaPrimeRénov’ distingue deux parcours distincts, qui ne
-            cumulent pas leurs forfaits sur les mêmes travaux. Il faut choisir l’un ou l’autre au
-            moment du dépôt du dossier. Dans les deux cas, le cumul avec la prime CEE est possible
-            et même recommandé.
+            Depuis la réforme de 2024, MPR distingue deux parcours qui ne cumulent pas leurs
+            forfaits sur les mêmes travaux. Choix au dépôt. Cumul prime CEE possible dans les deux
+            cas.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl border border-charcoal-200 p-6">
@@ -510,14 +492,12 @@ export default function MaprimeRenovCumulCeePage() {
                 </h3>
               </div>
               <p className="text-sm text-charcoal-700 leading-relaxed mb-3">
-                L’aide est calculée geste par geste&nbsp;: isolation de combles, remplacement d’une
-                chaudière par une pompe à chaleur, installation d’un chauffe-eau thermodynamique,
-                etc. Chaque geste a son forfait MaPrimeRénov’ propre, lu dans le tableau de l’arrêté
-                du 14 janvier 2020 modifié.
+                Aide calculée geste par geste (combles, PAC, CET…), forfait MPR propre lu dans
+                l’arrêté du 14 janvier 2020 modifié.
               </p>
               <ul className="text-sm text-charcoal-700 space-y-1 list-disc pl-5">
-                <li>Un seul geste possible (pas de bouquet obligatoire)</li>
-                <li>Recommandé pour les chantiers simples (PAC, poêle, isolation combles)</li>
+                <li>Un seul geste possible (pas de bouquet)</li>
+                <li>Idéal chantiers simples (PAC, poêle, isolation combles)</li>
                 <li>Pas d’accompagnateur Rénov’ obligatoire</li>
                 <li>Cumulable prime CEE en direct</li>
               </ul>
@@ -532,30 +512,23 @@ export default function MaprimeRenovCumulCeePage() {
                 </h3>
               </div>
               <p className="text-sm text-charcoal-700 leading-relaxed mb-3">
-                Successeur direct de MaPrimeRénov’ Sérénité. Il finance un bouquet de travaux d’au
-                moins deux gestes permettant un gain énergétique minimum de 35&nbsp;% (saut de deux
-                classes DPE minimum dans la majorité des cas). Mon Accompagnateur Rénov’ est{' '}
-                <strong>obligatoire</strong>.
+                Successeur de MPR Sérénité. Bouquet ≥ 2 gestes, gain ≥ 35&nbsp;% (saut 2 classes DPE
+                généralement). Mon Accompagnateur Rénov’ <strong>obligatoire</strong>.
               </p>
               <ul className="text-sm text-charcoal-700 space-y-1 list-disc pl-5">
-                <li>Bouquet &ge; 2 gestes, gain énergétique &ge; 35 %</li>
+                <li>Bouquet ≥ 2 gestes, gain ≥ 35 %</li>
                 <li>Mon Accompagnateur Rénov’ obligatoire (décret 2022-1035)</li>
-                <li>Bonus sortie de passoire (F ou G)</li>
-                <li>Bonus BBC (atteinte du niveau A ou B)</li>
-                <li>
-                  Le CEE «&nbsp;BAR-TH-174 rénovation d’ampleur maison individuelle&nbsp;» (qui
-                  remplace depuis 2024 l’ancienne BAR-TH-164) s’y adosse naturellement
-                </li>
+                <li>Bonus sortie de passoire (F/G)</li>
+                <li>Bonus BBC (A/B)</li>
+                <li>CEE BAR-TH-174 (rénovation d’ampleur) s’y adosse naturellement</li>
               </ul>
             </div>
           </div>
           <p className="text-charcoal-700 leading-relaxed mt-6">
-            Pour un particulier qui veut rénover complètement son logement, le Parcours Accompagné
-            sera presque toujours plus avantageux car les forfaits MaPrimeRénov’ et le coefficient
-            CEE BAR-TH-174 (rénovation d’ampleur, qui remplace depuis 2024 l’ancienne BAR-TH-164)
-            sont majorés. Pour un geste isolé (remplacer une vieille chaudière fioul par une PAC
-            air/eau, par exemple), le parcours par geste est plus simple et plus rapide, et reste
-            pleinement cumulable avec la prime CEE.
+            Pour une rénovation complète, le Parcours Accompagné est presque toujours plus
+            avantageux (forfaits MPR et coefficient CEE BAR-TH-174 majorés). Pour un geste isolé
+            (remplacement chaudière fioul → PAC air/eau), le parcours par geste reste plus simple et
+            toujours cumulable avec la prime CEE.
           </p>
         </div>
       </section>
@@ -566,10 +539,9 @@ export default function MaprimeRenovCumulCeePage() {
           3. Quelles sont les règles de cumul MaPrimeRénov’ + CEE par famille de travaux ?
         </h2>
         <p className="text-charcoal-700 leading-relaxed mb-8 max-w-3xl">
-          Le tableau ci-dessous synthétise la compatibilité des deux aides pour les 14 familles de
-          travaux les plus courantes en résidentiel. La colonne «&nbsp;Coup de pouce&nbsp;» indique
-          si une charte CEE bonifiée (Coup de pouce Chauffage, Isolation, Rénovation performante)
-          peut s’ajouter à la prime CEE standard.
+          Tableau de compatibilité pour les 14 familles résidentielles courantes. La colonne
+          «&nbsp;Coup de pouce&nbsp;» indique si une charte CEE bonifiée s’ajoute à la prime CEE
+          standard.
         </p>
         <div className="overflow-x-auto rounded-2xl border border-charcoal-200 bg-white">
           <table className="w-full text-sm">
@@ -619,15 +591,13 @@ export default function MaprimeRenovCumulCeePage() {
           </table>
         </div>
         <p className="text-xs text-charcoal-900 mt-4 leading-relaxed">
-          Sources&nbsp;: arrêté du 14 janvier 2020 modifié (MaPrimeRénov’), arrêté du 22 décembre
-          2014 modifié (opérations standardisées CEE), décret n°&nbsp;2022-1649 (exclusion
-          fossiles), chartes Coup de pouce en vigueur. Les éligibilités exactes dépendent des
-          performances techniques (COP, résistance thermique, rendement…) précisées dans chaque
-          fiche d’opération.
+          Sources&nbsp;: arrêté du 14 janvier 2020 modifié, arrêté du 22 décembre 2014 modifié,
+          décret n°&nbsp;2022-1649, chartes Coup de pouce. Éligibilité exacte selon performances
+          techniques (COP, R, rendement) de chaque fiche.
         </p>
       </section>
 
-      {/* Simulateur CTA — capte l'intent juste après le tableau de cumul */}
+      {/* Simulateur CTA */}
       <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
           <SimulateurCTA variant="banner" />
@@ -641,10 +611,8 @@ export default function MaprimeRenovCumulCeePage() {
             4. Quels sont les plafonds de cumul et le reste à charge minimum ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Le cumul MaPrimeRénov’ + CEE n’est pas illimité. Deux plafonds se combinent&nbsp;: un
-            plafond propre à MaPrimeRénov’ (dépense éligible par logement, sur une période de cinq
-            ans) et un plafond global d’écrêtement exprimé en taux d’aide maximum du coût TTC du
-            chantier. L’arrêté du 14 janvier 2020 modifié fixe un taux d’aide cumulé maximum par
+            Deux plafonds&nbsp;: dépense éligible MPR par logement sur 5 ans, et taux d’aide maximum
+            global. L’arrêté du 14 janvier 2020 modifié fixe le taux cumulé maximum par
             profil&nbsp;:
           </p>
           <div className="bg-white rounded-2xl border border-charcoal-200 overflow-hidden mb-6">
@@ -653,9 +621,7 @@ export default function MaprimeRenovCumulCeePage() {
                 <tr className="text-left">
                   <th className="px-4 py-3 font-semibold text-charcoal-700">Profil</th>
                   <th className="px-4 py-3 font-semibold text-charcoal-700">Tranche</th>
-                  <th className="px-4 py-3 font-semibold text-charcoal-700">
-                    Taux d’aide max (toutes aides publiques cumulées)
-                  </th>
+                  <th className="px-4 py-3 font-semibold text-charcoal-700">Taux d’aide max</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-charcoal-100">
@@ -683,32 +649,25 @@ export default function MaprimeRenovCumulCeePage() {
             </table>
           </div>
           <p className="text-xs text-charcoal-900 mb-6">
-            Valeurs de référence indicatives pour la configuration la plus courante (Parcours
-            Accompagné, hors bonifications exceptionnelles). Les chiffres exacts varient selon le
-            type de travaux et les éventuels bonus. Consultez toujours le simulateur officiel sur
-            maprimerenov.gouv.fr pour votre situation.
+            Valeurs indicatives Parcours Accompagné, hors bonifications exceptionnelles. Chiffres
+            exacts selon travaux et bonus — simulateur officiel sur maprimerenov.gouv.fr.
           </p>
           <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-3">
             La règle du reste à charge minimum
           </h3>
           <p className="text-charcoal-700 leading-relaxed mb-4">
-            Quelle que soit la combinaison d’aides, le ménage conserve
-            <strong> toujours un reste à charge minimum</strong>. C’est une règle cardinale,
-            inscrite depuis 2020 dans les textes MPR et renforcée par la loi Climat et Résilience.
-            En pratique, l’Anah écrête l’aide MaPrimeRénov’ pour que la somme MPR + CEE + autres
-            aides publiques ne dépasse jamais le taux maximum indiqué ci-dessus. Un devis dont
-            toutes les aides couvriraient 100&nbsp;% du coût TTC serait automatiquement rejeté.
+            Le ménage conserve <strong>toujours un reste à charge minimum</strong>. Règle inscrite
+            depuis 2020 dans MPR et renforcée par la loi Climat et Résilience. L’Anah écrête MPR
+            pour que MPR + CEE + autres aides publiques ne dépassent jamais le taux ci-dessus. Un
+            devis aux aides à 100&nbsp;% est rejeté.
           </p>
           <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-3 mt-6">
             Bonus sortie passoire et bonus BBC
           </h3>
           <p className="text-charcoal-700 leading-relaxed">
-            Deux bonus MaPrimeRénov’ restent mobilisables en Parcours Accompagné en 2026&nbsp;: le
-            bonus «&nbsp;sortie de passoire thermique&nbsp;» lorsque les travaux permettent à un
-            logement classé F ou G de sortir de ces étiquettes, et le bonus «&nbsp;Bâtiment basse
-            consommation&nbsp;» lorsque l’étiquette DPE finale atteint A ou B. Ces bonus s’ajoutent
-            aux forfaits par geste ou au forfait BAR-TH-174 (ex BAR-TH-164) et restent cumulables
-            avec la prime CEE correspondante, toujours dans la limite du taux d’aide maximum.
+            En Parcours Accompagné&nbsp;: bonus sortie de passoire (F/G) + bonus BBC (A/B).
+            S’ajoutent aux forfaits par geste ou BAR-TH-174, cumulables avec la prime CEE dans la
+            limite du taux maximum.
           </p>
         </div>
       </section>
@@ -719,42 +678,40 @@ export default function MaprimeRenovCumulCeePage() {
           5. Comment demander le cumul concrètement&nbsp;?
         </h2>
         <p className="text-charcoal-700 leading-relaxed mb-8">
-          L’ordre chronologique des étapes est déterminant. Une inversion (signature de devis avant
-          accord MPR, dépôt CEE antérieur à la date d’engagement, etc.) suffit à rendre le dossier
-          <strong> inéligible</strong>. Voici le parcours type, qui vaut pour la quasi-totalité des
-          chantiers résidentiels.
+          L’ordre chronologique est déterminant. Une inversion (devis avant accord MPR, dépôt CEE
+          antérieur à l’engagement) suffit à rendre le dossier <strong>inéligible</strong>.
         </p>
         <ol className="space-y-5">
           {[
             {
               n: 1,
               title: 'Identifier la fiche CEE et le parcours MPR',
-              text: 'Repérer la fiche d’opération standardisée correspondant aux travaux (BAR-EN-101, BAR-TH-171…) et décider si vous partez en parcours par geste ou en Parcours Accompagné. Dans le second cas, contactez un Accompagnateur Rénov’ agréé avant toute demande de devis.',
+              text: 'Repérer la fiche d’opération (BAR-EN-101, BAR-TH-171…) et choisir parcours par geste ou Parcours Accompagné. Pour ce dernier, contacter un Accompagnateur Rénov’ avant tout devis.',
             },
             {
               n: 2,
-              title: 'Demander un devis à un artisan RGE',
-              text: 'La qualification RGE doit être active à la date de signature du devis. Vérifiez-la sur france-renov.gouv.fr ou via notre annuaire. Le devis doit mentionner explicitement les caractéristiques techniques exigées (résistance thermique, COP, rendement, classe énergétique).',
+              title: 'Devis chez un artisan RGE',
+              text: 'RGE actif à la date de signature (vérifier sur france-renov.gouv.fr ou notre annuaire). Devis mentionnant les caractéristiques techniques exigées (R, COP, rendement).',
             },
             {
               n: 3,
-              title: 'Déposer le dossier MaPrimeRénov’ en ligne',
-              text: 'Rendez-vous sur maprimerenov.gouv.fr, créez votre compte, uploadez le devis, votre avis d’imposition et vos pièces justificatives. Attendez l’accord écrit. Aucun paiement, aucun acompte ne doit intervenir avant cet accord.',
+              title: 'Déposer le dossier MaPrimeRénov’',
+              text: 'Sur maprimerenov.gouv.fr, créer compte, uploader devis + avis d’imposition. Attendre l’accord écrit. Aucun acompte avant cet accord.',
             },
             {
               n: 4,
-              title: 'Signer le devis et l’attestation sur l’honneur CEE',
-              text: 'Une fois l’accord MPR reçu, signez le devis et l’attestation sur l’honneur CEE fournie par le délégataire choisi (Effy, Sonergia, TotalEnergies, EDF…). La date de signature fige le cours de la prime CEE.',
+              title: 'Signer devis et attestation CEE',
+              text: 'Une fois l’accord MPR reçu, signer devis + attestation sur l’honneur CEE du délégataire choisi (Effy, Sonergia, TotalEnergies, EDF…). La date fige le cours de la prime CEE.',
             },
             {
               n: 5,
               title: 'Travaux + facture acquittée',
-              text: 'L’artisan réalise les travaux. Conservez soigneusement la facture acquittée ainsi que les photos géotaggées et horodatées (obligatoires depuis la loi du 30 juin 2025).',
+              text: 'Travaux réalisés. Conserver facture acquittée + photos géotaggées (obligatoires depuis la loi du 30 juin 2025).',
             },
             {
               n: 6,
               title: 'Déposer la facture pour paiement',
-              text: 'Sur maprimerenov.gouv.fr, déposez la facture pour déclencher le versement Anah (2 à 4 mois). Parallèlement, transmettez le dossier complet au délégataire CEE pour versement de la prime CEE (4 à 12 semaines).',
+              text: 'Sur maprimerenov.gouv.fr, déposer la facture (versement Anah 2-4 mois). En parallèle, transmettre le dossier au délégataire CEE (4-12 semaines).',
             },
           ].map((step) => (
             <li key={step.n} className="flex gap-5 items-start">
@@ -778,28 +735,17 @@ export default function MaprimeRenovCumulCeePage() {
             <div>
               <div className="font-bold text-rose-900">Pièges classiques</div>
               <ul className="text-sm text-rose-900/90 mt-2 space-y-1 list-disc pl-5">
-                <li>
-                  Signer le devis avant l’accord MaPrimeRénov’ — dossier irrémédiablement rejeté.
-                </li>
-                <li>
-                  Accepter un démarchage téléphonique CEE — interdit par la loi n°&nbsp;2020-901 du
-                  24 juillet 2020.
-                </li>
-                <li>
-                  Artisan RGE non vérifié sur france-renov.gouv.fr à la date de signature — motif de
-                  fraude et d’annulation.
-                </li>
-                <li>
-                  Promesse d’un «&nbsp;reste à charge zéro&nbsp;» — contraire à la réglementation,
-                  signal d’arnaque.
-                </li>
+                <li>Devis signé avant accord MPR → dossier rejeté.</li>
+                <li>Démarchage téléphonique CEE → interdit (loi n°&nbsp;2020-901).</li>
+                <li>RGE non vérifié à la date de signature → fraude/annulation.</li>
+                <li>Promesse de «&nbsp;reste à charge zéro&nbsp;» → arnaque.</li>
               </ul>
               <p className="text-sm text-rose-900/90 mt-3">
-                Pour valider la qualification d’un artisan&nbsp;: consultez notre guide{' '}
+                Vérifier l’artisan&nbsp;:{' '}
                 <Link href="/rge/fraude-rge-comment-verifier" className="font-semibold underline">
                   Comment vérifier une qualification RGE
                 </Link>{' '}
-                ou rendez-vous directement sur{' '}
+                ou{' '}
                 <a
                   href="https://france-renov.gouv.fr"
                   target="_blank"
@@ -846,28 +792,16 @@ export default function MaprimeRenovCumulCeePage() {
           Références réglementaires
         </h2>
         <ul className="text-sm text-charcoal-600 space-y-2 list-disc pl-5 leading-relaxed">
-          <li>Code de l’énergie, articles L.&nbsp;221-1 et suivants (CEE)</li>
-          <li>
-            Code de la construction et de l’habitation, articles R.&nbsp;321-1 et suivants (Anah /
-            MaPrimeRénov’)
-          </li>
-          <li>
-            Arrêté du 22 décembre 2014 modifié — opérations standardisées d’économies d’énergie
-          </li>
-          <li>
-            Arrêté du 14 janvier 2020 modifié — prime de transition énergétique (MaPrimeRénov’)
-          </li>
-          <li>Décret n°&nbsp;2020-26 du 14 janvier 2020 — création de MaPrimeRénov’</li>
-          <li>
-            Décret n°&nbsp;2022-1649 du 26 décembre 2022 — exclusion des chaudières fonctionnant aux
-            énergies fossiles
-          </li>
+          <li>Code de l’énergie, art. L.&nbsp;221-1 et s. (CEE)</li>
+          <li>CCH, art. R.&nbsp;321-1 et s. (Anah / MPR)</li>
+          <li>Arrêté du 22 décembre 2014 modifié — opérations standardisées CEE</li>
+          <li>Arrêté du 14 janvier 2020 modifié — MaPrimeRénov’</li>
+          <li>Décret n°&nbsp;2020-26 du 14 janvier 2020 — création MPR</li>
+          <li>Décret n°&nbsp;2022-1649 du 26 décembre 2022 — exclusion fossiles</li>
           <li>Décret n°&nbsp;2022-1035 du 22 juillet 2022 — Mon Accompagnateur Rénov’</li>
-          <li>
-            Loi n°&nbsp;2020-901 du 24 juillet 2020 — interdiction du démarchage téléphonique CEE
-          </li>
+          <li>Loi n°&nbsp;2020-901 du 24 juillet 2020 — interdiction démarchage CEE</li>
           <li>Loi Climat et Résilience du 22 août 2021</li>
-          <li>CGI, article 278-0 bis A — TVA à 5,5 %</li>
+          <li>CGI, art. 278-0 bis A — TVA 5,5 %</li>
         </ul>
       </section>
 
@@ -883,8 +817,8 @@ export default function MaprimeRenovCumulCeePage() {
             Prêt à monter votre dossier&nbsp;?
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Obtenez un devis gratuit auprès d’un artisan RGE vérifié, ou approfondissez le sujet
-            avec nos ressources dédiées CEE, RGE et rénovation énergétique.
+            Devis gratuit auprès d’un artisan RGE vérifié, ou approfondissez avec nos ressources
+            CEE, RGE et rénovation.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -926,7 +860,7 @@ export default function MaprimeRenovCumulCeePage() {
         </div>
       </section>
 
-      {/* Sticky CTA mobile — simulateur aides rénovation */}
+      {/* Sticky CTA mobile */}
       <SimulateurCTA variant="sticky-bottom" />
     </>
   )

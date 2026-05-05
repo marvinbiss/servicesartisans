@@ -85,95 +85,95 @@ const CHARTS: Array<{
   {
     key: 'chauffage',
     label: 'Coup de pouce Chauffage (résidentiel individuel)',
-    status: 'Charte active en 2026 — dépôt des chartes signataires avant le 01/02/2026',
+    status: 'Active 2026 — dépôt signataires avant le 01/02/2026',
     icon: Flame,
     legal:
-      "Instituée par l'arrêté du 25 mars 2020 modifié (NOR : TRER2008220A) pris en application de l'article L221-7 du code de l'énergie. Elle est publiée au Bulletin officiel du ministère chargé de l'énergie et consultable sur Légifrance.",
+      "Arrêté du 25 mars 2020 modifié (NOR : TRER2008220A), article L221-7 du code de l'énergie. Publication au Bulletin officiel et sur Légifrance.",
     perimeter:
-      "Remplacement, en maison individuelle ou appartement à usage de résidence principale, d'un équipement de chauffage individuel au charbon, au fioul ou au gaz (hors condensation pour certains gestes) par un équipement utilisant une énergie renouvelable ou de récupération. La fiche BAR-TH-106 (chaudière gaz THPE) est abrogée depuis le 01/01/2024 et n'entre plus dans le périmètre.",
+      "Remplacement, en résidence principale (maison individuelle ou appartement), d'un chauffage individuel charbon/fioul/gaz par un équipement EnR&R. Fiche BAR-TH-106 (gaz THPE) abrogée le 01/01/2024.",
     operations: [
-      'BAR-TH-171 — pompe à chaleur air/eau (remplace la BAR-TH-104 abrogée le 01/01/2024)',
-      'BAR-TH-172 — pompe à chaleur eau/eau ou sol/eau',
-      'BAR-TH-113 — chaudière biomasse individuelle performante',
+      'BAR-TH-171 — PAC air/eau',
+      'BAR-TH-172 — PAC eau/eau ou sol/eau',
+      'BAR-TH-113 — chaudière biomasse individuelle',
       'BAR-TH-143 — système solaire combiné (SSC)',
-      "BAR-TH-137 — raccordement d'un logement existant à un réseau de chaleur alimenté majoritairement par des EnR&R",
-      "BAR-TH-112 — appareil indépendant de chauffage au bois (en remplacement d'un équipement au charbon)",
+      'BAR-TH-137 — raccordement réseau de chaleur EnR&R',
+      'BAR-TH-112 — appareil bois (remplacement charbon)',
     ],
     signers:
-      "Signataires : obligés et délégataires CEE volontaires (vendeurs d'énergie et leurs délégataires inscrits au registre national). La liste des signataires effectifs est publiée et mise à jour sur le site du ministère chargé de l'énergie ; elle évolue au fil des adhésions et des retraits.",
+      "Obligés et délégataires CEE volontaires. Liste des signataires effectifs publiée et mise à jour sur le site du ministère chargé de l'énergie.",
     conditions:
-      "Le dispositif distingue les ménages en situation de précarité énergétique (modestes et très modestes, au sens de l'arrêté du 30 mars 2020) et les autres ménages. La bonification s'exprime sous forme de coefficient multiplicateur appliqué au volume CEE de base de l'opération, plus élevé pour les ménages modestes.",
+      'Distinction ménages modestes / très modestes (arrêté du 30 mars 2020) vs autres. Coefficient multiplicateur appliqué au volume CEE de base, plus élevé pour les ménages modestes.',
     amounts:
-      'Depuis 2022, les montants planchers de prime en euros par profil de ménage ne sont plus imposés par arrêté : chaque signataire fixe ses propres barèmes. La charte fixe en revanche les coefficients multiplicateurs de bonification (ordre de grandeur : ×5 sur le volume CEE pour une PAC ou une chaudière biomasse chez un ménage modeste, ×2 pour un système solaire combiné, ×5 ou ×4 pour un appareil bois selon profil). Le montant final en euros dépend du signataire, de la localisation du bien et du profil du ménage — à simuler sur le site du signataire ou sur ecologie.gouv.fr/politiques-publiques/coup-pouce-chauffage.',
-    end: "Charte ouverte en 2026 : les obligés et délégataires peuvent la signer jusqu'au 01/02/2026, les opérations engagées sous charte restent éligibles selon les délais de l'arrêté en vigueur. Vérifier la dernière version sur Légifrance avant tout engagement.",
+      'Depuis 2022, plus de montant plancher en euros : chaque signataire fixe son barème. La charte fixe les coefficients (≈ ×5 PAC ou biomasse pour ménage modeste, ×2 SSC, ×5 ou ×4 bois selon profil). Simulation sur le site du signataire ou ecologie.gouv.fr/politiques-publiques/coup-pouce-chauffage.',
+    end: "Ouverte en 2026, signature jusqu'au 01/02/2026. Opérations engagées sous charte restent éligibles selon délais de l'arrêté. Vérifier Légifrance avant engagement.",
   },
   {
     key: 'renovation-mi',
     label: "Coup de pouce Rénovation d'ampleur (maison individuelle et appartement)",
-    status: "Charte active en 2026 — prolongée par l'arrêté du 7 janvier 2026",
+    status: "Active 2026 — prolongée par l'arrêté du 7 janvier 2026",
     icon: HomeIcon,
     legal:
-      "Instituée par l'arrêté du 8 octobre 2020 modifié, pris en application de l'article L221-7 du code de l'énergie, et prolongée par l'arrêté du 7 janvier 2026 (JORFTEXT000053373748), en vigueur depuis le 17/01/2026. Elle encadre la bonification CEE des opérations de rénovation d'ampleur en maison individuelle et en appartement.",
+      "Arrêté du 8 octobre 2020 modifié, prolongé par l'arrêté du 7 janvier 2026 (JORFTEXT000053373748), en vigueur depuis le 17/01/2026. Article L221-7 du code de l'énergie.",
     perimeter:
-      "Rénovation d'ampleur d'une maison individuelle ou d'un appartement existant, occupé à titre de résidence principale. Les résidences secondaires sont exclues du bénéfice de la charte. Les travaux doivent permettre un saut de 2 classes DPE minimum, attesté par un audit énergétique avant/après.",
+      'Maison individuelle ou appartement existant, résidence principale uniquement (résidences secondaires exclues). Saut de 2 classes DPE minimum, audit énergétique avant/après obligatoire.',
     operations: [
-      "BAR-TH-174 — rénovation d'ampleur d'une maison individuelle (remplace la BAR-TH-164 abrogée)",
-      "BAR-TH-175 — rénovation d'ampleur d'un appartement",
+      'BAR-TH-174 — rénovation maison individuelle',
+      'BAR-TH-175 — rénovation appartement',
       'Audit énergétique préalable obligatoire',
-      'Réalisation des travaux par des entreprises titulaires du signe de qualité RGE pour chaque lot concerné',
+      'Entreprises RGE pour chaque lot concerné',
     ],
     signers:
-      'Signataires : obligés et délégataires volontaires. Le bénéficiaire doit contractualiser avec un signataire de la charte avant la signature du devis.',
+      'Obligés et délégataires volontaires. Contractualisation avec un signataire avant signature du devis.',
     conditions:
-      "Saut de 2 classes DPE minimum calculé selon la méthode prévue par l'arrêté, résidence principale uniquement, résidences secondaires expressément exclues. Les plafonds MaPrimeRénov' Parcours accompagné s'appliquent pour le cumul avec l'aide publique.",
+      "Saut ≥ 2 classes DPE selon méthode de l'arrêté. Résidence principale exclusive. Plafonds MaPrimeRénov' Parcours accompagné applicables au cumul.",
     amounts:
-      "La bonification prend la forme d'un coefficient multiplicateur appliqué au volume CEE de base de l'opération BAR-TH-174 ou BAR-TH-175, variable selon le nombre de classes DPE gagnées. Depuis 2022, aucun montant plancher en euros n'est imposé par arrêté : chaque signataire fixe son propre barème. Le montant final dépend du signataire, de la surface, du gain énergétique et du profil du ménage — à simuler sur le site du signataire.",
-    end: "Pas de date limite d'achèvement fixée par l'arrêté du 7 janvier 2026 ; la charte reste en vigueur tant qu'elle n'est pas abrogée par un arrêté ultérieur.",
+      'Coefficient multiplicateur sur le volume CEE de base BAR-TH-174/175, variable selon classes DPE gagnées. Aucun plancher en euros depuis 2022 : barème fixé par chaque signataire selon surface, gain et profil ménage.',
+    end: "Pas de date limite fixée par l'arrêté du 7 janvier 2026 ; en vigueur tant qu'aucun arrêté postérieur ne l'abroge.",
   },
   {
     key: 'renovation-collectif',
     label: 'Coup de pouce Rénovation performante de bâtiment résidentiel collectif',
-    status: "Charte active en 2026 — prolongée par l'arrêté du 7 janvier 2026",
+    status: "Active 2026 — prolongée par l'arrêté du 7 janvier 2026",
     icon: HomeIcon,
     legal:
-      "Prolongée par l'arrêté du 7 janvier 2026 (JORFTEXT000053373748), en vigueur depuis le 17/01/2026, pris en application de l'article L221-7 du code de l'énergie. Elle encadre la bonification CEE des opérations de rénovation performante en copropriété et logement social.",
+      "Arrêté du 7 janvier 2026 (JORFTEXT000053373748), en vigueur depuis le 17/01/2026. Article L221-7 du code de l'énergie.",
     perimeter:
-      "Rénovation performante d'un bâtiment résidentiel collectif existant (copropriété, bailleur social), avec un bouquet de travaux permettant un gain énergétique significatif attesté par audit avant/après.",
+      'Bâtiment résidentiel collectif existant (copropriété, bailleur social), bouquet de travaux avec gain énergétique attesté par audit avant/après.',
     operations: [
-      "BAR-TH-177 — rénovation performante d'un bâtiment résidentiel collectif",
+      'BAR-TH-177 — rénovation performante collectif',
       'Audit énergétique préalable obligatoire',
-      'Réalisation des travaux par des entreprises titulaires du signe de qualité RGE pour chaque lot concerné',
+      'Entreprises RGE pour chaque lot concerné',
     ],
     signers:
-      'Signataires : obligés et délégataires volontaires. Le syndic ou le bailleur contractualise avec un signataire de la charte avant la signature du devis des travaux.',
+      'Obligés et délégataires volontaires. Syndic ou bailleur contractualise avec un signataire avant signature du devis.',
     conditions:
-      "Gain énergétique minimal fixé par l'arrêté, sur la base de la méthode de calcul officielle. Les exigences techniques et documentaires suivent la fiche BAR-TH-177.",
+      "Gain énergétique minimal fixé par l'arrêté ; exigences techniques de la fiche BAR-TH-177.",
     amounts:
-      "Bonification sous forme de coefficient multiplicateur appliqué au volume CEE de base de l'opération BAR-TH-177. Depuis 2022, aucun montant plancher en euros n'est imposé par arrêté : chaque signataire fixe son barème. Le montant final dépend du signataire, de la surface rénovée et du gain énergétique — à simuler sur le site du signataire.",
-    end: "Charte prolongée par l'arrêté du 7 janvier 2026 ; sa date de fin est fixée par arrêté, vérifier la dernière version sur Légifrance avant tout engagement.",
+      'Coefficient multiplicateur sur le volume CEE BAR-TH-177. Aucun plancher en euros depuis 2022 : barème fixé par chaque signataire selon surface et gain.',
+    end: "Prolongée par l'arrêté du 7 janvier 2026 ; date de fin par arrêté, vérifier Légifrance avant engagement.",
   },
   {
     key: 'chauffage-collectif',
     label: 'Coup de pouce Chauffage des bâtiments collectifs et tertiaires',
-    status: 'Charte active en 2026 — vérifier la dernière version sur Légifrance',
+    status: 'Active 2026 — vérifier dernière version sur Légifrance',
     icon: Flame,
     legal:
-      "Instituée sur le fondement de l'article L221-7 du code de l'énergie, publiée au Bulletin officiel du ministère chargé de l'énergie. Elle encadre la bonification CEE du remplacement d'équipements de chauffage dans les bâtiments résidentiels collectifs et tertiaires.",
+      "Article L221-7 du code de l'énergie, publication au Bulletin officiel du ministère chargé de l'énergie.",
     perimeter:
-      "Remplacement d'une chaudière charbon, fioul ou gaz par un équipement utilisant une énergie renouvelable ou de récupération, ou raccordement à un réseau de chaleur EnR&R, dans un bâtiment résidentiel collectif ou un bâtiment tertiaire existant.",
+      'Remplacement chaudière charbon/fioul/gaz par équipement EnR&R ou raccordement à un réseau de chaleur EnR&R, en résidentiel collectif ou tertiaire existant.',
     operations: [
-      'BAR-TH-137 — raccordement à un réseau de chaleur alimenté majoritairement par des EnR&R (résidentiel collectif)',
-      'BAR-TH-178 / BAR-TH-179 / BAR-TH-180 — équipements de chauffage performants en résidentiel collectif',
-      "BAT-TH-127 — raccordement d'un bâtiment tertiaire à un réseau de chaleur EnR&R",
-      'BAT-TH-162 / BAT-TH-163 / BAT-TH-164 — équipements de chauffage performants en tertiaire',
+      'BAR-TH-137 — raccordement réseau chaleur EnR&R (collectif)',
+      'BAR-TH-178/179/180 — équipements chauffage collectif',
+      'BAT-TH-127 — raccordement réseau chaleur EnR&R (tertiaire)',
+      'BAT-TH-162/163/164 — équipements chauffage tertiaire',
     ],
     signers:
-      "Signataires : obligés et délégataires CEE volontaires. Le maître d'ouvrage (syndic, bailleur social, gestionnaire tertiaire) contractualise avec un signataire de la charte avant la signature du devis.",
+      "Obligés et délégataires CEE volontaires. Maître d'ouvrage (syndic, bailleur, gestionnaire tertiaire) contractualise avant signature du devis.",
     conditions:
-      "Les exigences techniques suivent les fiches d'opérations standardisées correspondantes. Les contrôles sur site prévus par l'arrêté du 28 septembre 2021 modifié s'appliquent.",
+      "Exigences techniques des fiches d'opérations standardisées. Contrôles sur site de l'arrêté du 28 septembre 2021 modifié.",
     amounts:
-      "Bonification sous forme de coefficient multiplicateur appliqué au volume CEE de base de chaque opération. Aucun montant plancher en euros n'est imposé par arrêté depuis 2022 : chaque signataire fixe son barème. Le montant final dépend du signataire, de la surface traitée et du type d'équipement — à simuler sur le site du signataire.",
-    end: 'Charte reconduite par arrêté ; vérifier la dernière version en vigueur sur Légifrance avant tout engagement.',
+      'Coefficient multiplicateur sur le volume CEE de chaque opération. Aucun plancher en euros depuis 2022 : barème par signataire selon surface et équipement.',
+    end: 'Reconduite par arrêté ; vérifier dernière version sur Légifrance avant engagement.',
   },
 ]
 
@@ -181,32 +181,32 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Le Coup de pouce est-il systématique ?',
     answer:
-      "Non. Les chartes Coup de pouce sont facultatives pour les obligés et les délégataires : ils les signent s'ils le souhaitent, en fonction de leur stratégie d'approvisionnement en CEE. Un bénéficiaire ne peut donc obtenir la bonification que s'il contractualise avec un signataire effectif de la charte concernée, avant la signature du devis. Vérifiez toujours que le nom de votre délégataire ou obligé figure sur la liste publiée par le ministère chargé de l'énergie.",
+      "Non. Les chartes sont facultatives pour les obligés et délégataires : ils les signent selon leur stratégie d'approvisionnement CEE. La bonification suppose donc une contractualisation avec un signataire effectif, avant signature du devis. Vérifiez le nom du signataire sur la liste publiée par le ministère.",
   },
   {
     question: 'Qui finance réellement le Coup de pouce ?',
     answer:
-      "Le financement reste intégralement supporté par l'obligé signataire de la charte, c'est-à-dire le vendeur d'énergie soumis à l'obligation CEE prévue à l'article L221-1 du code de l'énergie. L'obligé répercute ce coût dans le prix de l'énergie qu'il facture à ses clients finaux. Le Coup de pouce n'est pas une aide d'État au sens budgétaire : c'est une bonification contractuelle privée, encadrée par arrêté, qu'un obligé s'engage à verser en contrepartie d'un volume de CEE bonifié.",
+      "L'obligé signataire (vendeur d'énergie soumis à l'obligation CEE, article L221-1). Il répercute le coût dans le prix de l'énergie facturé à ses clients. Ce n'est pas une aide d'État budgétaire mais une bonification contractuelle privée encadrée par arrêté.",
   },
   {
     question: 'Peut-on cumuler plusieurs Coup de pouce ?',
     answer:
-      "Le cumul dépend de la rédaction de chaque charte. Certaines opérations « Coup de pouce Chauffage » et « Coup de pouce Rénovation performante » sont exclusives l'une de l'autre lorsqu'elles portent sur le même geste, car un même kWh cumac ne peut être bonifié deux fois. En revanche, on peut en principe cumuler deux chartes sur deux opérations distinctes (par exemple une PAC bonifiée et un raccordement au réseau de chaleur), sous réserve que les arrêtés applicables ne l'interdisent pas. Demandez systématiquement confirmation écrite au signataire.",
+      'Le cumul dépend de chaque charte. Sur un même geste, Chauffage et Rénovation performante sont exclusifs (un kWh cumac ne peut être bonifié deux fois). Sur deux opérations distinctes (ex. PAC + raccordement réseau), le cumul est possible sauf interdiction des arrêtés. Demandez confirmation écrite au signataire.',
   },
   {
-    question: 'Que se passe-t-il quand une charte Coup de pouce prend fin ?',
+    question: 'Que se passe-t-il quand une charte prend fin ?',
     answer:
-      "La date de fin d'une charte est fixée par l'arrêté qui l'a créée. Au-delà, les dossiers engagés avant l'échéance restent traités selon la charte d'origine, à condition que la date d'engagement (signature du devis, bon de commande ou contrat) soit antérieure à la fin de la charte et que le dépôt au PNCEE intervienne dans le délai imparti par l'arrêté. Les nouveaux devis signés après l'échéance retombent au forfait CEE classique, sans bonification.",
+      "La date de fin est fixée par l'arrêté. Les dossiers engagés avant échéance (devis signé, bon de commande) restent traités selon la charte d'origine si le dépôt PNCEE intervient dans le délai. Les nouveaux devis signés après retombent au forfait CEE classique, sans bonification.",
   },
   {
-    question: 'Puis-je négocier le montant de la prime Coup de pouce ?',
+    question: 'Puis-je négocier le montant de la prime ?',
     answer:
-      "Oui, très souvent. Depuis 2022, les montants planchers en euros par profil de ménage ne sont plus imposés par arrêté : chaque signataire fixe librement son propre barème, dans le respect des coefficients multiplicateurs de bonification prévus par la charte. À opération identique, la différence de prime entre deux signataires peut être significative — comparez systématiquement plusieurs propositions avant d'arrêter votre choix. Attention toutefois à la transparence du reste à charge : un montant affiché élevé peut parfois masquer des frais d'accompagnement facturés à côté. Et soyez vigilant sur la date d'engagement (voir règles du parcours) : changer de signataire après la signature du devis peut rendre le dossier inéligible.",
+      "Oui. Depuis 2022, plus de plancher en euros : chaque signataire fixe son barème dans la limite des coefficients de la charte. Les écarts sont parfois significatifs — comparez plusieurs propositions. Attention au reste à charge réel (frais d'accompagnement parfois facturés à côté) et à la date d'engagement : changer de signataire après devis peut rendre le dossier inéligible.",
   },
   {
     question: 'Un artisan peut-il refuser un Coup de pouce ?',
     answer:
-      "Oui. L'artisan n'est pas signataire de la charte : il réalise simplement les travaux. S'il n'a pas de partenariat avec un délégataire signataire, ou s'il préfère travailler avec un autre circuit CEE, il peut refuser d'intégrer le Coup de pouce dans son devis. Dans ce cas, le bénéficiaire peut soit choisir un autre artisan RGE partenaire d'un signataire de la charte, soit contractualiser directement avec un délégataire signataire et demander à l'artisan de facturer sans prime intégrée.",
+      "Oui. L'artisan n'est pas signataire de la charte. Sans partenariat avec un délégataire signataire ou par préférence pour un autre circuit, il peut refuser d'intégrer la prime au devis. Le bénéficiaire peut alors choisir un autre RGE partenaire d'un signataire, ou contractualiser directement avec un délégataire et demander à l'artisan de facturer sans prime intégrée.",
   },
 ]
 
@@ -372,19 +372,16 @@ export default function CoupDePouce2026Page() {
       {/* Intro éditoriale */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <p className="text-charcoal-700 leading-relaxed text-lg mb-4">
-          Les «&nbsp;Coup de pouce&nbsp;» sont devenus, depuis leur lancement en 2019, l’un des
-          leviers les plus visibles du dispositif des certificats d’économies d’énergie. Ils ne
-          créent pas de nouvelles opérations&nbsp;: ils
-          <em> majorent</em> le volume de CEE généré par une opération déjà standardisée, en
-          contrepartie d’un engagement contractuel pris par un obligationé ou un délégataire auprès
-          de l’État.
+          Depuis 2019, les «&nbsp;Coup de pouce&nbsp;» sont l’un des leviers les plus visibles des
+          CEE. Ils ne créent pas d’opérations nouvelles&nbsp;: ils <em>majorent</em> le volume CEE
+          d’une opération déjà standardisée, contre un engagement contractuel pris par un
+          obligationé ou un délégataire auprès de l’État.
         </p>
         <p className="text-charcoal-700 leading-relaxed mb-4">
-          Cet article décrit ce qu’est juridiquement un Coup de pouce, liste les chartes actives ou
-          historiques en 2026, explique le parcours à suivre côté particulier et l’articulation avec
-          MaPrimeRénov’, et signale les pièges fréquents. Les données chiffrées exactes sont
-          volontairement renvoyées aux sites officiels — france-renov.gouv.fr et
-          maprimerenov.gouv.fr — car les montants peuvent être ajustés par arrêté en cours d’année.
+          Ce guide décrit le cadre juridique, recense les chartes actives en 2026, détaille le
+          parcours côté particulier, l’articulation avec MaPrimeRénov’ et les pièges fréquents. Les
+          montants exacts sont renvoyés aux sites officiels (france-renov.gouv.fr,
+          maprimerenov.gouv.fr) car ils peuvent évoluer par arrêté en cours d’année.
         </p>
       </section>
 
@@ -397,43 +394,33 @@ export default function CoupDePouce2026Page() {
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
               <strong>Définition juridique.</strong> Un Coup de pouce est une bonification
-              contractuelle d’une opération standardisée CEE. Il ne définit pas lui-même une
-              opération nouvelle&nbsp;: il s’adosse à une fiche existante (exemple BAR-TH-171 pour
-              une pompe à chaleur air/eau) et applique un coefficient multiplicateur au volume de
-              CEE généré, dont la contrepartie est versée par le signataire de la charte au
-              bénéficiaire final sous forme de prime. Depuis 2022, les montants planchers en euros
-              par profil de ménage ne sont plus imposés par arrêté&nbsp;: chaque signataire fixe
-              librement son propre barème.
+              contractuelle d’une opération standardisée CEE. Il s’adosse à une fiche existante
+              (ex&nbsp;: BAR-TH-171 PAC air/eau) et applique un coefficient multiplicateur au volume
+              CEE généré, reversé par le signataire au bénéficiaire sous forme de prime majorée.
+              Depuis 2022, plus de montant plancher en euros&nbsp;: chaque signataire fixe son
+              barème.
             </p>
             <p>
-              <strong>Cadre réglementaire.</strong> Les chartes Coup de pouce sont prises sur le
-              fondement de l’article L221-7 du code de l’énergie, qui autorise le ministre chargé de
-              l’énergie à bonifier certaines opérations par arrêté. Chaque dispositif fait l’objet
-              d’un arrêté sectoriel (arrêté du 25 mars 2020 modifié pour le chauffage, arrêté du 8
-              octobre 2020 modifié puis prolongé par l’arrêté du 7 janvier 2026 pour la rénovation
-              d’ampleur), publié au Bulletin officiel du ministère chargé de l’énergie et
-              consultable sur Légifrance. L’ensemble du dispositif s’inscrit depuis le 1
-              <sup>er</sup> janvier 2026 dans la{' '}
+              <strong>Cadre réglementaire.</strong> Article L221-7 du code de l’énergie, déclinaison
+              par arrêtés sectoriels (25 mars 2020 modifié pour le chauffage, 8 octobre 2020 modifié
+              prolongé par arrêté du 7 janvier 2026 pour la rénovation d’ampleur). Le dispositif
+              s’inscrit depuis le 1<sup>er</sup> janvier 2026 dans la{' '}
               <strong>
                 6<sup>e</sup> période CEE
               </strong>{' '}
-              (01/01/2026 &ndash; 31/12/2030), encadrée par l’arrêté du 21 décembre 2025
+              (01/01/2026&nbsp;– 31/12/2030), encadrée par l’arrêté du 21 décembre 2025
               (JORFTEXT000053158200) et le décret n°&nbsp;2025-1048.
             </p>
             <p>
-              <strong>Principe économique.</strong> L’obligé ou le délégataire signe une charte
-              d’engagement avec l’État. En échange, il obtient un bonus de volume CEE sur les
-              opérations concernées, qu’il s’engage à reverser au bénéficiaire final sous forme de
-              prime majorée. Le coût total reste supporté par l’obligé, qui le répercute ensuite
-              dans le prix de l’énergie qu’il vend à ses clients. Le Coup de pouce n’est donc pas
-              une subvention publique, même s’il en donne souvent l’apparence dans la communication
-              grand public.
+              <strong>Principe économique.</strong> L’obligé ou délégataire signe la charte, obtient
+              un bonus de volume CEE sur les opérations concernées et le reverse au bénéficiaire en
+              prime majorée. Le coût reste supporté par l’obligé et répercuté dans le prix de
+              l’énergie. Ce n’est pas une subvention publique malgré l’apparence.
             </p>
             <p>
-              <strong>Portée.</strong> Un Coup de pouce ne crée aucun droit automatique&nbsp;: il ne
-              s’applique que si le bénéficiaire contractualise avec un signataire effectif de la
-              charte, avant la signature du devis des travaux. C’est cette antériorité de
-              l’engagement qui conditionne juridiquement l’éligibilité.
+              <strong>Portée.</strong> Aucun droit automatique&nbsp;: la bonification suppose une
+              contractualisation avec un signataire effectif <em>avant</em> signature du devis.
+              Cette antériorité conditionne juridiquement l’éligibilité.
             </p>
           </div>
         </div>
@@ -539,27 +526,27 @@ export default function CoupDePouce2026Page() {
             {[
               {
                 t: 'Choisir un artisan RGE',
-                d: "Seules les entreprises titulaires du signe de qualité RGE (Reconnu garant de l'environnement) correspondant à l'opération peuvent réaliser les travaux ouvrant droit à la prime CEE. Vérifiez la validité du RGE sur france-renov.gouv.fr ; un RGE expiré ou sur un autre domaine de travaux disqualifie le dossier.",
+                d: "Seules les entreprises RGE (Reconnu garant de l'environnement) sur l'opération concernée peuvent réaliser les travaux. Vérifier la validité sur france-renov.gouv.fr ; un RGE expiré ou hors domaine disqualifie le dossier.",
               },
               {
                 t: "S'engager AVANT la signature du devis",
-                d: "L'engagement auprès du signataire de la charte (création d'un compte, acceptation des CGU, validation de l'opération) doit impérativement précéder la signature du devis de l'artisan. La date d'engagement est contrôlée au PNCEE. Toute antériorité du devis entraîne le rejet du dossier.",
+                d: "L'engagement auprès du signataire (création de compte, validation de l'opération) doit précéder la signature du devis. La date est contrôlée au PNCEE ; toute antériorité du devis entraîne le rejet.",
               },
               {
                 t: 'Obtenir le devis mentionnant la prime bonifiée',
-                d: "L'artisan émet ensuite le devis, qui doit mentionner de manière lisible la prime Coup de pouce prévue (montant ou référence à la charte) et le nom du signataire. C'est la preuve commerciale de la bonification.",
+                d: "Le devis de l'artisan doit mentionner lisiblement la prime Coup de pouce (montant ou référence à la charte) et le nom du signataire.",
               },
               {
-                t: 'Signer l’engagement et réaliser les travaux',
-                d: "Le bénéficiaire signe le devis, puis les travaux sont réalisés conformément aux règles techniques de la fiche d'opération standardisée (isolant certifié ACERMI, PAC avec COP minimum, etc.). Les photos géotaggées et justificatifs techniques sont collectés au fil du chantier.",
+                t: 'Signer et réaliser les travaux',
+                d: "Travaux conformes à la fiche d'opération standardisée (isolant ACERMI, PAC avec COP minimum, etc.). Photos géotaggées et justificatifs techniques collectés au fil du chantier.",
               },
               {
                 t: 'Déposer le dossier dans les délais',
-                d: "Une fois les travaux achevés et payés, le dossier complet (attestation sur l'honneur, facture, preuves techniques) est transmis au signataire, qui le dépose au PNCEE. Le délai habituel est de l'ordre de deux mois après la fin des travaux ; la charte et l'arrêté applicable fixent la règle exacte.",
+                d: "Dossier complet (attestation sur l'honneur, facture, preuves techniques) transmis au signataire, qui dépose au PNCEE. Délai usuel : ~2 mois après fin de travaux ; règle exacte fixée par la charte et l'arrêté.",
               },
               {
-                t: 'Recevoir la prime versée par le signataire',
-                d: "Le paiement intervient après validation du dossier par le signataire — parfois avant dépôt PNCEE, parfois après, selon le modèle. En cas de retard anormal, consultez la médiation nationale de l'énergie.",
+                t: 'Recevoir la prime',
+                d: "Paiement après validation par le signataire (avant ou après dépôt PNCEE selon le modèle). En cas de retard anormal, médiateur national de l'énergie.",
               },
             ].map((s, i) => (
               <li
@@ -622,42 +609,19 @@ export default function CoupDePouce2026Page() {
           </h2>
           <div className="space-y-4 text-charcoal-700 leading-relaxed">
             <p>
-              Depuis 2023, la politique publique des CEE et des Coup de pouce poursuit trois
-              tendances de fond. La première est le
-              <strong> durcissement progressif</strong> des critères techniques des
-              opérations&nbsp;: coefficients de performance minimaux rehaussés, contrôles sur site
-              renforcés par l’arrêté du 28 septembre 2021 modifié, exigences documentaires accrues.
+              Trois tendances de fond depuis 2023 : <strong>durcissement technique</strong>{' '}
+              (coefficients de performance rehaussés, contrôles renforcés par l’arrêté du 28
+              septembre 2021 modifié), <strong>révision à la baisse des bonifications</strong> les
+              plus généreuses pour limiter les effets d’aubaine, et{' '}
+              <strong>retrait progressif des opérations fossiles</strong> (chaudières gaz en voie
+              d’extinction). PAC, biomasse et réseaux EnR&R concentrent désormais l’effort.
             </p>
             <p>
-              La deuxième est la <strong>révision à la baisse des bonifications</strong> les plus
-              généreuses, observée en particulier sur les chartes historiques qui avaient alimenté
-              les offres «&nbsp;à 1&nbsp;euro&nbsp;» entre 2019 et 2021. Ce mouvement vise à
-              rééquilibrer le reste à charge et à limiter les effets d’aubaine.
-            </p>
-            <p>
-              La troisième est le <strong>retrait progressif des opérations fossiles</strong> du
-              périmètre des Coup de pouce&nbsp;: les bonifications sur les chaudières au gaz, déjà
-              très encadrées, sont en voie d’extinction, dans la ligne de la stratégie nationale bas
-              carbone. Les PAC, les chaudières biomasse et les raccordements à des réseaux de
-              chaleur EnR&R concentrent désormais l’essentiel de l’effort.
-            </p>
-            <p>
-              <strong>Chartes clôturées à ne pas confondre.</strong> Plusieurs chartes Coup de pouce
-              historiquement connues ne sont <em>plus actives</em> en 2026 et doivent être écartées
-              de toute communication commerciale. Le
-              <strong> Coup de pouce Isolation</strong>, qui a alimenté les offres «&nbsp;à
-              1&nbsp;euro&nbsp;» entre 2019 et 2021, a été clôturé le
-              <strong> 30 juin 2022</strong>. Le{' '}
-              <strong>Coup de pouce Pilotage connecté du chauffage</strong> (fiche BAR-TH-173), qui
-              bonifiait l’installation de systèmes de régulation pièce par pièce, a été
-              <strong> supprimé par l’arrêté du 18 novembre 2024</strong> (JORFTEXT000050626971).
-              Ces deux bonifications ne peuvent plus être proposées en 2026&nbsp;; toute promesse
-              commerciale les évoquant comme actives constitue une information trompeuse.
-            </p>
-            <p>
-              Ces tendances sont factées&nbsp;; les calendriers précis de sortie dépendent toutefois
-              de chaque arrêté modificatif et peuvent évoluer. C’est une raison supplémentaire de
-              vérifier la version à jour de chaque texte avant de s’engager.
+              <strong>Chartes clôturées à ne pas confondre.</strong> Le{' '}
+              <strong>Coup de pouce Isolation</strong> (offres « à 1 € » 2019–2021) a été clôturé le
+              30 juin 2022. Le <strong>Coup de pouce Pilotage connecté du chauffage</strong>{' '}
+              (BAR-TH-173) a été supprimé par l’arrêté du 18 novembre 2024 (JORFTEXT000050626971).
+              Ces deux bonifications ne peuvent plus être proposées en 2026.
             </p>
           </div>
         </div>
