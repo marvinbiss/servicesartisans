@@ -517,6 +517,35 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-platform-invariants
+    pillar: 3
+    title: Anti-régression invariants plateforme NON-NEGOTIABLE (CLAUDE.md + 2FA)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-platform-invariants.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (NON-NEGOTIABLE platform rules)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: CLAUDE.md NON-NEGOTIABLE + memory:audit-10-agents-2026-04-25
+    notes: >-
+      6 patterns lock-in invariants plateforme : (1) src/instrumentation.ts
+      existe (Next.js avec src/ convention NON-NEGOTIABLE de CLAUDE.md
+      global), (2) PAS de instrumentation.ts à la racine (sinon ignoré),
+      (3) two-factor.ts complet : TwoFactorAuthService + TOTP RFC 6238 +
+      HMAC SHA-1 + verify(window) + generateBackupCodes (audit-10-agents
+      2FA fix), (4) tsconfig path alias @/* → ./src/*, (5) classes dark:
+      ne croissent pas au-delà du baseline chat/ (4 fichiers historiques),
+      (6) CLAUDE.md projet documente Pipedrive 3 canaux. 100% pondéré
+      8.5/8.5. Régression = télémétrie cassée OU 2FA admin downgrade OU
+      imports cassés Vercel OU dark mode silencieux.
   - id: P3-authors-honest-eeat
     pillar: 3
     title: Anti-régression honnêteté E-E-A-T fiches auteurs (no fantasmed certifs)
