@@ -517,3 +517,28 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-rls-pii-tables
+    pillar: 3
+    title: Anti-régression RLS sur 11 tables PII business-critical
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-rls-pii-tables.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (sécurité PII)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:servicesartisans-rls-hotfix-2026-04-24 + audit-10-agents-2026-04-25
+    notes: >-
+      Lock-in RLS sur 11 tables PII (profiles, providers, provider_claims, bookings, lead_assignments, leads,
+      audit_logs, kyc_profiles, cee_leads, cee_mandats, estimation_leads). Pondération 2.0 sur les 4 tables
+      les plus sensibles (profiles email/phone, providers, provider_claims SIRET, leads description chantier).
+      Coverage 100% (16.5/16.5 pondéré). Bonus check : aucune migration récente (>400) ne DROP POLICY
+      massivement sans recreate (whitelist 417_reviews_rls_hardening_fix.sql = clean sweep délibéré).
+      Régression = exposition PII directe via PostgREST anon → spam, fraud claims, competitive intel.

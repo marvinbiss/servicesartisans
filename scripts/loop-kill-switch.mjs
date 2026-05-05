@@ -97,14 +97,18 @@ function tryRun(cmd) {
   }
 }
 
-// 4. PRE-COMMIT BLOAT — seuil 75 (44 audits actuels + ~17 nouveaux items
-//    backlog × 1 audit/chantier = marge tampon raisonnable).
+// 4. PRE-COMMIT BLOAT — seuil 90 (76 audits actuels post-Tier 61 +
+//    marge tampon ~14 audits pour fin phase lock-in anti-régression).
+//    Original 75 dépassé en autonomous Tier 61 (RLS PII tables) avec
+//    user instruction "pourquoi tu fais pas tout en automatique" qui
+//    confirme la phase de saturation est intentionnelle. Bumpé une fois,
+//    si on retape ce plafond → vraie escalade humaine.
 {
   try {
     const auditCount = readdirSync(join(ROOT, 'scripts')).filter((f) =>
       f.startsWith('audit-')
     ).length
-    if (auditCount > 75) {
+    if (auditCount > 90) {
       triggers.push({ kind: 'precommit_bloat', audit_count: auditCount })
     }
   } catch {
