@@ -517,6 +517,36 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-rge-cee-linking
+    pillar: 3
+    title: Anti-régression maillage RGE↔CEE + PageRank sculpting nofollow
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-rge-cee-linking.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (PageRank sculpting + maillage interne)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:servicesartisans-internal-linking-rge-cee-2026-04-20
+    notes: >-
+      4 patterns lock-in maillage interne RGE↔CEE + PageRank sculpting :
+      (1) service-guides-map.ts exporte les 4 helpers core (forward
+      getRgeGuidesForService + getCeeGuidesForService + inverses
+      getCeeOpsForRgeService + getRgeServicesForCeeOp), (2) qualification-
+      matcher.ts contient les 5 codes étendus (BAR-TH-172/174/143/159 +
+      BAR-EN-108) qui couvrent PAC/Iso/menuiseries/solaire-thermique,
+      (3) ArtisanSimilar utilise rel={noindex ? 'nofollow' : undefined}
+      pour bloquer le PageRank fuite vers 920K fiches noindex, (4)
+      ProviderCard documente le pattern. 100% pondéré 6.5/6.5. Régression
+      = PageRank fuit vers 920K pages mortes + 50K liens internes RGE→CEE
+      perdus + cluster CEE-PAC orphelin.
   - id: P3-provider-claim-flow
     pillar: 3
     title: Anti-régression flow revendication fiche artisan (supply-side Pillar #1)
