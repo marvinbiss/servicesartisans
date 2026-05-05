@@ -19,9 +19,13 @@ export const dynamic = 'force-dynamic'
 
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
-  urgency: z.enum(['flexible', 'mois', 'semaine', 'urgent'], {
-    message: "Veuillez sélectionner l'urgence",
-  }),
+  // Funnel devis fix 2026-05-05 : urgency était requise côté serveur mais
+  // optionnelle côté client (validateStep2 ne la check pas) → 400 fieldErrors
+  // ramenait l'utilisateur step 2 sur step 3 = friction → drop. Default
+  // 'flexible' aligné avec le UX intention "no rush". Downstream consumers
+  // (devis-service.urgencyDbMap, pipedrive.lead.urgency) ont tous déjà un
+  // fallback, donc pas d'impact data.
+  urgency: z.enum(['flexible', 'mois', 'semaine', 'urgent']).optional().default('flexible'),
   budget: z.string().max(20).optional(),
   description: z.string().optional(),
   codePostal: z.string().optional(),
