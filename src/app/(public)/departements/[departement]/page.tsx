@@ -703,50 +703,69 @@ export default async function DepartementPage({ params }: PageProps) {
             Objectif : éliminer les "orphan pages" flaggées par Ahrefs
             (chaque /services/[service]/[ville] du département reçoit
             au moins un inlink depuis sa page département parente). */}
-        {villesDuDepartement.length > 0 && (
-          <section className="mb-16 border-t border-sand-200 pt-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-sand-100 rounded-xl flex items-center justify-center">
-                <Map className="w-5 h-5 text-charcoal-600" />
-              </div>
-              <div>
-                <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
-                  Tous les artisans dans les villes du {dept.name}
-                </h2>
-                <p className="text-sm text-charcoal-500">
-                  {villesDuDepartement.length} ville
-                  {villesDuDepartement.length > 1 ? 's' : ''} ×{' '}
-                  {Math.min(orderedServices.length, 12)} métiers
-                </p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {orderedServices.slice(0, 12).map((svc) => (
-                <details
-                  key={`mesh-${svc.slug}`}
-                  className="bg-white rounded-xl border border-sand-200 overflow-hidden"
-                >
-                  <summary className="cursor-pointer px-5 py-3 font-medium text-charcoal-800 hover:bg-sand-50 select-none">
-                    {svc.name} — {villesDuDepartement.length} villes du {dept.name}
-                  </summary>
-                  <div className="px-5 py-4 border-t border-sand-200 bg-sand-50/40">
-                    <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-sm">
-                      {villesDuDepartement.map((v) => (
-                        <Link
-                          key={`mesh-${svc.slug}-${v.slug}`}
-                          href={`/services/${svc.slug}/${v.slug}`}
-                          className="text-charcoal-600 hover:text-primary-500 underline decoration-dotted underline-offset-2"
-                        >
-                          {svc.name} à {v.name}
-                        </Link>
-                      ))}
-                    </div>
+        {villesDuDepartement.length > 0 &&
+          (() => {
+            // Cap villes par service pour limiter le SSR bloat ; au-delà,
+            // on délègue le maillage aux pages /services/[s]/[v] et au sitemap.
+            const VILLES_CAP = 30
+            const cappedVilles = villesDuDepartement.slice(0, VILLES_CAP)
+            const overflow = Math.max(0, villesDuDepartement.length - VILLES_CAP)
+            return (
+              <section className="mb-16 border-t border-sand-200 pt-12">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-sand-100 rounded-xl flex items-center justify-center">
+                    <Map className="w-5 h-5 text-charcoal-600" />
                   </div>
-                </details>
-              ))}
-            </div>
-          </section>
-        )}
+                  <div>
+                    <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                      Tous les artisans dans les villes du {dept.name}
+                    </h2>
+                    <p className="text-sm text-charcoal-500">
+                      Top {cappedVilles.length} ville{cappedVilles.length > 1 ? 's' : ''} ×{' '}
+                      {Math.min(orderedServices.length, 12)} métiers
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {orderedServices.slice(0, 12).map((svc) => (
+                    <details
+                      key={`mesh-${svc.slug}`}
+                      className="bg-white rounded-xl border border-sand-200 overflow-hidden"
+                    >
+                      <summary className="cursor-pointer px-5 py-3 font-medium text-charcoal-800 hover:bg-sand-50 select-none">
+                        {svc.name} — {cappedVilles.length} villes du {dept.name}
+                      </summary>
+                      <div className="px-5 py-4 border-t border-sand-200 bg-sand-50/40">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-sm">
+                          {cappedVilles.map((v) => (
+                            <Link
+                              key={`mesh-${svc.slug}-${v.slug}`}
+                              href={`/services/${svc.slug}/${v.slug}`}
+                              className="text-charcoal-600 hover:text-primary-500 underline decoration-dotted underline-offset-2"
+                            >
+                              {svc.name} à {v.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </details>
+                  ))}
+                </div>
+                {overflow > 0 && (
+                  <p className="mt-4 text-sm text-charcoal-500">
+                    +{overflow} autres villes du {dept.name} —{' '}
+                    <Link
+                      href={`/villes?departement=${dept.code}`}
+                      className="text-primary-500 hover:underline"
+                    >
+                      voir l’annuaire complet
+                    </Link>
+                    .
+                  </p>
+                )}
+              </section>
+            )
+          })()}
 
         {/* ─── INTENT VARIANTS FOR TOP SERVICES ──────────────── */}
         {villesDuDepartement.length > 0 && top5Services.length > 0 && (

@@ -32,7 +32,6 @@ import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
 import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
-import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
@@ -837,6 +836,8 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       })
     }
   }
+  // Cap à 5 questions pour limiter le SSR bloat (Backlinko : 5-7 FAQ optimal).
+  combinedFaq.length = Math.min(combinedFaq.length, 5)
 
   // Task 2: ItemList JSON-LD for provider listings
   const itemListSchema =
@@ -1514,8 +1515,6 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           serviceName={service.name}
           villeName={location.name}
         />
-
-        <ComparatifsBlock serviceSlug={serviceSlug} serviceName={service.name} />
 
         {/* Primes CEE / MaPrimeRénov' — rénovation uniquement. Le CEE
             n'existe pas pour du dépannage ni des travaux classiques (peinture,

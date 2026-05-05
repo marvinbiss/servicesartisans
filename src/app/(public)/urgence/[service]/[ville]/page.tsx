@@ -68,7 +68,6 @@ import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
 import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
 import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
-import ComparatifsBlock from '@/components/seo/ComparatifsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
 import DevisCounterBlock from '@/components/seo/DevisCounterBlock'
@@ -739,15 +738,9 @@ async function renderUrgenceServiceVillePage({
     },
   ]
 
-  // Hash-selected trade FAQ items (2 from trade.faq)
+  // Hash-selected trade FAQ item (1 from trade.faq) — cap total à 5 questions.
   const faqHash = Math.abs(hashCode(`urgence-faq-${service}-${villeSlug}`))
-  const tradeFaqItems =
-    trade.faq.length <= 2
-      ? trade.faq
-      : Array.from({ length: 2 }, (_, i) => {
-          const idx = (faqHash + i * 5) % trade.faq.length
-          return trade.faq[idx]
-        }).filter((f, i, arr) => arr.indexOf(f) === i)
+  const tradeFaqItems = trade.faq.length === 0 ? [] : [trade.faq[faqHash % trade.faq.length]]
 
   const allFaqItems = [
     ...emergencyFaqItems.map((f) => ({ question: f.question, answer: f.answer })),
@@ -1056,7 +1049,6 @@ async function renderUrgenceServiceVillePage({
         minPrice={minPrice}
         maxPrice={maxPrice}
         priceUnit={trade.priceRange.unit}
-        emergencyInfo={trade.emergencyInfo}
       />
 
       {/* ─── EMERGENCY PROBLEMS ────────────────────────────── */}
@@ -1739,8 +1731,6 @@ async function renderUrgenceServiceVillePage({
         villeName={villeData.name}
       />
 
-      <ComparatifsBlock serviceSlug={service} serviceName={trade.name} />
-
       {commune && (
         <PrimesCEEBlock
           serviceSlug={service}
@@ -2072,7 +2062,6 @@ interface EmergencyEditorialProps {
   minPrice: number
   maxPrice: number
   priceUnit: string
-  emergencyInfo?: string
 }
 
 function EmergencyEditorialSections({
@@ -2084,7 +2073,6 @@ function EmergencyEditorialSections({
   minPrice,
   maxPrice,
   priceUnit,
-  emergencyInfo,
 }: EmergencyEditorialProps) {
   // ── Section 1: Signes d'urgence (~120 mots, 3 variantes) ──
   const signesHash = Math.abs(hashCode(`urgence-signes-${service}-${villeSlug}`))
@@ -2152,29 +2140,6 @@ function EmergencyEditorialSections({
   ]
   const checklistIntro = checklistIntros[checklistHash % checklistIntros.length]
 
-  // ── Section 3: Prix urgence vs planifié (~100 mots, 3 variantes) ──
-  const prixHash = Math.abs(hashCode(`urgence-prix-comp-${service}-${villeSlug}`))
-  const nightMin = Math.round(minPrice * 1.5)
-  const nightMax = Math.round(maxPrice * 1.5)
-  const weMin = Math.round(minPrice * 2)
-  const weMax = Math.round(maxPrice * 2)
-
-  const prixVariants = [
-    {
-      title: `Prix ${tradeLower} urgence vs intervention planifiée à ${villeName}`,
-      content: `À ${villeName}, la différence de coût entre une intervention planifiée et une urgence est significative. En journée (lundi-samedi, 8h-20h), un ${tradeLower} facture en moyenne ${minPrice} à ${maxPrice} ${priceUnit}. Le soir et le week-end, comptez ${nightMin} à ${nightMax} ${priceUnit} (majoration de 50 %). Les dimanches et jours fériés, les tarifs doublent : ${weMin} à ${weMax} ${priceUnit}. Ces majorations sont légales et encadrées par la convention collective du bâtiment. Pour réduire la facture, deux réflexes : évaluez si le problème peut attendre le lendemain matin, et demandez toujours un devis écrit avant le début de l'intervention, même en urgence. ${emergencyInfo ? 'Un artisan sérieux acceptera toujours de vous donner un prix avant de commencer.' : "Un professionnel transparent vous communiquera ses tarifs avant d'intervenir."}`,
-    },
-    {
-      title: `Combien coûte vraiment un ${tradeLower} d'urgence à ${villeName} ?`,
-      content: `La transparence tarifaire est essentielle, surtout en situation de stress. À ${villeName}, voici les fourchettes de prix réalistes pour un ${tradeLower}. Intervention planifiée en journée : ${minPrice} à ${maxPrice} ${priceUnit} — c'est le tarif de référence. Intervention d'urgence soir/samedi après-midi : ${nightMin} à ${nightMax} ${priceUnit}, soit une majoration d'environ 50 %. Dimanche, jour férié ou nuit (après minuit) : ${weMin} à ${weMax} ${priceUnit}, soit le double du tarif normal. Ces écarts s'expliquent par l'astreinte, le déplacement hors horaires et la disponibilité immédiate. Conseil important : un ${tradeLower} honnête à ${villeName} vous proposera un devis gratuit par téléphone avant de se déplacer. Refusez toute intervention sans devis préalable.`,
-    },
-    {
-      title: `${tradeName} à ${villeName} : urgence ou rendez-vous, quel impact sur le prix ?`,
-      content: `Planifier plutôt que subir : c'est la clé pour maîtriser son budget ${tradeLower} à ${villeName}. Un rendez-vous en journée coûte ${minPrice} à ${maxPrice} ${priceUnit}. En urgence le soir ou le samedi, la facture grimpe à ${nightMin}–${nightMax} ${priceUnit}. Le dimanche ou un jour férié, elle peut atteindre ${weMin} à ${weMax} ${priceUnit}. L'écart est considérable, mais justifié par les contraintes de l'astreinte. Pour chaque situation, posez-vous la question : le problème va-t-il empirer dans les prochaines heures ? Si oui, appelez immédiatement — les dégâts évités compensent largement le surcoût. Si le problème est stable, patientez jusqu'au prochain créneau en tarif normal et faites établir plusieurs devis comparatifs.`,
-    },
-  ]
-  const prix = prixVariants[prixHash % prixVariants.length]
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       {/* Section 1: Signes d'urgence */}
@@ -2198,14 +2163,6 @@ function EmergencyEditorialSections({
               <span className="text-charcoal-700 text-sm leading-relaxed">{item}</span>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Section 3: Prix urgence vs planifié */}
-      <section>
-        <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4">{prix.title}</h2>
-        <div className="prose prose-gray max-w-none">
-          <p className="text-charcoal-700 leading-relaxed">{prix.content}</p>
         </div>
       </section>
     </div>

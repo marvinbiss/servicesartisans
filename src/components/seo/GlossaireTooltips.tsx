@@ -71,7 +71,13 @@ function formatServiceName(slug: string): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export default function GlossaireTooltips({ serviceSlug, maxTerms = 5 }: GlossaireTooltipsProps) {
+function shortDefinition(def: string): string {
+  // Première phrase ou ~120 caractères max — le détail vit sur /glossaire#slug.
+  const firstSentence = def.split(/(?<=\.)\s/)[0]?.trim() ?? def
+  return firstSentence.length > 140 ? firstSentence.slice(0, 137) + '…' : firstSentence
+}
+
+export default function GlossaireTooltips({ serviceSlug, maxTerms = 4 }: GlossaireTooltipsProps) {
   const terms = getMatchingTerms(serviceSlug, maxTerms)
 
   if (terms.length === 0) return null
@@ -100,8 +106,8 @@ export default function GlossaireTooltips({ serviceSlug, maxTerms = 5 }: Glossai
                 {term.term}
               </Link>
             </dt>
-            <dd className="text-sm text-charcoal-600 leading-relaxed line-clamp-2">
-              {term.definition}
+            <dd className="text-sm text-charcoal-600 leading-relaxed">
+              {shortDefinition(term.definition)}
             </dd>
           </div>
         ))}
