@@ -550,10 +550,13 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
   // 2026-05-05 pivot full RGE — listing par défaut RGE certifiés uniquement.
   // `?rge=0` désactive le filtre (admin/debug). Toute autre valeur = RGE-only.
   const rgeOnly = resolvedSearchParams.rge !== '0'
-  // 2026-05-05 simplification — `?simple=1` rend la variante 8 blocs (vs 48
-  // dans la version full). Permet A/B sans détruire l'historique. Voir
-  // `_components/SimpleView.tsx` pour la justification (synthèse 5-agents).
-  const useSimpleView = resolvedSearchParams.simple === '1'
+  // 2026-05-05 slim pSEO — SimpleView (8 blocs cardinaux) est désormais la
+  // valeur par défaut. La variante dense (48 blocs) reste accessible via
+  // `?dense=1` pour A/B et investigations. Justification : Backlinko 2020 +
+  // synthèse 5-agents — la version dense empile ~23 600 mots vs cible
+  // 800-1 200 pour pSEO ville/service. HCU "scaled content" + INP/LCP
+  // mobile catastrophiques au-delà du bloc 10. Voir `_components/SimpleView.tsx`.
+  const useSimpleView = resolvedSearchParams.dense !== '1'
 
   // Early reject: invalid slugs (XSS attempts, random strings, special chars)
   if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {

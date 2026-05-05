@@ -72,20 +72,10 @@ import {
   buildFaqJsonLd,
 } from '@/lib/rge/pseo-content'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
-import { getVilleBySlug, getDepartementByCode, services as staticServices } from '@/lib/data/france'
+import { getVilleBySlug, getDepartementByCode } from '@/lib/data/france'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
-import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
-import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
-import InContentLinks from '@/components/seo/InContentLinks'
 import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
 import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
-import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
-import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
-import CalendrierSaisonnierBlock from '@/components/seo/CalendrierSaisonnierBlock'
-import UserQuestionBlock from '@/components/seo/UserQuestionBlock'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { logger } from '@/lib/logger'
 import {
@@ -1013,61 +1003,22 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           />
         </section>
 
+        {/* Contexte commune — gated by data uniqueness (Aleyda rule).
+            Les autres blocs intelligence locale (DPE / risques géo / calendrier
+            saisonnier / user-question) sont retirés de la version slim : ils
+            empilaient ~6-8K mots redondants avec /villes/[ville]. Couverts en
+            schema FAQ + AEO ci-dessus. */}
         {communeData && (
-          <>
-            <section className="mb-8">
-              <CommuneContextBlock
-                communeData={communeData}
-                serviceName={serviceName}
-                villeName={villeName}
-              />
-            </section>
-            <section className="mb-8">
-              <ContexteDPEBlock
-                communeData={communeData}
-                serviceName={serviceName}
-                villeName={villeName}
-              />
-            </section>
-            <section className="mb-8">
-              <RisquesGeoBlock
-                communeData={communeData}
-                serviceName={serviceName}
-                villeName={villeName}
-              />
-            </section>
-            <section className="mb-8">
-              <CalendrierSaisonnierBlock
-                serviceSlug={serviceSlug}
-                serviceName={serviceName}
-                villeName={villeName}
-                climatZone={communeData.climat_zone ?? null}
-              />
-            </section>
-          </>
+          <section className="mb-8">
+            <CommuneContextBlock
+              communeData={communeData}
+              serviceName={serviceName}
+              villeName={villeName}
+            />
+          </section>
         )}
 
-        <section className="mb-8">
-          <UserQuestionBlock
-            serviceSlug={serviceSlug}
-            serviceName={serviceName}
-            villeName={villeName}
-            villeSlug={villeSlug}
-          />
-        </section>
-
-        {/* Sprint 2 maillage interne — cross-intent + intent-aware (50K URLs) */}
-        <section className="mb-8">
-          <CrossIntentLinks
-            service={serviceSlug}
-            serviceName={serviceName}
-            ville={villeSlug}
-            villeName={villeName}
-            currentIntent="services"
-            variant="pills"
-          />
-        </section>
-
+        {/* Maillage interne — bloc unique, PageRank sculpting */}
         <section className="mb-12">
           <MaillageInterneBlock
             serviceSlug={serviceSlug}
@@ -1082,52 +1033,6 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             problemSlugs={problemSlugsForMaillage}
           />
         </section>
-
-        {/* Sprint 2.1 densification — DeepPageLinks (services connexes + nearby cities + dept/region/articles, ~15 liens) */}
-        <DeepPageLinks
-          currentService={serviceSlug}
-          currentVille={villeSlug}
-          currentIntent="services"
-          skipCrossIntent={true}
-        />
-
-        {/* Sprint 4 chantier #13 — cross-intent reroute (sibling intent différent) */}
-        <ServiceIntentReroute
-          serviceSlug={serviceSlug}
-          villeSlug={villeSlug}
-          villeName={villeName}
-          resolveServiceName={(slug) => staticServices.find((s) => s.slug === slug)?.name ?? null}
-        />
-
-        {/* Sprint 2.1 — InContentLinks (5 liens contextuels distribués) */}
-        <section className="mb-8 max-w-4xl mx-auto px-4 sm:px-6">
-          <InContentLinks
-            serviceSlug={serviceSlug}
-            serviceName={serviceName}
-            villeSlug={villeSlug}
-            villeName={villeName}
-            currentIntent="services"
-            departement={location.department_name ?? undefined}
-            departementCode={villeData?.departementCode}
-            region={villeData?.region}
-          />
-        </section>
-
-        {/* Sprint 2.1 — VerticalCrossLinks (4 services × ville pour intent avis) */}
-        <VerticalCrossLinks
-          currentService={serviceSlug}
-          villeSlug={villeSlug}
-          villeName={villeName}
-          intent="avis"
-        />
-
-        {/* Sprint 2.1 — TopCitiesGrid (top 20 villes pour ce service RGE) */}
-        <TopCitiesGrid
-          serviceSlug={serviceSlug}
-          serviceName={serviceName}
-          intent="services"
-          title={`${serviceName} RGE dans les principales villes`}
-        />
 
         <section className="mb-12 py-12 bg-charcoal-950 rounded-2xl text-center text-white">
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-3">

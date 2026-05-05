@@ -41,6 +41,28 @@ function formatCount(n: number): string {
   return new Intl.NumberFormat('fr-FR').format(n)
 }
 
+// Sémantique métier → mot-clé naturel pour le H2 (vocabulaire utilisateur,
+// pas marketing). Évite les bugs type "Artisans RGE Chauffage + près de
+// chez vous" lorsque le label d'organisme contient du branding.
+const SERVICE_NOUN: Record<string, string> = {
+  'pompe-a-chaleur': 'pompe à chaleur',
+  'panneaux-solaires': 'panneaux solaires',
+  chauffagiste: 'chauffagiste',
+  'isolation-thermique': 'isolation thermique',
+  'renovation-energetique': 'rénovation énergétique',
+  electricien: 'électricien',
+  menuisier: 'menuisier',
+  couvreur: 'couvreur',
+  zingueur: 'zingueur',
+  facadier: 'façadier',
+  platrier: 'plâtrier',
+  plombier: 'plombier',
+  climaticien: 'climaticien',
+  ramoneur: 'ramoneur',
+  'borne-recharge': 'borne de recharge',
+  'chauffe-eau-thermodynamique': 'chauffe-eau thermodynamique',
+}
+
 export default async function RgeGuideBlock({
   variant,
   serviceSlug,
@@ -65,10 +87,11 @@ export default async function RgeGuideBlock({
 
   const displayCities = topCities.slice(0, 8)
   const effectiveServiceSlug = variant === 'service' ? serviceSlug : undefined
+  const serviceNoun = serviceSlug ? SERVICE_NOUN[serviceSlug] : undefined
   const headingText =
     title ??
-    (variant === 'service' && qualificationLabel
-      ? `Artisans RGE ${qualificationLabel} près de chez vous`
+    (variant === 'service' && serviceNoun
+      ? `${serviceNoun.charAt(0).toUpperCase()}${serviceNoun.slice(1)} RGE certifié près de chez vous`
       : 'Artisans RGE certifiés près de chez vous')
 
   // JSON-LD ItemList des villes (si disponibles) pour aider l'indexation.
@@ -106,8 +129,8 @@ export default async function RgeGuideBlock({
               <p className="text-charcoal-700 leading-relaxed">
                 {'Plus de '}
                 <strong className="text-emerald-700">{formatCount(totalActive)}</strong>
-                {variant === 'service' && qualificationLabel
-                  ? ` artisans certifiés ${qualificationLabel} recensés dans notre annuaire, `
+                {variant === 'service' && serviceNoun
+                  ? ` ${serviceNoun}s RGE certifiés${qualificationLabel ? ` (${qualificationLabel})` : ''} recensés dans notre annuaire, `
                   : ' artisans RGE certifiés recensés dans notre annuaire, '}
                 {'issus du référentiel officiel '}
                 <a

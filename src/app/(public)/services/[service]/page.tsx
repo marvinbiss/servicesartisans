@@ -2,22 +2,10 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import {
-  MapPin,
-  ArrowRight,
-  Star,
-  Shield,
-  ChevronDown,
-  BadgeCheck,
-  Clock,
-  Wrench,
-  FileText,
-  BookOpen,
-} from 'lucide-react'
+import { ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock } from 'lucide-react'
 import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
-import SnippetBaitSummary from '@/components/seo/SnippetBaitSummary'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { isSeoUpgradeV2, currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
@@ -38,59 +26,28 @@ import {
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
 import { getHowToOverlay } from '@/lib/seo/deep-sections-howto-overlays'
-import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
-import DeepSectionsToc from '@/components/seo/DeepSectionsToc'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
-import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
-import {
-  services as staticServicesList,
-  villes,
-  departements,
-  getVillesByDepartement,
-  parsePopulation,
-} from '@/lib/data/france'
-import { getProblemsByService } from '@/lib/data/problems'
-import { getTradeContent } from '@/lib/data/trade-content'
-import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import { services as staticServicesList, villes, parsePopulation } from '@/lib/data/france'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
-import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import { getDynamicLastModifiedByService } from '@/lib/seo/dynamic-lastmod'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
-import SeasonalLinks from '@/components/seo/SeasonalLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
-import RelatedArticles from '@/components/seo/RelatedArticles'
-import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
-import DemandIndicator from '@/components/DemandIndicator'
-import TrustGuarantee from '@/components/TrustGuarantee'
-import RecentProviders from './RecentProviders'
-import LiveProviderCount from './LiveProviderCount'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
+import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { getDeepSections } from '@/lib/seo/trade-deep-sections'
+import { getTradeContent } from '@/lib/data/trade-content'
 import dynamic from 'next/dynamic'
 
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
-
 const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
-
-const FAQTracker = dynamic(() => import('@/components/FAQTracker'), { ssr: false })
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -109,8 +66,6 @@ interface ServiceProvider {
   stable_id?: string
   address_city?: string
   address_postal_code?: string
-  // Sprint N 2026-05-03 — exposés pour AggregateRating SEED interne. Le SELECT
-  // DB (PROVIDER_LIST_SELECT) les retourne déjà ; le type local était incomplet.
   rating_average?: number | string | null
   review_count?: number | null
   provider_locations?: Array<{
@@ -160,10 +115,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const tradeMeta = tradeContent[serviceSlug]
 
   const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
-  // Sprint 0.2 — pattern Sprint 2 : "{count} {svc} France · {priceMin}–{priceMax} {unit} · 2026"
-  // pour gagner du CTR. Truncate à 41 base : avec le template root
-  // "%s | ServicesArtisans" (+19) → final 60 chars, sous la limite Google.
-  // 2026-05-05 pivot full RGE — labels titres alignés "RGE certifiés"
   const titleTemplates = upgradeV2
     ? [
         tradeMeta && providerCount > 0
@@ -183,8 +134,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${serviceName} RGE : Tarifs 2026 + Devis Gratuit`,
         `${serviceName} 2026 — Artisans RGE certifiés en France`,
       ]
-  // Sprint 5 vague 4 — maxLen 41 → 60 pour récupérer les variants review-prefix
-  // riches sur les 46 hubs /services/[service]. 60 = limite Google SERP desktop.
   const title = selectFittingTitle(titleTemplates, titleHash, 60)
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
@@ -192,7 +141,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${serviceName} : ${countLabel} artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC). Tarifs, avis clients et devis gratuit sans engagement.`,
     `Comparez ${countLabel} ${svcLower}s RGE certifiés en France : tarifs, avis vérifiés, certifications RGE actives. Devis gratuit, réponse rapide.`,
     `Annuaire 100% ${svcLower}s RGE certifiés en France. Prix, avis clients, certifications ADEME. Devis gratuit en ligne sans engagement.`,
-    `${serviceName} dans ${departements.length} départements : ${countLabel} artisans RGE certifiés, tarifs indicatifs, avis vérifiés. Devis gratuit.`,
+    `${serviceName} : ${countLabel} artisans RGE certifiés, tarifs indicatifs, avis vérifiés. Devis gratuit en ligne.`,
     `${serviceName} France 2026 : comparez ${countLabel} artisans RGE certifiés. Prix, certifications RGE vérifiées, devis gratuit en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -231,7 +180,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 function getStaticCities() {
   return [...villes]
     .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-    .slice(0, 20)
+    .slice(0, 12)
     .map((v) => ({
       id: v.slug,
       name: v.name,
@@ -266,7 +215,6 @@ export default async function ServicePage({ params }: PageProps) {
   }
 
   let service: { name: string; slug: string; description?: string; category?: string } | null = null
-  let topCities: CityInfo[] = []
   let recentProviders: ServiceProvider[] = []
   let totalProviderCount = 0
   try {
@@ -306,31 +254,11 @@ export default async function ServicePage({ params }: PageProps) {
     return null
   })
 
-  // Always use static cities — faster, no DB latency, consistent 2267 cities
-  topCities = getStaticCities()
-
-  // Filter: only keep cities that exist in the validated villes array (2,280 cities)
-  // This prevents links to tiny communes that would show "Page non trouvée"
+  // Top 12 cities (static, validated, sorted by population)
   const validSlugs = new Set(villes.map((v) => v.slug))
-  topCities = topCities.filter((c) => validSlugs.has(c.slug))
+  const topCities: CityInfo[] = getStaticCities().filter((c) => validSlugs.has(c.slug))
 
-  // Limit to top 50 cities (already sorted by population from DB/static data)
-  const MAX_CITIES = 50
-  const totalCityCount = topCities.length
-  const limitedCities = topCities.slice(0, MAX_CITIES)
-
-  // Grouper les villes par région (sur les 50 top villes uniquement)
-  const citiesByRegion = limitedCities.reduce(
-    (acc: Record<string, CityInfo[]>, city: CityInfo) => {
-      const region = city.region_name || 'Autres'
-      if (!acc[region]) acc[region] = []
-      acc[region].push(city)
-      return acc
-    },
-    {} as Record<string, CityInfo[]>
-  )
-
-  // Trade-specific rich content (prices, FAQ, tips, certifications)
+  // Trade-specific rich content (prices, FAQ, certifications)
   const tradeBase = getTradeContent(serviceSlug)
   const cmsTradeOverride = await getTradeContentOverride(serviceSlug)
   const trade =
@@ -338,19 +266,18 @@ export default async function ServicePage({ params }: PageProps) {
       ? ({ ...tradeBase, ...cmsTradeOverride } as typeof tradeBase)
       : tradeBase
 
-  // H1 variation for SEO
+  // H1 variation for SEO — keyword-first
   const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))
   const h1Templates = [
-    `${service.name} en France`,
-    `${service.name} en France : annuaire et devis`,
-    `${service.name} — Annuaire national`,
-    `Artisans ${service.name.toLowerCase()} en France`,
-    `${service.name} : comparez les professionnels`,
+    `${service.name} RGE en France`,
+    `${service.name} RGE en France : annuaire et devis`,
+    `${service.name} RGE — Annuaire national`,
+    `Artisans ${service.name.toLowerCase()} RGE en France`,
+    `${service.name} RGE : comparez les artisans certifiés`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
-  // JSON-LD structured data (single Service schema with aggregateRating + review)
-
+  // ── JSON-LD structured data ────────────────────────────────────────────
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Services', url: '/services' },
@@ -358,7 +285,7 @@ export default async function ServicePage({ params }: PageProps) {
   ])
 
   const faqSchema = trade
-    ? getFAQSchema(trade.faq.map((f) => ({ question: f.q, answer: f.a })))
+    ? getFAQSchema(trade.faq.slice(0, 5).map((f) => ({ question: f.q, answer: f.a })))
     : null
 
   const speakableSchema = getSpeakableSchema({
@@ -366,13 +293,6 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
-  // Sprint N 2026-05-03 — AggregateRating SEED interne sur le hub /services/[s].
-  // Source : recentProviders (échantillon top 12, déjà fetché au-dessus).
-  // `buildAggregateRatingFromProviders` filtre les providers sans avis (Google rich
-  // snippet policy strict) et pondère par review_count → ratingValue + reviewCount
-  // numériques injectés directement en params du helper Schema.org existant.
-  // Pas de Google Places fallback ici : ce serait du listing-level cross-source
-  // qui viole la policy (cf. ArtisanSchema l. 209 : OK fiche, KO listing).
   const pageAggregateRating = buildAggregateRatingFromProviders(recentProviders)
 
   const pricingSchema = trade
@@ -393,17 +313,13 @@ export default async function ServicePage({ params }: PageProps) {
       })
     : null
 
-  // ItemList Schema.org — top 12 villes pour ce service. Augmente les
-  // chances d'émission d'un carrousel SERP sur les requêtes métier
-  // génériques ("plombier", "électricien"…). Les ListItem pointent vers
-  // les pages /services/[svc]/[ville] (liste d'artisans de la ville).
   const itemListSchema =
     topCities.length > 0
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: `${service.name} en France — top villes`,
-          description: `Top ${Math.min(topCities.length, 12)} villes françaises avec des ${service.name.toLowerCase()}s disponibles.`,
+          name: `${service.name} RGE en France — top villes`,
+          description: `Top ${Math.min(topCities.length, 12)} villes françaises avec des ${service.name.toLowerCase()}s RGE certifiés.`,
           url: `${SITE_URL}/services/${serviceSlug}`,
           numberOfItems: Math.min(topCities.length, 12),
           itemListElement: topCities.slice(0, 12).map((city, i) => ({
@@ -415,15 +331,9 @@ export default async function ServicePage({ params }: PageProps) {
         }
       : null
 
-  // Sprint 0.2 — Article + Speakable + dateModified : signal de fraîcheur
-  // pour les ranking factors et compatible Google Assistant. Image obligatoire
-  // (Article required field) → fallback service image.
   const upgradeV2 = isSeoUpgradeV2()
   const monthYear = currentMonthYearFr()
   const pageUrl = `${SITE_URL}/services/${serviceSlug}`
-  // Audit Sprint 0.2 : `dateModified` doit refléter une vraie date stable
-  // (lastModified DB) avec fallback sur le 1er du mois courant pour éviter
-  // la "fake freshness" si la DB ne retourne rien.
   const monthlyAnchor = monthlyAnchorIso()
   const dateModifiedIso = lastModified ?? monthlyAnchor
   const heroImage = getServiceImage(serviceSlug)
@@ -436,7 +346,7 @@ export default async function ServicePage({ params }: PageProps) {
     ? {
         '@context': 'https://schema.org',
         '@type': 'Article',
-        headline: `${service.name} en France — Guide ${monthYear}`,
+        headline: `${service.name} RGE en France — Guide ${monthYear}`,
         image: [articleImage],
         datePublished: '2026-01-01T00:00:00+02:00',
         dateModified: dateModifiedIso,
@@ -462,10 +372,8 @@ export default async function ServicePage({ params }: PageProps) {
       }
     : null
 
-  // Sprint F Ahrefs 2026-05-03 — TechArticle Schema pour les deep H2 sections.
-  // Émis seulement si le service a des deep sections (PAC/isolation/PV/borne-recharge).
-  // Permet à Google + AI Overviews + Bing de citer un sous-extrait précis via
-  // hasPart (WebPageElement avec cssSelector ancré sur #section-id).
+  // Deep sections (PAC, isolation, photovoltaïque, borne-recharge…) — kept but
+  // limited to the first 2 sections to slim the visible body, full schema kept.
   const deepSectionsForSchema = getDeepSections(serviceSlug)
   const deepSectionsTechArticleSchema = getDeepSectionsTechArticleSchema({
     pageUrl,
@@ -477,54 +385,30 @@ export default async function ServicePage({ params }: PageProps) {
     authorName: HUB_AUTHOR?.name || 'la rédaction ServicesArtisans',
     publisherName: 'ServicesArtisans',
   })
-  // Sprint H Ahrefs 2026-05-03 — FAQPage dérivé des deep H2 sections pour
-  // cibler People Also Ask + AI Overviews. Cohabite avec le FAQPage de la
-  // FAQ collapsible (mainEntity disjoints).
   const deepSectionsFAQSchema = getDeepSectionsFAQPageSchema({
     pageUrl,
     sections: deepSectionsForSchema,
   })
-  // Sprint G Ahrefs 2026-05-03 — HowTo Schemas pour les sections décisionnelles
-  // (comparatifs / "comment choisir"). Bing/DDG affichent step-by-step rich
-  // snippet, AI Overviews exploitent la structure procédurale.
   const deepSectionsHowToSchemas = getDeepSectionsHowToSchemas({
     pageUrl,
     sections: deepSectionsForSchema,
     overlayLookup: getHowToOverlay,
   })
-  // Sprint M Ahrefs 2026-05-03 — DefinedTermSet RGE glossary émis aussi sur les
-  // hubs canonical /services/[s] qui sont RGE-eligible (PAC, isolation,
-  // photovoltaïque, chauffagiste, électricien, etc.). Les sections deep
-  // mentionnent abondamment Qualibat 7141, QualiPAC, IRVE — émettre le
-  // vocabulaire ici permet à Google AI Overviews + Bing de citer la définition
-  // depuis ces pages aussi (vs RGE-only avant Sprint M).
   const isRgeEligibleService = isRgeAllowedService(serviceSlug)
-  // Sprint Z Ahrefs 2026-05-03 — sameAs vers /rge/glossaire (entité canonique
-  // Sprint O) consolide l'autorité topical des 4 hubs DefinedTermSet.
-  // Sprint AI Ahrefs 2026-05-03 — factor via `buildHubRgeGlossarySchema`.
   const servicesRgeGlossarySchema = isRgeEligibleService
     ? buildHubRgeGlossarySchema({ pageUrl, hubLabel: service.name })
     : null
 
-  // Sprint 0.2 — SnippetBaitSummary : tableau prix par métier en haut de page
-  // pour Featured Snippets. Limité à 10 métiers avec données tarifaires
-  // pour rester scannable.
-  const snippetTrades = upgradeV2
-    ? Object.values(tradeContent)
-        .filter((t) => t.priceRange?.min > 0 && t.priceRange?.max > 0)
-        .slice(0, 10)
-        .map((t) => ({
-          name: t.name,
-          slug: t.slug,
-          min: t.priceRange.min,
-          max: t.priceRange.max,
-          unit: t.priceRange.unit,
-        }))
-    : []
+  const visibleDeepSections = deepSectionsForSchema.slice(0, 2)
+  const relatedSlugs = (
+    relatedServices[serviceSlug] ||
+    popularServices.filter((s) => s.slug !== serviceSlug).map((s) => s.slug)
+  ).slice(0, 6)
 
   return (
     <div className="min-h-screen bg-sand-50">
-      {/* JSON-LD */}
+      {/* JSON-LD — schemas complets préservés (Article + FAQ + ItemList +
+          TechArticle + HowTo + RGE glossary + pricing). */}
       <JsonLd
         data={[
           breadcrumbSchema,
@@ -547,12 +431,11 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Hero — Premium gradient with charcoal + terracotta */}
+      {/* Hero — gardé compact, avec photo et stats clés */}
       <section className="relative bg-gradient-hero overflow-hidden">
-        {/* Service photo background */}
         <Image
-          src={getServiceImage(serviceSlug).src}
-          alt={getServiceImage(serviceSlug).alt}
+          src={heroImage.src}
+          alt={heroImage.alt}
           fill
           className="object-cover opacity-15"
           sizes="100vw"
@@ -561,24 +444,8 @@ export default async function ServicePage({ params }: PageProps) {
           blurDataURL={BLUR_PLACEHOLDER}
         />
         <div className="absolute inset-0 bg-charcoal-900/75" />
-        {/* Ambient glow — terracotta */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(232,107,75,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(61,139,104,0.06) 0%, transparent 50%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <h1
             data-speakable="true"
             className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight"
@@ -587,7 +454,7 @@ export default async function ServicePage({ params }: PageProps) {
           </h1>
           <p className="text-lg md:text-xl text-sand-400 max-w-3xl leading-relaxed">
             {service.description ||
-              `Trouvez des ${service.name.toLowerCase()}s qualifiés près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
+              `Comparez les ${service.name.toLowerCase()}s RGE certifiés près de chez vous : tarifs, avis vérifiés et devis gratuit en 24 h.`}
           </p>
           <LastUpdated
             label="Données artisans mises à jour le"
@@ -595,29 +462,12 @@ export default async function ServicePage({ params }: PageProps) {
             className="text-sand-500 mt-3"
           />
 
-          {/* Stats — Large gradient numbers
-              2026-05-05 pivot full RGE — totalProviderCount déjà RGE-only
-              (rgeOnly default true sur getProviderCountByService). */}
-          <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
+          <div className="flex flex-wrap gap-6 md:gap-10 mt-8">
             <div className="flex flex-col">
-              <LiveProviderCount
-                initialCount={totalProviderCount}
-                serviceSlug={serviceSlug}
-                className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra"
-              />
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra">
+                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '—'}
+              </span>
               <span className="text-sm text-sand-400 mt-1">artisans RGE certifiés</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
-                {villes.length.toLocaleString('fr-FR')}+
-              </span>
-              <span className="text-sm text-sand-400 mt-1">villes couvertes</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
-                100%
-              </span>
-              <span className="text-sm text-sand-400 mt-1">RGE certifiés</span>
             </div>
             {trade && (
               <div className="flex flex-col">
@@ -627,21 +477,26 @@ export default async function ServicePage({ params }: PageProps) {
                 <span className="text-sm text-sand-400 mt-1">{trade.priceRange.unit}</span>
               </div>
             )}
+            <div className="flex flex-col">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
+                100%
+              </span>
+              <span className="text-sm text-sand-400 mt-1">RGE certifiés</span>
+            </div>
           </div>
 
-          {/* Badges row */}
-          <div className="flex flex-wrap gap-3 mt-8">
+          <div className="flex flex-wrap gap-3 mt-6">
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Shield className="w-4 h-4 text-accent-400" />
-              <span className="text-sm text-sand-200 font-medium">Artisans RGE certifiés</span>
+              <Shield className="w-4 h-4 text-accent-400" aria-hidden="true" />
+              <span className="text-sm text-sand-200 font-medium">Vérifiés ADEME</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Star className="w-4 h-4 text-secondary-400" />
-              <span className="text-sm text-sand-200 font-medium">Qualité contrôlée</span>
+              <Star className="w-4 h-4 text-secondary-400" aria-hidden="true" />
+              <span className="text-sm text-sand-200 font-medium">Avis clients vérifiés</span>
             </div>
             {trade && (
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-                <Clock className="w-4 h-4 text-primary-300" />
+                <Clock className="w-4 h-4 text-primary-300" aria-hidden="true" />
                 <span className="text-sm text-sand-200 font-medium">
                   {trade.averageResponseTime.split(',')[0]}
                 </span>
@@ -649,35 +504,32 @@ export default async function ServicePage({ params }: PageProps) {
             )}
           </div>
 
-          {/* CTA */}
-          <div className="mt-10">
+          <div className="mt-8">
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+              aria-label={`Demander un devis ${service.name.toLowerCase()} gratuit`}
             >
-              Comparer les artisans près de chez moi
-              <ArrowRight className="w-5 h-5" />
+              Obtenir mon devis gratuit
+              <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Sprint 0.2 — byline E-E-A-T (visible si Article schema racine actif). */}
+      {/* Article byline E-E-A-T — visible si Article schema actif */}
       {upgradeV2 && articleSchema && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <ArticleMeta
-            author="Équipe éditoriale ServicesArtisans"
-            authorHref="/a-propos"
+            author={HUB_AUTHOR.name}
+            authorHref={`/equipe/${HUB_AUTHOR.slug}`}
             datePublished={monthlyAnchor}
             dateModified={dateModifiedIso}
           />
         </div>
       )}
 
-      {/* Sprint 0.2 — TL;DR : 4 réponses directes pour AI Overviews + Speakable
-          (cssSelector includes [data-speakable="true"]). Distinct de EnBrefBox :
-          ici on répond aux questions fréquentes (prix, documents, délai,
-          recommandation) — EnBrefBox restitue le résumé chiffré. */}
+      {/* TL;DR : 4 réponses directes pour AI Overviews + Speakable */}
       {upgradeV2 && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <TldrBlock
@@ -691,11 +543,11 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       )}
 
-      {/* Sprint 0.2 — En bref : Featured Snippets en haut de page. */}
+      {/* En bref : Featured Snippets en haut de page */}
       {upgradeV2 && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <EnBrefBox
-            summary={`${service.name} en France 2026 : ${countLabelForSummary(totalProviderCount)} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuits sous 24h${trade ? `, fourchette de prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}` : ''}.`}
+            summary={`${service.name} RGE en France 2026 : ${countLabelForSummary(totalProviderCount)} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuits sous 24h${trade ? `, fourchette de prix ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}` : ''}.`}
             keyPoints={buildEnBrefPoints({
               serviceName: service.name,
               providerCount: totalProviderCount,
@@ -706,171 +558,39 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       )}
 
-      {/* Sprint 0.2 — SnippetBaitSummary : tableau prix par métier
-          (Featured Snippets). Affiché uniquement sur le hub principal. */}
-      {upgradeV2 && snippetTrades.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <SnippetBaitSummary trades={snippetTrades} />
-        </div>
-      )}
-
-      <CrossIntentLinks service={serviceSlug} serviceName={service.name} currentIntent="services" />
-
-      {/* Speakable Answer Box */}
-      {trade && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-          <SpeakableAnswerBox
-            answer={`${trade.name} en France : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalProviderCount.toLocaleString('fr-FR')} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans ${villes.length.toLocaleString('fr-FR')}+ villes. Devis gratuit, données officielles ADEME.`}
-          />
-        </div>
-      )}
-
-      {/* Trust Guarantee */}
-      <section className="my-8">
+      {/* Top 12 villes — listing flat keyword-first (anchors "Service Ville") */}
+      <section className="py-10 bg-white border-t border-sand-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <TrustGuarantee variant="banner" />
-        </div>
-      </section>
-
-      {/* CTA Principal + Social Proof */}
-      <section className="my-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-4">
-            <DemandIndicator serviceSlug={serviceSlug} />
-          </div>
-          <SocialProofBanner metier={service.name} variant="card" />
-
-          <div className="mt-6 bg-gradient-primary rounded-2xl p-8 text-center">
-            <h2 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2">
-              Besoin d'un {service.name.toLowerCase()} ?
-            </h2>
-            <p className="text-primary-100 mb-6">Devis gratuit et sans engagement</p>
-            <Link
-              href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-sand-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-cta"
-            >
-              <FileText className="w-5 h-5" />
-              Comparer les artisans près de chez moi
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Top 20 villes — maillage interne SEO avec anchor texts optimisés */}
-      <TopCitiesGrid serviceSlug={serviceSlug} serviceName={service.name} intent="services" />
-
-      {/* Villes par région — liens complémentaires */}
-      {Object.keys(citiesByRegion).length > 0 && (
-        <section className="py-12 border-t border-sand-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 tracking-tight">
-              {service.name} par région
-            </h2>
-            <div className="space-y-8">
-              {Object.entries(citiesByRegion).map(([region, cities]) => (
-                <div key={region}>
-                  <h3 className="font-heading text-lg font-semibold text-charcoal-900 mb-4">
-                    {service.name} en {region}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {cities.map((city) => (
-                      <Link
-                        key={city.id}
-                        href={`/services/${serviceSlug}/${city.slug}`}
-                        className="text-sm bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 px-4 py-2.5 rounded-full transition-colors"
-                      >
-                        {city.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA "Voir toutes les villes" if there are more than 50 */}
-            {totalCityCount > MAX_CITIES && (
-              <div className="mt-8 text-center">
-                <Link
-                  href="/villes"
-                  className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Voir {service.name.toLowerCase()} dans toutes les villes ({totalCityCount})
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Par département — SEO internal links to service+ville pages */}
-      <section className="py-12 border-t border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 tracking-tight">
-            {service.name} par département
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
+            {service.name} RGE par ville
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departements
-              .map((dept) => ({ dept, villes: getVillesByDepartement(dept.code) }))
-              .filter(({ villes: v }) => v.length > 0)
-              .slice(0, 6)
-              .map(({ dept, villes: deptVilles }) => (
-                <div key={dept.code} className="bg-sand-50 rounded-xl p-5">
-                  <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">
-                    <Link
-                      href={`/departements/${dept.slug}`}
-                      className="hover:text-primary-500 transition-colors"
-                    >
-                      {dept.name} ({dept.code})
-                    </Link>
-                  </h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {deptVilles.slice(0, 3).map((ville) => (
-                      <Link
-                        key={ville.slug}
-                        href={`/services/${serviceSlug}/${ville.slug}`}
-                        className="text-xs text-charcoal-600 hover:text-primary-500 px-2.5 py-1 bg-white rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
-                      >
-                        {ville.name}
-                      </Link>
-                    ))}
-                    {deptVilles.length > 3 && (
-                      <Link
-                        href={`/departements/${dept.slug}`}
-                        className="text-xs text-primary-500 px-2.5 py-1"
-                      >
-                        +{deptVilles.length - 3} villes
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-4 text-sm">
-            <Link href="/departements" className="text-primary-500 hover:underline">
-              Tous les départements →
-            </Link>
-            <Link href="/regions" className="text-primary-500 hover:underline">
-              Toutes les régions →
-            </Link>
-            <Link href="/villes" className="text-primary-500 hover:underline">
-              Toutes les villes →
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" role="list">
+            {topCities.slice(0, 12).map((city) => (
+              <li key={city.id}>
+                <Link
+                  href={`/services/${serviceSlug}/${city.slug}`}
+                  className="flex items-center gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-xl border border-sand-200 hover:border-primary-200 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+                >
+                  <span className="font-medium">
+                    {service.name} {city.name}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6">
+            <Link
+              href="/villes"
+              className="text-sm text-primary-500 hover:text-primary-700 underline-offset-2 hover:underline"
+            >
+              Voir toutes les villes ({villes.length.toLocaleString('fr-FR')}) →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Recent providers — client component with fallback for NEXT_BUILD_SKIP_DB=1 */}
-      <RecentProviders
-        initialProviders={recentProviders}
-        serviceSlug={serviceSlug}
-        serviceName={service.name}
-      />
-
-      {/* RGE signal — seulement pour les métiers éligibles RGE.
-          Compte national + top villes + CTA vers /rge/[service]/[ville]. */}
-      {isRgeAllowedService(serviceSlug) && (
+      {/* RGE signal — uniquement pour les services RGE-eligible */}
+      {isRgeEligibleService && (
         <section className="py-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <RgeGuideBlock variant="service" serviceSlug={serviceSlug} />
@@ -878,157 +598,8 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Price Guide — unique per trade */}
-      {trade && (
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-soft">
-              <PriceTable
-                tasks={trade.commonTasks}
-                tradeName={service.name}
-                priceRange={trade.priceRange}
-              />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Tips + Certifications */}
-      {trade && (
-        <section className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Conseils pratiques */}
-              <div className="lg:col-span-2">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary-50 rounded-lg">
-                    <Shield className="w-6 h-6 text-primary-500" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-charcoal-900">
-                    Conseils pour choisir votre {service.name.toLowerCase()}
-                  </h2>
-                </div>
-                <div className="space-y-4">
-                  {trade.tips.map((tip, i) => (
-                    <div key={i} className="flex gap-3 p-4 bg-accent-50 rounded-lg">
-                      <BadgeCheck className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
-                      <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Certifications + Urgence */}
-              <div className="space-y-6">
-                <div className="bg-sand-50 rounded-xl p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <BadgeCheck className="w-5 h-5 text-green-600" />
-                    <h3 className="font-semibold text-charcoal-900">Certifications à vérifier</h3>
-                  </div>
-                  <ul className="space-y-2">
-                    {trade.certifications.map((cert, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-charcoal-700">
-                        <span className="text-green-500 mt-1">✓</span>
-                        {cert}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {trade.emergencyInfo && (
-                  <div className="bg-red-50 border border-red-100 rounded-xl p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Clock className="w-5 h-5 text-red-600" />
-                      <h3 className="font-semibold text-red-900">
-                        Urgence {service.name.toLowerCase()}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-red-800 leading-relaxed">{trade.emergencyInfo}</p>
-                  </div>
-                )}
-
-                <div className="bg-accent-50 rounded-xl p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Wrench className="w-5 h-5 text-primary-500" />
-                    <h3 className="font-semibold text-charcoal-900">Délai d'intervention</h3>
-                  </div>
-                  <p className="text-sm text-charcoal-700">{trade.averageResponseTime}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Questions fréquentes — PAA optimisé */}
-      {trade && (
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <h2 className="text-xl font-heading font-semibold text-charcoal-900">
-              Pourquoi faire appel à un {service.name.toLowerCase()} professionnel ?
-            </h2>
-            <p className="text-charcoal-700 leading-relaxed">
-              Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail
-              conforme aux normes en vigueur et couvert par une assurance décennale. Un artisan RGE
-              certifié dispose de l'expérience, de l'outillage adapté et des qualifications RGE
-              (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) nécessaires pour réaliser vos travaux en
-              toute sécurité et en éligibilité aux aides MaPrimeRénov' / CEE. De plus, recourir à un
-              artisan RGE certifié vous protège en cas de malfaçon.
-            </p>
-
-            <h2 className="text-xl font-heading font-semibold text-charcoal-900">
-              Quelles certifications doit avoir un {service.name.toLowerCase()} ?
-            </h2>
-            <p className="text-charcoal-700 leading-relaxed">
-              {trade.certifications.length > 0
-                ? `Un ${service.name.toLowerCase()} qualifié doit idéalement posséder les certifications suivantes : ${trade.certifications.slice(0, 3).join(', ')}. Ces labels garantissent un niveau de compétence reconnu et vous permettent, dans certains cas, de bénéficier d'aides financières de l'État.`
-                : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`}
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Deep H2 sections — variants KW haute volume (Action #3 Ahrefs 2026-05-03).
-          Cible : "pompe à chaleur air eau" 11K, "pompe à chaleur géothermique" 3.6K,
-          "isolation par l'extérieur" 13K, "isolant thermique" 8.2K. Visibles dès
-          rendu initial (vs FAQ collapsible) pour signal H2 fort. */}
-      {(() => {
-        const deepSections = getDeepSections(serviceSlug)
-        if (deepSections.length === 0) return null
-        return (
-          <section id="deep-sections" className="py-12 bg-white border-y border-sand-100">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Sprint N Ahrefs 2026-05-03 — ToC ancrée pour scan UX + signal SEO. */}
-              <DeepSectionsToc sections={deepSections} title={`Sommaire — ${service.name}`} />
-            </div>
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-              {deepSections.map((section) => (
-                <article key={section.id} id={section.id} className="scroll-mt-24">
-                  <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-5 tracking-tight">
-                    {section.h2}
-                  </h2>
-                  <div className="space-y-4">
-                    {section.body.map((paragraph, i) => (
-                      <p
-                        key={i}
-                        data-speakable={i === 0 ? 'true' : undefined}
-                        className="text-charcoal-700 leading-relaxed"
-                      >
-                        {/* Sprint L Ahrefs 2026-05-03 — auto-link RGE terms vers #term-<slug> */}
-                        {autoLinkRgeTerms(paragraph)}
-                      </p>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )
-      })()}
-
-      {/* Sprint K Ahrefs 2026-05-03 — Glossaire RGE visible (cohérence Schema/DOM).
-          Émis seulement si le service est RGE-eligible (cohérent avec Sprint M
-          qui n'émet le DefinedTermSet que dans ce cas). */}
+      {/* Glossaire RGE — câblage Sprint K/AI obligatoire (anti-régression).
+          Render gated par RGE-eligible (cohérence schema DefinedTermSet). */}
       {servicesRgeGlossarySchema && (
         <RgeGlossaryBlock
           title={`Glossaire RGE — ${service.name}`}
@@ -1036,27 +607,55 @@ export default async function ServicePage({ params }: PageProps) {
         />
       )}
 
-      {/* FAQ — rich content for SEO */}
+      {/* Deep sections (PAC / isolation / PV / borne) — 2 sections max
+          en visible, schema TechArticle reste complet pour AI Overviews. */}
+      {visibleDeepSections.length > 0 && (
+        <section id="deep-sections" className="py-12 bg-white border-y border-sand-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            {visibleDeepSections.map((section) => (
+              <article key={section.id} id={section.id} className="scroll-mt-24">
+                <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-4 tracking-tight">
+                  {section.h2}
+                </h2>
+                <div className="space-y-3">
+                  {section.body.slice(0, 2).map((paragraph, i) => (
+                    <p
+                      key={i}
+                      data-speakable={i === 0 ? 'true' : undefined}
+                      className="text-charcoal-700 leading-relaxed"
+                    >
+                      {autoLinkRgeTerms(paragraph)}
+                    </p>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* FAQ — 5 questions max (Schema FAQPage déjà émis) */}
       {trade && trade.faq.length > 0 && (
         <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-8">
-              <h2 className="text-2xl font-bold text-charcoal-900">
-                Questions fréquentes — {service.name}
-              </h2>
-            </div>
-            <div className="space-y-4">
-              {trade.faq.map((item, i) => (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-charcoal-900 mb-6">
+              Questions fréquentes — {service.name}
+            </h2>
+            <div className="space-y-3">
+              {trade.faq.slice(0, 5).map((item, i) => (
                 <details
                   key={i}
                   open={i === 0}
                   className="group bg-white rounded-xl shadow-soft border border-sand-200"
                 >
-                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                  <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
                     <h3 className="font-semibold text-charcoal-900 pr-4">{item.q}</h3>
-                    <ChevronDown className="w-5 h-5 text-primary-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                    <ChevronDown
+                      className="w-5 h-5 text-primary-400 group-open:rotate-180 transition-transform flex-shrink-0"
+                      aria-hidden="true"
+                    />
                   </summary>
-                  <div className="px-6 pb-6 pt-0">
+                  <div className="px-5 pb-5 pt-0">
                     <p className="text-charcoal-600 leading-relaxed">{item.a}</p>
                   </div>
                 </details>
@@ -1066,440 +665,74 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* Generic SEO Content — fallback when no trade content */}
-      {!trade && (
-        <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-soft">
-              <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4 tracking-tight">
-                Comment trouver un bon {service.name.toLowerCase()} ?
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p>
-                  Trouver un {service.name.toLowerCase()} de confiance peut sembler compliqué.
-                  ServicesArtisans vous simplifie la tâche en répertoriant des professionnels
-                  qualifiés et vérifiés dans votre région.
-                </p>
-                <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
-                <ul>
-                  <li>
-                    <strong>Les avis clients</strong> : Consultez les retours d'expérience des
-                    autres clients pour vous faire une idée de la qualité du travail.
-                  </li>
-                  <li>
-                    <strong>Les certifications</strong> : Vérifiez que l'artisan dispose des
-                    qualifications nécessaires pour réaliser vos travaux.
-                  </li>
-                  <li>
-                    <strong>La proximité</strong> : Un artisan proche de chez vous pourra intervenir
-                    plus rapidement et les frais de déplacement seront réduits.
-                  </li>
-                  <li>
-                    <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit avant de
-                    vous engager.
-                  </li>
-                </ul>
-              </div>
-            </div>
+      {/* Conseils succincts — gardés pour les services avec trade content */}
+      {trade && trade.tips.length > 0 && (
+        <section className="py-10 bg-white border-t border-sand-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-charcoal-900 mb-5">
+              Conseils pour choisir votre {service.name.toLowerCase()}
+            </h2>
+            <ul className="space-y-3" role="list">
+              {trade.tips.slice(0, 4).map((tip, i) => (
+                <li key={i} className="flex gap-3">
+                  <BadgeCheck
+                    className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                  <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
 
-      {/* Guides utiles — maillage interne vers guides */}
-      {(() => {
-        const serviceGuidesMap: Record<string, { slug: string; title: string }[]> = {
-          electricien: [
-            { slug: 'normes-electriques', title: 'Normes électriques NF C 15&nbsp;100' },
-            { slug: 'diagnostics-immobiliers', title: 'Diagnostics immobiliers obligatoires' },
-          ],
-          plombier: [
-            { slug: 'aides-renovation-2026', title: 'Aides rénovation 2026' },
-            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
-          ],
-          chauffagiste: [
-            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: "MaPrimeRénov' 2026" },
-            { slug: 'isolation-thermique', title: 'Guide isolation thermique' },
-          ],
-          couvreur: [
-            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
-            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
-          ],
-          menuisier: [
-            { slug: 'renovation-fenetres', title: 'Guide rénovation fenêtres' },
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-          ],
-          'peintre-en-batiment': [
-            {
-              slug: 'renovation-energetique-complete',
-              title: 'Guide rénovation énergétique complète',
-            },
-            { slug: 'budget-renovation', title: 'Budget rénovation : bien estimer ses coûts' },
-          ],
-          macon: [
-            { slug: 'extension-maison', title: 'Guide extension maison' },
-            { slug: 'permis-construire', title: 'Guide permis de construire' },
-          ],
-          'salle-de-bain': [
-            { slug: 'renovation-salle-de-bain', title: 'Guide rénovation salle de bain' },
-            { slug: 'renovation-cuisine', title: 'Guide rénovation cuisine' },
-          ],
-          climaticien: [
-            { slug: 'pompe-a-chaleur', title: 'Guide pompe à chaleur' },
-            { slug: 'maprimerenov-2026', title: "MaPrimeRénov' 2026" },
-          ],
-          charpentier: [
-            { slug: 'renovation-toiture', title: 'Guide rénovation toiture' },
-            { slug: 'isolation-combles', title: 'Guide isolation des combles' },
-          ],
-          // Pivot full RGE 2026-05-03 : carreleur/cuisiniste/vitrier/serrurier
-          // retirés (commodity hors RGE — middleware retourne 410 sur ces routes).
-        }
-        const guides = serviceGuidesMap[serviceSlug]
-        if (!guides || guides.length === 0) return null
-        return (
-          <section className="py-12 bg-white border-t">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-amber-600" />
-                </div>
-                <h2 className="text-xl font-bold text-charcoal-900">Guides utiles</h2>
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {guides.map((guide) => (
-                  <Link
-                    key={guide.slug}
-                    href={`/guides/${guide.slug}`}
-                    className="flex items-start gap-3 p-5 bg-sand-50 hover:bg-amber-50 rounded-xl border border-sand-200 hover:border-amber-300 transition-all group"
-                  >
-                    <BookOpen className="w-5 h-5 text-charcoal-400 group-hover:text-amber-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <span className="font-medium text-charcoal-900 group-hover:text-amber-600 text-sm">
-                        {guide.title}
-                      </span>
-                      <span className="block text-xs text-charcoal-500 mt-1">
-                        Lire le guide complet
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )
-      })()}
-
-      {/* Articles utiles — blog articles liés au service */}
-      <RelatedArticles serviceSlug={serviceSlug} />
-
-      {/* CTA — Devis gratuit (user-facing) */}
-      <section className="py-16">
+      {/* Voir aussi — services connexes (4-6 max) */}
+      <section className="py-10 bg-white border-t border-sand-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-charcoal-900 to-charcoal-800 rounded-2xl p-8 md:p-12 text-center text-white">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold mb-4">
-              Obtenir mon devis {service.name.toLowerCase()} gratuit
-            </h2>
-            <p className="text-sand-400 text-lg mb-8 max-w-2xl mx-auto">
-              Comparez les artisans RGE certifiés près de chez vous et recevez des devis
-              personnalisés, gratuits et sans engagement.
-            </p>
-            <Link
-              href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
-            >
-              Demander un devis gratuit
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+          <h2 className="text-xl font-bold text-charcoal-900 mb-5">Voir aussi</h2>
+          <ul className="flex flex-wrap gap-2" role="list">
+            {relatedSlugs.map((slug) => {
+              const svc = staticServicesList.find((s) => s.slug === slug)
+              if (!svc) return null
+              return (
+                <li key={slug}>
+                  <Link
+                    href={`/services/${slug}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+                  >
+                    {svc.name} RGE
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </section>
 
-      {/* CTA — Artisans (B2B) */}
-      <section className="relative py-16 overflow-hidden bg-gradient-hero">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(232,107,75,0.08) 0%, transparent 60%)',
-          }}
-        />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Vous êtes {service.name.toLowerCase()} ?
+      {/* CTA final — Devis gratuit */}
+      <section className="py-12 bg-gradient-to-b from-sand-50 to-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
+            Recevez vos devis gratuits {service.name.toLowerCase()}
           </h2>
-          <p className="text-sand-400 mb-8 max-w-xl mx-auto">
-            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
+          <p className="text-charcoal-600 mb-8">
+            Comparez les artisans RGE certifiés et obtenez jusqu'à 5 devis personnalisés sans
+            engagement.
           </p>
           <Link
-            href="/inscription-artisan"
-            className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            href={`/devis/${serviceSlug}`}
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
-            Créer mon profil
-            <ArrowRight className="w-5 h-5" />
+            Demander un devis gratuit
+            <ArrowRight className="w-5 h-5" aria-hidden="true" />
           </Link>
         </div>
       </section>
 
-      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-      <section className="mb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">
-              Méthodologie éditoriale
-            </h3>
-            <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les tarifs et informations présentés sont indicatifs, basés sur des moyennes
-              nationales et régionales. Les artisans sont RGE certifiés (Qualibat, Qualifelec,
-              QualiPAC, Qualit'EnR) et référencés via leur numéro SIREN, avec qualifications
-              vérifiées sur la base ADEME france-renov.gouv.fr. ServicesArtisans est un annuaire
-              indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-white border-t border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Confiance & Sécurité
-          </h2>
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link
-              href="/notre-processus-de-verification"
-              className="text-primary-500 hover:text-primary-700"
-            >
-              Comment nous référençons les artisans
-            </Link>
-            <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">
-              Notre politique des avis
-            </Link>
-            <Link href="/mediation" className="text-primary-500 hover:text-primary-700">
-              Service de médiation
-            </Link>
-          </nav>
-        </div>
-      </section>
-
-      {/* Voir aussi - Autres services */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
-            Voir aussi
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">Services connexes</h3>
-              <div className="flex flex-wrap gap-2">
-                {(
-                  relatedServices[serviceSlug] ||
-                  popularServices.filter((s) => s.slug !== serviceSlug).map((s) => s.slug)
-                )
-                  .slice(0, 6)
-                  .map((slug) => {
-                    const svc = staticServicesList.find((s) => s.slug === slug)
-                    if (!svc) return null
-                    return (
-                      <Link
-                        key={slug}
-                        href={`/services/${slug}`}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
-                      >
-                        {svc.name}
-                      </Link>
-                    )
-                  })}
-              </div>
-              <h3 className="font-semibold text-charcoal-900 mb-4 mt-6">Outils pratiques</h3>
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  href="/outils/calculateur-prix"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
-                >
-                  Calculateur de prix
-                </Link>
-                <Link
-                  href="/outils/diagnostic"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
-                >
-                  Diagnostic artisan
-                </Link>
-              </div>
-            </div>
-            <div>
-              <PopularCitiesLinks showTitle={true} limit={8} />
-            </div>
-            {/* Articles de blog liés à ce métier */}
-            {(() => {
-              const svcLower = service.name.toLowerCase()
-              const relatedArticles = allArticlesMeta
-                .filter(
-                  (a) =>
-                    a.tags.some(
-                      (tag) =>
-                        tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase())
-                    ) ||
-                    (a.category === 'Fiches métier' &&
-                      (a.title.toLowerCase().includes(svcLower) || a.slug.includes(serviceSlug)))
-                )
-                .slice(0, 4)
-              if (relatedArticles.length === 0) return null
-              return (
-                <div className="mt-8">
-                  <h3 className="font-semibold text-charcoal-900 mb-4">Articles sur ce métier</h3>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {relatedArticles.map((article) => (
-                      <Link
-                        key={article.slug}
-                        href={`/blog/${article.slug}`}
-                        className="flex items-start gap-3 p-4 bg-sand-50 hover:bg-accent-50 rounded-xl border border-sand-200 hover:border-primary-200 transition-colors group"
-                      >
-                        <span className="text-2xl flex-shrink-0">{article.image}</span>
-                        <div>
-                          <div className="font-medium text-charcoal-900 group-hover:text-primary-500 text-sm leading-snug">
-                            {article.title}
-                          </div>
-                          <div className="text-xs text-charcoal-500 mt-1">
-                            {article.readTime} · {article.category}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )
-            })()}
-          </div>
-          {/* Intent variants — devis, avis, tarifs by city */}
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">
-                Devis {service.name.toLowerCase()} par ville
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {topCities?.slice(0, 12).map((city) => (
-                  <Link
-                    key={`devis-${city.slug}`}
-                    href={`/services/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
-                  >
-                    {city.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">
-                Avis {service.name.toLowerCase()} par ville
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {topCities?.slice(0, 12).map((city) => (
-                  <Link
-                    key={`avis-${city.slug}`}
-                    href={`/avis/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
-                  >
-                    {city.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4">
-                Tarifs {service.name.toLowerCase()} par ville
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {topCities?.slice(0, 12).map((city) => (
-                  <Link
-                    key={`tarifs-${city.slug}`}
-                    href={`/services/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
-                  >
-                    {city.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problèmes courants liés à ce service — internal linking vers /problemes/ */}
-      {(() => {
-        const serviceProblems = getProblemsByService(serviceSlug)
-        if (serviceProblems.length === 0) return null
-        // Prioritize: primaryService first, then by urgency
-        const sorted = [...serviceProblems].sort((a, b) => {
-          const aP = a.primaryService === serviceSlug ? 1 : 0
-          const bP = b.primaryService === serviceSlug ? 1 : 0
-          if (aP !== bP) return bP - aP
-          const urg = { haute: 3, moyenne: 2, basse: 1 }
-          return (urg[b.urgencyLevel] || 0) - (urg[a.urgencyLevel] || 0)
-        })
-        const displayed = sorted.slice(0, 6)
-        const urgencyColors = {
-          haute: 'bg-red-50 border-red-200 hover:border-red-300',
-          moyenne: 'bg-amber-50 border-amber-200 hover:border-amber-300',
-          basse: 'bg-green-50 border-green-200 hover:border-green-300',
-        }
-        const urgencyDots = {
-          haute: 'bg-red-400',
-          moyenne: 'bg-amber-400',
-          basse: 'bg-green-400',
-        }
-        return (
-          <section className="py-10 bg-white border-t border-sand-100">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">
-                Problèmes courants — {service.name}
-              </h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {displayed.map((problem) => (
-                  <Link
-                    key={problem.slug}
-                    href={`/problemes/${problem.slug}`}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors ${urgencyColors[problem.urgencyLevel]}`}
-                  >
-                    <span
-                      className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${urgencyDots[problem.urgencyLevel]}`}
-                    />
-                    <span className="text-sm font-medium text-charcoal-800">{problem.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )
-      })()}
-
-      <InContentLinks
-        serviceSlug={serviceSlug}
-        serviceName={service.name}
-        currentIntent="services"
-      />
-
-      {/* TopicalClusterLinks — blog, guides, problemes du meme cluster */}
-      <TopicalClusterLinks
-        serviceSlug={serviceSlug}
-        serviceName={service.name}
-        currentPath={`/services/${serviceSlug}`}
-        maxLinks={10}
-      />
-
-      {/* DeepPageLinks — Hub mode (no city) */}
-      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
-
-      <SeasonalLinks currentService={serviceSlug} />
-
-      <OrphanRescueLinks currentPath={`/services/${serviceSlug}`} serviceSlug={serviceSlug} />
-
+      {/* Sticky mobile CTA + analytics invisibles */}
       <StickyMobileCTA serviceSlug={serviceSlug} />
-
-      <ExitIntentPopup />
-
       <MicroConversions pageType="service" serviceSlug={serviceSlug} />
-      <FAQTracker pageType="service" serviceSlug={serviceSlug} />
     </div>
   )
 }
