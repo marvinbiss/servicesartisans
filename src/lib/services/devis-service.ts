@@ -108,15 +108,20 @@ export { urgencyLabels }
 
 export async function checkDuplicate(
   supabase: ReturnType<typeof createAdminClient>,
-  email: string,
+  phone: string,
   serviceName: string,
   ville: string
 ): Promise<boolean> {
+  // Funnel fix 2026-05-05 : dedupe sur le téléphone (toujours requis),
+  // plus l'email (souvent vide ⇒ tous les anonymes matchaient `''` et
+  // déclenchaient un 409 invisible). Phone est la clé naturelle puisque
+  // le serveur la valide via Zod regex (E.164 français).
+  if (!phone) return false
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
   const { data: existing } = await supabase
     .from('devis_requests')
     .select('id')
-    .eq('client_email', email)
+    .eq('client_phone', phone)
     .eq('service_name', serviceName)
     .eq('city', ville)
     .gte('created_at', oneHourAgo)
@@ -151,12 +156,8 @@ export async function processDevis(
   const serviceName = resolveServiceName(data.service)
 
   // --- Duplicate check ---
-  const isDuplicate = await checkDuplicate(
-    supabase,
-    data.email || '',
-    serviceName,
-    data.ville || ''
-  )
+  // Phone est requis Zod-side, donc toujours présent ici.
+  const isDuplicate = await checkDuplicate(supabase, data.telephone, serviceName, data.ville || '')
   if (isDuplicate) {
     return { success: false, error: 'duplicate', code: 'duplicate' }
   }
@@ -314,22 +315,25 @@ async function syncWithPipedriveTimeout(leadId: string): Promise<void> {
     const message = err instanceof Error ? err.message : String(err)
     logger.error('Pipedrive sync error', err)
 
-    // Schedule un retry sous 5 min côté DB.
-    if (message.includes('timeout')) {
-      try {
-        const supabase = createAdminClient()
-        const nextRetryAt = new Date(Date.now() + 5 * 60 * 1000).toISOString()
-        await supabase
-          .from('devis_requests')
-          .update({
-            pipedrive_sync_error: message.slice(0, 500),
-            pipedrive_next_retry_at: nextRetryAt,
-          })
-          .eq('id', leadId)
-          .is('pipedrive_deal_id', null) // ne pas écraser si déjà sync
-      } catch (dbErr) {
-        logger.error('Pipedrive timeout DLQ enqueue failed', dbErr as Error, { leadId })
-      }
+    // Funnel fix 2026-05-05 : auparavant on ne planifiait le retry QUE
+    // sur les timeouts. Un 5xx Pipedrive, OAuth expiré ou custom-field
+    // manquant tombait dans le catch sans retry → lead orphelin côté CRM.
+    // Désormais on planifie pour TOUTE erreur, gardé par
+    // `pipedrive_deal_id IS NULL` pour ne pas écraser un sync réussi qui
+    // aurait écrit le deal_id avant le throw.
+    try {
+      const supabase = createAdminClient()
+      const nextRetryAt = new Date(Date.now() + 5 * 60 * 1000).toISOString()
+      await supabase
+        .from('devis_requests')
+        .update({
+          pipedrive_sync_error: message.slice(0, 500),
+          pipedrive_next_retry_at: nextRetryAt,
+        })
+        .eq('id', leadId)
+        .is('pipedrive_deal_id', null)
+    } catch (dbErr) {
+      logger.error('Pipedrive DLQ enqueue failed', dbErr as Error, { leadId })
     }
   } finally {
     if (timeoutHandle !== null) clearTimeout(timeoutHandle)

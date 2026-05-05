@@ -576,7 +576,7 @@ export default function DevisConfirmation({
           </p>
         </div>
         <p className={`text-charcoal-400 text-center ${compact ? 'text-[10px]' : 'text-xs'}`}>
-          Un SMS de confirmation a été envoyé au {maskedPhone}
+          Un conseiller vous rappellera au {maskedPhone}
         </p>
         <div
           className={`mt-4 bg-sand-50 border border-sand-200 rounded-xl p-4 ${compact ? 'text-xs' : 'text-sm'}`}

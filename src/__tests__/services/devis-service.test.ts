@@ -187,14 +187,14 @@ describe('checkDuplicate', () => {
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'jean@example.com',
+      '+33612345678',
       'Plombier',
       'Paris'
     )
 
     expect(result).toBe(true)
     expect(mockSupabaseFrom).toHaveBeenCalledWith('devis_requests')
-    expect(builder.eq).toHaveBeenCalledWith('client_email', 'jean@example.com')
+    expect(builder.eq).toHaveBeenCalledWith('client_phone', '+33612345678')
     expect(builder.eq).toHaveBeenCalledWith('service_name', 'Plombier')
     expect(builder.eq).toHaveBeenCalledWith('city', 'Paris')
   })
@@ -206,7 +206,7 @@ describe('checkDuplicate', () => {
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'jean@example.com',
+      '+33612345678',
       'Plombier',
       'Paris'
     )
@@ -221,7 +221,7 @@ describe('checkDuplicate', () => {
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'jean@example.com',
+      '+33612345678',
       'Plombier',
       'Paris'
     )
@@ -229,20 +229,20 @@ describe('checkDuplicate', () => {
     expect(result).toBe(false)
   })
 
-  it('returns false for different email', async () => {
+  it('returns false for different phone', async () => {
     const builder = createMockQueryBuilder()
     builder.limit = vi.fn().mockResolvedValue({ data: [] })
     mockSupabaseFrom.mockReturnValue(builder)
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'other@example.com',
+      '+33799999999',
       'Plombier',
       'Paris'
     )
 
     expect(result).toBe(false)
-    expect(builder.eq).toHaveBeenCalledWith('client_email', 'other@example.com')
+    expect(builder.eq).toHaveBeenCalledWith('client_phone', '+33799999999')
   })
 
   it('returns false for different service', async () => {
@@ -252,7 +252,7 @@ describe('checkDuplicate', () => {
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'jean@example.com',
+      '+33612345678',
       'Électricien',
       'Paris'
     )
@@ -268,7 +268,7 @@ describe('checkDuplicate', () => {
 
     const result = await checkDuplicate(
       mockSupabaseClient as never,
-      'jean@example.com',
+      '+33612345678',
       'Plombier',
       'Lyon'
     )
@@ -283,7 +283,7 @@ describe('checkDuplicate', () => {
     mockSupabaseFrom.mockReturnValue(builder)
 
     const before = Date.now()
-    await checkDuplicate(mockSupabaseClient as never, 'a@b.com', 'X', 'Y')
+    await checkDuplicate(mockSupabaseClient as never, '+33612345678', 'X', 'Y')
     const after = Date.now()
 
     const gteCall = builder.gte.mock.calls[0]
@@ -294,7 +294,7 @@ describe('checkDuplicate', () => {
     expect(timestamp).toBeLessThanOrEqual(after - 3600000 + 1000)
   })
 
-  it('handles empty email', async () => {
+  it('returns false early when phone is empty (no DB call)', async () => {
     const builder = createMockQueryBuilder()
     builder.limit = vi.fn().mockResolvedValue({ data: [] })
     mockSupabaseFrom.mockReturnValue(builder)
@@ -302,7 +302,9 @@ describe('checkDuplicate', () => {
     const result = await checkDuplicate(mockSupabaseClient as never, '', 'Plombier', 'Paris')
 
     expect(result).toBe(false)
-    expect(builder.eq).toHaveBeenCalledWith('client_email', '')
+    // Empty phone short-circuits — pas de query Supabase, pas de match accidentel
+    // sur tous les enregistrements à phone='' (cas anonyme).
+    expect(mockSupabaseFrom).not.toHaveBeenCalled()
   })
 })
 
@@ -914,7 +916,7 @@ describe('processDevis', () => {
 // ===========================================================================
 
 describe('edge cases', () => {
-  it('checkDuplicate handles empty string for all params', async () => {
+  it('checkDuplicate short-circuits on empty phone, even with empty service/city', async () => {
     const builder = createMockQueryBuilder()
     builder.limit = vi.fn().mockResolvedValue({ data: [] })
     mockSupabaseFrom.mockReturnValue(builder)
@@ -922,9 +924,8 @@ describe('edge cases', () => {
     const result = await checkDuplicate(mockSupabaseClient as never, '', '', '')
 
     expect(result).toBe(false)
-    expect(builder.eq).toHaveBeenCalledWith('client_email', '')
-    expect(builder.eq).toHaveBeenCalledWith('service_name', '')
-    expect(builder.eq).toHaveBeenCalledWith('city', '')
+    // Empty phone bypasse l'appel Supabase entièrement.
+    expect(mockSupabaseFrom).not.toHaveBeenCalled()
   })
 
   it('checkEmailRateLimit handles email with special characters', async () => {
