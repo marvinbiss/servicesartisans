@@ -28,10 +28,6 @@ import { villes, services } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import dynamic from 'next/dynamic'
 
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
@@ -533,7 +529,7 @@ export default async function UrgenceServicePage({
             d'urgence varient de +50% à +100%.
           </p>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-            {trade.commonTasks.map((task, i) => (
+            {trade.commonTasks.slice(0, 8).map((task, i) => (
               <div
                 key={i}
                 className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
@@ -814,22 +810,6 @@ export default async function UrgenceServicePage({
           </nav>
         </div>
       </section>
-
-      {/* Cross-intent links */}
-      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="urgence" />
-
-      {/* In-content contextual links */}
-      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="urgence" />
-
-      {/* Topical cluster links */}
-      <TopicalClusterLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        currentPath={`/urgence/${service}`}
-      />
-
-      {/* Deep page links */}
-      <DeepPageLinks currentService={service} currentIntent="urgence" skipCrossIntent />
 
       {/* Final CTA */}
       <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>

@@ -23,11 +23,8 @@ import {
   services,
 } from '@/lib/data/france'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
-import InContentLinks from '@/components/seo/InContentLinks'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -822,16 +819,6 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           const deptSlug = cityDeptCode ? getDepartementByCode(cityDeptCode)?.slug : undefined
           return (
             <>
-              <section className="mb-8">
-                <CrossIntentLinks
-                  service={proxyServiceSlug}
-                  serviceName={proxyServiceName}
-                  ville={villeSlug}
-                  villeName={villeName}
-                  currentIntent="services"
-                  variant="pills"
-                />
-              </section>
               <section className="mb-12">
                 <MaillageInterneBlock
                   serviceSlug={proxyServiceSlug}
@@ -843,28 +830,6 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                   regionName={ville?.region}
                   currentIntent="tarifs"
                   hasCEE={true}
-                />
-              </section>
-
-              {/* Sprint 2.1 densification — DeepPageLinks (services connexes + nearby cities) */}
-              <DeepPageLinks
-                currentService={proxyServiceSlug}
-                currentVille={villeSlug}
-                currentIntent="services"
-                skipCrossIntent={true}
-              />
-
-              {/* Sprint 2.1 — InContentLinks (5 liens contextuels in-paragraph) */}
-              <section className="mb-8 max-w-4xl mx-auto px-4 sm:px-6">
-                <InContentLinks
-                  serviceSlug={proxyServiceSlug}
-                  serviceName={proxyServiceName}
-                  villeSlug={villeSlug}
-                  villeName={villeName}
-                  currentIntent="tarifs"
-                  departement={ville?.departement}
-                  departementCode={ville?.departementCode}
-                  region={ville?.region}
                 />
               </section>
 

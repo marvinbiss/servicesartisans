@@ -45,11 +45,8 @@ import { getCityValues } from '@/lib/insee-resolver'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { getProblemsByService } from '@/lib/data/problems'
 import LastUpdated from '@/components/seo/LastUpdated'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import IntentNavBar from '@/components/seo/IntentNavBar'
 import RisquesGeoBlock from '@/components/seo/RisquesGeoBlock'
@@ -1753,32 +1750,6 @@ async function renderAvisServiceVillePage({
         villeSlug={villeSlug}
         villeName={villeData.name}
         intent="avis"
-      />
-
-      <InContentLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        villeSlug={villeSlug}
-        villeName={villeData.name}
-        currentIntent="avis"
-        departement={villeData.departement}
-        departementCode={villeData.departementCode}
-        region={villeData.region}
-      />
-
-      <CrossIntentLinks
-        service={service}
-        serviceName={trade.name}
-        ville={villeSlug}
-        villeName={villeData.name}
-        currentIntent="avis"
-      />
-
-      <DeepPageLinks
-        currentService={service}
-        currentVille={villeSlug}
-        currentIntent="avis"
-        skipCrossIntent
       />
 
       <ServiceIntentReroute

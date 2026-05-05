@@ -285,59 +285,55 @@ export default async function VillesIndexPage() {
         </div>
       </section>
 
-      {/* REGIONS — bloc accordion par région, design plus aéré */}
+      {/* REGIONS — top 12 villes par région, lien "voir toutes" vers /regions/[slug] */}
       <section className="bg-sand-50 pb-20 md:pb-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {sortedRegions.map(([region, regionVilles]) => {
             const regionId = slugifyRegion(region)
+            const top = regionVilles.slice(0, 12)
+            const regionSlug = regions.find((r) => r.name === region)?.slug
             return (
-              <details
+              <article
                 key={region}
                 id={`region-${regionId}`}
-                className="group rounded-3xl bg-white border border-sand-200 hover:border-sand-300 shadow-sm hover:shadow-md transition-all"
+                className="rounded-3xl bg-white border border-sand-200 hover:border-sand-300 shadow-sm hover:shadow-md transition-all p-6"
               >
-                <summary className="flex items-center gap-4 px-6 md:px-8 py-5 cursor-pointer list-none select-none">
+                <div className="flex items-center gap-3 mb-4">
                   <div
-                    className="w-11 h-11 rounded-2xl bg-accent-50 flex items-center justify-center shrink-0"
+                    className="w-10 h-10 rounded-2xl bg-accent-50 flex items-center justify-center shrink-0"
                     aria-hidden="true"
                   >
                     <Building2 className="w-5 h-5 text-accent-600" />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-heading text-base md:text-lg font-bold text-charcoal-900 tracking-tight truncate">
+                  <div className="min-w-0">
+                    <h3 className="font-heading text-base font-bold text-charcoal-900 tracking-tight truncate">
                       {region}
                     </h3>
-                    <p className="text-sm text-charcoal-500">
-                      {regionVilles.length} villes couvertes
-                    </p>
-                  </div>
-                  <ChevronRight
-                    className="w-5 h-5 text-charcoal-400 group-open:rotate-90 transition-transform"
-                    aria-hidden="true"
-                  />
-                </summary>
-                <div className="px-6 md:px-8 pb-6 pt-2">
-                  <div className="rounded-2xl bg-sand-50 border border-sand-200 p-5">
-                    <div className="flex flex-wrap gap-x-1 gap-y-1.5">
-                      {regionVilles.map((ville, i) => (
-                        <span key={ville.slug} className="inline-flex items-baseline">
-                          <Link
-                            href={`/villes/${ville.slug}`}
-                            className="text-sm text-charcoal-700 hover:text-primary-500 hover:underline transition-colors"
-                          >
-                            {ville.name}
-                          </Link>
-                          {i < regionVilles.length - 1 && (
-                            <span className="text-sand-400 mx-1.5" aria-hidden="true">
-                              ·
-                            </span>
-                          )}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="text-xs text-charcoal-500">{regionVilles.length} villes</p>
                   </div>
                 </div>
-              </details>
+                <ul className="space-y-1 mb-3">
+                  {top.map((ville) => (
+                    <li key={ville.slug}>
+                      <Link
+                        href={`/villes/${ville.slug}`}
+                        className="text-sm text-charcoal-700 hover:text-primary-500 hover:underline transition-colors"
+                      >
+                        {ville.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {regionSlug && (
+                  <Link
+                    href={`/regions/${regionSlug}`}
+                    className="inline-flex items-center gap-1.5 text-primary-500 hover:text-primary-600 text-sm font-semibold"
+                  >
+                    Voir les {regionVilles.length} villes
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </Link>
+                )}
+              </article>
             )
           })}
         </div>

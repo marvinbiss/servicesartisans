@@ -37,9 +37,6 @@ import {
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getServiceImageForContext } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { currentMonthYearFr } from '@/lib/seo/sprint-helpers'
@@ -881,18 +878,6 @@ export default async function DeptServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
-
-      <InContentLinks
-        serviceSlug={serviceSlug}
-        serviceName={trade.name}
-        currentIntent="services"
-        departementCode={dept.code}
-        region={dept.region}
-      />
-
-      <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
-
-      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

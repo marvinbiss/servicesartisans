@@ -27,10 +27,6 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { BAROMETRE_METIERS } from '@/lib/barometre/constants'
 import { departements } from '@/lib/data/france'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -283,7 +279,7 @@ export default async function AvisServicePage({
   ]
 
   const tradeFaqItems = trade.faq
-    .slice(0, trade.faq.length)
+    .slice()
     .sort((a, b) => {
       const ha = Math.abs(hashCode(`faq-sort-${service}-${a.q}`))
       const hb = Math.abs(hashCode(`faq-sort-${service}-${b.q}`))
@@ -1088,16 +1084,6 @@ export default async function AvisServicePage({
           </div>
         </section>
       )}
-
-      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="avis" />
-
-      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="avis" />
-      <TopicalClusterLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        currentPath={`/avis/${service}`}
-      />
-      <DeepPageLinks currentService={service} currentIntent="avis" skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

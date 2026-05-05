@@ -30,10 +30,6 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 
 export const revalidate = 86400
@@ -691,22 +687,6 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           </div>
         </div>
       </section>
-
-      <InContentLinks
-        serviceSlug={problem.primaryService}
-        serviceName={tradeName}
-        currentIntent="problemes"
-      />
-
-      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} />
-
-      <TopicalClusterLinks
-        serviceSlug={problem.primaryService}
-        serviceName={tradeName}
-        currentPath={`/problemes/${probleme}`}
-      />
-
-      <DeepPageLinks currentService={problem.primaryService} skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

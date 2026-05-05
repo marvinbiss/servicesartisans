@@ -8,7 +8,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
-import { villes, services } from '@/lib/data/france'
+import { services } from '@/lib/data/france'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -487,158 +487,28 @@ export default async function AvisPage() {
         </div>
       </section>
 
-      {/* ─── AVIS PAR VILLE ──────────────────────────────────── */}
+      {/* ─── AVIS PAR MÉTIER (slim — 12 services + lien vers /services) ─── */}
       <section className="py-16 bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3 tracking-tight">
-              Avis par ville
-            </h2>
-            <p className="text-charcoal-900 max-w-lg mx-auto">
-              Consultez les avis artisans dans les principales villes de France.
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {villes.slice(0, 20).map((ville) => (
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-6 text-center">
+            Avis par métier
+          </h2>
+          <div className="flex flex-wrap justify-center gap-2">
+            {services.slice(0, 12).map((s) => (
               <Link
-                key={ville.slug}
-                href={`/avis/plombier/${ville.slug}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-white border border-sand-300 rounded-full text-sm text-charcoal-700 hover:border-primary-300 hover:text-primary-500 hover:bg-primary-50 transition-all"
+                key={`avis-${s.slug}`}
+                href={`/avis/${s.slug}`}
+                className="text-sm text-charcoal-700 hover:text-primary-500 bg-white hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
               >
-                {ville.name}
+                Avis {s.name.toLowerCase()}
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── AVIS PAR MÉTIER × VILLE ─────────────────────────── */}
-      <section className="py-16 bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3 tracking-tight">
-              Avis par métier et ville
-            </h2>
-            <p className="text-charcoal-900 max-w-lg mx-auto">
-              Trouvez les avis d'artisans par spécialité dans votre ville.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.slice(0, 8).map((service) => (
-              <div key={service.slug} className="bg-sand-50 rounded-xl p-5">
-                <h3 className="font-semibold text-charcoal-900 mb-3">
-                  Avis {service.name.toLowerCase()}
-                </h3>
-                <div className="space-y-1.5">
-                  {villes.slice(0, 6).map((ville) => (
-                    <Link
-                      key={ville.slug}
-                      href={`/avis/${service.slug}/${ville.slug}`}
-                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                    >
-                      <ChevronRight className="w-3 h-3" /> {ville.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── VOIR AUSSI — LIENS TRANSVERSAUX ──────────────────── */}
-      <section className="py-16 bg-sand-50 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3 tracking-tight">
-              Voir aussi
-            </h2>
-            <p className="text-charcoal-900 max-w-lg mx-auto">
-              Explorez nos autres rubriques pour trouver l'artisan idéal.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Col 1: Devis */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4 text-lg">Devis artisans</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 8).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/devis/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Col 2: Tarifs */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4 text-lg">Tarifs artisans</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 8).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/tarifs/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Tarif {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Col 3: Urgence */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4 text-lg">Urgence artisans</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 8).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/urgence/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Urgence {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Col 4: Navigation */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-4 text-lg">Navigation</h3>
-              <div className="space-y-1.5">
-                <Link
-                  href="/services"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Tous les services
-                </Link>
-                <Link
-                  href="/villes"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Toutes les villes
-                </Link>
-                <Link
-                  href="/departements"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Tous les départements
-                </Link>
-                <Link
-                  href="/regions"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Toutes les régions
-                </Link>
-                <Link
-                  href="/blog"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Blog
-                </Link>
-              </div>
-            </div>
+            <Link
+              href="/services"
+              className="text-sm font-semibold text-primary-500 hover:text-primary-600 bg-primary-50 hover:bg-primary-100 border border-primary-200 px-3 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1"
+            >
+              Tous les métiers <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>

@@ -32,8 +32,6 @@ import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/se
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getServiceImageForContext } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import EnBrefBox from '@/components/seo/EnBrefBox'
@@ -776,10 +774,6 @@ export default async function RegionServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
-
-      <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
-
-      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
 
       {/* ─── STICKY MOBILE CTA + EXIT INTENT ────────────── */}
       <GeoPageCTA variant="sticky-only" service={serviceSlug} />

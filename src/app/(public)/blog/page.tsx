@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { allArticlesMeta, allCategories } from '@/lib/data/blog/articles-index'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import JsonLd from '@/components/JsonLd'
@@ -11,7 +11,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { allBlogTags } from '@/lib/data/blog/tags'
-import BlogPageClient from './BlogPageClient'
+import BlogNewsletter from './BlogNewsletter'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { ArticleMeta } from '@/components/ArticleMeta'
@@ -57,13 +57,7 @@ export const metadata: Metadata = {
   },
 }
 
-interface PageProps {
-  searchParams: Promise<{ tag?: string }>
-}
-
-export default async function BlogPage({ searchParams }: PageProps) {
-  const { tag } = await searchParams
-
+export default async function BlogPage() {
   const cmsPage = await getPageContent('blog', 'static')
 
   if (cmsPage?.content_html) {
@@ -161,19 +155,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
       answer:
         "Oui. Les fourchettes de prix sont mises à jour chaque année à partir des devis réels transmis par notre réseau d'artisans et croisées avec les données publiques (INSEE, CAPEB, FFB). Chaque guide prix précise les hypothèses retenues (métrés, gamme de matériaux, région, TVA).",
     },
-    {
-      question: 'Comment trouver un article sur un sujet précis ?',
-      answer:
-        'Vous pouvez filtrer par catégorie (Tarifs, Guides, Aides & Subventions, Rénovation, Fiches métier...) ou explorer par tag depuis la page blog. Un moteur de recherche interne permet aussi de retrouver un sujet par mot-clé.',
-    },
-    {
-      question: 'Puis-je citer un article ou reprendre un chiffre ?',
-      answer:
-        "Oui, la citation avec lien vers l'article source est autorisée et encouragée. Pour toute reprise intégrale (infographie, données d'étude), contactez notre service presse. Nos études propriétaires (baromètre, déserts artisanaux) sont publiées sous licence Creative Commons BY 4.0.",
-    },
   ])
 
-  // Category article counts for the cross-link section — top 8 by article count
   const categoryCounts = blogCategories
     .map((c) => ({
       ...c,
@@ -183,22 +166,19 @@ export default async function BlogPage({ searchParams }: PageProps) {
     .sort((a, b) => b.count - a.count)
     .slice(0, 8)
 
-  // First 12 articles for SSR — Google sees real content on first paint
   const SSR_COUNT = 12
   const ssrArticles = allArticlesMeta.slice(0, SSR_COUNT)
 
   const enBrefPoints = [
     `${allArticlesMeta.length}+ guides experts publiés`,
     `${blogCategories.length} catégories : tarifs, aides, fiches métier, rénovation`,
-    `${allBlogTags.length} tags pour explorer par sujet`,
     `Mis à jour mensuellement — sources INSEE, CAPEB, FFB, ANAH`,
   ]
 
   const tldrBullets = [
     `Le blog compte ${allArticlesMeta.length} articles vérifiés sur ${blogCategories.length} catégories.`,
-    `Les fourchettes de prix sont actualisées chaque année à partir de devis réels et de données publiques (INSEE, CAPEB, FFB).`,
-    `Les guides YMYL (aides, MaPrimeRénov', CEE) citent les sources gouvernementales et sont relus par des experts du bâtiment.`,
-    `Articles + études propriétaires sous licence Creative Commons BY 4.0 — citation autorisée.`,
+    `Fourchettes de prix actualisées chaque année — devis réels + INSEE, CAPEB, FFB.`,
+    `Articles + études propriétaires sous Creative Commons BY 4.0.`,
   ]
 
   const categoryColors: Record<string, string> = {
@@ -221,11 +201,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
     Budget: 'bg-orange-100 text-orange-700',
   }
 
+  const topTags = allBlogTags.slice(0, 30)
+
   return (
     <>
       <JsonLd data={[articleSchema, collectionSchema, breadcrumbSchema, faqSchema]} />
 
-      {/* Server-rendered hero with H1 — visible to crawlers */}
       <section className="relative bg-charcoal-950 text-white overflow-hidden">
         <div className="absolute inset-0">
           <div
@@ -233,14 +214,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
             style={{
               background:
                 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
-            }}
-          />
-          <div
-            className="absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-              backgroundSize: '64px 64px',
             }}
           />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
@@ -258,14 +231,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
               Blog & Actualités
             </h1>
             <p className="text-xl text-charcoal-400 max-w-2xl mx-auto">
-              Conseils, guides de prix et tendances pour vos projets de travaux. Par les experts de
-              ServicesArtisans.
+              Conseils, guides de prix et tendances pour vos projets de travaux.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Byline + En bref — E-E-A-T signal post-hero */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <ArticleMeta
@@ -279,9 +250,11 @@ export default async function BlogPage({ searchParams }: PageProps) {
         </div>
       </section>
 
-      {/* Server-rendered article grid — first 12 articles visible in HTML for SEO */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-8 border-l-4 border-primary-400 pl-4">
+            Derniers articles
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {ssrArticles.map((article, index) => {
               const badgeColor =
@@ -320,13 +293,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
                     </span>
                   </div>
                   <div className="p-6">
-                    <h2
+                    <h3
                       className={`font-bold text-charcoal-900 mb-2 group-hover:text-primary-500 transition-colors duration-200 ${
                         isFeatured ? 'text-2xl md:text-3xl font-heading' : 'text-lg'
                       }`}
                     >
                       {article.title}
-                    </h2>
+                    </h3>
                     <p
                       className={`text-charcoal-600 mb-4 ${isFeatured ? 'text-base max-w-3xl' : 'text-sm'}`}
                     >
@@ -360,10 +333,6 @@ export default async function BlogPage({ searchParams }: PageProps) {
         </div>
       </section>
 
-      {/* Client component for interactive features (filters, search, load more) */}
-      <BlogPageClient articles={allArticlesMeta} categories={allCategories} initialTag={tag} />
-
-      {/* Crawlable category links — server-rendered for SEO */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-charcoal-900 mb-8 border-l-4 border-primary-400 pl-4">
@@ -393,37 +362,22 @@ export default async function BlogPage({ searchParams }: PageProps) {
               )
             })}
           </div>
-          {blogCategories.length > 8 && (
-            <div className="text-center mt-6">
-              <p className="text-sm text-charcoal-500">
-                Et {blogCategories.length - 8} autres catégories disponibles via les filtres
-                ci-dessus.
-              </p>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* TL;DR — capture FS Position 0 / AI Overviews avant tag archive */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <TldrBlock bullets={tldrBullets} />
         </div>
       </section>
 
-      {/* Crawlable tag archive — server-rendered for SEO.
-          Linke chaque /blog/tag/[slug] pour sortir ces pages du
-          statut "orphan page" remonté par Ahrefs. */}
       <section className="py-12 bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-charcoal-900 mb-6 border-l-4 border-primary-400 pl-4">
-            Explorer par tag
+            Tags populaires
           </h2>
-          <p className="text-sm text-charcoal-500 mb-6">
-            {allBlogTags.length} tags — cliquez pour filtrer les articles.
-          </p>
           <div className="flex flex-wrap gap-2">
-            {allBlogTags.map((t) => (
+            {topTags.map((t) => (
               <Link
                 key={`tag-archive-${t.slug}`}
                 href={`/blog/tag/${t.slug}`}
@@ -436,6 +390,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
           </div>
         </div>
       </section>
+
+      <BlogNewsletter />
     </>
   )
 }

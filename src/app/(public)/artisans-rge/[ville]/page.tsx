@@ -24,11 +24,8 @@ import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { currentMonthYearFr, monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { villes, getVilleBySlug, getDepartementByCode } from '@/lib/data/france'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
-import InContentLinks from '@/components/seo/InContentLinks'
 import AEOAnswerBlock from '@/components/seo/AEOAnswerBlock'
 import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import ContexteDPEBlock from '@/components/seo/ContexteDPEBlock'
@@ -619,20 +616,6 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Sprint 2 maillage interne — câblage hub-spoke 5K URLs RGE ville */}
-      <section className="bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <CrossIntentLinks
-            service="renovation-energetique"
-            serviceName="Rénovation énergétique"
-            ville={ville.slug}
-            villeName={ville.name}
-            currentIntent="services"
-            variant="pills"
-          />
-        </div>
-      </section>
-
       <section className="bg-sand-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
           <MaillageInterneBlock
@@ -647,30 +630,6 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             regionName={ville.region}
             currentIntent="services"
             hasCEE={true}
-          />
-        </div>
-      </section>
-
-      {/* Sprint 2.1 densification — DeepPageLinks (services RGE connexes + nearby cities) */}
-      <DeepPageLinks
-        currentService="renovation-energetique"
-        currentVille={ville.slug}
-        currentIntent="services"
-        skipCrossIntent={true}
-      />
-
-      {/* Sprint 2.1 — InContentLinks (5 liens contextuels) */}
-      <section className="bg-white border-t">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-          <InContentLinks
-            serviceSlug="renovation-energetique"
-            serviceName="Rénovation énergétique"
-            villeSlug={ville.slug}
-            villeName={ville.name}
-            currentIntent="services"
-            departement={ville.departement}
-            departementCode={ville.departementCode}
-            region={ville.region}
           />
         </div>
       </section>

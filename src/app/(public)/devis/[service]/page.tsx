@@ -11,10 +11,6 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import DevisForm from '@/components/DevisForm'
@@ -327,7 +323,7 @@ export default async function DevisServicePage({
             Prestations courantes
           </h2>
           <div className="space-y-4">
-            {trade.commonTasks.map((task, i) => (
+            {trade.commonTasks.slice(0, 8).map((task, i) => (
               <div
                 key={i}
                 className="flex items-start gap-4 bg-sand-50 rounded-xl border border-sand-300 p-5 hover:bg-primary-50 hover:border-primary-200 transition-colors"
@@ -382,7 +378,7 @@ export default async function DevisServicePage({
             Questions fréquentes — Devis {trade.name}
           </h2>
           <div className="space-y-4">
-            {trade.faq.map((item, i) => (
+            {trade.faq.slice(0, 5).map((item, i) => (
               <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                   <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.q}</h3>
@@ -570,18 +566,6 @@ export default async function DevisServicePage({
           </nav>
         </div>
       </section>
-
-      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="devis" />
-
-      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="devis" />
-
-      <TopicalClusterLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        currentPath={`/devis/${service}`}
-      />
-
-      <DeepPageLinks currentService={service} currentIntent="devis" skipCrossIntent />
 
       <MoneyPageBoost currentService={service} />
 

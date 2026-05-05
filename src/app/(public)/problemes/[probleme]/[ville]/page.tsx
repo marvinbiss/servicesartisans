@@ -46,9 +46,6 @@ import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/commune-data'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getRegionPreposition } from '@/lib/geo-strings'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
 import { getReviewStatsByDept } from '@/lib/supabase'
 import dynamic from 'next/dynamic'
 
@@ -1375,25 +1372,6 @@ async function renderProblemeVillePage({
           </div>
         </div>
       </section>
-
-      <InContentLinks
-        serviceSlug={problem.primaryService}
-        serviceName={tradeName}
-        villeSlug={ville}
-        villeName={villeData.name}
-        currentIntent="problemes"
-        departementCode={villeData.departementCode}
-        region={villeData.region}
-      />
-
-      <CrossIntentLinks
-        service={problem.primaryService}
-        serviceName={tradeName}
-        ville={ville}
-        villeName={villeData.name}
-      />
-
-      <DeepPageLinks currentService={problem.primaryService} currentVille={ville} skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

@@ -26,7 +26,7 @@ import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { authors as personAuthors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { tradeContent, getTradesSlugs, slugifyTask } from '@/lib/data/trade-content'
+import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getDefaultAuthor } from '@/lib/data/team'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
@@ -40,11 +40,6 @@ import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import InContentLinks from '@/components/seo/InContentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
-import RelatedArticles from '@/components/seo/RelatedArticles'
-import TopicalClusterLinks from '@/components/seo/TopicalClusterLinks'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
 import dynamic from 'next/dynamic'
@@ -616,8 +611,6 @@ export default async function TarifsServicePage({
         </div>
       </section>
 
-      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="tarifs" />
-
       {/* Price range */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -687,44 +680,6 @@ export default async function TarifsServicePage({
         </div>
       </section>
 
-      {/* Liens vers les pages par travail et ville */}
-      <section className="py-16 bg-white border-t">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-2 text-center">
-            Prix détaillés par prestation et par ville
-          </h2>
-          <p className="text-charcoal-500 text-sm text-center mb-8">
-            Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes
-            de France.
-          </p>
-          {/* /tarifs/[s]/[v]/[task] supprimé 2026-04-29 (DELETE 410, stratégie
-              140K vague 1). On lie désormais vers /tarifs/[s]/[v] (parent qui
-              contient déjà le tableau complet des tâches). */}
-          <div className="space-y-6">
-            {trade.commonTasks.slice(0, 4).map((task) => {
-              const taskName = task.split(':')[0].trim()
-              const taskSlug = slugifyTask(taskName)
-              return (
-                <div key={taskSlug} className="bg-sand-50 rounded-xl border border-sand-300 p-5">
-                  <h3 className="font-semibold text-charcoal-900 text-sm mb-3">{taskName}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {topCities.slice(0, 4).map((ville) => (
-                      <Link
-                        key={ville.slug}
-                        href={`/services/${service}/${ville.slug}`}
-                        className="text-xs text-primary-600 hover:text-primary-700 hover:underline bg-white px-3 py-1.5 rounded-lg border border-sand-300 hover:border-primary-300 transition-colors"
-                      >
-                        Prix {taskName.toLowerCase()} à {ville.name} →
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Regional pricing */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -785,7 +740,7 @@ export default async function TarifsServicePage({
             Conseils pour choisir un {trade.name.toLowerCase()}
           </h2>
           <div className="space-y-4">
-            {trade.tips.map((tip, i) => (
+            {trade.tips.slice(0, 4).map((tip, i) => (
               <div
                 key={i}
                 className="flex items-start gap-4 bg-white rounded-xl border border-sand-300 p-5"
@@ -833,7 +788,7 @@ export default async function TarifsServicePage({
             Questions fréquentes — {trade.name}
           </h2>
           <div className="space-y-4">
-            {trade.faq.map((item, i) => (
+            {trade.faq.slice(0, 5).map((item, i) => (
               <details key={i} className="bg-white rounded-xl border border-sand-300 group">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                   <h3 className="text-base font-semibold text-charcoal-900 pr-4">{item.q}</h3>
@@ -947,107 +902,40 @@ export default async function TarifsServicePage({
         </div>
       </section>
 
-      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="tarifs" />
-
-      {/* Articles utiles — blog articles liés au service */}
-      <RelatedArticles serviceSlug={service} />
-
-      {/* Voir aussi */}
+      {/* Voir aussi — single nav bar */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">Voir aussi</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Ce service</h3>
-              <div className="space-y-2">
-                <Link
-                  href={`/services/${service}`}
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  {trade.name} — tous les artisans
-                </Link>
-                {trade.emergencyInfo && (
-                  <Link
-                    href={`/urgence/${service}`}
-                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                  >
-                    {trade.name} urgence
-                  </Link>
-                )}
-                {topCities.slice(0, 3).map((v) => (
-                  <Link
-                    key={v.slug}
-                    href={`/services/${service}/${v.slug}`}
-                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                  >
-                    {trade.name} à {v.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs associés</h3>
-              <div className="space-y-2">
-                {otherTrades.slice(0, 4).map((slug) => (
-                  <Link
-                    key={slug}
-                    href={`/tarifs/${slug}`}
-                    className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                  >
-                    Tarifs {tradeContent[slug].name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Informations utiles</h3>
-              <div className="space-y-2">
-                <Link
-                  href="/tarifs"
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  Guide complet des tarifs
-                </Link>
-                <Link
-                  href="/comment-ca-marche"
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  Comment ça marche
-                </Link>
-                <Link
-                  href="/devis"
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  Demander un devis
-                </Link>
-                <Link
-                  href="/faq"
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  FAQ
-                </Link>
-                <Link
-                  href="/notre-processus-de-verification"
-                  className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
-                >
-                  Processus de vérification
-                </Link>
-              </div>
-            </div>
-          </div>
+          <nav className="flex flex-wrap gap-2">
+            <Link
+              href={`/services/${service}`}
+              className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              {trade.name} — annuaire
+            </Link>
+            <Link
+              href={`/devis/${service}`}
+              className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              Devis {trade.name.toLowerCase()}
+            </Link>
+            {trade.emergencyInfo && (
+              <Link
+                href={`/urgence/${service}`}
+                className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                Urgence {trade.name.toLowerCase()}
+              </Link>
+            )}
+            <Link
+              href="/tarifs"
+              className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              Guide tarifs
+            </Link>
+          </nav>
         </div>
       </section>
-
-      {/* Maillage interne — cluster thematique */}
-      <TopicalClusterLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        currentPath={`/tarifs/${service}`}
-        maxLinks={10}
-      />
-
-      {/* Maillage interne — liens profonds service x ville */}
-      <DeepPageLinks currentService={service} currentIntent="tarifs" skipCrossIntent />
 
       {/* Trust */}
       <section className="py-8 bg-white border-t">

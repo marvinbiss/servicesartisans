@@ -11,7 +11,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Wrench,
-  ChevronRight,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -520,39 +519,6 @@ export default async function UrgencePage() {
         </div>
       </section>
 
-      {/* Emergency Services by City — Internal Links */}
-      <section className="py-16 bg-sand-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-charcoal-900 mb-8">
-            Services d'urgence par ville
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topEmergencyCities.slice(0, 6).map((ville) => (
-              <div key={ville.slug} className="bg-white rounded-xl border border-sand-300 p-5">
-                <h3 className="font-semibold text-charcoal-900 mb-3">Urgence à {ville.name}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {urgencyServices.map((service) => (
-                    <Link
-                      key={`${service.slug}-${ville.slug}`}
-                      href={`/urgence/${service.slug}/${ville.slug}`}
-                      className="text-sm text-charcoal-600 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors border border-sand-200"
-                    >
-                      {service.name.split(' ')[0]} à {ville.name}
-                    </Link>
-                  ))}
-                </div>
-                <Link
-                  href={`/villes/${ville.slug}`}
-                  className="inline-flex items-center gap-1 text-red-600 hover:text-red-700 text-sm font-medium mt-3"
-                >
-                  Tous les artisans <ArrowRight className="w-3 h-3" />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Trust & Guarantee Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -640,16 +606,14 @@ export default async function UrgencePage() {
         </div>
       </section>
 
-      {/* Section A0: Urgence par métier — all services hub link list */}
-      {/* Garantit un inlink pour chaque /urgence/[service] page
-          (sinon métiers hors top-4 restent orphans dans Ahrefs). */}
+      {/* Tous les métiers — single nav (limité aux 12 premiers, le reste via /services) */}
       <section className="py-12 border-t bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
-            Tous les métiers en dépannage d'urgence
+            Métiers en dépannage d'urgence
           </h2>
           <div className="flex flex-wrap gap-2">
-            {services.map((s) => (
+            {services.slice(0, 12).map((s) => (
               <Link
                 key={`urg-all-${s.slug}`}
                 href={`/urgence/${s.slug}`}
@@ -658,143 +622,12 @@ export default async function UrgencePage() {
                 Urgence {s.name.toLowerCase()}
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Section A: Urgence par métier et ville — Service×City matrix */}
-      <section className="py-12 border-t bg-sand-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">
-            Urgence par métier et ville
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.slice(0, 8).map((service) => (
-              <div key={service.slug}>
-                <h3 className="font-semibold text-charcoal-900 mb-3">
-                  Urgence {service.name.toLowerCase()}
-                </h3>
-                <div className="space-y-1.5">
-                  {villes.slice(0, 6).map((ville) => (
-                    <Link
-                      key={ville.slug}
-                      href={`/urgence/${service.slug}/${ville.slug}`}
-                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                    >
-                      <ChevronRight className="w-3 h-3" /> {ville.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Section B: Cross-intent "Voir aussi" */}
-      <section className="py-12 bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">Voir aussi</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Devis */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Demander un devis</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 10).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/devis/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Avis */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Avis clients</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 10).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/avis/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Avis {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Tarifs */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs artisans</h3>
-              <div className="space-y-1.5">
-                {services.slice(0, 10).map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/tarifs/${s.slug}`}
-                    className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                  >
-                    <ChevronRight className="w-3 h-3" /> Tarifs {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/* Navigation */}
-            <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Navigation</h3>
-              <div className="space-y-1.5">
-                <Link
-                  href="/services"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Tous les services
-                </Link>
-                <Link
-                  href="/villes"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Toutes les villes
-                </Link>
-                <Link
-                  href="/departements"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Tous les départements
-                </Link>
-                <Link
-                  href="/regions"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Toutes les régions
-                </Link>
-                <Link
-                  href="/blog"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Blog
-                </Link>
-                <Link
-                  href="/devis"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Demander un devis
-                </Link>
-                <Link
-                  href="/tarifs"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Tarifs artisans
-                </Link>
-                <Link
-                  href="/avis"
-                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-red-600 py-1 transition-colors"
-                >
-                  <ChevronRight className="w-3 h-3" /> Avis clients
-                </Link>
-              </div>
-            </div>
+            <Link
+              href="/services"
+              className="text-sm font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1"
+            >
+              Tous les métiers <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>

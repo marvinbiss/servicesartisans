@@ -43,7 +43,6 @@ import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getDeptPreposition, getDeptArticle } from '@/lib/geo-strings'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
@@ -1053,16 +1052,6 @@ export default async function DepartementPage({ params }: PageProps) {
           )}
         </div>
       </section>
-
-      {/* ─── CROSS-INTENT LINKS FOR TOP SERVICES ────────────── */}
-      {top5Services.slice(0, 3).map((svc) => (
-        <CrossIntentLinks
-          key={svc.slug}
-          service={svc.slug}
-          serviceName={svc.name}
-          currentIntent="services"
-        />
-      ))}
 
       <OrphanRescueLinks currentPath={`/departements/${deptSlug}`} serviceSlug={topServiceSlug} />
 

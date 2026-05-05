@@ -56,11 +56,8 @@ import FallbackProviders from '@/components/seo/FallbackProviders'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
-import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
-import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import ServiceIntentReroute from '@/components/seo/ServiceIntentReroute'
 import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
-import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import IntentNavBar from '@/components/seo/IntentNavBar'
@@ -1152,7 +1149,7 @@ async function renderUrgenceServiceVillePage({
             Prestations courantes
           </h3>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-            {trade.commonTasks.map((task, i) => (
+            {trade.commonTasks.slice(0, 8).map((task, i) => (
               <div
                 key={i}
                 className="flex items-start gap-3 bg-white rounded-xl border border-sand-300 p-4"
@@ -2037,32 +2034,6 @@ async function renderUrgenceServiceVillePage({
           </div>
         </div>
       </section>
-
-      <InContentLinks
-        serviceSlug={service}
-        serviceName={trade.name}
-        villeSlug={villeSlug}
-        villeName={villeData.name}
-        currentIntent="urgence"
-        departement={villeData.departement}
-        departementCode={villeData.departementCode}
-        region={villeData.region}
-      />
-
-      <CrossIntentLinks
-        service={service}
-        serviceName={trade.name}
-        ville={villeSlug}
-        villeName={villeData.name}
-        currentIntent="urgence"
-      />
-
-      <DeepPageLinks
-        currentService={service}
-        currentVille={villeSlug}
-        currentIntent="urgence"
-        skipCrossIntent
-      />
 
       <ServiceIntentReroute
         serviceSlug={service}
