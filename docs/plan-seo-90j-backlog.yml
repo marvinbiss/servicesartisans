@@ -517,6 +517,92 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-middleware-invariants
+    pillar: 3
+    title: Anti-régression invariants middleware Edge (gone-paths + timing-safe + CSP)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-middleware-invariants.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (security + perf lock-in)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:audit-10-agents-2026-04-25 + noindex-rge-migration + soft-404-bug
+    notes: >-
+      10 invariants middleware lock-in (Edge runtime 100% requests) :
+      (1) evaluateGonePath() en TÊTE de chaîne pour soft 404 Next.js 14.2
+      bug #69103 → 410 Gone sur 184K URLs DELETE strategy 140K. (2) lib
+      gone-paths.ts présent. (3) constantTimeEqual sur CRON_SECRET
+      (anti-timing audit 25/04 H1). (4) CSP sans unsafe-eval. (5)
+      frame-ancestors none. (6) Canonical redirect www→apex (sinon
+      /api/revalidate POST cassé). (7) LEGACY_REDIRECTS ≥3 entries.
+      (8) isSafeRedirectPath anti open-redirect. (9) matcher exclut
+      _next/static (perf). (10) rate limiter trio câblé. 100% pondéré
+      13.5/13.5. Régression critique = SEO meltdown OU key leak OU XSS.
+  - id: P3-indexnow-coverage
+    pillar: 3
+    title: Anti-régression pipeline IndexNow (cron + revalidate + webhook)
+    impact_clics_j_p50: 0
+    effort_hours: 1
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-indexnow-coverage.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (push indexation)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:rge-descriptions-2026-04-19 + noindex-rge-migration + internal-linking-rge-cee
+    notes: >-
+      Lock-in IndexNow flow critique (seul levier push face à 350K détectées
+      non indexées) : (a) src/lib/seo/indexnow.ts exporte submitToIndexNow +
+      3 helpers URL (Sprint V / CEE régionaux / provider affected), (b) cron
+      indexnow-submit appelle submitToIndexNow (batch quotidien depuis
+      services×villes×RGE×CEE), (c) /api/revalidate ping IndexNow après
+      revalidatePath, (d) webhook provider-seo-refresh utilise
+      submitUrlsWithRetry (qui wrappe submitToIndexNow), (e) INDEXNOW_API_KEY
+      déclarée env.ts, (f) clé servable /public/<hash>.txt. Coverage 100%
+      (9/9 pondéré). Régression = lag indexation +5 à +14j Bing/Yandex.
+  - id: P3-schema-cohesion
+    pillar: 3
+    title: Anti-régression cohésion Schema.org @context + inLanguage + isPartOf
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-schema-cohesion.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (technical SEO lock-in)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:seo-10agents-synthesis-2026-04-28 + Tiers 22-38
+    notes: >-
+      Lock-in cohésion Schema.org Booking-grade : (a) WebSite root function
+      avec @id #website, (b) Organization root avec @id #organization,
+      (c) zéro entité racine (Article/Service/FAQPage/HowTo/Product/
+      CollectionPage/LocalBusiness/GovernmentService/FinancialProduct/
+      NewsArticle/BlogPosting) sans inLanguage 'fr-FR' + isPartOf #website.
+      Heuristique : @type doit être PRÉCÉDÉ d'un @context schema.org pour
+      qualifier comme node racine (sub-components item:/itemListElement:/
+      mainEntity: filtrés). 56 fichiers scannés, 0 orphan, 100% pondéré.
+      Régression = ranking FR -5 à -15% sur SERP localisée + sitelinks
+      searchbox détaché.
   - id: P3-rls-pii-tables
     pillar: 3
     title: Anti-régression RLS sur 11 tables PII business-critical
