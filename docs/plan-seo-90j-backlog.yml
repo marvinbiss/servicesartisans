@@ -517,6 +517,64 @@ items:
       /api/simulateur/callback (callback-simulateur). Pipelines séparés : PIPEDRIVE_PIPELINE_ID vs
       PIPEDRIVE_PIPELINE_SIMULATEUR. DLQ retry cron par canal (pipedrive-retry + simulateur-pipedrive-retry). 8
       patterns. Régression = mélange funnels SLA → leads chauds traités froids OU vice-versa.
+  - id: P3-reviews-flywheel
+    pillar: 3
+    title: Anti-régression flywheel reviews (devis → invitation HMAC → review)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-reviews-flywheel.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (compounding trust signal)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:reviews-flywheel-2026-04-18 + ceo-strategy-2026-04-20
+    notes: >-
+      8 patterns flywheel reviews (CEO Pillar #2 compounding) : (1) mig 454
+      review_invitations présente, (2) colonnes critiques token_hash/
+      scheduled_at/sent_at/expires_at/devis_request_id, (3) SHA-256 +
+      randomBytes ≥32 (TOKEN_BYTES=32) — pas HMAC car plaintext est le
+      secret transmis email-only, (4) exports createInvitationToken +
+      hashInvitationToken, (5) helper invitations.ts crée pour devis,
+      (6) cron send-review-invitations existe, (7) page /invitation-avis/
+      [token] existe (renommée depuis donner-avis pour conflit slug Next.js),
+      (8) submit-invitation route verify via hashInvitationToken +
+      lookup token_hash. 100% pondéré 13.5/13.5. Régression = compounding
+      cassé, supply trust=0, conversion -25 à -40%.
+  - id: P3-rge-atomic-swap
+    pillar: 3
+    title: Anti-régression ADEME RGE atomic swap (P0 data integrity)
+    impact_clics_j_p50: 0
+    effort_hours: 2
+    blocked_by: []
+    human_required: false
+    dod: node scripts/audit-rge-atomic-swap.mjs --strict
+    status: completed
+    completed_at: "2026-05-05"
+    ahrefs:
+      kw_primary: n/a (data integrity sync)
+      volume_ahrefs: null
+      kd_ahrefs: null
+      cpc_ahrefs: null
+      cluster_pillar: 0
+      leader_rank: n/a
+      ahrefs_csv_source: memory:rge-integration + audit-architecture-2026-04-12 (P0 ADEME)
+    notes: >-
+      9 patterns lock-in pipeline ADEME RGE 165K lignes : (1) mig 413 présente,
+      (2) 3 RPC : rge_truncate_staging + rge_stage_rows + rge_apply_staging_atomic,
+      (3) SECURITY DEFINER + SET search_path = public, (4) RAISE EXCEPTION garde-fou
+      <10K rows (panne ADEME), (5) pas de COMMIT intermédiaire, (6) REVOKE PUBLIC +
+      GRANT service_role only, (7) aucune migration >413 ne DROP la fonction,
+      (8) src/lib/rge/sync.ts appelle truncate → stage → swap dans l'ordre des
+      .rpc() calls, (9) const ADEME_MIN_ROWS_FOR_CLEAR=50_000 défense en profondeur.
+      100% pondéré 14/14. Régression = 0 artisans /rge/[s]/[v] pendant 5-30 min OU
+      tout le parc RGE supprimé silencieusement si ADEME 502.
   - id: P3-middleware-invariants
     pillar: 3
     title: Anti-régression invariants middleware Edge (gone-paths + timing-safe + CSP)
