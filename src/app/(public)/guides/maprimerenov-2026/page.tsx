@@ -109,42 +109,42 @@ const faqItems = [
   {
     question: 'MaPrimeRénov est-elle accessible à tous ?',
     answer:
-      "Oui, depuis 2021, MaPrimeRénov est ouverte à tous les propriétaires, quels que soient leurs revenus. Cependant, le montant de l'aide varie selon la catégorie de revenus du foyer (très modestes, modestes, intermédiaires, supérieurs). Les propriétaires bailleurs sont également éligibles, dans la limite de 3 logements mis en location. Le logement doit être construit depuis au moins 15 ans (ou 2 ans pour un remplacement de chaudière fioul).",
+      'Oui, depuis 2021, MaPrimeRénov est ouverte à tous les propriétaires (occupants ou bailleurs, dans la limite de 3 logements). Le montant varie selon la catégorie de revenus du foyer. Le logement doit avoir 15 ans minimum (2 ans pour remplacement de chaudière fioul).',
   },
   {
     question: 'Faut-il un artisan RGE ?',
     answer:
-      "Oui, le recours à un artisan certifié RGE (Reconnu Garant de l'Environnement) est obligatoire pour bénéficier de MaPrimeRénov. Cette certification garantit les compétences de l'artisan en matière de rénovation énergétique. Vous pouvez vérifier la qualification RGE d'un artisan sur le site france-renov.gouv.fr ou sur ServicesArtisans. Attention : le devis doit être signé avec un artisan RGE AVANT le dépôt de votre dossier.",
+      "Oui, le recours à un artisan RGE certifié (Reconnu Garant de l'Environnement) est obligatoire. Le devis doit être signé avec l'artisan RGE AVANT le dépôt du dossier. Vérifiez la qualification sur france-renov.gouv.fr ou ServicesArtisans.",
   },
   {
     question: 'Peut-on isoler ses murs avec MaPrimeRénov en 2026 ?',
     answer:
-      "Depuis le 1er janvier 2025, les travaux d'isolation seuls (murs, toiture, plancher) ne sont plus éligibles au parcours par geste de MaPrimeRénov. L'isolation reste cependant finançable dans le cadre du parcours accompagné (rénovation globale avec un gain minimum de 2 classes DPE). Cette mesure vise à encourager les rénovations d'ampleur plutôt que les gestes isolés. Les Certificats d'Économie d'Énergie (CEE) restent disponibles pour financer l'isolation seule.",
+      "Depuis le 1er janvier 2025, l'isolation seule (murs, toiture, plancher) n'est plus éligible au parcours par geste. Elle reste finançable via le parcours accompagné (gain ≥ 2 classes DPE). Les CEE restent disponibles pour l'isolation seule.",
   },
   {
     question: 'Quel est le délai pour recevoir la prime ?',
     answer:
-      "Le délai moyen pour recevoir MaPrimeRénov est de 4 à 6 mois après la fin des travaux. Ce délai comprend : l'instruction du dossier (environ 1 mois), la réalisation des travaux, puis le versement après envoi de la facture. Pour le parcours accompagné, une avance de 70 % peut être accordée aux ménages très modestes. Le virement est effectué directement sur votre compte bancaire par l'ANAH.",
+      "4 à 6 mois en moyenne après la fin des travaux : 1 mois d'instruction, puis versement après envoi de la facture. Une avance de 70 % est possible pour les ménages très modestes en parcours accompagné. Virement direct par l'ANAH.",
   },
   {
     question: 'Peut-on cumuler MaPrimeRénov avec les CEE ?',
     answer:
-      "Oui, MaPrimeRénov est cumulable avec les Certificats d'Économie d'Énergie (CEE), aussi appelés « prime énergie ». Ce cumul permet de couvrir une part encore plus importante du coût des travaux. MaPrimeRénov est également cumulable avec l'éco-prêt à taux zéro (éco-PTZ), la TVA réduite à 5,5 %, les aides des collectivités locales et le chèque énergie. En revanche, le montant total des aides ne peut pas dépasser 100 % du coût des travaux.",
+      "Oui. MaPrimeRénov est cumulable avec les CEE (« prime énergie »), l'éco-PTZ, la TVA à 5,5 %, les aides locales et le chèque énergie. Plafond : le total des aides ne peut dépasser 100 % du coût des travaux.",
   },
   {
     question: 'MaPrimeRénov est-elle disponible pour les copropriétés ?',
     answer:
-      "Oui, MaPrimeRénov Copropriétés permet de financer les travaux de rénovation énergétique des parties communes. L'aide est versée directement au syndicat de copropriétaires. Elle peut couvrir jusqu'à 25 % du montant des travaux HT, avec un plafond de 25 000 € par logement. Un gain énergétique d'au moins 35 % est requis. Un bonus de 10 % est accordé pour les copropriétés « fragiles » ou en difficulté.",
+      "Oui via MaPrimeRénov Copropriétés : jusqu'à 25 % des travaux HT, plafond 25 000 € par logement, gain énergétique ≥ 35 % requis. Bonus +10 % pour copropriétés fragiles. Aide versée au syndicat.",
   },
   {
     question: 'Que faire si mon DPE est F ou G ?',
     answer:
-      "Si votre logement est classé F ou G au DPE (passoire thermique), vous bénéficiez de conditions avantageuses. Depuis 2023, les logements F et G ont l'obligation de rénover pour pouvoir être loués. Le parcours accompagné de MaPrimeRénov offre un bonus « sortie de passoire » de +10 % pour atteindre au minimum la classe D. Les ménages très modestes peuvent ainsi obtenir jusqu'à 90 % de financement. L'audit énergétique est obligatoire avant la vente d'un logement F ou G.",
+      "Le parcours accompagné offre un bonus « sortie de passoire » de +10 % pour atteindre la classe D minimum. Les ménages très modestes peuvent ainsi atteindre 90 % de financement. Audit énergétique obligatoire avant la vente d'un logement F ou G.",
   },
   {
     question: 'Comment trouver un artisan RGE près de chez moi ?',
     answer:
-      "Pour trouver un artisan RGE certifié, vous pouvez utiliser l'annuaire ServicesArtisans qui référence des milliers d'artisans RGE certifiés dans toute la France. Vous pouvez également consulter l'annuaire officiel sur france-renov.gouv.fr. Pensez à demander plusieurs devis (au moins 3) pour comparer les offres. Vérifiez que la mention RGE figure bien sur le devis et que la certification est en cours de validité pour le type de travaux envisagé.",
+      'Annuaire ServicesArtisans ou site officiel france-renov.gouv.fr. Demandez 3 devis minimum, vérifiez que la mention RGE figure sur le devis et que la certification est valide pour le type de travaux envisagé.',
   },
 ]
 
@@ -342,43 +342,37 @@ const etapesDemande = [
   {
     numero: 1,
     title: 'Vérifier votre éligibilité',
-    description:
-      'Utilisez le simulateur sur maprimerenov.gouv.fr pour connaître vos droits selon vos revenus et votre projet.',
+    description: 'Simulateur sur maprimerenov.gouv.fr selon revenus et projet.',
     icon: Search,
   },
   {
     numero: 2,
     title: 'Trouver un artisan RGE',
-    description:
-      'Recherchez un professionnel certifié RGE sur ServicesArtisans ou sur france-renov.gouv.fr.',
+    description: 'ServicesArtisans ou france-renov.gouv.fr.',
     icon: UserCheck,
   },
   {
     numero: 3,
     title: 'Créer un compte',
-    description:
-      'Inscrivez-vous sur maprimerenov.gouv.fr avec votre numéro fiscal et vos informations personnelles.',
+    description: 'Inscription sur maprimerenov.gouv.fr avec numéro fiscal.',
     icon: ClipboardList,
   },
   {
     numero: 4,
     title: 'Obtenir des devis',
-    description:
-      "Demandez au minimum 2 à 3 devis détaillés. Le devis doit mentionner la certification RGE de l'artisan.",
+    description: '2 à 3 devis minimum, mention RGE obligatoire sur chaque devis.',
     icon: FileText,
   },
   {
     numero: 5,
     title: 'Déposer le dossier AVANT les travaux',
-    description:
-      "Soumettez votre demande en ligne avec les devis. Attendez l'accord de l'ANAH avant de commencer les travaux.",
+    description: "Soumission en ligne, attendre l'accord ANAH avant de commencer.",
     icon: Hammer,
   },
   {
     numero: 6,
-    title: 'Réaliser les travaux et envoyer la facture',
-    description:
-      'Une fois les travaux terminés, téléversez la facture sur votre espace. Le versement intervient sous 4 à 6 mois.',
+    title: 'Travaux puis facture',
+    description: 'Téléversement de la facture après travaux. Versement sous 4-6 mois.',
     icon: Receipt,
   },
 ]
@@ -386,32 +380,27 @@ const etapesDemande = [
 const aidesCumulables = [
   {
     title: "CEE (Certificats d'Économie d'Énergie)",
-    description:
-      "Prime versée par les fournisseurs d'énergie. Cumulable avec MaPrimeRénov pour réduire davantage le reste à charge.",
+    description: "Prime versée par les fournisseurs d'énergie, cumulable avec MaPrimeRénov.",
     icon: Zap,
   },
   {
     title: 'Éco-PTZ (prêt à taux zéro)',
-    description:
-      "Jusqu'à 50 000 € de prêt sans intérêt pour financer le reste à charge de vos travaux de rénovation.",
+    description: "Jusqu'à 50 000 € sans intérêt pour le reste à charge.",
     icon: PiggyBank,
   },
   {
     title: 'TVA réduite 5,5 %',
-    description:
-      "Taux réduit automatiquement appliqué par l'artisan pour les travaux d'amélioration énergétique.",
+    description: "Appliquée automatiquement par l'artisan sur les travaux énergétiques.",
     icon: BadgePercent,
   },
   {
     title: 'Aides locales',
-    description:
-      "Régions, départements et communes proposent souvent des aides complémentaires. Consultez votre mairie ou l'ADIL.",
+    description: "Régions, départements, communes. Vérifier auprès de l'ADIL.",
     icon: Landmark,
   },
   {
     title: 'Chèque énergie',
-    description:
-      'Aide annuelle de 48 à 277 € pour les ménages modestes, utilisable pour payer les travaux de rénovation.',
+    description: 'Aide annuelle de 48 à 277 € pour les ménages modestes.',
     icon: CreditCard,
   },
 ]
@@ -543,9 +532,7 @@ export default function MaPrimeRenov2026Page() {
             <p className="mt-4 text-xl text-charcoal-600 max-w-3xl">
               {"Jusqu'à "}
               <span className="font-semibold text-green-700">90 % de vos travaux financés</span>
-              {
-                '. Découvrez les montants, conditions et démarches pour obtenir MaPrimeRénov en 2026.'
-              }
+              {'. Montants, barèmes et démarches MaPrimeRénov 2026.'}
             </p>
           </div>
         </div>
@@ -597,19 +584,9 @@ export default function MaPrimeRenov2026Page() {
               {"Qu'est-ce que MaPrimeRénov' ?"}
             </h2>
             <div className="bg-white rounded-xl border border-sand-300 p-6 md:p-8">
-              <p className="text-charcoal-700 leading-relaxed mb-4">
-                {
-                  "MaPrimeRénov' est la principale aide de l'État français pour la rénovation énergétique des logements. Gérée par l'Agence nationale de l'habitat (ANAH), elle a remplacé le crédit d'impôt pour la transition énergétique (CITE) et les aides « Habiter Mieux » de l'ANAH depuis le 1er janvier 2020."
-                }
-              </p>
-              <p className="text-charcoal-700 leading-relaxed mb-4">
-                {
-                  "En 2026, MaPrimeRénov' poursuit sa montée en puissance avec deux parcours distincts : le parcours accompagné pour les rénovations globales, et le parcours par geste pour les interventions ciblées sur le chauffage, l'eau chaude et la ventilation. L'objectif est d'accélérer la rénovation du parc immobilier français et de lutter contre les passoires thermiques (logements classés F et G au DPE)."
-                }
-              </p>
               <p className="text-charcoal-700 leading-relaxed">
                 {
-                  "Tous les propriétaires sont éligibles, qu'ils soient occupants ou bailleurs, sans condition de revenus pour certains travaux. Le montant de l'aide varie en fonction de la catégorie de revenus du foyer, du type de travaux et du parcours choisi."
+                  "MaPrimeRénov' est l'aide principale de l'État pour la rénovation énergétique des logements, gérée par l'ANAH depuis 2020 (en remplacement du CITE et des aides « Habiter Mieux »). En 2026, elle propose deux parcours : accompagné (rénovation globale, gain ≥ 2 classes DPE) et par geste (chauffage, eau chaude, ventilation). Tous les propriétaires sont éligibles — occupants ou bailleurs — avec un montant variable selon revenus, travaux et parcours."
                 }
               </p>
             </div>
@@ -622,7 +599,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "MaPrimeRénov' 2026 propose deux parcours distincts selon l'ampleur du projet : le parcours accompagné, conçu pour les rénovations globales avec un gain minimum de 2 classes DPE et un accompagnateur Rénov' (MAR) obligatoire, et le parcours par geste, destiné aux interventions ciblées sur le chauffage, l'eau chaude sanitaire et la ventilation. Depuis 2025, l'isolation seule n'est plus éligible au parcours par geste."
+                "Deux parcours selon l'ampleur du projet. Depuis 2025, l'isolation seule n'est plus éligible au parcours par geste."
               }
             </p>
 
@@ -638,17 +615,6 @@ export default function MaPrimeRenov2026Page() {
                 </div>
               </div>
 
-              <div className="bg-green-50 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-2">
-                  <Info className="w-5 h-5 text-green-700 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-green-800">
-                    {
-                      "Le parcours accompagné est le plus avantageux. Il permet de financer l'ensemble des travaux de rénovation (isolation, chauffage, ventilation, fenêtres) en une seule opération avec un accompagnateur Rénov' (MAR) obligatoire."
-                    }
-                  </p>
-                </div>
-              </div>
-
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start gap-2 text-charcoal-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -656,7 +622,7 @@ export default function MaPrimeRenov2026Page() {
                 </li>
                 <li className="flex items-start gap-2 text-charcoal-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>Accompagnateur Rénov' (MAR) obligatoire</span>
+                  <span>Accompagnateur Rénov&apos; (MAR) obligatoire</span>
                 </li>
                 <li className="flex items-start gap-2 text-charcoal-700">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -710,9 +676,8 @@ export default function MaPrimeRenov2026Page() {
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-amber-800">
-                    <strong>Bonus sortie de passoire :</strong> +10 % supplémentaires si le logement
-                    passe de F ou G à au minimum la classe D. Les ménages très modestes peuvent
-                    ainsi atteindre 90 % de financement.
+                    <strong>Bonus sortie de passoire :</strong> +10 % si passage de F/G à classe D
+                    minimum. Très modestes : jusqu&apos;à 90 % de financement.
                   </p>
                 </div>
               </div>
@@ -734,18 +699,16 @@ export default function MaPrimeRenov2026Page() {
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-red-800">
-                    <strong>Changement majeur depuis 2025 :</strong>{' '}
+                    <strong>Depuis 2025 :</strong>{' '}
                     {
-                      "l'isolation seule (murs, toiture, plancher) n'est plus éligible au parcours par geste. Seuls les travaux de chauffage, eau chaude sanitaire et ventilation sont concernés."
+                      'isolation seule (murs, toiture, plancher) plus éligible au parcours par geste. Seuls chauffage, eau chaude et ventilation sont concernés.'
                     }
                   </p>
                 </div>
               </div>
 
               <p className="text-charcoal-700 mb-6">
-                {
-                  "Le parcours par geste permet de financer un équipement spécifique via des montants forfaitaires, sans obligation de rénovation globale. L'aide est versée sous forme d'un montant fixe qui varie selon le type d'équipement et la catégorie de revenus."
-                }
+                Montants forfaitaires par équipement, sans rénovation globale requise.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-3">
@@ -772,7 +735,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6">
               {
-                "Les barèmes MaPrimeRénov' 2026 classent les ménages en quatre catégories (très modestes, modestes, intermédiaires, supérieurs) qui déterminent le taux de financement et le plafond d'aide. Les revenus pris en compte sont le revenu fiscal de référence (RFR) de l'année N-1, avec des plafonds différenciés selon la composition du foyer et la localisation (Île-de-France ou Province)."
+                'Quatre catégories (très modestes, modestes, intermédiaires, supérieurs) basées sur le revenu fiscal de référence N-1, avec plafonds différenciés selon foyer et zone (Île-de-France ou Province).'
               }
             </p>
 
@@ -884,9 +847,8 @@ export default function MaPrimeRenov2026Page() {
               <div className="flex items-start gap-2">
                 <Info className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-primary-800">
-                  {
-                    'Au-delà des plafonds « intermédiaires », vous êtes dans la catégorie « revenus supérieurs ». Vous restez éligible au parcours accompagné (30 % de financement) et à certains gestes du parcours par geste.'
-                  }
+                  Au-delà des plafonds intermédiaires : catégorie « revenus supérieurs ». Reste
+                  éligible au parcours accompagné (30 %).
                 </p>
               </div>
             </div>
@@ -899,7 +861,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "Les travaux éligibles à MaPrimeRénov' 2026 couvrent le chauffage (pompes à chaleur, chaudières biomasse, systèmes solaires combinés), l'eau chaude sanitaire (chauffe-eau solaire, thermodynamique), la ventilation (VMC double flux) et, dans le cadre du parcours accompagné uniquement, l'isolation (murs, toiture, planchers) et les menuiseries. Chaque catégorie de travaux doit être réalisée par un artisan certifié RGE pour être financée."
+                'Chauffage, eau chaude sanitaire, ventilation, plus isolation et menuiseries en parcours accompagné uniquement. Artisan RGE certifié obligatoire pour chaque catégorie.'
               }
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -952,7 +914,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "La demande MaPrimeRénov' se fait en ligne sur maprimerenov.gouv.fr avant le démarrage des travaux. Elle suppose la création d'un compte personnel, la sélection d'un artisan certifié RGE, le dépôt d'un devis détaillé et l'attente de l'accusé de réception de l'ANAH. Tout chantier démarré avant ce feu vert sera refusé."
+                "Demande en ligne sur maprimerenov.gouv.fr AVANT le démarrage des travaux. Tout chantier démarré avant l'accord ANAH est refusé."
               }
             </p>
             <div className="space-y-4">
@@ -980,11 +942,11 @@ export default function MaPrimeRenov2026Page() {
                 <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-red-900 mb-1">
-                    Attention : ne commencez pas les travaux avant accord
+                    Ne commencez pas les travaux avant l&apos;accord ANAH
                   </h4>
                   <p className="text-sm text-red-800">
                     {
-                      "Vous devez impérativement attendre l'accusé de réception de votre dossier par l'ANAH avant de signer le devis définitif et de commencer les travaux. Tout chantier démarré avant le dépôt du dossier sera refusé."
+                      "Attendre l'accusé de réception de l'ANAH avant de signer le devis définitif. Tout chantier démarré avant dépôt du dossier sera refusé."
                     }
                   </p>
                 </div>
@@ -999,7 +961,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6">
               {
-                "MaPrimeRénov' est cumulable avec plusieurs autres dispositifs d'aide à la rénovation énergétique — CEE (Certificats d'Économies d'Énergie), éco-prêt à taux zéro, TVA à taux réduit, aides locales et aides Action Logement — ce qui permet de réduire considérablement le reste à charge. Voici les principales aides complémentaires :"
+                'Cumulable avec CEE, éco-PTZ, TVA 5,5 %, aides locales et chèque énergie pour réduire le reste à charge.'
               }
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1020,9 +982,8 @@ export default function MaPrimeRenov2026Page() {
               <div className="flex items-start gap-2">
                 <Info className="w-5 h-5 text-green-700 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-green-800">
-                  <strong>Règle importante :</strong> le cumul de toutes les aides ne peut pas
-                  dépasser 100 % du montant TTC des travaux. Pour les ménages très modestes en
-                  parcours accompagné, le reste à charge minimum est de 10 %.
+                  <strong>Plafond cumul :</strong> 100 % du montant TTC max. Reste à charge minimum
+                  10 % pour les ménages très modestes en parcours accompagné.
                 </p>
               </div>
             </div>
@@ -1058,7 +1019,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-green-100 mb-6 max-w-2xl mx-auto">
               {
-                "Pour bénéficier de MaPrimeRénov', vous devez faire appel à un artisan certifié RGE. Trouvez un professionnel qualifié près de chez vous sur ServicesArtisans."
+                'MaPrimeRénov exige un artisan RGE certifié. Trouvez-en un près de chez vous sur ServicesArtisans.'
               }
             </p>
             <Link

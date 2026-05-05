@@ -117,6 +117,16 @@ describe('evaluateGonePath — /rge/[service]/[ville]', () => {
       reason: 'ville_slug_malformed',
     })
   })
+
+  it('routes statiques /rge/labels/[label] → passthrough (pas 410)', () => {
+    // Bug 2026-05-05 : le regex dynamique `/rge/[s]/[v]/?$` capturait à tort
+    // les routes statiques `/rge/labels/qualisol` (vol 908, KD 0) etc.
+    expect(evaluateGonePath('/rge/labels/qualisol')).toEqual({ gone: false })
+    expect(evaluateGonePath('/rge/labels/qualibat')).toEqual({ gone: false })
+    expect(evaluateGonePath('/rge/labels/qualibois')).toEqual({ gone: false })
+    expect(evaluateGonePath('/rge/labels/qualifelec')).toEqual({ gone: false })
+    expect(evaluateGonePath('/rge/labels/qualipac')).toEqual({ gone: false })
+  })
 })
 
 describe('evaluateGonePath — /cee/[operation]/[ville]', () => {

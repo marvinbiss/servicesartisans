@@ -242,8 +242,13 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
   }
 
   // 2. /rge/[service]/[ville]
+  //    Exclure les routes statiques 2-segments sous /rge/ pour éviter de
+  //    capturer /rge/labels/qualisol etc. via le regex dynamique.
+  //    Bug 2026-05-05 : tous les /rge/labels/* étaient en 410 alors que ce
+  //    sont des pages monographiques labels (vol Ahrefs 800-1100, KD 0).
+  const RGE_STATIC_2SEG_PREFIXES = new Set(['labels'])
   const rgeMatch = /^\/rge\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
-  if (rgeMatch) {
+  if (rgeMatch && !RGE_STATIC_2SEG_PREFIXES.has(rgeMatch[1])) {
     const [, service, ville] = rgeMatch
     if (!VALID_RGE_SERVICE_SLUGS.has(service)) {
       return { gone: true, reason: 'rge_service_slug_unknown' }
