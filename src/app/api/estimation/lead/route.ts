@@ -314,7 +314,7 @@ async function sendClientConfirmationEmail(
 
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">
-        ServicesArtisans.fr – La plateforme des artisans qualifiés<br>
+        ServicesArtisans.fr – La plateforme des artisans RGE certifiés<br>
         <a href="${SITE_URL}" style="color: #aaa;">servicesartisans.fr</a>
       </p>
     </div>

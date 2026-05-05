@@ -79,7 +79,7 @@ const tldr = [
   'Prix posé 2026 : 2 500-4 500 € (200-300 L).',
   'Économie 60-75 % vs ballon électrique direct (300-500 €/an pour famille de 4).',
   'MaPrimeRénov’ Bleu : 1 200 €. CEE : 100-300 € selon dossier.',
-  'ROI 4-6 ans. Installation par chauffagiste qualifié RGE QualiPAC.',
+  'ROI 4-6 ans. Installation par chauffagiste certifié RGE QualiPAC.',
 ]
 
 const TYPES_CET = [

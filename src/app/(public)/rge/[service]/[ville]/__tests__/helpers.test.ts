@@ -40,7 +40,7 @@ describe('truncateTitle', () => {
   })
 
   it('respects a custom maxLen of 41', () => {
-    const title = 'Isolation thermique par un artisan RGE qualifié'
+    const title = 'Isolation thermique par un artisan RGE certifié'
     const result = truncateTitle(title, 41)
     expect(result.length).toBeLessThanOrEqual(41)
     expect(result.endsWith('…')).toBe(true)

@@ -139,7 +139,7 @@ Le prix d"un CET varie de 2 500 à 4 500 € pose comprise selon la capacité et
 
       `## Installation par un professionnel
 
-L"installation prend une demi-journée. Le CET doit être placé dans une pièce non chauffée d"au moins 10 m² pour les modèles sur air ambiant. Prévoyez une évacuation des condensats et un raccordement électrique dédié. L"installateur doit être qualifié RGE pour que vous bénéficiiez des aides. Les raccordements hydrauliques doivent respecter les normes DTU 60.1.`,
+L"installation prend une demi-journée. Le CET doit être placé dans une pièce non chauffée d"au moins 10 m² pour les modèles sur air ambiant. Prévoyez une évacuation des condensats et un raccordement électrique dédié. L"installateur doit être certifié RGE pour que vous bénéficiiez des aides. Les raccordements hydrauliques doivent respecter les normes DTU 60.1.`,
 
       `## Entretien et durée de vie
 

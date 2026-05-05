@@ -74,7 +74,7 @@ const verificationSteps = [
     icon: AlertTriangle,
     title: 'Signalement',
     description:
-      "Si vous constatez un problème avec un artisan référencé sur la plateforme, vous pouvez nous le signaler. Chaque signalement est examiné et peut entraîner la suspension ou le retrait du profil de l'artisan concerné.",
+      "Si vous constatez un problème avec un artisan RGE certifié référencé sur la plateforme, vous pouvez nous le signaler. Chaque signalement est examiné et peut entraîner la suspension ou le retrait du profil de l'artisan concerné.",
   },
 ]
 
@@ -196,8 +196,8 @@ export default async function NotreProcessusDeVerificationPage() {
               Notre processus de vérification des artisans
             </h1>
             <p className="text-xl text-charcoal-400 max-w-3xl mx-auto">
-              Chaque artisan référencé sur {companyIdentity.name} passe par un processus de
-              vérification structuré. Voici les étapes que nous suivons.
+              Chaque artisan RGE certifié référencé sur {companyIdentity.name} passe par un
+              processus de vérification structuré. Voici les étapes que nous suivons.
             </p>
           </div>
         </div>
@@ -274,7 +274,7 @@ export default async function NotreProcessusDeVerificationPage() {
           <div className="bg-sand-50 rounded-2xl p-8 max-w-4xl mx-auto text-center">
             <h2 className="text-2xl font-bold text-charcoal-900 mb-4">Signaler un problème</h2>
             <p className="text-charcoal-600 mb-6">
-              Vous avez constaté un problème avec un artisan référencé ? Contactez-nous à{' '}
+              Vous avez constaté un problème avec un artisan RGE certifié ? Contactez-nous à{' '}
               <a
                 href={`mailto:${companyIdentity.email}`}
                 className="text-primary-500 hover:underline"

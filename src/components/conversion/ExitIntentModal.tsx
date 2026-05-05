@@ -210,7 +210,7 @@ export default function ExitIntentModal() {
             Avant de partir...
           </h2>
           <p className="text-charcoal-600 mb-6">
-            3 devis gratuits d&apos;artisans SIREN vérifiés — 100% sans engagement, aucune CB
+            3 devis gratuits d&apos;artisans RGE certifiés — 100% sans engagement, aucune CB
           </p>
 
           {/* What they lose */}

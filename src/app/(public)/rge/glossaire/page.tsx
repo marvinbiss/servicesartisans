@@ -234,7 +234,7 @@ export default function RgeGlossairePage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
-            Trouver un artisan RGE qualifié
+            Trouver un artisan RGE certifié
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
             Annuaire d’artisans RGE certifiés vérifiés via l’API officielle ADEME. Filtrez par

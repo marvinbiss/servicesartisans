@@ -150,7 +150,7 @@ export default async function DepartementsIndexPage() {
     },
     {
       question: 'Les artisans sont-ils certifiés RGE ?',
-      answer: `${rgeActiveCount} artisans référencés sont certifiés RGE (Reconnu Garant de l'Environnement) à ce jour. Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier RGE pour trouver un artisan RGE certifié éligible aux aides.`,
+      answer: `Oui — 100 % des artisans publiés sur ServicesArtisans sont RGE certifiés (Reconnu Garant de l'Environnement), soit ${rgeActiveCount} artisans actifs à ce jour. Cette certification est obligatoire pour bénéficier de MaPrimeRénov', des primes CEE et de la TVA réduite 5,5 % sur les travaux d'économies d'énergie. Filtrez par département + métier RGE pour trouver un artisan RGE éligible aux aides.`,
     },
     {
       question: "Les départements d'outre-mer sont-ils couverts ?",

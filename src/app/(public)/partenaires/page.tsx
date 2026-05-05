@@ -13,7 +13,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Nos partenaires',
   description:
-    "Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d'artisans de France.",
+    "Programme partenaires de ServicesArtisans. Devenez partenaire du 1er annuaire 100% artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).",
   robots: { index: false, follow: true },
   alternates: {
     canonical: `${SITE_URL}/partenaires`,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Nos partenaires',
     description:
-      "Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d'artisans de France.",
+      "Programme partenaires de ServicesArtisans. Devenez partenaire du 1er annuaire 100% artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).",
     url: `${SITE_URL}/partenaires`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Nos partenaires',
     description:
-      "Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d'artisans de France.",
+      "Programme partenaires de ServicesArtisans. Devenez partenaire du 1er annuaire 100% artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR).",
   },
 }
 

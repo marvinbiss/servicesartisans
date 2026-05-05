@@ -183,7 +183,10 @@ export default async function BarometreTarifsPage() {
                   <div className="flex items-center gap-4 text-sm text-charcoal-600 mb-3">
                     <span className="flex items-center gap-1">
                       <Users className="w-3.5 h-3.5" />
-                      {row.nb_artisans.toLocaleString('fr-FR')}
+                      {/* Pivot full RGE 2026-05-05 — nb_artisans agrège tous
+                          providers actifs ; ratio 0.14 dérive l'estimation
+                          RGE-only (cf. CarteClient.tsx). */}
+                      {Math.round(row.nb_artisans * 0.14).toLocaleString('fr-FR')}
                     </span>
                     {row.note_moyenne !== null && (
                       <span className="flex items-center gap-1">

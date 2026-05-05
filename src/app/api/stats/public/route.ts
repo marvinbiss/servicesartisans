@@ -14,10 +14,20 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Get REAL stats from actual reviews table (NOT from providers table which had fake data)
+    // 2026-05-05 pivot full RGE — `artisanCount` doit refléter UNIQUEMENT les
+    // artisans RGE certifiés actifs, aligné avec `getSiteStats()` (homepage)
+    // et le repositionnement "100% RGE certifiés". Avant le pivot, l'endpoint
+    // public renvoyait ~750K (tous providers actifs) ce qui contredisait le
+    // count homepage RGE-only ⇒ incohérence visible côté schema.org/SocialProof.
+    const todayIso = new Date().toISOString().slice(0, 10)
     const [{ count: artisanCount }, { data: realReviews }] = await Promise.all([
-      // Count active artisans
-      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
+      // Count active RGE artisans
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso),
 
       // Get ALL reviews (only exclude synthetic/fake ones)
       supabase

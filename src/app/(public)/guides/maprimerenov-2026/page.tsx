@@ -144,7 +144,7 @@ const faqItems = [
   {
     question: 'Comment trouver un artisan RGE près de chez moi ?',
     answer:
-      "Pour trouver un artisan RGE qualifié, vous pouvez utiliser l'annuaire ServicesArtisans qui référence des milliers de professionnels certifiés dans toute la France. Vous pouvez également consulter l'annuaire officiel sur france-renov.gouv.fr. Pensez à demander plusieurs devis (au moins 3) pour comparer les offres. Vérifiez que la mention RGE figure bien sur le devis et que la certification est en cours de validité pour le type de travaux envisagé.",
+      "Pour trouver un artisan RGE certifié, vous pouvez utiliser l'annuaire ServicesArtisans qui référence des milliers d'artisans RGE certifiés dans toute la France. Vous pouvez également consulter l'annuaire officiel sur france-renov.gouv.fr. Pensez à demander plusieurs devis (au moins 3) pour comparer les offres. Vérifiez que la mention RGE figure bien sur le devis et que la certification est en cours de validité pour le type de travaux envisagé.",
   },
 ]
 
@@ -899,7 +899,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "Les travaux éligibles à MaPrimeRénov' 2026 couvrent le chauffage (pompes à chaleur, chaudières biomasse, systèmes solaires combinés), l'eau chaude sanitaire (chauffe-eau solaire, thermodynamique), la ventilation (VMC double flux) et, dans le cadre du parcours accompagné uniquement, l'isolation (murs, toiture, planchers) et les menuiseries. Chaque catégorie de travaux doit être réalisée par un artisan qualifié RGE pour être financée."
+                "Les travaux éligibles à MaPrimeRénov' 2026 couvrent le chauffage (pompes à chaleur, chaudières biomasse, systèmes solaires combinés), l'eau chaude sanitaire (chauffe-eau solaire, thermodynamique), la ventilation (VMC double flux) et, dans le cadre du parcours accompagné uniquement, l'isolation (murs, toiture, planchers) et les menuiseries. Chaque catégorie de travaux doit être réalisée par un artisan certifié RGE pour être financée."
               }
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -952,7 +952,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "La demande MaPrimeRénov' se fait en ligne sur maprimerenov.gouv.fr avant le démarrage des travaux. Elle suppose la création d'un compte personnel, la sélection d'un artisan qualifié RGE, le dépôt d'un devis détaillé et l'attente de l'accusé de réception de l'ANAH. Tout chantier démarré avant ce feu vert sera refusé."
+                "La demande MaPrimeRénov' se fait en ligne sur maprimerenov.gouv.fr avant le démarrage des travaux. Elle suppose la création d'un compte personnel, la sélection d'un artisan certifié RGE, le dépôt d'un devis détaillé et l'attente de l'accusé de réception de l'ANAH. Tout chantier démarré avant ce feu vert sera refusé."
               }
             </p>
             <div className="space-y-4">

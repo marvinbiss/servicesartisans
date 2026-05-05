@@ -111,7 +111,7 @@ export default function ResultatActions({
               Devis d&apos;un artisan RGE
             </h3>
             <p className="text-sm text-charcoal-600 mt-1">
-              Un artisan qualifié RGE vous recontacte sous 24h avec un chiffrage officiel. Votre
+              Un artisan certifié RGE vous recontacte sous 24h avec un chiffrage officiel. Votre
               estimation est pré-remplie.
             </p>
           </div>

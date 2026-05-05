@@ -674,7 +674,7 @@ L'interdiction de location des passoires thermiques n'est plus un projet : c'est
 
 La bonne nouvelle : les aides n'ont jamais été aussi généreuses. Un ménage modeste peut rénover sa passoire thermique avec un reste à charge de 3 000 à 8 000 € seulement.
 
-N'attendez pas : faites réaliser un audit énergétique et commencez les démarches dès maintenant. Trouvez des artisans RGE qualifiés sur ServicesArtisans.`,
+N'attendez pas : faites réaliser un audit énergétique et commencez les démarches dès maintenant. Trouvez des artisans RGE certifiés sur ServicesArtisans.`,
     ],
   },
 
@@ -807,7 +807,7 @@ L'éco-PTZ est le complément idéal de MaPrimeRénov' pour financer le reste à
 
 En 2026, avec l'interdiction de location des logements G et l'échéance de 2028 pour les logements F, l'éco-PTZ est un outil indispensable pour les propriétaires qui doivent rénover.
 
-Trouvez des artisans RGE qualifiés sur ServicesArtisans et commencez votre projet de rénovation dès maintenant.`,
+Trouvez des artisans RGE certifiés sur ServicesArtisans et commencez votre projet de rénovation dès maintenant.`,
     ],
   },
 

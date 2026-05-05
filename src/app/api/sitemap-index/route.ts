@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
   const ids: string[] = [
     'static',
-    // service × city — full scale: 47 services × (2 267 + GSC priority extras).
+    // service × city — full scale: 21 services RGE × (2 267 + GSC priority extras).
     // Audit 2026-04-25 (B1) : on doit utiliser SITEMAP_SERVICE_CITIES_COUNT
     // (= SITEMAP_CITY_COUNT + extras GSC) pour matcher la longueur réelle
     // de mergedCities émise par le handler, sinon les ~3 700 URLs prioritaires
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] (11 × 101
     // = 1 111 URLs). MaPrimeRénov par dept déjà dans 'static' (legacy).
     'aides-dept',
-    // dept × service — 105 depts × 47 services
+    // dept × service — 105 depts × 21 services RGE
     ...Array.from(
       { length: Math.ceil((departements.length * tradeSlugs.length) / LARGE_BATCH) },
       (_, i) => `dept-services-${i}`

@@ -677,7 +677,7 @@ export function generateDataDrivenContent(
   } else {
     // Generic demand context for other trades
     demandeLocaleParts.push(
-      `À ${commune.name}, ${getRegionPreposition(commune.region_name || 'France')}, les besoins en ${svc} sont liés à l'entretien courant du patrimoine bâti et aux projets d'amélioration de l'habitat. Les artisans référencés sur ServicesArtisans interviennent dans un périmètre adapté à la demande locale.`
+      `À ${commune.name}, ${getRegionPreposition(commune.region_name || 'France')}, les besoins en ${svc} sont liés à l'entretien courant du patrimoine bâti et aux projets d'amélioration de l'habitat. Les artisans RGE certifiés sur ServicesArtisans interviennent dans un périmètre adapté à la demande locale.`
     )
   }
 

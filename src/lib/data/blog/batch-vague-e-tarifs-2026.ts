@@ -541,7 +541,7 @@ Pour estimer instantanément vos aides 2026 et obtenir 3 devis d’artisans RGE 
       {
         question: 'Qui peut réaliser un audit énergétique réglementaire ?',
         answer:
-          'Trois profils agréés : (1) bureaux d’études thermiques certifiés OPQIBI 1905 ou équivalent, (2) architectes ayant suivi formation spécifique (signature obligatoire), (3) entreprises RGE qualifiées "audit énergétique" (Qualibat 8731). Annuaire officiel sur france-renov.gouv.fr. Méfiance envers les "audits" gratuits qui sont du démarchage déguisé : un audit conforme exige 4-6 h sur site et coûte 500 €+ minimum.',
+          'Trois profils agréés : (1) bureaux d’études thermiques certifiés OPQIBI 1905 ou équivalent, (2) architectes ayant suivi formation spécifique (signature obligatoire), (3) entreprises RGE certifiées "audit énergétique" (Qualibat 8731). Annuaire officiel sur france-renov.gouv.fr. Méfiance envers les "audits" gratuits qui sont du démarchage déguisé : un audit conforme exige 4-6 h sur site et coûte 500 €+ minimum.',
       },
     ],
     content: [

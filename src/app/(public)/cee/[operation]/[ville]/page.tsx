@@ -151,7 +151,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = truncate(`Prime CEE ${opName} à ${villeName} — artisans RGE`, 60)
   const description = truncate(
-    `${opName} à ${villeName} : artisans RGE qualifiés, prime CEE mobilisable, cumul MaPrimeRénov’ et TVA 5,5 %. Vérification ADEME.`,
+    `${opName} à ${villeName} : artisans RGE certifiés, prime CEE mobilisable, cumul MaPrimeRénov’ et TVA 5,5 %. Vérification ADEME.`,
     158
   )
   const path = `/cee/${urlCode}/${villeSlug}`
@@ -255,7 +255,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     count > 0
       ? getItemListSchema({
           name: `${operation.nom} à ${villeName}`,
-          description: `Artisans RGE qualifiés pour ${operation.nom.toLowerCase()} à ${villeName}`,
+          description: `Artisans RGE certifiés pour ${operation.nom.toLowerCase()} à ${villeName}`,
           url: path,
           items: providers.slice(0, 10).map((p, idx) => ({
             name: p.name,
@@ -335,7 +335,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
     '@id': `${SITE_URL}${path}#article`,
     url: `${SITE_URL}${path}`,
     headline: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} — Guide ${monthYear}`,
-    description: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} : conditions, montants, artisans RGE qualifiés et démarche pas à pas.`,
+    description: `Prime CEE ${operation.code} ${operation.nom} à ${villeName} : conditions, montants, artisans RGE certifiés et démarche pas à pas.`,
     image: [`${SITE_URL}/og-cee-${operation.code.toLowerCase()}.jpg`, `${SITE_URL}/og-default.jpg`],
     datePublished: '2026-01-01T00:00:00+02:00',
     dateModified: monthlyAnchor,
@@ -447,7 +447,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         <EnBrefBox
           summary={
             count > 0
-              ? `${count} artisan${count > 1 ? 's' : ''} RGE qualifié${count > 1 ? 's' : ''} pour la prime CEE ${operation.code} (${operation.nom.toLowerCase()}) à ${villeName}. Cumul MaPrimeRénov' + TVA 5,5 % possible. Vérification ADEME.`
+              ? `${count} artisan${count > 1 ? 's' : ''} RGE certifié${count > 1 ? 's' : ''} pour la prime CEE ${operation.code} (${operation.nom.toLowerCase()}) à ${villeName}. Cumul MaPrimeRénov' + TVA 5,5 % possible. Vérification ADEME.`
               : `Catalogue national de l'opération CEE ${operation.code} (${operation.nom.toLowerCase()}) à ${villeName}. Devis gratuit, prime versée par les vendeurs d'énergie.`
           }
           keyPoints={[
@@ -475,7 +475,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
-                {count} artisan{count > 1 ? 's' : ''} RGE qualifié{count > 1 ? 's' : ''} pour cette
+                {count} artisan{count > 1 ? 's' : ''} RGE certifié{count > 1 ? 's' : ''} pour cette
                 opération CEE à {villeName}
               </>
             ) : (
@@ -520,7 +520,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           {count === 0 ? (
             <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
               <p className="text-charcoal-700 mb-3">
-                Aucun artisan RGE qualifié pour la fiche {operation.code} n’est actuellement
+                Aucun artisan RGE certifié pour la fiche {operation.code} n’est actuellement
                 référencé à {villeName}.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-4">
@@ -738,7 +738,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {rgeServices.length > 0 && (
           <section aria-labelledby="rge-services" className="mb-12">
             <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
-              Métiers RGE qualifiés à {villeName}
+              Métiers RGE certifiés à {villeName}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4 max-w-3xl">
               Explorer l’annuaire des artisans RGE par métier à {villeName}
@@ -892,7 +892,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             Prêt à lancer votre projet à {villeName}&nbsp;?
           </h2>
           <p className="text-charcoal-600 text-sm mb-4 max-w-2xl mx-auto">
-            Demandez un devis gratuit auprès d’un artisan RGE qualifié pour la fiche{' '}
+            Demandez un devis gratuit auprès d’un artisan RGE certifié pour la fiche{' '}
             {operation.code}. Devis sans engagement, primes CEE et MaPrimeRénov’ calculées
             automatiquement.
           </p>

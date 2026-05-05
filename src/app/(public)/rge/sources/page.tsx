@@ -309,7 +309,7 @@ export default function RgeSourcesPage() {
             Explorer l’annuaire RGE
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Consultez les artisans RGE qualifiés par métier et par ville, ou approfondissez votre
+            Consultez les artisans RGE certifiés par métier et par ville, ou approfondissez votre
             connaissance des qualifications officielles.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">

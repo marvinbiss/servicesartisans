@@ -34,7 +34,11 @@ export async function GET(request: NextRequest) {
   }
 
   const { service, location, offset, limit, rge } = parsed.data
-  const rgeOnly = rge === '1'
+  // 2026-05-05 pivot full RGE — endpoint public consommé par PageClient (load
+  // more). Default RGE-only ; admin/debug peut bypass via `?rge=0`. Avant le
+  // pivot, l'absence de `?rge` signifiait "tous providers" — désormais aligné
+  // sur le default des helpers Supabase (RGE first).
+  const rgeOnly = rge === '0' ? false : true
 
   try {
     // If location provided: fetch providers for service+location
@@ -47,7 +51,7 @@ export async function GET(request: NextRequest) {
           ),
       location
         ? getProviderCountByServiceAndLocation(service, location, { rgeOnly }).catch(() => 0)
-        : getProviderCountByService(service).catch(() => 0),
+        : getProviderCountByService(service, { rgeOnly }).catch(() => 0),
     ])
 
     return NextResponse.json(

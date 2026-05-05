@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   alternates: getAlternates('/services'),
   openGraph: {
     title: 'Tous les Métiers RGE Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers RGE du bâtiment. Artisans RGE certifiés dans 101 départements. Trouvez un professionnel qualifié RGE, devis gratuit éligible MaPrimeRénov' & CEE.`,
+    description: `${staticServicesList.length} métiers RGE du bâtiment. Artisans RGE certifiés dans 101 départements. Trouvez un professionnel certifié RGE, devis gratuit éligible MaPrimeRénov' & CEE.`,
     url: `${SITE_URL}/services`,
     images: [
       {

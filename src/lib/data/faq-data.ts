@@ -4,19 +4,19 @@ export const faqCategories = [
     questions: [
       {
         q: "Qu'est-ce que ServicesArtisans ?",
-        a: "ServicesArtisans est un annuaire d'artisans de France. Les données proviennent directement des registres SIREN officiels de l'État via l'API Annuaire des Entreprises. Le service est 100% gratuit.",
+        a: "ServicesArtisans est le 1er annuaire 100% artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), spécialisé dans la rénovation énergétique. Les qualifications RGE sont vérifiées chaque semaine sur la base ADEME (france-renov.gouv.fr) et le SIRET via le registre SIRENE de l'INSEE. Le service est 100% gratuit.",
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: "Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans. Pas d'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d'artisans que vous le souhaitez.",
+        a: "Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans RGE référencés. Pas d'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d'artisans RGE certifiés que vous le souhaitez.",
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: "C'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l'artisan de votre choix pour obtenir un devis gratuit.",
+        a: "C'est simple : 1) Recherchez un métier RGE et une localisation, 2) Comparez les profils, les qualifications RGE et les avis vérifiés, 3) Contactez directement l'artisan RGE certifié de votre choix pour obtenir un devis gratuit éligible MaPrimeRénov' et CEE.",
       },
       {
         q: "D'où proviennent les données des artisans ?",
-        a: "Toutes nos données proviennent de l'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est référencé via son numéro SIREN, garantissant qu'il s'agit d'une entreprise réelle et active.",
+        a: "Les données SIRET proviennent du registre SIRENE de l'INSEE (API recherche-entreprises.api.gouv.fr). Les qualifications RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) sont synchronisées chaque semaine avec la base officielle ADEME france-renov.gouv.fr. Seuls les artisans RGE actifs et en cours de validité sont publiés.",
       },
     ],
   },
@@ -25,7 +25,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment demander un devis ?',
-        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande aux artisans qualifiés de votre région.',
+        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande à un artisan RGE certifié exclusif (1 demande = 1 artisan, jamais partagé) de votre région.',
       },
       {
         q: 'Combien de devis vais-je recevoir ?',
@@ -46,11 +46,11 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment sont sélectionnés les artisans ?',
-        a: "Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l'État français. Nous contrôlons que l'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.",
+        a: "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR. Chaque entreprise est vérifiée SIRET via SIRENE/INSEE et synchronisée chaque semaine avec la base ADEME officielle (france-renov.gouv.fr). Cela couvre 20+ métiers RGE de la rénovation énergétique dans les 101 départements français.",
       },
       {
         q: 'Les artisans sont-ils assurés ?',
-        a: "Les artisans du bâtiment sont légalement tenus de disposer d'une garantie décennale (art. L241-1 Code des assurances). Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.",
+        a: "Les artisans RGE référencés sont légalement tenus de disposer d'une garantie décennale (art. L241-1 Code des assurances) — c'est un prérequis pour obtenir et maintenir leur qualification RGE. Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.",
       },
       {
         q: 'Puis-je voir les avis sur un artisan ?',

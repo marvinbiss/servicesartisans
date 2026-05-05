@@ -37,7 +37,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: "Qu'est-ce que l'ADEME et quel est son rôle dans la rénovation énergétique ?",
     answer:
-      "L'ADEME — Agence de la transition écologique (anciennement Agence de l'Environnement et de la Maîtrise de l'Énergie) — est l'établissement public à caractère industriel et commercial (EPIC) sous la tutelle conjointe des ministères de la Transition écologique et de la Recherche. Créée en 1991, elle pilote la politique nationale de transition énergétique et gère notamment le référentiel officiel des artisans RGE (Reconnu Garant de l'Environnement) consultable sur france-renov.gouv.fr. C'est l'unique source de vérité légale pour vérifier qu'une entreprise du bâtiment est bien qualifiée RGE et donc éligible aux aides publiques (MaPrimeRénov', CEE, TVA 5,5 %, Éco-PTZ).",
+      "L'ADEME — Agence de la transition écologique (anciennement Agence de l'Environnement et de la Maîtrise de l'Énergie) — est l'établissement public à caractère industriel et commercial (EPIC) sous la tutelle conjointe des ministères de la Transition écologique et de la Recherche. Créée en 1991, elle pilote la politique nationale de transition énergétique et gère notamment le référentiel officiel des artisans RGE (Reconnu Garant de l'Environnement) consultable sur france-renov.gouv.fr. C'est l'unique source de vérité légale pour vérifier qu'une entreprise du bâtiment est bien RGE certifié et donc éligible aux aides publiques (MaPrimeRénov', CEE, TVA 5,5 %, Éco-PTZ).",
   },
   {
     question: "D'où viennent les données d'artisans RGE affichées sur ServicesArtisans ?",

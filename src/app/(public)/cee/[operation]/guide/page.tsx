@@ -165,7 +165,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
     `Prime CEE ${guide.code}${operation ? ` (${operation.nom})` : ''} — ${guide.primeClassique} en classique, ${guide.primePrecarite} pour les ménages modestes.`,
     'Conditions clés : logement résidentiel >2 ans, devis CEE signé AVANT travaux, artisan RGE obligatoire, dossier déposé sous 6 mois après facture.',
     `Cumulable avec MaPrimeRénov' (${guide.maPrimeRenov}), TVA 5,5 % et éco-PTZ. Cadre légal : loi POPE 2005, période P6 2026-2030.`,
-    'Notre rôle : mise en relation avec un artisan RGE qualifié, devis gratuit en 24 h, prime sécurisée dès la signature.',
+    'Notre rôle : mise en relation avec un artisan RGE certifié, devis gratuit en 24 h, prime sécurisée dès la signature.',
   ]
 
   const faqSchema = {
@@ -438,7 +438,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             Obtenez votre prime {guide.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">

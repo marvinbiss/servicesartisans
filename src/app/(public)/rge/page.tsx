@@ -187,9 +187,9 @@ const FAQ: Array<{ question: string; answer: string }> = [
       'Trois chemins complémentaires selon votre besoin. Pour une recherche par ville, utilisez nos annuaires dédiés /artisans-rge/[votre-ville] — ils affichent tous les artisans RGE actifs dans la commune, toutes spécialités confondues, synchronisés chaque semaine avec l’ADEME. Pour une recherche par métier ciblé, passez par /rge/[service]/[ville] (exemple : /rge/pompe-a-chaleur/lyon). Enfin, si vous connaissez déjà le nom de l’entreprise, notre vérificateur /verifier-artisan vous confirme en temps réel si sa mention RGE est en cours de validité. Dans tous les cas, comparez toujours au moins trois devis d’artisans RGE avant de signer : c’est la seule manière d’objectiver les prix et de détecter les anomalies techniques.',
   },
   {
-    question: 'Qu’est-ce qu’un artisan RGE qualifié ?',
+    question: 'Qu’est-ce qu’un artisan RGE certifié ?',
     answer:
-      'Un artisan RGE qualifié est une entreprise du bâtiment qui détient une qualification active délivrée par un organisme accrédité COFRAC (Qualibat, Qualit’EnR, Qualifelec, Certibat, OPQIBI). Cette qualification atteste de trois éléments : une formation technique attestée du dirigeant ou d’un référent technique salarié, une assurance responsabilité civile professionnelle décennale couvrant les travaux de rénovation énergétique, et au moins un audit chantier réalisé par l’organisme certificateur dans les deux premières années. La qualification est nominative à l’entreprise (SIRET) et restreinte à des domaines précis : un artisan RGE pour les pompes à chaleur (QualiPAC) n’est pas automatiquement RGE pour l’isolation par l’extérieur (Qualibat 7141). Vérifiez toujours que la qualification correspond exactement aux travaux que vous voulez engager.',
+      'Un artisan RGE certifié est une entreprise du bâtiment qui détient une qualification active délivrée par un organisme accrédité COFRAC (Qualibat, Qualit’EnR, Qualifelec, Certibat, OPQIBI). Cette qualification atteste de trois éléments : une formation technique attestée du dirigeant ou d’un référent technique salarié, une assurance responsabilité civile professionnelle décennale couvrant les travaux de rénovation énergétique, et au moins un audit chantier réalisé par l’organisme certificateur dans les deux premières années. La qualification est nominative à l’entreprise (SIRET) et restreinte à des domaines précis : un artisan RGE pour les pompes à chaleur (QualiPAC) n’est pas automatiquement RGE pour l’isolation par l’extérieur (Qualibat 7141). Vérifiez toujours que la qualification correspond exactement aux travaux que vous voulez engager.',
   },
   {
     question: 'Qu’est-ce que l’annuaire RGE et où le consulter ?',
@@ -210,8 +210,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = 'Annuaire artisan RGE 2026 : trouver un pro certifié — ADEME'
   const description =
     totalActive > 0
-      ? `Trouvez parmi ${totalActive.toLocaleString('fr-FR')} artisans RGE qualifiés en France. Vérification ADEME en 1 clic, devis gratuit, éligibles MaPrimeRénov', CEE, TVA 5,5 %.`
-      : 'Annuaire national des artisans RGE qualifiés. Données ADEME officielles, vérification en 1 clic, éligibles MaPrimeRénov’, CEE, TVA 5,5 %.'
+      ? `Trouvez parmi ${totalActive.toLocaleString('fr-FR')} artisans RGE certifiés en France. Vérification ADEME en 1 clic, devis gratuit, éligibles MaPrimeRénov', CEE, TVA 5,5 %.`
+      : 'Annuaire national des artisans RGE certifiés. Données ADEME officielles, vérification en 1 clic, éligibles MaPrimeRénov’, CEE, TVA 5,5 %.'
 
   return {
     title,

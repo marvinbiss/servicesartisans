@@ -98,7 +98,7 @@ export default async function RegionsIndexPage() {
     {
       question: 'Les DOM-TOM sont-ils inclus ?',
       answer:
-        "Oui. Les cinq régions d'outre-mer (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) sont intégrées à l'annuaire, avec les départements et artisans RGE certifiés localement. La couverture est cependant moins dense qu'en métropole en raison du nombre plus limité d'artisans qualifiés RGE actifs.",
+        "Oui. Les cinq régions d'outre-mer (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte) sont intégrées à l'annuaire, avec les départements et artisans RGE certifiés localement. La couverture est cependant moins dense qu'en métropole en raison du nombre plus limité d'artisans RGE certifiés actifs.",
     },
     {
       question: 'Quelle région compte le plus d’artisans RGE ?',

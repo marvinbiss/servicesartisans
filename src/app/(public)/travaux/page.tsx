@@ -56,7 +56,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Refaire une toiture : quel prix et quelles aides en 2026 ?',
     answer:
-      'Le prix d’une réfection complète de toiture en 2026 se situe entre 110 et 280 € TTC le m² selon le matériau (tuiles terre cuite 150-200 €, ardoise naturelle 220-280 €, bac acier 100-140 €) et la complexité (charpente, demi-niveau, lucarnes). Sur une toiture de 120 m², comptez donc 13 000 à 33 000 € TTC. Les aides disponibles : prime CEE BAR-EN-103 si l’opération inclut isolation des rampants, MaPrimeRénov’ si gain énergétique attesté, TVA à 5,5 % automatique avec un artisan RGE qualifié couvreur (Qualibat 3811 ou 3815). Le simple ravalement de couverture (sans isolation) n’ouvre pas droit aux aides énergétiques.',
+      'Le prix d’une réfection complète de toiture en 2026 se situe entre 110 et 280 € TTC le m² selon le matériau (tuiles terre cuite 150-200 €, ardoise naturelle 220-280 €, bac acier 100-140 €) et la complexité (charpente, demi-niveau, lucarnes). Sur une toiture de 120 m², comptez donc 13 000 à 33 000 € TTC. Les aides disponibles : prime CEE BAR-EN-103 si l’opération inclut isolation des rampants, MaPrimeRénov’ si gain énergétique attesté, TVA à 5,5 % automatique avec un artisan RGE certifié couvreur (Qualibat 3811 ou 3815). Le simple ravalement de couverture (sans isolation) n’ouvre pas droit aux aides énergétiques.',
   },
   {
     question: 'Quels travaux nécessitent obligatoirement un artisan RGE ?',

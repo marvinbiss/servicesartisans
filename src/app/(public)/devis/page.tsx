@@ -76,7 +76,7 @@ const faqItems = [
   {
     question: 'Comment les artisans sont-ils sélectionnés ?',
     answer:
-      "ServicesArtisans est le 1er annuaire 100% artisans RGE certifiés. Chaque artisan affiché est qualifié RGE (Qualibat, Qualifelec, QualiPAC ou Qualit'EnR) — qualifications synchronisées hebdomadairement avec la base officielle ADEME france-renov.gouv.fr — et son SIRET est vérifié auprès de l'INSEE.",
+      "ServicesArtisans est le 1er annuaire 100% artisans RGE certifiés. Chaque artisan affiché est certifié RGE (Qualibat, Qualifelec, QualiPAC ou Qualit'EnR) — qualifications synchronisées hebdomadairement avec la base officielle ADEME france-renov.gouv.fr — et son SIRET est vérifié auprès de l'INSEE.",
   },
   {
     question: "Suis-je obligé d'accepter un devis ?",

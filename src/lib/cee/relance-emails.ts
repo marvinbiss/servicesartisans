@@ -38,7 +38,7 @@ function emailWrapper(body: string): string {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans — La plateforme des artisans qualifiés<br>
+    ServicesArtisans — La plateforme des artisans RGE certifiés<br>
     <a href="${SITE_URL}" style="color: #999;">${SITE_URL.replace('https://', '')}</a>
   </p>
 </body>

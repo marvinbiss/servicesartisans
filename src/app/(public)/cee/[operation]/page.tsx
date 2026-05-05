@@ -532,11 +532,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         <CeeCTA variant="inline" operationCode={operation.code} serviceSlug={rgeServices[0]} />
       </div>
 
-      {/* Métiers RGE qualifiés */}
+      {/* Métiers RGE certifiés */}
       {rgeServices.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
-            Métiers RGE qualifiés pour cette opération
+            Métiers RGE certifiés pour cette opération
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-6 leading-relaxed">
             Seuls les artisans titulaires d’une qualification RGE active peuvent déclencher la prime
@@ -585,7 +585,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
 
       {/* Sprint K Ahrefs 2026-05-03 — Glossaire RGE rendu HTML cohérent avec
           le DefinedTermSet emis (anchors #term-<slug> = DefinedTerm @id).
-          Place après "Métiers RGE qualifiés" (continuité éditoriale : liste
+          Place après "Métiers RGE certifiés" (continuité éditoriale : liste
           des métiers → définitions des certifications). */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-4">
         {/* Sprint AI Ahrefs 2026-05-03 — entries omis : RgeGlossaryBlock
@@ -599,11 +599,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         <section className="bg-sand-50 border-y border-charcoal-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
-              Où trouver un artisan RGE qualifié
+              Où trouver un artisan RGE certifié
             </h2>
             <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
               Classement des villes françaises où notre annuaire recense le plus d’artisans RGE
-              qualifiés pour l’opération {operation.code}.
+              certifiés pour l’opération {operation.code}.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {topCities.map((city) => (
@@ -696,7 +696,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Obtenez votre prime CEE {operation.code}
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">

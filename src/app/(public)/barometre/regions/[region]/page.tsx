@@ -95,7 +95,13 @@ export default async function BarometreRegionPage({ params }: PageProps) {
   const stats = await getStatsByRegion(regionSlug)
   const index = regionalIndices.find((r) => r.regionSlug === regionSlug)
 
-  const totalArtisans = stats.reduce((s, r) => s + r.nb_artisans, 0)
+  // Pivot full RGE 2026-05-05 — barometre_stats agrège tous providers actifs
+  // (RGE + non-RGE). On dérive l'estimation RGE-only via le ratio empirique
+  // 49 611 fiches RGE / ~350 000 actifs ≈ 0.14 (aligné CarteClient.tsx).
+  // À retirer dès que `barometre_stats.nb_artisans_rge` sera populé par cron.
+  const RGE_RATIO = 0.14
+  const totalArtisansRaw = stats.reduce((s, r) => s + r.nb_artisans, 0)
+  const totalArtisans = Math.round(totalArtisansRaw * RGE_RATIO)
   const ratedStats = stats.filter((r) => r.note_moyenne !== null)
   const noteMoyenne =
     ratedStats.length > 0

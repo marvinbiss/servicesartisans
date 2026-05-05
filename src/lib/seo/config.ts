@@ -10,9 +10,9 @@ export const PHONE_TEL = 'tel:+33756872787'
 // SEO configuration object
 export const defaultSEOConfig = {
   titleTemplate: '%s | ServicesArtisans',
-  defaultTitle: 'ServicesArtisans — Annuaire des artisans référencés en France',
+  defaultTitle: 'ServicesArtisans — Annuaire des artisans RGE certifiés en France',
   description:
-    "Annuaire d'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements. Devis gratuits.",
+    "Annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans 101 départements. Données SIREN vérifiées + certification ADEME. Devis gratuits.",
   canonical: SITE_URL,
   openGraph: {
     type: 'website',
@@ -24,7 +24,7 @@ export const defaultSEOConfig = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans - Trouvez des artisans qualifiés près de chez vous',
+        alt: 'ServicesArtisans — Trouvez des artisans RGE certifiés près de chez vous',
       },
     ],
   },
@@ -76,11 +76,11 @@ export const defaultSEOConfig = {
 export function getServiceSEO(serviceName: string, location?: string) {
   const title = location
     ? `${serviceName} à ${location} — Annuaire & Devis Gratuit`
-    : `${serviceName} en France — Artisans référencés SIREN`
+    : `${serviceName} RGE en France — Artisans certifiés Qualibat / Qualifelec / QualiPAC`
 
   const description = location
-    ? `Trouvez un ${serviceName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
-    : `Annuaire des ${serviceName.toLowerCase()}s en France. Professionnels référencés dans 101 départements. Recherche gratuite, devis sans engagement.`
+    ? `Trouvez un ${serviceName.toLowerCase()} RGE certifié à ${location} parmi des milliers d'artisans. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
+    : `Annuaire des ${serviceName.toLowerCase()}s RGE certifiés en France. Artisans Qualibat, Qualifelec, QualiPAC, Qualit'EnR dans 101 départements. Recherche gratuite, devis sans engagement.`
 
   return {
     title,
@@ -99,15 +99,15 @@ export function getLocationSEO(
   locationName: string
 ) {
   const titles: Record<string, string> = {
-    ville: `Artisans à ${locationName} — Annuaire référencés`,
-    region: `Artisans ${getRegionPreposition(locationName)} — Tous les métiers du bâtiment`,
-    departement: `Artisans ${getDeptPreposition(locationName)} — Annuaire & Devis gratuits`,
+    ville: `Artisans RGE à ${locationName} — Annuaire certifié`,
+    region: `Artisans RGE ${getRegionPreposition(locationName)} — Métiers de la rénovation énergétique`,
+    departement: `Artisans RGE ${getDeptPreposition(locationName)} — Annuaire & Devis gratuits`,
   }
 
   const descriptions: Record<string, string> = {
-    ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels référencés : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
-    region: `Trouvez un artisan ${getRegionPreposition(locationName)} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
-    departement: `Artisans référencés ${getDeptPreposition(locationName)}. 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
+    ville: `Annuaire complet des artisans RGE certifiés à ${locationName}. Métiers Qualibat, Qualifelec, QualiPAC, Qualit'EnR. 100% gratuit.`,
+    region: `Trouvez un artisan RGE certifié ${getRegionPreposition(locationName)} parmi des milliers de professionnels Qualibat, Qualifelec, QualiPAC, Qualit'EnR. Tous les départements.`,
+    departement: `Artisans RGE certifiés ${getDeptPreposition(locationName)}. 21 métiers de la rénovation énergétique. Recherche gratuite, devis sans engagement.`,
   }
 
   return {
@@ -153,7 +153,7 @@ export function getOgDefaults() {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — Annuaire des artisans référencés en France`,
+        alt: `${SITE_NAME} — Annuaire des artisans RGE certifiés en France`,
       },
     ],
   }
@@ -168,8 +168,8 @@ export function getArtisanSEO(
 ) {
   const title = `${artisanName} — ${service} à ${location}`
   const description = rating
-    ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`
-    : `${artisanName}, ${service.toLowerCase()} à ${location}. Entreprise référencée par SIREN. Coordonnées, profil et devis gratuit.`
+    ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise vérifiée SIREN + certification RGE ADEME. Consultez le profil et demandez un devis gratuit.`
+    : `${artisanName}, ${service.toLowerCase()} à ${location}. Entreprise vérifiée SIREN + certification RGE ADEME. Coordonnées, profil et devis gratuit.`
 
   return {
     title,

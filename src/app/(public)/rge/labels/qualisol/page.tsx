@@ -126,7 +126,7 @@ const faqs = [
   {
     question: 'Pourquoi QualiSol est obligatoire pour MaPrimeRénov’ ?',
     answer:
-      'L’État conditionne MaPrimeRénov’ chauffe-eau solaire individuel (CESI) et système solaire combiné (SSC) à l’intervention d’un artisan RGE qualifié QualiSol. Sans QualiSol, vous perdez l’ensemble des aides : MaPrimeRénov’ (1 000-4 000 € CESI, jusqu’à 11 000 € SSC), Coup de pouce CEE, TVA 5,5 %, éco-PTZ. Soit un surcoût potentiel de 3 000 à 5 000 € sur un CESI standard.',
+      'L’État conditionne MaPrimeRénov’ chauffe-eau solaire individuel (CESI) et système solaire combiné (SSC) à l’intervention d’un artisan RGE certifié QualiSol. Sans QualiSol, vous perdez l’ensemble des aides : MaPrimeRénov’ (1 000-4 000 € CESI, jusqu’à 11 000 € SSC), Coup de pouce CEE, TVA 5,5 %, éco-PTZ. Soit un surcoût potentiel de 3 000 à 5 000 € sur un CESI standard.',
   },
   {
     question: 'Combien coûte un chauffe-eau solaire CESI ?',

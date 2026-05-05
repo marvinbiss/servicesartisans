@@ -17,13 +17,13 @@ export const revalidate = 3600 // ISR - revalidate every hour
 export const metadata: Metadata = {
   title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
   description:
-    "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Pompe à chaleur, isolation, photovoltaïque, plomberie et 40+ métiers RGE. Données SIREN officielles + certification RGE vérifiée ADEME.",
+    "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Pompe à chaleur, isolation, photovoltaïque, plomberie et 20+ métiers RGE. Données SIREN officielles + certification RGE vérifiée ADEME.",
   alternates: getAlternates(`/artisans`),
   openGraph: {
     locale: 'fr_FR',
     title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
     description:
-      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) parmi les professionnels référencés en France. Données SIREN officielles et certification RGE vérifiée ADEME.",
+      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France. 100 % des artisans publiés sont RGE — données SIREN officielles et certification RGE vérifiée ADEME.",
     url: `${SITE_URL}/artisans`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -113,12 +113,12 @@ export default async function ArtisansPage() {
     {
       question: 'Comment sont sélectionnés les artisans RGE certifiés ?',
       answer:
-        "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR, QualiBois, QualiSol, QualiPV. Chaque fiche est vérifiée SIRET via SIRENE/INSEE et synchronisée chaque semaine avec la base ADEME officielle (france-renov.gouv.fr). Les fiches dont le RGE expire ou en cessation d'activité sont automatiquement masquées.",
+        "Nous référençons uniquement les artisans titulaires d'une qualification RGE (Reconnu Garant de l'Environnement) en cours de validité : Qualibat, Qualifelec, QualiPAC, Qualit'EnR (qui regroupe les certifications QualiBois, QualiSol et QualiPV). Chaque fiche est vérifiée SIRET via SIRENE/INSEE et synchronisée chaque semaine avec la base ADEME officielle (france-renov.gouv.fr). Les fiches dont le RGE expire ou en cessation d'activité sont automatiquement masquées.",
     },
     {
-      question: 'Comment savoir si un artisan est qualifié RGE ?',
+      question: 'Comment savoir si un artisan est certifié RGE ?',
       answer:
-        "Tous les artisans référencés sur ServicesArtisans sont RGE certifiés. Chaque fiche affiche les qualifications RGE en cours de validité (QualiPAC, QualiBois, Qualibat, Qualifelec, QualiSol, QualiPV, Qualit'EnR), leur numéro, leur domaine et leur date d'expiration. Ces données proviennent de la base officielle ADEME et sont synchronisées chaque semaine.",
+        "Tous les artisans publiés sur ServicesArtisans sont RGE certifiés. Chaque fiche affiche les qualifications RGE en cours de validité (Qualibat, Qualifelec, QualiPAC, Qualit'EnR — incluant QualiBois, QualiSol, QualiPV), leur numéro, leur domaine et leur date d'expiration. Ces données proviennent de la base officielle ADEME et sont synchronisées chaque semaine.",
     },
     {
       question: 'Les avis sont-ils vraiment authentiques ?',
@@ -174,7 +174,7 @@ export default async function ArtisansPage() {
           </h1>
           <p className="text-lg md:text-xl text-charcoal-300 max-w-3xl mx-auto mb-8">
             {count > 0
-              ? `Plus de ${Math.floor(count / 1000) * 1000} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans toute la France. Pompe à chaleur, isolation, photovoltaïque, plomberie et 40+ métiers RGE.`
+              ? `Plus de ${Math.floor(count / 1000) * 1000} artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans toute la France. Pompe à chaleur, isolation, photovoltaïque, plomberie et 20+ métiers RGE.`
               : "Tous les artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans toute la France."}
           </p>
 
@@ -215,8 +215,8 @@ export default async function ArtisansPage() {
                 <div className="text-sm text-charcoal-900 mt-1">Départements</div>
               </div>
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-charcoal-900">13 680+</div>
-                <div className="text-sm text-charcoal-900 mt-1">Communes desservies</div>
+                <div className="text-2xl md:text-3xl font-bold text-charcoal-900">35 999</div>
+                <div className="text-sm text-charcoal-900 mt-1">Communes couvertes</div>
               </div>
             </div>
           </div>

@@ -102,7 +102,7 @@ export default function CeeCTA({
             Estimez votre prime CEE gratuitement
           </h3>
           <p className="text-sm text-charcoal-600 leading-relaxed mb-4">
-            Comparez les devis d{"'"}artisans RGE qualifiés et sécurisez votre prime énergie dès la
+            Comparez les devis d{"'"}artisans RGE certifiés et sécurisez votre prime énergie dès la
             signature.
             {ville ? (
               <>

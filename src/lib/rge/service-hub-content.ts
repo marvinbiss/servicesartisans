@@ -207,7 +207,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
     h1: 'Chauffagistes RGE certifiés',
     lede: 'Installateurs RGE de chaudières biomasse, poêles à granulés, systèmes hybrides et chauffage bas-carbone. QualiBois, Chauffage + et Qualibat RGE.',
     description: [
-      "Le remplacement d'un système de chauffage ancien — fioul, gaz vétuste, convecteurs électriques — est l'un des chantiers les plus impactants en rénovation énergétique. Un chauffagiste RGE qualifié sait dimensionner précisément la puissance du générateur, adapter l'émission (radiateurs, plancher, ventilo-convecteurs) et raccorder le tout à l'hydraulique existante sans créer de dysfonctionnement.",
+      "Le remplacement d'un système de chauffage ancien — fioul, gaz vétuste, convecteurs électriques — est l'un des chantiers les plus impactants en rénovation énergétique. Un chauffagiste RGE certifié sait dimensionner précisément la puissance du générateur, adapter l'émission (radiateurs, plancher, ventilo-convecteurs) et raccorder le tout à l'hydraulique existante sans créer de dysfonctionnement.",
       "La mention de référence est QualiBois (Qualit'EnR) pour la biomasse, Chauffage + (Qualibat) pour les systèmes gaz à condensation haute performance. Certains artisans cumulent plusieurs qualifications et couvrent l'ensemble de la gamme chauffage. Sans mention RGE active, le Coup de Pouce Chauffage CEE — qui peut atteindre 5 000 € pour un remplacement de chaudière fioul — n'est pas mobilisable.",
       "Les chauffagistes listés ci-dessous disposent tous d'une qualification RGE active (QualiBois, Chauffage +, ou Qualibat RGE chauffage), vérifiée chaque semaine au référentiel ADEME.",
     ],

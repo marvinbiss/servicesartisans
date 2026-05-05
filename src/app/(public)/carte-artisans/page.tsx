@@ -96,7 +96,7 @@ export default function CarteArtisansPage() {
             <p className="text-primary-100 text-lg max-w-2xl">
               Explorez la couverture des artisans RGE certifiés (Reconnu Garant de l'Environnement)
               sur notre plateforme dans les 101 départements. Cliquez sur une ville pour découvrir
-              les professionnels disponibles.
+              les artisans RGE certifiés disponibles.
             </p>
           </div>
         </div>

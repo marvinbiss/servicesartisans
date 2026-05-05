@@ -407,8 +407,8 @@ export default function Page() {
               Pas envie de tout vérifier vous-même ?
             </h2>
             <p className="text-primary-100 mb-5 max-w-xl mx-auto">
-              Nos artisans référencés sont tous rattachés à un SIRET actif vérifié. Décrivez votre
-              projet, vous recevez jusqu’à 3 devis gratuits sous 24 h.
+              Nos artisans RGE certifiés sont tous rattachés à un SIRET actif vérifié. Décrivez
+              votre projet, vous recevez jusqu’à 3 devis gratuits sous 24 h.
             </p>
             <Link
               href="/devis"

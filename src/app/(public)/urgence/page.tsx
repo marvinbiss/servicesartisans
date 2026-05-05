@@ -253,15 +253,15 @@ export default async function UrgencePage() {
   }
 
   const enBrefPoints = [
-    `4 métiers urgence : plombier, électricien, serrurier, chauffagiste`,
+    `5 métiers urgence RGE : plombier, électricien, chauffagiste, couvreur, climaticien`,
     `Disponible soir & week-end, intervention rapide selon dispo locale`,
     `${villes.length}+ villes couvertes en France`,
     `Devis transparent — fuir les arnaques au tarif "express"`,
   ]
 
   const tldrBullets = [
-    `Une urgence est une situation à risque immédiat (fuite d'eau, court-circuit, porte claquée nuit, fuite gaz). Pour la sécurité — pompiers 18, gaz 0 800 47 33 33, dépannage 112.`,
-    `Notre service met en relation 4 corps de métier d'urgence avec des artisans vérifiés SIREN dans ${villes.length}+ villes, soir et week-end.`,
+    `Une urgence est une situation à risque immédiat (fuite d'eau, court-circuit, panne chauffage en hiver, fuite toiture, panne PAC en canicule). Pour la sécurité — pompiers 18, gaz 0 800 47 33 33, dépannage 112.`,
+    `Notre service met en relation 5 corps de métier d'urgence (plombier, électricien, chauffagiste, couvreur, climaticien) avec des artisans RGE certifiés et vérifiés SIREN dans ${villes.length}+ villes, soir et week-end.`,
     `Toujours demander un devis écrit AVANT intervention non vitale. Refuser les "tarifs express" verbaux > 200 €/h sans détail.`,
     `Vérifier en arrivant : carte pro, SIRET, assurance décennale. Conserver tickets, photos, devis : indispensable pour assurance habitation.`,
   ]
@@ -300,8 +300,8 @@ export default async function UrgencePage() {
             <span className="text-red-300">Intervention rapide 24h/7j.</span>
           </h1>
           <p className="text-xl text-red-100/80 max-w-2xl mb-10">
-            Plombier, électricien, serrurier, chauffagiste — un artisan référencé intervient chez
-            vous rapidement, jour et nuit, selon disponibilité.
+            Plombier, électricien, chauffagiste, couvreur, climaticien — un artisan RGE certifié
+            intervient chez vous rapidement, jour et nuit, selon disponibilité.
           </p>
 
           {/* Emergency CTAs */}
@@ -615,7 +615,7 @@ export default async function UrgencePage() {
             Une urgence ? Ne perdez pas de temps.
           </h2>
           <p className="text-xl text-red-100/80 mb-8">
-            Nos artisans référencés sont disponibles selon leurs horaires, y compris parfois les
+            Nos artisans RGE certifiés sont disponibles selon leurs horaires, y compris parfois les
             jours fériés pour intervenir rapidement chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

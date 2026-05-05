@@ -70,7 +70,7 @@ export default function RecherchePage() {
             Rechercher un artisan RGE certifié
           </h1>
           <p className="text-xl text-primary-100/80 mb-10 max-w-2xl mx-auto">
-            Trouvez l'artisan RGE qualifié (Qualibat, Qualifelec, QualiPAC) idéal pour votre projet
+            Trouvez l'artisan RGE certifié (Qualibat, Qualifelec, QualiPAC) idéal pour votre projet
             de rénovation énergétique. Comparez les avis, les tarifs et demandez des devis gratuits
             éligibles MaPrimeRénov' & CEE.
           </p>

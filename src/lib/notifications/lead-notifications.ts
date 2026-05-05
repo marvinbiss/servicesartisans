@@ -430,7 +430,7 @@ function emailTemplate(opts: {
       </div>
       ${opts.footer ? `<p style="color: #888; font-size: 13px; line-height: 1.5;">${opts.footer}</p>` : ''}
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
-      <p style="color: #aaa; font-size: 12px; text-align: center;">${SITE_NAME} – La plateforme des artisans qualifiés</p>
+      <p style="color: #aaa; font-size: 12px; text-align: center;">${SITE_NAME} – La plateforme des artisans RGE certifiés</p>
     </div>
   </div>
 </body>

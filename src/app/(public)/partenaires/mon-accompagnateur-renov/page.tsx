@@ -50,7 +50,7 @@ const MODIFIED = '2026-05-04'
 
 const TITLE = "Partenariat Mon Accompagnateur Rénov' — ServicesArtisans"
 const DESCRIPTION =
-  "ServicesArtisans propose aux Mon Accompagnateur Rénov' (MAR) agréés ANAH un flux de chantiers RGE qualifiés. Partenariat mutualisé sur la France entière : leads exclusifs propriétaires Parcours accompagné MaPrimeRénov'."
+  "ServicesArtisans propose aux Mon Accompagnateur Rénov' (MAR) agréés ANAH un flux de chantiers RGE certifiés. Partenariat mutualisé sur la France entière : leads exclusifs propriétaires Parcours accompagné MaPrimeRénov'."
 
 const PARTNER_EMAIL = 'partenariats@servicesartisans.fr'
 
@@ -78,8 +78,8 @@ const benefits = [
   },
   {
     icon: Network,
-    title: 'Réseau national 970 K artisans + 50 K RGE',
-    text: "Annuaire ServicesArtisans : 970 000 artisans français, 50 000 RGE actifs. Vos chantiers MAR trouvent l'artisan certifié de la bonne famille de travaux dans la zone.",
+    title: 'Réseau national ~50 000 artisans RGE certifiés',
+    text: "Annuaire ServicesArtisans : ~50 000 artisans RGE actifs (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), synchronisés chaque semaine sur la base ADEME. Vos chantiers MAR trouvent l'artisan certifié de la bonne famille de travaux dans la zone.",
   },
   {
     icon: ShieldCheck,

@@ -495,7 +495,7 @@ export default function CommentDevenirRgePage() {
             <strong>mécaniquement exclu</strong> de la majeure partie du marché de la rénovation
             énergétique performante&nbsp;: isolation, pompes à chaleur, chaudières biomasse, solaire
             thermique, menuiseries performantes, ventilation double flux. Sur ces segments, les
-            clients demandent systématiquement un devis d’artisan qualifié RGE pour ne pas perdre
+            clients demandent systématiquement un devis d’artisan certifié RGE pour ne pas perdre
             leurs aides.
           </p>
           <p>

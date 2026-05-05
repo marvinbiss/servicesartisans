@@ -240,7 +240,10 @@ async function _getNationalStats(): Promise<NationalStats> {
     }
   } catch {
     return {
-      totalArtisans: 940000,
+      // Pivot full RGE 2026-05-05 — fallback aligné sur le périmètre RGE
+      // (~50 000 fiches publiées). La page baromètre re-borne via
+      // RGE_TOTAL_FALLBACK = 50000 si la valeur DB sort du cadre.
+      totalArtisans: 50000,
       noteGlobale: 4.2,
       totalAvis: 0,
       tauxVerifGlobal: 0,
@@ -253,7 +256,10 @@ async function _getNationalStats(): Promise<NationalStats> {
 export async function getNationalStats(): Promise<NationalStats> {
   if (IS_BUILD) {
     return {
-      totalArtisans: 940000,
+      // Pivot full RGE 2026-05-05 — fallback aligné sur le périmètre RGE
+      // (~50 000 fiches publiées). La page baromètre re-borne via
+      // RGE_TOTAL_FALLBACK = 50000 si la valeur DB sort du cadre.
+      totalArtisans: 50000,
       noteGlobale: 4.2,
       totalAvis: 0,
       tauxVerifGlobal: 0,

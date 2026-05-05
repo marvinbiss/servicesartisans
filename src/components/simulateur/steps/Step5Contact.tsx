@@ -60,7 +60,7 @@ export default function Step5Contact({ state, dispatch, onSubmit }: Props) {
         </p>
         <p className="mt-1 text-xs text-emerald-800">
           Renseignez vos coordonnées pour découvrir votre reste à charge détaillé et recevoir un
-          devis personnalisé d&apos;un artisan RGE qualifié.
+          devis personnalisé d&apos;un artisan RGE certifié.
         </p>
       </div>
       <h3 className="text-lg font-semibold text-slate-900">Étape 5 — Vos coordonnées</h3>

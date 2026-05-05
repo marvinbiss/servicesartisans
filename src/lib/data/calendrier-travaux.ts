@@ -363,7 +363,7 @@ export const calendrierTravaux: CalendrierMois[] = [
       {
         titre: 'Installation de poêle à bois ou granulés',
         description:
-          'Octobre est le dernier mois pour installer un poêle avant les premiers froids. Le conduit de fumée, la ventilation et le raccordement doivent être réalisés par un professionnel qualifié RGE pour les aides.',
+          'Octobre est le dernier mois pour installer un poêle avant les premiers froids. Le conduit de fumée, la ventilation et le raccordement doivent être réalisés par un professionnel certifié RGE pour les aides.',
         service: 'chauffagiste',
       },
       {

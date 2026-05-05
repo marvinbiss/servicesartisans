@@ -172,7 +172,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       "En attendant le technicien : **fermez volets et rideaux** côté soleil dès le matin, **créez des courants d'air** la nuit (ventilation traversante), placez un **linge humide devant un ventilateur** (principe du rafraîchissement adiabatique), et **hydratez-vous** régulièrement. Si la température intérieure dépasse 35 °C et que vous avez des personnes vulnérables, contactez le **numéro vert canicule (0 800 06 66 66)**.",
 
       '## Trouver un technicien climatisation en urgence',
-      'Les frigoristes qualifiés possèdent obligatoirement une **attestation de capacité** pour manipuler les fluides frigorigènes (règlement européen F-Gas). Vérifiez cette certification avant de confier votre clim à un « dépanneur multiservices ». En période caniculaire, les professionnels référencés sur notre [annuaire climatisation](/services/climaticien) affichent leurs disponibilités et délais réels.',
+      'Les frigoristes qualifiés possèdent obligatoirement une **attestation de capacité** pour manipuler les fluides frigorigènes (règlement européen F-Gas). Vérifiez cette certification avant de confier votre clim à un « dépanneur multiservices ». En période caniculaire, les artisans RGE certifiés sur notre [annuaire climatisation](/services/climaticien) affichent leurs disponibilités et délais réels.',
 
       "## Prévenir les pannes : l'entretien au printemps",
       "L'entretien annuel d'un climatiseur split coûte entre **100 et 180 €** et comprend : nettoyage des filtres, vérification de la charge de gaz, contrôle électrique, et nettoyage de l'unité extérieure. Idéalement, planifiez cet entretien en **avril-mai**, avant la saison chaude. Les appareils de plus de 2 kg de fluide frigorigène doivent faire l'objet d'un **contrôle d'étanchéité obligatoire** annuel (règlement F-Gas).",
@@ -801,7 +801,7 @@ export const saisonnierUrgenceArticles: Record<string, BlogArticle> = {
       {
         question: 'Comment trouver un serrurier fiable à 3 heures du matin ?',
         answer:
-          "Privilégiez dans l'ordre : le numéro d'assistance de votre assurance habitation (24h/24), un serrurier que vous avez identifié à l'avance et dont vous avez le numéro, ou un professionnel référencé sur un annuaire vérifié comme ServicesArtisans. Évitez les premiers résultats sponsorisés sur Google qui sont souvent des centrales d'appels sans artisans propres.",
+          "Privilégiez dans l'ordre : le numéro d'assistance de votre assurance habitation (24h/24), un serrurier que vous avez identifié à l'avance et dont vous avez le numéro, ou un artisan RGE certifié sur un annuaire vérifié comme ServicesArtisans. Évitez les premiers résultats sponsorisés sur Google qui sont souvent des centrales d'appels sans artisans propres.",
       },
     ],
   },

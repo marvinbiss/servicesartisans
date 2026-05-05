@@ -533,9 +533,9 @@ export default function RenovationEnergetiqueHub() {
               <strong>à la date de signature du devis</strong> — pas au démarrage du chantier.
             </p>
             <p className="text-charcoal-600 leading-relaxed mb-4">
-              ServicesArtisans vérifie chaque jour la liste ADEME des 50 332 artisans RGE actifs en
-              France. Chaque fiche affiche les qualifications exactes (Qualibat, Qualit&apos;EnR,
-              Qualifelec, Certibat, OPQIBI) avec la date d&apos;expiration.
+              ServicesArtisans vérifie chaque semaine la liste ADEME des ~50 000 artisans RGE actifs
+              en France. Chaque fiche affiche les qualifications exactes (Qualibat, Qualifelec,
+              QualiPAC, Qualit&apos;EnR) avec la date d&apos;expiration.
             </p>
             <Link
               href="/guides/annuaire-rge-verifier-officiel"
@@ -547,11 +547,16 @@ export default function RenovationEnergetiqueHub() {
           </div>
           <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6">
             <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
-              Les 5 principaux organismes RGE
+              4 organismes RGE certificateurs (16 qualifications)
             </h3>
+            <p className="text-xs text-charcoal-500 mb-3">
+              Les 4 principaux organismes accrédités COFRAC qui délivrent les 16 qualifications RGE
+              référencées sur ServicesArtisans.
+            </p>
             <ul className="space-y-3 text-sm text-charcoal-700">
               <li>
-                <strong>Qualibat</strong> — isolation, maçonnerie, couverture, menuiserie, plomberie
+                <strong>Qualibat</strong> — isolation, maçonnerie, couverture, menuiserie
+                (qualifications 5911, 6111, 7131…)
               </li>
               <li>
                 <strong>Qualit&apos;EnR</strong> — pompes à chaleur (QualiPAC), bois (QualiBois),
@@ -561,13 +566,16 @@ export default function RenovationEnergetiqueHub() {
                 <strong>Qualifelec</strong> — installations électriques, IRVE, photovoltaïque
               </li>
               <li>
-                <strong>OPQIBI</strong> — bureaux d&apos;études, audits énergétiques
-              </li>
-              <li>
-                <strong>Certibat</strong> — entreprises générales du bâtiment (maisons
-                individuelles)
+                <strong>QualiPAC</strong> — installateurs de pompes à chaleur (label Qualit&apos;EnR
+                spécifique)
               </li>
             </ul>
+            <p className="text-xs text-charcoal-500 mt-3">
+              <em>
+                OPQIBI (audits énergétiques) et Certibat (entreprises générales) sont des organismes
+                RGE complémentaires non référencés directement dans notre annuaire.
+              </em>
+            </p>
           </div>
         </div>
       </section>
@@ -579,7 +587,7 @@ export default function RenovationEnergetiqueHub() {
             Artisans RGE par métier
           </h2>
           <p className="text-charcoal-600 mb-6 max-w-3xl">
-            Accédez aux artisans RGE qualifiés pour chaque type de travaux. Chaque page métier liste
+            Accédez aux artisans RGE certifiés pour chaque type de travaux. Chaque page métier liste
             les certifications requises, les opérations CEE éligibles, et les artisans actifs.
           </p>
           <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-12">

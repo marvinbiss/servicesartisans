@@ -163,7 +163,7 @@ const faqs = [
   {
     question: 'Qui peut réaliser un audit énergétique ?',
     answer:
-      'Un auditeur agréé inscrit sur l’annuaire France Rénov’ : architectes inscrits à l’Ordre, bureaux d’études thermiques certifiés OPQIBI 1905 ou 1911, diagnostiqueurs immobiliers certifiés audit énergétique, entreprises RGE qualifiées « Mention RGE Etudes » + « Audit énergétique ». Vérification gratuite sur france-renov.gouv.fr/annuaire-rge avec filtre « Audit énergétique ».',
+      'Un auditeur agréé inscrit sur l’annuaire France Rénov’ : architectes inscrits à l’Ordre, bureaux d’études thermiques certifiés OPQIBI 1905 ou 1911, diagnostiqueurs immobiliers certifiés audit énergétique, entreprises RGE certifiées « Mention RGE Etudes » + « Audit énergétique ». Vérification gratuite sur france-renov.gouv.fr/annuaire-rge avec filtre « Audit énergétique ».',
   },
   {
     question: 'Combien de temps est valable un audit énergétique ?',

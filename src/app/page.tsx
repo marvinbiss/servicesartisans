@@ -428,7 +428,7 @@ export default async function HomePage() {
               Jusqu'à 15&nbsp;000&nbsp;€ d'aides pour vos travaux
             </h2>
             <p className="text-emerald-100/90 max-w-2xl mx-auto">
-              Primes CEE, MaPrimeRénov', artisans RGE qualifiés : tout ce qu'il faut savoir pour
+              Primes CEE, MaPrimeRénov', artisans RGE certifiés : tout ce qu'il faut savoir pour
               financer votre rénovation énergétique.
             </p>
           </div>
@@ -472,8 +472,8 @@ export default async function HomePage() {
                 Annuaire artisans RGE
               </h3>
               <p className="text-sm text-emerald-100/80 leading-relaxed">
-                QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV : artisans qualifiés par métier
-                et par ville.
+                QualiPAC, QualiSol, QualiBois, Qualifelec, QualiPV : artisans RGE certifiés par
+                métier et par ville.
               </p>
               <div className="mt-3 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200 inline-flex items-center gap-1">
                 Trouver un RGE →
@@ -491,7 +491,7 @@ export default async function HomePage() {
                 Devenir mandataire CEE
               </h3>
               <p className="text-sm text-amber-100/85 leading-relaxed">
-                Touchez vos primes CEE 4× plus vite via Sonergia. Flux de chantiers RGE qualifiés,
+                Touchez vos primes CEE 4× plus vite via Sonergia. Flux de chantiers RGE certifiés,
                 leads exclusifs.
               </p>
               <div className="mt-3 text-sm font-semibold text-amber-300 group-hover:text-amber-200 inline-flex items-center gap-1">

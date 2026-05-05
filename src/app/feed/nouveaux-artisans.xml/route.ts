@@ -46,7 +46,7 @@ export async function GET() {
   <channel>
     <title>${escapeXml(SITE_NAME)} — Nouveaux artisans</title>
     <link>${SITE_URL}/artisans</link>
-    <description>Les derniers artisans référencés sur ${escapeXml(SITE_NAME)}</description>
+    <description>Les derniers artisans RGE certifiés sur ${escapeXml(SITE_NAME)}</description>
     <language>fr</language>
     <atom:link href="${SITE_URL}/feed/nouveaux-artisans.xml" rel="self" type="application/rss+xml" />
 ${items}

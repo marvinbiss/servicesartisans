@@ -477,7 +477,7 @@ export default async function CeeHubPage() {
         <p className="text-charcoal-600 max-w-3xl mb-10 leading-relaxed">
           Chaque fiche d’opération standardisée est identifiée par un code officiel (ex. BAR-EN-101)
           qui en définit les critères techniques. Cliquez sur une opération pour accéder aux
-          conditions détaillées et aux artisans RGE qualifiés, ville par ville.
+          conditions détaillées et aux artisans RGE certifiés, ville par ville.
         </p>
 
         <div className="space-y-10">
@@ -742,7 +742,7 @@ export default async function CeeHubPage() {
           Comprendre l’écosystème RGE
         </h2>
         <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-          Toute prime CEE nécessite un artisan RGE qualifié. Découvrez les métiers concernés, les
+          Toute prime CEE nécessite un artisan RGE certifié. Découvrez les métiers concernés, les
           qualifications officielles et la source des données que nous vérifions.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -757,8 +757,8 @@ export default async function CeeHubPage() {
               Annuaire artisans RGE
             </div>
             <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
-              14 métiers énergétiques (PAC, ITI, PV, poêle bois…) et 500+ villes couvertes avec
-              qualifications actives.
+              19 métiers énergétiques (PAC, ITI, PV, poêle bois, IRVE, VMC, fenêtres…) et 500+
+              villes couvertes avec qualifications RGE actives.
             </p>
             <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
               Explorer l’annuaire <ArrowRight className="w-4 h-4" aria-hidden="true" />

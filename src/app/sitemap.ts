@@ -93,7 +93,7 @@ export async function generateSitemaps() {
   )
 
   // emergencySlugs anciennement utilisé pour calculer le nombre de shards
-  // urgence-service-cities (47 svc × ~2 267 villes / 8K STATIC_BATCH = 14 shards).
+  // urgence-service-cities (21 svc RGE × ~2 267 villes / 8K STATIC_BATCH = 14 shards).
   // V2 #4 stratégie 140K (2026-04-29) consolide tout dans 1 shard ⇒ plus besoin.
   // problemSlugs n'est plus utilisé ici depuis V2 #7 — 1 shard fixe `problemes-cities-0`
   // suffit (tiered allocation ≈ 7 000 URLs ≤ STATIC_BATCH = 8 000).

@@ -591,7 +591,7 @@ export default function AidesRenovation2026Page() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez des artisans RGE qualifiés près de chez vous et obtenez un devis pour estimer le montant de vos aides.'
+                'Trouvez des artisans RGE certifiés près de chez vous et obtenez un devis pour estimer le montant de vos aides.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

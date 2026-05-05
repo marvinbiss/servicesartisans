@@ -147,7 +147,7 @@ const FAQ = [
   {
     question: 'Comment obtenir simultanément MaPrimeRénov’ et le Coup de pouce ?',
     answer:
-      'Procédure : (1) demander un devis à un artisan RGE qualifié pour l’opération ; (2) déposer la demande MaPrimeRénov’ sur maprimerenov.gouv.fr AVANT signature ; (3) inscrire le chantier chez un obligé CEE (Effy, Sonergia…) AVANT signature également ; (4) signer le devis une fois les deux accords obtenus ; (5) après travaux, déposer factures + photos avant/après géotaggées dans les deux dossiers.',
+      'Procédure : (1) demander un devis à un artisan RGE certifié pour l’opération ; (2) déposer la demande MaPrimeRénov’ sur maprimerenov.gouv.fr AVANT signature ; (3) inscrire le chantier chez un obligé CEE (Effy, Sonergia…) AVANT signature également ; (4) signer le devis une fois les deux accords obtenus ; (5) après travaux, déposer factures + photos avant/après géotaggées dans les deux dossiers.',
   },
 ]
 

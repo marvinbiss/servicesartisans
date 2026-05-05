@@ -85,7 +85,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Puis-je contester un audit énergétique qui me semble mauvais ?',
     answer:
-      "Oui. Un audit énergétique est une prestation intellectuelle soumise aux règles de la responsabilité contractuelle et, pour les professionnels qualifiés RGE, au respect d'un référentiel technique. Si l'audit ne respecte pas le cahier des charges de l'arrêté du 4 mai 2022 modifié (absence de scénarios, classement DPE incohérent, calculs manquants), vous pouvez commencer par une réclamation écrite à l'auditeur, puis saisir l'organisme de qualification (Qualibat, OPQIBI) qui peut engager une procédure de contrôle. En dernier recours, le médiateur de la consommation ou le tribunal compétent peuvent être saisis. Un second auditeur qualifié peut produire une contre-expertise.",
+      "Oui. Un audit énergétique est une prestation intellectuelle soumise aux règles de la responsabilité contractuelle et, pour les professionnels RGE certifiés, au respect d'un référentiel technique. Si l'audit ne respecte pas le cahier des charges de l'arrêté du 4 mai 2022 modifié (absence de scénarios, classement DPE incohérent, calculs manquants), vous pouvez commencer par une réclamation écrite à l'auditeur, puis saisir l'organisme de qualification (Qualibat, OPQIBI) qui peut engager une procédure de contrôle. En dernier recours, le médiateur de la consommation ou le tribunal compétent peuvent être saisis. Un second auditeur qualifié peut produire une contre-expertise.",
   },
   {
     question: "Audit énergétique et DPE : c'est la même chose ?",
@@ -95,7 +95,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Un audit gratuit ou offert par un installateur est-il fiable ?',
     answer:
-      "À considérer avec prudence. Un audit énergétique sérieux représente plusieurs heures de relevé sur site, plusieurs heures de modélisation et la mobilisation d'un professionnel qualifié : il a un coût réel. Lorsqu'il est proposé « gratuit » par un installateur ou un démarcheur, c'est généralement qu'il est financé par la marge d'un contrat de travaux associé, ce qui place l'auditeur en situation de conflit d'intérêts. L'audit risque alors d'orienter les scénarios vers les produits de l'installateur plutôt que vers le meilleur intérêt thermique du logement. Pour être éligible aux aides publiques, l'audit doit en outre être réalisé par un professionnel qualifié RGE audit, condition que la plupart des démarcheurs ne remplissent pas.",
+      "À considérer avec prudence. Un audit énergétique sérieux représente plusieurs heures de relevé sur site, plusieurs heures de modélisation et la mobilisation d'un professionnel qualifié : il a un coût réel. Lorsqu'il est proposé « gratuit » par un installateur ou un démarcheur, c'est généralement qu'il est financé par la marge d'un contrat de travaux associé, ce qui place l'auditeur en situation de conflit d'intérêts. L'audit risque alors d'orienter les scénarios vers les produits de l'installateur plutôt que vers le meilleur intérêt thermique du logement. Pour être éligible aux aides publiques, l'audit doit en outre être réalisé par un professionnel certifié RGE audit, condition que la plupart des démarcheurs ne remplissent pas.",
   },
 ]
 
@@ -108,7 +108,7 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     title: 'Tarifs audit énergétique 2026 : prix, aides et retour sur investissement',
     description:
-      "Prix moyens d'un audit énergétique, forfait MaPrimeRénov' audit, rentabilité et critères de choix d'un auditeur qualifié RGE.",
+      "Prix moyens d'un audit énergétique, forfait MaPrimeRénov' audit, rentabilité et critères de choix d'un auditeur certifié RGE.",
     url: PAGE_URL,
     siteName: SITE_NAME,
     type: 'article',
@@ -146,7 +146,7 @@ export default function TarifsAuditEnergetiquePage() {
     image: `${SITE_URL}/opengraph-image`,
     headline: 'Tarifs audit énergétique 2026 : prix, aides et retour sur investissement',
     description:
-      "Guide de référence sur les tarifs de l'audit énergétique réglementaire en 2026 : fourchettes de prix, forfait MaPrimeRénov' audit, rentabilité et critères de choix d'un auditeur qualifié RGE.",
+      "Guide de référence sur les tarifs de l'audit énergétique réglementaire en 2026 : fourchettes de prix, forfait MaPrimeRénov' audit, rentabilité et critères de choix d'un auditeur certifié RGE.",
     datePublished: PUBLISHED_AT,
     dateModified: UPDATED_AT,
     inLanguage: 'fr-FR',
@@ -350,7 +350,7 @@ export default function TarifsAuditEnergetiquePage() {
                 <strong>Important :</strong> la qualification RGE audit est{' '}
                 <strong>obligatoire</strong> pour que l'audit soit éligible au forfait MaPrimeRénov'
                 audit et ouvre les droits au Parcours Accompagné. Un audit réalisé par un
-                professionnel non qualifié RGE peut être techniquement correct, mais il ne
+                professionnel non certifié RGE peut être techniquement correct, mais il ne
                 déclenchera aucune aide publique.
               </p>
             </div>
@@ -476,7 +476,7 @@ export default function TarifsAuditEnergetiquePage() {
               maprimerenov.gouv.fr
             </a>{' '}
             et évoluent chaque année : consultez-les au moment de votre dossier. Pour en bénéficier,
-            l'audit doit impérativement être réalisé par un professionnel qualifié RGE audit.
+            l'audit doit impérativement être réalisé par un professionnel certifié RGE audit.
           </p>
 
           <h3 className="font-heading text-xl font-bold text-charcoal-900 mt-6 mb-2">
@@ -596,7 +596,7 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="flex items-center gap-3 mb-5">
             <ClipboardList className="w-7 h-7 text-emerald-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
-              Comment choisir un auditeur énergétique qualifié RGE&nbsp;?
+              Comment choisir un auditeur énergétique certifié RGE&nbsp;?
             </h2>
           </div>
           <p className="text-charcoal-700 leading-relaxed mb-6">
@@ -716,7 +716,7 @@ export default function TarifsAuditEnergetiquePage() {
             Lancez votre audit énergétique avec un professionnel qualifié
           </h2>
           <p className="text-lg text-emerald-50/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Comparez jusqu'à trois devis d'auditeurs qualifiés RGE, vérifiez leurs références et
+            Comparez jusqu'à trois devis d'auditeurs RGE certifiés, vérifiez leurs références et
             débloquez votre Parcours Accompagné MaPrimeRénov' en toute sécurité.
           </p>
           <div className="flex flex-wrap justify-center gap-3">

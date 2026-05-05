@@ -690,7 +690,7 @@ export default function MandataireVsDirectPage() {
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Retrouvez le catalogue des opérations standardisées, nos guides éditoriaux et l’annuaire
-            des artisans RGE qualifiés pour chaque type de travaux.
+            des artisans RGE certifiés pour chaque type de travaux.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

@@ -234,7 +234,7 @@ export default function CeeGuidesIndexPage() {
             Prêt à lancer votre projet&nbsp;?
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Demandez un devis gratuit auprès d’un artisan RGE qualifié et sécurisez votre prime CEE
+            Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <Link

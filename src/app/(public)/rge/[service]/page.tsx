@@ -448,7 +448,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
               Chaque opération CEE standardisée ci-dessous est éligible aux primes versées par les
               délégataires obligés (Effy, Sonergia, TotalEnergies, EDF) dès lors que les travaux
-              sont réalisés par un artisan RGE qualifié. Cliquez pour accéder au guide détaillé.
+              sont réalisés par un artisan RGE certifié. Cliquez pour accéder au guide détaillé.
             </p>
             <div className="flex flex-wrap gap-2">
               {ceeGuideLinks.map((c) => (

@@ -296,7 +296,7 @@ export default function DevenirPartenaireCeePage() {
     areaServed: { '@type': 'Country', name: 'France' },
     audience: {
       '@type': 'BusinessAudience',
-      name: 'Artisans du bâtiment qualifiés RGE',
+      name: 'Artisans du bâtiment RGE certifiés',
       audienceType:
         "Entreprises artisanales du bâtiment disposant d'une qualification RGE active (Qualibat, Qualit'EnR, Qualifelec ou équivalent accrédité COFRAC) et d'une assurance décennale à jour.",
     },

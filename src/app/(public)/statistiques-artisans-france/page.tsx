@@ -997,7 +997,7 @@ export default function StatistiquesArtisansFrancePage() {
                 </div>
                 <div>
                   <p className="mb-2">
-                    Ce calendrier génère une demande massive d'artisans qualifiés RGE, notamment :
+                    Ce calendrier génère une demande massive d'artisans RGE certifiés, notamment :
                   </p>
                   <ul className="space-y-1 ml-4">
                     <li>&bull; Installateurs de pompes à chaleur</li>

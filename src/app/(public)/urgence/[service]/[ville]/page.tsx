@@ -876,7 +876,7 @@ async function renderUrgenceServiceVillePage({
       : `Stop catastrophe en attendant l'artisan : couper l'eau / l'électricité selon le cas`,
     providers.length > 0
       ? `${providers.length} ${tradeLower}${providers.length > 1 ? 's' : ''} référencé${providers.length > 1 ? 's' : ''} disponible${providers.length > 1 ? 's' : ''} à ${villeData.name}`
-      : `Mise en relation immédiate avec un artisan référencé`,
+      : `Mise en relation immédiate avec un artisan RGE certifié`,
   ]
 
   const tldrBullets: string[] = [

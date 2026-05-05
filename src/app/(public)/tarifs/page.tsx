@@ -40,9 +40,9 @@ export const revalidate = 86400
 const PUBLISHED_DATE = getPublishedDate('/tarifs')
 
 export const metadata: Metadata = {
-  title: 'Tarifs Artisans 2026 : Prix par Métier',
+  title: 'Tarifs Artisans RGE 2026 : Prix par Métier',
   description:
-    'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+    'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
   alternates: getAlternates('/tarifs'),
   robots: {
     index: true,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
     description:
-      'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
     url: `${SITE_URL}/tarifs`,
     type: 'website',
     images: [
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
     description:
-      'Tarifs artisans 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, maçon, peintre. Comparez 15 corps de métier + devis gratuit.',
+      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -104,6 +104,7 @@ const tradeFaqs = [
 ]
 
 // Pivot full RGE 2026-05-03 : serrurier/carreleur/vitrier/cuisiniste retirés.
+// Pivot pure-play BTP énergétique 2026-05-02 : jardinier/nettoyage retirés.
 const tradeEmojis: Record<string, string> = {
   plombier: '🔧',
   electricien: '⚡',
@@ -113,11 +114,10 @@ const tradeEmojis: Record<string, string> = {
   'salle-de-bain': '🛁',
   couvreur: '🏠',
   macon: '🏗️',
-  jardinier: '🌳',
   climaticien: '❄️',
   'pompe-a-chaleur': '♨️',
   'isolation-thermique': '🧱',
-  nettoyage: '✨',
+  'panneaux-solaires': '☀️',
 }
 
 export default async function TarifsPage() {

@@ -149,7 +149,7 @@ export default function CalendrierTravauxPage() {
     {
       question: 'Combien de temps à l’avance faut-il contacter un artisan ?',
       answer:
-        "Prévoyez 1 à 2 mois d'avance pour des travaux de 1-2 semaines, 3 à 6 mois pour une rénovation complète ou toiture. En haute saison (avril-juin, septembre), les carnets de commandes sont remplis : anticipez dès février-mars pour sécuriser une équipe RGE reconnue.",
+        "Prévoyez 1 à 2 mois d'avance pour des travaux de 1-2 semaines, 3 à 6 mois pour une rénovation complète ou toiture. En haute saison (avril-juin, septembre), les carnets de commandes sont remplis : anticipez dès février-mars pour sécuriser une équipe RGE certifiée.",
     },
   ])
 

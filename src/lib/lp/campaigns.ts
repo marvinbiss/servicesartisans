@@ -99,7 +99,7 @@ const CAMPAIGNS: Record<string, LpCampaign> = {
       "Audit énergétique réglementaire obligatoire pour la vente d'un DPE F ou G (et E depuis 2025). Réalisé par un auditeur RGE OPQIBI 1905 ou Qualibat 8731. Devis gratuit en 24h.",
     ctaLabel: 'Demander mon audit énergétique',
     trustBlocks: [
-      { label: 'Auditeurs RGE qualifiés', value: 'OPQIBI 1905' },
+      { label: 'Auditeurs RGE certifiés', value: 'OPQIBI 1905' },
       { label: 'Aide MaPrimeRénov Audit', value: '500 €' },
       { label: 'Validité audit', value: '5 ans' },
     ],

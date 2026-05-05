@@ -272,7 +272,7 @@ export async function sendWelcomeEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifiés
+    ServicesArtisans - La plateforme des artisans RGE certifiés
   </p>
 </body>
 </html>
@@ -329,7 +329,7 @@ export async function sendPasswordResetEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifiés
+    ServicesArtisans - La plateforme des artisans RGE certifiés
   </p>
 </body>
 </html>
@@ -386,7 +386,7 @@ export async function sendClaimEmailConfirmation(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans — La plateforme des artisans qualifiés<br>
+    ServicesArtisans — La plateforme des artisans RGE certifiés<br>
     <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
@@ -442,7 +442,7 @@ export async function sendClaimApprovedEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifiés<br>
+    ServicesArtisans - La plateforme des artisans RGE certifiés<br>
     <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
@@ -509,7 +509,7 @@ export async function sendBookingConfirmationEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifiés
+    ServicesArtisans - La plateforme des artisans RGE certifiés
   </p>
 </body>
 </html>
@@ -575,7 +575,7 @@ export async function sendQuoteRequestEmail(params: {
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="color: #999; font-size: 12px; text-align: center;">
-    ServicesArtisans - La plateforme des artisans qualifiés
+    ServicesArtisans - La plateforme des artisans RGE certifiés
   </p>
 </body>
 </html>

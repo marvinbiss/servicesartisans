@@ -36154,9 +36154,9 @@ export function getQuartierBySlug(
   return { ville, quartierName: match }
 }
 
-// Services disponibles avec icônes Lucide (46 métiers)
+// Services disponibles avec icônes Lucide (21 métiers — pivot full RGE 2026-05-03)
 export const services = [
-  // ── 15 services historiques ──
+  // ── 8 services historiques ──
   { slug: 'plombier', name: 'Plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600' },
   { slug: 'electricien', name: 'Électricien', icon: 'Zap', color: 'from-amber-500 to-amber-600' },
   {

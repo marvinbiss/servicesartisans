@@ -80,7 +80,7 @@ const tldr = [
   "MaPrimeRénov' Parcours accompagné : jusqu'à 70 000 € pour rénovation d'ampleur (gain ≥ 2 classes DPE).",
   'CEE Coup de pouce chauffage : 2 500-5 000 € pour PAC, chaudière biomasse, isolation.',
   'Éco-PTZ : prêt 50 000 € sans intérêts sur 20 ans, cumulable avec MPR + CEE.',
-  "TVA 5,5 % automatique sur main-d'œuvre + matériaux avec artisan RGE qualifié.",
+  "TVA 5,5 % automatique sur main-d'œuvre + matériaux avec artisan RGE certifié.",
   'Cumul typique pour ménages modestes : reste à charge 10-30 % du devis total.',
 ]
 

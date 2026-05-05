@@ -2050,7 +2050,7 @@ Signalement sur [signal.conso.gouv.fr](https://signal.conso.gouv.fr). La DGCCRF 
 "Dans 80 % des litiges bâtiment que je traite, le client n'a pas de PV de réception des travaux. Ce document est ESSENTIEL : il est le point de départ de la garantie de parfait achèvement (1 an), de la garantie biennale (2 ans) et de la garantie décennale (10 ans). Sans lui, prouver la responsabilité de l'artisan est beaucoup plus difficile."
 :::
 
-Pour trouver des artisans vérifiés avec SIRET et assurance décennale validés, utilisez notre [annuaire d'artisans](/services). Chaque artisan référencé a fait l'objet d'une vérification administrative.`,
+Pour trouver des artisans RGE certifiés avec SIRET et assurance décennale validés, utilisez notre [annuaire d'artisans](/services). Chaque artisan RGE certifié a fait l'objet d'une vérification administrative.`,
 
       `## Sources et méthodologie
 

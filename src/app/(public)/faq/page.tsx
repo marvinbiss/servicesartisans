@@ -11,17 +11,18 @@ import Breadcrumb from '@/components/Breadcrumb'
 import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
-const faqTitle = 'FAQ — Questions Artisans et Travaux | ServicesArtisans'
-const faqTitleRoot = 'FAQ — Questions Artisans et Travaux'
+const faqTitle = 'FAQ — Questions Artisans RGE et Travaux | ServicesArtisans'
+const faqTitleRoot = 'FAQ — Questions Artisans RGE et Travaux'
 
 export const metadata: Metadata = {
   title: faqTitleRoot,
   description:
-    "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
+    "Retrouvez les réponses aux questions fréquentes sur ServicesArtisans : annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), demande de devis, vérification ADEME.",
   alternates: getAlternates('/faq'),
   openGraph: {
     title: faqTitle,
-    description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
+    description:
+      'Annuaire 100% artisans RGE certifiés — réponses aux questions fréquentes sur ServicesArtisans.',
     url: `${SITE_URL}/faq`,
     type: 'website',
     images: [
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: faqTitle,
-    description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
+    description: 'Annuaire 100% artisans RGE certifiés — réponses aux questions fréquentes.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -55,7 +56,7 @@ const faqWebPageSchema = {
   '@type': 'WebPage',
   name: 'Questions fréquentes (FAQ)',
   description:
-    "Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l'annuaire d'artisans.",
+    "Retrouvez les réponses aux questions fréquentes sur ServicesArtisans : annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), demande de devis, vérification ADEME.",
   url: `${SITE_URL}/faq`,
   speakable: {
     '@type': 'SpeakableSpecification',

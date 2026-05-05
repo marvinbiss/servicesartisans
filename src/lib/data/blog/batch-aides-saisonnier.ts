@@ -9,7 +9,7 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Découvrez les barèmes MaPrimeRénov' 2026 par profil, travaux éligibles et montants par geste. Obtenez un devis gratuit pour vos travaux.",
     content: [
-      "En 2025, MaPrimeRénov' a permis de financer plus de **700 000 projets de rénovation énergétique** en France, pour un montant total dépassant les 3 milliards d'euros. Pourtant, un dossier sur cinq est encore rejeté pour vice de forme ou non-respect des conditions. Ce guide exhaustif vous livre tout ce qu'il faut savoir sur le dispositif en 2026 : les barèmes actualisés, les parcours disponibles, les montants exacts par geste et les démarches à suivre pour toucher votre prime sans mauvaise surprise. Si vous cherchez un [chauffagiste qualifié RGE](/services/chauffagiste) pour vos travaux, notre annuaire vous met en relation avec des professionnels certifiés.",
+      "En 2025, MaPrimeRénov' a permis de financer plus de **700 000 projets de rénovation énergétique** en France, pour un montant total dépassant les 3 milliards d'euros. Pourtant, un dossier sur cinq est encore rejeté pour vice de forme ou non-respect des conditions. Ce guide exhaustif vous livre tout ce qu'il faut savoir sur le dispositif en 2026 : les barèmes actualisés, les parcours disponibles, les montants exacts par geste et les démarches à suivre pour toucher votre prime sans mauvaise surprise. Si vous cherchez un [chauffagiste certifié RGE](/services/chauffagiste) pour vos travaux, notre annuaire vous met en relation avec des professionnels certifiés.",
 
       "## MaPrimeRénov' en 2026 : ce qui change",
 

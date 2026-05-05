@@ -172,7 +172,7 @@ export default async function VillesIndexPage() {
             </h1>
             <p className="text-lg md:text-xl text-charcoal-400 max-w-2xl mx-auto leading-relaxed">
               Des artisans RGE certifiés dans plus de {villes.length} villes de France. Trouvez un
-              professionnel qualifié RGE (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR) près de
+              professionnel certifié RGE (Qualibat, Qualifelec, QualiPAC, Qualit&apos;EnR) près de
               chez vous.
             </p>
           </div>

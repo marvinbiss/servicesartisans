@@ -572,7 +572,7 @@ export default function PompeAChaleurPage() {
         {/* Services liés */}
         <section className="max-w-5xl mx-auto px-4 py-10">
           <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-4 font-heading">
-            Trouver un installateur qualifié RGE
+            Trouver un installateur certifié RGE
           </h2>
           <p className="text-charcoal-600 mb-8 text-lg">
             {
@@ -679,7 +679,7 @@ export default function PompeAChaleurPage() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Trouvez des chauffagistes RGE qualifiés près de chez vous. Devis gratuit et sans engagement.'
+                'Trouvez des chauffagistes RGE certifiés près de chez vous. Devis gratuit et sans engagement.'
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

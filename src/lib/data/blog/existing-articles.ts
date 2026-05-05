@@ -62,7 +62,7 @@ export const existingArticles: Record<string, BlogArticle> = {
           'Le devis signé a valeur de contrat. Adressez une réclamation par lettre recommandée avec AR. Si le litige persiste, saisissez le médiateur de la consommation (coordonnées obligatoires sur la facture), puis le tribunal judiciaire. Conservez tous les documents (devis, factures, photos, échanges écrits).',
       },
       {
-        question: 'Comment savoir si un plombier est qualifié RGE ?',
+        question: 'Comment savoir si un plombier est certifié RGE ?',
         answer:
           "Vérifiez le certificat RGE sur france-renov.gouv.fr en entrant le nom de l'entreprise ou son SIRET. Le label RGE est indispensable pour les travaux ouvrant droit aux aides (chauffe-eau thermodynamique, PAC). Un plombier-chauffagiste RGE vous fait économiser des milliers d'euros en aides.",
       },
@@ -762,7 +762,7 @@ export const existingArticles: Record<string, BlogArticle> = {
       {
         question: "Combien de temps prend la vérification d'un artisan ?",
         answer:
-          'Les vérifications de base (SIRET, assurance, qualifications) prennent moins de 30 minutes. Sur ServicesArtisans, ces vérifications sont effectuées automatiquement pour chaque professionnel référencé.',
+          'Les vérifications de base (SIRET, assurance, qualifications) prennent moins de 30 minutes. Sur ServicesArtisans, ces vérifications sont effectuées automatiquement pour chaque artisan RGE certifié.',
       },
       {
         question: "Que faire si l'artisan refuse de fournir son attestation d'assurance ?",

@@ -686,7 +686,7 @@ export default function TrouverArtisanPage() {
             </h2>
             <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
-                'Des milliers de professionnels référencés avec leur SIRET vérifié. Comparez les profils et demandez un devis gratuit.'
+                "Des milliers d'artisans RGE certifiés avec leur SIRET vérifié. Comparez les profils et demandez un devis gratuit."
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

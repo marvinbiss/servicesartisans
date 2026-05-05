@@ -222,7 +222,7 @@ const FAQS = [
   {
     question: 'Comment éviter les arnaques aux primes CEE\u00a0?',
     answer:
-      'Ne signez jamais un engagement CEE avant d’avoir choisi votre artisan. Vérifiez que l’entreprise qui vous propose la prime est bien référencée comme délégataire ou mandataire. Méfiez-vous des démarchages téléphoniques agressifs promettant des travaux à 1 € (dispositif terminé depuis 2022). Vérifiez que votre artisan est bien qualifié RGE sur france-renov.gouv.fr.',
+      'Ne signez jamais un engagement CEE avant d’avoir choisi votre artisan. Vérifiez que l’entreprise qui vous propose la prime est bien référencée comme délégataire ou mandataire. Méfiez-vous des démarchages téléphoniques agressifs promettant des travaux à 1 € (dispositif terminé depuis 2022). Vérifiez que votre artisan est bien certifié RGE sur france-renov.gouv.fr.',
   },
 ]
 

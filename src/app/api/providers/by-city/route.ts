@@ -12,6 +12,7 @@ import { getCityValues } from '@/lib/insee-resolver'
 const byCityQuerySchema = z.object({
   city: z.string().min(1, 'City parameter is required').max(200),
   limit: z.coerce.number().int().min(1).max(200).default(50),
+  rge: z.enum(['0', '1']).optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest) {
     const queryValidation = byCityQuerySchema.safeParse({
       city: searchParams.get('city') || undefined,
       limit: searchParams.get('limit') || undefined,
+      rge: searchParams.get('rge') || undefined,
     })
 
     if (!queryValidation.success) {
@@ -31,11 +33,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { city, limit } = queryValidation.data
+    const { city, limit, rge } = queryValidation.data
+    // 2026-05-05 pivot full RGE — markers carte = artisans RGE certifiés only.
+    // Bypass admin/debug via `?rge=0`.
+    const rgeOnly = rge === '0' ? false : true
 
     const supabase = createAdminClient()
 
-    const { data: providers, error } = await supabase
+    let query = supabase
       .from('providers')
       .select(
         'id, name, slug, latitude, longitude, rating_average, review_count, specialty, address_city'
@@ -45,6 +50,11 @@ export async function GET(request: NextRequest) {
       .not('longitude', 'is', null)
       // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
       .in('address_city', getCityValues(city))
+    if (rgeOnly) {
+      const todayIso = new Date().toISOString().slice(0, 10)
+      query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+    }
+    const { data: providers, error } = await query
       .order('rating_average', { ascending: false })
       .limit(limit)
 

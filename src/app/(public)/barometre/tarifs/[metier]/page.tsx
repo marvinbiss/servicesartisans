@@ -102,7 +102,7 @@ function generateFAQ(metier: { label: string; slug: string }, stats: BarometreSt
     },
     {
       question: `Comment trouver un ${label} RGE certifié près de chez moi ?`,
-      answer: `Utilisez notre moteur de recherche sur ${SITE_NAME} : entrez "${metier.label}" et votre ville. Tous les artisans référencés sont RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) et leur SIRET est vérifié.`,
+      answer: `Utilisez notre moteur de recherche sur ${SITE_NAME} : entrez "${metier.label}" et votre ville. Tous nos artisans publiés sont RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) et leur SIRET est vérifié.`,
     },
     {
       question: `Les données du baromètre ${label} RGE sont-elles fiables ?`,
@@ -140,7 +140,12 @@ export default async function BarometreMetierPage({ params }: PageProps) {
   // journalistes. CC-BY 4.0 + publisher + image = éligible Top Stories.
   const lastUpdated = monthlyAnchorIso().slice(0, 10)
   const canonicalUrlPage = `${SITE_URL}/barometre/tarifs/${metierSlug}`
-  const totalArtisans = stats?.nb_artisans ?? 0
+  // Pivot full RGE 2026-05-05 — barometre_stats.nb_artisans agrège tous
+  // providers actifs (RGE + non-RGE). Dérivation RGE-only via ratio empirique
+  // 49 611 fiches RGE / ~350 000 actifs ≈ 0.14 (aligné CarteClient.tsx).
+  // À retirer dès que `barometre_stats.nb_artisans_rge` sera populé par cron.
+  const RGE_RATIO = 0.14
+  const totalArtisans = Math.round((stats?.nb_artisans ?? 0) * RGE_RATIO)
   const datasetSchema = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',

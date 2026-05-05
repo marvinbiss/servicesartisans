@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = "ServicesArtisans — Annuaire d'artisans référencés en France"
+export const alt = "ServicesArtisans — Annuaire d'artisans RGE certifiés en France"
 export const size = {
   width: 1200,
   height: 630,
@@ -110,7 +110,7 @@ export default async function Image() {
             display: 'flex',
           }}
         >
-          Annuaire d'artisans référencés — Données SIREN officielles
+          Annuaire d'artisans RGE certifiés — Données SIREN officielles
         </div>
 
         {/* Bottom accent bar */}

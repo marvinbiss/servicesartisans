@@ -173,7 +173,7 @@ export default async function RgeQualificationsHubPage() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
-            Trouvez un artisan RGE qualifié
+            Trouvez un artisan RGE certifié
           </h2>
           <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Annuaire synchronisé hebdomadairement avec la base officielle ADEME.

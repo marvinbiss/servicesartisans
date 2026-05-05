@@ -65,7 +65,7 @@ const SOURCES = [
     description:
       "Le répertoire SIRENE de l'INSEE, accessible via l'API SIRENE et data.gouv.fr, recense l'ensemble des entreprises et établissements français avec leur numéro SIRET, adresse, code NAF et statut.",
     usage:
-      "Vérification de l'existence et de l'activité des artisans référencés (SIRET valide, code APE cohérent avec le métier déclaré, adresse de l'établissement).",
+      "Vérification de l'existence et de l'activité des artisans RGE certifiés (SIRET valide, code APE cohérent avec le métier déclaré, adresse de l'établissement).",
     license: 'Licence Ouverte Etalab 2.0',
   },
   {

@@ -493,7 +493,7 @@ Pour une fenêtre double vitrage standard (4/16/4 argon) : le bois affiche un Uw
 
       `## Installation par un professionnel RGE
 
-La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant de l'Environnement) pour bénéficier des aides financières. La dépose de l'ancien châssis, la préparation du support, la pose, l'étanchéité à l'air et à l'eau et les finitions intérieures sont des étapes critiques. Une fenêtre mal posée perd jusqu'à 40 % de ses performances thermiques. Trouvez un menuisier RGE qualifié sur ServicesArtisans et demandez 3 devis pour comparer.`,
+La pose de menuiseries doit être réalisée par un artisan RGE (Reconnu Garant de l'Environnement) pour bénéficier des aides financières. La dépose de l'ancien châssis, la préparation du support, la pose, l'étanchéité à l'air et à l'eau et les finitions intérieures sont des étapes critiques. Une fenêtre mal posée perd jusqu'à 40 % de ses performances thermiques. Trouvez un menuisier RGE certifié sur ServicesArtisans et demandez 3 devis pour comparer.`,
     ],
   },
 

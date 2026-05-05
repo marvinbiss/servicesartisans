@@ -50,7 +50,7 @@ const steps = [
     icon: MessageCircle,
     title: 'Processus de réclamation',
     content: [
-      'Si vous rencontrez un problème avec une prestation effectuée par un artisan référencé sur la plateforme, la première étape consiste à nous adresser une réclamation écrite.',
+      'Si vous rencontrez un problème avec une prestation effectuée par un artisan RGE certifié référencé sur la plateforme, la première étape consiste à nous adresser une réclamation écrite.',
       <>
         Vous pouvez nous contacter par email à{' '}
         <a

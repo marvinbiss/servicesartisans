@@ -156,7 +156,7 @@ export async function generateMetadata({
   const descTemplates = [
     `Besoin d'un ${tradeLower} en urgence ? Disponible selon les artisans de votre secteur partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
     `${trade.name} urgence : dépannage rapide jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
-    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans référencés SIREN, devis gratuit.`,
+    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans RGE certifiés SIREN, devis gratuit.`,
     `Dépannage ${tradeLower} en urgence, y compris le week-end. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
     `${trade.name} d'urgence soir & week-end : artisans disponibles partout en France. Devis rapide, intervention ${trade.averageResponseTime}.`,
   ]
@@ -275,7 +275,7 @@ export default async function UrgenceServicePage({
       },
       {
         name: `Contacter un ${tradeLowerHowTo} d'urgence`,
-        text: `Recherchez un ${tradeLowerHowTo} d'urgence disponible dans votre secteur. Privilégiez les artisans référencés avec un SIRET vérifié. Décrivez précisément le problème pour obtenir un diagnostic rapide.`,
+        text: `Recherchez un ${tradeLowerHowTo} d'urgence disponible dans votre secteur. Privilégiez les artisans RGE certifiés avec un SIRET vérifié. Décrivez précisément le problème pour obtenir un diagnostic rapide.`,
       },
       {
         name: 'Demander un devis avant intervention',

@@ -1123,7 +1123,7 @@ function generateIntroText(
     `${ville.name} compte ${count} ${svcLower}s référencés sur ServicesArtisans. Située dans le département ${dep} en région ${region}, cette commune de ${pop} habitants bénéficie d'un réseau dense de professionnels du bâtiment, tous identifiés par leur numéro SIREN via l'API officielle du gouvernement.`,
 
     // 2 — Annuaire et code postal
-    `ServicesArtisans recense ${count} ${svcLower}s à ${ville.name} (${ville.codePostal}). Cette commune de ${pop} habitants du département ${dep}, en région ${region}, dispose de professionnels référencés dans votre secteur géographique. Chaque ${svcLower} listé est identifié par son numéro SIREN, garantissant une activité déclarée et vérifiable.`,
+    `ServicesArtisans recense ${count} ${svcLower}s à ${ville.name} (${ville.codePostal}). Cette commune de ${pop} habitants du département ${dep}, en région ${region}, dispose d'artisans RGE certifiés dans votre secteur géographique. Chaque ${svcLower} listé est identifié par son numéro SIREN, garantissant une activité déclarée et vérifiable.`,
 
     // 3 — Exercent dans le département
     `${countSpace}${svcLower}s exercent à ${ville.name}, ${getDeptPreposition(dep)}. Cette ville de ${pop} habitants ${getRegionPreposition(region)} dispose de nombreux artisans qualifiés. ServicesArtisans vous permet de comparer les ${svcLower}s référencés à ${ville.name} (${ville.codePostal}), de consulter leurs coordonnées et de les contacter directement pour un devis gratuit.`,
@@ -1147,7 +1147,7 @@ function generateIntroText(
     `${count} ${svcLower}s sont actifs à ${ville.name}, commune de ${pop} habitants. Dans le ${dep}, la demande en services de ${svcLower} reste constante tout au long de l'année. En ${region}, ServicesArtisans référence les professionnels intervenant à ${ville.name} (${ville.codePostal}) et dans les communes environnantes, tous identifiés par leur numéro SIREN.`,
 
     // 10 — Trouvez un professionnel
-    `Trouvez un ${svcLower} vérifié à ${ville.name} parmi ${count} professionnels référencés. Que ce soit pour un dépannage urgent ou un projet planifié, ServicesArtisans répertorie les artisans ${getDeptArticle(dep)} (${ville.codePostal}) ${getRegionPreposition(region)}, vérifiés via l'API Sirene du gouvernement, pour vous permettre de comparer et de choisir en toute confiance.`,
+    `Trouvez un ${svcLower} vérifié à ${ville.name} parmi ${count} artisans RGE certifiés. Que ce soit pour un dépannage urgent ou un projet planifié, ServicesArtisans répertorie les artisans ${getDeptArticle(dep)} (${ville.codePostal}) ${getRegionPreposition(region)}, vérifiés via l'API Sirene du gouvernement, pour vous permettre de comparer et de choisir en toute confiance.`,
 
     // 11 — Ancrage régional
     `${ville.name} ${getRegionPreposition(region)} rassemble ${count} ${svcLower}s sur notre annuaire. Dans cette commune de ${pop} habitants ${getDeptArticle(dep)}, les services d'un ${svcLower} qualifié sont indispensables pour maintenir et valoriser votre habitat. Chaque professionnel est référencé par SIREN, garantissant son existence légale et son activité déclarée.`,
@@ -1156,13 +1156,13 @@ function generateIntroText(
     `Comparez les ${count} ${svcLower}s référencés à ${ville.name} (${ville.codePostal}). ServicesArtisans liste les professionnels vérifiés ${getDeptPreposition(dep)} (${region}), pour cette commune de ${pop} habitants. Consultez les coordonnées de chaque artisan identifié par SIREN et demandez plusieurs devis gratuits pour votre projet.`,
 
     // 13 — Disponibilité locale
-    `${countSpace}${svcLower}s qualifiés sont disponibles à ${ville.name}, ${dep}. La qualité des travaux dépend avant tout du choix du professionnel. Dans cette commune de ${pop} habitants ${getRegionPreposition(region)}, ServicesArtisans vous propose un annuaire d'artisans référencés et vérifiés par leur numéro SIREN, pour sélectionner le bon prestataire en toute sérénité.`,
+    `${countSpace}${svcLower}s qualifiés sont disponibles à ${ville.name}, ${dep}. La qualité des travaux dépend avant tout du choix du professionnel. Dans cette commune de ${pop} habitants ${getRegionPreposition(region)}, ServicesArtisans vous propose un annuaire d'artisans RGE certifiés et vérifiés par leur numéro SIREN, pour sélectionner le bon prestataire en toute sérénité.`,
 
     // 14 — Proximité géographique
     `${count} ${svcLower}s proches de ${ville.name} (${ville.codePostal}) sont sur ServicesArtisans. La proximité est essentielle pour bénéficier d'une intervention rapide et de tarifs compétitifs. Notre annuaire couvre tout le département ${dep} ${getRegionPreposition(region)} et référence les professionnels prêts à intervenir dans votre commune de ${pop} habitants et ses environs.`,
 
     // 15 — Vérifiés et comparables
-    `${ville.name} (${ville.codePostal}) : ${count} ${svcLower}s vérifiés et comparables. Dans le ${dep} (${region}), chaque artisan référencé sur ServicesArtisans est identifié par son numéro SIREN via les données officielles du gouvernement, un critère de fiabilité essentiel pour les ${pop} habitants de cette commune.`,
+    `${ville.name} (${ville.codePostal}) : ${count} ${svcLower}s vérifiés et comparables. Dans le ${dep} (${region}), chaque artisan RGE certifié sur ServicesArtisans est identifié par son numéro SIREN via les données officielles du gouvernement, un critère de fiabilité essentiel pour les ${pop} habitants de cette commune.`,
   ]
 
   return templates[hash % templates.length]
@@ -1322,10 +1322,10 @@ function generateConclusion(
     `Ne perdez plus de temps à chercher un ${svcLower} fiable à ${ville.name}. Consultez les ${countSpace}profils référencés sur ServicesArtisans, comparez les coordonnées et contactez directement le professionnel de votre choix ${getDeptPreposition(ville.departement)} (${ville.departementCode}).${urgencyLine}${certLine}`,
 
     // 2 — Simplicité de la démarche
-    `ServicesArtisans simplifie votre recherche de ${svcLower} à ${ville.name} (${ville.codePostal}). Parcourez notre annuaire de ${countSpace}professionnels référencés ${getRegionPreposition(ville.region)}, consultez leurs informations et demandez vos devis gratuitement.${urgencyLine}${certLine}`,
+    `ServicesArtisans simplifie votre recherche de ${svcLower} à ${ville.name} (${ville.codePostal}). Parcourez notre annuaire de ${countSpace}artisans RGE certifiés ${getRegionPreposition(ville.region)}, consultez leurs informations et demandez vos devis gratuitement.${urgencyLine}${certLine}`,
 
     // 3 — En quelques clics
-    `Trouvez le ${svcLower} qu'il vous faut à ${ville.name} en quelques clics. Notre annuaire de ${countSpace}professionnels ${getDeptArticle(ville.departement)} vous permet de comparer et de contacter les artisans référencés par SIREN dans votre secteur.${urgencyLine}${certLine}`,
+    `Trouvez le ${svcLower} qu'il vous faut à ${ville.name} en quelques clics. Notre annuaire de ${countSpace}professionnels ${getDeptArticle(ville.departement)} vous permet de comparer et de contacter les artisans RGE certifiés par SIREN dans votre secteur.${urgencyLine}${certLine}`,
 
     // 4 — Confiance et transparence
     `Faites le bon choix pour vos travaux à ${ville.name} (${ville.codePostal}). Les ${countSpace}${svcLower}s référencés sur ServicesArtisans ${getDeptPreposition(ville.departement)} sont tous identifiés par SIREN, un gage de sérieux et de transparence pour les habitants de ${ville.name}.${urgencyLine}${certLine}`,
@@ -1343,7 +1343,7 @@ function generateConclusion(
     `Votre recherche de ${svcLower} à ${ville.name} commence ici. Accédez gratuitement à notre annuaire de ${countSpace}professionnels ${getDeptArticle(ville.departement)}, vérifiés par leur numéro SIREN, et demandez vos devis sans engagement auprès des artisans de ${ville.name} (${ville.codePostal}).${urgencyLine}${certLine}`,
 
     // 9 — Question finale
-    `Prêt à trouver votre ${svcLower} à ${ville.name} ? ServicesArtisans met à votre disposition ${countSpace}professionnels référencés ${getDeptPreposition(ville.departement)} (${ville.departementCode}), ${getRegionPreposition(ville.region)}. Comparez les profils, vérifiez les qualifications et lancez votre projet en toute sérénité.${urgencyLine}${certLine}`,
+    `Prêt à trouver votre ${svcLower} à ${ville.name} ? ServicesArtisans met à votre disposition ${countSpace}artisans RGE certifiés ${getDeptPreposition(ville.departement)} (${ville.departementCode}), ${getRegionPreposition(ville.region)}. Comparez les profils, vérifiez les qualifications et lancez votre projet en toute sérénité.${urgencyLine}${certLine}`,
 
     // 10 — Mise en avant locale
     `Les ${countSpace}${svcLower}s de ${ville.name} référencés sur ServicesArtisans sont prêts à intervenir dans votre commune et dans tout le ${ville.departement}. Profitez d'un annuaire fiable, basé sur les données SIREN du gouvernement, pour choisir le bon professionnel ${getRegionPreposition(ville.region)}.${urgencyLine}${certLine}`,
@@ -1850,7 +1850,7 @@ const QUARTIER_INTROS: IntroFn[] = [
   (q, v, dep, code, pop, era, arch, density) =>
     `Vous habitez ${q} à ${v} ? Ce quartier en ${density.toLowerCase()} est composé de ${era.toLowerCase()}. ${arch} Notre annuaire référence les artisans ${getDeptArticle(dep)} (${code}) qualifiés pour intervenir sur ce patrimoine, au service des ${pop} habitants.`,
   (q, v, dep, code, pop, era, arch, density) =>
-    `${q}, quartier de ${v} ${getDeptPreposition(dep)} (${code}), présente un profil immobilier de type ${era.toLowerCase()}. ${arch} En ${density.toLowerCase()}, les besoins en artisanat sont spécifiques et nos professionnels référencés connaissent les particularités de ${v} (${pop} hab.).`,
+    `${q}, quartier de ${v} ${getDeptPreposition(dep)} (${code}), présente un profil immobilier de type ${era.toLowerCase()}. ${arch} En ${density.toLowerCase()}, les besoins en artisanat sont spécifiques et nos artisans RGE certifiés connaissent les particularités de ${v} (${pop} hab.).`,
   (q, v, dep, code, pop, era, arch, density) =>
     `Dans le quartier ${q} à ${v}, le parc immobilier relève du ${era.toLowerCase()}. ${arch} En ${density.toLowerCase()} ${getDeptPreposition(dep)} (${code}), ce secteur de ${v} (${pop} hab.) bénéficie d'artisans formés aux techniques adaptées à cette construction.`,
   (q, v, dep, code, pop, era, arch, density) =>
@@ -1866,7 +1866,7 @@ const QUARTIER_INTROS: IntroFn[] = [
   (q, v, dep, code, pop, era, arch, density) =>
     `Résider à ${q} dans ${v} (${code}), c'est vivre en ${density.toLowerCase()} dans du ${era.toLowerCase()}. ${arch} Le ${dep} regorge d'artisans compétents pour ce type d'habitat. ${v} et ses ${pop} habitants sont couverts par notre réseau de professionnels.`,
   (q, v, dep, code, pop, era, arch, density) =>
-    `${q} est un quartier de ${v} ${getDeptPreposition(dep)} (${code}), en ${density.toLowerCase()}. Le parc immobilier y est marqué par du ${era.toLowerCase()}. ${arch} Pour des travaux adaptés, les ${pop} habitants de la commune peuvent compter sur nos artisans référencés.`,
+    `${q} est un quartier de ${v} ${getDeptPreposition(dep)} (${code}), en ${density.toLowerCase()}. Le parc immobilier y est marqué par du ${era.toLowerCase()}. ${arch} Pour des travaux adaptés, les ${pop} habitants de la commune peuvent compter sur nos artisans RGE certifiés.`,
   (q, v, dep, code, pop, era, arch, density) =>
     `Votre projet concerne ${q} à ${v} ? Ce secteur en ${density.toLowerCase()} ${getDeptArticle(dep)} (${code}) est caractérisé par un parc de ${era.toLowerCase()}. ${arch} Parmi les professionnels intervenant auprès des ${pop} habitants, trouvez l'artisan adapté à votre chantier.`,
   (q, v, dep, code, pop, era, arch, density) =>
@@ -1876,11 +1876,11 @@ const QUARTIER_INTROS: IntroFn[] = [
   (q, v, dep, code, pop, era, arch, density) =>
     `Les constructions du quartier ${q} relèvent du ${era.toLowerCase()}, dans un environnement de ${density.toLowerCase()} à ${v} (${dep}, ${code}). ${arch} Cette configuration oriente le choix des artisans : les ${pop} habitants peuvent identifier ici les professionnels adaptés.`,
   (q, v, dep, code, pop, era, arch, density) =>
-    `${v} (${code}), commune de ${pop} habitants ${getDeptPreposition(dep)}, abrite le quartier ${q} où le bâti de ${era.toLowerCase()} prédomine en ${density.toLowerCase()}. ${arch} Nos artisans référencés interviennent sur ces constructions avec une expertise éprouvée.`,
+    `${v} (${code}), commune de ${pop} habitants ${getDeptPreposition(dep)}, abrite le quartier ${q} où le bâti de ${era.toLowerCase()} prédomine en ${density.toLowerCase()}. ${arch} Nos artisans RGE certifiés interviennent sur ces constructions avec une expertise éprouvée.`,
   (q, v, dep, code, pop, era, arch, density) =>
     `Au cœur de ${v} (${dep}, ${code}), ${q} est un secteur en ${density.toLowerCase()} dont le parc bâti remonte au ${era.toLowerCase()}. ${arch} Les ${pop} habitants y trouvent des artisans qualifiés capables de répondre aux exigences de ce patrimoine immobilier.`,
   (q, v, dep, code, pop, era, arch, density) =>
-    `Le profil immobilier de ${q} à ${v} associe ${era.toLowerCase()} et ${density.toLowerCase()}. ${arch} Cette combinaison influence directement les besoins en artisanat. Dans le ${dep} (${code}), les professionnels référencés par notre annuaire connaissent les particularités du quartier et ses ${pop} habitants.`,
+    `Le profil immobilier de ${q} à ${v} associe ${era.toLowerCase()} et ${density.toLowerCase()}. ${arch} Cette combinaison influence directement les besoins en artisanat. Dans le ${dep} (${code}), les artisans RGE certifiés par notre annuaire connaissent les particularités du quartier et ses ${pop} habitants.`,
   (q, v, dep, code, pop, era, arch, density) =>
     `Connaître le bâti de ${q} est essentiel pour choisir le bon artisan à ${v}. Ce quartier en ${density.toLowerCase()} ${getDeptArticle(dep)} (${code}) est constitué de ${era.toLowerCase()}. ${arch} Parmi les professionnels couvrant cette commune de ${pop} habitants, sélectionnez celui dont l'expérience correspond à votre chantier.`,
   (q, v, dep, code, pop, era, arch, density) =>
@@ -1895,7 +1895,7 @@ const BATIMENT_CONTEXTS: Record<BuildingEra, ((q: string, v: string) => string)[
     (q, v) =>
       `Le quartier ${q} à ${v} abrite un patrimoine d'avant 1950 qui peut demander une expertise particulière. Murs porteurs en pierre, planchers bois et charpentes anciennes requièrent des artisans formés aux techniques traditionnelles. La rénovation énergétique doit préserver le caractère architectural tout en améliorant le confort.`,
     (q, v) =>
-      `À ${q}, le parc immobilier ancien peut présenter des défis que seuls des artisans expérimentés peuvent relever. Problèmes d'humidité, réseaux vétustes, isolation insuffisante : chaque chantier à ${v} peut nécessiter un diagnostic approfondi. Nos artisans référencés connaissent les pathologies du bâti ancien et proposent des solutions durables.`,
+      `À ${q}, le parc immobilier ancien peut présenter des défis que seuls des artisans expérimentés peuvent relever. Problèmes d'humidité, réseaux vétustes, isolation insuffisante : chaque chantier à ${v} peut nécessiter un diagnostic approfondi. Nos artisans RGE certifiés connaissent les pathologies du bâti ancien et proposent des solutions durables.`,
   ],
   '1950-1980': [
     (q, v) =>
@@ -1917,7 +1917,7 @@ const BATIMENT_CONTEXTS: Record<BuildingEra, ((q: string, v: string) => string)[
     (q, v) =>
       `Le quartier ${q} à ${v} bénéficie de constructions récentes, conformes aux normes RT 2000/2005/2012. Ces logements bien isolés nécessitent essentiellement des travaux de personnalisation : climatisation réversible, domotique, aménagement sur mesure. Les artisans de ${v} spécialisés en équipements modernes sont les mieux placés.`,
     (q, v) =>
-      `À ${q}, le bâti récent de ${v} offre un excellent confort de base. Les interventions les plus demandées : personnalisation de l'intérieur (dressing, verrière), équipements connectés (thermostat intelligent, volets automatisés), entretien courant. Nos artisans référencés interviennent avec le soin exigé par ces logements modernes.`,
+      `À ${q}, le bâti récent de ${v} offre un excellent confort de base. Les interventions les plus demandées : personnalisation de l'intérieur (dressing, verrière), équipements connectés (thermostat intelligent, volets automatisés), entretien courant. Nos artisans RGE certifiés interviennent avec le soin exigé par ces logements modernes.`,
     (q, v) =>
       `Dans le quartier ${q} à ${v}, les résidences post-2000 sont conçues pour le confort moderne mais peuvent gagner en fonctionnalité. Borne de recharge, panneau solaire, pergola bioclimatique : les possibilités sont nombreuses. Consultez les artisans qualifiés de ${v} pour des devis personnalisés.`,
   ],
@@ -1927,7 +1927,7 @@ const BATIMENT_CONTEXTS: Record<BuildingEra, ((q: string, v: string) => string)[
     (q, v) =>
       `À ${q}, les immeubles haussmanniens de ${v} constituent un patrimoine prestigieux. Leur rénovation requiert un savoir-faire spécifique : restauration de gypseries, réfection de parquets massifs, mise aux normes sans dénaturer les volumes. Les artisans spécialisés connaissent les contraintes réglementaires (ABF, PLU) et les techniques respectueuses de ce style.`,
     (q, v) =>
-      `Dans le quartier ${q} de ${v}, le style haussmannien peut présenter des exigences spécifiques. Hauteurs sous plafond de trois mètres, façades en pierre de taille, ferronneries d'art : chaque intervention doit sublimer le patrimoine existant. Nos artisans référencés allient expertise technique et sensibilité architecturale.`,
+      `Dans le quartier ${q} de ${v}, le style haussmannien peut présenter des exigences spécifiques. Hauteurs sous plafond de trois mètres, façades en pierre de taille, ferronneries d'art : chaque intervention doit sublimer le patrimoine existant. Nos artisans RGE certifiés allient expertise technique et sensibilité architecturale.`,
   ],
   mixte: [
     (q, v) =>
@@ -2031,7 +2031,7 @@ const FAQ_POOL: {
   {
     q: (n, v) => `Les artisans à ${n}, ${v} sont-ils vérifiés ?`,
     a: (n, v, dep) =>
-      `Les artisans référencés à ${n} (${v}) sont identifiés via les données officielles du registre SIREN. Nous vérifions l'existence légale de l'entreprise, son activité ${getDeptPreposition(dep)}, et sa spécialité déclarée. Les avis clients complètent cette vérification.`,
+      `Les artisans RGE certifiés à ${n} (${v}) sont identifiés via les données officielles du registre SIREN. Nous vérifions l'existence légale de l'entreprise, son activité ${getDeptPreposition(dep)}, et sa spécialité déclarée. Les avis clients complètent cette vérification.`,
   },
   {
     q: (n) => `Quels sont les travaux les plus courants à ${n} ?`,
@@ -2435,7 +2435,7 @@ function generateQuartierDataDrivenContent(
     marcheArtisanalQuartier = marchTemplates[(seed + 1) % 3]
     dataSources.push('API SIRENE / INSEE (entreprises artisanales)')
   } else {
-    marcheArtisanalQuartier = `Le quartier ${quartierName} à ${ville.name} est desservi par les artisans ${getDeptArticle(ville.departement)}. Nos professionnels référencés connaissent le ${profile.eraLabel.toLowerCase()} du secteur.`
+    marcheArtisanalQuartier = `Le quartier ${quartierName} à ${ville.name} est desservi par les artisans ${getDeptArticle(ville.departement)}. Nos artisans RGE certifiés connaissent le ${profile.eraLabel.toLowerCase()} du secteur.`
   }
 
   // ── Section 3: Énergétique / DPE quartier ──
@@ -3061,7 +3061,7 @@ const DEPT_INTROS: DeptIntroFn[] = [
   (name, code, region, pop, chefLieu, climate, _economy, housing) =>
     `Le ${name} (${code}) ${getRegionPreposition(region)} compte ${pop} habitants autour de son chef-lieu ${chefLieu}. Son ${climate.toLowerCase()} conditionne les besoins en isolation, chauffage et entretien. Le ${housing.toLowerCase()} demande des artisans compétents et habitués au contexte local.`,
   (name, code, region, pop, _chefLieu, climate, economy, housing) =>
-    `Département de ${pop} habitants ${getRegionPreposition(region)}, le ${name} (${code}) présente un profil artisanal marqué par son ${climate.toLowerCase()} et son ${economy.toLowerCase()}. Le ${housing.toLowerCase()} génère des besoins spécifiques que nos artisans référencés maîtrisent.`,
+    `Département de ${pop} habitants ${getRegionPreposition(region)}, le ${name} (${code}) présente un profil artisanal marqué par son ${climate.toLowerCase()} et son ${economy.toLowerCase()}. Le ${housing.toLowerCase()} génère des besoins spécifiques que nos artisans RGE certifiés maîtrisent.`,
   (name, code, region, pop, chefLieu, climate, economy, housing) =>
     `${getDeptPreposition(name)} (${code}), les ${pop} habitants ${getRegionArticle(region)} comptent sur un réseau d'artisans qualifiés. Le ${climate.toLowerCase()} et l'${economy.toLowerCase()} façonnent la demande, tandis que le ${housing.toLowerCase()} guide les interventions. ${chefLieu} concentre une part importante de l'activité.`,
   (name, code, region, pop, chefLieu, climate, economy, housing) =>
@@ -3161,7 +3161,7 @@ const DEPT_FAQ_POOL: {
   {
     q: (name, code) => `Combien d'artisans sont référencés ${getDeptPreposition(name)} (${code}) ?`,
     a: (name, code, region) =>
-      `Le ${name} (${code}) ${getRegionPreposition(region)} fait partie de notre réseau d'artisans référencés à partir des données SIREN officielles de l'INSEE.`,
+      `Le ${name} (${code}) ${getRegionPreposition(region)} fait partie de notre réseau d'artisans RGE certifiés à partir des données SIREN officielles de l'INSEE.`,
   },
   {
     q: (name) => `Quels sont les travaux les plus demandés ${getDeptPreposition(name)} ?`,
@@ -4150,7 +4150,7 @@ const VILLE_INTROS: ((p: VilleIntroParams) => string)[] = [
   (p) =>
     `${p.sizeLabel} ${getRegionArticle(p.region)}, ${p.name} (${p.deptCode}) compte ${p.pop} habitants et se distingue par son climat ${p.climate.toLowerCase()}. Les artisans locaux connaissent les spécificités du bâti et interviennent rapidement pour tous vos travaux.`,
   (p) =>
-    `Située ${getDeptPreposition(p.dept)} (${p.deptCode}), ${p.name} rassemble ${p.pop} habitants dans un environnement ${p.climate.toLowerCase()}. Que vous ayez besoin de rénovation, d'entretien ou de dépannage urgent, les professionnels référencés sur notre plateforme couvrent l'ensemble de la commune.`,
+    `Située ${getDeptPreposition(p.dept)} (${p.deptCode}), ${p.name} rassemble ${p.pop} habitants dans un environnement ${p.climate.toLowerCase()}. Que vous ayez besoin de rénovation, d'entretien ou de dépannage urgent, les artisans RGE certifiés sur notre plateforme couvrent l'ensemble de la commune.`,
   (p) =>
     `Avec ses ${p.pop} habitants, ${p.name} est une ${p.sizeLabel.toLowerCase()} ${getDeptArticle(p.dept)} ${getRegionPreposition(p.region)}. Le climat ${p.climate.toLowerCase()} de la zone influence directement les besoins en matière de travaux et d'entretien du bâti.`,
   (p) =>
@@ -4162,7 +4162,7 @@ const VILLE_INTROS: ((p: VilleIntroParams) => string)[] = [
   (p) =>
     `Commune de ${p.pop} habitants ${getRegionPreposition(p.region)}, ${p.name} fait partie ${getDeptArticle(p.dept)} (${p.deptCode}). Les artisans y intervenant connaissent les contraintes du climat ${p.climate.toLowerCase()} et adaptent leurs prestations en conséquence.`,
   (p) =>
-    `En plein cœur ${getDeptArticle(p.dept)}, ${p.name} (${p.pop} hab.) offre un cadre de vie ${p.climate.toLowerCase()} typique ${getRegionArticle(p.region)}. Nos artisans référencés assurent tous types de travaux, du dépannage à la rénovation complète.`,
+    `En plein cœur ${getDeptArticle(p.dept)}, ${p.name} (${p.pop} hab.) offre un cadre de vie ${p.climate.toLowerCase()} typique ${getRegionArticle(p.region)}. Nos artisans RGE certifiés assurent tous types de travaux, du dépannage à la rénovation complète.`,
   (p) =>
     `${p.name} compte ${p.pop} habitants dans le département ${p.dept} (${p.deptCode}). ${p.sizeLabel} au climat ${p.climate.toLowerCase()}, elle nécessite des artisans expérimentés pour répondre aux défis propres à son habitat.`,
   (p) =>
@@ -4315,7 +4315,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   {
     q: (name) => `Comment trouver un artisan de confiance à ${name} ?`,
     a: (p) =>
-      `Sur ServicesArtisans, tous les artisans référencés à ${p.name} disposent d'un numéro SIREN vérifié. Sélectionnez le corps de métier souhaité, consultez les profils et demandez un devis gratuit pour comparer les offres.`,
+      `Sur ServicesArtisans, tous les artisans RGE certifiés à ${p.name} disposent d'un numéro SIREN vérifié. Sélectionnez le corps de métier souhaité, consultez les profils et demandez un devis gratuit pour comparer les offres.`,
   },
   {
     q: (name) => `Quels types de travaux peut-on réaliser à ${name} ?`,
@@ -4330,7 +4330,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   {
     q: (name) => `Les artisans à ${name} interviennent-ils en urgence ?`,
     a: (p) =>
-      `Certains artisans référencés à ${p.name} proposent des interventions d'urgence, notamment les plombiers, serruriers et électriciens. Les disponibilités varient selon les professionnels. Consultez notre page urgence pour trouver un dépannage rapide.`,
+      `Certains artisans RGE certifiés à ${p.name} proposent des interventions d'urgence, notamment les plombiers, serruriers et électriciens. Les disponibilités varient selon les professionnels. Consultez notre page urgence pour trouver un dépannage rapide.`,
   },
   {
     q: (name) => `Quel est le prix moyen d'un artisan à ${name} ?`,
@@ -4340,7 +4340,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   {
     q: (name) => `D'où proviennent les données des artisans à ${name} ?`,
     a: (p) =>
-      `Les artisans référencés sur ServicesArtisans sont répertoriés à partir des données SIREN officielles de l'INSEE. Chaque professionnel listé à ${p.name} dispose d'un numéro SIREN enregistré et vérifiable.`,
+      `Les artisans RGE certifiés sur ServicesArtisans sont répertoriés à partir des données SIREN officielles de l'INSEE. Chaque professionnel listé à ${p.name} dispose d'un numéro SIREN enregistré et vérifiable.`,
   },
   {
     q: (name) => `Quels sont les quartiers desservis à ${name} ?`,

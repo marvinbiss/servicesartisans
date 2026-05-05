@@ -131,7 +131,7 @@ export const RGE_QUALIFICATION_GUIDES: Record<string, RgeQualificationGuide> = {
       {
         question: "Que faire si l'artisan refuse de montrer son attestation?",
         answer:
-          "Quittez immédiatement. Un artisan RGE qualifié fournit spontanément son attestation Qualit'EnR datée et nominative avec son devis. Un refus est un signal d'alerte fort.",
+          "Quittez immédiatement. Un artisan RGE certifié fournit spontanément son attestation Qualit'EnR datée et nominative avec son devis. Un refus est un signal d'alerte fort.",
       },
     ],
   },

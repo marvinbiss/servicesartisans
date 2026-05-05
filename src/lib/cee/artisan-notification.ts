@@ -128,7 +128,7 @@ function buildEmailHtml(input: CeeArtisanBriefingInput, artisanName: string): st
 
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">
-        ServicesArtisans — La plateforme des artisans qualifiés
+        ServicesArtisans — La plateforme des artisans RGE certifiés
       </p>
     </div>
   </div>

@@ -460,7 +460,7 @@ function generateJsonLd(
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${service.name} à ${location.name}`,
-    description: `Trouvez des ${svcLower}s qualifiés et vérifiés à ${location.name}`,
+    description: `Trouvez des ${svcLower}s RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) à ${location.name}`,
     image: getServiceImageForContext(serviceSlug, locationSlug).src,
     serviceType: service.name,
     inLanguage: 'fr-FR',

@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `Prime CEE ${op.code} en ${reg.name} 2026 — guide régional`
   const description =
-    `Prime CEE ${op.code} (${op.nom}) en ${reg.name} : montants 2026 selon zone climatique ${reg.climateZone}, aides régionales cumulables, top villes avec artisans RGE qualifiés.`.slice(
+    `Prime CEE ${op.code} (${op.nom}) en ${reg.name} : montants 2026 selon zone climatique ${reg.climateZone}, aides régionales cumulables, top villes avec artisans RGE certifiés.`.slice(
       0,
       160
     )
@@ -201,7 +201,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
       ? `${reg.regionalAids.length} aide${reg.regionalAids.length > 1 ? 's' : ''} régionale${reg.regionalAids.length > 1 ? 's' : ''} cumulable${reg.regionalAids.length > 1 ? 's' : ''} (région ${reg.name}).`
       : `Aucune aide régionale spécifique recensée — uniquement aides nationales (MaPrimeRénov', éco-PTZ, TVA 5,5 %).`,
     totalProviders > 0
-      ? `${totalProviders.toLocaleString('fr-FR')} artisans RGE qualifiés actifs identifiés dans la région pour cette opération.`
+      ? `${totalProviders.toLocaleString('fr-FR')} artisans RGE certifiés actifs identifiés dans la région pour cette opération.`
       : `Réseau régional en cours de recensement — réservez un devis pour être mis en relation.`,
     `Qualification RGE (${op.rge_qualifications_requises.join(', ') || 'au moins une qualification du domaine'}) obligatoire à la date du devis pour percevoir la prime.`,
   ]
@@ -243,7 +243,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
           </h1>
           <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
             {op.nom}. Montants modulés selon zone climatique {reg.climateZone}, aides régionales
-            cumulables, artisans RGE qualifiés vérifiés ADEME.
+            cumulables, artisans RGE certifiés vérifiés ADEME.
           </p>
           <ArticleMeta
             author="ServicesArtisans"
@@ -266,7 +266,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <EnBrefBox
           title={`Prime CEE ${op.code} en ${reg.name} — en bref`}
-          summary={`En ${reg.name} (zone climatique ${reg.climateZone}), la prime CEE ${op.code} cible ${op.nom.toLowerCase()}. ${totalProviders > 0 ? `${totalProviders.toLocaleString('fr-FR')} artisans RGE qualifiés actifs sur la région.` : 'Réseau régional en cours de constitution.'} ${reg.regionalAids.length > 0 ? `${reg.regionalAids.length} aide${reg.regionalAids.length > 1 ? 's' : ''} régionale${reg.regionalAids.length > 1 ? 's' : ''} cumulable${reg.regionalAids.length > 1 ? 's' : ''}.` : ''}`.trim()}
+          summary={`En ${reg.name} (zone climatique ${reg.climateZone}), la prime CEE ${op.code} cible ${op.nom.toLowerCase()}. ${totalProviders > 0 ? `${totalProviders.toLocaleString('fr-FR')} artisans RGE certifiés actifs sur la région.` : 'Réseau régional en cours de constitution.'} ${reg.regionalAids.length > 0 ? `${reg.regionalAids.length} aide${reg.regionalAids.length > 1 ? 's' : ''} régionale${reg.regionalAids.length > 1 ? 's' : ''} cumulable${reg.regionalAids.length > 1 ? 's' : ''}.` : ''}`.trim()}
           keyPoints={[
             `Code opération : ${op.code} (${op.domaine})`,
             `Zone climatique RT2012 : ${reg.climateZone}`,

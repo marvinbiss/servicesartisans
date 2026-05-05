@@ -16,9 +16,9 @@
 export type { Ville, Departement, Region } from './france'
 
 // Services list inlined here to avoid pulling in the full france.ts module.
-// Keep in sync with france.ts — 19 services (post pivot full RGE 2026-05-03).
+// Keep in sync with france.ts — 21 services (post pivot full RGE 2026-05-03).
 export const services = [
-  // 15 services historiques
+  // 8 services historiques
   { slug: 'plombier', name: 'Plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600' },
   { slug: 'electricien', name: 'Électricien', icon: 'Zap', color: 'from-amber-500 to-amber-600' },
   {

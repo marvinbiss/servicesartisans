@@ -54,7 +54,7 @@ const METHODOLOGY_SECTIONS = [
     icon: UserCheck,
     title: 'Comment les artisans sont vérifiés',
     intro:
-      "Chaque artisan référencé sur ServicesArtisans fait l'objet de vérifications avant et après son inscription.",
+      "Chaque artisan RGE certifié référencé sur ServicesArtisans fait l'objet de vérifications avant et après son inscription.",
     points: [
       "Vérification du numéro SIRET via l'API SIRENE officielle : existence de l'entreprise, code APE cohérent avec le métier déclaré, établissement actif.",
       'Pour les artisans RGE : vérification hebdomadaire automatisée via la base ADEME. Les qualifications expirées ou retirées sont désactivées sous 24h.',

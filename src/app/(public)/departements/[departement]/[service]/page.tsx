@@ -768,7 +768,7 @@ export default async function DeptServicePage({ params }: PageProps) {
             Besoin d'un {trade.name.toLowerCase()} dans le {dept.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Devis gratuit et sans engagement de professionnels qualifiés.
+            Devis gratuit et sans engagement d&apos;artisans RGE certifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
