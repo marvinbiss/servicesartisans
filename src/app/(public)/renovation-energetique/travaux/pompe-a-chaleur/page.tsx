@@ -237,6 +237,11 @@ const relatedPages = [
       'Bilan thermique → mise en service. Durée 2-5 j, démarches admin, erreurs à éviter',
   },
   {
+    label: 'Fonctionnement PAC : cycle thermo, COP, fluides',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/fonctionnement',
+    description: '4 phases physiques + R32/R290 + dégivrage + Inverter + réversible',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',

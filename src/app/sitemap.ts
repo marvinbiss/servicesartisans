@@ -749,6 +749,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Sprint 4 PAC long-tail 2026-05-06 — sub-page fonctionnement (~4 300 vol/mo cumul).
+        // KW pivots Bloc 1 + estimation longue traîne :
+        //   - "fonctionnement pompe a chaleur"      2 500 vol KD 3 ⭐⭐⭐⭐ PIVOT
+        //   - "comment fonctionne pompe a chaleur"  ~600 vol KD 2
+        //   - "principe pompe a chaleur"            ~400 vol KD 1
+        //   - "schema pompe a chaleur"              ~350 vol KD 1
+        // Anti-cannibalisation : /installation = chantier 8 étapes ; /entretien =
+        // post-pose ; /consommation = budget ; cette page = physique du cycle thermo
+        // (4 phases, COP/SCOP, fluides R32/R290, dégivrage, Inverter, réversible).
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/fonctionnement`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
