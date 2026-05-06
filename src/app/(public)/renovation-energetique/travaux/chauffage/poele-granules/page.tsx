@@ -226,6 +226,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Entretien poêle à granulés 2026',
+    href: '/renovation-energetique/travaux/chauffage/poele-granules/entretien',
+    description: '150-220 € HT/an, 12 points, ramonage 80-150 €',
+  },
+  {
     label: 'Poêle granulés sans électricité',
     href: '/renovation-energetique/travaux/chauffage/poele-granules/sans-electricite',
     description: 'Gravitaire, hybride, onduleur — autonomie réseau',

@@ -910,6 +910,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.7,
       },
+      // Levier N 2026-05-06 — sub-page entretien poêle granulés (~2 500 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "entretien poele a granule"        1 000 vol KD 0 ⭐⭐⭐ pivot rang #140
+      //   - "tarif entretien poêle à granulés"   350 vol KD 0 rang #158
+      //   - "ramonage poele granule"             400 vol KD 0
+      //   - "contrat entretien poele granule"    300 vol KD 0
+      // Anti-canniba : entretien APPAREIL (brûleur/échangeur) vs ramonage CONDUIT (Décret 2023-741).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/poele-granules/entretien`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chauffe-eau-thermodynamique`,
         lastModified: STATIC_DATE,
