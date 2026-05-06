@@ -360,8 +360,32 @@ const sources = [
 
 const relatedPages = [
   {
-    label: 'DPE classe G — seuils, conséquences, sauts ROI',
+    label: 'DPE classe G — déjà interdite location 2025',
     href: '/renovation-energetique/diagnostic/dpe/classes/g',
+  },
+  {
+    label: 'DPE classe F — interdite location 2028 (33 mois)',
+    href: '/renovation-energetique/diagnostic/dpe/classes/f',
+  },
+  {
+    label: 'DPE classe E — interdite location 2034',
+    href: '/renovation-energetique/diagnostic/dpe/classes/e',
+  },
+  {
+    label: 'DPE classe D — 30 % du parc, médiocre',
+    href: '/renovation-energetique/diagnostic/dpe/classes/d',
+  },
+  {
+    label: 'DPE classe C — 24 % du parc, performant',
+    href: '/renovation-energetique/diagnostic/dpe/classes/c',
+  },
+  {
+    label: 'DPE classe B — 4 % du parc, très performant',
+    href: '/renovation-energetique/diagnostic/dpe/classes/b',
+  },
+  {
+    label: 'DPE classe A — excellence (RT 2012 / RE 2020)',
+    href: '/renovation-energetique/diagnostic/dpe/classes/a',
   },
   {
     label: 'Hub DPE — méthode, prix, opposabilité',

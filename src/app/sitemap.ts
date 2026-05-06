@@ -1263,6 +1263,45 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Sprint 3 (suite) — 6 sub-pages DPE classes individuelles (KW orphan KD 0-1)
+      // Cumul ~4 530 vol/mo. Anti-cannib: hub recap A-G + chaque page distincte (% parc, lois,
+      // sauts ROI propres). Author sophie-martin.
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/f`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/e`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/d`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/c`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/b`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.65,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/a`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,
         lastModified: STATIC_DATE,
