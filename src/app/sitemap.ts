@@ -1191,6 +1191,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier U 2026-05-06 — sub-page meilleures marques poêle granulés (~1 820 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "meilleur poele a granule"                          500 vol KD 3 ⭐⭐ pivot rang #170
+      //   - "quelle est la meilleure marque de poele à granulés" 500 vol KD 0 (rang #168)
+      //   - "poele a granules avis"                             ~250 vol estimé KD 1
+      //   - "comparatif poele a granules"                       ~150 vol estimé KD 1
+      //   - "marque poele a granules"                           ~200 vol estimé KD 1
+      //   - "top poele a granules" / "fiabilité"                ~220 cumulé longue traîne
+      // Anti-canniba : COMPARATIF MARQUES indépendant (8 marques + 6 critères + 3 budgets +
+      // 4 erreurs) vs hub /poele-granules (panorama technos/prix/aides) et /entretien (service).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/poele-granules/marques`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier T 2026-05-06 — sub-page disconnecteur chaudière (~2 800 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "disconnecteur chaudiere"        1 500 vol KD 0 ⭐⭐⭐ pivot rang #59

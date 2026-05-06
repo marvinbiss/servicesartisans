@@ -318,6 +318,11 @@ const relatedPages = [
     description: 'Sécurité anti-pollution OBLIGATOIRE + contrôle annuel',
   },
   {
+    label: 'Meilleur poêle à granulés (8 marques)',
+    href: '/renovation-energetique/travaux/chauffage/poele-granules/marques',
+    description: 'Comparatif RIKA, MCZ, Edilkamin, Stuv, Wodtke + 3 budgets',
+  },
+  {
     label: 'Entretien chaudière gaz 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
     description: '100-180 € HT, obligation Décret 2009-649, attestation 2 ans',

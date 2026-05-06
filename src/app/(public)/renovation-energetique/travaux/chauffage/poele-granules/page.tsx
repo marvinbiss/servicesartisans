@@ -231,6 +231,11 @@ const relatedPages = [
     description: '150-220 € HT/an, 12 points, ramonage 80-150 €',
   },
   {
+    label: 'Meilleures marques poêle granulés (8 comparées)',
+    href: '/renovation-energetique/travaux/chauffage/poele-granules/marques',
+    description: 'RIKA, MCZ, Edilkamin, Stuv, Wodtke + 6 critères + 3 budgets',
+  },
+  {
     label: 'Poêle granulés sans électricité',
     href: '/renovation-energetique/travaux/chauffage/poele-granules/sans-electricite',
     description: 'Gravitaire, hybride, onduleur — autonomie réseau',
