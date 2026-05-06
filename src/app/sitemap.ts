@@ -912,6 +912,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier L 2026-05-06 — sub-page chaudière à granulés (~5 750 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "chaudière à granulés"  2 100 vol KD 5 ⭐⭐⭐ pivot rang #57
+      //   - "chaudiere a granule"   1 500 vol KD 2 rang #90
+      //   - "chaudiere granulés"    1 100 vol KD 4 rang #149
+      //   - "chaudiere a pellet"      700 vol KD 2 rang #179
+      // Anti-canniba : focus chauffage central automatisé silo+vis vs /chaudiere-bois biomasse large.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-granules`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
       {
         // Levier M 2026-05-06 — sub-page tubage cheminée / fumisterie (~1 600 vol/mo cumulé).
         // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :

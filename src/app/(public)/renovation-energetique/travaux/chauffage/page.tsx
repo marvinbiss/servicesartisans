@@ -298,6 +298,11 @@ const relatedPages = [
     description: 'Prix 50-150 €, obligation annuelle Décret 2023-741',
   },
   {
+    label: 'Chaudière à granulés 2026 — prix & MPR 7 000 €',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-granules',
+    description: "Prix 15-25K €, aides cumulées jusqu'à 12 000 €",
+  },
+  {
     label: 'Chaudière gaz 2026 — prix & alternatives',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz',
     description: '4 types, prix 3 500-9 500 €, statut RE2020, aides 2026',

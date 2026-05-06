@@ -284,6 +284,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Chaudière à granulés 2026',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-granules',
+    description: 'Sub-page focused pellets : silo + vis + automation',
+  },
+  {
     label: 'Hub Chauffage 2026',
     href: '/renovation-energetique/travaux/chauffage',
     description: 'Comparatif PAC, chaudière, poêle, CET',
