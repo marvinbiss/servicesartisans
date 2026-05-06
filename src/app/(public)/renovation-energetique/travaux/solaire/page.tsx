@@ -41,17 +41,19 @@
  * Aides PV résidentiel (rappel critique YMYL) :
  *   - PV pur PAS éligible CEE (cf src/lib/rge/qualification-matcher.ts:106)
  *   - PV pur PAS éligible MaPrimeRénov' (uniquement solaire thermique)
- *   - Prime autoconsommation EDF OA Solaire (versée 5 ans, barème 2026)
+ *   - Prime autoconsommation EDF OA Solaire (versée 5 ans, barème CRE trimestriel)
  *   - TVA 10 % si ≤3 kWc (sinon 20 %)
  *   - Exonération IR si ≤3 kWc et autoconsommation
- *   - Tarif d'achat surplus : ~0,1276 €/kWh (S1 2026 EDF OA, ≤9 kWc)
+ *   - Tarif d'achat surplus : barème CRE trimestriel (cf cre.fr / edf-oa.fr)
+ *   - Page hedge volontairement les montants exacts (publication trimestrielle CRE
+ *     = risque obsolescence). Pour les valeurs en vigueur, consulter edf-oa.fr.
  *
  * Marques principales couvertes : DualSun, Sunpower, REC, LG, Trina, JA Solar,
  * Q.Cells, SystoVi (top 8 marché France 2026).
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Award, Calculator } from 'lucide-react'
+import { ArrowRight, Calculator, Sun } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -73,9 +75,9 @@ const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'marc-lefebvre'
 const AUTHOR_NAME = 'Marc Lefebvre'
 
-const TITLE = 'Panneau solaire 2026 : prix, aides, rendement (guide complet)'
+const TITLE = 'Panneau solaire 2026 : prix, aides, rendement'
 const DESCRIPTION =
-  'Panneau solaire 2026 : prix posé 7 500-19 000 €, prime autoconsommation EDF OA, TVA 10 %, rendement 14-22 %. Comparatif PV / hybride / souple, ROI 8-12 ans.'
+  'Panneau solaire 2026 : prix posé 7 500-19 000 € (3-9 kWc), prime autoconsommation EDF OA, TVA 10 %, rendement 14-22 %. Comparatif PV / hybride / souple, ROI 8-12 ans.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -98,7 +100,7 @@ const tldr = [
   'Panneau solaire = production d’électricité (photovoltaïque) ou de chaleur (thermique). Le PV domine le résidentiel.',
   '4 grandes familles : cristallin (mono / poly), amorphe (souple), hybride PV-T, thermique CESI.',
   'Prix posé 2026 (PV cristallin) : 3 kWc 7 500-9 000 €, 6 kWc 12 000-15 000 €, 9 kWc 16 000-19 000 €.',
-  'Aides PV pur : prime EDF OA autoconsommation (~80-380 €/kWc), TVA 10 % ≤3 kWc, exonération IR ≤3 kWc. Pas de MaPrimeRénov’ ni CEE.',
+  'Aides PV pur : prime EDF OA autoconsommation (barème trimestriel CRE, à vérifier sur edf-oa.fr), TVA 10 % ≤3 kWc, exonération IR ≤3 kWc. Pas de MaPrimeRénov’ ni CEE.',
   'Rendement cristallin mono 18-22 %, poly 14-16 %, amorphe 6-9 %. Garantie production 80-85 % à 25 ans.',
   'Production type 3 kWc Sud France : 3 600-4 200 kWh/an. Reste à charge post-aides 5 500-7 000 €. ROI 8-12 ans.',
   'Artisan RGE QualiPV obligatoire pour la prime EDF OA + Consuel. SA référence 3 985 QualiPV actifs (snapshot 2026-05-06).',
@@ -111,7 +113,7 @@ const TYPES = [
     aide: 'Prime EDF OA + TVA 10 % (≤3 kWc)',
     perf: 'Rendement 18-22 %',
     detail:
-      'Top du marché. Cellules silicium pur, couleur uniforme noire. Idéal toiture orientation sud, surface limitée. Garantie production 25 ans à 80-85 %. **Choix #1 résidentiel 2026.**',
+      'Top du marché. Cellules silicium pur, couleur uniforme noire. Idéal toiture orientation sud, surface limitée. Garantie production 25 ans à 80-85 %. <strong>Choix #1 résidentiel 2026.</strong>',
     href: '#types-solaire',
   },
   {
@@ -129,7 +131,7 @@ const TYPES = [
     aide: 'Aucune (hors résidentiel sédentaire)',
     perf: 'Rendement 6-9 %',
     detail:
-      'Léger, courbable, pose sur toit irrégulier ou véhicule. Faible rendement = surface 2× plus grande. **Niche : fourgon, bateau, abri jardin.** Pas pour résidence principale.',
+      'Léger, courbable, pose sur toit irrégulier ou véhicule. Faible rendement = surface 2× plus grande. <strong>Niche : fourgon, bateau, abri jardin.</strong> Pas pour résidence principale.',
     href: '#souple',
   },
   {
@@ -147,7 +149,7 @@ const TYPES = [
     aide: 'MaPrimeRénov’ + CEE BAR-TH-143 (SSC)',
     perf: 'Couvre 50-70 % besoin ECS / 25-40 % chauffage',
     detail:
-      'Capteurs solaires raccordés à un ballon ou un système combiné. **Distinct du PV.** Aides MPR + CEE accessibles, label RGE QualiSol requis.',
+      'Capteurs solaires raccordés à un ballon ou un système combiné. <strong>Distinct du PV.</strong> Aides MPR + CEE accessibles, label RGE QualiSol requis.',
     href: '/rge/labels/qualisol',
   },
 ]
@@ -181,13 +183,13 @@ const ARBRE_DECISION = [
     profil: 'Budget serré, ECS uniquement (douches + lave-linge eau chaude)',
     recommandation: 'Solaire thermique CESI 2-4 m² + ballon 200 L',
     justification:
-      'Couvre 50-70 % besoin ECS annuel. Prix posé 4 000-6 000 €, MPR 2 500-4 000 € + CEE = reste à charge 0-1 500 €. **Plus rentable que le PV à budget équivalent.**',
+      'Couvre 50-70 % besoin ECS annuel. Prix posé 4 000-6 000 €, MPR 2 500-4 000 € + CEE = reste à charge 0-1 500 €. Souvent plus rentable que le PV à budget équivalent.',
   },
   {
     profil: 'Piscine chauffée saisonnière',
     recommandation: 'Capteurs souples ou tubulaires solaires (sans PV)',
     justification:
-      'Réseau dédié bassin, ROI 3-5 ans sur facture chauffage piscine. Voir page dédiée /solaire/piscine.',
+      'Réseau dédié bassin, ROI 3-5 ans sur facture chauffage piscine. Pas de prime EDF OA (système hors réseau électrique). Couplable à PAC piscine.',
   },
   {
     profil: 'Site isolé / refuge / chalet hors réseau',
@@ -201,21 +203,21 @@ const PRIX_PAR_KWC = [
   {
     puissance: '3 kWc (8-10 panneaux)',
     prix_pose: '7 500-9 000 €',
-    prime_oa: '~1 140 € (380 €/kWc)',
+    prime_oa: 'Tranche ≤3 kWc — barème CRE en vigueur',
     production: '3 600-4 200 kWh/an',
     foyers: 'Studio à T3, conso 3 500-5 000 kWh/an',
   },
   {
     puissance: '6 kWc (15-18 panneaux)',
     prix_pose: '12 000-15 000 €',
-    prime_oa: '~1 680 € (280 €/kWc)',
+    prime_oa: 'Tranche 3-9 kWc — barème CRE en vigueur',
     production: '6 800-8 200 kWh/an',
     foyers: 'Maison 100 m², conso 7 000-9 000 kWh/an',
   },
   {
     puissance: '9 kWc (22-27 panneaux)',
     prix_pose: '16 000-19 000 €',
-    prime_oa: '~2 520 € (280 €/kWc)',
+    prime_oa: 'Tranche 3-9 kWc — barème CRE en vigueur',
     production: '10 200-12 500 kWh/an',
     foyers: 'Maison 150 m² + voiture élec, conso 10 000-13 000 kWh/an',
   },
@@ -242,12 +244,12 @@ const faqs = [
   {
     question: 'Quelles aides pour les panneaux solaires en 2026 ?',
     answer:
-      'Le <strong>photovoltaïque pur (PV)</strong> n’est <strong>PAS éligible MaPrimeRénov’ ni CEE</strong>. Aides spécifiques : <strong>prime à l’autoconsommation EDF OA</strong> (~380 €/kWc ≤3 kWc, 280 €/kWc 3-9 kWc, 190 €/kWc 9-36 kWc — versée sur 5 ans), <strong>TVA 10 %</strong> au lieu de 20 % si ≤3 kWc, <strong>exonération impôt sur le revenu</strong> sur la revente si ≤3 kWc. Tarif d’achat surplus EDF OA S1 2026 : ~0,1276 €/kWh (≤9 kWc, 20 ans contrat). Le <strong>solaire thermique (CESI / SSC)</strong> est éligible MPR (jusqu’à 4 000 €) + CEE BAR-TH-143 (SSC uniquement). Cumul avec éco-PTZ possible si bouquet de travaux. Aides locales (régions, départements) à vérifier au cas par cas — voir <a href="/aides/par-region">/aides/par-region</a>.',
+      'Le <strong>photovoltaïque pur (PV)</strong> n’est <strong>PAS éligible MaPrimeRénov’ ni CEE</strong>. Aides spécifiques : <strong>prime à l’autoconsommation EDF OA</strong> (barème fixé chaque trimestre par la CRE, dégressif par tranche ≤3 / 3-9 / 9-36 kWc, versée sur 5 ans), <strong>TVA 10 %</strong> au lieu de 20 % si ≤3 kWc, <strong>exonération impôt sur le revenu</strong> sur la revente si ≤3 kWc. <strong>Tarif d’achat surplus EDF OA</strong> (≤9 kWc, contrat 20 ans) : barème trimestriel publié par la CRE. Pour les montants exacts en vigueur, consulter <a href="https://www.edf-oa.fr" rel="noopener noreferrer" target="_blank">edf-oa.fr</a> et <a href="https://www.cre.fr" rel="noopener noreferrer" target="_blank">cre.fr</a>. Le <strong>solaire thermique (CESI / SSC)</strong> est éligible MPR (jusqu’à 4 000 €) + CEE BAR-TH-143 (SSC uniquement). Cumul avec éco-PTZ possible si bouquet de travaux. Aides locales (régions, départements) à vérifier au cas par cas — voir <a href="/aides/par-region">/aides/par-region</a>.',
   },
   {
     question: 'Combien de temps pour rentabiliser ses panneaux solaires ?',
     answer:
-      '<strong>ROI typique PV cristallin résidentiel 2026</strong> : 8-12 ans en autoconsommation + revente surplus (Sud / Centre France, toit sud). Calcul type 6 kWc : investissement 13 000 €, prime EDF OA -1 680 €, soit reste à charge 11 320 €. Économie annuelle (autoconso 40 % + revente 60 % à 0,1276 €/kWh) : ~1 100-1 350 €/an. Rentabilité 8-10 ans, puis 15-17 ans de gain net (durée de vie 25-30 ans). Avec batterie LiFePO4 (autoconso 70-90 %) : ROI rallongé à 11-14 ans mais résilience coupures + indépendance réseau. <strong>Solaire thermique CESI</strong> : ROI 5-9 ans avec MPR.',
+      '<strong>ROI typique PV cristallin résidentiel</strong> : 8-12 ans en autoconsommation + revente surplus (Sud / Centre France, toit sud). Le calcul dépend du barème EDF OA en vigueur (prime + tarif d’achat fixés trimestriellement par la CRE), du taux d’autoconsommation, et de la zone d’ensoleillement. Ordre de grandeur 6 kWc : investissement 12 000-15 000 €, économie annuelle ~1 000-1 400 € (autoconso ~40 % + revente surplus). Avec batterie LiFePO4 (autoconso 70-90 %) : ROI rallongé à 11-14 ans mais résilience coupures + indépendance réseau accrue. <strong>Solaire thermique CESI</strong> : ROI 5-9 ans avec MaPrimeRénov’.',
   },
   {
     question: 'Quel est le rendement d’un panneau solaire ?',
@@ -262,12 +264,12 @@ const faqs = [
   {
     question: 'Autoconsommation totale ou revente totale du surplus ?',
     answer:
-      'Trois schémas. (1) <strong>Vente totale</strong> : tarif d’achat plus élevé (~0,15-0,17 €/kWh ≤9 kWc), mais zéro autoconsommation directe. <strong>Discontinué pour les nouveaux contrats</strong> depuis octobre 2023 sauf cas très spécifiques. (2) <strong>Autoconsommation + vente du surplus</strong> : <strong>schéma majoritaire 2026</strong>. Vous consommez ce que vous produisez en direct (gratuit), revendez l’excédent à EDF OA à 0,1276 €/kWh (S1 2026, ≤9 kWc, contrat 20 ans). Prime EDF OA sur 5 ans. (3) <strong>Autoconsommation totale</strong> : aucune revente, surplus perdu sauf si batterie. Rentabilité dépend du taux d’autoconso (sans batterie 30-50 %, avec batterie 70-90 %).',
+      'Trois schémas. (1) <strong>Vente totale</strong> : toute la production injectée dans le réseau, zéro autoconsommation directe. Schéma <strong>fortement restreint pour les nouveaux contrats</strong> depuis la réforme tarifaire d’octobre 2023. (2) <strong>Autoconsommation + vente du surplus</strong> : <strong>schéma majoritaire 2026</strong>. Vous consommez ce que vous produisez en direct (gratuit), revendez l’excédent à EDF OA au tarif d’achat en vigueur (publié par la CRE chaque trimestre), avec contrat 20 ans. La prime à l’autoconsommation EDF OA est versée sur 5 ans. (3) <strong>Autoconsommation totale</strong> : aucune revente, surplus perdu sauf si batterie. Rentabilité dépend du taux d’autoconso (sans batterie 30-50 %, avec batterie 70-90 %).',
   },
   {
     question: 'Comment entretenir et nettoyer ses panneaux solaires ?',
     answer:
-      'Les panneaux solaires sont <strong>quasi sans entretien</strong>. Pluie + auto-nettoyage électrostatique suffisent dans 80 % des cas. <strong>Nettoyage manuel recommandé 1-2× par an</strong> si environnement poussiéreux (proche route, pollens, fientes oiseaux), avec eau déminéralisée et raclette télescopique souple — <strong>jamais de jet haute pression</strong> ni de produits abrasifs (risque rayure cellule + perte garantie). Coût pro : 80-180 € par session pour 6 kWc. Vérifier l’<strong>onduleur tous les 2 ans</strong> (fusibles, bornes, mise à jour firmware) et la <strong>boîte de jonction</strong> (étanchéité). Production en baisse > 10 % vs année précédente = inspection requise. Voir page dédiée <a href="#nettoyage">/solaire/nettoyage-entretien</a>.',
+      'Les panneaux solaires sont <strong>quasi sans entretien</strong>. Pluie + auto-nettoyage électrostatique suffisent dans 80 % des cas. <strong>Nettoyage manuel recommandé 1-2× par an</strong> si environnement poussiéreux (proche route, pollens, fientes oiseaux), avec eau déminéralisée et raclette télescopique souple — <strong>jamais de jet haute pression</strong> ni de produits abrasifs (risque rayure cellule + perte garantie). Coût pro : 80-180 € par session pour 6 kWc. Vérifier l’<strong>onduleur tous les 2 ans</strong> (fusibles, bornes, mise à jour firmware) et la <strong>boîte de jonction</strong> (étanchéité). Production en baisse > 10 % vs année précédente = inspection requise.',
   },
 ]
 
@@ -344,12 +346,21 @@ export default function Page() {
   ])
   const faqSchema = getFAQSchema(faqs)
   const govSchema = getGovernmentServiceSchema({
-    name: 'Solaire photovoltaïque : prime EDF OA + TVA 10 % 2026',
+    name: 'Solaire photovoltaïque : prime EDF OA + TVA 10 %',
     description:
-      'Panneaux solaires éligibles à la prime à l’autoconsommation EDF OA Solaire et à la TVA 10 % (≤3 kWc). Installation par artisan RGE QualiPV obligatoire. Pas d’éligibilité MaPrimeRénov’ ni CEE pour le PV pur résidentiel.',
+      'Panneaux solaires photovoltaïques éligibles à la prime à l’autoconsommation EDF OA Solaire (barème trimestriel CRE) et à la TVA 10 % (≤3 kWc). Installation par artisan RGE QualiPV obligatoire. Pas d’éligibilité MaPrimeRénov’ ni CEE pour le PV pur résidentiel.',
     url: PAGE_URL,
-    serviceType: 'Subvention publique solaire photovoltaïque',
+    serviceType: 'Tarif réglementé d’achat et prime à l’autoconsommation photovoltaïque',
     audience: 'Propriétaires occupants, bailleurs, copropriétés',
+    serviceOperator: {
+      name: 'Commission de régulation de l’énergie (CRE)',
+      url: 'https://www.cre.fr',
+    },
+    sameAs: [
+      'https://www.edf-oa.fr',
+      'https://www.cre.fr',
+      'https://www.service-public.fr/particuliers/vosdroits/F32814',
+    ],
   })
   const schemas = [articleSchema, breadcrumbSchema, faqSchema, govSchema].filter(
     (s): s is Record<string, unknown> => s !== null
@@ -370,7 +381,7 @@ export default function Page() {
           />
           <header className="mb-8">
             <div className="inline-flex items-center gap-1.5 bg-primary-50 text-primary-800 text-xs font-medium px-2.5 py-1 rounded-full mb-4">
-              <Award className="w-3.5 h-3.5" aria-hidden />
+              <Sun className="w-3.5 h-3.5" aria-hidden />
               Hub Solaire 2026 — PV / hybride / thermique
             </div>
             <h1
@@ -477,8 +488,12 @@ export default function Page() {
               </table>
             </div>
             <p className="text-xs text-sand-500 italic">
-              Barème prime EDF OA — S1 2026 (CRE délibération du 13/02/2026). Prix posé inclut
-              matériel Tier 1, onduleur, pose, raccordement, Consuel. Hors batterie sauf mention.
+              Barème prime EDF OA fixé chaque trimestre par la CRE (consulter{' '}
+              <a href="https://www.edf-oa.fr" rel="noopener noreferrer" target="_blank">
+                edf-oa.fr
+              </a>{' '}
+              pour la valeur en vigueur). Prix posé indicatif fourchette 2026 : matériel Tier 1,
+              onduleur, pose, raccordement, Consuel inclus. Hors batterie sauf mention.
             </p>
 
             <h2 id="aides-solaire">Aides PV résidentiel 2026 (rappel critique)</h2>
@@ -490,8 +505,13 @@ export default function Page() {
             </p>
             <ul>
               <li>
-                <strong>Prime à l’autoconsommation EDF OA Solaire</strong> : ~380 €/kWc (≤3 kWc),
-                280 €/kWc (3-9 kWc), 190 €/kWc (9-36 kWc). Versée trimestriellement sur 5 ans.
+                <strong>Prime à l’autoconsommation EDF OA Solaire</strong> : barème fixé chaque
+                trimestre par la CRE et dégressif par tranche de puissance (≤3 kWc, 3-9 kWc, 9-36
+                kWc). Versée trimestriellement sur 5 ans. Montants exacts en vigueur sur{' '}
+                <a href="https://www.edf-oa.fr" rel="noopener noreferrer" target="_blank">
+                  edf-oa.fr
+                </a>{' '}
+                (mise à jour CRE).
               </li>
               <li>
                 <strong>TVA réduite 10 %</strong> (au lieu de 20 %) si puissance ≤ 3 kWc et pose par
@@ -502,8 +522,12 @@ export default function Page() {
                 puissance ≤ 3 kWc et autoconsommation.
               </li>
               <li>
-                <strong>Tarif d’achat surplus EDF OA</strong> : ~0,1276 €/kWh (≤9 kWc, S1 2026,
-                contrat 20 ans).
+                <strong>Tarif d’achat surplus EDF OA</strong> (≤9 kWc, contrat 20 ans) : barème
+                trimestriel publié par la CRE — tarif en vigueur sur{' '}
+                <a href="https://www.cre.fr" rel="noopener noreferrer" target="_blank">
+                  cre.fr
+                </a>
+                .
               </li>
               <li>
                 <strong>Aides locales</strong> : régions et départements (variable, voir{' '}
