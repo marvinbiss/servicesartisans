@@ -1380,6 +1380,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.7,
       },
+      // Sprint 5 — Indice Rénovation™ asset E-E-A-T DR boost
+      // KW pivot "barometre renovation energetique" 400 vol KD 3 + famille ~1 450 vol/mo cumul
+      // Schema Dataset CC-BY 4.0 (ADEME / ANAH / France Rénov' / BPI France / INSEE)
+      // Anti-cannib : transversal marché (vs /barometre/rge focused annuaire)
+      {
+        url: `${SITE_URL}/barometre/renovation-energetique-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       // /recherche removed — 301-redirects to /services (next.config.js). Including redirected URLs
       // in sitemaps wastes crawl budget and sends conflicting signals to Google.
       {

@@ -635,7 +635,7 @@ export default async function BarometrePage() {
               </div>
             </Link>
             <Link
-              href="/barometre/tarifs"
+              href="/barometre/renovation-energetique-2026"
               className="flex items-center gap-4 bg-white rounded-xl border border-sand-300 p-6 hover:shadow-md transition-shadow group"
             >
               <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
@@ -643,9 +643,9 @@ export default async function BarometrePage() {
               </div>
               <div>
                 <p className="font-semibold text-charcoal-900 group-hover:text-amber-600">
-                  Baromètre des prix
+                  Indice Rénovation 2026
                 </p>
-                <p className="text-sm text-charcoal-500">Tarifs par intervention</p>
+                <p className="text-sm text-charcoal-500">Marché France — données CC-BY 4.0</p>
               </div>
             </Link>
           </div>
