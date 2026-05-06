@@ -310,6 +310,11 @@ const relatedPages = [
     description: 'Électricité + ECS sur un seul panneau, 450-700 €/m², DualSun / Systovi',
   },
   {
+    label: 'Dimension panneau solaire (taille, poids, surface)',
+    href: '/renovation-energetique/travaux/solaire/dimension',
+    description: '4 formats 2026 + calcul surface toit pour 3-9 kWc + 5 contraintes pose',
+  },
+  {
     label: 'Autoconsommation solaire (totale, surplus, collective)',
     href: '/renovation-energetique/travaux/solaire/autoconsommation',
     description: '3 modes énergétiques + ROI batterie + raccordement Enedis CACSI',

@@ -1191,6 +1191,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier S 2026-05-06 — sub-page dimension panneau solaire (~2 270 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "dimension panneau solaire"        800 vol KD 4 ⭐⭐ pivot rang #122
+      //   - "taille panneau solaire"           ~350 vol estimé KD 1
+      //   - "surface panneau solaire"          ~300 vol estimé KD 1
+      //   - "poids panneau solaire"            ~250 vol estimé KD 1
+      //   - "epaisseur / largeur / hauteur"    ~370 cumulé longue traîne
+      //   - "dimensions panneau photovoltaique" ~200 vol estimé KD 1
+      // Anti-canniba : SPÉCIFICATIONS PHYSIQUES (4 formats résidentiel + 5 paramètres
+      // techniques + calcul surface toit + 5 contraintes pose) vs hub /solaire (prix/types)
+      // et /solaire/rendement (% conversion) et /solaire/autoconsommation (mode énergétique).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/dimension`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier R 2026-05-06 — sub-page PAC hybride (~2 550 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "pompe a chaleur hybride"     1 100 vol KD 3 ⭐⭐⭐ pivot rang #82
