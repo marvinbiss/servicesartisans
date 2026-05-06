@@ -26,8 +26,8 @@
  *   - /travaux/menuiseries/fenetre-de-toit = ouverture toit (Levier D)
  *   - /travaux/isolation/toiture        = isolation thermique combles
  *   - Cette page = STRUCTURE PORTANTE de la toiture (charpente bois /
- *     fermettes / acier). Métier charpentier (Qualibat 2231) ou
- *     charpentier-couvreur (Qualibat 2232).
+ *     fermettes / acier). Métier charpentier (Qualibat 2191) ou
+ *     couvreur cumulé (qualif. 2261-2263 couverture).
  *
  * YMYL medium : sécurité structure (DTU 31.1, 31.3, 31.2, 32.1), travail
  * en hauteur (Code travail R4323-58), responsabilité décennale obligatoire.
@@ -35,7 +35,7 @@
  *
  * Cite : DTU 31.1 (charpente bois traditionnelle), DTU 31.3 (lamellé-collé),
  * DTU 31.2 (ossature bois), DTU 32.1 (charpente acier), Code travail R4323-58,
- * Qualibat 2231 / 2232, ADEME bois construction.
+ * Qualibat 2191 / 2261, ADEME bois construction.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -73,7 +73,7 @@ const AUTHOR_NAME = 'Thomas Bernard'
 
 const TITLE = 'Charpente 2026 : prix 100-300 €/m², types et choix charpentier'
 const DESCRIPTION =
-  'Charpente en 2026 : prix 100-300 €/m² selon type (traditionnelle, fermettes, lamellé-collé, acier). Réfection, traitement, choisir un charpentier Qualibat 2231.'
+  'Charpente en 2026 : prix 100-300 €/m² selon type (traditionnelle, fermettes, lamellé-collé, acier). Réfection, traitement, choisir un charpentier Qualibat 2191.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -96,9 +96,9 @@ const tldr = [
   '4 types de charpente en 2026 : traditionnelle (bois massif), fermettes industrielles (sapin/épicéa), lamellé-collé (grandes portées), acier ou métallique.',
   'Prix moyen 2026 au m² couvert : traditionnelle 150-300 €/m², fermettes 100-180 €/m², lamellé-collé 200-350 €/m², acier 180-280 €/m². Maison 100 m² : 10 000-30 000 €.',
   'Réfection partielle de charpente : 80-200 €/m² selon dégâts (traitement insectes / champignons, remplacement pannes, renforts métalliques).',
-  'Traitement charpente bois (anti-termites, capricornes, vrillettes) : 25-50 €/m², garantie 10 ans avec entreprise certifiée CTB-A+ ou Qualibat 5331.',
+  'Traitement charpente bois (anti-termites, capricornes, vrillettes) : 25-50 €/m², garantie 10 ans avec entreprise certifiée CTB-A+ (FCBA) ou qualification équivalente.',
   'Aucune aide MaPrimeRénov’ ni CEE pour la charpente seule (pas une rénovation thermique). TVA 10 % logement > 2 ans avec artisan. Si combles aménagés en même temps : aides isolation toiture éligibles.',
-  'Choisir un charpentier Qualibat 2231 (charpente bois traditionnelle) ou Qualibat 2232 (charpentier-couvreur), avec décennale et RC pro travail en hauteur à jour.',
+  'Choisir un charpentier Qualibat 2191 (charpente et ossature bois) ou avec qualifications cumulées charpente + couverture (2261-2263), avec décennale et RC pro travail en hauteur à jour.',
 ]
 
 const TYPES_CHARPENTE = [
@@ -181,9 +181,9 @@ const REGLEMENT = [
 
 const QUI_CHOISIR = [
   {
-    title: 'Qualibat 2231 (charpente bois) ou 2232 (charpentier-couvreur)',
+    title: 'Qualibat 2191 (charpente bois) ou 2192 (lamellé-collé)',
     must: 'Recommandé',
-    desc: 'Préférer un artisan disposant de la qualification Qualibat 2231 (charpente bois traditionnelle), 2232 (charpentier-couvreur) ou 2122 (lamellé-collé) selon votre projet.',
+    desc: 'Préférer un artisan disposant de la qualification Qualibat 2191 (charpente et ossature bois), 2192 (charpente lamellé-collé) ou 2293 (charpente métallique) selon le projet. Couverture cumulée : 2261-2263.',
   },
   {
     title: 'Décennale et RC pro travail en hauteur',
@@ -221,7 +221,7 @@ const faqs = [
   {
     question: 'Combien coûte une réfection partielle de charpente ?',
     answer:
-      'Pour une réfection partielle : remplacer 1 à 4 pannes endommagées 80-200 €/m², ajout de renforts métalliques 50-150 € par renfort. Pour une charpente attaquée par insectes (capricornes, vrillettes) ou champignons (mérule) : traitement préventif 25-50 €/m², traitement curatif 30-80 €/m², le tout garanti 10 ans avec un pro certifié CTB-A+ ou Qualibat 5331. En cas de mérule avérée, déclaration en mairie obligatoire (loi ALUR 2014).',
+      'Pour une réfection partielle : remplacer 1 à 4 pannes endommagées 80-200 €/m², ajout de renforts métalliques 50-150 € par renfort. Pour une charpente attaquée par insectes (capricornes, vrillettes) ou champignons (mérule) : traitement préventif 25-50 €/m², traitement curatif 30-80 €/m², le tout garanti 10 ans avec un pro certifié CTB-A+ (FCBA) ou détenteur d’une qualification traitement bois équivalente. En cas de mérule avérée, déclaration en mairie obligatoire (loi ALUR 2014).',
   },
   {
     question: 'Y a-t-il une aide MaPrimeRénov’ ou CEE pour refaire la charpente ?',
@@ -359,8 +359,9 @@ export default function Page() {
               Pour une maison de 100 m² couverts en 2026, une charpente neuve coûte{' '}
               <strong>10 000 à 30 000 €</strong> selon le type : fermettes industrielles, bois
               massif traditionnelle, lamellé-collé ou acier. Réfection partielle{' '}
-              <strong>80-200 €/m²</strong>. Choisir un charpentier <strong>Qualibat 2231</strong> ou{' '}
-              <strong>2232</strong> avec décennale et RC pro travail en hauteur à jour.
+              <strong>80-200 €/m²</strong>. Choisir un charpentier <strong>Qualibat 2191</strong>{' '}
+              (ou cumul charpente + couverture 2261-2263) avec décennale et RC pro travail en
+              hauteur à jour.
             </p>
             <LastUpdated date={MODIFIED} className="mt-3" />
           </header>
@@ -459,7 +460,8 @@ export default function Page() {
                     déclarer en mairie selon les art. L133-1 à L133-6 du Code construction (loi ALUR
                     2014). Lors d’une vente immobilière, l’état parasitaire fait partie des
                     diagnostics obligatoires en zone à termites. Confier le traitement à un pro
-                    certifié CTB-A+ ou Qualibat 5331, garanti 10 ans.
+                    certifié CTB-A+ (FCBA) ou détenant une qualification traitement bois
+                    équivalente, garanti 10 ans.
                   </p>
                 </div>
               </div>
@@ -500,7 +502,7 @@ export default function Page() {
                     Demandez 3 devis charpente en 2 minutes
                   </p>
                   <p className="text-sm md:text-base text-sand-700 mb-3">
-                    3 charpentiers Qualibat 2231 / 2232 vérifiés vous répondent sous 48 h. Devis
+                    3 charpentiers Qualibat 2191 / 2261 vérifiés vous répondent sous 48 h. Devis
                     détaillés type, essence, dimensions, garanties pose et matériel.
                   </p>
                   <div className="flex flex-wrap gap-2">

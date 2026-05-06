@@ -28,13 +28,13 @@
  *     (combles, rampants) — différent métier, différent intent
  *   - Cette page = entretien SURFACE de couverture (mousses, lichens,
  *     hydrofuge). Métier couvreur / spécialiste démoussage. Pas RGE
- *     obligatoire (juste Qualibat 8211 couverture recommandé).
+ *     obligatoire (juste Qualibat 2261-2263 couverture recommandé).
  *
  * YMYL bas-medium : sécurité travail en hauteur (Code Travail R4323-58)
  * + produits biocides (Règlement UE 528/2012). Pas d'aide publique.
  *
  * Cite : INRS R408/R430, Règlement UE 528/2012 biocides, DTU 40,
- * Qualibat 8211, ANSES (produits autorisés), ADEME.
+ * Qualibat 2261-2263, ANSES (produits autorisés), ADEME.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -98,7 +98,7 @@ const tldr = [
   'Fréquence recommandée : nettoyage tous les 5-10 ans (climat humide), tous les 10-15 ans (climat sec). Hydrofuge à refaire tous les 8-12 ans.',
   'Méthode pro : nettoyage manuel ou basse pression < 100 bar (haute pression = décollement tuiles), produits biocides TP 7/8 (Règlement UE 528/2012), travail amorcé en bas-toit pour éviter saletés.',
   'Sécurité : travail en hauteur encadré (Code travail R4323-58), 2ᵉ cause d’accidents mortels du BTP. Échafaudage ou nacelle obligatoire si pente > 25° ou hauteur > 6 m.',
-  'Pas d’aide MaPrimeRénov’ ni CEE (pas une rénovation énergétique). TVA 10 % logement > 2 ans avec artisan. Choisir Qualibat 8211 (couverture) avec assurance décennale.',
+  'Pas d’aide MaPrimeRénov’ ni CEE (pas une rénovation énergétique). TVA 10 % logement > 2 ans avec artisan. Choisir Qualibat 2261-2263 (couverture) avec assurance décennale.',
 ]
 
 const PRIX_PRESTATIONS = [
@@ -188,9 +188,9 @@ const SECURITE = [
 
 const QUI_CHOISIR = [
   {
-    title: 'Qualibat 8211 (couverture) avec décennale',
+    title: 'Qualibat 2261-2263 (couverture) avec décennale',
     must: 'Recommandé',
-    desc: 'Le label Qualibat 8211 atteste de la qualification professionnelle du couvreur. Demandez le numéro + attestation décennale en cours de validité.',
+    desc: 'Le label Qualibat 2261-2263 atteste de la qualification professionnelle du couvreur. Demandez le numéro + attestation décennale en cours de validité.',
   },
   {
     title: 'Assurance RC pro travail en hauteur',
@@ -243,7 +243,7 @@ const faqs = [
   {
     question: 'Peut-on nettoyer une toiture soi-même ?',
     answer:
-      'Techniquement oui, mais c’est dangereux : le travail en hauteur > 3 m est encadré (Code travail R4323-58) et exige harnais, ligne de vie, formation. Le risque de chute est la 2ᵉ cause d’accidents mortels du BTP. Pour une toiture < 3 m (cabanon, hangar bas), si vous êtes équipé EPI : possible. Sinon, faites appel à un pro Qualibat 8211 : le coût est largement justifié par la sécurité et la qualité du résultat.',
+      'Techniquement oui, mais c’est dangereux : le travail en hauteur > 3 m est encadré (Code travail R4323-58) et exige harnais, ligne de vie, formation. Le risque de chute est la 2ᵉ cause d’accidents mortels du BTP. Pour une toiture < 3 m (cabanon, hangar bas), si vous êtes équipé EPI : possible. Sinon, faites appel à un pro Qualibat 2261-2263 : le coût est largement justifié par la sécurité et la qualité du résultat.',
   },
   {
     question: 'Quels produits anti-mousse sont autorisés ?',
@@ -275,7 +275,7 @@ const sources = [
     url: 'https://www.anses.fr/fr/content/biocides',
   },
   {
-    label: 'Qualibat — référentiel 8211 couverture',
+    label: 'Qualibat — référentiels 2261-2263 couverture',
     url: 'https://www.qualibat.com',
   },
   {
@@ -303,7 +303,7 @@ const relatedPages = [
     href: '/renovation-energetique/travaux/solaire/nettoyage',
   },
   {
-    label: 'Trouver un couvreur RGE Qualibat 8211',
+    label: 'Trouver un couvreur RGE Qualibat 2261-2263',
     href: '/rge/couvreur',
   },
 ]
@@ -367,7 +367,7 @@ export default function Page() {
               <strong>1 000-2 000 €</strong> pour un démoussage curatif,{' '}
               <strong>800-1 800 €</strong> pour un hydrofuge, et <strong>2 000-4 000 €</strong> pour
               un pack complet (les trois). Travail en hauteur encadré (Code Travail R4323-58) :
-              faites appel à un couvreur Qualibat 8211 avec assurance décennale et RC pro.
+              faites appel à un couvreur Qualibat 2261-2263 avec assurance décennale et RC pro.
             </p>
             <LastUpdated date={MODIFIED} className="mt-3" />
           </header>
@@ -504,8 +504,8 @@ export default function Page() {
                     Demandez 3 devis nettoyage de toiture en 2 minutes
                   </p>
                   <p className="text-sm md:text-base text-sand-700 mb-3">
-                    3 couvreurs Qualibat 8211 vérifiés vous répondent sous 48 h. Devis détaillés +
-                    comparatif des 3 prestations (nettoyage / démoussage / hydrofuge).
+                    3 couvreurs Qualibat 2261-2263 vérifiés vous répondent sous 48 h. Devis
+                    détaillés + comparatif des 3 prestations (nettoyage / démoussage / hydrofuge).
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Link
@@ -617,7 +617,7 @@ export default function Page() {
               href="/rge/couvreur"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
-              Couvreurs Qualibat 8211 <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
+              Couvreurs Qualibat 2261-2263 <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>
