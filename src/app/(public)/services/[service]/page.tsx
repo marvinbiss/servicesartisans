@@ -3,7 +3,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock } from 'lucide-react'
-import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
+import {
+  getServiceBySlug,
+  getProvidersByService,
+  getProviderCountByService,
+  getProviderCountByServiceAndLocation,
+} from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
@@ -255,8 +260,25 @@ export default async function ServicePage({ params }: PageProps) {
   })
 
   // Top 12 cities (static, validated, sorted by population)
+  // 2026-05-06 — Filtre RGE-aware : exclut les villes où le combo
+  // /services/[s]/[v] partirait en notFound() (0 RGE pour ce service à cette
+  // ville). Avant pivot full RGE, le hub listait des villes statiques qui
+  // n'avaient aucun artisan RGE pour le service → liens cassés, soft-404, UX KO.
+  // Coût : 30 count queries en parallèle, déjà cachées 1h via getCachedData.
   const validSlugs = new Set(villes.map((v) => v.slug))
-  const topCities: CityInfo[] = getStaticCities().filter((c) => validSlugs.has(c.slug))
+  const candidates: CityInfo[] = getStaticCities().filter((c) => validSlugs.has(c.slug))
+  const cityCounts = await Promise.all(
+    candidates.slice(0, 30).map(async (c) => {
+      const n = await getProviderCountByServiceAndLocation(serviceSlug, c.slug, {
+        rgeOnly: true,
+      }).catch(() => 0)
+      return { city: c, count: n }
+    })
+  )
+  const topCities: CityInfo[] = cityCounts
+    .filter((x) => x.count > 0)
+    .slice(0, 12)
+    .map((x) => x.city)
 
   // Trade-specific rich content (prices, FAQ, certifications)
   const tradeBase = getTradeContent(serviceSlug)

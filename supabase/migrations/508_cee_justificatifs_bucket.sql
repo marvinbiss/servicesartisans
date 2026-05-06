@@ -59,7 +59,7 @@ CREATE POLICY cee_justificatifs_insert
         JOIN public.providers pr ON pr.id = p.provider_id
        WHERE d.id::text = (storage.foldername(name))[1]
          AND pr.user_id = auth.uid()
-         AND d.status IN ('draft', 'brouillon', 'pending_documents')
+         AND d.status IN ('draft', 'brouillon')
     )
   );
 
@@ -77,7 +77,7 @@ CREATE POLICY cee_justificatifs_update
         JOIN public.providers pr ON pr.id = p.provider_id
        WHERE d.id::text = (storage.foldername(name))[1]
          AND pr.user_id = auth.uid()
-         AND d.status IN ('draft', 'brouillon', 'pending_documents')
+         AND d.status IN ('draft', 'brouillon')
     )
   );
 
