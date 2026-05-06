@@ -688,6 +688,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Vague 2 V2 fused (2026-05-06) — Hub Solaire PV pillar, cible "panneau solaire prix" 6 300 KD 25.
+      // Source : STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED — orphelin solaire-pv (3 985 QualiPV supply).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.92,
+      },
       // Vague F (40/40) — 2026-05-04 — Hub menuiseries extérieures (clôture audit STRATEGIE).
       // KW pivots Ahrefs API live (snapshot 2026-05-04) :
       //   - "menuiserie exterieure" 200 KD 0 + "porte fenetre prix" 200 KD 2

@@ -29,6 +29,7 @@ import {
   Home,
   Layers,
   Sparkles,
+  Sun,
   ThermometerSun,
   Wind,
 } from 'lucide-react'
@@ -171,6 +172,20 @@ const CLUSTERS = [
       {
         label: 'Installation VMC (1.2K vol KD 0)',
         href: '/renovation-energetique/travaux/vmc/installation',
+      },
+    ],
+  },
+  {
+    icon: Sun,
+    name: 'Solaire photovoltaïque',
+    href: '/renovation-energetique/travaux/solaire',
+    headline: 'Autoconsommation EDF OA',
+    detail:
+      'Panneaux PV pour autoconsommation + revente surplus. Prime EDF OA 190-380 €/kWc. ⚠ HORS CEE et HORS MaPrimeRénov’ (PV ≠ solaire thermique). Supply : 3 985 artisans QualiPV actifs.',
+    pages: [
+      {
+        label: 'Hub solaire PV (6.3K vol KD 25)',
+        href: '/renovation-energetique/travaux/solaire',
       },
     ],
   },
