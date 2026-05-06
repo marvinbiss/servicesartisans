@@ -165,19 +165,14 @@ export interface HomepageData extends SiteStats {
 async function _getSiteStats(): Promise<SiteStats> {
   try {
     const supabase = createAdminClient()
-    const todayIso = new Date().toISOString().slice(0, 10)
 
-    // 2026-05-05 pivot full RGE — artisanCount = artisans RGE actifs uniquement
-    // (non plus tous providers actifs). Aligne homepage TrustBar + barometres
-    // sur le positionnement "annuaire 100% RGE certifiés".
-    const [providerRes, reviewCountRes, ratingsRes, deptRes] = await withTimeout(
+    // 2026-05-06 — artisanCount tiré de `getProviderCount()` (RPC scalaire
+    // `get_active_rge_count` sur `mv_provider_counts`, ms vs 4s+ timeout sur
+    // `providers` 970K rows). Le `count exact head` filtré rge_qualifications
+    // + rge_valid_until faisait timeout `site_stats_aggregate` 6s en prod.
+    const [artisanCount, reviewCountRes, ratingsRes, deptRes] = await withTimeout(
       Promise.all([
-        supabase
-          .from('providers')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_active', true)
-          .not('rge_qualifications', 'is', null)
-          .gte('rge_valid_until', todayIso),
+        getProviderCount(),
         supabase
           .from('reviews')
           .select('*', { count: 'exact', head: true })
@@ -194,8 +189,6 @@ async function _getSiteStats(): Promise<SiteStats> {
       'site_stats_aggregate'
     )
 
-    const artisanCount =
-      providerRes.count && providerRes.count > 0 ? providerRes.count : PROVIDER_COUNT_FALLBACK
     const reviewCount = reviewCountRes.count ?? 0
 
     let avgRating = 4.9
@@ -216,9 +209,9 @@ async function _getSiteStats(): Promise<SiteStats> {
   }
 }
 
-// Cache key bumped 2026-05-06 (`-v2`) pour purger une entry poisoned (artisanCount=0)
-// après timeout PostgREST sur la query providers.rge_valid_until.
-export const getSiteStats = unstable_cache(_getSiteStats, ['site-stats-v2'], {
+// Cache key bumped 2026-05-06 (`-v3`) après bascule du count providers sur la
+// RPC scalaire (purge entry poisoned du timeout site_stats_aggregate).
+export const getSiteStats = unstable_cache(_getSiteStats, ['site-stats-v3'], {
   revalidate: 3600,
   tags: ['providers', 'reviews'],
 })
