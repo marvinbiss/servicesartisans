@@ -1191,6 +1191,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier Q 2026-05-06 — sub-page remplacement chaudière gaz (~2 600 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "remplacement chaudière gaz"   600 vol KD 1 ⭐⭐ pivot rang #110
+      //   - "changement chaudiere gaz"     400 vol KD 0 (rang #139)
+      //   - "installation chaudière gaz"   500 vol KD 0 (rang #111)
+      //   - "installation chaudiere gaz"   700 vol KD 0 (rang #81)
+      //   - "remplacer chaudière gaz"      ~250 vol estimé KD 1
+      // Anti-canniba : ACTION remplacement (planning 4 phases + 5 alternatives + 10 erreurs)
+      // vs hub /chaudiere-gaz (panorama 4 types) et /chaudiere-condensation (sub-tech).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-gaz/remplacement`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier P 2026-05-06 — sub-page solaire hybride PV-T (~1 800 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "panneau solaire hybride"      1 400 vol KD 4 ⭐⭐ pivot rang #169

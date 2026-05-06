@@ -308,6 +308,11 @@ const relatedPages = [
     description: '4 types, prix 3 500-9 500 €, statut RE2020, aides 2026',
   },
   {
+    label: 'Remplacement chaudière gaz 2026',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz/remplacement',
+    description: '7 signaux + 5 alternatives + planning chantier + prix net',
+  },
+  {
     label: 'Entretien chaudière gaz 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
     description: '100-180 € HT, obligation Décret 2009-649, attestation 2 ans',

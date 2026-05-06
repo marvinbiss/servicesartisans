@@ -296,6 +296,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Remplacement chaudière gaz 2026 (planning + alternatives)',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz/remplacement',
+    description: '7 signaux + 5 alternatives + prix net après aides',
+  },
+  {
     label: 'Chaudière à condensation 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation',
     description: 'Tech haute perf, prix 4 500-7 500 €',
