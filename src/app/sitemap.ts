@@ -1128,6 +1128,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Sprint 3 (orphelin) 2026-05-06 — sub-page DPE classes A-G recap (~5 100 vol/mo cumulé).
+        // KW pivots Bloc 1 + estimation snapshot (quota Ahrefs API restreint) :
+        //   - "classe dpe"          ~1 500 vol KD 3 ⭐⭐⭐ PIVOT
+        //   - "dpe classe g"        8 000 vol (passoire — share avec /passoires-thermiques)
+        //   - "dpe classe f"        ~600 vol KD 0
+        //   - "dpe classe a-e"      ~1 400 vol cumul KD 0
+        //   - "etiquette dpe"       ~600 vol KD 5
+        // Anti-cannibalisation : hub /dpe (méthode), /dpe/location (interdictions), /dpe/validite
+        // (durée 10 ans) couvrent leurs angles ; cette page = recap exhaustif des 7 lettres avec,
+        // pour chacune : seuil énergie + GES, facture, location, travaux pour saut.
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',

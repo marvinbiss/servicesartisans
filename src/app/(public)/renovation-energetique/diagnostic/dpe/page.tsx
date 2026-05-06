@@ -243,6 +243,11 @@ const relatedPages = [
     description: 'DPE pré-2021 caducs depuis 2025 + correction 2024 maisons < 1948',
   },
   {
+    label: 'Classes DPE A à G : seuils, GES, travaux',
+    href: '/renovation-energetique/diagnostic/dpe/classes',
+    description: 'Méthode 3CL-2021 + facture par classe + sauts E→C, F→C',
+  },
+  {
     label: 'Audit énergétique 2026',
     href: '/renovation-energetique/diagnostic/audit-energetique',
     description: 'Obligatoire vente F/G/E et MPR',
