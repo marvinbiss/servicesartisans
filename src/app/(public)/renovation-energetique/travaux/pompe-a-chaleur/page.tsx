@@ -231,6 +231,12 @@ const relatedPages = [
     description: '3 000-7 000 kWh/an pour 100 m². Comparatif vs gaz/fioul + 10 leviers d’économie',
   },
   {
+    label: 'Installation PAC : 8 étapes + RGE QualiPAC',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/installation',
+    description:
+      'Bilan thermique → mise en service. Durée 2-5 j, démarches admin, erreurs à éviter',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',

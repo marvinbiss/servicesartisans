@@ -732,6 +732,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Sprint 4 PAC long-tail 2026-05-06 — sub-page installation PAC (~5 600 vol/mo cumul).
+        // KW pivots Bloc 1 + estimation longue traîne (quota Ahrefs API restreint) :
+        //   - "installation pompe a chaleur"        3 300 vol KD 1 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "installation pac"                    ~600 vol KD 0
+        //   - "pose pompe a chaleur"                ~500 vol KD 0
+        //   - "installation pompe a chaleur prix"   ~400 vol KD 1
+        //   - "etape installation pompe a chaleur"  ~250 vol KD 0
+        // Anti-cannibalisation : /entretien = post-pose ; /consommation = post-pose ;
+        // cette page = phases 1-8 du chantier, durée 2-5j, RGE QualiPAC obligatoire,
+        // démarches admin, garanties, erreurs sous/sur-dimensionnement.
+        // Schema HowTo (8 étapes) + GovernmentService.
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
