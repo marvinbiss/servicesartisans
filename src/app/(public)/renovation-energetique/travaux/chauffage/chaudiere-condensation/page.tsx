@@ -193,6 +193,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Chaudière gaz 2026 — panorama 4 types',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz',
+    description: 'Atmosphérique, BT, condensation, hybride',
+  },
+  {
     label: 'Entretien chaudière gaz 2026 — prix & obligation',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
     description: '100-180 € HT, 12 points, attestation 2 ans',

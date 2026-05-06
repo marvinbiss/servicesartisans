@@ -846,6 +846,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier K 2026-05-06 — head term chaudière gaz (~20 100 vol/mo cumulé).
+      // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "chaudiere gaz"            12 000 vol KD 1 ⭐⭐⭐ pivot rang #6
+      //   - "chaudière gaz"             3 400 vol KD 1
+      //   - "chaudiere gaz condensation" 1 900 vol KD 0 rang #44
+      //   - "prix chaudiere gaz"         1 200 vol KD 1 rang #58
+      //   - "installation chaudiere gaz"   700 vol KD 0 rang #81
+      // Anti-canniba : page parent panorama 4 types vs /chaudiere-condensation tech focus.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-gaz`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-condensation`,
         lastModified: STATIC_DATE,

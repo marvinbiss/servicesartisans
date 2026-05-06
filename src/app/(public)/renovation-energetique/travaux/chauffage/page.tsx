@@ -298,6 +298,11 @@ const relatedPages = [
     description: 'Prix 50-150 €, obligation annuelle Décret 2023-741',
   },
   {
+    label: 'Chaudière gaz 2026 — prix & alternatives',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz',
+    description: '4 types, prix 3 500-9 500 €, statut RE2020, aides 2026',
+  },
+  {
     label: 'Entretien chaudière gaz 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
     description: '100-180 € HT, obligation Décret 2009-649, attestation 2 ans',
