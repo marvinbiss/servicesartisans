@@ -264,6 +264,11 @@ const relatedPages = [
     description: 'Velux 600-2 500 € posée + DTU 40.29 + BAR-EN-104',
   },
   {
+    label: 'Menuiserie aluminium : prix, RPT, aides',
+    href: '/renovation-energetique/travaux/menuiseries/aluminium',
+    description: 'Alu 800-1 800 €/fenêtre, RPT obligatoire, comparatif PVC/alu/bois',
+  },
+  {
     label: 'VMC double flux',
     href: '/renovation-energetique/travaux/vmc-double-flux',
     description: 'Couplage menuiseries étanches + VMC',

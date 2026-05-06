@@ -1180,6 +1180,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.8,
       },
+      // P0 ABSENT Bloc 1 — menuiserie aluminium 3 500 vol KD 6 (#13 du top P0).
+      // Famille cumulée ~6 200 vol/mo accessible. Anti-cannib : hub menuiseries (panorama),
+      // /fenetre-de-toit (Velux). Cette page = focus matériau ALU + RPT obligatoire +
+      // comparatif PVC/alu/bois + prix par ouverture + aides MPR.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/menuiseries/aluminium`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         // Levier G 2026-05-06 — sous-page nettoyage / démoussage toiture (~8 600 vol/mo cumulé).
         // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
