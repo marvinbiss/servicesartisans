@@ -262,6 +262,11 @@ const relatedPages = [
     description: 'PV PAS éligible MPR/CEE — prime EDF OA + TVA 10 % + IR exonéré',
   },
   {
+    label: 'Aides pompe à chaleur 2026 (anti-arnaque)',
+    href: '/renovation-energetique/aides/pompe-a-chaleur-2026',
+    description: "MPR jusqu'à 11 000 € + CEE 4 000 € + bonus passoire + scénarios chiffrés",
+  },
+  {
     label: "MaPrimeRénov' 2026 : guide complet",
     href: '/renovation-energetique/aides/maprimerenov-2026',
     description: 'Barèmes, parcours, démarche A à Z',

@@ -1191,6 +1191,25 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier V 2026-05-06 — sub-page aides pompe à chaleur 2026 (~5 550 vol/mo cumulé estimé).
+      // KW pivots Ahrefs Bloc 1 + extrapolation longue traîne (snapshot 2026-05-04) :
+      //   - "pompe a chaleur 1€"                 500 vol KD 0 (rang #92 bloc1)
+      //   - "pompe à chaleur à 1 euro vrai ou faux" 450 vol KD 0 (rang #199 bloc1)
+      //   - "aide pompe à chaleur 2026"          ~2 200 vol estimé KD 5 (PIVOT)
+      //   - "aide pour pompe à chaleur"          ~800 vol estimé KD 8
+      //   - "MPR pompe à chaleur"                ~600 vol estimé KD 12
+      //   - "subvention pompe à chaleur"         ~400 vol estimé KD 5
+      //   - "prime pompe à chaleur 2026"         ~350 vol estimé KD 4
+      // Anti-canniba : SIBLING parallèle de /aides/panneau-solaire-2026 — focus PAC
+      // anti-arnaque + 5 vraies aides + tableau MPR + 3 scénarios chiffrés vs hub
+      // /aides général et /maprimerenov-2026 (toutes aides) et /pompe-a-chaleur/air-eau-prix
+      // (focus prix matériel).
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/pompe-a-chaleur-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
       // Levier U 2026-05-06 — sub-page meilleures marques poêle granulés (~1 820 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "meilleur poele a granule"                          500 vol KD 3 ⭐⭐ pivot rang #170
