@@ -301,6 +301,11 @@ const relatedPages = [
     description: '7 signaux + 5 alternatives + prix net après aides',
   },
   {
+    label: 'Disconnecteur chaudière (NF EN 1717)',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz/disconnecteur',
+    description: 'Sécurité anti-pollution OBLIGATOIRE — 4 types + contrôle annuel',
+  },
+  {
     label: 'Chaudière à condensation 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation',
     description: 'Tech haute perf, prix 4 500-7 500 €',

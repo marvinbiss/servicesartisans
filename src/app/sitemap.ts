@@ -1191,6 +1191,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier T 2026-05-06 — sub-page disconnecteur chaudière (~2 800 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "disconnecteur chaudiere"        1 500 vol KD 0 ⭐⭐⭐ pivot rang #59
+      //   - "disconnecteur chaudière"        ~700 vol estimé KD 0 (variante accent)
+      //   - "clapet anti-retour chaudière"   ~150 vol estimé KD 0
+      //   - "disconnecteur ca cb"            ~80 vol estimé KD 0
+      //   - "disconnecteur chaudiere obligatoire" ~120 vol estimé KD 0
+      //   - "disconnecteur chaudiere gaz"    ~250 vol estimé KD 0
+      // Anti-canniba : ÉQUIPEMENT SÉCURITÉ disconnecteur (NF EN 1717 + arrêté 30/11/2005,
+      // 4 types CA/CB/BA/EB, contrôle annuel obligatoire) vs hub /chaudiere-gaz (panorama)
+      // et /chaudiere-gaz/remplacement (action) et /chaudiere-condensation/entretien (entretien).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-gaz/disconnecteur`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier S 2026-05-06 — sub-page dimension panneau solaire (~2 270 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "dimension panneau solaire"        800 vol KD 4 ⭐⭐ pivot rang #122

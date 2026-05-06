@@ -313,6 +313,11 @@ const relatedPages = [
     description: '7 signaux + 5 alternatives + planning chantier + prix net',
   },
   {
+    label: 'Disconnecteur chaudière (NF EN 1717)',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-gaz/disconnecteur',
+    description: 'Sécurité anti-pollution OBLIGATOIRE + contrôle annuel',
+  },
+  {
     label: 'Entretien chaudière gaz 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
     description: '100-180 € HT, obligation Décret 2009-649, attestation 2 ans',
