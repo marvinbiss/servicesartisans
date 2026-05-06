@@ -193,6 +193,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Entretien chaudière gaz 2026 — prix & obligation',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien',
+    description: '100-180 € HT, 12 points, attestation 2 ans',
+  },
+  {
     label: 'Hub Chauffage',
     href: '/renovation-energetique/travaux/chauffage',
     description: 'Comparatif PAC, granulés, condensation',

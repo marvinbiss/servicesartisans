@@ -852,6 +852,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // Levier J 2026-05-06 — sub-page entretien chaudière gaz (~12 100 vol/mo cumulé).
+      // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "entretien chaudiere gaz"        6 200 vol KD 12 ⭐⭐ pivot
+      //   - "contrat entretien chaudiere"    1 800 vol KD 8
+      //   - "prix entretien chaudiere gaz"   1 200 vol KD 4
+      //   - "entretien chaudiere obligatoire"  900 vol KD 5
+      //   - "attestation entretien chaudiere"  450 vol KD 1
+      // YMYL high : Décret 2009-649 modifié 2020-912, obligation légale + assurance.
+      // Anti-cannibalisation : ramonage = conduits, entretien = brûleur/échangeur/sécurités.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-condensation/entretien`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage/poele-granules`,
         lastModified: STATIC_DATE,
