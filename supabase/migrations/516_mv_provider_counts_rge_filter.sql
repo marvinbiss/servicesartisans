@@ -17,6 +17,14 @@
 -- une colonne agrégée. La MV n'est lue par aucun code TS aujourd'hui (vérif
 -- 2026-05-06 grep mv_provider_counts dans src/), donc le DROP transitoire est
 -- safe.
+--
+-- Fix 2026-05-06 : la mig 312 d'origine groupait par
+-- (specialty, city, department) avec UNIQUE INDEX (specialty, city) → bug
+-- latent qui pète dès qu'address_city contient des doublons sémantiques (codes
+-- postaux ex. '13041' enregistrés avec différents address_department selon le
+-- batch d'enrich). Aucun consommateur ne filtre la MV par department (vérif
+-- grep src/), donc on drop department du GROUP BY et on prend MAX() pour
+-- conserver la colonne (compat indexes).
 
 -- =============================================================================
 -- 1. DROP + CREATE avec colonne rge_provider_count
@@ -27,7 +35,7 @@ CREATE MATERIALIZED VIEW public.mv_provider_counts AS
 SELECT
   specialty,
   address_city AS city,
-  address_department AS department,
+  MAX(address_department) AS department,
   COUNT(*)::int AS provider_count,
   COUNT(*) FILTER (WHERE is_verified)::int AS verified_count,
   COUNT(*) FILTER (
@@ -39,7 +47,7 @@ FROM public.providers
 WHERE is_active = TRUE
   AND specialty IS NOT NULL
   AND address_city IS NOT NULL
-GROUP BY specialty, address_city, address_department
+GROUP BY specialty, address_city
 WITH DATA;
 
 COMMENT ON MATERIALIZED VIEW public.mv_provider_counts IS

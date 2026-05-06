@@ -22,20 +22,19 @@ const PROVIDER_COUNT_FALLBACK = 45_000
 
 /**
  * Nombre total d'artisans RGE actifs dans la base.
- * 2026-05-05 pivot full RGE — comptait tous providers actifs avant.
+ *
+ * 2026-05-06 — bascule de `count(*) exact head` sur `providers` (970K rows,
+ * timeout 4s régulier en prod) vers la RPC `get_active_rge_count()` (mig 517)
+ * qui retourne `SUM(rge_provider_count)` agrégée dans `mv_provider_counts`
+ * (mig 516, rafraîchie par `refresh_artisan_stats()`). Résultat scalaire ~ms,
+ * pas de pagination PostgREST à risque de sous-compter.
  */
 async function _getProviderCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
-    const todayIso = new Date().toISOString().slice(0, 10)
-    const { count, error } = await withTimeout(
-      supabase
-        .from('providers')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .not('rge_qualifications', 'is', null)
-        .gte('rge_valid_until', todayIso),
-      4_000,
+    const { data, error } = await withTimeout(
+      supabase.rpc('get_active_rge_count'),
+      3_000,
       'site_stats_provider_count'
     )
     if (error) {
@@ -43,7 +42,8 @@ async function _getProviderCount(): Promise<number> {
       captureError(error, { tags: { source: 'stats.getProviderCount' } })
       return PROVIDER_COUNT_FALLBACK
     }
-    return count && count > 0 ? count : PROVIDER_COUNT_FALLBACK
+    const total = typeof data === 'number' ? data : Number(data ?? 0)
+    return total > 0 ? total : PROVIDER_COUNT_FALLBACK
   } catch (err) {
     logger.error('getProviderCount: timeout or fetch failed', { error: String(err) })
     captureError(err, { tags: { source: 'stats.getProviderCount' } })
@@ -51,9 +51,8 @@ async function _getProviderCount(): Promise<number> {
   }
 }
 
-// Cache key bumped 2026-05-06 (`-v2`) pour purger une entry poisoned avec 0
-// après timeout PostgREST sur la query rge_valid_until — voir stats.ts.
-export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count-v2'], {
+// Cache key bumped 2026-05-06 (`-v3`) après bascule sur mv_provider_counts.
+export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count-v3'], {
   revalidate: 3600, // 1h — aligné sur le revalidate du root layout
   tags: ['providers'],
 })
