@@ -91,7 +91,11 @@ const faqItems = [
 ]
 
 interface DevisPageProps {
-  searchParams: { service?: string | string[]; operation?: string | string[] }
+  searchParams: {
+    service?: string | string[]
+    operation?: string | string[]
+    ville?: string | string[]
+  }
 }
 
 export default async function DevisPage({ searchParams }: DevisPageProps) {
@@ -99,14 +103,18 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
 
   // Query params : pré-remplissage depuis un CTA contextualisé (ex: fiche
   // artisan RGE). Tolérant aux string[] (Next.js peut envoyer un tableau).
+  // 2026-05-07 — ajout `ville` (envoyé par GeoPageCTA, TarifsDevisCTA,
+  // VilleHeroCTA pour pré-remplir la ville du formulaire).
   const rawService = Array.isArray(searchParams?.service)
     ? searchParams?.service[0]
     : searchParams?.service
   const rawOperation = Array.isArray(searchParams?.operation)
     ? searchParams?.operation[0]
     : searchParams?.operation
+  const rawVille = Array.isArray(searchParams?.ville) ? searchParams?.ville[0] : searchParams?.ville
   const prefilledService = rawService?.trim() || undefined
   const prefilledOperation = rawOperation?.trim() || undefined
+  const prefilledCity = rawVille?.trim() || undefined
 
   if (cmsPage?.content_html) {
     return (
@@ -233,6 +241,7 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
               <DevisForm
                 prefilledService={prefilledService}
                 prefilledOperation={prefilledOperation}
+                prefilledCity={prefilledCity}
               />
             </div>
 

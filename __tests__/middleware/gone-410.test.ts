@@ -72,8 +72,11 @@ describe('middleware Gone 410 — slugs invalides', () => {
     expect(res.status).toBe(410)
   })
 
-  it('CEE operation format invalide → 410', async () => {
-    const res = await middleware(makeRequest('/cee/bar-th-104/paris'), makeEvent())
+  // 2026-05-07 — `bar-th-104` (lowercase) est VALIDE : Next.js sert lowercase,
+  // sitemap émet lowercase. Cf. CEE_OPERATION_RE avec flag /i.
+  // Voir post-mortem 2026-05-06.
+  it('CEE operation vraiment invalide → 410', async () => {
+    const res = await middleware(makeRequest('/cee/XYZ-TH-999/paris'), makeEvent())
     expect(res.status).toBe(410)
   })
 

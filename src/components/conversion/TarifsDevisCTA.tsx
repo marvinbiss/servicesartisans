@@ -27,14 +27,17 @@ export default function TarifsDevisCTA({
 }: TarifsDevisCTAProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  // Build desktop devis link with pre-filled service + ville
+  // Build desktop devis link with pre-filled service + ville.
+  // 2026-05-07 — fix : pointe vers `/devis?service&ville` (formulaire pré-rempli)
+  // au lieu de `/services/[s]/[v]` (page artisans listing).
   const villeSlug = ville ? slugify(ville) : ''
-  const devisHref =
-    service && villeSlug
-      ? `/services/${service}/${villeSlug}`
-      : service
-        ? `/devis/${service}`
-        : '/devis'
+  const devisHref = (() => {
+    if (service && villeSlug) {
+      return `/devis?service=${encodeURIComponent(service)}&ville=${encodeURIComponent(villeSlug)}`
+    }
+    if (service) return `/devis/${service}`
+    return '/devis'
+  })()
 
   const handleClick = () => {
     const isDesktop = window.matchMedia('(min-width: 768px)').matches
