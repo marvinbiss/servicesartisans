@@ -242,6 +242,11 @@ const relatedPages = [
     description: '4 phases physiques + R32/R290 + dégivrage + Inverter + réversible',
   },
   {
+    label: 'PAC eau-eau : nappe phréatique, COP 5-6',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/eau-eau',
+    description: 'La PAC la plus performante. Étude hydrogéo + déclaration DDT.',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',

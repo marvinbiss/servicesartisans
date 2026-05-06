@@ -764,6 +764,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Sprint 4 PAC long-tail 2026-05-06 — sub-page eau-eau / nappe phréatique (~2 800 vol/mo).
+        // KW pivots Bloc 1 + estimation longue traîne :
+        //   - "pompe a chaleur eau eau"          1 700 vol KD 0 ⭐⭐⭐⭐⭐ MEGA EASY
+        //   - "pac eau eau"                      ~400 vol KD 0
+        //   - "pompe a chaleur nappe phreatique" ~250 vol KD 1
+        // Anti-cannibalisation : /geothermie = sol-eau (sondes/horizontal) ;
+        // /fonctionnement = cycle thermo générique ; cette page = focus eau-eau
+        // (boucle ouverte nappe, COP 5-6, étude hydrogéo BRGM, déclaration DDT
+        // L214-3, qualité eau pH/fer/manganèse, prix 18-30K€).
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/eau-eau`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
