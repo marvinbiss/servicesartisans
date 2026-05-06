@@ -257,6 +257,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Aides panneau solaire 2026 — EDF OA, TVA, IR',
+    href: '/renovation-energetique/aides/panneau-solaire-2026',
+    description: 'PV PAS éligible MPR/CEE — prime EDF OA + TVA 10 % + IR exonéré',
+  },
+  {
     label: "MaPrimeRénov' 2026 : guide complet",
     href: '/renovation-energetique/aides/maprimerenov-2026',
     description: 'Barèmes, parcours, démarche A à Z',

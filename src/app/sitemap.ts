@@ -655,6 +655,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier O 2026-05-06 — sub-page aides PV résidentiel (~6 500 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "aide panneau solaire 2024"           4 500 vol KD 6 ⭐⭐⭐ pivot rang #105
+      //   - "panneau solaire gratuit gouvernement" 1 000 vol KD 7 rang #195 (anti-arnaque)
+      //   - "subvention panneau solaire"            300 vol KD 4 longue traîne
+      // Anti-canniba : focus AIDES PV (prime EDF OA, TVA 10 %, IR exonéré) vs hub /aides
+      // (panorama 4 dispositifs MPR/CEE/éco-PTZ) et clarif PV ≠ MPR/CEE.
+      {
+        url: `${SITE_URL}/renovation-energetique/aides/panneau-solaire-2026`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/aides/prime-coup-de-pouce`,
         lastModified: STATIC_DATE,
