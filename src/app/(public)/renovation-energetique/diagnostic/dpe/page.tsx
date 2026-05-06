@@ -233,6 +233,11 @@ const relatedPages = [
     description: 'DPE + audit + thermographie comparés',
   },
   {
+    label: 'DPE location : obligations bailleur 2026',
+    href: '/renovation-energetique/diagnostic/dpe/location',
+    description: 'Calendrier interdiction G 2025 / F 2028 / E 2034',
+  },
+  {
     label: 'Audit énergétique 2026',
     href: '/renovation-energetique/diagnostic/audit-energetique',
     description: 'Obligatoire vente F/G/E et MPR',

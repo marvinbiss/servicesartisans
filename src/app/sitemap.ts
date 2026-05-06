@@ -874,6 +874,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.95,
       },
       {
+        // Levier F 2026-05-06 — sub-page DPE location (~9 700 vol/mo cumulé).
+        // KW pivots Ahrefs Bloc 1 v3 (snapshot 2026-05-04) :
+        //   - "dpe location"            6 798 vol KD 2 ⭐⭐⭐⭐ MEGA
+        //   - "obligation dpe location" ~600 vol estimé KD 1
+        //   - "dpe minimum location"    ~400 vol estimé KD 2
+        //   - "loi dpe location"        ~500 vol estimé KD 3
+        //   - "dpe interdit location"   ~350 vol estimé KD 2
+        //   - "calendrier dpe location" ~250 vol estimé KD 1
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/location`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
