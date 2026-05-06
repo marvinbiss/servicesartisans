@@ -243,6 +243,11 @@ const relatedPages = [
     href: '/rge/renovation-energetique',
     description: 'Annuaire vérifié Qualibat 5911/5912/7131/7141',
   },
+  {
+    label: 'Isolation phonique (acoustique)',
+    href: '/renovation-energetique/travaux/isolation/phonique',
+    description: 'Mur, plafond, sol, fenêtre — hors aides MPR/CEE',
+  },
 ]
 
 export default function Page() {

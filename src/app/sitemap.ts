@@ -545,6 +545,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier 6 ROI — 2026-05-06 — cluster `isolation phonique` cumulé ~13 800 vol/mo KD avg 3
+      // (pivot 8 300 vol KD 7, mur 3 500 KD 0, mur mitoyen 800 KD 0, sol 700 KD 0, fenêtre 250
+      // KD 15). Acoustique HORS aides énergétique. Ahrefs snapshot local 2026-05-04.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/phonique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "aides renovation energetique" 200 KD 63 (hub) + cumul famille
