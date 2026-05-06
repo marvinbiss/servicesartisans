@@ -228,6 +228,11 @@ const relatedPages = [
     description: 'Récup chaleur 70-90 %, MPR 2 500 €',
   },
   {
+    label: 'Entretien VMC',
+    href: '/renovation-energetique/travaux/vmc/entretien',
+    description: 'Prix 80-300 €, fréquence, obligations gaz collective',
+  },
+  {
     label: 'Hub Travaux rénovation',
     href: '/renovation-energetique/travaux',
     description: '4 clusters travaux + ordre logique',

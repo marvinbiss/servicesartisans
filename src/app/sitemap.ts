@@ -779,6 +779,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      {
+        // Levier H 2026-05-06 — sub-page entretien VMC (~6 100 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "entretien vmc"             2 400 vol KD 0 ⭐⭐⭐ MEGA EASY
+        //   - "nettoyage vmc"             1 400 vol KD 0
+        //   - "prix vmc"                  1 300 vol KD 0 (entretien angle)
+        //   - "entretien vmc obligatoire"   500 vol KD 0
+        //   - "pose vmc"                    500 vol KD 0
+        // Anti-cannibalisation : /vmc, /vmc/installation, /vmc/simple-flux,
+        // /vmc/hygroreglable, /vmc-double-flux = choix/install. Cette page = entretien récurrent.
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/entretien`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Vague 2 V2 fused (2026-05-06) — Hub Solaire PV pillar, cible "panneau solaire prix" 6 300 KD 25.
       // Source : STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED — orphelin solaire-pv (3 985 QualiPV supply).
       {
