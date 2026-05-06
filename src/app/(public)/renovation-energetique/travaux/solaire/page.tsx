@@ -295,6 +295,11 @@ const relatedPages = [
     description: 'Cluster PAC : air-eau, air-air, géothermie',
   },
   {
+    label: 'Rendement panneau solaire (technos + facteurs)',
+    href: '/renovation-energetique/travaux/solaire/rendement',
+    description: 'Mono 18-22 %, poly 14-17 %, dégradation 25 ans, calcul ROI',
+  },
+  {
     label: 'Autoconsommation solaire (totale, surplus, collective)',
     href: '/renovation-energetique/travaux/solaire/autoconsommation',
     description: '3 modes énergétiques + ROI batterie + raccordement Enedis CACSI',

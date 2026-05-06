@@ -1087,6 +1087,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.92,
       },
+      // P0 ABSENT Bloc 1 — rendement panneau solaire 3 200 vol KD 6 (#10 du top P0).
+      // Famille cumulée ~5 000 vol/mo. Anti-cannib : hub /solaire (prix), /autoconsommation (mode),
+      // capacité/usage. Cette page = focus TECHNIQUE rendement (% conversion, technos comparées).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/rendement`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         // B4 sub-page 2026-05-06 — Autoconsommation solaire (~22 490 vol/mo cumulé).
         // KW pivots Ahrefs API live (snapshot 2026-05-06) :
