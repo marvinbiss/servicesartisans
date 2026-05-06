@@ -30,6 +30,7 @@ import {
   TrendingDown,
   AlertTriangle,
   Snowflake,
+  CloudRain,
 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
@@ -128,6 +129,21 @@ const ISOLATION_TYPES: IsolationType[] = [
       'Perte 8-12 cm sur surface intérieure. Ne traite pas les ponts thermiques. Travaux dans le logement.',
     aidesMax: 'MaPrimeRénov’ jusqu’à 25 €/m² + CEE jusqu’à 15 €/m²',
     rgeQual: 'Qualibat 5912 (ITI)',
+  },
+  {
+    slug: 'toiture',
+    name: 'Isolation de la toiture (sarking, rampants)',
+    icon: CloudRain,
+    position: 'Toiture par-dessus (sarking) ou sous rampants (intérieur)',
+    prixM2: '50 à 180 €/m² posée — sarking extérieur 80-180 €/m², rampants intérieur 50-120 €/m²',
+    performance: 'R 6 m².K/W minimum (rampants), R 4,4 m².K/W (toiture-terrasse)',
+    bestFor:
+      'Réfection complète de toiture (sarking) ou combles aménagés sans surcoût intérieur. Conserve totalement le volume habitable.',
+    drawbacks:
+      'Sarking : ne se justifie qu’en réfection de couverture. Rampants intérieur : perte 12-22 cm sous chevrons.',
+    aidesMax:
+      'MaPrimeRénov’ forfait selon revenus (R ≥ 6 m².K/W) + CEE BAR-EN-103. Voir france-renov.gouv.fr.',
+    rgeQual: 'Qualibat 7131/7132 (rampants/sarking) ou 8211 (couverture)',
   },
 ]
 

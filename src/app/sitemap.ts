@@ -536,6 +536,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // Levier 5 ROI — 2026-05-06 — cluster `isolation toiture` cumulé ~13 670 vol/mo KD avg 1.0
+      // (sarking 3 300, sous-toiture 1 800, rampants 1 000, etc.). Pivot KW "isolation toiture"
+      // 5 100 vol KD 2 — quasi-libre côté V1. Ahrefs API live snapshot 2026-05-06.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/toiture`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "aides renovation energetique" 200 KD 63 (hub) + cumul famille
