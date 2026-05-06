@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
 
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
-    // Build queries
+    // Build devis_requests queries (service_name + city are columns on devis_requests,
+    // pas providers — schema mig 100). Filtres devant providerQuery pour garder le
+    // schema-drift linter clean (il trace le dernier .from() vu).
     let weekQuery = supabase
       .from('devis_requests')
       .select('*', { count: 'exact', head: true })
@@ -34,6 +36,15 @@ export async function GET(request: NextRequest) {
       .from('devis_requests')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', startOfMonth.toISOString())
+
+    if (service) {
+      weekQuery = weekQuery.ilike('service_name', `%${service}%`)
+      monthQuery = monthQuery.ilike('service_name', `%${service}%`)
+    }
+    if (city) {
+      weekQuery = weekQuery.ilike('city', `%${city}%`)
+      monthQuery = monthQuery.ilike('city', `%${city}%`)
+    }
 
     // 2026-05-05 pivot full RGE — endpoint public consommé par SocialProofBanner.
     // active_providers doit refléter UNIQUEMENT les artisans RGE certifiés actifs
@@ -45,15 +56,7 @@ export async function GET(request: NextRequest) {
       .eq('is_active', true)
       .not('rge_qualifications', 'is', null)
       .gte('rge_valid_until', todayIso)
-
-    if (service) {
-      weekQuery = weekQuery.ilike('service_name', `%${service}%`)
-      monthQuery = monthQuery.ilike('service_name', `%${service}%`)
-    }
-
     if (city) {
-      weekQuery = weekQuery.ilike('city', `%${city}%`)
-      monthQuery = monthQuery.ilike('city', `%${city}%`)
       providerQuery = providerQuery.ilike('address_city', `%${city}%`)
     }
 
