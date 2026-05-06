@@ -300,6 +300,21 @@ const relatedPages = [
     description: 'Méthode pro, prix 100-300 € visite, sécurité hauteur',
   },
   {
+    label: 'Kit panneau solaire 1000W (DIY autoconso)',
+    href: '/renovation-energetique/travaux/solaire/panneau-1000w',
+    description: 'Plug & play 600-1 200 €, déclaration Enedis obligatoire',
+  },
+  {
+    label: 'Panneau solaire souple (camping-car / voilier)',
+    href: '/renovation-energetique/travaux/solaire/panneau-souple',
+    description: 'Flexible 100-600 €, mobile, durée 5-10 ans',
+  },
+  {
+    label: 'Panneau solaire piscine (thermique)',
+    href: '/renovation-energetique/travaux/solaire/panneau-piscine',
+    description: 'Moquette 500-1 200 €, capteurs 1 800-4 500 €, +5 à +10 °C',
+  },
+  {
     label: 'Label QualiSol (solaire thermique)',
     href: '/rge/labels/qualisol',
     description: 'CESI / SSC — chauffe-eau solaire éligible MPR',

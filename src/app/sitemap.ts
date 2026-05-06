@@ -800,6 +800,33 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.8,
       },
+      {
+        // Levier E2 2026-05-06 — kit panneau solaire 1000W autoconso DIY (~3 900 vol/mo).
+        // KW pivots : "panneau solaire 1000w" 2 100 KD 1, "kit panneau solaire 1000w" ~600,
+        //  "kit solaire plug and play" ~400, "panneau solaire autoconsommation" ~800 KD 5.
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/panneau-1000w`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        // Levier E3 2026-05-06 — panneau solaire souple/flexible (~4 500 vol/mo).
+        // KW pivots : "panneau solaire souple" 2 100 KD 0 ⭐⭐⭐ MEGA EASY,
+        //  "panneau solaire flexible" ~700, "panneau camping car" ~1 200, "bateau" ~500.
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/panneau-souple`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        // Levier E4 2026-05-06 — panneau solaire piscine THERMIQUE (~4 700 vol/mo).
+        // KW pivots : "panneau solaire piscine" 2 700 KD 2, "chauffage solaire piscine" ~900,
+        //  "moquette solaire piscine" ~600, "kit solaire piscine" ~500.
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/panneau-piscine`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
       // Vague F (40/40) — 2026-05-04 — Hub menuiseries extérieures (clôture audit STRATEGIE).
       // KW pivots Ahrefs API live (snapshot 2026-05-04) :
       //   - "menuiserie exterieure" 200 KD 0 + "porte fenetre prix" 200 KD 2
