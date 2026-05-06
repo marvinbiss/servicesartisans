@@ -85,6 +85,14 @@ interface ProviderListRow {
   rge_valid_until: string | null
   rge_organismes: string[] | null
   rge_source_url: string | null
+  // Google Places (mig 483) — exposés en listing pour fallback
+  // AggregateRating sur les hubs page-level. Distincts de rating_average/
+  // review_count first-party. Helper `buildAggregateRatingFromProviders`
+  // applique les garde-fous (count ≥ 3, OPERATIONAL, place_id présent).
+  google_rating: number | null
+  google_user_ratings_total: number | null
+  google_business_status: string | null
+  google_place_id: string | null
 }
 
 /**
@@ -184,6 +192,14 @@ const PROVIDER_LIST_SELECT = [
   'rge_valid_until',
   'rge_organismes',
   'rge_source_url',
+  // Google Places (migration 483) — fallback page-level AggregateRating sur
+  // les hubs quand review_count first-party = 0 (audit SEO 10-agents 04-28
+  // #5 : +18-25% CTR sur 50K URLs RGE/services). Garde-fous appliqués dans
+  // `buildAggregateRatingFromProviders` : count ≥ 3, OPERATIONAL, place_id.
+  'google_rating',
+  'google_user_ratings_total',
+  'google_business_status',
+  'google_place_id',
 ].join(',')
 
 export async function getServices() {
@@ -347,7 +363,7 @@ export async function getLocationBySlug(slug: string) {
 
 // Provider detail SELECT — listing columns + extra fields for the artisan detail page.
 // Only add columns that exist in the providers table (verified in types/database.ts).
-// RGE ADEME columns are already included in PROVIDER_LIST_SELECT.
+// RGE ADEME + Google Places columns are already included in PROVIDER_LIST_SELECT.
 const PROVIDER_DETAIL_SELECT = [
   PROVIDER_LIST_SELECT,
   'creation_date',
@@ -357,12 +373,6 @@ const PROVIDER_DETAIL_SELECT = [
   'description',
   'website',
   'email',
-  // Migration 483 — Google Places enrichment (49K fiches via SIRET match).
-  // Source DISTINCTE de rating_average / review_count (first-party plateforme).
-  'google_place_id',
-  'google_rating',
-  'google_user_ratings_total',
-  'google_business_status',
 ].join(',')
 
 /**
