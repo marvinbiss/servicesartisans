@@ -108,7 +108,7 @@ const SOLUTIONS = [
     name: 'Chaudière à bois (biomasse)',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-bois',
     headline: 'Granulés, bûches ou mixte',
-    prixPose: '8 000-22 000 €',
+    prixPose: '8 000-25 000 €',
     aidesMax: 'MPR + CEE BAR-TH-104 + Coup de pouce',
     cop: 'Rendement ETAS 70-85 %',
     detail:

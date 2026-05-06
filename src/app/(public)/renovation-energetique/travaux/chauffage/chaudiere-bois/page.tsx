@@ -78,7 +78,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Chaudière à bois 2026 : prix, granulés ou bûches, aides MPR'
 const DESCRIPTION =
-  'Chaudière à bois 2026 : prix posé 12 000-22 000 € (granulés / bûche / mixte), aides MaPrimeRénov’ + CEE BAR-TH-104, label RGE Qualibois obligatoire.'
+  'Chaudière à bois 2026 : prix posé 8 000-25 000 € (granulés / bûche / mixte), aides MaPrimeRénov’ + CEE BAR-TH-104, label RGE Qualibois obligatoire.'
 
 export const metadata: Metadata = {
   title: TITLE,
