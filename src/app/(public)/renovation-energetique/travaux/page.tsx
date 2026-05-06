@@ -377,6 +377,11 @@ const relatedPages = [
     description: 'Alternative VMC, 3 500-7 000 €, maison ancienne',
   },
   {
+    label: 'Ballon thermodynamique 2026',
+    href: '/renovation-energetique/travaux/ballon-thermodynamique',
+    description: 'ECS PAC 150-300L, prix 2 500-4 500 €, MPR + CEE 1 350 €',
+  },
+  {
     label: 'Climatisation : prix installation 2026',
     href: '/renovation-energetique/travaux/climatisation',
     description: 'Monosplit, multisplit, gainable, 1 500-15 000 €',

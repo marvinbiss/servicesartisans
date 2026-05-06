@@ -846,6 +846,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // P0-1 du Bloc 1 (rang #7 top 50) — Ballon thermodynamique cluster.
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "ballon thermodynamique"     18 000 vol KD 6 ⭐⭐⭐⭐ rang #7
+      //   - "ballon thermodynamique prix"   700 vol KD 0 rang #163
+      //   - "prix ballon thermodynamique"   350 vol KD 0 rang #161
+      // Cluster Bloc 1 cumulé : 47 KW vol 22 840/mo KD avg 2.3 = goldmine.
+      // Anti-canniba : focus PRODUIT ballon (capacité, classes, marques) vs
+      // /chauffage/chauffe-eau-thermodynamique focus SOLUTION (COP, ROI, comparatif).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/ballon-thermodynamique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.92,
+      },
       // Levier K 2026-05-06 — head term chaudière gaz (~20 100 vol/mo cumulé).
       // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "chaudiere gaz"            12 000 vol KD 1 ⭐⭐⭐ pivot rang #6

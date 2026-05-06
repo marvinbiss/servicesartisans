@@ -245,6 +245,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Ballon thermodynamique 2026 — focus produit',
+    href: '/renovation-energetique/travaux/ballon-thermodynamique',
+    description: 'Capacités 150-300L, classes A à A+++, 6 marques',
+  },
+  {
     label: 'Hub Chauffage 2026',
     href: '/renovation-energetique/travaux/chauffage',
     description: 'PAC, granulés, condensation, CET',
