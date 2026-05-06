@@ -787,6 +787,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.92,
       },
+      {
+        // Levier E 2026-05-06 — sub-page nettoyage panneau solaire (~4 700 vol/mo cumulé).
+        // KW pivots Ahrefs Bloc 1 v3 (snapshot 2026-05-04) :
+        //   - "nettoyage panneau solaire"   3 300 vol KD 3 ⭐⭐⭐
+        //   - "comment nettoyer panneau s." ~600 vol estimé KD 1
+        //   - "prix nettoyage panneau s."   ~400 vol estimé KD 2
+        //   - "nettoyage panneau photovolt" ~250 vol estimé
+        //   - "nettoyer panneau solaire drone" ~150 vol estimé (niche)
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/nettoyage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       // Vague F (40/40) — 2026-05-04 — Hub menuiseries extérieures (clôture audit STRATEGIE).
       // KW pivots Ahrefs API live (snapshot 2026-05-04) :
       //   - "menuiserie exterieure" 200 KD 0 + "porte fenetre prix" 200 KD 2

@@ -295,6 +295,11 @@ const relatedPages = [
     description: 'Cluster PAC : air-eau, air-air, géothermie',
   },
   {
+    label: 'Nettoyage panneau solaire (entretien)',
+    href: '/renovation-energetique/travaux/solaire/nettoyage',
+    description: 'Méthode pro, prix 100-300 € visite, sécurité hauteur',
+  },
+  {
     label: 'Label QualiSol (solaire thermique)',
     href: '/rge/labels/qualisol',
     description: 'CESI / SSC — chauffe-eau solaire éligible MPR',
