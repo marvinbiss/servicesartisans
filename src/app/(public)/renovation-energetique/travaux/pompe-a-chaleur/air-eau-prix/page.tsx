@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/pompe-a-chaleur/air-eau-prix
  *
+ * @kw-primary    prix pompe a chaleur air eau
+ * @kw-volume     2263
+ * @kw-kd         1
+ * @kw-cpc        1.20
+ * @intent        commercial
+ * @cluster       reno-energetique-pac-air-eau-prix
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 cash cow PAC air-eau-prix
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "prix pompe a chaleur air eau"  → 2 263 vol, KD 1, CPC $1,20, clicks 2 947 ⭐
  * - "pac air eau prix"              → 126 vol, KD 2, CPC $1,40
@@ -49,7 +59,7 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/pompe-a-chaleur/air-eau-prix'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-03'
-const MODIFIED = '2026-05-03'
+const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'jean-pierre-duval'
 const AUTHOR_NAME = 'Jean-Pierre Duval'
 
@@ -159,6 +169,85 @@ const AIDES_TABLE = [
     cee: '2 500 €',
     cumul: '4 500 €',
     rac: '7 500 - 10 000 €',
+  },
+]
+
+const MARQUES = [
+  {
+    marque: 'Daikin (JP)',
+    modele: 'Altherma 3 H HT',
+    cop: '4,40',
+    scop: '4,30',
+    prix: '11 000 - 15 000 €',
+    garantie: '5 ans',
+    point: 'Leader mondial, SAV France dense, COP excellent jusqu’à -25 °C.',
+  },
+  {
+    marque: 'Mitsubishi Electric (JP)',
+    modele: 'Ecodan PUZ',
+    cop: '4,45',
+    scop: '4,40',
+    prix: '11 500 - 15 500 €',
+    garantie: '5-7 ans',
+    point: 'Très silencieux (35-39 dB), fiable longue durée, modulation fine.',
+  },
+  {
+    marque: 'Atlantic (FR)',
+    modele: 'Alféa Excellia AI',
+    cop: '4,30',
+    scop: '4,25',
+    prix: '10 500 - 14 000 €',
+    garantie: '5 ans',
+    point: 'Fabrication française (La Roche-sur-Yon), pièces SAV rapides.',
+  },
+  {
+    marque: 'De Dietrich (FR)',
+    modele: 'Strateo MR',
+    cop: '4,45',
+    scop: '4,40',
+    prix: '11 000 - 14 500 €',
+    garantie: '5 ans',
+    point: 'Compact, parfait remplacement chaudière fioul, hybridation possible.',
+  },
+  {
+    marque: 'Stiebel Eltron (DE)',
+    modele: 'WPL HT',
+    cop: '4,50',
+    scop: '4,45',
+    prix: '12 000 - 16 000 €',
+    garantie: '5 ans',
+    point: 'Ingénierie allemande, robustesse +15 ans, idéal climat froid.',
+  },
+]
+
+const ROI_10_ANS = [
+  {
+    profil: 'Fioul → PAC, modeste',
+    facture: '2 500 €/an → 900 €/an',
+    rac: '4 000 €',
+    eco10: '16 000 €',
+    roi: '2,5 ans',
+  },
+  {
+    profil: 'Gaz → PAC, intermédiaire',
+    facture: '1 800 €/an → 800 €/an',
+    rac: '6 000 €',
+    eco10: '10 000 €',
+    roi: '6 ans',
+  },
+  {
+    profil: 'Électrique → PAC, modeste',
+    facture: '2 800 €/an → 950 €/an',
+    rac: '4 000 €',
+    eco10: '18 500 €',
+    roi: '2,2 ans',
+  },
+  {
+    profil: 'Fioul → PAC, supérieur',
+    facture: '2 500 €/an → 900 €/an',
+    rac: '8 000 €',
+    eco10: '16 000 €',
+    roi: '5 ans',
   },
 ]
 
@@ -546,6 +635,89 @@ export default function Page() {
                 %
               </li>
             </ul>
+
+            <h2>ROI sur 10 ans : économies cumulées par profil</h2>
+            <p>
+              Le retour sur investissement d’une PAC air-eau dépend du combustible remplacé et du
+              niveau d’aides perçues. Voici 4 cas types calculés sur 10 ans après pose, hors
+              entretien annuel (150-250 €/an) et hausses tarifaires énergie.
+            </p>
+            <div className="not-prose bg-white border border-sand-200 rounded-xl my-6 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-sand-50 text-sand-900 text-left">
+                  <tr>
+                    <th className="p-3 border-b border-sand-200">Profil</th>
+                    <th className="p-3 border-b border-sand-200">Facture annuelle</th>
+                    <th className="p-3 border-b border-sand-200">Reste à charge</th>
+                    <th className="p-3 border-b border-sand-200">Éco. 10 ans</th>
+                    <th className="p-3 border-b border-sand-200">ROI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ROI_10_ANS.map((row) => (
+                    <tr key={row.profil} className="border-b border-sand-100 last:border-0">
+                      <td className="p-3 font-semibold">{row.profil}</td>
+                      <td className="p-3 whitespace-nowrap">{row.facture}</td>
+                      <td className="p-3 whitespace-nowrap">{row.rac}</td>
+                      <td className="p-3 font-semibold text-primary-800 whitespace-nowrap">
+                        {row.eco10}
+                      </td>
+                      <td className="p-3 font-semibold whitespace-nowrap">{row.roi}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="text-xs text-sand-500 p-3">
+                Hypothèses : PAC 10 kW SCOP 4,3 ; tarif EDF heures creuses 0,17 €/kWh ; fioul 1,30
+                €/L ; gaz 0,12 €/kWh ; valorisation revente non incluse. Sources : ADEME, AFPAC,
+                INSEE.
+              </p>
+            </div>
+
+            <h2>Comparatif marques PAC air-eau 2026</h2>
+            <p>
+              Cinq marques se partagent l’essentiel du marché français. Les prix indicatifs portent
+              sur une PAC 10 kW posée par un artisan RGE QualiPAC, hors options ECS séparé.
+            </p>
+            <div className="not-prose bg-white border border-sand-200 rounded-xl my-6 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-sand-50 text-sand-900 text-left">
+                  <tr>
+                    <th className="p-3 border-b border-sand-200">Marque / modèle</th>
+                    <th className="p-3 border-b border-sand-200">COP / SCOP</th>
+                    <th className="p-3 border-b border-sand-200">Prix posée</th>
+                    <th className="p-3 border-b border-sand-200">Garantie</th>
+                    <th className="p-3 border-b border-sand-200 hidden md:table-cell">
+                      Point fort
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="align-top">
+                  {MARQUES.map((row) => (
+                    <tr key={row.marque} className="border-b border-sand-100 last:border-0">
+                      <td className="p-3 font-semibold whitespace-nowrap">
+                        {row.marque}
+                        <br />
+                        <span className="text-xs text-sand-500 font-normal">{row.modele}</span>
+                      </td>
+                      <td className="p-3 whitespace-nowrap">
+                        {row.cop} / {row.scop}
+                      </td>
+                      <td className="p-3 font-semibold text-primary-800 whitespace-nowrap">
+                        {row.prix}
+                      </td>
+                      <td className="p-3 whitespace-nowrap">{row.garantie}</td>
+                      <td className="p-3 text-sand-600 hidden md:table-cell">{row.point}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="text-xs text-sand-500 p-3">
+                COP / SCOP officiels mesurés norme EN 14511. Garantie fabricant standard. Pour
+                Mitsubishi, l’extension à 7 ans s’active via enregistrement du modèle. Sources :
+                fiches produits constructeurs, AFPAC.
+              </p>
+            </div>
           </article>
 
           <FlagshipFaq items={faqs} />

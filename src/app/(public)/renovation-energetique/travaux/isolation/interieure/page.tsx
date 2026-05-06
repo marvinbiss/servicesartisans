@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/isolation/interieure
  *
+ * @kw-primary    isolation interieure
+ * @kw-volume     248
+ * @kw-kd         2
+ * @kw-cpc        0.70
+ * @intent        info
+ * @cluster       reno-energetique-isolation-iti
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 ITI HUB low-vol mais KD 1-2
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "isolation interieure"        → 248 vol, KD 2, CPC $0,70, clicks 363 ⭐
  * - "isolation murs"              → 233 vol, KD 1, CPC $0,30 (longue traîne)

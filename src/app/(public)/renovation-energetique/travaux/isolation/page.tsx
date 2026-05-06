@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/isolation
  *
+ * @kw-primary    isolation thermique
+ * @kw-volume     5747
+ * @kw-kd         11
+ * @kw-cpc        0.35
+ * @intent        info
+ * @cluster       reno-energetique-isolation-hub
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 hub Isolation pillar
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "isolation thermique"     → 5 747 vol, KD 11, CPC $0,35, clicks 4 604 ⭐⭐⭐
  * - "isolation"               → ~15K vol estimé (KW générique, KD plus haut)

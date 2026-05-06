@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/pompe-a-chaleur/air-air-prix
  *
+ * @kw-primary    pompe a chaleur air air
+ * @kw-volume     6404
+ * @kw-kd         8
+ * @kw-cpc        1.10
+ * @intent        commercial
+ * @cluster       reno-energetique-pac-air-air-prix
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 PAC air-air JACKPOT KD 8 vol 6404
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "pompe a chaleur air air"          → 6 404 vol, KD 8, CPC $1,10, clicks 9 387 ⭐⭐⭐ JACKPOT
  * - "prix pompe a chaleur air air"     → 1 458 vol, KD 0, CPC $0,90, clicks 1 864 ⭐⭐

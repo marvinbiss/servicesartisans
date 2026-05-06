@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/pompe-a-chaleur/geothermie
  *
+ * @kw-primary    geothermie
+ * @kw-volume     5556
+ * @kw-kd         12
+ * @kw-cpc        0.35
+ * @intent        info
+ * @cluster       reno-energetique-pac-geothermie
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 PAC géothermie head 5556 vol KD 12
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "geothermie"                       → 5 556 vol, KD 12, CPC $0,35, clicks 4 343 ⭐⭐⭐
  * - "pompe a chaleur geothermie"       → 292 vol, KD 4, CPC $0,70 ⭐

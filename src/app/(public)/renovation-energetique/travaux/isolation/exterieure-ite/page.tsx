@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/isolation/exterieure-ite
  *
+ * @kw-primary    isolation exterieur
+ * @kw-volume     14000
+ * @kw-kd         2
+ * @kw-cpc        1.50
+ * @intent        info
+ * @cluster       reno-energetique-isolation-ite
+ * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md
+ * @snapshot      2026-05-04
+ * @backlog-item  Sprint 2 ITE JACKPOT KD 2 vol 14000 head term
+ *
  * KW cibles (re-validés Ahrefs Bloc 1 v3, snapshot 2026-05-04, country=fr) :
  * - "isolation exterieur"          → 14 000 vol, KD 2 (france-renov.gouv.fr #1 — JACKPOT)
  * - "isolation par l'extérieur"    → 12 000 vol, KD 2 (effy.fr #1)

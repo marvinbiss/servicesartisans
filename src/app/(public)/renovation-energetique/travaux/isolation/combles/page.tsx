@@ -1,6 +1,16 @@
 /**
  * Page : /renovation-energetique/travaux/isolation/combles
  *
+ * @kw-primary    isolation combles
+ * @kw-volume     4080
+ * @kw-kd         5
+ * @kw-cpc        1.20
+ * @intent        commercial
+ * @cluster       reno-energetique-isolation-combles
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  Sprint 2 ISO combles JACKPOT 10876 vol cumulé
+ *
  * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
  * - "isolation combles"           → 4 080 vol, KD 5, CPC $1,20, clicks 5 151 ⭐⭐⭐
  * - "isolation des combles"       → 4 054 vol, KD 6, CPC $1,20 (variant)
