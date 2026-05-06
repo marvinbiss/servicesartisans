@@ -248,6 +248,11 @@ const relatedPages = [
     description: 'Méthode 3CL-2021 + facture par classe + sauts E→C, F→C',
   },
   {
+    label: 'DPE classe G : sortir de la passoire',
+    href: '/renovation-energetique/diagnostic/dpe/classes/g',
+    description: 'Seuils, audit obligatoire vente, 5 sauts G→F/E/D/C/B chiffrés',
+  },
+  {
     label: 'Audit énergétique 2026',
     href: '/renovation-energetique/diagnostic/audit-energetique',
     description: 'Obligatoire vente F/G/E et MPR',

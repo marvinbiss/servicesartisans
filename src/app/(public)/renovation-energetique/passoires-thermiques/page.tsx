@@ -244,6 +244,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'DPE classe G : sortir de la passoire',
+    href: '/renovation-energetique/diagnostic/dpe/classes/g',
+    description: 'Seuils 3CL-2021, audit vente, 5 sauts G→F/E/D/C/B chiffrés',
+  },
+  {
     label: 'Interdiction location DPE G et F 2026',
     href: '/renovation-energetique/passoires-thermiques/interdiction-location-g-f',
     description: 'Obligations bailleurs, sanctions, recours locataires, dérogations',

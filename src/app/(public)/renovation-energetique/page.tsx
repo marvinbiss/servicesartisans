@@ -373,7 +373,7 @@ export default function RenovationEnergetiqueHub() {
               Explorer le pillar Rénovation énergétique
             </h2>
             <p className="text-charcoal-600 leading-relaxed">
-              4 sous-hubs flagship avec barèmes officiels, sources E-E-A-T (Légifrance, France
+              5 sous-hubs flagship avec barèmes officiels, sources E-E-A-T (Légifrance, France
               Rénov’, ADEME) et schémas Article + GovernmentService.
             </p>
           </div>
@@ -422,6 +422,18 @@ export default function RenovationEnergetiqueHub() {
               </h3>
               <p className="text-sm text-charcoal-600">
                 Loi Climat 2021, interdiction location G/F, calendrier 2025-2034, dérogations.
+              </p>
+            </Link>
+            <Link
+              href="/barometre/renovation-energetique-2026"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+            >
+              <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                Baromètre marché 2026 (CC-BY 4.0)
+              </h3>
+              <p className="text-sm text-charcoal-600">
+                30 M logements, 5,1 M passoires, 700 K MPR/an, 62 K RGE, 87 Md€ — données ADEME /
+                ANAH / France Rénov’ libres de réutilisation.
               </p>
             </Link>
           </div>
