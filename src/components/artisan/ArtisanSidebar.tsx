@@ -4,6 +4,7 @@ import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { buildDevisHref } from '@/lib/utils'
 
 function slugify(text: string): string {
   return text
@@ -16,8 +17,7 @@ function slugify(text: string): string {
 
 function getDevisUrl(artisan: LegacyArtisan): string {
   const specialtySlug = artisan.specialty ? slugify(artisan.specialty) : 'artisan'
-  const citySlug = artisan.city ? slugify(artisan.city) : ''
-  return `/services/${specialtySlug}/${citySlug}`
+  return buildDevisHref(specialtySlug, artisan.city)
 }
 
 interface ArtisanSidebarProps {

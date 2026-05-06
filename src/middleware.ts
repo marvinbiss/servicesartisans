@@ -488,14 +488,30 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         })
       }
     } else {
-      // Vérification stricte du hostname (=== ou sous-domaine légitime)
-      const allowedOrigin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
+      // Vérification stricte du hostname.
+      //
+      // 2026-05-07 — assouplit la vérif :
+      //   1. same-origin (Origin === request URL origin) : par définition non-CSRF,
+      //      always safe — couvre les Vercel previews `*.vercel.app` + le custom
+      //      domain prod sans dépendre de NEXT_PUBLIC_SITE_URL.
+      //   2. NEXT_PUBLIC_SITE_URL et ses sous-domaines (apex/www).
+      //   3. *.vercel.app (Vercel previews testés depuis un autre alias).
+      //
+      // L'ancienne version échouait silencieusement quand l'utilisateur arrivait
+      // via une URL preview ou que la prod tournait sur un alias non ré-injecté
+      // dans NEXT_PUBLIC_SITE_URL — bouton « ne fonctionne pas » côté user.
       try {
-        const allowedHostname = new URL(allowedOrigin).hostname
         const originHostname = new URL(origin).hostname
-        const isAllowed =
+        const requestHostname = request.nextUrl.hostname
+        const allowedOrigin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
+        const allowedHostname = new URL(allowedOrigin).hostname
+
+        const isSameOrigin = originHostname === requestHostname
+        const isAllowedHost =
           originHostname === allowedHostname || originHostname.endsWith('.' + allowedHostname)
-        if (!isAllowed) {
+        const isVercelPreview = originHostname.endsWith('.vercel.app')
+
+        if (!isSameOrigin && !isAllowedHost && !isVercelPreview) {
           return new NextResponse(JSON.stringify({ error: 'Origine non autorisée' }), {
             status: 403,
             headers: { 'Content-Type': 'application/json' },

@@ -27,6 +27,7 @@ import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 import { PlatformSidebarCTA } from '@/components/artisan/PlatformSidebarCTA'
 import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
+import { buildDevisHref } from '@/lib/utils'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
@@ -449,8 +450,7 @@ export default function ArtisanPageClient({
             city={artisan.city || ''}
             onDevisClick={() => {
               const specialtySlug = slugify(artisan.specialty || 'artisan')
-              const citySlug = artisan.city ? slugify(artisan.city) : ''
-              window.location.href = `/services/${specialtySlug}/${citySlug}`
+              window.location.href = buildDevisHref(specialtySlug, artisan.city)
             }}
           />
         )}
