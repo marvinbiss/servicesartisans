@@ -564,6 +564,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier A — 2026-05-06 — 3 sub-pages plancher bas dédiées (densifient le hub /sol).
+      // Ahrefs snapshot local 2026-05-04 country=fr.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/sol/vide-sanitaire`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/sol/garage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/sol/cave-plafond`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
       // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "aides renovation energetique" 200 KD 63 (hub) + cumul famille
