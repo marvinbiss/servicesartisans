@@ -89,7 +89,7 @@ export const metadata: Metadata = {
 
 const tldr = [
   '<strong>Prime CEE = Prime énergie</strong> : c’est la <strong>même prime</strong>, sous différents noms commerciaux. Mécanisme légal : Certificats d’Économie d’Énergie (loi POPE 2005).',
-  'Versée par les <strong>« obligés »</strong> : EDF, Engie, TotalEnergies, Auchan, Carrefour, Leclerc, BP, Esso, etc. — tous obligés par la loi de financer la transition énergétique.',
+  'Versée par les <strong>« obligés »</strong> (vendeurs d’énergie/carburants : EDF, Engie, TotalEnergies, Auchan, Carrefour, Leclerc, BP, Esso…) ou leurs <strong>délégataires</strong> (Sonergia, etc.) — tous tenus par la loi de financer la transition énergétique.',
   '<strong>Cumulable</strong> avec MaPrimeRénov’ depuis 2021. Cumul typique sur isolation = 50-70 % du devis pour ménages très modestes.',
   'À <strong>signer AVANT le devis</strong> : la prime n’est versée que si la « valorisation CEE » figure sur le devis avant signature.',
   'Comparer les offres : EDF, Engie, TotalEnergies, Sonergia, Cdiscount Énergie etc. — montants varient ±30 %. Prime fixée par opération (BAR-EN-101, BAR-TH-104…).',
@@ -114,24 +114,24 @@ const OBLIGES = [
     note: 'Filiale Total. Bons montants sur isolation. Promos régulières.',
   },
   {
-    nom: 'Sonergia',
+    nom: 'Sonergia (délégataire CEE)',
     marque: 'Sonergia',
-    note: 'Spécialiste indépendant. DR 49. Excellents montants sur certaines opérations.',
+    note: 'Délégataire historique des obligés. DR 49. Bons montants sur isolation et chauffage.',
   },
   {
-    nom: 'Auchan',
+    nom: 'Auchan (carburants)',
     marque: 'Prime Énergie Auchan',
-    note: 'Versée en chèque cadeaux Auchan (à valoriser selon vos besoins).',
+    note: 'Obligé via vente de carburants. Versée souvent en chèque cadeaux Auchan.',
   },
   {
-    nom: 'Carrefour / Leclerc',
+    nom: 'Carrefour / Leclerc (carburants)',
     marque: 'Prime Énergie GMS',
-    note: 'Distribué via leur enseigne. Modalité chèque ou virement.',
+    note: 'Obligés via vente de carburants en station. Modalité chèque ou virement.',
   },
   {
     nom: 'Cdiscount Énergie',
     marque: 'Cdiscount Énergie',
-    note: 'Acteur en ligne. Parcours digital simple. Montants compétitifs.',
+    note: 'Fournisseur d’énergie pure player. Parcours digital simple. Montants compétitifs.',
   },
 ]
 
@@ -162,9 +162,14 @@ const FORFAITS = [
     primeIndic: '~4 000-6 000 € (selon obligé)',
   },
   {
-    operation: 'BAR-TH-127 / 125 — VMC',
-    forfait: 'H1 ~17 000-21 000 kWhc',
-    primeIndic: '~700-1 200 €',
+    operation: 'BAR-TH-127 — VMC double flux',
+    forfait: 'H1 ~17 000-21 000 kWhc selon surface',
+    primeIndic: '~700-1 200 € (double flux résidentiel)',
+  },
+  {
+    operation: 'BAR-TH-125 — VMC simple flux hygroréglable',
+    forfait: 'Forfait beaucoup plus bas (~1 500-3 000 kWhc)',
+    primeIndic: '~80-200 € (simple flux hygro)',
   },
 ]
 

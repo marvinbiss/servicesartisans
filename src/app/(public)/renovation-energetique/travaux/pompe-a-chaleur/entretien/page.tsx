@@ -91,7 +91,7 @@ const tldr = [
   'Entretien obligatoire tous les 2 ans pour les PAC de 4 à 70 kW (décret 2020-912 codifié au Code de l’environnement R224-59-2).',
   'Prix d’un contrat annuel 2026 : 150 à 300 € TTC selon marque et niveau (visite + main-d’œuvre + petites pièces).',
   'Intervention ponctuelle hors contrat : 200 à 400 € TTC. Dépannage : 80-150 €/h HT + déplacement 30-80 €.',
-  'Contrôle d’étanchéité fluide frigorigène : annuel si charge ≥ 2 tCO2-eq, par technicien attestation fluides catégorie I (Règlement UE 517/2014).',
+  'Contrôle d’étanchéité fluide frigorigène : annuel si charge ≥ 5 tCO2-eq (Règlement UE 517/2014 art. 4), par technicien attestation fluides catégorie I.',
   'Sans entretien attesté : garantie fabricant + assurance habitation peuvent être refusées en cas de sinistre.',
 ]
 
@@ -121,7 +121,7 @@ const QUI_PEUT = [
 const CHECKLIST_ENTRETIEN = [
   'Contrôle visuel unité extérieure (corrosion, givre persistant, vibrations anormales)',
   'Vérification de la charge en fluide frigorigène (R32, R290, R410A selon modèle)',
-  'Test d’étanchéité du circuit frigorifique (obligatoire annuel si ≥ 2 tCO2-eq)',
+  'Test d’étanchéité du circuit frigorifique (obligatoire annuel si charge ≥ 5 tCO2-eq, Règlement UE 517/2014 art. 4)',
   'Nettoyage du condenseur, de l’évaporateur et des filtres à air',
   'Contrôle des sécurités électriques (haute pression, basse pression, dégivrage)',
   'Vérification du COP/SCOP réel mesuré vs spécifications constructeur',
@@ -181,7 +181,7 @@ const faqs = [
   {
     question: 'L’entretien d’une pompe à chaleur est-il vraiment obligatoire ?',
     answer:
-      'Oui, depuis le décret 2020-912 du 28 juillet 2020 (codifié aux articles R224-59-1 à R224-59-7 du Code de l’environnement). L’entretien est obligatoire tous les 2 ans pour toute PAC de puissance thermique nominale comprise entre 4 et 70 kW. Une attestation doit être remise au commanditaire dans les 15 jours suivant la visite. Pour les PAC contenant ≥ 2 tCO2-eq de fluide frigorigène, un contrôle d’étanchéité annuel s’ajoute (Règlement UE 517/2014).',
+      'Oui, depuis le décret 2020-912 du 28 juillet 2020 (codifié aux articles R224-59-1 à R224-59-7 du Code de l’environnement). L’entretien est obligatoire tous les 2 ans pour toute PAC de puissance thermique nominale comprise entre 4 et 70 kW. Une attestation doit être remise au commanditaire dans les 15 jours suivant la visite. Pour les PAC contenant au moins 5 tCO2-eq de fluide frigorigène, un contrôle d’étanchéité annuel s’ajoute (Règlement UE 517/2014, article 4).',
   },
   {
     question: 'Combien coûte précisément un entretien de PAC en 2026 ?',
@@ -546,7 +546,7 @@ export default function Page() {
               <strong>même décret 2020-912</strong> dès lors que la puissance dépasse 4 kW. La
               différence : pas de circuit hydraulique, donc visite plus rapide (1 h en moyenne) et
               tarif moindre (<strong>100 à 180 € / an TTC</strong>). Le contrôle d’étanchéité reste
-              obligatoire si la charge de fluide dépasse 2 tCO2-eq. Pensez aussi au nettoyage
+              obligatoire si la charge de fluide dépasse 5 tCO2-eq. Pensez aussi au nettoyage
               régulier des filtres intérieurs (tous les 2-3 mois) que vous pouvez faire vous-même.
             </p>
 
