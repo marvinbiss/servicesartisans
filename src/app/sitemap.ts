@@ -554,6 +554,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.8,
       },
+      // Levier 7 ROI — 2026-05-06 — cluster `isolation plancher bas` cumulé ~5 760 vol/mo KD avg 1.5
+      // (pivot "isolation plancher bas" 1 000 KD 2, "isolation sol" 1 900, "isolation vide
+      // sanitaire" 1 000, "isolation sous-sol" 900, etc.). Éligible CEE BAR-EN-103.
+      // Ahrefs snapshot local 2026-05-04.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/sol`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "aides renovation energetique" 200 KD 63 (hub) + cumul famille

@@ -23,6 +23,7 @@ import Link from 'next/link'
 import {
   ArrowRight,
   Layers,
+  Layers3,
   Home,
   ShieldCheck,
   CheckCircle2,
@@ -144,6 +145,22 @@ const ISOLATION_TYPES: IsolationType[] = [
     aidesMax:
       'MaPrimeRénov’ forfait selon revenus (R ≥ 6 m².K/W) + CEE BAR-EN-101. Voir france-renov.gouv.fr.',
     rgeQual: 'Qualibat 7131/7132 (rampants/sarking) ou 8211 (couverture)',
+  },
+  {
+    slug: 'sol',
+    name: 'Isolation plancher bas (sol, cave, vide-sanitaire)',
+    icon: Layers3,
+    position: 'Plancher bas par dessous (cave/garage/VS) ou par dessus (chape)',
+    prixM2:
+      '25 à 110 €/m² posée — par dessous 25-50 €/m², mousse projetée 35-70 €/m², chape isolante 60-110 €/m²',
+    performance: 'R 3 m².K/W minimum (CEE BAR-EN-103)',
+    bestFor:
+      'Cave/sous-sol/garage accessibles : poste rentable après combles. ROI 3-7 ans, confort sols immédiat.',
+    drawbacks:
+      'Sol sur terre-plein non éligible BAR-EN-103. Vide-sanitaire bas (< 60 cm) : mousse projetée obligatoire.',
+    aidesMax:
+      'MaPrimeRénov’ forfait selon revenus + CEE BAR-EN-103 (forfait kWhc/m² H1 1 600 / H2 1 300 / H3 900).',
+    rgeQual: 'Qualibat 7131 / 7191 (plancher) / 5232 (mousse PU)',
   },
 ]
 
