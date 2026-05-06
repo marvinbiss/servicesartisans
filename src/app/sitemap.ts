@@ -643,6 +643,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      {
+        // Levier B 2026-05-06 — hub Prime CEE / Prime énergie / Prime EDF (~22K vol/mo cumulé).
+        // KW pivots Ahrefs (snapshot 2026-05-04) :
+        //   - "prime cee" 8 500 vol KD 8 (Effy rank #23 — striking distance)
+        //   - "prime edf" 7 500 vol KD 9
+        //   - "prime cee edf" 6 300 vol KD 8
+        //   - "prime energie" 1 800 vol KD 12
+        url: `${SITE_URL}/renovation-energetique/aides/prime-energie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Vague B — 2026-05-04 — Travaux compléments (hub + 2 PAC + cluster chauffage 4 + fenêtres + VMC).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "renovation energetique" hub /travaux/

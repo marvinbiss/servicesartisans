@@ -277,6 +277,11 @@ const relatedPages = [
     description: 'Bonification CEE PAC + biomasse',
   },
   {
+    label: 'Prime CEE / Prime énergie / Prime EDF',
+    href: '/renovation-energetique/aides/prime-energie',
+    description: 'Comparer les obligés (EDF, Engie, Sonergia, Auchan…)',
+  },
+  {
     label: 'Simulateur aides rénovation 2026',
     href: '/simulateur-aides-renovation',
     description: 'Estimation personnalisée en 2 minutes',
