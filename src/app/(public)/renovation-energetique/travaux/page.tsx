@@ -366,6 +366,21 @@ const relatedPages = [
     href: '/renovation-energetique/travaux/nettoyage-toiture',
     description: 'Prix 100 m² 700-3 000 € selon prestation',
   },
+  {
+    label: 'Charpente : 4 types et prix 2026',
+    href: '/renovation-energetique/travaux/charpente',
+    description: '100-300 €/m², traditionnelle, fermettes, lamellé-collé',
+  },
+  {
+    label: 'VMI (Ventilation Mécanique par Insufflation)',
+    href: '/renovation-energetique/travaux/vmi',
+    description: 'Alternative VMC, 3 500-7 000 €, maison ancienne',
+  },
+  {
+    label: 'Climatisation : prix installation 2026',
+    href: '/renovation-energetique/travaux/climatisation',
+    description: 'Monosplit, multisplit, gainable, 1 500-15 000 €',
+  },
 ]
 
 export default function Page() {

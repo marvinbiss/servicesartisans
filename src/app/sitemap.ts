@@ -741,6 +741,32 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Levier M 2026-05-06 — sub-page tubage cheminée / fumisterie (~1 600 vol/mo cumulé).
+        // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "tuber une cheminée" 350 vol KD 1 ⭐⭐ pivot
+        //   - cluster cousin Levier I (ramonage) — long-tail fumisterie
+        // Anti-cannibalisation : tubage = chemisage conduit, ramonage = entretien.
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/tubage-cheminee`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        // Levier I 2026-05-06 — sub-page ramonage cheminée (~19 900 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "ramoneur"               4 900 vol KD 0 ⭐⭐⭐
+        //   - "ramonage"               4 200 vol KD 11
+        //   - "ramonage autour de moi" 3 600 vol KD 0
+        //   - "ramonage cheminée"      2 400 vol KD 2 ⭐⭐⭐ pivot
+        //   - "ramoneur autour de moi" 1 800 vol KD 0
+        //   - "prix ramonage cheminée" 1 200 vol KD 0
+        // YMYL high : Décret 2023-741 obligation annuelle, RSD type art. 7 amende 450 €.
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/ramonage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/fenetres-double-vitrage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
@@ -775,6 +801,45 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/vmc/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        // Levier L 2026-05-06 — page Climatisation hub (~3 200 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "frigoriste autour de moi"        800 vol KD 2
+        //   - "dépannage climatisation"         600 vol KD 0
+        //   - "climatisation autour de moi"     600 vol KD 0
+        //   - "installation climatisation prix" 450 vol KD 0 ⭐⭐⭐ pivot
+        //   - "prix climatisation réversible pose comprise" 350 vol KD 3
+        // Anti-cannibalisation : /pompe-a-chaleur/air-air-prix = PAC AA angle réno
+        // énergétique. Cette page = clim install + dépannage angle confort été.
+        url: `${SITE_URL}/renovation-energetique/travaux/climatisation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        // Levier K 2026-05-06 — page Charpente (~19 400 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "charpente"            8 700 vol KD 0 ⭐⭐⭐⭐ MEGA EASY
+        //   - "charpentier"          8 700 vol KD 0
+        //   - "charpentier couvreur" 2 000 vol KD 0
+        // Anti-cannibalisation : structure portante (vs nettoyage-toiture surface,
+        // isolation/toiture thermique, fenetre-de-toit ouverture).
+        url: `${SITE_URL}/renovation-energetique/travaux/charpente`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        // Levier J 2026-05-06 — page VMI Ventilation Mécanique par Insufflation.
+        // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "vmi" 4 600 vol KD 1 ⭐⭐⭐ MEGA EASY (Travaux.com #10)
+        // Anti-cannibalisation : VMI = insufflation, VMC = extraction.
+        // Pas d'aide MPR/CEE (BAR-TH-127/125 réservés VMC double flux + hygro B).
+        url: `${SITE_URL}/renovation-energetique/travaux/vmi`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.85,

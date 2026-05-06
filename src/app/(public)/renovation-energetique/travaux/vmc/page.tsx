@@ -233,6 +233,11 @@ const relatedPages = [
     description: 'Prix 80-300 €, fréquence, obligations gaz collective',
   },
   {
+    label: 'VMI (insufflation, alternative VMC)',
+    href: '/renovation-energetique/travaux/vmi',
+    description: 'Prix 3 500-7 000 €, idéale rénovation maison ancienne',
+  },
+  {
     label: 'Hub Travaux rénovation',
     href: '/renovation-energetique/travaux',
     description: '4 clusters travaux + ordre logique',

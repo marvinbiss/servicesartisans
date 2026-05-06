@@ -293,6 +293,16 @@ const relatedPages = [
     description: 'Mention RGE chaudière + poêle bois',
   },
   {
+    label: 'Ramonage cheminée 2026',
+    href: '/renovation-energetique/travaux/chauffage/ramonage',
+    description: 'Prix 50-150 €, obligation annuelle Décret 2023-741',
+  },
+  {
+    label: 'Tubage cheminée (poêle, chaudière)',
+    href: '/renovation-energetique/travaux/chauffage/tubage-cheminee',
+    description: '50-150 €/ml inox, NF DTU 24.1, classes T-P-W',
+  },
+  {
     label: 'Simulateur aides 2026',
     href: '/simulateur-aides-renovation',
     description: 'Estimation MPR + CEE + éco-PTZ',
