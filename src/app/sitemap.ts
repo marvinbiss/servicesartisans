@@ -1191,6 +1191,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier R 2026-05-06 — sub-page PAC hybride (~2 550 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "pompe a chaleur hybride"     1 100 vol KD 3 ⭐⭐⭐ pivot rang #82
+      //   - "pompe à chaleur hybride"       700 vol KD 3 (rang #126)
+      //   - "chaudiere hybride"             300 vol KD 0 (rang #186)
+      //   - "pac hybride"                   ~250 vol estimé KD 1
+      // Anti-canniba : SYSTÈME hybride PAC + chaudière gaz (compromis maisons mal isolées
+      // + climat froid + seul système gaz éligible MPR depuis 2024) vs hub /pompe-a-chaleur
+      // (3 types PAC) et /chaudiere-gaz (panorama gaz pur) et /chaudiere-gaz/remplacement
+      // (mentionne hybride parmi 5 alternatives).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/hybride`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier Q 2026-05-06 — sub-page remplacement chaudière gaz (~2 600 vol/mo cumulé).
       // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "remplacement chaudière gaz"   600 vol KD 1 ⭐⭐ pivot rang #110

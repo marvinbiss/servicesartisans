@@ -404,6 +404,11 @@ const relatedPages = [
     description: "Aides MPR + CEE jusqu'à 9 000 €",
   },
   {
+    label: 'PAC hybride PAC + chaudière gaz',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/hybride',
+    description: 'Seul système gaz éligible MPR — compromis maisons mal isolées',
+  },
+  {
     label: 'Chaudière granulés bois 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-granules',
     description: "Biomasse, MPR jusqu'à 7 000 €",

@@ -247,6 +247,11 @@ const relatedPages = [
     description: 'La PAC la plus performante. Étude hydrogéo + déclaration DDT.',
   },
   {
+    label: 'PAC hybride PAC + chaudière gaz',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/hybride',
+    description: "Seul système gaz éligible MPR. 4 cas d'usage + 4 fabricants leaders.",
+  },
+  {
     label: 'PAC Daikin : Altherma, prix, COP, avis',
     href: '/renovation-energetique/travaux/pompe-a-chaleur/marques/daikin',
     description: 'N°1 mondial. 5 gammes (H HT, R290, M, EHS Hybrid, Emura). SAV 600 tech.',
