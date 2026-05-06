@@ -1191,6 +1191,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.88,
       },
+      // Levier P 2026-05-06 — sub-page solaire hybride PV-T (~1 800 vol/mo cumulé).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "panneau solaire hybride"      1 400 vol KD 4 ⭐⭐ pivot rang #169
+      //   - "panneau hybride"                300 vol KD 3 longue traîne
+      //   - "panneau solaire pv-t"           ~120 vol estimé
+      //   - "solaire hybride dualsun"        ~80 vol marque
+      // Anti-canniba : produit PV-T 2-en-1 (élec + ECS) vs /solaire/thermique (CESI/SSC chaleur pure)
+      // et /solaire (PV pur électrique) et /aides/panneau-solaire-2026 (focus aides).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/hybride`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         // B4 sub-page 2026-05-06 — Autoconsommation solaire (~22 490 vol/mo cumulé).
         // KW pivots Ahrefs API live (snapshot 2026-05-06) :

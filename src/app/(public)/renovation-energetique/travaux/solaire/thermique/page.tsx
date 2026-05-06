@@ -331,6 +331,11 @@ const relatedPages = [
     description: '5 technos PV, latitude, orientation, ombrage',
   },
   {
+    label: 'Panneau solaire hybride PV-T (2-en-1)',
+    href: '/renovation-energetique/travaux/solaire/hybride',
+    description: 'Électricité + ECS sur un même panneau, +5-15 % rendement PV',
+  },
+  {
     label: 'Ballon thermodynamique 2026 — alternative ECS',
     href: '/renovation-energetique/travaux/ballon-thermodynamique',
     description: "PAC sur air, ECS 60-75 % d'économie",

@@ -305,6 +305,11 @@ const relatedPages = [
     description: "Chaleur eau pour ECS + chauffage, MPR jusqu'à 10 000 €",
   },
   {
+    label: 'Panneau solaire hybride PV-T (2-en-1)',
+    href: '/renovation-energetique/travaux/solaire/hybride',
+    description: 'Électricité + ECS sur un seul panneau, 450-700 €/m², DualSun / Systovi',
+  },
+  {
     label: 'Autoconsommation solaire (totale, surplus, collective)',
     href: '/renovation-energetique/travaux/solaire/autoconsommation',
     description: '3 modes énergétiques + ROI batterie + raccordement Enedis CACSI',
