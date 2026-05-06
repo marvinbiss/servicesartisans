@@ -649,6 +649,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.9,
       },
+      // Levier 3 ROI (2026-05-06) — chaudière biomasse Qualibois.
+      // Cluster bois ~4 250 vol/mo cumulé KD avg 1.5 (Ahrefs API live).
+      // Pivot "chaudiere a bois" 1 200 KD 1 + "chaudiere biomasse" 900 KD 1.
+      // Supply DB live : 4 171 Qualibois actifs (snapshot 2026-05-06).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-bois`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/fenetres-double-vitrage`,
         lastModified: STATIC_DATE,

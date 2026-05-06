@@ -105,6 +105,17 @@ const SOLUTIONS = [
   },
   {
     icon: Flame,
+    name: 'Chaudière à bois (biomasse)',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-bois',
+    headline: 'Granulés, bûches ou mixte',
+    prixPose: '8 000-22 000 €',
+    aidesMax: 'MPR + CEE BAR-TH-104 + Coup de pouce',
+    cop: 'Rendement ETAS 70-85 %',
+    detail:
+      'Chauffage central + ECS via combustible bois. Top alternative pour maison rurale mal isolée + sortie fioul. Label RGE Qualibois requis.',
+  },
+  {
+    icon: Flame,
     name: 'Poêle à granulés',
     href: '/renovation-energetique/travaux/chauffage/poele-granules',
     headline: 'Chauffage d’appoint EnR',
@@ -190,10 +201,10 @@ const ORDRE_PRIORITE = [
   },
   {
     cas: 'Vous habitez une maison rurale ancienne mal isolée',
-    priorite: 'Chaudière biomasse granulés',
+    priorite: 'Chaudière à bois (granulés ou bûches)',
     detail:
-      'Idéal pour gros besoins en chauffage avant isolation lourde. Combustible local, ROI plus rapide qu’une PAC sur logement non isolé.',
-    href: '/renovation-energetique/travaux/chauffage/poele-granules',
+      'Idéal pour gros besoins en chauffage avant isolation lourde. Combustible local, ROI plus rapide qu’une PAC sur logement non isolé. Label RGE Qualibois.',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-bois',
   },
   {
     cas: 'Votre ballon ECS électrique est en fin de vie',
