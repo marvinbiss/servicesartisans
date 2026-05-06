@@ -247,6 +247,16 @@ const relatedPages = [
     description: 'La PAC la plus performante. Étude hydrogéo + déclaration DDT.',
   },
   {
+    label: 'PAC Daikin : Altherma, prix, COP, avis',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/marques/daikin',
+    description: 'N°1 mondial. 5 gammes (H HT, R290, M, EHS Hybrid, Emura). SAV 600 tech.',
+  },
+  {
+    label: 'PAC Mitsubishi : Ecodan, Zubadan, prix, avis',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/marques/mitsubishi',
+    description: 'N°2 mondial. Acoustique 33-37 dB record + Zubadan -28 °C + garantie 7 ans auto.',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',

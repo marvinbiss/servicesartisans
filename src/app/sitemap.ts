@@ -779,6 +779,38 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.8,
       },
       {
+        // Sprint 4 PAC long-tail 2026-05-06 — sub-page marque Daikin (~4 600 vol/mo cumul).
+        // KW pivots Bloc 1 v3 (rang 37, KGR 208) + estimation longue traîne :
+        //   - "pompe a chaleur daikin"        2 400 vol KD 0 ⭐⭐⭐⭐⭐ MEGA EASY
+        //   - "pac daikin"                    ~600 vol KD 0
+        //   - "daikin altherma"               ~700 vol KD 1
+        //   - "daikin altherma 3"             ~250 vol KD 1
+        //   - "altherma 3 r290"               ~150 vol KD 0
+        // Anti-cannibalisation : /air-eau-prix mentionne 5 marques en grille générique ;
+        // cette page = focus DAIKIN (5 gammes Altherma, R290, SAV France 600 tech,
+        // garantie 5+7 ans, comparatif vs concurrence, avis utilisateurs).
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/marques/daikin`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
+        // Sprint 4 PAC long-tail 2026-05-06 — sub-page marque Mitsubishi (~4 050 vol/mo cumul).
+        // KW pivots Bloc 1 v3 (rang 62, KGR 123.5) + estimation longue traîne :
+        //   - "pompe a chaleur mitsubishi"    1 900 vol KD 0 ⭐⭐⭐⭐⭐ MEGA EASY
+        //   - "pac mitsubishi"                ~500 vol KD 0
+        //   - "mitsubishi ecodan"             ~600 vol KD 1
+        //   - "mitsubishi zubadan"            ~250 vol KD 0
+        //   - "ecodan puz"                    ~150 vol KD 0
+        // Anti-cannibalisation : /marques/daikin = page jumelle ; cette page = focus
+        // MITSUBISHI ELECTRIC (Ecodan, Zubadan -28 °C, acoustique 33-37 dB record,
+        // garantie 7 ans automatique, comparatif détaillé vs Daikin).
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/marques/mitsubishi`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
