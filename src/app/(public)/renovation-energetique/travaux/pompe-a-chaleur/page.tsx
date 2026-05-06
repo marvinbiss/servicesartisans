@@ -221,6 +221,11 @@ const relatedPages = [
     description: 'Sondes verticales/horizontales, COP 4-5,5, MPR jusqu’à 11 000 €',
   },
   {
+    label: 'Entretien PAC : obligation, prix, checklist',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/entretien',
+    description: 'Décret 2020-912, contrat 150-300 €/an, F-Gas catégorie I',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',
