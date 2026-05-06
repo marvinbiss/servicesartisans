@@ -62,7 +62,7 @@ import { getReviewerForAuthor } from '@/lib/data/authors'
 import { buildAggregateRatingFromProviders } from '@/lib/seo/aggregate-rating'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
-import { getArtisanUrl } from '@/lib/utils'
+import { buildDevisHref, getArtisanUrl } from '@/lib/utils'
 import { getServiceImageForContext } from '@/lib/data/images'
 import {
   services as staticServicesList,
@@ -1309,7 +1309,6 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           departmentName={location.department_name || ville?.departement || ''}
           serviceName={service.name}
           serviceSlug={serviceSlug}
-          villeSlug={locationSlug}
           villeName={location.name}
         />
       )}
@@ -1694,7 +1693,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
               {location.name}.
             </p>
             <Link
-              href={`/services/${serviceSlug}/${locationSlug}`}
+              href={buildDevisHref(serviceSlug, location.name)}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Obtenir mon devis gratuit

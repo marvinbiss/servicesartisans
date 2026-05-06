@@ -43,6 +43,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
+import { buildDevisHref } from '@/lib/utils'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import type { CommuneData } from '@/lib/data/commune-data'
 import type { TradeContent } from '@/lib/data/trade-content'
@@ -266,7 +267,7 @@ export default function SimpleView({
             Comparez les profils et choisissez parmi nos artisans RGE certifiés à {location.name}.
           </p>
           <Link
-            href={`/services/${serviceSlug}/${locationSlug}`}
+            href={buildDevisHref(serviceSlug, location.name)}
             className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Obtenir mon devis gratuit

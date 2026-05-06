@@ -13,7 +13,7 @@ import {
   getProviderCountByServiceAndLocation,
   supabase,
 } from '@/lib/supabase'
-import { getArtisanUrl } from '@/lib/utils'
+import { buildDevisHref, getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
@@ -1061,7 +1061,7 @@ async function renderProviderPage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                href={`/services/${serviceSlug}/${locationSlug}`}
+                href={buildDevisHref(serviceSlug, artisan.city)}
                 className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
               >
                 Obtenir mon devis gratuit

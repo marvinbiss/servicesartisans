@@ -10,6 +10,7 @@
 import Link from 'next/link'
 import { SITE_URL } from '@/lib/seo/config'
 import { safeJsonStringify } from '@/lib/seo/safe-json'
+import { buildDevisHref } from '@/lib/utils'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -247,7 +248,7 @@ export default function StructuredPricingTable({
 
       <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
         <Link
-          href={`/services/${serviceSlug}/${villeSlug}`}
+          href={buildDevisHref(serviceSlug, villeName)}
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
         >
           Obtenir un devis pr{'é'}cis {'à'} {villeName}

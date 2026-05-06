@@ -7,6 +7,7 @@ import { isDynamicServerError } from 'next/dist/client/components/hooks-server-c
 import { isUrgenceIndexable } from '@/lib/seo/urgence-whitelist'
 import { isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
 import { logger } from '@/lib/logger'
+import { buildDevisHref } from '@/lib/utils'
 import {
   Phone,
   Clock,
@@ -988,7 +989,7 @@ async function renderUrgenceServiceVillePage({
               <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
-              href={`/services/${service}/${villeSlug}`}
+              href={buildDevisHref(service, villeData.name)}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Intervention rapide — Devis gratuit
@@ -1647,7 +1648,7 @@ async function renderUrgenceServiceVillePage({
               <PlatformPhoneLabel variant="badge" className="mt-2" />
             </div>
             <Link
-              href={`/services/${service}/${villeSlug}`}
+              href={buildDevisHref(service, villeData.name)}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Intervention rapide — Devis gratuit
@@ -1664,7 +1665,6 @@ async function renderUrgenceServiceVillePage({
           departmentName={villeData.departement}
           serviceName={trade.name}
           serviceSlug={service}
-          villeSlug={villeSlug}
           villeName={villeData.name}
         />
       ) : providers.length > 0 ? (
@@ -1876,7 +1876,7 @@ async function renderUrgenceServiceVillePage({
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link
-              href={`/services/${service}/${villeSlug}`}
+              href={buildDevisHref(service, villeData.name)}
               className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors"
             >
               Devis {tradeLower} à {villeData.name}
@@ -1930,7 +1930,7 @@ async function renderUrgenceServiceVillePage({
                   Tarifs {tradeLower} à {villeData.name}
                 </Link>
                 <Link
-                  href={`/services/${service}/${villeSlug}`}
+                  href={buildDevisHref(service, villeData.name)}
                   className="block text-sm text-charcoal-600 hover:text-primary-500 py-1"
                 >
                   Devis {tradeLower} à {villeData.name}

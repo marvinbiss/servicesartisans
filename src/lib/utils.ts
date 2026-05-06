@@ -113,6 +113,28 @@ const _specialtyToServiceSlug: Record<string, string> = {
   // (jardinier/paysagiste/nettoyage/alarme/demenageur).
 }
 
+/**
+ * Construit le href d'un CTA "devis" pré-rempli.
+ *
+ * 2026-05-07 — fix : tous les boutons « Demander un devis / Recevoir mes devis »
+ * pointaient vers `/services/[s]/[v]` (page artisans listing) au lieu du
+ * formulaire `/devis`. Self-link sur les pages /services elles-mêmes — le
+ * bouton « ne fonctionnait pas ». Cf. post-mortem 2026-05-07.
+ *
+ * - service + ville fournis    → `/devis?service=&ville=` (form pré-rempli)
+ * - service seul                → `/devis/[service]` (route dédiée)
+ * - rien                        → `/devis`
+ */
+export function buildDevisHref(service?: string | null, ville?: string | null): string {
+  const s = service?.trim() || ''
+  const v = ville ? slugify(ville) : ''
+  if (s && v) {
+    return `/devis?service=${encodeURIComponent(s)}&ville=${encodeURIComponent(v)}`
+  }
+  if (s) return `/devis/${encodeURIComponent(s)}`
+  return '/devis'
+}
+
 // Generate SEO-friendly artisan URL using static slug lookup
 export function getArtisanUrl(artisan: {
   stable_id?: string | null

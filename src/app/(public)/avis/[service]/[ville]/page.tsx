@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { logger } from '@/lib/logger'
+import { buildDevisHref } from '@/lib/utils'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   ArrowRight,
@@ -854,7 +855,7 @@ async function renderAvisServiceVillePage({
             </div>
             <div className="mt-8">
               <Link
-                href={`/services/${service}/${villeSlug}`}
+                href={buildDevisHref(service, villeData.name)}
                 className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />

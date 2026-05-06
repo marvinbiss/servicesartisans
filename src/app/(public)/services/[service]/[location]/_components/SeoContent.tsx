@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getQuartiersByVille } from '@/lib/data/france'
+import { buildDevisHref } from '@/lib/utils'
 import type { LocationContent } from '@/lib/seo/location-content'
 import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
@@ -108,7 +109,7 @@ export default function SeoContent({
                 <p>
                   {locationContent.conclusion} Pour démarrer votre projet,{' '}
                   <Link
-                    href={`/services/${service.slug}/${locationSlug}`}
+                    href={buildDevisHref(service.slug, location.name)}
                     className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
                   >
                     demandez un devis gratuit {service.name.toLowerCase()} à {location.name}
@@ -171,7 +172,7 @@ export default function SeoContent({
                     <p>
                       Pour obtenir un chiffrage précis,{' '}
                       <Link
-                        href={`/services/${service.slug}/${locationSlug}`}
+                        href={buildDevisHref(service.slug, location.name)}
                         className="text-primary-600 underline decoration-primary-300 underline-offset-2 hover:text-primary-700"
                       >
                         demandez un devis gratuit {service.name.toLowerCase()} à {location.name}

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Star, ShieldCheck, MapPin, ChevronRight, Award, ArrowRight } from 'lucide-react'
-import { getAvatarColor } from '@/lib/utils'
+import { buildDevisHref, getAvatarColor } from '@/lib/utils'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -25,7 +25,6 @@ interface FallbackProvidersProps {
   departmentName: string
   serviceName: string
   serviceSlug: string
-  villeSlug: string
   villeName: string
 }
 
@@ -67,7 +66,6 @@ export default function FallbackProviders({
   departmentName,
   serviceName,
   serviceSlug,
-  villeSlug,
   villeName,
 }: FallbackProvidersProps) {
   const svcLower = serviceName.toLowerCase()
@@ -86,7 +84,7 @@ export default function FallbackProviders({
               {departmentName}. Vous pouvez tout de m{'ê'}me demander un devis gratuit.
             </p>
             <Link
-              href={`/services/${serviceSlug}/${villeSlug}`}
+              href={buildDevisHref(serviceSlug, villeName)}
               className="inline-flex items-center gap-2 bg-primary-400 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-cta hover:bg-primary-500 hover:shadow-cta-hover active:scale-[0.98] transition-all duration-200"
             >
               Demander un devis gratuit
@@ -219,7 +217,7 @@ export default function FallbackProviders({
 
                 {/* Generic CTA — NOT linked to specific artisan (rule: no CTA on unclaimed) */}
                 <Link
-                  href={`/services/${serviceSlug}/${villeSlug}`}
+                  href={buildDevisHref(serviceSlug, villeName)}
                   className="relative z-20 block w-full py-2.5 text-center bg-primary-400 text-white rounded-lg font-bold text-sm shadow-cta hover:bg-primary-500 hover:shadow-cta-hover active:scale-[0.98] transition-all duration-200"
                 >
                   <span className="inline-flex items-center gap-1.5">

@@ -55,7 +55,7 @@ import {
   buildAggregateRatingFromProviders,
   type PageAggregateRating,
 } from '@/lib/seo/aggregate-rating'
-import { getArtisanUrl } from '@/lib/utils'
+import { buildDevisHref, getArtisanUrl } from '@/lib/utils'
 import {
   getRgeProvidersByServiceAndCity,
   getRgeProvidersByServiceAndDepartement,
@@ -729,7 +729,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             </p>
           )}
           <Link
-            href={`/services/${serviceSlug}/${villeSlug}`}
+            href={buildDevisHref(serviceSlug, villeName)}
             className="inline-flex items-center gap-2 mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
@@ -812,7 +812,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             Recevez un devis gratuit et sans engagement en 2 minutes
           </p>
           <Link
-            href={`/services/${serviceSlug}/${villeSlug}`}
+            href={buildDevisHref(serviceSlug, villeName)}
             className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
@@ -1042,7 +1042,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             Devis gratuit en 2 min — éligible MaPrimeRénov&apos;, CEE et TVA 5,5 %
           </p>
           <Link
-            href={`/services/${serviceSlug}/${villeSlug}`}
+            href={buildDevisHref(serviceSlug, villeName)}
             className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
