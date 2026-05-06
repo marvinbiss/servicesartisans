@@ -9,8 +9,16 @@
 
 import { unstable_cache } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { withTimeout } from '@/lib/api/timeout'
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
+
+// Fallback réaliste : 45 481 artisans RGE actifs (snapshot 2026-05-06).
+// Utilisé si la query Supabase timeout ou error — évite le `---` visible côté
+// hero et trust bar de la home.
+const PROVIDER_COUNT_FALLBACK = 45_000
 
 /**
  * Nombre total d'artisans RGE actifs dans la base.
@@ -20,19 +28,32 @@ async function _getProviderCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
     const todayIso = new Date().toISOString().slice(0, 10)
-    const { count } = await supabase
-      .from('providers')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .not('rge_qualifications', 'is', null)
-      .gte('rge_valid_until', todayIso)
-    return count ?? 0
-  } catch {
-    return 0
+    const { count, error } = await withTimeout(
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .not('rge_qualifications', 'is', null)
+        .gte('rge_valid_until', todayIso),
+      4_000,
+      'site_stats_provider_count'
+    )
+    if (error) {
+      logger.error('getProviderCount: supabase error', { error: String(error.message) })
+      captureError(error, { tags: { source: 'stats.getProviderCount' } })
+      return PROVIDER_COUNT_FALLBACK
+    }
+    return count && count > 0 ? count : PROVIDER_COUNT_FALLBACK
+  } catch (err) {
+    logger.error('getProviderCount: timeout or fetch failed', { error: String(err) })
+    captureError(err, { tags: { source: 'stats.getProviderCount' } })
+    return PROVIDER_COUNT_FALLBACK
   }
 }
 
-export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count'], {
+// Cache key bumped 2026-05-06 (`-v2`) pour purger une entry poisoned avec 0
+// après timeout PostgREST sur la query rge_valid_until — voir stats.ts.
+export const getProviderCount = unstable_cache(_getProviderCount, ['provider-count-v2'], {
   revalidate: 3600, // 1h — aligné sur le revalidate du root layout
   tags: ['providers'],
 })
@@ -150,27 +171,32 @@ async function _getSiteStats(): Promise<SiteStats> {
     // 2026-05-05 pivot full RGE — artisanCount = artisans RGE actifs uniquement
     // (non plus tous providers actifs). Aligne homepage TrustBar + barometres
     // sur le positionnement "annuaire 100% RGE certifiés".
-    const [providerRes, reviewCountRes, ratingsRes, deptRes] = await Promise.all([
-      supabase
-        .from('providers')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
-        .not('rge_qualifications', 'is', null)
-        .gte('rge_valid_until', todayIso),
-      supabase
-        .from('reviews')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'published'),
-      supabase.from('reviews').select('rating').eq('status', 'published').limit(500),
-      supabase
-        .from('communes')
-        .select('departement_code')
-        .gt('provider_count', 0)
-        .not('departement_code', 'is', null)
-        .limit(10000),
-    ])
+    const [providerRes, reviewCountRes, ratingsRes, deptRes] = await withTimeout(
+      Promise.all([
+        supabase
+          .from('providers')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true)
+          .not('rge_qualifications', 'is', null)
+          .gte('rge_valid_until', todayIso),
+        supabase
+          .from('reviews')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'published'),
+        supabase.from('reviews').select('rating').eq('status', 'published').limit(500),
+        supabase
+          .from('communes')
+          .select('departement_code')
+          .gt('provider_count', 0)
+          .not('departement_code', 'is', null)
+          .limit(10000),
+      ]),
+      6_000,
+      'site_stats_aggregate'
+    )
 
-    const artisanCount = providerRes.count ?? 0
+    const artisanCount =
+      providerRes.count && providerRes.count > 0 ? providerRes.count : PROVIDER_COUNT_FALLBACK
     const reviewCount = reviewCountRes.count ?? 0
 
     let avgRating = 4.9
@@ -184,12 +210,16 @@ async function _getSiteStats(): Promise<SiteStats> {
     const deptCount = depts.size || 96
 
     return { artisanCount, reviewCount, avgRating, deptCount }
-  } catch {
-    return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
+  } catch (err) {
+    logger.error('getSiteStats: timeout or aggregate failed', { error: String(err) })
+    captureError(err, { tags: { source: 'stats.getSiteStats' } })
+    return { artisanCount: PROVIDER_COUNT_FALLBACK, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
   }
 }
 
-export const getSiteStats = unstable_cache(_getSiteStats, ['site-stats'], {
+// Cache key bumped 2026-05-06 (`-v2`) pour purger une entry poisoned (artisanCount=0)
+// après timeout PostgREST sur la query providers.rge_valid_until.
+export const getSiteStats = unstable_cache(_getSiteStats, ['site-stats-v2'], {
   revalidate: 3600,
   tags: ['providers', 'reviews'],
 })
