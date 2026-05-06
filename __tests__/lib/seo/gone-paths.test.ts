@@ -136,11 +136,16 @@ describe('evaluateGonePath — /cee/[operation]/[ville]', () => {
     expect(evaluateGonePath('/cee/IND-UT-103/toulouse')).toEqual({ gone: false })
   })
 
-  it('opération en minuscules → gone:true (format FOS exige MAJ)', () => {
-    expect(evaluateGonePath('/cee/bar-th-104/paris')).toEqual({
-      gone: true,
-      reason: 'cee_operation_invalid_format',
-    })
+  // 2026-05-06 — Régression P0 : Next.js sert les URLs CEE en lowercase
+  // (sitemap émet `${SITE_URL}/cee/${code}/${ville.slug}` avec
+  // CEE_OPERATION_CODES en lowercase, et generateStaticParams retourne
+  // op.code.toLowerCase()). Sans le flag /i sur CEE_OPERATION_RE, ~9 000
+  // URLs sitemap déclenchaient un faux 410 → soft-410 sitemap massif.
+  it('opération en minuscules → gone:false (Next.js sert lowercase)', () => {
+    expect(evaluateGonePath('/cee/bar-th-104/paris')).toEqual({ gone: false })
+    expect(evaluateGonePath('/cee/bar-th-112/toulouse')).toEqual({ gone: false })
+    expect(evaluateGonePath('/cee/bar-th-112/ludres')).toEqual({ gone: false })
+    expect(evaluateGonePath('/cee/bar-th-112/les-herbiers')).toEqual({ gone: false })
   })
 
   it('secteur inconnu → gone:true', () => {
@@ -356,7 +361,7 @@ describe('evaluateGonePath — routes non-vulnérables (passthrough)', () => {
 })
 
 describe('CEE_OPERATION_RE', () => {
-  it('valide les 6 préfixes secteurs FOS', () => {
+  it('valide les 6 préfixes secteurs FOS (uppercase)', () => {
     expect(CEE_OPERATION_RE.test('BAR-TH-104')).toBe(true)
     expect(CEE_OPERATION_RE.test('BAT-TH-102')).toBe(true)
     expect(CEE_OPERATION_RE.test('IND-UT-103')).toBe(true)
@@ -365,12 +370,21 @@ describe('CEE_OPERATION_RE', () => {
     expect(CEE_OPERATION_RE.test('TRA-EQ-101')).toBe(true)
   })
 
-  it('rejette les variantes invalides', () => {
-    expect(CEE_OPERATION_RE.test('bar-th-104')).toBe(false)
+  // 2026-05-06 — Next.js sert les URLs en lowercase (sitemap + generateStaticParams).
+  // Le regex doit accepter lowercase, sinon ~9 000 URLs CEE × ville déclenchent
+  // un faux 410. Bug introduit non couvert par CI jusqu'à cette date.
+  it('accepte les codes en lowercase (Next.js sert lowercase)', () => {
+    expect(CEE_OPERATION_RE.test('bar-th-104')).toBe(true)
+    expect(CEE_OPERATION_RE.test('bar-th-112')).toBe(true)
+    expect(CEE_OPERATION_RE.test('bat-en-101')).toBe(true)
+  })
+
+  it('rejette les formats vraiment invalides', () => {
     expect(CEE_OPERATION_RE.test('BAR_TH_104')).toBe(false)
     expect(CEE_OPERATION_RE.test('BAR-TH-10')).toBe(false)
     expect(CEE_OPERATION_RE.test('BAR-TH-1045')).toBe(false)
     expect(CEE_OPERATION_RE.test('XYZ-TH-104')).toBe(false)
+    expect(CEE_OPERATION_RE.test('BARTH-104')).toBe(false)
   })
 })
 

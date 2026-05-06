@@ -175,9 +175,15 @@ export const VALID_PROBLEM_SLUGS: ReadonlySet<string> = new Set([
  * Ex : `BAR-TH-104`, `BAT-EN-101`, `IND-UT-103`, `RES-CH-108`.
  *
  * Secteurs admis : BAR (résidentiel), BAT (tertiaire), IND, RES, AGRI, TRA.
- * Catégories : 2 lettres majuscules. Numéro : 3 chiffres.
+ * Catégories : 2 lettres. Numéro : 3 chiffres.
+ *
+ * Flag `/i` obligatoire : Next.js sert les URLs en lowercase (sitemap émet
+ * `${SITE_URL}/cee/${code}/${ville.slug}` avec code lowercase via
+ * `CEE_OPERATION_CODES`, et `generateStaticParams` retourne `op.code.toLowerCase()`).
+ * Sans le flag, ~9 000 URLs sitemap déclenchaient un faux 410. Voir
+ * post-mortem 2026-05-06.
  */
-export const CEE_OPERATION_RE = /^(BAR|BAT|IND|RES|AGRI|TRA)-[A-Z]{2}-\d{3}$/
+export const CEE_OPERATION_RE = /^(BAR|BAT|IND|RES|AGRI|TRA)-[A-Z]{2}-\d{3}$/i
 
 import { WHITELIST_TARIFS_TASK_GSC } from '@/lib/seo/gone-paths-whitelist-gsc'
 
