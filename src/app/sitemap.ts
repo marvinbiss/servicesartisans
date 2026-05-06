@@ -853,6 +853,21 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.8,
       },
+      {
+        // Levier G 2026-05-06 — sous-page nettoyage / démoussage toiture (~8 600 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "prix nettoyage toiture 100 m2"  2 600 vol KD 0 ⭐⭐⭐ MEGA EASY
+        //   - "prix nettoyage toiture"         1 800 vol KD 0
+        //   - "nettoyage toiture prix"         1 600 vol KD 0
+        //   - "prix demoussage toiture"        1 100 vol KD 1
+        //   - "nettoyage de toiture"           1 000 vol KD 3
+        //   - "demoussage toiture tarif"         500 vol KD 0
+        // Anti-cannibalisation : /travaux/isolation/toiture = thermique. Cette page = surface couverture.
+        url: `${SITE_URL}/renovation-energetique/travaux/nettoyage-toiture`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       // Vague C — 2026-05-04 — Cluster diagnostic (hub + DPE + thermographie).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "diagnostic energetique" 855 KD 53 (hub)

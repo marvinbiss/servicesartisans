@@ -361,6 +361,11 @@ const relatedPages = [
     href: '/simulateur-aides-renovation',
     description: 'Estimation personnalisée 2 minutes',
   },
+  {
+    label: 'Nettoyage et démoussage de toiture',
+    href: '/renovation-energetique/travaux/nettoyage-toiture',
+    description: 'Prix 100 m² 700-3 000 € selon prestation',
+  },
 ]
 
 export default function Page() {
