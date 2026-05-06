@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+
+// SLA-99.9 : timeout dur Supabase 5s
+const SUPABASE_TIMEOUT_MS = 5_000
 
 // GET query params schema
 const reportsQuerySchema = paginationSchema.extend({
@@ -16,6 +21,20 @@ export const dynamic = 'force-dynamic'
 // GET - Liste des signalements
 export async function GET(request: NextRequest) {
   try {
+    // SLA-99.9 : rate-limit lecture 60/min/IP
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-reports-list:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     // Verify admin with reviews:read permission
     const authResult = await requirePermission('reviews', 'read')
     if (!authResult.success || !authResult.admin) {
@@ -55,11 +74,19 @@ export async function GET(request: NextRequest) {
       query = query.eq('target_type', targetType)
     }
 
-    const {
-      data: reports,
-      count,
-      error,
-    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
+    // SLA-99.9 : Promise.race timeout 5s sur la query Supabase
+    const queryPromise = query
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    const queryResult = await Promise.race([
+      queryPromise,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
+
+    const { data: reports, count, error } = queryResult
 
     if (error) {
       logger.warn('Reports query failed, returning empty list', {
@@ -83,7 +110,8 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil((count || 0) / limit),
     })
   } catch (error) {
-    logger.error('Admin reports list error', error)
+    logger.error('admin-reports-list: error', error)
+    captureError(error, { tags: { route: 'admin/reports', method: 'GET', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

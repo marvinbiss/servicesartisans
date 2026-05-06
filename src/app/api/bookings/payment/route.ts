@@ -10,10 +10,13 @@ import { z } from 'zod'
 
 const paymentSchema = z.object({
   bookingId: z.string().uuid(),
-  depositAmountInCents: z.number().int().positive(),
 })
 
+const MIN_DEPOSIT_CENTS = 100
+const MAX_DEPOSIT_CENTS = 1_000_000
+
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
   try {
@@ -36,15 +39,14 @@ export async function POST(request: Request) {
       )
     }
 
-    const { bookingId, depositAmountInCents } = parsed.data
+    const { bookingId } = parsed.data
 
-    // Verify booking exists and belongs to user
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select('id, provider_id, client_id, status, scheduled_date')
+      .select('id, provider_id, client_id, status, scheduled_date, deposit_amount, payment_status')
       .eq('id', bookingId)
       .eq('client_id', user.id)
-      .single()
+      .maybeSingle()
 
     if (bookingError || !booking) {
       return NextResponse.json({ error: 'Réservation introuvable' }, { status: 404 })
@@ -57,28 +59,52 @@ export async function POST(request: Request) {
       )
     }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: `Acompte réservation #${bookingId.slice(0, 8)}`,
-            },
-            unit_amount: depositAmountInCents,
-          },
-          quantity: 1,
-        },
-      ],
-      metadata: {
+    if (booking.payment_status === 'paid') {
+      return NextResponse.json({ error: 'Cette réservation est déjà payée' }, { status: 409 })
+    }
+
+    const depositAmountInCents = booking.deposit_amount
+    if (
+      typeof depositAmountInCents !== 'number' ||
+      !Number.isInteger(depositAmountInCents) ||
+      depositAmountInCents < MIN_DEPOSIT_CENTS ||
+      depositAmountInCents > MAX_DEPOSIT_CENTS
+    ) {
+      logger.error('Booking payment rejected: invalid deposit_amount', {
         bookingId,
-        userId: user.id,
+        deposit_amount: depositAmountInCents,
+      })
+      return NextResponse.json(
+        { error: 'Montant d’acompte invalide pour cette réservation' },
+        { status: 422 }
+      )
+    }
+
+    const session = await stripe.checkout.sessions.create(
+      {
+        payment_method_types: ['card'],
+        mode: 'payment',
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: `Acompte réservation #${bookingId.slice(0, 8)}`,
+              },
+              unit_amount: depositAmountInCents,
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          bookingId,
+          userId: user.id,
+        },
+        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=cancelled`,
       },
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=cancelled`,
-    })
+      { idempotencyKey: `booking-payment:${bookingId}` }
+    )
 
     return NextResponse.json({ url: session.url })
   } catch (error) {

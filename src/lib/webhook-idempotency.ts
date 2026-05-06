@@ -13,12 +13,15 @@ import { logger } from '@/lib/logger'
  *   - Twilio:  "twilio:xxx"
  *   - Vapi:    "vapi:xxx"
  */
+const WEBHOOK_PROCESSING_TIMEOUT_MS = 30_000
+
 export async function checkWebhookIdempotency(eventId: string, provider: string): Promise<boolean> {
   try {
     const supabase = createAdminClient()
 
     const { error } = await supabase.from('webhook_events').insert({
       stripe_event_id: eventId,
+      provider, // mig 511 — discriminant explicite pour agrégations admin
       type: `${provider}_webhook`,
       status: 'processing',
       created_at: new Date().toISOString(),
@@ -28,14 +31,29 @@ export async function checkWebhookIdempotency(eventId: string, provider: string)
       if (error.code === '23505') {
         const { data: existing } = await supabase
           .from('webhook_events')
-          .select('status')
+          .select('status, created_at')
           .eq('stripe_event_id', eventId)
-          .single()
+          .maybeSingle()
 
         if (existing?.status === 'completed') {
           logger.info(`Webhook event ${eventId} already processed, skipping`)
           return true
         }
+
+        if (existing?.status === 'processing') {
+          const ageMs = existing.created_at
+            ? Date.now() - new Date(existing.created_at).getTime()
+            : 0
+          if (ageMs < WEBHOOK_PROCESSING_TIMEOUT_MS) {
+            logger.warn(`Webhook event ${eventId} already in flight (age=${ageMs}ms), skipping`)
+            return true
+          }
+          logger.warn(
+            `Webhook event ${eventId} stuck in processing >${WEBHOOK_PROCESSING_TIMEOUT_MS}ms, claiming`
+          )
+        }
+      } else {
+        logger.warn(`Webhook idempotency insert failed for ${eventId}`, { code: error.code })
       }
     }
 

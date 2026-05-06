@@ -1,9 +1,29 @@
+/**
+ * Endpoint public de désinscription RGPD prospection.
+ *
+ * Accessible sans authentification via token HMAC signé (cf.
+ * `verifyUnsubscribeToken` dans lib/prospection/template-renderer.ts).
+ *
+ * SLA-99.9 hardening (2026-05-06) :
+ *   - Rate-limit 30/min/IP via Redis Upstash (shared cross-instances) +
+ *     fail-open (un crawler de safe-link ne doit jamais bloquer un user).
+ *     Le précédent in-memory Map ne tenait pas sur Vercel multi-region.
+ *   - Timeout 5s sur l'UPDATE Supabase (Promise.race) → fail-soft.
+ *   - HMAC verifié via crypto.timingSafeEqual (cf. template-renderer.ts).
+ *     Aucun `===` sur la signature côté app.
+ *   - Logs anonymisés : on log payload.cid (UUID interne) jamais l'email.
+ */
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyUnsubscribeToken } from '@/lib/prospection/template-renderer'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
+
+// SLA-99.9 : timeout DB (5s) — fail-soft sur lenteur Supabase.
+const DB_TIMEOUT_MS = 5000
 
 function escapeHtml(str: string): string {
   return str
@@ -14,40 +34,37 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#039;')
 }
 
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT = 10 // max requests per window
-const RATE_WINDOW = 60_000 // 1 minute
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW })
-    return true
-  }
-  if (entry.count >= RATE_LIMIT) return false
-  entry.count++
-  return true
-}
-
 const securityHeaders = {
   'Content-Type': 'text/html; charset=utf-8',
   'Content-Security-Policy':
     "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'",
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
+  'Cache-Control': 'no-store',
+} as const
+
+async function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`${label}-timeout`)), ms)),
+  ])
 }
 
-/**
- * Endpoint public de désinscription RGPD
- * Accessible sans authentification via token signé
- */
 export async function GET(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  if (!checkRateLimit(ip)) {
+  // SLA-99.9 : RL Redis (shared) 30/min/IP fail-open.
+  const ip = getClientIp(request.headers)
+  const rl = await checkRateLimit(`unsubscribe:${ip}`, {
+    window: 60_000,
+    max: 30,
+    failOpen: true,
+  })
+  if (!rl.allowed) {
     return new NextResponse('Trop de requêtes. Réessayez plus tard.', {
       status: 429,
-      headers: { 'Retry-After': '60' },
+      headers: {
+        'Retry-After': String(Math.max(1, Math.ceil((rl.resetTime - Date.now()) / 1000))),
+        'Cache-Control': 'no-store',
+      },
     })
   }
 
@@ -61,7 +78,8 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Verify HMAC-signed token using the same key derivation as generation
+    // SLA-99.9 : Verify HMAC-signed token avec timingSafeEqual côté
+    // verifyUnsubscribeToken (cf. template-renderer.ts).
     const payload = verifyUnsubscribeToken(token)
 
     if (!payload) {
@@ -73,17 +91,34 @@ export async function GET(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    // Marquer le contact comme opted_out
-    const { error } = await supabase
-      .from('prospection_contacts')
-      .update({
-        consent_status: 'opted_out',
-        opted_out_at: new Date().toISOString(),
+    // SLA-99.9 : timeout 5s sur l'UPDATE.
+    let updateError: { message: string } | null = null
+    try {
+      const res = await withTimeout(
+        supabase
+          .from('prospection_contacts')
+          .update({
+            consent_status: 'opted_out',
+            opted_out_at: new Date().toISOString(),
+          })
+          .eq('id', payload.cid),
+        DB_TIMEOUT_MS,
+        'unsubscribe-update'
+      )
+      updateError = (res.error as { message: string } | null) ?? null
+    } catch (err) {
+      logger.error('Unsubscribe update timeout', {
+        contactId: payload.cid,
+        error: err instanceof Error ? err.message : 'unknown',
       })
-      .eq('id', payload.cid)
+      return new NextResponse(unsubscribePage('Service indisponible', false), {
+        status: 503,
+        headers: securityHeaders,
+      })
+    }
 
-    if (error) {
-      logger.error('Unsubscribe error', error)
+    if (updateError) {
+      logger.error('Unsubscribe error', updateError)
       return new NextResponse(unsubscribePage('Erreur technique', false), {
         status: 500,
         headers: securityHeaders,
@@ -111,6 +146,7 @@ function unsubscribePage(message: string, success: boolean): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
   <title>Désinscription - ServicesArtisans</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f5f5f5; }

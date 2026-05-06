@@ -8,6 +8,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
 import {
@@ -15,6 +17,9 @@ import {
   approveRemovalRequest,
   rejectRemovalRequest,
 } from '@/lib/services/claims-service'
+
+// SLA-99.9 : timeout dur Supabase 5s
+const SUPABASE_TIMEOUT_MS = 5_000
 
 export const dynamic = 'force-dynamic'
 
@@ -32,6 +37,20 @@ const actionSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    // SLA-99.9 : rate-limit lecture 60/min/IP
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-removal-list:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const authResult = await requirePermission('providers', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -55,7 +74,13 @@ export async function GET(request: NextRequest) {
 
     const { status, page, limit } = result.data
 
-    const serviceResult = await listRemovalRequests(supabase, { status, page, limit })
+    // SLA-99.9 : timeout 5s sur la liste
+    const serviceResult = await Promise.race([
+      listRemovalRequests(supabase, { status, page, limit }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
 
     if (!serviceResult.success) {
       return NextResponse.json(
@@ -70,7 +95,10 @@ export async function GET(request: NextRequest) {
       pagination: serviceResult.data.pagination,
     })
   } catch (err) {
-    logger.error('Admin removal-requests GET error', { error: err })
+    logger.error('admin-removal-list: error', { error: err })
+    captureError(err, {
+      tags: { route: 'admin/removal-requests', method: 'GET', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -80,6 +108,20 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
+    // SLA-99.9 : rate-limit mutation 20/min — décision RGPD irréversible
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-removal-patch:${ip}`, {
+      window: 60_000,
+      max: 20,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const authResult = await requirePermission('providers', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -109,12 +151,13 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (action === 'approve') {
-      const result = await approveRemovalRequest(
-        supabase,
-        requestId,
-        authResult.admin.id,
-        adminNotes
-      )
+      // SLA-99.9 : timeout 5s — service interne audit_logs déjà
+      const result = await Promise.race([
+        approveRemovalRequest(supabase, requestId, authResult.admin.id, adminNotes),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+        ),
+      ])
 
       if (!result.success) {
         return NextResponse.json(
@@ -130,7 +173,13 @@ export async function PATCH(request: NextRequest) {
     } else {
       // action === 'reject' — adminNotes presence already validated above
       const notes = adminNotes ?? ''
-      const result = await rejectRemovalRequest(supabase, requestId, authResult.admin.id, notes)
+      // SLA-99.9 : timeout 5s
+      const result = await Promise.race([
+        rejectRemovalRequest(supabase, requestId, authResult.admin.id, notes),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+        ),
+      ])
 
       if (!result.success) {
         return NextResponse.json(
@@ -145,7 +194,10 @@ export async function PATCH(request: NextRequest) {
       })
     }
   } catch (err) {
-    logger.error('Admin removal-requests PATCH error', { error: err })
+    logger.error('admin-removal-patch: error', { error: err })
+    captureError(err, {
+      tags: { route: 'admin/removal-requests', method: 'PATCH', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

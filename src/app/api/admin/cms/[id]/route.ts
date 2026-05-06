@@ -2,16 +2,44 @@ import { NextResponse } from 'next/server'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { invalidateCache } from '@/lib/cache'
 import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { UUID_RE, updatePageSchema, sanitizeTextFields } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
 
+// SLA-99.9 : timeout 5s pour borner Supabase.
+const SUPABASE_TIMEOUT_MS = 5_000
+
+function withSupabaseTimeout<T>(p: PromiseLike<T>): Promise<T> {
+  return Promise.race<T>([
+    Promise.resolve(p),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+    ),
+  ])
+}
+
 // --- GET: Single page by ID ---
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // SLA-99.9 : rate limit lecture 60/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-cms-get:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const auth = await requirePermission('content', 'read')
     if (!auth.success) return auth.error
 
@@ -25,13 +53,16 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
     const supabase = createAdminClient()
 
-    const { data: page, error } = await supabase
-      .from('cms_pages')
-      .select(
-        'id, slug, page_type, title, content_json, content_html, structured_data, meta_title, meta_description, og_image_url, canonical_url, excerpt, author, author_bio, category, tags, read_time, featured_image, service_slug, location_slug, status, published_at, published_by, sort_order, is_active, created_by, updated_by, created_at, updated_at'
-      )
-      .eq('id', id)
-      .single()
+    // SLA-99.9 : Promise.race timeout 5s.
+    const { data: page, error } = await withSupabaseTimeout(
+      supabase
+        .from('cms_pages')
+        .select(
+          'id, slug, page_type, title, content_json, content_html, structured_data, meta_title, meta_description, og_image_url, canonical_url, excerpt, author, author_bio, category, tags, read_time, featured_image, service_slug, location_slug, status, published_at, published_by, sort_order, is_active, created_by, updated_by, created_at, updated_at'
+        )
+        .eq('id', id)
+        .single()
+    )
 
     if (error || !page) {
       return NextResponse.json(
@@ -42,7 +73,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {
-    logger.error('CMS page get error', error)
+    logger.error('admin-cms-get: error', error)
+    captureError(error, {
+      tags: { route: 'admin/cms/[id]', method: 'GET', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -54,6 +88,20 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // SLA-99.9 : rate limit mutation 30/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-cms-put:${ip}`, {
+      window: 60_000,
+      max: 30,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error
 
@@ -119,47 +167,64 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const supabase = createAdminClient()
 
-    // Fetch old slug/type before update for stale-path revalidation
-    let oldPage: {
-      slug: string
-      page_type: string
-      service_slug: string | null
-      location_slug: string | null
-      status: string
-    } | null = null
-    if (validated.slug || validated.page_type) {
-      const { data } = await supabase
+    // SLA-99.9 : snapshot avant update (audit_logs.old_value + détection slug/type change).
+    const { data: oldPage } = await withSupabaseTimeout(
+      supabase
         .from('cms_pages')
-        .select('slug, page_type, service_slug, location_slug, status')
+        .select(
+          'slug, page_type, service_slug, location_slug, status, title, meta_title, meta_description'
+        )
         .eq('id', id)
         .single()
-      oldPage = data
-    }
+    )
 
-    const { data: page, error } = await supabase
-      .from('cms_pages')
-      .update({
-        ...validated,
-        updated_by: auth.admin.id,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single()
+    // SLA-99.9 : Promise.race timeout 5s.
+    const { data: page, error } = await withSupabaseTimeout(
+      supabase
+        .from('cms_pages')
+        .update({
+          ...validated,
+          updated_by: auth.admin.id,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single()
+    )
 
     if (error || !page) {
-      logger.error('CMS page update error', error)
+      logger.error('admin-cms-put: update error', error)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la mise à jour de la page' } },
         { status: error ? 500 : 404 }
       )
     }
 
-    // Log d'audit
-    await logAdminAction(auth.admin.id, 'cms_page.update', 'cms_page', id, {
-      slug: page.slug,
-      page_type: page.page_type,
-    })
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur mutation.
+    try {
+      await withSupabaseTimeout(
+        supabase.from('audit_logs').insert({
+          user_id: auth.admin.id,
+          action: 'cms_page.update',
+          resource_type: 'cms_page',
+          resource_id: id,
+          old_value: oldPage ?? {},
+          new_value: {
+            slug: page.slug,
+            page_type: page.page_type,
+            title: page.title,
+            status: page.status,
+            updated_fields: Object.keys(validated),
+          },
+        })
+      )
+    } catch (auditError) {
+      logger.warn('admin-cms-put: audit log failed', { error: String(auditError) })
+      captureError(auditError, {
+        tags: { route: 'admin/cms/[id]', method: 'PUT', audit: 'failed' },
+      })
+    }
+    void logAdminAction
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {
@@ -177,7 +242,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {
-    logger.error('CMS page update error', error)
+    logger.error('admin-cms-put: error', error)
+    captureError(error, {
+      tags: { route: 'admin/cms/[id]', method: 'PUT', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -187,8 +255,22 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
 // --- DELETE: Soft delete (set is_active = false) ---
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // SLA-99.9 : rate limit destructif 30/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-cms-delete:${ip}`, {
+      window: 60_000,
+      max: 30,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const auth = await requirePermission('content', 'delete')
     if (!auth.success) return auth.error
 
@@ -202,27 +284,55 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
     const supabase = createAdminClient()
 
-    const { data: page, error } = await supabase
-      .from('cms_pages')
-      .update({
-        is_active: false,
-        updated_by: auth.admin.id,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single()
+    // SLA-99.9 : snapshot avant soft-delete.
+    const { data: oldPage } = await withSupabaseTimeout(
+      supabase
+        .from('cms_pages')
+        .select('slug, page_type, status, is_active, title')
+        .eq('id', id)
+        .single()
+    )
+
+    // SLA-99.9 : Promise.race timeout 5s.
+    const { data: page, error } = await withSupabaseTimeout(
+      supabase
+        .from('cms_pages')
+        .update({
+          is_active: false,
+          updated_by: auth.admin.id,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single()
+    )
 
     if (error || !page) {
-      logger.error('CMS page delete error', error)
+      logger.error('admin-cms-delete: error', error)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la suppression de la page' } },
         { status: error ? 500 : 404 }
       )
     }
 
-    // Log d'audit
-    await logAdminAction(auth.admin.id, 'cms_page.delete', 'cms_page', id, { slug: page.slug })
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur soft-delete.
+    try {
+      await withSupabaseTimeout(
+        supabase.from('audit_logs').insert({
+          user_id: auth.admin.id,
+          action: 'cms_page.delete',
+          resource_type: 'cms_page',
+          resource_id: id,
+          old_value: oldPage ?? {},
+          new_value: { slug: page.slug, is_active: false },
+        })
+      )
+    } catch (auditError) {
+      logger.warn('admin-cms-delete: audit log failed', { error: String(auditError) })
+      captureError(auditError, {
+        tags: { route: 'admin/cms/[id]', method: 'DELETE', audit: 'failed' },
+      })
+    }
 
     // Revalidate public paths so the page disappears from the site
     if (page.status === 'published') {
@@ -232,7 +342,10 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {
-    logger.error('CMS page delete error', error)
+    logger.error('admin-cms-delete: error', error)
+    captureError(error, {
+      tags: { route: 'admin/cms/[id]', method: 'DELETE', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

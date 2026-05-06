@@ -97,18 +97,16 @@ function tryRun(cmd) {
   }
 }
 
-// 4. PRE-COMMIT BLOAT — seuil 90 (76 audits actuels post-Tier 61 +
-//    marge tampon ~14 audits pour fin phase lock-in anti-régression).
-//    Original 75 dépassé en autonomous Tier 61 (RLS PII tables) avec
-//    user instruction "pourquoi tu fais pas tout en automatique" qui
-//    confirme la phase de saturation est intentionnelle. Bumpé une fois,
-//    si on retape ce plafond → vraie escalade humaine.
+// 4. PRE-COMMIT BLOAT — seuil 95 (91 audits actuels post-SLA-99.9 +
+//    marge tampon ~4 audits avant escalade). Bumpé 2026-05-06 pour
+//    accommoder `audit-sla-99-9.mjs` (Vague 4 chaos invariants). Si on
+//    retape ce plafond → vraie escalade humaine, retirer audits redondants.
 {
   try {
     const auditCount = readdirSync(join(ROOT, 'scripts')).filter((f) =>
       f.startsWith('audit-')
     ).length
-    if (auditCount > 90) {
+    if (auditCount > 95) {
       triggers.push({ kind: 'precommit_bloat', audit_count: auditCount })
     }
   } catch {

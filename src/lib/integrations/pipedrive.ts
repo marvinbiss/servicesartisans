@@ -19,6 +19,11 @@
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { captureError } from '@/lib/monitoring/sentry'
+import {
+  shouldSkipPipedrive,
+  recordPipedriveSuccess,
+  recordPipedriveFailure,
+} from '@/lib/integrations/pipedrive-circuit'
 
 // ── DLQ / retry config ─────────────────────────────────────────────
 // Exponential backoff schedule (seconds): 30s, 2min, 8min, 32min, 2h.
@@ -107,15 +112,21 @@ export function isPipedriveConfigured(): boolean {
 
 // ── HTTP helper ─────────────────────────────────────────────────────
 
+const PIPEDRIVE_FETCH_TIMEOUT_MS = 4_000
+
 async function pdFetch<T>(
   path: string,
-  init: RequestInit & { token: string; baseUrl: string }
+  init: RequestInit & { token: string; baseUrl: string; timeoutMs?: number }
 ): Promise<PipedriveResponse<T>> {
-  const { token, baseUrl, ...rest } = init
+  const { token, baseUrl, timeoutMs, signal, ...rest } = init
   const sep = path.includes('?') ? '&' : '?'
   const url = `${baseUrl}${path}${sep}api_token=${encodeURIComponent(token)}`
+  const timeout = timeoutMs ?? PIPEDRIVE_FETCH_TIMEOUT_MS
+  const timeoutSignal = AbortSignal.timeout(timeout)
+  const finalSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal
   const res = await fetch(url, {
     ...rest,
+    signal: finalSignal,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -294,6 +305,15 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
     return
   }
 
+  // Plan C — C-4 : circuit-breaker. Si Pipedrive est globalement HS, on
+  // skip sans incrémenter `pipedrive_sync_attempts` (sinon le retry cron
+  // dead-letter en masse pendant un down provider). Le retry cron rappelera
+  // ce lead à la prochaine itération.
+  if (await shouldSkipPipedrive()) {
+    logger.warn('pipedrive: skipped — circuit open', { devisId })
+    return
+  }
+
   try {
     const result = await syncLeadToPipedrive(lead as DevisLeadForSync)
     await supabase
@@ -308,7 +328,12 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
       })
       .eq('id', devisId)
     logger.info('pipedrive: lead synced', { devisId, dealId: result.dealId })
+    // Plan C — C-4 : reset circuit-breaker (closed)
+    await recordPipedriveSuccess()
   } catch (err) {
+    // Plan C — C-4 : compte le fail dans le circuit (n'incrémente que si
+    // erreur infra/5xx/timeout, pas pour les 4xx métier).
+    await recordPipedriveFailure(err)
     const message = err instanceof Error ? err.message : String(err)
     const nextAttempts = (lead.pipedrive_sync_attempts || 0) + 1
     const isDeadLetter = nextAttempts >= MAX_SYNC_ATTEMPTS

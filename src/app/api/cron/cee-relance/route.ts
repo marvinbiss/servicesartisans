@@ -55,6 +55,11 @@ const RELANCE_J14_DAYS = 14
 /** Fenêtre anti-spam : pas de relance du même type dans les 72 h. */
 const ANTI_SPAM_HOURS = 72
 
+// SLA-99.9 : wall-clock 50s sous Vercel maxDuration 60s + lease anti-double-run.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_cee_relance'
+const LEASE_TTL_SECONDS = 15 * 60
+
 /** Types de relance (stockés dans payload.relance_type). */
 type RelanceType = 'relance_j3' | 'relance_j7' | 'relance_j14'
 
@@ -132,6 +137,42 @@ export const GET = withCronCheckIn('cron-cee-relance', async (request: Request) 
   const startedAt = Date.now()
   const now = new Date()
 
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('cee-relance: lease error', undefined, {
+      action: 'cee-relance',
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('cee-relance: skipped (lease already held)', {
+      action: 'cee-relance',
+      lease: LEASE_NAME,
+    })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
+
   const counters = {
     relance_j3: 0,
     relance_j7: 0,
@@ -186,6 +227,8 @@ export const GET = withCronCheckIn('cron-cee-relance', async (request: Request) 
     // -- Traiter chaque dossier --------------------------------------------
     for (const dossier of allDossiers) {
       if (budget <= 0) break
+      // SLA-99.9 : wall-clock guard (1 email Resend = ~500ms-1.5s).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
 
       try {
         // Déterminer le palier de relance applicable
@@ -321,6 +364,13 @@ export const GET = withCronCheckIn('cron-cee-relance', async (request: Request) 
       action: 'cee-relance',
     })
     return NextResponse.json({ error: 'internal_error' }, { status: 500 })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })
 

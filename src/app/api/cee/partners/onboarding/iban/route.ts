@@ -20,7 +20,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { validateOrigin } from '@/lib/cee/csrf'
-import { checkRateLimit } from '@/lib/cee/rate-limit'
+import { checkRateLimit as checkUserRateLimit } from '@/lib/cee/rate-limit'
 import { validateIban } from '@/lib/cee/iban-crypto'
 import { updateCeePartnerStatus } from '@/lib/cee/leads-service'
 import {
@@ -33,9 +33,21 @@ import {
   requireEnvProd,
 } from '@/lib/cee/route-helpers'
 import { logger } from '@/lib/logger'
+import { checkRateLimit as checkIpRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { captureError } from '@/lib/monitoring/sentry'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+// SLA-99.9 : timeout court sur DB.
+const DB_TIMEOUT_MS = 5_000
+
+function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`${label}_timeout`)), ms)),
+  ])
+}
 
 const BodySchema = z.object({
   iban: z.string().min(14).max(64),
@@ -56,12 +68,32 @@ export async function POST(request: NextRequest) {
   const envError = requireEnvProd('CEE_IBAN_KEY')
   if (envError) return envError
 
+  // SLA-99.9 : rate limit IP-based 10/min (defense in depth contre abus
+  // distribué qui contournerait le user-bucket en réutilisant des sessions).
+  const ip = getClientIp(request.headers)
+  const ipRl = await checkIpRateLimit(`cee-partners-iban:${ip}`, {
+    window: 60_000,
+    max: 10,
+    failOpen: true,
+  })
+  if (!ipRl.allowed) {
+    return NextResponse.json(
+      { success: false, error: { code: 'RATE_LIMITED', message: 'Trop de requêtes' } },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(Math.max(1, Math.ceil((ipRl.resetTime - Date.now()) / 1000))),
+        },
+      }
+    )
+  }
+
   const auth = await requireArtisanAuth()
   if (!auth.ok) return auth.response
   const { ctx } = auth
 
-  // MUST-8 rate limit 3/min
-  const rl = checkRateLimit(`cee:iban:${ctx.userId}`, {
+  // MUST-8 rate limit 3/min per user (anti-bruteforce IBAN enumeration).
+  const rl = checkUserRateLimit(`cee:iban:${ctx.userId}`, {
     max: 3,
     windowMs: 60_000,
   })
@@ -89,11 +121,16 @@ export async function POST(request: NextRequest) {
 
   try {
     // Fetch current partner record (RLS-scoped) to get partner_id.
-    const { data: partner, error: readError } = await ctx.supabase
-      .from('cee_artisan_partners')
-      .select('id, status')
-      .eq('user_id', ctx.userId)
-      .maybeSingle()
+    // SLA-99.9 : timeout 5s.
+    const { data: partner, error: readError } = await withTimeout(
+      ctx.supabase
+        .from('cee_artisan_partners')
+        .select('id, status')
+        .eq('user_id', ctx.userId)
+        .maybeSingle(),
+      DB_TIMEOUT_MS,
+      'partner_lookup'
+    )
 
     if (readError) {
       logger.error('cee-iban: partner lookup failed', readError, {
@@ -118,13 +155,18 @@ export async function POST(request: NextRequest) {
       })
       return serverErrorResponse('CONFIG_ERROR', 'Configuration serveur incomplète')
     }
-    const { error: rpcError } = await ctx.supabase.rpc('cee_store_partner_iban', {
-      p_partner_id: partner.id,
-      p_iban: ibanCheck.normalized,
-      p_bic: body.bic,
-      p_titulaire: body.titulaire,
-      p_key: key,
-    })
+    // SLA-99.9 : timeout 5s sur RPC (encryption + insert pgcrypto).
+    const { error: rpcError } = await withTimeout(
+      ctx.supabase.rpc('cee_store_partner_iban', {
+        p_partner_id: partner.id,
+        p_iban: ibanCheck.normalized,
+        p_bic: body.bic,
+        p_titulaire: body.titulaire,
+        p_key: key,
+      }),
+      DB_TIMEOUT_MS,
+      'iban_rpc'
+    )
 
     if (rpcError) {
       logger.error('cee-iban: RPC failed', rpcError, {
@@ -132,7 +174,7 @@ export async function POST(request: NextRequest) {
         userId: ctx.userId,
         partnerId: partner.id,
         code: (rpcError as { code?: string }).code,
-        // NEVER log the IBAN, BIC or titulaire.
+        // SLA-99.9 : NEVER log the IBAN, BIC or titulaire (PII bancaire).
       })
       return serverErrorResponse(
         'ENCRYPT_FAILED',
@@ -169,6 +211,12 @@ export async function POST(request: NextRequest) {
     logger.error('cee-iban: unexpected error', error, {
       action: 'cee-iban-catch',
       userId: ctx.userId,
+      // SLA-99.9 : NEVER include body / IBAN / BIC / titulaire in error context.
+    })
+    // SLA-99.9 : Sentry alert. NE JAMAIS passer le body en extras
+    // (contiendrait IBAN clair). Tags only.
+    captureError(error, {
+      tags: { route: 'cee-partners-iban', critical: 'true' },
     })
     return serverErrorResponse('INTERNAL_ERROR', 'Erreur serveur')
   }

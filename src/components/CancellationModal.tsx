@@ -88,7 +88,7 @@ export default function CancellationModal({
           </h3>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-sand-100 rounded-lg"
+            className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] hover:bg-sand-100 rounded-lg"
             aria-label="Fermer"
           >
             <X className="w-5 h-5" />

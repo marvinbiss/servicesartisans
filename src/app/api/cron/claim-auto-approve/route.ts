@@ -25,6 +25,13 @@
  *
  * Audit trail : chaque tentative (approuvée OU skippée) loggue dans
  * claims_auto_approve_log avec décision + raisons. Permet KPI + debug.
+ *
+ * Hardening SLA-99.9 (2026-05-06) :
+ *   - Lease 15 min anti-double-run (50 claims × 2-4s = potentiel 100-200s)
+ *   - Wall-clock 50s : on sort de la boucle approveClaim avant kill Vercel
+ *   - Per-claim try/catch : l'échec d'un email Resend ne casse pas le batch
+ *   - Audit log inséré pour ce qui a été traité (best-effort)
+ *   - Release du lease en finally
  */
 
 import { NextResponse } from 'next/server'
@@ -37,6 +44,11 @@ import { approveClaim } from '@/lib/services/claims-service'
 export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 50
+
+// SLA-99.9 : wall-clock 50s + lease 15min.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_claim_auto_approve'
+const LEASE_TTL_SECONDS = 15 * 60
 
 type ClaimRow = {
   id: string
@@ -72,119 +84,182 @@ export const GET = withCronCheckIn('cron-claim-auto-approve', async (request: Re
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
+  const startedAt = Date.now()
   const nowIso = new Date().toISOString()
 
-  // Précondition 2 (email_confirmed_at NOT NULL) en SQL pour limiter la
-  // surface du batch. Préconditions 3+4 vérifiées en mémoire car le join
-  // JSONB sur providers.user_id IS NULL ne peut pas se filtrer côté
-  // PostgREST embedded resource (limitation `.is()` sur join).
-  const { data: claims, error } = await supabase
-    .from('provider_claims')
-    .select(
-      `id, provider_id, status, email_confirmed_at,
-       providers:provider_id (id, user_id, rge_valid_until)`
-    )
-    .eq('status', 'pending')
-    .not('email_confirmed_at', 'is', null)
-    .order('created_at', { ascending: true })
-    .limit(BATCH_SIZE)
-    .returns<ClaimRow[]>()
-
-  if (error) {
-    logger.error('[claim-auto-approve] fetch error', error)
-    return NextResponse.json({ success: false, error: 'fetch_failed' }, { status: 500 })
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
   }
 
-  const candidates = claims ?? []
-  if (candidates.length === 0) {
-    return NextResponse.json({ success: true, scanned: 0, approved: 0, skipped: 0 })
+  if (leaseErr) {
+    logger.error('[claim-auto-approve] lease error', undefined, {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ success: false, error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[claim-auto-approve] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
   }
 
-  let approved = 0
-  let skipped = 0
-  const logs: LogRow[] = []
+  try {
+    // Précondition 2 (email_confirmed_at NOT NULL) en SQL pour limiter la
+    // surface du batch. Préconditions 3+4 vérifiées en mémoire car le join
+    // JSONB sur providers.user_id IS NULL ne peut pas se filtrer côté
+    // PostgREST embedded resource (limitation `.is()` sur join).
+    const { data: claims, error } = await supabase
+      .from('provider_claims')
+      .select(
+        `id, provider_id, status, email_confirmed_at,
+         providers:provider_id (id, user_id, rge_valid_until)`
+      )
+      .eq('status', 'pending')
+      .not('email_confirmed_at', 'is', null)
+      .order('created_at', { ascending: true })
+      .limit(BATCH_SIZE)
+      .returns<ClaimRow[]>()
 
-  for (const claim of candidates) {
-    const provider = claim.providers
-    const reasons: string[] = []
+    if (error) {
+      logger.error('[claim-auto-approve] fetch error', error)
+      return NextResponse.json({ success: false, error: 'fetch_failed' }, { status: 500 })
+    }
 
-    if (!provider) {
-      reasons.push('provider_not_found')
-    } else {
-      if (provider.user_id !== null) reasons.push('provider_already_claimed')
-      if (!provider.rge_valid_until) reasons.push('rge_missing')
-      else if (new Date(provider.rge_valid_until).getTime() <= Date.now()) {
-        reasons.push('rge_expired')
+    const candidates = claims ?? []
+    if (candidates.length === 0) {
+      return NextResponse.json({ success: true, scanned: 0, approved: 0, skipped: 0 })
+    }
+
+    let approved = 0
+    let skipped = 0
+    let capReached = false
+    const logs: LogRow[] = []
+
+    for (const claim of candidates) {
+      // SLA-99.9 : wall-clock guard (1 approveClaim = 2-4s).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        break
+      }
+
+      // SLA-99.9 : per-claim try/catch — l'échec d'un approveClaim (email
+      // Resend down, race condition) ne casse pas le batch.
+      try {
+        const provider = claim.providers
+        const reasons: string[] = []
+
+        if (!provider) {
+          reasons.push('provider_not_found')
+        } else {
+          if (provider.user_id !== null) reasons.push('provider_already_claimed')
+          if (!provider.rge_valid_until) reasons.push('rge_missing')
+          else if (new Date(provider.rge_valid_until).getTime() <= Date.now()) {
+            reasons.push('rge_expired')
+          }
+        }
+
+        if (reasons.length > 0) {
+          skipped++
+          logs.push({
+            claim_id: claim.id,
+            provider_id: claim.provider_id,
+            decision: 'skipped',
+            reasons,
+            rge_valid_until: provider?.rge_valid_until ?? null,
+            email_confirmed: claim.email_confirmed_at !== null,
+          })
+          continue
+        }
+
+        const result = await approveClaim(supabase, claim.id, null)
+
+        if (result.success) {
+          approved++
+          logs.push({
+            claim_id: claim.id,
+            provider_id: claim.provider_id,
+            decision: 'approved',
+            reasons: ['auto_4_conditions_met'],
+            // À ce stade `provider` est non-null (sinon on aurait skip). Cast safe.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            rge_valid_until: provider!.rge_valid_until,
+            email_confirmed: true,
+          })
+        } else {
+          // approveClaim peut échouer en cas de race (provider déjà claimé entre
+          // SELECT et UPDATE atomique) — log skipped avec raison technique.
+          skipped++
+          logs.push({
+            claim_id: claim.id,
+            provider_id: claim.provider_id,
+            decision: 'skipped',
+            reasons: [`approve_failed:${result.error.slice(0, 80)}`],
+            rge_valid_until: provider?.rge_valid_until ?? null,
+            email_confirmed: true,
+          })
+          logger.warn('[claim-auto-approve] approveClaim returned failure', {
+            claimId: claim.id,
+            error: result.error,
+            status: result.status,
+          })
+        }
+      } catch (claimErr) {
+        skipped++
+        logger.warn('[claim-auto-approve] claim processing failed', {
+          claimId: claim.id,
+          error: claimErr instanceof Error ? claimErr.message : String(claimErr),
+        })
       }
     }
 
-    if (reasons.length > 0) {
-      skipped++
-      logs.push({
-        claim_id: claim.id,
-        provider_id: claim.provider_id,
-        decision: 'skipped',
-        reasons,
-        rge_valid_until: provider?.rge_valid_until ?? null,
-        email_confirmed: claim.email_confirmed_at !== null,
-      })
-      continue
+    if (logs.length > 0) {
+      const { error: logError } = await supabase.from('claims_auto_approve_log').insert(logs)
+      if (logError) {
+        logger.error('[claim-auto-approve] audit log insert failed', logError)
+        // Ne pas faire échouer le cron : les approbations ont eu lieu, l'audit
+        // log est best-effort. Sentry capture via checkIn pour traçabilité.
+      }
     }
 
-    const result = await approveClaim(supabase, claim.id, null)
+    logger.info('[claim-auto-approve] run complete', {
+      scanned: candidates.length,
+      approved,
+      skipped,
+      cap_reached: capReached,
+      duration_ms: Date.now() - startedAt,
+      timestamp: nowIso,
+    })
 
-    if (result.success) {
-      approved++
-      logs.push({
-        claim_id: claim.id,
-        provider_id: claim.provider_id,
-        decision: 'approved',
-        reasons: ['auto_4_conditions_met'],
-        // À ce stade `provider` est non-null (sinon on aurait skip). Cast safe.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        rge_valid_until: provider!.rge_valid_until,
-        email_confirmed: true,
-      })
-    } else {
-      // approveClaim peut échouer en cas de race (provider déjà claimé entre
-      // SELECT et UPDATE atomique) — log skipped avec raison technique.
-      skipped++
-      logs.push({
-        claim_id: claim.id,
-        provider_id: claim.provider_id,
-        decision: 'skipped',
-        reasons: [`approve_failed:${result.error.slice(0, 80)}`],
-        rge_valid_until: provider?.rge_valid_until ?? null,
-        email_confirmed: true,
-      })
-      logger.warn('[claim-auto-approve] approveClaim returned failure', {
-        claimId: claim.id,
-        error: result.error,
-        status: result.status,
-      })
+    return NextResponse.json({
+      success: true,
+      scanned: candidates.length,
+      approved,
+      skipped,
+      cap_reached: capReached,
+      duration_ms: Date.now() - startedAt,
+    })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
     }
   }
-
-  if (logs.length > 0) {
-    const { error: logError } = await supabase.from('claims_auto_approve_log').insert(logs)
-    if (logError) {
-      logger.error('[claim-auto-approve] audit log insert failed', logError)
-      // Ne pas faire échouer le cron : les approbations ont eu lieu, l'audit
-      // log est best-effort. Sentry capture via checkIn pour traçabilité.
-    }
-  }
-
-  logger.info('[claim-auto-approve] run complete', {
-    scanned: candidates.length,
-    approved,
-    skipped,
-    timestamp: nowIso,
-  })
-
-  return NextResponse.json({
-    success: true,
-    scanned: candidates.length,
-    approved,
-    skipped,
-  })
 })

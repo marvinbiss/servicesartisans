@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
 import { listProviders } from '@/lib/services/admin-crud-service'
@@ -14,9 +16,36 @@ const providersQuerySchema = paginationSchema.extend({
 
 export const dynamic = 'force-dynamic'
 
+// SLA-99.9 : timeout court (5s) pour borner toute requête Supabase et éviter
+// l'épuisement du pool de connexions en cas de DB lente.
+const SUPABASE_TIMEOUT_MS = 5_000
+
+function withSupabaseTimeout<T>(p: PromiseLike<T>): Promise<T> {
+  return Promise.race<T>([
+    Promise.resolve(p),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+    ),
+  ])
+}
+
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin with providers:read permission
+    // SLA-99.9 : rate limit 60/min/IP, fail-open pour ne pas bloquer l'admin si Upstash glitch.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-providers-list:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
+    // SLA-99.9 : RBAC obligatoire — providers:read.
     const authResult = await requirePermission('providers', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
@@ -41,7 +70,8 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = createAdminClient()
-    const serviceResult = await listProviders(supabase, result.data)
+    // SLA-99.9 : Promise.race avec timeout 5s.
+    const serviceResult = await withSupabaseTimeout(listProviders(supabase, result.data))
 
     if (serviceResult.error) {
       return NextResponse.json(
@@ -68,7 +98,10 @@ export async function GET(request: NextRequest) {
 
     return response
   } catch (error) {
-    logger.error('Admin providers list error', error)
+    logger.error('admin-providers-list: error', error)
+    captureError(error, {
+      tags: { route: 'admin/providers', method: 'GET', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

@@ -72,13 +72,11 @@ export async function getSubscription(subscriptionId: string) {
   }
 }
 
-/**
- * Traiter un remboursement (total ou partiel)
- */
 export async function processRefund(
   paymentIntentId: string,
-  amount?: number, // En centimes, undefined = remboursement total
-  reason?: 'duplicate' | 'fraudulent' | 'requested_by_customer'
+  amount?: number,
+  reason?: 'duplicate' | 'fraudulent' | 'requested_by_customer',
+  idempotencyKey?: string
 ) {
   try {
     const refundParams: Stripe.RefundCreateParams = {
@@ -90,7 +88,10 @@ export async function processRefund(
       refundParams.amount = amount
     }
 
-    const refund = await getStripe().refunds.create(refundParams)
+    const key =
+      idempotencyKey || `refund:${paymentIntentId}:${typeof amount === 'number' ? amount : 'full'}`
+
+    const refund = await getStripe().refunds.create(refundParams, { idempotencyKey: key })
 
     return {
       id: refund.id,
@@ -197,23 +198,30 @@ export async function changeSubscriptionPlan(
  */
 export async function createManualCharge(
   customerId: string,
-  amount: number, // En centimes
+  amount: number,
   description: string,
-  metadata?: Record<string, string>
+  metadata?: Record<string, string>,
+  idempotencyKey?: string
 ) {
   try {
-    const paymentIntent = await getStripe().paymentIntents.create({
-      amount,
-      currency: 'eur',
-      customer: customerId,
-      description,
-      metadata,
-      confirm: true,
-      automatic_payment_methods: {
-        enabled: true,
-        allow_redirects: 'never',
+    const key =
+      idempotencyKey || (metadata?.bookingId ? `charge:${metadata.bookingId}:${amount}` : undefined)
+
+    const paymentIntent = await getStripe().paymentIntents.create(
+      {
+        amount,
+        currency: 'eur',
+        customer: customerId,
+        description,
+        metadata,
+        confirm: true,
+        automatic_payment_methods: {
+          enabled: true,
+          allow_redirects: 'never',
+        },
       },
-    })
+      key ? { idempotencyKey: key } : undefined
+    )
 
     return {
       id: paymentIntent.id,

@@ -13,11 +13,14 @@ export const dynamic = 'force-dynamic'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 /**
- * POST /api/cron/abandon-emails
+ * GET/POST /api/cron/abandon-emails
  * Cron job to send recovery email sequences (30min, 24h, 72h).
  * Protected by CRON_SECRET.
+ *
+ * Note 2026-05-05 : Vercel Cron envoie GET (audit V1 P0 #4 « abandon-emails
+ * DEAD »). On expose le même handler en GET et POST pour compat.
  */
-export const POST = withCronCheckIn('cron-abandon-emails', async (request: NextRequest) => {
+const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (request: NextRequest) => {
   // Verify cron secret
   if (!process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Serveur mal configuré' }, { status: 500 })
@@ -142,3 +145,6 @@ export const POST = withCronCheckIn('cron-abandon-emails', async (request: NextR
     return NextResponse.json({ error: 'cron failed' }, { status: 500 })
   }
 })
+
+export const POST = handleAbandonEmails
+export const GET = handleAbandonEmails

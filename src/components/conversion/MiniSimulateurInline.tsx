@@ -229,7 +229,7 @@ function Body({ cp, setCp, error, submitting, inputId, errorId }: BodyProps) {
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? errorId : undefined}
           placeholder="75001"
-          className="flex-1 h-12 rounded-xl border border-sand-300 bg-white px-4 text-base text-charcoal-900 placeholder:text-charcoal-300 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
+          className="flex-1 h-12 rounded-xl border border-sand-300 bg-white px-4 text-base text-charcoal-900 placeholder:text-charcoal-500 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         />
         <button
           type="submit"

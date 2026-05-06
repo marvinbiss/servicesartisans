@@ -23,7 +23,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { renderToBuffer } from '@react-pdf/renderer'
 import ConventionPDF from '@/app/(private)/espace-artisan/cee/onboarding/ConventionPDF'
 import { validateOrigin } from '@/lib/cee/csrf'
-import { checkRateLimit } from '@/lib/cee/rate-limit'
+import { checkRateLimit as checkUserRateLimit } from '@/lib/cee/rate-limit'
 import { createSignatureRequest } from '@/lib/cee/yousign'
 import { updateCeePartnerStatus } from '@/lib/cee/leads-service'
 import {
@@ -36,9 +36,33 @@ import {
 } from '@/lib/cee/route-helpers'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit as checkIpRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { captureError } from '@/lib/monitoring/sentry'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+// SLA-99.9 : timeout court sur DB.
+const DB_TIMEOUT_MS = 5_000
+
+function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`${label}_timeout`)), ms)),
+  ])
+}
+
+function rateLimited429(resetAtMs: number): NextResponse {
+  return NextResponse.json(
+    { success: false, error: { code: 'RATE_LIMITED', message: 'Trop de requêtes' } },
+    {
+      status: 429,
+      headers: {
+        'Retry-After': String(Math.max(1, Math.ceil((resetAtMs - Date.now()) / 1000))),
+      },
+    }
+  )
+}
 
 /** MUST-12 SSRF guard on PDF URL. */
 function isYousignPdfUrl(url: string | null | undefined): boolean {
@@ -66,12 +90,21 @@ export async function POST(request: NextRequest) {
   const envError = requireEnvProd('YOUSIGN_API_KEY')
   if (envError) return envError
 
+  // SLA-99.9 : rate limit IP-based (defense in depth, anti-distributed-abuse).
+  const ip = getClientIp(request.headers)
+  const ipRl = await checkIpRateLimit(`cee-partners-convention:${ip}`, {
+    window: 60_000,
+    max: 30,
+    failOpen: true,
+  })
+  if (!ipRl.allowed) return rateLimited429(ipRl.resetTime)
+
   const auth = await requireArtisanAuth()
   if (!auth.ok) return auth.response
   const { ctx } = auth
 
-  // Rate limit 10/min
-  const rl = checkRateLimit(`cee:convention:${ctx.userId}`, {
+  // Rate limit 10/min per user (Yousign cost protection — fail-close).
+  const rl = checkUserRateLimit(`cee:convention:${ctx.userId}`, {
     max: 10,
     windowMs: 60_000,
   })
@@ -79,11 +112,16 @@ export async function POST(request: NextRequest) {
 
   try {
     // Lookup partner + artisan display info (RLS scoped).
-    const { data: partner, error: readError } = await ctx.supabase
-      .from('cee_artisan_partners')
-      .select('id, provider_id, status, iban_last4')
-      .eq('user_id', ctx.userId)
-      .maybeSingle()
+    // SLA-99.9 : timeout 5s.
+    const { data: partner, error: readError } = await withTimeout(
+      ctx.supabase
+        .from('cee_artisan_partners')
+        .select('id, provider_id, status, iban_last4')
+        .eq('user_id', ctx.userId)
+        .maybeSingle(),
+      DB_TIMEOUT_MS,
+      'partner_lookup'
+    )
 
     if (readError) {
       logger.error('cee-convention: partner lookup failed', readError, {
@@ -103,8 +141,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: 'IBAN_REQUIRED',
-            message:
-              'Veuillez renseigner votre IBAN avant de générer la convention.',
+            message: 'Veuillez renseigner votre IBAN avant de générer la convention.',
           },
         },
         { status: 409 }
@@ -112,12 +149,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch provider name/email for envelope — admin client (read-only safe).
+    // SLA-99.9 : timeout 5s.
     const admin = createAdminClient()
-    const { data: provider } = await admin
-      .from('providers')
-      .select('name, email, siret')
-      .eq('id', partner.provider_id)
-      .maybeSingle()
+    const { data: provider } = await withTimeout(
+      admin
+        .from('providers')
+        .select('name, email, siret')
+        .eq('id', partner.provider_id)
+        .maybeSingle(),
+      DB_TIMEOUT_MS,
+      'provider_lookup'
+    )
 
     const artisanName = provider?.name || ctx.email?.split('@')[0] || 'Artisan'
     const artisanEmail = provider?.email || ctx.email || ''
@@ -176,14 +218,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Persist envelope ID (admin client — still scoped by partner.id we loaded via RLS).
-    const { error: updateError } = await admin
-      .from('cee_artisan_partners')
-      .update({
-        yousign_envelope_id: envelope.envelopeId,
-        yousign_procedure_id: envelope.procedureId,
-        convention_sent_at: new Date().toISOString(),
-      })
-      .eq('id', partner.id)
+    // SLA-99.9 : timeout 5s.
+    const { error: updateError } = await withTimeout(
+      admin
+        .from('cee_artisan_partners')
+        .update({
+          yousign_envelope_id: envelope.envelopeId,
+          yousign_procedure_id: envelope.procedureId,
+          convention_sent_at: new Date().toISOString(),
+        })
+        .eq('id', partner.id),
+      DB_TIMEOUT_MS,
+      'partner_update'
+    )
 
     if (updateError) {
       logger.error('cee-convention: partner update failed', updateError, {
@@ -204,10 +251,7 @@ export async function POST(request: NextRequest) {
       logger.warn('cee-convention: status transition skipped', {
         action: 'cee-convention-transition-skip',
         partnerId: partner.id,
-        error:
-          transError instanceof Error
-            ? transError.message
-            : String(transError),
+        error: transError instanceof Error ? transError.message : String(transError),
       })
     }
 
@@ -228,6 +272,10 @@ export async function POST(request: NextRequest) {
     logger.error('cee-convention: unexpected error', error, {
       action: 'cee-convention-catch',
       userId: ctx.userId,
+    })
+    // SLA-99.9 : Sentry alert.
+    captureError(error, {
+      tags: { route: 'cee-partners-convention', critical: 'true' },
     })
     return serverErrorResponse('INTERNAL_ERROR', 'Erreur serveur')
   }

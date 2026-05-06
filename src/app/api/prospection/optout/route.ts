@@ -30,8 +30,22 @@ const securityHeaders = {
   'Cache-Control': 'no-store',
 } as const
 
-const RATE_LIMIT_MAX = 10
+// SLA-99.9 (2026-05-06) : 30/min/IP — élargi de 10 → 30 pour absorber les
+// pré-fetcheurs anti-spam (Outlook safe-links, Apple Mail privacy proxy)
+// qui visitent l'URL avant le user. Le HMAC fait la sécurité réelle.
+const RATE_LIMIT_MAX = 30
 const RATE_LIMIT_WINDOW_SECONDS = 60
+
+// SLA-99.9 : timeout DB strict (5s) — si Supabase rame, on fail-soft au lieu
+// de laisser le navigateur attendre indéfiniment.
+const DB_TIMEOUT_MS = 5000
+
+async function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`${label}-timeout`)), ms)),
+  ])
+}
 
 function getClientIp(request: NextRequest): string {
   const fwd = request.headers.get('x-forwarded-for')
@@ -95,6 +109,8 @@ interface OptoutInput {
 async function performOptout(
   input: OptoutInput
 ): Promise<{ ok: true } | { ok: false; status: number; message: string }> {
+  // SLA-99.9 : verifyOptoutToken utilise crypto.timingSafeEqual (lib/prospection/optout.ts).
+  // Aucune comparaison `===` sur le HMAC côté app.
   if (!verifyOptoutToken(input.token, input.email, input.campaignId)) {
     logger.warn('Prospection optout: token invalide', {
       campaignId: input.campaignId,
@@ -115,11 +131,22 @@ async function performOptout(
   // faux positifs (ex: `a_b@x.com` matche `aab@x.com`) ainsi qu'un vecteur
   // d'injection de wildcards. L'unique index `lower(email)` (migration 393)
   // garantit la cohérence côté DB.
-  const { data: existing } = await supabase
-    .from('prospection_optouts')
-    .select('id')
-    .eq('email', normalizedEmail)
-    .maybeSingle()
+  let existing: { id: string } | null = null
+  try {
+    // SLA-99.9 : timeout 5s DB (anti-hang Supabase).
+    const res = await withTimeout(
+      supabase.from('prospection_optouts').select('id').eq('email', normalizedEmail).maybeSingle(),
+      DB_TIMEOUT_MS,
+      'optout-select'
+    )
+    existing = (res.data as { id: string } | null) ?? null
+  } catch (err) {
+    logger.error('Prospection optout: select timeout', {
+      campaignId: input.campaignId,
+      error: err instanceof Error ? err.message : 'unknown',
+    })
+    return { ok: false, status: 503, message: 'Service indisponible, réessayez plus tard.' }
+  }
 
   if (existing) {
     logger.info('Prospection optout: déjà enregistré', {
@@ -129,15 +156,29 @@ async function performOptout(
     return { ok: true }
   }
 
-  const { error: insertError } = await supabase.from('prospection_optouts').insert({
-    email: normalizedEmail,
-    reason: input.reason,
-    source: input.source,
-    campaign_id: input.campaignId,
-    token_used: input.token,
-    ip_hash: input.ipHash,
-    user_agent: input.userAgent,
-  })
+  let insertError: { code?: string; message: string } | null = null
+  try {
+    const res = await withTimeout(
+      supabase.from('prospection_optouts').insert({
+        email: normalizedEmail,
+        reason: input.reason,
+        source: input.source,
+        campaign_id: input.campaignId,
+        token_used: input.token,
+        ip_hash: input.ipHash,
+        user_agent: input.userAgent,
+      }),
+      DB_TIMEOUT_MS,
+      'optout-insert'
+    )
+    insertError = (res.error as { code?: string; message: string } | null) ?? null
+  } catch (err) {
+    logger.error('Prospection optout: insert timeout', {
+      campaignId: input.campaignId,
+      error: err instanceof Error ? err.message : 'unknown',
+    })
+    return { ok: false, status: 503, message: 'Service indisponible, réessayez plus tard.' }
+  }
 
   if (insertError) {
     // Course : deux clics simultanés — la contrainte unique a pu gagner
@@ -149,7 +190,10 @@ async function performOptout(
       error: insertError.message,
       campaignId: input.campaignId,
     })
-    return { ok: false, status: 500, message: 'Erreur technique, réessayez plus tard.' }
+    // SLA-99.9 : 503 plutôt que 500 → indique "service temporairement
+    // indisponible, retry possible" (cohérent avec exigence opérationnelle
+    // RGPD : un opt-out doit pouvoir être retenté).
+    return { ok: false, status: 503, message: 'Service indisponible, réessayez plus tard.' }
   }
 
   // Le trigger DB (migration 393) réplique automatiquement dans

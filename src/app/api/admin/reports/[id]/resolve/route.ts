@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
+
+// SLA-99.9 : timeout dur Supabase 5s
+const SUPABASE_TIMEOUT_MS = 5_000
 
 // POST request schema
 const resolveReportSchema = z.object({
@@ -16,6 +21,20 @@ export const dynamic = 'force-dynamic'
 // POST - Résoudre ou rejeter un signalement
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    // SLA-99.9 : rate-limit mutation 20/min — modération sensible
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-reports-resolve:${ip}`, {
+      window: 60_000,
+      max: 20,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     // Verify admin with reviews:write permission
     const authResult = await requirePermission('reviews', 'write')
     if (!authResult.success || !authResult.admin) {
@@ -45,7 +64,8 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const newStatus = action === 'resolve' ? 'reviewed' : 'dismissed'
 
-    const { data, error } = await supabase
+    // SLA-99.9 : timeout 5s sur la mutation Supabase
+    const mutationPromise = supabase
       .from('user_reports')
       .update({
         status: newStatus,
@@ -57,6 +77,13 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       .select()
       .single()
 
+    const { data, error } = await Promise.race([
+      mutationPromise,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
+
     if (error) {
       logger.error('Report resolve failed', { code: error.code, message: error.message })
       return NextResponse.json(
@@ -65,7 +92,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       )
     }
 
-    // Log d'audit
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur mutation modération
     await logAdminAction(authResult.admin.id, `report.${action}`, 'report', params.id, {
       status: newStatus,
       resolution,
@@ -77,7 +104,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',
     })
   } catch (error) {
-    logger.error('Admin report resolve error', error)
+    logger.error('admin-reports-resolve: error', error)
+    captureError(error, {
+      tags: { route: 'admin/reports/[id]/resolve', method: 'POST', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

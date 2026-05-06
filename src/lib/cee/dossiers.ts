@@ -194,6 +194,12 @@ export async function listCeeDossiersForProvider(
  * Signature publique préservée : le wrapping applicatif reste identique
  * pour ne pas casser les callers (cron, API routes).
  */
+// Plan D — SLA fix : RPC sans timeout natif → cron rule D peut hang per-dossier.
+// 5s suffit largement pour un UPDATE single-row + trigger DAG. Au-delà = pathologie
+// (lock, deadlock, network) → abort fetch HTTP côté client (libère le worker
+// supabase-js pool) puis on skip ce dossier au prochain run.
+const TRANSITION_RPC_TIMEOUT_MS = 5_000
+
 export async function transitionCeeDossierStatus(
   supabase: SupabaseClient,
   id: string,
@@ -205,12 +211,42 @@ export async function transitionCeeDossierStatus(
     return { ok: false, error: 'dossier id manquant' }
   }
 
-  const { data, error } = await supabase.rpc('transition_cee_dossier_status', {
-    p_dossier_id: id,
-    p_to_status: toStatus,
-    p_actor_id: actorId,
-    p_actor_type: actorType,
-  })
+  // AbortController : si le timeout fire, on abort réellement la requête HTTP
+  // sortante au lieu de juste reject la promise (sinon : leak resource +
+  // write-after-timeout côté DB).
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), TRANSITION_RPC_TIMEOUT_MS)
+  let data: unknown = null
+  let error: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('transition_cee_dossier_status', {
+        p_dossier_id: id,
+        p_to_status: toStatus,
+        p_actor_id: actorId,
+        p_actor_type: actorType,
+      })
+      .abortSignal(controller.signal)
+    data = (result as { data: unknown; error: { message: string } | null }).data
+    error = (result as { data: unknown; error: { message: string } | null }).error
+  } catch (rpcErr) {
+    const isAbort =
+      controller.signal.aborted ||
+      (rpcErr instanceof Error &&
+        (rpcErr.name === 'AbortError' || rpcErr.message.includes('aborted')))
+    logger.error(
+      isAbort ? 'transitionCeeDossierStatus: RPC timeout' : 'transitionCeeDossierStatus: RPC throw',
+      rpcErr instanceof Error ? rpcErr : new Error(String(rpcErr)),
+      {
+        action: 'cee-dossier-transition',
+        dossier_id: id,
+        to_status: toStatus,
+      }
+    )
+    return { ok: false, error: isAbort ? 'rpc_timeout' : 'rpc_error' }
+  } finally {
+    clearTimeout(timer)
+  }
 
   if (error) {
     logger.error('transitionCeeDossierStatus: RPC error', error, {

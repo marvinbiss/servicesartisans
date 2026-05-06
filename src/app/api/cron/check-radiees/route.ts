@@ -16,12 +16,24 @@ export const dynamic = 'force-dynamic'
  *
  * Batch de 100 SIRET par appel (limite INSEE: q= max ~80 termes).
  * Le cron traite jusqu'à 1000 providers par exécution pour rester sous les 60s.
+ *
+ * Hardening SLA-99.9 (2026-05-06) :
+ *   - Lease 30 min anti-double-run (workload lourd, sync ADEME/SIRENE)
+ *   - Wall-clock 50s : on stoppe avant kill Vercel et on désactive ce qu'on a
+ *     déjà détecté (radieIds accumulés)
+ *   - Per-batch try/catch déjà présent (pas de régression)
+ *   - Release du lease en finally
  */
 
 const BATCH_SIZE = 80 // nombre de SIRET par requête INSEE (limite pratique)
 const MAX_PROVIDERS_PER_RUN = 1000
 
 export const maxDuration = 60
+
+// SLA-99.9 : wall-clock 50s + lease 30min (synchro ADEME/SIRENE = lourd).
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_check_radiees'
+const LEASE_TTL_SECONDS = 30 * 60
 
 export const GET = withCronCheckIn('cron-check-radiees', async (request: Request) => {
   if (!process.env.CRON_SECRET) {
@@ -33,7 +45,37 @@ export const GET = withCronCheckIn('cron-check-radiees', async (request: Request
   }
 
   const supabase = createAdminClient()
+  const startedAt = Date.now()
   const stats = { checked: 0, radiees: 0, errors: 0, skipped: 0 }
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('check-radiees: lease error', leaseErr, { lease: LEASE_NAME })
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('check-radiees: skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
     // Récupérer les providers actifs avec un SIRET valide (14 chiffres)
@@ -61,9 +103,21 @@ export const GET = withCronCheckIn('cron-check-radiees', async (request: Request
 
     const token = await getToken()
     const radieIds: string[] = []
+    let capReached = false
 
     // Traiter par batch
     for (let i = 0; i < validProviders.length; i += BATCH_SIZE) {
+      // SLA-99.9 : wall-clock guard (1 batch = 1 fetch INSEE + 2.2s sleep ≈ 3-5s).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        stats.skipped += validProviders.length - i
+        logger.warn('check-radiees: wall-clock cap reached, stopping batch loop', {
+          processed: i,
+          remaining: validProviders.length - i,
+        })
+        break
+      }
+
       const batch = validProviders.slice(i, i + BATCH_SIZE)
       const sirets = batch.map((p) => p.siret as string)
 
@@ -131,17 +185,24 @@ export const GET = withCronCheckIn('cron-check-radiees', async (request: Request
           stats.checked++
         }
       } catch (batchErr) {
+        // SLA-99.9 : per-batch try/catch — l'échec d'un batch ne casse pas le run.
         logger.error('check-radiees: batch error', batchErr)
         stats.errors += batch.length
       }
 
-      // Pause entre les batchs pour respecter le rate limit (30 req/min)
+      // Pause entre les batchs pour respecter le rate limit (30 req/min).
+      // SLA-99.9 : on ne sleep que si on a encore du budget wall-clock.
       if (i + BATCH_SIZE < validProviders.length) {
+        if (Date.now() - startedAt + 2200 > MAX_RUNTIME_MS) {
+          capReached = true
+          stats.skipped += validProviders.length - (i + BATCH_SIZE)
+          break
+        }
         await new Promise((resolve) => setTimeout(resolve, 2200))
       }
     }
 
-    // Désactiver les providers radiés
+    // Désactiver les providers radiés (best-effort, même si cap reached).
     if (radieIds.length > 0) {
       const { error: updateError } = await supabase
         .from('providers')
@@ -160,10 +221,22 @@ export const GET = withCronCheckIn('cron-check-radiees', async (request: Request
       logger.info(`check-radiees: ${radieIds.length} providers désactivés`)
     }
 
-    logger.info('check-radiees: terminé', stats)
-    return NextResponse.json({ success: true, stats })
+    logger.info('check-radiees: terminé', { ...stats, cap_reached: capReached })
+    return NextResponse.json({
+      success: true,
+      stats,
+      cap_reached: capReached,
+      duration_ms: Date.now() - startedAt,
+    })
   } catch (err) {
     logger.error('check-radiees: fatal error', err)
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

@@ -16,7 +16,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { validateOrigin } from '@/lib/cee/csrf'
-import { checkRateLimit } from '@/lib/cee/rate-limit'
+import { checkRateLimit as checkUserRateLimit } from '@/lib/cee/rate-limit'
 import { scoreQuiz, QUIZ_QUESTIONS, PASS_THRESHOLD } from '@/lib/cee/quiz-questions'
 import { updateCeePartnerStatus } from '@/lib/cee/leads-service'
 import { sendCeeCertificationEmail } from '@/lib/cee/emails'
@@ -30,9 +30,21 @@ import {
 } from '@/lib/cee/route-helpers'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit as checkIpRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { captureError } from '@/lib/monitoring/sentry'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+// SLA-99.9 : timeout court sur DB.
+const DB_TIMEOUT_MS = 5_000
+
+function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`${label}_timeout`)), ms)),
+  ])
+}
 
 // Accept only `answers: { [id]: number }`. All other fields are stripped.
 // Out-of-range indexes are accepted at the schema level and scored as wrong
@@ -45,11 +57,31 @@ const BodySchema = z.object({
 export async function POST(request: NextRequest) {
   if (!validateOrigin(request)) return csrfRejectResponse()
 
+  // SLA-99.9 : rate limit IP-based 30/min (defense in depth).
+  const ip = getClientIp(request.headers)
+  const ipRl = await checkIpRateLimit(`cee-partners-quiz:${ip}`, {
+    window: 60_000,
+    max: 30,
+    failOpen: true,
+  })
+  if (!ipRl.allowed) {
+    return NextResponse.json(
+      { success: false, error: { code: 'RATE_LIMITED', message: 'Trop de requêtes' } },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(Math.max(1, Math.ceil((ipRl.resetTime - Date.now()) / 1000))),
+        },
+      }
+    )
+  }
+
   const auth = await requireArtisanAuth()
   if (!auth.ok) return auth.response
   const { ctx } = auth
 
-  const rl = checkRateLimit(`cee:quiz:${ctx.userId}`, {
+  // Rate limit 3/min per user (anti-bruteforce quiz).
+  const rl = checkUserRateLimit(`cee:quiz:${ctx.userId}`, {
     max: 3,
     windowMs: 60_000,
   })
@@ -68,11 +100,16 @@ export async function POST(request: NextRequest) {
   const result = scoreQuiz(parsed.answers)
 
   try {
-    const { data: partner, error: readError } = await ctx.supabase
-      .from('cee_artisan_partners')
-      .select('id, status')
-      .eq('user_id', ctx.userId)
-      .maybeSingle()
+    // SLA-99.9 : timeout 5s sur lookup.
+    const { data: partner, error: readError } = await withTimeout(
+      ctx.supabase
+        .from('cee_artisan_partners')
+        .select('id, status, certification_score, certified_at')
+        .eq('user_id', ctx.userId)
+        .maybeSingle(),
+      DB_TIMEOUT_MS,
+      'partner_lookup'
+    )
 
     if (readError) {
       logger.error('cee-quiz: partner lookup failed', readError, {
@@ -87,14 +124,48 @@ export async function POST(request: NextRequest) {
 
     const admin = createAdminClient()
 
-    // Persist score + training_completed_at.
-    const { error: updateError } = await admin
-      .from('cee_artisan_partners')
-      .update({
-        certification_score: result.score,
-        training_completed_at: new Date().toISOString(),
+    // SLA-99.9 : idempotence — si déjà certifié/actif, retourner l'état actuel
+    // sans repasser par UPDATE + transition (évite les writes inutiles et le
+    // risque de réécraser certification_score d'une session valide).
+    const partnerTyped = partner as {
+      id: string
+      status: string
+      certification_score: number | null
+      certified_at: string | null
+    }
+    if (partnerTyped.status === 'certified' || partnerTyped.status === 'active') {
+      logger.info('cee-quiz: already certified (idempotent)', {
+        action: 'cee-quiz-idempotent',
+        partnerId: partnerTyped.id,
+        status: partnerTyped.status,
       })
-      .eq('id', partner.id)
+      return NextResponse.json({
+        success: true,
+        data: {
+          score: partnerTyped.certification_score ?? result.score,
+          total: result.total,
+          passThreshold: PASS_THRESHOLD,
+          passed: true,
+          certified: true,
+          questionCount: QUIZ_QUESTIONS.length,
+          alreadyCertified: true,
+        },
+      })
+    }
+
+    // Persist score + training_completed_at.
+    // SLA-99.9 : timeout 5s.
+    const { error: updateError } = await withTimeout(
+      admin
+        .from('cee_artisan_partners')
+        .update({
+          certification_score: result.score,
+          training_completed_at: new Date().toISOString(),
+        })
+        .eq('id', partner.id),
+      DB_TIMEOUT_MS,
+      'score_update'
+    )
 
     if (updateError) {
       logger.error('cee-quiz: score update failed', updateError, {
@@ -110,9 +181,12 @@ export async function POST(request: NextRequest) {
     let certified = false
     if (result.passed) {
       try {
-        if (partner.status !== 'certified' && partner.status !== 'active') {
-          await updateCeePartnerStatus(admin, partner.id, 'certified')
-        }
+        // SLA-99.9 : timeout 5s sur transition.
+        await withTimeout(
+          updateCeePartnerStatus(admin, partner.id, 'certified'),
+          DB_TIMEOUT_MS,
+          'transition'
+        )
         certified = true
 
         // Fail-open email.
@@ -162,6 +236,10 @@ export async function POST(request: NextRequest) {
     logger.error('cee-quiz: unexpected error', error, {
       action: 'cee-quiz-catch',
       userId: ctx.userId,
+    })
+    // SLA-99.9 : Sentry alert.
+    captureError(error, {
+      tags: { route: 'cee-partners-quiz', critical: 'true' },
     })
     return serverErrorResponse('INTERNAL_ERROR', 'Erreur serveur')
   }

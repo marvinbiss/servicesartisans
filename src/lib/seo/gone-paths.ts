@@ -75,6 +75,26 @@ export const VALID_RGE_SERVICE_SLUGS: ReadonlySet<string> = new Set([
 ])
 
 /**
+ * Préfixes statiques 2-segments sous `/rge/<seg>/<...>` qui NE doivent PAS
+ * être 410-killed par le matcher dynamique `/^\/rge\/([^/]+)\/([^/]+)\/?$/`.
+ *
+ * Source de vérité : `src/app/(public)/rge/<seg>/` qui contient des
+ * sous-routes (statiques OU dynamiques `[slug]`). Tout segment `<seg>` qui
+ * n'est PAS `[service]` (la route dynamique principale) ET qui contient au
+ * moins une sous-route DOIT figurer ici.
+ *
+ * Bug 2026-05-05 (post-mortem `servicesartisans-soft-404-bug-2026-04-19`) :
+ *   - `/rge/labels/qualisol` était 410 (vol Ahrefs 800-1100, KD 0).
+ *
+ * Plan C — C-6 (2026-05-05) : ajout `qualifications` (route
+ * `/rge/qualifications/[slug]`) qui était dans le même cas.
+ *
+ * Anti-régression : `src/__tests__/seo/rge-static-prefixes.test.ts` scanne
+ * `src/app/(public)/rge/` et fail si la Set diverge.
+ */
+export const RGE_STATIC_2SEG_PREFIXES: ReadonlySet<string> = new Set(['labels', 'qualifications'])
+
+/**
  * Slugs problèmes couverts par `/problemes/[probleme]` et
  * `/problemes/[probleme]/[ville]`.
  *
@@ -241,12 +261,7 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
     return validateVilleSlug(ville)
   }
 
-  // 2. /rge/[service]/[ville]
-  //    Exclure les routes statiques 2-segments sous /rge/ pour éviter de
-  //    capturer /rge/labels/qualisol etc. via le regex dynamique.
-  //    Bug 2026-05-05 : tous les /rge/labels/* étaient en 410 alors que ce
-  //    sont des pages monographiques labels (vol Ahrefs 800-1100, KD 0).
-  const RGE_STATIC_2SEG_PREFIXES = new Set(['labels'])
+  // 2. /rge/[service]/[ville] — voir RGE_STATIC_2SEG_PREFIXES (export module).
   const rgeMatch = /^\/rge\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
   if (rgeMatch && !RGE_STATIC_2SEG_PREFIXES.has(rgeMatch[1])) {
     const [, service, ville] = rgeMatch

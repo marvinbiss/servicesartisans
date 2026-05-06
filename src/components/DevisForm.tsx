@@ -176,52 +176,27 @@ export default function DevisForm({
       ? prefilledService
       : undefined
 
-  const savedState =
-    typeof window !== 'undefined'
-      ? (() => {
-          try {
-            const saved = localStorage.getItem(STORAGE_KEY)
-            if (!saved) return null
-            const parsed = JSON.parse(saved)
-            if (parsed.step === 4) parsed.step = 3
-            if (parsed.step > 3) parsed.step = 1
-            return parsed
-          } catch {
-            return null
-          }
-        })()
-      : null
-
-  const hasSavedProgress = !isPrefilled && savedState?.step && savedState.step > 1
-
+  // SSR-safe : aucune lecture de localStorage en initial render. Le state
+  // saved est hydraté côté client via useEffect ci-dessous (anti hydration
+  // mismatch — bug 2026-04-18 PR#10 ssr:false visait le même problème).
   const resolvedInitialData = isPrefilled
     ? { service: validPrefilledService || '', ville: prefilledCity || '' }
-    : hasSavedProgress
-      ? {}
-      : validPrefilledService
-        ? { ...(savedState?.formData || {}), service: validPrefilledService }
-        : savedState?.formData || {}
+    : validPrefilledService
+      ? { service: validPrefilledService }
+      : {}
 
-  const resolvedInitialStep: 1 | 2 | 3 = isMinimal
-    ? 3
-    : isPrefilled
-      ? 2
-      : hasSavedProgress
-        ? 1
-        : ((savedState?.step || 1) as 1 | 2 | 3)
+  const resolvedInitialStep: 1 | 2 | 3 = isMinimal ? 3 : isPrefilled ? 2 : 1
 
   const [ceeEligible, setCeeEligible] = useState(false)
   const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
-  const [selectedVillePostal, setSelectedVillePostal] = useState(
-    prefilledCityPostal || (hasSavedProgress ? '' : savedState?.selectedVillePostal || '')
-  )
+  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || '')
   const [monthlyCount, setMonthlyCount] = useState<string>('1 200+')
 
   const form = useDevisForm({
     source: 'devis_form',
     initialData: resolvedInitialData,
     initialStep: resolvedInitialStep,
-    initialVilleQuery: prefilledCity || (hasSavedProgress ? '' : savedState?.villeQuery || ''),
+    initialVilleQuery: prefilledCity || '',
     villeQueryDebounceMs: 300,
     onSubmitSuccess: (responseBody) => {
       const body = responseBody as {
@@ -232,7 +207,11 @@ export default function DevisForm({
         setCeeEligible(true)
         setCeeOperationCodes(body.cee_operation_codes || [])
       }
-      localStorage.removeItem(STORAGE_KEY)
+      try {
+        localStorage.removeItem(STORAGE_KEY)
+      } catch {
+        // ignore
+      }
     },
   })
 
@@ -285,7 +264,11 @@ export default function DevisForm({
   }, [])
 
   const handleDismiss = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY)
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch {
+      // ignore
+    }
     form.resetForm()
     form.setVilleQuery('')
     setSelectedVillePostal('')
@@ -859,7 +842,7 @@ export default function DevisForm({
                 className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                   form.isStep1Valid
                     ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
-                    : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
+                    : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                 }`}
               >
                 Suivant <ArrowRight className="w-5 h-5" />
@@ -1107,7 +1090,7 @@ export default function DevisForm({
                   className={`${isPrefilled && !isMinimal ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                     isStep2Valid
                       ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
-                      : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
+                      : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >
                   Suivant <ArrowRight className="w-5 h-5" />
@@ -1291,7 +1274,7 @@ export default function DevisForm({
                   className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-5 rounded-xl transition-all duration-300 text-lg ${
                     form.isStep3Valid && !form.submitting
                       ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1'
-                      : 'bg-charcoal-200 text-charcoal-400 cursor-not-allowed'
+                      : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >
                   {form.submitting ? (

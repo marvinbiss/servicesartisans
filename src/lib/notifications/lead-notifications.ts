@@ -153,16 +153,27 @@ async function deliverNotification(
   target: NotificationTarget,
   spec: NotificationSpec
 ): Promise<void> {
-  // Idempotency check: skip if already delivered
-  const { data: existing } = await supabase
-    .from('notification_deliveries')
-    .select('id')
-    .eq('event_id', eventId)
-    .eq('channel', channel)
-    .eq('recipient_id', target.userId)
-    .maybeSingle()
+  // Write-ahead-log: réserver le slot AVANT le send pour empêcher
+  // qu'un cron concurrent envoie 2x le même email/SMS.
+  // L'unique partial index (event_id, channel, recipient_id) rejette le 2e insert.
+  const { error: claimError } = await supabase.from('notification_deliveries').insert({
+    event_id: eventId,
+    channel,
+    recipient_id: target.userId,
+    status: 'pending',
+    error_message: null,
+  })
 
-  if (existing) return // Already processed
+  if (claimError) {
+    if ((claimError as { code?: string }).code === '23505') {
+      // Race perdue : un autre worker traite déjà.
+      return
+    }
+    logger.error(`Notification claim failed [${channel}/${spec.type}]:`, {
+      error: claimError.message,
+    })
+    return
+  }
 
   let status: 'sent' | 'failed' = 'sent'
   let errorMessage: string | null = null
@@ -194,18 +205,12 @@ async function deliverNotification(
     logger.error(`Notification delivery failed [${channel}/${spec.type}]:`, { error: errorMessage })
   }
 
-  // Record delivery (idempotency key)
-  try {
-    await supabase.from('notification_deliveries').insert({
-      event_id: eventId,
-      channel,
-      recipient_id: target.userId,
-      status,
-      error_message: errorMessage,
-    })
-  } catch {
-    // Unique constraint violation = already recorded by concurrent request
-  }
+  await supabase
+    .from('notification_deliveries')
+    .update({ status, error_message: errorMessage })
+    .eq('event_id', eventId)
+    .eq('channel', channel)
+    .eq('recipient_id', target.userId)
 }
 
 // ============================================================

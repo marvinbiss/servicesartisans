@@ -10,9 +10,18 @@ import {
   markWebhookFailed,
 } from '@/lib/webhook-idempotency'
 import { env } from '@/lib/env'
+import { withTimeout } from '@/lib/api/timeout'
 import Stripe from 'stripe'
 
+// SLA-99.9 : timeout amont 5s sur Supabase. Au-delà, on remonte une erreur
+// catchée par le wrapper try/catch du handler → retourne 500 → Stripe retry
+// automatiquement (politique exponential backoff). Préserve l'idempotence
+// via webhook_idempotency table (`markWebhookFailed`).
+const SB_TIMEOUT_MS = 5_000
+
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const maxDuration = 25
 
 /**
  * Map Stripe subscription status to our DB subscription_status
@@ -91,42 +100,51 @@ export async function POST(request: Request) {
   }
 
   try {
-    switch (event.type) {
-      case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.Checkout.Session
-        await handleCheckoutCompleted(session)
-        break
-      }
+    // SLA-99.9 : timeout global 20s sur le traitement d'event (Vercel maxDuration=25s).
+    // Au-delà, throw → catch bloc → markWebhookFailed → Stripe retry exponential
+    // backoff. Préserve idempotence via webhook_idempotency.
+    await withTimeout(
+      (async () => {
+        switch (event.type) {
+          case 'checkout.session.completed': {
+            const session = event.data.object as Stripe.Checkout.Session
+            await handleCheckoutCompleted(session)
+            break
+          }
 
-      case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription
-        await handleSubscriptionUpdated(subscription)
-        break
-      }
+          case 'customer.subscription.updated': {
+            const subscription = event.data.object as Stripe.Subscription
+            await handleSubscriptionUpdated(subscription)
+            break
+          }
 
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription
-        await handleSubscriptionDeleted(subscription)
-        break
-      }
+          case 'customer.subscription.deleted': {
+            const subscription = event.data.object as Stripe.Subscription
+            await handleSubscriptionDeleted(subscription)
+            break
+          }
 
-      case 'invoice.payment_succeeded': {
-        const invoice = event.data.object as Stripe.Invoice
-        await handleInvoicePaymentSucceeded(invoice)
-        break
-      }
+          case 'invoice.payment_succeeded': {
+            const invoice = event.data.object as Stripe.Invoice
+            await handleInvoicePaymentSucceeded(invoice)
+            break
+          }
 
-      case 'invoice.payment_failed': {
-        const invoice = event.data.object as Stripe.Invoice
-        await handleInvoicePaymentFailed(invoice)
-        break
-      }
+          case 'invoice.payment_failed': {
+            const invoice = event.data.object as Stripe.Invoice
+            await handleInvoicePaymentFailed(invoice)
+            break
+          }
 
-      default:
-        logger.debug(`Unhandled event type: ${event.type}`)
-    }
+          default:
+            logger.debug(`Unhandled event type: ${event.type}`)
+        }
+      })(),
+      20_000,
+      `stripe_webhook_${event.type}`
+    )
 
-    await markWebhookCompleted(event.id, event.type)
+    await withTimeout(markWebhookCompleted(event.id, event.type), SB_TIMEOUT_MS, 'mark_completed')
 
     return NextResponse.json({ received: true })
   } catch (error) {

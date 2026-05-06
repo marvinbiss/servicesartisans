@@ -25,11 +25,16 @@ const mockSupabase = {
       error: null,
     })),
   },
-  from: vi.fn(() => ({
-    select: vi.fn(() => ({
-      eq: vi.fn(() => ({ maybeSingle: maybeSingleMock })),
-    })),
-  })),
+  from: vi.fn((table: string) => {
+    if (table === 'audit_logs') {
+      return { insert: vi.fn(() => Promise.resolve({ error: null })) }
+    }
+    return {
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({ maybeSingle: maybeSingleMock })),
+      })),
+    }
+  }),
 }
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(async () => mockSupabase),
@@ -44,6 +49,17 @@ vi.mock('@/lib/cee/leads-service', () => ({
 }))
 vi.mock('@/lib/cee/emails', () => ({
   sendCeePartnerActivatedEmail: vi.fn(async () => ({ success: true })),
+}))
+
+// --- Rate-limiter + Sentry mocks (SLA-99.9 added) ---
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(() =>
+    Promise.resolve({ allowed: true, limit: 60, remaining: 59, reset: Date.now() + 60_000 })
+  ),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}))
+vi.mock('@/lib/monitoring/sentry', () => ({
+  captureError: vi.fn(),
 }))
 
 type MockResult = { body: Record<string, unknown>; status: number }

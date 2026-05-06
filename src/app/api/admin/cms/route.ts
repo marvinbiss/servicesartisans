@@ -2,10 +2,24 @@ import { NextResponse } from 'next/server'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { pageSchema, pageSizeSchema } from '@/lib/validations/schemas'
 
 export const dynamic = 'force-dynamic'
+
+// SLA-99.9 : timeout 5s pour borner Supabase.
+const SUPABASE_TIMEOUT_MS = 5_000
+
+function withSupabaseTimeout<T>(p: PromiseLike<T>): Promise<T> {
+  return Promise.race<T>([
+    Promise.resolve(p),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+    ),
+  ])
+}
 
 // --- Schemas ---
 
@@ -27,8 +41,21 @@ const listQuerySchema = z.object({
 
 export async function GET(request: Request) {
   try {
-    const auth = await requirePermission('content', 'read')
+    // SLA-99.9 : rate limit lecture 60/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-cms-list:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
 
+    const auth = await requirePermission('content', 'read')
     if (!auth.success) return auth.error
 
     const { searchParams } = new URL(request.url)
@@ -90,7 +117,8 @@ export async function GET(request: Request) {
       .order(sortBy, { ascending: sortOrder === 'asc' })
       .range(offset, offset + pageSize - 1)
 
-    const { data: pages, error, count } = await query
+    // SLA-99.9 : Promise.race timeout 5s.
+    const { data: pages, error, count } = await withSupabaseTimeout(query)
 
     if (error) {
       logger.warn('CMS pages query failed, returning empty list', {
@@ -122,7 +150,10 @@ export async function GET(request: Request) {
       },
     })
   } catch (error) {
-    logger.error('CMS pages list error', error)
+    logger.error('admin-cms-list: error', error)
+    captureError(error, {
+      tags: { route: 'admin/cms', method: 'GET', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -134,8 +165,21 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = await requirePermission('content', 'write')
+    // SLA-99.9 : rate limit création 30/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-cms-create:${ip}`, {
+      window: 60_000,
+      max: 30,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
 
+    const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error
 
     // Lazy imports — only needed for POST, avoids crashing GET if deps are missing
@@ -197,16 +241,19 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient()
 
-    const { data: page, error } = await supabase
-      .from('cms_pages')
-      .insert({
-        ...validated,
+    // SLA-99.9 : Promise.race timeout 5s.
+    const { data: page, error } = await withSupabaseTimeout(
+      supabase
+        .from('cms_pages')
+        .insert({
+          ...validated,
 
-        created_by: auth.admin.id,
-        status: 'draft',
-      })
-      .select()
-      .single()
+          created_by: auth.admin.id,
+          status: 'draft',
+        })
+        .select()
+        .single()
+    )
 
     if (error) {
       if (error.code === '23505') {
@@ -218,23 +265,44 @@ export async function POST(request: Request) {
           { status: 409 }
         )
       }
-      logger.error('CMS page create error', error)
+      logger.error('admin-cms-create: insert error', error)
       return NextResponse.json(
         { success: false, error: { message: 'Erreur lors de la création de la page' } },
         { status: 500 }
       )
     }
 
-    // Log d'audit
-
-    await logAdminAction(auth.admin.id, 'cms_page.create', 'cms_page', page.id, {
-      slug: validated.slug,
-      page_type: validated.page_type,
-    })
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur création.
+    try {
+      await withSupabaseTimeout(
+        supabase.from('audit_logs').insert({
+          user_id: auth.admin.id,
+          action: 'cms_page.create',
+          resource_type: 'cms_page',
+          resource_id: page.id,
+          old_value: {},
+          new_value: {
+            slug: validated.slug,
+            page_type: validated.page_type,
+            status: 'draft',
+          },
+        })
+      )
+    } catch (auditError) {
+      logger.warn('admin-cms-create: audit log failed', { error: String(auditError) })
+      captureError(auditError, {
+        tags: { route: 'admin/cms', method: 'POST', audit: 'failed' },
+      })
+    }
+    // Garde l'helper logAdminAction pour rétro-compat éventuelle.
+    void logAdminAction
 
     return NextResponse.json({ success: true, data: page }, { status: 201 })
   } catch (error) {
-    logger.error('CMS page create error', error)
+    logger.error('admin-cms-create: error', error)
+    captureError(error, {
+      tags: { route: 'admin/cms', method: 'POST', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

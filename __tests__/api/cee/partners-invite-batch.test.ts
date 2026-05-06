@@ -51,6 +51,17 @@ vi.mock('@/lib/cee/emails', () => ({
   sendCeePartnerInvite: (...args: unknown[]) => sendInviteMock(...args),
 }))
 
+// --- Rate-limiter + Sentry mocks (SLA-99.9 added) ---
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(() =>
+    Promise.resolve({ allowed: true, limit: 60, remaining: 59, reset: Date.now() + 60_000 })
+  ),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}))
+vi.mock('@/lib/monitoring/sentry', () => ({
+  captureError: vi.fn(),
+}))
+
 type MockResult = { body: Record<string, unknown>; status: number }
 
 function makeRequest(body: unknown) {

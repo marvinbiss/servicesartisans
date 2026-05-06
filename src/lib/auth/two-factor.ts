@@ -97,8 +97,41 @@ export interface TwoFactorStatus {
   created_at?: string
 }
 
+// Plan C — C-3 : 24h cooldown entre 2 transitions enable/disable (anti-spam).
+// Refusable au support via RPC admin si rotation device légitime.
+const TWO_FACTOR_CHANGE_COOLDOWN_MS = 24 * 60 * 60 * 1000
+
+export class TwoFactorChangeCooldownError extends Error {
+  constructor(public readonly remainingMs: number) {
+    const hours = Math.ceil(remainingMs / (60 * 60 * 1000))
+    super(
+      `Modification 2FA trop rapprochée. Réessayez dans environ ${hours} heure${hours > 1 ? 's' : ''}.`
+    )
+    this.name = 'TwoFactorChangeCooldownError'
+  }
+}
+
 export class TwoFactorAuthService {
   private supabase = createAdminClient()
+
+  /**
+   * Plan C — C-3 : check cooldown 24h avant toute transition enable/disable.
+   * Lit `profiles.last_2fa_change_at` (mig 514). Throw si trop récent.
+   */
+  private async assertChangeCooldownPassed(userId: string): Promise<void> {
+    const { data } = await this.supabase
+      .from('profiles')
+      .select('last_2fa_change_at')
+      .eq('id', userId)
+      .maybeSingle()
+
+    const last = data?.last_2fa_change_at
+    if (!last) return
+    const elapsed = Date.now() - new Date(last).getTime()
+    if (elapsed < TWO_FACTOR_CHANGE_COOLDOWN_MS) {
+      throw new TwoFactorChangeCooldownError(TWO_FACTOR_CHANGE_COOLDOWN_MS - elapsed)
+    }
+  }
 
   /**
    * Generate a new 2FA secret and QR code for setup
@@ -114,6 +147,10 @@ export class TwoFactorAuthService {
     if (existing?.verified) {
       throw new Error('2FA is already enabled')
     }
+
+    // Plan C — C-3 : si l'utilisateur vient de désactiver 2FA dans les
+    // dernières 24h, on bloque le re-setup (anti enroll/disable spam).
+    await this.assertChangeCooldownPassed(userId)
 
     // Generate secret
     const secret = authenticator.generateSecret()
@@ -184,11 +221,12 @@ export class TwoFactorAuthService {
       })
       .eq('user_id', userId)
 
-    // Update user profile
+    // Update user profile (mig 514 : last_2fa_change_at pour le cooldown)
     await this.supabase
       .from('profiles')
       .update({
         two_factor_enabled: true,
+        last_2fa_change_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', userId)
@@ -310,6 +348,10 @@ export class TwoFactorAuthService {
    * Disable 2FA
    */
   async disable(userId: string, code: string): Promise<boolean> {
+    // Plan C — C-3 : refuser une désactivation < 24h après la dernière
+    // activation (anti-spam, anti-effacement de traces audit).
+    await this.assertChangeCooldownPassed(userId)
+
     // Verify the code first
     const isValid = await this.verifyCode(userId, code)
 
@@ -320,11 +362,13 @@ export class TwoFactorAuthService {
     // Delete 2FA record
     await this.supabase.from('two_factor_auth').delete().eq('user_id', userId)
 
-    // Update profile
+    // Update profile (mig 514 : on garde last_2fa_change_at pour bloquer
+    // un éventuel re-enable < 24h)
     await this.supabase
       .from('profiles')
       .update({
         two_factor_enabled: false,
+        last_2fa_change_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', userId)

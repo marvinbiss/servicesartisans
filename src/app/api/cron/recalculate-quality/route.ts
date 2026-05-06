@@ -4,6 +4,14 @@
  *
  * Recalculates data_quality_score for providers whose data has changed
  * since their last score calculation. Uses batch SQL updates for efficiency.
+ *
+ * Hardening SLA-99.9 (2026-05-06) :
+ *   - Auth timing-safe (verifyCronSecret)
+ *   - Lease anti-double-run via RPC `acquire_cron_lease` (mig 411)
+ *     avec abort 5s pour ne jamais bloquer le run sur DB lente
+ *   - Wall-clock guard 50s : on sort proprement de la boucle batch
+ *     plutôt que de risquer un kill Vercel sans release du lease
+ *   - Release du lease en finally (best-effort, TTL 30 min en filet)
  */
 
 import { NextResponse } from 'next/server'
@@ -16,6 +24,12 @@ export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 500
 const UPDATE_CHUNK_SIZE = 50
+
+// SLA-99.9 : wall-clock guard. Vercel maxDuration = 60s ; on s'arrête à 50s
+// pour avoir le temps d'appeler release_cron_lease avant kill.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_recalculate_quality'
+const LEASE_TTL_SECONDS = 30 * 60
 
 /**
  * Calculate data quality score for a provider record (0-100).
@@ -65,27 +79,70 @@ function calculateQualityScore(provider: Record<string, unknown>): {
 }
 
 export const GET = withCronCheckIn('cron-recalculate-quality', async (request: Request) => {
+  // -- Auth ---------------------------------------------------------------
+  const authHeader = request.headers.get('authorization')
+  if (!verifyCronSecret(authHeader)) {
+    logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
+    return NextResponse.json(
+      { success: false, error: { message: 'Non autorisé' } },
+      { status: 401 }
+    )
+  }
+
+  const supabase = createAdminClient()
+  const startedAt = Date.now()
+
+  // SLA-99.9 : lease avec abort 5s pour ne pas bloquer si DB stalle.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
   try {
-    const supabase = createAdminClient()
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
 
-    // Verify cron secret
-    const authHeader = request.headers.get('authorization')
-    if (!verifyCronSecret(authHeader)) {
-      logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
-    }
+  if (leaseErr) {
+    logger.error('[Cron] recalculate-quality lease acquisition failed', undefined, {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ success: false, error: { message: 'lease_error' } }, { status: 500 })
+  }
 
+  if (acquired !== true) {
+    logger.info('[Cron] recalculate-quality skipped (lease already held)', {
+      lease: LEASE_NAME,
+    })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
+
+  try {
     logger.info('[Cron] Starting data quality score recalculation')
 
     let totalUpdated = 0
     let totalErrors = 0
     let offset = 0
     let hasMore = true
+    let capReached = false
 
     while (hasMore) {
+      // SLA-99.9 : wall-clock guard avant chaque batch (le plus coûteux).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        break
+      }
+
       // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
         .from('providers')
@@ -115,6 +172,11 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
 
       // Process updates in chunks of UPDATE_CHUNK_SIZE, parallelized within each chunk
       for (let i = 0; i < updates.length; i += UPDATE_CHUNK_SIZE) {
+        // SLA-99.9 : wall-clock guard fin-grain pour quitter au plus vite.
+        if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+          capReached = true
+          break
+        }
         const chunk = updates.slice(i, i + UPDATE_CHUNK_SIZE)
 
         const results = await Promise.all(
@@ -150,6 +212,7 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
 
       logger.info(`[Cron] Batch processed: ${updates.length} providers (offset=${offset})`)
 
+      if (capReached) break
       if (providers.length < BATCH_SIZE) {
         hasMore = false
       } else {
@@ -158,7 +221,9 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
     }
 
     logger.info(
-      `[Cron] Data quality recalculation complete: ${totalUpdated} updated, ${totalErrors} errors`
+      `[Cron] Data quality recalculation complete: ${totalUpdated} updated, ${totalErrors} errors${
+        capReached ? ' (wall-clock cap reached)' : ''
+      }`
     )
 
     return NextResponse.json({
@@ -166,6 +231,8 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
       message: 'Data quality scores recalculated',
       updated: totalUpdated,
       errors: totalErrors,
+      cap_reached: capReached,
+      duration_ms: Date.now() - startedAt,
     })
   } catch (error) {
     logger.error('[Cron] Error in recalculate-quality:', error)
@@ -173,5 +240,12 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
       { success: false, error: { message: 'Erreur lors du recalcul des scores de qualité' } },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort. Lease expire naturellement au TTL.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

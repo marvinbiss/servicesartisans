@@ -171,6 +171,10 @@ export async function processDevis(
   }
 
   // --- Store in DB ---
+  // Le trigger `devis_requests_dedup_trg` (mig 506) garantit l'atomicité :
+  // si une demande identique (phone+service+city) existe dans la dernière
+  // heure, l'insert lève 23505 ⇒ on retourne `duplicate` idempotent au lieu
+  // de planter avec un 500.
   const { data: lead, error: dbError } = await supabase
     .from('devis_requests')
     .insert({
@@ -192,6 +196,14 @@ export async function processDevis(
     .single()
 
   if (dbError) {
+    if ((dbError as { code?: string }).code === '23505') {
+      logger.info('Devis duplicate caught by trigger', {
+        phone: data.telephone,
+        service: serviceName,
+        city: data.ville,
+      })
+      return { success: false, error: 'duplicate', code: 'duplicate' }
+    }
     logger.error('Database error', dbError)
     return { success: false, error: 'db_error', code: 'db_error' }
   }

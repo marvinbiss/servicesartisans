@@ -74,7 +74,8 @@ export async function getDynamicLastModified(
 
       return maxDate ? maxDate.toISOString() : null
     },
-    CACHE_TTL.stats
+    CACHE_TTL.stats,
+    { skipNull: true }
   )
 }
 
@@ -97,7 +98,7 @@ async function getLatestReviewDate(
       .not('latest_review_at', 'is', null)
       .order('latest_review_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
 
     if (error || !data) return null
     return data.latest_review_at as string | null
@@ -124,7 +125,7 @@ async function getLatestProviderDate(
       .not('updated_at', 'is', null)
       .order('updated_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
 
     if (error || !data) return null
     return data.updated_at as string | null
@@ -173,7 +174,8 @@ export async function getDynamicLastModifiedByService(serviceSlug: string): Prom
       }
       return maxDate ? maxDate.toISOString() : null
     },
-    CACHE_TTL.stats
+    CACHE_TTL.stats,
+    { skipNull: true }
   )
 }
 
@@ -190,7 +192,7 @@ async function getLatestProviderDateNational(
       .not('updated_at', 'is', null)
       .order('updated_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
     if (error || !data) return null
     return data.updated_at as string | null
   } catch {
@@ -210,7 +212,7 @@ async function getLatestReviewDateNational(
       .not('latest_review_at', 'is', null)
       .order('latest_review_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
     if (error || !data) return null
     return data.latest_review_at as string | null
   } catch {
@@ -230,29 +232,21 @@ async function getLatestDevisDate(
   try {
     const postalPrefix = `${departmentCode}%`
 
-    // Try each specialty — devis_requests uses service_name (human-readable)
-    let latestDate: string | null = null
+    // Audit V1 P1-2 : N+1 séquentiel + .single() PGRST116 spam → 1 query .or()
+    // sur tous les specialties + maybeSingle pour 0 row legitime.
+    const orFilter = specialties.map((s) => `service_name.ilike.${s}`).join(',')
+    const { data, error } = await supabase
+      .from('devis_requests')
+      .select('created_at')
+      .or(orFilter)
+      .like('postal_code', postalPrefix)
+      .not('created_at', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
 
-    for (const specialty of specialties) {
-      const { data, error } = await supabase
-        .from('devis_requests')
-        .select('created_at')
-        .ilike('service_name', specialty)
-        .like('postal_code', postalPrefix)
-        .not('created_at', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      if (error || !data) continue
-
-      const d = data.created_at as string | null
-      if (d && (!latestDate || new Date(d) > new Date(latestDate))) {
-        latestDate = d
-      }
-    }
-
-    return latestDate
+    if (error || !data) return null
+    return (data.created_at as string | null) ?? null
   } catch {
     return null
   }

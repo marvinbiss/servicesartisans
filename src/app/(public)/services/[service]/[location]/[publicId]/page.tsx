@@ -191,6 +191,11 @@ function convertToArtisan(
   const memberYear = provider.created_at ? new Date(provider.created_at).getFullYear() : null
   const currentYear = new Date().getFullYear()
 
+  // SLA-99.9 / PII : règle CLAUDE.md `feedback_no_phone_from_db` interdit
+  // d'exposer le tel artisan depuis DB sur fiches non-revendiquées.
+  // L'artisan doit avoir explicitement claim sa fiche (provider.user_id != null).
+  const isClaimedForPhone = !!provider.user_id
+
   return {
     id: provider.id,
     stable_id: provider.stable_id || undefined,
@@ -233,7 +238,8 @@ function convertToArtisan(
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
     available_24h: provider.available_24h || false,
-    phone_secondary: provider.phone_secondary || undefined,
+    // SLA-99.9 / PII : tel exposé UNIQUEMENT si fiche revendiquée par l'artisan.
+    phone_secondary: isClaimedForPhone ? provider.phone_secondary || undefined : undefined,
     opening_hours:
       provider.opening_hours && Object.keys(provider.opening_hours).length > 0
         ? provider.opening_hours
@@ -244,8 +250,9 @@ function convertToArtisan(
     siret: provider.siret || undefined,
     creation_date: provider.creation_date || undefined,
     legal_form: provider.legal_form_code || provider.legal_form || undefined,
-    phone: provider.phone || undefined,
-    email: provider.email || undefined,
+    // SLA-99.9 / PII : tel + email exposés UNIQUEMENT si fiche revendiquée.
+    phone: isClaimedForPhone ? provider.phone || undefined : undefined,
+    email: isClaimedForPhone ? provider.email || undefined : undefined,
     website: provider.website || undefined,
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,

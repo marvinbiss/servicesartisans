@@ -6,6 +6,7 @@ import {
   getRateLimitConfig,
   getRateLimitKey,
   getClientIp,
+  RATE_LIMITS,
 } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 
@@ -20,8 +21,43 @@ function constantTimeEqual(a: string, b: string): boolean {
   }
   return mismatch === 0
 }
+
+// Plan D — SLA 99.9% : middleware sur le hot path de tous les /espace-* et
+// /admin. Supabase auth.getUser() + profile fetch sans timeout = stall = tous
+// les private routes hangent. 3s = budget large (auth normale 50-200ms) mais
+// fail-fast permet au catch de rediriger vers /connexion si Supabase down.
+//
+// Note : on race juste la promise (pas d'AbortController natif sur
+// supabase.auth.getUser()). Le fetch sortant peut continuer en background
+// (lifecycle de la fonction Edge le terminera). Acceptable car middleware
+// retourne déjà une redirect → la requête utilisateur est libérée.
+const MIDDLEWARE_AUTH_TIMEOUT_MS = 3_000
+function withAuthTimeout<T>(promise: PromiseLike<T>, label: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | null = null
+  return new Promise<T>((resolve, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`[middleware-timeout] ${label} > ${MIDDLEWARE_AUTH_TIMEOUT_MS}ms`)),
+      MIDDLEWARE_AUTH_TIMEOUT_MS
+    )
+    Promise.resolve(promise).then(
+      (val) => {
+        if (timer) clearTimeout(timer)
+        resolve(val)
+      },
+      (err) => {
+        if (timer) clearTimeout(timer)
+        reject(err)
+      }
+    )
+  })
+}
 import { isSafeRedirectPath } from '@/lib/safe-redirect'
 import { evaluateGonePath, goneResponseHeaders, GONE_RESPONSE_BODY } from '@/lib/seo/gone-paths'
+import {
+  PENDING_COOKIE_NAME,
+  VERIFIED_COOKIE_NAME,
+  readVerifiedCookie,
+} from '@/lib/auth/two-factor-cookies'
 
 /**
  * Middleware v3 — performance-optimized
@@ -278,7 +314,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       const {
         data: { user },
         error: authError,
-      } = await supabase.auth.getUser()
+      } = await withAuthTimeout(supabase.auth.getUser(), 'auth.getUser')
 
       if (authError || !user) {
         const redirectUrl = isSafeRedirectPath(pathname)
@@ -287,13 +323,44 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
       }
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
+      const { data: profile } = await withAuthTimeout(
+        supabase.from('profiles').select('role, two_factor_enabled').eq('id', user.id).single(),
+        'profiles.select'
+      )
 
       if (profile) {
+        // Plan C — C-1 (BLOCKER CVSS 8.1) : 2FA gate post-signin.
+        // Si l'utilisateur a activé 2FA, on exige le cookie HMAC `sa_2fa_verified`
+        // valide AVANT de servir une route privée. Sinon redirect vers
+        // /verifier-2fa qui collectera le code TOTP. Couvre aussi les sessions
+        // hijackées : un attaquant qui vole la session Supabase doit toujours
+        // produire un cookie verified signé HMAC (impossible sans le code TOTP).
+        if (profile.two_factor_enabled === true) {
+          const verifiedCookieValue = request.cookies.get(VERIFIED_COOKIE_NAME)?.value
+          let verifiedPayload = null
+          try {
+            verifiedPayload = await readVerifiedCookie(verifiedCookieValue, user.id)
+          } catch {
+            verifiedPayload = null
+          }
+          if (!verifiedPayload) {
+            const verifyUrl = new URL('/verifier-2fa', request.url)
+            const nextPath = isSafeRedirectPath(pathname) ? pathname : '/espace-client'
+            verifyUrl.searchParams.set('next', nextPath)
+            const redirectResp = NextResponse.redirect(verifyUrl)
+            // Si pas de cookie pending non plus, le user n'a même pas franchi
+            // signin → on le renvoie vers /connexion. Sinon /verifier-2fa va
+            // accepter sa session pending.
+            const hasPending = !!request.cookies.get(PENDING_COOKIE_NAME)?.value
+            if (!hasPending) {
+              const loginUrl = new URL('/connexion', request.url)
+              loginUrl.searchParams.set('redirect', nextPath)
+              return NextResponse.redirect(loginUrl)
+            }
+            return redirectResp
+          }
+        }
+
         if (pathname.startsWith('/espace-artisan') && profile.role !== 'artisan') {
           return NextResponse.redirect(new URL('/espace-client', request.url))
         }
@@ -316,33 +383,26 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   }
 
   // Rate limiting for API routes (skip health check — must always respond fast)
-  // Skip Googlebot + other validated crawlers: GSC reports "Connectivité serveur"
-  // quand Googlebot prend un 429 (incident 2026-04-22 Upstash fail-close, 62.1%
-  // échec exploration). On isole les crawlers officiels du rate-limit user-facing.
+  // Audit V1 P0-2 : exemption totale crawler ouvrait un DoS via UA spoofing.
+  // Désormais : crawlers GET/HEAD sont placés dans bucket `crawler` 600/min/IP
+  // (10 req/s, large pour Googlebot légitime mais cap un attaquant qui spoof).
+  // Mutations (POST/PUT/DELETE) ne bénéficient d'aucune exemption.
   const uaForRateLimit = request.headers.get('user-agent') || ''
-  // Crawler exemption ne s'applique QUE sur GET/HEAD pour empêcher un attaquant
-  // de spoofer son UA en `Googlebot` afin de bypasser le rate-limit sur les
-  // mutations (POST /api/devis, /api/reviews, /api/simulateur/submit).
   const isReadOnlyMethod = request.method === 'GET' || request.method === 'HEAD'
-  const isCrawlerExempt = isReadOnlyMethod && CRAWLER_RE.test(uaForRateLimit)
+  const isCrawlerLike = isReadOnlyMethod && CRAWLER_RE.test(uaForRateLimit)
   // Server Actions transitent en POST sur l'URL de la page avec header
   // `Next-Action: <hash>` (Next 14 App Router). Sans cette détection, elles
   // échappaient au rate-limit (gap CVE GHSA-h25m-26qc-wcjf, audit 2026-04-26).
   const isServerAction = request.method === 'POST' && request.headers.has('next-action')
-  if (
-    (pathname.startsWith('/api/') && pathname !== '/api/health' && !isCrawlerExempt) ||
-    isServerAction
-  ) {
+  if ((pathname.startsWith('/api/') && pathname !== '/api/health') || isServerAction) {
     const clientIp = getClientIp(request.headers)
-    // Pour Server Actions, le `pathname` est l'URL de la page (ex. `/devis`),
-    // pas `/api/*`. On force un bucket dédié pour ne pas tomber sur le bucket
-    // `default` (trop permissif) ou un bucket de page non pertinent.
-    const rateLimitConfig = isServerAction
-      ? getRateLimitConfig('/_next/server-action')
-      : getRateLimitConfig(pathname)
-    const rateLimitKey = isServerAction
-      ? getRateLimitKey(clientIp, '/_next/server-action')
-      : getRateLimitKey(clientIp, pathname)
+    const bucketPath = isServerAction
+      ? '/_next/server-action'
+      : isCrawlerLike
+        ? '/_crawler'
+        : pathname
+    const rateLimitConfig = isCrawlerLike ? RATE_LIMITS.crawler : getRateLimitConfig(bucketPath)
+    const rateLimitKey = getRateLimitKey(clientIp, bucketPath)
 
     try {
       const result = await checkRateLimit(rateLimitKey, rateLimitConfig)

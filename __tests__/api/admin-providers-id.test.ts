@@ -108,6 +108,17 @@ vi.mock('@/lib/sanitize', () => ({
   }),
 }))
 
+// --- Rate-limiter + Sentry mocks (SLA-99.9 added) ---
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(() =>
+    Promise.resolve({ allowed: true, limit: 60, remaining: 59, reset: Date.now() + 60_000 })
+  ),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}))
+vi.mock('@/lib/monitoring/sentry', () => ({
+  captureError: vi.fn(),
+}))
+
 // ============================================
 // Helpers
 // ============================================
@@ -420,7 +431,8 @@ describe('PATCH /api/admin/providers/[id]', () => {
       'provider.update',
       'provider',
       PROVIDER_UUID,
-      expect.objectContaining({ updated_at: expect.any(String) })
+      expect.objectContaining({ updated_at: expect.any(String) }),
+      expect.anything()
     )
   })
 
@@ -443,7 +455,8 @@ describe('PATCH /api/admin/providers/[id]', () => {
       'provider.update',
       'provider',
       PROVIDER_UUID,
-      expect.objectContaining({ description: 'alert("xss")Clean text' })
+      expect.objectContaining({ description: 'alert("xss")Clean text' }),
+      expect.anything()
     )
   })
 })
@@ -520,7 +533,9 @@ describe('DELETE /api/admin/providers/[id]', () => {
       ADMIN_ID,
       'provider.hard_delete',
       'provider',
-      PROVIDER_UUID
+      PROVIDER_UUID,
+      expect.anything(),
+      expect.anything()
     )
   })
 })

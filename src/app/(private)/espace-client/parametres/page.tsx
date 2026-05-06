@@ -454,6 +454,13 @@ export default function ParametresClientPage() {
               ))}
               <hr className="my-2" />
               <Link
+                href="/espace-client/securite/2fa"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-charcoal-700 hover:bg-sand-50"
+              >
+                <Lock className="w-5 h-5" />
+                Sécurité (2FA)
+              </Link>
+              <Link
                 href="/espace-client/mes-demandes"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-charcoal-700 hover:bg-sand-50"
               >

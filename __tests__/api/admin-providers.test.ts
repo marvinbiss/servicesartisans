@@ -145,6 +145,19 @@ vi.mock('@/lib/sanitize', () => ({
   sanitizeSearchQuery: vi.fn((input: string) => input.trim()),
 }))
 
+// --- Rate-limiter mock (SLA-99.9 added) ---
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(() =>
+    Promise.resolve({ allowed: true, limit: 60, remaining: 59, reset: Date.now() + 60_000 })
+  ),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}))
+
+// --- Sentry capture mock ---
+vi.mock('@/lib/monitoring/sentry', () => ({
+  captureError: vi.fn(),
+}))
+
 // ============================================
 // Helper: create a mock NextRequest with URL
 // ============================================
@@ -398,7 +411,7 @@ describe('GET /api/admin/providers', () => {
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
     expect(result.body.error.message).toBe('Erreur serveur')
-    expect(mockLoggerError).toHaveBeenCalledWith('Admin providers list error', expect.any(Error))
+    expect(mockLoggerError).toHaveBeenCalledWith('admin-providers-list: error', expect.any(Error))
   })
 
   // ------------------------------------------

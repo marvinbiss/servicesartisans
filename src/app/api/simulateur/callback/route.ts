@@ -34,6 +34,8 @@ import {
   type CallbackPayload,
 } from '@/lib/simulateur/callback-pipedrive'
 import { sendCallbackClientConfirmation, sendCallbackAdminAlert } from '@/lib/simulateur/emails'
+import { captureError } from '@/lib/monitoring/sentry'
+import { withTimeout } from '@/lib/api/timeout'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -137,17 +139,41 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createAdminClient()
-  const { data: estimation, error: fetchErr } = await supabase
-    .from('simulateur_estimations')
-    .select('id, prenom, nom, email, callback_used_at')
-    .eq('public_id', publicId)
-    .maybeSingle()
+  // SLA-99.9 : timeout 5s sur le fetch — au-delà on renvoie 503 et le user
+  // peut re-cliquer sur le lien email (token reste valide).
+  const fetchResult = await withTimeout(
+    supabase
+      .from('simulateur_estimations')
+      .select('id, prenom, nom, email, callback_used_at')
+      .eq('public_id', publicId)
+      .maybeSingle(),
+    5_000,
+    'simulateur_callback_fetch'
+  ).catch((err) => {
+    logger.error('simulateur/callback fetch timeout', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: err instanceof Error ? err.message : String(err),
+    })
+    captureError(err, {
+      tags: { route: 'api/simulateur/callback', stage: 'fetch', critical: 'true' },
+    })
+    return null
+  })
+
+  if (!fetchResult) {
+    return NextResponse.json({ error: 'Service temporairement indisponible' }, { status: 503 })
+  }
+  const { data: estimation, error: fetchErr } = fetchResult
 
   if (fetchErr) {
     logger.error('simulateur/callback fetch estimation failed', {
       component: 'api/simulateur/callback',
       publicId,
       error: fetchErr.message,
+    })
+    captureError(fetchErr, {
+      tags: { route: 'api/simulateur/callback', stage: 'fetch', critical: 'true' },
     })
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
@@ -177,19 +203,45 @@ export async function POST(req: NextRequest) {
   // concurrent requests both passing the read above. If this UPDATE matches 0
   // rows, another caller won the race → 409. Done BEFORE Pipedrive so a single
   // lead never produces duplicate Person/Deal writes.
-  const { data: claimed, error: claimErr } = await supabase
-    .from('simulateur_estimations')
-    .update({ callback_used_at: new Date().toISOString() })
-    .eq('id', estimation.id as string)
-    .is('callback_used_at', null)
-    .select('id')
-    .maybeSingle()
+  // SLA-99.9 : timeout 5s sur l'atomic claim. Si timeout, le user voit 503,
+  // re-tente, et le claim repassera ; comme c'est un UPDATE conditionnel
+  // (`is('callback_used_at', null)`) la double exécution est safe — race-condition
+  // déjà gérée par le filtre WHERE.
+  const claimResult = await withTimeout(
+    supabase
+      .from('simulateur_estimations')
+      .update({ callback_used_at: new Date().toISOString() })
+      .eq('id', estimation.id as string)
+      .is('callback_used_at', null)
+      .select('id')
+      .maybeSingle(),
+    5_000,
+    'simulateur_callback_claim'
+  ).catch((err) => {
+    logger.error('simulateur/callback claim timeout', {
+      component: 'api/simulateur/callback',
+      publicId,
+      error: err instanceof Error ? err.message : String(err),
+    })
+    captureError(err, {
+      tags: { route: 'api/simulateur/callback', stage: 'claim', critical: 'true' },
+    })
+    return null
+  })
+
+  if (!claimResult) {
+    return NextResponse.json({ error: 'Service temporairement indisponible' }, { status: 503 })
+  }
+  const { data: claimed, error: claimErr } = claimResult
 
   if (claimErr) {
     logger.error('simulateur/callback claim update failed', {
       component: 'api/simulateur/callback',
       publicId,
       error: claimErr.message,
+    })
+    captureError(claimErr, {
+      tags: { route: 'api/simulateur/callback', stage: 'claim', critical: 'true' },
     })
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }

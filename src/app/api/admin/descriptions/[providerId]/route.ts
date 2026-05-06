@@ -3,12 +3,17 @@ import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { isValidUuid } from '@/lib/sanitize'
 import {
   buildProviderUrls,
   submitUrlsWithRetry,
   type ProviderSeoRefreshEvent,
 } from '@/lib/seo/provider-seo-refresh'
+
+// SLA-99.9 : timeout dur Supabase 5s
+const SUPABASE_TIMEOUT_MS = 5_000
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +25,20 @@ const patchSchema = z.object({
 
 export async function PATCH(request: NextRequest, { params }: { params: { providerId: string } }) {
   try {
+    // SLA-99.9 : rate-limit mutation 20/min — descriptions = E-E-A-T critique
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-descriptions-patch:${ip}`, {
+      window: 60_000,
+      max: 20,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const auth = await requirePermission('providers', 'write')
     if (!auth.success || !auth.admin) {
       return (
@@ -55,16 +74,23 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
         )
       }
       const wordCount = draft_text.trim().split(/\s+/).length
-      const { error } = await supabase
-        .from('provider_descriptions_draft')
-        .update({ draft_text, word_count: wordCount })
-        .eq('provider_id', params.providerId)
+      // SLA-99.9 : timeout 5s
+      const { error } = await Promise.race([
+        supabase
+          .from('provider_descriptions_draft')
+          .update({ draft_text, word_count: wordCount })
+          .eq('provider_id', params.providerId),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+        ),
+      ])
       if (error) {
         return NextResponse.json(
           { success: false, error: { message: error.message } },
           { status: 500 }
         )
       }
+      // SLA-99.9 : audit_logs OBLIGATOIRE
       await logAdminAction(auth.admin.id, 'description.edit', 'provider', params.providerId, {
         word_count: wordCount,
       })
@@ -72,19 +98,26 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
     }
 
     if (action === 'reject') {
-      const { error } = await supabase
-        .from('provider_descriptions_draft')
-        .update({
-          status: 'judged_fail',
-          rejection_reason: rejection_reason ?? 'Rejected by admin',
-        })
-        .eq('provider_id', params.providerId)
+      // SLA-99.9 : timeout 5s
+      const { error } = await Promise.race([
+        supabase
+          .from('provider_descriptions_draft')
+          .update({
+            status: 'judged_fail',
+            rejection_reason: rejection_reason ?? 'Rejected by admin',
+          })
+          .eq('provider_id', params.providerId),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+        ),
+      ])
       if (error) {
         return NextResponse.json(
           { success: false, error: { message: error.message } },
           { status: 500 }
         )
       }
+      // SLA-99.9 : audit_logs OBLIGATOIRE
       await logAdminAction(auth.admin.id, 'description.reject', 'provider', params.providerId, {
         rejection_reason,
       })
@@ -92,11 +125,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
     }
 
     // action === 'publish'
-    const { data: draft, error: draftErr } = await supabase
-      .from('provider_descriptions_draft')
-      .select('draft_text')
-      .eq('provider_id', params.providerId)
-      .maybeSingle()
+    // SLA-99.9 : timeout 5s sur la lecture du draft
+    const { data: draft, error: draftErr } = await Promise.race([
+      supabase
+        .from('provider_descriptions_draft')
+        .select('draft_text')
+        .eq('provider_id', params.providerId)
+        .maybeSingle(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
 
     if (draftErr || !draft?.draft_text) {
       return NextResponse.json(
@@ -105,11 +144,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
       )
     }
 
-    const { data: provider, error: providerFetchErr } = await supabase
-      .from('providers')
-      .select('id, slug, stable_id, specialty, address_city')
-      .eq('id', params.providerId)
-      .maybeSingle()
+    // SLA-99.9 : timeout 5s sur la lecture provider
+    const { data: provider, error: providerFetchErr } = await Promise.race([
+      supabase
+        .from('providers')
+        .select('id, slug, stable_id, specialty, address_city')
+        .eq('id', params.providerId)
+        .maybeSingle(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
 
     if (providerFetchErr || !provider) {
       return NextResponse.json(
@@ -118,13 +163,19 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
       )
     }
 
-    const { error: updErr } = await supabase
-      .from('providers')
-      .update({
-        description: draft.draft_text,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.providerId)
+    // SLA-99.9 : timeout 5s sur l'update provider
+    const { error: updErr } = await Promise.race([
+      supabase
+        .from('providers')
+        .update({
+          description: draft.draft_text,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', params.providerId),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
 
     if (updErr) {
       return NextResponse.json(
@@ -133,10 +184,16 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
       )
     }
 
-    const { error: flipErr } = await supabase
-      .from('provider_descriptions_draft')
-      .update({ status: 'published', published_at: new Date().toISOString() })
-      .eq('provider_id', params.providerId)
+    // SLA-99.9 : timeout 5s sur le flip status (best-effort)
+    const { error: flipErr } = await Promise.race([
+      supabase
+        .from('provider_descriptions_draft')
+        .update({ status: 'published', published_at: new Date().toISOString() })
+        .eq('provider_id', params.providerId),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
 
     if (flipErr) {
       logger.warn('[admin/descriptions] draft flip failed after publish', {
@@ -164,13 +221,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { provid
       })
     }
 
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur publish (impact public direct)
     await logAdminAction(auth.admin.id, 'description.publish', 'provider', params.providerId, {
       urls_count: urls.length,
     })
 
     return NextResponse.json({ success: true, urls_count: urls.length })
   } catch (err) {
-    logger.error('admin/descriptions PATCH fatal', err as Error)
+    logger.error('admin-descriptions-patch: error', err as Error)
+    captureError(err, {
+      tags: { route: 'admin/descriptions/[providerId]', method: 'PATCH', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

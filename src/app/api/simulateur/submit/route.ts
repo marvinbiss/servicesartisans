@@ -32,6 +32,8 @@ import { computeInputsHash } from '@/lib/simulateur/hash'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { runPipedriveHook } from '@/lib/simulateur/submit-hooks'
 import { sendSubmitClientConfirmation, sendSubmitAdminNotification } from '@/lib/simulateur/emails'
+import { captureError } from '@/lib/monitoring/sentry'
+import { withTimeout } from '@/lib/api/timeout'
 import type { Situation } from '@/lib/simulateur/types'
 
 export const runtime = 'nodejs'
@@ -99,7 +101,14 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { situation: situationInput, projet, budget, coordonnees, attribution, scoring } = parsed.data
+  const {
+    situation: situationInput,
+    projet,
+    budget,
+    coordonnees,
+    attribution,
+    scoring,
+  } = parsed.data
 
   // Double-check RGPD (schéma impose déjà literal true, mais défense en profondeur)
   if (coordonnees.consentRgpd !== true) {
@@ -281,20 +290,38 @@ export async function POST(req: NextRequest) {
     user_agent: userAgent,
   }
 
-  const { data: inserted, error: insertErr } = await supabase
-    .from('simulateur_estimations')
-    .insert(insertPayload)
-    .select('id')
-    .single()
-
-  if (insertErr || !inserted) {
-    logger.error('simulateur_estimations insert failed', {
+  // SLA-99.9 : timeout 5s sur l'insert. Au-delà, 503 cacheable côté front
+  // (le user peut re-submit) plutôt que de hang la function Vercel.
+  const insertResult = await withTimeout(
+    supabase.from('simulateur_estimations').insert(insertPayload).select('id').single(),
+    5_000,
+    'simulateur_submit_insert'
+  ).catch((err) => {
+    logger.error('simulateur_estimations insert timeout', {
       component: 'api/simulateur/submit',
-      error: insertErr?.message,
+      error: err instanceof Error ? err.message : String(err),
       publicId,
     })
+    captureError(err, {
+      tags: { route: 'api/simulateur/submit', stage: 'insert', critical: 'true' },
+    })
+    return null
+  })
+
+  if (!insertResult || insertResult.error || !insertResult.data) {
+    logger.error('simulateur_estimations insert failed', {
+      component: 'api/simulateur/submit',
+      error: insertResult?.error?.message,
+      publicId,
+    })
+    if (insertResult?.error) {
+      captureError(insertResult.error, {
+        tags: { route: 'api/simulateur/submit', stage: 'insert', critical: 'true' },
+      })
+    }
     return NextResponse.json({ error: 'Erreur lors de la sauvegarde' }, { status: 500 })
   }
+  const inserted = insertResult.data
 
   logger.info('simulateur estimation created', {
     component: 'api/simulateur/submit',

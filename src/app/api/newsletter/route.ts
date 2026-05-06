@@ -1,6 +1,12 @@
 /**
  * Newsletter API - ServicesArtisans (legacy route)
  * Forwards to /api/newsletter/subscribe for backward compatibility.
+ *
+ * SLA-99.9 hardening (2026-05-06) :
+ *   - RL 30/min/IP, fail-open (incident 2026-04-22 — Redis glitch ne doit
+ *     jamais bloquer un signup).
+ *   - Timeout 5s sur DB upsert + envoi email Resend.
+ *   - Validation zod + email normalization.
  */
 
 import { NextResponse } from 'next/server'
@@ -13,11 +19,21 @@ import { safeJsonBody } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
 
+// SLA-99.9 : timeout 5s pour DB et email — empêche un POST de hang sur le client.
+const TIMEOUT_MS = 5000
+
+async function withTimeout<T>(p: PromiseLike<T>, ms: number, label: string): Promise<T> {
+  return Promise.race([
+    Promise.resolve(p),
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`${label}-timeout`)), ms)),
+  ])
+}
+
 export async function POST(request: Request) {
   try {
-    // Rate limiting (public endpoint — 3 requests per 5 min per IP)
+    // SLA-99.9 : RL 30/min/IP, fail-open (cible scope mission).
     const ip = getClientIp(request.headers)
-    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 300_000, max: 3, failOpen: true })
+    const rl = await checkRateLimit(`newsletter:${ip}`, { window: 60_000, max: 30, failOpen: true })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de requêtes, veuillez réessayer plus tard' },
@@ -31,7 +47,7 @@ export async function POST(request: Request) {
     const parsed = await safeJsonBody<unknown>(request)
     if (!parsed.ok) return parsed.response
 
-    // Validate input
+    // Validate input (zod email + max 254 chars).
     const validation = newsletterEmailSchema.safeParse(parsed.data)
     if (!validation.success) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
@@ -40,31 +56,38 @@ export async function POST(request: Request) {
     const { email } = validation.data
     const normalizedEmail = email.toLowerCase().trim()
 
-    // Store in Supabase (upsert — re-subscribe if previously unsubscribed)
+    // Store in Supabase (upsert — re-subscribe if previously unsubscribed).
+    // SLA-99.9 : timeout 5s — DB lente ne doit pas tuer le signup.
     try {
       const supabase = createAdminClient()
-      await supabase.from('newsletter_subscribers').upsert(
-        {
-          email: normalizedEmail,
-          subscribed_at: new Date().toISOString(),
-          unsubscribed_at: null,
-          source: 'legacy',
-        },
-        { onConflict: 'email' }
+      await withTimeout(
+        supabase.from('newsletter_subscribers').upsert(
+          {
+            email: normalizedEmail,
+            subscribed_at: new Date().toISOString(),
+            unsubscribed_at: null,
+            source: 'legacy',
+          },
+          { onConflict: 'email' }
+        ),
+        TIMEOUT_MS,
+        'newsletter-upsert'
       )
     } catch (dbError) {
       logger.error('Newsletter DB insert failed (legacy route)', dbError)
       // Don't fail the subscription if DB fails
     }
 
-    // Send welcome email (non-blocking — don't crash signup if email fails)
+    // SLA-99.9 : Send welcome email avec timeout 5s, non-blocking — un Resend
+    // lent ne doit pas tuer la subscription (déjà persistée plus haut).
     try {
       const resend = getResendClient()
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
-        to: normalizedEmail,
-        subject: 'Bienvenue dans la newsletter ServicesArtisans !',
-        html: `
+      await withTimeout(
+        resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+          to: normalizedEmail,
+          subject: 'Bienvenue dans la newsletter ServicesArtisans !',
+          html: `
           <h2>Bienvenue !</h2>
           <p>Merci de vous être inscrit à notre newsletter.</p>
           <p>Vous recevrez régulièrement nos meilleurs articles et conseils pour vos projets de travaux :</p>
@@ -81,7 +104,10 @@ export async function POST(request: Request) {
             <a href="https://servicesartisans.fr">servicesartisans.fr</a>
           </p>
         `,
-      })
+        }),
+        TIMEOUT_MS,
+        'newsletter-resend'
+      )
     } catch (emailError) {
       logger.error('Newsletter welcome email failed', emailError)
     }

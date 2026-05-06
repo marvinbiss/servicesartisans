@@ -45,6 +45,18 @@ export default function ConnexionPage() {
         return
       }
 
+      // Plan C — C-1 : 2FA gate. Si signin renvoie `requires2FA: true`, on
+      // a un cookie `sa_2fa_pending` posé côté serveur. Redirige vers la page
+      // /verifier-2fa qui collectera le code TOTP et déposera `sa_2fa_verified`.
+      if (data.data?.requires2FA) {
+        const safeNext = getSafeRedirectPath(redirectTo, '')
+        const target = safeNext
+          ? `/verifier-2fa?next=${encodeURIComponent(safeNext)}`
+          : '/verifier-2fa'
+        router.push(target)
+        return
+      }
+
       // Session managed by Supabase SSR cookies — no localStorage storage needed
 
       // Redirect: honor ?redirect= param, else default to dashboard

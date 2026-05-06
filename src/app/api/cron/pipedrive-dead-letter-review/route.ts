@@ -35,6 +35,11 @@ const ALERTS_EMAIL = process.env.ALERTS_EMAIL || 'partenariats@servicesartisans.
 const MAX_DETAILS_ROWS = 50
 const SAMPLE_LOOKBACK_DAYS = 30
 
+// Plan C — C-5 : seuils paliers d'alerting Sentry, configurables via env.
+// `info` → debug (pas d'alerte ops), `warning` → on regarde, `error` → escalade visible.
+const WARN_THRESHOLD = Number(process.env.ALERTS_DLQ_WARN_THRESHOLD) || 10
+const ERROR_THRESHOLD = Number(process.env.ALERTS_DLQ_ERROR_THRESHOLD) || 100
+
 type DeadLetterRow = {
   id: string
   created_at: string | null
@@ -163,21 +168,28 @@ export const GET = withCronCheckIn(
 
     const recentRows = (rows ?? []) as DeadLetterRow[]
 
-    // Sentry tagged event pour visibilité ops
+    // Sentry tagged event pour visibilité ops (palier de criticité)
+    const level: 'info' | 'warning' | 'error' =
+      totalCount >= ERROR_THRESHOLD ? 'error' : totalCount >= WARN_THRESHOLD ? 'warning' : 'info'
     Sentry.captureMessage('Pipedrive dead-letter weekly review', {
-      level: totalCount > 10 ? 'warning' : 'info',
+      level,
       tags: {
         cron: 'pipedrive-dead-letter-review',
         dead_letter: 'weekly-review',
+        severity: level,
       },
       extra: {
         total_count: totalCount,
         recent_30d_count: recentRows.length,
+        warn_threshold: WARN_THRESHOLD,
+        error_threshold: ERROR_THRESHOLD,
+        alerts_email: ALERTS_EMAIL,
       },
     })
 
     // Email summary à l'équipe partenariats
     let emailSent = false
+    let emailError: unknown = null
     try {
       const result = await sendEmail({
         to: ALERTS_EMAIL,
@@ -188,12 +200,34 @@ export const GET = withCronCheckIn(
       })
       emailSent = result.success
       if (!emailSent) {
-        logger.error('[pipedrive-dead-letter-review] email send failed', {
-          error: result.error,
-        })
+        emailError = result.error
+        logger.error('[pipedrive-dead-letter-review] email send failed', { error: result.error })
       }
     } catch (err) {
+      emailError = err
       logger.error('[pipedrive-dead-letter-review] email throw', err)
+    }
+
+    // Plan C — C-5 : si l'email échoue ALORS qu'on a des dead-letters à
+    // signaler, on capture une exception Sentry séparée (le `captureMessage`
+    // ci-dessus est info-only). Sans ça l'opacité de DLQ-2 persiste.
+    if (!emailSent && totalCount > 0) {
+      Sentry.captureException(
+        emailError instanceof Error
+          ? emailError
+          : new Error(`DLQ alert email failed: ${String(emailError ?? 'unknown')}`),
+        {
+          tags: {
+            cron: 'pipedrive-dead-letter-review',
+            failure: 'email_send',
+            critical: 'true',
+          },
+          extra: {
+            total_count: totalCount,
+            recipient: ALERTS_EMAIL,
+          },
+        }
+      )
     }
 
     return NextResponse.json({

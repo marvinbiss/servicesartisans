@@ -38,3 +38,9 @@ run_audit() {
 
 run_audit scripts/audit-schema-drift.mjs --baseline-check --strict || exit 1
 run_audit scripts/audit-migrations-applied.mjs --strict || exit 1
+# Audit V2 SQL P1 : pre-commit ne lint que les fichiers stagés ; ici on rescanne
+# TOUT au push avec --baseline-check pour bloquer toute NOUVELLE violation
+# CVE-2018-1058 sans bloquer la dette historique (117 fns, baseline figée).
+# Régénérer après remédiation : node scripts/audit-migration-search-path.mjs --baseline-write
+run_audit scripts/audit-migration-search-path.mjs --all --baseline-check || exit 1
+node scripts/check-migration-unique.mjs || exit 1

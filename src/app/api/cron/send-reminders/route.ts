@@ -27,15 +27,21 @@ export const GET = withCronCheckIn('cron-send-reminders', async (request: Reques
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
-    // Calculate tomorrow's date range
+    // Audit V1 P0 #4 : avant ce fix, `.eq(status,confirmed).limit(500)` puis
+    // filter JS `scheduled_date.startsWith(tomorrowStr)` faisait silent-miss
+    // tous les bookings de demain au-delà de la 500e ligne. Volume 970K
+    // providers × N futurs ⇒ saturation possible. Fix : range côté DB.
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
-    const tomorrowStr = tomorrow.toISOString().split('T')[0]
+    const tomorrowStart = new Date(tomorrow)
+    tomorrowStart.setHours(0, 0, 0, 0)
+    const dayAfter = new Date(tomorrowStart)
+    dayAfter.setDate(dayAfter.getDate() + 1)
+    const tomorrowStr = tomorrowStart.toISOString().split('T')[0]
 
     logger.info(`[Cron] Fetching bookings for ${tomorrowStr}`)
 
-    // Fetch all confirmed bookings for tomorrow using scheduled_date (availability_slots has no FK on bookings)
-    const { data: bookings, error } = await supabase
+    const { data: tomorrowBookings, error } = await supabase
       .from('bookings')
       .select(
         `
@@ -48,20 +54,18 @@ export const GET = withCronCheckIn('cron-send-reminders', async (request: Reques
       `
       )
       .eq('status', 'confirmed')
-      .limit(500)
+      .gte('scheduled_date', tomorrowStart.toISOString())
+      .lt('scheduled_date', dayAfter.toISOString())
+      .limit(5000)
 
     if (error) {
       logger.error('[Cron] Error fetching bookings:', error)
       throw error
     }
 
-    // Filter bookings for tomorrow using scheduled_date
-    const tomorrowBookings =
-      bookings?.filter((b) => b.scheduled_date && b.scheduled_date.startsWith(tomorrowStr)) || []
+    logger.info(`[Cron] Found ${tomorrowBookings?.length ?? 0} bookings for tomorrow`)
 
-    logger.info(`[Cron] Found ${tomorrowBookings.length} bookings for tomorrow`)
-
-    if (tomorrowBookings.length === 0) {
+    if (!tomorrowBookings || tomorrowBookings.length === 0) {
       return NextResponse.json({
         success: true,
         message: 'Aucune réservation pour demain',

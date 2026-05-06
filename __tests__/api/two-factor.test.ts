@@ -47,6 +47,7 @@ function makeBuilder(tableName: string) {
   b.limit = vi.fn().mockReturnValue(b)
   b.order = vi.fn().mockReturnValue(b)
   b.single = vi.fn().mockReturnValue(b)
+  b.maybeSingle = vi.fn().mockReturnValue(b)
   b.in = vi.fn().mockReturnValue(b)
   b.insert = vi.fn().mockImplementation((row: unknown) => {
     insertCaptures.push({ table: tableName, row })

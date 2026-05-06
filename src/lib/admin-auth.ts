@@ -337,7 +337,8 @@ export async function logAdminAction(
   action: string,
   entityType: string,
   entityId: string,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
+  oldValue?: Record<string, unknown>
 ): Promise<void> {
   try {
     const supabase = createAdminClient()
@@ -347,6 +348,7 @@ export async function logAdminAction(
       resource_type: entityType,
       resource_id: entityId,
       new_value: details || {},
+      ...(oldValue ? { old_value: oldValue } : {}),
     })
   } catch (error) {
     // Audit logging should not break the main operation

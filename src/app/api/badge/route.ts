@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+
+export const dynamic = 'force-dynamic'
+
 /** Escape XML special characters to prevent XSS in SVG output */
 function escapeXml(str: string): string {
   return str
@@ -46,31 +52,50 @@ function starPoints(cx: number, cy: number, outerR: number, innerR: number): str
   return points.join(' ')
 }
 
+/** SLA-99.9 : minimal SVG fallback retourné quand le handler crash. Évite de
+ *  renvoyer 5xx à un site partenaire qui embed le badge — le crawler verrait
+ *  un widget cassé et déprécierait le backlink. */
+function fallbackSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
+  <rect width="200" height="50" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="100" y="30" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="11" fill="#94a3b8">ServicesArtisans.fr</text>
+</svg>`
+}
+
 export async function GET(request: NextRequest) {
-  const name = request.nextUrl.searchParams.get('name') || 'Artisan'
-  const service = request.nextUrl.searchParams.get('service') || ''
-  const rating = request.nextUrl.searchParams.get('rating') || '4.5'
-  const reviews = request.nextUrl.searchParams.get('reviews') || '0'
-  const style = request.nextUrl.searchParams.get('style') || 'light'
+  // SLA-99.9 : rate-limit IP-keyed 600/min, fail-open si Upstash glitche
+  // (un crawler partenaire ne doit jamais voir 429 transient sur un asset embed).
+  try {
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`badge:${ip}`, { window: 60_000, max: 600, failOpen: true })
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
 
-  // Clamp rating between 0 and 5
-  const ratingNum = Math.min(5, Math.max(0, parseFloat(rating) || 4.5))
+    const name = request.nextUrl.searchParams.get('name') || 'Artisan'
+    const service = request.nextUrl.searchParams.get('service') || ''
+    const rating = request.nextUrl.searchParams.get('rating') || '4.5'
+    const reviews = request.nextUrl.searchParams.get('reviews') || '0'
+    const style = request.nextUrl.searchParams.get('style') || 'light'
 
-  const isMinimal = style === 'minimal'
-  const bgColor = style === 'dark' ? '#1e293b' : '#ffffff'
-  const textColor = style === 'dark' ? '#ffffff' : '#1e293b'
-  const subtextColor = style === 'dark' ? '#94a3b8' : '#64748b'
-  const borderColor = style === 'dark' ? '#334155' : '#e2e8f0'
-  const accentColor = '#2563eb'
-  const starColor = '#f59e0b'
+    // Clamp rating between 0 and 5
+    const ratingNum = Math.min(5, Math.max(0, parseFloat(rating) || 4.5))
 
-  const escapedName = escapeXml(name.length > 28 ? name.slice(0, 26) + '...' : name)
-  const escapedService = escapeXml(service.length > 30 ? service.slice(0, 28) + '...' : service)
+    const isMinimal = style === 'minimal'
+    const bgColor = style === 'dark' ? '#1e293b' : '#ffffff'
+    const textColor = style === 'dark' ? '#ffffff' : '#1e293b'
+    const subtextColor = style === 'dark' ? '#94a3b8' : '#64748b'
+    const borderColor = style === 'dark' ? '#334155' : '#e2e8f0'
+    const accentColor = '#2563eb'
+    const starColor = '#f59e0b'
 
-  let svg: string
+    const escapedName = escapeXml(name.length > 28 ? name.slice(0, 26) + '...' : name)
+    const escapedService = escapeXml(service.length > 30 ? service.slice(0, 28) + '...' : service)
 
-  if (isMinimal) {
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
+    let svg: string
+
+    if (isMinimal) {
+      svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
   <rect width="200" height="50" rx="6" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
   <text x="12" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="${accentColor}">ServicesArtisans.fr</text>
   <text x="12" y="36" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="${textColor}">${escapedName}</text>
@@ -80,8 +105,8 @@ export async function GET(request: NextRequest) {
   </g>
   <text x="177" y="46" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="7" font-weight="600" fill="#16a34a">Certifie</text>
 </svg>`
-  } else {
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100">
+    } else {
+      svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100">
   <rect width="300" height="100" rx="8" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
   <text x="15" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="${accentColor}">ServicesArtisans.fr</text>
   <text x="15" y="45" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="${textColor}">${escapedName}</text>
@@ -94,13 +119,30 @@ export async function GET(request: NextRequest) {
   </g>
   <text x="270" y="58" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="600" fill="#16a34a">Verifie</text>
 </svg>`
-  }
+    }
 
-  return new NextResponse(svg, {
-    headers: {
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-      'Access-Control-Allow-Origin': '*', // CORS: public badge endpoint, intentionally allows cross-origin
-    },
-  })
+    // SLA-99.9 : Cache 1h public + SWR 7j → CDN absorbe les pics, l'origine
+    // ne voit qu'1 hit/heure/badge. CORS '*' obligatoire (asset embed cross-origin).
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=604800',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+      },
+    })
+  } catch (error) {
+    // SLA-99.9 : fallback SVG vide + 200 → l'embed reste fonctionnel côté
+    // partenaire, on évite un 5xx visible. Trace forcée Sentry pour alerting.
+    logger.error('badge: error', error)
+    captureError(error, { tags: { route: 'api/badge', critical: 'true' } })
+    return new NextResponse(fallbackSvg(), {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, s-maxage=60',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+  }
 }

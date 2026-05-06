@@ -152,14 +152,18 @@ describe('Notifications V1 — Lead Event Processor', () => {
     expect(processorCode).toContain('createAdminClient')
   })
 
-  it('checks idempotency before delivery', () => {
+  it('claims notification_deliveries via write-ahead-log before sending', () => {
+    // 2026-05-05 : pattern inversé pour fermer race cron concurrent
+    // (audit V2 P0 #2). On insert AVANT le send, status=pending,
+    // l'unique partial index rejette les workers concurrents.
     expect(processorCode).toContain('notification_deliveries')
-    expect(processorCode).toContain('maybeSingle')
-    expect(processorCode).toContain('if (existing) return')
+    expect(processorCode).toContain("status: 'pending'")
+    expect(processorCode).toContain("'23505'")
   })
 
-  it('records delivery after processing', () => {
-    expect(processorCode).toContain("supabase.from('notification_deliveries').insert")
+  it('updates delivery status after processing', () => {
+    expect(processorCode).toContain(".from('notification_deliveries')")
+    expect(processorCode).toContain('.update({ status, error_message: errorMessage })')
   })
 
   it('uses existing Resend email infrastructure', () => {

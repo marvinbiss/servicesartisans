@@ -140,7 +140,19 @@ function makeChainBuilder(table: string) {
 }
 
 const mockFrom = vi.fn((table: string) => makeChainBuilder(table))
-const mockAdminSupabase = { from: mockFrom }
+const mockRpc = vi.fn((fn: string) => {
+  const result =
+    fn === 'acquire_cron_lease' ? { data: true, error: null } : { data: null, error: null }
+  const builder: {
+    abortSignal: (s: AbortSignal) => typeof builder
+    then: Promise<typeof result>['then']
+  } = {
+    abortSignal: () => builder,
+    then: (onF, onR) => Promise.resolve(result).then(onF, onR),
+  }
+  return builder
+})
+const mockAdminSupabase = { from: mockFrom, rpc: mockRpc }
 
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(() => mockAdminSupabase),

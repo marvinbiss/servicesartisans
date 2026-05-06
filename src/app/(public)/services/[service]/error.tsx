@@ -1,13 +1,22 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
+import * as Sentry from '@sentry/nextjs'
 
 export default function ServiceDetailError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  useEffect(() => {
+    Sentry.captureException(error, {
+      tags: { boundary: 'service_detail_error' },
+      extra: { digest: error.digest },
+    })
+  }, [error])
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="text-center max-w-md">

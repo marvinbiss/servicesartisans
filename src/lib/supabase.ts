@@ -188,20 +188,16 @@ const PROVIDER_LIST_SELECT = [
 
 export async function getServices() {
   if (IS_BUILD) return Object.values(staticServices) // Use static data during build
-  return withTimeout(
-    (async () => {
-      const { data, error } = await supabase
-        .from('services')
-        .select('id, name, slug, description, icon, category, is_active')
-        .eq('is_active', true)
-        .order('name')
+  return retryWithBackoff(async () => {
+    const { data, error } = await supabase
+      .from('services')
+      .select('id, name, slug, description, icon, category, is_active')
+      .eq('is_active', true)
+      .order('name')
 
-      if (error) throw error
-      return data
-    })(),
-    QUERY_TIMEOUT_MS,
-    'getServices'
-  )
+    if (error) throw error
+    return data
+  }, 'getServices')
 }
 
 // Services statiques en fallback — généré depuis france.ts (couvre les 46 métiers)
@@ -274,7 +270,8 @@ export async function getServiceBySlug(slug: string) {
         throw error
       }
     },
-    CACHE_TTL.services // 86400s — services ne changent pas
+    CACHE_TTL.services, // 86400s — services ne changent pas
+    { skipNull: true }
   )
 }
 
@@ -572,7 +569,8 @@ export const getReviewStatsByDept = requestCache(
           return null
         }
       },
-      CACHE_TTL.artisans
+      CACHE_TTL.artisans,
+      { skipNull: true }
     )
   }
 )
@@ -987,7 +985,7 @@ export async function getRgeProviderCountByServiceAndLocation(
 ): Promise<number> {
   if (IS_BUILD) return 0
 
-  return getCachedData(
+  const cached = await getCachedData<number | null>(
     `rge-provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
     async () => {
       try {
@@ -1014,11 +1012,13 @@ export async function getRgeProviderCountByServiceAndLocation(
           return count ?? 0
         }, `getRgeProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`)
       } catch {
-        return 0
+        return null
       }
     },
-    CACHE_TTL.artisans // 3600s (1h)
+    CACHE_TTL.artisans, // 3600s (1h)
+    { skipNull: true }
   )
+  return cached ?? 0
 }
 
 /**
@@ -1084,24 +1084,20 @@ export async function getAllProviders() {
   return getCachedData(
     'providers:all',
     async () => {
-      return withTimeout(
-        (async () => {
-          const { data, error } = await supabase
-            .from('providers')
-            .select(PROVIDER_LIST_SELECT)
-            .eq('is_active', true)
-            .order('rge_valid_until', { ascending: false, nullsFirst: false })
-            .order('phone', { ascending: false, nullsFirst: false })
-            .order('is_verified', { ascending: false })
-            .order('name')
-            .limit(1000)
+      return retryWithBackoff(async () => {
+        const { data, error } = await supabase
+          .from('providers')
+          .select(PROVIDER_LIST_SELECT)
+          .eq('is_active', true)
+          .order('rge_valid_until', { ascending: false, nullsFirst: false })
+          .order('phone', { ascending: false, nullsFirst: false })
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .limit(1000)
 
-          if (error) throw error
-          return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-        })(),
-        QUERY_TIMEOUT_MS,
-        'getAllProviders'
-      )
+        if (error) throw error
+        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+      }, 'getAllProviders')
     },
     CACHE_TTL.artisans, // 3600s (1h)
     { skipNull: true }
@@ -1128,8 +1124,8 @@ export async function getProvidersByService(
   const effectiveLimit = limit || 50
   const todayIso = new Date().toISOString().slice(0, 10)
   try {
-    return await withTimeout(
-      (async () => {
+    return await retryWithBackoff(
+      async () => {
         let query = supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
@@ -1146,8 +1142,7 @@ export async function getProvidersByService(
 
         if (error) throw error
         return resolveProviderCities((data || []) as unknown as ProviderListRow[])
-      })(),
-      QUERY_TIMEOUT_MS,
+      },
       `getProvidersByService(${serviceSlug}${rgeOnly ? ', rge' : ''})`
     )
   } catch {
@@ -1204,42 +1199,42 @@ export async function getDevisCountByDept(
 
   const cacheKey = `devis-count:${serviceSlug}:${departmentCode}`
 
-  return getCachedData(
+  const cached = await getCachedData<number | null>(
     cacheKey,
     async () => {
       try {
-        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-        if (!specialties || specialties.length === 0) return 0
+        return await retryWithBackoff(async () => {
+          const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+          if (!specialties || specialties.length === 0) return 0
 
-        const thirtyDaysAgo = new Date()
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+          const postalPrefix = `${departmentCode}%`
 
-        // devis_requests stores service_name (human-readable), not slug.
-        // Use ilike to match any specialty name for this service.
-        // Also filter by postal_code prefix for the department.
-        const postalPrefix = `${departmentCode}%`
-
-        let total = 0
-        for (const specialty of specialties) {
-          const { count, error } = await supabase
-            .from('devis_requests')
-            .select('*', { count: 'exact', head: true })
-            .ilike('service_name', specialty)
-            .like('postal_code', postalPrefix)
-            .gte('created_at', thirtyDaysAgo.toISOString())
-
-          if (!error && count) {
-            total += count
-          }
-        }
-
-        return total
+          // N round-trips parallèles (specialties.length ≤ 3) : -2× latence
+          // vs for-loop séquentiel. Un seul fail = throw → retryWithBackoff.
+          const counts = await Promise.all(
+            specialties.map(async (specialty) => {
+              const { count, error } = await supabase
+                .from('devis_requests')
+                .select('*', { count: 'exact', head: true })
+                .ilike('service_name', specialty)
+                .like('postal_code', postalPrefix)
+                .gte('created_at', thirtyDaysAgo.toISOString())
+              if (error) throw error
+              return count ?? 0
+            })
+          )
+          return counts.reduce((a, b) => a + b, 0)
+        }, `getDevisCountByDept(${serviceSlug}, ${departmentCode})`)
       } catch {
-        return 0
+        return null
       }
     },
-    CACHE_TTL.stats
+    CACHE_TTL.stats,
+    { skipNull: true }
   )
+  return cached ?? 0
 }
 
 /**

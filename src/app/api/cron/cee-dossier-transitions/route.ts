@@ -1,92 +1,81 @@
 /**
- * Cron CEE — réconciliation des transitions de dossiers (brique 6 mandataire CEE).
+ * Cron CEE — réconciliation des transitions de dossiers (mandataire CEE V3).
  *
- * Objectif :
- *   Aucun worker ne fait avancer automatiquement les dossiers CEE dans le DAG
- *   à 12 états défini par la migration 402. Ce cron scanne les dossiers en
- *   statut intermédiaire et déclenche les transitions "mécaniques" évidentes :
+ * Plan D — D-1 + D-2 (2026-05-06) : refonte complète pour statuts V3.
  *
- *     Règle A — detect_missing_justificatifs
- *       Scope   : `engagement_signe` âgés > 24 h
- *       Action  : pas de transition (aucun état "incomplets" dans le DAG),
- *                 log.warn structuré listant les codes manquants pour alerter
- *                 le backoffice mandataire.
+ * Avant : ce cron scannait `engagement_signe`, `travaux_acheves`,
+ *         `depose_delegataire` (statuts V2 droppés par mig 433). Inerte.
  *
- *     Règle B — travaux_acheves_ready_to_sign_ah
- *       Scope   : `travaux_acheves` avec `getJustificatifsGap.complete === true`
- *       Action  : transition `travaux_acheves` → `ah_signee`
- *                 (= justificatifs prêts, dossier peut passer à la signature AH)
+ * Après : alertes ops sur dossiers stuck dans un statut V3 — Sonergia n'a PAS
+ *         d'API publique, donc on n'auto-push PAS. Le rôle du cron est de
+ *         signaler les actions humaines requises côté backoffice CEE.
  *
- *     Règle C — depose_delegataire_acquittement_assumed
- *       Scope   : `depose_delegataire` âgés > 48 h
- *       Action  : transition `depose_delegataire` → `depose_pncee`
- *                 (= acquittement délégataire présumé reçu)
+ * Règles V3 (DAG `src/lib/cee/dossier-transitions.ts`) :
  *
- * Règles transverses (garanties par le code et le trigger SQL migration 402) :
- *   - PAS de régression d'état : on ne cible que des transitions forward
- *     autorisées par `cee_dossiers_validate_status_transition`.
- *   - Idempotent : une 2e exécution dans la même heure ne trouvera que les
- *     dossiers restants (ceux déjà transités ne matchent plus le filtre de
- *     statut source).
- *   - Par-dossier try/catch : l'erreur d'un dossier n'annule pas les autres.
- *   - Cap 500 dossiers/run pour borner la durée d'exécution et la charge DB.
+ *   Règle A — qa_approved_stale_to_deposit
+ *     Scope   : `qa_approved` âgés > 24h
+ *     Action  : Sentry warn + log structuré → ops doit dépose manuel chez
+ *               Sonergia puis appeler /api/admin/cee/dossiers/[id]/transition
+ *               pour passer en `deposited`. Aucun auto-transition.
+ *
+ *   Règle B — deposited_acquittement_overdue
+ *     Scope   : `deposited` âgés > 14j (cycle moyen acquittement Sonergia)
+ *     Action  : Sentry warn → ops doit relancer délégataire pour validation
+ *               PNCEE.
+ *
+ *   Règle C — validated_pncee_payment_overdue
+ *     Scope   : `validated_pncee` âgés > 7j
+ *     Action  : Sentry warn → ops doit déclencher versement client.
+ *
+ *   Règle D — paid_client_to_commission_due (auto)
+ *     Scope   : `paid_client` âgés > 1h (= virement client confirmé)
+ *     Action  : auto-transition vers `commission_due` (pas d'action externe ;
+ *               la commission devient due dès que le client est payé).
+ *
+ * Garanties :
+ *   - PAS de régression d'état : transitions forward strictement validées par
+ *     trigger SQL `cee_dossiers_check_status_transition` (mig 433).
+ *   - Idempotent : 2e run trouve uniquement les dossiers restants.
+ *   - Par-dossier try/catch isolé.
+ *   - Cap 500 dossiers/run + lease anti-double-run.
  *   - Zéro PII dans les logs.
  *
- * Auth :
- *   - Fail-closed sur `CRON_SECRET` absent.
- *   - Comparaison en temps constant via `crypto.timingSafeEqual`.
+ * Auth : fail-closed sur CRON_SECRET absent + timingSafeEqual.
  *
  * Schedule : 1 × par heure (cf. `vercel.json`).
  */
 
 import { NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
+import * as Sentry from '@sentry/nextjs'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 import { transitionCeeDossierStatus } from '@/lib/cee/dossiers'
-import { getJustificatifsGap } from '@/lib/cee/justificatifs'
-import type { CeeDossierStatus } from '@/lib/cee/dossier-types'
+import type { CeeDossierV3Status } from '@/lib/cee/dossier-transitions'
 
-// Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
 export const dynamic = 'force-dynamic'
 
-// ---------------------------------------------------------------------------
-// Constantes
-// ---------------------------------------------------------------------------
-
-/** Borne dure par run pour éviter qu'un cron bloque > maxDuration. */
-
 const MAX_DOSSIERS_PER_RUN = 500
+const QA_APPROVED_STALE_HOURS = 24
+const DEPOSITED_OVERDUE_DAYS = 14
+const VALIDATED_PNCEE_OVERDUE_DAYS = 7
+const PAID_CLIENT_AUTO_TRANSITION_HOURS = 1
+// Plan D — SLA fix : Vercel maxDuration cron = 60s. Sécurité : sortir 10s
+// avant le hard-timeout pour permettre release du lease + JSON response.
+// 500 dossiers × 150ms RPC = 75s théorique → wall-clock guard obligatoire.
+const MAX_RUNTIME_MS = 50_000
 
-/** Âge minimum pour la règle A (détection justificatifs manquants). */
-const ENGAGEMENT_STALE_HOURS = 24
-
-/** Âge minimum pour la règle C (acquittement délégataire présumé). */
-const DEPOSE_STALE_HOURS = 48
-
-/** Nom du lease anti-double-run pour ce cron. */
 const LEASE_NAME = 'cee_dossier_transitions'
-
-/** TTL du lease : 15 min >> durée typique d'un run, < écart entre 2 crons horaires. */
 const LEASE_TTL_SECONDS = 15 * 60
 
-/**
- * Clés de compteur de transitions renvoyées dans la réponse JSON.
- * Format : `{from}_to_{to}` — stable pour monitoring externe.
- */
-type TransitionKey = 'travaux_acheves_to_ah_signee' | 'depose_delegataire_to_depose_pncee'
+type AlertCounters = {
+  qa_approved_stale: number
+  deposited_overdue: number
+  validated_pncee_overdue: number
+  paid_client_to_commission_due: number
+}
 
-type TransitionCounters = Record<TransitionKey, number>
-
-// ---------------------------------------------------------------------------
-// Auth helpers (fail-closed, temps constant)
-// ---------------------------------------------------------------------------
-
-/**
- * Compare deux secrets en temps constant. Retourne false si l'une des valeurs
- * est absente ou si les longueurs diffèrent (timingSafeEqual throw sinon).
- */
 function safeCompare(a: string | null | undefined, b: string | null | undefined): boolean {
   if (!a || !b) return false
   const bufA = Buffer.from(a, 'utf8')
@@ -99,10 +88,6 @@ function safeCompare(a: string | null | undefined, b: string | null | undefined)
   }
 }
 
-/**
- * Extrait le bearer depuis le header Authorization. Retourne null si absent
- * ou malformé.
- */
 function extractBearer(request: Request): string | null {
   const header = request.headers.get('authorization')
   if (!header) return null
@@ -110,17 +95,9 @@ function extractBearer(request: Request): string | null {
   return match ? match[1].trim() : null
 }
 
-// ---------------------------------------------------------------------------
-// DB helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Représentation minimale d'un dossier retournée par nos requêtes batch.
- * On ne lit que les colonnes strictement nécessaires aux règles.
- */
-interface DossierRow {
+type DossierRow = {
   id: string
-  status: CeeDossierStatus
+  status: CeeDossierV3Status
   operation_code: string
   created_at: string
   updated_at: string
@@ -128,19 +105,12 @@ interface DossierRow {
 
 const DOSSIER_MIN_SELECT = 'id,status,operation_code,created_at,updated_at'
 
-/**
- * Calcule un ISO timestamp `now - hours`. Factorisé pour le test.
- */
-function hoursAgoIso(hours: number, now: Date = new Date()): string {
-  return new Date(now.getTime() - hours * 3600 * 1000).toISOString()
+function ageBeforeIso(amount: number, unit: 'hours' | 'days', now: Date = new Date()): string {
+  const ms = unit === 'hours' ? amount * 3600 * 1000 : amount * 24 * 3600 * 1000
+  return new Date(now.getTime() - ms).toISOString()
 }
 
-// ---------------------------------------------------------------------------
-// Handler
-// ---------------------------------------------------------------------------
-
 async function handleCeeDossierTransitions(request: Request): Promise<Response> {
-  // -- Auth fail-closed -----------------------------------------------------
   const expected = process.env.CRON_SECRET
   if (!expected) {
     logger.error('cee-dossier-transitions: CRON_SECRET not configured', undefined, {
@@ -156,16 +126,34 @@ async function handleCeeDossierTransitions(request: Request): Promise<Response> 
   const supabase = createAdminClient()
   const startedAt = Date.now()
 
-  // -- Lease anti-double-run ------------------------------------------------
-  // Appel RPC atomique `acquire_cron_lease` (migration 411). Le précédent
-  // pattern PostgREST `.upsert(...).lt(...).select()` était cassé : le `.lt()`
-  // filtre la ligne retournée côté PostgREST, mais n'est PAS injecté dans le
-  // `WHERE` du `ON CONFLICT DO UPDATE`. Ici, le `WHERE expires_at < NOW()` est
-  // poussé dans le corps de la fonction plpgsql → atomicité garantie.
-  const { data: acquired, error: leaseErr } = await supabase.rpc('acquire_cron_lease', {
-    p_name: LEASE_NAME,
-    p_ttl_seconds: LEASE_TTL_SECONDS,
-  })
+  // Plan D — SLA fix : abort lease acquisition après 5s. Si Supabase stall ici,
+  // le cron meurt en silence (Sentry checkin ne fire pas). Fail-fast → release
+  // implicite via TTL 15min puis retry au prochain tick.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = {
+      message:
+        err instanceof Error
+          ? err.name === 'AbortError' || err.message.includes('aborted')
+            ? 'lease_acquire_timeout'
+            : err.message
+          : String(err),
+    }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
 
   if (leaseErr) {
     logger.error('cee-dossier-transitions: lease acquisition failed', leaseErr, {
@@ -176,187 +164,220 @@ async function handleCeeDossierTransitions(request: Request): Promise<Response> 
   }
 
   if (acquired !== true) {
-    // Lease actif détenu par un autre run → skip idempotent.
     logger.info('cee-dossier-transitions: skipped (lease already held)', {
       action: 'cee-dossier-transitions',
       lease: LEASE_NAME,
     })
-    return NextResponse.json({
-      ok: true,
-      skipped: true,
-      reason: 'already_running',
-    })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
   }
 
-  const counters: TransitionCounters = {
-    travaux_acheves_to_ah_signee: 0,
-    depose_delegataire_to_depose_pncee: 0,
+  const counters: AlertCounters = {
+    qa_approved_stale: 0,
+    deposited_overdue: 0,
+    validated_pncee_overdue: 0,
+    paid_client_to_commission_due: 0,
   }
   let processed = 0
   let remainingBudget = MAX_DOSSIERS_PER_RUN
 
+  // Plan D — SLA fix : wall-clock guard global. Si une règle précédente brûle
+  // tout le budget (Supabase 503 + retry, etc.), les règles suivantes doivent
+  // s'auto-skip pour relâcher le lease + retourner une réponse JSON avant le
+  // hard-timeout Vercel 60s.
+  const isOverWallClock = (): boolean => Date.now() - startedAt > MAX_RUNTIME_MS
+
   try {
-    // -- Règle A — engagement_signe stale → log gap (no transition) ----------
-    // Pas de transition DAG possible (aucun état "justificatifs_incomplets"),
-    // mais on alerte le backoffice via log structuré.
-    if (remainingBudget > 0) {
-      const staleBefore = hoursAgoIso(ENGAGEMENT_STALE_HOURS)
-      const { data: engagementRows, error: engagementErr } = await supabase
+    // -- Règle A — qa_approved âgés > 24h → alerte ops (manual depose Sonergia) --
+    if (remainingBudget > 0 && !isOverWallClock()) {
+      const staleBefore = ageBeforeIso(QA_APPROVED_STALE_HOURS, 'hours')
+      const { data, error } = await supabase
         .from('cee_dossiers')
         .select(DOSSIER_MIN_SELECT)
-        .eq('status', 'engagement_signe')
-        // updated_at est TIMESTAMPTZ (migration 402) — comparaison ISO UTC safe
+        .eq('status', 'qa_approved')
         .lte('updated_at', staleBefore)
         .order('updated_at', { ascending: true })
         .limit(remainingBudget)
 
-      if (engagementErr) {
-        logger.error('cee-dossier-transitions: list engagement_signe failed', engagementErr, {
-          action: 'cee-dossier-transitions',
-          rule: 'A_engagement_gap',
+      if (error) {
+        logger.error('cee-dossier-transitions: list qa_approved failed', error, {
+          rule: 'A_qa_approved_stale',
         })
       } else {
-        const rows = (engagementRows ?? []) as DossierRow[]
-        for (const row of rows) {
-          if (remainingBudget <= 0) break
-          remainingBudget--
-          processed++
-          try {
-            const gap = await getJustificatifsGap(supabase, row.id)
-            if (!gap.complete && gap.missing.length > 0) {
-              logger.warn('cee-dossier-transitions: engagement_signe with missing justificatifs', {
-                action: 'cee-dossier-transitions',
-                rule: 'A_engagement_gap',
-                dossier_id: row.id,
-                operation_code: row.operation_code,
-                missing_count: gap.missing.length,
-                missing_codes: gap.missing,
-              })
-            }
-          } catch (err) {
-            logger.warn('cee-dossier-transitions: engagement gap check failed', {
-              action: 'cee-dossier-transitions',
-              rule: 'A_engagement_gap',
-              dossier_id: row.id,
-              error: err instanceof Error ? err.message : 'unknown',
-            })
-          }
+        const rows = (data ?? []) as DossierRow[]
+        counters.qa_approved_stale = rows.length
+        processed += rows.length
+        remainingBudget -= rows.length
+        if (rows.length > 0) {
+          // Sentry capture pour visibilité ops backoffice
+          Sentry.captureMessage('CEE: dossiers qa_approved stuck (manual depose required)', {
+            level: rows.length > 50 ? 'error' : 'warning',
+            tags: {
+              cron: 'cee-dossier-transitions',
+              rule: 'qa_approved_stale',
+              action_required: 'manual_sonergia_depose',
+            },
+            extra: {
+              count: rows.length,
+              oldest_dossier_id: rows[0].id,
+              oldest_age_hours: Math.round(
+                (Date.now() - new Date(rows[0].updated_at).getTime()) / 3600000
+              ),
+              stale_threshold_hours: QA_APPROVED_STALE_HOURS,
+            },
+          })
+          logger.warn('cee-dossier-transitions: qa_approved stuck', {
+            rule: 'A_qa_approved_stale',
+            count: rows.length,
+            dossier_ids: rows.map((r) => r.id),
+          })
         }
       }
     }
 
-    // -- Règle B — travaux_acheves + gap complet → ah_signee ------------------
-    if (remainingBudget > 0) {
-      const { data: travauxRows, error: travauxErr } = await supabase
+    // -- Règle B — deposited > 14j → alerte ops (relancer délégataire) ----------
+    if (remainingBudget > 0 && !isOverWallClock()) {
+      const staleBefore = ageBeforeIso(DEPOSITED_OVERDUE_DAYS, 'days')
+      const { data, error } = await supabase
         .from('cee_dossiers')
         .select(DOSSIER_MIN_SELECT)
-        .eq('status', 'travaux_acheves')
+        .eq('status', 'deposited')
+        .lte('updated_at', staleBefore)
         .order('updated_at', { ascending: true })
         .limit(remainingBudget)
 
-      if (travauxErr) {
-        logger.error('cee-dossier-transitions: list travaux_acheves failed', travauxErr, {
-          action: 'cee-dossier-transitions',
-          rule: 'B_ready_to_sign_ah',
+      if (error) {
+        logger.error('cee-dossier-transitions: list deposited failed', error, {
+          rule: 'B_deposited_overdue',
         })
       } else {
-        const rows = (travauxRows ?? []) as DossierRow[]
+        const rows = (data ?? []) as DossierRow[]
+        counters.deposited_overdue = rows.length
+        processed += rows.length
+        remainingBudget -= rows.length
+        if (rows.length > 0) {
+          Sentry.captureMessage('CEE: dossiers deposited overdue (relancer délégataire)', {
+            level: 'warning',
+            tags: {
+              cron: 'cee-dossier-transitions',
+              rule: 'deposited_overdue',
+              action_required: 'chase_delegataire',
+            },
+            extra: {
+              count: rows.length,
+              oldest_dossier_id: rows[0].id,
+              overdue_threshold_days: DEPOSITED_OVERDUE_DAYS,
+            },
+          })
+          logger.warn('cee-dossier-transitions: deposited overdue', {
+            rule: 'B_deposited_overdue',
+            count: rows.length,
+            dossier_ids: rows.map((r) => r.id),
+          })
+        }
+      }
+    }
+
+    // -- Règle C — validated_pncee > 7j → alerte ops (versement client) ---------
+    if (remainingBudget > 0 && !isOverWallClock()) {
+      const staleBefore = ageBeforeIso(VALIDATED_PNCEE_OVERDUE_DAYS, 'days')
+      const { data, error } = await supabase
+        .from('cee_dossiers')
+        .select(DOSSIER_MIN_SELECT)
+        .eq('status', 'validated_pncee')
+        .lte('updated_at', staleBefore)
+        .order('updated_at', { ascending: true })
+        .limit(remainingBudget)
+
+      if (error) {
+        logger.error('cee-dossier-transitions: list validated_pncee failed', error, {
+          rule: 'C_validated_pncee_overdue',
+        })
+      } else {
+        const rows = (data ?? []) as DossierRow[]
+        counters.validated_pncee_overdue = rows.length
+        processed += rows.length
+        remainingBudget -= rows.length
+        if (rows.length > 0) {
+          Sentry.captureMessage('CEE: dossiers validated_pncee overdue (versement client)', {
+            level: 'warning',
+            tags: {
+              cron: 'cee-dossier-transitions',
+              rule: 'validated_pncee_overdue',
+              action_required: 'pay_client',
+            },
+            extra: {
+              count: rows.length,
+              oldest_dossier_id: rows[0].id,
+              overdue_threshold_days: VALIDATED_PNCEE_OVERDUE_DAYS,
+            },
+          })
+          logger.warn('cee-dossier-transitions: validated_pncee overdue', {
+            rule: 'C_validated_pncee_overdue',
+            count: rows.length,
+            dossier_ids: rows.map((r) => r.id),
+          })
+        }
+      }
+    }
+
+    // -- Règle D — paid_client > 1h → auto-transition commission_due ------------
+    // Aucun appel externe : marquer la commission comme due ne dépend que de
+    // l'état interne (le client est payé). Auto-transition safe.
+    if (remainingBudget > 0 && !isOverWallClock()) {
+      const staleBefore = ageBeforeIso(PAID_CLIENT_AUTO_TRANSITION_HOURS, 'hours')
+      const { data, error } = await supabase
+        .from('cee_dossiers')
+        .select(DOSSIER_MIN_SELECT)
+        .eq('status', 'paid_client')
+        .lte('updated_at', staleBefore)
+        .order('updated_at', { ascending: true })
+        .limit(remainingBudget)
+
+      if (error) {
+        logger.error('cee-dossier-transitions: list paid_client failed', error, {
+          rule: 'D_paid_client_auto',
+        })
+      } else {
+        const rows = (data ?? []) as DossierRow[]
         for (const row of rows) {
           if (remainingBudget <= 0) break
+          // Plan D — SLA wall-clock guard : sortir avant timeout Vercel 60s.
+          if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+            logger.warn('cee-dossier-transitions: wall-clock budget exhausted', {
+              rule: 'D_paid_client_auto',
+              processed,
+              remaining_dossiers: rows.length - rows.indexOf(row),
+            })
+            break
+          }
           remainingBudget--
           processed++
           try {
-            const gap = await getJustificatifsGap(supabase, row.id)
-            if (!gap.complete) continue
-
             const result = await transitionCeeDossierStatus(
               supabase,
               row.id,
-              'ah_signee',
+              'commission_due' as never,
               null,
               'system'
             )
             if (result.ok) {
-              counters.travaux_acheves_to_ah_signee++
+              counters.paid_client_to_commission_due++
               logger.info('cee-dossier-transitions: transition ok', {
-                action: 'cee-dossier-transitions',
-                rule: 'B_ready_to_sign_ah',
+                rule: 'D_paid_client_auto',
                 dossier_id: row.id,
-                from: 'travaux_acheves',
-                to: 'ah_signee',
+                from: 'paid_client',
+                to: 'commission_due',
               })
             } else {
               logger.warn('cee-dossier-transitions: transition rejected', {
-                action: 'cee-dossier-transitions',
-                rule: 'B_ready_to_sign_ah',
+                rule: 'D_paid_client_auto',
                 dossier_id: row.id,
                 error: result.error ?? 'unknown',
               })
             }
           } catch (err) {
-            logger.warn('cee-dossier-transitions: rule B dossier aborted', {
-              action: 'cee-dossier-transitions',
-              rule: 'B_ready_to_sign_ah',
-              dossier_id: row.id,
-              error: err instanceof Error ? err.message : 'unknown',
-            })
-          }
-        }
-      }
-    }
-
-    // -- Règle C — depose_delegataire > 48h → depose_pncee --------------------
-    if (remainingBudget > 0) {
-      const staleBefore = hoursAgoIso(DEPOSE_STALE_HOURS)
-      const { data: deposeRows, error: deposeErr } = await supabase
-        .from('cee_dossiers')
-        .select(DOSSIER_MIN_SELECT)
-        .eq('status', 'depose_delegataire')
-        // updated_at est TIMESTAMPTZ (migration 402) — comparaison ISO UTC safe
-        .lte('updated_at', staleBefore)
-        .order('updated_at', { ascending: true })
-        .limit(remainingBudget)
-
-      if (deposeErr) {
-        logger.error('cee-dossier-transitions: list depose_delegataire failed', deposeErr, {
-          action: 'cee-dossier-transitions',
-          rule: 'C_depose_acquittement',
-        })
-      } else {
-        const rows = (deposeRows ?? []) as DossierRow[]
-        for (const row of rows) {
-          if (remainingBudget <= 0) break
-          remainingBudget--
-          processed++
-          try {
-            const result = await transitionCeeDossierStatus(
-              supabase,
-              row.id,
-              'depose_pncee',
-              null,
-              'system'
-            )
-            if (result.ok) {
-              counters.depose_delegataire_to_depose_pncee++
-              logger.info('cee-dossier-transitions: transition ok', {
-                action: 'cee-dossier-transitions',
-                rule: 'C_depose_acquittement',
-                dossier_id: row.id,
-                from: 'depose_delegataire',
-                to: 'depose_pncee',
-              })
-            } else {
-              logger.warn('cee-dossier-transitions: transition rejected', {
-                action: 'cee-dossier-transitions',
-                rule: 'C_depose_acquittement',
-                dossier_id: row.id,
-                error: result.error ?? 'unknown',
-              })
-            }
-          } catch (err) {
-            logger.warn('cee-dossier-transitions: rule C dossier aborted', {
-              action: 'cee-dossier-transitions',
-              rule: 'C_depose_acquittement',
+            logger.warn('cee-dossier-transitions: rule D dossier aborted', {
+              rule: 'D_paid_client_auto',
               dossier_id: row.id,
               error: err instanceof Error ? err.message : 'unknown',
             })
@@ -369,7 +390,7 @@ async function handleCeeDossierTransitions(request: Request): Promise<Response> 
     logger.info('cee-dossier-transitions: run complete', {
       action: 'cee-dossier-transitions',
       processed,
-      transitions: counters,
+      counters,
       duration_ms: durationMs,
       cap_reached: remainingBudget === 0,
     })
@@ -377,19 +398,15 @@ async function handleCeeDossierTransitions(request: Request): Promise<Response> 
     return NextResponse.json({
       ok: true,
       processed,
-      transitions: counters,
+      counters,
       cap: MAX_DOSSIERS_PER_RUN,
       duration_ms: durationMs,
     })
   } finally {
-    // Release du lease : on appelle le RPC `release_cron_lease` qui force
-    // `expires_at = NOW()` côté Postgres. Best-effort : en cas d'erreur DB,
-    // le lease expirera naturellement après LEASE_TTL_SECONDS.
     try {
       await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
     } catch (releaseErr) {
       logger.warn('cee-dossier-transitions: lease release failed', {
-        action: 'cee-dossier-transitions',
         lease: LEASE_NAME,
         error: releaseErr instanceof Error ? releaseErr.message : 'unknown',
       })

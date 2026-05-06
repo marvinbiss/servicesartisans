@@ -3,6 +3,8 @@
  * GET: Récupérer un provider avec toutes ses relations
  * PATCH: Mise à jour complète
  * DELETE: Hard delete
+ *
+ * SLA-99.9 : rate-limit + timeout Supabase + audit_logs sur mutation.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -10,6 +12,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import {
   getProviderById,
@@ -50,9 +54,35 @@ const NO_CACHE_HEADERS = {
   Pragma: 'no-cache',
 }
 
+// SLA-99.9 : timeout 5s appliqué à toute opération Supabase.
+const SUPABASE_TIMEOUT_MS = 5_000
+
+function withSupabaseTimeout<T>(p: PromiseLike<T>): Promise<T> {
+  return Promise.race<T>([
+    Promise.resolve(p),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+    ),
+  ])
+}
+
 // GET - Récupérer un provider complet
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    // SLA-99.9 : rate limit lecture 60/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-providers-get:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const authResult = await requirePermission('providers', 'read')
     if (!authResult.success || !authResult.admin) return authResult.error
 
@@ -65,7 +95,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     }
 
     const supabase = createAdminClient()
-    const serviceResult = await getProviderById(supabase, providerId)
+    // SLA-99.9 : Promise.race timeout 5s.
+    const serviceResult = await withSupabaseTimeout(getProviderById(supabase, providerId))
 
     if (serviceResult.error) {
       return NextResponse.json(
@@ -79,7 +110,10 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
     response.headers.set('Pragma', 'no-cache')
     return response
   } catch (error) {
-    logger.error('Admin provider GET error', error)
+    logger.error('admin-providers-get: error', error)
+    captureError(error, {
+      tags: { route: 'admin/providers/[id]', method: 'GET', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur lors de la récupération du profil' } },
       { status: 500 }
@@ -92,6 +126,20 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   const providerId = params.id
 
   try {
+    // SLA-99.9 : rate limit mutation 30/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-providers-patch:${ip}`, {
+      window: 60_000,
+      max: 30,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const authResult = await requirePermission('providers', 'write')
     if (!authResult.success || !authResult.admin) return authResult.error
 
@@ -125,7 +173,20 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
     const updateData = buildProviderUpdateData(body)
     const supabase = createAdminClient()
-    const serviceResult = await updateProvider(supabase, providerId, updateData)
+
+    // SLA-99.9 : récupère snapshot avant mutation pour audit_logs.old_value (timeout 5s).
+    const { data: oldValue } = await withSupabaseTimeout(
+      supabase
+        .from('providers')
+        .select('id, name, email, phone, is_verified, is_active, address_city, address_region')
+        .eq('id', providerId)
+        .single()
+    )
+
+    // SLA-99.9 : Promise.race timeout 5s sur l'update.
+    const serviceResult = await withSupabaseTimeout(
+      updateProvider(supabase, providerId, updateData)
+    )
 
     if (serviceResult.error) {
       return NextResponse.json(
@@ -134,16 +195,21 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       )
     }
 
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur mutation, avec old_value + new_value.
     try {
       await logAdminAction(
         authResult.admin.id,
         'provider.update',
         'provider',
         providerId,
-        updateData
+        { ...updateData, updated_at: new Date().toISOString() },
+        oldValue ?? {}
       )
-    } catch {
-      logger.warn('Audit log failed')
+    } catch (auditError) {
+      logger.warn('admin-providers-patch: audit log failed', { error: String(auditError) })
+      captureError(auditError, {
+        tags: { route: 'admin/providers/[id]', method: 'PATCH', audit: 'failed' },
+      })
     }
 
     return NextResponse.json(
@@ -151,8 +217,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       { headers: NO_CACHE_HEADERS }
     )
   } catch (error) {
-    const err = error as Error
-    logger.error('Unexpected PATCH error', { message: err.message })
+    logger.error('admin-providers-patch: error', error)
+    captureError(error, {
+      tags: { route: 'admin/providers/[id]', method: 'PATCH', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur inattendue lors de la mise à jour' } },
       { status: 500 }
@@ -161,10 +229,24 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Hard delete (suppression définitive)
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   const providerId = params.id
 
   try {
+    // SLA-99.9 : rate limit destructif 30/min/IP fail-open.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-providers-delete:${ip}`, {
+      window: 60_000,
+      max: 30,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const authResult = await requirePermission('providers', 'delete')
     if (!authResult.success || !authResult.admin) return authResult.error
 
@@ -176,7 +258,20 @@ export async function DELETE(_request: NextRequest, { params }: { params: { id: 
     }
 
     const supabase = createAdminClient()
-    const serviceResult = await deleteProvider(supabase, providerId)
+
+    // SLA-99.9 : snapshot pré-delete pour audit_logs.old_value.
+    const { data: oldValue } = await withSupabaseTimeout(
+      supabase
+        .from('providers')
+        .select('id, name, slug, email, phone, siret, address_city, address_region, is_active')
+        .eq('id', providerId)
+        .single()
+    )
+
+    // SLA-99.9 : Promise.race timeout 5s. Note : deleteProvider effectue plusieurs
+    // suppressions séquentielles (claims, reviews, lead_assignments, bookings, provider).
+    // Le timeout couvre l'opération complète — si dépassement, on bascule en 500.
+    const serviceResult = await withSupabaseTimeout(deleteProvider(supabase, providerId))
 
     if (serviceResult.error) {
       return NextResponse.json(
@@ -185,16 +280,29 @@ export async function DELETE(_request: NextRequest, { params }: { params: { id: 
       )
     }
 
+    // SLA-99.9 : audit_logs OBLIGATOIRE sur DELETE.
     try {
-      await logAdminAction(authResult.admin.id, 'provider.hard_delete', 'provider', providerId)
-    } catch {
-      logger.warn('Audit log failed')
+      await logAdminAction(
+        authResult.admin.id,
+        'provider.hard_delete',
+        'provider',
+        providerId,
+        {},
+        oldValue ?? {}
+      )
+    } catch (auditError) {
+      logger.warn('admin-providers-delete: audit log failed', { error: String(auditError) })
+      captureError(auditError, {
+        tags: { route: 'admin/providers/[id]', method: 'DELETE', audit: 'failed' },
+      })
     }
 
     return NextResponse.json({ success: true, message: serviceResult.data.message })
   } catch (error) {
-    const err = error as Error
-    logger.error('Unexpected DELETE error', { message: err.message })
+    logger.error('admin-providers-delete: error', error)
+    captureError(error, {
+      tags: { route: 'admin/providers/[id]', method: 'DELETE', critical: 'true' },
+    })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur lors de la suppression' } },
       { status: 500 }

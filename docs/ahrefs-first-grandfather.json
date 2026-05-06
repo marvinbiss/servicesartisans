@@ -1,11 +1,12 @@
 {
   "generated_at": "2026-05-04",
-  "routes_count": 326,
+  "routes_count": 327,
   "routes": [
     "/connexion",
     "/definir-mot-de-passe",
     "/inscription",
     "/inscription-artisan",
+    "/verifier-2fa",
     "/mot-de-passe-oublie",
     "/booking/confirmation/[bookingId]",
     "/booking/[id]",

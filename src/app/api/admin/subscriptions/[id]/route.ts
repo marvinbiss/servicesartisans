@@ -65,8 +65,11 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 // PATCH - Modifier un abonnement (changer de plan)
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify admin with payments:write permission (changing plans)
-    const authResult = await requirePermission('payments', 'write')
+    // SLA-99.9 / RBAC fix : payments.write n'existe PAS dans AdminPermissions schema
+    // (valides : read | refund | cancel). Le cast `Record<string, boolean>` retournait
+    // undefined → false → 403 systématique, même super_admin. On utilise 'cancel'
+    // (sémantique : modifier un abonnement actif).
+    const authResult = await requirePermission('payments', 'cancel')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }

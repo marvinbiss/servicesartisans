@@ -10,6 +10,12 @@
  * (100_v2_schema_cleanup.sql). This cron now only updates:
  *   - rating_average (from reviews table)
  *   - review_count   (from reviews table)
+ *
+ * Hardening SLA-99.9 (2026-05-06) :
+ *   - Lease anti-double-run via RPC `acquire_cron_lease` (mig 411) avec abort 5s
+ *   - Wall-clock guard 50s : on sort de la boucle batch + on tente quand même
+ *     les MV refresh si on a le budget (très court)
+ *   - Release du lease en finally
  */
 
 import { NextResponse } from 'next/server'
@@ -22,27 +28,69 @@ export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 200
 
-export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request: Request) => {
-  try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    if (!supabaseUrl || !serviceRoleKey) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Configuration Supabase manquante' } },
-        { status: 500 }
-      )
-    }
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
-    // Verify cron secret
-    const authHeader = request.headers.get('authorization')
-    if (!verifyCronSecret(authHeader)) {
-      logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
-    }
+// SLA-99.9 : wall-clock 50s sous Vercel maxDuration 60s.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_calculate_trust_badges'
+const LEASE_TTL_SECONDS = 30 * 60
 
+export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request: Request) => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!supabaseUrl || !serviceRoleKey) {
+    return NextResponse.json(
+      { success: false, error: { message: 'Configuration Supabase manquante' } },
+      { status: 500 }
+    )
+  }
+  const supabase = createClient(supabaseUrl, serviceRoleKey)
+
+  // -- Auth ----------------------------------------------------------------
+  const authHeader = request.headers.get('authorization')
+  if (!verifyCronSecret(authHeader)) {
+    logger.warn('[Cron] Unauthorized access attempt to calculate-trust-badges')
+    return NextResponse.json(
+      { success: false, error: { message: 'Non autorisé' } },
+      { status: 401 }
+    )
+  }
+
+  const startedAt = Date.now()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[Cron] calculate-trust-badges lease error', undefined, {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ success: false, error: { message: 'lease_error' } }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[Cron] calculate-trust-badges skipped (lease already held)', {
+      lease: LEASE_NAME,
+    })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
+
+  try {
     logger.info('[Cron] Starting review metrics recalculation')
 
     let totalUpdated = 0
@@ -50,8 +98,15 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
     let totalSkipped = 0
     let offset = 0
     let hasMore = true
+    let capReached = false
 
     while (hasMore) {
+      // SLA-99.9 : wall-clock guard.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        break
+      }
+
       // Fetch active providers with their current metrics
       const { data: providers, error } = await supabase
         .from('providers')
@@ -143,10 +198,16 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
         // Execute updates in parallel (batch of 50 max)
         const CONCURRENT_UPDATES = 50
         for (let i = 0; i < updates.length; i += CONCURRENT_UPDATES) {
+          // SLA-99.9 : wall-clock guard fin-grain pour quitter au plus vite.
+          if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+            capReached = true
+            break
+          }
           await Promise.allSettled(updates.slice(i, i + CONCURRENT_UPDATES))
         }
       }
 
+      if (capReached) break
       if (providers.length < BATCH_SIZE) {
         hasMore = false
       } else {
@@ -155,35 +216,41 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
     }
 
     logger.info(
-      `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors`
+      `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors${
+        capReached ? ' (wall-clock cap reached)' : ''
+      }`
     )
 
-    // Refresh des vues matérialisées
+    // Refresh des vues matérialisées (uniquement si on a encore du budget).
     let mvRefreshed = false
     let reviewStatsDeptRefreshed = false
 
-    try {
-      const { error: mvError } = await supabase.rpc('refresh_provider_stats')
-      if (mvError) {
-        logger.error('[Cron] Failed to refresh mv_provider_stats:', mvError)
-      } else {
-        mvRefreshed = true
-        logger.info('[Cron] mv_provider_stats refreshed successfully')
+    if (Date.now() - startedAt < MAX_RUNTIME_MS) {
+      try {
+        const { error: mvError } = await supabase.rpc('refresh_provider_stats')
+        if (mvError) {
+          logger.error('[Cron] Failed to refresh mv_provider_stats:', mvError)
+        } else {
+          mvRefreshed = true
+          logger.info('[Cron] mv_provider_stats refreshed successfully')
+        }
+      } catch (mvErr) {
+        logger.error('[Cron] Exception refreshing mv_provider_stats:', mvErr)
       }
-    } catch (mvErr) {
-      logger.error('[Cron] Exception refreshing mv_provider_stats:', mvErr)
     }
 
-    try {
-      const { error: rvError } = await supabase.rpc('fn_refresh_review_stats')
-      if (rvError) {
-        logger.error('[Cron] Failed to refresh review_stats_by_dept:', rvError)
-      } else {
-        reviewStatsDeptRefreshed = true
-        logger.info('[Cron] review_stats_by_dept refreshed successfully')
+    if (Date.now() - startedAt < MAX_RUNTIME_MS) {
+      try {
+        const { error: rvError } = await supabase.rpc('fn_refresh_review_stats')
+        if (rvError) {
+          logger.error('[Cron] Failed to refresh review_stats_by_dept:', rvError)
+        } else {
+          reviewStatsDeptRefreshed = true
+          logger.info('[Cron] review_stats_by_dept refreshed successfully')
+        }
+      } catch (rvErr) {
+        logger.error('[Cron] Exception refreshing review_stats_by_dept:', rvErr)
       }
-    } catch (rvErr) {
-      logger.error('[Cron] Exception refreshing review_stats_by_dept:', rvErr)
     }
 
     return NextResponse.json({
@@ -194,6 +261,8 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
       errors: totalErrors,
       mvRefreshed,
       reviewStatsDeptRefreshed,
+      cap_reached: capReached,
+      duration_ms: Date.now() - startedAt,
     })
   } catch (error) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
@@ -201,5 +270,12 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
       { success: false, error: { message: "Erreur lors du recalcul des métriques d'avis" } },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

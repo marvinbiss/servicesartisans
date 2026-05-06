@@ -69,9 +69,12 @@ describe('checkWebhookIdempotency', () => {
     // Insert fails with unique constraint violation
     mockInsert.mockResolvedValue({ error: { code: '23505' } })
 
-    // Setup select chain for the duplicate check
+    // Setup select chain for the duplicate check (maybeSingle now)
     const mockEqForSelect = vi.fn().mockReturnValue({
-      single: vi.fn().mockResolvedValue({ data: { status: 'completed' }, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { status: 'completed', created_at: new Date().toISOString() },
+        error: null,
+      }),
     })
     mockSelect.mockReturnValue({ eq: mockEqForSelect })
 
@@ -79,11 +82,33 @@ describe('checkWebhookIdempotency', () => {
     expect(result).toBe(true)
   })
 
-  it('returns false for a duplicate event still processing', async () => {
+  it('returns true for a duplicate event still processing within 30s window (anti double-traitement)', async () => {
+    // 2026-05-05 fix audit V2 races P0 #3 : status=processing récent ⇒ skip
+    // pour empêcher 2 workers de traiter simultanément le même webhook.
     mockInsert.mockResolvedValue({ error: { code: '23505' } })
 
     const mockEqForSelect = vi.fn().mockReturnValue({
-      single: vi.fn().mockResolvedValue({ data: { status: 'processing' }, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { status: 'processing', created_at: new Date().toISOString() },
+        error: null,
+      }),
+    })
+    mockSelect.mockReturnValue({ eq: mockEqForSelect })
+
+    const result = await checkWebhookIdempotency('evt_123', 'stripe')
+    expect(result).toBe(true)
+  })
+
+  it('returns false (claim) for a duplicate event stuck in processing >30s', async () => {
+    // Worker précédent stuck/crashed → autoriser un retry après 30s.
+    mockInsert.mockResolvedValue({ error: { code: '23505' } })
+
+    const oldTimestamp = new Date(Date.now() - 60_000).toISOString()
+    const mockEqForSelect = vi.fn().mockReturnValue({
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { status: 'processing', created_at: oldTimestamp },
+        error: null,
+      }),
     })
     mockSelect.mockReturnValue({ eq: mockEqForSelect })
 

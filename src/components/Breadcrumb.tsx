@@ -58,7 +58,9 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
                 <span itemProp="name">{item.label}</span>
               </Link>
             ) : (
-              <span className="text-charcoal-900 font-medium" itemProp="name">
+              // Plan D — D-5 (a11y) : aria-current="page" pour annoncer la
+              // page courante aux lecteurs d'écran (WCAG 2.4.8 Location).
+              <span className="text-charcoal-900 font-medium" itemProp="name" aria-current="page">
                 {item.label}
               </span>
             )}

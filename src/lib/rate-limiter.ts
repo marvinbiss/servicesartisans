@@ -326,6 +326,11 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   // pendant la fenêtre où le CDN n'a pas encore chauffé. 60/min/IP suffit
   // pour un consommateur légitime, bloque un script naïf à 1 req/sec.
   openData: { window: 60 * 1000, max: 60, failOpen: true },
+  // Crawler bucket : Googlebot/Bingbot/Ahrefs etc. ne doivent JAMAIS prendre
+  // un 429 (incident 2026-04-22 GSC), mais l'exemption totale ouvre un DoS
+  // gratuit via UA spoofing (audit V1 P0-2). 600/min/IP = 10 req/s, large
+  // pour crawlers légitimes mais cap un attaquant qui spoof Googlebot.
+  crawler: { window: 60 * 1000, max: 600, failOpen: true },
   default: { window: 60 * 1000, max: 100 }, // 100 requests per minute default
 }
 

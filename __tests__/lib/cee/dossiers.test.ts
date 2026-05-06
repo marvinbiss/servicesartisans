@@ -274,7 +274,16 @@ describe('transitionCeeDossierStatus', () => {
       from: fromSpy,
       rpc: vi.fn((fn: string, args: Record<string, unknown>) => {
         rpcCalls.push({ fn, args })
-        return Promise.resolve(rpcResult)
+        // PostgrestBuilder thenable + .abortSignal() chaînable (SLA-4 timeout).
+        const builder: {
+          abortSignal: (s: AbortSignal) => typeof builder
+          then: Promise<typeof rpcResult>['then']
+        } = {
+          abortSignal: () => builder,
+          then: (onFulfilled, onRejected) =>
+            Promise.resolve(rpcResult).then(onFulfilled, onRejected),
+        }
+        return builder
       }),
     }
     return {

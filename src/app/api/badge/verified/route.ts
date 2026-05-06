@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { withTimeout } from '@/lib/api/timeout'
+
+export const dynamic = 'force-dynamic'
 
 /** Escape XML special characters */
 function escapeXml(str: string): string {
@@ -50,97 +57,128 @@ function shieldIcon(x: number, y: number, size: number, color: string): string {
   </g>`
 }
 
-export async function GET(request: NextRequest) {
-  const slug = request.nextUrl.searchParams.get('slug')
-  const id = request.nextUrl.searchParams.get('id')
-  const style = request.nextUrl.searchParams.get('style') || 'light'
-
-  if (!slug && !id) {
-    return NextResponse.json({ error: 'slug ou id requis' }, { status: 400 })
-  }
-
-  const supabase = createAdminClient()
-
-  let query = supabase
-    .from('providers')
-    .select(
-      'name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count'
-    )
-
-  if (slug) {
-    query = query.eq('slug', slug)
-  } else {
-    query = query.eq('stable_id', id)
-  }
-
-  const { data: provider, error } = await query.single()
-
-  if (error || !provider) {
-    // Badge "non trouvé" — retourne un SVG générique
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
+/** SLA-99.9 : SVG fallback "non trouvé" — réutilisé pour les vraies erreurs.
+ *  Évite un 5xx visible côté embed partenaire. */
+function notFoundSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
   <rect width="300" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
   <text x="150" y="44" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" fill="#94a3b8">Artisan non trouve</text>
 </svg>`
-    return new NextResponse(svg, {
-      headers: {
-        'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=3600',
-        'Access-Control-Allow-Origin': '*', // CORS: public badge endpoint, intentionally allows cross-origin
-      },
+}
+
+const SVG_NOT_FOUND_HEADERS = {
+  'Content-Type': 'image/svg+xml',
+  'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET',
+}
+
+export async function GET(request: NextRequest) {
+  // SLA-99.9 : RL 600/min, fail-open. Endpoint embed cross-origin.
+  try {
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`badge-verified:${ip}`, {
+      window: 60_000,
+      max: 600,
+      failOpen: true,
     })
-  }
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
 
-  const name = escapeXml(
-    (provider.name || 'Artisan').length > 26
-      ? (provider.name || 'Artisan').slice(0, 24) + '...'
-      : provider.name || 'Artisan'
-  )
-  const specialty = escapeXml(
-    (provider.specialty || '').length > 28
-      ? (provider.specialty || '').slice(0, 26) + '...'
-      : provider.specialty || ''
-  )
-  const city = escapeXml(
-    (provider.address_city || '').length > 20
-      ? (provider.address_city || '').slice(0, 18) + '...'
-      : provider.address_city || ''
-  )
-  const rating = Math.min(5, Math.max(0, provider.rating_average || 0))
-  const reviews = provider.review_count || 0
-  const isVerified = provider.is_verified === true
-  const isActive = provider.is_active !== false
+    const slug = request.nextUrl.searchParams.get('slug')
+    const id = request.nextUrl.searchParams.get('id')
+    const style = request.nextUrl.searchParams.get('style') || 'light'
 
-  const isDark = style === 'dark'
-  const isMinimal = style === 'minimal'
+    if (!slug && !id) {
+      return NextResponse.json({ error: 'slug ou id requis' }, { status: 400 })
+    }
 
-  const bgColor = isDark ? '#0f172a' : '#ffffff'
-  const textColor = isDark ? '#f1f5f9' : '#0f172a'
-  const subtextColor = isDark ? '#94a3b8' : '#64748b'
-  const borderColor = isDark ? '#1e293b' : '#e2e8f0'
-  const brandColor = '#3464f4'
-  const verifiedColor = isVerified ? '#059669' : '#94a3b8'
-  const verifiedLabel = isVerified ? 'Verifie' : 'Reference'
-  const verifiedBg = isVerified ? (isDark ? '#064e3b' : '#ecfdf5') : isDark ? '#1e293b' : '#f1f5f9'
+    const supabase = createAdminClient()
 
-  let svg: string
+    let query = supabase
+      .from('providers')
+      .select(
+        'name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count'
+      )
 
-  if (isMinimal) {
-    // --- MINIMAL: 220x54 ---
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="54" viewBox="0 0 220 54">
+    if (slug) {
+      query = query.eq('slug', slug)
+    } else {
+      query = query.eq('stable_id', id)
+    }
+
+    // SLA-99.9 : timeout amont 5s pour rester sous le budget Vercel function.
+    const { data: provider, error } = await withTimeout(
+      query.single(),
+      5_000,
+      'badge_verified_provider'
+    )
+
+    if (error || !provider) {
+      // Badge "non trouvé" — retourne un SVG générique avec cache court.
+      return new NextResponse(notFoundSvg(), {
+        headers: SVG_NOT_FOUND_HEADERS,
+      })
+    }
+
+    const name = escapeXml(
+      (provider.name || 'Artisan').length > 26
+        ? (provider.name || 'Artisan').slice(0, 24) + '...'
+        : provider.name || 'Artisan'
+    )
+    const specialty = escapeXml(
+      (provider.specialty || '').length > 28
+        ? (provider.specialty || '').slice(0, 26) + '...'
+        : provider.specialty || ''
+    )
+    const city = escapeXml(
+      (provider.address_city || '').length > 20
+        ? (provider.address_city || '').slice(0, 18) + '...'
+        : provider.address_city || ''
+    )
+    const rating = Math.min(5, Math.max(0, provider.rating_average || 0))
+    const reviews = provider.review_count || 0
+    const isVerified = provider.is_verified === true
+    const isActive = provider.is_active !== false
+
+    const isDark = style === 'dark'
+    const isMinimal = style === 'minimal'
+
+    const bgColor = isDark ? '#0f172a' : '#ffffff'
+    const textColor = isDark ? '#f1f5f9' : '#0f172a'
+    const subtextColor = isDark ? '#94a3b8' : '#64748b'
+    const borderColor = isDark ? '#1e293b' : '#e2e8f0'
+    const brandColor = '#3464f4'
+    const verifiedColor = isVerified ? '#059669' : '#94a3b8'
+    const verifiedLabel = isVerified ? 'Verifie' : 'Reference'
+    const verifiedBg = isVerified
+      ? isDark
+        ? '#064e3b'
+        : '#ecfdf5'
+      : isDark
+        ? '#1e293b'
+        : '#f1f5f9'
+
+    let svg: string
+
+    if (isMinimal) {
+      // --- MINIMAL: 220x54 ---
+      svg = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="54" viewBox="0 0 220 54">
   <rect width="220" height="54" rx="8" fill="${bgColor}" stroke="${borderColor}" stroke-width="1"/>
   ${shieldIcon(8, 12, 28, verifiedColor)}
   <text x="42" y="22" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="${textColor}">${name}</text>
   <text x="42" y="38" font-family="system-ui,-apple-system,sans-serif" font-size="10" fill="${subtextColor}">${verifiedLabel} sur ServicesArtisans</text>
   <rect x="42" y="44" width="35" height="1" rx="0.5" fill="${brandColor}" opacity="0.3"/>
 </svg>`
-  } else {
-    // --- STANDARD: 320x110 ---
-    const w = 320
-    const h = 110
-    const hasRating = rating > 0 && reviews > 0
-    const locationLine = specialty && city ? `${specialty} - ${city}` : specialty || city || ''
+    } else {
+      // --- STANDARD: 320x110 ---
+      const w = 320
+      const h = 110
+      const hasRating = rating > 0 && reviews > 0
+      const locationLine = specialty && city ? `${specialty} - ${city}` : specialty || city || ''
 
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+      svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <defs>
     <filter id="shadow" x="-4%" y="-4%" width="108%" height="116%">
       <feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.06"/>
@@ -178,14 +216,30 @@ export async function GET(request: NextRequest) {
   <!-- Brand -->
   <text x="${w - 15}" y="${h - 10}" text-anchor="end" font-family="system-ui,-apple-system,sans-serif" font-size="8" font-weight="600" fill="${brandColor}" opacity="0.6">ServicesArtisans.fr</text>
 </svg>`
-  }
+    }
 
-  return new NextResponse(svg, {
-    headers: {
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-      'Access-Control-Allow-Origin': '*', // CORS: public badge endpoint, intentionally allows cross-origin
-      'Access-Control-Allow-Methods': 'GET',
-    },
-  })
+    // SLA-99.9 : Cache 1h CDN + SWR 7j (badge change rarement, mais on garde
+    // SWR long pour absorber un éventuel pic de scrapers partenaires).
+    return new NextResponse(svg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=604800',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+      },
+    })
+  } catch (error) {
+    // SLA-99.9 : fallback SVG "non trouvé" + 200 → l'embed reste fonctionnel,
+    // le crawler partenaire ne déprécie pas le backlink.
+    logger.error('badge-verified: error', error)
+    captureError(error, { tags: { route: 'api/badge/verified', critical: 'true' } })
+    return new NextResponse(notFoundSvg(), {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, s-maxage=60',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+  }
 }

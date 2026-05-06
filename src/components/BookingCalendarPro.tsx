@@ -377,7 +377,6 @@ export default function BookingCalendarPro({
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 bookingId: bookingResult.bookingId,
-                depositAmountInCents: depositAmount * 100,
               }),
             })
             const data = await response.json()

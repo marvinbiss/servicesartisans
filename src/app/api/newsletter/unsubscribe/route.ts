@@ -8,11 +8,38 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
+// Plan D — SLA fix : rate-limit IP pour empêcher brute-force du token HMAC
+// (même si timingSafeEqual rend l'attaque coûteuse, on ferme la porte).
+// 100 / 10 min / IP : large pour bot anti-spam mail (preview link prefetcher
+// peut hit 5-10 fois) sans bloquer un user légitime sous NAT partagé.
+const RL_WINDOW_MS = 10 * 60 * 1000
+const RL_MAX = 100
+
 export async function GET(request: NextRequest) {
   try {
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`newsletter-unsub:${ip}`, {
+      window: RL_WINDOW_MS,
+      max: RL_MAX,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return new NextResponse(
+        htmlPage('Trop de requêtes', 'Veuillez patienter quelques minutes.'),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'text/html; charset=utf-8',
+            'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)),
+          },
+        }
+      )
+    }
+
     const { searchParams } = request.nextUrl
     const email = searchParams.get('email')
     const token = searchParams.get('token')
@@ -24,13 +51,42 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Verify token (HMAC-SHA256 of email)
-    const unsubscribeSecret = process.env.UNSUBSCRIBE_SECRET || 'sa-newsletter-default-key'
+    // Plan D — D-3 + D-4 (2026-05-06) :
+    //   - Fail-CLOSE si UNSUBSCRIBE_SECRET absent (au lieu du fallback
+    //     `'sa-newsletter-default-key'` qui permettait token forgery en prod
+    //     si l'env n'était pas posée).
+    //   - timingSafeEqual pour aligner sur prospection/unsubscribe et
+    //     prévenir les attaques timing.
+    const unsubscribeSecret = process.env.UNSUBSCRIBE_SECRET
+    if (!unsubscribeSecret || unsubscribeSecret.length < 32) {
+      logger.error(
+        'Newsletter unsubscribe: UNSUBSCRIBE_SECRET missing or too short (must be >=32 chars)',
+        undefined
+      )
+      return new NextResponse(
+        htmlPage('Service indisponible', 'La désinscription est temporairement indisponible.'),
+        {
+          status: 503,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        }
+      )
+    }
     const expectedToken = crypto
       .createHmac('sha256', unsubscribeSecret)
       .update(email.toLowerCase().trim())
       .digest('hex')
-    if (token !== expectedToken) {
+
+    let isValidToken = false
+    try {
+      const tokenBuf = Buffer.from(token, 'hex')
+      const expectedBuf = Buffer.from(expectedToken, 'hex')
+      isValidToken =
+        tokenBuf.length === expectedBuf.length && crypto.timingSafeEqual(tokenBuf, expectedBuf)
+    } catch {
+      isValidToken = false
+    }
+
+    if (!isValidToken) {
       return new NextResponse(
         htmlPage('Lien invalide', 'Le lien de désinscription est invalide.'),
         {

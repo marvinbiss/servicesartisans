@@ -21,13 +21,17 @@ import { GET as getCsv, OPTIONS as optionsCsv } from '../cee-regional-aids.csv/r
 
 describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.json', () => {
   it('GET retourne 200 + Content-Type JSON-LD', async () => {
-    const res = await getJson()
+    const res = await getJson(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.json')
+    )
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toContain('application/ld+json')
   })
 
   it('expose les Schema.org Dataset wrapper + data array', async () => {
-    const res = await getJson()
+    const res = await getJson(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.json')
+    )
     const body = await res.json()
     expect(body['@context']).toBe('https://schema.org')
     expect(body['@type']).toBe('Dataset')
@@ -37,7 +41,9 @@ describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.json', () => {
   })
 
   it('headers CDN + CORS + license corrects', async () => {
-    const res = await getJson()
+    const res = await getJson(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.json')
+    )
     expect(res.headers.get('cache-control')).toContain('s-maxage=86400')
     expect(res.headers.get('access-control-allow-origin')).toBe('*')
     expect(res.headers.get('x-license')).toBe('https://creativecommons.org/licenses/by/4.0/')
@@ -53,13 +59,17 @@ describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.json', () => {
 
 describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.csv', () => {
   it('GET retourne 200 + Content-Type text/csv', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toContain('text/csv')
   })
 
   it('démarre par BOM UTF-8 (octets EF BB BF) — Excel-friendly accents', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     // `.text()` décode via TextDecoder qui strip silencieusement le BOM
     // (cf. WHATWG Encoding §6 ignoreBOM). On lit donc les bytes bruts.
     const buf = new Uint8Array(await res.arrayBuffer())
@@ -69,14 +79,18 @@ describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.csv', () => {
   })
 
   it('utilise CRLF entre rangs (RFC 4180 + Excel Windows)', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     const body = await res.text()
     // Au moins un CRLF entre header et 1ère data row.
     expect(body.includes('\r\n')).toBe(true)
   })
 
   it('header CSV inclut tous les champs documentés', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     const body = await res.text()
     // `.text()` strip déjà le BOM (WHATWG Encoding §6) — split direct.
     const firstLine = body.split('\r\n')[0]
@@ -88,7 +102,9 @@ describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.csv', () => {
   })
 
   it('Content-Disposition inline (PAS attachment — Power BI/data.gouv.fr)', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     const cd = res.headers.get('content-disposition')
     expect(cd).toBeTruthy()
     expect(cd).toContain('inline')
@@ -96,7 +112,9 @@ describe('Sprint AI Wave G — /api/datasets/cee-regional-aids.csv', () => {
   })
 
   it('X-Robots-Tag noindex (asset technique)', async () => {
-    const res = await getCsv()
+    const res = await getCsv(
+      new Request('https://servicesartisans.fr/api/datasets/cee-regional-aids.csv')
+    )
     expect(res.headers.get('x-robots-tag')).toBe('noindex')
   })
 

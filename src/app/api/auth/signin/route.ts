@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { twoFactorAuth } from '@/lib/auth/two-factor'
+import { buildPendingCookie } from '@/lib/auth/two-factor-cookies'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
@@ -108,26 +109,33 @@ export async function POST(request: Request) {
       )
     }
 
-    // Audit 2026-04-25 (agent #4 BLOCKER H6) : avant ce check, signin posait
-    // immédiatement le cookie session après signInWithPassword, ignorant le
-    // flag two_factor_enabled. N'importe qui avec mot de passe entrait, 2FA
-    // désactivé de fait. Si l'utilisateur a 2FA activé, on déconnecte la
-    // session Supabase et on renvoie un signal `requires2FA` au client, qui
-    // doit faire un second round avec le code TOTP via /api/auth/2fa.
+    // Audit 2026-04-25 (agent #4 BLOCKER H6) puis Plan C C-1 (2026-05-05) :
+    // avant 04-25, signin posait immédiatement le cookie de session après
+    // signInWithPassword, ignorant le flag two_factor_enabled (bypass 2FA).
+    // 04-25 a corrigé en signOut + signal `requires2FA` au client, mais sans
+    // page UI le user était bloqué et la route verify_login échouait car
+    // l'utilisateur n'avait plus de session.
+    //
+    // C-1 : on garde la session Supabase active mais on dépose un cookie
+    // `sa_2fa_pending` HMAC-signé (10 min). Le middleware bloque l'accès aux
+    // routes privées tant que le cookie `sa_2fa_verified` n'est pas posé via
+    // /api/auth/2fa/verify-pending. L'enforcement repose sur le middleware,
+    // pas sur l'absence de session — sécurité équivalente, UX réparée.
+    let pendingCookie: Awaited<ReturnType<typeof buildPendingCookie>> | null = null
     try {
       const requiresTwoFactor = await twoFactorAuth.isEnabled(data.user.id)
       if (requiresTwoFactor) {
-        // Annule la session que signInWithPassword vient d'établir.
-        await supabase.auth.signOut()
-        return NextResponse.json(
+        pendingCookie = await buildPendingCookie(data.user.id)
+        const pendingResponse = NextResponse.json(
           createSuccessResponse({
             requires2FA: true,
             userId: data.user.id,
-            // Pas de tokens. Le client doit appeler /api/auth/2fa/verify avec
-            // le code TOTP, qui re-créera une session si valide.
+            redirectTo: '/verifier-2fa',
           }),
           { status: 200 }
         )
+        pendingResponse.cookies.set(pendingCookie.name, pendingCookie.value, pendingCookie.options)
+        return pendingResponse
       }
     } catch (twoFAError) {
       // Fail-closed sur le check 2FA : un user qui a activé 2FA ne doit

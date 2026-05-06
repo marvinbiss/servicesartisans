@@ -79,17 +79,17 @@ function buildMockSupabaseAdmin() {
           }
         }
         if (webhookCallsForTable === 2 && idempotencyInsertResult.error?.code === '23505') {
-          // Second call after unique violation: select status
+          // Second call after unique violation: select status (maybeSingle since 2026-05-05)
+          const resolveSelect = (resolve: (v: unknown) => unknown) =>
+            resolve({
+              data: idempotencySelectResult.data,
+              error: idempotencySelectResult.error,
+            })
           return {
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockReturnValue({
-                  then: (resolve: (v: unknown) => unknown) =>
-                    resolve({
-                      data: idempotencySelectResult.data,
-                      error: idempotencySelectResult.error,
-                    }),
-                }),
+                single: vi.fn().mockReturnValue({ then: resolveSelect }),
+                maybeSingle: vi.fn().mockReturnValue({ then: resolveSelect }),
               }),
             }),
           }
@@ -286,8 +286,11 @@ describe('POST /api/stripe/webhook', () => {
         message: string
       },
     }
-    // Simulate finding existing completed event
-    idempotencySelectResult = { data: { status: 'completed' }, error: null }
+    // Simulate finding existing completed event (mig 511 + maybeSingle)
+    idempotencySelectResult = {
+      data: { status: 'completed', created_at: new Date().toISOString() },
+      error: null,
+    }
 
     const result = await callPOST(makeWebhookRequest('{}', 'valid_sig'))
 

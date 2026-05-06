@@ -149,6 +149,17 @@ vi.mock('@/lib/admin-auth', () => ({
   logAdminAction: vi.fn(() => Promise.resolve()),
 }))
 
+// --- Rate-limiter + Sentry mocks (SLA-99.9 added) ---
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(() =>
+    Promise.resolve({ allowed: true, limit: 60, remaining: 59, reset: Date.now() + 60_000 })
+  ),
+  getClientIp: vi.fn(() => '127.0.0.1'),
+}))
+vi.mock('@/lib/monitoring/sentry', () => ({
+  captureError: vi.fn(),
+}))
+
 // ============================================
 // Helpers
 // ============================================
@@ -708,11 +719,14 @@ describe('DELETE /api/admin/cms/[id] (Soft delete)', () => {
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
-    // Verify is_active was set to false
-    const updateCall = mockSupabaseFrom.mock.results[0]?.value?.update
-    if (updateCall) {
-      const updateArg = updateCall.mock.calls[0]?.[0]
-      expect(updateArg.is_active).toBe(false)
+    // Verify is_active was set to false (handler may select first then update,
+    // so scan all from() results for the one carrying update calls).
+    const updateBuilder = mockSupabaseFrom.mock.results.find(
+      (r) => r.value?.update?.mock?.calls?.length > 0
+    )?.value?.update
+    if (updateBuilder) {
+      const updateArg = updateBuilder.mock.calls[0]?.[0]
+      expect(updateArg?.is_active).toBe(false)
     }
   })
 

@@ -3,6 +3,11 @@ import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { captureError } from '@/lib/monitoring/sentry'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
+
+// SLA-99.9 : timeout dur Supabase 5s
+const SUPABASE_TIMEOUT_MS = 5_000
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +22,20 @@ const querySchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    // SLA-99.9 : rate-limit lecture 60/min/IP
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`admin-descriptions-list:${ip}`, {
+      window: 60_000,
+      max: 60,
+      failOpen: true,
+    })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Trop de requêtes' } },
+        { status: 429 }
+      )
+    }
+
     const auth = await requirePermission('providers', 'read')
     if (!auth.success || !auth.admin) {
       return (
@@ -51,7 +70,13 @@ export async function GET(request: NextRequest) {
     if (status !== 'all') query = query.eq('status', status)
     if (minScore > 0) query = query.gte('judge_score', minScore)
 
-    const { data, error, count } = await query
+    // SLA-99.9 : timeout 5s sur la liste
+    const { data, error, count } = await Promise.race([
+      query,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+      ),
+    ])
     if (error) {
       logger.error('admin/descriptions list failed', error as Error)
       return NextResponse.json(
@@ -74,10 +99,16 @@ export async function GET(request: NextRequest) {
     >()
 
     if (providerIds.length > 0) {
-      const { data: providers } = await supabase
-        .from('providers')
-        .select('id, name, slug, address_city, description')
-        .in('id', providerIds)
+      // SLA-99.9 : timeout 5s sur le join providers
+      const { data: providers } = await Promise.race([
+        supabase
+          .from('providers')
+          .select('id, name, slug, address_city, description')
+          .in('id', providerIds),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('supabase_timeout')), SUPABASE_TIMEOUT_MS)
+        ),
+      ])
       for (const p of providers ?? []) providersMap.set(p.id as string, p as never)
     }
 
@@ -96,7 +127,8 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (err) {
-    logger.error('admin/descriptions fatal', err as Error)
+    logger.error('admin-descriptions-list: error', err as Error)
+    captureError(err, { tags: { route: 'admin/descriptions', method: 'GET', critical: 'true' } })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

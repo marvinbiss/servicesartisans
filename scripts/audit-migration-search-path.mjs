@@ -13,8 +13,13 @@
 // Bypass complet via env : SKIP_SEARCH_PATH_AUDIT=1 (à éviter).
 // Mode `--all` : audit historique complet (utile en CI). Sinon : ne lint que
 // les migrations stagées dans le commit courant (mode pre-commit).
+//
+// Mode `--baseline-check` (combiné avec `--all`) : compare vs
+// `.search-path-baseline.json` et n'échoue QUE sur les nouvelles violations.
+// Permet d'ajouter le hook --all en pre-push sans bloquer la dette historique.
+// Mode `--baseline-write` : (re)génère la baseline depuis l'état actuel.
 
-import { readdirSync, readFileSync } from 'node:fs'
+import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { execSync } from 'node:child_process'
 
@@ -24,16 +29,19 @@ if (process.env.SKIP_SEARCH_PATH_AUDIT === '1') {
 }
 
 const MIG_DIR = join(process.cwd(), 'supabase', 'migrations')
+const BASELINE_FILE = join(process.cwd(), '.search-path-baseline.json')
 const WINDOW_LINES = 60
 const ALLOW_PRAGMA = 'pragma: allow-mutable-search-path'
 const SCAN_ALL = process.argv.includes('--all')
+const WRITE_BASELINE = process.argv.includes('--baseline-write')
+const CHECK_BASELINE = process.argv.includes('--baseline-check')
 
 // `files` contient des PATHS relatifs au cwd (ex: "supabase/migrations/474_x.sql"
 // ou "supabase/migrations/rollback/474_x_rollback.sql"). On lit/résout chaque
 // fichier directement sans reconstruire le chemin via basename — sinon les
 // migrations dans `rollback/` ou tout sous-dossier sont mal résolues.
 let files
-if (SCAN_ALL) {
+if (SCAN_ALL || WRITE_BASELINE) {
   files = readdirSync(MIG_DIR)
     .filter((f) => f.endsWith('.sql'))
     .map((f) => `supabase/migrations/${f}`)
@@ -91,6 +99,61 @@ for (const file of files) {
       fnName,
     })
   }
+}
+
+// Mode baseline-write : sérialise les violations actuelles comme baseline acceptable.
+if (WRITE_BASELINE) {
+  // Clé stable = `${file}::${schema}.${fnName}` (line bouge avec edits, pas la clé).
+  const keys = violations.map((v) => `${v.file}::${v.schema}.${v.fnName}`).sort()
+  const baseline = {
+    generatedAt: new Date().toISOString(),
+    note:
+      'Violations historiques tolérées. Toute NOUVELLE violation (clé absente d\'ici) bloque le push.',
+    count: keys.length,
+    violations: keys,
+  }
+  writeFileSync(BASELINE_FILE, JSON.stringify(baseline, null, 2) + '\n', 'utf8')
+  console.log(`✅ Baseline écrite : ${BASELINE_FILE} (${keys.length} violations historiques).`)
+  process.exit(0)
+}
+
+// Mode baseline-check : ne bloque que les violations absentes du baseline.
+if (CHECK_BASELINE) {
+  if (!existsSync(BASELINE_FILE)) {
+    console.error(
+      `❌ ${BASELINE_FILE} introuvable. Lancer : node scripts/audit-migration-search-path.mjs --baseline-write`
+    )
+    process.exit(1)
+  }
+  const baseline = JSON.parse(readFileSync(BASELINE_FILE, 'utf8'))
+  const allowed = new Set(baseline.violations || [])
+  const fresh = violations.filter((v) => !allowed.has(`${v.file}::${v.schema}.${v.fnName}`))
+
+  if (fresh.length > 0) {
+    console.error('\n❌ Nouvelle(s) CREATE FUNCTION sans `SET search_path` (hors baseline) :\n')
+    for (const v of fresh) {
+      console.error(`  - ${v.file}:${v.line}  ${v.schema}.${v.fnName}`)
+    }
+    console.error(`\n${fresh.length} nouvelle(s) violation(s).`)
+    console.error('Ajouter `SET search_path = public, pg_catalog` dans la définition,')
+    console.error(
+      'ou `-- pragma: allow-mutable-search-path` si la fonction doit accéder à extensions/vault.\n'
+    )
+    process.exit(1)
+  }
+
+  // Détecte aussi les entrées baseline désormais clean (info, pas blocking)
+  const seenKeys = new Set(violations.map((v) => `${v.file}::${v.schema}.${v.fnName}`))
+  const cleaned = [...allowed].filter((k) => !seenKeys.has(k))
+  if (cleaned.length > 0) {
+    console.log(
+      `ℹ️  ${cleaned.length} entrée(s) baseline désormais clean. Régénérer : --baseline-write.`
+    )
+  }
+  console.log(
+    `OK. ${violations.length} violation(s) historiques tolérées par le baseline, 0 nouvelle.`
+  )
+  process.exit(0)
 }
 
 if (violations.length > 0) {

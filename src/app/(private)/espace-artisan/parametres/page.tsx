@@ -3,7 +3,16 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
-import { Loader2, AlertCircle, CheckCircle, User, Phone, Shield } from 'lucide-react'
+import {
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  User,
+  Phone,
+  Shield,
+  ShieldCheck,
+  ChevronRight,
+} from 'lucide-react'
 
 interface SettingsData {
   profile: {
@@ -161,6 +170,25 @@ export default function ArtisanSettingsPage() {
                 </div>
               </div>
             </div>
+
+            {/* 2FA shortcut */}
+            <Link
+              href="/espace-artisan/securite/2fa"
+              className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6 flex items-center justify-between gap-4 hover:bg-sand-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="w-6 h-6 text-primary-600" />
+                <div>
+                  <h2 className="font-semibold text-charcoal-900">
+                    Vérification en deux étapes (2FA)
+                  </h2>
+                  <p className="text-sm text-charcoal-500">
+                    Activez la 2FA pour exiger un code TOTP à chaque connexion.
+                  </p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-charcoal-400" />
+            </Link>
 
             {/* Edit form */}
             <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
