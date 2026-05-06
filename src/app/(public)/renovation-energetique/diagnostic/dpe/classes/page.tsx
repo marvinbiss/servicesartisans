@@ -360,6 +360,10 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'DPE classe G — seuils, conséquences, sauts ROI',
+    href: '/renovation-energetique/diagnostic/dpe/classes/g',
+  },
+  {
     label: 'Hub DPE — méthode, prix, opposabilité',
     href: '/renovation-energetique/diagnostic/dpe',
   },

@@ -1253,6 +1253,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Sprint 3 orphelin — DPE classe G dédiée (KW pivot le plus volumique du cluster)
+        // KW : "dpe classe g" 8 000 vol KD 0 + variants ~1 750 vol cumul (≈9 750 vol/mo).
+        // Anti-cannib : hub /classes (recap A-G), /passoires-thermiques (lois + calendrier),
+        // /interdiction-location-g-f (focus bailleur). Cette page = focus classification G,
+        // conséquences VENTE (audit obligatoire + décote 10-15 %), 5 sauts ROI vers F/E/D/C/B.
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/classes/g`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
