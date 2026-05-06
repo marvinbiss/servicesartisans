@@ -145,7 +145,7 @@ const OBLIGATIONS_BAILLEUR = [
   },
   {
     title: 'Respecter le calendrier d’interdiction',
-    desc: 'Au 1ᵉʳ janvier 2025, plus aucun bail signé / renouvelé sur logement classe G. Au 1ᵉʳ janvier 2028, plus aucun classe F. Au 1ᵉʳ janvier 2034, plus aucun classe E. Renouvellement automatique bloqué — le bail prend fin sans reconduction.',
+    desc: 'Depuis le 1ᵉʳ janvier 2025, plus aucun bail signé / renouvelé sur logement classe G. Au 1ᵉʳ janvier 2028, ce sera le tour de la classe F, puis 1ᵉʳ janvier 2034 pour la classe E. Renouvellement automatique bloqué — le bail prend fin sans reconduction.',
   },
   {
     title: 'Respecter le gel des loyers passoires (F + G)',
@@ -172,7 +172,7 @@ const RECOURS_LOCATAIRE = [
   },
   {
     title: 'En fin de bail : refuser un nouveau bail si non conforme',
-    desc: 'Si en 2025 le bailleur tente de re-signer un bail sur classe G (ou F en 2028, E en 2034) : refus protégé. Le bailleur ne peut pas vous donner congé pour ce motif. Recours ANIL ou tribunal si pression.',
+    desc: 'Si le bailleur tente de re-signer un bail sur classe G (interdite depuis le 1ᵉʳ janvier 2025) ou F (interdite à partir de 2028) ou E (à partir de 2034) : refus protégé. Le bailleur ne peut pas vous donner congé pour ce motif. Recours ANIL ou tribunal si pression.',
   },
 ]
 
@@ -514,8 +514,8 @@ export default function Page() {
               </li>
               <li>
                 <CheckCircle2 className="inline w-4 h-4 text-primary-700 mr-1" aria-hidden /> Si
-                vente envisagée : audit énergétique obligatoire depuis 1ᵉʳ avril 2023 pour passoires
-                F + G
+                vente envisagée : audit énergétique obligatoire pour passoires F + G (depuis 1ᵉʳ
+                avril 2023) et désormais pour la classe E (depuis 1ᵉʳ janvier 2025)
               </li>
               <li>
                 <CheckCircle2 className="inline w-4 h-4 text-primary-700 mr-1" aria-hidden />{' '}
@@ -554,7 +554,7 @@ export default function Page() {
                 <Calendar className="w-6 h-6 text-primary-700 shrink-0 mt-1" aria-hidden />
                 <div>
                   <p className="font-heading text-lg font-semibold text-sand-900 mb-1">
-                    Bailleur : rénover votre passoire thermique avant 2025 / 2028 / 2034
+                    Bailleur : rénover votre passoire thermique pour pouvoir continuer à louer
                   </p>
                   <p className="text-sm md:text-base text-sand-700 mb-3">
                     Demandez 3 devis comparés à des artisans RGE vérifiés pour rénover votre
