@@ -95,7 +95,16 @@ function buildPersonNode(profile: Author): Record<string, unknown> {
  * organizational author for generic editorial content.
  */
 export function getFlagshipArticleSchema(input: FlagshipArticleInput): Record<string, unknown> {
-  const canonical = `${SITE_URL}/guides/${input.slug}`
+  // Two slug conventions in the codebase :
+  //  1. Legacy guides pages pass a bare slug ("acompte-artisan-legal-maximum")
+  //     → prefix with /guides/.
+  //  2. Hub pages (renovation-energetique, services, etc.) pass an absolute
+  //     PAGE_PATH starting with '/' → use it directly.
+  // Detect by leading '/' to keep backward-compat across ~100+ callers without
+  // a sweeping rewrite.
+  const canonical = input.slug.startsWith('/')
+    ? `${SITE_URL}${input.slug}`
+    : `${SITE_URL}/guides/${input.slug}`
   const articleImage = input.image || `${SITE_URL}/opengraph-image`
 
   const authorNode = (() => {

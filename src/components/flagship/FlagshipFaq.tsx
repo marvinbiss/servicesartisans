@@ -15,6 +15,11 @@ type Props = {
  * for progressive disclosure — no hydration cost, still crawlable.
  *
  * Pair with getFAQSchema() + JsonLd to emit FAQPage structured data.
+ *
+ * `answer` is rendered via dangerouslySetInnerHTML to support inline `<strong>`,
+ * `<a href>` and `<em>` markup (~100+ flagship pages already pass HTML strings).
+ * SAFETY : answers are hardcoded string literals authored by the editorial team
+ * inside .tsx source files — never user-supplied. Do NOT pipe user input here.
  */
 export default function FlagshipFaq({ title = 'Questions fréquentes', items }: Props) {
   if (!items || items.length === 0) return null
@@ -33,9 +38,10 @@ export default function FlagshipFaq({ title = 'Questions fréquentes', items }: 
             <summary className="cursor-pointer select-none p-4 font-semibold text-sand-900 hover:bg-sand-50 transition-colors">
               {item.question}
             </summary>
-            <div className="px-4 pb-4 text-sand-700 text-sm md:text-base leading-relaxed">
-              {item.answer}
-            </div>
+            <div
+              className="px-4 pb-4 text-sand-700 text-sm md:text-base leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: item.answer }}
+            />
           </details>
         ))}
       </div>
