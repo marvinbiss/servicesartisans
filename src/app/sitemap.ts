@@ -330,6 +330,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.75,
       },
       {
+        // B16 récap audits 2026-05-06 — comparatif primes énergie obligés (~18 500 vol/mo accessibles).
+        // KW pivots Ahrefs API live (snapshot 2026-05-06, country=fr) :
+        //   - "prime edf"               7 500 vol KD 3 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "prime energie edf"      10 000 vol KD 2 ⭐⭐⭐⭐⭐
+        //   - "prime cee edf"           6 300 vol KD 30
+        //   - "prime energie engie"     1 000 vol KD 1
+        //   - "prime energie"           4 800 vol KD 58 (head capture indirect)
+        //   - "prime cee"               8 200 vol KD 48 (head capture indirect)
+        //   - "comparatif prime energie"   20 vol KD null CPC $1,40
+        // Anti-cannibalisation : hub /cee = catalogue 21 ops ; /mandataire-vs-direct =
+        // 3 rôles juridiques ; /coup-de-pouce-2026 = bonification ; cette page = comparatif
+        // commercial 5 obligés/mandataires (EDF, Engie, TotalEnergies, Sonergia, Hellio).
+        url: `${SITE_URL}/cee/comparatif-primes-energie`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         url: `${SITE_URL}/cee/mandataire-vs-direct`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
@@ -686,16 +704,32 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
-        // Levier C 2026-05-06 — sous-page entretien PAC (~1 700 vol/mo cumulé).
-        // KW pivots Ahrefs gap CSV (snapshot 2026-04) :
-        //   - "prix entretien pompe a chaleur"        500 vol KD 1 (Travaux #9)
-        //   - "tarif entretien PAC air-eau"           400 vol KD 0
-        //   - "entretien pompe a chaleur autour moi"  400 vol KD 0
-        //   - "contrat entretien PAC"                 ~250 vol estimé
+        // B6 récap audits 2026-05-06 — sous-page entretien PAC (~7 450 vol/mo cumul).
+        // KW pivot revalidé Ahrefs API live (snapshot 2026-05-06, country=fr) :
+        //   - "entretien pompe a chaleur"             5 900 vol KD 1 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "entretien pac"                           800 vol KD 2
+        //   - "contrat entretien pompe a chaleur"       500 vol KD 0
+        //   - "prix entretien pompe a chaleur"          500 vol KD 1
+        //   - "tarif entretien PAC air-eau"             400 vol KD 0
+        //   - "entretien pompe a chaleur autour moi"    400 vol KD 0
+        //   - "entretien pompe a chaleur obligatoire"   100 vol KD 0
         url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/entretien`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
-        priority: 0.8,
+        priority: 0.85,
+      },
+      {
+        // B8 récap audits 2026-05-06 — sous-page consommation PAC (~3 800 vol/mo cumul).
+        // KW pivots Ahrefs API live (snapshot 2026-05-06, country=fr) :
+        //   - "consommation pompe a chaleur"            3 400 vol KD 1 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "consommation electrique pompe a chaleur"   250 vol KD 2
+        //   - "consommation pac"                          150 vol KD 0
+        // Anti-cannibalisation : /entretien = obligation légale + contrat annuel ;
+        // cette page = consommation kWh/an + COP/SCOP + facture €/an + comparatif gaz/fioul.
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/consommation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
       },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
@@ -800,10 +834,71 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.9,
       },
       {
-        url: `${SITE_URL}/renovation-energetique/travaux/vmc/installation`,
+        // Sprint1-20-80 2026-05-06 — sub-page VMC hygro type B (~4 000 vol/mo cumul).
+        // KW pivots Ahrefs Bloc 1 v3 (snapshot 2026-05-04, country=fr) :
+        //   - "vmc hygroréglable type b"   1 700 vol KD 0 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "vmc hygro b"                1 500 vol KD 1
+        //   - "hygroréglable type b"         400 vol KD 0
+        //   - "vmc hygro type b prix"        200 vol KD 0
+        // Anti-cannibalisation : hub /vmc/hygroreglable = panorama type A vs B ;
+        // cette page = focus DEEP type B (modulation totale entrées + bouches,
+        // marques dédiées, ROI spécifique).
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/hygroreglable/type-b`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.85,
+      },
+      {
+        // Sprint1-20-80 cash cow — pivot up "installation vmc" 1 800 vol KD 0
+        // (vs "vmc installation" 1 200 vol — ordre Google préféré).
+        // Famille ~5 020 vol/mo. INTENT COMMERCIAL = devis cash cow.
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        // Sprint1-20-80 2026-05-06 — sub-page VMC branchement+pose (~1 600 vol/mo cumul).
+        // KW pivots Ahrefs Bloc 1 v3 (snapshot 2026-05-04, country=fr) :
+        //   - "branchement vmc"          600 vol KD 0 ⭐⭐⭐ PIVOT (quelleenergie #2)
+        //   - "pose vmc"                 500 vol KD 0 (effy #1)
+        //   - "schema branchement vmc"   200 vol KD 0
+        //   - "raccordement vmc"         100 vol KD 0
+        // Anti-cannibalisation : /vmc/installation = process commercial global ;
+        // cette page = focus TECHNIQUE (NF C 15-100 + DTU 68.3 + schémas + 9 étapes).
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/branchement-pose`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        // Sprint1-20-80 2026-05-06 — sub-page VMC double flux thermodynamique (~2 750 vol/mo cumul).
+        // KW pivots Ahrefs Bloc 1 v3 (snapshot 2026-05-04, country=fr) :
+        //   - "vmc double flux thermodynamique" 1 800 vol KD 0 ⭐⭐⭐⭐⭐ PIVOT
+        //   - "vmc thermodynamique"               500 vol KD 0
+        //   - "double flux thermodynamique"       200 vol KD 0
+        // Anti-cannibalisation : /vmc-double-flux = DF standard ; cette page =
+        // focus DEEP DF thermo (PAC intégrée, COP, rafraîchissement été, ROI 7-12 ans).
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/double-flux-thermodynamique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
+        // B5 récap audits 2026-05-06 — sub-page VMC salle de bain (~11 900 vol/mo cumul).
+        // KW pivots Ahrefs API live (snapshot 2026-05-06, country=fr) :
+        //   - "vmc salle de bain"           9 800 vol KD 0 ⭐⭐⭐⭐⭐ MEGA PIVOT
+        //   - "aerateur salle de bain"      1 000 vol KD 0
+        //   - "extracteur salle de bain"      600 vol KD 0
+        //   - "vmc pour salle de bain"        300 vol KD 0
+        //   - "vmc sdb"                       200 vol KD 0
+        // Anti-cannibalisation : hub /vmc = panorama 4 types ; /entretien = obligation
+        // récurrente ; cette page = focus pièce humide SDB (NF C 15-100 volumes 0/1/2,
+        // débit min 15 m³/h arrêté 24/03/1982, sans fenêtre RSD type, top marques SDB).
+        url: `${SITE_URL}/renovation-energetique/travaux/vmc/salle-de-bain`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
       },
       {
         // Levier N 2026-05-06 — page Électricité hub (~37 000 vol/mo cumulé direct).
@@ -882,6 +977,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.92,
+      },
+      {
+        // B4 sub-page 2026-05-06 — Autoconsommation solaire (~22 490 vol/mo cumulé).
+        // KW pivots Ahrefs API live (snapshot 2026-05-06) :
+        //   - "autoconsommation solaire"        2 400 vol KD 14
+        //   - "panneau solaire autoconsommation" 7 400 vol KD 33
+        //   - "batterie panneau solaire"        4 600 vol KD 10 ⭐⭐⭐ MEGA EASY
+        //   - "panneau solaire avec batterie"   3 400 vol KD 13
+        //   - "kit autoconsommation"            2 100 vol KD 9
+        //   - "autoconsommation totale"           600 vol KD 8
+        //   - "autoconsommation collective"       400 vol KD 2
+        //   - "prix kit autoconsommation"         300 vol KD 4 + variantes
+        // Anti-cannibalisation : /solaire = hub prix/types panneaux ; cette page = mode énergétique
+        // (totale/surplus/collective) + ROI batterie + raccordement Enedis CACSI + arnaques "panneau gratuit".
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/autoconsommation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
       },
       {
         // Levier E 2026-05-06 — sub-page nettoyage panneau solaire (~4 700 vol/mo cumulé).
@@ -997,6 +1110,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.9,
+      },
+      {
+        // B7 récap audits 2026-05-06 — sub-page DPE validité (~2 360 vol/mo cumul).
+        // KW pivots Ahrefs API live (snapshot 2026-05-06, country=fr) :
+        //   - "validite dpe"                1 600 vol KD 39 ⭐⭐⭐⭐ PIVOT
+        //   - "duree validite dpe"          500 vol KD 38
+        //   - "duree de validite dpe"       100 vol KD 35
+        //   - "dpe combien de temps"        50 vol KD 2 (long-tail facile)
+        //   - "renouvellement dpe"          30 vol KD 29
+        // Anti-cannibalisation : hub /dpe traite la validité en surface, /dpe/validite
+        // creuse le calendrier d'invalidation 2007-2021, correction 2024 maisons <1948,
+        // procédure de vérification numéro ADEME, opposabilité, copropriété.
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/validite`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
       },
       {
         url: `${SITE_URL}/renovation-energetique/diagnostic/thermographie`,

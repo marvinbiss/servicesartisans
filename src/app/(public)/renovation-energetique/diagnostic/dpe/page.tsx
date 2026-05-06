@@ -238,6 +238,11 @@ const relatedPages = [
     description: 'Calendrier interdiction G 2025 / F 2028 / E 2034',
   },
   {
+    label: 'Validité DPE 2026 : durée 10 ans, renouvellement',
+    href: '/renovation-energetique/diagnostic/dpe/validite',
+    description: 'DPE pré-2021 caducs depuis 2025 + correction 2024 maisons < 1948',
+  },
+  {
     label: 'Audit énergétique 2026',
     href: '/renovation-energetique/diagnostic/audit-energetique',
     description: 'Obligatoire vente F/G/E et MPR',

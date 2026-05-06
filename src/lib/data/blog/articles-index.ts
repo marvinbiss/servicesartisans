@@ -100,6 +100,8 @@ const existingEmojis: Record<string, string> = {
   'prix-chaudiere-condensation-2026': '🔥',
   'prix-poele-granules-2026': '🔥',
   'prix-audit-energetique-2026': '📊',
+  // Vague E Tarifs 2026-05-06 — complétion 8/8 articles Sprint 2 STRATEGIE-RENOVATION-ENERGETIQUE.md
+  'prix-dpe-2026': '📋',
 }
 
 /** Normalize non-accented category names to their accented equivalents */

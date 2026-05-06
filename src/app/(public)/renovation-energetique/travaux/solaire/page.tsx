@@ -295,6 +295,11 @@ const relatedPages = [
     description: 'Cluster PAC : air-eau, air-air, géothermie',
   },
   {
+    label: 'Autoconsommation solaire (totale, surplus, collective)',
+    href: '/renovation-energetique/travaux/solaire/autoconsommation',
+    description: '3 modes énergétiques + ROI batterie + raccordement Enedis CACSI',
+  },
+  {
     label: 'Nettoyage panneau solaire (entretien)',
     href: '/renovation-energetique/travaux/solaire/nettoyage',
     description: 'Méthode pro, prix 100-300 € visite, sécurité hauteur',

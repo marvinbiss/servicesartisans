@@ -9,14 +9,23 @@
  * - 'prix-poele-granules-2026'         → "prix poele a granules" 150 vol, KD 5, CPC $0,30 ⭐⭐⭐
  *                                       (orthographe officielle "à" ; slug sans accent par convention)
  * - 'prix-audit-energetique-2026'      → "prix audit energetique" 200 vol, KD 1, CPC $0,70 ⭐⭐⭐⭐
+ * - 'prix-dpe-2026' (ajout 2026-05-06) → "prix dpe" 2 500 vol, KD 6, CPC $0,60 ⭐⭐⭐⭐⭐ TOP CLUSTER
+ *                                       + "combien coute un dpe" 700 vol, KD 0
+ *                                       + "tarif dpe" 700 vol, KD 2
+ *                                       + "prix dpe appartement" 450 vol, KD 0
+ *                                       + "prix dpe maison" 300 vol, KD 5
+ *                                       Famille cumul ~4 680 vol/mois (Ahrefs API live, 2026-05-06, country=fr)
  *
- * Cumul Vague E : ~1 750 vol/mois sur articles très accessibles (KD 0-5, CPC $0,30-1,00)
+ * Cumul Vague E : ~6 430 vol/mois sur articles très accessibles (KD 0-6, CPC $0,30-1,00)
  *
  * Anti-cannibalisation :
  *   - prix-pompe-a-chaleur-2026       (existe — batch-energie-2026.ts) : pas dupliqué
  *   - prix-fenetre-double-vitrage-2026 (existe — batch-prix.ts) : pas dupliqué
  *   - prix-vmc-double-flux-2026       (existe — batch-prestations-problemes.ts) : pas dupliqué
  *   - prix-isolation-exterieure-ite-m2-2026 (existe — batch-prestations-problemes.ts) : pas dupliqué
+ *   - /renovation-energetique/diagnostic/dpe (hub DPE général : définition, classes A-G, obligation
+ *     vente/location, validité 10 ans) : ce blog cible explicitement le PRIX (focus tarifs + qui paye)
+ *   - prix-audit-energetique-2026 (audit 500-1 500 € avec 2 scénarios chiffrés ≠ DPE 100-280 € note A-G)
  */
 import type { BlogArticle } from './articles'
 
@@ -670,5 +679,183 @@ Pour estimer instantanément vos aides 2026 (audit + travaux) et obtenir 3 devis
     authorBio:
       'Sophie Martin est experte rénovation énergétique chez ServicesArtisans. Son contenu s’appuie sur les barèmes officiels MaPrimeRénov’ 2026, France Rénov’, le décret n° 2022-780 et l’arrêté du 28 février 2023 sur l’audit énergétique réglementaire.',
     updatedDate: '2026-05-04',
+  },
+
+  'prix-dpe-2026': {
+    title: 'Prix DPE 2026 : tarifs maison, appartement, copropriété (et qui paye)',
+    excerpt:
+      'Prix DPE 2026 : 100-280 € pour une maison, 90-180 € pour un appartement, 4-8 € HT/lot en copropriété. Validité 10 ans. Obligatoire vente + location. Pas d’aide MaPrimeRénov’ sur le DPE seul.',
+    metaTitle: 'Prix DPE 2026 : Tarifs Maison, Appart, Copro',
+    metaDescription:
+      'Prix DPE 2026 : 100-280 € maison, 90-180 € appart. Obligatoire vente/location, validité 10 ans. Comparatif diagnostiqueurs COFRAC.',
+    image: '📋',
+    author: 'Sophie Martin',
+    date: '2026-05-06',
+    readTime: '10 min',
+    category: 'Tarifs',
+    tags: ['DPE', 'diagnostic', 'prix', 'rénovation énergétique', 'vente', 'location'],
+    keyTakeaways: [
+      'Prix DPE maison individuelle 2026 : 100-280 € TTC selon surface (100 m² → 130-200 €).',
+      'Prix DPE appartement 2026 : 90-180 € TTC selon surface (50 m² → 100-150 €).',
+      'DPE collectif copropriété : 4-8 € HT par lot (obligatoire depuis 2024 pour copros > 200 lots).',
+      'Validité 10 ans depuis le 1er juillet 2021. DPE opposable juridiquement (loi Climat 2021).',
+      'Pas d’aide MaPrimeRénov’ sur le DPE seul, mais cumulable avec l’audit énergétique (300-500 € MPR).',
+    ],
+    faq: [
+      {
+        question: 'Quel est le prix moyen d’un DPE en 2026 ?',
+        answer:
+          'Pour une maison individuelle 100 m², comptez 130-200 € TTC (moyenne nationale 160 € en 2026). Maison < 100 m² : 100-150 €. Maison 150-250 m² : 180-280 €. Pour un appartement 50 m² : 100-150 €. Appartement 80-100 m² : 130-180 €. Le prix varie selon la zone géographique (Île-de-France, PACA et grandes métropoles +20-30 % vs zones rurales) et la complexité du logement (plusieurs systèmes de chauffage, dépendances, plans manquants).',
+      },
+      {
+        question: 'Le DPE est-il obligatoire en 2026 ?',
+        answer:
+          'OUI dans 4 cas : (1) toute vente immobilière (annexé à la promesse), (2) toute location (annexé au bail), (3) construction neuve (DPE neuf à la livraison, dans les 6 mois), (4) copropriétés > 200 lots construites avant 2013 (DPE collectif obligatoire depuis 2024 ; > 50 lots à terme 2028). Sans DPE, le bailleur s’expose à une amende administrative jusqu’à 3 000 € et le vendeur à une demande en réduction du prix de l’acheteur.',
+      },
+      {
+        question: 'Quelle différence entre DPE et audit énergétique ?',
+        answer:
+          'DPE : 100-280 € TTC, visite 1-2 h, donne uniquement la note A-G + recommandations génériques de travaux. Validité 10 ans. Audit énergétique réglementaire : 500-1 500 € TTC, visite 4-6 h, propose 2 scénarios chiffrés détaillés (matériau, prix, gain énergétique, aides, ROI). Validité 5 ans. L’audit est OBLIGATOIRE pour la vente d’une maison F/G (depuis 2023) ou E (depuis 2025), ainsi que pour MaPrimeRénov’ Parcours accompagné > 5 000 €. Le DPE ne le remplace pas.',
+      },
+      {
+        question: 'Y a-t-il une aide pour financer le DPE en 2026 ?',
+        answer:
+          'NON, le DPE seul n’est pas éligible à MaPrimeRénov’ ni aux CEE. Il est considéré comme une dépense réglementaire à la charge du propriétaire (vendeur ou bailleur). Toutefois : (1) en cas de vente, le coût est déductible de la plus-value imposable si le bien n’est pas la résidence principale ; (2) bailleurs : déductible des revenus fonciers ; (3) si l’audit énergétique est réalisé en complément (500-1 500 €), l’audit lui peut bénéficier de MPR Audit (300-500 € selon revenus).',
+      },
+      {
+        question: 'Qui peut réaliser un DPE en 2026 ?',
+        answer:
+          'Uniquement un diagnostiqueur certifié par un organisme accrédité COFRAC. La certification (mention "avec mention" requise depuis le 1er juillet 2024 pour les bâtiments tertiaires et copropriétés > 50 lots) doit être à jour. Annuaire officiel des diagnostiqueurs : diagnostiqueurs.application.developpement-durable.gouv.fr. Méfiance envers les "DPE à 50 €" sans visite physique : depuis le 1er juillet 2021, le DPE doit obligatoirement être réalisé sur site avec relevés conformes à la méthode 3CL-2021 (arrêté du 31 mars 2021).',
+      },
+    ],
+    content: [
+      `# Prix DPE en 2026 : tarifs maison, appartement, copropriété et qui le paye
+
+Le DPE (Diagnostic de Performance Énergétique) est devenu en 2026 le document central de toute transaction immobilière française. Obligatoire pour vendre ou louer, opposable juridiquement depuis le 1er juillet 2021 (loi Climat et Résilience), il classe le logement de A (le plus performant) à G (passoire thermique) et conditionne désormais l’éligibilité à la location.
+
+Avec l’interdiction progressive de location des passoires (G depuis 2025, F en 2028, E en 2034), le DPE n’est plus une formalité : c’est un document qui peut bloquer une location, faire baisser un prix de vente de 10-20 %, ou déclencher un audit énergétique obligatoire (vente F/G/E maison individuelle). Voici les prix réels constatés en 2026 et les arbitrages à connaître.`,
+
+      `## Prix d’un DPE 2026 selon le bien
+
+**Maison individuelle < 100 m²** : 100-150 € TTC. Le cas le plus fréquent en zone rurale et péri-urbaine. Visite 1-1,5 h, rapport 6-8 pages, étiquette énergie + GES.
+
+**Maison individuelle 100-150 m²** : 130-200 € TTC. Surface moyenne. Visite 1,5-2 h, rapport 8-12 pages.
+
+**Maison individuelle 150-250 m²** : 180-280 € TTC. Plusieurs niveaux, plusieurs systèmes de chauffage, dépendances éventuelles. Visite 2-3 h.
+
+**Maison > 250 m² ou complexe** : 250-400 € TTC. Maisons d’architecte, secteur sauvegardé, plusieurs zones climatiques internes.
+
+**Appartement < 50 m²** : 90-130 € TTC. Studio, T1, T2 standard. Visite 45 min-1 h.
+
+**Appartement 50-100 m²** : 120-180 € TTC. T3, T4 standard. Visite 1-1,5 h.
+
+**Appartement > 100 m²** : 150-220 € TTC. Grands T4 ou T5, duplex.
+
+**DPE collectif copropriété (parties communes)** : 4-8 € HT par lot (soit 600-1 600 € pour 200 lots, 2 500-4 000 € pour 500 lots). Inclut visite parties communes + analyse système de chauffage collectif + recommandations de travaux. Obligatoire depuis 2024 pour copros > 200 lots construites avant 2013, étendu à toutes les copros > 50 lots à terme 2028.
+
+**Variations géographiques** : Île-de-France, PACA, métropoles : +15-30 %. Zones rurales : prix de base. Outre-mer : +20-50 % (logistique).`,
+
+      `## Quand le DPE est-il obligatoire en 2026
+
+**Vente immobilière** : OBLIGATOIRE pour toute vente d’un logement (maison ou appartement), construit ou en l’état futur d’achèvement. Le DPE doit être annexé à la promesse de vente, puis à l’acte authentique. Validité requise : 10 ans (depuis 1er juillet 2021).
+
+**Location** : OBLIGATOIRE pour toute mise en location nue ou meublée, résidence principale, étudiante, ou logement de fonction. Annexé au bail. Le DPE est opposable juridiquement : un classement erroné peut faire baisser le loyer ou ouvrir droit à des dommages-intérêts.
+
+**Construction neuve** : OBLIGATOIRE à la livraison (DPE neuf, dans les 6 mois suivant la réception). Réalisé par le constructeur sur la base des éléments réels du chantier.
+
+**Bâtiments tertiaires > 250 m²** : OBLIGATOIRE depuis 2012 (audit énergétique tertiaire pour > 1000 m²).
+
+**Copropriétés > 200 lots construites avant 2013** : DPE collectif OBLIGATOIRE depuis 2024.
+
+**Copropriétés 51-200 lots construites avant 2013** : DPE collectif OBLIGATOIRE depuis 2025.
+
+**Copropriétés ≥ 50 lots construites avant 2013** : DPE collectif OBLIGATOIRE 2028.
+
+**Cas particuliers** : pas de DPE obligatoire pour les bâtiments < 50 m² indépendants, lieux de culte, monuments historiques classés, bâtiments agricoles non chauffés, résidences occupées < 4 mois/an.`,
+
+      `## Pas d’aide MaPrimeRénov’ sur le DPE — comment l’optimiser fiscalement
+
+**Pas d’aide directe** : le DPE seul n’est PAS éligible à MaPrimeRénov’ ni aux CEE. Il est considéré comme une charge réglementaire courante (vendeur, bailleur, propriétaire occupant à la livraison du neuf).
+
+**Déduction fiscale en revenus fonciers (bailleurs)** : le DPE est intégralement déductible des revenus fonciers de l’année de réalisation, ligne "Frais de gestion" ou "Frais et charges" (formulaire 2044). Économie d’impôt : 30-45 % du coût selon TMI.
+
+**Déduction de la plus-value imposable (vendeurs hors résidence principale)** : pour les biens locatifs, secondaires ou en SCI, le coût du DPE peut être ajouté au prix de revient pour réduire la plus-value imposable (article 150 VB du CGI). Avantage : 19 % d’IR + 17,2 % de prélèvements sociaux = 36,2 % d’économie effective.
+
+**Cumul avec audit énergétique** : si vente F/G/E maison individuelle, l’audit énergétique réglementaire (500-1 500 € TTC) est obligatoire. Cet audit, lui, est éligible à MaPrimeRénov’ Audit (300-500 € selon revenus). Le DPE reste sans aide mais peut être commandé en pack avec l’audit (économie 50-100 € sur l’ensemble).
+
+**TVA réduite à 5,5 %** : NON applicable au DPE (taux normal 20 %).
+
+**Aides locales ponctuelles** : quelques rares dispositifs locaux (ex. : ANAH pour propriétaires bailleurs très modestes en convention) peuvent prendre en charge tout ou partie du DPE en complément d’aide locative. À vérifier auprès de votre ADIL départementale.`,
+
+      `## DPE vs audit énergétique vs DTG : quelle différence
+
+**DPE (Diagnostic de Performance Énergétique)** :
+- Coût : 100-280 € TTC.
+- Durée : visite 1-2 h sur site.
+- Réalisateur : diagnostiqueur certifié COFRAC.
+- Contenu : note A-G + étiquette GES + recommandations génériques de travaux (sans chiffrage).
+- Obligatoire pour : toute vente, toute location, construction neuve.
+- Validité : 10 ans (DPE post 1er juillet 2021). Les DPE 2018-2024 réalisés avec l’ancienne méthode étaient valables jusqu’au 31 décembre 2025 (réformés depuis 1er juillet 2021).
+- Opposable : OUI depuis 2021.
+
+**Audit énergétique réglementaire** :
+- Coût : 500-1 500 € TTC.
+- Durée : visite 4-6 h sur site + 5-10 h calculs.
+- Réalisateur : bureau d’études OPQIBI 1905, architecte habilité, ou Qualibat 8731.
+- Contenu : analyse thermique détaillée + 2 scénarios chiffrés de travaux.
+- Obligatoire pour : vente F/G/E maison individuelle + MPR Parcours accompagné.
+- Validité : 5 ans.
+- Aide MPR : 300-500 € selon revenus.
+
+**DTG (Diagnostic Technique Global, copropriétés)** :
+- Coût : 4 000-15 000 € selon nb de lots et complexité.
+- Obligatoire pour : copropriétés > 10 ans en cas de mise en copropriété, ou décision en AG.
+- Contenu : état général immeuble + plan pluriannuel travaux + analyse énergétique.
+- Inclut souvent un DPE collectif.
+
+**À retenir** : pour vendre ou louer un logement non passoire (A à E), le DPE seul suffit (100-280 €). Pour vendre une passoire F/G/E maison individuelle, il faut DPE + audit énergétique (~600-1 800 € au total, hors aides). Pour une copropriété > 200 lots, c’est DPE + DPE collectif obligatoires.`,
+
+      `## Comment se déroule un DPE 2026
+
+**Étape 1 — Prise de RDV (J-7 à J-3)** : appel ou réservation en ligne. Devis gratuit obligatoire (loi Hamon). Vérifier la certification du diagnostiqueur sur diagnostiqueurs.application.developpement-durable.gouv.fr (mention "avec mention" requise depuis 1er juillet 2024 pour copros et tertiaire).
+
+**Étape 2 — Visite sur site (J0)** : 1-3 h selon surface. Le diagnostiqueur relève : surface habitable (mesure laser), épaisseur isolation toiture/murs/planchers, type et année des menuiseries, système de chauffage (modèle, année, état), production ECS, ventilation (VMC ou non), photos du compteur électrique, du tableau de chauffage, des murs extérieurs.
+
+**Étape 3 — Calcul thermique (J0 à J+3)** : application de la méthode 3CL-2021 (arrêté du 31 mars 2021). Calcul des consommations conventionnelles en kWh/m²/an d’énergie primaire et des émissions de CO2 en kg/m²/an. Détermination automatique de la classe A à G.
+
+**Étape 4 — Rapport (J+1 à J+5)** : remise du DPE en PDF officiel (numéro ADEME unique, traçable) + 1 page synthèse. Inclut : étiquette énergie, étiquette GES, estimation facture annuelle, recommandations de travaux génériques, liste des aides MaPrimeRénov’ associées.
+
+**Étape 5 — Transmission ADEME** : le diagnostiqueur déclare automatiquement le DPE à l’Observatoire DPE-Audit (ADEME) sous 7 jours. Le numéro DPE permet à tout acheteur ou locataire de vérifier l’authenticité et la conformité du document.`,
+
+      `## Pièges et arnaques à éviter en 2026
+
+**1. Le DPE à 50 € sans visite physique** : ILLÉGAL depuis le 1er juillet 2021. Tout DPE doit être réalisé sur site avec relevés conformes 3CL-2021. Un DPE "sur plans" ou "à distance" peut être annulé par l’acquéreur, ouvrir droit à des dommages-intérêts (DPE opposable) et entraîner la radiation du diagnostiqueur.
+
+**2. Le diagnostiqueur sans certification COFRAC** : seul un diagnostiqueur certifié peut réaliser un DPE valide. Vérifier impérativement sur diagnostiqueurs.application.developpement-durable.gouv.fr. La certification est valable 5 ans, renouvellement obligatoire avec contrôle compétences.
+
+**3. Le DPE non opposable** : depuis le 1er juillet 2021, tous les DPE sont opposables. Un acquéreur peut engager la responsabilité du diagnostiqueur ET du vendeur si le classement réel s’avère pire (ex. DPE classé E mais reclassé F après nouveau diagnostic = perte de location ou décote).
+
+**4. La date de validité expirée** : un DPE > 10 ans est nul. Pour les transactions 2026, vérifier que la date du DPE est postérieure au 1er juillet 2021 (méthode 3CL-2021). Les DPE antérieurs sont expirés depuis le 31 décembre 2025.
+
+**5. Le pack "DPE + audit + autres diagnostics" gonflé** : pour une vente, vous avez besoin de DPE + audit énergétique (si F/G/E) + ERP/ESRIS + amiante + plomb + termites (selon zone) + électricité/gaz si > 15 ans + assainissement non collectif. Total moyen : 600-1 200 € TTC. Au-delà de 1 500 €, demandez plusieurs devis (écart courant 30-50 %).
+
+**6. La "garantie DPE A" vendue sans travaux** : aucun diagnostiqueur ne peut "garantir" une classe DPE sans travaux préalables. Le DPE constate l’existant, il ne le modifie pas. Une promesse écrite "DPE garanti A après votre passage" = arnaque.`,
+
+      `## Notre avis 2026 : le DPE, un coût modeste à grosse portée juridique
+
+Le DPE reste en 2026 le diagnostic le moins cher du dossier de vente (100-280 € sur un total moyen de 600-1 200 € pour une maison) et pourtant celui qui a le plus d’impact économique : un classement passoire (F ou G) entraîne une décote de 10-20 % sur le prix de vente et une interdiction de location à terme.
+
+**Recommandations 2026** :
+
+- **Avant vente d’une maison construite avant 1990** : faire le DPE en amont du compromis (140-200 € pour 100 m²) pour anticiper l’éventuelle obligation d’audit énergétique (vente F/G/E = audit obligatoire 500-1 500 €).
+- **Avant location** : si DPE classé F ou G, le bien est déjà ou bientôt interdit à la location (G depuis 2025). Anticiper les travaux ou ajuster le projet locatif.
+- **Avant achat** : exiger un DPE postérieur au 1er juillet 2021 (méthode 3CL-2021, opposable). Les DPE antérieurs sont expirés depuis fin 2025.
+- **Investisseur locatif** : viser dès l’achat une classe E minimum (préparation interdiction 2034) ou prévoir budget travaux d’isolation (8-15 K€ typique pour passer de F à E).
+
+Pour estimer instantanément vos travaux post-DPE et obtenir 3 devis d’artisans RGE pour vos rénovations, utilisez notre [simulateur aides rénovation 2026](/simulateur-aides-renovation).`,
+    ],
+    authorBio:
+      'Sophie Martin est experte rénovation énergétique chez ServicesArtisans. Son contenu s’appuie sur la loi Climat et Résilience 2021, l’arrêté du 31 mars 2021 (méthode 3CL-2021), l’arrêté du 13 avril 2022 (correction DPE petites surfaces) et l’Observatoire DPE-Audit de l’ADEME.',
+    updatedDate: '2026-05-06',
   },
 }

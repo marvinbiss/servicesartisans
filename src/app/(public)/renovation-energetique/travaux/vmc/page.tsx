@@ -1,27 +1,45 @@
 /**
- * /renovation-energetique/travaux/vmc — hub VMC cluster (Pilier 2).
+ * /renovation-energetique/travaux/vmc — hub head term VMC (cluster Pilier 2).
  *
- * @kw-primary    vmc double flux
- * @kw-volume     18500
+ * @kw-primary    vmc
+ * @kw-volume     48000
  * @kw-kd         7
- * @kw-cpc        3.20
- * @cluster       2
- * @ahrefs-source docs/STRATEGIE-RENOVATION-ENERGETIQUE-V2-FUSED-2026-05-04.md#vmc-goldmine
- * @backlog-item  P3-vmc-cluster
- * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — GOLDMINE KD 0.7)
+ * @kw-cpc        2.10
+ * @intent        info
+ * @cluster       reno-energetique-vmc-hub
+ * @ahrefs-source bloc1
+ * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — cluster GOLDMINE KD avg 0.7)
+ * @backlog-item  Sprint1-20-80-vmc-recibler-head-term
+ *
+ * Re-ciblage 2026-05-06 : hub passe de "vmc double flux" (18 500 vol) au head term
+ * "vmc" (48 000 vol KD 7) pour kill cannibalisation avec /vmc-double-flux/ (focus
+ * "vmc double flux" 13 374 vol). Hub = panorama 4 types + arbre décision + prix +
+ * aides ; sub-pages = focus deep par type.
  *
  * KW cibles validés Bloc 1 v3 (country=fr) :
- * - "vmc"               → 8 100 vol, KD 1 (parent générique)
- * - "vmc simple flux"   → 15 000 vol, KD 2 (effy.fr #2)
- * - "vmc hygroreglable" → 14 000 vol, KD 1 (quelleenergie.fr #2)
- * - "vmc double flux"   → 13 374 vol, KD 2 (sub-page dédiée)
- * - "vmc prix"          → 1 600 vol, KD 0
- * - "vmc installation"  → 1 200 vol, KD 0
+ * - "vmc"                        → 48 000 vol, KD 7 ⭐⭐⭐⭐⭐ HEAD TERM PIVOT
+ * - "vmc simple flux"            → 15 000 vol, KD 2 (sub /simple-flux/)
+ * - "vmc hygroréglable"          → 14 000 vol, KD 1 (sub /hygroreglable/)
+ * - "vmc double flux"            → 13 374 vol, KD 2 (page sœur /vmc-double-flux/)
+ * - "vmc salle de bain"          →  9 800 vol, KD 0 (sub /salle-de-bain/)
+ * - "vmc simple flux hygroréglable" → 4 400 vol, KD 1
+ * - "entretien vmc"              →  2 400 vol, KD 0 (sub /entretien/)
+ * - "vmc installation"           →  1 800 vol, KD 0 (sub /installation/)
+ * - "vmc prix"                   →  1 600 vol, KD 0 (couvert par hub)
  * - Cluster cumulé : 215 KW, vol 127 800/mo, KD moyen 0.7 (GOLDMINE)
  *
  * Easy win : OUI MEGA — pas de leader fort sur cluster KD 0.7.
- * Concurrence : Effy, Aldes, Atlantic, Helios. Atout SA : artisans RGE
- * Qualibat 8721 + simulateur aides + comparatif neutre.
+ * Concurrence head : France-Renov #9, Effy #11+. Atout SA : artisans RGE
+ * Qualibat 8721 + simulateur aides + comparatif neutre + 4 marques détaillées.
+ *
+ * Anti-cannibalisation :
+ *   - Hub /vmc = panorama tous types + arbre décision + comparatif (ce fichier)
+ *   - /vmc/simple-flux = focus simple flux autoréglable + hygroréglable A
+ *   - /vmc/hygroreglable = focus hygroréglable A vs B
+ *   - /vmc-double-flux (top-level) = focus double flux + prix + récup chaleur
+ *   - /vmc/salle-de-bain = pièce humide (NF C 15-100 vol 0/1/2)
+ *   - /vmc/entretien = obligation contrat + tarif
+ *   - /vmc/installation = process pose + raccordement
  *
  * Marques principales couvertes : Aldes, Atlantic, Helios, Unelvent,
  * Zehnder (top 5 marché VMC France).
@@ -50,9 +68,9 @@ const MODIFIED = '2026-05-04'
 const AUTHOR_SLUG = 'marc-lefebvre'
 const AUTHOR_NAME = 'Marc Lefebvre'
 
-const TITLE = 'VMC 2026 : guide complet (simple flux, hygro, double flux)'
+const TITLE = 'VMC 2026 : types, prix, installation et aides (guide complet)'
 const DESCRIPTION =
-  'VMC 2026 : comparatif simple flux, hygroréglable, double flux. Prix posé 500-6 500 €, MaPrimeRénov’ jusqu’à 2 500 €, économie 5-25 % sur le chauffage.'
+  'VMC 2026 : tout sur la ventilation mécanique contrôlée. 4 types comparés (autoréglable, hygro A/B, double flux), prix posés 500-6 500 €, MaPrimeRénov’ jusqu’à 2 500 €, obligation depuis 1982, économie 5-25 % chauffage.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -231,6 +249,26 @@ const relatedPages = [
     label: 'Entretien VMC',
     href: '/renovation-energetique/travaux/vmc/entretien',
     description: 'Prix 80-300 €, fréquence, obligations gaz collective',
+  },
+  {
+    label: 'VMC salle de bain : extracteur, débits, normes',
+    href: '/renovation-energetique/travaux/vmc/salle-de-bain',
+    description: 'Extracteur 60-300 € posé, NF C 15-100 IP44, sans fenêtre',
+  },
+  {
+    label: 'VMC hygroréglable type B (focus deep)',
+    href: '/renovation-energetique/travaux/vmc/hygroreglable/type-b',
+    description: 'Modulation totale entrées + bouches, économie 8-12 %, 1 200-2 800 € posée',
+  },
+  {
+    label: 'VMC double flux thermodynamique (PAC intégrée)',
+    href: '/renovation-energetique/travaux/vmc/double-flux-thermodynamique',
+    description: 'Échangeur 85-95 % + PAC, MPR 2 500 €, 6 000-9 000 € posée, ROI 7-12 ans',
+  },
+  {
+    label: 'Branchement et pose VMC : schéma + 9 étapes',
+    href: '/renovation-energetique/travaux/vmc/branchement-pose',
+    description: 'NF C 15-100, sections câble, volumes humides, mise en service débits',
   },
   {
     label: 'VMI (insufflation, alternative VMC)',

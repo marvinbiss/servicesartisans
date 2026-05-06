@@ -226,6 +226,11 @@ const relatedPages = [
     description: 'Décret 2020-912, contrat 150-300 €/an, F-Gas catégorie I',
   },
   {
+    label: 'Consommation PAC : kWh/an, COP, facture',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/consommation',
+    description: '3 000-7 000 kWh/an pour 100 m². Comparatif vs gaz/fioul + 10 leviers d’économie',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',

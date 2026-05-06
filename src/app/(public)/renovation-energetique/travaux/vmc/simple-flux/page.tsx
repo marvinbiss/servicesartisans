@@ -5,20 +5,31 @@
  * @kw-volume     15000
  * @kw-kd         2
  * @kw-cpc        2.80
- * @cluster       2
- * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
- * @backlog-item  P3-vmc-cluster
- * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — JACKPOT)
+ * @intent        commercial
+ * @cluster       reno-energetique-vmc-simple-flux
+ * @ahrefs-source bloc1
+ * @snapshot      2026-05-06 (audit Sprint1-20-80 — recheck)
+ * @backlog-item  Sprint1-20-80-vmc-simple-flux-audit
+ *
+ * Audit 2026-05-06 : page existante validée Bloc 1, KW pivot toujours top
+ * priorité (15K vol KD 2). Header enrichi @intent + cluster slug + audit Sprint1.
  *
  * Famille cumulée ~18 000 vol/mois :
- * - "vmc simple flux"               → 15 000 vol, KD 2 (effy.fr #2)
- * - "vmc simple flux prix"          → 1 200 vol, KD 0
- * - "vmc simple flux hygroreglable" → 880 vol, KD 1
- * - "vmc simple flux autoreglable"  → 480 vol, KD 0
- * - "vmc simple flux maison"        → 320 vol, KD 0
+ * - "vmc simple flux"               → 15 000 vol, KD 2 ⭐⭐⭐⭐⭐ PIVOT (effy.fr #2)
+ * - "vmc simple flux prix"          →  1 200 vol, KD 0
+ * - "vmc simple flux hygroréglable" →    880 vol, KD 1 (overlap /hygroreglable/)
+ * - "vmc simple flux autoreglable"  →    480 vol, KD 0
+ * - "vmc simple flux maison"        →    320 vol, KD 0
  *
  * Easy win : OUI MEGA — Effy seul top 5, France-Renov pas dédiée.
- * Atout SA : comparatif neutre + simulateur + RGE Qualibat 8721.
+ * Atout SA : comparatif neutre + simulateur + RGE Qualibat 8721 + DevisCTA inline.
+ *
+ * Anti-cannibalisation :
+ *   - Hub /vmc = panorama 4 types (head term "vmc" 48K)
+ *   - Cette page = focus simple flux (autoréglable + hygro vue d'ensemble)
+ *   - /vmc/hygroreglable = focus deep type A vs B
+ *   - /vmc/hygroreglable/type-b = focus deep type B
+ *   - /vmc-double-flux (top-level) = autre famille
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -40,7 +51,7 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/vmc/simple-flux'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-04'
-const MODIFIED = '2026-05-04'
+const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'marc-lefebvre'
 const AUTHOR_NAME = 'Marc Lefebvre'
 

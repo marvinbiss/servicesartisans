@@ -1,24 +1,37 @@
 /**
- * /renovation-energetique/travaux/vmc/hygroreglable — sub-page VMC hygro.
+ * /renovation-energetique/travaux/vmc/hygroreglable — hub focus type A vs B.
  *
- * @kw-primary    vmc hygroreglable
+ * @kw-primary    vmc hygroréglable
  * @kw-volume     14000
  * @kw-kd         1
  * @kw-cpc        2.40
- * @cluster       2
- * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
- * @backlog-item  P3-vmc-cluster
- * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — JACKPOT KD 1)
+ * @intent        commercial
+ * @cluster       reno-energetique-vmc-hygroreglable
+ * @ahrefs-source bloc1
+ * @snapshot      2026-05-06 (audit Sprint1-20-80 — recheck + maillage type-b)
+ * @backlog-item  Sprint1-20-80-vmc-hygroreglable-audit
+ *
+ * Audit 2026-05-06 : page existante validée Bloc 1, KW pivot top priorité
+ * (14K vol KD 1). Header enrichi @intent + cluster slug. Maillage interne renforcé
+ * vers nouvelle sub-page /vmc/hygroreglable/type-b/ (1 700 vol KD 0).
  *
  * Famille cumulée ~16 400 vol/mois :
- * - "vmc hygroreglable"        → 14 000 vol, KD 1 (quelleenergie.fr #2)
- * - "vmc hygroreglable type a" → 720 vol, KD 0
- * - "vmc hygroreglable type b" → 880 vol, KD 0
- * - "vmc hygro b"              → 480 vol, KD 0
- * - "prix vmc hygroreglable"   → 320 vol, KD 0
+ * - "vmc hygroréglable"        → 14 000 vol, KD 1 ⭐⭐⭐⭐⭐ PIVOT (quelleenergie.fr #2)
+ * - "vmc hygroréglable type a" →    720 vol, KD 0 (à creuser dans sub-page type-a future)
+ * - "vmc hygroréglable type b" →  1 700 vol, KD 0 (✅ couvert par /type-b/)
+ * - "vmc hygro b"              →  1 500 vol, KD 1 (✅ couvert)
+ * - "prix vmc hygroreglable"   →    320 vol, KD 0 (couvert dans cette page)
  *
  * Easy win : OUI MEGA — KD 1 head term 14K vol, leader 1 absent (gov absent).
- * Atout SA : approfondissement type A vs B + débits réglementaires + RGE 8721.
+ * Atout SA : approfondissement type A vs B + débits réglementaires + RGE 8721 +
+ * DevisCTA inline + maillage cascade vers /type-b/ (focus deep).
+ *
+ * Anti-cannibalisation :
+ *   - Hub /vmc = head term "vmc" 48K (panorama)
+ *   - Cette page = panorama type A vs B (intent comparison)
+ *   - /vmc/hygroreglable/type-b = focus deep type B
+ *   - /vmc/hygroreglable/type-a (à créer Sprint 2) = focus deep type A
+ *   - /vmc/simple-flux = panorama simple flux générique
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -40,7 +53,7 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/vmc/hygroreglable'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-04'
-const MODIFIED = '2026-05-04'
+const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'marc-lefebvre'
 const AUTHOR_NAME = 'Marc Lefebvre'
 
@@ -183,6 +196,11 @@ const relatedPages = [
     label: 'Hub VMC',
     href: '/renovation-energetique/travaux/vmc',
     description: 'Comparatif 4 familles VMC',
+  },
+  {
+    label: 'VMC hygroréglable type B (focus deep)',
+    href: '/renovation-energetique/travaux/vmc/hygroreglable/type-b',
+    description: 'Modulation totale entrées + bouches, économie 8-12 %, marques top',
   },
   {
     label: 'VMC simple flux (générique)',

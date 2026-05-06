@@ -614,11 +614,31 @@ export default async function CeeHubPage() {
             Comprendre le circuit CEE
           </h2>
           <p className="text-charcoal-600 max-w-3xl mb-8 leading-relaxed">
-            Trois décisions structurantes avant de lancer un projet&nbsp;: choisir entre mandataire
-            et dépôt direct, profiter des bonifications Coup de pouce 2026, et orchestrer le cumul
-            avec MaPrimeRénov’.
+            Quatre décisions structurantes avant de lancer un projet&nbsp;: comparer les obligés
+            émetteurs (EDF, Engie, TotalEnergies, Sonergia, Hellio), choisir entre mandataire et
+            dépôt direct, profiter des bonifications Coup de pouce 2026, et orchestrer le cumul avec
+            MaPrimeRénov’.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <Link
+              href="/cee/comparatif-primes-energie"
+              className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+            >
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+              </div>
+              <div className="font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                Prime énergie&nbsp;: comparatif obligés
+              </div>
+              <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">
+                EDF, Engie, TotalEnergies, Sonergia, Hellio&nbsp;: montants, délais, conditions.
+                Choisir le bon obligé pour son dossier.
+              </p>
+              <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Comparer les obligés <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </Link>
+
             <Link
               href="/cee/coup-de-pouce-2026"
               className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"

@@ -1,25 +1,38 @@
 /**
- * /renovation-energetique/travaux/vmc/installation — guide installation VMC.
+ * /renovation-energetique/travaux/vmc/installation — guide installation VMC (cash cow).
  *
- * @kw-primary    vmc installation
- * @kw-volume     1200
+ * @kw-primary    installation vmc
+ * @kw-volume     1800
  * @kw-kd         0
  * @kw-cpc        2.10
- * @cluster       2
- * @ahrefs-source docs/ahrefs-bloc1-keywords-gap-2026-05-04.md#vmc-cluster
- * @backlog-item  P3-vmc-cluster
- * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3 — QUICK WIN)
+ * @intent        commercial
+ * @cluster       reno-energetique-vmc-installation
+ * @ahrefs-source bloc1
+ * @snapshot      2026-05-06 (Ahrefs Bloc 1 v3 — pivot up sur head canonical)
+ * @backlog-item  Sprint1-20-80-vmc-installation-cash-cow
  *
- * Famille cumulée ~3 800 vol/mois (KD 0-1) :
- * - "vmc installation"      → 1 200 vol, KD 0
+ * Re-cible 2026-05-06 : pivot passe de "vmc installation" (1 200 vol) à "installation
+ * vmc" (1 800 vol KD 0) — ordre des mots préféré Google + déjà aligné avec H1/TITLE.
+ *
+ * Famille cumulée ~5 020 vol/mois (KD 0-1, intent COMMERCIAL — fort potentiel devis) :
+ * - "installation vmc"      → 1 800 vol, KD 0 ⭐⭐⭐⭐ PIVOT (effy.fr #1)
+ * - "vmc installation"      → 1 200 vol, KD 0 (variant)
  * - "installation vmc prix" → 880 vol, KD 0
  * - "pose vmc"              → 720 vol, KD 0
  * - "remplacement vmc"      → 480 vol, KD 1
+ * - "vmc installation prix" → 350 vol, KD 0
  * - "installer une vmc"     → 320 vol, KD 0
- * - "vmc neuf prix"         → 200 vol, KD 0
+ * - "qui installe une vmc"  → 250 vol, KD 1
  *
- * Easy win : OUI — KD 0 sur tous KW. Page how-to + check-list.
- * Atout SA : guide étapes + tarifs + checklist devis + RGE Qualibat 8721.
+ * Easy win : OUI MEGA — KD 0 sur tous KW. Page how-to + check-list devis.
+ * Atout SA : guide étapes + tarifs + checklist devis + RGE Qualibat 8721 +
+ * CTA devis exclusifs (intent commercial = conversion lead 5-10 % vs info 0.5 %).
+ *
+ * Anti-cannibalisation :
+ *   - /vmc (hub head term "vmc" 48K) = panorama types (intent info)
+ *   - /vmc/simple-flux, /hygroreglable, /vmc-double-flux = focus type (intent achat)
+ *   - /vmc/entretien = post-installation récurrent (intent légal)
+ *   - Cette page = CTA devis + processus pose (intent COMMERCIAL = devis)
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -41,7 +54,7 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/vmc/installation'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-04'
-const MODIFIED = '2026-05-04'
+const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'marc-lefebvre'
 const AUTHOR_NAME = 'Marc Lefebvre'
 

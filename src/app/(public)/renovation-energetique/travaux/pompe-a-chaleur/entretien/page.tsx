@@ -1,33 +1,38 @@
 /**
  * Page : /renovation-energetique/travaux/pompe-a-chaleur/entretien
  *
- * @kw-primary    prix entretien pompe a chaleur
- * @kw-volume     500
+ * @kw-primary    entretien pompe a chaleur
+ * @kw-volume     5900
  * @kw-kd         1
- * @kw-cpc        0.68
- * @cluster       2
- * @ahrefs-source docs/ahrefs-audit-2026-04/normalized/ahrefs-content-gap.csv
- * @snapshot      2026-05-04 (Ahrefs Bloc 1 v3)
- * @backlog-item  Levier-C-pac-entretien
+ * @kw-cpc        1.20
+ * @cluster       reno-energetique-pac-entretien
+ * @ahrefs-source api-live
+ * @snapshot      2026-05-06
+ * @backlog-item  B6 (récap audits 2026-05-06 — Bloc 1 Ahrefs cluster PAC entretien)
  *
- * KW cibles (validés Ahrefs gap CSV 2026-04, country=fr) :
- * - "prix entretien pompe a chaleur"          →  500 vol, KD 1 (Travaux.com #9)
- * - "tarif entretien pompe a chaleur air-eau" →  400 vol, KD 0 (Travaux.com #3)
- * - "entretien pompe a chaleur autour de moi" →  400 vol, KD 0 (Travaux.com #5)
- * - "contrat entretien pompe a chaleur"       →  ~250 vol estimé, KD 1
- * - "entretien obligatoire pompe a chaleur"   →  ~150 vol estimé, intent légal
- * - Famille cumulée pivot : ~1 700 vol/mois
+ * KW cibles (revalidés Ahrefs API live 2026-05-06, country=fr) :
+ * - "entretien pompe a chaleur"               → 5 900 vol, KD 1, CPC $1,20 ⭐⭐⭐⭐⭐ PIVOT
+ * - "entretien pac"                           →   800 vol, KD 2, CPC $1,30 ⭐⭐⭐⭐
+ * - "contrat entretien pompe a chaleur"       →   500 vol, KD 0, CPC $1,00 ⭐⭐⭐⭐
+ * - "prix entretien pompe a chaleur"          →   500 vol, KD 1, CPC $0,68 ⭐⭐⭐
+ * - "tarif entretien pompe a chaleur air-eau" →   400 vol, KD 0
+ * - "entretien pompe a chaleur autour de moi" →   400 vol, KD 0
+ * - "prix entretien pac"                      →   150 vol, KD 1, CPC $0,60
+ * - "entretien pompe a chaleur obligatoire"   →   100 vol, KD 0, CPC $0,40 (intent légal)
+ * - Famille cumulée pivot : ~7 450 vol/mois (KD 0-2 = TOP EASY WIN)
  *
- * Source : docs/ahrefs-audit-2026-04/normalized/ahrefs-content-gap.csv
- *          (snapshot Ahrefs Bloc 1 v3 2026-05-04)
- * Easy win : OUI (KD 0-1 sur 4 KW pivots, intent post-install récurrent)
+ * Refresh 2026-05-06 : KW racine "entretien pompe a chaleur" 5 900 vol KD 1
+ * désormais ciblé en priorité (vs "prix entretien" 500 vol secondaire).
+ *
+ * Easy win : OUI MAJEUR (KD 0-2 sur tout le cluster, intent post-install récurrent + légal)
  * Cluster pillar : Rénovation Énergétique → Travaux → PAC → Entretien
  *
  * Anti-cannibalisation :
  *   - Hub /pompe-a-chaleur = comparatif 3 types + prix (intent achat)
  *   - /air-eau-prix, /air-air-prix, /geothermie = sous-pages prix par type
+ *   - /pompe-a-chaleur/consommation (B8) = consommation kWh/an + facture (intent budget)
  *   - Cette page = POST-INSTALLATION récurrent (intent légal + tarif annuel),
- *     pas de chevauchement « prix d'achat ».
+ *     pas de chevauchement « prix d'achat » ni « consommation kWh ».
  *
  * YMYL : page légale/sécurité (décret 2020-912 + F-Gas UE 517/2014).
  * Cite Légifrance + ADEME + AFPAC + Code de l'environnement.
@@ -66,9 +71,9 @@ const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'jean-pierre-duval'
 const AUTHOR_NAME = 'Jean-Pierre Duval'
 
-const TITLE = 'Entretien PAC 2026 : prix & obligation légale'
+const TITLE = 'Entretien Pompe à Chaleur 2026 : obligation, prix, contrat'
 const DESCRIPTION =
-  'Entretien pompe à chaleur 2026 : obligatoire tous les 2 ans (décret 2020-912). Prix contrat 150-300 €/an. Que vérifie le pro ?'
+  'Entretien pompe à chaleur 2026 : obligatoire tous les 2 ans (décret 2020-912) pour PAC 4-70 kW. Contrat 150-300 €/an. Étanchéité fluide annuelle si ≥ 5 tCO2-eq.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -266,6 +271,10 @@ const relatedPages = [
     href: '/renovation-energetique/travaux/pompe-a-chaleur/geothermie',
   },
   {
+    label: 'Consommation PAC : kWh, COP, facture',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/consommation',
+  },
+  {
     label: 'Trouver un chauffagiste RGE QualiPAC',
     href: '/rge/chauffagiste',
   },
@@ -282,10 +291,13 @@ export default function Page() {
     section: 'Travaux — PAC — Entretien',
     keywords: [
       'entretien pompe à chaleur',
+      'entretien pac',
+      'contrat entretien pompe à chaleur',
       'prix entretien PAC',
-      'contrat entretien PAC',
-      'entretien obligatoire PAC',
-      'tarif entretien pompe à chaleur',
+      'entretien pompe à chaleur obligatoire',
+      'tarif entretien pompe à chaleur air-eau',
+      'attestation fluides catégorie I',
+      'décret 2020-912',
     ],
   })
   const breadcrumbSchema = getBreadcrumbSchema([
