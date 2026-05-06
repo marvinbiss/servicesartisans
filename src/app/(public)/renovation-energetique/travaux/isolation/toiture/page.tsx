@@ -45,12 +45,21 @@
  *
  * Aides 2026 (rappel YMYL) :
  *   - MaPrimeRénov' isolation rampants/toiture (forfait selon revenus, R ≥ 6
- *     m².K/W toiture par rampants, R ≥ 7 m².K/W combles perdus, R ≥ 4,4
+ *     m².K/W toiture par rampants, R ≥ 7 m².K/W combles perdus, R ≥ 4,5
  *     m².K/W toiture-terrasse) — barème révisé annuellement par l'Anah.
- *   - CEE BAR-EN-103 (isolation toiture) — prime variable opérateur.
+ *   - CEE BAR-EN-101 (isolation des combles et de la toiture) — prime
+ *     variable opérateur. Code FOS DGEC v2024 catalogue résidentiel.
  *   - Coup de pouce isolation : majoration ménages modestes.
  *   - Éco-PTZ jusqu'à 30 000 € (par geste) ou 50 000 € (rénovation d'ampleur).
  *   - TVA 5,5 % sur fourniture + pose par RGE Qualibat 7131/7132.
+ *
+ * DTU pertinents :
+ *   - DTU 31.1 — charpentes en bois (sarking, fixation par-dessus chevrons)
+ *   - DTU 40.21x — couverture en tuiles (40.21 plates terre cuite, 40.211
+ *     canal, 40.23 béton…) selon couverture réfection
+ *   - DTU 40.29 — écrans souples de sous-toiture homologués (HPV)
+ *   - DTU 25.41 — plaques de plâtre BA13 (rampants intérieur)
+ *   - DTU 43.1 / 43.4 — étanchéité toitures-terrasses (porteur maçonnerie / bois)
  *
  * Label RGE OBLIGATOIRE : Qualibat 7131 (isolation plâtrerie sèche, rampants
  * intérieur), Qualibat 7132 (ITE — sarking par certains poseurs), Qualibat
@@ -82,7 +91,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'Isolation toiture 2026 : sarking, rampants, prix posé'
 const DESCRIPTION =
-  'Isolation toiture 2026 : sarking par l’extérieur 80-180 €/m², rampants intérieur 50-120 €/m², écran sous-toiture HPV. Aides MPR + CEE BAR-EN-103, RGE Qualibat.'
+  'Isolation toiture 2026 : sarking par l’extérieur 80-180 €/m², rampants intérieur 50-120 €/m², écran sous-toiture HPV. Aides MPR + CEE BAR-EN-101, RGE Qualibat.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -105,8 +114,8 @@ const tldr = [
   'L’isolation de la toiture représente 25-30 % des déperditions thermiques d’une maison non isolée — premier poste après les combles perdus.',
   '3 techniques principales : sarking (par l’extérieur, sur charpente), rampants intérieur (entre + sous chevrons), écran sous-toiture HPV.',
   'Sarking 80-180 €/m² posé · rampants intérieur 50-120 €/m² · écran sous-toiture seul 15-35 €/m².',
-  'R minimum 2026 pour MaPrimeRénov’ : ≥ 6 m².K/W (toiture par rampants), ≥ 7 m².K/W (combles perdus), ≥ 4,4 m².K/W (toiture-terrasse).',
-  'Aides cumulables : MaPrimeRénov’ (forfait selon revenus) + CEE BAR-EN-103 + Coup de pouce isolation + éco-PTZ + TVA 5,5 %.',
+  'R minimum 2026 pour MaPrimeRénov’ : ≥ 6 m².K/W (toiture par rampants), ≥ 7 m².K/W (combles perdus), ≥ 4,5 m².K/W (toiture-terrasse).',
+  'Aides cumulables : MaPrimeRénov’ (forfait selon revenus) + CEE BAR-EN-101 + Coup de pouce isolation + éco-PTZ + TVA 5,5 %.',
   'Label RGE Qualibat 7131 (rampants intérieur), 7132 (ITE/sarking), 8211 (couverture sarking) — obligatoire pour ouvrir droit aux aides.',
   'Si combles perdus : voir /isolation/combles (technique soufflage 20-40 €/m², ROI 1-3 ans).',
 ]
@@ -118,7 +127,7 @@ const TECHNIQUES = [
     r: 'R 5-7 m².K/W typique',
     epaisseur: '100-160 mm',
     detail:
-      'Panneaux isolants posés par-dessus la charpente, entre celle-ci et la couverture. Conserve volume habitable + traite les ponts thermiques. Idéal lors d’une réfection complète de toiture (DTU 40.41 + DTU 31.1). Pas d’intervention intérieure. Matériaux : laine de bois rigide (Steico, Pavatex), fibre de bois, PIR/PUR.',
+      'Panneaux isolants posés par-dessus la charpente, entre celle-ci et la couverture. Conserve volume habitable + traite les ponts thermiques. Idéal lors d’une réfection complète de toiture (DTU 31.1 charpente bois + DTU 40.21x selon couverture tuiles). Pas d’intervention intérieure. Matériaux : laine de bois rigide (Steico, Pavatex), fibre de bois, PIR/PUR.',
     ideal: 'Rénovation lourde toiture, combles aménagés à conserver, charpente saine',
   },
   {
@@ -142,7 +151,7 @@ const TECHNIQUES = [
   {
     technique: 'Toiture-terrasse (rare en résidentiel)',
     prix: '120-220 €/m² posé',
-    r: 'R 4,4-6 m².K/W',
+    r: 'R 4,5-6 m².K/W',
     epaisseur: '120-200 mm',
     detail:
       'Toiture plate ou très faiblement pentue. Isolation par-dessus l’étanchéité (toiture inversée) ou en dessous (toiture chaude). Matériaux : XPS, PIR, verre cellulaire. DTU 43.1 / 43.4. Spécifique aux maisons modernes.',
@@ -236,12 +245,12 @@ const faqs = [
   {
     question: 'Quel R minimum pour MaPrimeRénov’ en 2026 sur la toiture ?',
     answer:
-      'Seuils 2026 (à vérifier sur <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> avant devis) : <strong>toiture par rampants R ≥ 6 m².K/W</strong>, <strong>combles perdus R ≥ 7 m².K/W</strong>, <strong>toiture-terrasse R ≥ 4,4 m².K/W</strong>. Ces seuils sont alignés sur les exigences CEE BAR-EN-103. En pratique : 200-300 mm de laine minérale ou biosourcée pour les rampants ; 300-400 mm en soufflage pour les combles perdus ; 100-160 mm de PIR/PUR ou fibre de bois rigide pour le sarking. Inférieur au seuil R minimum = pas d’aide. Le devis doit indiquer le matériau, l’épaisseur, le R atteint et la conformité ACERMI.',
+      'Seuils 2026 (à vérifier sur <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> avant devis) : <strong>toiture par rampants R ≥ 6 m².K/W</strong>, <strong>combles perdus R ≥ 7 m².K/W</strong>, <strong>toiture-terrasse R ≥ 4,5 m².K/W</strong>. Ces seuils sont alignés sur les exigences CEE BAR-EN-101. En pratique : 200-300 mm de laine minérale ou biosourcée pour les rampants ; 300-400 mm en soufflage pour les combles perdus ; 100-160 mm de PIR/PUR ou fibre de bois rigide pour le sarking. Inférieur au seuil R minimum = pas d’aide. Le devis doit indiquer le matériau, l’épaisseur, le R atteint et la conformité ACERMI.',
   },
   {
     question: 'Quelles aides pour l’isolation de la toiture en 2026 ?',
     answer:
-      'Aides cumulables 2026 si artisan RGE Qualibat 7131/7132/8211 et matériau certifié ACERMI : <strong>MaPrimeRénov’</strong> isolation rampants/toiture (forfait selon revenus — barème révisé annuellement par l’Anah, voir <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a>) ; <strong>CEE BAR-EN-103</strong> (isolation rampants/plafond/combles) — prime variable selon opérateur ; <strong>Coup de pouce isolation</strong> majoration ménages modestes ; <strong>éco-PTZ</strong> jusqu’à 30 000 € (par geste) ou 50 000 € (rénovation d’ampleur) ; <strong>TVA 5,5 %</strong> sur fourniture + pose. <strong>Reste à charge typique</strong> ménages modestes (Bleu) sur sarking 100 m² : ~30-50 % du devis selon barème en vigueur.',
+      'Aides cumulables 2026 si artisan RGE Qualibat 7131/7132/8211 et matériau certifié ACERMI : <strong>MaPrimeRénov’</strong> isolation rampants/toiture (forfait selon revenus — barème révisé annuellement par l’Anah, voir <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a>) ; <strong>CEE BAR-EN-101</strong> (isolation rampants/plafond/combles) — prime variable selon opérateur ; <strong>Coup de pouce isolation</strong> majoration ménages modestes ; <strong>éco-PTZ</strong> jusqu’à 30 000 € (par geste) ou 50 000 € (rénovation d’ampleur) ; <strong>TVA 5,5 %</strong> sur fourniture + pose. <strong>Reste à charge typique</strong> ménages modestes (Bleu) sur sarking 100 m² : ~30-50 % du devis selon barème en vigueur.',
   },
   {
     question: 'Quel artisan RGE pour l’isolation de la toiture ?',
@@ -273,7 +282,7 @@ const sources = [
     label: 'Service-Public.fr — Aides isolation',
     url: 'https://www.service-public.fr',
   },
-  { label: 'CSTB — DTU 40.29 / 40.41 / 25.41', url: 'https://www.cstb.fr' },
+  { label: 'CSTB — DTU 31.1 / 40.21x / 40.29 / 25.41 / 43.1', url: 'https://www.cstb.fr' },
   { label: 'Qualibat — Mentions 7131 / 7132 / 8211', url: 'https://www.qualibat.com' },
   {
     label: 'ACERMI — Certification matériaux isolants',
@@ -346,9 +355,9 @@ export default function Page() {
   ])
   const faqSchema = getFAQSchema(faqs)
   const govSchema = getGovernmentServiceSchema({
-    name: 'Aides isolation toiture 2026 (MaPrimeRénov’ + CEE BAR-EN-103)',
+    name: 'Aides isolation toiture 2026 (MaPrimeRénov’ + CEE BAR-EN-101)',
     description:
-      'Isolation de la toiture (sarking, rampants, écran HPV) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-103, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 6 m².K/W (rampants), 7 m².K/W (combles perdus), 4,4 m².K/W (toiture-terrasse). Installation par artisan RGE Qualibat 7131/7132/8211 obligatoire.',
+      'Isolation de la toiture (sarking, rampants, écran HPV) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-101, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 6 m².K/W (rampants), 7 m².K/W (combles perdus), 4,5 m².K/W (toiture-terrasse). Installation par artisan RGE Qualibat 7131/7132/8211 obligatoire.',
     url: PAGE_URL,
     serviceType: 'Subvention publique isolation toiture',
     audience: 'Propriétaires occupants, bailleurs, copropriétés',
@@ -395,7 +404,7 @@ export default function Page() {
               <strong>rampants par l’intérieur</strong> (50-120 €/m², combles aménagés) et l’
               <strong>écran sous-toiture HPV</strong> (étanchéité air + vapeur, indispensable).
               Aides cumulables 2026 :{' '}
-              <strong>MaPrimeRénov’ + CEE BAR-EN-103 + Coup de pouce + TVA 5,5 %</strong>. Label{' '}
+              <strong>MaPrimeRénov’ + CEE BAR-EN-101 + Coup de pouce + TVA 5,5 %</strong>. Label{' '}
               <strong>RGE Qualibat 7131 / 7132 / 8211</strong> obligatoire.
             </p>
             <LastUpdated date={MODIFIED} className="mt-3" />
@@ -491,7 +500,7 @@ export default function Page() {
                 pour le montant en vigueur.
               </li>
               <li>
-                <strong>CEE BAR-EN-103</strong> (isolation rampants/plafond/combles) : prime
+                <strong>CEE BAR-EN-101</strong> (isolation rampants/plafond/combles) : prime
                 variable selon opérateur et zone climatique, cumulable avec MPR.
               </li>
               <li>
