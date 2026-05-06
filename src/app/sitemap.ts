@@ -811,6 +811,36 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.8,
       },
       {
+        // Sprint 4 PAC long-tail 2026-05-06 — utility pages.
+        // Cout-total : "cout pompe a chaleur" 1 000 vol KD 1 + variants ~2 000 cumul
+        // Anti-cannib : /air-eau-prix = prix achat ; /consommation = facture ;
+        // cette page = TCO 15 ans (achat + élec + entretien + remplacement) + comparatif
+        // 5 énergies (PAC vs fioul/gaz/élec/granulés) sur 15 ans.
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/cout-total`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        // Puissance : "puissance pompe a chaleur" 350 vol KD 0 + variants ~920 cumul
+        // Anti-cannib : /installation = chantier ; cette page = méthode dimensionnement
+        // NF EN 12831 + cas types 60-180 m² + erreurs sous/sur-dim.
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/puissance`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
+        // Depannage : "depannage pompe a chaleur" 450 vol KD 0 + variants ~1 800 cumul
+        // CPC élevé (1,20 €) intent commercial urgence.
+        // Anti-cannib : /entretien = préventif ; cette page = curatif (10 pannes
+        // courantes, codes erreur, prix intervention 80-300 €, garanties).
+        url: `${SITE_URL}/renovation-energetique/travaux/pompe-a-chaleur/depannage`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.75,
+      },
+      {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage`,
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',

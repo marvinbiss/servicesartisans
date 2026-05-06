@@ -257,6 +257,21 @@ const relatedPages = [
     description: 'N°2 mondial. Acoustique 33-37 dB record + Zubadan -28 °C + garantie 7 ans auto.',
   },
   {
+    label: 'Coût total PAC sur 15 ans',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/cout-total',
+    description: 'TCO ~28K€ vs 52K€ fioul. Comparatif 5 énergies + 5 leviers de réduction.',
+  },
+  {
+    label: 'Puissance PAC : calcul kW selon surface',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/puissance',
+    description: 'Méthode NF EN 12831 + cas types 60-180 m² + erreurs sous/sur-dim',
+  },
+  {
+    label: 'Dépannage PAC : pannes, codes erreur, prix',
+    href: '/renovation-energetique/travaux/pompe-a-chaleur/depannage',
+    description: '10 pannes courantes + codes par marque + prix intervention 80-300 €',
+  },
+  {
     label: 'Guide pompe à chaleur (technique complet)',
     href: '/guides/pompe-a-chaleur',
     description: 'Fonctionnement, COP, dimensionnement, durée de vie',
