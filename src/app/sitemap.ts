@@ -1152,6 +1152,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      // Levier M 2026-05-06 — sub-page solaire thermique (~5 000 vol/mo cumulé Bloc 1).
+      // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+      //   - "panneau solaire thermique"     3 200 vol KD 4 ⭐⭐⭐ pivot rang #31
+      //   - "panneaux solaires thermiques"    900 vol KD 7 rang #150
+      //   - "chauffe-eau solaire individuel" longue traîne CESI
+      //   - "système solaire combiné"        longue traîne SSC
+      // Anti-canniba : focus CESI/SSC (chaleur eau) vs hub /solaire PV (électricité).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/thermique`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
       {
         // B4 sub-page 2026-05-06 — Autoconsommation solaire (~22 490 vol/mo cumulé).
         // KW pivots Ahrefs API live (snapshot 2026-05-06) :

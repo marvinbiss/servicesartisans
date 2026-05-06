@@ -300,6 +300,11 @@ const relatedPages = [
     description: 'Mono 18-22 %, poly 14-17 %, dégradation 25 ans, calcul ROI',
   },
   {
+    label: 'Panneau solaire thermique 2026 (CESI / SSC)',
+    href: '/renovation-energetique/travaux/solaire/thermique',
+    description: "Chaleur eau pour ECS + chauffage, MPR jusqu'à 10 000 €",
+  },
+  {
     label: 'Autoconsommation solaire (totale, surplus, collective)',
     href: '/renovation-energetique/travaux/solaire/autoconsommation',
     description: '3 modes énergétiques + ROI batterie + raccordement Enedis CACSI',
