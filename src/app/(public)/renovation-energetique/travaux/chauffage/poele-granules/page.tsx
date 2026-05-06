@@ -1,18 +1,57 @@
 /**
- * Page : /renovation-energetique/travaux/chauffage/poele-granules
+ * /renovation-energetique/travaux/chauffage/poele-granules — Levier 4 ROI.
  *
- * KW cibles (validés Ahrefs API live, snapshot 2026-05-03, country=fr) :
- * - "poele a granules"             → 380 vol, KD 16, CPC $0,40, clicks 1 244 ⭐
- * - "poele granules"               → 48 vol, KD 17, CPC $0,40
- * - "prix poele a granules"        → longue traîne KD bas
- * - "poele granule"                → variant orthographique
- * - Famille cumulée pivot : ~700 vol/mois
+ * @kw-primary    poele a granule
+ * @kw-volume     48000
+ * @kw-kd         12
+ * @kw-cpc        0.40
+ * @cluster       4
+ * @ahrefs-source live keywords-explorer/overview snapshot 2026-05-06 country=fr
+ * @backlog-item  P3-poele-granules-cluster
  *
- * Source : audit Ahrefs API live (cf docs/ahrefs-audit-2026-04/STRATEGIE-RENOVATION-ENERGETIQUE.md)
- * Easy win : MOYEN (KD 16-17, vol pivot 380, intent transactionnel)
- *            Concurrence forte (Stuv, MCZ, Edilkamin sites constructeurs + comparateurs)
- *            Atout SA : focus aides MPR/CEE + ROI réel + entretien
- * Cluster pillar : Rénovation Énergétique → Travaux → Chauffage → Poêle granulés
+ * REFONTE CIBLAGE 2026-05-06 (Levier 4 ROI) :
+ * Le ciblage initial (snapshot 2026-05-03, 380 vol KD 16) ratait le vrai
+ * pivot. Repull Ahrefs API live a révélé que le variant orthographique
+ * `poele a granule` (sans S) génère 126× plus de volume. Cette refonte
+ * cible le bon pivot tout en couvrant les variants en cohabitation.
+ *
+ * KW cibles validés Ahrefs API live (snapshot 2026-05-06, country=fr) :
+ * - "poele a granule"            → 48 000 vol, KD 12, CPC 0,40 €  (PIVOT primary)
+ * - "poele a pellet"             →  5 400 vol, KD 17
+ * - "poele a granule prix"       →  2 300 vol, KD 3  (money KW easy win)
+ * - "poele a granules"           →  1 000 vol, KD 16 (variant pluriel)
+ * - "poele a pellets"            →    300 vol, KD 18
+ * - "poele granules etanche"     →    150 vol, KD null (large opportunité)
+ * - "prix poele a granules"      →    150 vol, KD 5
+ * - "poele granules"             →    150 vol, KD 17
+ * - "poele a granules sans electricite" → 90 vol, KD 0 (sub-page easy win)
+ * - "poele a granules prix"      →     60 vol, KD 3
+ * - "prix poele granule"         →     40 vol, KD 12
+ * - "poele a pellets prix"       →     30 vol, KD null
+ * - Cluster cumulé : ~58 000 vol/mo, KD avg 11.
+ *
+ * Easy win : OUI MAJEUR sur "poele a granule prix" (2 300 KD 3) et
+ * "poele a granules sans electricite" (90 KD 0). Sur le pivot 48K KD 12,
+ * compétition Effy/Hellio/MCZ/comparateurs — atteignable mais demande
+ * autorité topical (cluster bois/biomasse cohérent, mêmes 4 171 Qualibois
+ * que /chaudiere-bois, label Flamme Verte 7+, prix posé fourchette honnête).
+ *
+ * Cluster pillar : Rénovation Énergétique → Travaux → Chauffage → Poêle granulés.
+ *
+ * Anti-cannibalisation :
+ *   - /chauffage/chaudiere-bois          → chaudière biomasse (chauffage central)
+ *   - /chauffage/chaudiere-condensation  → chaudière gaz/fioul
+ *   - /chauffage/chauffe-eau-thermodynamique → ECS uniquement
+ *   - Cette page = poêle (point unique pièce, jamais central)
+ *   - /poele-granules/sans-electricite (sub-page Vague 1, KD 0)
+ *   - /guides/poele-granules-aides-2026 → cette page absorbe l'autorité topical
+ *     via maillage descendant
+ *
+ * Aides 2026 (rappel YMYL) :
+ *   - MaPrimeRénov' Bleu 2 500 € (4 000 € hydro) — barème révisé annuellement
+ *   - CEE BAR-TH-112 (poêle granulés) + Coup de pouce si remplacement fioul/gaz
+ *   - Éco-PTZ (1 action) + TVA 5,5 % avec RGE Qualibois Module Air ou Eau
+ *   - Label Flamme Verte 7+ obligatoire pour TVA 5,5 % (rendement ≥ 87 %).
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -34,13 +73,13 @@ export const revalidate = 86400
 const PAGE_PATH = '/renovation-energetique/travaux/chauffage/poele-granules'
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`
 const PUBLISHED = '2026-05-04'
-const MODIFIED = '2026-05-04'
+const MODIFIED = '2026-05-06'
 const AUTHOR_SLUG = 'jean-pierre-duval'
 const AUTHOR_NAME = 'Jean-Pierre Duval'
 
-const TITLE = 'Poêle à granulés 2026 : prix & aides MPR'
+const TITLE = 'Poêle à granulé 2026 : prix posé, aides MPR + CEE'
 const DESCRIPTION =
-  'Poêle à granulés 2026 : prix posé 4 000-8 000 €, MPR jusquà 2 500 €, rendement 85-92 %. Étanche/canalisable/hydro, ROI 5-8 ans.'
+  'Poêle à granulé (pellet) 2026 : prix posé 4 000-14 000 € (étanche / canalisable / hydro), MaPrimeRénov’ jusqu’à 4 000 €, label Flamme Verte 7+, ROI 5-8 ans.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -163,7 +202,7 @@ const faqs = [
   {
     question: 'Quel artisan installer un poêle à granulés ?',
     answer:
-      'Mention RGE <strong>Qualibois</strong> Module Air (poêle simple) ou Module Eau (poêle hydro raccordé chauffage central). Vérifier dans notre <Link href="/rge/labels/qualibois">annuaire Qualibois</Link>. Le devis doit indiquer : marque, modèle, label Flamme Verte 7+, puissance kW, rendement %, conduit fumée (tubage neuf ou existant), mise en service. Au moins 2-3 devis comparés pour optimiser.',
+      'Mention RGE <strong>Qualibois</strong> Module Air (poêle simple) ou Module Eau (poêle hydro raccordé chauffage central). Vérifier dans notre <a href="/rge/labels/qualibois">annuaire Qualibois</a>. Le devis doit indiquer : marque, modèle, label Flamme Verte 7+, puissance kW, rendement %, conduit fumée (tubage neuf ou existant), mise en service. Au moins 2-3 devis comparés pour optimiser.',
   },
   {
     question: 'Quel entretien pour un poêle à granulés ?',
@@ -186,6 +225,16 @@ const sources = [
 ]
 
 const relatedPages = [
+  {
+    label: 'Poêle granulés sans électricité',
+    href: '/renovation-energetique/travaux/chauffage/poele-granules/sans-electricite',
+    description: 'Gravitaire, hybride, onduleur — autonomie réseau',
+  },
+  {
+    label: 'Chaudière à bois (biomasse)',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-bois',
+    description: 'Chauffage central + ECS via bois',
+  },
   {
     label: 'Hub Chauffage',
     href: '/renovation-energetique/travaux/chauffage',
@@ -228,12 +277,17 @@ export default function Page() {
     author: { type: 'person', name: AUTHOR_NAME },
     section: 'Poêle à granulés',
     keywords: [
+      'poele a granule',
       'poele a granules',
-      'poele granules',
-      'prix poele a granules',
-      'poele a granules 2026',
+      'poele a pellet',
       'poele a pellets',
+      'poele a granule prix',
+      'poele granules',
+      'poele granules etanche',
+      'poele a granules sans electricite',
       'maprimerenov poele granules',
+      'flamme verte',
+      'qualibois',
     ],
   })
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -273,20 +327,20 @@ export default function Page() {
           <header className="mb-8">
             <div className="inline-flex items-center gap-1.5 bg-primary-50 text-primary-800 text-xs font-medium px-2.5 py-1 rounded-full mb-4">
               <Leaf className="w-3.5 h-3.5" aria-hidden />
-              EnR — MaPrimeRénov’ jusqu’à 2 500 €
+              EnR — MaPrimeRénov’ jusqu’à 4 000 € (hydro Bleu)
             </div>
             <h1
               data-speakable="true"
               className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
             >
-              Poêle à granulés 2026 : prix, aides et modèles
+              Poêle à granulé (pellet) 2026 : prix, aides et modèles
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">
-              Le <strong>poêle à granulés</strong> brûle automatiquement des pellets bois pour
-              chauffer une pièce principale ou une maison entière (canalisable / hydro). Prix posé
-              2026 : <strong>4 000 à 8 000 €</strong> pour un modèle étanche standard, jusqu’à{' '}
-              <strong>14 000 €</strong> pour un hydraulique raccordé au chauffage central. Avec un
-              rendement de <strong>85-92 %</strong> et MaPrimeRénov’{' '}
+              Le <strong>poêle à granulé</strong> (ou <strong>pellet</strong>) brûle automatiquement
+              des pellets bois pour chauffer une pièce principale ou une maison entière (canalisable
+              / hydro). Prix posé 2026 : <strong>4 000 à 8 000 €</strong> pour un modèle étanche
+              standard, jusqu’à <strong>14 000 €</strong> pour un hydraulique raccordé au chauffage
+              central. Avec un rendement de <strong>85-92 %</strong> et MaPrimeRénov’{' '}
               <strong>jusqu’à 4 000 €</strong> (Bleu hydro), c’est une alternative pertinente aux
               chaudières fossiles.
             </p>

@@ -643,6 +643,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // Levier 4 ROI (2026-05-06) — sub-page niche cluster Poêle granulés.
+      // KW pivot "poele a granules sans electricite" 90 vol KD 0 — easy win extrême.
+      // Contenu YMYL : 4 solutions (gravitaire / hybride / onduleur / bûches).
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/poele-granules/sans-electricite`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      },
       {
         url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chauffe-eau-thermodynamique`,
         lastModified: STATIC_DATE,
