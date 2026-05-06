@@ -604,6 +604,33 @@ export default function Page() {
                 </div>
               </div>
             </div>
+
+            <h3>Embed iframe pour médias / blogs / partenaires</h3>
+            <p>
+              Une iframe responsive prête à coller, mise à jour automatiquement (cache 24 h) et sans
+              tracking côté hôte. Elle restitue les six KPI publics avec le lien retour vers cette
+              page.
+            </p>
+            <div className="not-prose bg-sand-900 text-sand-100 rounded-lg p-4 my-4 overflow-x-auto">
+              <pre className="text-xs leading-relaxed whitespace-pre">
+                <code>{`<iframe src="${SITE_URL}/api/v1/barometre/renovation/embed.html"
+        width="100%" height="640" loading="lazy"
+        frameborder="0"
+        title="Indice Rénovation Énergétique 2026 — ServicesArtisans"></iframe>`}</code>
+              </pre>
+            </div>
+            <p className="text-sm text-sand-600">
+              Endpoint :{' '}
+              <a
+                href="/api/v1/barometre/renovation/embed.html"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                /api/v1/barometre/renovation/embed.html
+              </a>{' '}
+              — renvoie une page HTML autonome (Cache-Control public 1 h, SWR 24 h).
+            </p>
           </article>
 
           <FlagshipSources sources={sources} />
