@@ -806,6 +806,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.85,
       },
       {
+        // Levier N 2026-05-06 — page Électricité hub (~37 000 vol/mo cumulé direct).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
+        //   - "electricien"               14 000 vol KD 12
+        //   - "electricien autour de moi"  5 500 vol KD 1 ⭐⭐⭐ pivot
+        //   - "consuel electrique"         4 600 vol KD 4
+        //   - "électricien"                4 100 vol KD 0
+        //   - "hauteur tableau électrique" 2 600 vol KD 0
+        //   - "tableau électrique triphasé" 1 900 vol KD 0
+        //   - "irve" 8 300 vol KD 9 (sub-page possible)
+        // YMYL high : NF C 15-100, Consuel Décret 2010-301, IRVE Décret 2017-298.
+        url: `${SITE_URL}/renovation-energetique/travaux/electricite`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
+      {
         // Levier L 2026-05-06 — page Climatisation hub (~3 200 vol/mo cumulé).
         // KW pivots Ahrefs gap CSV (snapshot 2026-05-04) :
         //   - "frigoriste autour de moi"        800 vol KD 2

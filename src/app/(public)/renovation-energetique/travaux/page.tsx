@@ -381,6 +381,11 @@ const relatedPages = [
     href: '/renovation-energetique/travaux/climatisation',
     description: 'Monosplit, multisplit, gainable, 1 500-15 000 €',
   },
+  {
+    label: 'Électricité : prix électricien et NF C 15-100',
+    href: '/renovation-energetique/travaux/electricite',
+    description: 'Tarif horaire, mise aux normes, IRVE, Consuel',
+  },
 ]
 
 export default function Page() {
