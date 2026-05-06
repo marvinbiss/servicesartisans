@@ -3,12 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock } from 'lucide-react'
-import {
-  getServiceBySlug,
-  getProvidersByService,
-  getProviderCountByService,
-  getProviderCountByServiceAndLocation,
-} from '@/lib/supabase'
+import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
+import { getValidCitySlugsForService } from '@/lib/seo/valid-combos'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
@@ -259,26 +255,15 @@ export default async function ServicePage({ params }: PageProps) {
     return null
   })
 
-  // Top 12 cities (static, validated, sorted by population)
-  // 2026-05-06 — Filtre RGE-aware : exclut les villes où le combo
-  // /services/[s]/[v] partirait en notFound() (0 RGE pour ce service à cette
-  // ville). Avant pivot full RGE, le hub listait des villes statiques qui
-  // n'avaient aucun artisan RGE pour le service → liens cassés, soft-404, UX KO.
-  // Coût : 30 count queries en parallèle, déjà cachées 1h via getCachedData.
-  const validSlugs = new Set(villes.map((v) => v.slug))
-  const candidates: CityInfo[] = getStaticCities().filter((c) => validSlugs.has(c.slug))
-  const cityCounts = await Promise.all(
-    candidates.slice(0, 30).map(async (c) => {
-      const n = await getProviderCountByServiceAndLocation(serviceSlug, c.slug, {
-        rgeOnly: true,
-      }).catch(() => 0)
-      return { city: c, count: n }
-    })
-  )
-  const topCities: CityInfo[] = cityCounts
-    .filter((x) => x.count > 0)
+  // Top 12 cities — single source of truth via mat-view `mv_provider_counts`
+  // (mig 312 + 516, RGE-aware). Le helper retourne déjà les villes triées par
+  // count RGE descendant et exclut les combos sans aucun artisan RGE actif.
+  // Avant pivot full RGE, ce hub listait des villes statiques qui partaient en
+  // notFound() côté /services/[s]/[v] (~50% des cas). Cf. lib/seo/valid-combos.ts.
+  const validCitySlugs = new Set(await getValidCitySlugsForService(serviceSlug, { limit: 30 }))
+  const topCities: CityInfo[] = getStaticCities()
+    .filter((c) => validCitySlugs.has(c.slug))
     .slice(0, 12)
-    .map((x) => x.city)
 
   // Trade-specific rich content (prices, FAQ, certifications)
   const tradeBase = getTradeContent(serviceSlug)

@@ -23,6 +23,7 @@ import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes } from '@/lib/data/france'
+import { getValidCitySlugsForService } from '@/lib/seo/valid-combos'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { BAROMETRE_METIERS } from '@/lib/barometre/constants'
@@ -236,8 +237,6 @@ async function getServiceStats(serviceSlug: string) {
   }
 }
 
-const topCities = villes.slice(0, 20)
-
 export default async function AvisServicePage({
   params,
 }: {
@@ -251,6 +250,14 @@ export default async function AvisServicePage({
   const tradeLower = trade.name.toLowerCase()
 
   const serviceStats = await getServiceStats(service)
+
+  // 2026-05-06 — single source of truth via mat-view RGE-aware. Avant pivot
+  // full RGE, ce hub listait `villes.slice(0, 20)` sans filtre → ~28K combos
+  // /avis/[s]/[v] cassés. Cf. lib/seo/valid-combos.ts.
+  const validCitySlugs = await getValidCitySlugsForService(service, { limit: 20 })
+  const topCities = validCitySlugs
+    .map((slug) => villes.find((v) => v.slug === slug))
+    .filter((v): v is (typeof villes)[number] => Boolean(v))
 
   // JSON-LD schemas
   const breadcrumbSchema = getBreadcrumbSchema([
