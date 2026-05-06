@@ -32,7 +32,7 @@
  * Easy win : OUI MAJEUR. 80 % des KW sont KD 0-2. Cluster massif sous-investi
  * V1. Concurrence head : Effy, ADEME, IsolEnergie, Hellio. Atout SA :
  * cluster isolation cohérent (combles + ITE + ITI + cette page toiture),
- * supply Qualibat 7131/7132 + Qualibat 8211 (couverture).
+ * supply Qualibat 7131/7141 + Qualibat 8211 (couverture).
  *
  * Anti-cannibalisation :
  *   - /isolation/combles        → combles perdues + aménagées (vol 4 080 KD 5)
@@ -51,7 +51,7 @@
  *     variable opérateur. Code FOS DGEC v2024 catalogue résidentiel.
  *   - Coup de pouce isolation : majoration ménages modestes.
  *   - Éco-PTZ jusqu'à 30 000 € (par geste) ou 50 000 € (rénovation d'ampleur).
- *   - TVA 5,5 % sur fourniture + pose par RGE Qualibat 7131/7132.
+ *   - TVA 5,5 % sur fourniture + pose par RGE Qualibat 7131/7141.
  *
  * DTU pertinents :
  *   - DTU 31.1 — charpentes en bois (sarking, fixation par-dessus chevrons)
@@ -62,7 +62,7 @@
  *   - DTU 43.1 / 43.4 — étanchéité toitures-terrasses (porteur maçonnerie / bois)
  *
  * Label RGE OBLIGATOIRE : Qualibat 7131 (isolation plâtrerie sèche, rampants
- * intérieur), Qualibat 7132 (ITE — sarking par certains poseurs), Qualibat
+ * intérieur), Qualibat 7141 (ITE — sarking par certains poseurs), Qualibat
  * 8211 (couverture, sarking en réfection complète).
  */
 import type { Metadata } from 'next'
@@ -250,12 +250,12 @@ const faqs = [
   {
     question: 'Quelles aides pour l’isolation de la toiture en 2026 ?',
     answer:
-      'Aides cumulables 2026 si artisan RGE Qualibat 7131/7132/8211 et matériau certifié ACERMI : <strong>MaPrimeRénov’</strong> isolation rampants/toiture (forfait selon revenus — barème révisé annuellement par l’Anah, voir <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a>) ; <strong>CEE BAR-EN-101</strong> (isolation rampants/plafond/combles) — prime variable selon opérateur ; <strong>Coup de pouce isolation</strong> majoration ménages modestes ; <strong>éco-PTZ</strong> jusqu’à 30 000 € (par geste) ou 50 000 € (rénovation d’ampleur) ; <strong>TVA 5,5 %</strong> sur fourniture + pose. <strong>Reste à charge typique</strong> ménages modestes (Bleu) sur sarking 100 m² : ~30-50 % du devis selon barème en vigueur.',
+      'Aides cumulables 2026 si artisan RGE Qualibat 7131/7141/8211 et matériau certifié ACERMI : <strong>MaPrimeRénov’</strong> isolation rampants/toiture (forfait selon revenus — barème révisé annuellement par l’Anah, voir <a href="https://france-renov.gouv.fr" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a>) ; <strong>CEE BAR-EN-101</strong> (isolation rampants/plafond/combles) — prime variable selon opérateur ; <strong>Coup de pouce isolation</strong> majoration ménages modestes ; <strong>éco-PTZ</strong> jusqu’à 30 000 € (par geste) ou 50 000 € (rénovation d’ampleur) ; <strong>TVA 5,5 %</strong> sur fourniture + pose. <strong>Reste à charge typique</strong> ménages modestes (Bleu) sur sarking 100 m² : ~30-50 % du devis selon barème en vigueur.',
   },
   {
     question: 'Quel artisan RGE pour l’isolation de la toiture ?',
     answer:
-      'Selon la technique : <strong>Qualibat 7131</strong> (isolation thermique en plâtrerie — pour rampants intérieur), <strong>Qualibat 7132</strong> (isolation thermique des bâtiments par l’extérieur — pour sarking par certains poseurs ITE), <strong>Qualibat 8211</strong> (couverture — pour sarking en réfection complète, le couvreur réalise sarking + couverture en lot unique). Vérification possible sur <a href="https://france-renov.gouv.fr/annuaires-professionnels/artisan-rge" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> ou via notre annuaire (mise à jour mensuelle source ADEME). Préférer 2-3 devis comparés sur même cahier des charges (matériau, épaisseur, R, certification ACERMI).',
+      'Selon la technique : <strong>Qualibat 7131</strong> (isolation thermique en plâtrerie — pour rampants intérieur), <strong>Qualibat 7141</strong> (isolation thermique des bâtiments par l’extérieur — pour sarking par certains poseurs ITE), <strong>Qualibat 8211</strong> (couverture — pour sarking en réfection complète, le couvreur réalise sarking + couverture en lot unique). Vérification possible sur <a href="https://france-renov.gouv.fr/annuaires-professionnels/artisan-rge" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> ou via notre annuaire (mise à jour mensuelle source ADEME). Préférer 2-3 devis comparés sur même cahier des charges (matériau, épaisseur, R, certification ACERMI).',
   },
   {
     question: 'Faut-il un écran sous-toiture HPV ?',
@@ -357,7 +357,7 @@ export default function Page() {
   const govSchema = getGovernmentServiceSchema({
     name: 'Aides isolation toiture 2026 (MaPrimeRénov’ + CEE BAR-EN-101)',
     description:
-      'Isolation de la toiture (sarking, rampants, écran HPV) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-101, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 6 m².K/W (rampants), 7 m².K/W (combles perdus), 4,5 m².K/W (toiture-terrasse). Installation par artisan RGE Qualibat 7131/7132/8211 obligatoire.',
+      'Isolation de la toiture (sarking, rampants, écran HPV) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-101, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 6 m².K/W (rampants), 7 m².K/W (combles perdus), 4,5 m².K/W (toiture-terrasse). Installation par artisan RGE Qualibat 7131/7141/8211 obligatoire.',
     url: PAGE_URL,
     serviceType: 'Subvention publique isolation toiture',
     audience: 'Propriétaires occupants, bailleurs, copropriétés',
@@ -533,7 +533,7 @@ export default function Page() {
                 intérieur, BA13).
               </li>
               <li>
-                <strong>Qualibat 7132</strong> — isolation thermique des bâtiments par l’extérieur
+                <strong>Qualibat 7141</strong> — isolation thermique des bâtiments par l’extérieur
                 (ITE et certains sarkings).
               </li>
               <li>

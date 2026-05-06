@@ -49,8 +49,13 @@
  *   - France Rénov #8 sur "isolation plancher bas" : SA peut viser top 5
  *     vu autorité gouv déjà dépassée par concurrents privés sur ce cluster.
  *
- * Label RGE : Qualibat 7131 (plâtrerie sèche, plancher par dessus) ou
- * 7191 (isolation plancher) ou 5232 (mousse polyuréthane projetée).
+ * Label RGE : Qualibat 7131 (ITI — couvre plancher bas par dessous,
+ * combles, rampants, murs intérieurs) ou 5232 (mousse polyuréthane
+ * projetée — mention spécifique application mousse PU).
+ *
+ * Note : "Qualibat 7191" parfois cité (plancher dédié) n'apparaît PAS
+ * dans le référentiel officiel Qualibat 2024-2026. Le code applicable
+ * pour plancher bas par dessous = 7131 (ITI général).
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -104,7 +109,7 @@ const tldr = [
   'MaPrimeRénov’ par geste cumulable + Coup de pouce CEE (majoration ménages modestes) + éco-PTZ + TVA 5,5 %.',
   'Solution la plus rentable : par dessous quand l’espace inférieur est accessible (cave, vide-sanitaire, garage). Pas de gêne dans le logement, prix mini.',
   'Sensation pieds froids éliminée + gain confort thermique perceptible dès le premier hiver.',
-  'Vérification artisan RGE : Qualibat 7131 (plâtrerie sèche), 7191 (plancher) ou 5232 (mousse PU projetée).',
+  'Vérification artisan RGE : Qualibat 7131 (ITI — couvre plancher bas par dessous) ou 5232 pour la projection de mousse polyuréthane.',
 ]
 
 const TYPES_PLANCHER = [
@@ -276,7 +281,7 @@ const faqs = [
   {
     question: 'Quel artisan RGE pour l’isolation plancher bas ?',
     answer:
-      'Selon la technique : <strong>Qualibat 7131</strong> (isolation thermique en plâtrerie — pour plancher par dessous laine + plaques), <strong>Qualibat 7191</strong> (isolation thermique des planchers), <strong>Qualibat 5232</strong> (isolation thermique par projection de mousse polyuréthane — spécifique mousse projetée). Vérification gratuite sur <a href="https://france-renov.gouv.fr/annuaires-professionnels/artisan-rge" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> ou via notre annuaire (mise à jour mensuelle source ADEME). Sans Qualibat valide à la date du devis : pas d’aide MPR, pas de CEE, pas de TVA 5,5 %.',
+      'Selon la technique : <strong>Qualibat 7131</strong> (isolation thermique par l’intérieur — couvre plancher bas par dessous, combles, rampants, murs intérieurs). <strong>Qualibat 5232</strong> (application de mousse polyuréthane projetée — mention spécifique pour la technique mousse). Vérification gratuite sur <a href="https://france-renov.gouv.fr/annuaires-professionnels/artisan-rge" rel="noopener noreferrer" target="_blank">france-renov.gouv.fr</a> ou via notre annuaire (mise à jour mensuelle source ADEME). Sans Qualibat valide à la date du devis : pas d’aide MPR, pas de CEE, pas de TVA 5,5 %.',
   },
   {
     question: 'Faut-il isoler une cave humide ?',
@@ -306,7 +311,7 @@ const sources = [
     url: 'https://www.service-public.fr/particuliers/vosdroits/F35632',
   },
   { label: 'CSTB — DTU 26.2 (chape) et 52.10 (chape sèche)', url: 'https://www.cstb.fr' },
-  { label: 'Qualibat — Mentions 7131 / 7191 / 5232', url: 'https://www.qualibat.com' },
+  { label: 'Qualibat — Mentions 7131 (ITI) / 5232 (mousse PU)', url: 'https://www.qualibat.com' },
   {
     label: 'ACERMI — Certification matériaux isolants',
     url: 'https://www.acermi.com',
@@ -366,7 +371,7 @@ export default function Page() {
       'mousse polyurethane projetee',
       'cee bar-en-103',
       'maprimerenov plancher',
-      'qualibat 7191',
+      'qualibat 7131',
     ],
   })
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -380,7 +385,7 @@ export default function Page() {
   const govSchema = getGovernmentServiceSchema({
     name: 'Aides isolation plancher bas 2026 (MaPrimeRénov’ + CEE BAR-EN-103)',
     description:
-      'Isolation plancher bas (vide-sanitaire, cave, sous-sol non chauffé, garage, passage ouvert) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-103, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 3 m².K/W. Forfait CEE H1 1 600, H2 1 300, H3 900 kWhc/m² maison individuelle. Installation par artisan RGE Qualibat 7131 / 7191 / 5232 obligatoire.',
+      'Isolation plancher bas (vide-sanitaire, cave, sous-sol non chauffé, garage, passage ouvert) éligible à MaPrimeRénov’ par geste, CEE BAR-EN-103, Coup de pouce isolation, éco-PTZ et TVA 5,5 %. R minimum 3 m².K/W. Forfait CEE H1 1 600, H2 1 300, H3 900 kWhc/m² maison individuelle. Installation par artisan RGE Qualibat 7131 (ITI) ou 5232 (mousse PU) obligatoire.',
     url: PAGE_URL,
     serviceType: 'Subvention publique isolation plancher bas',
     audience: 'Propriétaires occupants, bailleurs, copropriétés',
@@ -583,19 +588,16 @@ export default function Page() {
             </div>
 
             <h2 id="rge">Le label RGE Qualibat : mentions pertinentes</h2>
-            <p>Trois mentions Qualibat couvrent l’isolation plancher bas selon la technique :</p>
+            <p>Deux mentions Qualibat couvrent l’isolation plancher bas selon la technique :</p>
             <ul>
               <li>
-                <strong>Qualibat 7131</strong> — isolation thermique en plâtrerie (plancher par
-                dessous laine + plaques).
+                <strong>Qualibat 7131</strong> — isolation thermique par l’intérieur (ITI). Couvre
+                tout le périmètre intérieur : combles, rampants, murs intérieurs et{' '}
+                <strong>plancher bas par dessous</strong>.
               </li>
               <li>
-                <strong>Qualibat 7191</strong> — isolation thermique des planchers (mention
-                spécifique plancher).
-              </li>
-              <li>
-                <strong>Qualibat 5232</strong> — isolation thermique par projection de mousse
-                polyuréthane (mousse projetée, vide-sanitaire bas).
+                <strong>Qualibat 5232</strong> — application de mousse polyuréthane projetée
+                (mention spécifique pour la projection de mousse PU, idéale vide-sanitaire bas).
               </li>
             </ul>
             <p>
@@ -616,7 +618,8 @@ export default function Page() {
               <p className="text-sand-900 m-0 mb-3">
                 <Calculator className="inline w-5 h-5 text-primary-700 mr-1" aria-hidden />
                 <strong>Devis isolation plancher bas en 30 secondes</strong> — artisans certifiés
-                RGE Qualibat 7131 / 7191 / 5232 pour ouvrir droit à MPR + CEE + TVA 5,5 %.
+                RGE Qualibat 7131 (ITI) ou 5232 (mousse PU) pour ouvrir droit à MPR + CEE + TVA 5,5
+                %.
               </p>
               <Link
                 href="/devis"
