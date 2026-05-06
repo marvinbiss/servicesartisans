@@ -259,6 +259,11 @@ const relatedPages = [
     description: 'Focus vitrage 4/16/4 argon (4 636 vol)',
   },
   {
+    label: 'Fenêtre de toit Velux : prix, pose, aides',
+    href: '/renovation-energetique/travaux/menuiseries/fenetre-de-toit',
+    description: 'Velux 600-2 500 € posée + DTU 40.29 + BAR-EN-104',
+  },
+  {
     label: 'VMC double flux',
     href: '/renovation-energetique/travaux/vmc-double-flux',
     description: 'Couplage menuiseries étanches + VMC',

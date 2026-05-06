@@ -800,6 +800,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.85,
       },
+      {
+        // Levier D 2026-05-06 — sous-page fenêtre de toit / Velux (~5 700 vol/mo cumulé).
+        // KW pivots Ahrefs gap CSV (snapshot 2026-04) :
+        //   - "prix velux"  1 700 vol KD 1 (Travaux #8)
+        //   - "velux prix"  1 600 vol KD 2 (Travaux #9)
+        //   - "pose velux"  1 200 vol KD 1
+        //   - "velux pvc"     600 vol KD 1
+        //   - "fenetre de toit" ~600 vol estimé
+        url: `${SITE_URL}/renovation-energetique/travaux/menuiseries/fenetre-de-toit`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      },
       // Vague C — 2026-05-04 — Cluster diagnostic (hub + DPE + thermographie).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "diagnostic energetique" 855 KD 53 (hub)
