@@ -148,4 +148,83 @@ describe('POST /api/simulateur/submit', () => {
     await new Promise((r) => setTimeout(r, 0))
     expect(runPipedriveHookMock).not.toHaveBeenCalled()
   })
+
+  // -------------------------------------------------------------------------
+  // Schema contract — chaque colonne référencée par le payload doit exister
+  // en DB. Ce test n'attrape PAS le drift code↔DB (responsabilité de
+  // scripts/audit-schema-drift.mjs) — il sert de garde-fou contre une
+  // suppression silencieuse d'un champ depuis le payload (qui passerait
+  // sinon l'insert mock sans rien casser).
+  //
+  // Contexte : 2026-05-07 — bug "form rénovation énergétique ne fonctionne pas"
+  // POST 500 car migrations 452+453 jamais appliquées, 12 colonnes manquantes
+  // (urgence_projet, age_chaudiere, lead_score, lead_segment, confidence_*,
+  // utm_*, referrer). Le test happy path ci-dessus passait quand même.
+  // -------------------------------------------------------------------------
+  it('payload insert contient toutes les colonnes lead scoring + UTM + Phase 2', async () => {
+    const res = await POST(
+      buildReq({
+        ...baseBody,
+        attribution: {
+          utm_source: 'google',
+          utm_medium: 'cpc',
+          utm_campaign: 'primes-cee-2026',
+          utm_term: 'pompe chaleur prix',
+          utm_content: 'banner-v2',
+          referrer: 'https://google.com/search',
+        },
+        scoring: {
+          urgenceProjet: 'sous_3_mois',
+          ageChaudiere: '10_15_ans',
+        },
+      })
+    )
+    expect(res.status).toBe(201)
+    expect(insertCaptured).toHaveLength(1)
+    const payload = insertCaptured[0] as Record<string, unknown>
+
+    // Mig 452 — confidence persistence
+    expect(payload).toHaveProperty('confidence_level')
+    expect(payload).toHaveProperty('confidence_breakdown')
+
+    // Mig 452 — UTM attribution (chaque clé doit être ajoutée même si null)
+    for (const k of [
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_term',
+      'utm_content',
+      'referrer',
+    ]) {
+      expect(payload, `missing ${k}`).toHaveProperty(k)
+    }
+
+    // Mig 452 — scoring commercial
+    expect(payload).toHaveProperty('lead_score')
+    expect(payload).toHaveProperty('lead_segment')
+
+    // Mig 453 — Phase 2 signals
+    expect(payload).toHaveProperty('urgence_projet')
+    expect(payload).toHaveProperty('age_chaudiere')
+    expect(payload.urgence_projet).toBe('sous_3_mois')
+    expect(payload.age_chaudiere).toBe('10_15_ans')
+
+    // Mig 444 — traçabilité
+    expect(payload).toHaveProperty('request_id')
+    expect(payload).toHaveProperty('inputs_hash')
+    expect(payload).toHaveProperty('consent_text_sha256')
+
+    // Mig 450 — aides enrichment
+    expect(payload).toHaveProperty('mar_prise_en_charge')
+    expect(payload).toHaveProperty('cee_ampleur')
+    expect(payload).toHaveProperty('eco_ptz_eligible')
+    expect(payload).toHaveProperty('par_eligible')
+    expect(payload).toHaveProperty('complementaires')
+    expect(payload).toHaveProperty('total_aides_bas')
+    expect(payload).toHaveProperty('total_aides_haut')
+
+    // Mig 451 — lead routing
+    expect(payload).toHaveProperty('lead_priority')
+    expect(payload).toHaveProperty('necessite_mar')
+  })
 })
