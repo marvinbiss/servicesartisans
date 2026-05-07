@@ -89,6 +89,19 @@ const FILTER_RE = new RegExp(
   `\\.(${FILTER_METHODS.join('|')})\\(\\s*['"\`]([\\w]+)['"\`]`,
   'g'
 )
+// `.insert(`, `.update(`, `.upsert(` — payload columns extraction.
+// Catches the bug where mig 452/453 added DB columns but the insert payload
+// in src/app/api/simulateur/submit/route.ts referenced them while prod DB
+// hadn't been migrated. SELECT/filter regexes alone don't see this.
+const MUTATION_RE = /\.(insert|update|upsert)\(\s*(\[\s*)?\{/g
+// Variable-passed payload : `.insert(insertPayload)` — needs back-resolve.
+const MUTATION_VAR_RE = /\.(insert|update|upsert)\(\s*([A-Za-z_][\w]*)\s*[,)]/g
+// JS reserved / common type names to exclude from extracted keys.
+const RESERVED_KEYS = new Set([
+  'string', 'number', 'boolean', 'null', 'undefined', 'true', 'false',
+  'as', 'const', 'let', 'var', 'new', 'function', 'return', 'if', 'else',
+  'for', 'while', 'switch', 'case', 'default', 'this', 'typeof', 'instanceof',
+])
 
 function parseSelectExpression(raw) {
   const cols = []
@@ -123,6 +136,148 @@ function parseSelectExpression(raw) {
   return cols
 }
 
+/**
+ * Walks an object literal starting AT the position right after the opening
+ * `{` and returns its top-level property keys (identifier or string).
+ * Skips nested braces, parens, brackets, strings, template literals, regex,
+ * spread (`...x`), and computed keys (`[expr]:`).
+ *
+ * @param {string} text
+ * @param {number} startAfterBrace  index of first char inside the `{`
+ * @returns {{ keys: string[], end: number } | null}  null if unbalanced
+ */
+function extractObjectKeys(text, startAfterBrace) {
+  const keys = []
+  let i = startAfterBrace
+  let depth = 1   // depth of { / } only — paren/bracket tracked separately
+  let paren = 0
+  let bracket = 0
+  let str = null  // active string delimiter or null
+  let templateDepth = 0
+  let expectKey = true
+
+  while (i < text.length) {
+    const c = text[i]
+    const next = text[i + 1]
+
+    // String state machine
+    if (str) {
+      if (c === '\\') { i += 2; continue }
+      if (str === '`' && c === '$' && next === '{') {
+        templateDepth++
+        str = null
+        i += 2
+        continue
+      }
+      if (c === str) { str = null; i++; continue }
+      i++
+      continue
+    }
+    if (templateDepth > 0 && c === '}') {
+      templateDepth--
+      str = '`'
+      i++
+      continue
+    }
+    if (c === '/' && (next === '/' || next === '*')) {
+      // line or block comment — skip
+      if (next === '/') {
+        const eol = text.indexOf('\n', i + 2)
+        i = eol === -1 ? text.length : eol + 1
+      } else {
+        const close = text.indexOf('*/', i + 2)
+        i = close === -1 ? text.length : close + 2
+      }
+      continue
+    }
+    if (c === '"' || c === "'" || c === '`') {
+      // Could be a key (string) — capture if at top-level depth and expectKey
+      if (depth === 1 && paren === 0 && bracket === 0 && expectKey) {
+        const close = findStringEnd(text, i + 1, c)
+        if (close > i) {
+          const raw = text.slice(i + 1, close)
+          // Find the colon after closing quote
+          let j = close + 1
+          while (j < text.length && /\s/.test(text[j])) j++
+          if (text[j] === ':' && /^[\w]+$/.test(raw)) {
+            keys.push(raw)
+            expectKey = false
+            i = j + 1
+            continue
+          }
+          i = close + 1
+          continue
+        }
+      }
+      str = c
+      i++
+      continue
+    }
+    if (c === '{') { depth++; i++; expectKey = true; continue }
+    if (c === '}') {
+      depth--
+      if (depth === 0) return { keys, end: i + 1 }
+      i++
+      continue
+    }
+    if (c === '(') { paren++; i++; continue }
+    if (c === ')') { paren--; i++; continue }
+    if (c === '[') { bracket++; i++; continue }
+    if (c === ']') { bracket--; i++; continue }
+    if (c === ',' && depth === 1 && paren === 0 && bracket === 0) {
+      expectKey = true
+      i++
+      continue
+    }
+    // Identifier key (must be at top-level + expectKey + not preceded by `...`)
+    if (depth === 1 && paren === 0 && bracket === 0 && expectKey && /[A-Za-z_$]/.test(c)) {
+      // Skip spread operator
+      if (text.slice(Math.max(0, i - 3), i) === '...') {
+        // already consumed dots — find end of identifier and continue
+        const m = text.slice(i).match(/^[\w$]+/)
+        if (m) i += m[0].length
+        else i++
+        expectKey = false
+        continue
+      }
+      const m = text.slice(i).match(/^[\w$]+/)
+      if (m) {
+        const ident = m[0]
+        let j = i + ident.length
+        while (j < text.length && /\s/.test(text[j])) j++
+        // Match `key:` (regular) or `key,`/`key}` (shorthand)
+        if (text[j] === ':') {
+          if (/^[a-z_]/i.test(ident)) keys.push(ident)
+          expectKey = false
+          i = j + 1
+          continue
+        }
+        if (text[j] === ',' || text[j] === '}') {
+          if (/^[a-z_]/i.test(ident)) keys.push(ident)
+          expectKey = false
+          i = j
+          continue
+        }
+        i = j
+        continue
+      }
+    }
+    i++
+  }
+  return null  // unbalanced
+}
+
+function findStringEnd(text, from, quote) {
+  let i = from
+  while (i < text.length) {
+    const c = text[i]
+    if (c === '\\') { i += 2; continue }
+    if (c === quote) return i
+    i++
+  }
+  return -1
+}
+
 function extractFromContent(content) {
   const refs = new Map()
   const matches = [...content.matchAll(/\.from\(\s*['"`]([\w]+)['"`]\s*\)/g)]
@@ -131,11 +286,9 @@ function extractFromContent(content) {
     const start = matches[i].index + matches[i][0].length
     // Chunk-end : next `.from(` OR end-of-method-chain heuristic.
     // Pour limiter la mis-attribution, on prend jusqu'au prochain `.from(`
-    // OU 2000 chars max OU un `\n\n` (séparation blocs JS).
+    // OU 4000 chars max (insert payloads peuvent être très grands).
     let end = i + 1 < matches.length ? matches[i + 1].index : content.length
-    const blank = content.indexOf('\n\n', start)
-    if (blank !== -1 && blank < end) end = blank
-    end = Math.min(end, start + 2000)
+    end = Math.min(end, start + 4000)
     const chunk = content.slice(start, end)
 
     let cols = refs.get(table)
@@ -146,6 +299,34 @@ function extractFromContent(content) {
     }
     for (const fm of chunk.matchAll(FILTER_RE)) {
       cols.add(fm[2])
+    }
+    // Mutation payloads (insert/update/upsert) — extract object literal keys.
+    for (const mm of chunk.matchAll(MUTATION_RE)) {
+      // mm.index is relative to `chunk`; `mm[0]` ends just past the `{`.
+      const braceIdx = mm.index + mm[0].length
+      const parsed = extractObjectKeys(chunk, braceIdx)
+      if (parsed) {
+        for (const k of parsed.keys) {
+          if (!RESERVED_KEYS.has(k)) cols.add(k)
+        }
+      }
+    }
+    // Variable-passed mutation : `.insert(payload)` — back-resolve `const payload = { ... }`
+    // in the SAME file (not just chunk — payload is often built earlier in the function).
+    for (const mv of chunk.matchAll(MUTATION_VAR_RE)) {
+      const varName = mv[2]
+      // Skip arrays/spreads we can't follow
+      if (RESERVED_KEYS.has(varName)) continue
+      const declRe = new RegExp(`(?:^|\\W)(?:const|let|var)\\s+${varName}\\s*(?::[^=\\n]+)?=\\s*\\{`, 'g')
+      const declMatch = declRe.exec(content)
+      if (!declMatch) continue
+      const braceIdx = declMatch.index + declMatch[0].length
+      const parsed = extractObjectKeys(content, braceIdx)
+      if (parsed) {
+        for (const k of parsed.keys) {
+          if (!RESERVED_KEYS.has(k)) cols.add(k)
+        }
+      }
     }
   }
   return refs

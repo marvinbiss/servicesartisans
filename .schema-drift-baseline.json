@@ -1,7 +1,23 @@
 {
-  "generatedAt": "2026-05-04T19:53:07.591Z",
+  "generatedAt": "2026-05-07T01:13:26.564Z",
   "source": "OpenAPI (service_role, RLS-bypass)",
   "drifts": [
+    {
+      "table": "providers",
+      "column": "provider_id"
+    },
+    {
+      "table": "providers",
+      "column": "client_id"
+    },
+    {
+      "table": "providers",
+      "column": "status"
+    },
+    {
+      "table": "reviews",
+      "column": "fraud_indicators"
+    },
     {
       "table": "devis_requests",
       "column": "pipedrive_last_error"
@@ -27,8 +43,96 @@
       "column": "phone"
     },
     {
-      "table": "devis_requests",
+      "table": "cee_dossiers",
+      "column": "client_id"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_engagement"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "zone_climatique"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "postal_code"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "precarite"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "metadata"
+    },
+    {
+      "table": "audit_logs",
+      "column": "old_value"
+    },
+    {
+      "table": "audit_logs",
+      "column": "provider_id"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "captured_at"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "total_rge_active"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "total_rge_expired"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "total_providers"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "by_region"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "by_qualification"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "by_specialty"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "organismes"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "methodology"
+    },
+    {
+      "table": "barometre_rge_snapshots",
+      "column": "source_note"
+    },
+    {
+      "table": "services",
+      "column": "service_id"
+    },
+    {
+      "table": "services",
+      "column": "city"
+    },
+    {
+      "table": "newsletter_subscribers",
       "column": "source"
+    },
+    {
+      "table": "access_logs",
+      "column": "user_id"
+    },
+    {
+      "table": "review_stats_by_dept",
+      "column": "provider_id"
     }
   ]
 }
