@@ -26,6 +26,7 @@ import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import { cleanAdemeText } from '@/lib/descriptions/retrieval'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { logger } from '@/lib/logger'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
@@ -192,9 +193,14 @@ function convertToArtisan(
   const currentYear = new Date().getFullYear()
 
   // SLA-99.9 / PII : règle CLAUDE.md `feedback_no_phone_from_db` interdit
-  // d'exposer le tel artisan depuis DB sur fiches non-revendiquées.
-  // L'artisan doit avoir explicitement claim sa fiche (provider.user_id != null).
+  // d'exposer le tel artisan depuis DB sur fiches non-revendiquées,
+  // SAUF exception RGE ADEME (cf. CLAUDE.md "Fiches RGE non revendiquées
+  // — exception tel public" 2026-05-07). Le tel des fiches RGE actives non
+  // revendiquées est issu de la mig 389 (`ademe_telephone` → `providers.phone`,
+  // anti-doublon) et peut être affiché publiquement avec mention de source.
   const isClaimedForPhone = !!provider.user_id
+  const isRgePhoneExposable = hasActiveRgeQualification(provider.rge_qualifications)
+  const canExposePhone = isClaimedForPhone || isRgePhoneExposable
 
   return {
     id: provider.id,
@@ -238,7 +244,9 @@ function convertToArtisan(
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
     available_24h: provider.available_24h || false,
-    // SLA-99.9 / PII : tel exposé UNIQUEMENT si fiche revendiquée par l'artisan.
+    // SLA-99.9 / PII : phone_secondary reste gated `isClaimedForPhone` strict —
+    // pas d'équivalent ADEME public, ce champ n'est saisi que par l'artisan
+    // dans son dashboard.
     phone_secondary: isClaimedForPhone ? provider.phone_secondary || undefined : undefined,
     opening_hours:
       provider.opening_hours && Object.keys(provider.opening_hours).length > 0
@@ -250,8 +258,12 @@ function convertToArtisan(
     siret: provider.siret || undefined,
     creation_date: provider.creation_date || undefined,
     legal_form: provider.legal_form_code || provider.legal_form || undefined,
-    // SLA-99.9 / PII : tel + email exposés UNIQUEMENT si fiche revendiquée.
-    phone: isClaimedForPhone ? provider.phone || undefined : undefined,
+    // SLA-99.9 / PII :
+    //   phone → exposé si claimed OU RGE actif (source ADEME publique)
+    //   email → reste gated `isClaimedForPhone` strict (mention "Source ADEME"
+    //           ne suffit pas à justifier exposer un email dont l'artisan
+    //           ignore l'usage marketing potentiel)
+    phone: canExposePhone ? provider.phone || undefined : undefined,
     email: isClaimedForPhone ? provider.email || undefined : undefined,
     website: provider.website || undefined,
     latitude: provider.latitude || undefined,
