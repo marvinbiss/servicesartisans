@@ -95,6 +95,22 @@ Middleware protège `/espace-client`, `/espace-artisan`.
 
 Page artisan → "Revendiquez cette fiche" → SIRET (14 chiffres) → vérif vs base → `provider_claims` pending → admin approuve/rejette → `providers.user_id` assigné.
 
+## Fiches RGE non revendiquées — exception "tel public" (2026-05-07)
+
+Sur les ~45 480 fiches `providers` avec au moins une qualification RGE active (`rge_qualifications[].date_fin > now`), le numéro `providers.phone` peut être affiché publiquement.
+
+**Conditions strictes** :
+
+- `Array.isArray(rge_qualifications) && au moins 1 qualif active` (helper `hasActiveRgeQualification` dans `src/lib/rge/has-active-qualification.ts`)
+- Mention "Source : Registre RGE ADEME" obligatoire à côté du numéro (transparence)
+- `ArtisanQuickQuote` / `ArtisanQuoteForm` / `ArtisanServices` (devis spécifique artisan) restent **gated `isClaimed`** — ne JAMAIS impliquer un engagement plateforme
+- CTA "C'est ma fiche ? Revendiquez-la" version discrète conservé (funnel claim préservé)
+- ArtisanSchema JSON-LD `telephone` étendu via gate `(isClaimed || isRgeActive) && phone`
+
+**Hors RGE (~925K fiches non revendiquées) : règle "no phone from DB" inchangée**, claim CTA principal conservé.
+
+Audit pre-commit `scripts/audit-unclaimed-cta-rules.mjs` valide le respect du nouveau gate.
+
 ## Pipedrive CRM — 3 canaux
 
 | Canal                      | Pipeline                        | `source`                | Mode            |

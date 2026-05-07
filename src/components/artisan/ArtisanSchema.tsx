@@ -7,6 +7,7 @@ import { cleanAdemeText } from '@/lib/ademe/text'
 import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL } from '@/lib/seo/config'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -16,6 +17,12 @@ interface ArtisanSchemaProps {
 export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
+
+  // Exception "tel public ADEME" (cf. CLAUDE.md "Fiches RGE non revendiquées")
+  // — la fiche peut exposer le téléphone même non revendiquée si au moins une
+  // qualif RGE est active (source data.gouv.fr Etalab 2.0).
+  const isRgeActive = hasActiveRgeQualification(artisan.rge_qualifications)
+  const canExposePhone = isClaimed || isRgeActive
 
   // Organization Schema for ServicesArtisans platform
   const organizationSchema = {
@@ -104,11 +111,14 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     isPartOf: { '@id': `${baseUrl}#website` },
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
-    ...(isClaimed &&
+    ...(canExposePhone &&
       artisan.phone &&
       artisan.phone.replace(/\D/g, '').length >= 10 && {
         telephone: artisan.phone,
       }),
+    // Email reste strictement gated `isClaimed` — pas exposé par l'ADEME
+    // public, donc même les fiches RGE actives non revendiquées ne doivent
+    // pas afficher d'email côté JSON-LD.
     ...(isClaimed && artisan.email && { email: artisan.email }),
     url: artisanUrl,
     parentOrganization: {

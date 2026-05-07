@@ -27,6 +27,8 @@ import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 import { PlatformSidebarCTA } from '@/components/artisan/PlatformSidebarCTA'
 import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
+import { ArtisanRgeAdemeCard } from '@/components/artisan/ArtisanRgeAdemeCard'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { buildDevisHref } from '@/lib/utils'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
@@ -203,6 +205,13 @@ export default function ArtisanPageClient({
 
   const displayName = getDisplayName(artisan)
 
+  // Exception "tel public ADEME" : ne s'applique qu'aux fiches RGE actives
+  // non revendiquées. Hors RGE, la règle "no phone from DB" reste en place
+  // (cf. CLAUDE.md → "Fiches RGE non revendiquées" + memory
+  // `servicesartisans-rge-phone-exception-2026-05-07.md`).
+  const isRgeActive = hasActiveRgeQualification(artisan.rge_qualifications)
+  const isRgeUnclaimed = !isClaimed && isRgeActive
+
   return (
     <>
       {/* Schema.org JSON-LD is now rendered server-side in page.tsx */}
@@ -271,8 +280,20 @@ export default function ArtisanPageClient({
           className="max-w-7xl mx-auto px-4 py-6"
           aria-label={`Profil de ${displayName}`}
         >
-          {/* Bandeau fiche non-revendiquee */}
-          {!isClaimed && (
+          {/* Carte ADEME — uniquement sur fiches RGE actives non revendiquées
+              (~45 480 fiches). Affiche le tel ADEME public + claim discret. */}
+          {isRgeUnclaimed && (
+            <ArtisanRgeAdemeCard
+              artisanId={artisanId}
+              displayName={artisan.business_name || displayName}
+              phone={artisan.phone}
+              hasSiret={hasSiret}
+            />
+          )}
+
+          {/* Bandeau "fiche non revendiquée" — hors RGE uniquement (~925K).
+              La règle "no phone from DB" reste en place pour ce périmètre. */}
+          {!isClaimed && !isRgeActive && (
             <div
               className="mb-6 flex items-start gap-3 rounded-xl border border-primary-200 bg-primary-50 px-4 py-3.5"
               role="status"
@@ -388,8 +409,10 @@ export default function ArtisanPageClient({
                   <ArtisanContactCard artisan={artisan} isClaimed={isClaimed} />
                 </section>
               )}
-              {/* Claim button on mobile — only if NOT claimed */}
-              {!isClaimed && (
+              {/* Claim button on mobile — non-RGE unclaimed uniquement.
+                  Sur RGE unclaimed, la version discrète est déjà inline dans
+                  ArtisanRgeAdemeCard en haut de page (pas de double CTA). */}
+              {!isClaimed && !isRgeActive && (
                 <section className="lg:hidden" aria-label="Revendiquer cette fiche">
                   <ClaimButton
                     providerId={artisanId}
@@ -397,6 +420,19 @@ export default function ArtisanPageClient({
                     hasSiret={hasSiret}
                   />
                   <div className="text-center mt-2">
+                    <RemovalRequestButton
+                      providerId={artisanId}
+                      providerName={artisan.business_name || displayName}
+                      hasSiret={hasSiret}
+                    />
+                  </div>
+                </section>
+              )}
+              {/* Sur RGE unclaimed : un lien "Demande de retrait" discret reste
+                  utile (artisan pas content de figurer dans le registre public). */}
+              {isRgeUnclaimed && (
+                <section className="lg:hidden" aria-label="Demande de retrait">
+                  <div className="text-center">
                     <RemovalRequestButton
                       providerId={artisanId}
                       providerName={artisan.business_name || displayName}

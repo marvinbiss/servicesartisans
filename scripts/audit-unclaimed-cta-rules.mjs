@@ -5,38 +5,45 @@
  * DoD du backlog item P3-supply-claim-cta-audit (Tier 51).
  *
  * Source : CLAUDE.md "Critical Rules — NON-NEGOTIABLE" + memory
- * `servicesartisans-ceo-strategy-2026-04-20` (Pilier 1 supply-side broken,
- * 19 claimed / 970K providers).
+ * `servicesartisans-ceo-strategy-2026-04-20` (Pilier 1 supply-side broken)
+ * + memory `servicesartisans-rge-phone-exception-2026-05-07` (exception
+ * "tel public ADEME" sur fiches RGE actives).
  *
  * Règles NON-NÉGOCIABLES protégées par cet audit :
  *   1. NEVER display artisan phone numbers from DB on public pages
- *      → toute lecture de `artisan.phone` ou `provider.phone` rendue dans
- *        un composant artisan doit être gatée par `isClaimed`
- *   2. NEVER add CTAs (devis) on unclaimed artisan pages
- *      → tout CTA "devis"/"obtenir un devis" rendu sur fiche artisan doit
- *        être gaté par `isClaimed`
+ *      → toute lecture de `artisan.phone` rendue dans un composant artisan
+ *        doit être gatée par `isClaimed` OU par `isRgeActive`
+ *        (helper `hasActiveRgeQualification`).
+ *   2. NEVER add devis-CTAs targeting a specific unclaimed artisan
+ *      → `ArtisanQuoteForm` / `ArtisanQuickQuote` / `ArtisanServices`
+ *        restent gated `isClaimed` strictement (engagement plateforme).
+ *      → CTA générique métier+ville (`buildDevisHref`) reste autorisé partout.
  *   3. NEVER recommend chatbots on ServicesArtisans (kills conversion)
- *      → aucun composant ne doit importer/render un chatbot widget
+ *      → aucun composant ne doit importer/render un chatbot widget.
  *
  * Pourquoi : ces règles sont hors-types (TypeScript ne peut pas détecter)
  * mais fondamentales business :
- *   - Phone unclaimed = RGPD violation potentielle + démarchage abusif
- *   - Devis CTA unclaimed = lead qui n'aboutira jamais (l'artisan n'a pas
- *     accepté la plateforme) → expérience cassée + perte de confiance
- *   - Chatbots = cannibalisent le funnel devis exclusif (mémoire user)
+ *   - Phone unclaimed hors RGE = RGPD potentiel + données souvent fausses
+ *   - Phone unclaimed RGE = OK (data.gouv.fr Etalab 2.0, mention source obligatoire)
+ *   - Devis CTA artisan unclaimed = lead qui n'aboutira jamais
+ *   - Chatbots = cannibalisent le funnel devis exclusif
  *
  * Vérifie sur src/components/artisan/**.tsx + ArtisanPageClient.tsx :
  *
- *   1. ArtisanSchema gate phone par `isClaimed && artisan.phone`
- *   2. ArtisanSchema gate email par `isClaimed && artisan.email`
- *   3. ArtisanPageClient render bandeau "non revendiquée" si !isClaimed
- *   4. ArtisanPageClient render ClaimButton OR "Revendiquez" CTA si !isClaimed
+ *   1. ArtisanSchema gate phone par `(isClaimed || isRgeActive) && artisan.phone`
+ *      (anciennement `isClaimed && artisan.phone` — assoupli 2026-05-07).
+ *   2. ArtisanSchema gate email par `isClaimed && artisan.email` (inchangé —
+ *      l'email n'est pas exposé par l'ADEME public).
+ *   3. ArtisanPageClient render `ArtisanRgeAdemeCard` si RGE unclaimed
+ *      (remplace l'ancien bandeau négatif "pas encore rejoint").
+ *   4. ArtisanPageClient render `ClaimButton` (gros, mobile) sur non-RGE
+ *      unclaimed, ou inline discret via `ArtisanRgeAdemeCard` sur RGE unclaimed.
  *   5. Aucun composant artisan ne contient un import chatbot
- *      (intercom, drift, crisp, hubspot-chat, livechat, freshchat, tawk)
- *   6. ArtisanContactCard rendu UNIQUEMENT si isClaimed (gate parent)
- *   7. ArtisanServices rendu UNIQUEMENT si isClaimed (price_prices = paid prestations)
+ *      (intercom, drift, crisp, hubspot-chat, livechat, freshchat, tawk).
+ *   6. ArtisanContactCard rendu UNIQUEMENT si isClaimed (gate parent).
+ *   7. ArtisanServices rendu UNIQUEMENT si isClaimed (paid prestations).
  *   8. Devis CTA banner ("Obtenir mon devis") gated par isClaimed
- *      (vérifié dans page.tsx du template provider detail)
+ *      (vérifié dans page.tsx du template provider detail).
  *
  * Usage :
  *   node scripts/audit-unclaimed-cta-rules.mjs --strict
@@ -116,24 +123,33 @@ for (const file of allArtisanTsx) {
 const checks = [
   {
     id: 'schema_phone_gated',
-    label: 'ArtisanSchema gate phone par `isClaimed && artisan.phone`',
+    label:
+      'ArtisanSchema gate phone par `(isClaimed || isRgeActive) && artisan.phone` (exception RGE 2026-05-07)',
     ok:
-      /isClaimed\s*&&\s*\n?\s*artisan\.phone/.test(schemaSrc) ||
-      /isClaimed[^|]+&&[^|]+phone/.test(schemaSrc),
+      /canExposePhone\s*&&[\s\S]{0,80}?artisan\.phone/.test(schemaSrc) ||
+      /\(isClaimed\s*\|\|\s*isRgeActive\)\s*&&[\s\S]{0,80}?artisan\.phone/.test(schemaSrc),
   },
   {
     id: 'schema_email_gated',
-    label: 'ArtisanSchema gate email par `isClaimed && artisan.email`',
+    label: 'ArtisanSchema gate email par `isClaimed && artisan.email` (inchangé)',
     ok:
       /isClaimed\s*&&\s*artisan\.email/.test(schemaSrc) ||
       /isClaimed[^|]+&&[^|]+email/.test(schemaSrc),
   },
   {
-    id: 'unclaimed_banner',
-    label: 'ArtisanPageClient render bandeau « non revendiquée » si !isClaimed',
+    id: 'rge_ademe_card_present',
+    label:
+      'ArtisanPageClient render `ArtisanRgeAdemeCard` sur RGE unclaimed (remplace bandeau négatif)',
     ok:
-      /\{!isClaimed\s*&&[\s\S]*?n['']a pas encore rejoint/.test(clientSrc) ||
-      /\{!isClaimed\s*&&[\s\S]*?revendiqu[eé]/i.test(clientSrc),
+      /ArtisanRgeAdemeCard/.test(clientSrc) &&
+      /isRgeUnclaimed\s*&&[\s\S]{0,400}?<ArtisanRgeAdemeCard/.test(clientSrc),
+  },
+  {
+    id: 'rge_active_helper_used',
+    label: 'ArtisanPageClient utilise `hasActiveRgeQualification` pour calculer `isRgeActive`',
+    ok:
+      /hasActiveRgeQualification/.test(clientSrc) &&
+      /isRgeActive\s*=\s*hasActiveRgeQualification/.test(clientSrc),
   },
   {
     id: 'claim_cta_present',
