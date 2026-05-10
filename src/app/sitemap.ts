@@ -40,6 +40,13 @@ import { aidesSlugs } from '@/lib/aides/aides-catalog'
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
 
+// Vercel build warning : `vercel.json` `functions` glob (`src/app/**/*.tsx`)
+// ne matche pas la route Next.js synthétique `/sitemap/[__metadata_id__]/route`
+// générée depuis `src/app/sitemap.ts`. On déclare `maxDuration` directement
+// pour que la fonction de sitemap (sharding large = 742K URLs) ait le temps
+// de répondre sur cold start ISR.
+export const maxDuration = 90
+
 // Build-time date for pages whose content rarely changes (hub pages, static
 // pages, guides). Refreshed on every deploy — this is honest freshness,
 // not fake: the page WAS re-rendered and re-validated on this date. Combined
