@@ -730,8 +730,23 @@ module.exports = sentryEnabled
       // Hide source maps from the public bundle (uploaded privately to Sentry).
       hideSourceMaps: true,
 
+      // Scope sourcemap upload to assets that actually have `//# sourceMappingURL=`
+      // references. Next.js 14 generates server-side `page.js`/`route.js` files
+      // without sourcemap refs (synthetic outputs), which triggered ~1900
+      // "Could not auto-detect referenced sourcemap" warnings. Restricting to
+      // explicit globs makes upload deterministic and silences the noise.
+      sourcemaps: {
+        assets: ['.next/static/chunks/**/*.{js,map}', '.next/server/**/*.{js,map}'],
+        ignore: ['node_modules/**', '.next/cache/**'],
+      },
+
       // Tree-shake Sentry debug logger in prod (~30KB saved).
-      disableLogger: true,
+      // Migrated from deprecated `disableLogger` to nested option (Sentry SDK ≥ 8).
+      webpack: {
+        treeshake: {
+          removeDebugLogging: true,
+        },
+      },
 
       // Route Sentry traffic through our domain to bypass ad-blockers.
       tunnelRoute: '/monitoring',
