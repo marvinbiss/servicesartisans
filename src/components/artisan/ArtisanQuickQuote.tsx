@@ -4,6 +4,7 @@ import { FileText, ShieldCheck, Clock, Users } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
 
 interface ArtisanQuickQuoteProps {
   artisan: LegacyArtisan
@@ -57,7 +58,8 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           {/* Trust signals */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4">
             <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">
-              <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />2 conseillers dispo
+              <Users className="w-4 h-4 text-accent-500" aria-hidden="true" />
+              {ADVISORS_LABEL_SHORT}
             </div>
             {artisan.is_verified && (
               <div className="flex items-center gap-1.5 text-xs font-medium text-accent-700">

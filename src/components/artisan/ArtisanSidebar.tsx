@@ -3,7 +3,7 @@
 import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
 import { buildDevisHref } from '@/lib/utils'
 
 function slugify(text: string): string {
@@ -77,7 +77,8 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           {/* Trust reassurance under CTA */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+              {ADVISORS_LABEL_SHORT}
             </span>
             <span className="text-charcoal-300" aria-hidden="true">
               ·
@@ -206,7 +207,8 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         {/* Trust line under CTA */}
         <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
           <span className="flex items-center gap-1">
-            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
+            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+            {ADVISORS_LABEL_SHORT}
           </span>
           <span className="text-charcoal-300" aria-hidden="true">
             ·

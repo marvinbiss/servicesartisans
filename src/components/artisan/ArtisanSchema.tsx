@@ -106,7 +106,11 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     '@id': `${artisanUrl}#business`,
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
-    image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+    // OG fallback : `${baseUrl}/opengraph-image.png` est l'asset statique
+    // emit par `src/app/opengraph-image.tsx` (Next 14 App Router). Référencer
+    // l'extension `.png` pour fournir une image-source absolue acceptable par
+    // Google Rich Results (sinon le fetcher peut rejeter).
+    image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image.png`,
     inLanguage: 'fr-FR',
     isPartOf: { '@id': `${baseUrl}#website` },
     // Add knowsAbout for E-E-A-T signals
@@ -131,9 +135,12 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       '@type': 'PostalAddress',
       ...(artisan.address ? { streetAddress: artisan.address } : {}),
       addressLocality: artisan.city,
-      ...(artisan.region || artisan.department
-        ? { addressRegion: artisan.region || artisan.department }
-        : {}),
+      // Schema.org `addressRegion` attend le NOM de la région (pas le code
+      // INSEE département). `artisan.department` venant de `address_department`
+      // est un code 2-3 chars (cf. CLAUDE.md règle dept code vs name) — ne
+      // jamais utiliser comme fallback ici. On garde uniquement `region`
+      // (résolu via la table `villes` dans page.tsx).
+      ...(artisan.region ? { addressRegion: artisan.region } : {}),
       postalCode: artisan.postal_code,
       addressCountry: 'FR',
     },
@@ -147,11 +154,11 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         },
       }),
 
-    ...(artisan.service_prices.length > 0 && {
+    ...((artisan.service_prices ?? []).length > 0 && {
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Services',
-        itemListElement: artisan.service_prices.map((s, _i) => ({
+        itemListElement: (artisan.service_prices ?? []).map((s, _i) => ({
           '@type': 'Offer',
           itemOffered: {
             '@type': 'Service',
@@ -267,7 +274,20 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
-    priceRange: '€€',
+    // priceRange — émis uniquement si on a un signal réel (service_prices).
+    // Hardcoder '€€' sur 459K fiches = signal Schema.org faux et bruité.
+    // Si `service_prices` présent : compute min/max réels en EUR. Sinon, omit.
+    ...(() => {
+      const prices = (artisan.service_prices ?? [])
+        .map((s) => parseInt(String(s.price ?? '').replace(/[^0-9]/g, ''), 10))
+        .filter((n) => Number.isFinite(n) && n > 0)
+      if (prices.length === 0) return {}
+      const min = Math.min(...prices)
+      const max = Math.max(...prices)
+      return {
+        priceRange: min === max ? `${min}€` : `${min}€–${max}€`,
+      }
+    })(),
     currenciesAccepted: 'EUR',
 
     // Opening hours for Google Knowledge Panel
@@ -355,8 +375,40 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
     },
   }
 
-  // FAQPage Schema — not applicable (no FAQ data on individual artisan pages)
-  const faqSchema = null
+  // FAQPage Schema — émis uniquement quand la fiche est claim ET expose au moins
+  // une paire question/réponse non-vide. Gate `isClaimed` : on n'émet pas de FAQ
+  // pour les fiches non revendiquées même si la donnée est présente, car
+  // l'artisan n'a pas validé le contenu (HCU + Google scale-content guidelines).
+  // Données alimentées par mig 306 `providers.faq` (wirée dans PROVIDER_DETAIL_SELECT).
+  type FaqPair = { question: string; answer: string }
+  const faqPairs: FaqPair[] =
+    isClaimed && Array.isArray(artisan.faq)
+      ? (artisan.faq as FaqPair[]).filter(
+          (f) =>
+            f &&
+            typeof f.question === 'string' &&
+            typeof f.answer === 'string' &&
+            f.question.trim().length > 0 &&
+            f.answer.trim().length > 0
+        )
+      : []
+  const faqSchema =
+    faqPairs.length > 0
+      ? {
+          '@type': 'FAQPage',
+          '@id': `${artisanUrl}#faq`,
+          inLanguage: 'fr-FR',
+          isPartOf: { '@id': `${baseUrl}#website` },
+          mainEntity: faqPairs.map((f) => ({
+            '@type': 'Question',
+            name: f.question.trim(),
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: f.answer.trim(),
+            },
+          })),
+        }
+      : null
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb
   // Structure: Accueil > Services > {Service} > {Ville} > {Nom artisan}

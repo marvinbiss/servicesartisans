@@ -364,8 +364,19 @@ export async function getLocationBySlug(slug: string) {
 // Provider detail SELECT — listing columns + extra fields for the artisan detail page.
 // Only add columns that exist in the providers table (verified in types/database.ts).
 // RGE ADEME + Google Places columns are already included in PROVIDER_LIST_SELECT.
+//
+// Mig 306 columns wired here (detail-only — keep listing payload light).
+// Memory `mig306-status-2026-04-28` documente qu'elles sont vivantes en DB
+// mais non lues côté SELECT, ce qui dégrade silencieusement ArtisanFAQ /
+// ArtisanServices / ArtisanWhyChoose / ArtisanContactCard / ArtisanStats /
+// ArtisanSidebar / generateRgeMinimalDescription (bio fallback).
 const PROVIDER_DETAIL_SELECT = [
   PROVIDER_LIST_SELECT,
+  'business_name',
+  'first_name',
+  'last_name',
+  'is_center',
+  'address_department',
   'creation_date',
   'employee_count',
   'legal_form',
@@ -373,6 +384,19 @@ const PROVIDER_DETAIL_SELECT = [
   'description',
   'website',
   'email',
+  // Mig 306 — colonnes vivantes en DB mais ignorées par le SELECT jusqu'à
+  // aujourd'hui. Wirées ici pour alimenter convertToArtisan() côté fiche.
+  'bio',
+  'team_size',
+  'services_offered',
+  'service_prices',
+  'faq',
+  'opening_hours',
+  'intervention_radius_km',
+  'phone_secondary',
+  'accepts_new_clients',
+  'free_quote',
+  'available_24h',
 ].join(',')
 
 /**
@@ -386,12 +410,18 @@ async function queryProviderDetail(field: 'stable_id' | 'id' | 'slug', value: st
   // .maybeSingle() : la fiche peut être absente (pSEO publicId pointe sur
   // un stable_id orphelin, ou provider supprimé). Retourner null silencieux
   // → page Next.js déclenche notFound() proprement, pas PGRST116 dans Sentry.
+  //
+  // Note : on ne filtre PAS sur `noindex` ici. La page rend correctement avec
+  // `robots:{index:false}` côté generateMetadata (cf. shouldNoindex). Filtrer
+  // côté SELECT renverrait notFound() (404 pour Google) au lieu d'un noindex
+  // proprement crawlable+oubliable, ce qui contredit la stratégie noindex
+  // RGE-only 2026-04-19. Le 404/noindex split est piloté par la stratégie
+  // sitemap (sitemap n'inclut que noindex=false) + filtre de listing dédié.
   const { data } = await supabase
     .from('providers')
     .select(PROVIDER_DETAIL_SELECT)
     .eq(field, value)
     .eq('is_active', true)
-    .eq('noindex', false)
     .maybeSingle()
 
   return data ? resolveProviderCity(data as Row) : null

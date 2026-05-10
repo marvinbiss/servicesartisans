@@ -7,6 +7,18 @@ export const SITE_NAME = 'ServicesArtisans'
 export const PHONE_NUMBER = '07 56 87 27 87'
 export const PHONE_TEL = 'tel:+33756872787'
 
+/**
+ * Nombre de conseillers commerciaux disponibles. Source de vérité unique
+ * (équipe ServicesArtisans 2026 : 2 commerciales seniores). Utilisé par
+ * l'UX trust signals (sticky bar, sidebar CTA, hero, exit-intent…).
+ * Met à jour ici uniquement quand l'équipe change.
+ */
+export const ADVISORS_COUNT: number = 2
+export const ADVISORS_LABEL: string =
+  ADVISORS_COUNT === 1 ? '1 conseiller disponible' : `${ADVISORS_COUNT} conseillers disponibles`
+export const ADVISORS_LABEL_SHORT: string =
+  ADVISORS_COUNT === 1 ? '1 conseiller dispo' : `${ADVISORS_COUNT} conseillers dispo`
+
 // SEO configuration object
 export const defaultSEOConfig = {
   titleTemplate: '%s | ServicesArtisans',

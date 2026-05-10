@@ -288,6 +288,7 @@ export default function ArtisanPageClient({
               displayName={artisan.business_name || displayName}
               phone={artisan.phone}
               hasSiret={hasSiret}
+              rgeQualifications={artisan.rge_qualifications}
             />
           )}
 
@@ -470,6 +471,8 @@ export default function ArtisanPageClient({
                     providerId={artisanId}
                     providerName={artisan.business_name || displayName}
                     hasSiret={hasSiret}
+                    artisanPhone={artisan.phone}
+                    isRgeActive={isRgeActive}
                   />
                 )}
               </div>
@@ -484,6 +487,10 @@ export default function ArtisanPageClient({
           <UnclaimedStickyBar
             specialty={artisan.specialty || 'artisan'}
             city={artisan.city || ''}
+            artisanPhone={artisan.phone}
+            artisanName={artisan.business_name || displayName}
+            isRgeActive={isRgeActive}
+            artisanId={artisanId}
             onDevisClick={() => {
               const specialtySlug = slugify(artisan.specialty || 'artisan')
               window.location.href = buildDevisHref(specialtySlug, artisan.city)

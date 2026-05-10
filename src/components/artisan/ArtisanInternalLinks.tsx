@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Wrench, Compass } from 'lucide-react'
+import { MapPin, Wrench, Compass, Leaf } from 'lucide-react'
 import {
   services as staticServicesList,
   villes,
@@ -8,6 +8,8 @@ import {
 } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
 import { getServiceWeight } from '@/lib/constants/navigation'
+import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
+import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 
 interface ArtisanInternalLinksProps {
   serviceSlug: string
@@ -52,12 +54,21 @@ export default function ArtisanInternalLinks({
   const dept = deptCode ? getDepartementByCode(deptCode) : undefined
   const regionSlug = region ? getRegionSlugByName(region) : undefined
 
+  // RGE / aides cross-links — pivot rénovation énergétique 2026-05-03 :
+  // chaque fiche artisan dont le métier est RGE-éligible irrigue ses hubs RGE
+  // + opérations CEE éligibles + page MaPrimeRénov'. Maillage critique
+  // pillar #2 (audit `gsc-diagnostic-2026-04-30`).
+  const isRgeEligibleService = (RGE_ALLOWED_SERVICES as readonly string[]).includes(serviceSlug)
+  const ceeOps = isRgeEligibleService ? getCeeOpsForRgeService(serviceSlug).slice(0, 4) : []
+
   return (
     <section className="py-12 bg-sand-100 border-t border-stone-200/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-charcoal-900 mb-8">Voir aussi</h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div
+          className={`grid md:grid-cols-2 gap-8 ${isRgeEligibleService ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}
+        >
           {/* Column 1: Same service, nearby cities */}
           <div>
             <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
@@ -173,6 +184,62 @@ export default function ArtisanInternalLinks({
               )}
             </div>
           </div>
+
+          {/* Column 4: RGE / aides — uniquement pour services RGE-éligibles */}
+          {isRgeEligibleService && (
+            <div>
+              <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                <Leaf className="w-4 h-4 text-emerald-600" />
+                Rénovation énergétique
+              </h3>
+              <div className="space-y-2">
+                <Link
+                  href={`/rge/${serviceSlug}`}
+                  className="block px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-900 rounded-lg text-sm transition-colors font-medium"
+                >
+                  Artisans RGE {serviceName.toLowerCase()}
+                </Link>
+                {dept && (
+                  <Link
+                    href={`/rge/${serviceSlug}/departement/${dept.slug}`}
+                    className="block px-3 py-2 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-900 rounded-lg text-sm transition-colors"
+                  >
+                    {serviceName} RGE dans le {dept.code}
+                  </Link>
+                )}
+                <Link
+                  href="/aides/maprimerenov"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                >
+                  MaPrimeRénov&apos; 2026
+                </Link>
+                <Link
+                  href="/aides"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                >
+                  Toutes les aides à la rénovation
+                </Link>
+                {ceeOps.length > 0 && (
+                  <div className="pt-2 mt-2 border-t border-emerald-200/40">
+                    <p className="text-xs uppercase tracking-wider text-charcoal-400 mb-1.5">
+                      Primes CEE éligibles
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {ceeOps.map((op) => (
+                        <Link
+                          key={op.code}
+                          href={`/cee/${op.code.toLowerCase()}/guide`}
+                          className="inline-flex items-center px-2.5 py-1 bg-white border border-emerald-200 hover:border-emerald-400 text-emerald-800 hover:bg-emerald-50 rounded-md text-xs transition-colors"
+                        >
+                          {op.code}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

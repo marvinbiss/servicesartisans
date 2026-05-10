@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Phone, CheckCircle, Clock, Zap, Users, ArrowRight } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL } from '@/lib/seo/config'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 
@@ -12,14 +12,36 @@ interface PlatformSidebarCTAProps {
   providerId: string
   providerName: string
   hasSiret: boolean
+  /**
+   * Tel artisan (registre RGE ADEME). Affiché en CTA primaire si fourni
+   * ET `isRgeActive`. Source label "Registre RGE ADEME" obligatoire
+   * (decision 2026-05-07).
+   */
+  artisanPhone?: string | null
+  isRgeActive?: boolean
+}
+
+function formatFrenchPhone(raw: string): string {
+  const digits = raw.replace(/[^\d+]/g, '')
+  const local = digits.startsWith('+33')
+    ? '0' + digits.slice(3)
+    : digits.startsWith('33') && digits.length === 11
+      ? '0' + digits.slice(2)
+      : digits
+  if (local.length !== 10) return raw
+  return local.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
 }
 
 export function PlatformSidebarCTA({
   providerId,
   providerName,
   hasSiret,
+  artisanPhone,
+  isRgeActive = false,
 }: PlatformSidebarCTAProps) {
   const [shouldPulse, setShouldPulse] = useState(false)
+  const cleanArtisanPhone = artisanPhone?.replace(/[^\d+]/g, '') ?? ''
+  const showArtisanPhone = isRgeActive && cleanArtisanPhone.length >= 10
 
   // Pulse CTA every 6s for attention
   useEffect(() => {
@@ -32,6 +54,39 @@ export function PlatformSidebarCTA({
 
   return (
     <div className="space-y-4">
+      {/* Card tel artisan direct — RGE actif uniquement, source ADEME publique */}
+      {showArtisanPhone && (
+        <div className="bg-white rounded-2xl shadow-card-hover border border-accent-200 overflow-hidden">
+          <div className="bg-accent-50 px-5 py-3 border-b border-accent-100">
+            <p className="text-xs font-semibold uppercase tracking-wider text-accent-700">
+              Contact direct artisan
+            </p>
+          </div>
+          <div className="p-5">
+            <p className="text-sm text-charcoal-600 mb-4">
+              Joindre {providerName} directement&nbsp;:
+            </p>
+            <a
+              href={`tel:${cleanArtisanPhone}`}
+              onClick={() => {
+                trackEvent('phone_click', {
+                  source: 'platform_sidebar_artisan',
+                  artisanId: providerId,
+                })
+              }}
+              className="w-full py-4 px-5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-accent-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+              aria-label={`Appeler ${providerName} au ${formatFrenchPhone(cleanArtisanPhone)}`}
+            >
+              <Phone className="w-5 h-5" aria-hidden="true" />
+              {formatFrenchPhone(cleanArtisanPhone)}
+            </a>
+            <p className="text-center text-xs text-charcoal-500 mt-3">
+              Source&nbsp;: Registre RGE ADEME (data.gouv.fr — Licence Etalab&nbsp;2.0)
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Card principale — conversion */}
       <div
         className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
@@ -43,7 +98,7 @@ export function PlatformSidebarCTA({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
           </span>
-          <span className="text-white text-sm font-bold">2 conseillers disponibles</span>
+          <span className="text-white text-sm font-bold">{ADVISORS_LABEL}</span>
         </div>
 
         <div className="p-5">

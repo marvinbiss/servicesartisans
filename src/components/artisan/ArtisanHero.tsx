@@ -4,11 +4,32 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { MapPin, CheckCircle, Users, CalendarCheck, ShieldCheck, FileText } from 'lucide-react'
+import {
+  MapPin,
+  CheckCircle,
+  Users,
+  CalendarCheck,
+  ShieldCheck,
+  FileText,
+  Phone,
+} from 'lucide-react'
 import { getDisplayName } from './types'
 import RgeBadge from './RgeBadge'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
+import { ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
+
+function formatFrenchPhone(raw: string): string {
+  const digits = raw.replace(/[^\d+]/g, '')
+  const local = digits.startsWith('+33')
+    ? '0' + digits.slice(3)
+    : digits.startsWith('33') && digits.length === 11
+      ? '0' + digits.slice(2)
+      : digits
+  if (local.length !== 10) return raw
+  return local.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+}
 
 const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), {
   ssr: false,
@@ -25,6 +46,15 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
 
   const hasPortfolioImage =
     artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
+
+  // Phone CTA — n'est rendu que si `artisan.phone` est défini. Le gate amont
+  // (convertToArtisan dans page.tsx) garantit que `phone` n'est exposé que pour
+  // les fiches claimed OU RGE actives (cf. CLAUDE.md "Fiches RGE non
+  // revendiquées — exception tel public" 2026-05-07). Hors RGE actif et
+  // hors claim, `artisan.phone` reste undefined → le bloc ne s'affiche pas.
+  const isRgeActive = hasActiveRgeQualification(artisan.rge_qualifications)
+  const cleanPhone = artisan.phone?.replace(/[^\d+]/g, '') ?? ''
+  const showPhoneCta = cleanPhone.length >= 10 && (isClaimed || isRgeActive)
 
   return (
     <>
@@ -200,7 +230,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                   </button>
                   <p className="text-xs text-charcoal-500 mt-2 flex items-center gap-1.5">
                     <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-                    <span>2 conseillers dispo</span>
+                    <span>{ADVISORS_LABEL_SHORT}</span>
                     <span className="text-charcoal-300" aria-hidden="true">
                       ·
                     </span>
@@ -210,6 +240,35 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                     </span>
                     <span>Sans engagement</span>
                   </p>
+                </div>
+              )}
+
+              {/* Tel CTA — affiché dès qu'on a un tel exposable (claimed OU
+                  RGE actif). Sur fiche RGE non revendiquée, source ADEME
+                  obligatoire (decision 2026-05-07). */}
+              {showPhoneCta && (
+                <div className={isClaimed ? 'mt-3' : 'mt-5'}>
+                  <a
+                    href={`tel:${cleanPhone}`}
+                    onClick={() => {
+                      trackEvent('phone_click', {
+                        artisanId: artisan.id,
+                        artisanName: artisan.business_name || displayName,
+                        source: 'hero_cta',
+                        target: 'artisan',
+                      })
+                    }}
+                    className="w-full sm:w-auto py-3.5 px-8 bg-accent-600 hover:bg-accent-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                    aria-label={`Appeler ${displayName} au ${formatFrenchPhone(cleanPhone)}`}
+                  >
+                    <Phone className="w-5 h-5" aria-hidden="true" />
+                    {formatFrenchPhone(cleanPhone)}
+                  </a>
+                  {!isClaimed && (
+                    <p className="text-xs text-charcoal-500 mt-2">
+                      Source&nbsp;: Registre RGE ADEME (data.gouv.fr — Licence Etalab&nbsp;2.0)
+                    </p>
+                  )}
                 </div>
               )}
             </div>

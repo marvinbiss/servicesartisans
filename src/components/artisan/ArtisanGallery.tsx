@@ -118,7 +118,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 50vw, 40vw"
-              unoptimized
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
               {photos[0].mediaType === 'video' ? (
@@ -158,7 +158,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 25vw, 20vw"
-                unoptimized
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                 {photo.mediaType === 'video' ? (
@@ -290,7 +290,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                     width={1200}
                     height={800}
                     className="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto"
-                    unoptimized
+                    sizes="(max-width: 1200px) 100vw, 1200px"
                   />
                 )}
               </motion.div>
@@ -326,7 +326,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                     fill
                     className="object-cover"
                     sizes="64px"
-                    unoptimized
+                    loading="lazy"
                   />
                   {photo.mediaType === 'video' && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">

@@ -121,8 +121,18 @@ interface ArtisanReviewsProps {
 export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
   const [showAll, setShowAll] = useState(false)
 
-  const visibleReviews = showAll ? reviews : reviews.slice(0, MAX_VISIBLE_REVIEWS)
-  const hasMoreReviews = !showAll && reviews.length > MAX_VISIBLE_REVIEWS
+  // Tri date décroissant. `dateISO` (YYYY-MM-DD) prioritaire car comparable
+  // lex. Fallback parse `date` FR. Tri stable : si dates égales, ordre props.
+  const sortedReviews = [...reviews].sort((a, b) => {
+    const ta = a.dateISO ? Date.parse(a.dateISO) : Date.parse(a.date)
+    const tb = b.dateISO ? Date.parse(b.dateISO) : Date.parse(b.date)
+    const va = Number.isFinite(ta) ? ta : 0
+    const vb = Number.isFinite(tb) ? tb : 0
+    return vb - va
+  })
+
+  const visibleReviews = showAll ? sortedReviews : sortedReviews.slice(0, MAX_VISIBLE_REVIEWS)
+  const hasMoreReviews = !showAll && sortedReviews.length > MAX_VISIBLE_REVIEWS
 
   return (
     <div

@@ -3,6 +3,7 @@
 import { Mail, FileText, ShieldCheck, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
 
 interface ArtisanContactCardProps {
   artisan: LegacyArtisan
@@ -64,7 +65,8 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
           {/* Trust reassurance */}
           <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />2 conseillers dispo
+              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
+              {ADVISORS_LABEL_SHORT}
             </span>
             <span className="text-charcoal-300" aria-hidden="true">
               ·

@@ -197,9 +197,14 @@ function normalizePhone(raw: string | undefined | null): string | null {
 
 function normalizeEmail(raw: string | undefined | null): string | null {
   if (!raw) return null
-  const trimmed = raw.trim().toLowerCase()
-  if (!trimmed || !trimmed.includes('@') || !trimmed.includes('.')) return null
-  return trimmed
+  // Strip JSONB-hostile chars (null bytes, lone surrogates, C0 controls) BEFORE
+  // any other processing. Required since `ademe_email` est sérialisé tel quel
+  // dans le payload `rge_stage_rows(payload jsonb)` — un U+0000 dans un email
+  // ADEME tue tout le batch (Postgres erreur 22P05). Observé prod 2026-04
+  // (cron mort depuis 2026-04-13, batch offset 50000-52000).
+  const cleaned = stripJsonbUnsafe(String(raw)).trim().toLowerCase()
+  if (!cleaned || !cleaned.includes('@') || !cleaned.includes('.')) return null
+  return cleaned
 }
 
 // ---------------------------------------------------------------------------

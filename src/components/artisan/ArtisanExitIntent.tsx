@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { X, FileText, Shield, Users, Phone } from 'lucide-react'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER, ADVISORS_COUNT } from '@/lib/seo/config'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getDisplayName } from '@/components/artisan/types'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -260,7 +260,10 @@ export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitInt
               <li className="flex items-center gap-2.5">
                 <Users className="w-4 h-4 text-accent-500 flex-shrink-0" />
                 <span className="text-sm text-charcoal-700">
-                  <strong>2 conseillers</strong> à votre écoute
+                  <strong>
+                    {ADVISORS_COUNT} {ADVISORS_COUNT === 1 ? 'conseiller' : 'conseillers'}
+                  </strong>{' '}
+                  à votre écoute
                 </span>
               </li>
               <li className="flex items-center gap-2.5">

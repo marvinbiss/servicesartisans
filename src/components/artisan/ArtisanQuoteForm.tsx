@@ -16,7 +16,7 @@ import {
 import { Artisan, getDisplayName } from './types'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL } from '@/lib/seo/config'
 
 interface ArtisanQuoteFormProps {
   artisan: Artisan
@@ -317,8 +317,8 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
             <p className="text-sm text-charcoal-600 mb-4 flex items-center gap-1.5">
               <Users className="w-4 h-4 text-accent-700 flex-shrink-0" aria-hidden="true" />
               <span>
-                <span className="font-semibold text-accent-700">2 conseillers disponibles</span> ·
-                Devis gratuit sans engagement
+                <span className="font-semibold text-accent-700">{ADVISORS_LABEL}</span> · Devis
+                gratuit sans engagement
               </span>
             </p>
 

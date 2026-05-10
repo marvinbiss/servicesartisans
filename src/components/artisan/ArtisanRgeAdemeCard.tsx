@@ -3,12 +3,25 @@
 import { Phone, ShieldCheck } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
+import {
+  hasActiveRgeQualification,
+  type RgeQualification,
+} from '@/lib/rge/has-active-qualification'
 
 interface ArtisanRgeAdemeCardProps {
   artisanId: string
   displayName: string
   phone: string | null | undefined
   hasSiret?: boolean
+  /**
+   * Defense-in-depth : si fourni, on revérifie en interne qu'au moins une
+   * qualif RGE est active avant d'exposer le tel ADEME. Le composant accepte
+   * `undefined` pour rester rétro-compat avec les call-sites existants qui
+   * gatent en amont via `isRgeUnclaimed` (cf. ArtisanPageClient). Les
+   * nouveaux call-sites doivent passer `rgeQualifications` pour bloquer
+   * toute fuite si jamais le gate parent est retiré ou refactorisé.
+   */
+  rgeQualifications?: RgeQualification[] | null
 }
 
 function formatFrenchPhone(raw: string): string {
@@ -27,9 +40,15 @@ export function ArtisanRgeAdemeCard({
   displayName,
   phone,
   hasSiret,
+  rgeQualifications,
 }: ArtisanRgeAdemeCardProps) {
+  // Defense-in-depth : si l'appelant a fourni `rgeQualifications`, on n'expose
+  // le tel ADEME que si une qualif est active. `undefined` = pas de check
+  // interne (le parent gate via `isRgeUnclaimed`). `null`/`[]`/expirées =
+  // bloquer l'affichage tel.
+  const rgeCheckOk = rgeQualifications === undefined || hasActiveRgeQualification(rgeQualifications)
   const cleanPhone = phone?.replace(/[^\d+]/g, '') ?? ''
-  const showPhone = cleanPhone.length >= 10
+  const showPhone = rgeCheckOk && cleanPhone.length >= 10
 
   return (
     <div

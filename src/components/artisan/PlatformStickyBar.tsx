@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, X } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL } from '@/lib/seo/config'
 
 export function PlatformStickyBar() {
   const [dismissed, setDismissed] = useState(false)
@@ -15,7 +15,7 @@ export function PlatformStickyBar() {
     const texts = [
       'Réponse en moins de 2 min',
       'Appel 100% gratuit',
-      '2 conseillers disponibles',
+      ADVISORS_LABEL,
       'On vous trouve un pro maintenant',
     ]
     let i = 0
