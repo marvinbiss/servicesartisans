@@ -361,23 +361,13 @@ export async function getLocationBySlug(slug: string) {
   )
 }
 
-// Provider detail SELECT — listing columns + extra fields for the artisan detail page.
-// Only add columns that exist in the providers table (verified in types/database.ts).
-// RGE ADEME + Google Places columns are already included in PROVIDER_LIST_SELECT.
-//
-// Mig 306 columns wired here (detail-only — keep listing payload light).
-// Memory `mig306-status-2026-04-28` documente qu'elles sont vivantes en DB
-// mais non lues côté SELECT, ce qui dégrade silencieusement ArtisanFAQ /
-// ArtisanServices / ArtisanWhyChoose / ArtisanContactCard / ArtisanStats /
-// ArtisanSidebar / generateRgeMinimalDescription (bio fallback).
-// Rollback : commit 591665911 a ajoute des cols mig 306 + 4 cols fabriquees
-// (business_name/first_name/last_name/is_center) qui cassent SELECT sur 459K fiches.
-// Hotfix db642b578 a retire les 4 fabriquees mais les cols mig 306 restent suspectes
-// (memory dit vivantes en DB, mais drift hors-Git precedent sur bookings 01-05 prouve
-// que les memos schema-drift peuvent etre obsoletes). Revert au snapshot ab45aa77d
-// (04-04, 36j prod stable). Re-cabler mig 306 cols apres audit DB colonne par colonne.
+// Provider detail SELECT — listing columns + extra fields for artisan detail page.
+// All cols verifiees prod via service_role direct (2026-05-10 post-regression
+// 591665911 : business_name/first_name/last_name/is_center fabriquees -> 400
+// "does not exist", retirees). Mig 306 cols vivantes prod confirmed.
 const PROVIDER_DETAIL_SELECT = [
   PROVIDER_LIST_SELECT,
+  'address_department',
   'creation_date',
   'employee_count',
   'legal_form',
@@ -385,6 +375,18 @@ const PROVIDER_DETAIL_SELECT = [
   'description',
   'website',
   'email',
+  // Mig 306 — vivantes en DB (verifiees prod 2026-05-10).
+  'bio',
+  'team_size',
+  'services_offered',
+  'service_prices',
+  'faq',
+  'opening_hours',
+  'intervention_radius_km',
+  'phone_secondary',
+  'accepts_new_clients',
+  'free_quote',
+  'available_24h',
 ].join(',')
 
 /**

@@ -471,8 +471,6 @@ export default function ArtisanPageClient({
                     providerId={artisanId}
                     providerName={artisan.business_name || displayName}
                     hasSiret={hasSiret}
-                    artisanPhone={artisan.phone}
-                    isRgeActive={isRgeActive}
                   />
                 )}
               </div>
