@@ -372,14 +372,7 @@ export async function getLocationBySlug(slug: string) {
 // ArtisanSidebar / generateRgeMinimalDescription (bio fallback).
 const PROVIDER_DETAIL_SELECT = [
   PROVIDER_LIST_SELECT,
-  'business_name',
-  'first_name',
-  'last_name',
-  'is_center',
   'address_department',
-  'creation_date',
-  'employee_count',
-  'legal_form',
   'legal_form_code',
   'description',
   'website',
