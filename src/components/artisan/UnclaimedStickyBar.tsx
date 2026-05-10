@@ -22,17 +22,6 @@ interface UnclaimedStickyBarProps {
 
 const HIDDEN_PATHS = ['/admin', '/espace-artisan', '/espace-client', '/devis']
 
-function formatFrenchPhone(raw: string): string {
-  const digits = raw.replace(/[^\d+]/g, '')
-  const local = digits.startsWith('+33')
-    ? '0' + digits.slice(3)
-    : digits.startsWith('33') && digits.length === 11
-      ? '0' + digits.slice(2)
-      : digits
-  if (local.length !== 10) return raw
-  return local.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
-}
-
 export function UnclaimedStickyBar({
   specialty,
   city,
@@ -45,8 +34,13 @@ export function UnclaimedStickyBar({
   const cleanArtisanPhone = artisanPhone?.replace(/[^\d+]/g, '') ?? ''
   const useArtisanPhone = isRgeActive && cleanArtisanPhone.length >= 10
   const phoneHref = useArtisanPhone ? `tel:${cleanArtisanPhone}` : PHONE_TEL
-  const phoneDisplay = useArtisanPhone ? formatFrenchPhone(cleanArtisanPhone) : PHONE_NUMBER
-  const phoneLabel = useArtisanPhone ? 'Artisan' : 'Conseiller'
+  // Tel artisan : digits masques (intent capture only, lead trackable).
+  // Tel plateforme : numero visible (transparence conseiller SA).
+  const phoneDisplay = useArtisanPhone ? null : PHONE_NUMBER
+  const phoneLabel = useArtisanPhone ? 'Appeler' : 'Conseiller'
+  const phoneAriaLabel = useArtisanPhone
+    ? `Appeler ${artisanName || 'l’artisan'}`
+    : `Appeler ServicesArtisans au ${PHONE_NUMBER}`
   const [visible, setVisible] = useState(false)
   const pathname = usePathname()
 
@@ -107,14 +101,10 @@ export function UnclaimedStickyBar({
               })
             }}
             className="inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium text-sm hover:border-sand-400 hover:bg-sand-50 transition-all duration-200"
-            aria-label={
-              useArtisanPhone
-                ? `Appeler ${artisanName || 'l’artisan'} au ${phoneDisplay}`
-                : `Appeler ServicesArtisans au ${phoneDisplay}`
-            }
+            aria-label={phoneAriaLabel}
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
-            {phoneLabel} · {phoneDisplay}
+            {phoneDisplay ? `${phoneLabel} · ${phoneDisplay}` : `${phoneLabel} l’artisan`}
           </a>
           <button
             onClick={() => {
@@ -148,11 +138,7 @@ export function UnclaimedStickyBar({
               })
             }}
             className="flex flex-col items-center justify-center w-14 h-12 rounded-xl border-2 border-sand-300 text-charcoal-700 hover:border-sand-400 hover:bg-sand-50 transition-all duration-200 touch-manipulation flex-shrink-0"
-            aria-label={
-              useArtisanPhone
-                ? `Appeler ${artisanName || 'l’artisan'} au ${phoneDisplay}`
-                : `Appeler un conseiller au ${phoneDisplay}`
-            }
+            aria-label={phoneAriaLabel}
           >
             <Phone className="w-5 h-5" />
             <span className="text-[9px] leading-tight mt-0.5">{phoneLabel}</span>

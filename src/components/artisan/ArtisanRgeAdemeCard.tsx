@@ -13,26 +13,7 @@ interface ArtisanRgeAdemeCardProps {
   displayName: string
   phone: string | null | undefined
   hasSiret?: boolean
-  /**
-   * Defense-in-depth : si fourni, on revérifie en interne qu'au moins une
-   * qualif RGE est active avant d'exposer le tel ADEME. Le composant accepte
-   * `undefined` pour rester rétro-compat avec les call-sites existants qui
-   * gatent en amont via `isRgeUnclaimed` (cf. ArtisanPageClient). Les
-   * nouveaux call-sites doivent passer `rgeQualifications` pour bloquer
-   * toute fuite si jamais le gate parent est retiré ou refactorisé.
-   */
   rgeQualifications?: RgeQualification[] | null
-}
-
-function formatFrenchPhone(raw: string): string {
-  const digits = raw.replace(/[^\d+]/g, '')
-  const local = digits.startsWith('+33')
-    ? '0' + digits.slice(3)
-    : digits.startsWith('33') && digits.length === 11
-      ? '0' + digits.slice(2)
-      : digits
-  if (local.length !== 10) return raw
-  return local.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
 }
 
 export function ArtisanRgeAdemeCard({
@@ -42,10 +23,6 @@ export function ArtisanRgeAdemeCard({
   hasSiret,
   rgeQualifications,
 }: ArtisanRgeAdemeCardProps) {
-  // Defense-in-depth : si l'appelant a fourni `rgeQualifications`, on n'expose
-  // le tel ADEME que si une qualif est active. `undefined` = pas de check
-  // interne (le parent gate via `isRgeUnclaimed`). `null`/`[]`/expirées =
-  // bloquer l'affichage tel.
   const rgeCheckOk = rgeQualifications === undefined || hasActiveRgeQualification(rgeQualifications)
   const cleanPhone = phone?.replace(/[^\d+]/g, '') ?? ''
   const showPhone = rgeCheckOk && cleanPhone.length >= 10
@@ -82,10 +59,10 @@ export function ArtisanRgeAdemeCard({
               })
             }}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-accent-600/20 transition-all hover:bg-accent-700 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
-            aria-label={`Appeler ${displayName} au ${formatFrenchPhone(cleanPhone)}`}
+            aria-label={`Appeler ${displayName}`}
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
-            {formatFrenchPhone(cleanPhone)}
+            Appeler l&apos;artisan
           </a>
         )}
       </div>
