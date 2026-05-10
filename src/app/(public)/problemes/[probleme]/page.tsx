@@ -70,7 +70,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { probleme } = await params
   const problem = getProblemBySlug(probleme)
-  if (!problem) return {}
+  if (!problem) return { robots: { index: false, follow: false } }
 
   const titleHash = Math.abs(hashCode(`probleme-title-${probleme}`))
   // Sprint 2 — variants gradués + first-fitting via title-selector partagé.

@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const hub = getAidesDeptHubData(slug)
     if (hub) return metadataForDeptHub(hub)
   }
-  return {}
+  return { robots: { index: false, follow: false } }
 }
 
 function metadataForAide(aide: Aide, slug: string): Metadata {

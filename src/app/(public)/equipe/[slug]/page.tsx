@@ -35,7 +35,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const author = getAuthorBySlug(slug)
-  if (!author) return {}
+  if (!author) return { robots: { index: false, follow: false } }
 
   const title = `${author.name} — ${author.role} | ServicesArtisans`
   const titleRoot = `${author.name} — ${author.role}`

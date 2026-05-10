@@ -48,7 +48,7 @@ function buildPath(slug: string): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const kw = getLongTailBySlug(slug)
-  if (!kw) return {}
+  if (!kw) return { robots: { index: false, follow: false } }
   const path = buildPath(slug)
   const titleBase = capitalize(kw.keyword)
   const title = `${titleBase} : guide complet 2026 — tarifs, aides, RGE`

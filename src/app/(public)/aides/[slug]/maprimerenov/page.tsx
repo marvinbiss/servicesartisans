@@ -65,9 +65,9 @@ function truncate(s: string, max = 58): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug: deptSlug } = await params
-  if (!/^[a-z0-9-]+$/.test(deptSlug)) return {}
+  if (!/^[a-z0-9-]+$/.test(deptSlug)) return { robots: { index: false, follow: false } }
   const dept = getDepartementBySlug(deptSlug)
-  if (!dept) return {}
+  if (!dept) return { robots: { index: false, follow: false } }
 
   const path = `/aides/${deptSlug}/maprimerenov`
   const title = truncate(`MaPrimeRénov' ${dept.name} (${dept.code}) 2026 — artisans RGE`)
