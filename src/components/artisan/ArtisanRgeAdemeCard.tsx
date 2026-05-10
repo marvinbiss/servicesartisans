@@ -1,70 +1,37 @@
 'use client'
 
-import { Phone, ShieldCheck } from 'lucide-react'
-import { trackEvent } from '@/lib/analytics/tracking'
+import { ShieldCheck } from 'lucide-react'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
-import {
-  hasActiveRgeQualification,
-  type RgeQualification,
-} from '@/lib/rge/has-active-qualification'
 
 interface ArtisanRgeAdemeCardProps {
   artisanId: string
   displayName: string
-  phone: string | null | undefined
+  phone?: string | null | undefined
   hasSiret?: boolean
-  rgeQualifications?: RgeQualification[] | null
+  rgeQualifications?: unknown
 }
 
 export function ArtisanRgeAdemeCard({
   artisanId,
   displayName,
-  phone,
   hasSiret,
-  rgeQualifications,
 }: ArtisanRgeAdemeCardProps) {
-  const rgeCheckOk = rgeQualifications === undefined || hasActiveRgeQualification(rgeQualifications)
-  const cleanPhone = phone?.replace(/[^\d+]/g, '') ?? ''
-  const showPhone = rgeCheckOk && cleanPhone.length >= 10
-
   return (
     <div
       className="mb-6 rounded-xl border border-accent-200 bg-accent-50/60 px-5 py-4"
       role="region"
       aria-label="Coordonnées officielles ADEME"
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-start gap-3">
-          <ShieldCheck
-            className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5"
-            aria-hidden="true"
-          />
-          <div>
-            <p className="text-sm font-semibold text-charcoal-900">
-              Coordonnées officielles {displayName}
-            </p>
-            <p className="text-xs text-charcoal-500 mt-0.5">
-              Source&nbsp;: Registre RGE ADEME (data.gouv.fr — Licence Etalab 2.0)
-            </p>
-          </div>
+      <div className="flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <div>
+          <p className="text-sm font-semibold text-charcoal-900">
+            Coordonnées officielles {displayName}
+          </p>
+          <p className="text-xs text-charcoal-500 mt-0.5">
+            Source&nbsp;: Registre RGE ADEME (data.gouv.fr — Licence Etalab 2.0)
+          </p>
         </div>
-
-        {showPhone && (
-          <a
-            href={`tel:${cleanPhone}`}
-            onClick={() => {
-              trackEvent('phone_click', {
-                artisanId,
-                source: 'rge_ademe_card',
-              })
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-accent-600/20 transition-all hover:bg-accent-700 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
-            aria-label={`Appeler ${displayName}`}
-          >
-            <Phone className="w-4 h-4" aria-hidden="true" />
-            Appeler l&apos;artisan
-          </a>
-        )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-charcoal-500">
