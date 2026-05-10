@@ -96,6 +96,12 @@ const FILTER_RE = new RegExp(
 const MUTATION_RE = /\.(insert|update|upsert)\(\s*(\[\s*)?\{/g
 // Variable-passed payload : `.insert(insertPayload)` — needs back-resolve.
 const MUTATION_VAR_RE = /\.(insert|update|upsert)\(\s*([A-Za-z_][\w]*)\s*[,)]/g
+// Identifier-passed select : `.select(PROVIDER_DETAIL_SELECT)` — needs
+// back-resolve vers `const NAME = [...].join(',')`. Sans ça, le pattern le
+// plus repandu (centralized SELECT constants) slip through. Regression
+// 2026-05-10 commit 591665911 (business_name/first_name/is_center fabriques)
+// aurait ete bloque par cette resolution.
+const SELECT_VAR_RE = /\.select\(\s*([A-Za-z_][\w]*)\s*\)/g
 // JS reserved / common type names to exclude from extracted keys.
 const RESERVED_KEYS = new Set([
   'string', 'number', 'boolean', 'null', 'undefined', 'true', 'false',
@@ -278,6 +284,63 @@ function findStringEnd(text, from, quote) {
   return -1
 }
 
+/**
+ * Resolve `const NAME = [...].join(',')` ou `const NAME = 'a,b,c'` declarations
+ * in same-file scope. Returns array of column names. Recursive (cap depth 5)
+ * pour gerer nested const refs comme PROVIDER_DETAIL_SELECT -> PROVIDER_LIST_SELECT.
+ *
+ * @param {string} content  Full file content
+ * @param {string} name     Identifier to resolve
+ * @param {number} depth    Recursion guard (max 5)
+ * @returns {string[]}
+ */
+function resolveConstSelect(content, name, depth = 0, visited = new Set()) {
+  if (depth > 5 || visited.has(name)) return []
+  visited.add(name)
+
+  // Pattern 1 : const NAME = [...].join(',')
+  const arrayRe = new RegExp(
+    `(?:^|\\W)(?:const|let|var)\\s+${name}\\s*(?::[^=\\n]+)?=\\s*\\[([\\s\\S]*?)\\]\\.join\\(`,
+    'g'
+  )
+  const arrayMatch = arrayRe.exec(content)
+  if (arrayMatch) {
+    return parseArrayElements(arrayMatch[1], content, depth + 1, visited)
+  }
+
+  // Pattern 2 : const NAME = 'a,b,c'
+  const strRe = new RegExp(
+    `(?:^|\\W)(?:const|let|var)\\s+${name}\\s*(?::[^=\\n]+)?=\\s*['"\`]([^'"\`]+)['"\`]`,
+    'g'
+  )
+  const strMatch = strRe.exec(content)
+  if (strMatch) {
+    return parseSelectExpression(strMatch[1])
+  }
+
+  return []
+}
+
+function parseArrayElements(arrayBody, content, depth, visited) {
+  const cols = []
+  // Strip line + block comments
+  const stripped = arrayBody.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '')
+  // Match string literals OR bare identifiers
+  const elementRe = /(['"`])([^'"`]*)\1|([A-Za-z_][\w]*)/g
+  let m
+  while ((m = elementRe.exec(stripped)) !== null) {
+    if (m[2] !== undefined) {
+      // String literal — parse as select expression (handles comma-joined inline)
+      for (const c of parseSelectExpression(m[2])) cols.push(c)
+    } else if (m[3]) {
+      const ident = m[3]
+      if (RESERVED_KEYS.has(ident)) continue
+      for (const c of resolveConstSelect(content, ident, depth, visited)) cols.push(c)
+    }
+  }
+  return cols
+}
+
 function extractFromContent(content) {
   const refs = new Map()
   const matches = [...content.matchAll(/\.from\(\s*['"`]([\w]+)['"`]\s*\)/g)]
@@ -296,6 +359,13 @@ function extractFromContent(content) {
 
     for (const sm of chunk.matchAll(SELECT_RE)) {
       for (const c of parseSelectExpression(sm[1])) cols.add(c)
+    }
+    // Identifier-passed select : `.select(PROVIDER_DETAIL_SELECT)` — resolve
+    // depuis le full content (const declaration peut etre n'importe ou en amont).
+    for (const sv of chunk.matchAll(SELECT_VAR_RE)) {
+      const ident = sv[1]
+      if (RESERVED_KEYS.has(ident)) continue
+      for (const c of resolveConstSelect(content, ident)) cols.add(c)
     }
     for (const fm of chunk.matchAll(FILTER_RE)) {
       cols.add(fm[2])

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-07T01:13:26.564Z",
+  "generatedAt": "2026-05-10T21:06:24.311Z",
   "source": "OpenAPI (service_role, RLS-bypass)",
   "drifts": [
     {
@@ -52,6 +52,34 @@
     },
     {
       "table": "cee_dossiers",
+      "column": "date_pre_visite"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_debut_travaux"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_fin_travaux"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_ah_signature"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_depot_delegataire"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_depot_pncee"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "date_validation"
+    },
+    {
+      "table": "cee_dossiers",
       "column": "zone_climatique"
     },
     {
@@ -60,7 +88,23 @@
     },
     {
       "table": "cee_dossiers",
+      "column": "kwhc_depose"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "prime_versee_eur"
+    },
+    {
+      "table": "cee_dossiers",
       "column": "precarite"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "rejection_reason"
+    },
+    {
+      "table": "cee_dossiers",
+      "column": "notes"
     },
     {
       "table": "cee_dossiers",
