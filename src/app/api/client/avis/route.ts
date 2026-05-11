@@ -42,8 +42,11 @@ export async function GET() {
 
     const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
 
-    // Step 2: fetch reviews for those bookings
-    // Note: 'devis' table does not exist (TODO: re-enable join when reconciled)
+    // Step 2: fetch reviews for those bookings.
+    // Note: schema actuel = `reviews.booking_id` -> bookings (1:1). Aucun
+    // chemin reviews -> devis_requests (devis = lead, pas livrable).
+    // Si on veut afficher avis par "devis accepte", il faut soit ajouter
+    // `reviews.devis_request_id`, soit traverser bookings.devis_request_id.
     // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
       .from('reviews')
@@ -68,7 +71,11 @@ export async function GET() {
       )
     }
 
-    // TODO: table 'devis' does not exist — pending reviews from completed devis disabled
+    // Pending reviews path desactive : `devis_requests.status='accepted'`
+    // existe, mais aucun signal "service complete" ne declenche d'invitation
+    // d'avis cote client. Bridge devis -> invitation cree par cron
+    // `send-review-invitations` (voir memory reviews-flywheel-2026-04-18) :
+    // l'invitation se fait apres booking complete, pas via cette route.
     const avisEnAttente: unknown[] = []
 
     // Format published reviews

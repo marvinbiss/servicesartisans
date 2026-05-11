@@ -216,9 +216,11 @@ export default async function CeeHubPage() {
             TotalEnergies, Effy, Sonergia).
           </p>
           {/* Freshness signal — date de révision éditoriale du catalogue CEE
-              (barèmes kWh cumac, bonifications précarité, MPR 2026). TODO :
-              brancher sur cee_operations.updated_at quand la table DGEC
-              automatisée sera en place. */}
+              (barèmes kWh cumac, bonifications précarité, MPR 2026).
+              Source actuelle : constante `CEE_CATALOG_UPDATED_AT` mise à jour
+              manuellement. Brancher sur `cee_operations.updated_at` dès que
+              le cron `rge-sync` ou un équivalent DGEC persistera des
+              timestamps (voir aussi `lib/cee/operation-guides-content.ts`). */}
           <LastUpdated
             label="Barèmes CEE vérifiés le"
             date={CEE_CATALOG_UPDATED_AT}

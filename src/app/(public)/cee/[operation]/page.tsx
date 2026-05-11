@@ -414,8 +414,9 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Opération standardisée résidentielle éligible aux Certificats d’Économies d’Énergie,
             sous conditions de qualification RGE de l’entreprise.
           </p>
-          {/* Freshness signal — révision éditoriale des barèmes. TODO : brancher
-              sur cee_operations.updated_at dès la persistance DGEC automatisée. */}
+          {/* Freshness signal — révision éditoriale des barèmes. Bascule sur
+              `cee_operations.updated_at` quand la sync DGEC persistera des
+              timestamps (cf. `lib/cee/operation-guides-content.ts`). */}
           <LastUpdated
             label="Barèmes CEE vérifiés le"
             date={CEE_CATALOG_UPDATED_AT}

@@ -34,8 +34,10 @@ import type { RgeGuideSlug } from '@/lib/rge/qualification-matcher'
  * contenu = fausse fraîcheur = drapeau rouge Google helpful content.
  * Source : developers.google.com/search/docs/fundamentals/creating-helpful-content
  *
- * TODO : à brancher sur une future table `cee_operations.updated_at` dès que
- * le catalogue sera persisté en DB (sync DGEC automatisée).
+ * Évolution future : bascule sur `cee_operations.updated_at` dès que le
+ * catalogue sera persisté en DB (sync DGEC automatisée). 3 call-sites
+ * concernés : `cee/page.tsx`, `cee/[operation]/page.tsx`, et la constante
+ * `CEE_CATALOG_UPDATED_AT` ci-dessous.
  *
  * Format : ISO date (YYYY-MM-DD) — parseable par `new Date(...)`.
  */

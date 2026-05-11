@@ -389,7 +389,11 @@ export async function GET(request: Request) {
         change: fmtChange(curLeadAssignments, prevLeadAssignments),
       },
       devisEnvoyes: {
-        // TODO: Wire to actual devis sent table when available
+        // Compteur "devis envoyes par l'artisan" = 0 tant que le funnel
+        // reponse-artisan n'est pas instrumente. `lead_assignments` track
+        // le dispatch mais pas la reponse. Brancher quand soit (a) colonne
+        // `lead_assignments.responded_at` ajoutee, soit (b) table
+        // `artisan_quote_responses` creee.
         value: 0,
         change: '+0%',
       },
@@ -679,7 +683,11 @@ async function getLegacyStats(
       change: fmtChange(legacyCurLeadAssignments, legacyPrevLeadAssignments),
     },
     devisEnvoyes: {
-      // TODO: Wire to actual devis sent table when available
+      // Compteur "devis envoyes par l'artisan" = 0 tant que le funnel
+      // reponse-artisan n'est pas instrumente. `lead_assignments` track
+      // le dispatch mais pas la reponse. Brancher quand soit (a) colonne
+      // `lead_assignments.responded_at` ajoutee, soit (b) table
+      // `artisan_quote_responses` creee.
       value: 0,
       change: '+0%',
     },

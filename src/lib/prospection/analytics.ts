@@ -258,7 +258,12 @@ export async function getChannelPerformance(
       failed: d.failed,
       delivery_rate: d.sent > 0 ? (d.delivered / d.sent) * 100 : 0,
       reply_rate: d.delivered > 0 ? (d.replied / d.delivered) * 100 : 0,
-      avg_cost: 0, // TODO: calculer depuis les coûts réels
+      // avg_cost = 0 par defaut : `prospection_campaigns.actual_cost` est
+      // stocke par campagne (toutes-channels confondues), pas par channel.
+      // Pour un cout par channel realiste : soit splitter via volume (biaise),
+      // soit ajouter `prospection_messages.cost` (per-send). En attente
+      // d'arbitrage produit.
+      avg_cost: 0,
     }
   })
 }
