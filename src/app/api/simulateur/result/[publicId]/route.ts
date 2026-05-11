@@ -10,7 +10,8 @@ import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+// Pas de `force-dynamic` : reponse stable par publicId (row immutable).
+// Cache-Control applique sur reponse success uniquement (cf. ci-dessous).
 
 const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/i
 
@@ -53,38 +54,47 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ public
     return NextResponse.json({ error: 'Estimation introuvable' }, { status: 404 })
   }
 
-  return NextResponse.json({
-    publicId: data.public_id,
-    barometreVersion: data.barometre_version,
-    situation: {
-      typeLogement: data.type_logement,
-      residencePrincipale: data.residence_principale,
-      anciennete: data.anciennete,
-      surface: data.surface_m2,
-      codePostal: data.code_postal,
-      zone: data.zone_climatique,
-      idf: data.idf,
-      foyer: data.foyer_taille,
-      rfrTranche: tranche10k(data.rfr as number),
-      categorieAnah: data.categorie_anah,
+  return NextResponse.json(
+    {
+      publicId: data.public_id,
+      barometreVersion: data.barometre_version,
+      situation: {
+        typeLogement: data.type_logement,
+        residencePrincipale: data.residence_principale,
+        anciennete: data.anciennete,
+        surface: data.surface_m2,
+        codePostal: data.code_postal,
+        zone: data.zone_climatique,
+        idf: data.idf,
+        foyer: data.foyer_taille,
+        rfrTranche: tranche10k(data.rfr as number),
+        categorieAnah: data.categorie_anah,
+      },
+      projet: {
+        parcours: data.parcours,
+        gestes: data.gestes,
+        coupDePouce: data.coup_de_pouce,
+        equipementActuel: data.equipement_actuel,
+        sautsDpe: data.sauts_dpe,
+      },
+      resultats: {
+        mprTotal: Number(data.mpr_total),
+        ceeFourchetteBas: Number(data.cee_fourchette_bas),
+        ceeFourchetteHaut: Number(data.cee_fourchette_haut),
+        coupPouceEstimation: Number(data.coup_pouce_estimation),
+        ecretementPct: Number(data.ecretement_pct),
+        resteAChargeBas: Number(data.reste_a_charge_bas),
+        resteAChargeHaut: Number(data.reste_a_charge_haut),
+      },
+      baremeIds: data.bareme_ids,
+      createdAt: data.created_at,
     },
-    projet: {
-      parcours: data.parcours,
-      gestes: data.gestes,
-      coupDePouce: data.coup_de_pouce,
-      equipementActuel: data.equipement_actuel,
-      sautsDpe: data.sauts_dpe,
-    },
-    resultats: {
-      mprTotal: Number(data.mpr_total),
-      ceeFourchetteBas: Number(data.cee_fourchette_bas),
-      ceeFourchetteHaut: Number(data.cee_fourchette_haut),
-      coupPouceEstimation: Number(data.coup_pouce_estimation),
-      ecretementPct: Number(data.ecretement_pct),
-      resteAChargeBas: Number(data.reste_a_charge_bas),
-      resteAChargeHaut: Number(data.reste_a_charge_haut),
-    },
-    baremeIds: data.bareme_ids,
-    createdAt: data.created_at,
-  })
+    {
+      headers: {
+        // Row immutable per publicId : public CDN cache long (24h) + SWR 7j.
+        // Pas de PII (rfr en tranche, ni email/tel).
+        'Cache-Control': 'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    }
+  )
 }

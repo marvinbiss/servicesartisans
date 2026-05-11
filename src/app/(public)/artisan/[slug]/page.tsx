@@ -2,7 +2,11 @@ import { notFound, redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getArtisanUrl } from '@/lib/utils'
 
-export const dynamic = 'force-dynamic'
+// ISR : ce path effectue 1 requête DB pour resoudre slug/stable_id puis
+// redirige (301). Resultat stable tant que `providers.slug/stable_id/
+// address_city` ne change pas. revalidate=3600 = 1h CDN cache, evite des
+// milliers de DB hits sur les slugs frequemment demandes.
+export const revalidate = 3600
 
 export const metadata = {
   robots: { index: false, follow: true },

@@ -12,7 +12,12 @@ function normalizePublicId(raw: string): string {
   return raw.replace(/^est-/i, 'EST-')
 }
 
-export const dynamic = 'force-dynamic'
+// ISR : page resultat d'estimation reno. Le `publicId` est immutable (1 row
+// `aides_estimations` -> 1 publicId). Resultat stable per-publicId.
+// revalidate=86400 = cache CDN 24h, regenere en cas de mutation ulterieure
+// (publicId reutilise apres reset improbable). robots noindex empeche
+// indexation = pas de stale SERP.
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Votre estimation aides rénovation',
