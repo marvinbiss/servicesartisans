@@ -52,6 +52,7 @@ export async function sendEmail(
         html: options.template.html,
         text: options.template.text,
       }),
+      signal: AbortSignal.timeout(8_000),
     })
 
     const data = await response.json()

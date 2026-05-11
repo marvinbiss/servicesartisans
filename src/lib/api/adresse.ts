@@ -104,6 +104,7 @@ async function adresseRequest<T>(
 
         const response = await fetch(url.toString(), {
           headers: { Accept: 'application/json' },
+          signal: AbortSignal.timeout(5000),
         })
 
         const duration = Date.now() - start

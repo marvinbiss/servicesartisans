@@ -105,6 +105,7 @@ async function dgFetch<T>(cfg: DataGouvConfig, path: string, opts: FetchOptions 
       Accept: 'application/json',
     },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
+    signal: AbortSignal.timeout(10_000),
   })
   if (!res.ok) {
     const text = await res.text().catch(() => '')

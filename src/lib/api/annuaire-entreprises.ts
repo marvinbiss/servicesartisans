@@ -158,6 +158,7 @@ async function annuaireRequest<T>(endpoint: string, params: Record<string, strin
 
       const response = await fetch(url.toString(), {
         headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(5000),
       })
 
       const duration = Date.now() - start
