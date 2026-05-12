@@ -443,7 +443,6 @@ export function getAllPagePaths(): string[] {
     '/statistiques-artisans-france',
     '/a-propos',
     '/contact',
-    '/faq',
     '/comment-ca-marche',
     '/notre-processus-de-verification',
     '/politique-avis',
@@ -486,13 +485,7 @@ export function getAllPagePaths(): string[] {
     pages.push(`/avis/${svc}`)
   }
 
-  // Intent × service × city (Tier 1: devis, urgence, tarifs)
-  for (const svc of serviceSlugs) {
-    for (const city of tier1Cities) {
-      pages.push(`/services/${svc}/${city.slug}`)
-      pages.push(`/services/${svc}/${city.slug}`)
-    }
-  }
+  // Intent × city (Tier 1: urgence only — tarifs/devis have no [ville] route)
   for (const svc of tradeSlugs) {
     for (const city of tier1Cities) {
       pages.push(`/urgence/${svc}/${city.slug}`)
@@ -543,5 +536,6 @@ export function getAllPagePaths(): string[] {
     pages.push(`/barometre/tarifs/${svc}`)
   }
 
-  return pages
+  // Deduplicate as a safety net against future accidental double-pushes
+  return Array.from(new Set(pages))
 }
