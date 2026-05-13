@@ -101,8 +101,6 @@ export default tseslint.config(
       '.claude/worktrees/**',
       // Bundled debug assets (non-source, vendored)
       'src/assets/debug/**',
-      // Capacitor / Android build intermediates (Gradle generated)
-      'android/**',
       // Root-level analysis scripts (one-shot, not part of the app)
       '_*.mjs',
     ],

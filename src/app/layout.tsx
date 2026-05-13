@@ -36,10 +36,6 @@ const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
 const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
   ssr: false,
 })
-const CapacitorInit = dynamic(
-  () => import('@/components/CapacitorInit').then((mod) => ({ default: mod.CapacitorInit })),
-  { ssr: false }
-)
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
@@ -282,7 +278,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <Footer />
             <MobileBottomNav />
             <ServiceWorkerRegistration />
-            <CapacitorInit />
             <CookieConsent />
             <SpeedInsights />
           </CompareProviderWrapper>

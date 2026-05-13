@@ -82,13 +82,8 @@ const STATIC_CSP =
   "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 
 // CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
-function addCspHeaders(response: NextResponse, request: NextRequest): NextResponse {
-  const userAgent = request.headers.get('user-agent') || ''
-  const isCapacitor =
-    userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
-  const isDev = process.env.NODE_ENV === 'development'
-
-  if (isDev || isCapacitor) {
+function addCspHeaders(response: NextResponse, _request: NextRequest): NextResponse {
+  if (process.env.NODE_ENV === 'development') {
     return response
   }
 

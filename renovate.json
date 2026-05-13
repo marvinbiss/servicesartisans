@@ -87,16 +87,6 @@
     },
 
     {
-      "description": "Capacitor (mobile) — major bumps cassent l'iOS/Android build",
-      "matchPackageNames": ["@capacitor/*"],
-      "groupName": "Capacitor",
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "minimumReleaseAge": "14 days",
-      "labels": ["dependencies", "capacitor", "needs-manual-review"]
-    },
-
-    {
       "description": "Stripe — financier, jamais auto-merge",
       "matchPackageNames": ["@stripe/*", "stripe"],
       "groupName": "Stripe",
