@@ -22,6 +22,7 @@ import { ClayHeroSearch } from './ClayHeroSearch'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
+import { RecentlyViewedCarousel } from '@/components/providers/RecentlyViewedCarousel'
 import {
   formatProviderCount,
   type SiteStats,
@@ -489,6 +490,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </div>
         </div>
       </ScrollReveal>
+
+      {/* ─── HISTORIQUE — Fiches consultées récemment (client-only) ──────────── */}
+      <RecentlyViewedCarousel />
 
       {/* ─── PREUVE SOCIALE — Chiffres clés + avis ──────────── */}
       <ScrollReveal as="section">

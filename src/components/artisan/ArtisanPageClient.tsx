@@ -32,6 +32,8 @@ import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { buildDevisHref } from '@/lib/utils'
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
+import { trackProviderView } from '@/lib/storage/recently-viewed'
+import { RecentlyViewedCarousel } from '@/components/providers/RecentlyViewedCarousel'
 
 // Dynamic import for exit intent (not needed on first paint)
 const ArtisanExitIntent = dynamic(
@@ -176,6 +178,17 @@ export default function ArtisanPageClient({
   useEffect(() => {
     if (artisan) {
       BookingFunnel.viewProfile(artisanId, artisan.business_name || '', 'profile_page')
+      // LRU history "consultés récemment" (client-only, localStorage)
+      trackProviderView({
+        id: artisanId,
+        name: artisan.business_name || '',
+        specialty: artisan.specialty ?? null,
+        city: artisan.city ?? null,
+        href:
+          typeof window !== 'undefined'
+            ? window.location.pathname
+            : `/services/${artisan.specialty_slug ?? ''}/${artisan.city ?? ''}/${artisanId}`,
+      })
     }
   }, [artisan, artisanId])
 
@@ -455,6 +468,11 @@ export default function ArtisanPageClient({
                   <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} />
                 </section>
               )}
+              <RecentlyViewedCarousel
+                compact
+                heading="Vos consultations récentes"
+                excludeId={artisanId}
+              />
             </div>
 
             {/* Right column - Sticky sidebar */}
