@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useId } from 'react'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 
@@ -33,6 +33,10 @@ export default function ExitIntentPopup({
   const [visible, setVisible] = useState(false)
   const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const mobileTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
+  const titleId = useId()
+  const descriptionId = useId()
 
   const shouldSuppress = useCallback(() => {
     if (typeof window === 'undefined') return true
@@ -64,6 +68,29 @@ export default function ExitIntentPopup({
       if (dismissTimer.current) clearTimeout(dismissTimer.current)
     }
   }, [visible])
+
+  // Escape + focus management. Non-modal dialog so we don't trap focus —
+  // the page behind the popup stays interactive. We just send focus to
+  // the close button on open so keyboard users can dismiss in one Tab,
+  // and restore the prior focus when the popup unmounts.
+  useEffect(() => {
+    if (!visible) return
+    previouslyFocusedRef.current = (document.activeElement as HTMLElement | null) ?? null
+    closeButtonRef.current?.focus()
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        close()
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      const prior = previouslyFocusedRef.current
+      if (prior && document.body.contains(prior)) prior.focus()
+    }
+  }, [visible, close])
 
   // Desktop: mouseleave at top of viewport
   useEffect(() => {
@@ -101,20 +128,30 @@ export default function ExitIntentPopup({
   if (!visible) return null
 
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100%-2rem)] max-w-sm animate-in slide-in-from-bottom-4 duration-300">
+    <div
+      role="dialog"
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100%-2rem)] max-w-sm animate-in slide-in-from-bottom-4 duration-300"
+    >
       <div className="bg-white rounded-2xl shadow-2xl border border-sand-300/60 p-5 relative">
         {/* Close button */}
         <button
+          ref={closeButtonRef}
           onClick={close}
-          className="absolute top-3 right-3 p-1.5 rounded-full text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-200 transition-colors"
+          className="absolute top-3 right-3 p-1.5 rounded-full text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
           aria-label="Fermer"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4" aria-hidden="true" />
         </button>
 
         {/* Content */}
-        <p className="text-sm font-medium text-charcoal-900 mb-1">{title}</p>
-        <p className="text-sm text-charcoal-600 mb-4 pr-6">{description}</p>
+        <p id={titleId} className="text-sm font-medium text-charcoal-900 mb-1">
+          {title}
+        </p>
+        <p id={descriptionId} className="text-sm text-charcoal-600 mb-4 pr-6">
+          {description}
+        </p>
 
         {/* CTA */}
         {onCtaClick ? (
