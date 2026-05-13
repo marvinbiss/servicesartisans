@@ -298,6 +298,30 @@ export function HeroSearch() {
     setRecentSearches(getRecentSearches())
   }, [])
 
+  // Keyboard shortcut: "/" anywhere on the page focuses the service
+  // input — mirrors GitHub / Slack / Linear / Vercel dashboard so power
+  // users can jump straight into search. We swallow the slash so it
+  // doesn't end up in the input, and bail when the user is already
+  // typing in an input, textarea, contentEditable, or holding a
+  // modifier (Ctrl+/ stays as the platform comment shortcut).
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== '/') return
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      const target = e.target as HTMLElement | null
+      if (!target) return
+      const tag = target.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable) {
+        return
+      }
+      e.preventDefault()
+      serviceInputRef.current?.focus()
+      setActiveField('service')
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [])
+
   // Close on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
