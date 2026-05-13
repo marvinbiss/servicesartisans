@@ -27,6 +27,30 @@ export function ClaimButton({ providerId, providerName }: ClaimButtonProps) {
   const [success, setSuccess] = useState(false)
   const [profileLoaded, setProfileLoaded] = useState(false)
 
+  // Auto-open the claim modal when arriving from the cold-outreach
+  // email (scripts/outreach-claim-campaign.ts deeplinks to
+  // {profileUrl}?claim=1). Pre-fills the SIRET if the URL also carries
+  // it. Removes the params from the URL so a refresh doesn't re-trigger.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const url = new URL(window.location.href)
+    const claimParam = url.searchParams.get('claim')
+    if (claimParam !== '1') return
+    const siretParam = url.searchParams.get('siret')
+    if (siretParam) {
+      const digits = siretParam.replace(/\D/g, '').slice(0, 14)
+      if (digits.length === 9 || digits.length === 14) setSiret(digits)
+    }
+    setShowModal(true)
+    trackEvent('claim_started' as BookingEvent, { providerId, providerName, source: 'outreach' })
+    capture(EVENT.ARTISAN_CLAIM_STARTED, { providerId, providerName, source: 'outreach' })
+    url.searchParams.delete('claim')
+    url.searchParams.delete('siret')
+    window.history.replaceState({}, '', url.pathname + (url.search ? url.search : '') + url.hash)
+    // intentionally fire-once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Lock body scroll & handle Escape when modal open
   useEffect(() => {
     if (!showModal) return
