@@ -40,6 +40,7 @@ export default function StickyMobileCTA({
   const [hasAnimated, setHasAnimated] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [formInView, setFormInView] = useState(false)
+  const [inputFocused, setInputFocused] = useState(false)
 
   // Hide on /devis pages, connected areas, and when estimation widget is open
   const shouldHide =
@@ -88,6 +89,59 @@ export default function StickyMobileCTA({
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [shouldHide, hasAnimated])
+
+  // Hide the sticky bar while the user is typing in any input — on
+  // mobile the virtual keyboard rises and the CTA would otherwise sit
+  // on top of the field. visualViewport gives the most reliable signal
+  // on iOS Safari (keyboard shrinks the viewport height); focusin /
+  // focusout cover Android and the rare desktop edge case where the
+  // sticky CTA covers a comment box.
+  useEffect(() => {
+    if (shouldHide) return
+
+    const isFocusableInput = (el: EventTarget | null): boolean => {
+      if (!el || !(el instanceof HTMLElement)) return false
+      const tag = el.tagName
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable
+    }
+    const onFocusIn = (e: FocusEvent) => {
+      if (isFocusableInput(e.target)) setInputFocused(true)
+    }
+    const onFocusOut = (e: FocusEvent) => {
+      // Use relatedTarget to detect focus moving between two inputs —
+      // we keep the CTA hidden until focus lands outside any input.
+      if (!isFocusableInput(e.relatedTarget)) setInputFocused(false)
+    }
+    document.addEventListener('focusin', onFocusIn)
+    document.addEventListener('focusout', onFocusOut)
+
+    // visualViewport — iOS Safari shrinks the viewport when the keyboard
+    // is up; treat any >150 px delta as "keyboard open". Bail when
+    // visualViewport is missing (older browsers, Firefox desktop).
+    let removeViewport = () => {}
+    if (typeof window !== 'undefined' && 'visualViewport' in window && window.visualViewport) {
+      const vv = window.visualViewport
+      const baseline = vv.height
+      const onViewportResize = () => {
+        const delta = baseline - vv.height
+        if (delta > 150) setInputFocused(true)
+        else if (delta < 50) {
+          // Only flip back to false when the keyboard fully retracts and
+          // no input still owns focus (covers Android's blur-without-
+          // focusout sequence on some webview chromes).
+          if (!isFocusableInput(document.activeElement)) setInputFocused(false)
+        }
+      }
+      vv.addEventListener('resize', onViewportResize)
+      removeViewport = () => vv.removeEventListener('resize', onViewportResize)
+    }
+
+    return () => {
+      document.removeEventListener('focusin', onFocusIn)
+      document.removeEventListener('focusout', onFocusOut)
+      removeViewport()
+    }
+  }, [shouldHide])
 
   const openSheet = useCallback(() => {
     trackEvent('form_started', {
@@ -139,7 +193,7 @@ export default function StickyMobileCTA({
           fixed left-0 right-0 z-sticky-cta md:hidden
           transition-all duration-300 ease-out
           ${
-            visible && hasAnimated && !formInView
+            visible && hasAnimated && !formInView && !inputFocused
               ? 'translate-y-0 opacity-100'
               : 'translate-y-full opacity-0 pointer-events-none'
           }
@@ -225,7 +279,7 @@ export default function StickyMobileCTA({
           fixed bottom-6 right-6 z-sticky-cta hidden md:block
           transition-all duration-300 ease-out
           ${
-            visible && hasAnimated && !formInView
+            visible && hasAnimated && !formInView && !inputFocused
               ? 'translate-y-0 opacity-100'
               : 'translate-y-8 opacity-0 pointer-events-none'
           }
