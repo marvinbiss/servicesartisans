@@ -1,10 +1,12 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
 import { buildDevisHref } from '@/lib/utils'
+import { useCompare } from '@/components/compare/CompareProvider'
 
 function slugify(text: string): string {
   return text
@@ -159,13 +161,30 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   )
 }
 
-// Mobile CTA bar -- Single dominant CTA, ALWAYS visible
+// Mobile CTA bar — slides in once the user scrolls past the hero, mutes
+// while the compare drawer owns the bottom-0 real estate.
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
+  const [visible, setVisible] = useState(false)
+  const { compareList } = useCompare()
+  const muted = compareList.length > 0
+
+  useEffect(() => {
+    const threshold = 480
+    const onScroll = () => setVisible(window.scrollY > threshold)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const active = visible && !muted
   return (
     <div
-      className="animate-fade-in-up fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-sticky-bar"
+      className={`fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-sticky-bar transition-transform duration-200 motion-reduce:transition-none ${
+        active ? 'translate-y-0' : 'translate-y-full pointer-events-none'
+      }`}
       role="group"
       aria-label="Actions rapides"
+      aria-hidden={!active}
     >
       <div className="flex flex-col items-center gap-2">
         {/* Primary row: Phone + Devis CTA */}
