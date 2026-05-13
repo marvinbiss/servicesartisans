@@ -9,6 +9,7 @@
  */
 
 import type { Metadata } from 'next'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 export default function ClaimConfirmedPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-charcoal-900">Email confirmé</h1>
+      <PageHeroH1 size="article">Email confirmé</PageHeroH1>
       <p className="mt-4 text-charcoal-700">
         Merci, votre adresse email est maintenant validée. Votre demande de revendication est en
         cours d&apos;examen.

@@ -4,6 +4,7 @@ import { Shield, Award, MapPin, ExternalLink, BookOpen, Database } from 'lucide-
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -58,9 +59,7 @@ export default async function BarometreRgePage() {
   if (!snap) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 data-speakable="true" className="text-3xl font-bold text-charcoal-900">
-          Baromètre RGE
-        </h1>
+        <PageHeroH1 size="article">Baromètre RGE</PageHeroH1>
         <p className="mt-4 text-charcoal-600">
           Le premier snapshot mensuel sera publié prochainement. Revenez bientôt.
         </p>

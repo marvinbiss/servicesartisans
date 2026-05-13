@@ -8,6 +8,7 @@
  */
 
 import type { Metadata } from 'next'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default function OutreachUnsubscribedPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-charcoal-900">Vous êtes désinscrit</h1>
+      <PageHeroH1 size="article">Vous êtes désinscrit</PageHeroH1>
       <p className="mt-4 text-charcoal-700">
         Nous ne vous adresserons plus d&apos;emails de prospection. Si vous changez d&apos;avis ou
         souhaitez revendiquer votre fiche artisan plus tard, vous pourrez toujours le faire depuis

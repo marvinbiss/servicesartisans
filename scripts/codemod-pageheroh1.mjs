@@ -31,13 +31,30 @@ import { join, sep } from 'node:path'
 const DRY = process.argv.includes('--dry')
 
 const PATTERNS = [
+  // Standard speakable article H1 (pages CMS, articles, hubs)
   {
     open: '<h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">',
     replace: '<PageHeroH1 size="article">',
   },
+  // Standard speakable page H1 (responsive md:4xl)
   {
     open: '<h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">',
     replace: '<PageHeroH1 size="page">',
+  },
+  // Not-found / error pages — pattern centré avec mb-4
+  {
+    open: '<h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-4">',
+    replace: '<PageHeroH1 size="article" className="mb-4">',
+  },
+  // Mini-confirmations (claim/email/desinscrit) — pas de data-speakable, pas font-heading
+  {
+    open: '<h1 className="text-3xl font-bold text-charcoal-900">',
+    replace: '<PageHeroH1 size="article">',
+  },
+  // Variante speakable sans font-heading
+  {
+    open: '<h1 data-speakable="true" className="text-3xl font-bold text-charcoal-900">',
+    replace: '<PageHeroH1 size="article">',
   },
 ]
 
