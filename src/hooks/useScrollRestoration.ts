@@ -14,8 +14,14 @@ import { useEffect } from 'react'
  * The hook writes the live `scrollTop` to sessionStorage (cheap, scoped
  * to the tab session) under a route-derived key, and reads it back on
  * mount inside a `requestAnimationFrame` so the restoration happens
- * after the new layout is painted. Writes are throttled with a 150 ms
- * trailing timer so a fast scroll doesn't hammer storage.
+ * after the new layout is painted.
+ *
+ * Saves are throttled with a 150 ms trailing timer to avoid hammering
+ * storage on momentum scrolls, but the timer is **flushed immediately**
+ * before any of: a link/button click bubbling up from the panel, a
+ * pagehide / visibilitychange:hidden event, or beforeunload. Without
+ * the flush, a user who scrolled and then tapped a card in under
+ * 150 ms would lose their position on back-nav.
  */
 export function useScrollRestoration(
   ref: React.RefObject<HTMLElement | null>,
@@ -46,23 +52,52 @@ export function useScrollRestoration(
     })
 
     let timer: ReturnType<typeof setTimeout> | null = null
+    const writeNow = () => {
+      try {
+        sessionStorage.setItem(storageKey, String(el.scrollTop))
+      } catch {
+        // ignore
+      }
+    }
+    const flush = () => {
+      if (timer) {
+        clearTimeout(timer)
+        timer = null
+      }
+      writeNow()
+    }
     const onScroll = () => {
       if (!restored) return
       if (timer) clearTimeout(timer)
-      timer = setTimeout(() => {
-        try {
-          sessionStorage.setItem(storageKey, String(el.scrollTop))
-        } catch {
-          // ignore
-        }
-      }, 150)
+      timer = setTimeout(writeNow, 150)
     }
+    // Anchor / button clicks inside the panel race the 150 ms timer.
+    // Flush in capture phase so we win even if the handler navigates
+    // synchronously.
+    const onClickCapture = (e: Event) => {
+      if (!restored) return
+      const target = e.target as Element | null
+      if (target && target.closest('a,button')) {
+        flush()
+      }
+    }
+    const onPageHide = () => flush()
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') flush()
+    }
+
     el.addEventListener('scroll', onScroll, { passive: true })
+    el.addEventListener('click', onClickCapture, { capture: true })
+    window.addEventListener('pagehide', onPageHide)
+    document.addEventListener('visibilitychange', onVisibilityChange)
 
     return () => {
       cancelAnimationFrame(rafId)
       if (timer) clearTimeout(timer)
       el.removeEventListener('scroll', onScroll)
+      el.removeEventListener('click', onClickCapture, { capture: true } as EventListenerOptions)
+      window.removeEventListener('pagehide', onPageHide)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
     }
   }, [ref, storageKey])
 }

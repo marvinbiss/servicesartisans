@@ -69,4 +69,46 @@ describe('useScrollRestoration', () => {
     await vi.advanceTimersByTimeAsync(20)
     expect(el.scrollTop).toBe(0)
   })
+
+  it('flushes immediately on click inside the panel (beats 150 ms timer)', async () => {
+    vi.useFakeTimers()
+    const el = document.createElement('div')
+    Object.defineProperty(el, 'scrollTop', { value: 0, writable: true })
+    const anchor = document.createElement('a')
+    anchor.href = '#x'
+    el.appendChild(anchor)
+    document.body.appendChild(el)
+
+    renderWith(el, 'sa:listing-scroll:/flush')
+    await vi.advanceTimersByTimeAsync(20)
+
+    // Simulate fast scroll → click in under 150 ms
+    el.scrollTop = 250
+    el.dispatchEvent(new Event('scroll'))
+    // Click bubbles up through the panel before the trailing timer fires
+    anchor.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
+    // Without flush the value would still be null at this point. With flush
+    // it's already persisted.
+    expect(sessionStorage.getItem('sa:listing-scroll:/flush')).toBe('250')
+    document.body.removeChild(el)
+  })
+
+  it('flushes on visibilitychange→hidden', async () => {
+    vi.useFakeTimers()
+    const el = document.createElement('div')
+    Object.defineProperty(el, 'scrollTop', { value: 0, writable: true })
+    document.body.appendChild(el)
+
+    renderWith(el, 'sa:listing-scroll:/vis')
+    await vi.advanceTimersByTimeAsync(20)
+
+    el.scrollTop = 99
+    el.dispatchEvent(new Event('scroll'))
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true })
+    document.dispatchEvent(new Event('visibilitychange'))
+
+    expect(sessionStorage.getItem('sa:listing-scroll:/vis')).toBe('99')
+    document.body.removeChild(el)
+  })
 })
