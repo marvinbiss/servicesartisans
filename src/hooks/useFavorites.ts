@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { clearFavoritesMeta, removeFavoriteMeta } from '@/lib/storage/favorites-meta'
 
 const STORAGE_KEY = 'sa_favorites'
 const FAVORITES_EVENT = 'sa_favorites_changed'
@@ -64,10 +65,12 @@ export function useFavorites() {
 
   const toggleFavorite = useCallback((providerId: string) => {
     setFavorites((prev) => {
-      const next = prev.includes(providerId)
-        ? prev.filter((id) => id !== providerId)
-        : [...prev, providerId]
+      const wasFavorite = prev.includes(providerId)
+      const next = wasFavorite ? prev.filter((id) => id !== providerId) : [...prev, providerId]
       writeFavorites(next)
+      // Keep meta companion store in sync: drop meta on un-favorite. Add-side
+      // is owned by FavoriteButton where the caller has the display data.
+      if (wasFavorite) removeFavoriteMeta(providerId)
       return next
     })
   }, [])
@@ -75,6 +78,7 @@ export function useFavorites() {
   const clearFavorites = useCallback(() => {
     setFavorites([])
     writeFavorites([])
+    clearFavoritesMeta()
   }, [])
 
   return {

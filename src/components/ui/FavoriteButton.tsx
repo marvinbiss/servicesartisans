@@ -4,10 +4,16 @@ import { Heart } from 'lucide-react'
 import { useState, useEffect, useCallback } from 'react'
 import { useFavorites } from '@/hooks/useFavorites'
 import { cn } from '@/lib/utils'
+import { setFavoriteMeta, removeFavoriteMeta } from '@/lib/storage/favorites-meta'
 
 interface FavoriteButtonProps {
   providerId: string
   providerName: string
+  /** Captured at favorite time so /mes-favoris can render without an extra fetch. */
+  providerHref?: string
+  providerSlug?: string | null
+  providerCity?: string | null
+  providerSpecialty?: string | null
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
@@ -21,6 +27,10 @@ const sizeMap = {
 export function FavoriteButton({
   providerId,
   providerName,
+  providerHref,
+  providerSlug = null,
+  providerCity = null,
+  providerSpecialty = null,
   size = 'md',
   className,
 }: FavoriteButtonProps) {
@@ -46,6 +56,21 @@ export function FavoriteButton({
       const willBeFavorite = !favorited
       toggleFavorite(providerId)
 
+      // Companion metadata store (sa:favorites-meta:v1) — keeps name/slug/
+      // city/specialty/href so /mes-favoris renders without an extra fetch.
+      if (willBeFavorite && providerHref) {
+        setFavoriteMeta({
+          id: providerId,
+          name: providerName,
+          slug: providerSlug,
+          specialty: providerSpecialty,
+          city: providerCity,
+          href: providerHref,
+        })
+      } else if (!willBeFavorite) {
+        removeFavoriteMeta(providerId)
+      }
+
       // Trigger bounce animation
       setAnimating(true)
       setTimeout(() => setAnimating(false), 300)
@@ -55,7 +80,16 @@ export function FavoriteButton({
         willBeFavorite ? `${providerName} ajouté aux favoris` : `${providerName} retiré des favoris`
       )
     },
-    [favorited, toggleFavorite, providerId, providerName]
+    [
+      favorited,
+      toggleFavorite,
+      providerId,
+      providerName,
+      providerHref,
+      providerSlug,
+      providerSpecialty,
+      providerCity,
+    ]
   )
 
   return (

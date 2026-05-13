@@ -68,6 +68,10 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
       <FavoriteButton
         providerId={provider.stable_id || provider.id}
         providerName={provider.name}
+        providerHref={providerUrl}
+        providerSlug={provider.slug ?? null}
+        providerCity={provider.address_city ?? null}
+        providerSpecialty={provider.specialty ?? null}
         size="sm"
         className="absolute top-3 right-3 z-30"
       />
