@@ -49,7 +49,9 @@ export default function ProviderList({
     sortBy: 'name',
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [resultsAnnouncement, setResultsAnnouncement] = useState('')
   const listRef = useRef<HTMLDivElement>(null)
+  const previousCountRef = useRef<number | null>(null)
   const reducedMotion = useReducedMotion()
   const pathname = usePathname()
 
@@ -144,6 +146,28 @@ export default function ProviderList({
     })
   }, [providers, filters, rgeClientFilter, searchQuery, effectiveSortBy, today])
 
+  // SR live-region announcement when the result count changes via a
+  // user-driven filter / sort interaction. We compare against the
+  // previous count rather than firing on every mount so the initial
+  // page load doesn't double-announce alongside the page title.
+  useEffect(() => {
+    if (isLoading) return
+    const count = displayedProviders.length
+    if (previousCountRef.current === null) {
+      previousCountRef.current = count
+      return
+    }
+    if (previousCountRef.current === count) return
+    previousCountRef.current = count
+    if (count === 0) {
+      setResultsAnnouncement('Aucun artisan ne correspond à vos filtres')
+    } else {
+      setResultsAnnouncement(
+        `${count} artisan${count > 1 ? 's' : ''} affiché${count > 1 ? 's' : ''}`
+      )
+    }
+  }, [displayedProviders.length, isLoading])
+
   return (
     <div className="flex flex-col h-full">
       {/* Filters */}
@@ -195,11 +219,18 @@ export default function ProviderList({
             ))}
           </ul>
         ) : (
-          <div className="text-center py-12" role="status" aria-live="polite">
+          <div className="text-center py-12">
             <p className="text-charcoal-500 text-lg">Aucun artisan trouvé</p>
             <p className="text-charcoal-400 text-sm mt-2">Essayez de modifier vos filtres</p>
           </div>
         )}
+      </div>
+
+      {/* Single SR-only live region for filter / sort result changes —
+          kept outside the visible empty-state so the announcement fires
+          exactly once per count transition, not twice. */}
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {resultsAnnouncement}
       </div>
     </div>
   )
