@@ -480,7 +480,7 @@ export default function ServiceLocationPageClient({
                 <p className="text-charcoal-500 font-medium">Chargement des artisans...</p>
               </div>
             ) : allProviders.length === 0 ? (
-              /* Empty state when 0 providers */
+              /* Empty state when 0 providers — primary CTA devis + fallback élargir zone */
               <div className="flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
                 <div className="w-16 h-16 bg-sand-200 rounded-2xl flex items-center justify-center mb-6">
                   <SearchX className="w-8 h-8 text-charcoal-400" />
@@ -490,16 +490,24 @@ export default function ServiceLocationPageClient({
                 </h2>
                 <p className="text-charcoal-500 max-w-md mb-8">
                   Demandez un devis et nous rechercherons un artisan RGE certifié pour vous dans les
-                  plus brefs délais.
+                  plus brefs délais. Réponse sous 24-48h ouvrées.
                 </p>
-                <Link
-                  href={buildDevisHref(serviceSlug || service.slug, location.name)}
-                  className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-base"
-                >
-                  <FileText className="w-5 h-5" />
-                  Recevoir mes devis gratuits
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href={buildDevisHref(serviceSlug || service.slug, location.name)}
+                    className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-base"
+                  >
+                    <FileText className="w-5 h-5" />
+                    Recevoir mes devis gratuits
+                    <ArrowRight className="w-5 h-5" />
+                  </Link>
+                  <Link
+                    href={`/services/${serviceSlug || service.slug}`}
+                    className="inline-flex items-center justify-center gap-2 border-2 border-charcoal-300 text-charcoal-700 hover:bg-sand-100 font-semibold px-6 py-3.5 rounded-xl transition-all duration-200 text-base"
+                  >
+                    Voir d&apos;autres villes
+                  </Link>
+                </div>
               </div>
             ) : (
               <>

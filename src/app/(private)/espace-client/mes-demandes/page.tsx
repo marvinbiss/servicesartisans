@@ -19,6 +19,7 @@ import LeadRecommendations from '@/components/client/LeadRecommendations'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { StatCard } from '@/components/dashboard/StatCard'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { URGENCY_META } from '@/types/leads'
 
 interface ClientLead {
@@ -241,16 +242,30 @@ export default function MesDemandesPage() {
                 <p className="text-sm text-charcoal-500 mt-2">Chargement...</p>
               </div>
             ) : filtered.length === 0 ? (
-              <div className="bg-white rounded-xl border border-sand-300 p-12 text-center">
-                <div className="w-14 h-14 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-7 h-7 text-charcoal-400" />
-                </div>
-                <p className="text-charcoal-500 font-medium text-lg">Aucune demande</p>
-                <p className="text-charcoal-400 text-sm mt-2">
-                  {searchQuery
-                    ? 'Aucun résultat pour cette recherche.'
-                    : 'Vos demandes de devis apparaîtront ici.'}
-                </p>
+              <div className="bg-white rounded-xl border border-sand-300">
+                {searchQuery ? (
+                  <EmptyState
+                    variant="search"
+                    title="Aucun résultat pour cette recherche"
+                    description={`Essayez un autre mot-clé que « ${searchQuery} » ou retirez le filtre actif.`}
+                    action={{ label: 'Effacer la recherche', onClick: () => setSearchQuery('') }}
+                    secondaryAction={{
+                      label: 'Voir toutes les demandes',
+                      onClick: () => {
+                        setSearchQuery('')
+                        setStatusFilter('all')
+                      },
+                    }}
+                  />
+                ) : (
+                  <EmptyState
+                    variant="inbox"
+                    title="Aucune demande pour le moment"
+                    description="Vos demandes de devis apparaîtront ici dès que vous en aurez créé. Décrivez votre projet et nous trouverons un artisan RGE certifié."
+                    action={{ label: 'Créer une demande de devis', href: '/devis' }}
+                    secondaryAction={{ label: 'Parcourir les artisans', href: '/artisans' }}
+                  />
+                )}
               </div>
             ) : (
               <>

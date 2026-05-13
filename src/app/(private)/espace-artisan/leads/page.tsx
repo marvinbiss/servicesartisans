@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
-  FileText,
   Clock,
   MapPin,
   Phone,
@@ -24,6 +23,7 @@ import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { LeadsTrendChart } from '@/components/dashboard/LeadsTrendChart'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface Assignment {
   id: string
@@ -342,16 +342,23 @@ export default function ArtisanLeadsInbox() {
 
             {/* Lead list */}
             {paginated.length === 0 ? (
-              <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
-                <div className="w-14 h-14 bg-sand-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-7 h-7 text-charcoal-400" />
-                </div>
-                <p className="text-charcoal-500 font-medium text-lg">Aucun lead</p>
-                <p className="text-charcoal-400 text-sm mt-2">
-                  {searchQuery
-                    ? 'Aucun résultat pour cette recherche.'
-                    : 'Les demandes de devis vous seront attribuées automatiquement.'}
-                </p>
+              <div className="bg-white rounded-xl border border-sand-200">
+                {searchQuery ? (
+                  <EmptyState
+                    variant="search"
+                    title="Aucun lead pour cette recherche"
+                    description={`Pas de résultat pour « ${searchQuery} ». Essayez un autre mot-clé ou retirez le filtre.`}
+                    action={{ label: 'Effacer la recherche', onClick: () => setSearchQuery('') }}
+                  />
+                ) : (
+                  <EmptyState
+                    variant="inbox"
+                    title="Aucun lead pour le moment"
+                    description="Les demandes de devis correspondant à votre métier et votre zone vous seront attribuées automatiquement. Complétez votre fiche pour augmenter vos chances."
+                    action={{ label: 'Compléter ma fiche', href: '/espace-artisan/profil' }}
+                    secondaryAction={{ label: 'Mes statistiques', href: '/espace-artisan' }}
+                  />
+                )}
               </div>
             ) : (
               <>
