@@ -21,6 +21,12 @@ import type { DevisFormData } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
 import { loadUserContactPrefs, saveUserContactPrefs } from '@/lib/storage/user-prefs'
+import {
+  loadDevisDraft,
+  saveDevisDraft,
+  clearDevisDraft,
+  formatDraftSavedAt,
+} from '@/lib/storage/devis-draft'
 
 const budgetOptions = [
   { value: 'moins-500', label: 'Moins de 500 €' },
@@ -66,8 +72,6 @@ const serviceSubcategories: Record<string, string[]> = {
   macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
   jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],
 }
-
-const STORAGE_KEY = 'sa:devis-draft'
 
 const stepTitles = [
   {
@@ -208,11 +212,7 @@ export default function DevisForm({
         setCeeEligible(true)
         setCeeOperationCodes(body.cee_operation_codes || [])
       }
-      try {
-        localStorage.removeItem(STORAGE_KEY)
-      } catch {
-        // ignore
-      }
+      clearDevisDraft()
       // Persist contact info for prefill on the next quote — the user already
       // consented to share these when submitting (RGPD consent checkbox).
       saveUserContactPrefs({
@@ -232,11 +232,7 @@ export default function DevisForm({
     if (prefillAppliedRef.current) return
     prefillAppliedRef.current = true
     if (isPrefilled) return
-    try {
-      if (localStorage.getItem(STORAGE_KEY)) return // draft will handle restoration
-    } catch {
-      // ignore
-    }
+    if (loadDevisDraft()) return // draft will handle restoration
     const prefs = loadUserContactPrefs()
     if (!prefs) return
     form.setFormData((prev) => ({
@@ -251,37 +247,27 @@ export default function DevisForm({
   const [showResumeBanner, setShowResumeBanner] = useState(false)
   const [savedService, setSavedService] = useState('')
   const [savedVille, setSavedVille] = useState('')
+  const [savedAtLabel, setSavedAtLabel] = useState('')
 
   useEffect(() => {
     if (isPrefilled) return
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (!saved) return
-      const parsed = JSON.parse(saved)
-      if (parsed.step && parsed.step > 1 && parsed.formData) {
-        setSavedService(parsed.formData.service || '')
-        setSavedVille(parsed.formData.ville || '')
-        setShowResumeBanner(true)
-      }
-    } catch {
-      // ignore
+    const draft = loadDevisDraft()
+    if (!draft) return
+    if (draft.step > 1) {
+      setSavedService(draft.formData.service || '')
+      setSavedVille(draft.formData.ville || '')
+      setSavedAtLabel(formatDraftSavedAt(draft.savedAt))
+      setShowResumeBanner(true)
     }
   }, [isPrefilled])
 
   const handleResume = useCallback(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (!saved) return
-      const parsed = JSON.parse(saved)
-      if (parsed.step) {
-        const targetStep = (parsed.step === 4 ? 3 : parsed.step > 3 ? 1 : parsed.step) as 1 | 2 | 3
-        form.setStep(targetStep)
-        if (parsed.formData) form.setFormData({ ...initialDevisFormData, ...parsed.formData })
-        if (parsed.villeQuery) form.setVilleQuery(parsed.villeQuery)
-        if (parsed.selectedVillePostal) setSelectedVillePostal(parsed.selectedVillePostal)
-      }
-    } catch {
-      // ignore
+    const draft = loadDevisDraft()
+    if (draft) {
+      form.setStep(draft.step)
+      form.setFormData({ ...initialDevisFormData, ...draft.formData })
+      if (draft.villeQuery) form.setVilleQuery(draft.villeQuery)
+      if (draft.selectedVillePostal) setSelectedVillePostal(draft.selectedVillePostal)
     }
     setShowResumeBanner(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -297,11 +283,7 @@ export default function DevisForm({
   }, [])
 
   const handleDismiss = useCallback(() => {
-    try {
-      localStorage.removeItem(STORAGE_KEY)
-    } catch {
-      // ignore
-    }
+    clearDevisDraft()
     form.resetForm()
     form.setVilleQuery('')
     setSelectedVillePostal('')
@@ -402,19 +384,12 @@ export default function DevisForm({
 
   useEffect(() => {
     if (form.submitted || showResumeBanner) return
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          formData: form.formData,
-          step: form.step,
-          villeQuery: form.villeQuery,
-          selectedVillePostal,
-        })
-      )
-    } catch {
-      // ignore
-    }
+    saveDevisDraft({
+      formData: form.formData,
+      step: form.step,
+      villeQuery: form.villeQuery,
+      selectedVillePostal,
+    })
   }, [
     form.formData,
     form.step,
@@ -676,7 +651,12 @@ export default function DevisForm({
       {showResumeBanner && (
         <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 mb-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-primary-800">Vous aviez commencé une demande</p>
+            <p className="text-sm font-medium text-primary-800">
+              Vous aviez commencé une demande
+              {savedAtLabel && (
+                <span className="font-normal text-primary-600"> — sauvegardée {savedAtLabel}</span>
+              )}
+            </p>
             <p className="text-xs text-primary-600">
               {savedService && (
                 <>Service : {services.find((s) => s.slug === savedService)?.name || savedService}</>
