@@ -1,9 +1,19 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  ReactNode,
+} from 'react'
 import { useToast } from '@/hooks/useToast'
 import { ToastContainer } from '@/components/ui/Toast'
 import type { RgeQualification } from '@/lib/rge/has-active-qualification'
+import { loadCompareList, saveCompareList } from '@/lib/storage/compare-store'
 
 const MAX_COMPARE = 3
 
@@ -39,13 +49,30 @@ interface CompareContextType {
   removeFromCompare: (providerId: string) => void
   isInCompare: (providerId: string) => boolean
   clearCompare: () => void
+  notifySuccess: (title: string, message?: string) => void
+  notifyError: (title: string, message?: string) => void
 }
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined)
 
 export function CompareProviderWrapper({ children }: { children: ReactNode }) {
   const [compareList, setCompareList] = useState<CompareProvider[]>([])
-  const { toasts, removeToast, warning } = useToast()
+  const hydratedRef = useRef(false)
+  const { toasts, removeToast, warning, success, error } = useToast()
+
+  // Hydrate from localStorage once on mount.
+  useEffect(() => {
+    const stored = loadCompareList()
+    if (stored.length > 0) setCompareList(stored)
+    hydratedRef.current = true
+  }, [])
+
+  // Persist after hydration so the initial empty-state pass doesn't clobber
+  // a previously saved list.
+  useEffect(() => {
+    if (!hydratedRef.current) return
+    saveCompareList(compareList)
+  }, [compareList])
 
   const addToCompare = useCallback(
     (provider: CompareProvider) => {
@@ -76,6 +103,20 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
     setCompareList([])
   }, [])
 
+  const notifySuccess = useCallback(
+    (title: string, message?: string) => {
+      success(title, message)
+    },
+    [success]
+  )
+
+  const notifyError = useCallback(
+    (title: string, message?: string) => {
+      error(title, message)
+    },
+    [error]
+  )
+
   const value = useMemo(
     () => ({
       compareList,
@@ -83,8 +124,18 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
       removeFromCompare,
       isInCompare,
       clearCompare,
+      notifySuccess,
+      notifyError,
     }),
-    [compareList, addToCompare, removeFromCompare, isInCompare, clearCompare]
+    [
+      compareList,
+      addToCompare,
+      removeFromCompare,
+      isInCompare,
+      clearCompare,
+      notifySuccess,
+      notifyError,
+    ]
   )
 
   return (
@@ -101,6 +152,8 @@ const noopContext: CompareContextType = {
   removeFromCompare: () => {},
   isInCompare: () => false,
   clearCompare: () => {},
+  notifySuccess: () => {},
+  notifyError: () => {},
 }
 
 export function useCompare() {

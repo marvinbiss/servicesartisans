@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Scale } from 'lucide-react'
+import { X, Scale, Share2 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useCompare } from '@/components/compare/CompareProvider'
+import { buildCompareShareUrl } from '@/lib/storage/compare-store'
 import { CompareView } from './CompareView'
 
 function ProviderInitial({ name, index }: { name: string; index: number }) {
@@ -22,10 +23,30 @@ function ProviderInitial({ name, index }: { name: string; index: number }) {
 }
 
 export function CompareBar() {
-  const { compareList, removeFromCompare, clearCompare } = useCompare()
+  const { compareList, removeFromCompare, clearCompare, notifySuccess, notifyError } = useCompare()
   const [showModal, setShowModal] = useState(false)
 
   if (compareList.length === 0) return null
+
+  const handleShare = async () => {
+    const url = buildCompareShareUrl(compareList)
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Ma sélection d’artisans',
+          text: `Je compare ${compareList.length} artisan(s) sur ServicesArtisans`,
+          url,
+        })
+        return
+      }
+      await navigator.clipboard.writeText(url)
+      notifySuccess('Lien copié', 'Collez-le pour partager votre comparatif')
+    } catch (err) {
+      // navigator.share AbortError when the user dismisses the OS sheet — silent
+      if (err instanceof Error && err.name === 'AbortError') return
+      notifyError('Impossible de partager', url)
+    }
+  }
 
   return (
     <>
@@ -72,6 +93,14 @@ export function CompareBar() {
 
             {/* Actions */}
             <div className="flex items-center gap-2 flex-shrink-0">
+              <button
+                onClick={handleShare}
+                className="inline-flex items-center gap-1.5 text-sm text-charcoal-600 hover:text-primary-600 transition-colors px-2 py-1.5 rounded-lg hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
+                aria-label="Partager ce comparatif"
+              >
+                <Share2 className="w-4 h-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Partager</span>
+              </button>
               <button
                 onClick={clearCompare}
                 className="text-sm text-charcoal-500 hover:text-red-600 transition-colors px-2 py-1.5 rounded-lg hover:bg-red-50"
