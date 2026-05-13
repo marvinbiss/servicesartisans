@@ -410,12 +410,23 @@ export default function HeaderClient({
             </Link>
 
             {/* Quick Search */}
-            <div className="hidden md:flex flex-1 min-w-[220px] max-w-xl mx-4 lg:mx-8">
+            <div className="hidden md:flex flex-1 min-w-[220px] max-w-xl mx-4 lg:mx-8 items-center gap-2">
               {mounted ? (
                 <QuickSearch />
               ) : (
                 <div className="w-full rounded-full border border-sand-300 bg-sand-50 h-[38px]" />
               )}
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event('sa:open-command-palette'))}
+                className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-charcoal-500 bg-sand-50 hover:bg-sand-100 border border-sand-300 rounded-lg transition-colors"
+                aria-label="Recherche rapide (Ctrl+K)"
+                title="Recherche rapide"
+              >
+                <kbd className="font-mono text-[10px] px-1 rounded bg-white border border-sand-300">
+                  ⌘K
+                </kbd>
+              </button>
             </div>
 
             {/* Navigation Desktop */}
