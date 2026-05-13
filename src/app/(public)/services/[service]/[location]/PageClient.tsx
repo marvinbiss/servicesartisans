@@ -20,6 +20,9 @@ import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 import { RgeTracking } from '@/lib/analytics/tracking'
 import { buildDevisHref } from '@/lib/utils'
+import { SaveSearchButton } from '@/components/providers/SaveSearchButton'
+import { FilterPanel, countActiveFilters, parseFilters } from '@/components/providers/FilterPanel'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
 
@@ -201,10 +204,30 @@ export default function ServiceLocationPageClient({
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Memoize providers for the map — avoids recreating the cluster on every render
+  // Read URL filters + derive filtered list (client-side over `allProviders`).
+  // `rgeOnly` reste géré séparément (déclenche un re-fetch serveur). Les
+  // filtres ci-dessous sont strictement client-side : aucune requête réseau
+  // pour les toggles, latence < 16ms.
+  const filters = useMemo(() => parseFilters(searchParams), [searchParams])
+  const activeFilterCount = countActiveFilters(filters)
+  const filteredProviders = useMemo(() => {
+    if (activeFilterCount === 0) return allProviders
+    return allProviders.filter((p) => {
+      if (filters.rge && !hasActiveRgeQualification(p.rge_qualifications)) return false
+      if (filters.verified && !p.is_verified) return false
+      if (filters.claimed && !p.user_id) return false
+      if (filters.emergency && !p.emergency_available) return false
+      if (filters.freeQuote && !p.free_quote) return false
+      if (filters.ratingMin > 0 && (p.rating_average ?? 0) < filters.ratingMin) return false
+      return true
+    })
+  }, [allProviders, filters, activeFilterCount])
+
+  // Memoize providers for the map — uses `filteredProviders` pour synchro
+  // liste/carte avec les filtres actifs.
   const mapProviders = useMemo(
     () =>
-      allProviders.map((p) => ({
+      filteredProviders.map((p) => ({
         id: p.id,
         name: p.name || '',
         stable_id: p.stable_id ?? undefined,
@@ -219,7 +242,7 @@ export default function ServiceLocationPageClient({
         address_street: p.address_street,
         address_postal_code: p.address_postal_code,
       })),
-    [allProviders]
+    [filteredProviders]
   )
 
   // Default center: location coordinates -> provider average -> France fallback
@@ -298,49 +321,61 @@ export default function ServiceLocationPageClient({
                 </span>
               </div>
 
-              {recentDevisCount >= 120 && (
+              {/* Compteur réel issu de `devis_requests.created_at` >= now()-30j
+                  filtré par ville. Seuil 25 plutôt que 120 pour exposer le
+                  signal sur les villes moyennes — la donnée reste authentique
+                  (issue de la table, pas d'un compteur fabriqué). */}
+              {recentDevisCount >= 25 && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent-50 text-accent-700 rounded-full text-sm font-medium mt-2">
                   <span className="w-2 h-2 bg-accent-500 rounded-full animate-pulse" />
-                  {recentDevisCount} devis demand{'e'}
-                  {recentDevisCount > 1 ? 's' : ''} ce mois-ci
+                  {recentDevisCount} devis envoyés ces 30 derniers jours
                 </div>
               )}
             </div>
 
-            {/* View toggle - Desktop */}
-            <div className="hidden md:flex items-center gap-1 bg-sand-200 rounded-lg p-1">
-              <button
-                onClick={() => setViewMode('split')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'split'
-                    ? 'bg-white text-charcoal-900 shadow-soft'
-                    : 'text-charcoal-600 hover:text-charcoal-900'
-                }`}
-              >
-                Les deux
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
-                  viewMode === 'list'
-                    ? 'bg-white text-charcoal-900 shadow-soft'
-                    : 'text-charcoal-600 hover:text-charcoal-900'
-                }`}
-              >
-                <List className="w-4 h-4" />
-                Liste
-              </button>
-              <button
-                onClick={() => setViewMode('map')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
-                  viewMode === 'map'
-                    ? 'bg-white text-charcoal-900 shadow-soft'
-                    : 'text-charcoal-600 hover:text-charcoal-900'
-                }`}
-              >
-                <MapIcon className="w-4 h-4" />
-                Carte
-              </button>
+            {/* Save search + View toggle (desktop, regroupés à droite du H1) */}
+            <div className="hidden md:flex items-center gap-2">
+              <SaveSearchButton
+                service={serviceSlug || service.slug}
+                serviceLabel={service.name}
+                ville={locationSlug || location.slug}
+                villeLabel={location.name}
+                filters={rgeOnly ? 'rge=1' : ''}
+              />
+              <div className="flex items-center gap-1 bg-sand-200 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('split')}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === 'split'
+                      ? 'bg-white text-charcoal-900 shadow-soft'
+                      : 'text-charcoal-600 hover:text-charcoal-900'
+                  }`}
+                >
+                  Les deux
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                    viewMode === 'list'
+                      ? 'bg-white text-charcoal-900 shadow-soft'
+                      : 'text-charcoal-600 hover:text-charcoal-900'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                  Liste
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1 ${
+                    viewMode === 'map'
+                      ? 'bg-white text-charcoal-900 shadow-soft'
+                      : 'text-charcoal-600 hover:text-charcoal-900'
+                  }`}
+                >
+                  <MapIcon className="w-4 h-4" />
+                  Carte
+                </button>
+              </div>
             </div>
 
             {/* View toggle - Mobile */}
@@ -522,17 +557,38 @@ export default function ServiceLocationPageClient({
                     </p>
                   </div>
                 )}
-                <ProviderList
-                  providers={allProviders}
-                  onProviderHover={setSelectedProvider}
-                  totalCount={liveCount || allProviders.length}
-                  searchQuery={searchQuery}
-                  sortOrder={sortOrder}
-                  highlightedProviderId={mapHoveredProviderId}
-                  rgeOnly={rgeOnly}
-                  onRgeToggle={handleRgeToggle}
-                />
-                {hasMore && (
+                <div className="mx-4 mt-3 mb-2">
+                  <FilterPanel resultCount={filteredProviders.length} variant="inline" />
+                </div>
+                {activeFilterCount > 0 && filteredProviders.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center text-center px-6 py-12">
+                    <div className="w-14 h-14 bg-sand-200 rounded-2xl flex items-center justify-center mb-4">
+                      <SearchX className="w-7 h-7 text-charcoal-400" />
+                    </div>
+                    <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
+                      Aucun artisan ne correspond à ces filtres
+                    </h3>
+                    <p className="text-charcoal-500 text-sm max-w-sm">
+                      Essayez d&apos;assouplir vos critères depuis le panneau de filtres ci-dessus.
+                    </p>
+                  </div>
+                ) : (
+                  <ProviderList
+                    providers={filteredProviders}
+                    onProviderHover={setSelectedProvider}
+                    totalCount={
+                      activeFilterCount > 0
+                        ? filteredProviders.length
+                        : liveCount || allProviders.length
+                    }
+                    searchQuery={searchQuery}
+                    sortOrder={sortOrder}
+                    highlightedProviderId={mapHoveredProviderId}
+                    rgeOnly={rgeOnly}
+                    onRgeToggle={handleRgeToggle}
+                  />
+                )}
+                {hasMore && activeFilterCount === 0 && (
                   <div className="p-4 border-t border-sand-200 bg-white sticky bottom-0">
                     <button
                       onClick={loadMore}
