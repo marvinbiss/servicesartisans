@@ -39,6 +39,9 @@ const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWork
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
+const ScrollToTop = dynamic(() => import('@/components/ui/ScrollToTop'), {
+  ssr: false,
+})
 const WebVitals = dynamic(
   () => import('@/components/WebVitals').then((mod) => ({ default: mod.WebVitals })),
   { ssr: false }
@@ -292,6 +295,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <CommandPaletteMount />
             <ServiceWorkerRegistration />
             <CookieConsent />
+            <ScrollToTop />
             <SpeedInsights />
           </CompareProviderWrapper>
         </MobileMenuProvider>
