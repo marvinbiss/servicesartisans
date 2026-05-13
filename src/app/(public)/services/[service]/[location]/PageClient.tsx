@@ -28,6 +28,7 @@ import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 import { StickyMobileDevisCTA } from '@/components/providers/StickyMobileDevisCTA'
 import { SmartEmptyState } from '@/components/providers/SmartEmptyState'
 import { HubReviewsCarousel } from '@/components/providers/HubReviewsCarousel'
+import { PriceTransparencyCard } from '@/components/providers/PriceTransparencyCard'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -569,6 +570,14 @@ export default function ServiceLocationPageClient({
                     ? `${filteredProviders.length} artisan${filteredProviders.length > 1 ? 's' : ''} après filtrage`
                     : ''}
                 </div>
+                {filteredProviders.length > 0 && (
+                  <PriceTransparencyCard
+                    providers={filteredProviders}
+                    specialty={serviceSlug || service.slug}
+                    serviceName={service.name}
+                    locationName={location.name}
+                  />
+                )}
                 {filteredProviders.length > 0 && (
                   <HubReviewsCarousel
                     providerIds={filteredProviders.slice(0, 20).map((p) => p.id)}
