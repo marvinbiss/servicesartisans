@@ -96,11 +96,14 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
 
       {/* Avatar, Nom et verification */}
       <div className="flex items-start gap-4 mb-3">
-        {/* Avatar / Initials */}
+        {/* Avatar duplicate-link hidden from AT to avoid double-announce
+            with the name link. Img alt stays for image-search SEO. */}
         <Link
           href={providerUrl}
           rel={linkRel}
-          className="flex-shrink-0"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="flex-shrink-0 focus:outline-none"
           onClick={() =>
             trackEvent('artisan_listing_click', {
               artisanId: provider.stable_id || provider.id,
@@ -109,7 +112,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             })
           }
         >
-          <div className="w-12 h-12 rounded-full overflow-hidden shadow-soft flex-shrink-0">
+          <div className="w-12 h-12 rounded-full overflow-hidden shadow-soft flex-shrink-0 bg-sand-100">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getDiceBearAvatar(provider.siret || provider.slug || provider.name, 96)}
@@ -117,6 +120,23 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
               width={48}
               height={48}
               loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                // DiceBear hiccup → swap to a CSS-only initial bubble so
+                // the layout reserves its 48 × 48 footprint and we don't
+                // leave a broken-image icon.
+                const img = e.currentTarget
+                img.style.display = 'none'
+                const parent = img.parentElement
+                if (parent && !parent.querySelector('[data-avatar-fallback]')) {
+                  const fallback = document.createElement('div')
+                  fallback.setAttribute('data-avatar-fallback', '')
+                  fallback.className =
+                    'w-full h-full flex items-center justify-center bg-primary-100 text-primary-700 font-semibold text-base'
+                  fallback.textContent = (provider.name || 'A').charAt(0).toUpperCase()
+                  parent.appendChild(fallback)
+                }
+              }}
               className="w-full h-full"
             />
           </div>
