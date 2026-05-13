@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock } from 'lucide-react'
 import { getServiceBySlug, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
-import { getValidCitySlugsForService } from '@/lib/seo/valid-combos'
+import { getValidCityCountsForService } from '@/lib/seo/valid-combos'
 import JsonLd from '@/components/JsonLd'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import EnBrefBox from '@/components/seo/EnBrefBox'
@@ -58,6 +58,7 @@ interface CityInfo {
   slug: string
   department_code?: string
   region_name?: string
+  rgeCount?: number
 }
 
 /** Shape returned by getProvidersByService (provider with joined location) */
@@ -255,13 +256,16 @@ export default async function ServicePage({ params }: PageProps) {
   })
 
   // Top 12 cities — single source of truth via mat-view `mv_provider_counts`
-  // (mig 312 + 516, RGE-aware). Le helper retourne déjà les villes triées par
-  // count RGE descendant et exclut les combos sans aucun artisan RGE actif.
+  // (mig 312 + 516, RGE-aware). Le helper retourne villes triées par count RGE
+  // descendant ET le count pour rendre un badge "X artisans RGE" social proof.
   // Avant pivot full RGE, ce hub listait des villes statiques qui partaient en
   // notFound() côté /services/[s]/[v] (~50% des cas). Cf. lib/seo/valid-combos.ts.
-  const validCitySlugs = new Set(await getValidCitySlugsForService(serviceSlug, { limit: 30 }))
+  const cityCounts = await getValidCityCountsForService(serviceSlug, { limit: 30 })
+  const cityCountMap = new Map(cityCounts.map((c) => [c.slug, c.count]))
   const topCities: CityInfo[] = getStaticCities()
-    .filter((c) => validCitySlugs.has(c.slug))
+    .filter((c) => cityCountMap.has(c.slug))
+    .map((c) => ({ ...c, rgeCount: cityCountMap.get(c.slug) }))
+    .sort((a, b) => (b.rgeCount ?? 0) - (a.rgeCount ?? 0))
     .slice(0, 12)
 
   // Trade-specific rich content (prices, FAQ, certifications)
@@ -575,11 +579,24 @@ export default async function ServicePage({ params }: PageProps) {
               <li key={city.id}>
                 <Link
                   href={`/services/${serviceSlug}/${city.slug}`}
-                  className="flex items-center gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-xl border border-sand-200 hover:border-primary-200 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+                  className="flex items-center justify-between gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-xl border border-sand-200 hover:border-primary-200 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+                  aria-label={
+                    city.rgeCount
+                      ? `${service.name} à ${city.name} — ${city.rgeCount} artisans RGE certifiés`
+                      : `${service.name} à ${city.name}`
+                  }
                 >
-                  <span className="font-medium">
+                  <span className="font-medium truncate">
                     {service.name} {city.name}
                   </span>
+                  {typeof city.rgeCount === 'number' && city.rgeCount > 0 && (
+                    <span
+                      className="flex-shrink-0 text-xs font-semibold text-primary-700 bg-primary-100 px-2 py-0.5 rounded-full"
+                      aria-hidden="true"
+                    >
+                      {city.rgeCount.toLocaleString('fr-FR')}
+                    </span>
+                  )}
                 </Link>
               </li>
             ))}

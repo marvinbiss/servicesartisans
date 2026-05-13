@@ -110,6 +110,89 @@ export async function getValidCitySlugsForService(
   )
 }
 
+export interface CityWithCount {
+  slug: string
+  cityName: string
+  count: number
+}
+
+/**
+ * Like getValidCitySlugsForService but also returns the RGE provider count
+ * per city. Used by the service pillar page to render count badges on the
+ * "Top villes" block — strong social proof + freshness signal vs a flat
+ * keyword list.
+ *
+ * Same MV-backed source, same 1h cache, so calling both helpers in the same
+ * page does not double-fetch.
+ */
+export async function getValidCityCountsForService(
+  serviceSlug: string,
+  options: { limit?: number; minCount?: number } = {}
+): Promise<CityWithCount[]> {
+  const { limit = 12, minCount = 1 } = options
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
+
+  const cacheKey = `valid-combos:svc-counts:${serviceSlug}:${limit}:${minCount}`
+
+  return getCachedData(
+    cacheKey,
+    async () => {
+      try {
+        const supabase = createAdminClient()
+        const { data, error } = await withTimeout(
+          supabase
+            .from('mv_provider_counts')
+            .select('city, rge_provider_count')
+            .in('specialty', specialties)
+            .gte('rge_provider_count', minCount)
+            .order('rge_provider_count', { ascending: false })
+            .limit(limit * 3),
+          5_000,
+          `valid_combo_counts:${serviceSlug}`
+        )
+
+        if (error) {
+          logger.error('valid-combos: counts query error', {
+            error: String(error.message),
+            service: serviceSlug,
+          })
+          captureError(error, { tags: { source: 'valid-combos.countsByService' } })
+          return []
+        }
+
+        const nameToSlug = getCityNameToSlugMap()
+        const seen = new Set<string>()
+        const out: CityWithCount[] = []
+
+        for (const row of data ?? []) {
+          const cityName = (row.city ?? '').toLowerCase().trim()
+          if (!cityName) continue
+          const slug = nameToSlug.get(cityName)
+          if (!slug || seen.has(slug)) continue
+          seen.add(slug)
+          out.push({
+            slug,
+            cityName: row.city,
+            count: row.rge_provider_count ?? 0,
+          })
+          if (out.length >= limit) break
+        }
+
+        return out
+      } catch (err) {
+        logger.error('valid-combos: counts timeout', {
+          error: String(err),
+          service: serviceSlug,
+        })
+        captureError(err, { tags: { source: 'valid-combos.countsByService' } })
+        return []
+      }
+    },
+    CACHE_TTL.artisans
+  )
+}
+
 /**
  * Vérifie qu'un combo précis (service × ville) a au moins 1 artisan RGE.
  * Mocking-friendly : retourne true si la query échoue (fail-open) — on
