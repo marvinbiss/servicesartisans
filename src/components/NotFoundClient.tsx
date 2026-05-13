@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Home, Search, FileText, Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useId, useMemo, useRef } from 'react'
 import { trackEvent } from '@/lib/analytics/tracking'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import ExitIntentPopup from '@/components/ExitIntentPopup'
@@ -109,6 +109,26 @@ export default function NotFoundClient() {
 
   const dynamicSuggestions = useMemo(() => getSuggestions(segments), [segments])
 
+  // Pre-fill the recovery search box with the last URL segment, dashes
+  // turned into spaces, so a typo like "/services/plombir-paris" lands
+  // with "plombir paris" pre-filled — the user only has to edit, not
+  // retype.
+  const prefilledQuery = useMemo(() => {
+    if (segments.length === 0) return ''
+    const last = segments[segments.length - 1]
+    return decodeURIComponent(last).replace(/[-_]/g, ' ').trim()
+  }, [segments])
+
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const searchHelperId = useId()
+
+  // Send keyboard / SR users to the H1 on mount so their entry point is
+  // the headline, not document.body (which a soft-404 client component
+  // would otherwise leave them at).
+  useEffect(() => {
+    headingRef.current?.focus()
+  }, [])
+
   useEffect(() => {
     trackEvent('page_not_found', {
       path: pathname,
@@ -132,7 +152,11 @@ export default function NotFoundClient() {
             <div className="text-6xl -mt-20 mb-4">🔧</div>
           </div>
 
-          <h1 className="font-heading text-3xl font-bold text-charcoal-900 mb-4 tracking-tight">
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="font-heading text-3xl font-bold text-charcoal-900 mb-4 tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg"
+          >
             Page introuvable
           </h1>
           <p className="text-charcoal-600 mb-8">
@@ -158,32 +182,50 @@ export default function NotFoundClient() {
             </Link>
           </div>
 
-          {/* Search bar */}
+          {/* Search bar — pre-filled from the broken URL so the user
+              edits a typo instead of retyping the whole query. */}
           <form
             action="/recherche"
             method="GET"
+            role="search"
+            aria-label="Recherche d'artisan"
             className="mt-8 flex items-center gap-2 max-w-sm mx-auto"
           >
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400"
+                aria-hidden="true"
+              />
+              <label htmlFor="not-found-search" className="sr-only">
+                Rechercher un service ou une ville
+              </label>
               <input
+                id="not-found-search"
                 type="text"
                 name="q"
+                defaultValue={prefilledQuery}
                 placeholder="Rechercher un service..."
+                aria-describedby={searchHelperId}
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-sand-400 text-sm focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-400/20"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
+              className="px-4 py-2.5 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
             >
               Rechercher
             </button>
+            <p id={searchHelperId} className="sr-only">
+              Saisissez un métier ou une ville, puis validez pour lancer la recherche.
+            </p>
           </form>
 
           {/* Dynamic suggestions based on URL */}
           {dynamicSuggestions.length > 0 && (
-            <div className="mt-8 p-4 bg-primary-50 rounded-xl border border-primary-100">
+            <section
+              aria-label="Suggestions basées sur l'URL"
+              className="mt-8 p-4 bg-primary-50 rounded-xl border border-primary-100"
+            >
               <p className="text-sm font-semibold text-primary-800 mb-3">
                 Peut-être cherchiez-vous :
               </p>
@@ -198,7 +240,7 @@ export default function NotFoundClient() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </section>
           )}
 
           {/* Default suggestions */}
