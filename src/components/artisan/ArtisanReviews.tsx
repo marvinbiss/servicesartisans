@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Star, ChevronDown, ShieldCheck, MessageCircle } from 'lucide-react'
 import { Review } from './types'
 
@@ -45,12 +45,22 @@ function ReviewStars({ rating, size = 'w-4 h-4' }: { rating: number; size?: stri
 }
 
 /** Single review card */
-function ReviewCard({ review, index }: { review: Review; index: number }) {
+function ReviewCard({
+  review,
+  index,
+  cardRef,
+}: {
+  review: Review
+  index: number
+  cardRef?: (el: HTMLDivElement | null) => void
+}) {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <div
-      className="animate-fade-in-up bg-sand-50 rounded-xl border border-sand-200 p-4"
+      ref={cardRef}
+      tabIndex={-1}
+      className="animate-fade-in-up bg-sand-50 rounded-xl border border-sand-200 p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
       {/* Header: author + rating + date */}
@@ -120,6 +130,8 @@ interface ArtisanReviewsProps {
 
 export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
   const [showAll, setShowAll] = useState(false)
+  const [announcement, setAnnouncement] = useState('')
+  const firstNewCardRef = useRef<HTMLDivElement | null>(null)
 
   // Tri date décroissant. `dateISO` (YYYY-MM-DD) prioritaire car comparable
   // lex. Fallback parse `date` FR. Tri stable : si dates égales, ordre props.
@@ -133,6 +145,21 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
 
   const visibleReviews = showAll ? sortedReviews : sortedReviews.slice(0, MAX_VISIBLE_REVIEWS)
   const hasMoreReviews = !showAll && sortedReviews.length > MAX_VISIBLE_REVIEWS
+
+  // After expanding, move focus to the first newly revealed card so a
+  // keyboard or SR user lands on the new content instead of being stranded
+  // on the now-hidden "Voir tous" button.
+  useEffect(() => {
+    if (!showAll) return
+    const added = sortedReviews.length - MAX_VISIBLE_REVIEWS
+    if (added <= 0) return
+    setAnnouncement(
+      `${added} avis supplémentaire${added > 1 ? 's' : ''} affiché${added > 1 ? 's' : ''}`
+    )
+    if (firstNewCardRef.current) {
+      firstNewCardRef.current.focus()
+    }
+  }, [showAll, sortedReviews.length])
 
   return (
     <div
@@ -149,7 +176,14 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
         <>
           <div className="space-y-3">
             {visibleReviews.map((review, i) => (
-              <ReviewCard key={review.id} review={review} index={i} />
+              <ReviewCard
+                key={review.id}
+                review={review}
+                index={i}
+                cardRef={
+                  i === MAX_VISIBLE_REVIEWS ? (el) => (firstNewCardRef.current = el) : undefined
+                }
+              />
             ))}
           </div>
 
@@ -157,13 +191,19 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
             <div className="mt-4 text-center">
               <button
                 onClick={() => setShowAll(true)}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-400 hover:text-primary-600 transition-colors"
+                aria-expanded={false}
+                aria-controls="reviews-extra"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-400 hover:text-primary-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg px-2 py-1"
               >
                 Voir tous les avis ({reviews.length})
                 <ChevronDown className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           )}
+
+          <div role="status" aria-live="polite" className="sr-only">
+            {announcement}
+          </div>
         </>
       ) : (
         <div className="bg-sand-50 rounded-xl p-8 text-center border border-sand-200">
