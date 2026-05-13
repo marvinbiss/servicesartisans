@@ -1,16 +1,20 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   MapPin,
   Star,
   ChevronRight,
+  ChevronDown,
   ShieldCheck,
   Wallet,
   Zap,
   Clock,
   FileCheck,
+  Leaf,
 } from 'lucide-react'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
 import { getDiceBearAvatar } from '@/lib/data/images-faces'
@@ -28,6 +32,7 @@ interface ProviderCardProps {
 }
 
 export default function ProviderCard({ provider, isHovered = false }: ProviderCardProps) {
+  const [expanded, setExpanded] = useState(false)
   const providerUrl = getArtisanUrl({
     stable_id: provider.stable_id,
     slug: provider.slug,
@@ -296,6 +301,80 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           </Link>
         )}
       </div>
+
+      {/* Inline details toggle — surfaces info already in listing (no fetch). */}
+      <div className="relative z-20 mt-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setExpanded((v) => !v)
+          }}
+          aria-expanded={expanded}
+          aria-controls={`details-${provider.id}`}
+          className="inline-flex items-center gap-1 text-xs font-medium text-charcoal-600 hover:text-primary-600 transition-colors px-2 py-1 -ml-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+        >
+          {expanded ? 'Masquer les détails' : 'Voir les détails'}
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          />
+        </button>
+      </div>
+      {expanded && (
+        <div
+          id={`details-${provider.id}`}
+          className="relative z-20 mt-2 pt-3 border-t border-sand-200 space-y-2 text-xs text-charcoal-700"
+        >
+          {provider.address_street && (
+            <div className="flex items-start gap-1.5">
+              <MapPin
+                className="w-3.5 h-3.5 text-charcoal-400 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
+              <span>
+                {provider.address_street}
+                {provider.address_postal_code ? `, ${provider.address_postal_code}` : ''}
+                {provider.address_city ? ` ${provider.address_city}` : ''}
+              </span>
+            </div>
+          )}
+          {(() => {
+            const quals = provider.rge_qualifications
+            if (!hasActiveRgeQualification(quals) || !quals) return null
+            const shown = quals.slice(0, 3)
+            return (
+              <div className="flex items-start gap-1.5">
+                <Leaf
+                  className="w-3.5 h-3.5 text-accent-500 flex-shrink-0 mt-0.5"
+                  aria-hidden="true"
+                />
+                <div className="flex flex-wrap gap-1">
+                  <span className="font-semibold text-accent-700">Qualifications RGE :</span>
+                  {shown.map((q, i) => (
+                    <span key={i} className="text-charcoal-700">
+                      {q.code}
+                      {i < shown.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                  {quals.length > 3 && (
+                    <span className="text-charcoal-500">+{quals.length - 3}</span>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
+          {provider.is_verified && (
+            <div className="flex items-start gap-1.5">
+              <ShieldCheck
+                className="w-3.5 h-3.5 text-primary-500 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
+              <span>Identité et SIRET vérifiés par la plateforme</span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Compare button — sous CTAs, plus discret. Bascule selection panier comparaison. */}
       <div className="relative z-20 mt-2 flex justify-end">
