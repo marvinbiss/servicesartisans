@@ -176,15 +176,26 @@ export async function createClaim(
     }
   }
 
-  // Check if this specific provider already has a pending claim from anyone
+  // Check if this specific provider already has a pending claim from anyone.
+  // F-2 security fix : un claim pending avec email non confirmé après 24h
+  // n'est plus considéré comme un blocage — sinon un attaquant peut squatter
+  // une fiche RGE indéfiniment avec un email throwaway et bloquer le claim
+  // légitime de l'artisan.
+  const STALE_PENDING_HOURS = 24
+  const staleCutoff = new Date(Date.now() - STALE_PENDING_HOURS * 60 * 60 * 1000).toISOString()
+
   const { data: providerPendingClaims } = await adminClient
     .from('provider_claims')
-    .select('id')
+    .select('id, email_confirmed_at, created_at')
     .eq('provider_id', providerId)
     .eq('status', 'pending')
-    .limit(1)
+    .limit(5)
 
-  if (providerPendingClaims && providerPendingClaims.length > 0) {
+  const blockingClaim = providerPendingClaims?.find(
+    (c) => c.email_confirmed_at !== null || c.created_at > staleCutoff
+  )
+
+  if (blockingClaim) {
     return {
       success: false,
       error: 'Une demande de revendication est déjà en cours pour cette fiche',

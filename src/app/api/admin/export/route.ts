@@ -38,24 +38,36 @@ export async function GET(request: NextRequest) {
     }
     const { type, format } = result.data
 
-    const { data, filename } = await exportData(type as ExportType)
-
-    // Log d'audit pour l'export de données
+    // Log d'audit AVANT l'export — si exportData throw, l'intent reste tracé.
     await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, {
       format,
-      recordCount: data.length,
     })
+
+    const { data, filename } = await exportData(type as ExportType)
 
     if (format === 'csv') {
       if (data.length === 0) {
         return new NextResponse('No data', { status: 200 })
       }
 
+      // CSV formula injection guard : Excel/Sheets interprètent toute cellule
+      // commençant par =, +, -, @, tab ou CR comme formule. On préfixe par un
+      // apostrophe (OWASP CSV injection mitigation).
+      const escapeCell = (raw: unknown): string => {
+        const s = JSON.stringify(raw ?? '')
+        if (s.length < 2) return s
+        const firstChar = s.charAt(1)
+        if (['=', '+', '-', '@', '\t', '\r'].includes(firstChar)) {
+          return `"'${s.slice(1)}`
+        }
+        return s
+      }
+
       const headers = Object.keys(data[0] as object)
       const csv = [
         headers.join(','),
         ...data.map((row) =>
-          headers.map((h) => JSON.stringify((row as Record<string, unknown>)[h] ?? '')).join(',')
+          headers.map((h) => escapeCell((row as Record<string, unknown>)[h])).join(',')
         ),
       ].join('\n')
 

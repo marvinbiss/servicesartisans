@@ -36,9 +36,10 @@ async function checkPipedrive(): Promise<Check> {
 
   const start = Date.now()
   try {
-    const res = await fetch(`https://api.pipedrive.com/v1/users/me?api_token=${token}`, {
+    const res = await fetch('https://api.pipedrive.com/v1/users/me', {
       signal: AbortSignal.timeout(DEP_TIMEOUT_MS),
       cache: 'no-store',
+      headers: { 'x-api-token': token },
     })
     const latency = Date.now() - start
     if (!res.ok) {

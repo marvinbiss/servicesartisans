@@ -337,7 +337,7 @@ describe('createCallbackRequest — person creation when not found', () => {
     const result = await createCallbackRequest(makePayload())
 
     expect(result.personId).toBe(555)
-    const personPost = calls.find((c) => c.url.includes('/persons?') && c.init?.method === 'POST')
+    const personPost = calls.find((c) => c.url.endsWith('/persons') && c.init?.method === 'POST')
     expect(personPost).toBeDefined()
   })
 
@@ -363,7 +363,7 @@ describe('createCallbackRequest — person creation when not found', () => {
 
     await createCallbackRequest(makePayload({ prenom: 'Jean', nom: 'Dupont', telephone: '+33699' }))
 
-    const personPost = calls.find((c) => c.url.includes('/persons?') && c.init?.method === 'POST')
+    const personPost = calls.find((c) => c.url.endsWith('/persons') && c.init?.method === 'POST')
     const body = JSON.parse(personPost!.init!.body as string)
     expect(body.name).toContain('Jean')
     expect(body.email[0].value).toBe('marie.curie@example.fr')
@@ -396,7 +396,7 @@ describe('createCallbackRequest — deal creation when not found', () => {
     const result = await createCallbackRequest(makePayload())
 
     expect(result.dealId).toBe(999)
-    const dealPost = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealPost = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     expect(dealPost).toBeDefined()
   })
 
@@ -419,7 +419,7 @@ describe('createCallbackRequest — deal creation when not found', () => {
 
     await createCallbackRequest(makePayload())
 
-    const dealPost = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealPost = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     const body = JSON.parse(dealPost!.init!.body as string)
     expect(body.title).toContain('[RAPPEL]')
     expect(body.pipeline_id).toBe(42)
@@ -512,7 +512,7 @@ describe('createCallbackRequest — custom fields & phone fallback', () => {
       return { ok: false, body: { success: false } }
     })
     await createCallbackRequest(makePayload())
-    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealCreate = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     expect(dealCreate).toBeDefined()
     const body = JSON.parse(dealCreate!.init!.body as string)
     expect(body.cf_source_key).toBe('callback-simulateur')

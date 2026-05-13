@@ -9,6 +9,19 @@ import { retry } from '../utils/retry'
 import { APIError, ErrorCode, AppError, ValidationError } from '../utils/errors'
 import { apiLogger } from '@/lib/logger'
 
+// XSS guard pour interpolation HTML dans templates email (F-4).
+// Tout champ user/admin (name, providerName, rejectionReason, etc.) DOIT
+// passer par esc() avant injection dans une string template.
+function esc(s: unknown): string {
+  if (s === null || s === undefined) return ''
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 // Lazy-loaded Resend client
 let resendClient: Resend | null = null
 
@@ -234,7 +247,7 @@ export async function sendWelcomeEmail(params: {
     <h1 style="color: #2563eb; margin: 0;">ServicesArtisans</h1>
   </div>
 
-  <h2>Bienvenue ${name} !</h2>
+  <h2>Bienvenue ${esc(name)} !</h2>
 
   <p>Nous sommes ravis de vous accueillir sur ServicesArtisans${isArtisan ? ', la plateforme qui connecte les artisans avec leurs clients' : ''}.</p>
 
@@ -280,7 +293,7 @@ export async function sendWelcomeEmail(params: {
 
   return sendEmail({
     to,
-    subject: `Bienvenue sur ServicesArtisans${isArtisan ? ' !' : ', ' + name}`,
+    subject: `Bienvenue sur ServicesArtisans${isArtisan ? ' !' : ', ' + esc(name)}`,
     html,
     tags: [
       { name: 'type', value: 'welcome' },
@@ -312,12 +325,12 @@ export async function sendPasswordResetEmail(params: {
 
   <h2>Réinitialisation de mot de passe</h2>
 
-  <p>Bonjour ${name},</p>
+  <p>Bonjour ${esc(name)},</p>
 
   <p>Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${resetLink}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${esc(resetLink)}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Réinitialiser mon mot de passe
     </a>
   </div>
@@ -354,7 +367,7 @@ export async function sendClaimEmailConfirmation(params: {
   confirmLink: string
 }): Promise<EmailResult> {
   const { to, name, providerName, confirmLink } = params
-  const greeting = name ? `Bonjour ${name}` : 'Bonjour'
+  const greeting = name ? `Bonjour ${esc(name)}` : 'Bonjour'
 
   const html = `
 <!DOCTYPE html>
@@ -369,12 +382,12 @@ export async function sendClaimEmailConfirmation(params: {
 
   <h2 style="color: #333;">${greeting},</h2>
 
-  <p>Vous venez de demander la revendication de la fiche <strong>${providerName}</strong>.</p>
+  <p>Vous venez de demander la revendication de la fiche <strong>${esc(providerName)}</strong>.</p>
 
   <p>Confirmez votre adresse email pour qu'un administrateur puisse valider votre demande&nbsp;:</p>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${confirmLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+    <a href="${esc(confirmLink)}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
       Confirmer mon email
     </a>
   </div>
@@ -423,14 +436,14 @@ export async function sendClaimApprovedEmail(params: {
     <h1 style="color: #f59e0b; margin: 0;">ServicesArtisans</h1>
   </div>
 
-  <h2 style="color: #333;">Bonne nouvelle, ${name} !</h2>
+  <h2 style="color: #333;">Bonne nouvelle, ${esc(name)} !</h2>
 
-  <p>Votre demande de revendication pour <strong>${providerName}</strong> a été approuvée par notre équipe.</p>
+  <p>Votre demande de revendication pour <strong>${esc(providerName)}</strong> a été approuvée par notre équipe.</p>
 
   <p>Votre fiche artisan est désormais active. Pour accéder à votre espace et gérer vos leads, définissez votre mot de passe :</p>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${passwordLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+    <a href="${esc(passwordLink)}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
       Définir mon mot de passe
     </a>
   </div>
@@ -477,11 +490,11 @@ export async function sendClaimRejectedEmail(params: {
   retryLink: string
 }): Promise<EmailResult> {
   const { to, name, providerName, rejectionReason, retryLink } = params
-  const greeting = name ? `Bonjour ${name}` : 'Bonjour'
+  const greeting = name ? `Bonjour ${esc(name)}` : 'Bonjour'
   const reasonBlock = rejectionReason
     ? `<div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
         <strong style="color: #92400e;">Motif du rejet :</strong><br>
-        <span style="color: #78350f;">${rejectionReason}</span>
+        <span style="color: #78350f;">${esc(rejectionReason)}</span>
       </div>`
     : `<p style="color: #666;">Notre équipe n'a pas pu valider votre demande en l'état.</p>`
 
@@ -498,14 +511,14 @@ export async function sendClaimRejectedEmail(params: {
 
   <h2 style="color: #333;">${greeting},</h2>
 
-  <p>Votre demande de revendication pour <strong>${providerName}</strong> n'a pas pu être validée.</p>
+  <p>Votre demande de revendication pour <strong>${esc(providerName)}</strong> n'a pas pu être validée.</p>
 
   ${reasonBlock}
 
   <p>Ce n'est pas définitif : vous pouvez resoumettre une nouvelle demande avec les informations corrigées (SIREN/SIRET vérifié, email pro, justificatifs si besoin).</p>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${retryLink}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+    <a href="${esc(retryLink)}" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
       Resoumettre ma demande
     </a>
   </div>
@@ -560,15 +573,15 @@ export async function sendBookingConfirmationEmail(params: {
 
   <h2>Réservation confirmée !</h2>
 
-  <p>Bonjour ${clientName},</p>
+  <p>Bonjour ${esc(clientName)},</p>
 
-  <p>Votre rendez-vous avec <strong>${artisanName}</strong> est confirmé.</p>
+  <p>Votre rendez-vous avec <strong>${esc(artisanName)}</strong> est confirmé.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${serviceName}</p>
-    <p style="margin: 0 0 10px 0;"><strong>Date :</strong> ${date}</p>
-    <p style="margin: 0 0 10px 0;"><strong>Heure :</strong> ${time}</p>
-    <p style="margin: 0;"><strong>Adresse :</strong> ${address}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service :</strong> ${esc(serviceName)}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Date :</strong> ${esc(date)}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Heure :</strong> ${esc(time)}</p>
+    <p style="margin: 0;"><strong>Adresse :</strong> ${esc(address)}</p>
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
@@ -627,14 +640,14 @@ export async function sendQuoteRequestEmail(params: {
 
   <h2>Nouvelle demande de devis !</h2>
 
-  <p>Bonjour ${artisanName},</p>
+  <p>Bonjour ${esc(artisanName)},</p>
 
-  <p>Vous avez reçu une nouvelle demande de devis de <strong>${clientName}</strong>.</p>
+  <p>Vous avez reçu une nouvelle demande de devis de <strong>${esc(clientName)}</strong>.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${serviceName}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${esc(serviceName)}</p>
     <p style="margin: 0;"><strong>Description :</strong></p>
-    <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${description}</p>
+    <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${esc(description)}</p>
   </div>
 
   <div style="text-align: center; margin: 30px 0;">

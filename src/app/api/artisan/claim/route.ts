@@ -72,6 +72,21 @@ export async function POST(request: Request) {
       )
     }
 
+    // F-2 security fix : RL par providerId (anti-flood SIRET d'une même fiche
+    // depuis N IPs). 2 tentatives / 24h / fiche. Couvre le cas où l'IP RL
+    // (3/h) ne suffit pas car l'attaquant rote ses IPs.
+    const providerRl = await checkRateLimit(`claim:provider:${validation.data.providerId}`, {
+      window: 24 * 3_600_000,
+      max: 2,
+      failOpen: true,
+    })
+    if (!providerRl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de demandes pour cette fiche. Réessayez plus tard.' },
+        { status: 429 }
+      )
+    }
+
     const result = await createClaim(validation.data, user?.id ?? null)
 
     if (!result.success) {

@@ -179,14 +179,14 @@ describe('createSimulateurDeal — field mapping & flow', () => {
     expect(calls[0].url).toContain('/persons/search')
     expect(calls[0].url).toContain('jean.dupont%40example.fr')
 
-    const personCreate = calls.find((c) => c.url.includes('/persons?') && c.init?.method === 'POST')
+    const personCreate = calls.find((c) => c.url.endsWith('/persons') && c.init?.method === 'POST')
     expect(personCreate).toBeDefined()
     const personBody = JSON.parse(personCreate!.init!.body as string)
     expect(personBody.name).toBe('Jean Dupont')
     expect(personBody.email[0].value).toBe('jean.dupont@example.fr')
     expect(personBody.phone[0].value).toBe('+33612345678')
 
-    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealCreate = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     expect(dealCreate).toBeDefined()
     const dealBody = JSON.parse(dealCreate!.init!.body as string)
     expect(dealBody.person_id).toBe(1001)
@@ -198,7 +198,7 @@ describe('createSimulateurDeal — field mapping & flow', () => {
     expect(dealBody.title).toContain('Jean Dupont')
     expect(dealBody.title).toContain('75001')
 
-    const noteCreate = calls.find((c) => c.url.includes('/notes?') && c.init?.method === 'POST')
+    const noteCreate = calls.find((c) => c.url.endsWith('/notes') && c.init?.method === 'POST')
     expect(noteCreate).toBeDefined()
     const noteBody = JSON.parse(noteCreate!.init!.body as string)
     expect(noteBody.deal_id).toBe(2002)
@@ -232,9 +232,7 @@ describe('createSimulateurDeal — field mapping & flow', () => {
     expect(result.personId).toBe(9999)
     expect(result.dealId).toBe(2002)
 
-    const personPosts = calls.filter(
-      (c) => c.url.includes('/persons?') && c.init?.method === 'POST'
-    )
+    const personPosts = calls.filter((c) => c.url.endsWith('/persons') && c.init?.method === 'POST')
     expect(personPosts).toHaveLength(0)
   })
 
@@ -296,7 +294,7 @@ describe('createSimulateurDeal — custom fields', () => {
       return { ok: false, body: { success: false } }
     })
     await createSimulateurDeal(mockLead())
-    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealCreate = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     const dealBody = JSON.parse(dealCreate!.init!.body as string)
     expect(dealBody.cf_source_key).toBe('simulateur-aides')
   })
@@ -312,7 +310,7 @@ describe('createSimulateurDeal — custom fields', () => {
       return { ok: false, body: { success: false } }
     })
     await createSimulateurDeal(mockLead())
-    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealCreate = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     const dealBody = JSON.parse(dealCreate!.init!.body as string)
     expect(dealBody.cf_cp_key).toBe('75001')
   })
@@ -327,7 +325,7 @@ describe('createSimulateurDeal — custom fields', () => {
       return { ok: false, body: { success: false } }
     })
     await createSimulateurDeal(mockLead())
-    const dealCreate = calls.find((c) => c.url.includes('/deals?') && c.init?.method === 'POST')
+    const dealCreate = calls.find((c) => c.url.endsWith('/deals') && c.init?.method === 'POST')
     const dealBody = JSON.parse(dealCreate!.init!.body as string)
     // Only base keys — no arbitrary custom field keys
     expect(Object.keys(dealBody).sort()).toEqual(
@@ -376,7 +374,7 @@ describe('upsertPerson — phone fallback for cross-canal dedup', () => {
     expect(result.personId).toBe(5555)
     const searches = calls.filter((c) => c.url.includes('/persons/search'))
     expect(searches).toHaveLength(2)
-    const personCreate = calls.find((c) => c.url.includes('/persons?') && c.init?.method === 'POST')
+    const personCreate = calls.find((c) => c.url.endsWith('/persons') && c.init?.method === 'POST')
     expect(personCreate).toBeDefined()
   })
 })

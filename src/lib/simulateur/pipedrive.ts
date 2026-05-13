@@ -153,8 +153,7 @@ async function pdFetch<T>(
   path: string,
   init: RequestInit = {}
 ): Promise<PdResponse<T>> {
-  const sep = path.includes('?') ? '&' : '?'
-  const url = `${cfg.baseUrl}${path}${sep}api_token=${encodeURIComponent(cfg.token)}`
+  const url = `${cfg.baseUrl}${path}`
   // 5s timeout : protège le cron (maxDuration 60s, budget 25s/row) d'un appel
   // Pipedrive bloqué indéfiniment qui écraserait notre deadline.
   const res = await fetch(url, {
@@ -163,6 +162,7 @@ async function pdFetch<T>(
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'x-api-token': cfg.token,
       ...(init.headers || {}),
     },
   })

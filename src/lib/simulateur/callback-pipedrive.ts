@@ -67,13 +67,13 @@ async function pdFetch<T>(
   path: string,
   init: RequestInit = {}
 ): Promise<PdResponse<T>> {
-  const sep = path.includes('?') ? '&' : '?'
-  const url = `${cfg.baseUrl}${path}${sep}api_token=${encodeURIComponent(cfg.token)}`
+  const url = `${cfg.baseUrl}${path}`
   const res = await fetch(url, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'x-api-token': cfg.token,
       ...(init.headers || {}),
     },
     // Hard per-call timeout. 5s keeps worst-case row time (5 sequential

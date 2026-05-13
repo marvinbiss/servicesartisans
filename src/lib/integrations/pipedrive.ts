@@ -119,8 +119,7 @@ async function pdFetch<T>(
   init: RequestInit & { token: string; baseUrl: string; timeoutMs?: number }
 ): Promise<PipedriveResponse<T>> {
   const { token, baseUrl, timeoutMs, signal, ...rest } = init
-  const sep = path.includes('?') ? '&' : '?'
-  const url = `${baseUrl}${path}${sep}api_token=${encodeURIComponent(token)}`
+  const url = `${baseUrl}${path}`
   const timeout = timeoutMs ?? PIPEDRIVE_FETCH_TIMEOUT_MS
   const timeoutSignal = AbortSignal.timeout(timeout)
   const finalSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal
@@ -130,6 +129,7 @@ async function pdFetch<T>(
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'x-api-token': token,
       ...(rest.headers || {}),
     },
   })

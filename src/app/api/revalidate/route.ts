@@ -8,15 +8,26 @@ import { readJsonBodyWithCap } from '@/lib/auth/read-body-with-cap'
 // Force dynamic rendering — GET handler reads request.headers (cron-secret / IP / origin).
 export const dynamic = 'force-dynamic'
 
+// Pattern: chemin absolu commençant par /, sans `..`, sans backslash, sans null byte.
+// Évite revalidatePath('//evil') ou revalidatePath('/../../api/admin').
+const PATH_PATTERN = /^\/(?:[a-zA-Z0-9\-_./[\]()@~%+]*)$/
+const isSafeRevalidatePath = (p: string): boolean =>
+  PATH_PATTERN.test(p) && !p.includes('..') && !p.includes('//')
+
 // Schema pour revalidation single path (rétrocompatible)
 const revalidateSingleSchema = z.object({
-  path: z.string().min(1, 'Path requis'),
+  path: z.string().min(1, 'Path requis').max(500).refine(isSafeRevalidatePath, {
+    message: 'Path invalide',
+  }),
   secret: z.string().min(1, 'Secret requis'),
 })
 
 // Schema pour revalidation batch
 const revalidateBatchSchema = z.object({
-  paths: z.array(z.string().min(1)).min(1).max(50, 'Maximum 50 paths par batch'),
+  paths: z
+    .array(z.string().min(1).max(500).refine(isSafeRevalidatePath, { message: 'Path invalide' }))
+    .min(1)
+    .max(50, 'Maximum 50 paths par batch'),
 })
 
 const MAX_BATCH_SIZE = 50
