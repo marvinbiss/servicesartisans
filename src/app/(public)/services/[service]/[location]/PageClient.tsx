@@ -29,6 +29,7 @@ import { StickyMobileDevisCTA } from '@/components/providers/StickyMobileDevisCT
 import { SmartEmptyState } from '@/components/providers/SmartEmptyState'
 import { HubReviewsCarousel } from '@/components/providers/HubReviewsCarousel'
 import { PriceTransparencyCard } from '@/components/providers/PriceTransparencyCard'
+import { NearbyCitySuggestions } from '@/components/providers/NearbyCitySuggestions'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -606,6 +607,14 @@ export default function ServiceLocationPageClient({
                     highlightedProviderId={mapHoveredProviderId}
                     rgeOnly={rgeOnly}
                     onRgeToggle={handleRgeToggle}
+                  />
+                )}
+                {filteredProviders.length > 0 && (
+                  <NearbyCitySuggestions
+                    serviceSlug={serviceSlug || service.slug}
+                    serviceName={service.name}
+                    currentCitySlug={locationSlug || location.slug}
+                    currentDepartmentCode={location.department_code}
                   />
                 )}
                 {hasMore && activeFilterCount === 0 && (
