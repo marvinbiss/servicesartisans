@@ -23,6 +23,7 @@ import { buildDevisHref } from '@/lib/utils'
 import { SaveSearchButton } from '@/components/providers/SaveSearchButton'
 import { SortDropdown, type SortOrder } from '@/components/providers/SortDropdown'
 import { FilterPanel, countActiveFilters, parseFilters } from '@/components/providers/FilterPanel'
+import { ActiveFilterChips } from '@/components/providers/ActiveFilterChips'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -553,6 +554,11 @@ export default function ServiceLocationPageClient({
                 <div className="mx-4 mt-3 mb-2">
                   <FilterPanel resultCount={filteredProviders.length} variant="inline" />
                 </div>
+                {activeFilterCount > 0 && (
+                  <div className="mx-4 mb-3">
+                    <ActiveFilterChips />
+                  </div>
+                )}
                 {activeFilterCount > 0 && filteredProviders.length === 0 ? (
                   <div className="flex flex-col items-center justify-center text-center px-6 py-12">
                     <div className="w-14 h-14 bg-sand-200 rounded-2xl flex items-center justify-center mb-4">
