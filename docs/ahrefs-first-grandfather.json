@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-05-04",
-  "routes_count": 327,
+  "routes_count": 328,
   "routes": [
     "/connexion",
     "/definir-mot-de-passe",
@@ -11,6 +11,7 @@
     "/booking/confirmation/[bookingId]",
     "/booking/[id]",
     "/donner-avis/[bookingId]",
+    "/mes-recherches",
     "/espace-artisan/abonnement",
     "/espace-artisan/avis",
     "/espace-artisan/avis-recus",
