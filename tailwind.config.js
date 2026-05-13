@@ -152,6 +152,10 @@ module.exports = {
         'card-hover': '0 20px 40px -12px rgba(28, 25, 23, 0.1), 0 8px 20px -8px rgba(232, 107, 75, 0.08)',
         'cta': '0 4px 14px 0 rgba(232, 107, 75, 0.3)',
         'cta-hover': '0 8px 25px 0 rgba(212, 85, 58, 0.4)',
+        // Sticky-bar bottom shadow (mobile bottom CTAs, sticky platform bar).
+        // Documenté 2026-05-13 — replace 3 occurrences ad-hoc.
+        'sticky-bar': '0 -4px 20px rgba(0, 0, 0, 0.08)',
+        'sticky-bar-lg': '0 -8px 30px rgba(0, 0, 0, 0.12)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

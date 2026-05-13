@@ -41,7 +41,7 @@ export function PlatformStickyBar() {
       {/* Gradient shadow above */}
       <div className="h-6 bg-gradient-to-t from-white/90 to-transparent pointer-events-none" />
 
-      <div className="bg-white border-t border-sand-200 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+      <div className="bg-white border-t border-sand-200 shadow-sticky-bar-lg">
         {/* Urgency ticker */}
         <div className="bg-accent-500 text-white text-center py-1">
           <AnimatePresence mode="wait">

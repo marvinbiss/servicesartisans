@@ -149,7 +149,7 @@ export default function StickyMobileCTA({
         }}
       >
         <div
-          className="mx-0 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.08)] border-t border-sand-200"
+          className="mx-0 bg-white shadow-sticky-bar border-t border-sand-200"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
           <div className="px-3 pt-2.5 pb-2">

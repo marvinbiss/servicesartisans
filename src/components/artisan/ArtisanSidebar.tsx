@@ -163,7 +163,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
   return (
     <div
-      className="animate-fade-in-up fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+      className="animate-fade-in-up fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-sand-200 p-4 lg:hidden z-40 shadow-sticky-bar"
       role="group"
       aria-label="Actions rapides"
     >
