@@ -608,7 +608,7 @@ export default function DevisForm({
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
           <Link
             href="/services"
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
           >
             Trouver d'autres artisans
           </Link>
@@ -841,7 +841,7 @@ export default function DevisForm({
                 disabled={!form.isStep1Valid}
                 className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                   form.isStep1Valid
-                    ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                    ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
                     : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                 }`}
               >
@@ -1089,7 +1089,7 @@ export default function DevisForm({
                   disabled={!isStep2Valid}
                   className={`${isPrefilled && !isMinimal ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                     isStep2Valid
-                      ? 'bg-primary-400 hover:bg-primary-500 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
                       : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >

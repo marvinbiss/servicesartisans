@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, ChevronDown, ShieldCheck } from 'lucide-react'
+import { Star, ChevronDown, ShieldCheck, MessageCircle } from 'lucide-react'
 import { Review } from './types'
 
 const MAX_VISIBLE_REVIEWS = 3
@@ -166,10 +166,11 @@ export function ArtisanReviews({ reviews }: ArtisanReviewsProps) {
           )}
         </>
       ) : (
-        <div className="text-center py-6">
-          <p className="text-charcoal-600 font-medium">Pas encore d&apos;avis</p>
-          <p className="text-sm text-charcoal-400 mt-1">
-            Aucun avis n&apos;a été collecté pour cet artisan.
+        <div className="bg-sand-50 rounded-xl p-8 text-center border border-sand-200">
+          <MessageCircle className="w-10 h-10 text-charcoal-300 mx-auto mb-3" aria-hidden="true" />
+          <p className="text-charcoal-700 font-semibold mb-1">Pas encore d&apos;avis</p>
+          <p className="text-sm text-charcoal-500">
+            Demandez un devis pour être le premier à donner votre retour.
           </p>
         </div>
       )}

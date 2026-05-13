@@ -132,7 +132,7 @@ export default function DevelopersHubPage() {
         <header className="mb-12">
           <h1
             data-speakable="true"
-            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
           >
             API &amp; Données ouvertes ServicesArtisans
           </h1>
@@ -192,7 +192,7 @@ export default function DevelopersHubPage() {
         </section>
 
         <section aria-labelledby="endpoints" className="mb-12">
-          <h2 id="endpoints" className="text-2xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h2 id="endpoints" className="text-2xl font-bold text-charcoal-900 font-heading mb-4">
             Endpoints disponibles
           </h2>
           <div className="overflow-x-auto rounded-xl border border-sand-300">
@@ -240,7 +240,7 @@ export default function DevelopersHubPage() {
         <section aria-labelledby="auth" className="mb-12 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-sand-300 p-6">
             <Key className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
-            <h2 id="auth" className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">
+            <h2 id="auth" className="text-xl font-bold text-charcoal-900 font-heading mb-2">
               Authentification
             </h2>
             <p className="text-sm text-charcoal-600 mb-3">
@@ -255,7 +255,7 @@ export default function DevelopersHubPage() {
 
           <div className="rounded-2xl border border-sand-300 p-6">
             <Zap className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
-            <h2 className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">Rate limits</h2>
+            <h2 className="text-xl font-bold text-charcoal-900 font-heading mb-2">Rate limits</h2>
             <ul className="space-y-2 text-sm">
               {RATE_LIMITS.map((tier) => (
                 <li
@@ -276,7 +276,7 @@ export default function DevelopersHubPage() {
           className="mb-12 rounded-2xl border border-emerald-200 bg-emerald-50 p-6"
         >
           <Scale className="w-8 h-8 text-emerald-700 mb-3" aria-hidden="true" />
-          <h2 id="license" className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">
+          <h2 id="license" className="text-xl font-bold text-charcoal-900 font-heading mb-2">
             Licence Creative Commons CC-BY 4.0
           </h2>
           <p className="text-sm text-charcoal-700 mb-3">
@@ -303,7 +303,7 @@ export default function DevelopersHubPage() {
           className="mb-12 rounded-2xl bg-charcoal-950 p-8 text-center text-white"
         >
           <Mail className="w-10 h-10 mx-auto mb-4 text-clay-400" aria-hidden="true" />
-          <h2 id="contact" className="text-2xl font-bold mb-2 font-jakarta">
+          <h2 id="contact" className="text-2xl font-bold mb-2 font-heading">
             Demande d&apos;API key ou support
           </h2>
           <p className="text-charcoal-300 mb-6 max-w-xl mx-auto">

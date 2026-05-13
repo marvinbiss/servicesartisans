@@ -494,7 +494,7 @@ export default function ServiceLocationPageClient({
                 </p>
                 <Link
                   href={buildDevisHref(serviceSlug || service.slug, location.name)}
-                  className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-base"
+                  className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-base"
                 >
                   <FileText className="w-5 h-5" />
                   Recevoir mes devis gratuits

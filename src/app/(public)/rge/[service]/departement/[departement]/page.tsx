@@ -197,7 +197,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         <header className="mb-8">
           <h1
             data-speakable="true"
-            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
           >
             {serviceName} certifié RGE dans le {dept.name} ({dept.code})
           </h1>
@@ -290,7 +290,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
 
         {topVilles.length > 0 && (
           <section aria-labelledby="top-villes" className="mb-12">
-            <h2 id="top-villes" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+            <h2 id="top-villes" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
               {serviceName} RGE par ville dans le {dept.name}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
@@ -312,7 +312,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         )}
 
         <section aria-labelledby="other-services" className="mb-12">
-          <h2 id="other-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h2 id="other-services" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
             Autres métiers RGE dans le {dept.name}
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -332,7 +332,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="cross-links" className="mb-12">
-          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
             Aller plus loin
           </h2>
           <ul className="grid gap-3 md:grid-cols-2">

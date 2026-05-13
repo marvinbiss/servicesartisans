@@ -76,7 +76,7 @@ export default function GeoPageCTA({
             <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={handleClick}
-                className="inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
               >
                 {service && ville
                   ? `Besoin d'un ${service} à ${ville} ?`

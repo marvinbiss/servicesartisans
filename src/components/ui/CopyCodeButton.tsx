@@ -36,7 +36,7 @@ export default function CopyCodeButton({ code, className }: CopyCodeButtonProps)
       onClick={handleCopy}
       className={
         className ||
-        'inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-all shadow-[0_4px_14px_0_rgba(232,107,75,0.3)] hover:shadow-[0_8px_25px_0_rgba(212,85,58,0.4)]'
+        'inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-all shadow-[0_4px_14px_0_rgba(232,107,75,0.3)] hover:shadow-[0_8px_25px_0_rgba(212,85,58,0.4)]'
       }
     >
       {copied ? (

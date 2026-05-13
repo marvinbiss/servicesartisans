@@ -204,7 +204,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 py-12">
           <h1
             data-speakable="true"
-            className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4"
+            className="text-3xl font-bold text-charcoal-900 font-heading mb-4"
           >
             Prime CEE {opCode} à {villeName}
           </h1>
@@ -465,7 +465,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </div>
           <h1
             data-speakable="true"
-            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
           >
             {operation.nom} : artisans RGE certifiés à {villeName} ({monthYear})
           </h1>
@@ -605,7 +605,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
 
         {/* Comprendre cette prime CEE */}
         <section className="mb-12 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
-          <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 font-heading mb-4">
             Comprendre la prime CEE {operation.code}
           </h2>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
@@ -705,7 +705,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           <section aria-labelledby="faq" className="mb-12">
             <h2
               id="faq"
-              className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
+              className="text-xl md:text-2xl font-bold text-charcoal-900 font-heading mb-6"
             >
               Questions fréquentes — {operation.nom} à {villeName}
             </h2>
@@ -734,7 +734,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking métiers RGE */}
         {rgeServices.length > 0 && (
           <section aria-labelledby="rge-services" className="mb-12">
-            <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+            <h2 id="rge-services" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
               Métiers RGE certifiés à {villeName}
             </h2>
             <p className="text-sm text-charcoal-600 mb-4 max-w-3xl">
@@ -767,7 +767,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking villes */}
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
-            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
               {operation.nom} dans d’autres villes
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -787,7 +787,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         {/* Cross-linking opérations */}
         {sameDomainOps.length > 0 && (
           <section aria-labelledby="same-domain" className="mb-12">
-            <h2 id="same-domain" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+            <h2 id="same-domain" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
               Autres primes CEE du domaine {domaineLabel.toLowerCase()}
             </h2>
             <ul className="grid gap-3 md:grid-cols-3">
@@ -853,7 +853,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         })()}
 
         <section className="mb-12 rounded-2xl border border-sand-300 bg-white p-6 text-center">
-          <h2 className="text-lg font-bold text-charcoal-900 font-jakarta mb-2">
+          <h2 className="text-lg font-bold text-charcoal-900 font-heading mb-2">
             Prêt à lancer votre projet à {villeName}&nbsp;?
           </h2>
           <p className="text-charcoal-600 text-sm mb-4 max-w-2xl mx-auto">

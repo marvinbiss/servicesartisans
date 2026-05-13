@@ -386,7 +386,7 @@ export default function DevisBottomSheet({
                     <button
                       type="button"
                       onClick={form.validateAndNext}
-                      className="w-full h-12 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
+                      className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                     >
                       Continuer
                       <ArrowRight className="w-4 h-4" />
@@ -481,7 +481,7 @@ export default function DevisBottomSheet({
                       <button
                         type="button"
                         onClick={form.validateAndNext}
-                        className="flex-1 h-12 bg-primary-400 hover:bg-primary-500 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
+                        className="flex-1 h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                       >
                         Continuer
                         <ArrowRight className="w-4 h-4" />
@@ -571,7 +571,7 @@ export default function DevisBottomSheet({
                       <button
                         type="submit"
                         disabled={form.submitting}
-                        className="flex-1 h-12 bg-primary-400 hover:bg-primary-500 disabled:opacity-60 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
+                        className="flex-1 h-12 bg-primary-500 hover:bg-primary-600 disabled:opacity-60 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all flex items-center justify-center gap-2 touch-manipulation"
                       >
                         {form.submitting ? (
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

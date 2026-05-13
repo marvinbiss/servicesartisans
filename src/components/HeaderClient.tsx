@@ -414,7 +414,7 @@ export default function HeaderClient({
               {mounted ? (
                 <QuickSearch />
               ) : (
-                <div className="w-full rounded-full border border-sand-300 bg-sand-50 h-[38px] animate-pulse" />
+                <div className="w-full rounded-full border border-sand-300 bg-sand-50 h-[38px]" />
               )}
             </div>
 
@@ -469,7 +469,7 @@ export default function HeaderClient({
               <Link
                 href="/devis"
                 onClick={() => trackEvent('header_devis_click', { source: 'header', pathname })}
-                className="ml-2 px-5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                className="ml-2 px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
                 Trouver un artisan
               </Link>
@@ -486,7 +486,7 @@ export default function HeaderClient({
               </a>
               <Link
                 href="/devis"
-                className="px-3.5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-xs rounded-lg shadow-cta transition-all duration-200"
+                className="px-3.5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-xs rounded-lg shadow-cta transition-all duration-200"
               >
                 Devis gratuit
               </Link>

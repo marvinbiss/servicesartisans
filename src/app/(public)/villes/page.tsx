@@ -186,7 +186,7 @@ export default async function VillesIndexPage() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
                     href="/devis"
-                    className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-primary-400 hover:bg-primary-500 text-white font-semibold shadow-cta hover:shadow-cta-hover transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900 focus-visible:ring-primary-300"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-primary-500 hover:bg-primary-600 text-white font-semibold shadow-cta hover:shadow-cta-hover transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900 focus-visible:ring-primary-300"
                   >
                     Obtenir mon devis gratuit
                     <ArrowRight className="w-5 h-5" aria-hidden="true" />

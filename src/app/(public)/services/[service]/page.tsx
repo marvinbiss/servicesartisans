@@ -514,7 +514,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="mt-8">
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+              className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
               aria-label={`Demander un devis ${service.name.toLowerCase()} gratuit`}
             >
               Obtenir mon devis gratuit

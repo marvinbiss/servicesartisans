@@ -567,7 +567,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={city.slug}
                   href={`/rge/${serviceSlug}/${city.slug}`}
-                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <MapPin

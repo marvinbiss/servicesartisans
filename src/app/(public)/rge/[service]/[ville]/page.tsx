@@ -680,7 +680,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         <header className="mb-8">
           <h1
             data-speakable="true"
-            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-jakarta"
+            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
           >
             {upgradeV2 ? (
               isFallback && location.department_name ? (
@@ -821,7 +821,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         </section>
 
         <section aria-labelledby="cross-links" className="mb-12">
-          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-jakarta mb-4">
+          <h2 id="cross-links" className="text-xl font-bold text-charcoal-900 font-heading mb-4">
             Aller plus loin
           </h2>
           <ul className="grid gap-3 md:grid-cols-2">
@@ -878,7 +878,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         {otherCities.length > 0 && (
           <section aria-labelledby="other-cities" className="mb-12">
-            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-jakarta mb-2">
+            <h2 id="other-cities" className="text-xl font-bold text-charcoal-900 font-heading mb-2">
               {serviceName} RGE dans d’autres villes
             </h2>
             <p className="text-sm text-charcoal-500 mb-4">
@@ -911,7 +911,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           <section aria-labelledby="faq" className="mb-12">
             <h2
               id="faq"
-              className="text-xl md:text-2xl font-bold text-charcoal-900 font-jakarta mb-6"
+              className="text-xl md:text-2xl font-bold text-charcoal-900 font-heading mb-6"
             >
               Questions fréquentes : {serviceName.toLowerCase()} RGE à {villeName}
             </h2>

@@ -120,7 +120,7 @@ export default function FormRecoveryBanner() {
             <button
               type="button"
               onClick={handleResume}
-              className="inline-flex items-center gap-1.5 bg-primary-400 hover:bg-primary-500 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+              className="inline-flex items-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
             >
               Reprendre
             </button>

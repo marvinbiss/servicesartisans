@@ -163,7 +163,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 py-12">
           <h1
             data-speakable="true"
-            className="text-3xl font-bold text-charcoal-900 font-jakarta mb-4"
+            className="text-3xl font-bold text-charcoal-900 font-heading mb-4"
           >
             Prime CEE {opCode}
           </h1>
