@@ -85,6 +85,31 @@ export function ArtisanSimilar({
     }
   }
 
+  const handleCarouselKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return
+    const el = scrollRef.current
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault()
+        el.scrollBy({ left: 320, behavior: 'smooth' })
+        break
+      case 'ArrowLeft':
+        e.preventDefault()
+        el.scrollBy({ left: -320, behavior: 'smooth' })
+        break
+      case 'Home':
+        e.preventDefault()
+        el.scrollTo({ left: 0, behavior: 'smooth' })
+        break
+      case 'End':
+        e.preventDefault()
+        el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' })
+        break
+      default:
+        break
+    }
+  }
+
   const hubUrl =
     _artisan.specialty_slug && _artisan.city_slug
       ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
@@ -130,18 +155,23 @@ export function ArtisanSimilar({
       )}
       {isClaimed && <div className="mb-4" />}
 
-      {/* Horizontal scroll container */}
+      {/* Horizontal scroll container — keyboard-navigable carousel */}
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2"
+        tabIndex={0}
+        onKeyDown={handleCarouselKeyDown}
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 rounded-lg"
         style={{ scrollSnapType: 'x mandatory' }}
-        role="list"
+        role="region"
         aria-label="Liste des artisans similaires"
+        aria-roledescription="carousel"
       >
         {similar.map((item, index) => (
           <div
             key={item.id}
-            role="listitem"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${index + 1} sur ${similar.length}`}
             className="animate-fade-in-right"
             style={{ scrollSnapAlign: 'start', animationDelay: `${index * 0.05}s` }}
           >
