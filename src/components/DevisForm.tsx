@@ -409,12 +409,35 @@ export default function DevisForm({
     }
   }, [form])
 
+  // Focus the first invalid form control after setErrors so keyboard /
+  // SR users land on the failing field instead of being stranded on
+  // the now-greyed-out "Continuer" button. Defer to the next tick so
+  // React has flushed the aria-invalid attribute change.
+  const focusFirstInvalid = useCallback(() => {
+    if (typeof window === 'undefined') return
+    requestAnimationFrame(() => {
+      const node = document.querySelector<HTMLElement>('[aria-invalid="true"]')
+      if (node) {
+        // role="radiogroup" isn't focusable on its own — fall back to the
+        // first input inside the group.
+        if (node.getAttribute('role') === 'radiogroup') {
+          const firstRadio = node.querySelector<HTMLInputElement>('input[type="radio"]')
+          firstRadio?.focus()
+          return
+        }
+        node.focus()
+      }
+    })
+  }, [])
+
   const validateStep1Extended = (): boolean => {
     const newErrors: Partial<Record<keyof DevisFormData, string>> = {}
     if (!form.formData.service) newErrors.service = 'Veuillez sélectionner un service'
     if (!form.formData.ville) newErrors.ville = 'Veuillez indiquer votre ville'
     form.setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    const valid = Object.keys(newErrors).length === 0
+    if (!valid) focusFirstInvalid()
+    return valid
   }
 
   // 7→4 obligatoires : email + urgence sont optionnels sur cette étape. On
@@ -432,7 +455,9 @@ export default function DevisForm({
         'Veuillez détailler davantage votre projet (5 caractères minimum) ou laisser le champ vide'
     }
     form.setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    const valid = Object.keys(newErrors).length === 0
+    if (!valid) focusFirstInvalid()
+    return valid
   }
 
   const validateStep3Extended = (): boolean => {
@@ -447,7 +472,9 @@ export default function DevisForm({
       newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
     }
     form.setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    const valid = Object.keys(newErrors).length === 0
+    if (!valid) focusFirstInvalid()
+    return valid
   }
 
   const animateToStep = useCallback((targetStep: 1 | 2 | 3, direction: 'forward' | 'backward') => {
@@ -926,10 +953,16 @@ export default function DevisForm({
               </div>
 
               <div>
-                <label className={labelClass}>
+                <label className={labelClass} id="urgence-label">
                   Délai souhaité <span className="text-charcoal-400 font-normal">(optionnel)</span>
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div
+                  role="radiogroup"
+                  aria-labelledby="urgence-label"
+                  aria-invalid={!!form.errors.urgence}
+                  aria-describedby={form.errors.urgence ? 'urgence-error' : undefined}
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+                >
                   {urgencyOptions.map((opt) => (
                     <label
                       key={opt.value}
@@ -955,7 +988,11 @@ export default function DevisForm({
                   ))}
                 </div>
                 {form.errors.urgence && (
-                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
+                  <p
+                    id="urgence-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
                     {form.errors.urgence}
                   </p>
                 )}
@@ -1217,6 +1254,8 @@ export default function DevisForm({
                     type="checkbox"
                     checked={form.formData.consentement}
                     onChange={(e) => form.updateField('consentement', e.target.checked)}
+                    aria-invalid={!!form.errors.consentement}
+                    aria-describedby={form.errors.consentement ? 'consentement-error' : undefined}
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
@@ -1232,7 +1271,11 @@ export default function DevisForm({
                   </span>
                 </label>
                 {form.errors.consentement && (
-                  <p role="alert" className="mt-1.5 text-sm text-red-600 animate-fade-in-down">
+                  <p
+                    id="consentement-error"
+                    role="alert"
+                    className="mt-1.5 text-sm text-red-600 animate-fade-in-down"
+                  >
                     {form.errors.consentement}
                   </p>
                 )}
