@@ -25,6 +25,7 @@ import { SortDropdown, type SortOrder } from '@/components/providers/SortDropdow
 import { FilterPanel, countActiveFilters, parseFilters } from '@/components/providers/FilterPanel'
 import { ActiveFilterChips } from '@/components/providers/ActiveFilterChips'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
+import { StickyMobileDevisCTA } from '@/components/providers/StickyMobileDevisCTA'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -641,6 +642,12 @@ export default function ServiceLocationPageClient({
           </div>
         )}
       </div>
+
+      <StickyMobileDevisCTA
+        href={buildDevisHref(serviceSlug || service.slug, location.name)}
+        serviceLabel={service.name}
+        villeLabel={location.name}
+      />
     </div>
   )
 }
