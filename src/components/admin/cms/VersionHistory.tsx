@@ -236,7 +236,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
           role="dialog"
           aria-modal="true"
           aria-label="Confirmer la restauration"
-          className="fixed inset-0 z-[60] overflow-y-auto"
+          className="fixed inset-0 z-over-modal overflow-y-auto"
         >
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setConfirmRestore(null)} />

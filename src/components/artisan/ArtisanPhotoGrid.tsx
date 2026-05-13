@@ -177,7 +177,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
       {/* Lightbox Modal */}
       {lightboxOpen && (
         <div
-          className="animate-fade-in fixed inset-0 z-[100] bg-black flex items-center justify-center"
+          className="animate-fade-in fixed inset-0 z-lightbox bg-black flex items-center justify-center"
           onClick={closeLightbox}
           onKeyDown={handleKeyDown}
           tabIndex={0}

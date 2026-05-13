@@ -62,7 +62,7 @@ export default function PortfolioLightbox({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+        className="fixed inset-0 z-lightbox bg-black/95 flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label={`Galerie photo : ${currentItem?.title ?? ''}`}

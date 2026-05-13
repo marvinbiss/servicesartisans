@@ -100,6 +100,36 @@ module.exports = {
       fontSize: {
         '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
       },
+      // ─── Z-INDEX SYSTEM ─────────────────────────────────────────────
+      // Documenté 2026-05-13. Avant : 15 valeurs ad-hoc (z-[51], z-[54],
+      // z-[55], z-[56], z-[60], z-[100], z-[1000], z-[9999], z-[10000]).
+      // Maintenant : tokens nommés mappés à la pile UI logique.
+      //   base       0    background / cards
+      //   raised     10   in-component overlays, sticky-header dans card
+      //   dropdown   20   selects, autocompletes, popovers
+      //   sticky     30   sticky elements dans flow (sticky top, footer ad)
+      //   header     40   site header, sticky top bar
+      //   nav-mobile 45   MobileBottomNav (au-dessus du content)
+      //   modal     50    modal & modal backdrop
+      //   sticky-cta 55   StickyMobileCTA (au-dessus de nav-mobile)
+      //   over-modal 60   modal au-dessus d'un autre modal
+      //   lightbox   100  photo gallery fullscreen, lightbox
+      //   toast      200  notifications transients
+      //   skip-link 9999  WCAG skip-to-content focus visible
+      zIndex: {
+        base: '0',
+        raised: '10',
+        dropdown: '20',
+        sticky: '30',
+        header: '40',
+        'nav-mobile': '45',
+        modal: '50',
+        'sticky-cta': '55',
+        'over-modal': '60',
+        lightbox: '100',
+        toast: '200',
+        'skip-link': '9999',
+      },
       letterSpacing: {
         'tighter': '-0.04em',
         'display': '-0.02em',

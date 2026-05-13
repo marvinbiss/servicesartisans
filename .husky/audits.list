@@ -80,3 +80,4 @@ audit-dept-code-not-name.mjs --strict
 audit-cron-force-dynamic.mjs --strict
 audit-public-rge-only.mjs --strict
 audit-banned-tokens.mjs --strict
+audit-z-index.mjs --strict

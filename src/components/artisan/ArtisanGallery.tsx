@@ -201,7 +201,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+            className="fixed inset-0 z-lightbox bg-black/95 flex flex-col"
             onClick={closeLightbox}
             role="dialog"
             aria-label="Galerie de réalisations en plein écran"

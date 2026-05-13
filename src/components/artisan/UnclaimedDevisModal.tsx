@@ -267,7 +267,7 @@ export function UnclaimedDevisModal({
           animate="visible"
           exit="hidden"
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[60] flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-over-modal flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget) handleClose()
           }}

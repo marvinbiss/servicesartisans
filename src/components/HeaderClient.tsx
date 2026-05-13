@@ -331,7 +331,7 @@ export default function HeaderClient({
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
+          'fixed top-0 left-0 right-0 z-skip-link transition-all duration-300',
           scrolled
             ? 'bg-white/95 backdrop-blur-xl shadow-soft border-b border-sand-200/60'
             : 'bg-white/60 backdrop-blur-sm border-b border-transparent'

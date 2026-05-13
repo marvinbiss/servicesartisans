@@ -136,7 +136,7 @@ export default function StickyMobileCTA({
       {/* ── Sticky CTA Bar (mobile only) ── */}
       <div
         className={`
-          fixed left-0 right-0 z-[51] md:hidden
+          fixed left-0 right-0 z-sticky-cta md:hidden
           transition-all duration-300 ease-out
           ${
             visible && hasAnimated && !formInView
@@ -222,7 +222,7 @@ export default function StickyMobileCTA({
       {/* ── Sticky Desktop CTA (desktop only) ── */}
       <div
         className={`
-          fixed bottom-6 right-6 z-[51] hidden md:block
+          fixed bottom-6 right-6 z-sticky-cta hidden md:block
           transition-all duration-300 ease-out
           ${
             visible && hasAnimated && !formInView

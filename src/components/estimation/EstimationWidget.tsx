@@ -134,7 +134,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
       {/* Launcher + Greeting (when closed, hidden when hideLauncher is set) */}
       <AnimatePresence>
         {!isOpen && !hideLauncher && (
-          <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
+          <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-skip-link flex flex-col items-end gap-3">
             <AnimatePresence>
               {engagement.showGreeting && (
                 <GreetingBubble
@@ -169,7 +169,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className={
-              'fixed z-[9999] flex flex-col bg-white shadow-2xl ' +
+              'fixed z-skip-link flex flex-col bg-white shadow-2xl ' +
               'inset-0 ' +
               'sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:max-h-[600px] sm:rounded-[20px]'
             }

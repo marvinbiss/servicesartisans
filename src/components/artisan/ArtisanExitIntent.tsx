@@ -193,7 +193,7 @@ export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitInt
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-skip-link flex items-center justify-center p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="exit-intent-title"
