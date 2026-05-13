@@ -13,7 +13,7 @@ import {
   Shield,
   Clock,
 } from 'lucide-react'
-import { isValidFrenchPhone } from '@/lib/validation/phone'
+import { isValidFrenchPhone, formatFrenchPhoneAsTyped } from '@/lib/validation/phone'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { capture, EVENT } from '@/lib/analytics/posthog'
 import { useDevisForm, urgencyOptions, initialDevisFormData } from '@/hooks/useDevisForm'
@@ -1188,7 +1188,9 @@ export default function DevisForm({
                     inputMode="tel"
                     placeholder="06 12 34 56 78"
                     value={form.formData.telephone}
-                    onChange={(e) => form.updateField('telephone', e.target.value)}
+                    onChange={(e) =>
+                      form.updateField('telephone', formatFrenchPhoneAsTyped(e.target.value))
+                    }
                     onBlur={() => validateField('telephone')}
                     aria-describedby={form.errors.telephone ? 'telephone-error' : 'telephone-hint'}
                     aria-invalid={!!form.errors.telephone}
