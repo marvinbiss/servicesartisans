@@ -560,6 +560,12 @@ export default function ServiceLocationPageClient({
                     <ActiveFilterChips />
                   </div>
                 )}
+                {/* a11y: announce filter result count to screen readers. */}
+                <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+                  {activeFilterCount > 0
+                    ? `${filteredProviders.length} artisan${filteredProviders.length > 1 ? 's' : ''} après filtrage`
+                    : ''}
+                </div>
                 {activeFilterCount > 0 && filteredProviders.length === 0 ? (
                   <div className="flex flex-col items-center justify-center text-center px-6 py-12">
                     <div className="w-14 h-14 bg-sand-200 rounded-2xl flex items-center justify-center mb-4">

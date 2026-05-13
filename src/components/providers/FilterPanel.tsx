@@ -22,7 +22,7 @@
  * Le compteur de résultats live est passé par le parent — le panel n'a pas
  * à connaître l'algo de filtrage, juste les valeurs.
  */
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronDown, Filter, RotateCcw, X } from 'lucide-react'
 
@@ -186,6 +186,26 @@ export function FilterPanel({ resultCount, variant = 'sidebar' }: FilterPanelPro
   const searchParams = useSearchParams()
   const [filters, setFilters] = useState<ProviderFilters>(() => parseFilters(searchParams))
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+
+  // Esc closes drawer + body scroll-lock + focus return when closing.
+  useEffect(() => {
+    if (!drawerOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDrawerOpen(false)
+    }
+    const trigger = triggerRef.current
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeButtonRef.current?.focus()
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      trigger?.focus()
+    }
+  }, [drawerOpen])
 
   // Garde le state local synchro si l'URL change (back/forward navigation,
   // ou un autre widget edit les params). Compare par sérialisation pour ne
@@ -314,9 +334,12 @@ export function FilterPanel({ resultCount, variant = 'sidebar' }: FilterPanelPro
         {/* Mobile trigger button (sticky bottom) */}
         <div className="md:hidden sticky bottom-16 z-40 flex justify-center pointer-events-none">
           <button
+            ref={triggerRef}
             type="button"
             onClick={() => setDrawerOpen(true)}
-            className="pointer-events-auto inline-flex items-center gap-2 px-5 py-3 rounded-full bg-charcoal-900 text-white text-sm font-semibold shadow-lg hover:bg-charcoal-800 active:scale-95 transition-all duration-150"
+            aria-haspopup="dialog"
+            aria-expanded={drawerOpen}
+            className="pointer-events-auto inline-flex items-center gap-2 px-5 py-3 rounded-full bg-charcoal-900 text-white text-sm font-semibold shadow-lg hover:bg-charcoal-800 active:scale-95 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
           >
             <Filter className="w-4 h-4" />
             Filtres
@@ -345,10 +368,11 @@ export function FilterPanel({ resultCount, variant = 'sidebar' }: FilterPanelPro
               <div className="flex items-center justify-between px-4 py-3 border-b border-sand-200">
                 <h2 className="font-heading font-bold text-charcoal-900">Filtres</h2>
                 <button
+                  ref={closeButtonRef}
                   type="button"
                   onClick={() => setDrawerOpen(false)}
                   aria-label="Fermer les filtres"
-                  className="p-1 text-charcoal-500 hover:text-charcoal-900 rounded-lg hover:bg-sand-100"
+                  className="p-1 text-charcoal-500 hover:text-charcoal-900 rounded-lg hover:bg-sand-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
                 >
                   <X className="w-5 h-5" />
                 </button>
