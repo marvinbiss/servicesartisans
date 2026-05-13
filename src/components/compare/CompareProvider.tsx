@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
 import { useToast } from '@/hooks/useToast'
 import { ToastContainer } from '@/components/ui/Toast'
+import type { RgeQualification } from '@/lib/rge/has-active-qualification'
 
 const MAX_COMPARE = 3
 
@@ -20,6 +21,16 @@ export interface CompareProvider {
   review_count?: number
   phone?: string
   siret?: string
+  // Mig 306 signals
+  hourly_rate_min?: number | null
+  hourly_rate_max?: number | null
+  emergency_available?: boolean
+  available_24h?: boolean
+  free_quote?: boolean
+  accepts_new_clients?: boolean
+  // RGE
+  rge_qualifications?: RgeQualification[] | null
+  rge_valid_until?: string | null
 }
 
 interface CompareContextType {

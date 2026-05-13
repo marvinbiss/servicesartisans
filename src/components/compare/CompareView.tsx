@@ -11,7 +11,11 @@ import {
   XCircle,
   FileText,
   MapPinned,
+  Leaf,
+  Wallet,
+  Zap,
 } from 'lucide-react'
+import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { clsx } from 'clsx'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
@@ -218,6 +222,74 @@ export function CompareView({ onClose }: CompareViewProps) {
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => <BooleanCell value={provider.is_verified} />}
+              </ProviderGrid>
+            </CompareRow>
+
+            {/* RGE actif — déclencheur d'aides (MaPrimeRénov', CEE, TVA 5,5%) */}
+            <CompareRow
+              label="Certifié RGE"
+              icon={<Leaf className="w-4 h-4 text-accent-500" />}
+              providers={compareList}
+            >
+              <ProviderGrid providers={compareList}>
+                {(provider) => (
+                  <BooleanCell value={hasActiveRgeQualification(provider.rge_qualifications)} />
+                )}
+              </ProviderGrid>
+            </CompareRow>
+
+            {/* Tarif horaire (mig 306) */}
+            <CompareRow
+              label="Tarif horaire"
+              icon={<Wallet className="w-4 h-4 text-amber-500" />}
+              providers={compareList}
+            >
+              <ProviderGrid providers={compareList}>
+                {(provider) => {
+                  const min = provider.hourly_rate_min
+                  const max = provider.hourly_rate_max
+                  if (min == null && max == null) {
+                    return <span className="text-charcoal-400 text-xs">Sur devis</span>
+                  }
+                  if (min != null && max != null && min !== max) {
+                    return (
+                      <span className="text-charcoal-700 font-medium">
+                        {min}–{max}
+                        {' '}€/h
+                      </span>
+                    )
+                  }
+                  return (
+                    <span className="text-charcoal-700 font-medium">
+                      {min ?? max}
+                      {' '}€/h
+                    </span>
+                  )
+                }}
+              </ProviderGrid>
+            </CompareRow>
+
+            {/* Urgences */}
+            <CompareRow
+              label="Urgences 24/7"
+              icon={<Zap className="w-4 h-4 text-orange-500" />}
+              providers={compareList}
+            >
+              <ProviderGrid providers={compareList}>
+                {(provider) => (
+                  <BooleanCell value={provider.emergency_available || provider.available_24h} />
+                )}
+              </ProviderGrid>
+            </CompareRow>
+
+            {/* Devis gratuit */}
+            <CompareRow
+              label="Devis gratuit"
+              icon={<FileText className="w-4 h-4 text-charcoal-400" />}
+              providers={compareList}
+            >
+              <ProviderGrid providers={compareList}>
+                {(provider) => <BooleanCell value={provider.free_quote} />}
               </ProviderGrid>
             </CompareRow>
 

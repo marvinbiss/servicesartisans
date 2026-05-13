@@ -313,6 +313,14 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             rating_average: provider.rating_average,
             review_count: provider.review_count,
             siret: provider.siret,
+            hourly_rate_min: provider.hourly_rate_min ?? null,
+            hourly_rate_max: provider.hourly_rate_max ?? null,
+            emergency_available: provider.emergency_available,
+            available_24h: provider.available_24h,
+            free_quote: provider.free_quote,
+            accepts_new_clients: provider.accepts_new_clients,
+            rge_qualifications: provider.rge_qualifications ?? null,
+            rge_valid_until: provider.rge_valid_until ?? null,
           }}
         />
       </div>
