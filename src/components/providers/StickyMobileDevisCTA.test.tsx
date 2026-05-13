@@ -3,6 +3,18 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { StickyMobileDevisCTA } from './StickyMobileDevisCTA'
 
+const compareListMock: { value: { id: string; name: string; slug: string }[] } = { value: [] }
+
+vi.mock('@/components/compare/CompareProvider', () => ({
+  useCompare: () => ({
+    compareList: compareListMock.value,
+    addToCompare: vi.fn(),
+    removeFromCompare: vi.fn(),
+    clearCompare: vi.fn(),
+    isInCompare: () => false,
+  }),
+}))
+
 vi.mock('next/link', () => ({
   default: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
     <a href={href} {...rest}>
@@ -19,7 +31,10 @@ function setScroll(y: number) {
 }
 
 describe('StickyMobileDevisCTA', () => {
-  beforeEach(() => setScroll(0))
+  beforeEach(() => {
+    setScroll(0)
+    compareListMock.value = []
+  })
   afterEach(() => setScroll(0))
 
   it('starts hidden (translate-y-full)', () => {
@@ -64,5 +79,14 @@ describe('StickyMobileDevisCTA', () => {
     render(<StickyMobileDevisCTA href="/devis" serviceLabel="Plombier" villeLabel="Lyon" />)
     const wrapper = screen.getByLabelText(/Recevoir mes devis/).closest('div')
     expect(wrapper?.className).toContain('md:hidden')
+  })
+
+  it('muted when compareList is non-empty (yields stage to CompareBar)', () => {
+    compareListMock.value = [{ id: 'p1', name: 'A', slug: 'a' }]
+    render(<StickyMobileDevisCTA href="/devis" serviceLabel="Plombier" villeLabel="Lyon" />)
+    setScroll(700)
+    const wrapper = screen.getByLabelText(/Recevoir mes devis/).closest('div')
+    expect(wrapper?.className).toContain('translate-y-full')
+    expect(wrapper?.getAttribute('aria-hidden')).toBe('true')
   })
 })

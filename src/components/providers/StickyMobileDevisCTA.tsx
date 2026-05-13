@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, FileText } from 'lucide-react'
+import { useCompare } from '@/components/compare/CompareProvider'
 
 type Props = {
   href: string
@@ -14,6 +15,10 @@ type Props = {
 
 export function StickyMobileDevisCTA({ href, serviceLabel, villeLabel, threshold = 600 }: Props) {
   const [visible, setVisible] = useState(false)
+  const { compareList } = useCompare()
+  // Mute when compare mode active: CompareBar owns the bottom-0 mobile real
+  // estate. The user is engaged in a different decision flow; don't compete.
+  const muted = compareList.length > 0
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > threshold)
@@ -22,12 +27,13 @@ export function StickyMobileDevisCTA({ href, serviceLabel, villeLabel, threshold
     return () => window.removeEventListener('scroll', onScroll)
   }, [threshold])
 
+  const active = visible && !muted
   return (
     <div
-      className={`md:hidden fixed inset-x-0 bottom-0 z-40 px-4 pb-3 pt-2 bg-gradient-to-t from-white via-white/95 to-white/0 transition-transform duration-200 ${
-        visible ? 'translate-y-0' : 'translate-y-full pointer-events-none'
+      className={`md:hidden fixed inset-x-0 bottom-0 z-40 px-4 pb-3 pt-2 bg-gradient-to-t from-white via-white/95 to-white/0 transition-transform duration-200 motion-reduce:transition-none ${
+        active ? 'translate-y-0' : 'translate-y-full pointer-events-none'
       }`}
-      aria-hidden={!visible}
+      aria-hidden={!active}
     >
       <Link
         href={href}
