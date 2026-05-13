@@ -17,6 +17,7 @@
 
 import Link from 'next/link'
 import { Leaf, ShieldCheck, ArrowRight, MapPin } from 'lucide-react'
+import { ExternalLink } from '@/components/ui/ExternalLink'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
@@ -133,14 +134,12 @@ export default async function RgeGuideBlock({
                   ? ` ${serviceNoun}s RGE certifiés${qualificationLabel ? ` (${qualificationLabel})` : ''} recensés dans notre annuaire, `
                   : ' artisans RGE certifiés recensés dans notre annuaire, '}
                 {'issus du référentiel officiel '}
-                <a
+                <ExternalLink
                   href="https://france-renov.gouv.fr/annuaire-rge"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-accent-700 underline hover:text-accent-800"
                 >
                   France Rénov&apos;
-                </a>
+                </ExternalLink>
                 {' (ADEME). Éligibles à MaPrimeRénov&apos; et aux CEE.'}
               </p>
             ) : (
