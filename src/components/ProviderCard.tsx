@@ -1,7 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { MapPin, Star, ChevronRight, ShieldCheck, Wallet } from 'lucide-react'
+import {
+  MapPin,
+  Star,
+  ChevronRight,
+  ShieldCheck,
+  Wallet,
+  Zap,
+  Clock,
+  FileCheck,
+} from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
 import { getDiceBearAvatar } from '@/lib/data/images-faces'
@@ -223,6 +232,40 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           )}
         </span>
       </div>
+
+      {/* Badges trust authentiques (mig 306, renseignés par l'artisan).
+          Pas de faux compteurs "X personnes regardent" — uniquement des
+          signaux que l'artisan a explicitement validés sur sa fiche. */}
+      {(provider.emergency_available ||
+        provider.available_24h ||
+        provider.free_quote ||
+        provider.accepts_new_clients) && (
+        <div className="flex flex-wrap gap-1.5 ml-16 mb-3">
+          {provider.emergency_available && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold bg-red-50 text-red-700 border border-red-100">
+              <Zap className="w-3 h-3" aria-hidden="true" />
+              Urgences
+            </span>
+          )}
+          {provider.available_24h && !provider.emergency_available && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold bg-accent-50 text-accent-700 border border-accent-100">
+              <Clock className="w-3 h-3" aria-hidden="true" />
+              7j/7
+            </span>
+          )}
+          {provider.free_quote && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold bg-primary-50 text-primary-700 border border-primary-100">
+              <FileCheck className="w-3 h-3" aria-hidden="true" />
+              Devis gratuit
+            </span>
+          )}
+          {provider.accepts_new_clients && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-semibold bg-secondary-50 text-secondary-700 border border-secondary-100">
+              Disponible
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Boutons */}
       <div className="flex gap-3 relative z-20 mt-4">

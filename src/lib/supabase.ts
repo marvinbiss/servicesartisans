@@ -96,6 +96,11 @@ interface ProviderListRow {
   // Pricing (mig 306) — listing pour ProviderCard pricing badge.
   hourly_rate_min: number | null
   hourly_rate_max: number | null
+  // Disponibilité / urgence (mig 306) — alimente badges ProviderCard.
+  emergency_available: boolean | null
+  available_24h: boolean | null
+  accepts_new_clients: boolean | null
+  free_quote: boolean | null
 }
 
 /**
@@ -208,6 +213,14 @@ const PROVIDER_LIST_SELECT = [
   // Surcoût ~16 octets/row × 50 rows page = ~800B (négligeable).
   'hourly_rate_min',
   'hourly_rate_max',
+  // Disponibilité / urgence (mig 306 — booleans, ~4 octets/row).
+  // Alimentent les badges trust ProviderCard ("Urgences", "Devis gratuit",
+  // "Accepte de nouveaux clients"). Signaux authentiques renseignés par
+  // l'artisan, pas des compteurs simulés.
+  'emergency_available',
+  'available_24h',
+  'accepts_new_clients',
+  'free_quote',
 ].join(',')
 
 export async function getServices() {

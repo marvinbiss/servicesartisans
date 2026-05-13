@@ -60,6 +60,7 @@ export interface Provider {
   rating_average?: number
   review_count?: number
   available_24h?: boolean
+  emergency_available?: boolean
   phone_secondary?: string
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   accepts_new_clients?: boolean
