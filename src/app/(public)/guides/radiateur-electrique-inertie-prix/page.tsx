@@ -1,3 +1,20 @@
+/**
+ * /guides/radiateur-electrique-inertie-prix — Hub radiateur électrique inertie
+ *
+ * @kw-primary    radiateur électrique basse consommation
+ * @kw-volume     1300
+ * @kw-kd         0
+ * @kw-cpc        16
+ * @kw-secondary  radiateur inertie prix, radiateur électrique économique
+ * @cluster       6 (chauffage électrique / régulation)
+ * @intent        commercial (prix + économie)
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/keyword_opportunities_2026-05.csv:12
+ * @snapshot      2026-05-13 (chantier #12 KW commerciaux vague 2)
+ *
+ * Optimisation 2026-05-13 :
+ *   Title élargi pour capter aussi "radiateur électrique basse consommation".
+ *   Sonergia rang 5 = striking distance.
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Thermometer, ArrowRight, Phone } from 'lucide-react'
@@ -20,9 +37,11 @@ const AUTHOR_SLUG = 'marc-lefebvre'
 
 export const revalidate = 86400
 
-const TITLE = 'Radiateur inertie : prix, pose 2026'
+// Title élargi pour capter "radiateur électrique basse consommation" (1 300 vol,
+// KD 0) en plus de "radiateur inertie prix". Sonergia rang 5 = striking distance.
+const TITLE = 'Radiateur électrique basse consommation 2026 : inertie, prix, pose'
 const DESCRIPTION =
-  'Radiateur inertie 2026 : prix 350-1 400 € posé (fluide, fonte, céramique), 750-2 000 W, pilotage Wifi, électricien qualifié, CEE 200-400 €.'
+  'Radiateur électrique basse consommation 2026 : inertie fluide 350-700 €, fonte/céramique 600-1 400 € posé. Économie 15-25 % vs convecteur. Pilotage Wi-Fi + CEE 200-400 €.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -141,7 +160,7 @@ export default function Page() {
               data-speakable="true"
               className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
             >
-              Radiateur électrique à inertie : prix 2026
+              Radiateur électrique basse consommation 2026 : inertie, prix et pose
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">
               Un radiateur inertie coûte 350-1 400 € TTC posé selon la technologie (fluide, fonte,
