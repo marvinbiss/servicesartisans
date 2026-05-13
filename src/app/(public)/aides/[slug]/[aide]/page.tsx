@@ -14,6 +14,7 @@ import AideDemarche from '@/components/aides/AideDemarche'
 import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { aidesSlugs, getAideBySlug, getCumulableAides } from '@/lib/aides/aides-catalog'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { CLIMATE_ZONE_LABELS, deptToClimateZone } from '@/lib/aides/climate-zones'
@@ -283,9 +284,9 @@ export default async function AideDeptPage({ params }: PageProps) {
           />
 
           <header className="mt-6 mb-8">
-            <h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">
+            <PageHeroH1 size="page">
               {aide.name} {getDeptPreposition(dept.name)} {dept.name} ({dept.code}) — 2026
-            </h1>
+            </PageHeroH1>
             <p className="mt-3 text-charcoal-700">{aide.description}</p>
             <p className="mt-2 flex items-center gap-2 text-sm text-charcoal-600">
               <MapPin className="h-4 w-4" /> Région : {dept.region} · Zone climatique {zoneLabel}

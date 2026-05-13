@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
@@ -52,9 +53,7 @@ export default function DroitOppositionPage() {
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: "Droit d'opposition" }]} className="mb-4" />
-          <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-            Droit d&apos;opposition et suppression de fiche
-          </h1>
+          <PageHeroH1 size="article">Droit d&apos;opposition et suppression de fiche</PageHeroH1>
           <p className="text-charcoal-600 mt-2">Dernière mise à jour : Avril 2026</p>
         </div>
       </section>

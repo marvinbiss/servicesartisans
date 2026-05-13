@@ -17,6 +17,7 @@ import { CmsContent } from '@/components/CmsContent'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
@@ -65,9 +66,7 @@ export default async function BlogPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <PageHeroH1 size="article">{cmsPage.title}</PageHeroH1>
           </div>
         </section>
         <section className="py-12">

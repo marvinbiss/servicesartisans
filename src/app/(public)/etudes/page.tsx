@@ -8,6 +8,7 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 
 const canonicalUrl = `${SITE_URL}/etudes`
@@ -163,9 +164,7 @@ export default function EtudesPage() {
           <Breadcrumb items={[{ label: 'Études' }]} className="mb-4" />
           <div className="flex items-center gap-3 mb-4">
             <BarChart3 className="w-8 h-8 text-primary-500" />
-            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-              Études et données
-            </h1>
+            <PageHeroH1 size="article">Études et données</PageHeroH1>
           </div>
           <p className="text-lg text-charcoal-600 max-w-2xl">
             Analyses exclusives sur l&apos;artisanat en France, basées sur les données SIREN

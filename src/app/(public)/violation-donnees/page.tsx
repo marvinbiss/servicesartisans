@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
@@ -54,9 +55,7 @@ export default function ViolationDonneesPage() {
             items={[{ label: 'Notification de violation de données' }]}
             className="mb-4"
           />
-          <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-            Notification de violation de données
-          </h1>
+          <PageHeroH1 size="article">Notification de violation de données</PageHeroH1>
           <p className="text-charcoal-600 mt-2">Dernière mise à jour : Avril 2026</p>
         </div>
       </section>

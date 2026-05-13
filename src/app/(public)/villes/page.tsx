@@ -18,6 +18,7 @@ import { villes, regions, departements, services } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 
 export const revalidate = 86400
 
@@ -73,9 +74,7 @@ export default async function VillesIndexPage() {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <PageHeroH1 size="article">{cmsPage.title}</PageHeroH1>
           </div>
         </section>
         <section className="py-12">

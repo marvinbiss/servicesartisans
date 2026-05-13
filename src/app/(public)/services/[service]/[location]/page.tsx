@@ -117,6 +117,7 @@ import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import dynamic from 'next/dynamic'
 import IntentNavBar from '@/components/seo/IntentNavBar'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
@@ -585,9 +586,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <PageHeroH1 size="article">{cmsPage.title}</PageHeroH1>
           </div>
         </section>
         <section className="py-12">

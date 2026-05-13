@@ -8,6 +8,7 @@ import FAQPageClient from './FAQPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import dynamic from 'next/dynamic'
 const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
 
@@ -74,9 +75,7 @@ export default async function FAQPage() {
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
-            <h1 data-speakable="true" className="font-heading text-3xl font-bold text-charcoal-900">
-              {cmsPage.title}
-            </h1>
+            <PageHeroH1 size="article">{cmsPage.title}</PageHeroH1>
           </div>
         </section>
         <section className="py-12">
