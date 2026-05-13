@@ -57,14 +57,19 @@ export function Pagination({ currentPage, totalPages, baseUrl, className }: Pagi
       {currentPage > 1 ? (
         <Link
           href={getPageUrl(currentPage - 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-600 hover:bg-sand-100 rounded-lg min-h-[44px] min-w-[44px] justify-center"
+          aria-label={`Aller à la page précédente (page ${currentPage - 1})`}
+          rel="prev"
+          className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-600 hover:bg-sand-100 rounded-lg min-h-[44px] min-w-[44px] justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           <span className="hidden sm:inline">Précédent</span>
         </Link>
       ) : (
-        <span className="flex items-center gap-1 px-3 py-2 text-sm text-sand-500 cursor-not-allowed min-h-[44px] min-w-[44px] justify-center">
-          <ChevronLeft className="w-4 h-4" />
+        <span
+          aria-disabled="true"
+          className="flex items-center gap-1 px-3 py-2 text-sm text-sand-500 cursor-not-allowed min-h-[44px] min-w-[44px] justify-center"
+        >
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           <span className="hidden sm:inline">Précédent</span>
         </span>
       )}
@@ -73,7 +78,11 @@ export function Pagination({ currentPage, totalPages, baseUrl, className }: Pagi
       <div className="flex items-center gap-1.5">
         {pages.map((page, index) =>
           page === 'ellipsis' ? (
-            <span key={`ellipsis-${index}`} className="px-3 py-2 text-charcoal-400">
+            <span
+              key={`ellipsis-${index}`}
+              aria-hidden="true"
+              className="px-3 py-2 text-charcoal-400"
+            >
               ...
             </span>
           ) : page === currentPage ? (
@@ -81,6 +90,7 @@ export function Pagination({ currentPage, totalPages, baseUrl, className }: Pagi
               key={page}
               className="min-w-[44px] h-11 flex items-center justify-center rounded-lg text-sm font-medium bg-primary-500 text-white"
               aria-current="page"
+              aria-label={`Page ${page}, page courante`}
             >
               {page}
             </span>
@@ -88,7 +98,8 @@ export function Pagination({ currentPage, totalPages, baseUrl, className }: Pagi
             <Link
               key={page}
               href={getPageUrl(page)}
-              className="min-w-[44px] h-11 flex items-center justify-center rounded-lg text-sm font-medium transition-colors text-charcoal-600 hover:bg-sand-100"
+              aria-label={`Aller à la page ${page}`}
+              className="min-w-[44px] h-11 flex items-center justify-center rounded-lg text-sm font-medium transition-colors text-charcoal-600 hover:bg-sand-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
             >
               {page}
             </Link>
@@ -100,15 +111,20 @@ export function Pagination({ currentPage, totalPages, baseUrl, className }: Pagi
       {currentPage < totalPages ? (
         <Link
           href={getPageUrl(currentPage + 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-600 hover:bg-sand-100 rounded-lg min-h-[44px] min-w-[44px] justify-center"
+          aria-label={`Aller à la page suivante (page ${currentPage + 1})`}
+          rel="next"
+          className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-600 hover:bg-sand-100 rounded-lg min-h-[44px] min-w-[44px] justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
         >
           <span className="hidden sm:inline">Suivant</span>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       ) : (
-        <span className="flex items-center gap-1 px-3 py-2 text-sm text-sand-500 cursor-not-allowed min-h-[44px] min-w-[44px] justify-center">
+        <span
+          aria-disabled="true"
+          className="flex items-center gap-1 px-3 py-2 text-sm text-sand-500 cursor-not-allowed min-h-[44px] min-w-[44px] justify-center"
+        >
           <span className="hidden sm:inline">Suivant</span>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </span>
       )}
     </nav>
