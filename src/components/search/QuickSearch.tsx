@@ -2,8 +2,11 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, Wrench, X, Building2 } from 'lucide-react'
+import Link from 'next/link'
+import { Search, MapPin, Wrench, X, Building2, History, Bookmark } from 'lucide-react'
 import { services, villesLight, type Ville } from '@/lib/data/france-light'
+import { loadRecentlyViewed, type RecentlyViewedItem } from '@/lib/storage/recently-viewed'
+import { loadSavedSearches, buildSearchHref, type SavedSearch } from '@/lib/storage/saved-searches'
 
 // Full villes loaded on demand (lazy — only when user types)
 let _allVilles: Ville[] | null = null
@@ -365,6 +368,20 @@ export default function QuickSearch() {
     return [...suggestions, ...enterpriseResults].slice(0, 10)
   }, [suggestions, enterpriseResults])
 
+  // Recently viewed + saved searches — surfaced when input empty.
+  // Loaded lazily on first focus so SSR/CSR stay aligned.
+  const [recents, setRecents] = useState<{
+    recent: RecentlyViewedItem[]
+    saved: SavedSearch[]
+  }>({ recent: [], saved: [] })
+  const [recentsLoaded, setRecentsLoaded] = useState(false)
+  const loadRecents = useCallback(() => {
+    if (recentsLoaded) return
+    setRecents({ recent: loadRecentlyViewed().slice(0, 4), saved: loadSavedSearches().slice(0, 3) })
+    setRecentsLoaded(true)
+  }, [recentsLoaded])
+  const showRecents = !input.trim() && (recents.recent.length > 0 || recents.saved.length > 0)
+
   // Reset highlight when suggestions change
   useEffect(() => {
     setHighlightedIndex(-1)
@@ -516,9 +533,8 @@ export default function QuickSearch() {
               setShowDropdown(true)
             }}
             onFocus={() => {
-              if (input.trim().length > 0) {
-                setShowDropdown(true)
-              }
+              loadRecents()
+              setShowDropdown(true)
             }}
             onKeyDown={handleKeyDown}
             placeholder="Rechercher un artisan, service, ville, SIRET ou SIREN..."
@@ -556,6 +572,71 @@ export default function QuickSearch() {
           </button>
         </div>
       </form>
+
+      {/* Recents / Saved searches — shown when input empty + focused */}
+      {showDropdown && showRecents && (
+        <div
+          className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-sand-300 z-50 overflow-hidden"
+          role="region"
+          aria-label="Vos consultations récentes"
+        >
+          <div className="max-h-80 overflow-y-auto py-1">
+            {recents.recent.length > 0 && (
+              <div className="px-3 pt-2 pb-1">
+                <p className="text-2xs font-bold uppercase tracking-wide text-charcoal-400 px-1">
+                  Consultés récemment
+                </p>
+              </div>
+            )}
+            {recents.recent.map((item) => (
+              <Link
+                key={`recent-${item.id}`}
+                href={item.href}
+                onClick={() => setShowDropdown(false)}
+                className="flex items-center gap-3 px-3.5 py-2 hover:bg-sand-50 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-lg bg-sand-100 flex items-center justify-center flex-shrink-0">
+                  <History className="w-4 h-4 text-charcoal-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-charcoal-900 truncate">
+                    {item.name || 'Artisan'}
+                  </div>
+                  {(item.specialty || item.city) && (
+                    <div className="text-xs text-charcoal-400 truncate">
+                      {[item.specialty, item.city].filter(Boolean).join(' · ')}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+            {recents.saved.length > 0 && (
+              <div className="px-3 pt-2 pb-1 border-t border-sand-100 mt-1">
+                <p className="text-2xs font-bold uppercase tracking-wide text-charcoal-400 px-1">
+                  Recherches enregistrées
+                </p>
+              </div>
+            )}
+            {recents.saved.map((s) => (
+              <Link
+                key={`saved-${s.id}`}
+                href={buildSearchHref(s)}
+                onClick={() => setShowDropdown(false)}
+                className="flex items-center gap-3 px-3.5 py-2 hover:bg-sand-50 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
+                  <Bookmark className="w-4 h-4 text-primary-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-charcoal-900 truncate">
+                    {s.serviceLabel} · {s.villeLabel}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Suggestions Dropdown */}
       {showDropdown && allSuggestions.length > 0 && (
