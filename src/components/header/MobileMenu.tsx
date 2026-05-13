@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import {
   Search,
@@ -63,9 +64,66 @@ export default function MobileMenu({
     closeMobileMenu()
   }
 
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  // a11y — Escape to close, focus trap inside the drawer, restore focus
+  // on the trigger when the drawer unmounts. The hamburger button in
+  // HeaderClient is the prior focus target.
+  useEffect(() => {
+    const node = dialogRef.current
+    if (!node) return
+    const previouslyFocused = (document.activeElement as HTMLElement | null) ?? null
+
+    // Move focus into the drawer so SR users hear the new landmark.
+    const focusables = node.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusables.length > 0) {
+      focusables[0].focus()
+    }
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        closeMobileMenu()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const live = node.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      if (live.length === 0) return
+      const first = live[0]
+      const last = live[live.length - 1]
+      const active = document.activeElement
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      // Restore focus to the hamburger button so the keyboard user lands
+      // where they left off. Guard against the trigger having been
+      // removed (e.g., route change unmounts header).
+      if (previouslyFocused && document.body.contains(previouslyFocused)) {
+        previouslyFocused.focus()
+      }
+    }
+  }, [closeMobileMenu])
+
   return (
     <div
+      ref={dialogRef}
       data-menu-content="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu de navigation"
       className="lg:hidden border-t border-sand-200/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
