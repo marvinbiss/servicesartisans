@@ -100,25 +100,35 @@ export function FavoriteButton({
         aria-label={
           favorited ? `Retirer ${providerName} des favoris` : `Ajouter ${providerName} aux favoris`
         }
+        aria-pressed={favorited}
         className={cn(
           btnSize,
           'bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-110',
-          animating && 'animate-[favoriteScale_0.3s_ease-in-out]'
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2',
+          'motion-reduce:transition-none motion-reduce:hover:scale-100',
+          animating && 'animate-[favoriteScale_0.3s_ease-in-out] motion-reduce:animate-none'
         )}
       >
         <Heart
           className={cn(
             iconSize,
-            'transition-colors duration-200',
+            'transition-colors duration-200 motion-reduce:transition-none',
             favorited ? 'text-red-500 fill-red-500' : 'text-charcoal-600 hover:text-red-400'
           )}
+          aria-hidden="true"
         />
       </button>
 
-      {/* Toast notification */}
+      {/* Visible toast — doubles as the SR live region so we never announce
+          twice. role="status" + aria-live="polite" so the message is read
+          without stealing focus. Off-screen text fallback keeps the
+          announcement available even when the visual toast has faded. */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {toast}
+      </div>
       {toast && (
-        <div className="absolute top-full right-0 mt-2 z-50 pointer-events-none">
-          <div className="whitespace-nowrap bg-charcoal-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out]">
+        <div className="absolute top-full right-0 mt-2 z-50 pointer-events-none" aria-hidden="true">
+          <div className="whitespace-nowrap bg-charcoal-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out] motion-reduce:animate-none">
             {toast}
           </div>
         </div>
