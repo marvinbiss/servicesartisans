@@ -246,7 +246,7 @@ export function ArtisanRgeEnrichedSection({
                     </p>
                   </div>
                   <ArrowRight
-                    className="w-4 h-4 text-accent-600 flex-shrink-0 mt-1 group-hover:trancharcoal-x-0.5 transition-transform"
+                    className="w-4 h-4 text-accent-600 flex-shrink-0 mt-1 group-hover:translate-x-0.5 transition-transform"
                     aria-hidden="true"
                   />
                 </div>

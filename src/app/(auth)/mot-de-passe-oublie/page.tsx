@@ -95,7 +95,7 @@ export default function MotDePasseOubliePage() {
                 Adresse email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
                 <input
                   type="email"
                   value={email}

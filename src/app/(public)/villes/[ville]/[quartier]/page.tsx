@@ -409,7 +409,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-trancharcoal-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-accent-200' : 'bg-white border border-sand-200'}`}
+                className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-accent-200' : 'bg-white border border-sand-200'}`}
               >
                 <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
                   {service.name}
@@ -747,7 +747,7 @@ export default async function QuartierPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-trancharcoal-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

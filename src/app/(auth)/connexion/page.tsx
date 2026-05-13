@@ -134,7 +134,7 @@ export default function ConnexionPage() {
               <div>
                 <label className="block text-sm font-medium text-sand-500 mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type="email"
                     value={email}
@@ -150,7 +150,7 @@ export default function ConnexionPage() {
               <div>
                 <label className="block text-sm font-medium text-sand-500 mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
@@ -163,7 +163,7 @@ export default function ConnexionPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -trancharcoal-y-1/2 text-charcoal-500 hover:text-sand-500"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-sand-500"
                     aria-label={
                       showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
                     }
@@ -284,8 +284,8 @@ export default function ConnexionPage() {
         <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-800 items-center justify-center p-12 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl trancharcoal-x-1/2 -trancharcoal-y-1/2" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -trancharcoal-x-1/2 trancharcoal-y-1/2" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
           </div>
           <div className="max-w-md text-white text-center relative z-10">
             <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">

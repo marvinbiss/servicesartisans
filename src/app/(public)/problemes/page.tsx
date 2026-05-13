@@ -427,7 +427,7 @@ export default function ProblemesPage() {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-3 bg-white text-amber-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-trancharcoal-y-0.5 transition-all"
+            className="inline-flex items-center gap-3 bg-white text-amber-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
           >
             Obtenir mon devis gratuit
             <ArrowRight className="w-5 h-5" />

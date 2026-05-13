@@ -204,7 +204,7 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
                       href={`/questions/${q.slug}`}
                       className="flex items-start gap-2 p-3 bg-white rounded-lg border hover:border-primary-300 hover:shadow-sm transition-all group"
                     >
-                      <ArrowRight className="w-4 h-4 text-primary-400 mt-1 shrink-0 group-hover:trancharcoal-x-0.5 transition-transform" />
+                      <ArrowRight className="w-4 h-4 text-primary-400 mt-1 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                       <span className="text-sm text-charcoal-700 group-hover:text-primary-600 transition-colors leading-snug">
                         {q.question}
                       </span>

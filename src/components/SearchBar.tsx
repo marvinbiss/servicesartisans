@@ -470,7 +470,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
           <div className={`relative ${isLarge ? 'flex-1' : 'flex-1 min-w-0'}`}>
             <div className="relative">
               <MapPin
-                className={`absolute top-1/2 -trancharcoal-y-1/2 text-charcoal-400 ${isLarge ? 'left-4 w-5 h-5' : 'left-3 w-4 h-4'}`}
+                className={`absolute top-1/2 -translate-y-1/2 text-charcoal-400 ${isLarge ? 'left-4 w-5 h-5' : 'left-3 w-4 h-4'}`}
               />
               <input
                 ref={cityInputRef}

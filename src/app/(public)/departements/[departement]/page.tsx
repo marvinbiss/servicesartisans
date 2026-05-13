@@ -413,7 +413,7 @@ export default async function DepartementPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/departements/${dept.slug}/${service.slug}`}
-                className={`bg-white rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-trancharcoal-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-accent-200' : 'border border-sand-200'}`}
+                className={`bg-white rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-accent-200' : 'border border-sand-200'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
                   <span className="inline-block text-[10px] font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full mb-2">
@@ -552,7 +552,7 @@ export default async function DepartementPage({ params }: PageProps) {
                   <Link
                     key={ville.slug}
                     href={`/villes/${ville.slug}`}
-                    className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-trancharcoal-y-0.5 transition-all group"
+                    className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg flex items-center justify-center group-hover:from-primary-100 group-hover:to-primary-200 transition-colors">
@@ -870,7 +870,7 @@ export default async function DepartementPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-trancharcoal-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

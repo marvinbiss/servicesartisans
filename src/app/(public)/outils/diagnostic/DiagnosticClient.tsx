@@ -130,9 +130,9 @@ export default function DiagnosticClient() {
         className={`transition-all duration-150 ease-in-out ${
           animating
             ? direction === 'forward'
-              ? 'opacity-0 trancharcoal-x-4'
-              : 'opacity-0 -trancharcoal-x-4'
-            : 'opacity-100 trancharcoal-x-0'
+              ? 'opacity-0 translate-x-4'
+              : 'opacity-0 -translate-x-4'
+            : 'opacity-100 translate-x-0'
         }`}
       >
         {/* Step 1: Category selection */}

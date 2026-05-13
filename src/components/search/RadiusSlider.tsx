@@ -86,7 +86,7 @@ export function RadiusSlider({
           {/* Thumb */}
           <div
             className={cn(
-              'absolute top-1/2 -trancharcoal-y-1/2 w-4 h-4 bg-white border-2 border-primary-500 rounded-full shadow transition-transform',
+              'absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-primary-500 rounded-full shadow transition-transform',
               isDragging && 'scale-125'
             )}
             style={{ left: `calc(${percentage}% - 8px)` }}

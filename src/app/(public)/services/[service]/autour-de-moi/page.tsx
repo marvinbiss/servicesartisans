@@ -245,7 +245,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                   <span className="font-medium text-charcoal-800 group-hover:text-primary-700">
                     {c.name}
                   </span>
-                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:trancharcoal-x-0.5 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all" />
                 </Link>
               </li>
             ))}
@@ -340,7 +340,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           </p>
           <Link
             href={`/devis/${service}`}
-            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
           >
             Demander un devis gratuit
             <ArrowRight className="w-5 h-5" />

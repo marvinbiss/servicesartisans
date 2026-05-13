@@ -75,7 +75,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  available24h ? 'trancharcoal-x-6' : 'trancharcoal-x-1'
+                  available24h ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
             </button>
@@ -97,7 +97,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  acceptsNewClients ? 'trancharcoal-x-6' : 'trancharcoal-x-1'
+                  acceptsNewClients ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
             </button>

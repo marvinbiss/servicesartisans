@@ -247,10 +247,10 @@ export function VilleAutocomplete({
         />
 
         {/* Left icon */}
-        <MapPin className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
 
         {/* Right actions */}
-        <div className="absolute right-2 top-1/2 -trancharcoal-y-1/2 flex items-center gap-1">
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {/* Loading indicator */}
           {isLoading && <Loader2 className="w-4 h-4 text-charcoal-400 animate-spin" />}
 

@@ -247,7 +247,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
         className={`relative bg-gradient-to-br ${gradient} text-white py-16 md:py-20 overflow-hidden`}
       >
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">

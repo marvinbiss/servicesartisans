@@ -155,7 +155,7 @@ export function ArtisanSimilar({
               rel={item.noindex === true ? 'nofollow' : undefined}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
-              <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-trancharcoal-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
+              <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">

@@ -526,7 +526,7 @@ export default async function AvisPage() {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-primary-400/25 hover:shadow-xl hover:-trancharcoal-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-primary-400/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <Star className="w-5 h-5" />
             Obtenir mon devis gratuit

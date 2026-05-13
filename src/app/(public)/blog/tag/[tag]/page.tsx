@@ -252,7 +252,7 @@ export default async function BlogTagPage({ params }: PageProps) {
                   <Link
                     key={article.slug}
                     href={`/blog/${article.slug}`}
-                    className="bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-trancharcoal-y-2 transition-all duration-300 group"
+                    className="bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
                   >
                     <div className="relative overflow-hidden h-48">
                       <Image

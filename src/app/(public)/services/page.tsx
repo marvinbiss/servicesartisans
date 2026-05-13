@@ -548,7 +548,7 @@ export default async function ServicesPage() {
                           <Link
                             key={service.slug}
                             href={`/services/${service.slug}`}
-                            className={`${cardBase} hover:shadow-card-hover hover:-trancharcoal-y-0.5 ${tokens.ring}`}
+                            className={`${cardBase} hover:shadow-card-hover hover:-translate-y-0.5 ${tokens.ring}`}
                             aria-label={`Voir les artisans RGE certifiés ${service.name}`}
                           >
                             <div

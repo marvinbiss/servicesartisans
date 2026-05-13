@@ -243,7 +243,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                    className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                   >
                     {link.name}
                   </Link>
@@ -261,7 +261,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/mentions-legales"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Mentions légales
                 </Link>
@@ -269,7 +269,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/cgv"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   CGV
                 </Link>
@@ -277,7 +277,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/confidentialite"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Confidentialité
                 </Link>
@@ -285,7 +285,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/accessibilite"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Accessibilité
                 </Link>
@@ -293,7 +293,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/droit-acces"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Droit d&apos;accès
                 </Link>
@@ -301,7 +301,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/droit-opposition"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Droit d&apos;opposition
                 </Link>
@@ -309,7 +309,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/violation-donnees"
-                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:trancharcoal-x-1 inline-block py-1.5"
+                  className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                 >
                   Violation de données
                 </Link>

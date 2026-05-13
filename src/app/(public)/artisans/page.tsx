@@ -258,7 +258,7 @@ export default async function ArtisansPage() {
               return (
                 <div
                   key={provider.id}
-                  className="group relative overflow-hidden rounded-2xl border border-sand-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-trancharcoal-y-1 hover:shadow-lg hover:border-amber-200 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-amber-400 before:via-amber-500 before:to-orange-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity"
+                  className="group relative overflow-hidden rounded-2xl border border-sand-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-amber-200 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-amber-400 before:via-amber-500 before:to-orange-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity"
                 >
                   {/* Name + verification */}
                   <div className="flex items-start gap-3 mb-3">

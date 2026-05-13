@@ -244,7 +244,7 @@ export default function ExitIntentModal() {
           <button
             type="button"
             onClick={handleResume}
-            className="w-full bg-primary-500 hover:bg-primary-600 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-200"
+            className="w-full bg-primary-500 hover:bg-primary-600 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200"
           >
             Récupérez 3 devis vérifiés avant de partir
           </button>

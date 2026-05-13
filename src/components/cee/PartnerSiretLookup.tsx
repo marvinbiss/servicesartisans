@@ -150,7 +150,7 @@ export default function PartnerSiretLookup() {
                 aria-describedby={state.kind === 'error' ? 'siret-error' : 'siret-help'}
               />
               <Search
-                className="absolute right-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none"
                 aria-hidden="true"
               />
             </div>

@@ -742,7 +742,7 @@ export function HeroSearch() {
                             <ChevronRight
                               className={`w-4 h-4 transition-all duration-150 ${
                                 isHighlighted
-                                  ? 'text-primary-300 trancharcoal-x-0.5'
+                                  ? 'text-primary-300 translate-x-0.5'
                                   : 'text-charcoal-300'
                               }`}
                             />

@@ -417,7 +417,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                       <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-accent-700 group-hover:text-accent-900">
                         Lire le guide
                         <ArrowRight
-                          className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
+                          className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                           aria-hidden="true"
                         />
                       </div>
@@ -458,7 +458,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                   <span className="font-mono font-bold text-primary-800 text-xs">{c.code}</span>
                   <span className="text-charcoal-700">{c.label}</span>
                   <ArrowRight
-                    className="w-3.5 h-3.5 text-primary-500 group-hover:trancharcoal-x-0.5 transition-transform"
+                    className="w-3.5 h-3.5 text-primary-500 group-hover:translate-x-0.5 transition-transform"
                     aria-hidden="true"
                   />
                 </Link>
@@ -562,7 +562,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={city.slug}
                   href={`/rge/${serviceSlug}/${city.slug}`}
-                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:-trancharcoal-y-0.5 hover:shadow-card-hover transition-all duration-200"
+                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <MapPin

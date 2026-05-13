@@ -429,7 +429,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
                   <div className="text-sm text-charcoal-600 mt-0.5">{aide.detail}</div>
                 </div>
                 <ArrowRight
-                  className="w-4 h-4 text-accent-600 group-hover:trancharcoal-x-0.5 transition-transform"
+                  className="w-4 h-4 text-accent-600 group-hover:translate-x-0.5 transition-transform"
                   aria-hidden="true"
                 />
               </Link>

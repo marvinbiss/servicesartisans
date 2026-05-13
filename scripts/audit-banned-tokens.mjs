@@ -34,14 +34,17 @@ const strict = args.has('--strict')
 const jsonOut = args.has('--json')
 
 // Régression-blockers — tout match = erreur.
+// Note : on évite les faux+ substring (ex: `slate-` dans `translate-`,
+// `gray-` théorique dans `engraveray-`...) via lookbehind : le token
+// doit être précédé d'une non-lettre (`-`, `:`, espace, quote, `(`, etc.).
 const BANNED = [
-  { token: 'emerald-', replacement: 'accent-' },
-  { token: 'slate-', replacement: 'charcoal-' },
-  { token: 'gray-', replacement: 'charcoal-' },
-  { token: 'stone-', replacement: 'sand- ou charcoal-' },
-  { token: 'violet-', replacement: 'primary- ou accent-' },
-  { token: 'indigo-', replacement: 'primary- ou accent-' },
-  { token: 'font-jakarta', replacement: 'font-heading' },
+  { token: 'emerald-', regex: /(^|[^a-zA-Z])emerald-/g, replacement: 'accent-' },
+  { token: 'slate-', regex: /(^|[^a-zA-Z])slate-/g, replacement: 'charcoal-' },
+  { token: 'gray-', regex: /(^|[^a-zA-Z])gray-/g, replacement: 'charcoal-' },
+  { token: 'stone-', regex: /(^|[^a-zA-Z])stone-/g, replacement: 'sand- ou charcoal-' },
+  { token: 'violet-', regex: /(^|[^a-zA-Z])violet-/g, replacement: 'primary- ou accent-' },
+  { token: 'indigo-', regex: /(^|[^a-zA-Z])indigo-/g, replacement: 'primary- ou accent-' },
+  { token: 'font-jakarta', regex: /(^|[^a-zA-Z])font-jakarta/g, replacement: 'font-heading' },
 ]
 
 // Exclusions — fichiers où la règle ne s'applique pas.
@@ -81,8 +84,9 @@ for (const file of files) {
   const content = readFileSync(file, 'utf8')
   const lines = content.split('\n')
   lines.forEach((line, i) => {
-    for (const { token, replacement } of BANNED) {
-      if (line.includes(token)) {
+    for (const { token, regex, replacement } of BANNED) {
+      regex.lastIndex = 0
+      if (regex.test(line)) {
         violations.push({
           file: file.replace(root + sep, ''),
           line: i + 1,

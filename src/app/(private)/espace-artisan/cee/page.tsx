@@ -225,7 +225,7 @@ export default async function EspaceArtisanCeePage() {
             </div>
             <Link
               href="/espace-artisan/cee/nouveau"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-md motion-safe:transition-all motion-safe:hover:-trancharcoal-y-0.5 hover:bg-sand-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 motion-safe:active:trancharcoal-y-0"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-md motion-safe:transition-all motion-safe:hover:-translate-y-0.5 hover:bg-sand-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 motion-safe:active:translate-y-0"
             >
               <Plus className="h-4 w-4" aria-hidden="true" />
               Créer un dossier
@@ -322,7 +322,7 @@ export default async function EspaceArtisanCeePage() {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/espace-artisan/cee/nouveau"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md motion-safe:transition-all motion-safe:hover:-trancharcoal-y-0.5 hover:bg-primary-600 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 motion-safe:active:trancharcoal-y-0"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md motion-safe:transition-all motion-safe:hover:-translate-y-0.5 hover:bg-primary-600 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 motion-safe:active:translate-y-0"
               >
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 Créer un dossier

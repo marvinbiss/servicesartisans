@@ -364,7 +364,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
                 href="/cee"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-trancharcoal-y-0.5"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   19 opérations
@@ -381,7 +381,7 @@ export default async function HomePage() {
 
               <Link
                 href="/cee/guides"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-trancharcoal-y-0.5"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   10 guides détaillés
@@ -400,7 +400,7 @@ export default async function HomePage() {
 
               <Link
                 href="/rge"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-trancharcoal-y-0.5"
+                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   Source ADEME
@@ -419,7 +419,7 @@ export default async function HomePage() {
 
               <Link
                 href="/devenir-partenaire-cee"
-                className="group p-7 rounded-3xl bg-gradient-to-br from-secondary-500/20 to-primary-500/15 hover:from-secondary-500/30 hover:to-primary-500/25 border border-secondary-400/40 backdrop-blur-sm transition-all hover:-trancharcoal-y-0.5 relative"
+                className="group p-7 rounded-3xl bg-gradient-to-br from-secondary-500/20 to-primary-500/15 hover:from-secondary-500/30 hover:to-primary-500/25 border border-secondary-400/40 backdrop-blur-sm transition-all hover:-translate-y-0.5 relative"
               >
                 <span className="absolute top-4 right-4 px-2.5 py-0.5 bg-secondary-400 text-charcoal-900 text-[10px] font-bold rounded-full uppercase tracking-wide">
                   Pro

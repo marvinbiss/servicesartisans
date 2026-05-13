@@ -933,7 +933,7 @@ async function renderUrgenceServiceVillePage({
         className={`relative bg-gradient-to-br ${meta.gradient} text-white py-16 md:py-20 overflow-hidden`}
       >
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb inside hero */}
@@ -1102,7 +1102,7 @@ async function renderUrgenceServiceVillePage({
               <div className="mt-3 text-xs text-charcoal-400">Lundi à samedi, 8h–20h</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-amber-300 p-6 text-center relative">
-              <div className="absolute -top-3 left-1/2 -trancharcoal-x-1/2 bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +50 %
               </div>
               <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
@@ -1115,7 +1115,7 @@ async function renderUrgenceServiceVillePage({
               <div className="mt-3 text-xs text-charcoal-400">Samedi après 20h, dimanche matin</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-red-300 p-6 text-center relative">
-              <div className="absolute -top-3 left-1/2 -trancharcoal-x-1/2 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +100 %
               </div>
               <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">

@@ -64,7 +64,7 @@ export default function CrossLinks({
                   <Link
                     key={s.slug}
                     href={`/services/${s.slug}/${locationSlug}`}
-                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     {s.name}
                   </Link>
@@ -76,7 +76,7 @@ export default function CrossLinks({
               >
                 Tous les artisans à {location.name}
                 <svg
-                  className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -97,7 +97,7 @@ export default function CrossLinks({
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     {city.name}
                   </Link>
@@ -109,7 +109,7 @@ export default function CrossLinks({
               >
                 Voir toutes les villes
                 <svg
-                  className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -129,7 +129,7 @@ export default function CrossLinks({
                 {location.region_name && (
                   <Link
                     href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}/${serviceSlug}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                    className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg
                       className="w-4 h-4 shrink-0 text-charcoal-400"
@@ -160,7 +160,7 @@ export default function CrossLinks({
                     return (
                       <Link
                         href={`/departements/${deptSlug}/${serviceSlug}`}
-                        className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                        className="flex items-center gap-2 px-4 py-3 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                       >
                         <svg
                           className="w-4 h-4 shrink-0 text-charcoal-400"
@@ -188,7 +188,7 @@ export default function CrossLinks({
                 {location.region_name && (
                   <Link
                     href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-600 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                    className="flex items-center gap-2 px-4 py-3 bg-sand-50 hover:bg-primary-50 text-charcoal-600 hover:text-primary-500 rounded-xl text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg
                       className="w-4 h-4 shrink-0 text-charcoal-400"
@@ -321,7 +321,7 @@ export default function CrossLinks({
                         <Link
                           key={path}
                           href={path}
-                          className="inline-flex items-center gap-1 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
+                          className="inline-flex items-center gap-1 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                         >
                           {svc} à {city}
                         </Link>

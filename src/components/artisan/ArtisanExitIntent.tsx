@@ -279,7 +279,7 @@ export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitInt
           <button
             type="button"
             onClick={handleDevisCTA}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-lg shadow-primary-600/25 hover:-trancharcoal-y-0.5 transition-all duration-200"
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-heading font-bold text-base px-6 py-3.5 rounded-xl shadow-lg shadow-primary-600/25 hover:-translate-y-0.5 transition-all duration-200"
           >
             Devis gratuit en 2 min
           </button>

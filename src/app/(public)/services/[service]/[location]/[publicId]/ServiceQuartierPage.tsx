@@ -605,7 +605,7 @@ export default async function ServiceQuartierPage({
               >
                 Voir tous les tarifs {svcLower} en France
                 <svg
-                  className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

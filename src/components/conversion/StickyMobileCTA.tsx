@@ -140,8 +140,8 @@ export default function StickyMobileCTA({
           transition-all duration-300 ease-out
           ${
             visible && hasAnimated && !formInView
-              ? 'trancharcoal-y-0 opacity-100'
-              : 'trancharcoal-y-full opacity-0 pointer-events-none'
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-full opacity-0 pointer-events-none'
           }
         `}
         style={{
@@ -226,8 +226,8 @@ export default function StickyMobileCTA({
           transition-all duration-300 ease-out
           ${
             visible && hasAnimated && !formInView
-              ? 'trancharcoal-y-0 opacity-100'
-              : 'trancharcoal-y-8 opacity-0 pointer-events-none'
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-8 opacity-0 pointer-events-none'
           }
         `}
       >
@@ -239,7 +239,7 @@ export default function StickyMobileCTA({
               source: 'sticky_desktop_cta',
             })
           }}
-          className="group flex items-center gap-3 bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white font-semibold px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.18)] hover:-trancharcoal-y-0.5 transition-all"
+          className="group flex items-center gap-3 bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white font-semibold px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
         >
           <FileText className="w-5 h-5 flex-shrink-0" />
           <span className="text-base">{ctaText}</span>

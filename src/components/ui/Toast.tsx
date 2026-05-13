@@ -54,7 +54,7 @@ export function Toast({ toast, onDismiss }: ToastProps) {
         'flex items-start gap-3 w-full max-w-sm p-4 rounded-lg border shadow-lg',
         'transition-all duration-150 ease-out',
         styles[toast.type],
-        isVisible ? 'trancharcoal-x-0 opacity-100' : 'trancharcoal-x-full opacity-0'
+        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       )}
       role="alert"
     >

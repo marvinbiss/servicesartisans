@@ -90,7 +90,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
         </div>
 
         {/* Hover indicator */}
-        <div className="absolute -bottom-1 left-1/2 -trancharcoal-x-1/2 w-2 h-2 bg-white border-r border-b border-sand-200 rotate-45" />
+        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-sand-200 rotate-45" />
       </div>
     </div>
   )

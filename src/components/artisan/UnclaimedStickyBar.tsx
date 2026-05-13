@@ -66,7 +66,7 @@ export function UnclaimedStickyBar({
   return (
     <div
       className={`fixed bottom-14 md:bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-sand-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] lg:hidden transition-transform duration-300 ease-out ${
-        visible ? 'trancharcoal-y-0' : 'trancharcoal-y-full'
+        visible ? 'translate-y-0' : 'translate-y-full'
       }`}
       role="group"
       aria-label="Actions rapides"

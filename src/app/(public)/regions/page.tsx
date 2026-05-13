@@ -300,7 +300,7 @@ export default async function RegionsIndexPage() {
               <Link
                 key={region.slug}
                 href={`/regions/${region.slug}`}
-                className="bg-white rounded-2xl border border-sand-300 p-6 shadow-soft hover:shadow-card-hover hover:border-primary-200 hover:-trancharcoal-y-0.5 transition-all duration-300 group"
+                className="bg-white rounded-2xl border border-sand-300 p-6 shadow-soft hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all duration-300 group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -309,7 +309,7 @@ export default async function RegionsIndexPage() {
                     </h3>
                   </div>
                   <div className="w-10 h-10 bg-sand-100 rounded-xl flex items-center justify-center group-hover:bg-primary-50 transition-colors flex-shrink-0">
-                    <ArrowRight className="w-5 h-5 text-charcoal-500 group-hover:text-primary-400 group-hover:trancharcoal-x-0.5 transition-all" />
+                    <ArrowRight className="w-5 h-5 text-charcoal-500 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
                   </div>
                 </div>
 
@@ -374,7 +374,7 @@ export default async function RegionsIndexPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-trancharcoal-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-translate-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

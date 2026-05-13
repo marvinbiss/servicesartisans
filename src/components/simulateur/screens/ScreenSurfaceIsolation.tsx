@@ -52,7 +52,7 @@ export default function ScreenSurfaceIsolation({
       </ScreenTitle>
       <div className="mx-auto max-w-xs">
         <div className="relative">
-          <Home className="absolute left-3 top-1/2 h-5 w-5 -trancharcoal-y-1/2 text-charcoal-400" />
+          <Home className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-400" />
           <input
             type="number"
             inputMode="numeric"
@@ -66,7 +66,7 @@ export default function ScreenSurfaceIsolation({
             aria-label="Surface en mètres carrés"
             className="w-full rounded-xl border-2 border-charcoal-200 py-4 pl-11 pr-16 text-center text-2xl font-bold tracking-wide text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
-          <span className="absolute right-4 top-1/2 -trancharcoal-y-1/2 text-sm font-semibold text-charcoal-500">
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-charcoal-500">
             m²
           </span>
         </div>

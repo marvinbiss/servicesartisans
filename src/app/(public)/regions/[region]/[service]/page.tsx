@@ -456,7 +456,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               <Link
                 key={dept.code}
                 href={`/departements/${dept.slug}/${serviceSlug}`}
-                className="bg-white rounded-2xl border border-sand-300 p-6 hover:shadow-card-hover hover:border-primary-200 hover:-trancharcoal-y-0.5 transition-all duration-300 group"
+                className="bg-white rounded-2xl border border-sand-300 p-6 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all duration-300 group"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -473,7 +473,7 @@ export default async function RegionServicePage({ params }: PageProps) {
                       </span>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-400 group-hover:trancharcoal-x-0.5 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {deptCitiesMap[dept.code].slice(0, 3).map((city) => (
@@ -513,7 +513,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               <Link
                 key={city.slug}
                 href={`/services/${serviceSlug}/${city.slug}`}
-                className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-trancharcoal-y-0.5 transition-all group text-center"
+                className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group text-center"
               >
                 <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
                   {city.name}
@@ -675,7 +675,7 @@ export default async function RegionServicePage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-trancharcoal-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

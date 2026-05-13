@@ -235,7 +235,7 @@ export default function GarantiePage() {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center justify-center gap-2 bg-white text-primary-600 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:-trancharcoal-y-0.5 transition-all"
+            className="inline-flex items-center justify-center gap-2 bg-white text-primary-600 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
           >
             Recevoir mes devis gratuits
           </Link>

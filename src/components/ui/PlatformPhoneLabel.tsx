@@ -34,7 +34,7 @@ export function PlatformPhoneLabel({
       >
         <Info className="w-3.5 h-3.5 text-charcoal-400 cursor-help" />
         {showTooltip && (
-          <span className="absolute bottom-full left-1/2 -trancharcoal-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed">
+          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed">
             {tooltipText}
           </span>
         )}
@@ -53,7 +53,7 @@ export function PlatformPhoneLabel({
         <Info className="w-3 h-3" />
         N° plateforme
         {showTooltip && (
-          <span className="absolute bottom-full left-1/2 -trancharcoal-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed font-normal">
+          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed font-normal">
             {tooltipText}
           </span>
         )}
@@ -72,7 +72,7 @@ export function PlatformPhoneLabel({
       <Info className="w-3 h-3 cursor-help" />
       <span>N° ServicesArtisans</span>
       {showTooltip && (
-        <span className="absolute bottom-full left-1/2 -trancharcoal-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed">
+        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 text-xs text-white bg-charcoal-800 rounded-lg shadow-lg z-50 text-center leading-relaxed">
           {tooltipText}
         </span>
       )}

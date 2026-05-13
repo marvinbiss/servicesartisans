@@ -100,7 +100,7 @@ export default function SearchFilters({
               <option value="rating">Meilleures notes</option>
             </select>
             <ChevronDown
-              className="absolute right-2 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none"
               aria-hidden="true"
             />
           </div>

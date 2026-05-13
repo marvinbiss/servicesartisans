@@ -128,7 +128,7 @@ export default function FallbackProviders({
             return (
               <div
                 key={provider.id}
-                className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-trancharcoal-y-0.5 hover:border-primary-200 transition-all duration-200"
+                className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-translate-y-0.5 hover:border-primary-200 transition-all duration-200"
               >
                 {/* Header: avatar + name + badges */}
                 <div className="flex items-start gap-3 mb-3">

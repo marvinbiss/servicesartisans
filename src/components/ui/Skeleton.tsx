@@ -11,7 +11,7 @@ export function Skeleton({ className, shimmer = true }: SkeletonProps) {
       className={cn(
         'rounded-md bg-sand-300 relative overflow-hidden',
         shimmer &&
-          'after:absolute after:inset-0 after:trancharcoal-x-[-100%] after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent',
+          'after:absolute after:inset-0 after:translate-x-[-100%] after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent',
         className
       )}
     />

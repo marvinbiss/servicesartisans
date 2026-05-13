@@ -85,7 +85,7 @@ export default function DossierListCard({ dossier }: DossierListCardProps) {
         </div>
 
         <ChevronRight
-          className="mt-1 h-5 w-5 shrink-0 text-charcoal-400 transition-transform group-hover:trancharcoal-x-0.5 group-hover:text-primary-500"
+          className="mt-1 h-5 w-5 shrink-0 text-charcoal-400 transition-transform group-hover:translate-x-0.5 group-hover:text-primary-500"
           aria-hidden="true"
         />
       </div>

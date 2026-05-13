@@ -37,8 +37,8 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
     <div
       className={`group/card relative overflow-hidden rounded-2xl border bg-white p-5 sm:p-6 transition-all duration-300 ease-premium ${
         isHovered
-          ? '-trancharcoal-y-1 border-primary-200 shadow-card-hover'
-          : 'border-sand-300 shadow-soft hover:-trancharcoal-y-1 hover:border-primary-200 hover:shadow-card-hover'
+          ? '-translate-y-1 border-primary-200 shadow-card-hover'
+          : 'border-sand-300 shadow-soft hover:-translate-y-1 hover:border-primary-200 hover:shadow-card-hover'
       }`}
     >
       {/* Bouton favori — top-right */}
@@ -63,7 +63,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
         }
       />
       {/* Mobile: right arrow indicator */}
-      <div className="absolute right-4 top-1/2 -trancharcoal-y-1/2 md:hidden z-0">
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
         <ChevronRight className="w-5 h-5 text-charcoal-300" />
       </div>
 
@@ -124,7 +124,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
                 >
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                 </svg>
-                <span className="absolute inset-0 -trancharcoal-x-full animate-[shimmer_2.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <span className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
               </span>
             )}
           </div>
@@ -199,14 +199,14 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             <Link
               href={`${providerUrl}#devis`}
               rel={linkRel}
-              className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-trancharcoal-y-0.5 active:scale-[0.98] active:trancharcoal-y-0 transition-all duration-200"
+              className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
             >
               Demander un devis
             </Link>
             <Link
               href={providerUrl}
               rel={linkRel}
-              className="hidden md:flex items-center justify-center gap-1 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-trancharcoal-y-0.5 active:scale-[0.98] active:trancharcoal-y-0 transition-all duration-200"
+              className="hidden md:flex items-center justify-center gap-1 px-5 py-3 min-h-[48px] border-2 border-sand-400 text-charcoal-700 rounded-xl font-semibold hover:bg-sand-100 hover:border-primary-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
             >
               Voir le profil
             </Link>
@@ -215,7 +215,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           <Link
             href={providerUrl}
             rel={linkRel}
-            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-trancharcoal-y-0.5 active:scale-[0.98] active:trancharcoal-y-0 transition-all duration-200"
+            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             Voir le profil
           </Link>

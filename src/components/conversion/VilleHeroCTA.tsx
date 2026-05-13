@@ -77,7 +77,7 @@ export default function VilleHeroCTA({
           </div>
           <button
             onClick={openDevis}
-            className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all text-lg whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all text-lg whitespace-nowrap"
           >
             Obtenir mon devis gratuit
           </button>

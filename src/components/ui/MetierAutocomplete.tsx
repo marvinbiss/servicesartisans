@@ -262,7 +262,7 @@ export function MetierAutocomplete({
 
         {/* Left Icon */}
         {showIcon && (
-          <div className="absolute left-3 top-1/2 -trancharcoal-y-1/2">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2">
             {selectedService ? (
               <div
                 className={`
@@ -281,7 +281,7 @@ export function MetierAutocomplete({
         )}
 
         {/* Right Actions */}
-        <div className="absolute right-3 top-1/2 -trancharcoal-y-1/2 flex items-center gap-1">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {/* Clear Button */}
           {query && (
             <button

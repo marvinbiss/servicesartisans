@@ -41,7 +41,7 @@ export function MessageBubble({
       <div
         className={cn(
           'absolute top-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
-          isOwn ? 'left-0 -trancharcoal-x-full pr-2' : 'right-0 trancharcoal-x-full pl-2'
+          isOwn ? 'left-0 -translate-x-full pr-2' : 'right-0 translate-x-full pl-2'
         )}
       >
         <button

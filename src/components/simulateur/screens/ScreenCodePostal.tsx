@@ -31,7 +31,7 @@ export default function ScreenCodePostal({ value, onChange, onNext, detectedCity
       </ScreenTitle>
       <div className="mx-auto max-w-xs">
         <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 h-5 w-5 -trancharcoal-y-1/2 text-charcoal-400" />
+          <MapPin className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-charcoal-400" />
           <input
             type="text"
             inputMode="numeric"
