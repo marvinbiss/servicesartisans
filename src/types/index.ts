@@ -70,6 +70,8 @@ export interface Provider {
   team_size?: number
   services_offered?: string[]
   bio?: string
+  hourly_rate_min?: number | null
+  hourly_rate_max?: number | null
   user_id?: string | null
   claimed_at?: string | null
   // RGE ADEME (migration 380) — certifications officielles data.gouv.fr

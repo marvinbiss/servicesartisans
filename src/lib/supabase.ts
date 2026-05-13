@@ -93,6 +93,9 @@ interface ProviderListRow {
   google_user_ratings_total: number | null
   google_business_status: string | null
   google_place_id: string | null
+  // Pricing (mig 306) — listing pour ProviderCard pricing badge.
+  hourly_rate_min: number | null
+  hourly_rate_max: number | null
 }
 
 /**
@@ -200,6 +203,11 @@ const PROVIDER_LIST_SELECT = [
   'google_user_ratings_total',
   'google_business_status',
   'google_place_id',
+  // Pricing transparency (mig 306 — vivantes en DB).
+  // Affichées sur ProviderCard pour lever frein #1 prospects (gap UX 6→9).
+  // Surcoût ~16 octets/row × 50 rows page = ~800B (négligeable).
+  'hourly_rate_min',
+  'hourly_rate_max',
 ].join(',')
 
 export async function getServices() {

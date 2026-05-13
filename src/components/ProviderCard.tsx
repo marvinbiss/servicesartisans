@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { MapPin, Star, ChevronRight, ShieldCheck } from 'lucide-react'
+import { MapPin, Star, ChevronRight, ShieldCheck, Wallet } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
 import { getDiceBearAvatar } from '@/lib/data/images-faces'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { CompareButton } from '@/components/ui/CompareButton'
 import { trackEvent } from '@/lib/analytics/tracking'
 import RgeBadge from '@/components/artisan/RgeBadge'
+import { formatHourlyRange, resolveProviderPricing } from '@/lib/data/specialty-pricing'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
@@ -25,6 +27,13 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
   })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
+  const pricing = resolveProviderPricing({
+    hourlyRateMin: provider.hourly_rate_min,
+    hourlyRateMax: provider.hourly_rate_max,
+    specialty: provider.specialty,
+  })
+  const pricingLabel = formatHourlyRange(pricing)
+  const pricingIsProviderOwn = pricing.kind === 'provider'
   // Concentrer le PageRank sur les 46K fiches RGE visibles (noindex=false).
   // Les 920K fiches non-RGE (noindex=true) restent cliquables pour l'UX mais
   // sont exclues du flux PageRank via rel="nofollow". Source : Google Search
@@ -192,6 +201,29 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
         </p>
       )}
 
+      {/* Tarif horaire — vrai si claimed+rempli, sinon moyenne métier labellisée.
+          Transparence : ne JAMAIS prétendre que la moyenne est le tarif de l'artisan. */}
+      <div className="flex items-center gap-1.5 ml-16 mb-3">
+        <Wallet
+          className={`w-3.5 h-3.5 flex-shrink-0 ${pricingIsProviderOwn ? 'text-accent-600' : 'text-charcoal-400'}`}
+          aria-hidden="true"
+        />
+        <span
+          className={`text-xs font-medium ${pricingIsProviderOwn ? 'text-charcoal-800' : 'text-charcoal-500'}`}
+        >
+          {pricingIsProviderOwn ? (
+            <>
+              <span className="font-semibold">{pricingLabel}</span>
+              <span className="ml-1 text-charcoal-500">indicatif</span>
+            </>
+          ) : (
+            <>
+              Tarif moyen métier : <span className="font-semibold">{pricingLabel}</span>
+            </>
+          )}
+        </span>
+      </div>
+
       {/* Boutons */}
       <div className="flex gap-3 relative z-20 mt-4">
         {provider.user_id ? (
@@ -220,6 +252,26 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             Voir le profil
           </Link>
         )}
+      </div>
+
+      {/* Compare button — sous CTAs, plus discret. Bascule selection panier comparaison. */}
+      <div className="relative z-20 mt-2 flex justify-end">
+        <CompareButton
+          provider={{
+            id: provider.stable_id || provider.id,
+            name: provider.name,
+            slug: provider.slug ?? '',
+            stable_id: provider.stable_id ?? undefined,
+            specialty: provider.specialty,
+            address_city: provider.address_city,
+            address_region: provider.address_region,
+            address_postal_code: provider.address_postal_code,
+            is_verified: provider.is_verified,
+            rating_average: provider.rating_average,
+            review_count: provider.review_count,
+            siret: provider.siret,
+          }}
+        />
       </div>
     </div>
   )
