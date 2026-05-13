@@ -37,7 +37,7 @@ import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })

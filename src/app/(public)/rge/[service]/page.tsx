@@ -15,7 +15,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import StickyMobileCTA from '@/components/StickyMobileCTA'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   buildHubRgeGlossarySchema,
