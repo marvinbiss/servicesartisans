@@ -55,6 +55,17 @@ const AuthTracker = dynamic(() => import('@/components/AuthTracker'), {
 const ConsentGatedScripts = dynamic(() => import('@/components/ConsentGatedScripts'), {
   ssr: false,
 })
+const CompareBar = dynamic(
+  () => import('@/components/compare/CompareBar').then((mod) => ({ default: mod.CompareBar })),
+  { ssr: false }
+)
+const CommandPaletteMount = dynamic(
+  () =>
+    import('@/components/command-palette/CommandPaletteMount').then((mod) => ({
+      default: mod.CommandPaletteMount,
+    })),
+  { ssr: false }
+)
 // Kill switch: NEXT_PUBLIC_DISABLE_COMPARE_SSR must be UNSET in normal production.
 // Set it to 'true' on Vercel ONLY to trigger an emergency rollback to CSR-only
 // (~60-90s via env var + redeploy). Build-time inlined, so it requires a redeploy
@@ -277,6 +288,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </main>
             <Footer />
             <MobileBottomNav />
+            <CompareBar />
+            <CommandPaletteMount />
             <ServiceWorkerRegistration />
             <CookieConsent />
             <SpeedInsights />
