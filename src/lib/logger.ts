@@ -65,6 +65,31 @@ function maskValue(value: unknown): unknown {
   return `${value.slice(0, 2)}***${value.slice(-2)}`
 }
 
+// F-10 security fix : les messages d'erreur Postgres / Stripe / Resend peuvent
+// contenir des PII en clair (ex: "duplicate key ... claimant_email=foo@bar.com",
+// "phone +33612345678 invalid"). Ces messages contournent SENSITIVE_KEY_RE
+// (qui ne masque que les CLÉS d'objet). On scrub par regex toute occurrence
+// de pattern PII trouvable dans la string.
+const PII_PATTERNS: Array<[RegExp, string]> = [
+  // emails — anywhere in a string
+  [/([a-zA-Z0-9._%+-]{1,2})[a-zA-Z0-9._%+-]*@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, '$1***@$2'],
+  // phone numbers E.164 / FR formats
+  [/(\+?33|0)\s*[1-9](?:[\s.-]?\d{2}){4}/g, '+33***'],
+  // SIRET (14 digits) / SIREN (9 digits) — partial mask
+  [/\b(\d{2})\d{5,12}\b/g, '$1***'],
+  // bearer/auth tokens (long base64-ish or hex strings >= 20 chars)
+  [/\b[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g, '[JWT_REDACTED]'],
+  [/\b[a-f0-9]{32,}\b/gi, '[HEX_REDACTED]'],
+]
+
+function scrubPiiString(s: string): string {
+  let out = s
+  for (const [re, replacement] of PII_PATTERNS) {
+    out = out.replace(re, replacement)
+  }
+  return out
+}
+
 function maskPiiDeep<T>(input: T, depth = 0): T {
   if (depth > 4 || input == null) return input
   if (Array.isArray(input)) return input.map((v) => maskPiiDeep(v, depth + 1)) as unknown as T
@@ -133,8 +158,14 @@ function createLogger(defaultContext?: LogContext): AppLogger {
       if (shouldLog('error')) {
         const errorDetails =
           error instanceof Error
-            ? { name: error.name, message: error.message, stack: error.stack }
-            : error
+            ? {
+                name: error.name,
+                message: scrubPiiString(error.message),
+                stack: error.stack ? scrubPiiString(error.stack) : undefined,
+              }
+            : typeof error === 'string'
+              ? scrubPiiString(error)
+              : error
         console.error(
           formatMessage('error', message, { ...mergeContext(context), error: errorDetails })
         )

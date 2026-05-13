@@ -111,8 +111,21 @@ async function validateCsrf(): Promise<NextResponse | null> {
       Boolean
     ) as string[]
 
-    // If no allowed URLs are configured, allow all (development mode)
+    // F-8 security fix : fail-CLOSED en prod si aucun NEXT_PUBLIC_SITE_URL
+    // ou NEXTAUTH_URL configuré (sinon CSRF totalement désactivé suite à
+    // mauvaise config Vercel env). En dev/test on garde fail-open pour
+    // permettre curl + tests.
     if (allowedUrls.length === 0) {
+      if (process.env.NODE_ENV === 'production') {
+        logger.error('CSRF blocked: no NEXT_PUBLIC_SITE_URL/NEXTAUTH_URL configured in prod')
+        return NextResponse.json(
+          {
+            success: false,
+            error: { code: 'CSRF_REJECTED', message: 'Configuration serveur invalide' },
+          },
+          { status: 403 }
+        )
+      }
       return null
     }
 

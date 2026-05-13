@@ -469,7 +469,12 @@ export async function checkRateLimit(
  * trafic sans IP.
  */
 export function getClientIp(headers: Headers): string {
+  // L-3 security fix : x-vercel-forwarded-for est injecté par Vercel Edge et
+  // ne peut pas être spoofé par le client. On le préfère à x-forwarded-for
+  // qui peut être réécrit par un proxy intermédiaire (cas d'un WAF/CDN
+  // custom en amont de Vercel) pour contourner le rate-limit.
   const ip =
+    headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() ||
     headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     headers.get('x-real-ip') ||
     headers.get('cf-connecting-ip') // Cloudflare

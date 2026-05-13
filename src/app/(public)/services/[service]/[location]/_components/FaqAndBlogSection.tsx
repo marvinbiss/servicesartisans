@@ -154,11 +154,9 @@ function BlogLink({
       href={href}
       className="flex items-start gap-3 p-4 bg-white rounded-xl border border-sand-200 hover:border-primary-200 hover:shadow-soft transition-all group"
     >
-      <span
-        className="text-2xl shrink-0"
-        aria-hidden="true"
-        dangerouslySetInnerHTML={{ __html: emoji }}
-      />
+      <span className="text-2xl shrink-0" aria-hidden="true">
+        {emoji}
+      </span>
       <div>
         <span className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
           {title}

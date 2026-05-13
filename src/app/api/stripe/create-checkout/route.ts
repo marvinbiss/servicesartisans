@@ -44,14 +44,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Ce plan ne nécessite pas de paiement' }, { status: 400 })
     }
 
-    // Create Stripe customer for this session
-    const customer = await stripe.customers.create({
-      email: user.email,
-      metadata: {
-        supabase_user_id: user.id,
-      },
-    })
-    const customerId = customer.id
+    // F-9 security/billing fix : réutiliser le Stripe Customer existant si
+    // déjà persisté côté profile, sinon le créer. Sinon, chaque POST sur
+    // /api/stripe/create-checkout générait un nouveau customer (le webhook
+    // écrasait ensuite stripe_customer_id), produisant un mess billing
+    // côté Stripe et empêchant la consolidation des abonnements.
+    let customerId: string
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('stripe_customer_id')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (profile?.stripe_customer_id) {
+      customerId = profile.stripe_customer_id
+    } else {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        metadata: {
+          supabase_user_id: user.id,
+        },
+      })
+      customerId = customer.id
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ stripe_customer_id: customerId })
+        .eq('id', user.id)
+      if (updateError) {
+        logger.warn('Failed to persist stripe_customer_id', { userId: user.id })
+      }
+    }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
