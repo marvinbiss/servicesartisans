@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useId } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { Filter, ChevronDown, X, BadgeCheck, Star, Leaf } from 'lucide-react'
 
 interface FilterState {
@@ -60,6 +60,50 @@ export default function SearchFilters({
   const activeFiltersCount = [filters.verified, rgeActive, filters.minRating !== null].filter(
     Boolean
   ).length
+
+  // Roving tabindex for the filter toolbar (WAI-ARIA toolbar pattern):
+  // a single tab-stop enters the toolbar, arrow keys move focus between
+  // toggles, Home/End jump to the extremities. The clear button is part of
+  // the toolbar so it sits in the same focus ring.
+  const toolbarRef = useRef<HTMLDivElement>(null)
+  const [activeToolbarIndex, setActiveToolbarIndex] = useState(0)
+
+  // Snap activeToolbarIndex back to 0 whenever the panel re-opens so the
+  // first toggle is always the entry point (avoids stale focus on a
+  // button that just got hidden by Clear).
+  useEffect(() => {
+    if (isOpen) setActiveToolbarIndex(0)
+  }, [isOpen])
+
+  const handleToolbarKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!toolbarRef.current) return
+    const items = Array.from(
+      toolbarRef.current.querySelectorAll<HTMLElement>('[data-toolbar-item]')
+    )
+    if (items.length === 0) return
+    const currentIndex = items.findIndex((el) => el === document.activeElement)
+    const from = currentIndex === -1 ? 0 : currentIndex
+    let next = from
+    switch (e.key) {
+      case 'ArrowRight':
+        next = (from + 1) % items.length
+        break
+      case 'ArrowLeft':
+        next = (from - 1 + items.length) % items.length
+        break
+      case 'Home':
+        next = 0
+        break
+      case 'End':
+        next = items.length - 1
+        break
+      default:
+        return
+    }
+    e.preventDefault()
+    setActiveToolbarIndex(next)
+    items[next].focus()
+  }, [])
 
   return (
     <div
@@ -134,13 +178,18 @@ export default function SearchFilters({
       {isOpen && (
         <div
           id={filterPanelId}
+          ref={toolbarRef}
           className="mt-4 pt-4 border-t border-sand-200"
-          role="group"
+          role="toolbar"
           aria-label="Options de filtrage"
+          aria-orientation="horizontal"
+          onKeyDown={handleToolbarKeyDown}
         >
           <div className="flex flex-wrap gap-3">
             {/* Verified filter */}
             <button
+              data-toolbar-item
+              tabIndex={activeToolbarIndex === 0 ? 0 : -1}
               onClick={() => updateFilter('verified', !filters.verified)}
               aria-pressed={filters.verified}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
@@ -155,6 +204,8 @@ export default function SearchFilters({
 
             {/* RGE filter (ADEME — indispensable pour aides MaPrimeRénov', CEE, TVA 5,5%) */}
             <button
+              data-toolbar-item
+              tabIndex={activeToolbarIndex === 1 ? 0 : -1}
               onClick={() => {
                 if (isRgeControlled) {
                   onControlledRgeChange?.(!rgeActive)
@@ -174,35 +225,33 @@ export default function SearchFilters({
               <span>Certifié RGE</span>
             </button>
 
-            {/* Rating filter */}
-            <div
-              className="flex items-center gap-1"
-              role="group"
-              aria-label="Filtrer par note minimum"
-            >
-              {[4, 4.5].map((rating) => (
-                <button
-                  key={rating}
-                  onClick={() =>
-                    updateFilter('minRating', filters.minRating === rating ? null : rating)
-                  }
-                  aria-pressed={filters.minRating === rating}
-                  aria-label={`Note minimum ${rating} étoiles`}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
-                    filters.minRating === rating
-                      ? 'bg-secondary-50 border-secondary-200 text-secondary-700'
-                      : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
-                  }`}
-                >
-                  <Star className="w-4 h-4 fill-current" aria-hidden="true" />
-                  <span>{rating}+</span>
-                </button>
-              ))}
-            </div>
+            {/* Rating filter — both buttons are real toolbar items */}
+            {[4, 4.5].map((rating, ratingIdx) => (
+              <button
+                key={rating}
+                data-toolbar-item
+                tabIndex={activeToolbarIndex === 2 + ratingIdx ? 0 : -1}
+                onClick={() =>
+                  updateFilter('minRating', filters.minRating === rating ? null : rating)
+                }
+                aria-pressed={filters.minRating === rating}
+                aria-label={`Note minimum ${rating} étoiles`}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
+                  filters.minRating === rating
+                    ? 'bg-secondary-50 border-secondary-200 text-secondary-700'
+                    : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
+                }`}
+              >
+                <Star className="w-4 h-4 fill-current" aria-hidden="true" />
+                <span>{rating}+</span>
+              </button>
+            ))}
 
             {/* Clear filters */}
             {activeFiltersCount > 0 && (
               <button
+                data-toolbar-item
+                tabIndex={activeToolbarIndex === 4 ? 0 : -1}
                 onClick={clearFilters}
                 aria-label="Effacer tous les filtres"
                 className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-500 hover:text-charcoal-700 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-charcoal-500 focus-visible:ring-offset-2 rounded-lg"
