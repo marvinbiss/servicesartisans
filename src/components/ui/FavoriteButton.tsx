@@ -1,7 +1,7 @@
 'use client'
 
 import { Heart } from 'lucide-react'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useFavorites } from '@/hooks/useFavorites'
 import { cn } from '@/lib/utils'
 import { setFavoriteMeta, removeFavoriteMeta } from '@/lib/storage/favorites-meta'
@@ -36,17 +36,36 @@ export function FavoriteButton({
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites()
   const [animating, setAnimating] = useState(false)
-  const [toast, setToast] = useState<string | null>(null)
+  // Toast is keyed so rapid toggles re-announce even when the message
+  // string is identical (e.g. add → remove → add yields two "ajouté"
+  // states). A monotonic counter forces the useEffect to re-run.
+  const [toast, setToast] = useState<{ message: string; key: number } | null>(null)
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const animTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const favorited = isFavorite(providerId)
   const { button: btnSize, icon: iconSize } = sizeMap[size]
 
-  // Clear toast after 2 seconds
+  // Clear toast 2 s after the latest click. We key on toast?.key so a
+  // re-click with the same message still resets the timer rather than
+  // letting the prior schedule finish early.
   useEffect(() => {
     if (!toast) return
-    const timer = setTimeout(() => setToast(null), 2000)
-    return () => clearTimeout(timer)
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = setTimeout(() => setToast(null), 2000)
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+    }
   }, [toast])
+
+  // Cleanup pending animation / toast timers on unmount so a
+  // navigation mid-bounce doesn't fire setState on an unmounted node.
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+      if (animTimerRef.current) clearTimeout(animTimerRef.current)
+    }
+  }, [])
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -71,14 +90,21 @@ export function FavoriteButton({
         removeFavoriteMeta(providerId)
       }
 
-      // Trigger bounce animation
+      // Trigger bounce — clear the prior timer first so rapid clicks
+      // don't leave us with `animating=false` while a fresh bounce is
+      // mid-flight.
+      if (animTimerRef.current) clearTimeout(animTimerRef.current)
       setAnimating(true)
-      setTimeout(() => setAnimating(false), 300)
+      animTimerRef.current = setTimeout(() => setAnimating(false), 300)
 
-      // Show toast
-      setToast(
-        willBeFavorite ? `${providerName} ajouté aux favoris` : `${providerName} retiré des favoris`
-      )
+      // Keyed toast forces re-announcement even when the message
+      // string didn't change (e.g. fast double-tap on the same target).
+      setToast({
+        message: willBeFavorite
+          ? `${providerName} ajouté aux favoris`
+          : `${providerName} retiré des favoris`,
+        key: Date.now(),
+      })
     },
     [
       favorited,
@@ -119,17 +145,19 @@ export function FavoriteButton({
         />
       </button>
 
-      {/* Visible toast — doubles as the SR live region so we never announce
-          twice. role="status" + aria-live="polite" so the message is read
-          without stealing focus. Off-screen text fallback keeps the
-          announcement available even when the visual toast has faded. */}
+      {/* sr-only live region — visible toast is aria-hidden so the
+          announcement never doubles. */}
       <div role="status" aria-live="polite" className="sr-only">
-        {toast}
+        {toast?.message ?? ''}
       </div>
       {toast && (
-        <div className="absolute top-full right-0 mt-2 z-50 pointer-events-none" aria-hidden="true">
+        <div
+          key={toast.key}
+          className="absolute top-full right-0 mt-2 z-50 pointer-events-none"
+          aria-hidden="true"
+        >
           <div className="whitespace-nowrap bg-charcoal-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out] motion-reduce:animate-none">
-            {toast}
+            {toast.message}
           </div>
         </div>
       )}

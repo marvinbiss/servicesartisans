@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, beforeEach } from 'vitest'
-import { render, fireEvent, screen, act } from '@testing-library/react'
+import { render, fireEvent, screen, act, cleanup } from '@testing-library/react'
 import { FavoriteButton } from './FavoriteButton'
 
 describe('FavoriteButton', () => {
@@ -52,5 +52,24 @@ describe('FavoriteButton', () => {
       await new Promise((r) => setTimeout(r, 350))
     })
     expect(btn.className).not.toContain('animate-[favoriteScale_0.3s_ease-in-out]')
+  })
+
+  it('rapid double-tap re-announces the latest state', () => {
+    render(<FavoriteButton providerId="p1" providerName="Plomberie A" />)
+    const btn = screen.getByRole('button')
+    fireEvent.click(btn)
+    fireEvent.click(btn)
+    fireEvent.click(btn)
+    // After 3 clicks: !favorited -> favorited -> !favorited -> favorited
+    // So final state is favorited=true, message="ajouté"
+    expect(btn.getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByRole('status').textContent).toContain('ajouté')
+  })
+
+  it('unmount mid-animation does not throw', () => {
+    const { unmount } = render(<FavoriteButton providerId="p1" providerName="Plomberie A" />)
+    fireEvent.click(screen.getByRole('button'))
+    expect(() => unmount()).not.toThrow()
+    cleanup()
   })
 })
