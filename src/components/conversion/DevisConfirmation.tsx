@@ -21,6 +21,7 @@ import {
   ArrowRight,
   Sparkles,
   Leaf,
+  Printer,
 } from 'lucide-react'
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { services } from '@/lib/data/france-light'
@@ -242,7 +243,10 @@ export default function DevisConfirmation({
   const maskedPhone = maskPhone(phone)
 
   return (
-    <div className={compact ? 'py-4' : 'py-6 md:py-8'}>
+    <div
+      data-print-area="devis-confirmation"
+      className={`${compact ? 'py-4' : 'py-6 md:py-8'} print:py-0 print:text-black`}
+    >
       {/* ── Animated checkmark ── */}
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
@@ -591,10 +595,10 @@ export default function DevisConfirmation({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className={`flex items-center justify-between gap-3 px-4 py-3 bg-charcoal-900 text-white rounded-xl ${compact ? 'mb-3 text-xs' : 'mb-5 text-sm'}`}
+          className={`flex items-center justify-between gap-3 px-4 py-3 bg-charcoal-900 text-white rounded-xl print:bg-white print:text-black print:border print:border-charcoal-300 print:break-inside-avoid ${compact ? 'mb-3 text-xs' : 'mb-5 text-sm'}`}
         >
           <div className="min-w-0">
-            <p className="text-charcoal-400 uppercase tracking-wider text-[10px] font-semibold">
+            <p className="text-charcoal-400 uppercase tracking-wider text-[10px] font-semibold print:text-charcoal-700">
               Numéro de votre demande
             </p>
             <p className="font-mono font-bold text-lg tracking-wider">
@@ -609,7 +613,7 @@ export default function DevisConfirmation({
               setTimeout(() => setRefCopied(false), 2000)
             }}
             aria-label="Copier le numéro de demande"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900 print:hidden"
           >
             {refCopied ? (
               <Check className="w-3.5 h-3.5 text-accent-300" aria-hidden="true" />
@@ -675,7 +679,7 @@ export default function DevisConfirmation({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1 }}
-        className="text-center"
+        className="text-center print:hidden"
       >
         <Link
           href={`/services/${service}/${city.toLowerCase().replace(/\s+/g, '-')}`}
@@ -690,7 +694,7 @@ export default function DevisConfirmation({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.3 }}
-        className={`${compact ? 'mt-4' : 'mt-6'}`}
+        className={`${compact ? 'mt-4' : 'mt-6'} print:hidden`}
       >
         <p
           className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}
@@ -733,7 +737,7 @@ export default function DevisConfirmation({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
-        className={`${compact ? 'mt-4' : 'mt-6'}`}
+        className={`${compact ? 'mt-4' : 'mt-6'} print:hidden`}
       >
         <p
           className={`font-semibold text-charcoal-800 text-center ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}
@@ -780,6 +784,17 @@ export default function DevisConfirmation({
           >
             {copied ? <Check className="w-4 h-4 text-accent-500" /> : <Copy className="w-4 h-4" />}
             {copied ? 'Copié !' : 'Partager'}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== 'undefined') window.print()
+            }}
+            aria-label="Imprimer ou enregistrer en PDF"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+          >
+            <Printer className="w-4 h-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Imprimer</span>
           </button>
         </div>
       </motion.div>
