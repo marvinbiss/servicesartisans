@@ -27,6 +27,7 @@ import { ActiveFilterChips } from '@/components/providers/ActiveFilterChips'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 import { StickyMobileDevisCTA } from '@/components/providers/StickyMobileDevisCTA'
 import { SmartEmptyState } from '@/components/providers/SmartEmptyState'
+import { HubReviewsCarousel } from '@/components/providers/HubReviewsCarousel'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -568,6 +569,11 @@ export default function ServiceLocationPageClient({
                     ? `${filteredProviders.length} artisan${filteredProviders.length > 1 ? 's' : ''} après filtrage`
                     : ''}
                 </div>
+                {filteredProviders.length > 0 && (
+                  <HubReviewsCarousel
+                    providerIds={filteredProviders.slice(0, 20).map((p) => p.id)}
+                  />
+                )}
                 {activeFilterCount > 0 && filteredProviders.length === 0 ? (
                   <SmartEmptyState
                     serviceSlug={serviceSlug || service.slug}
