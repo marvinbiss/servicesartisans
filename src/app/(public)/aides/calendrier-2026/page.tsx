@@ -81,9 +81,9 @@ const CATEGORY_ICONS: Record<CalendarEventCategory, typeof Calendar> = {
 const CATEGORY_COLORS: Record<CalendarEventCategory, string> = {
   bareme: 'bg-blue-50 text-blue-700 border-blue-200',
   fiscal: 'bg-amber-50 text-amber-700 border-amber-200',
-  saisonnalite: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  saisonnalite: 'bg-accent-50 text-accent-700 border-accent-200',
   echeance: 'bg-red-50 text-red-700 border-red-200',
-  campagne: 'bg-violet-50 text-violet-700 border-violet-200',
+  campagne: 'bg-primary-50 text-primary-700 border-primary-200',
 }
 
 function formatDate(iso: string): string {
@@ -276,11 +276,11 @@ export default function AidesCalendrier2026Page() {
         />
       </div>
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <CalendarClock className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <CalendarClock className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Calendrier 2026 · YMYL vérifié · sources officielles
             </span>
           </div>
@@ -290,7 +290,7 @@ export default function AidesCalendrier2026Page() {
           >
             Calendrier des aides rénovation énergétique 2026
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             {AIDES_CALENDAR_2026.length} dates clés organisées chronologiquement : revalorisations
             de barème, échéances fiscales, saisonnalité optimale par type de travaux et deadlines de
             dépôt. Sources : ANAH, ADEME, France Rénov’, ministère de la Transition écologique.
@@ -298,19 +298,19 @@ export default function AidesCalendrier2026Page() {
           <LastUpdated
             label="Calendrier vérifié le"
             date={REVIEWED_AT}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides 2026
             </Link>
             <Link
               href="/aides"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Hub des aides
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -334,7 +334,7 @@ export default function AidesCalendrier2026Page() {
       <section className="bg-white py-12" aria-labelledby="categories-heading">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-6">
-            <Sparkles className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Sparkles className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2
               id="categories-heading"
               className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900"
@@ -365,7 +365,7 @@ export default function AidesCalendrier2026Page() {
       <section className="bg-sand-50 py-12" aria-labelledby="timeline-heading">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-8">
-            <Calendar className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Calendar className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2
               id="timeline-heading"
               className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900"
@@ -378,8 +378,8 @@ export default function AidesCalendrier2026Page() {
             {monthsWithEvents.map((m) => (
               <div key={m.month} className="bg-white rounded-2xl border border-charcoal-100 p-6">
                 <div className="flex items-center gap-3 mb-4 pb-3 border-b border-charcoal-100">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
-                    <span className="font-heading font-bold text-emerald-700">
+                  <div className="w-12 h-12 rounded-xl bg-accent-50 flex items-center justify-center">
+                    <span className="font-heading font-bold text-accent-700">
                       {String(m.month).padStart(2, '0')}
                     </span>
                   </div>
@@ -422,7 +422,7 @@ export default function AidesCalendrier2026Page() {
                             </p>
                             <div className="flex items-start gap-2 mb-3 text-sm">
                               <CheckCircle2
-                                className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"
+                                className="w-4 h-4 text-accent-600 flex-shrink-0 mt-0.5"
                                 aria-hidden="true"
                               />
                               <span className="text-charcoal-800">
@@ -434,7 +434,7 @@ export default function AidesCalendrier2026Page() {
                                 href={e.sourceUrl}
                                 rel="noopener nofollow"
                                 target="_blank"
-                                className="inline-flex items-center gap-1 text-emerald-800 hover:underline font-medium"
+                                className="inline-flex items-center gap-1 text-accent-800 hover:underline font-medium"
                               >
                                 Source officielle
                                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
@@ -447,7 +447,7 @@ export default function AidesCalendrier2026Page() {
                                     <Link
                                       key={slug}
                                       href={`/aides/${slug}`}
-                                      className="text-emerald-700 hover:underline"
+                                      className="text-accent-700 hover:underline"
                                     >
                                       {slug}
                                     </Link>
@@ -536,9 +536,9 @@ export default function AidesCalendrier2026Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link
               href="/aides"
-              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-emerald-300 hover:bg-emerald-50/40 transition"
+              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-accent-300 hover:bg-accent-50/40 transition"
             >
-              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-emerald-800">
+              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-accent-800">
                 Hub des aides nationales
               </div>
               <p className="text-sm text-charcoal-700">
@@ -548,9 +548,9 @@ export default function AidesCalendrier2026Page() {
             </Link>
             <Link
               href="/aides/maprimerenov-vs-cee"
-              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-emerald-300 hover:bg-emerald-50/40 transition"
+              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-accent-300 hover:bg-accent-50/40 transition"
             >
-              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-emerald-800">
+              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-accent-800">
                 MaPrimeRénov’ vs CEE — 10 différences
               </div>
               <p className="text-sm text-charcoal-700">
@@ -559,9 +559,9 @@ export default function AidesCalendrier2026Page() {
             </Link>
             <Link
               href="/aides/par-region"
-              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-emerald-300 hover:bg-emerald-50/40 transition"
+              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-accent-300 hover:bg-accent-50/40 transition"
             >
-              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-emerald-800">
+              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-accent-800">
                 Aides par région
               </div>
               <p className="text-sm text-charcoal-700">
@@ -570,9 +570,9 @@ export default function AidesCalendrier2026Page() {
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-emerald-300 hover:bg-emerald-50/40 transition"
+              className="group rounded-2xl border border-charcoal-100 p-5 hover:border-accent-300 hover:bg-accent-50/40 transition"
             >
-              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-emerald-800">
+              <div className="font-heading font-bold text-charcoal-900 mb-1 group-hover:text-accent-800">
                 Cumul MaPrimeRénov’ + CEE famille par famille
               </div>
               <p className="text-sm text-charcoal-700">
@@ -581,7 +581,7 @@ export default function AidesCalendrier2026Page() {
             </Link>
           </div>
           <div className="mt-6 flex items-start gap-2 text-sm text-charcoal-500">
-            <Info className="w-4 h-4 text-emerald-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <Info className="w-4 h-4 text-accent-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <span>
               Ce calendrier est mis à jour trimestriellement. En cas d’ajustement officiel publié
               par arrêté DGEC ou décret ANAH, les dates sont actualisées dans les 7 jours.

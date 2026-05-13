@@ -58,10 +58,10 @@ export default async function BarometreRgePage() {
   if (!snap) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 data-speakable="true" className="text-3xl font-bold text-slate-900">
+        <h1 data-speakable="true" className="text-3xl font-bold text-charcoal-900">
           Baromètre RGE
         </h1>
-        <p className="mt-4 text-slate-600">
+        <p className="mt-4 text-charcoal-600">
           Le premier snapshot mensuel sera publié prochainement. Revenez bientôt.
         </p>
       </div>
@@ -183,7 +183,7 @@ export default async function BarometreRgePage() {
     <>
       <JsonLd data={[getBreadcrumbSchema(breadcrumbs), datasetSchema, articleSchema]} />
 
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-charcoal-50">
         <div className="mx-auto max-w-5xl px-6 py-10">
           <Breadcrumb
             items={[
@@ -193,11 +193,11 @@ export default async function BarometreRgePage() {
           />
 
           <header className="mt-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+            <div className="inline-flex items-center gap-2 rounded-full bg-accent-100 px-3 py-1 text-xs font-semibold text-accent-800">
               <Database className="h-3.5 w-3.5" />
               Données officielles — sync ADEME hebdo
             </div>
-            <h1 data-speakable="true" className="mt-4 text-4xl font-extrabold text-slate-900">
+            <h1 data-speakable="true" className="mt-4 text-4xl font-extrabold text-charcoal-900">
               Baromètre RGE {monthLabel}
             </h1>
             <ArticleMeta
@@ -206,7 +206,7 @@ export default async function BarometreRgePage() {
               dateModified={snap.captured_at}
               className="mt-3"
             />
-            <p className="mt-3 text-lg text-slate-600">
+            <p className="mt-3 text-lg text-charcoal-600">
               {nf(snap.total_rge_active)} artisans RGE actifs en France, suivis chaque mois depuis
               le répertoire ADEME. Les chiffres qui comptent pour MaPrimeRénov', les CEE et la
               rénovation énergétique.
@@ -215,29 +215,35 @@ export default async function BarometreRgePage() {
 
           {/* KPIs */}
           <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
-              <Shield className="h-5 w-5 text-emerald-600" />
-              <p className="mt-3 text-3xl font-bold text-slate-900">{nf(snap.total_rge_active)}</p>
-              <p className="mt-1 text-sm text-slate-600">Artisans RGE actifs</p>
+            <div className="rounded-xl border border-charcoal-200 bg-white p-5">
+              <Shield className="h-5 w-5 text-accent-600" />
+              <p className="mt-3 text-3xl font-bold text-charcoal-900">
+                {nf(snap.total_rge_active)}
+              </p>
+              <p className="mt-1 text-sm text-charcoal-600">Artisans RGE actifs</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <div className="rounded-xl border border-charcoal-200 bg-white p-5">
               <Award className="h-5 w-5 text-amber-600" />
-              <p className="mt-3 text-3xl font-bold text-slate-900">{nf(snap.total_rge_expired)}</p>
-              <p className="mt-1 text-sm text-slate-600">RGE expirés (à renouveler)</p>
+              <p className="mt-3 text-3xl font-bold text-charcoal-900">
+                {nf(snap.total_rge_expired)}
+              </p>
+              <p className="mt-1 text-sm text-charcoal-600">RGE expirés (à renouveler)</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <div className="rounded-xl border border-charcoal-200 bg-white p-5">
               <MapPin className="h-5 w-5 text-blue-600" />
-              <p className="mt-3 text-3xl font-bold text-slate-900">{nf(snap.total_providers)}</p>
-              <p className="mt-1 text-sm text-slate-600">Artisans RGE total référencés</p>
+              <p className="mt-3 text-3xl font-bold text-charcoal-900">
+                {nf(snap.total_providers)}
+              </p>
+              <p className="mt-1 text-sm text-charcoal-600">Artisans RGE total référencés</p>
             </div>
           </section>
 
           {/* Régions */}
           <section className="mt-10">
-            <h2 className="text-2xl font-bold text-slate-900">Top régions — RGE actifs</h2>
-            <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <h2 className="text-2xl font-bold text-charcoal-900">Top régions — RGE actifs</h2>
+            <div className="mt-4 overflow-hidden rounded-xl border border-charcoal-200 bg-white">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-left text-slate-600">
+                <thead className="bg-charcoal-50 text-left text-charcoal-600">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Région</th>
                     <th className="px-4 py-3 text-right font-semibold">RGE actifs</th>
@@ -247,15 +253,15 @@ export default async function BarometreRgePage() {
                 </thead>
                 <tbody>
                   {snap.by_region.slice(0, 13).map((r) => (
-                    <tr key={r.region_slug} className="border-t border-slate-100">
-                      <td className="px-4 py-3 font-medium text-slate-900">{r.region}</td>
-                      <td className="px-4 py-3 text-right text-emerald-700">
+                    <tr key={r.region_slug} className="border-t border-charcoal-100">
+                      <td className="px-4 py-3 font-medium text-charcoal-900">{r.region}</td>
+                      <td className="px-4 py-3 text-right text-accent-700">
                         {nf(r.nb_rge_active)}
                       </td>
-                      <td className="px-4 py-3 text-right text-slate-500">
+                      <td className="px-4 py-3 text-right text-charcoal-500">
                         {nf(r.nb_rge_expired)}
                       </td>
-                      <td className="px-4 py-3 text-slate-700">{r.top_qualification ?? '—'}</td>
+                      <td className="px-4 py-3 text-charcoal-700">{r.top_qualification ?? '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -266,10 +272,10 @@ export default async function BarometreRgePage() {
           {/* Qualifications */}
           <section className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">Top 10 qualifications</h2>
-              <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <h2 className="text-2xl font-bold text-charcoal-900">Top 10 qualifications</h2>
+              <div className="mt-4 overflow-hidden rounded-xl border border-charcoal-200 bg-white">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-50 text-left text-slate-600">
+                  <thead className="bg-charcoal-50 text-left text-charcoal-600">
                     <tr>
                       <th className="px-4 py-3 font-semibold">Code</th>
                       <th className="px-4 py-3 text-right font-semibold">Artisans</th>
@@ -277,9 +283,11 @@ export default async function BarometreRgePage() {
                   </thead>
                   <tbody>
                     {snap.by_qualification.map((q) => (
-                      <tr key={q.code} className="border-t border-slate-100">
-                        <td className="px-4 py-3 font-medium text-slate-900">{q.code}</td>
-                        <td className="px-4 py-3 text-right text-slate-700">{nf(q.nb_artisans)}</td>
+                      <tr key={q.code} className="border-t border-charcoal-100">
+                        <td className="px-4 py-3 font-medium text-charcoal-900">{q.code}</td>
+                        <td className="px-4 py-3 text-right text-charcoal-700">
+                          {nf(q.nb_artisans)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -288,10 +296,10 @@ export default async function BarometreRgePage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">Top spécialités</h2>
-              <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <h2 className="text-2xl font-bold text-charcoal-900">Top spécialités</h2>
+              <div className="mt-4 overflow-hidden rounded-xl border border-charcoal-200 bg-white">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-50 text-left text-slate-600">
+                  <thead className="bg-charcoal-50 text-left text-charcoal-600">
                     <tr>
                       <th className="px-4 py-3 font-semibold">Spécialité</th>
                       <th className="px-4 py-3 text-right font-semibold">RGE actifs</th>
@@ -300,12 +308,12 @@ export default async function BarometreRgePage() {
                   </thead>
                   <tbody>
                     {snap.by_specialty.map((s) => (
-                      <tr key={s.specialty} className="border-t border-slate-100">
-                        <td className="px-4 py-3 font-medium text-slate-900">{s.specialty}</td>
-                        <td className="px-4 py-3 text-right text-slate-700">
+                      <tr key={s.specialty} className="border-t border-charcoal-100">
+                        <td className="px-4 py-3 font-medium text-charcoal-900">{s.specialty}</td>
+                        <td className="px-4 py-3 text-right text-charcoal-700">
                           {nf(s.nb_rge_active)}
                         </td>
-                        <td className="px-4 py-3 text-right text-slate-500">{s.share_pct}%</td>
+                        <td className="px-4 py-3 text-right text-charcoal-500">{s.share_pct}%</td>
                       </tr>
                     ))}
                   </tbody>
@@ -317,15 +325,15 @@ export default async function BarometreRgePage() {
           {/* Organismes */}
           {snap.organismes.length > 0 && (
             <section className="mt-10">
-              <h2 className="text-2xl font-bold text-slate-900">Organismes certificateurs</h2>
+              <h2 className="text-2xl font-bold text-charcoal-900">Organismes certificateurs</h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {snap.organismes.map((o) => (
                   <span
                     key={o.organisme}
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700"
+                    className="inline-flex items-center gap-2 rounded-full border border-charcoal-200 bg-white px-3 py-1.5 text-sm text-charcoal-700"
                   >
                     {o.organisme}
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                    <span className="rounded-full bg-charcoal-100 px-2 py-0.5 text-xs font-semibold text-charcoal-700">
                       {nf(o.nb_artisans)}
                     </span>
                   </span>
@@ -335,16 +343,16 @@ export default async function BarometreRgePage() {
           )}
 
           {/* Usage & API */}
-          <section className="mt-12 rounded-xl border border-slate-200 bg-white p-6">
-            <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
+          <section className="mt-12 rounded-xl border border-charcoal-200 bg-white p-6">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-charcoal-900">
               <ExternalLink className="h-5 w-5 text-blue-600" />
               Reprendre ces données
             </h2>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-charcoal-600">
               Données libres de réutilisation sous licence <strong>CC-BY 4.0</strong>. Attribution
               obligatoire :
             </p>
-            <blockquote className="mt-3 rounded-md border-l-4 border-blue-500 bg-blue-50 p-3 text-sm text-slate-700">
+            <blockquote className="mt-3 rounded-md border-l-4 border-blue-500 bg-blue-50 p-3 text-sm text-charcoal-700">
               Source :{' '}
               <a href={canonicalUrl} className="font-semibold text-blue-700 hover:underline">
                 {SITE_NAME} — Baromètre RGE {monthLabel}
@@ -353,14 +361,14 @@ export default async function BarometreRgePage() {
             <div className="mt-4 flex flex-wrap gap-3 text-sm">
               <Link
                 href="/api/v1/docs"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-charcoal-900 px-4 py-2 font-semibold text-white hover:bg-charcoal-700"
               >
                 <BookOpen className="h-4 w-4" />
                 API publique RGE
               </Link>
               <Link
                 href="/api/v1/rge/search?qualification=RGE&limit=20"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-charcoal-200 bg-white px-4 py-2 font-semibold text-charcoal-700 hover:bg-charcoal-50"
               >
                 Rechercher un artisan RGE
               </Link>
@@ -369,9 +377,9 @@ export default async function BarometreRgePage() {
 
           {/* Méthodologie */}
           <section className="mt-10">
-            <h2 className="text-xl font-bold text-slate-900">Méthodologie</h2>
-            <p className="mt-3 whitespace-pre-line text-sm text-slate-600">{snap.methodology}</p>
-            <p className="mt-3 text-xs text-slate-500">
+            <h2 className="text-xl font-bold text-charcoal-900">Méthodologie</h2>
+            <p className="mt-3 whitespace-pre-line text-sm text-charcoal-600">{snap.methodology}</p>
+            <p className="mt-3 text-xs text-charcoal-500">
               Snapshot capturé le {new Date(snap.captured_at).toLocaleDateString('fr-FR')}. Source
               officielle :{' '}
               <a

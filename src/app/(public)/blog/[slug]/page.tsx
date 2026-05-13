@@ -431,7 +431,7 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
     case 'tip':
       return (
         <svg
-          className="w-5 h-5 text-emerald-500"
+          className="w-5 h-5 text-accent-500"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -514,7 +514,7 @@ function getCalloutStyles(calloutType: CalloutBlock['calloutType']): {
 } {
   switch (calloutType) {
     case 'tip':
-      return { bg: 'bg-emerald-50', border: 'border-emerald-400', headerColor: 'text-emerald-700' }
+      return { bg: 'bg-accent-50', border: 'border-accent-400', headerColor: 'text-accent-700' }
     case 'warning':
       return { bg: 'bg-orange-50', border: 'border-orange-400', headerColor: 'text-orange-700' }
     case 'info':
@@ -640,12 +640,12 @@ function renderCalloutContent(block: CalloutBlock) {
 function getAuthorGradient(name: string): string {
   const gradients = [
     'from-primary-400 to-primary-500',
-    'from-emerald-500 to-emerald-600',
+    'from-accent-500 to-accent-600',
     'from-purple-500 to-purple-600',
     'from-amber-500 to-amber-600',
     'from-rose-500 to-rose-600',
     'from-cyan-500 to-cyan-600',
-    'from-indigo-500 to-primary-600',
+    'from-primary-500 to-primary-600',
     'from-teal-500 to-teal-600',
   ]
   let hash = 0
@@ -890,7 +890,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 {article.readTime} de lecture
               </div>
               {article.updatedDate && (
-                <div className="flex items-center gap-2 text-emerald-600">
+                <div className="flex items-center gap-2 text-accent-600">
                   <Clock className="w-4 h-4" />
                   Mis à jour le{' '}
                   {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
@@ -913,7 +913,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
             <span className="text-sm font-medium text-primary-700">
               {"Besoin d'un artisan ? Devis gratuit et sans engagement"}
             </span>
-            <ChevronRight className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
+            <ChevronRight className="w-4 h-4 text-primary-400 group-hover:trancharcoal-x-0.5 transition-transform flex-shrink-0" />
           </Link>
         </div>
 
@@ -1107,7 +1107,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                       href={link.href}
                       className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-800 font-medium group transition-colors"
                     >
-                      <ChevronRight className="w-4 h-4 text-amber-500 group-hover:translate-x-0.5 transition-transform" />
+                      <ChevronRight className="w-4 h-4 text-amber-500 group-hover:trancharcoal-x-0.5 transition-transform" />
                       {link.text}
                     </Link>
                   </li>
@@ -1134,7 +1134,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                     <Link
                       key={relSlug}
                       href={`/blog/${relSlug}`}
-                      className="group p-5 bg-white border border-sand-300 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                      className="group p-5 bg-white border border-sand-300 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-trancharcoal-y-1 transition-all duration-300"
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
@@ -1333,7 +1333,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </p>
           <Link
             href={devisHref}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-charcoal-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-charcoal-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-trancharcoal-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Obtenir mon devis gratuit
             <ChevronRight className="w-5 h-5" />

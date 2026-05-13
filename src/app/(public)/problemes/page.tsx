@@ -91,8 +91,8 @@ const serviceCategories = [
     name: 'Rénovation énergétique',
     slug: 'renovation-energetique',
     icon: Flame,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
+    color: 'text-accent-600',
+    bg: 'bg-accent-50',
   },
   { name: 'Chauffage', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
   { name: 'Toiture', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
@@ -427,7 +427,7 @@ export default function ProblemesPage() {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-3 bg-white text-amber-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center gap-3 bg-white text-amber-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-trancharcoal-y-0.5 transition-all"
           >
             Obtenir mon devis gratuit
             <ArrowRight className="w-5 h-5" />

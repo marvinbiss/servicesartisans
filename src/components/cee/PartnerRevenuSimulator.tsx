@@ -84,10 +84,10 @@ export default function PartnerRevenuSimulator() {
   }, [volumes])
 
   return (
-    <section className="bg-gradient-to-r from-emerald-50 to-emerald-100/60 border-y border-emerald-200">
+    <section className="bg-gradient-to-r from-accent-50 to-accent-100/60 border-y border-accent-200">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-start gap-3 mb-6">
-          <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-accent-600 flex items-center justify-center">
             <Euro className="w-6 h-6 text-white" aria-hidden="true" />
           </div>
           <div>
@@ -110,11 +110,11 @@ export default function PartnerRevenuSimulator() {
             return (
               <div
                 key={op.code}
-                className="bg-white rounded-2xl border border-emerald-100 p-5 hover:border-emerald-300 transition"
+                className="bg-white rounded-2xl border border-accent-100 p-5 hover:border-accent-300 transition"
               >
                 <div className="flex items-baseline justify-between mb-2 gap-3">
                   <div>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-semibold text-emerald-700 mb-1">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent-50 border border-accent-200 text-[11px] font-semibold text-accent-700 mb-1">
                       {op.code}
                     </span>
                     <h3 className="font-heading font-bold text-charcoal-900 text-base leading-tight">
@@ -123,7 +123,7 @@ export default function PartnerRevenuSimulator() {
                   </div>
                   <div className="text-right whitespace-nowrap">
                     <div className="text-xs text-charcoal-500">Prime moy./chantier</div>
-                    <div className="font-heading font-extrabold text-emerald-700 text-lg">
+                    <div className="font-heading font-extrabold text-accent-700 text-lg">
                       {formatEuro(op.primeMoyenne)}
                     </div>
                   </div>
@@ -143,7 +143,7 @@ export default function PartnerRevenuSimulator() {
                     onChange={(e) =>
                       setVolumes((prev) => ({ ...prev, [op.code]: Number(e.target.value) }))
                     }
-                    className="flex-1 accent-emerald-600 h-2"
+                    className="flex-1 accent-accent-600 h-2"
                     aria-describedby={`vol-${op.code}-desc`}
                   />
                   <div
@@ -165,9 +165,9 @@ export default function PartnerRevenuSimulator() {
           })}
         </div>
 
-        <div className="bg-white rounded-2xl border-2 border-emerald-300 p-6 md:p-8">
+        <div className="bg-white rounded-2xl border-2 border-accent-300 p-6 md:p-8">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <TrendingUp className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h3 className="font-heading text-xl font-extrabold text-charcoal-900">
               Synthèse de vos volumes
             </h3>
@@ -185,7 +185,7 @@ export default function PartnerRevenuSimulator() {
               <div className="text-xs text-charcoal-500 uppercase tracking-wide">
                 Primes clients
               </div>
-              <div className="font-heading text-2xl font-extrabold text-emerald-700 tabular-nums">
+              <div className="font-heading text-2xl font-extrabold text-accent-700 tabular-nums">
                 {formatEuro(totals.primesClients)}
               </div>
               <div className="text-xs text-charcoal-500">/ mois</div>
@@ -194,7 +194,7 @@ export default function PartnerRevenuSimulator() {
               <div className="text-xs text-charcoal-500 uppercase tracking-wide">
                 Primes clients
               </div>
-              <div className="font-heading text-2xl font-extrabold text-emerald-700 tabular-nums">
+              <div className="font-heading text-2xl font-extrabold text-accent-700 tabular-nums">
                 {formatEuro(totals.primesClientsAnnuel)}
               </div>
               <div className="text-xs text-charcoal-500">/ an</div>
@@ -203,7 +203,7 @@ export default function PartnerRevenuSimulator() {
               <div className="text-xs text-charcoal-500 uppercase tracking-wide">
                 Votre commission
               </div>
-              <div className="font-heading text-2xl font-extrabold text-emerald-700 tabular-nums">
+              <div className="font-heading text-2xl font-extrabold text-accent-700 tabular-nums">
                 {formatEuro(0)}
               </div>
               <div className="text-xs text-charcoal-500">

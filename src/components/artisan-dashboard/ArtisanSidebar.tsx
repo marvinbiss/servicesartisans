@@ -351,7 +351,7 @@ export default function ArtisanSidebar({
         aria-label="Menu principal artisan"
         onKeyDown={handleMobileKeyDown}
         className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl transform transition-transform duration-200 ease-in-out ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+          mobileOpen ? 'trancharcoal-x-0' : '-trancharcoal-x-full'
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-sand-200">

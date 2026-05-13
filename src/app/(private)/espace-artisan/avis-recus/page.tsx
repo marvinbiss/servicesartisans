@@ -297,7 +297,7 @@ export default function AvisRecusPage() {
             </div>
 
             {/* Tips */}
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white">
+            <div className="bg-gradient-to-r from-green-500 to-accent-500 rounded-xl p-6 text-white">
               <div className="flex items-start gap-4">
                 <ThumbsUp className="w-8 h-8 flex-shrink-0" />
                 <div>

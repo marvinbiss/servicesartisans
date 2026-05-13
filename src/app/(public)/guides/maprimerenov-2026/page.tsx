@@ -510,7 +510,7 @@ export default function MaPrimeRenov2026Page() {
         </div>
 
         {/* Hero */}
-        <div className="bg-gradient-to-b from-green-50 via-emerald-50/30 to-sand-50">
+        <div className="bg-gradient-to-b from-green-50 via-accent-50/30 to-sand-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="flex items-center gap-3 mb-4">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -1013,7 +1013,7 @@ export default function MaPrimeRenov2026Page() {
           <RgeGuideBlock variant="generic" title="Artisans RGE éligibles MaPrimeRénov'" />
 
           {/* CTA */}
-          <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center">
+          <section className="bg-gradient-to-r from-green-600 to-accent-600 rounded-2xl p-8 md:p-12 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white font-heading mb-4">
               {'Trouvez un artisan RGE certifié'}
             </h2>

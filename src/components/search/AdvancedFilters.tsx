@@ -234,7 +234,7 @@ export function AdvancedFilters({
                 <span
                   className={cn(
                     'absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow',
-                    values.verified && 'translate-x-5'
+                    values.verified && 'trancharcoal-x-5'
                   )}
                 />
               </span>

@@ -271,11 +271,11 @@ export default function MaprimerenovVsCeePage() {
         />
       </div>
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Scale className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Scale className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Comparatif aides 2026 · YMYL vérifié
             </span>
           </div>
@@ -285,7 +285,7 @@ export default function MaprimerenovVsCeePage() {
           >
             MaPrimeRénov’ vs prime CEE en 2026 : 10 différences clés
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Comparatif officiel des deux principaux dispositifs d’aide à la rénovation énergétique
             résidentielle en France. Sources : ANAH, ADEME, France Rénov’, ministère de la
             Transition énergétique.
@@ -293,19 +293,19 @@ export default function MaprimerenovVsCeePage() {
           <LastUpdated
             label="Comparatif vérifié le"
             date={REVIEWED_AT}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mon cumul d’aides
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Détail famille par famille
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -329,7 +329,7 @@ export default function MaprimerenovVsCeePage() {
       <section className="bg-white py-12" aria-labelledby="comparison-table-heading">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-6">
-            <Sparkles className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Sparkles className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2
               id="comparison-table-heading"
               className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900"
@@ -340,7 +340,7 @@ export default function MaprimerenovVsCeePage() {
           <p className="text-charcoal-700 mb-6">
             Tableau de comparaison à plat. Les pastilles{' '}
             <CheckCircle2
-              className="inline w-4 h-4 text-emerald-600 align-text-bottom"
+              className="inline w-4 h-4 text-accent-600 align-text-bottom"
               aria-hidden="true"
             />{' '}
             indiquent le dispositif qui prend l’avantage sur le critère.
@@ -350,7 +350,7 @@ export default function MaprimerenovVsCeePage() {
               <caption className="sr-only">
                 Comparatif détaillé MaPrimeRénov’ vs prime CEE en 2026 sur 10 critères
               </caption>
-              <thead className="bg-emerald-50 text-sm text-charcoal-800">
+              <thead className="bg-accent-50 text-sm text-charcoal-800">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-semibold w-44">
                     Critère
@@ -372,7 +372,7 @@ export default function MaprimerenovVsCeePage() {
                     <td className="px-4 py-3 leading-relaxed">
                       {c.mprWins && (
                         <CheckCircle2
-                          className="inline w-4 h-4 text-emerald-600 mr-1 align-text-bottom"
+                          className="inline w-4 h-4 text-accent-600 mr-1 align-text-bottom"
                           aria-label="MaPrimeRénov’ prend l’avantage sur ce critère"
                         />
                       )}
@@ -381,7 +381,7 @@ export default function MaprimerenovVsCeePage() {
                     <td className="px-4 py-3 leading-relaxed">
                       {c.ceeWins && (
                         <CheckCircle2
-                          className="inline w-4 h-4 text-emerald-600 mr-1 align-text-bottom"
+                          className="inline w-4 h-4 text-accent-600 mr-1 align-text-bottom"
                           aria-label="Prime CEE prend l’avantage sur ce critère"
                         />
                       )}
@@ -396,7 +396,7 @@ export default function MaprimerenovVsCeePage() {
       </section>
 
       <section
-        className="bg-emerald-50/40 py-12 border-y border-emerald-100"
+        className="bg-accent-50/40 py-12 border-y border-accent-100"
         aria-labelledby="quand-choisir-heading"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -411,14 +411,14 @@ export default function MaprimerenovVsCeePage() {
             droits que l’autre n’ouvre pas. Voici 6 cas concrets pour 2026.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl bg-white border border-emerald-200 p-6">
+            <div className="rounded-2xl bg-white border border-accent-200 p-6">
               <h3 className="font-heading font-bold text-charcoal-900 mb-3">
                 MaPrimeRénov’ d’abord
               </h3>
               <ul className="space-y-3 text-sm text-charcoal-700 leading-relaxed">
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -428,7 +428,7 @@ export default function MaprimerenovVsCeePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -438,7 +438,7 @@ export default function MaprimerenovVsCeePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -448,12 +448,12 @@ export default function MaprimerenovVsCeePage() {
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl bg-white border border-emerald-200 p-6">
+            <div className="rounded-2xl bg-white border border-accent-200 p-6">
               <h3 className="font-heading font-bold text-charcoal-900 mb-3">Prime CEE d’abord</h3>
               <ul className="space-y-3 text-sm text-charcoal-700 leading-relaxed">
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -463,7 +463,7 @@ export default function MaprimerenovVsCeePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -473,7 +473,7 @@ export default function MaprimerenovVsCeePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>
@@ -492,8 +492,8 @@ export default function MaprimerenovVsCeePage() {
         aria-labelledby="cumul-bridge-heading"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex items-start gap-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 p-6 md:p-8">
-            <Info className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-1" aria-hidden="true" />
+          <div className="flex items-start gap-4 rounded-2xl bg-accent-50/60 border border-accent-200 p-6 md:p-8">
+            <Info className="w-6 h-6 text-accent-700 flex-shrink-0 mt-1" aria-hidden="true" />
             <div>
               <h2
                 id="cumul-bridge-heading"
@@ -511,14 +511,14 @@ export default function MaprimerenovVsCeePage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/maprimerenov-cumulaison-cee"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 text-white font-semibold shadow-md hover:bg-emerald-800 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-700 text-white font-semibold shadow-md hover:bg-accent-800 transition"
                 >
                   Voir le cumul famille par famille
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
                 <Link
                   href="/simulateur-aides-renovation"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300 text-accent-700 font-semibold hover:bg-accent-50 transition"
                 >
                   <Calculator className="w-5 h-5" aria-hidden="true" />
                   Simuler mon cumul d’aides
@@ -544,12 +544,12 @@ export default function MaprimerenovVsCeePage() {
             {FAQ.map((item, i) => (
               <details
                 key={`faq-${i}`}
-                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-accent-300 open:shadow-sm"
               >
                 <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span
-                    className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                    className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none"
                     aria-hidden="true"
                   >
                     +
@@ -573,14 +573,14 @@ export default function MaprimerenovVsCeePage() {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/aides/maprimerenov"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-semibold transition"
             >
               Page MaPrimeRénov’
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/aides/cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-semibold transition"
             >
               Page prime CEE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

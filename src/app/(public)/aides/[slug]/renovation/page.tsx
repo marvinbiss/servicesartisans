@@ -291,11 +291,11 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <MapPin className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <MapPin className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               {reg.name} — Zone climatique {reg.climateZone}
             </span>
           </div>
@@ -303,15 +303,15 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
             data-speakable="true"
             className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
           >
-            Aides rénovation énergétique <span className="text-emerald-200">{reg.name}</span> 2026
+            Aides rénovation énergétique <span className="text-accent-200">{reg.name}</span> 2026
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             MaPrimeRénov&apos;, CEE, éco-PTZ et TVA 5,5 % cumulables avec {reg.regionalAids.length}{' '}
             aide{reg.regionalAids.length > 1 ? 's' : ''} régionale
             {reg.regionalAids.length > 1 ? 's' : ''} spécifique
             {reg.regionalAids.length > 1 ? 's' : ''}. Sources officielles ANAH + conseils régionaux.
           </p>
-          <p className="mt-4 text-sm text-emerald-100/80">
+          <p className="mt-4 text-sm text-accent-100/80">
             Auteur : <span className="font-medium text-white">{author.name}</span>
             {' · '}
             Mis à jour le{' '}
@@ -327,19 +327,19 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
           <LastUpdated
             label="Aides régionales vérifiées le"
             date={reg.lastReviewedAt}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-200/30 text-white font-semibold hover:bg-emerald-700/40 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-200/30 text-white font-semibold hover:bg-accent-700/40 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Trouver un artisan RGE
@@ -364,7 +364,7 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
 
       {/* Aides régionales spécifiques */}
       {reg.regionalAids.length > 0 && (
-        <section className="bg-emerald-50/40 border-y border-emerald-100">
+        <section className="bg-accent-50/40 border-y border-accent-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
               {reg.regionalAids.length} aide{reg.regionalAids.length > 1 ? 's' : ''} régionale
@@ -378,18 +378,18 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
               {reg.regionalAids.map((aid, i) => (
                 <article
                   key={`${aid.name}-${i}`}
-                  className="p-6 bg-white rounded-2xl border border-emerald-100"
+                  className="p-6 bg-white rounded-2xl border border-accent-100"
                 >
                   <div className="flex items-baseline gap-2 flex-wrap mb-2">
                     <h3 className="font-heading font-bold text-charcoal-900 text-lg">{aid.name}</h3>
-                    <span className="text-sm font-bold text-emerald-700">{aid.montant}</span>
+                    <span className="text-sm font-bold text-accent-700">{aid.montant}</span>
                   </div>
                   <p className="text-sm text-charcoal-700 leading-relaxed mb-3">{aid.detail}</p>
                   <a
                     href={aid.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-emerald-700 hover:underline"
+                    className="text-sm text-accent-700 hover:underline"
                   >
                     Source officielle ↗
                   </a>
@@ -420,16 +420,16 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
               <Link
                 key={aide.slug}
                 href={`/aides/${aide.slug}`}
-                className="group flex items-center justify-between p-5 bg-emerald-50/40 rounded-xl border border-emerald-100 hover:border-emerald-300 hover:bg-emerald-50 transition"
+                className="group flex items-center justify-between p-5 bg-accent-50/40 rounded-xl border border-accent-100 hover:border-accent-300 hover:bg-accent-50 transition"
               >
                 <div>
-                  <div className="font-bold text-charcoal-900 group-hover:text-emerald-800 transition">
+                  <div className="font-bold text-charcoal-900 group-hover:text-accent-800 transition">
                     {aide.label}
                   </div>
                   <div className="text-sm text-charcoal-600 mt-0.5">{aide.detail}</div>
                 </div>
                 <ArrowRight
-                  className="w-4 h-4 text-emerald-600 group-hover:translate-x-0.5 transition-transform"
+                  className="w-4 h-4 text-accent-600 group-hover:trancharcoal-x-0.5 transition-transform"
                   aria-hidden="true"
                 />
               </Link>
@@ -453,11 +453,11 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
                 <Link
                   key={d.slug}
                   href={`/aides/${d.slug}/maprimerenov`}
-                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <Home className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
+                    <Home className="w-4 h-4 text-accent-600 flex-shrink-0" aria-hidden="true" />
+                    <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
                       {d.name}
                     </span>
                   </div>
@@ -476,16 +476,16 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
             Parc immobilier {reg.name}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="p-6 bg-emerald-50/40 rounded-2xl border border-emerald-100">
-              <div className="text-3xl font-extrabold text-emerald-700">
+            <div className="p-6 bg-accent-50/40 rounded-2xl border border-accent-100">
+              <div className="text-3xl font-extrabold text-accent-700">
                 {reg.housingMix.pctMaisonsIndividuelles}%
               </div>
               <div className="text-sm text-charcoal-700 mt-2 leading-relaxed">
                 de maisons individuelles dans le parc résidentiel (vs collectif).
               </div>
             </div>
-            <div className="p-6 bg-emerald-50/40 rounded-2xl border border-emerald-100">
-              <div className="text-3xl font-extrabold text-emerald-700">
+            <div className="p-6 bg-accent-50/40 rounded-2xl border border-accent-100">
+              <div className="text-3xl font-extrabold text-accent-700">
                 {reg.housingMix.pctConstructionPre1975}%
               </div>
               <div className="text-sm text-charcoal-700 mt-2 leading-relaxed">
@@ -509,11 +509,11 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
           {faqs.map((item, i) => (
             <details
               key={`faq-${i}-${item.question.slice(0, 30)}`}
-              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
             >
               <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
-                <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -526,26 +526,26 @@ export default async function AidesRegionRenovationPage({ params }: PageProps) {
       {/* Tier 1 2026-05-04 : YmylDisclaimer injecté via layout cluster aides. */}
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4">
             Lancez votre projet de rénovation en {reg.name}
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Simulez vos aides en 2 minutes ou trouvez un artisan RGE certifié dans votre
             département.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Trouver un artisan RGE

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 export default function OutreachInvalidPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-gray-900">Lien invalide</h1>
-      <p className="mt-4 text-gray-700">
+      <h1 className="text-3xl font-bold text-charcoal-900">Lien invalide</h1>
+      <p className="mt-4 text-charcoal-700">
         Ce lien de désinscription n&apos;est pas reconnu. Pour vous désinscrire ou exercer vos
         droits sur vos données, contactez directement
         <a className="ml-1 text-orange-600 underline" href="mailto:contact@servicesartisans.fr">

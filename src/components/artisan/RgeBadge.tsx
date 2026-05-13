@@ -96,13 +96,13 @@ export default function RgeBadge({
       .join('\n')
 
     const compactClasses =
-      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200'
+      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 text-accent-700 text-[11px] font-semibold border border-accent-200'
     const compactAria = `Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}, valide jusqu'au ${formatDate(validUntil)}`
     const compactInner = (
       <>
-        <Leaf className="w-3 h-3 text-emerald-600" aria-hidden="true" />
+        <Leaf className="w-3 h-3 text-accent-600" aria-hidden="true" />
         RGE
-        {count > 1 && <span className="text-[10px] font-normal text-emerald-600">×{count}</span>}
+        {count > 1 && <span className="text-[10px] font-normal text-accent-600">×{count}</span>}
       </>
     )
 
@@ -110,7 +110,7 @@ export default function RgeBadge({
       return (
         <button
           type="button"
-          className={`${compactClasses} cursor-pointer hover:bg-emerald-100 transition-colors`}
+          className={`${compactClasses} cursor-pointer hover:bg-accent-100 transition-colors`}
           title={titleLines}
           aria-label={compactAria}
           onClick={(e) => {
@@ -134,13 +134,13 @@ export default function RgeBadge({
   return (
     <details className="group inline-block mb-3">
       <summary
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-sm font-semibold border border-emerald-200 cursor-pointer list-none hover:bg-emerald-100 transition-colors"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-semibold border border-accent-200 cursor-pointer list-none hover:bg-accent-100 transition-colors"
         aria-label={`Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}`}
         onClick={handleTrackedClick}
       >
-        <Leaf className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+        <Leaf className="w-4 h-4 text-accent-600" aria-hidden="true" />
         Certifié RGE
-        <span className="ml-1 text-xs font-normal text-emerald-600">
+        <span className="ml-1 text-xs font-normal text-accent-600">
           ({count} qualif{count > 1 ? 's' : ''})
         </span>
         <svg
@@ -154,9 +154,9 @@ export default function RgeBadge({
         </svg>
       </summary>
 
-      <div className="mt-3 p-4 rounded-lg bg-white border border-emerald-200 shadow-sm max-w-md">
-        <div className="mb-3 pb-3 border-b border-emerald-100">
-          <div className="text-xs uppercase tracking-wide text-emerald-600 font-semibold mb-1">
+      <div className="mt-3 p-4 rounded-lg bg-white border border-accent-200 shadow-sm max-w-md">
+        <div className="mb-3 pb-3 border-b border-accent-100">
+          <div className="text-xs uppercase tracking-wide text-accent-600 font-semibold mb-1">
             Reconnu Garant de l&apos;Environnement
           </div>
           <div className="text-sm text-charcoal-700">
@@ -169,7 +169,7 @@ export default function RgeBadge({
           {qualifications.map((q) => (
             <li key={`${q.code}-${q.organisme}`} className="flex items-start gap-2">
               <Leaf
-                className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5"
+                className="w-3.5 h-3.5 text-accent-500 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="flex-1 min-w-0">
@@ -192,14 +192,14 @@ export default function RgeBadge({
           ))}
         </ul>
 
-        <div className="mt-3 pt-3 border-t border-emerald-100 text-xs text-charcoal-500">
+        <div className="mt-3 pt-3 border-t border-accent-100 text-xs text-charcoal-500">
           Source :{' '}
           {sourceUrl ? (
             <a
               href={sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-700 hover:underline"
+              className="text-accent-700 hover:underline"
             >
               ADEME — France Rénov&apos;
             </a>

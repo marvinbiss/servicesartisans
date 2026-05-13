@@ -110,11 +110,11 @@ export default async function ResultatPage({ params }: PageParams) {
     | undefined
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-charcoal-50">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <header className="mb-6">
-          <p className="text-sm text-slate-500">
-            Estimation <span className="font-mono text-slate-700">{data.public_id}</span>
+          <p className="text-sm text-charcoal-500">
+            Estimation <span className="font-mono text-charcoal-700">{data.public_id}</span>
           </p>
           <h1
             data-speakable="true"
@@ -130,7 +130,7 @@ export default async function ResultatPage({ params }: PageParams) {
         </header>
 
         {/* HERO : equation reste a charge */}
-        <section className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 p-6 md:p-8 shadow-sm">
+        <section className="rounded-2xl border-2 border-accent-300 bg-gradient-to-br from-accent-50 via-white to-accent-50/60 p-6 md:p-8 shadow-sm">
           <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-center">
             <div className="text-center md:text-left">
               <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
@@ -150,7 +150,7 @@ export default async function ResultatPage({ params }: PageParams) {
               <p className="text-xs font-semibold uppercase tracking-wide text-charcoal-500">
                 Aides cumulées
               </p>
-              <p className="mt-1 text-2xl md:text-3xl font-bold text-emerald-700">
+              <p className="mt-1 text-2xl md:text-3xl font-bold text-accent-700">
                 {fmtEur(aidesMid)}
               </p>
             </div>
@@ -177,7 +177,7 @@ export default async function ResultatPage({ params }: PageParams) {
         {/* Detail aides directes */}
         <section className="mt-5 rounded-xl border border-sand-200 bg-white p-5 shadow-sm">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-charcoal-900">
-            <BadgeCheck className="w-5 h-5 text-emerald-600" aria-hidden="true" />
+            <BadgeCheck className="w-5 h-5 text-accent-600" aria-hidden="true" />
             Subventions directes
           </h2>
           <dl className="space-y-3 text-charcoal-800">
@@ -210,7 +210,7 @@ export default async function ResultatPage({ params }: PageParams) {
             )}
             <div className="flex items-baseline justify-between border-t border-sand-200 pt-3 text-base">
               <dt className="font-semibold">Total aides directes</dt>
-              <dd className="font-bold text-emerald-700">{fmtEur(aidesMid)}</dd>
+              <dd className="font-bold text-accent-700">{fmtEur(aidesMid)}</dd>
             </div>
           </dl>
           <p className="mt-4 text-xs text-charcoal-500">
@@ -316,7 +316,7 @@ export default async function ResultatPage({ params }: PageParams) {
         )}
 
         {/* Prochaine etape : pont vers artisans RGE */}
-        <section className="mt-5 rounded-xl border-2 border-emerald-200 bg-gradient-to-r from-emerald-50 to-white p-5 shadow-sm">
+        <section className="mt-5 rounded-xl border-2 border-accent-200 bg-gradient-to-r from-accent-50 to-white p-5 shadow-sm">
           <h2 className="mb-2 text-lg font-semibold text-charcoal-900">
             Prochaine étape : confirmez vos aides avec un devis RGE
           </h2>
@@ -332,14 +332,14 @@ export default async function ResultatPage({ params }: PageParams) {
                   ? `?cp=${codePostal}&source=simulateur&publicId=${publicId}&parcours=${parcoursSlug ?? ''}`
                   : `?source=simulateur&publicId=${publicId}&parcours=${parcoursSlug ?? ''}`
               }`}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow-md hover:bg-emerald-700 transition text-center"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent-600 text-white font-semibold shadow-md hover:bg-accent-700 transition text-center"
             >
               Trouver un artisan RGE
             </Link>
             {codePostal && (
               <Link
                 href={`/services/renovation-energetique/${codePostal.slice(0, 2)}`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition text-center"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border-2 border-accent-600 text-accent-700 font-semibold hover:bg-accent-50 transition text-center"
               >
                 Voir les artisans dans mon département
               </Link>

@@ -105,9 +105,9 @@ const emergencyMeta: Record<
     ],
   },
   climaticien: {
-    gradient: 'from-indigo-600 to-indigo-800',
-    lightBg: 'bg-indigo-50',
-    lightText: 'text-indigo-700',
+    gradient: 'from-primary-600 to-primary-800',
+    lightBg: 'bg-primary-50',
+    lightText: 'text-primary-700',
     problems: [
       'Panne de climatisation',
       'Climatisation qui ne refroidit plus',
@@ -409,7 +409,7 @@ export default async function UrgenceServicePage({
         className={`relative bg-gradient-to-br ${meta.gradient} text-white py-16 md:py-20 overflow-hidden`}
       >
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-6">

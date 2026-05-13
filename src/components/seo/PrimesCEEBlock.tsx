@@ -45,7 +45,7 @@ const BRACKET_LABELS: Record<RevenuBracket, { label: string; color: string; prim
   {
     précaire: {
       label: 'Ménages très modestes',
-      color: 'text-emerald-700 bg-emerald-100',
+      color: 'text-accent-700 bg-accent-100',
       primeLevel: 'maximale',
     },
     modeste: {
@@ -185,8 +185,8 @@ export default async function PrimesCEEBlock({
   return (
     <section className="py-6 bg-white rounded-xl border border-sand-200 p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Zap className="w-5 h-5 text-emerald-600" aria-hidden="true" />
+        <div className="w-9 h-9 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Zap className="w-5 h-5 text-accent-600" aria-hidden="true" />
         </div>
         <h3 className="font-heading text-lg font-bold text-charcoal-900">
           Primes CEE pour {serviceName.toLowerCase()} à {villeName}
@@ -222,10 +222,10 @@ export default async function PrimesCEEBlock({
         const savingsText = getSavingsContext(bracket, climatZone, serviceName, villeName)
         if (!savingsText) return null
         return (
-          <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 mb-4">
+          <div className="p-3 rounded-lg bg-accent-50 border border-accent-100 mb-4">
             <div className="flex items-start gap-2">
-              <Leaf className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
-              <p className="text-sm text-emerald-800 leading-relaxed">{savingsText}</p>
+              <Leaf className="w-4 h-4 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <p className="text-sm text-accent-800 leading-relaxed">{savingsText}</p>
             </div>
           </div>
         )
@@ -242,7 +242,7 @@ export default async function PrimesCEEBlock({
             >
               <div className="flex-shrink-0 mt-1">
                 {op.domaine === 'enveloppe' ? (
-                  <Leaf className="w-4 h-4 text-emerald-500" aria-hidden="true" />
+                  <Leaf className="w-4 h-4 text-accent-500" aria-hidden="true" />
                 ) : (
                   <Euro className="w-4 h-4 text-primary-500" aria-hidden="true" />
                 )}
@@ -263,7 +263,7 @@ export default async function PrimesCEEBlock({
                     </span>
                   )}
                   {op.precarite_eligible && bracket === 'précaire' && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-emerald-700 bg-emerald-50">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold text-accent-700 bg-accent-50">
                       Bonification précarité
                     </span>
                   )}

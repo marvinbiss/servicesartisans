@@ -34,7 +34,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           variants[variant],
           paddings[padding],
           'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
-          hover && 'hover:shadow-card-hover hover:-translate-y-1 cursor-pointer',
+          hover && 'hover:shadow-card-hover hover:-trancharcoal-y-1 cursor-pointer',
           className
         )}
         {...props}

@@ -315,11 +315,11 @@ export default function RenovationEnergetiqueHub() {
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Rénovation énergétique' }]} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Aides cumulables 2026 — artisans RGE vérifiés via ADEME
             </span>
           </div>
@@ -329,7 +329,7 @@ export default function RenovationEnergetiqueHub() {
           >
             Rénovation énergétique 2026
           </h1>
-          <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 max-w-3xl leading-relaxed">
             MaPrimeRénov&apos;, primes CEE, TVA 5,5 %, éco-PTZ : toutes les aides officielles
             cumulables pour financer vos travaux. Simulateur d&apos;éligibilité instantané et
             annuaire d&apos;artisans RGE vérifiés directement via l&apos;API ADEME.
@@ -337,19 +337,19 @@ export default function RenovationEnergetiqueHub() {
           <LastUpdated
             label="Barèmes et aides vérifiés le"
             date={CONTENT_UPDATED_AT}
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
             </Link>
             <Link
               href="/artisans-rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <Users className="w-5 h-5" aria-hidden="true" />
               Annuaire artisans RGE
@@ -380,7 +380,7 @@ export default function RenovationEnergetiqueHub() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
               href="/renovation-energetique/aides"
-              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-lg transition"
             >
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                 Aides 2026 (8 pages)
@@ -392,7 +392,7 @@ export default function RenovationEnergetiqueHub() {
             </Link>
             <Link
               href="/renovation-energetique/travaux"
-              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-lg transition"
             >
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                 Travaux (16 pages)
@@ -404,7 +404,7 @@ export default function RenovationEnergetiqueHub() {
             </Link>
             <Link
               href="/renovation-energetique/diagnostic"
-              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-lg transition"
             >
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                 Diagnostic (4 pages)
@@ -415,7 +415,7 @@ export default function RenovationEnergetiqueHub() {
             </Link>
             <Link
               href="/renovation-energetique/passoires-thermiques"
-              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-lg transition"
             >
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                 Passoires thermiques (3 pages)
@@ -426,7 +426,7 @@ export default function RenovationEnergetiqueHub() {
             </Link>
             <Link
               href="/barometre/renovation-energetique-2026"
-              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-lg transition"
+              className="block rounded-2xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-lg transition"
             >
               <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                 Baromètre marché 2026 (CC-BY 4.0)
@@ -459,10 +459,10 @@ export default function RenovationEnergetiqueHub() {
                 <Link
                   key={aide.title}
                   href={aide.href}
-                  className="group block rounded-2xl border border-charcoal-100 bg-white p-6 hover:border-emerald-300 hover:shadow-lg transition"
+                  className="group block rounded-2xl border border-charcoal-100 bg-white p-6 hover:border-accent-300 hover:shadow-lg transition"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-50 text-accent-700 flex items-center justify-center">
                       <Icon className="w-6 h-6" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
@@ -470,9 +470,9 @@ export default function RenovationEnergetiqueHub() {
                         <h3 className="font-heading text-lg font-bold text-charcoal-900">
                           {aide.title}
                         </h3>
-                        <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-emerald-700 transition" />
+                        <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-accent-700 transition" />
                       </div>
-                      <div className="text-sm font-semibold text-emerald-700 mb-2">
+                      <div className="text-sm font-semibold text-accent-700 mb-2">
                         {aide.amount}
                       </div>
                       <p className="text-sm text-charcoal-600 leading-relaxed">
@@ -488,7 +488,7 @@ export default function RenovationEnergetiqueHub() {
       </section>
 
       {/* Travaux populaires */}
-      <section id="travaux" className="bg-emerald-50/40 py-12 md:py-16 border-y border-emerald-100">
+      <section id="travaux" className="bg-accent-50/40 py-12 md:py-16 border-y border-accent-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mb-10">
             <h2 className="font-heading text-3xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
@@ -506,13 +506,13 @@ export default function RenovationEnergetiqueHub() {
                 <Link
                   key={travail.title}
                   href={travail.href}
-                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-accent-100 text-accent-700 flex items-center justify-center flex-shrink-0">
                       <Icon className="w-5 h-5" aria-hidden="true" />
                     </div>
-                    <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 transition">
+                    <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 transition">
                       {travail.title}
                     </h3>
                   </div>
@@ -551,13 +551,13 @@ export default function RenovationEnergetiqueHub() {
             </p>
             <Link
               href="/guides/annuaire-rge-verifier-officiel"
-              className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-800"
+              className="inline-flex items-center gap-2 text-accent-700 font-semibold hover:text-accent-800"
             >
               Comment vérifier une qualification RGE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6">
+          <div className="rounded-2xl bg-accent-50 border border-accent-200 p-6">
             <h3 className="font-heading text-xl font-bold text-charcoal-900 mb-4">
               4 organismes RGE certificateurs (16 qualifications)
             </h3>
@@ -618,7 +618,7 @@ export default function RenovationEnergetiqueHub() {
                 <li key={slug}>
                   <Link
                     href={`/rge/${slug}`}
-                    className="block px-4 py-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 transition text-sm font-semibold text-emerald-900"
+                    className="block px-4 py-3 rounded-xl border border-accent-200 bg-accent-50 hover:bg-accent-100 hover:border-accent-400 transition text-sm font-semibold text-accent-900"
                   >
                     {anchor}
                   </Link>
@@ -662,7 +662,7 @@ export default function RenovationEnergetiqueHub() {
             {FAQ.map((item) => (
               <details
                 key={item.question}
-                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-emerald-300"
+                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-accent-300"
               >
                 <summary className="cursor-pointer font-heading font-bold text-charcoal-900 list-none flex justify-between items-start gap-4">
                   <span>{item.question}</span>
@@ -689,7 +689,7 @@ export default function RenovationEnergetiqueHub() {
                 href="https://www.anah.gouv.fr/"
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="hover:text-emerald-700 underline underline-offset-2"
+                className="hover:text-accent-700 underline underline-offset-2"
               >
                 Anah — Agence nationale de l&apos;habitat
               </a>
@@ -699,7 +699,7 @@ export default function RenovationEnergetiqueHub() {
                 href="https://france-renov.gouv.fr/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-emerald-700 underline underline-offset-2"
+                className="hover:text-accent-700 underline underline-offset-2"
               >
                 France Rénov&apos; — service public de la rénovation
               </a>
@@ -709,7 +709,7 @@ export default function RenovationEnergetiqueHub() {
                 href="https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie"
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="hover:text-emerald-700 underline underline-offset-2"
+                className="hover:text-accent-700 underline underline-offset-2"
               >
                 Ministère — Certificats d&apos;économies d&apos;énergie (CEE)
               </a>
@@ -719,7 +719,7 @@ export default function RenovationEnergetiqueHub() {
                 href="https://www.maprimerenov.gouv.fr/"
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="hover:text-emerald-700 underline underline-offset-2"
+                className="hover:text-accent-700 underline underline-offset-2"
               >
                 MaPrimeRénov&apos; — plateforme officielle de demande
               </a>

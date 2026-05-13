@@ -47,17 +47,19 @@ export function MessageInput({
   }
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+    <div className="border-t border-charcoal-200 dark:border-charcoal-700 bg-white dark:bg-charcoal-900">
       {/* Reply banner */}
       {replyTo && (
-        <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3 px-4 py-2 bg-charcoal-50 dark:bg-charcoal-800 border-b border-charcoal-200 dark:border-charcoal-700">
           <div className="flex-1 min-w-0">
             <div className="text-xs text-blue-600 font-medium">Réponse à</div>
-            <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{replyTo.content}</p>
+            <p className="text-sm text-charcoal-600 dark:text-charcoal-300 truncate">
+              {replyTo.content}
+            </p>
           </div>
           <button
             onClick={onCancelReply}
-            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-gray-500"
+            className="p-1 hover:bg-charcoal-200 dark:hover:bg-charcoal-700 rounded text-charcoal-500"
           >
             ✕
           </button>

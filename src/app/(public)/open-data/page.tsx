@@ -192,10 +192,10 @@ export default function OpenDataPage() {
         </div>
       </header>
 
-      <section className="py-10 bg-emerald-50/40 border-b border-emerald-200/60">
+      <section className="py-10 bg-accent-50/40 border-b border-accent-200/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-6">
           <div className="flex items-start gap-3">
-            <Shield className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <Shield className="w-6 h-6 text-accent-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h2 className="font-heading font-semibold text-charcoal-900 mb-1">
                 Licence Etalab 2.0
@@ -206,10 +206,7 @@ export default function OpenDataPage() {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Database
-              className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-0.5"
-              aria-hidden="true"
-            />
+            <Database className="w-6 h-6 text-accent-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h2 className="font-heading font-semibold text-charcoal-900 mb-1">Formats ouverts</h2>
               <p className="text-sm text-charcoal-600">
@@ -218,10 +215,7 @@ export default function OpenDataPage() {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <FileText
-              className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-0.5"
-              aria-hidden="true"
-            />
+            <FileText className="w-6 h-6 text-accent-700 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h2 className="font-heading font-semibold text-charcoal-900 mb-1">K-anonymat ≥ 10</h2>
               <p className="text-sm text-charcoal-600">
@@ -333,7 +327,7 @@ export default function OpenDataPage() {
             </div>
           </article>
 
-          <article className="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6 md:p-8">
+          <article className="rounded-2xl border border-accent-200 bg-accent-50/40 p-6 md:p-8">
             <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-3">
               Méthodologie & garanties
             </h2>
@@ -342,7 +336,7 @@ export default function OpenDataPage() {
                 <strong>Source RGE</strong> : annuaire officiel ADEME publié sur{' '}
                 <a
                   href="https://france-renov.gouv.fr/"
-                  className="underline hover:text-emerald-700"
+                  className="underline hover:text-accent-700"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
@@ -374,7 +368,7 @@ export default function OpenDataPage() {
                 l'annuaire ADEME publié sur{' '}
                 <a
                   href="https://france-renov.gouv.fr/"
-                  className="underline hover:text-emerald-700"
+                  className="underline hover:text-accent-700"
                   rel="noopener noreferrer"
                   target="_blank"
                 >

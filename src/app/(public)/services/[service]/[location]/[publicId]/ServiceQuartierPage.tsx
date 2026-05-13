@@ -264,7 +264,7 @@ export default async function ServiceQuartierPage({
                 .map((t) => (
                   <span
                     key={t}
-                    className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-medium"
+                    className="text-xs bg-accent-100 text-accent-800 px-3 py-1 rounded-full font-medium"
                   >
                     {t.toUpperCase()}
                   </span>
@@ -312,14 +312,14 @@ export default async function ServiceQuartierPage({
                       </div>
                       <div className="text-xs text-charcoal-500 mt-1">Loyer m²</div>
                     </div>
-                    <div className="text-center p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                      <div className="text-sm font-bold text-emerald-700">
+                    <div className="text-center p-3 bg-accent-50 rounded-xl border border-accent-100">
+                      <div className="text-sm font-bold text-accent-700">
                         {quartierRealData.tauxProprietaires}%
                       </div>
                       <div className="text-xs text-charcoal-500 mt-1">Taux propriétaires</div>
                     </div>
-                    <div className="text-center p-3 bg-violet-50 rounded-xl border border-violet-100">
-                      <div className="text-sm font-bold text-violet-700">
+                    <div className="text-center p-3 bg-primary-50 rounded-xl border border-primary-100">
+                      <div className="text-sm font-bold text-primary-700">
                         {quartierRealData.populationEstimee.toLocaleString('fr-FR')}
                       </div>
                       <div className="text-xs text-charcoal-500 mt-1">Population quartier</div>
@@ -349,8 +349,8 @@ export default async function ServiceQuartierPage({
                       </div>
                       <div className="text-xs text-charcoal-500 mt-1">Densité urbaine</div>
                     </div>
-                    <div className="text-center p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                      <div className="text-sm font-bold text-emerald-700">{providers.length}</div>
+                    <div className="text-center p-3 bg-accent-50 rounded-xl border border-accent-100">
+                      <div className="text-sm font-bold text-accent-700">{providers.length}</div>
                       <div className="text-xs text-charcoal-500 mt-1">
                         {svcLower}s à {ville.name}
                       </div>
@@ -510,15 +510,15 @@ export default async function ServiceQuartierPage({
             {quartierRealData?.transport &&
               quartierRealData.transport.length > 0 &&
               quartierRealData.transport[0] !== 'aucun' && (
-                <div className="bg-gradient-to-br from-emerald-50/50 to-teal-50/30 rounded-2xl border border-emerald-100 p-8">
-                  <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-emerald-500 pl-4">
+                <div className="bg-gradient-to-br from-accent-50/50 to-teal-50/30 rounded-2xl border border-accent-100 p-8">
+                  <h2 className="text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-accent-500 pl-4">
                     Transports à {quartierName}
                   </h2>
                   <div className="flex flex-wrap gap-3">
                     {quartierRealData.transport.map((t) => (
                       <div
                         key={t}
-                        className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-emerald-100"
+                        className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-accent-100"
                       >
                         <span className="text-sm font-medium text-charcoal-700">
                           {t === 'metro'
@@ -605,7 +605,7 @@ export default async function ServiceQuartierPage({
               >
                 Voir tous les tarifs {svcLower} en France
                 <svg
-                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                  className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -628,15 +628,15 @@ export default async function ServiceQuartierPage({
             </h2>
             <div className="mt-6 space-y-4">
               {trade.certifications.length > 0 && (
-                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                  <h3 className="font-semibold text-emerald-900 mb-2">
+                <div className="bg-accent-50 border border-accent-100 rounded-xl p-4">
+                  <h3 className="font-semibold text-accent-900 mb-2">
                     Certifications recommandées
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {trade.certifications.map((cert, i) => (
                       <span
                         key={i}
-                        className="text-sm bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200"
+                        className="text-sm bg-white text-accent-700 px-3 py-1 rounded-full border border-accent-200"
                       >
                         {cert}
                       </span>

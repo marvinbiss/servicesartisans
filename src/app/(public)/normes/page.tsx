@@ -181,7 +181,7 @@ const categories = [
   {
     title: 'Fenêtres et menuiseries',
     icon: Home,
-    color: 'bg-indigo-100 text-indigo-700',
+    color: 'bg-primary-100 text-primary-700',
     normes: [
       {
         name: 'DTU 36.5 (NF DTU 36.5)',

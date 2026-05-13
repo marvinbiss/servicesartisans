@@ -18,7 +18,7 @@ export default function AideSources({ sources, lastReviewed, author }: Props) {
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-3 mb-5">
-          <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2
             id="sources-heading"
             className="font-heading text-xl font-extrabold text-charcoal-900"
@@ -33,7 +33,7 @@ export default function AideSources({ sources, lastReviewed, author }: Props) {
                 href={src.url}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="inline-flex items-start gap-2 text-emerald-700 hover:text-emerald-800 hover:underline"
+                className="inline-flex items-start gap-2 text-accent-700 hover:text-accent-800 hover:underline"
               >
                 <ExternalLink className="w-4 h-4 mt-0.5 flex-shrink-0" aria-hidden="true" />
                 <span>{src.label}</span>
@@ -46,14 +46,14 @@ export default function AideSources({ sources, lastReviewed, author }: Props) {
             <p>
               Rédigé par{' '}
               {author.profileUrl ? (
-                <a href={author.profileUrl} className="underline hover:text-emerald-700">
+                <a href={author.profileUrl} className="underline hover:text-accent-700">
                   {author.name}
                 </a>
               ) : (
                 <span className="font-medium text-charcoal-700">{author.name}</span>
               )}{' '}
               · méthodologie publiée sur{' '}
-              <Link href="/methodologie" className="underline hover:text-emerald-700">
+              <Link href="/methodologie" className="underline hover:text-accent-700">
                 /methodologie
               </Link>
             </p>

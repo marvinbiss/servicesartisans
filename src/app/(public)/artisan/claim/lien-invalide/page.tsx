@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 export default function ClaimLinkInvalidPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-gray-900">Lien invalide ou expiré</h1>
-      <p className="mt-4 text-gray-700">
+      <h1 className="text-3xl font-bold text-charcoal-900">Lien invalide ou expiré</h1>
+      <p className="mt-4 text-charcoal-700">
         Ce lien de confirmation n&apos;est plus valide. Cela peut arriver si&nbsp;:
       </p>
-      <ul className="mt-2 list-disc pl-6 text-gray-700">
+      <ul className="mt-2 list-disc pl-6 text-charcoal-700">
         <li>le lien a déjà été utilisé,</li>
         <li>il a expiré (validité 7 jours),</li>
         <li>la demande a déjà été traitée par notre équipe.</li>
       </ul>
-      <p className="mt-4 text-gray-700">
+      <p className="mt-4 text-charcoal-700">
         Si vous avez besoin de relancer la revendication, recommencez depuis votre fiche artisan.
       </p>
       <div className="mt-8">

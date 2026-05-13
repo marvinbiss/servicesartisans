@@ -41,12 +41,12 @@ export default function CeeCTA({
       <div
         role="complementary"
         aria-label="Aide CEE disponible"
-        className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg"
+        className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-accent-700 border-t border-accent-600 px-4 py-3 shadow-lg"
       >
         <Link
           href={href}
           onClick={handleClick}
-          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-emerald-800 font-semibold text-sm hover:bg-emerald-50 transition"
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-accent-800 font-semibold text-sm hover:bg-accent-50 transition"
         >
           <Sparkles className="w-4 h-4" aria-hidden="true" />
           Prime CEE disponible — Estimez la vôtre
@@ -57,9 +57,9 @@ export default function CeeCTA({
 
   if (variant === 'hero') {
     return (
-      <section className="bg-gradient-to-r from-emerald-50 to-emerald-100/60 border-2 border-emerald-200 rounded-2xl p-8 md:p-10">
+      <section className="bg-gradient-to-r from-accent-50 to-accent-100/60 border-2 border-accent-200 rounded-2xl p-8 md:p-10">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-          <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center">
+          <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-accent-600 flex items-center justify-center">
             <Sparkles className="w-7 h-7 text-white" aria-hidden="true" />
           </div>
           <div className="flex-1">
@@ -80,7 +80,7 @@ export default function CeeCTA({
           <Link
             href={href}
             onClick={handleClick}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-accent-600 text-white font-semibold shadow-lg hover:bg-accent-700 transition whitespace-nowrap"
           >
             Demander un devis gratuit
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -92,9 +92,9 @@ export default function CeeCTA({
 
   // variant === 'inline' (default)
   return (
-    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 md:p-8">
+    <div className="rounded-2xl border border-accent-200 bg-accent-50 p-6 md:p-8">
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-accent-600 flex items-center justify-center">
           <Sparkles className="w-5 h-5 text-white" aria-hidden="true" />
         </div>
         <div className="flex-1">
@@ -115,7 +115,7 @@ export default function CeeCTA({
           <Link
             href={href}
             onClick={handleClick}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 text-white font-semibold text-sm hover:bg-accent-700 transition"
           >
             Demander un devis gratuit
             <ArrowRight className="w-4 h-4" aria-hidden="true" />

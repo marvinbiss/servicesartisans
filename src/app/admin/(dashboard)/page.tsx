@@ -260,7 +260,7 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <MessageSquare className="w-5 h-5 text-emerald-600" />
+              <MessageSquare className="w-5 h-5 text-accent-600" />
               <h3 className="font-semibold text-gray-900">Leads Estimation IA</h3>
             </div>
             <div className="flex items-center gap-3">
@@ -275,7 +275,7 @@ export default function AdminDashboard() {
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
                       (data?.estimationLeads?.today ?? 0) > 0
-                        ? 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-accent-100 text-accent-700'
                         : 'bg-gray-100 text-gray-500'
                     }`}
                   >
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
               )}
               <Link
                 href="/admin/estimation-leads"
-                className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                className="flex items-center gap-1 text-sm text-accent-600 hover:text-accent-700 font-medium"
               >
                 Voir tout
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -329,7 +329,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-3 shrink-0">
                     <a
                       href={`tel:${lead.telephone.replace(/[\s.\-()]/g, '')}`}
-                      className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
+                      className="p-1.5 rounded-lg bg-accent-50 text-accent-600 hover:bg-accent-100 transition-colors"
                       title={`Appeler ${lead.telephone}`}
                     >
                       <Phone className="w-4 h-4" />

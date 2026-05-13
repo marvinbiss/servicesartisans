@@ -120,7 +120,7 @@ export default function SmartSuggestions({
             key={suggestion}
             type="button"
             onClick={() => handleSelect(suggestion)}
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-sand-100 hover:bg-primary-50 text-charcoal-600 hover:text-primary-600 border border-sand-200 hover:border-primary-200 rounded-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-sand-100 hover:bg-primary-50 text-charcoal-600 hover:text-primary-600 border border-sand-200 hover:border-primary-200 rounded-full transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
           >
             {suggestion}
           </button>

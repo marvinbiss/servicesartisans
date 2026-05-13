@@ -57,8 +57,8 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }>
   },
   valide: {
     label: 'Valide',
-    bg: 'bg-emerald-100',
-    text: 'text-emerald-700',
+    bg: 'bg-accent-100',
+    text: 'text-accent-700',
   },
   rejete: { label: 'Rejete', bg: 'bg-red-100', text: 'text-red-700' },
   annule: { label: 'Annule', bg: 'bg-gray-100', text: 'text-gray-500' },

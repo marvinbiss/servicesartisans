@@ -350,7 +350,7 @@ export default function Page() {
               sources publiques officielles (ADEME, ANAH, France Rénov’, INSEE, BPI France).
             </p>
             <div className="flex items-center gap-3 mt-4 flex-wrap">
-              <span className="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1 text-xs font-semibold bg-accent-50 text-accent-800 px-2.5 py-1 rounded-full">
                 <Database className="w-3.5 h-3.5" aria-hidden />
                 Données CC-BY 4.0 — réutilisation libre avec citation
               </span>
@@ -580,11 +580,11 @@ export default function Page() {
             </ul>
 
             <h2>Réutilisation et citation (CC-BY 4.0)</h2>
-            <div className="not-prose border-2 border-emerald-200 bg-emerald-50 rounded-lg p-5 my-6">
+            <div className="not-prose border-2 border-accent-200 bg-accent-50 rounded-lg p-5 my-6">
               <div className="flex items-start gap-3">
-                <Database className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5" aria-hidden />
+                <Database className="w-6 h-6 text-accent-700 shrink-0 mt-0.5" aria-hidden />
                 <div>
-                  <p className="font-semibold text-emerald-900 m-0">
+                  <p className="font-semibold text-accent-900 m-0">
                     Données librement réutilisables sous licence{' '}
                     <a
                       href="https://creativecommons.org/licenses/by/4.0/deed.fr"
@@ -595,7 +595,7 @@ export default function Page() {
                       Creative Commons CC-BY 4.0
                     </a>
                   </p>
-                  <p className="text-sm text-emerald-900 mt-2 mb-0">
+                  <p className="text-sm text-accent-900 mt-2 mb-0">
                     Citation requise (texte ou lien hypertexte) : « Source : Baromètre Rénovation
                     Énergétique 2026, ServicesArtisans, données agrégées ADEME / ANAH / France
                     Rénov’ — {PAGE_URL} ». Réutilisation autorisée à des fins commerciales et non

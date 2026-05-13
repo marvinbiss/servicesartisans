@@ -197,7 +197,7 @@ export default function MoneyPageBoost({ currentService, currentVille }: MoneyPa
 
   return (
     <nav aria-label={sectionLabel} className="border-t border-charcoal-100 mt-6 pt-4">
-      <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">
+      <p className="text-xs font-semibold text-sand-500 uppercase tracking-wider mb-2">
         {sectionLabel}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -205,7 +205,7 @@ export default function MoneyPageBoost({ currentService, currentVille }: MoneyPa
           <Link
             key={`${page.serviceSlug}-${page.villeSlug}`}
             href={`/services/${page.serviceSlug}/${page.villeSlug}`}
-            className="px-3 py-1.5 text-sm text-stone-600 bg-amber-50 hover:bg-amber-100 hover:text-amber-800 rounded-full transition-colors"
+            className="px-3 py-1.5 text-sm text-sand-600 bg-amber-50 hover:bg-amber-100 hover:text-amber-800 rounded-full transition-colors"
             prefetch={false}
           >
             {anchor}

@@ -202,7 +202,7 @@ export default function Calendar({
                           : today
                             ? 'border-primary-200 bg-primary-50/50'
                             : hasSlots && count === 0
-                              ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50'
+                              ? 'border-accent-200 bg-accent-50/50 hover:bg-accent-50'
                               : 'border-transparent hover:bg-sand-100'
                       }
                     `}
@@ -219,7 +219,7 @@ export default function Calendar({
                     {/* Indicateurs : dispo (vert) en bas à gauche, bookings en bas à droite */}
                     {hasSlots && (
                       <span
-                        className="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-emerald-500"
+                        className="absolute bottom-1 left-1 w-2 h-2 rounded-full bg-accent-500"
                         title={`${daySlots.length} créneau(x) disponible(s)`}
                       />
                     )}
@@ -272,7 +272,7 @@ export default function Calendar({
                         isSelected
                           ? 'border-primary-400 bg-primary-50'
                           : hasSlots && count === 0
-                            ? 'border-emerald-200 bg-emerald-50/50'
+                            ? 'border-accent-200 bg-accent-50/50'
                             : 'border-sand-300 hover:bg-sand-100'
                       }
                     `}
@@ -294,14 +294,14 @@ export default function Calendar({
                         </span>
                       )}
                       {hasSlots && (
-                        <span className="text-xs text-emerald-600 font-medium">
+                        <span className="text-xs text-accent-600 font-medium">
                           {daySlots.length} dispo
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
                       {hasSlots && (
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-accent-500 shrink-0" />
                       )}
                       {count > 0 && (
                         <span
@@ -329,7 +329,7 @@ export default function Calendar({
             {/* Légende */}
             <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-sand-200 text-xs text-charcoal-500">
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-accent-500" />
                 Disponible
               </div>
               <div className="flex items-center gap-1.5">
@@ -363,15 +363,15 @@ export default function Calendar({
           {/* Créneaux de disponibilité */}
           {selectedSlots.length > 0 && (
             <div className="mb-4">
-              <h5 className="text-sm font-semibold text-emerald-700 mb-2 flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <h5 className="text-sm font-semibold text-accent-700 mb-2 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-accent-500" />
                 Créneaux disponibles ({selectedSlots.length})
               </h5>
               <div className="flex flex-wrap gap-2">
                 {selectedSlots.map((slot) => (
                   <div
                     key={slot.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-sm text-emerald-700"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent-200 bg-accent-50 text-sm text-accent-700"
                   >
                     <Clock className="w-3.5 h-3.5" />
                     {slot.start_time.slice(0, 5)} - {slot.end_time.slice(0, 5)}

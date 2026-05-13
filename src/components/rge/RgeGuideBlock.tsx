@@ -116,9 +116,9 @@ export default async function RgeGuideBlock({
     <section className="max-w-5xl mx-auto px-4 py-10">
       {itemListSchema ? <JsonLd data={itemListSchema} /> : null}
 
-      <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50 p-6 md:p-10">
+      <div className="rounded-2xl border border-accent-200 bg-gradient-to-br from-accent-50 to-green-50 p-6 md:p-10">
         <div className="flex items-start gap-4 mb-6">
-          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-600 text-white flex items-center justify-center">
             <Leaf className="w-6 h-6" aria-hidden="true" />
           </div>
           <div className="flex-1">
@@ -128,7 +128,7 @@ export default async function RgeGuideBlock({
             {hasData ? (
               <p className="text-charcoal-700 leading-relaxed">
                 {'Plus de '}
-                <strong className="text-emerald-700">{formatCount(totalActive)}</strong>
+                <strong className="text-accent-700">{formatCount(totalActive)}</strong>
                 {variant === 'service' && serviceNoun
                   ? ` ${serviceNoun}s RGE certifiés${qualificationLabel ? ` (${qualificationLabel})` : ''} recensés dans notre annuaire, `
                   : ' artisans RGE certifiés recensés dans notre annuaire, '}
@@ -137,7 +137,7 @@ export default async function RgeGuideBlock({
                   href="https://france-renov.gouv.fr/annuaire-rge"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 underline hover:text-emerald-800"
+                  className="text-accent-700 underline hover:text-accent-800"
                 >
                   France Rénov&apos;
                 </a>
@@ -156,7 +156,7 @@ export default async function RgeGuideBlock({
         {hasData ? (
           <>
             <div className="mb-6">
-              <div className="flex items-center gap-2 text-sm font-semibold text-emerald-900 mb-3 uppercase tracking-wide">
+              <div className="flex items-center gap-2 text-sm font-semibold text-accent-900 mb-3 uppercase tracking-wide">
                 <MapPin className="w-4 h-4" aria-hidden="true" />
                 <span>Villes avec le plus d&apos;artisans RGE certifiés</span>
               </div>
@@ -166,12 +166,12 @@ export default async function RgeGuideBlock({
                     key={city.slug}
                     href={buildCityHref(effectiveServiceSlug, city.slug)}
                     surface="guide"
-                    className="group flex items-center justify-between rounded-lg border border-emerald-200 bg-white px-3 py-2.5 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
+                    className="group flex items-center justify-between rounded-lg border border-accent-200 bg-white px-3 py-2.5 hover:border-accent-400 hover:bg-accent-50 transition-colors"
                   >
                     <span className="text-sm font-medium text-charcoal-900 truncate">
                       {city.name}
                     </span>
-                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full px-2 py-0.5 ml-2">
+                    <span className="text-xs font-semibold text-accent-700 bg-accent-100 rounded-full px-2 py-0.5 ml-2">
                       {formatCount(city.count)}
                     </span>
                   </RgePseoCtaLink>
@@ -184,7 +184,7 @@ export default async function RgeGuideBlock({
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/verifier-artisan"
-            className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-accent-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-accent-700 transition-colors"
           >
             <ShieldCheck className="w-5 h-5" aria-hidden="true" />
             <span>Vérifier un artisan RGE</span>
@@ -192,7 +192,7 @@ export default async function RgeGuideBlock({
           {!hideGuideCta ? (
             <Link
               href="/guides/artisan-rge"
-              className="inline-flex items-center justify-center gap-2 bg-white text-emerald-700 border border-emerald-300 px-5 py-3 rounded-xl font-semibold hover:bg-emerald-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-white text-accent-700 border border-accent-300 px-5 py-3 rounded-xl font-semibold hover:bg-accent-50 transition-colors"
             >
               <span>Tout savoir sur le label RGE</span>
               <ArrowRight className="w-5 h-5" aria-hidden="true" />

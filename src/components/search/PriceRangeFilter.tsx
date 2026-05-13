@@ -88,7 +88,7 @@ export function PriceRangeFilter({
         <div className="flex-1">
           <label className="text-xs text-charcoal-500 mb-1 block">Min (EUR/h)</label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+            <Euro className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
             <input
               type="number"
               value={localMin}
@@ -106,7 +106,7 @@ export function PriceRangeFilter({
         <div className="flex-1">
           <label className="text-xs text-charcoal-500 mb-1 block">Max (EUR/h)</label>
           <div className="relative">
-            <Euro className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+            <Euro className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
             <input
               type="number"
               value={localMax}

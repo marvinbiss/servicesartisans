@@ -370,7 +370,7 @@ export default async function AideDeptPage({ params }: PageProps) {
             return (
               <section className="mb-8 rounded-xl bg-white p-6 shadow-sm">
                 <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold text-charcoal-900">
-                  <MapPin className="h-5 w-5 text-emerald-700" /> Aller plus loin
+                  <MapPin className="h-5 w-5 text-accent-700" /> Aller plus loin
                 </h2>
 
                 <h3 className="mt-4 mb-2 text-sm font-semibold uppercase tracking-wide text-charcoal-500">

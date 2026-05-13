@@ -42,14 +42,14 @@ export default function ServiceIntentReroute({
   const targetHref = `/services/${reroute.targetSlug}/${villeSlug}`
   const accent =
     reroute.targetIntent === 'renovation'
-      ? 'from-emerald-50 to-teal-50 border-emerald-200 text-emerald-900'
+      ? 'from-accent-50 to-teal-50 border-accent-200 text-accent-900'
       : reroute.targetIntent === 'urgence'
         ? 'from-red-50 to-orange-50 border-red-200 text-red-900'
         : 'from-sand-50 to-white border-sand-300 text-charcoal-900'
 
   const linkAccent =
     reroute.targetIntent === 'renovation'
-      ? 'text-emerald-700 hover:text-emerald-900'
+      ? 'text-accent-700 hover:text-accent-900'
       : reroute.targetIntent === 'urgence'
         ? 'text-red-700 hover:text-red-900'
         : 'text-primary-600 hover:text-primary-800'

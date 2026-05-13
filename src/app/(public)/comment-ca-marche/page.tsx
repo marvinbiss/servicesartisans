@@ -87,7 +87,7 @@ const steps = [
       "Éligibilité MaPrimeRénov' et CEE confirmée",
       "Informations sur l'entreprise (date de création, statut)",
     ],
-    gradient: 'from-emerald-500 to-emerald-700',
+    gradient: 'from-accent-500 to-accent-700',
   },
   {
     number: '3',
@@ -263,7 +263,7 @@ export default async function CommentCaMarchePage() {
               <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-trancharcoal-y-0.5 transition-all duration-300"
                 >
                   <Search className="w-5 h-5" />
                   Parcourir les services

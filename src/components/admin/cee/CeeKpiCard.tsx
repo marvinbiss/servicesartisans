@@ -24,7 +24,7 @@ export function CeeKpiCard({ icon: Icon, label, value, variation }: CeeKpiCardPr
       {variation && (
         <p
           className={`text-xs mt-1 font-medium ${
-            variation.positive ? 'text-emerald-600' : 'text-red-500'
+            variation.positive ? 'text-accent-600' : 'text-red-500'
           }`}
         >
           {variation.text}

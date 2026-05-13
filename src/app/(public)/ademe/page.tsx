@@ -133,11 +133,11 @@ export default async function AdemePage() {
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-charcoal-800 via-charcoal-900 to-emerald-950 text-white py-16 md:py-24">
+      <section className="relative bg-gradient-to-br from-charcoal-800 via-charcoal-900 to-accent-950 text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Database className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Database className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Source officielle — data.ademe.fr
             </span>
           </div>
@@ -175,7 +175,7 @@ export default async function AdemePage() {
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Explorer l&apos;annuaire RGE
@@ -188,7 +188,7 @@ export default async function AdemePage() {
       <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">
               {hasStats ? totalActive.toLocaleString('fr-FR') : '~60 000'}
             </div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
@@ -196,19 +196,19 @@ export default async function AdemePage() {
             </div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">165 000</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">165 000</div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Qualifications RGE actives (une entreprise peut en cumuler plusieurs).
             </div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">7 j</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">7 j</div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Fréquence de notre synchronisation avec le référentiel officiel ADEME.
             </div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">4</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">4</div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
               Organismes certificateurs accrédités COFRAC : Qualibat, Qualit&apos;EnR, Qualifelec,
               Certibat.
@@ -245,7 +245,7 @@ export default async function AdemePage() {
                 href="https://france-renov.gouv.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-700 hover:underline font-semibold"
+                className="text-accent-700 hover:underline font-semibold"
               >
                 france-renov.gouv.fr
               </a>{' '}
@@ -275,7 +275,7 @@ export default async function AdemePage() {
                 href="https://data.ademe.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-700 hover:underline font-semibold"
+                className="text-accent-700 hover:underline font-semibold"
               >
                 data.ademe.fr
               </a>{' '}
@@ -354,8 +354,8 @@ export default async function AdemePage() {
                   key={idx}
                   className="flex items-start gap-4 p-6 bg-sand-50 rounded-2xl border border-charcoal-100"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                  <div className="w-10 h-10 rounded-lg bg-accent-50 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-accent-700" aria-hidden="true" />
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-heading font-bold text-charcoal-900 text-lg mb-1">
@@ -371,7 +371,7 @@ export default async function AdemePage() {
       </section>
 
       {/* Section 4 : Comment vérifier */}
-      <section className="bg-emerald-50/40 border-y border-emerald-100">
+      <section className="bg-accent-50/40 border-y border-accent-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-6">
             Comment vérifier un artisan RGE en 3 minutes
@@ -382,9 +382,9 @@ export default async function AdemePage() {
             pas active à la date de signature.
           </p>
           <div className="space-y-5">
-            <div className="p-6 bg-white rounded-2xl border border-emerald-200">
+            <div className="p-6 bg-white rounded-2xl border border-accent-200">
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-accent-100 text-accent-700 font-bold flex-shrink-0">
                   1
                 </span>
                 <div className="min-w-0">
@@ -398,7 +398,7 @@ export default async function AdemePage() {
                   </p>
                   <Link
                     href="/verifier-artisan"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-accent-700 hover:text-accent-800"
                   >
                     Lancer une vérification gratuite
                     <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -407,9 +407,9 @@ export default async function AdemePage() {
               </div>
             </div>
 
-            <div className="p-6 bg-white rounded-2xl border border-emerald-200">
+            <div className="p-6 bg-white rounded-2xl border border-accent-200">
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-accent-100 text-accent-700 font-bold flex-shrink-0">
                   2
                 </span>
                 <div className="min-w-0">
@@ -425,7 +425,7 @@ export default async function AdemePage() {
                     href="https://france-renov.gouv.fr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-accent-700 hover:text-accent-800"
                   >
                     france-renov.gouv.fr
                     <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -434,9 +434,9 @@ export default async function AdemePage() {
               </div>
             </div>
 
-            <div className="p-6 bg-white rounded-2xl border border-emerald-200">
+            <div className="p-6 bg-white rounded-2xl border border-accent-200">
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex-shrink-0">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-accent-100 text-accent-700 font-bold flex-shrink-0">
                   3
                 </span>
                 <div className="min-w-0">
@@ -511,14 +511,14 @@ export default async function AdemePage() {
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-md transition"
+                className="group p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 hover:shadow-md transition"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="font-heading font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                  <h3 className="font-heading font-bold text-charcoal-900 text-lg group-hover:text-accent-700 transition">
                     {resource.name}
                   </h3>
                   <ExternalLink
-                    className="w-4 h-4 text-charcoal-400 group-hover:text-emerald-600 flex-shrink-0 mt-1"
+                    className="w-4 h-4 text-charcoal-400 group-hover:text-accent-600 flex-shrink-0 mt-1"
                     aria-hidden="true"
                   />
                 </div>
@@ -534,7 +534,7 @@ export default async function AdemePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
           <div className="flex items-start gap-3 p-6 bg-white rounded-2xl border border-charcoal-200">
             <FileCheck2
-              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0"
               aria-hidden="true"
             />
             <div>
@@ -548,7 +548,7 @@ export default async function AdemePage() {
                   href="https://www.etalab.gouv.fr/licence-ouverte-open-licence"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 hover:underline font-semibold"
+                  className="text-accent-700 hover:underline font-semibold"
                 >
                   Licence Ouverte 2.0 (Etalab)
                 </a>
@@ -575,11 +575,11 @@ export default async function AdemePage() {
           {FAQ.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
             >
               <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
-                <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -590,7 +590,7 @@ export default async function AdemePage() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-gradient-to-br from-charcoal-800 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-charcoal-800 to-accent-900 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold mb-4">
             Trouvez un artisan RGE vérifié en 3 minutes
@@ -610,13 +610,13 @@ export default async function AdemePage() {
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               Explorer l&apos;annuaire RGE
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Demander un devis
             </Link>

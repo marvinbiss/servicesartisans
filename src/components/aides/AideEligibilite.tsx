@@ -7,7 +7,7 @@ type Props = {
 export default function AideEligibilite({ eligibilite }: Props) {
   return (
     <section
-      className="bg-emerald-50/40 py-12 border-y border-emerald-100"
+      className="bg-accent-50/40 py-12 border-y border-accent-100"
       aria-labelledby="eligibilite-heading"
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -21,7 +21,7 @@ export default function AideEligibilite({ eligibilite }: Props) {
           {eligibilite.map((cond) => (
             <li key={cond} className="flex items-start gap-3 text-charcoal-800">
               <CheckCircle2
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <span className="leading-relaxed">{cond}</span>

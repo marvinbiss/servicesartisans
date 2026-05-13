@@ -189,11 +189,11 @@ export default function TarifsAuditEnergetiquePage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Landmark className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Landmark className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Mis à jour pour MaPrimeRénov' 2026
             </span>
           </div>
@@ -207,9 +207,9 @@ export default function TarifsAuditEnergetiquePage() {
             author="ServicesArtisans"
             datePublished={PUBLISHED_AT}
             dateModified={UPDATED_AT}
-            className="justify-start mt-2 text-emerald-50/80"
+            className="justify-start mt-2 text-accent-50/80"
           />
-          <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 max-w-3xl leading-relaxed">
             Depuis le 1er avril 2023, l'audit énergétique est obligatoire pour vendre une maison
             classée F ou G, et depuis le 1er janvier 2025 pour les maisons classées E. Il est aussi
             la porte d'entrée du Parcours Accompagné MaPrimeRénov'. Ce guide détaille honnêtement
@@ -219,14 +219,14 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Obtenir un devis gratuit
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/rge/qualifications/architecte-audit-energetique"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500/10 border border-emerald-300/30 text-white font-semibold hover:bg-emerald-500/20 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500/10 border border-accent-300/30 text-white font-semibold hover:bg-accent-500/20 transition"
             >
               Guide qualification audit
               <BookOpen className="w-4 h-4" />
@@ -257,7 +257,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <FileCheck2 className="w-7 h-7 text-emerald-700" />
+            <FileCheck2 className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Qu'est-ce qu'un audit énergétique réglementaire&nbsp;?
             </h2>
@@ -302,7 +302,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <ShieldCheck className="w-7 h-7 text-emerald-700" />
+            <ShieldCheck className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Qui peut réaliser un audit énergétique réglementaire&nbsp;?
             </h2>
@@ -313,14 +313,14 @@ export default function TarifsAuditEnergetiquePage() {
           </p>
           <ul className="space-y-4 text-charcoal-700">
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
               <span>
                 <strong>Architectes</strong> inscrits à l'Ordre (CNOA), sous réserve d'une formation
                 complémentaire à l'audit énergétique.
               </span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
               <span>
                 <strong>Bureaux d'études</strong> qualifiés <strong>OPQIBI 1905</strong>{' '}
                 «&nbsp;Audit énergétique des bâtiments (toutes catégories)&nbsp;» ou{' '}
@@ -328,14 +328,14 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
               <span>
                 <strong>Entreprises qualifiées Qualibat 8731</strong> «&nbsp;Audit énergétique en
                 maison individuelle&nbsp;» ou équivalent reconnu.
               </span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
               <span>
                 <strong>Thermiciens certifiés</strong> rattachés à un organisme reconnu
                 (certification individuelle type Cerqual, Cequami).
@@ -361,7 +361,7 @@ export default function TarifsAuditEnergetiquePage() {
             professionnel, consultez notre guide dédié :{' '}
             <Link
               href="/rge/qualifications/architecte-audit-energetique"
-              className="text-emerald-700 font-semibold underline underline-offset-2 hover:text-emerald-800"
+              className="text-accent-700 font-semibold underline underline-offset-2 hover:text-accent-800"
             >
               qualification RGE «&nbsp;Architecte – Audit énergétique&nbsp;»
             </Link>
@@ -374,7 +374,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="py-16 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <Euro className="w-7 h-7 text-emerald-700" />
+            <Euro className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Combien coûte un audit énergétique en 2026&nbsp;?
             </h2>
@@ -401,7 +401,7 @@ export default function TarifsAuditEnergetiquePage() {
                 {PRICE_RANGES.map((row) => (
                   <tr key={row.profil} className="align-top">
                     <td className="px-4 py-4 font-semibold text-charcoal-900">{row.profil}</td>
-                    <td className="px-4 py-4 font-semibold text-emerald-700 whitespace-nowrap">
+                    <td className="px-4 py-4 font-semibold text-accent-700 whitespace-nowrap">
                       {row.fourchette}
                     </td>
                     <td className="px-4 py-4 text-charcoal-600 leading-relaxed">{row.details}</td>
@@ -435,7 +435,7 @@ export default function TarifsAuditEnergetiquePage() {
           <div className="mt-6 text-center">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-700 text-white font-semibold shadow hover:bg-emerald-800 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-700 text-white font-semibold shadow hover:bg-accent-800 transition"
             >
               Obtenir jusqu'à 3 devis d'auditeurs qualifiés
               <ArrowRight className="w-4 h-4" />
@@ -448,7 +448,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <Wallet className="w-7 h-7 text-emerald-700" />
+            <Wallet className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Quelles aides permettent de financer un audit énergétique en 2026&nbsp;?
             </h2>
@@ -471,7 +471,7 @@ export default function TarifsAuditEnergetiquePage() {
               href="https://www.maprimerenov.gouv.fr"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-700 underline underline-offset-2 hover:text-emerald-800"
+              className="text-accent-700 underline underline-offset-2 hover:text-accent-800"
             >
               maprimerenov.gouv.fr
             </a>{' '}
@@ -529,7 +529,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <Scale className="w-7 h-7 text-emerald-700" />
+            <Scale className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Un audit énergétique est-il rentable en 2026&nbsp;? Analyse honnête
             </h2>
@@ -568,8 +568,8 @@ export default function TarifsAuditEnergetiquePage() {
           <h3 className="font-heading text-lg font-bold text-charcoal-900 mt-6 mb-2">
             3. Scénario réaliste chiffré
           </h3>
-          <div className="mt-2 p-5 rounded-xl bg-emerald-50 border border-emerald-200">
-            <p className="text-sm text-emerald-900 leading-relaxed">
+          <div className="mt-2 p-5 rounded-xl bg-accent-50 border border-accent-200">
+            <p className="text-sm text-accent-900 leading-relaxed">
               Maison de 140 m² en zone H2, classée E, propriétaires profil violet. Coût de l'audit :{' '}
               <strong>900 € TTC</strong>. Forfait MaPrimeRénov' audit : environ{' '}
               <strong>400 €</strong>. Reste à charge net : <strong>500 €</strong>. L'audit ouvre un
@@ -594,7 +594,7 @@ export default function TarifsAuditEnergetiquePage() {
       <section className="bg-sand-50 py-16 md:py-20 border-y border-charcoal-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-5">
-            <ClipboardList className="w-7 h-7 text-emerald-700" />
+            <ClipboardList className="w-7 h-7 text-accent-700" />
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900">
               Comment choisir un auditeur énergétique certifié RGE&nbsp;?
             </h2>
@@ -604,7 +604,7 @@ export default function TarifsAuditEnergetiquePage() {
           </p>
           <ol className="space-y-4 text-charcoal-700">
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 1
               </span>
               <span>
@@ -613,7 +613,7 @@ export default function TarifsAuditEnergetiquePage() {
                   href="https://france-renov.gouv.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 underline underline-offset-2"
+                  className="text-accent-700 underline underline-offset-2"
                 >
                   france-renov.gouv.fr
                 </a>
@@ -622,7 +622,7 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 2
               </span>
               <span>
@@ -632,7 +632,7 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 3
               </span>
               <span>
@@ -644,7 +644,7 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 4
               </span>
               <span>
@@ -654,7 +654,7 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 5
               </span>
               <span>
@@ -667,7 +667,7 @@ export default function TarifsAuditEnergetiquePage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-700 text-white text-sm font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-7 h-7 rounded-full bg-accent-700 text-white text-sm font-bold flex items-center justify-center">
                 6
               </span>
               <span>
@@ -691,13 +691,13 @@ export default function TarifsAuditEnergetiquePage() {
             {FAQ.map((item) => (
               <details
                 key={item.question}
-                className="group border border-charcoal-200 rounded-xl p-5 bg-white hover:border-emerald-300 transition"
+                className="group border border-charcoal-200 rounded-xl p-5 bg-white hover:border-accent-300 transition"
               >
                 <summary className="cursor-pointer font-semibold text-charcoal-900 list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span
                     aria-hidden="true"
-                    className="flex-shrink-0 w-6 h-6 rounded-full bg-sand-200 text-charcoal-600 flex items-center justify-center group-open:bg-emerald-600 group-open:text-white transition text-sm font-bold"
+                    className="flex-shrink-0 w-6 h-6 rounded-full bg-sand-200 text-charcoal-600 flex items-center justify-center group-open:bg-accent-600 group-open:text-white transition text-sm font-bold"
                   >
                     +
                   </span>
@@ -710,34 +710,34 @@ export default function TarifsAuditEnergetiquePage() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white py-16 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-heading text-3xl md:text-4xl font-extrabold mb-4">
             Lancez votre audit énergétique avec un professionnel qualifié
           </h2>
-          <p className="text-lg text-emerald-50/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-accent-50/90 mb-8 max-w-2xl mx-auto leading-relaxed">
             Comparez jusqu'à trois devis d'auditeurs RGE certifiés, vérifiez leurs références et
             débloquez votre Parcours Accompagné MaPrimeRénov' en toute sécurité.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Obtenir un devis gratuit
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500/10 border border-emerald-300/30 text-white font-semibold hover:bg-emerald-500/20 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500/10 border border-accent-300/30 text-white font-semibold hover:bg-accent-500/20 transition"
             >
               Hub rénovation énergétique RGE
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-emerald-500/30">
-            <p className="text-sm text-emerald-100/80 mb-3 font-semibold uppercase tracking-wide">
+          <div className="mt-10 pt-8 border-t border-accent-500/30">
+            <p className="text-sm text-accent-100/80 mb-3 font-semibold uppercase tracking-wide">
               Pour aller plus loin
             </p>
             <div className="flex flex-wrap justify-center gap-3 text-sm">

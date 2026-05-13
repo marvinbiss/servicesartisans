@@ -216,7 +216,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
           {filterRating && (
             <button
               onClick={() => setFilterRating(null)}
-              className="text-xs text-violet-600 hover:text-violet-700"
+              className="text-xs text-primary-600 hover:text-primary-700"
             >
               Effacer
             </button>
@@ -226,7 +226,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="text-sm border border-sand-400 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+          className="text-sm border border-sand-400 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
           <option value="recent">Plus récents</option>
           <option value="helpful">Plus utiles</option>
@@ -242,8 +242,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-violet-600" />
+                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-primary-600" />
                 </div>
                 <div>
                   <p className="font-medium text-charcoal-900">{review.author_name}</p>
@@ -274,8 +274,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
 
             {/* Artisan response */}
             {review.reply && (
-              <div className="bg-violet-50 rounded-lg p-4 mb-4">
-                <p className="text-xs font-medium text-violet-700 mb-1">
+              <div className="bg-primary-50 rounded-lg p-4 mb-4">
+                <p className="text-xs font-medium text-primary-700 mb-1">
                   Réponse de {artisanName || "l'artisan"}
                 </p>
                 <p className="text-sm text-charcoal-700">{review.reply}</p>
@@ -292,8 +292,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 disabled={votedReviews.has(review.id)}
                 className={`flex items-center gap-1.5 text-sm transition ${
                   votedReviews.has(review.id)
-                    ? 'text-violet-600'
-                    : 'text-charcoal-500 hover:text-violet-600'
+                    ? 'text-primary-600'
+                    : 'text-charcoal-500 hover:text-primary-600'
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />
@@ -308,7 +308,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
       {filteredReviews.length > 5 && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 text-violet-600 hover:text-violet-700 font-medium"
+          className="w-full flex items-center justify-center gap-2 py-3 text-primary-600 hover:text-primary-700 font-medium"
         >
           <span>Voir tous les avis ({filteredReviews.length})</span>
           <ChevronDown className="w-4 h-4" />

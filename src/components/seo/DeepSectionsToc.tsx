@@ -30,10 +30,10 @@ export default function DeepSectionsToc({
   return (
     <nav
       aria-labelledby="deep-toc-title"
-      className="bg-emerald-50/40 border border-emerald-100 rounded-2xl p-6 my-8 max-w-4xl mx-auto"
+      className="bg-accent-50/40 border border-accent-100 rounded-2xl p-6 my-8 max-w-4xl mx-auto"
     >
       <div className="flex items-center gap-2 mb-3">
-        <ListOrdered className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+        <ListOrdered className="w-5 h-5 text-accent-700" aria-hidden="true" />
         <h2
           id="deep-toc-title"
           className="font-heading text-base font-bold text-charcoal-900 uppercase tracking-wider"
@@ -41,12 +41,12 @@ export default function DeepSectionsToc({
           {title}
         </h2>
       </div>
-      <ol className="space-y-2 list-decimal list-inside marker:text-emerald-600 marker:font-bold">
+      <ol className="space-y-2 list-decimal list-inside marker:text-accent-600 marker:font-bold">
         {sections.map((s) => (
           <li key={s.id}>
             <a
               href={`#${s.id}`}
-              className="text-charcoal-700 hover:text-emerald-700 underline-offset-2 hover:underline transition"
+              className="text-charcoal-700 hover:text-accent-700 underline-offset-2 hover:underline transition"
             >
               {s.h2}
             </a>

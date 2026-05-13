@@ -65,7 +65,7 @@ export default function BlogClusterLinks({
         {/* Related articles from same cluster */}
         {hasRelatedArticles && (
           <div className="mb-8">
-            <h3 className="text-sm font-semibold text-stone-800 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-semibold text-sand-800 uppercase tracking-wider mb-4">
               Articles liés
             </h3>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -77,7 +77,7 @@ export default function BlogClusterLinks({
                   prefetch={false}
                 >
                   <BookOpen className="w-4 h-4 mt-0.5 text-primary-400 flex-shrink-0" />
-                  <span className="text-sm text-stone-700 group-hover:text-primary-600 transition-colors leading-snug">
+                  <span className="text-sm text-sand-700 group-hover:text-primary-600 transition-colors leading-snug">
                     {title}
                   </span>
                 </Link>
@@ -96,7 +96,7 @@ export default function BlogClusterLinks({
 
           return (
             <div key={service} className="mb-6 last:mb-0">
-              <h3 className="text-sm font-semibold text-stone-800 uppercase tracking-wider mb-3">
+              <h3 className="text-sm font-semibold text-sand-800 uppercase tracking-wider mb-3">
                 Dossier {serviceName.toLowerCase()}
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -106,7 +106,7 @@ export default function BlogClusterLinks({
                     <Link
                       key={link.path}
                       href={link.path}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-stone-600 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-full border border-charcoal-200 hover:border-primary-200 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-sand-600 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-full border border-charcoal-200 hover:border-primary-200 transition-colors"
                       prefetch={false}
                     >
                       <Icon className="w-3.5 h-3.5 flex-shrink-0" />

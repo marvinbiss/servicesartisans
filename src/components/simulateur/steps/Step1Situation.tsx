@@ -34,18 +34,20 @@ export default function Step1Situation({ state, dispatch }: Props) {
 
   return (
     <form onSubmit={onNext} className="space-y-5" noValidate>
-      <h3 className="text-lg font-semibold text-slate-900">Étape 1 — Votre logement</h3>
+      <h3 className="text-lg font-semibold text-charcoal-900">Étape 1 — Votre logement</h3>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-slate-800">Type de logement</legend>
+        <legend className="mb-2 block text-sm font-medium text-charcoal-800">
+          Type de logement
+        </legend>
         <div className="flex gap-3">
           {(['maison', 'appartement'] as const).map((v) => (
             <label
               key={v}
               className={`flex-1 cursor-pointer rounded-md border p-3 text-sm ${
                 s.typeLogement === v
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                  : 'border-slate-300 hover:border-slate-400'
+                  ? 'border-accent-600 bg-accent-50 text-accent-900'
+                  : 'border-charcoal-300 hover:border-charcoal-400'
               }`}
             >
               <input
@@ -63,7 +65,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-slate-800">
+        <legend className="mb-2 block text-sm font-medium text-charcoal-800">
           Résidence principale ?
         </legend>
         <div className="flex gap-3">
@@ -75,8 +77,8 @@ export default function Step1Situation({ state, dispatch }: Props) {
               key={String(v)}
               className={`flex-1 cursor-pointer rounded-md border p-3 text-sm ${
                 s.residencePrincipale === v
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                  : 'border-slate-300 hover:border-slate-400'
+                  ? 'border-accent-600 bg-accent-50 text-accent-900'
+                  : 'border-charcoal-300 hover:border-charcoal-400'
               }`}
             >
               <input
@@ -99,7 +101,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
 
       {s.typeLogement === 'appartement' && (
         <fieldset>
-          <legend className="mb-2 block text-sm font-medium text-slate-800">
+          <legend className="mb-2 block text-sm font-medium text-charcoal-800">
             Logement en copropriété ?
           </legend>
           <div className="flex gap-3">
@@ -111,8 +113,8 @@ export default function Step1Situation({ state, dispatch }: Props) {
                 key={`copro-${String(v)}`}
                 className={`flex-1 cursor-pointer rounded-md border p-3 text-sm ${
                   s.copropriete === v
-                    ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                    : 'border-slate-300 hover:border-slate-400'
+                    ? 'border-accent-600 bg-accent-50 text-accent-900'
+                    : 'border-charcoal-300 hover:border-charcoal-400'
                 }`}
               >
                 <input
@@ -135,7 +137,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
       )}
 
       <div>
-        <label htmlFor="anciennete" className="mb-1 block text-sm font-medium text-slate-800">
+        <label htmlFor="anciennete" className="mb-1 block text-sm font-medium text-charcoal-800">
           Ancienneté du logement
         </label>
         <select
@@ -150,7 +152,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
               },
             })
           }
-          className="w-full rounded-md border border-slate-300 p-2 text-sm"
+          className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
           required
         >
           <option value="">Sélectionner…</option>
@@ -162,7 +164,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="surface" className="mb-1 block text-sm font-medium text-slate-800">
+          <label htmlFor="surface" className="mb-1 block text-sm font-medium text-charcoal-800">
             Surface habitable (m²)
           </label>
           <input
@@ -180,11 +182,11 @@ export default function Step1Situation({ state, dispatch }: Props) {
                 },
               })
             }
-            className="w-full rounded-md border border-slate-300 p-2 text-sm"
+            className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
           />
         </div>
         <div>
-          <label htmlFor="codePostal" className="mb-1 block text-sm font-medium text-slate-800">
+          <label htmlFor="codePostal" className="mb-1 block text-sm font-medium text-charcoal-800">
             Code postal
           </label>
           <input
@@ -200,13 +202,13 @@ export default function Step1Situation({ state, dispatch }: Props) {
                 patch: { codePostal: e.target.value.replace(/\D/g, '') },
               })
             }
-            className="w-full rounded-md border border-slate-300 p-2 text-sm"
+            className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="foyer" className="mb-1 block text-sm font-medium text-slate-800">
+        <label htmlFor="foyer" className="mb-1 block text-sm font-medium text-charcoal-800">
           Nombre de personnes dans le foyer
         </label>
         <select
@@ -218,7 +220,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
               patch: { foyer: e.target.value ? Number(e.target.value) : undefined },
             })
           }
-          className="w-full rounded-md border border-slate-300 p-2 text-sm"
+          className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
         >
           <option value="">Sélectionner…</option>
           {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -232,7 +234,7 @@ export default function Step1Situation({ state, dispatch }: Props) {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="rounded-md bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-500"
         >
           Étape suivante
         </button>

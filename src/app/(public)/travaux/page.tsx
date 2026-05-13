@@ -302,11 +302,11 @@ export default function TravauxHubPage() {
       <Breadcrumb items={[{ label: 'Accueil', href: '/' }, { label: 'Travaux de rénovation' }]} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Hammer className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">Hub travaux 2026</span>
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Hammer className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">Hub travaux 2026</span>
           </div>
           <h1
             data-speakable="true"
@@ -314,24 +314,24 @@ export default function TravauxHubPage() {
           >
             {HUB_TITLE}
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             {HUB_DESCRIPTION}
           </p>
           <LastUpdated
             label="Hub vérifié le"
             date={REVIEW_DATE}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Devis travaux gratuit
             </Link>
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
@@ -376,8 +376,8 @@ export default function TravauxHubPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="rounded-xl border border-charcoal-100 bg-white p-5">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
-                <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <div className="w-9 h-9 rounded-lg bg-accent-50 flex items-center justify-center mb-3">
+                <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
               </div>
               <h3 className="font-heading font-bold text-charcoal-900 mb-1">RGE en cours</h3>
               <p className="text-sm text-charcoal-600 leading-relaxed">
@@ -386,8 +386,8 @@ export default function TravauxHubPage() {
               </p>
             </div>
             <div className="rounded-xl border border-charcoal-100 bg-white p-5">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
-                <ClipboardList className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <div className="w-9 h-9 rounded-lg bg-accent-50 flex items-center justify-center mb-3">
+                <ClipboardList className="w-5 h-5 text-accent-700" aria-hidden="true" />
               </div>
               <h3 className="font-heading font-bold text-charcoal-900 mb-1">Décennale + RC Pro</h3>
               <p className="text-sm text-charcoal-600 leading-relaxed">
@@ -395,8 +395,8 @@ export default function TravauxHubPage() {
               </p>
             </div>
             <div className="rounded-xl border border-charcoal-100 bg-white p-5">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
-                <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <div className="w-9 h-9 rounded-lg bg-accent-50 flex items-center justify-center mb-3">
+                <Building2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
               </div>
               <h3 className="font-heading font-bold text-charcoal-900 mb-1">SIRET 3+ ans</h3>
               <p className="text-sm text-charcoal-600 leading-relaxed">
@@ -408,7 +408,7 @@ export default function TravauxHubPage() {
           <div className="mt-6">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-800 transition"
+              className="inline-flex items-center gap-2 text-accent-700 font-semibold hover:text-accent-800 transition"
             >
               Annuaire 49 000+ artisans RGE certifiés
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -421,7 +421,7 @@ export default function TravauxHubPage() {
       <section
         id="metiers"
         aria-labelledby="metiers-heading"
-        className="bg-emerald-50/60 py-12 border-y border-emerald-100"
+        className="bg-accent-50/60 py-12 border-y border-accent-100"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2
@@ -437,16 +437,16 @@ export default function TravauxHubPage() {
                 <Link
                   key={t.href}
                   href={t.href}
-                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
-                    <Icon className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                  <div className="w-10 h-10 rounded-lg bg-accent-50 flex items-center justify-center mb-3">
+                    <Icon className="w-5 h-5 text-accent-700" aria-hidden="true" />
                   </div>
-                  <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 transition mb-2">
+                  <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 transition mb-2">
                     {t.title}
                   </h3>
                   <p className="text-sm text-charcoal-600 leading-relaxed mb-3">{t.description}</p>
-                  <span className="inline-flex items-center gap-1 text-sm text-emerald-700 font-medium">
+                  <span className="inline-flex items-center gap-1 text-sm text-accent-700 font-medium">
                     Voir les artisans
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </span>
@@ -473,16 +473,16 @@ export default function TravauxHubPage() {
                 <Link
                   key={g.href}
                   href={g.href}
-                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
-                    <Icon className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                  <div className="w-10 h-10 rounded-lg bg-accent-50 flex items-center justify-center mb-3">
+                    <Icon className="w-5 h-5 text-accent-700" aria-hidden="true" />
                   </div>
-                  <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 transition mb-2">
+                  <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 transition mb-2">
                     {g.title}
                   </h3>
                   <p className="text-sm text-charcoal-600 leading-relaxed mb-3">{g.description}</p>
-                  <span className="inline-flex items-center gap-1 text-sm text-emerald-700 font-medium">
+                  <span className="inline-flex items-center gap-1 text-sm text-accent-700 font-medium">
                     Lire le guide
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </span>
@@ -494,12 +494,12 @@ export default function TravauxHubPage() {
       </section>
 
       {/* CTA simulateur + RGE */}
-      <section className="bg-emerald-700 text-white py-12">
+      <section className="bg-accent-700 text-white py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Vos travaux pas à pas : simulateur + 3 devis RGE en 24-48h
           </h2>
-          <p className="text-emerald-50/90 leading-relaxed mb-6 max-w-2xl mx-auto">
+          <p className="text-accent-50/90 leading-relaxed mb-6 max-w-2xl mx-auto">
             Simulez le bouquet d’aides applicable à votre projet en 3 minutes, puis recevez 3 devis
             d’artisans certifiés RGE de votre région. Lead exclusif (1 demande = 1 artisan, jamais
             partagé).
@@ -507,14 +507,14 @@ export default function TravauxHubPage() {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides en 3 min
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Devis travaux gratuit
             </Link>
@@ -541,7 +541,7 @@ export default function TravauxHubPage() {
                 key={q.question}
                 className="group rounded-xl border border-charcoal-100 bg-white p-5"
               >
-                <summary className="cursor-pointer list-none font-semibold text-charcoal-900 group-open:text-emerald-700">
+                <summary className="cursor-pointer list-none font-semibold text-charcoal-900 group-open:text-accent-700">
                   {q.question}
                 </summary>
                 <p className="mt-3 text-sm text-charcoal-700 leading-relaxed">{q.answer}</p>
@@ -555,7 +555,7 @@ export default function TravauxHubPage() {
       <section className="bg-sand-50 py-10 border-t border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-xl font-extrabold text-charcoal-900">
               Notre méthodologie
             </h2>
@@ -571,7 +571,7 @@ export default function TravauxHubPage() {
           </ul>
           <p className="mt-3 text-xs text-charcoal-500">
             Détail complet sur{' '}
-            <Link href="/methodologie" className="underline hover:text-emerald-700">
+            <Link href="/methodologie" className="underline hover:text-accent-700">
               /methodologie
             </Link>{' '}
             · Sources officielles : ADEME, France Rénov’, FFB, baromètre Opinion Way prix travaux.

@@ -45,7 +45,7 @@ const FUNNEL_COLORS: Record<string, string> = {
   engagement_signe: '#60a5fa', // primary-400
   travaux_en_cours: '#f59e0b', // amber-500
   depose_delegataire: '#0ea5e9', // sky-500
-  valide: '#10b981', // emerald-500
+  valide: '#10b981', // accent-500
 }
 
 // Statuts qui comptent comme "en cours" pour le taux de conversion
@@ -274,12 +274,10 @@ export default async function AdminCeeDashboardPage() {
           <div className="bg-white border border-sand-200 shadow-sm rounded-xl p-5 flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-3">
               <div
-                className={`p-2 rounded-lg ${
-                  stagnantCount > 0 ? 'bg-amber-100' : 'bg-emerald-100'
-                }`}
+                className={`p-2 rounded-lg ${stagnantCount > 0 ? 'bg-amber-100' : 'bg-accent-100'}`}
               >
                 <AlertTriangle
-                  className={`w-5 h-5 ${stagnantCount > 0 ? 'text-amber-600' : 'text-emerald-600'}`}
+                  className={`w-5 h-5 ${stagnantCount > 0 ? 'text-amber-600' : 'text-accent-600'}`}
                 />
               </div>
               <span className="text-sm text-gray-500">Dossiers stagnants</span>

@@ -73,7 +73,7 @@ export default function MobileMenu({
         <form onSubmit={handleSearch} className="mb-4">
           <div className="flex items-center bg-white border-2 border-sand-300 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <Search className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
               <label htmlFor="mobile-search-service" className="sr-only">
                 Service recherché
               </label>
@@ -88,7 +88,7 @@ export default function MobileMenu({
             </div>
             <div className="w-px h-7 bg-sand-300" />
             <div className="relative flex-1">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <MapPin className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
               <label htmlFor="mobile-search-location" className="sr-only">
                 Ville ou code postal
               </label>
@@ -104,7 +104,7 @@ export default function MobileMenu({
                 type="button"
                 onClick={handleGeolocation}
                 disabled={isLocating}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-sand-100 rounded-full transition-colors disabled:opacity-50"
+                className="absolute right-1 top-1/2 -trancharcoal-y-1/2 p-2 hover:bg-sand-100 rounded-full transition-colors disabled:opacity-50"
                 aria-label="Utiliser ma position"
                 title="Ma position"
               >

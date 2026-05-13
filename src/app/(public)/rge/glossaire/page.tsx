@@ -165,11 +165,11 @@ export default function RgeGlossairePage() {
       <Breadcrumb items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Glossaire' }]} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Award className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Award className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Référentiel officiel — {entries.length} qualifications
             </span>
           </div>
@@ -179,7 +179,7 @@ export default function RgeGlossairePage() {
           >
             Glossaire des qualifications RGE
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Définitions canoniques des qualifications délivrées par Qualibat, Qualit&apos;EnR,
             Qualifelec et l&apos;OPQIBI. Sans qualification RGE active à la date du devis,
             MaPrimeRénov&apos; et les primes CEE sont refusées.
@@ -187,7 +187,7 @@ export default function RgeGlossairePage() {
           <ArticleMeta
             author="ServicesArtisans"
             datePublished="2026-05-03"
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
         </div>
       </section>
@@ -213,12 +213,12 @@ export default function RgeGlossairePage() {
           {faqItems.map((item, i) => (
             <details
               key={`rge-glos-faq-${i}`}
-              className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+              className="group rounded-lg border border-sand-300 bg-white p-5 open:border-accent-300 open:shadow-sm"
             >
               <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                 <span>{item.question}</span>
                 <span
-                  className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                  className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none"
                   aria-hidden="true"
                 >
                   +
@@ -243,14 +243,14 @@ export default function RgeGlossairePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Link
               href="/rge"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
               <ShieldCheck
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Tous les métiers RGE
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">Hub par métier</div>
@@ -258,11 +258,11 @@ export default function RgeGlossairePage() {
             </Link>
             <Link
               href="/rge/qualifications"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
-              <Award className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Award className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Guides détaillés
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">
@@ -272,14 +272,14 @@ export default function RgeGlossairePage() {
             </Link>
             <Link
               href="/rge/comment-devenir-rge"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
               <ArrowRight
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Devenir RGE
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">Procédure pour artisans</div>
@@ -290,11 +290,11 @@ export default function RgeGlossairePage() {
                 peuvent ré-utiliser légalement les définitions via JSON-LD. */}
             <a
               href="/api/glossaire-rge.json"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
-              <Code2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Code2 className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Données ouvertes JSON-LD
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">
@@ -307,11 +307,11 @@ export default function RgeGlossairePage() {
                 BOM UTF-8 + RFC 4180 escape pour ouverture directe sans assistant. */}
             <a
               href="/api/glossaire-rge.csv"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
-              <Table className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Table className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Données ouvertes CSV
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">
@@ -325,14 +325,14 @@ export default function RgeGlossairePage() {
                 Cross-linking transforme la coexistence en cluster sémantique. */}
             <Link
               href="/glossaire"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
               <ArrowRight
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Glossaire bâtiment
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">

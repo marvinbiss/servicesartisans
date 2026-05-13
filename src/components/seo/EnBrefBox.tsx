@@ -22,15 +22,15 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
 
   return (
     <div
-      className="snippet-answer rounded-xl border border-emerald-200 bg-emerald-50/50 px-6 py-5 mb-8"
+      className="snippet-answer rounded-xl border border-accent-200 bg-accent-50/50 px-6 py-5 mb-8"
       data-speakable="true"
       role="region"
       aria-label={title}
     >
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-6 h-6 rounded-md bg-emerald-100 flex items-center justify-center flex-shrink-0">
+        <div className="w-6 h-6 rounded-md bg-accent-100 flex items-center justify-center flex-shrink-0">
           <svg
-            className="w-3.5 h-3.5 text-emerald-600"
+            className="w-3.5 h-3.5 text-accent-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -44,7 +44,7 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
             />
           </svg>
         </div>
-        <span className="text-sm font-bold text-emerald-800 uppercase tracking-wider">{title}</span>
+        <span className="text-sm font-bold text-accent-800 uppercase tracking-wider">{title}</span>
       </div>
 
       {summary && <p className="text-base leading-relaxed text-charcoal-800 mb-0">{summary}</p>}
@@ -54,7 +54,7 @@ export default function EnBrefBox({ summary, keyPoints, title = 'En bref' }: EnB
           {keyPoints.map((point, i) => (
             <li key={i} className="flex items-start gap-2 text-sm text-charcoal-700">
               <svg
-                className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5"
+                className="w-4 h-4 text-accent-500 flex-shrink-0 mt-0.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

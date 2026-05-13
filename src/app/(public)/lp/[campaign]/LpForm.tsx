@@ -67,8 +67,8 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
 
   if (state === 'success') {
     return (
-      <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-8 text-center">
-        <div className="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-4">
+      <div className="bg-accent-50 border-2 border-accent-300 rounded-2xl p-8 text-center">
+        <div className="w-14 h-14 rounded-full bg-accent-500 flex items-center justify-center mx-auto mb-4">
           <Check className="w-7 h-7 text-white" />
         </div>
         <h3 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2">
@@ -98,7 +98,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Jean Dupont"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
           autoComplete="name"
           required
           minLength={2}
@@ -118,7 +118,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
           placeholder="06 12 34 56 78"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
           autoComplete="tel"
           required
           inputMode="tel"
@@ -136,7 +136,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="vous@exemple.fr"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
             autoComplete="email"
             required
           />
@@ -151,7 +151,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
             placeholder="75015"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
             autoComplete="postal-code"
             inputMode="numeric"
             pattern="[0-9]{5}"
@@ -164,7 +164,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
       <button
         type="submit"
         disabled={state === 'submitting'}
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-md"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-accent-600 text-white font-semibold hover:bg-accent-700 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-md"
       >
         {state === 'submitting' ? (
           <>
@@ -189,7 +189,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
       )}
 
       <p className="flex items-start gap-2 text-xs text-charcoal-500 leading-relaxed">
-        <ShieldCheck className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+        <ShieldCheck className="w-4 h-4 text-accent-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
         Vos données sont confidentielles, transmises uniquement à un artisan RGE certifié près de
         chez vous. Aucun engagement, devis gratuit.
       </p>

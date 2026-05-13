@@ -178,7 +178,7 @@ export default function BarometreRegionsPage() {
         {/* Header */}
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-50 text-accent-700 rounded-full text-sm font-medium mb-6">
               <MapPin className="w-4 h-4" />
               13 régions métropolitaines
             </div>

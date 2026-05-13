@@ -24,7 +24,7 @@ export default function AideFAQ({ aideName, faqs }: Props) {
           {faqs.map((item) => (
             <details
               key={item.question}
-              className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-emerald-300"
+              className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-accent-300"
             >
               <summary className="cursor-pointer font-heading font-bold text-charcoal-900 list-none flex justify-between items-start gap-4">
                 <span>{item.question}</span>

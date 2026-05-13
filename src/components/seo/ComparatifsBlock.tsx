@@ -87,7 +87,7 @@ function OptionRow({ option }: { option: ComparisonOption }) {
         {option.name}
       </td>
       <td className="py-1.5 pr-3 text-xs text-charcoal-600">{option.prixMoyen}</td>
-      <td className="py-1.5 pr-3 text-xs text-emerald-700">{truncate(advantage, 60)}</td>
+      <td className="py-1.5 pr-3 text-xs text-accent-700">{truncate(advantage, 60)}</td>
       <td className="py-1.5 text-xs text-red-600">{truncate(inconvenient, 60)}</td>
     </tr>
   )

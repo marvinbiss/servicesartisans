@@ -578,9 +578,9 @@ export default function DevisForm({
   const getTransitionClass = () => {
     switch (transition) {
       case 'slide-out-left':
-        return 'translate-x-[-30px] opacity-0 transition-all duration-200 ease-out'
+        return 'trancharcoal-x-[-30px] opacity-0 transition-all duration-200 ease-out'
       case 'slide-out-right':
-        return 'translate-x-[30px] opacity-0 transition-all duration-200 ease-out'
+        return 'trancharcoal-x-[30px] opacity-0 transition-all duration-200 ease-out'
       case 'slide-in-right':
         return 'animate-slide-in-right'
       case 'slide-in-left':
@@ -608,7 +608,7 @@ export default function DevisForm({
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
           <Link
             href="/services"
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
           >
             Trouver d'autres artisans
           </Link>
@@ -730,9 +730,9 @@ export default function DevisForm({
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none" />
                   {getFieldState('service') === 'valid' && (
-                    <span className="absolute right-9 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                    <span className="absolute right-9 top-1/2 -trancharcoal-y-1/2 text-accent-500 animate-scale-in">
                       <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -778,7 +778,7 @@ export default function DevisForm({
                     className={`${inputBase} pr-10 ${inputBorderClass('ville')}`}
                   />
                   {getFieldState('ville') === 'valid' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                    <span className="absolute right-3 top-1/2 -trancharcoal-y-1/2 text-accent-500 animate-scale-in">
                       <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -841,7 +841,7 @@ export default function DevisForm({
                 disabled={!form.isStep1Valid}
                 className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                   form.isStep1Valid
-                    ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                    ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 hover:scale-[1.01]'
                     : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                 }`}
               >
@@ -887,7 +887,7 @@ export default function DevisForm({
                     className={`${inputBase} pr-10 ${inputBorderClass('email')}`}
                   />
                   {getFieldState('email') === 'valid' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                    <span className="absolute right-3 top-1/2 -trancharcoal-y-1/2 text-accent-500 animate-scale-in">
                       <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -1089,7 +1089,7 @@ export default function DevisForm({
                   disabled={!isStep2Valid}
                   className={`${isPrefilled && !isMinimal ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                     isStep2Valid
-                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 hover:scale-[1.01]'
                       : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >
@@ -1127,7 +1127,7 @@ export default function DevisForm({
                     className={`${inputBase} pr-10 ${inputBorderClass('nom')}`}
                   />
                   {getFieldState('nom') === 'valid' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                    <span className="absolute right-3 top-1/2 -trancharcoal-y-1/2 text-accent-500 animate-scale-in">
                       <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -1163,7 +1163,7 @@ export default function DevisForm({
                     className={`${inputBase} pr-10 ${inputBorderClass('telephone')}`}
                   />
                   {getFieldState('telephone') === 'valid' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-500 animate-scale-in">
+                    <span className="absolute right-3 top-1/2 -trancharcoal-y-1/2 text-accent-500 animate-scale-in">
                       <Check className="w-4 h-4" />
                     </span>
                   )}
@@ -1273,7 +1273,7 @@ export default function DevisForm({
                   disabled={form.submitting || !form.isStep3Valid}
                   className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-5 rounded-xl transition-all duration-300 text-lg ${
                     form.isStep3Valid && !form.submitting
-                      ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1'
+                      ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-trancharcoal-y-1'
                       : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >

@@ -79,7 +79,7 @@ export default function ScreenContact({
             placeholder="Votre prénom"
             value={prenom}
             onChange={(e) => onChangePrenom(e.target.value)}
-            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-xl border-2 border-charcoal-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
         </div>
         <div>
@@ -89,7 +89,7 @@ export default function ScreenContact({
             placeholder="Votre téléphone"
             value={telephone}
             onChange={(e) => onChangeTelephone(e.target.value)}
-            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-xl border-2 border-charcoal-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
         </div>
         <div>
@@ -99,11 +99,11 @@ export default function ScreenContact({
             placeholder="Votre email"
             value={email}
             onChange={(e) => onChangeEmail(e.target.value)}
-            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-xl border-2 border-charcoal-200 px-4 py-3.5 text-base text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
         </div>
 
-        <div className="space-y-2.5 rounded-lg bg-slate-50 p-3">
+        <div className="space-y-2.5 rounded-lg bg-charcoal-50 p-3">
           <label className="flex items-start gap-2.5 text-xs text-charcoal-700">
             <input
               type="checkbox"
@@ -144,7 +144,7 @@ export default function ScreenContact({
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-xl bg-emerald-600 py-4 text-base font-bold text-white shadow-lg transition hover:bg-emerald-700 disabled:opacity-60"
+          className="w-full rounded-xl bg-accent-600 py-4 text-base font-bold text-white shadow-lg transition hover:bg-accent-700 disabled:opacity-60"
         >
           {submitting ? 'Envoi en cours…' : 'Obtenir mon estimation gratuite'}
         </button>

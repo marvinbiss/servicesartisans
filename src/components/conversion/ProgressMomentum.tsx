@@ -89,8 +89,8 @@ export default function ProgressMomentum({ currentStep, totalSteps }: ProgressMo
         <p
           className={`text-sm font-medium transition-all duration-300 ${
             showCheck
-              ? 'text-accent-600 translate-x-0 opacity-100'
-              : 'text-charcoal-400 -translate-x-2 opacity-70'
+              ? 'text-accent-600 trancharcoal-x-0 opacity-100'
+              : 'text-charcoal-400 -trancharcoal-x-2 opacity-70'
           }`}
         >
           {message}

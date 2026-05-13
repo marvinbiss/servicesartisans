@@ -192,7 +192,7 @@ export default function NewsletterAidesRenovationPage() {
 
       <main className="min-h-screen bg-gradient-to-b from-sand-50 to-white">
         {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-600 via-primary-500 to-indigo-600 text-white">
+        <section className="bg-gradient-to-br from-primary-600 via-primary-500 to-primary-600 text-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <Breadcrumb
               items={breadcrumbItems}
@@ -328,7 +328,7 @@ export default function NewsletterAidesRenovationPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-primary-50 to-indigo-50 border-t border-sand-200">
+        <section className="py-12 sm:py-16 bg-gradient-to-br from-primary-50 to-primary-50 border-t border-sand-200">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-charcoal-900 font-heading mb-4">
               Prêt à recevoir nos actus ?

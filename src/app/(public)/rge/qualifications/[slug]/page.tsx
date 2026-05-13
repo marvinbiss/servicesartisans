@@ -148,11 +148,11 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Award className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Award className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Délivrée par {guide.organisme}
             </span>
           </div>
@@ -167,23 +167,23 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             datePublished="2026-01-15"
             className="justify-center mt-4"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
         </div>
       </section>
 
       {/* Travaux couverts & CEE débloquées */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-6">
+          <div className="rounded-2xl border border-accent-100 bg-accent-50/40 p-6">
             <h2 className="font-heading text-lg font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
               Travaux couverts
             </h2>
             <ul className="space-y-2">
               {guide.travauxCouverts.map((travail) => (
                 <li key={travail} className="flex items-start gap-2 text-sm text-charcoal-700">
                   <CheckCircle2
-                    className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-4 h-4 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <span>{travail}</span>
@@ -270,11 +270,11 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
             {guide.faq.map((item, i) => (
               <details
                 key={i}
-                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-accent-300 open:shadow-sm"
               >
                 <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
-                  <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                  <span className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none">
                     +
                   </span>
                 </summary>
@@ -287,7 +287,7 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
 
       {/* Vérification officielle */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <div className="rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 p-6">
+        <div className="rounded-2xl border-2 border-accent-200 bg-accent-50/50 p-6">
           <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-3">
             Vérifier une qualification {guide.name}
           </h2>
@@ -300,14 +300,14 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
               href="https://france-renov.gouv.fr/annuaire-rge"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-100 transition text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-100 transition text-sm"
             >
               Annuaire France Rénov’
               <ExternalLink className="w-4 h-4" aria-hidden="true" />
             </a>
             <Link
               href={`/rge/${guide.linkedRgeService}`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-100 transition text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-100 transition text-sm"
             >
               Nos artisans {guide.linkedRgeService.replace(/-/g, ' ')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -317,26 +317,26 @@ export default async function RgeQualificationGuidePage({ params }: PageProps) {
       </section>
 
       {/* CTAs */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Trouvez un artisan {guide.name}
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Tous nos artisans sont vérifiés via la synchronisation hebdomadaire de l’annuaire ADEME
             officiel. Qualifications actives uniquement.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Demander un devis gratuit
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Tous les artisans RGE
             </Link>

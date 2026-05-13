@@ -90,18 +90,18 @@ export default function ExclusivityProofBadge({ assignmentId }: Props) {
   return (
     <div
       className={`rounded-xl border p-4 ${
-        exclusive ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'
+        exclusive ? 'border-accent-200 bg-accent-50' : 'border-amber-200 bg-amber-50'
       }`}
     >
       <div className="flex items-start gap-3">
         <ShieldCheck
-          className={`w-5 h-5 shrink-0 mt-0.5 ${exclusive ? 'text-emerald-700' : 'text-amber-700'}`}
+          className={`w-5 h-5 shrink-0 mt-0.5 ${exclusive ? 'text-accent-700' : 'text-amber-700'}`}
         />
         <div className="flex-1 min-w-0">
-          <p className={`font-bold mb-1 ${exclusive ? 'text-emerald-900' : 'text-amber-900'}`}>
+          <p className={`font-bold mb-1 ${exclusive ? 'text-accent-900' : 'text-amber-900'}`}>
             {exclusive ? 'Lead exclusif — envoye uniquement a vous' : 'Lead non exclusif'}
           </p>
-          <p className={`text-sm mb-3 ${exclusive ? 'text-emerald-800' : 'text-amber-800'}`}>
+          <p className={`text-sm mb-3 ${exclusive ? 'text-accent-800' : 'text-amber-800'}`}>
             {exclusive
               ? `Assignation le ${new Date(proof.assignedAt).toLocaleString('fr-FR')}. Aucun autre artisan de ServicesArtisans n'a recu ce lead.`
               : 'Une autre assignation active existe. Contactez le support.'}
@@ -115,7 +115,7 @@ export default function ExclusivityProofBadge({ assignmentId }: Props) {
               className="shrink-0 text-charcoal-500 hover:text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
             >
               {copied ? (
-                <Check className="w-4 h-4 text-emerald-600" />
+                <Check className="w-4 h-4 text-accent-600" />
               ) : (
                 <Copy className="w-4 h-4" />
               )}

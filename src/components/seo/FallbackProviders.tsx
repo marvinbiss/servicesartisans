@@ -128,7 +128,7 @@ export default function FallbackProviders({
             return (
               <div
                 key={provider.id}
-                className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-translate-y-0.5 hover:border-primary-200 transition-all duration-200"
+                className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-trancharcoal-y-0.5 hover:border-primary-200 transition-all duration-200"
               >
                 {/* Header: avatar + name + badges */}
                 <div className="flex items-start gap-3 mb-3">
@@ -172,8 +172,8 @@ export default function FallbackProviders({
                 {/* RGE badge */}
                 {isRge && (
                   <div className="flex items-center gap-1.5 mb-2">
-                    <Award className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                    <span className="text-xs font-semibold text-emerald-700">Certifi{'é'} RGE</span>
+                    <Award className="w-4 h-4 text-accent-600 flex-shrink-0" />
+                    <span className="text-xs font-semibold text-accent-700">Certifi{'é'} RGE</span>
                   </div>
                 )}
 
@@ -208,7 +208,7 @@ export default function FallbackProviders({
                 )}
 
                 {/* Department badge */}
-                <div className="flex items-center gap-1.5 mb-3 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg">
+                <div className="flex items-center gap-1.5 mb-3 bg-accent-50 text-accent-700 px-3 py-1.5 rounded-lg">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="text-xs font-medium">
                     Intervient dans tout le {departmentName}

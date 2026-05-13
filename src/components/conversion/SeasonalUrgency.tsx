@@ -33,7 +33,7 @@ const SEASONAL_MESSAGES: Record<string, { icon: typeof Calendar; message: string
     'winter-default': {
       icon: Calendar,
       message: "Période creuse = meilleurs tarifs — idéal pour vos travaux d'intérieur",
-      color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+      color: 'text-accent-700 bg-accent-50 border-accent-200',
     },
   }
 

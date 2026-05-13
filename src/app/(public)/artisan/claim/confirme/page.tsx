@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 export default function ClaimConfirmedPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-gray-900">Email confirmé</h1>
-      <p className="mt-4 text-gray-700">
+      <h1 className="text-3xl font-bold text-charcoal-900">Email confirmé</h1>
+      <p className="mt-4 text-charcoal-700">
         Merci, votre adresse email est maintenant validée. Votre demande de revendication est en
         cours d&apos;examen.
       </p>
-      <p className="mt-2 text-gray-700">
+      <p className="mt-2 text-charcoal-700">
         Si toutes les conditions sont réunies (SIRET vérifié, RGE actif), elle peut être approuvée
         automatiquement dans l&apos;heure qui suit. Sinon, un administrateur la traite sous 24-72h.
       </p>
-      <p className="mt-2 text-gray-700">
+      <p className="mt-2 text-charcoal-700">
         Vous recevrez un nouvel email dès que votre fiche sera active.
       </p>
       <div className="mt-8">

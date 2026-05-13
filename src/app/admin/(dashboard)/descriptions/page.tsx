@@ -59,7 +59,7 @@ const STATUS_LABEL: Record<DraftStatus | 'all', string> = {
 const STATUS_COLOR: Record<DraftStatus, string> = {
   pending: 'bg-gray-100 text-gray-700',
   generating: 'bg-blue-100 text-blue-700',
-  judged_pass: 'bg-emerald-100 text-emerald-700',
+  judged_pass: 'bg-accent-100 text-accent-700',
   judged_fail: 'bg-rose-100 text-rose-700',
   published: 'bg-indigo-100 text-indigo-700',
   archived: 'bg-neutral-100 text-neutral-700',
@@ -132,7 +132,7 @@ export default function AdminDescriptionsPage() {
                   setPage(1)
                 }}
                 className={`px-3 py-2 text-sm font-medium ${
-                  status === s ? 'bg-emerald-600 text-white' : 'text-gray-700 hover:bg-gray-50'
+                  status === s ? 'bg-accent-600 text-white' : 'text-gray-700 hover:bg-gray-50'
                 } first:rounded-l-md last:rounded-r-md`}
               >
                 {STATUS_LABEL[s]}
@@ -217,7 +217,7 @@ export default function AdminDescriptionsPage() {
                       <button
                         onClick={() => act(item.provider_id, 'publish')}
                         disabled={isBusy || hasHallucination === true}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-40"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-accent-600 text-white text-sm font-medium hover:bg-accent-700 disabled:opacity-40"
                       >
                         <CheckCircle2 className="w-4 h-4" /> Publier
                       </button>
@@ -292,14 +292,14 @@ export default function AdminDescriptionsPage() {
                             act(item.provider_id, 'edit', { draft_text: editing.text })
                           }
                           disabled={isBusy || editing.text.trim().length < 50}
-                          className="px-3 py-1.5 rounded-md bg-emerald-600 text-white text-sm font-medium disabled:opacity-40"
+                          className="px-3 py-1.5 rounded-md bg-accent-600 text-white text-sm font-medium disabled:opacity-40"
                         >
                           Enregistrer
                         </button>
                       </div>
                     </>
                   ) : (
-                    <div className="p-3 bg-emerald-50 rounded-md text-sm text-gray-900 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                    <div className="p-3 bg-accent-50 rounded-md text-sm text-gray-900 max-h-64 overflow-y-auto whitespace-pre-wrap">
                       {item.draft_text ?? <em>(pas encore généré)</em>}
                     </div>
                   )}

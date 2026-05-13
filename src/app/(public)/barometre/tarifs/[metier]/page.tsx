@@ -286,7 +286,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
               <div className="text-xs text-charcoal-500 mt-1">Note moyenne</div>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
-              <MapPin className="w-5 h-5 text-emerald-600 mx-auto mb-2" />
+              <MapPin className="w-5 h-5 text-accent-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-charcoal-900">
                 {stats ? stats.nb_avis.toLocaleString('fr-FR') : '--'}
               </div>
@@ -405,7 +405,7 @@ export default async function BarometreMetierPage({ params }: PageProps) {
               className="bg-white rounded-xl border border-sand-300 p-5 hover:shadow-md hover:border-primary-200 transition-all group"
             >
               <div className="flex items-center gap-2 mb-2">
-                <ArrowRight className="w-5 h-5 text-emerald-600" />
+                <ArrowRight className="w-5 h-5 text-accent-600" />
                 <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
                   Devis {metier.label.toLowerCase()}
                 </h3>

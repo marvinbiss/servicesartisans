@@ -23,7 +23,7 @@ interface CompareViewProps {
 }
 
 function ProviderAvatar({ provider, index }: { provider: CompareProvider; index: number }) {
-  const colors = ['bg-primary-400', 'bg-emerald-500', 'bg-amber-500']
+  const colors = ['bg-primary-400', 'bg-accent-500', 'bg-amber-500']
   return (
     <div
       className={clsx(

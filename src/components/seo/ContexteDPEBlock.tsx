@@ -197,8 +197,8 @@ export default function ContexteDPEBlock({
         const demandContext = getRenovationDemandContext(communeData, serviceName, villeName)
         if (!demandContext) return null
         return (
-          <div className="flex items-start gap-3 mt-4 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-            <TrendingUp className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 mt-4 p-3 rounded-lg bg-accent-50 border border-accent-100">
+            <TrendingUp className="w-4 h-4 text-accent-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-charcoal-700 leading-relaxed">{demandContext}</p>
           </div>
         )

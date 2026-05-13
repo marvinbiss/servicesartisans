@@ -12,19 +12,17 @@ interface Props {
 export default function ScreenTypeLogement({ value, onSelect }: Props) {
   return (
     <div>
-      <ScreenTitle subtitle="Commençons par votre logement">
-        Maison ou appartement ?
-      </ScreenTitle>
+      <ScreenTitle subtitle="Commençons par votre logement">Maison ou appartement ?</ScreenTitle>
       <div className="grid grid-cols-2 gap-4">
         <CardButton selected={value === 'maison'} onClick={() => onSelect('maison')}>
           <div className="flex flex-col items-center gap-3 py-4">
-            <Home className="h-12 w-12 text-emerald-600" />
+            <Home className="h-12 w-12 text-accent-600" />
             <span className="text-base font-semibold text-charcoal-900">Maison</span>
           </div>
         </CardButton>
         <CardButton selected={value === 'appartement'} onClick={() => onSelect('appartement')}>
           <div className="flex flex-col items-center gap-3 py-4">
-            <Building2 className="h-12 w-12 text-emerald-600" />
+            <Building2 className="h-12 w-12 text-accent-600" />
             <span className="text-base font-semibold text-charcoal-900">Appartement</span>
           </div>
         </CardButton>

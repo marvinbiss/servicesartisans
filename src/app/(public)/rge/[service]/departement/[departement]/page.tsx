@@ -243,19 +243,19 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
           </p>
         </section>
 
-        <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+        <section className="mb-6 rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">
           <strong className="font-semibold">Source officielle&nbsp;:</strong> Données sourcées
           depuis{' '}
           <a
             href="https://data.ademe.fr/datasets/liste-des-entreprises-rge-2"
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="underline hover:text-emerald-700"
+            className="underline hover:text-accent-700"
           >
             data.ademe.fr
           </a>{' '}
           — Licence Etalab 2.0.{' '}
-          <Link href="/rge/sources" className="underline hover:text-emerald-700">
+          <Link href="/rge/sources" className="underline hover:text-accent-700">
             Méthodologie complète
           </Link>
           .
@@ -302,7 +302,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                 <Link
                   key={v.slug}
                   href={`/rge/${serviceSlug}/${v.slug}`}
-                  className="flex items-center justify-between px-3 py-2 bg-white rounded-lg border border-sand-300 hover:border-emerald-400 hover:bg-emerald-50 transition text-sm text-charcoal-700 hover:text-emerald-700"
+                  className="flex items-center justify-between px-3 py-2 bg-white rounded-lg border border-sand-300 hover:border-accent-400 hover:bg-accent-50 transition text-sm text-charcoal-700 hover:text-accent-700"
                 >
                   <span className="truncate font-medium">{v.name}</span>
                 </Link>
@@ -322,7 +322,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                 <Link
                   key={s}
                   href={`/rge/${s}/departement/${deptSlug}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-sand-300 text-xs font-medium text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-sand-300 text-xs font-medium text-charcoal-700 hover:border-accent-400 hover:text-accent-700 transition"
                 >
                   {otherLabel?.label ?? s}
                 </Link>
@@ -339,7 +339,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href={`/rge/${serviceSlug}`}
-                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-accent-400 hover:bg-accent-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
                   Hub national {serviceName} RGE
@@ -352,7 +352,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href={`/departements/${deptSlug}`}
-                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-accent-400 hover:bg-accent-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
                   Tous les artisans {getDeptArticle(dept.name)}
@@ -363,7 +363,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href="/rge/qualifications"
-                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-accent-400 hover:bg-accent-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">
                   Comprendre les qualifications RGE
@@ -376,7 +376,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
             <li>
               <Link
                 href="/cee/guides"
-                className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                className="block rounded-lg border border-sand-300 p-4 hover:border-accent-400 hover:bg-accent-50 transition"
               >
                 <div className="font-semibold text-charcoal-900">Guides primes CEE 2026</div>
                 <div className="text-sm text-charcoal-500">

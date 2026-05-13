@@ -54,7 +54,7 @@ export function ArtisanSimilar({
         : null
     if (!hubUrl) return null
     return (
-      <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
+      <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-sand-200/60 p-6">
         <h2 className="text-xl font-semibold text-charcoal-900 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           {!isClaimed
@@ -92,7 +92,7 @@ export function ArtisanSimilar({
 
   return (
     <div
-      className="animate-fade-in-up bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
+      className="animate-fade-in-up bg-[#FFFCF8] rounded-2xl shadow-soft border border-sand-200/60 p-6"
       style={{ animationDelay: '0.6s' }}
     >
       <div className="flex items-center justify-between mb-2">
@@ -155,7 +155,7 @@ export function ArtisanSimilar({
               rel={item.noindex === true ? 'nofollow' : undefined}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
-              <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
+              <article className="w-72 bg-white rounded-xl border border-sand-200 p-4 transition-all cursor-pointer hover:-trancharcoal-y-1 hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15)]">
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
@@ -176,7 +176,7 @@ export function ArtisanSimilar({
                     </span>
                   )}
                   {!isClaimed && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 text-accent-700 text-xs font-medium">
                       <CheckCircle className="w-3 h-3" aria-hidden="true" />
                       Disponible
                     </span>
@@ -206,7 +206,7 @@ export function ArtisanSimilar({
 
       {/* CTA bottom link for unclaimed */}
       {!isClaimed && hubUrl && (
-        <div className="mt-4 pt-4 border-t border-stone-200/60 text-center">
+        <div className="mt-4 pt-4 border-t border-sand-200/60 text-center">
           <Link
             href={hubUrl}
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-700 transition-colors"

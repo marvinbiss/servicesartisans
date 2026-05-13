@@ -124,10 +124,12 @@ export default function Step3Projet({ state, dispatch }: Props) {
 
   return (
     <form onSubmit={onNext} className="space-y-5" noValidate>
-      <h3 className="text-lg font-semibold text-slate-900">Étape 3 — Votre projet</h3>
+      <h3 className="text-lg font-semibold text-charcoal-900">Étape 3 — Votre projet</h3>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-slate-800">Type de parcours</legend>
+        <legend className="mb-2 block text-sm font-medium text-charcoal-800">
+          Type de parcours
+        </legend>
         <div className="flex gap-3">
           {(
             [
@@ -139,8 +141,8 @@ export default function Step3Projet({ state, dispatch }: Props) {
               key={v}
               className={`flex-1 cursor-pointer rounded-md border p-3 text-sm ${
                 p.parcours === v
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                  : 'border-slate-300 hover:border-slate-400'
+                  ? 'border-accent-600 bg-accent-50 text-accent-900'
+                  : 'border-charcoal-300 hover:border-charcoal-400'
               }`}
             >
               <input
@@ -157,7 +159,9 @@ export default function Step3Projet({ state, dispatch }: Props) {
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 block text-sm font-medium text-slate-800">Gestes à réaliser</legend>
+        <legend className="mb-2 block text-sm font-medium text-charcoal-800">
+          Gestes à réaliser
+        </legend>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {GESTES.map((g) => {
             const checked = p.gestes.includes(g.id)
@@ -165,7 +169,7 @@ export default function Step3Projet({ state, dispatch }: Props) {
               <label
                 key={g.id}
                 className={`flex cursor-pointer items-center gap-2 rounded-md border p-2 text-sm ${
-                  checked ? 'border-emerald-600 bg-emerald-50 text-emerald-900' : 'border-slate-300'
+                  checked ? 'border-accent-600 bg-accent-50 text-accent-900' : 'border-charcoal-300'
                 }`}
               >
                 <input
@@ -229,7 +233,7 @@ export default function Step3Projet({ state, dispatch }: Props) {
 
       {p.parcours === 'accompagne' ? (
         <div>
-          <label htmlFor="sautsDpe" className="mb-1 block text-sm font-medium text-slate-800">
+          <label htmlFor="sautsDpe" className="mb-1 block text-sm font-medium text-charcoal-800">
             Sauts de classe DPE visés
           </label>
           <select
@@ -243,7 +247,7 @@ export default function Step3Projet({ state, dispatch }: Props) {
                 },
               })
             }
-            className="w-full rounded-md border border-slate-300 p-2 text-sm"
+            className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
           >
             <option value="">Sélectionner…</option>
             <option value={2}>2 classes</option>
@@ -253,7 +257,7 @@ export default function Step3Projet({ state, dispatch }: Props) {
         </div>
       ) : null}
 
-      <label className="flex items-start gap-2 text-sm text-slate-800">
+      <label className="flex items-start gap-2 text-sm text-charcoal-800">
         <input
           type="checkbox"
           checked={p.coupDePouce}
@@ -269,7 +273,10 @@ export default function Step3Projet({ state, dispatch }: Props) {
       </label>
 
       <div>
-        <label htmlFor="equipementActuel" className="mb-1 block text-sm font-medium text-slate-800">
+        <label
+          htmlFor="equipementActuel"
+          className="mb-1 block text-sm font-medium text-charcoal-800"
+        >
           Équipement de chauffage actuel
         </label>
         <select
@@ -284,7 +291,7 @@ export default function Step3Projet({ state, dispatch }: Props) {
               },
             })
           }
-          className="w-full rounded-md border border-slate-300 p-2 text-sm"
+          className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
         >
           <option value="">Sélectionner…</option>
           {EQUIPEMENTS.map((eq) => (
@@ -299,13 +306,13 @@ export default function Step3Projet({ state, dispatch }: Props) {
         <button
           type="button"
           onClick={() => dispatch({ type: 'PREV' })}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          className="rounded-md border border-charcoal-300 px-4 py-2 text-sm text-charcoal-700 hover:bg-charcoal-50"
         >
           Retour
         </button>
         <button
           type="submit"
-          className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="rounded-md bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-500"
         >
           Étape suivante
         </button>

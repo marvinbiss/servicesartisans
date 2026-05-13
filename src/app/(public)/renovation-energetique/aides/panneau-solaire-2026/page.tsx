@@ -451,7 +451,7 @@ export default function Page() {
                       {a.montant}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-700 font-medium m-0 mb-1">
+                  <p className="text-xs text-accent-700 font-medium m-0 mb-1">
                     Éligibilité : {a.eligibilite}
                   </p>
                   <p className="text-sm text-sand-700 m-0">{a.detail}</p>
@@ -487,7 +487,7 @@ export default function Page() {
                       {s.investissement}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-700 m-0 mb-1">
+                  <p className="text-xs text-accent-700 m-0 mb-1">
                     <strong>Aides :</strong> {s.aides}
                   </p>
                   <p className="text-xs text-amber-800 font-medium m-0 mb-1">

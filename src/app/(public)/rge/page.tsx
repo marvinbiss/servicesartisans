@@ -415,7 +415,7 @@ export default async function RgeHubPage() {
               <Link
                 key={href}
                 href={href}
-                className="group rounded-3xl bg-white border border-sand-200 p-7 hover:border-accent-300 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300"
+                className="group rounded-3xl bg-white border border-sand-200 p-7 hover:border-accent-300 hover:shadow-card-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
               >
                 <div
                   className="w-12 h-12 rounded-2xl bg-accent-50 flex items-center justify-center mb-5"
@@ -466,7 +466,7 @@ export default async function RgeHubPage() {
                 <Link
                   key={slug}
                   href={linkTarget}
-                  className="group rounded-3xl bg-sand-50 border border-sand-200 p-7 hover:bg-white hover:border-accent-300 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300"
+                  className="group rounded-3xl bg-sand-50 border border-sand-200 p-7 hover:bg-white hover:border-accent-300 hover:shadow-card-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
                 >
                   <div
                     className="w-12 h-12 rounded-2xl bg-accent-100 flex items-center justify-center mb-5 group-hover:bg-accent-200 transition-colors"
@@ -620,7 +620,7 @@ export default async function RgeHubPage() {
               <Link
                 key={href}
                 href={href}
-                className="group rounded-3xl bg-white border border-sand-200 p-7 hover:border-accent-300 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300"
+                className="group rounded-3xl bg-white border border-sand-200 p-7 hover:border-accent-300 hover:shadow-card-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
               >
                 <div
                   className="w-12 h-12 rounded-2xl bg-accent-50 flex items-center justify-center mb-5"

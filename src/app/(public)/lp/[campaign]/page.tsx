@@ -114,31 +114,29 @@ export default async function LpPage({ params }: PageProps) {
     <>
       <JsonLd data={[buildSchema(campaign)]} />
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-12 md:py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           <div>
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-              <ShieldCheck className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-              <span className="text-sm font-medium text-emerald-100">
+            <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+              <ShieldCheck className="w-4 h-4 text-accent-300" aria-hidden="true" />
+              <span className="text-sm font-medium text-accent-100">
                 Artisans RGE certifiés — données ADEME officielles
               </span>
             </div>
             <h1 className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-5">
               {campaign.h1}
             </h1>
-            <p className="text-lg text-emerald-50/90 leading-relaxed mb-6">
-              {campaign.subheadline}
-            </p>
+            <p className="text-lg text-accent-50/90 leading-relaxed mb-6">{campaign.subheadline}</p>
             <div className="grid grid-cols-3 gap-4 mb-2">
               {campaign.trustBlocks.map((block) => (
                 <div
                   key={block.label}
-                  className="bg-emerald-700/40 border border-emerald-500/30 rounded-xl p-3"
+                  className="bg-accent-700/40 border border-accent-500/30 rounded-xl p-3"
                 >
                   <div className="text-xl md:text-2xl font-extrabold text-white tabular-nums">
                     {block.value}
                   </div>
-                  <div className="text-xs text-emerald-100/80 mt-1 leading-snug">{block.label}</div>
+                  <div className="text-xs text-accent-100/80 mt-1 leading-snug">{block.label}</div>
                 </div>
               ))}
             </div>
@@ -157,7 +155,7 @@ export default async function LpPage({ params }: PageProps) {
       <section className="bg-white py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-start gap-3">
-            <Award className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <Award className="w-6 h-6 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <div className="font-bold text-charcoal-900">100% RGE</div>
               <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">
@@ -168,7 +166,7 @@ export default async function LpPage({ params }: PageProps) {
           </div>
           <div className="flex items-start gap-3">
             <ShieldCheck
-              className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"
+              className="w-6 h-6 text-accent-600 flex-shrink-0 mt-0.5"
               aria-hidden="true"
             />
             <div>
@@ -180,7 +178,7 @@ export default async function LpPage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Star className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+            <Star className="w-6 h-6 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <div className="font-bold text-charcoal-900">Devis gratuit, sans engagement</div>
               <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">

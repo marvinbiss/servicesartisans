@@ -57,10 +57,10 @@ const categoryIcons: Record<string, typeof Layers> = {
 const categoryColors: Record<string, { bg: string; text: string; border: string; light: string }> =
   {
     'Gros œuvre': {
-      bg: 'bg-stone-100',
-      text: 'text-stone-700',
-      border: 'border-stone-200',
-      light: 'bg-stone-50',
+      bg: 'bg-sand-100',
+      text: 'text-sand-700',
+      border: 'border-sand-200',
+      light: 'bg-sand-50',
     },
     'Charpente & toiture': {
       bg: 'bg-amber-100',
@@ -417,18 +417,18 @@ export default function GlossairePage() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Link
               href="/rge/glossaire"
-              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-emerald-200 p-5 hover:border-emerald-400 hover:shadow-md transition-all group"
+              className="flex items-center gap-3 bg-white rounded-xl shadow-sm border border-accent-200 p-5 hover:border-accent-400 hover:shadow-md transition-all group"
             >
-              <div className="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-                <BookOpen className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 bg-accent-50 rounded-lg flex items-center justify-center group-hover:bg-accent-100 transition-colors">
+                <BookOpen className="w-5 h-5 text-accent-600" />
               </div>
               <div>
-                <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition-colors text-sm">
+                <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition-colors text-sm">
                   Glossaire RGE
                 </span>
                 <p className="text-xs text-charcoal-500">QualiPAC, Qualibat, Qualifelec…</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-emerald-600 transition-colors" />
+              <ArrowRight className="w-4 h-4 text-charcoal-400 ml-auto group-hover:text-accent-600 transition-colors" />
             </Link>
             <Link
               href="/guides/artisan-rge"

@@ -287,7 +287,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="flex flex-col items-center gap-4 mb-8 md:mb-10">
             <Link
               href="/devis"
-              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-1 animate-pulse-subtle"
+              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-trancharcoal-y-1 animate-pulse-subtle"
             >
               <ClipboardList className="w-6 h-6" />
               Obtenir mes 3 devis gratuits — en 2 min
@@ -381,7 +381,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 <ScrollReveal key={slug} delay={i * 0.06}>
                   <Link
                     href={`/services/${slug}`}
-                    className="group snap-start flex-shrink-0 w-[160px] md:w-auto bg-white rounded-2xl p-5 text-center transition-all duration-300 border border-sand-200 hover:border-primary-200 hover:-translate-y-1 hover:shadow-card-hover block"
+                    className="group snap-start flex-shrink-0 w-[160px] md:w-auto bg-white rounded-2xl p-5 text-center transition-all duration-300 border border-sand-200 hover:border-primary-200 hover:-trancharcoal-y-1 hover:shadow-card-hover block"
                   >
                     <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-100 transition-colors">
                       <SvcIcon className="w-6 h-6 text-primary-400" />
@@ -634,7 +634,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
 
                 return (
                   <ScrollReveal key={a.name} delay={i * 0.1}>
-                    <div className="rounded-3xl overflow-hidden transition-all duration-300 bg-white border border-sand-200 hover:shadow-card-hover hover:-translate-y-1">
+                    <div className="rounded-3xl overflow-hidden transition-all duration-300 bg-white border border-sand-200 hover:shadow-card-hover hover:-trancharcoal-y-1">
                       <div className="relative overflow-hidden h-[200px]">
                         <Image
                           src={bgImage}
@@ -763,7 +763,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             <div className="flex gap-3 flex-wrap justify-center">
               <Link
                 href="/devis"
-                className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-200 bg-white hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+                className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-200 bg-white hover:-trancharcoal-y-0.5 shadow-lg hover:shadow-xl"
               >
                 Obtenir mon devis gratuit
               </Link>

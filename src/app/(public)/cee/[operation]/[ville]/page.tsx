@@ -210,7 +210,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           </h1>
           <p className="text-charcoal-700">
             Cette opération CEE n’est pas actuellement disponible dans notre catalogue. Consultez le{' '}
-            <Link href="/cee" className="text-emerald-700 underline">
+            <Link href="/cee" className="text-accent-700 underline">
               hub des primes CEE
             </Link>{' '}
             pour découvrir les 19 opérations résidentielles couvertes.
@@ -458,8 +458,8 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         />
 
         <header className="mb-8">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1 mb-3">
-            <span className="text-xs font-semibold text-emerald-800">
+          <div className="inline-flex items-center gap-2 bg-accent-50 border border-accent-200 rounded-full px-3 py-1 mb-3">
+            <span className="text-xs font-semibold text-accent-800">
               Fiche officielle DGEC {operation.code}
             </span>
           </div>
@@ -523,7 +523,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               <div className="flex flex-wrap justify-center gap-3 mt-4">
                 <Link
                   href="/devis"
-                  className="inline-flex items-center px-5 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition"
+                  className="inline-flex items-center px-5 py-2.5 rounded-lg bg-accent-600 text-white font-semibold hover:bg-accent-700 transition"
                 >
                   Demander un devis gratuit
                 </Link>
@@ -604,7 +604,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         </section>
 
         {/* Comprendre cette prime CEE */}
-        <section className="mb-12 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
+        <section className="mb-12 rounded-2xl border border-accent-100 bg-accent-50/50 p-6">
           <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 font-heading mb-4">
             Comprendre la prime CEE {operation.code}
           </h2>
@@ -642,7 +642,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             {operation.coup_de_pouce && (
               <div>
                 <dt className="font-semibold text-charcoal-900">Coup de pouce</dt>
-                <dd className="text-emerald-700 font-semibold">
+                <dd className="text-accent-700 font-semibold">
                   Oui{operation.coup_de_pouce_charte ? ` (${operation.coup_de_pouce_charte})` : ''}
                 </dd>
               </div>
@@ -651,7 +651,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           <div className="mt-5 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
             <Link
               href={`/cee/${urlCode}/guide`}
-              className="text-emerald-700 font-semibold underline hover:text-emerald-900"
+              className="text-accent-700 font-semibold underline hover:text-accent-900"
             >
               Guide complet {operation.code} — étapes, montants, pièces justificatives →
             </Link>
@@ -660,7 +660,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 href={operation.url_fiche_officielle}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-700 font-semibold underline hover:text-emerald-900"
+                className="text-accent-700 font-semibold underline hover:text-accent-900"
               >
                 Consulter la fiche officielle DGEC {operation.code} →
               </a>
@@ -677,14 +677,14 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
         </section>
 
         {/* Source officielle Etalab visible — E-E-A-T YMYL */}
-        <section className="mb-10 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+        <section className="mb-10 rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">
           <strong className="font-semibold">Source officielle&nbsp;:</strong> Données opération CEE{' '}
           {operation.code} sourcées depuis la{' '}
           <a
             href="https://www.ecologie.gouv.fr/politiques-publiques/certificats-deconomies-denergie"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-emerald-700"
+            className="underline hover:text-accent-700"
           >
             DGEC (ministère de la Transition écologique)
           </a>{' '}
@@ -693,7 +693,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
             href="https://data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-emerald-700"
+            className="underline hover:text-accent-700"
           >
             data.gouv.fr — ADEME
           </a>{' '}
@@ -713,11 +713,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
               {faqItems.map((item, i) => (
                 <details
                   key={i}
-                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-accent-300 open:shadow-sm"
                 >
                   <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
-                    <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                    <span className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none">
                       +
                     </span>
                   </summary>
@@ -749,14 +749,12 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                   <Link
                     key={slug}
                     href={`/rge/${slug}/${villeSlug}`}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50 text-sm text-emerald-800 hover:border-emerald-400 hover:bg-emerald-100 transition"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent-200 bg-accent-50 text-sm text-accent-800 hover:border-accent-400 hover:bg-accent-100 transition"
                   >
                     <span className="font-semibold capitalize">
                       Artisans RGE {trade} à {villeName}
                     </span>
-                    {meta && (
-                      <span className="text-xs text-emerald-600">&middot; {meta.label}</span>
-                    )}
+                    {meta && <span className="text-xs text-accent-600">&middot; {meta.label}</span>}
                   </Link>
                 )
               })}
@@ -775,7 +773,7 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/cee/${urlCode}/${c.slug}`}
-                  className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-accent-400 hover:text-accent-700 transition"
                 >
                   {c.name}
                 </Link>
@@ -795,9 +793,9 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
                 <li key={op.code}>
                   <Link
                     href={`/cee/${op.code.toLowerCase()}/${villeSlug}`}
-                    className="block rounded-lg border border-sand-300 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                    className="block rounded-lg border border-sand-300 p-4 hover:border-accent-400 hover:bg-accent-50 transition"
                   >
-                    <div className="text-xs font-semibold text-emerald-700">{op.code}</div>
+                    <div className="text-xs font-semibold text-accent-700">{op.code}</div>
                     <div className="font-semibold text-charcoal-900 mt-1">{op.nom}</div>
                   </Link>
                 </li>
@@ -864,13 +862,13 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center px-5 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition"
+              className="inline-flex items-center px-5 py-2.5 rounded-lg bg-accent-600 text-white font-semibold hover:bg-accent-700 transition"
             >
               Demander un devis gratuit
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center px-5 py-2.5 rounded-lg border border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center px-5 py-2.5 rounded-lg border border-accent-300 text-accent-700 font-semibold hover:bg-accent-50 transition"
             >
               Voir toutes les primes CEE
             </Link>

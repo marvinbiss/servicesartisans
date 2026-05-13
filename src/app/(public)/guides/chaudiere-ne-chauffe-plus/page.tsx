@@ -284,9 +284,9 @@ export default function Page() {
               </table>
             </div>
 
-            <div className="not-prose border border-emerald-200 bg-emerald-50 rounded-lg p-4 my-6 flex items-start gap-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" aria-hidden />
-              <div className="text-sm text-emerald-900">
+            <div className="not-prose border border-accent-200 bg-accent-50 rounded-lg p-4 my-6 flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-accent-700 shrink-0 mt-0.5" aria-hidden />
+              <div className="text-sm text-accent-900">
                 <p className="font-semibold m-0 mb-1">Chaudière fioul &gt; 15 ans ?</p>
                 <p className="m-0">
                   C’est le cas idéal pour basculer vers une pompe à chaleur air-eau. Exemple :

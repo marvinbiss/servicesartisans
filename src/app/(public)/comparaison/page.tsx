@@ -57,8 +57,8 @@ const categories = [
   {
     name: 'Revêtements',
     icon: PaintBucket,
-    color: 'bg-violet-100 text-violet-700',
-    iconBg: 'bg-violet-50',
+    color: 'bg-primary-100 text-primary-700',
+    iconBg: 'bg-primary-50',
   },
   {
     name: 'Extérieur',

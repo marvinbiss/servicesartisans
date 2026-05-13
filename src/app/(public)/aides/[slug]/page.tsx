@@ -53,10 +53,10 @@ const AUTHOR = authors['claire-dubois']
 const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const CATEGORY_BADGE: Record<Aide['category'], string> = {
-  'Subvention nationale': 'bg-emerald-500/20 border-emerald-400/30 text-emerald-100',
+  'Subvention nationale': 'bg-accent-500/20 border-accent-400/30 text-accent-100',
   'Prime privée': 'bg-amber-500/20 border-amber-400/30 text-amber-100',
   Prêt: 'bg-sky-500/20 border-sky-400/30 text-sky-100',
-  'Avantage fiscal': 'bg-violet-500/20 border-violet-400/30 text-violet-100',
+  'Avantage fiscal': 'bg-primary-500/20 border-primary-400/30 text-primary-100',
 }
 
 export function generateStaticParams() {
@@ -301,7 +301,7 @@ export default async function AidePage({ params }: PageProps) {
         />
       </div>
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div
             className={`inline-flex items-center gap-2 border rounded-full px-4 py-1.5 mb-5 ${CATEGORY_BADGE[aide.category]}`}
@@ -315,11 +315,11 @@ export default async function AidePage({ params }: PageProps) {
           >
             {aide.name}
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             {aide.tagline}
           </p>
           {AUTHOR && (
-            <p className="mt-3 text-sm text-emerald-100/80">
+            <p className="mt-3 text-sm text-accent-100/80">
               Auteur : <span className="font-medium text-white">{AUTHOR.name}</span>
               {' · '}
               Mis à jour le{' '}
@@ -336,19 +336,19 @@ export default async function AidePage({ params }: PageProps) {
           <LastUpdated
             label="Barèmes vérifiés le"
             date={aide.lastReviewed}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Devis gratuit RGE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -380,7 +380,7 @@ export default async function AidePage({ params }: PageProps) {
       <RelatedAides title={`Aides cumulables avec ${aide.name}`} aides={cumulables} />
 
       <section
-        className="bg-emerald-50/40 py-10 border-t border-emerald-100"
+        className="bg-accent-50/40 py-10 border-t border-accent-100"
         aria-labelledby="rge-heading"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -398,7 +398,7 @@ export default async function AidePage({ params }: PageProps) {
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <h3 className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-accent-900 uppercase tracking-wide mb-3">
                 Par spécialité RGE
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -406,7 +406,7 @@ export default async function AidePage({ params }: PageProps) {
                   <Link
                     key={svc.slug}
                     href={`/rge/${svc.slug}`}
-                    className="block px-3 py-2 rounded-lg bg-white border border-emerald-200 text-sm text-charcoal-800 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                    className="block px-3 py-2 rounded-lg bg-white border border-accent-200 text-sm text-charcoal-800 hover:border-accent-400 hover:bg-accent-50 transition"
                   >
                     {svc.label} RGE
                   </Link>
@@ -415,7 +415,7 @@ export default async function AidePage({ params }: PageProps) {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-emerald-900 uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-accent-900 uppercase tracking-wide mb-3">
                 Par grande ville
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -423,7 +423,7 @@ export default async function AidePage({ params }: PageProps) {
                   <Link
                     key={v.slug}
                     href={`/artisans-rge/${v.slug}`}
-                    className="block px-3 py-2 rounded-lg bg-white border border-emerald-200 text-sm text-charcoal-800 hover:border-emerald-400 hover:bg-emerald-50 transition"
+                    className="block px-3 py-2 rounded-lg bg-white border border-accent-200 text-sm text-charcoal-800 hover:border-accent-400 hover:bg-accent-50 transition"
                   >
                     Artisans RGE à {v.name}
                   </Link>
@@ -435,25 +435,25 @@ export default async function AidePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-600 text-white font-semibold hover:bg-accent-700 transition"
             >
               Annuaire artisans RGE
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-accent-600 text-accent-700 font-semibold hover:bg-accent-50 transition"
             >
               Demander un devis
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-accent-600 text-accent-700 font-semibold hover:bg-accent-50 transition"
             >
               Voir les opérations CEE
             </Link>
             <Link
               href="/aides"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-emerald-600 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-accent-600 text-accent-700 font-semibold hover:bg-accent-50 transition"
             >
               Toutes les aides
             </Link>
@@ -580,11 +580,11 @@ function renderDeptHub(hub: AidesDeptHubData) {
         />
       </div>
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Sparkles className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Sparkles className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Hub aides {hub.dept.name} · zone {hub.climate.zone}
             </span>
           </div>
@@ -594,26 +594,26 @@ function renderDeptHub(hub: AidesDeptHubData) {
           >
             Aides rénovation énergétique {hub.dept.name} 2026
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             {hub.dept.name} (département {hub.dept.code}, région {hub.dept.region}) :{' '}
             {hub.climate.impact}
           </p>
           <LastUpdated
             label="Catalogue vérifié pour"
             date={monthYear}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides {hub.dept.name}
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Devis gratuit RGE
             </Link>
@@ -642,12 +642,12 @@ function renderDeptHub(hub: AidesDeptHubData) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               href={`/aides/${hub.dept.slug}/maprimerenov`}
-              className="group block rounded-xl border border-emerald-200 bg-emerald-50/40 p-5 hover:border-emerald-400 hover:shadow-md transition"
+              className="group block rounded-xl border border-accent-200 bg-accent-50/40 p-5 hover:border-accent-400 hover:shadow-md transition"
             >
-              <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+              <span className="inline-block text-xs font-medium text-accent-700 mb-2">
                 Subvention nationale · dept-aware
               </span>
-              <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+              <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 mb-2">
                 MaPrimeRénov’ {hub.dept.name}
               </h3>
               <p className="text-sm text-charcoal-600 leading-relaxed">
@@ -659,12 +659,12 @@ function renderDeptHub(hub: AidesDeptHubData) {
               <Link
                 key={a.slug}
                 href={`/aides/${hub.dept.slug}/${a.slug}`}
-                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
               >
-                <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+                <span className="inline-block text-xs font-medium text-accent-700 mb-2">
                   {a.category} · dept-aware
                 </span>
-                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 mb-2">
                   {a.name} {hub.dept.name}
                 </h3>
                 <p className="text-sm text-charcoal-600 leading-relaxed">{a.tagline}</p>
@@ -676,7 +676,7 @@ function renderDeptHub(hub: AidesDeptHubData) {
 
       {hub.regionalAids.length > 0 && (
         <section
-          className="bg-emerald-50/40 py-12 border-y border-emerald-100"
+          className="bg-accent-50/40 py-12 border-y border-accent-100"
           aria-labelledby="aides-regionales-heading"
         >
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -692,17 +692,17 @@ function renderDeptHub(hub: AidesDeptHubData) {
             </p>
             <ul className="space-y-4">
               {hub.regionalAids.map((aid) => (
-                <li key={aid.name} className="rounded-xl border border-emerald-200 bg-white p-5">
+                <li key={aid.name} className="rounded-xl border border-accent-200 bg-white p-5">
                   <div className="flex flex-wrap items-baseline gap-3 mb-2">
                     <h3 className="font-heading font-bold text-charcoal-900">{aid.name}</h3>
-                    <span className="text-emerald-700 font-semibold">{aid.montant}</span>
+                    <span className="text-accent-700 font-semibold">{aid.montant}</span>
                   </div>
                   <p className="text-sm text-charcoal-700 leading-relaxed mb-2">{aid.detail}</p>
                   <a
                     href={aid.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-emerald-700 underline hover:text-emerald-900"
+                    className="inline-flex items-center gap-1 text-xs text-accent-700 underline hover:text-accent-900"
                   >
                     Source officielle
                   </a>
@@ -730,12 +730,12 @@ function renderDeptHub(hub: AidesDeptHubData) {
               <Link
                 key={a.slug}
                 href={`/aides/${a.slug}`}
-                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
               >
-                <span className="inline-block text-xs font-medium text-emerald-700 mb-2">
+                <span className="inline-block text-xs font-medium text-accent-700 mb-2">
                   {a.category}
                 </span>
-                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 mb-2">
+                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 mb-2">
                   {a.name}
                 </h3>
                 <p className="text-sm text-charcoal-600 leading-relaxed">{a.tagline}</p>

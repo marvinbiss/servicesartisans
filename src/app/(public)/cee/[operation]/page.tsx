@@ -174,7 +174,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           />
           <p className="text-charcoal-700">
             Cette opération n’est pas actuellement disponible dans notre catalogue.{' '}
-            <Link href="/cee" className="text-emerald-700 underline">
+            <Link href="/cee" className="text-accent-700 underline">
               Voir toutes les primes CEE
             </Link>
             .
@@ -393,11 +393,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Fiche officielle DGEC {operation.code}
             </span>
           </div>
@@ -407,7 +407,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           >
             Prime CEE : {operation.nom}
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Domaine{' '}
             <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>
             {operation.sous_domaine ? ` — ${operation.sous_domaine.replace(/_/g, ' ')}` : ''}.
@@ -420,7 +420,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           <LastUpdated
             label="Barèmes CEE vérifiés le"
             date={CEE_CATALOG_UPDATED_AT}
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
         </div>
       </section>
@@ -447,7 +447,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </p>
         </div>
 
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5 text-sm mt-8 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6">
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5 text-sm mt-8 rounded-2xl border border-accent-100 bg-accent-50/50 p-6">
           <div>
             <dt className="font-semibold text-charcoal-900">Code officiel</dt>
             <dd className="text-charcoal-700">{operation.code}</dd>
@@ -482,8 +482,8 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </div>
           {operation.coup_de_pouce && (
             <div className="md:col-span-2">
-              <dt className="font-semibold text-emerald-800">Coup de pouce actif</dt>
-              <dd className="text-emerald-700">
+              <dt className="font-semibold text-accent-800">Coup de pouce actif</dt>
+              <dd className="text-accent-700">
                 {operation.coup_de_pouce_charte || 'Bonification obligé'}
               </dd>
             </div>
@@ -491,9 +491,9 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
         </dl>
 
         {hasGuide && (
-          <div className="mt-8 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="mt-8 rounded-2xl border-2 border-accent-300 bg-gradient-to-br from-accent-50 to-white p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
-              <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
+              <div className="text-xs font-semibold text-accent-700 uppercase tracking-wide mb-1">
                 Guide détaillé
               </div>
               <div className="font-bold text-charcoal-900 text-lg">
@@ -505,7 +505,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             </div>
             <Link
               href={`/cee/${urlCode}/guide`}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent-600 text-white font-semibold hover:bg-accent-700 transition whitespace-nowrap"
             >
               Lire le guide
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -519,7 +519,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               href={operation.url_fiche_officielle}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-900"
+              className="inline-flex items-center gap-2 text-accent-700 font-semibold hover:text-accent-900"
             >
               Consulter la fiche officielle DGEC
               <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -561,14 +561,14 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                 <Link
                   key={slug}
                   href={`/rge/${slug}`}
-                  className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
                 >
                   <ShieldCheck
-                    className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <div className="min-w-0">
-                    <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                    <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                       Artisans RGE {displayName.toLowerCase()}
                     </div>
                     {meta && (
@@ -611,11 +611,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                 <Link
                   key={city.slug}
                   href={`/cee/${urlCode}/${city.slug}`}
-                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
+                    <MapPin className="w-4 h-4 text-accent-600 flex-shrink-0" aria-hidden="true" />
+                    <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
                       {city.name}
                     </span>
                   </div>
@@ -640,13 +640,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
               <Link
                 key={op.code}
                 href={`/cee/${op.code.toLowerCase()}`}
-                className="group block p-5 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-md transition"
+                className="group block p-5 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-md transition"
               >
-                <div className="text-xs font-semibold text-emerald-700">{op.code}</div>
-                <div className="font-bold text-charcoal-900 text-lg mt-1 group-hover:text-emerald-700 transition">
+                <div className="text-xs font-semibold text-accent-700">{op.code}</div>
+                <div className="font-bold text-charcoal-900 text-lg mt-1 group-hover:text-accent-700 transition">
                   {op.nom}
                 </div>
-                <div className="text-sm font-semibold text-emerald-700 mt-3 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                <div className="text-sm font-semibold text-accent-700 mt-3 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                   Découvrir <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </div>
               </Link>
@@ -673,12 +673,12 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           {faqItems.map((item, i) => (
             <details
               key={`cee-faq-${i}`}
-              className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+              className="group rounded-lg border border-sand-300 bg-white p-5 open:border-accent-300 open:shadow-sm"
             >
               <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                 <span>{item.question}</span>
                 <span
-                  className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                  className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none"
                   aria-hidden="true"
                 >
                   +
@@ -691,25 +691,25 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       </section>
 
       {/* CTAs */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Obtenez votre prime CEE {operation.code}
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Demander un devis gratuit
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Toutes les primes CEE
             </Link>

@@ -569,9 +569,9 @@ export default function Page() {
                       <p className="text-sand-600 m-0">Flamme Verte</p>
                       <p className="font-semibold text-sand-900 m-0">{m.flammeVerte}</p>
                     </div>
-                    <div className="bg-emerald-50 rounded p-2">
-                      <p className="text-emerald-700 m-0">Garantie</p>
-                      <p className="font-bold text-emerald-900 m-0">{m.garantie}</p>
+                    <div className="bg-accent-50 rounded p-2">
+                      <p className="text-accent-700 m-0">Garantie</p>
+                      <p className="font-bold text-accent-900 m-0">{m.garantie}</p>
                     </div>
                   </div>
                 </article>

@@ -1133,7 +1133,7 @@ async function renderProviderPage({ params }: PageProps) {
         const ceeOps = getCeeOpsForRgeService(serviceSlug).slice(0, 6)
         if (!ceeOps.length) return null
         return (
-          <section className="py-8 bg-emerald-50/40 border-t border-emerald-200/60">
+          <section className="py-8 bg-accent-50/40 border-t border-accent-200/60">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 mb-2">
                 Primes CEE éligibles avec {artisan.business_name}
@@ -1147,9 +1147,9 @@ async function renderProviderPage({ params }: PageProps) {
                   <li key={op.code}>
                     <Link
                       href={`/cee/${op.code.toLowerCase()}/guide`}
-                      className="inline-flex items-center gap-2 rounded-lg border border-emerald-300 bg-white hover:border-emerald-500 hover:bg-emerald-100 transition px-3 py-2 text-sm"
+                      className="inline-flex items-center gap-2 rounded-lg border border-accent-300 bg-white hover:border-accent-500 hover:bg-accent-100 transition px-3 py-2 text-sm"
                     >
-                      <span className="font-bold text-emerald-900">{op.code}</span>
+                      <span className="font-bold text-accent-900">{op.code}</span>
                       <span className="text-charcoal-700">{op.label}</span>
                     </Link>
                   </li>
@@ -1158,7 +1158,7 @@ async function renderProviderPage({ params }: PageProps) {
               <div className="mt-4">
                 <Link
                   href={`/rge/${serviceSlug}`}
-                  className="text-sm font-semibold text-emerald-700 hover:text-emerald-900 underline underline-offset-2"
+                  className="text-sm font-semibold text-accent-700 hover:text-accent-900 underline underline-offset-2"
                 >
                   Tous les artisans RGE {(service?.name || artisan.specialty).toLowerCase()} →
                 </Link>

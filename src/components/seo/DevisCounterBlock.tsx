@@ -21,15 +21,15 @@ export default function DevisCounterBlock({
   const badge = count >= 50 ? 'Très forte demande' : count >= 10 ? 'Forte demande' : null
 
   return (
-    <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2 flex items-center gap-2 text-sm text-emerald-800">
-      <TrendingUp className="h-4 w-4 flex-shrink-0 text-emerald-600" />
+    <div className="bg-accent-50 border border-accent-200 rounded-lg px-4 py-2 flex items-center gap-2 text-sm text-accent-800">
+      <TrendingUp className="h-4 w-4 flex-shrink-0 text-accent-600" />
       <span>
         <strong>{count}</strong> demande{count > 1 ? 's' : ''} de devis {serviceName} dans le{' '}
         {departmentName} ces 30 derniers jours
       </span>
       {badge && (
-        <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold whitespace-nowrap">
-          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+        <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold whitespace-nowrap">
+          <span className="w-1.5 h-1.5 bg-accent-500 rounded-full animate-pulse" />
           {badge}
         </span>
       )}

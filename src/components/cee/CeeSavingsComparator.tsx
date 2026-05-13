@@ -173,9 +173,9 @@ export default function CeeSavingsComparator({
             <div className="mb-2 h-4 w-1/2 animate-pulse rounded bg-sand-200" />
             <div className="h-6 w-3/4 animate-pulse rounded bg-sand-200" />
           </div>
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-            <div className="mb-2 h-4 w-1/2 animate-pulse rounded bg-emerald-100" />
-            <div className="h-6 w-3/4 animate-pulse rounded bg-emerald-100" />
+          <div className="rounded-xl border border-accent-200 bg-accent-50 p-4">
+            <div className="mb-2 h-4 w-1/2 animate-pulse rounded bg-accent-100" />
+            <div className="h-6 w-3/4 animate-pulse rounded bg-accent-100" />
           </div>
         </div>
       </div>
@@ -229,11 +229,11 @@ export default function CeeSavingsComparator({
     >
       {/* Titre */}
       <div className="mb-3 flex items-center gap-2">
-        <Leaf className="h-5 w-5 text-emerald-600 flex-shrink-0" aria-hidden="true" />
+        <Leaf className="h-5 w-5 text-accent-600 flex-shrink-0" aria-hidden="true" />
         <h4 className="font-heading text-sm font-semibold text-charcoal-900">
           Estimation du coût avec et sans prime CEE
         </h4>
-        <span className="ml-auto inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+        <span className="ml-auto inline-flex items-center rounded-full bg-accent-100 px-2 py-0.5 text-[11px] font-semibold text-accent-700">
           Prime CEE
         </span>
       </div>
@@ -255,19 +255,19 @@ export default function CeeSavingsComparator({
         </div>
 
         {/* ── Colonne AVEC prime ── */}
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 transition-all">
-          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+        <div className="rounded-xl border border-accent-200 bg-accent-50 p-4 transition-all">
+          <p className="text-xs font-semibold uppercase tracking-wide text-accent-700">
             Après prime CEE
           </p>
-          <p className="mt-1 text-sm text-emerald-800">{costInfo.label} - prime déduite</p>
+          <p className="mt-1 text-sm text-accent-800">{costInfo.label} - prime déduite</p>
           <p
-            className="mt-2 text-xl font-bold text-emerald-800 transition-all"
+            className="mt-2 text-xl font-bold text-accent-800 transition-all"
             aria-label={`entre ${Math.round(afterMin).toLocaleString('fr-FR')} et ${Math.round(afterMax).toLocaleString('fr-FR')} euros`}
           >
             {formatEuros(afterMin)} à {formatEuros(afterMax)}
           </p>
           <p
-            className="mt-2 text-2xl font-bold text-emerald-600 transition-all"
+            className="mt-2 text-2xl font-bold text-accent-600 transition-all"
             aria-label={`Économie : jusqu'à ${Math.round(primeMax).toLocaleString('fr-FR')} euros`}
           >
             Économie : jusqu&apos;à {formatEuros(primeMax)}

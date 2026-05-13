@@ -88,7 +88,7 @@ export default function RelatedHubs({ currentPath, extraLinks }: RelatedHubsProp
   return (
     <section className="py-10 border-t border-charcoal-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 className="text-sm font-semibold text-stone-800 mb-4">À découvrir aussi</h3>
+        <h3 className="text-sm font-semibold text-sand-800 mb-4">À découvrir aussi</h3>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {links.map((link) => (
             <Link
@@ -96,11 +96,11 @@ export default function RelatedHubs({ currentPath, extraLinks }: RelatedHubsProp
               href={link.href}
               className="group flex flex-col gap-1 p-4 rounded-xl bg-sand-50 hover:bg-clay-50 border border-charcoal-100 hover:border-clay-200 transition-colors"
             >
-              <span className="text-sm font-medium text-stone-800 group-hover:text-clay-600 transition-colors">
+              <span className="text-sm font-medium text-sand-800 group-hover:text-clay-600 transition-colors">
                 {link.label}
               </span>
               {link.description && (
-                <span className="text-xs text-stone-500">{link.description}</span>
+                <span className="text-xs text-sand-500">{link.description}</span>
               )}
             </Link>
           ))}

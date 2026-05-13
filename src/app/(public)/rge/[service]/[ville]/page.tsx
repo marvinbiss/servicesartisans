@@ -744,14 +744,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           ))}
         </section>
 
-        <section className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+        <section className="mb-6 rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">
           <strong className="font-semibold">Source officielle&nbsp;:</strong> Les données de
           certification RGE affichées sont sourcées depuis{' '}
           <a
             href="https://data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-emerald-700"
+            className="underline hover:text-accent-700"
           >
             data.gouv.fr
           </a>{' '}
@@ -813,7 +813,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
           <Link
             href={buildDevisHref(serviceSlug, villeName)}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-trancharcoal-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Obtenir mon devis gratuit
@@ -889,7 +889,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/rge/${serviceSlug}/${c.slug}`}
-                  className="inline-flex items-center px-4 py-2.5 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                  className="inline-flex items-center px-4 py-2.5 rounded-full border border-sand-300 text-sm text-charcoal-700 hover:border-accent-400 hover:text-accent-700 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 >
                   {serviceName} RGE à {c.name}
                 </Link>
@@ -919,12 +919,12 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               {faqItems.map((item, i) => (
                 <details
                   key={`faq-${i}-${item.question.slice(0, 20)}`}
-                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                  className="group rounded-lg border border-sand-300 bg-white p-5 open:border-accent-300 open:shadow-sm"
                 >
                   <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                     <span>{item.question}</span>
                     <span
-                      className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                      className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none"
                       aria-hidden="true"
                     >
                       +
@@ -1043,7 +1043,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
           <Link
             href={buildDevisHref(serviceSlug, villeName)}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-trancharcoal-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Devis gratuit en 2 min

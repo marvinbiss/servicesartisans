@@ -271,7 +271,7 @@ export default function Stepper() {
     <section
       ref={sectionRef}
       aria-labelledby="stepper-title"
-      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 scroll-mt-16"
+      className="rounded-xl border border-charcoal-200 bg-white p-4 shadow-sm sm:p-6 scroll-mt-16"
     >
       <h2 id="stepper-title" className="sr-only">
         Formulaire en 5 étapes
@@ -285,14 +285,14 @@ export default function Stepper() {
           aria-valuemin={1}
           aria-valuemax={5}
           aria-label={`Étape ${state.step} sur 5`}
-          className="h-2 w-full overflow-hidden rounded-full bg-slate-100"
+          className="h-2 w-full overflow-hidden rounded-full bg-charcoal-100"
         >
           <div
-            className="h-full bg-emerald-600 transition-all"
+            className="h-full bg-accent-600 transition-all"
             style={{ width: `${progressPct}%` }}
           />
         </div>
-        <ol className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600">
+        <ol className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-charcoal-600">
           {STEP_LABELS.map((label, idx) => {
             const n = (idx + 1) as StepperState['step']
             const done = state.step > n
@@ -302,10 +302,10 @@ export default function Stepper() {
                 key={label}
                 className={
                   current
-                    ? 'font-semibold text-emerald-700'
+                    ? 'font-semibold text-accent-700'
                     : done
-                      ? 'text-emerald-600'
-                      : 'text-slate-500'
+                      ? 'text-accent-600'
+                      : 'text-charcoal-500'
                 }
                 aria-current={current ? 'step' : undefined}
               >

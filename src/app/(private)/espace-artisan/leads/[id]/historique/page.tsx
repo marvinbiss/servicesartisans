@@ -25,7 +25,7 @@ interface LeadEvent {
 
 const EVENT_CONFIG: Record<string, { label: string; icon: typeof Clock; color: string }> = {
   created: { label: 'Lead créé', icon: ArrowRight, color: 'text-primary-500 bg-primary-100' },
-  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-indigo-600 bg-indigo-100' },
+  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-primary-600 bg-primary-100' },
   viewed: { label: 'Consulté', icon: Eye, color: 'text-yellow-600 bg-yellow-100' },
   quoted: { label: 'Devis envoyé', icon: Send, color: 'text-green-600 bg-green-100' },
   declined: { label: 'Décliné', icon: X, color: 'text-charcoal-600 bg-sand-100' },

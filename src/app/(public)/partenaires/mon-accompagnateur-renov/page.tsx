@@ -305,7 +305,7 @@ export default function PartenairesMarPage() {
         </section>
 
         {/* CTA central */}
-        <section className="py-14 sm:py-20 bg-gradient-to-br from-primary-50 to-indigo-50 border-y border-sand-200">
+        <section className="py-14 sm:py-20 bg-gradient-to-br from-primary-50 to-primary-50 border-y border-sand-200">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-charcoal-900 font-heading mb-4">
               Prêt à recevoir votre premier lead Parcours accompagné ?

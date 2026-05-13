@@ -14,13 +14,13 @@ export default function ArtisansRgeVilleNotFound() {
         <div className="flex flex-wrap gap-3 justify-center">
           <Link
             href="/rge"
-            className="bg-emerald-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
+            className="bg-accent-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-700 transition-colors"
           >
             Annuaire RGE national
           </Link>
           <Link
             href="/verifier-artisan"
-            className="inline-flex items-center px-5 py-2.5 rounded-lg font-semibold text-emerald-700 border border-emerald-300 bg-white hover:bg-emerald-50 transition-colors"
+            className="inline-flex items-center px-5 py-2.5 rounded-lg font-semibold text-accent-700 border border-accent-300 bg-white hover:bg-accent-50 transition-colors"
           >
             Vérifier un artisan
           </Link>

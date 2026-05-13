@@ -188,7 +188,7 @@ export default function NextActionsBlock() {
                 >
                   {action.ctaLabel}
                   <ArrowRight
-                    className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5"
+                    className="w-3.5 h-3.5 transition-transform group-hover:trancharcoal-x-0.5"
                     aria-hidden
                   />
                 </span>

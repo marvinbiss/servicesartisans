@@ -364,7 +364,7 @@ export default function LocalInsightsBlock({
             {/* 6. Revenue / aids eligibility */}
             {revenueInsight && (
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-emerald-700 bg-emerald-100 flex-shrink-0 mt-0.5">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-accent-700 bg-accent-100 flex-shrink-0 mt-0.5">
                   Budget
                 </span>
                 <p className="text-sm text-charcoal-700 leading-relaxed">{revenueInsight}</p>

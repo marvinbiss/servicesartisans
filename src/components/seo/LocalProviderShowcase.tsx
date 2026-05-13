@@ -198,7 +198,7 @@ export default function LocalProviderShowcase({
               return (
                 <div
                   key={provider.id}
-                  className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-translate-y-0.5 hover:border-primary-200 transition-all duration-200"
+                  className="group relative bg-white rounded-xl border border-sand-300 p-5 shadow-soft hover:shadow-card-hover hover:-trancharcoal-y-0.5 hover:border-primary-200 transition-all duration-200"
                 >
                   {/* Mobile: full-card tappable overlay */}
                   <Link
@@ -206,7 +206,7 @@ export default function LocalProviderShowcase({
                     className="absolute inset-0 z-10 md:hidden"
                     aria-label={`Voir le profil de ${provider.name}`}
                   />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden">
+                  <div className="absolute right-4 top-1/2 -trancharcoal-y-1/2 md:hidden">
                     <ChevronRight className="w-5 h-5 text-charcoal-300" />
                   </div>
 

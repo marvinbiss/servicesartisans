@@ -296,7 +296,7 @@ export default async function BarometrePage() {
               <div className="text-sm text-charcoal-500 mt-1">Note moyenne nationale</div>
             </div>
             <div className="bg-white rounded-2xl shadow-lg border border-sand-200 p-6 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-50 text-accent-600 mb-3">
                 <MapPin className="w-6 h-6" />
               </div>
               <div className="text-3xl font-extrabold text-charcoal-900">
@@ -437,7 +437,7 @@ export default async function BarometrePage() {
                       </div>
                       <div className="w-full bg-sand-300 rounded-full h-1.5">
                         <div
-                          className="bg-emerald-500 rounded-full h-1.5 transition-all"
+                          className="bg-accent-500 rounded-full h-1.5 transition-all"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -541,7 +541,7 @@ export default async function BarometrePage() {
               </p>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-6">
-              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-lg bg-accent-50 text-accent-600 flex items-center justify-center mb-4">
                 <BarChart3 className="w-5 h-5" />
               </div>
               <h3 className="font-semibold text-charcoal-900 mb-2">Agrégation quotidienne</h3>
@@ -594,13 +594,13 @@ export default async function BarometrePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link
               href="/barometre/rge"
-              className="flex items-center gap-4 bg-white rounded-xl border border-emerald-200 p-6 hover:shadow-md transition-shadow group"
+              className="flex items-center gap-4 bg-white rounded-xl border border-accent-200 p-6 hover:shadow-md transition-shadow group"
             >
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-accent-50 text-accent-700 flex items-center justify-center flex-shrink-0">
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <p className="font-semibold text-charcoal-900 group-hover:text-emerald-700">
+                <p className="font-semibold text-charcoal-900 group-hover:text-accent-700">
                   Baromètre RGE
                 </p>
                 <p className="text-sm text-charcoal-500">Artisans certifiés ADEME</p>
@@ -624,11 +624,11 @@ export default async function BarometrePage() {
               href="/barometre/regions"
               className="flex items-center gap-4 bg-white rounded-xl border border-sand-300 p-6 hover:shadow-md transition-shadow group"
             >
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-accent-50 text-accent-600 flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-6 h-6" />
               </div>
               <div>
-                <p className="font-semibold text-charcoal-900 group-hover:text-emerald-600">
+                <p className="font-semibold text-charcoal-900 group-hover:text-accent-600">
                   Par région
                 </p>
                 <p className="text-sm text-charcoal-500">13 régions métropolitaines</p>

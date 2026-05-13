@@ -228,11 +228,11 @@ export default function LeadsExclusifsVsPartagesPage() {
       {/* ============================================================ */}
       {/*  HERO                                                        */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-accent-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Target className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Target className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guide artisan — acquisition clients
             </span>
           </div>
@@ -248,7 +248,7 @@ export default function LeadsExclusifsVsPartagesPage() {
             dateModified="2026-04-12"
             className="justify-center mt-4"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Vous payez des leads. Mais combien vous coûte vraiment un chantier signé&nbsp;?
             Comparatif objectif avec les chiffres réels des principales plateformes.
           </p>
@@ -289,7 +289,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <TrendingUp className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Comparatif chiffré
             </h2>
@@ -299,7 +299,7 @@ export default function LeadsExclusifsVsPartagesPage() {
               <thead className="bg-sand-200 text-charcoal-700">
                 <tr>
                   <th className="text-left p-4 font-semibold">Critère</th>
-                  <th className="text-left p-4 font-semibold text-emerald-700">
+                  <th className="text-left p-4 font-semibold text-accent-700">
                     <div className="flex items-center gap-1.5">
                       <Lock className="w-4 h-4" aria-hidden="true" />
                       Lead exclusif
@@ -319,7 +319,7 @@ export default function LeadsExclusifsVsPartagesPage() {
                     <td className="p-4 font-semibold text-charcoal-900 align-top">
                       {row.criteria}
                     </td>
-                    <td className="p-4 text-emerald-700 font-semibold align-top">{row.exclusif}</td>
+                    <td className="p-4 text-accent-700 font-semibold align-top">{row.exclusif}</td>
                     <td className="p-4 text-charcoal-500 align-top">{row.partage}</td>
                   </tr>
                 ))}
@@ -338,7 +338,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <Euro className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Exemple concret&nbsp;: un plombier-chauffagiste
           </h2>
@@ -377,30 +377,30 @@ export default function LeadsExclusifsVsPartagesPage() {
           </div>
 
           {/* Scénario leads exclusifs */}
-          <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
+          <div className="p-6 bg-accent-50 rounded-2xl border border-accent-200">
             <div className="flex items-center gap-2 mb-4">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" aria-hidden="true" />
+              <CheckCircle2 className="w-5 h-5 text-accent-600" aria-hidden="true" />
               <h3 className="font-heading font-bold text-lg text-charcoal-900">
                 Scénario leads exclusifs
               </h3>
             </div>
             <ul className="space-y-3 text-sm text-charcoal-700">
               <li className="flex items-start gap-2">
-                <span className="text-emerald-500 mt-0.5">&bull;</span>
+                <span className="text-accent-500 mt-0.5">&bull;</span>
                 <span>
                   Coût&nbsp;: <strong>0&nbsp;€/mois</strong> (ServicesArtisans, phase de lancement)
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-500 mt-0.5">&bull;</span>
+                <span className="text-accent-500 mt-0.5">&bull;</span>
                 <span>Moins de volume, meilleure qualité (pas de course au rappel)</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-500 mt-0.5">&bull;</span>
+                <span className="text-accent-500 mt-0.5">&bull;</span>
                 <span>Chaque lead est à vous, sans concurrence interne sur la même demande</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-emerald-500 mt-0.5">&bull;</span>
+                <span className="text-accent-500 mt-0.5">&bull;</span>
                 <span>+ temps libéré pour faire les chantiers</span>
               </li>
             </ul>
@@ -420,7 +420,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Comparatif des principales plateformes
             </h2>
@@ -431,7 +431,7 @@ export default function LeadsExclusifsVsPartagesPage() {
                 key={p.name}
                 className={`p-6 rounded-2xl border ${
                   p.name === 'ServicesArtisans'
-                    ? 'bg-emerald-50 border-emerald-300'
+                    ? 'bg-accent-50 border-accent-300'
                     : 'bg-white border-charcoal-200'
                 }`}
               >
@@ -440,7 +440,7 @@ export default function LeadsExclusifsVsPartagesPage() {
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
                       p.model.includes('exclusif')
-                        ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                        ? 'bg-accent-100 text-accent-700 border border-accent-200'
                         : 'bg-charcoal-100 text-charcoal-600 border border-charcoal-200'
                     }`}
                   >
@@ -488,7 +488,7 @@ export default function LeadsExclusifsVsPartagesPage() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <Clock className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <Clock className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Comment choisir&nbsp;?
           </h2>
@@ -528,11 +528,11 @@ export default function LeadsExclusifsVsPartagesPage() {
             {FAQS.map((faq) => (
               <details
                 key={faq.question}
-                className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
+                className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 transition"
               >
                 <summary className="font-heading font-bold text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-3">
                   <span>{faq.question}</span>
-                  <span className="text-emerald-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
+                  <span className="text-accent-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
                     +
                   </span>
                 </summary>
@@ -546,26 +546,26 @@ export default function LeadsExclusifsVsPartagesPage() {
       {/* ============================================================ */}
       {/*  CTA FINAL                                                    */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Passez aux leads exclusifs
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Inscription gratuite, zéro engagement. Chaque demande de devis vous est envoyée en
             exclusivité.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
               href="/devenir-partenaire-cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Rejoindre le programme
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Découvrir les primes CEE
             </Link>

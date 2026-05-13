@@ -137,8 +137,8 @@ describe('Calendar', () => {
     const day10 = screen.getByLabelText(/10 Avril 2026.*créneaux disponibles/)
     expect(day10).toBeInTheDocument()
 
-    // L'indicateur vert (bg-emerald-500) doit être présent
-    const greenDot = day10.querySelector('.bg-emerald-500')
+    // L'indicateur vert (bg-accent-500) doit être présent
+    const greenDot = day10.querySelector('.bg-accent-500')
     expect(greenDot).not.toBeNull()
   })
 

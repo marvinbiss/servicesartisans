@@ -101,7 +101,7 @@ export default function ReviewPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -115,7 +115,7 @@ export default function ReviewPage() {
           <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
+            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
           >
             Retour à l'accueil
           </Link>
@@ -138,7 +138,7 @@ export default function ReviewPage() {
           </p>
           <Link
             href="/"
-            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
+            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
           >
             Découvrir d'autres artisans
           </Link>
@@ -159,8 +159,8 @@ export default function ReviewPage() {
         {/* Booking info card */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center">
-              <span className="text-violet-600 font-bold text-lg">
+            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+              <span className="text-primary-600 font-bold text-lg">
                 {bookingInfo?.artisanName.charAt(0)}
               </span>
             </div>
@@ -249,7 +249,7 @@ export default function ReviewPage() {
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               placeholder="Partagez votre expérience..."
-              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
             />
             <p className="text-xs text-charcoal-500 mt-1">{comment.length}/500 caractères</p>
           </div>
@@ -265,7 +265,7 @@ export default function ReviewPage() {
           <button
             type="submit"
             disabled={submitting || rating === 0}
-            className="w-full bg-violet-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-violet-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>

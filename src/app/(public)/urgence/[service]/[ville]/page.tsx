@@ -147,9 +147,9 @@ const emergencyMeta: Record<
     ],
   },
   climaticien: {
-    gradient: 'from-indigo-600 to-indigo-800',
-    lightBg: 'bg-indigo-50',
-    lightText: 'text-indigo-700',
+    gradient: 'from-primary-600 to-primary-800',
+    lightBg: 'bg-primary-50',
+    lightText: 'text-primary-700',
     problems: [
       'Panne de climatisation',
       'Climatisation qui ne refroidit plus',
@@ -160,9 +160,9 @@ const emergencyMeta: Record<
     ],
   },
   couvreur: {
-    gradient: 'from-stone-600 to-stone-800',
-    lightBg: 'bg-stone-50',
-    lightText: 'text-stone-700',
+    gradient: 'from-sand-600 to-sand-800',
+    lightBg: 'bg-sand-50',
+    lightText: 'text-sand-700',
     problems: [
       'Tuile cassée ou envolée',
       'Infiltration toiture après intempéries',
@@ -198,9 +198,9 @@ const emergencyMeta: Record<
     ],
   },
   'peintre-en-batiment': {
-    gradient: 'from-violet-600 to-violet-800',
-    lightBg: 'bg-violet-50',
-    lightText: 'text-violet-700',
+    gradient: 'from-primary-600 to-primary-800',
+    lightBg: 'bg-primary-50',
+    lightText: 'text-primary-700',
     problems: [
       'Remise en état urgente après dégât des eaux',
       'Moisissures étendues sur murs ou plafonds',
@@ -210,9 +210,9 @@ const emergencyMeta: Record<
     ],
   },
   plaquiste: {
-    gradient: 'from-slate-600 to-slate-800',
-    lightBg: 'bg-slate-50',
-    lightText: 'text-slate-700',
+    gradient: 'from-charcoal-600 to-charcoal-800',
+    lightBg: 'bg-charcoal-50',
+    lightText: 'text-charcoal-700',
     problems: [
       'Plafond en placo affaissé ou effondré',
       'Cloison endommagée après choc ou sinistre',
@@ -271,9 +271,9 @@ const emergencyMeta: Record<
     ],
   },
   'isolation-thermique': {
-    gradient: 'from-emerald-600 to-emerald-800',
-    lightBg: 'bg-emerald-50',
-    lightText: 'text-emerald-700',
+    gradient: 'from-accent-600 to-accent-800',
+    lightBg: 'bg-accent-50',
+    lightText: 'text-accent-700',
     problems: [
       'Isolation arrachée par la tempête',
       'Pont thermique causant condensation massive',
@@ -297,9 +297,9 @@ const emergencyMeta: Record<
     ],
   },
   'borne-recharge': {
-    gradient: 'from-emerald-700 to-emerald-900',
-    lightBg: 'bg-emerald-50',
-    lightText: 'text-emerald-800',
+    gradient: 'from-accent-700 to-accent-900',
+    lightBg: 'bg-accent-50',
+    lightText: 'text-accent-800',
     problems: [
       'Panne de borne de recharge',
       'Court-circuit sur borne (risque incendie)',
@@ -384,9 +384,9 @@ const emergencyMeta: Record<
     ],
   },
   ramoneur: {
-    gradient: 'from-stone-800 to-stone-950',
-    lightBg: 'bg-stone-50',
-    lightText: 'text-stone-800',
+    gradient: 'from-sand-800 to-sand-950',
+    lightBg: 'bg-sand-50',
+    lightText: 'text-sand-800',
     problems: [
       'Feu de cheminée (intervention urgente)',
       'Conduit de cheminée obstrué (refoulement fumée)',
@@ -408,9 +408,9 @@ const emergencyMeta: Record<
     ],
   },
   zingueur: {
-    gradient: 'from-slate-700 to-slate-900',
-    lightBg: 'bg-slate-50',
-    lightText: 'text-slate-800',
+    gradient: 'from-charcoal-700 to-charcoal-900',
+    lightBg: 'bg-charcoal-50',
+    lightText: 'text-charcoal-800',
     problems: [
       'Gouttière percée ou arrachée',
       'Noue bouchée provoquant infiltration',
@@ -933,7 +933,7 @@ async function renderUrgenceServiceVillePage({
         className={`relative bg-gradient-to-br ${meta.gradient} text-white py-16 md:py-20 overflow-hidden`}
       >
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb inside hero */}
@@ -1102,7 +1102,7 @@ async function renderUrgenceServiceVillePage({
               <div className="mt-3 text-xs text-charcoal-400">Lundi à samedi, 8h–20h</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-amber-300 p-6 text-center relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 left-1/2 -trancharcoal-x-1/2 bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +50 %
               </div>
               <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
@@ -1115,7 +1115,7 @@ async function renderUrgenceServiceVillePage({
               <div className="mt-3 text-xs text-charcoal-400">Samedi après 20h, dimanche matin</div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-red-300 p-6 text-center relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 left-1/2 -trancharcoal-x-1/2 bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">
                 +100 %
               </div>
               <div className="text-sm font-semibold text-charcoal-500 mb-2 uppercase tracking-wide">
@@ -1889,7 +1889,7 @@ async function renderUrgenceServiceVillePage({
             </Link>
             <Link
               href={`/services/${service}/${villeSlug}`}
-              className="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-colors"
+              className="px-4 py-2 bg-accent-50 text-accent-800 rounded-lg text-sm font-medium border border-accent-100 hover:border-accent-200 transition-colors"
             >
               Tarifs {tradeLower} à {villeData.name}
             </Link>

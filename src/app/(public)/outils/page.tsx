@@ -56,9 +56,9 @@ const tools = [
       'Répondez à 3 questions simples pour savoir quel professionnel appeler. Plombier, électricien, serrurier... Notre outil vous guide en 30 secondes.',
     href: '/outils/diagnostic',
     icon: Stethoscope,
-    color: 'text-indigo-600',
-    bg: 'bg-indigo-50',
-    borderHover: 'hover:border-indigo-200',
+    color: 'text-primary-600',
+    bg: 'bg-primary-50',
+    borderHover: 'hover:border-primary-200',
   },
 ]
 
@@ -189,7 +189,7 @@ export default function OutilsPage() {
                 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]"
               >
                 Outils gratuits{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-indigo-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-300 via-primary-200 to-primary-300">
                   pour vos travaux
                 </span>
               </h1>

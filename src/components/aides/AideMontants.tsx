@@ -16,7 +16,7 @@ export default function AideMontants({ aideName, montants }: Props) {
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center">
             <Euro className="w-5 h-5" aria-hidden="true" />
           </div>
           <h2
@@ -47,7 +47,7 @@ export default function AideMontants({ aideName, montants }: Props) {
                   <th scope="row" className="px-5 py-4 font-medium align-top">
                     {m.label}
                   </th>
-                  <td className="px-5 py-4 font-semibold text-emerald-700 align-top whitespace-nowrap">
+                  <td className="px-5 py-4 font-semibold text-accent-700 align-top whitespace-nowrap">
                     {m.max}
                   </td>
                   <td className="px-5 py-4 text-charcoal-600 align-top">{m.condition ?? '—'}</td>

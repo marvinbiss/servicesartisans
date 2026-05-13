@@ -60,10 +60,10 @@ export function ConversationList({
       <div className="space-y-4 p-4">
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-3 animate-pulse">
-            <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full" />
+            <div className="w-12 h-12 bg-charcoal-200 dark:bg-charcoal-700 rounded-full" />
             <div className="flex-1">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
-              <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+              <div className="h-4 bg-charcoal-200 dark:bg-charcoal-700 rounded w-3/4 mb-2" />
+              <div className="h-3 bg-charcoal-200 dark:bg-charcoal-700 rounded w-1/2" />
             </div>
           </div>
         ))}
@@ -74,9 +74,9 @@ export function ConversationList({
   return (
     <div className="flex flex-col h-full">
       {/* Search */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-b border-charcoal-200 dark:border-charcoal-700">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
           <Input
             type="text"
             placeholder="Rechercher une conversation..."
@@ -90,14 +90,14 @@ export function ConversationList({
       {/* Conversations */}
       <div className="flex-1 overflow-y-auto">
         {filteredConversations.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400 p-4">
+          <div className="flex flex-col items-center justify-center h-full text-charcoal-500 dark:text-charcoal-400 p-4">
             <MessageSquare className="w-12 h-12 mb-4 opacity-50" />
             <p className="text-center">
               {searchQuery ? 'Aucune conversation trouvée' : 'Aucune conversation pour le moment'}
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100 dark:divide-gray-800">
+          <div className="divide-y divide-charcoal-100 dark:divide-charcoal-800">
             {filteredConversations.map((conversation) => {
               const convAny = conversation as unknown as Record<string, unknown>
               const providerData = convAny.provider as { id?: string; name?: string } | undefined
@@ -111,7 +111,7 @@ export function ConversationList({
                   key={conversation.id}
                   onClick={() => onSelect(conversation)}
                   className={cn(
-                    'w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors',
+                    'w-full flex items-center gap-3 p-4 text-left hover:bg-charcoal-50 dark:hover:bg-charcoal-800 transition-colors',
                     selectedId === conversation.id && 'bg-blue-50 dark:bg-blue-900/20'
                   )}
                 >
@@ -148,18 +148,18 @@ export function ConversationList({
                         className={cn(
                           'font-medium truncate',
                           conversation.unread_count > 0
-                            ? 'text-gray-900 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300'
+                            ? 'text-charcoal-900 dark:text-white'
+                            : 'text-charcoal-700 dark:text-charcoal-300'
                         )}
                       >
                         {name || 'Utilisateur'}
                       </h3>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">
+                      <span className="text-xs text-charcoal-500 dark:text-charcoal-400 flex-shrink-0 ml-2">
                         {formatTime(conversation.last_message_at)}
                       </span>
                     </div>
                     {/* Last message preview would go here if we had it */}
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                    <p className="text-sm text-charcoal-500 dark:text-charcoal-400 truncate">
                       {conversation.booking_id
                         ? 'Réservation en cours'
                         : conversation.quote_id

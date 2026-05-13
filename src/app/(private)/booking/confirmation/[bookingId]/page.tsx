@@ -133,8 +133,8 @@ END:VCALENDAR`
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 to-indigo-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -148,7 +148,7 @@ END:VCALENDAR`
           <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
+            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
           >
             Retour à l'accueil
           </Link>
@@ -158,7 +158,7 @@ END:VCALENDAR`
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Success header */}
         <div className="text-center mb-8">
@@ -174,22 +174,22 @@ END:VCALENDAR`
         {/* Booking details card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-violet-600 to-primary-600 p-6 text-white">
+          <div className="bg-gradient-to-r from-primary-600 to-primary-600 p-6 text-white">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur">
                 <User className="w-8 h-8" />
               </div>
               <div>
                 <h2 className="text-xl font-bold">{booking.artisanName}</h2>
-                <p className="text-violet-200">{booking.serviceName}</p>
+                <p className="text-primary-200">{booking.serviceName}</p>
               </div>
             </div>
           </div>
 
           {/* Details */}
           <div className="p-6 space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-violet-50 rounded-xl">
-              <Calendar className="w-6 h-6 text-violet-600" />
+            <div className="flex items-center gap-4 p-4 bg-primary-50 rounded-xl">
+              <Calendar className="w-6 h-6 text-primary-600" />
               <div>
                 <p className="text-sm text-charcoal-500">Date</p>
                 <p className="font-semibold text-charcoal-900">
@@ -230,7 +230,7 @@ END:VCALENDAR`
                   <p className="text-sm text-charcoal-500">Téléphone</p>
                   <a
                     href={`tel:${booking.artisanPhone.replace(/[\s.\-()]/g, '')}`}
-                    className="font-semibold text-charcoal-900 hover:text-violet-600"
+                    className="font-semibold text-charcoal-900 hover:text-primary-600"
                   >
                     {booking.artisanPhone}
                   </a>
@@ -252,7 +252,7 @@ END:VCALENDAR`
                 onClick={() => {
                   navigator.clipboard.writeText(booking.id.slice(0, 8).toUpperCase())
                 }}
-                className="text-violet-600 hover:text-violet-700 text-sm font-medium"
+                className="text-primary-600 hover:text-primary-700 text-sm font-medium"
               >
                 Copier
               </button>
@@ -329,12 +329,12 @@ END:VCALENDAR`
               Modifier, annuler ou reporter le rendez-vous
             </p>
           </div>
-          <ChevronRight className="w-5 h-5 text-charcoal-400 group-hover:text-violet-600 transition" />
+          <ChevronRight className="w-5 h-5 text-charcoal-400 group-hover:text-primary-600 transition" />
         </Link>
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <Link href="/" className="text-violet-600 hover:text-violet-700 font-medium">
+          <Link href="/" className="text-primary-600 hover:text-primary-700 font-medium">
             Retour à l'accueil
           </Link>
         </div>

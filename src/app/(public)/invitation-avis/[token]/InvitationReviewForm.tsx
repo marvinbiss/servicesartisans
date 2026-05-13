@@ -65,14 +65,14 @@ export default function InvitationReviewForm({ token, clientName, serviceName }:
   if (state.status === 'success') {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-sand-200 p-8 text-center">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 rounded-full bg-accent-100 flex items-center justify-center mx-auto mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="3"
-            className="w-8 h-8 text-emerald-600"
+            className="w-8 h-8 text-accent-600"
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>
@@ -139,7 +139,7 @@ export default function InvitationReviewForm({ token, clientName, serviceName }:
             onClick={() => setWouldRecommend(true)}
             className={`flex-1 py-3 px-4 rounded-xl border-2 font-semibold transition ${
               wouldRecommend === true
-                ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                ? 'border-accent-500 bg-accent-50 text-accent-800'
                 : 'border-sand-300 bg-white text-charcoal-700 hover:border-sand-400'
             }`}
           >

@@ -46,7 +46,7 @@ export default function SimulateurCTA({
         role="complementary"
         aria-label="Simulateur aides rénovation"
         className={[
-          'fixed bottom-0 inset-x-0 z-40 md:hidden bg-emerald-700 border-t border-emerald-600 px-4 py-3 shadow-lg',
+          'fixed bottom-0 inset-x-0 z-40 md:hidden bg-accent-700 border-t border-accent-600 px-4 py-3 shadow-lg',
           className ?? '',
         ]
           .filter(Boolean)
@@ -55,7 +55,7 @@ export default function SimulateurCTA({
         <Link
           href={href}
           onClick={handleClick}
-          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-emerald-800 font-semibold text-sm hover:bg-emerald-50 transition"
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-white text-accent-800 font-semibold text-sm hover:bg-accent-50 transition"
         >
           <Calculator className="w-4 h-4" aria-hidden="true" />
           Simuler mes aides rénovation
@@ -68,7 +68,7 @@ export default function SimulateurCTA({
     return (
       <section
         className={[
-          'rounded-2xl border-2 border-emerald-200 bg-gradient-to-r from-emerald-50 to-emerald-100/60 px-6 py-6 md:px-8 md:py-7',
+          'rounded-2xl border-2 border-accent-200 bg-gradient-to-r from-accent-50 to-accent-100/60 px-6 py-6 md:px-8 md:py-7',
           className ?? '',
         ]
           .filter(Boolean)
@@ -76,7 +76,7 @@ export default function SimulateurCTA({
       >
         <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
           <div className="flex items-start gap-4 flex-1">
-            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-600 flex items-center justify-center">
               <Calculator className="w-6 h-6 text-white" aria-hidden="true" />
             </div>
             <div className="flex-1">
@@ -98,7 +98,7 @@ export default function SimulateurCTA({
           <Link
             href={href}
             onClick={handleClick}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-md hover:bg-emerald-700 transition whitespace-nowrap"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-accent-600 text-white font-semibold shadow-md hover:bg-accent-700 transition whitespace-nowrap"
           >
             Simuler mes aides
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -114,7 +114,7 @@ export default function SimulateurCTA({
         href={href}
         onClick={handleClick}
         className={[
-          'inline-flex items-center gap-1.5 text-emerald-700 font-semibold hover:text-emerald-800 hover:underline underline-offset-4 transition',
+          'inline-flex items-center gap-1.5 text-accent-700 font-semibold hover:text-accent-800 hover:underline underline-offset-4 transition',
           className ?? '',
         ]
           .filter(Boolean)
@@ -131,14 +131,14 @@ export default function SimulateurCTA({
   return (
     <section
       className={[
-        'rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-6 md:p-8',
+        'rounded-2xl border-2 border-accent-200 bg-gradient-to-br from-accent-50 via-white to-accent-50/40 p-6 md:p-8',
         className ?? '',
       ]
         .filter(Boolean)
         .join(' ')}
     >
       <div className="flex items-start gap-4 mb-5">
-        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-600 flex items-center justify-center">
           <Sparkles className="w-6 h-6 text-white" aria-hidden="true" />
         </div>
         <div className="flex-1">
@@ -159,22 +159,22 @@ export default function SimulateurCTA({
       </div>
       <ul className="space-y-2 mb-6 text-sm text-charcoal-700">
         <li className="flex items-start gap-2">
-          <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+          <span className="text-accent-600 font-bold mt-0.5">✓</span>
           <span>Cumul automatique des 4 aides nationales + locales</span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+          <span className="text-accent-600 font-bold mt-0.5">✓</span>
           <span>Reste à charge et mensualité éco-PTZ affichés</span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+          <span className="text-accent-600 font-bold mt-0.5">✓</span>
           <span>Sans création de compte, résultat immédiat</span>
         </li>
       </ul>
       <Link
         href={href}
         onClick={handleClick}
-        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition"
+        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-accent-600 text-white font-semibold shadow-lg hover:bg-accent-700 transition"
       >
         <Calculator className="w-5 h-5" aria-hidden="true" />
         Lancer la simulation

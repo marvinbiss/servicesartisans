@@ -178,7 +178,7 @@ export default function QuestionsHubPage() {
                       className={`group flex items-start gap-3 p-5 bg-white border rounded-xl hover:shadow-md hover:${config.borderColor} transition-all`}
                     >
                       <ArrowRight
-                        className={`w-5 h-5 mt-0.5 shrink-0 ${config.color} group-hover:translate-x-0.5 transition-transform`}
+                        className={`w-5 h-5 mt-0.5 shrink-0 ${config.color} group-hover:trancharcoal-x-0.5 transition-transform`}
                       />
                       <div>
                         <p className="font-medium text-charcoal-900 group-hover:text-primary-600 transition-colors leading-snug">

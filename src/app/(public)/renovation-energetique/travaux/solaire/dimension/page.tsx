@@ -539,7 +539,7 @@ export default function Page() {
                       <strong>Production annuelle :</strong> {c.productionAnnuelle}
                     </li>
                   </ul>
-                  <p className="text-xs font-semibold text-emerald-700 m-0">
+                  <p className="text-xs font-semibold text-accent-700 m-0">
                     Prix indicatif posé : {c.prixIndicatif}
                   </p>
                 </article>

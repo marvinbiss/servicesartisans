@@ -249,7 +249,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-4">
-              <MapPin className="w-8 h-8 text-emerald-600" />
+              <MapPin className="w-8 h-8 text-accent-600" />
               <h1
                 data-speakable="true"
                 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight"
@@ -291,7 +291,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
               <div className="text-xs text-charcoal-500 mt-1">Note moyenne</div>
             </div>
             <div className="bg-white rounded-xl border border-sand-300 p-5 text-center">
-              <BarChart3 className="w-5 h-5 text-emerald-600 mx-auto mb-2" />
+              <BarChart3 className="w-5 h-5 text-accent-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-charcoal-900">{stats.length}</div>
               <div className="text-xs text-charcoal-500 mt-1">Métiers couverts</div>
             </div>
@@ -339,7 +339,7 @@ export default async function BarometreRegionPage({ params }: PageProps) {
                       </div>
                       <div className="w-full bg-sand-100 rounded-full h-1.5">
                         <div
-                          className="bg-emerald-500 rounded-full h-1.5"
+                          className="bg-accent-500 rounded-full h-1.5"
                           style={{ width: `${pct}%` }}
                         />
                       </div>

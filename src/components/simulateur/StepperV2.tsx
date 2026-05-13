@@ -438,9 +438,9 @@ export default function StepperV2() {
             </span>
             <span>{progressPct}%</span>
           </div>
-          <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-charcoal-100">
             <div
-              className="h-full bg-emerald-500 transition-all duration-500"
+              className="h-full bg-accent-500 transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>

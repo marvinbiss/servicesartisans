@@ -104,7 +104,7 @@ export function CertificationBadge() {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="inline-flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-full px-4 py-2"
+      className="inline-flex items-center gap-3 bg-gradient-to-r from-green-50 to-accent-50 border border-green-200 rounded-full px-4 py-2"
     >
       <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
         <CheckCircle className="w-5 h-5 text-white" />

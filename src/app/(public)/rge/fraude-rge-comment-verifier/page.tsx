@@ -249,7 +249,7 @@ export default function FraudeRgeVerifierPage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 rounded-full px-4 py-1.5 mb-5">
             <ShieldAlert className="w-4 h-4 text-amber-200" />
@@ -263,13 +263,13 @@ export default function FraudeRgeVerifierPage() {
           >
             Fraude RGE&nbsp;: comment vérifier qu’un artisan est vraiment certifié&nbsp;?
           </h1>
-          <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 leading-relaxed">
             Faux labels, attestations bidon, démarchage téléphonique illégal, promesses d’aides
             «&nbsp;100&nbsp;%&nbsp;»&nbsp;: la fraude à la rénovation énergétique reste un angle
             mort pour de nombreux ménages.
           </p>
           <div
-            className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
+            className="speakable-summary mt-6 text-base md:text-lg text-accent-50/80 leading-relaxed border-l-2 border-accent-400/40 pl-4"
             data-speakable="true"
           >
             <p>
@@ -362,12 +362,12 @@ export default function FraudeRgeVerifierPage() {
               className="bg-white rounded-2xl border border-charcoal-200 p-6 flex flex-col"
             >
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-emerald-700">
+                <div className="w-11 h-11 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0 font-heading font-extrabold text-accent-700">
                   {m.n}
                 </div>
                 <div>
                   <h3 className="font-heading text-xl font-bold text-charcoal-900">{m.title}</h3>
-                  <p className="text-sm text-emerald-700 font-medium mt-0.5">{m.lede}</p>
+                  <p className="text-sm text-accent-700 font-medium mt-0.5">{m.lede}</p>
                 </div>
               </div>
               <p className="text-sm text-charcoal-700 leading-relaxed">{m.body}</p>
@@ -376,7 +376,7 @@ export default function FraudeRgeVerifierPage() {
                   href={m.link.href}
                   target={m.link.external ? '_blank' : undefined}
                   rel={m.link.external ? 'noopener noreferrer nofollow' : undefined}
-                  className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+                  className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-accent-700 hover:text-accent-900"
                 >
                   <ExternalLink className="w-4 h-4" aria-hidden="true" />
                   {m.link.label}
@@ -484,14 +484,14 @@ export default function FraudeRgeVerifierPage() {
           ))}
         </ol>
 
-        <div className="mt-8 bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+        <div className="mt-8 bg-accent-50 border border-accent-200 rounded-xl p-5">
           <div className="flex items-start gap-3">
-            <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <FileCheck2 className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0" />
             <div>
-              <div className="font-semibold text-emerald-900 mb-1">
+              <div className="font-semibold text-accent-900 mb-1">
                 Droit de rétractation — 14 jours
               </div>
-              <p className="text-sm text-emerald-900/90 leading-relaxed">
+              <p className="text-sm text-accent-900/90 leading-relaxed">
                 Lorsque le devis a été signé hors établissement (à votre domicile, lors d’une foire,
                 sur un salon, par téléphone après démarchage), vous disposez d’un délai de
                 <strong> 14 jours calendaires</strong> pour exercer votre droit de rétractation sans
@@ -509,8 +509,8 @@ export default function FraudeRgeVerifierPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-5 h-5 text-emerald-700" />
+            <div className="w-11 h-11 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0">
+              <Building2 className="w-5 h-5 text-accent-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Le rôle de ServicesArtisans
@@ -538,7 +538,7 @@ export default function FraudeRgeVerifierPage() {
           <div className="mt-6">
             <Link
               href="/rge/sources"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-accent-700 hover:text-accent-900"
             >
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
               Nos sources et notre méthodologie
@@ -556,11 +556,11 @@ export default function FraudeRgeVerifierPage() {
           {FAQ.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
             >
               <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
-                <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -578,49 +578,49 @@ export default function FraudeRgeVerifierPage() {
           </h2>
           <ul className="space-y-3 text-sm text-charcoal-700">
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Arrêté du 1er décembre 2015 modifié, relatif aux critères de qualifications requis
                 pour bénéficier du label «&nbsp;Reconnu garant de l’environnement&nbsp;» (RGE).
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Code de la consommation, articles L221-18 (droit de rétractation) et L132-1 (clauses
                 abusives).
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Code pénal, article 313-1 (escroquerie)&nbsp;: cinq ans d’emprisonnement et
                 375&nbsp;000 euros d’amende.
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Loi n° 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique —
                 interdiction pour les travaux de rénovation énergétique.
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Rapport annuel de la DGCCRF (economie.gouv.fr) — bilan des contrôles dans le secteur
                 de la rénovation énergétique.
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 France Rénov’ — annuaire officiel des professionnels RGE, tenu par l’ADEME pour le
                 compte de l’État.
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
               <span>
                 Signal Conso (signal.conso.gouv.fr) — téléservice officiel de signalement à la
                 DGCCRF.
@@ -631,31 +631,31 @@ export default function FraudeRgeVerifierPage() {
       </section>
 
       {/* CTAs finaux */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4">Aller plus loin</h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Consultez notre annuaire RGE sourcé du dataset officiel ADEME, notre méthodologie, et
             les sources gouvernementales de référence.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Annuaire artisans RGE
             </Link>
             <Link
               href="/rge/sources"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Nos sources RGE
             </Link>
             <Link
               href="/rge/comment-devenir-rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <Users className="w-5 h-5" aria-hidden="true" />
               Comment devenir RGE
@@ -664,7 +664,7 @@ export default function FraudeRgeVerifierPage() {
               href="https://france-renov.gouv.fr/annuaire-rge"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <ExternalLink className="w-5 h-5" aria-hidden="true" />
               France Rénov’
@@ -673,7 +673,7 @@ export default function FraudeRgeVerifierPage() {
               href="https://signal.conso.gouv.fr"
               target="_blank"
               rel="noopener noreferrer nofollow"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <ExternalLink className="w-5 h-5" aria-hidden="true" />
               Signal Conso

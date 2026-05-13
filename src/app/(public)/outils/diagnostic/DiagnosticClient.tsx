@@ -130,9 +130,9 @@ export default function DiagnosticClient() {
         className={`transition-all duration-150 ease-in-out ${
           animating
             ? direction === 'forward'
-              ? 'opacity-0 translate-x-4'
-              : 'opacity-0 -translate-x-4'
-            : 'opacity-100 translate-x-0'
+              ? 'opacity-0 trancharcoal-x-4'
+              : 'opacity-0 -trancharcoal-x-4'
+            : 'opacity-100 trancharcoal-x-0'
         }`}
       >
         {/* Step 1: Category selection */}
@@ -260,7 +260,7 @@ export default function DiagnosticClient() {
         {/* Step 4: Results */}
         {step === 4 && selectedProblem && (
           <div>
-            <div className="bg-gradient-to-br from-primary-50 to-indigo-50 border border-primary-200 rounded-2xl p-6 sm:p-8 mb-6">
+            <div className="bg-gradient-to-br from-primary-50 to-primary-50 border border-primary-200 rounded-2xl p-6 sm:p-8 mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl" role="img" aria-hidden="true">
                   {serviceIcon}

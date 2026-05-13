@@ -167,7 +167,7 @@ function OpeningHoursEditorInner({ value, onChange, showDefaultsHint }: OpeningH
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    day.ouvert ? 'translate-x-6' : 'translate-x-1'
+                    day.ouvert ? 'trancharcoal-x-6' : 'trancharcoal-x-1'
                   }`}
                 />
               </button>

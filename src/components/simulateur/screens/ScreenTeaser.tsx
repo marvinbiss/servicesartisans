@@ -89,7 +89,7 @@ export default function ScreenTeaser({
     <div className="text-center">
       {loading ? (
         <div className="py-12">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-accent-200 border-t-accent-600" />
           <p className="mt-4 text-sm text-charcoal-500">Calcul de vos aides en cours…</p>
         </div>
       ) : error ? (
@@ -98,7 +98,7 @@ export default function ScreenTeaser({
           <button
             type="button"
             onClick={onNext}
-            className="mt-4 rounded-xl bg-emerald-600 px-6 py-3 text-base font-semibold text-white hover:bg-emerald-700"
+            className="mt-4 rounded-xl bg-accent-600 px-6 py-3 text-base font-semibold text-white hover:bg-accent-700"
           >
             Continuer quand même
           </button>
@@ -110,12 +110,12 @@ export default function ScreenTeaser({
           transition={{ duration: 0.5 }}
           className="py-8"
         >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-            <Sparkles className="h-8 w-8 text-emerald-600" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-100">
+            <Sparkles className="h-8 w-8 text-accent-600" />
           </div>
           <p className="mt-5 text-lg font-medium text-charcoal-700">Bonne nouvelle !</p>
           <p className="mt-1 text-sm text-charcoal-500">Vous pouvez prétendre à environ</p>
-          <p className="mt-3 text-4xl font-extrabold text-emerald-700 sm:text-5xl">
+          <p className="mt-3 text-4xl font-extrabold text-accent-700 sm:text-5xl">
             <AnimatedNumber value={mid} /> €
           </p>
           {totalBas !== totalHaut && (
@@ -174,7 +174,7 @@ export default function ScreenTeaser({
                 <motion.ul
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-2 space-y-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-left text-xs text-charcoal-500"
+                  className="mt-2 space-y-1.5 rounded-lg border border-charcoal-200 bg-charcoal-50 px-3 py-2.5 text-left text-xs text-charcoal-500"
                 >
                   {hypotheses.map((h, i) => (
                     <li key={i} className="flex gap-1.5">
@@ -188,9 +188,9 @@ export default function ScreenTeaser({
           )}
 
           <div className="mx-auto mt-6 max-w-xs">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-charcoal-100">
               <motion.div
-                className="h-full bg-emerald-500"
+                className="h-full bg-accent-500"
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 1, delay: 0.3 }}
@@ -201,7 +201,7 @@ export default function ScreenTeaser({
           <button
             type="button"
             onClick={onNext}
-            className="mt-8 w-full max-w-xs rounded-xl bg-emerald-600 px-6 py-4 text-base font-bold text-white shadow-lg transition hover:bg-emerald-700 hover:shadow-xl"
+            className="mt-8 w-full max-w-xs rounded-xl bg-accent-600 px-6 py-4 text-base font-bold text-white shadow-lg transition hover:bg-accent-700 hover:shadow-xl"
           >
             Découvrir mon estimation détaillée
           </button>

@@ -227,11 +227,11 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
       />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="relative bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Euro className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Euro className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Prime CEE {op.code} — Zone climatique {reg.climateZone}
             </span>
           </div>
@@ -241,19 +241,19 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
           >
             Prime CEE {op.code} en {reg.name} — guide 2026
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             {op.nom}. Montants modulés selon zone climatique {reg.climateZone}, aides régionales
             cumulables, artisans RGE certifiés vérifiés ADEME.
           </p>
           <ArticleMeta
             author="ServicesArtisans"
             datePublished="2026-05-03"
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
           <LastUpdated
             label="Réglementation vérifiée le"
             date={reg.lastReviewedAt}
-            className="mt-2 text-emerald-100/80"
+            className="mt-2 text-accent-100/80"
           />
         </div>
       </section>
@@ -295,7 +295,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
                   href={op.url_fiche_officielle}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-emerald-700 hover:underline"
+                  className="text-accent-700 hover:underline"
                 >
                   Consulter la fiche officielle ↗
                 </a>
@@ -310,8 +310,8 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
         <section className="bg-sand-50 border-b border-charcoal-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
             <div className="flex items-center gap-2 mb-3">
-              <Award className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+              <Award className="w-5 h-5 text-accent-700" aria-hidden="true" />
+              <span className="text-xs font-bold text-accent-800 uppercase tracking-wider">
                 Aides régionales cumulables — {reg.name}
               </span>
             </div>
@@ -324,18 +324,18 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
               {reg.regionalAids.map((aid) => (
                 <div
                   key={aid.name}
-                  className="bg-white p-6 rounded-2xl border border-emerald-100 hover:shadow-sm transition"
+                  className="bg-white p-6 rounded-2xl border border-accent-100 hover:shadow-sm transition"
                 >
                   <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
                     {aid.name}
                   </h3>
-                  <div className="text-sm font-semibold text-emerald-700 mb-2">{aid.montant}</div>
+                  <div className="text-sm font-semibold text-accent-700 mb-2">{aid.montant}</div>
                   <p className="text-sm text-charcoal-700 leading-relaxed mb-3">{aid.detail}</p>
                   <a
                     href={aid.sourceUrl}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="text-sm font-semibold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                    className="text-sm font-semibold text-accent-700 hover:underline inline-flex items-center gap-1"
                   >
                     Source officielle ↗
                   </a>
@@ -351,8 +351,8 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
         <section className="bg-white border-b border-charcoal-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
             <div className="flex items-center gap-2 mb-3">
-              <MapPin className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+              <MapPin className="w-5 h-5 text-accent-700" aria-hidden="true" />
+              <span className="text-xs font-bold text-accent-800 uppercase tracking-wider">
                 Villes — {reg.name}
               </span>
             </div>
@@ -369,10 +369,10 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/cee/${operation.toLowerCase()}/${c.slug}`}
-                  className="group flex items-center justify-between gap-3 p-4 bg-sand-50 rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group flex items-center justify-between gap-3 p-4 bg-sand-50 rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
                 >
                   <div className="min-w-0">
-                    <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                    <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                       {c.name}
                     </div>
                     <div className="text-xs text-charcoal-600 mt-0.5">
@@ -380,7 +380,7 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
                     </div>
                   </div>
                   <ArrowRight
-                    className="w-4 h-4 text-emerald-600 flex-shrink-0"
+                    className="w-4 h-4 text-accent-600 flex-shrink-0"
                     aria-hidden="true"
                   />
                 </Link>
@@ -399,11 +399,11 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Link
               href={`/cee/${operation.toLowerCase()}`}
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
-              <Euro className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <Euro className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Hub national {op.code}
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">
@@ -413,14 +413,14 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
             </Link>
             <Link
               href="/cee"
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
               <ShieldCheck
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Toutes les primes CEE
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">19 opérations standardisées</div>
@@ -428,14 +428,11 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
             </Link>
             <Link
               href={`/regions/${region}`}
-              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+              className="group flex items-start gap-3 p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
             >
-              <MapPin
-                className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
-                aria-hidden="true"
-              />
+              <MapPin className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
               <div className="min-w-0">
-                <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <div className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition">
                   Région {reg.name}
                 </div>
                 <div className="text-xs text-charcoal-600 mt-0.5">Tous métiers + villes</div>

@@ -130,10 +130,10 @@ export default function Step4Budget({ state, dispatch }: Props) {
 
   return (
     <form onSubmit={onNext} className="space-y-5" noValidate>
-      <h3 className="text-lg font-semibold text-slate-900">Étape 4 — Budget</h3>
+      <h3 className="text-lg font-semibold text-charcoal-900">Étape 4 — Budget</h3>
 
       <div>
-        <label htmlFor="budgetHt" className="mb-1 block text-sm font-medium text-slate-800">
+        <label htmlFor="budgetHt" className="mb-1 block text-sm font-medium text-charcoal-800">
           Budget estimé des travaux (HT, en €)
         </label>
         <input
@@ -150,24 +150,24 @@ export default function Step4Budget({ state, dispatch }: Props) {
               },
             })
           }
-          className="w-full rounded-md border border-slate-300 p-2 text-sm"
+          className="w-full rounded-md border border-charcoal-300 p-2 text-sm"
         />
       </div>
 
       <div
         aria-live="polite"
-        className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm"
+        className="rounded-md border border-charcoal-200 bg-charcoal-50 p-4 text-sm"
       >
         {loading ? (
-          <p className="text-slate-600">Calcul en cours…</p>
+          <p className="text-charcoal-600">Calcul en cours…</p>
         ) : estError ? (
           <p className="text-amber-700">{estError}</p>
         ) : estimate ? (
           estimate.exclusion ? (
             <p className="text-amber-800">{estimate.exclusion}</p>
           ) : (
-            <div className="space-y-1 text-slate-800">
-              <p className="font-semibold text-emerald-800">Estimation indicative</p>
+            <div className="space-y-1 text-charcoal-800">
+              <p className="font-semibold text-accent-800">Estimation indicative</p>
               <p>MaPrimeRénov&apos; : {fmtEur(estimate.mprTotal)}</p>
               <p>
                 CEE : {fmtEur(estimate.ceeFourchetteBas)} – {fmtEur(estimate.ceeFourchetteHaut)}
@@ -185,7 +185,7 @@ export default function Step4Budget({ state, dispatch }: Props) {
             </div>
           )
         ) : (
-          <p className="text-slate-500">
+          <p className="text-charcoal-500">
             Saisissez un budget pour voir votre estimation en direct.
           </p>
         )}
@@ -195,13 +195,13 @@ export default function Step4Budget({ state, dispatch }: Props) {
         <button
           type="button"
           onClick={() => dispatch({ type: 'PREV' })}
-          className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+          className="rounded-md border border-charcoal-300 px-4 py-2 text-sm text-charcoal-700 hover:bg-charcoal-50"
         >
           Retour
         </button>
         <button
           type="submit"
-          className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="rounded-md bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-accent-500"
         >
           Étape suivante
         </button>

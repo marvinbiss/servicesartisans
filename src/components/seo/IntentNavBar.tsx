@@ -82,7 +82,7 @@ export default function IntentNavBar({
               return (
                 <span
                   key={intent}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white whitespace-nowrap min-w-fit cursor-default"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-accent-600 text-white whitespace-nowrap min-w-fit cursor-default"
                   aria-current="page"
                 >
                   <Icon className="w-4 h-4" aria-hidden="true" />
@@ -96,7 +96,7 @@ export default function IntentNavBar({
               <Link
                 key={intent}
                 href={url}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-charcoal-700 bg-white hover:bg-emerald-50 whitespace-nowrap min-w-fit transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-charcoal-700 bg-white hover:bg-accent-50 whitespace-nowrap min-w-fit transition-colors"
               >
                 <Icon className="w-4 h-4" aria-hidden="true" />
                 {label}

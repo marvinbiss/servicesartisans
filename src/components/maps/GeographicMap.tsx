@@ -131,7 +131,7 @@ export default function GeographicMap({
         ? '#C4533A' // clay-600
         : isVerified
           ? '#E86B4B' // clay-400
-          : '#78716c' // stone-500
+          : '#78716c' // sand-500
 
       return _L.divIcon({
         className: 'custom-marker',
@@ -371,7 +371,7 @@ export default function GeographicMap({
       {mapMoved && (
         <button
           onClick={handleSearchArea}
-          className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-white px-4 py-2 rounded-full shadow-lg border border-stone-200 text-sm font-semibold text-stone-700 hover:bg-clay-50 hover:text-clay-600 transition-all"
+          className="absolute top-4 left-1/2 -trancharcoal-x-1/2 z-[1000] bg-white px-4 py-2 rounded-full shadow-lg border border-sand-200 text-sm font-semibold text-sand-700 hover:bg-clay-50 hover:text-clay-600 transition-all"
         >
           Rechercher dans cette zone
         </button>

@@ -42,8 +42,8 @@ export default function UserQuestionBlock({ serviceName, villeName }: UserQuesti
     return (
       <section className="rounded-xl bg-sand-50 border border-sand-200 px-6 py-5">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-            <CheckCircle className="w-5 h-5 text-emerald-600" />
+          <div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0">
+            <CheckCircle className="w-5 h-5 text-accent-600" />
           </div>
           <div>
             <p className="font-semibold text-charcoal-800 text-sm">Merci pour votre question !</p>

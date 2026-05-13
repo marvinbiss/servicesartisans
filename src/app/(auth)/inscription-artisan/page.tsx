@@ -263,7 +263,7 @@ export default function InscriptionArtisanPage() {
                         Nom de l'entreprise *
                       </label>
                       <div className="relative">
-                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                        <Building className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="text"
                           autoComplete="organization"
@@ -349,7 +349,7 @@ export default function InscriptionArtisanPage() {
                         Email *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                        <Mail className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="email"
                           autoComplete="email"
@@ -366,7 +366,7 @@ export default function InscriptionArtisanPage() {
                         Téléphone *
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                        <Phone className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="tel"
                           autoComplete="tel"
@@ -390,7 +390,7 @@ export default function InscriptionArtisanPage() {
                         Adresse *
                       </label>
                       <div className="relative">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                        <MapPin className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
                         <input
                           type="text"
                           autoComplete="street-address"

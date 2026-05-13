@@ -34,7 +34,7 @@ function getTrendIcon(tendance: 'hausse' | 'stable' | 'baisse'): React.ReactNode
     case 'hausse':
       return <TrendingUp className="w-4 h-4 text-red-500" />
     case 'baisse':
-      return <TrendingDown className="w-4 h-4 text-emerald-500" />
+      return <TrendingDown className="w-4 h-4 text-accent-500" />
     default:
       return <Minus className="w-4 h-4 text-charcoal-400" />
   }
@@ -57,7 +57,7 @@ function getTrendColor(tendance: 'hausse' | 'stable' | 'baisse'): string {
     case 'hausse':
       return 'text-red-600'
     case 'baisse':
-      return 'text-emerald-600'
+      return 'text-accent-600'
     default:
       return 'text-charcoal-500'
   }

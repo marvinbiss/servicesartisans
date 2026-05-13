@@ -128,7 +128,7 @@ export default function DesktopMegaMenus({
                                   {service.description}
                                 </div>
                               </div>
-                              <ArrowRight className="w-3.5 h-3.5 text-charcoal-300 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-200" />
+                              <ArrowRight className="w-3.5 h-3.5 text-charcoal-300 opacity-0 -trancharcoal-x-1 group-hover/link:opacity-100 group-hover/link:trancharcoal-x-0 transition-all duration-200" />
                             </Link>
                           )
                         })}
@@ -145,7 +145,7 @@ export default function DesktopMegaMenus({
                   className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold group/cta transition-colors"
                 >
                   Voir tous les services
-                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="w-4 h-4 group-hover/cta:trancharcoal-x-1 transition-transform duration-200" />
                 </Link>
                 {/* Pivot full RGE 2026-05-03 : CTA "Urgence" remplacé par
                     "Simulateur aides" — aligné repositionnement RGE +
@@ -246,7 +246,7 @@ export default function DesktopMegaMenus({
                   className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold group/cta transition-colors"
                 >
                   Voir toutes les villes
-                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="w-4 h-4 group-hover/cta:trancharcoal-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-charcoal-900">
                   <ShieldCheck className="w-4 h-4 text-green-500" />
@@ -325,7 +325,7 @@ export default function DesktopMegaMenus({
               {domTomRegions.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-4">
-                    <Globe className="w-4 h-4 text-emerald-600" />
+                    <Globe className="w-4 h-4 text-accent-600" />
                     <h4 className="font-heading font-bold text-sm text-charcoal-900 uppercase tracking-wider">
                       Outre-mer
                     </h4>
@@ -336,11 +336,11 @@ export default function DesktopMegaMenus({
                         key={region.slug}
                         href={`/regions/${region.slug}`}
                         onClick={closeMenus}
-                        className="group/region flex items-center gap-3 p-3 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl border border-transparent hover:border-emerald-200 transition-all duration-200"
+                        className="group/region flex items-center gap-3 p-3 bg-accent-50/50 hover:bg-accent-50 rounded-xl border border-transparent hover:border-accent-200 transition-all duration-200"
                       >
-                        <Globe className="w-4 h-4 text-emerald-400 group-hover/region:text-emerald-600 transition-colors flex-shrink-0" />
+                        <Globe className="w-4 h-4 text-accent-400 group-hover/region:text-accent-600 transition-colors flex-shrink-0" />
                         <div className="min-w-0">
-                          <div className="text-sm font-medium text-charcoal-700 group-hover/region:text-emerald-700 transition-colors truncate">
+                          <div className="text-sm font-medium text-charcoal-700 group-hover/region:text-accent-700 transition-colors truncate">
                             {region.name}
                           </div>
                         </div>
@@ -357,7 +357,7 @@ export default function DesktopMegaMenus({
                   className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold group/cta transition-colors"
                 >
                   Voir toutes les régions
-                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="w-4 h-4 group-hover/cta:trancharcoal-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-charcoal-900">
                   <Star className="w-4 h-4 text-amber-500" />

@@ -166,25 +166,25 @@ export function CeePrimeEstimateCard({ serviceSlug, postalCode }: CeePrimeEstima
     <div
       data-testid="cee-prime-card"
       role="status"
-      className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-soft"
+      className="mt-4 rounded-xl border border-accent-200 bg-accent-50 p-4 shadow-soft"
     >
       <div className="flex items-start gap-3">
         <div
           aria-hidden="true"
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100"
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-accent-100"
         >
-          <Sparkles className="h-5 w-5 text-emerald-600" />
+          <Sparkles className="h-5 w-5 text-accent-600" />
         </div>
         <div className="flex-1">
-          <p className="font-heading text-base font-semibold text-emerald-900">
+          <p className="font-heading text-base font-semibold text-accent-900">
             Prime CEE&nbsp;: jusqu’à {formatEuros(maxPrime)} récupérables
           </p>
-          <p className="mt-1 text-sm text-emerald-800">
+          <p className="mt-1 text-sm text-accent-800">
             Grâce à notre partenariat mandataire, vos travaux peuvent être éligibles à une prime
             Certificats d’Économies d’Énergie. Aucune démarche supplémentaire pour vous&nbsp;: nous
             vous accompagnons de bout en bout.
           </p>
-          <p className="mt-2 flex items-start gap-1.5 text-xs text-emerald-700">
+          <p className="mt-2 flex items-start gap-1.5 text-xs text-accent-700">
             <Info className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
             <span>
               Estimation indicative&nbsp;: le montant final dépend des caractéristiques précises de

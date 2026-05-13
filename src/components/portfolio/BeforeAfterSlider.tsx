@@ -124,7 +124,7 @@ export default function BeforeAfterSlider({
         {/* Handle */}
         <div
           className={clsx(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+            'absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2',
             'w-10 h-10 rounded-full bg-white shadow-lg',
             'flex items-center justify-center',
             'transition-transform duration-150',

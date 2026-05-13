@@ -94,7 +94,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                 )}
                 {/* Team size badge */}
                 {artisan.team_size && artisan.team_size > 1 && (
-                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-white px-2.5 py-0.5 rounded-full shadow-md border border-sand-200 text-xs font-medium text-charcoal-700 whitespace-nowrap">
+                  <div className="absolute -bottom-2.5 left-1/2 -trancharcoal-x-1/2 inline-flex items-center gap-1 bg-white px-2.5 py-0.5 rounded-full shadow-md border border-sand-200 text-xs font-medium text-charcoal-700 whitespace-nowrap">
                     <Users className="w-3 h-3 text-primary-400" aria-hidden="true" />
                     Équipe de {artisan.team_size}
                   </div>

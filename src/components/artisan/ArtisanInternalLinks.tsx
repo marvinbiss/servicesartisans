@@ -62,7 +62,7 @@ export default function ArtisanInternalLinks({
   const ceeOps = isRgeEligibleService ? getCeeOpsForRgeService(serviceSlug).slice(0, 4) : []
 
   return (
-    <section className="py-12 bg-sand-100 border-t border-stone-200/40">
+    <section className="py-12 bg-sand-100 border-t border-sand-200/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-charcoal-900 mb-8">Voir aussi</h2>
 
@@ -81,7 +81,7 @@ export default function ArtisanInternalLinks({
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-full text-sm transition-colors"
+                    className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-full text-sm transition-colors"
                   >
                     {city.name}
                   </Link>
@@ -109,7 +109,7 @@ export default function ArtisanInternalLinks({
                 <Link
                   key={s.slug}
                   href={`/services/${s.slug}/${locationSlug}`}
-                  className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-full text-sm transition-colors"
                 >
                   {s.name}
                 </Link>
@@ -133,7 +133,7 @@ export default function ArtisanInternalLinks({
               {region && (
                 <Link
                   href={`/regions/${regionSlug || slugify(region)}`}
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Artisans en {region}
                 </Link>
@@ -141,7 +141,7 @@ export default function ArtisanInternalLinks({
               {dept && (
                 <Link
                   href={`/departements/${dept.slug}`}
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Artisans dans {departmentName || dept.name} ({dept.code})
                 </Link>
@@ -149,26 +149,26 @@ export default function ArtisanInternalLinks({
               {dept && (
                 <Link
                   href={`/departements/${dept.slug}/${serviceSlug}`}
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   {serviceName} dans le {dept.code}
                 </Link>
               )}
               <Link
                 href={`/villes/${locationSlug}`}
-                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 Tous les artisans à {cityName}
               </Link>
               <Link
                 href={`/services/${serviceSlug}`}
-                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 {serviceName} en France
               </Link>
               <Link
                 href={`/tarifs/${serviceSlug}`}
-                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 Tarifs {serviceName} en France
               </Link>
@@ -177,7 +177,7 @@ export default function ArtisanInternalLinks({
               ) && (
                 <Link
                   href={`/urgence/${serviceSlug}`}
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Urgence {serviceName}
                 </Link>
@@ -189,38 +189,38 @@ export default function ArtisanInternalLinks({
           {isRgeEligibleService && (
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                <Leaf className="w-4 h-4 text-emerald-600" />
+                <Leaf className="w-4 h-4 text-accent-600" />
                 Rénovation énergétique
               </h3>
               <div className="space-y-2">
                 <Link
                   href={`/rge/${serviceSlug}`}
-                  className="block px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-900 rounded-lg text-sm transition-colors font-medium"
+                  className="block px-3 py-2 bg-accent-50 hover:bg-accent-100 text-accent-800 hover:text-accent-900 rounded-lg text-sm transition-colors font-medium"
                 >
                   Artisans RGE {serviceName.toLowerCase()}
                 </Link>
                 {dept && (
                   <Link
                     href={`/rge/${serviceSlug}/departement/${dept.slug}`}
-                    className="block px-3 py-2 bg-emerald-50/60 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-900 rounded-lg text-sm transition-colors"
+                    className="block px-3 py-2 bg-accent-50/60 hover:bg-accent-100 text-accent-800 hover:text-accent-900 rounded-lg text-sm transition-colors"
                   >
                     {serviceName} RGE dans le {dept.code}
                   </Link>
                 )}
                 <Link
                   href="/aides/maprimerenov"
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   MaPrimeRénov&apos; 2026
                 </Link>
                 <Link
                   href="/aides"
-                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-sand-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Toutes les aides à la rénovation
                 </Link>
                 {ceeOps.length > 0 && (
-                  <div className="pt-2 mt-2 border-t border-emerald-200/40">
+                  <div className="pt-2 mt-2 border-t border-accent-200/40">
                     <p className="text-xs uppercase tracking-wider text-charcoal-400 mb-1.5">
                       Primes CEE éligibles
                     </p>
@@ -229,7 +229,7 @@ export default function ArtisanInternalLinks({
                         <Link
                           key={op.code}
                           href={`/cee/${op.code.toLowerCase()}/guide`}
-                          className="inline-flex items-center px-2.5 py-1 bg-white border border-emerald-200 hover:border-emerald-400 text-emerald-800 hover:bg-emerald-50 rounded-md text-xs transition-colors"
+                          className="inline-flex items-center px-2.5 py-1 bg-white border border-accent-200 hover:border-accent-400 text-accent-800 hover:bg-accent-50 rounded-md text-xs transition-colors"
                         >
                           {op.code}
                         </Link>

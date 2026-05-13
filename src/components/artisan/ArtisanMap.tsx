@@ -103,7 +103,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             </div>
           </div>
           <ExternalLink
-            className="w-4 h-4 text-primary-400 group-hover:translate-x-0.5 transition-transform"
+            className="w-4 h-4 text-primary-400 group-hover:trancharcoal-x-0.5 transition-transform"
             aria-hidden="true"
           />
         </a>

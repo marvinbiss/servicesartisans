@@ -75,7 +75,7 @@ interface LeadStats {
 
 const QUOTE_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
   pending: { label: 'En attente', cls: 'bg-primary-100 text-primary-600' },
-  accepted: { label: 'Accepté', cls: 'bg-emerald-100 text-emerald-700' },
+  accepted: { label: 'Accepté', cls: 'bg-accent-100 text-accent-700' },
   refused: { label: 'Refusé', cls: 'bg-red-100 text-red-700' },
   expired: { label: 'Expiré', cls: 'bg-orange-100 text-orange-700' },
 }
@@ -261,9 +261,9 @@ export default function LeadDetailPage() {
 
             {/* Action feedback banners */}
             {actionSuccess && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                <p className="text-emerald-700 text-sm font-medium">{actionSuccess}</p>
+              <div className="bg-accent-50 border border-accent-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-accent-500 flex-shrink-0" />
+                <p className="text-accent-700 text-sm font-medium">{actionSuccess}</p>
               </div>
             )}
             {actionError && (
@@ -406,7 +406,7 @@ export default function LeadDetailPage() {
                           <div
                             key={quote.id}
                             className={`p-6 transition-colors ${
-                              quote.status === 'accepted' ? 'bg-emerald-50' : ''
+                              quote.status === 'accepted' ? 'bg-accent-50' : ''
                             }`}
                           >
                             {/* Quote header */}
@@ -479,7 +479,7 @@ export default function LeadDetailPage() {
                                 <button
                                   onClick={() => handleAccept(quote.id)}
                                   disabled={anyLoading}
-                                  className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  className="flex items-center gap-2 px-4 py-2.5 bg-accent-600 text-white rounded-lg text-sm font-medium hover:bg-accent-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                   {isAccepting ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -505,7 +505,7 @@ export default function LeadDetailPage() {
 
                             {/* Accepted confirmation banner */}
                             {quote.status === 'accepted' && (
-                              <div className="flex items-center gap-2 text-emerald-700 text-sm font-medium">
+                              <div className="flex items-center gap-2 text-accent-700 text-sm font-medium">
                                 <CheckCircle className="w-4 h-4" />
                                 Vous avez accepté ce devis — l'artisan va vous contacter.
                               </div>

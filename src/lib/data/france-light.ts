@@ -35,7 +35,7 @@ export const services = [
   },
   { slug: 'menuisier', name: 'Menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700' },
   { slug: 'couvreur', name: 'Couvreur', icon: 'Home', color: 'from-red-500 to-red-600' },
-  { slug: 'macon', name: 'Maçon', icon: 'Blocks', color: 'from-stone-500 to-stone-600' },
+  { slug: 'macon', name: 'Maçon', icon: 'Blocks', color: 'from-sand-500 to-sand-600' },
   { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
   // Pivot RGE 2026-05-01 + pure-play BTP énergétique 2026-05-02
   // (mirror src/lib/data/france.ts — voir commentaire détaillé).
@@ -47,7 +47,12 @@ export const services = [
   { slug: 'zingueur', name: 'Zingueur', icon: 'Droplets', color: 'from-zinc-500 to-zinc-600' },
   { slug: 'etancheiste', name: 'Étanchéiste', icon: 'Shield', color: 'from-blue-600 to-blue-700' },
   { slug: 'facadier', name: 'Façadier', icon: 'Building', color: 'from-orange-600 to-orange-700' },
-  { slug: 'platrier', name: 'Plâtrier', icon: 'Paintbrush', color: 'from-gray-500 to-gray-600' },
+  {
+    slug: 'platrier',
+    name: 'Plâtrier',
+    icon: 'Paintbrush',
+    color: 'from-charcoal-500 to-charcoal-600',
+  },
   {
     slug: 'salle-de-bain',
     name: 'Salle de bain',
@@ -82,7 +87,7 @@ export const services = [
     slug: 'borne-recharge',
     name: 'Borne de recharge',
     icon: 'PlugZap',
-    color: 'from-emerald-600 to-emerald-700',
+    color: 'from-accent-600 to-accent-700',
   },
   { slug: 'ramoneur', name: 'Ramoneur', icon: 'Factory', color: 'from-neutral-600 to-neutral-700' },
   {

@@ -7,7 +7,7 @@ import { useCompare } from '@/components/compare/CompareProvider'
 import { CompareView } from './CompareView'
 
 function ProviderInitial({ name, index }: { name: string; index: number }) {
-  const colors = ['bg-primary-400', 'bg-emerald-500', 'bg-amber-500']
+  const colors = ['bg-primary-400', 'bg-accent-500', 'bg-amber-500']
   return (
     <div
       className={clsx(

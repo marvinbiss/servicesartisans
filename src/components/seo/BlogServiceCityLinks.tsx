@@ -105,7 +105,7 @@ export default function BlogServiceCityLinks({ articleSlug }: BlogServiceCityLin
                       <Link
                         key={city.slug}
                         href={`/services/${serviceSlug}/${city.slug}`}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sand-100 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
                         prefetch={false}
                       >
                         {getAnchorText(serviceName, city.name, idx)}
@@ -120,7 +120,7 @@ export default function BlogServiceCityLinks({ articleSlug }: BlogServiceCityLin
                   >
                     Voir toutes les villes
                     <svg
-                      className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                      className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -157,7 +157,7 @@ export default function BlogServiceCityLinks({ articleSlug }: BlogServiceCityLin
               <Link
                 key={`${serviceSlug}-${city.slug}`}
                 href={`/services/${serviceSlug}/${city.slug}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 rounded-full text-sm font-medium border border-sand-200 hover:border-primary-200 transition-all duration-200 hover:-trancharcoal-y-0.5 hover:shadow-sm"
                 prefetch={false}
               >
                 {trade.name} à {city.name}

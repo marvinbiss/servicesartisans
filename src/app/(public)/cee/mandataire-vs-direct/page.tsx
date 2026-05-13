@@ -299,11 +299,11 @@ export default function MandataireVsDirectPage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Scale className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Scale className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guide neutre — code de l’énergie L221-x / R221-x
             </span>
           </div>
@@ -317,16 +317,16 @@ export default function MandataireVsDirectPage() {
             author="ServicesArtisans"
             datePublished={PUBLISHED}
             dateModified={MODIFIED}
-            className="justify-start mt-2 text-emerald-50/80"
+            className="justify-start mt-2 text-accent-50/80"
           />
-          <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 leading-relaxed">
             Qui achète les certificats d’économies d’énergie&nbsp;? Qui dépose les dossiers au
             PNCEE&nbsp;? Qui se contente de monter le dossier pour le compte du bénéficiaire&nbsp;?
             Ce guide clarifie les trois rôles du dispositif CEE, leurs obligations réglementaires et
             leur modèle économique — sans jargon, sans parti pris.
           </p>
           <div
-            className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
+            className="speakable-summary mt-6 text-base md:text-lg text-accent-50/80 leading-relaxed border-l-2 border-accent-400/40 pl-4"
             data-speakable="true"
           >
             <p>
@@ -391,14 +391,14 @@ export default function MandataireVsDirectPage() {
                   className="bg-white rounded-2xl border border-charcoal-200 p-6 flex flex-col"
                 >
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-5 h-5 text-emerald-700" />
+                    <div className="w-11 h-11 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-accent-700" />
                     </div>
                     <div>
                       <h3 className="font-heading text-xl font-bold text-charcoal-900">
                         {role.label}
                       </h3>
-                      <p className="text-sm text-emerald-700 font-medium mt-0.5">{role.tagline}</p>
+                      <p className="text-sm text-accent-700 font-medium mt-0.5">{role.tagline}</p>
                     </div>
                   </div>
 
@@ -496,8 +496,8 @@ export default function MandataireVsDirectPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-              <Wrench className="w-5 h-5 text-emerald-700" />
+            <div className="w-11 h-11 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0">
+              <Wrench className="w-5 h-5 text-accent-700" />
             </div>
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Quel impact le choix d’un mandataire ou d’un délégataire CEE a-t-il pour un artisan
@@ -542,8 +542,8 @@ export default function MandataireVsDirectPage() {
       {/* Comment vérifier qu'un partenaire est légitime */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-            <ShieldCheck className="w-5 h-5 text-emerald-700" />
+          <div className="w-11 h-11 rounded-xl bg-accent-100 flex items-center justify-center flex-shrink-0">
+            <ShieldCheck className="w-5 h-5 text-accent-700" />
           </div>
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Comment vérifier qu’un partenaire CEE est légitime&nbsp;?
@@ -585,7 +585,7 @@ export default function MandataireVsDirectPage() {
               key={i}
               className="flex items-start gap-3 bg-white rounded-xl border border-charcoal-200 p-4"
             >
-              <FileCheck2 className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" />
+              <FileCheck2 className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0" />
               <div>
                 <div
                   className="font-semibold text-charcoal-900 mb-1"
@@ -611,11 +611,11 @@ export default function MandataireVsDirectPage() {
             {FAQ.map((item, idx) => (
               <details
                 key={idx}
-                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
               >
                 <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
-                  <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                  <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                     +
                   </span>
                 </summary>
@@ -633,42 +633,42 @@ export default function MandataireVsDirectPage() {
         </h2>
         <ul className="space-y-3 text-sm text-charcoal-700">
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Code de l’énergie, articles L221-1 à L221-12 et R221-1 à R221-27 (définitions de
               l’obligation, du délégataire, du registre PNCEE).
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Arrêté du 22 décembre 2014 modifié, définissant les opérations standardisées
               d’économies d’énergie (catalogue BAR, BAT, IND, RES, TRA).
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Arrêté du 4 septembre 2014 modifié, fixant la liste des pièces d’un dossier de demande
               de CEE et les conditions du mandat.
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Arrêté du 28 septembre 2021 modifié, relatif aux contrôles dans le cadre du dispositif
               CEE.
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Loi n° 2020-901 du 24 juillet 2020 encadrant le démarchage téléphonique (interdiction
               pour les travaux d’économies d’énergie).
             </span>
           </li>
           <li className="flex items-start gap-2">
-            <ExternalLink className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <ExternalLink className="w-4 h-4 text-accent-700 mt-0.5 flex-shrink-0" />
             <span>
               Pôle national des certificats d’économies d’énergie (PNCEE), DGEC — Ministère chargé
               de l’énergie.
@@ -683,40 +683,40 @@ export default function MandataireVsDirectPage() {
       </div>
 
       {/* CTAs finaux */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4">
             Approfondir le dispositif CEE
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Retrouvez le catalogue des opérations standardisées, nos guides éditoriaux et l’annuaire
             des artisans RGE certifiés pour chaque type de travaux.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
               Catalogue des primes CEE
             </Link>
             <Link
               href="/cee/guides"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Guides CEE
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Annuaire artisans RGE
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Cumul MaPrimeRénov’ &amp; CEE

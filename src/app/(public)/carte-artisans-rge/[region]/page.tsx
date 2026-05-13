@@ -270,11 +270,11 @@ export default async function CarteArtisansRgeRegionPage({
 
       <main className="min-h-screen bg-gradient-to-b from-sand-50 to-white">
         {/* Hero */}
-        <section className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-primary-600 text-white">
+        <section className="bg-gradient-to-br from-accent-700 via-accent-600 to-primary-600 text-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <Breadcrumb
               items={breadcrumbItems}
-              className="mb-6 text-emerald-100 [&_a]:text-emerald-100 [&_a:hover]:text-white [&_svg]:text-emerald-200 [&>ol>li:last-child_span]:text-white"
+              className="mb-6 text-accent-100 [&_a]:text-accent-100 [&_a:hover]:text-white [&_svg]:text-accent-200 [&>ol>li:last-child_span]:text-white"
             />
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 rounded-full text-sm font-medium mb-6">
               <MapIcon className="w-4 h-4" />
@@ -286,7 +286,7 @@ export default async function CarteArtisansRgeRegionPage({
             >
               Carte artisans RGE en {spec.name}
             </h1>
-            <p className="text-lg sm:text-xl text-emerald-50 max-w-3xl leading-relaxed mb-8">
+            <p className="text-lg sm:text-xl text-accent-50 max-w-3xl leading-relaxed mb-8">
               Annuaire des artisans Reconnu Garant de l&apos;Environnement en {spec.name},
               indispensables pour MaPrimeRénov&apos;, CEE, Éco-PTZ et TVA 5,5 %. Sources officielles
               ADEME mises à jour chaque jour.
@@ -294,20 +294,20 @@ export default async function CarteArtisansRgeRegionPage({
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/carte-artisans"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all hover:bg-emerald-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-accent-700 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all hover:bg-accent-50"
               >
                 <MapIcon className="w-5 h-5" />
                 Carte interactive nationale
               </Link>
               <Link
                 href={`/aides/${regionSlug}/renovation`}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-800/40 hover:bg-emerald-800/60 text-white font-semibold rounded-xl border border-white/20 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-accent-800/40 hover:bg-accent-800/60 text-white font-semibold rounded-xl border border-white/20 transition-all"
               >
                 Aides rénovation en {spec.name}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
-            <p className="mt-6 text-sm text-emerald-100">
+            <p className="mt-6 text-sm text-accent-100">
               <LastUpdated date={MODIFIED} label="Page mise à jour le" />
             </p>
           </div>
@@ -364,9 +364,9 @@ export default async function CarteArtisansRgeRegionPage({
 
             {/* Aides régionales */}
             {spec.regionalAids.length > 0 && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 sm:p-8">
+              <div className="bg-accent-50 border border-accent-200 rounded-2xl p-6 sm:p-8">
                 <h3 className="text-xl font-bold text-charcoal-900 mb-2 flex items-center gap-2">
-                  <Coins className="w-5 h-5 text-emerald-600" />
+                  <Coins className="w-5 h-5 text-accent-600" />
                   Aides régionales cumulables — {spec.name}
                 </h3>
                 <p className="text-charcoal-700 mb-4 text-sm">
@@ -377,14 +377,14 @@ export default async function CarteArtisansRgeRegionPage({
                     <li key={aid.name} className="bg-white border border-sand-200 rounded-xl p-4">
                       <div className="flex items-baseline gap-2 mb-1">
                         <strong className="text-charcoal-900">{aid.name}</strong>
-                        <span className="text-emerald-700 font-semibold">{aid.montant}</span>
+                        <span className="text-accent-700 font-semibold">{aid.montant}</span>
                       </div>
                       <p className="text-sm text-charcoal-700 leading-relaxed">{aid.detail}</p>
                       <a
                         href={aid.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
-                        className="text-xs text-emerald-700 hover:text-emerald-800 underline"
+                        className="text-xs text-accent-700 hover:text-accent-800 underline"
                       >
                         Source officielle
                       </a>
@@ -411,11 +411,11 @@ export default async function CarteArtisansRgeRegionPage({
                 <Link
                   key={v.slug}
                   href={`/rge/audit-energetique/${v.slug}`}
-                  className="flex items-start gap-2 p-4 bg-white rounded-xl border border-sand-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-colors group"
+                  className="flex items-start gap-2 p-4 bg-white rounded-xl border border-sand-200 hover:border-accent-300 hover:bg-accent-50/50 transition-colors group"
                 >
-                  <MapPin className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-accent-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <div className="font-semibold text-charcoal-900 group-hover:text-emerald-700">
+                    <div className="font-semibold text-charcoal-900 group-hover:text-accent-700">
                       {v.name}
                     </div>
                     <div className="text-xs text-charcoal-500">{v.codePostal}</div>
@@ -441,13 +441,13 @@ export default async function CarteArtisansRgeRegionPage({
                 <Link
                   key={s.slug}
                   href={`/rge/${s.slug}`}
-                  className="flex items-center gap-3 p-5 bg-white border border-sand-200 rounded-xl hover:border-emerald-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-3 p-5 bg-white border border-sand-200 rounded-xl hover:border-accent-300 hover:shadow-md transition-all group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                    <Award className="w-5 h-5 text-emerald-600" />
+                  <div className="w-10 h-10 rounded-lg bg-accent-50 flex items-center justify-center flex-shrink-0">
+                    <Award className="w-5 h-5 text-accent-600" />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-charcoal-900 group-hover:text-emerald-700">
+                    <div className="font-bold text-charcoal-900 group-hover:text-accent-700">
                       Artisans RGE {s.label}
                     </div>
                     <div className="text-xs text-charcoal-500">
@@ -499,12 +499,12 @@ export default async function CarteArtisansRgeRegionPage({
                 <Link
                   key={card.href}
                   href={card.href}
-                  className="bg-white border border-sand-200 rounded-2xl p-5 hover:border-emerald-300 hover:shadow-md transition-all group"
+                  className="bg-white border border-sand-200 rounded-2xl p-5 hover:border-accent-300 hover:shadow-md transition-all group"
                 >
                   <div className="flex items-start gap-3">
-                    <ShieldCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-1" />
+                    <ShieldCheck className="w-5 h-5 text-accent-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h3 className="font-bold text-charcoal-900 group-hover:text-emerald-700 mb-1">
+                      <h3 className="font-bold text-charcoal-900 group-hover:text-accent-700 mb-1">
                         {card.title}
                       </h3>
                       <p className="text-sm text-charcoal-600 leading-relaxed">{card.desc}</p>

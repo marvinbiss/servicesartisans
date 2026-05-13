@@ -193,10 +193,10 @@ export function getCategoryColors(color: string) {
       border: 'border-pink-200',
     },
     emerald: {
-      text: 'text-emerald-700',
-      hoverBg: 'hover:bg-emerald-50',
-      iconBg: 'bg-emerald-100',
-      border: 'border-emerald-200',
+      text: 'text-accent-700',
+      hoverBg: 'hover:bg-accent-50',
+      iconBg: 'bg-accent-100',
+      border: 'border-accent-200',
     },
   }
   return map[color] || map.blue

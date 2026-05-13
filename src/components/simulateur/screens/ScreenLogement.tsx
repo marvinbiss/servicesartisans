@@ -53,20 +53,21 @@ export default function ScreenLogement({
 
   return (
     <div>
-      <ScreenTitle subtitle="Commençons par votre logement">
-        Décrivez votre logement
-      </ScreenTitle>
+      <ScreenTitle subtitle="Commençons par votre logement">Décrivez votre logement</ScreenTitle>
 
       <div className="grid grid-cols-2 gap-4">
         <CardButton selected={typeLogement === 'maison'} onClick={() => selectType('maison')}>
           <div className="flex flex-col items-center gap-2 py-3">
-            <Home className="h-10 w-10 text-emerald-600" />
+            <Home className="h-10 w-10 text-accent-600" />
             <span className="text-base font-semibold text-charcoal-900">Maison</span>
           </div>
         </CardButton>
-        <CardButton selected={typeLogement === 'appartement'} onClick={() => selectType('appartement')}>
+        <CardButton
+          selected={typeLogement === 'appartement'}
+          onClick={() => selectType('appartement')}
+        >
           <div className="flex flex-col items-center gap-2 py-3">
-            <Building2 className="h-10 w-10 text-emerald-600" />
+            <Building2 className="h-10 w-10 text-accent-600" />
             <span className="text-base font-semibold text-charcoal-900">Appartement</span>
           </div>
         </CardButton>
@@ -77,9 +78,13 @@ export default function ScreenLogement({
       </p>
       <div className="grid grid-cols-2 gap-3">
         {SURFACES.map((o) => (
-          <CardButton key={o.id} selected={surfaceTranche === o.id} onClick={() => selectSurface(o.id)}>
+          <CardButton
+            key={o.id}
+            selected={surfaceTranche === o.id}
+            onClick={() => selectSurface(o.id)}
+          >
             <div className="flex flex-col items-center gap-1.5 py-2">
-              <Maximize2 className="h-5 w-5 text-emerald-600" />
+              <Maximize2 className="h-5 w-5 text-accent-600" />
               <span className="text-sm font-bold text-charcoal-900">{o.label}</span>
               <span className="text-xs text-charcoal-500">{o.sub}</span>
             </div>

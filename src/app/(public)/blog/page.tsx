@@ -183,7 +183,7 @@ export default async function BlogPage() {
 
   const categoryColors: Record<string, string> = {
     Conseils: 'bg-amber-100 text-amber-700',
-    Tarifs: 'bg-emerald-100 text-emerald-700',
+    Tarifs: 'bg-accent-100 text-accent-700',
     'Fiches métier': 'bg-primary-100 text-primary-600',
     Guides: 'bg-purple-100 text-purple-700',
     'Guides pratiques': 'bg-primary-100 text-primary-600',
@@ -195,7 +195,7 @@ export default async function BlogPage() {
     DIY: 'bg-orange-100 text-orange-700',
     Inspiration: 'bg-pink-100 text-pink-700',
     Tendances: 'bg-purple-100 text-purple-700',
-    Rénovation: 'bg-emerald-100 text-emerald-700',
+    Rénovation: 'bg-accent-100 text-accent-700',
     Actualités: 'bg-rose-100 text-rose-700',
     Décoration: 'bg-pink-100 text-pink-700',
     Budget: 'bg-orange-100 text-orange-700',
@@ -265,7 +265,7 @@ export default async function BlogPage() {
                 <Link
                   key={article.slug}
                   href={`/blog/${article.slug}`}
-                  className={`bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group ${
+                  className={`bg-white rounded-2xl border border-sand-300 overflow-hidden hover:shadow-xl hover:-trancharcoal-y-2 transition-all duration-300 group ${
                     isFeatured ? 'md:col-span-2 lg:col-span-3' : ''
                   }`}
                 >
@@ -357,7 +357,7 @@ export default async function BlogPage() {
                       {c.count} article{c.count > 1 ? 's' : ''}
                     </p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:trancharcoal-x-0.5 transition-all" />
                 </Link>
               )
             })}

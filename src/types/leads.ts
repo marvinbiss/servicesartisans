@@ -171,7 +171,7 @@ export const EVENT_TYPE_META: Record<
 }
 
 export const URGENCY_META: Record<string, { label: string; cls: string }> = {
-  normal: { label: 'Normal', cls: 'bg-gray-100 text-gray-700' },
+  normal: { label: 'Normal', cls: 'bg-charcoal-100 text-charcoal-700' },
   urgent: { label: 'Urgent', cls: 'bg-red-100 text-red-700' },
   tres_urgent: { label: 'Très urgent', cls: 'bg-red-200 text-red-800' },
 }
@@ -180,8 +180,8 @@ export const STATUS_META: Record<string, { label: string; cls: string }> = {
   pending: { label: 'Nouveau', cls: 'bg-blue-100 text-blue-700' },
   viewed: { label: 'Consulté', cls: 'bg-yellow-100 text-yellow-700' },
   quoted: { label: 'Devis envoyé', cls: 'bg-green-100 text-green-700' },
-  declined: { label: 'Décliné', cls: 'bg-gray-100 text-gray-600' },
-  accepted: { label: 'Accepté', cls: 'bg-emerald-100 text-emerald-700' },
+  declined: { label: 'Décliné', cls: 'bg-charcoal-100 text-charcoal-600' },
+  accepted: { label: 'Accepté', cls: 'bg-accent-100 text-accent-700' },
   refused: { label: 'Refusé', cls: 'bg-red-100 text-red-700' },
   completed: { label: 'Terminé', cls: 'bg-green-100 text-green-800' },
   expired: { label: 'Expiré', cls: 'bg-orange-100 text-orange-700' },

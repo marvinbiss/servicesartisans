@@ -323,7 +323,7 @@ export default async function LongTailPage({ params }: PageProps) {
         </section>
 
         <footer className="mt-12 flex flex-wrap items-center gap-3 text-xs text-charcoal-500">
-          <ShieldCheck className="h-4 w-4 text-emerald-500" />
+          <ShieldCheck className="h-4 w-4 text-accent-500" />
           <span>Artisans RGE vérifiés ADEME · données mises à jour 2026-05-04</span>
           <span>·</span>
           <MapPin className="h-3.5 w-3.5" />

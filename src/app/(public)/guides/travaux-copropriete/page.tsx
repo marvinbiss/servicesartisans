@@ -207,23 +207,23 @@ export default function TravauxCoproprietePage() {
                     </li>
                   </ul>
                 </div>
-                <div className="bg-indigo-50 rounded-xl p-6">
-                  <h3 className="text-lg font-bold text-indigo-900 mb-3">Parties privatives</h3>
+                <div className="bg-primary-50 rounded-xl p-6">
+                  <h3 className="text-lg font-bold text-primary-900 mb-3">Parties privatives</h3>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-2 text-charcoal-700">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600 mt-1 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-primary-600 mt-1 shrink-0" />
                       <span>{"Intérieur de l'appartement, sols, plafonds"}</span>
                     </li>
                     <li className="flex items-start gap-2 text-charcoal-700">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600 mt-1 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-primary-600 mt-1 shrink-0" />
                       <span>Cloisons non porteuses</span>
                     </li>
                     <li className="flex items-start gap-2 text-charcoal-700">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600 mt-1 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-primary-600 mt-1 shrink-0" />
                       <span>Équipements intérieurs (cuisine, salle de bain)</span>
                     </li>
                     <li className="flex items-start gap-2 text-charcoal-700">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600 mt-1 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-primary-600 mt-1 shrink-0" />
                       <span>Revêtements intérieurs (peinture, papier peint)</span>
                     </li>
                   </ul>
@@ -264,7 +264,7 @@ export default function TravauxCoproprietePage() {
 
         {/* Autorisations pour travaux privatifs */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-purple-600 to-primary-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 font-heading">
               {'Travaux privatifs nécessitant une autorisation'}
             </h2>
@@ -463,7 +463,7 @@ export default function TravauxCoproprietePage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-purple-600 to-primary-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               {'Des travaux à réaliser dans votre copropriété ?'}
             </h2>

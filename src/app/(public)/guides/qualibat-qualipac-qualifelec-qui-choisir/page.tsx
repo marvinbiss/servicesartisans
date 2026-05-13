@@ -415,7 +415,7 @@ export default function QualificationsRgePage() {
 
         {/* Comment vérifier */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-green-600 to-accent-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading flex items-center gap-3">
               <Search className="w-8 h-8" />
               Comment vérifier la qualification RGE d&apos;un artisan&nbsp;?
@@ -483,7 +483,7 @@ export default function QualificationsRgePage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-green-600 to-accent-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               Trouvez l&apos;artisan RGE avec la bonne qualification
             </h2>

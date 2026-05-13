@@ -57,7 +57,7 @@ const STATUS_COLORS: Record<string, string> = {
   en_attente: 'bg-yellow-100 text-yellow-700',
   en_traitement: 'bg-primary-100 text-primary-600',
   devis_recus: 'bg-green-100 text-green-700',
-  accepte: 'bg-emerald-100 text-emerald-700',
+  accepte: 'bg-accent-100 text-accent-700',
   termine: 'bg-green-100 text-green-800',
   expire: 'bg-orange-100 text-orange-700',
   refuse: 'bg-red-100 text-red-700',
@@ -217,7 +217,7 @@ export default function MesDemandesPage() {
                 />
               </div>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+                <Search className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
                 <input
                   type="text"
                   placeholder="Rechercher..."

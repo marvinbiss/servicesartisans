@@ -235,14 +235,14 @@ export default function CalendrierSaisonnierBlock({
       {matchingTravaux.length > 0 && (
         <div className="mb-4">
           <p className="text-sm font-semibold text-charcoal-800 mb-2 flex items-center gap-1.5">
-            <CheckCircle className="w-4 h-4 text-emerald-500" />
+            <CheckCircle className="w-4 h-4 text-accent-500" />
             Travaux recommandés ce mois
           </p>
           <div className="space-y-2">
             {matchingTravaux.map((travail) => (
               <div
                 key={travail.titre}
-                className="p-3 rounded-lg bg-emerald-50 border border-emerald-100"
+                className="p-3 rounded-lg bg-accent-50 border border-accent-100"
               >
                 <p className="text-sm font-medium text-charcoal-900">{travail.titre}</p>
                 <p className="text-sm text-charcoal-600 mt-1 leading-relaxed">

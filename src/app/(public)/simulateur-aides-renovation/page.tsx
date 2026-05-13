@@ -111,7 +111,7 @@ export default function SimulateurAidesRenovationPage() {
   ])
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-charcoal-50">
       <JsonLd
         data={[
           breadcrumbSchema,

@@ -305,7 +305,7 @@ export default function DevisBottomSheet({
                             </option>
                           ))}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" />
                       </div>
                       {form.errors.service && (
                         <p className="text-red-500 text-xs mt-1">{form.errors.service}</p>
@@ -344,7 +344,7 @@ export default function DevisBottomSheet({
                             }
                           }}
                           disabled={form.geoLoading}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-400 hover:text-primary-600 transition-colors touch-manipulation"
+                          className="absolute right-2 top-1/2 -trancharcoal-y-1/2 p-2 text-primary-400 hover:text-primary-600 transition-colors touch-manipulation"
                           aria-label="Utiliser ma position"
                         >
                           <MapPin className={`w-5 h-5 ${form.geoLoading ? 'animate-pulse' : ''}`} />

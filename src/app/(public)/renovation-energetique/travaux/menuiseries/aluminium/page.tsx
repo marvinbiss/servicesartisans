@@ -259,7 +259,7 @@ export default function MenuiserieAluminiumPage() {
 
         <article className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
           <header className="mb-8">
-            <p className="inline-flex items-center gap-2 bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
+            <p className="inline-flex items-center gap-2 bg-charcoal-100 text-charcoal-800 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
               <ShieldCheck className="w-3.5 h-3.5" aria-hidden /> Premium · RPT obligatoire
             </p>
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-sand-900 mt-3 mb-3 leading-tight">
@@ -314,7 +314,7 @@ export default function MenuiserieAluminiumPage() {
                   <div className="grid grid-cols-3 gap-3 text-sm mb-3">
                     <div>
                       <p className="text-xs uppercase text-sand-500 mb-0.5">Uw</p>
-                      <p className="font-semibold text-slate-700">{m.uw}</p>
+                      <p className="font-semibold text-charcoal-700">{m.uw}</p>
                     </div>
                     <div>
                       <p className="text-xs uppercase text-sand-500 mb-0.5">Prix HT/fenêtre</p>
@@ -369,12 +369,12 @@ export default function MenuiserieAluminiumPage() {
             </div>
           </section>
 
-          <section className="my-10 bg-emerald-50 border-2 border-emerald-200 rounded-xl p-6">
-            <h2 className="font-heading text-xl font-bold text-emerald-900 mb-3">
+          <section className="my-10 bg-accent-50 border-2 border-accent-200 rounded-xl p-6">
+            <h2 className="font-heading text-xl font-bold text-accent-900 mb-3">
               <Calculator className="inline w-5 h-5 mr-2" aria-hidden />
               Estimer mes aides menuiserie en 2 minutes
             </h2>
-            <p className="text-sm text-emerald-800 mb-4 leading-relaxed">
+            <p className="text-sm text-accent-800 mb-4 leading-relaxed">
               Le simulateur officiel France Rénov’ calcule MaPrimeRénov’ menuiseries (80-120 €/m²
               selon revenus) + CEE Coup de pouce (35-100 €/m²) + TVA 5,5 % + éco-PTZ. Conditions :
               Uw ≤ 1,3 W/m².K + Sw ≥ 0,30 + RGE Qualibat 6361.
@@ -382,14 +382,14 @@ export default function MenuiserieAluminiumPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/simulateur-aides-renovation"
-                className="inline-flex items-center gap-2 bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                className="inline-flex items-center gap-2 bg-accent-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-800 transition-colors"
               >
                 Simulateur aides
                 <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>
               <Link
                 href="/renovation-energetique/aides/maprimerenov-2026"
-                className="inline-flex items-center gap-2 bg-white border border-emerald-300 text-emerald-800 px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+                className="inline-flex items-center gap-2 bg-white border border-accent-300 text-accent-800 px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-50 transition-colors"
               >
                 MaPrimeRénov’ 2026
                 <ArrowRight className="w-4 h-4" aria-hidden />

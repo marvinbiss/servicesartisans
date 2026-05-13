@@ -100,7 +100,7 @@ export default function SearchFilters({
               <option value="rating">Meilleures notes</option>
             </select>
             <ChevronDown
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none"
+              className="absolute right-2 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none"
               aria-hidden="true"
             />
           </div>
@@ -166,7 +166,7 @@ export default function SearchFilters({
               title="Reconnu Garant de l'Environnement — requis pour MaPrimeRénov', CEE et TVA 5,5%"
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
                 rgeActive
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  ? 'bg-accent-50 border-accent-200 text-accent-700'
                   : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
               }`}
             >

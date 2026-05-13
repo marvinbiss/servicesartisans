@@ -63,7 +63,7 @@ export default function RecherchePage() {
       <section className="relative bg-gradient-to-br from-charcoal-900 via-primary-800 to-charcoal-900 text-white py-20">
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-400 rounded-full blur-[150px] opacity-30" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-indigo-500 rounded-full blur-[150px] opacity-30" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary-500 rounded-full blur-[150px] opacity-30" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 data-speakable="true" className="font-heading text-4xl md:text-5xl font-bold mb-4">

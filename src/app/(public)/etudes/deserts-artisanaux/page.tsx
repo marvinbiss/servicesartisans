@@ -227,7 +227,7 @@ function fmt(n: number): string {
 function densityColor(density: number, avg: number): string {
   if (density < avg * 0.7) return 'text-red-700 bg-red-50'
   if (density < avg * 0.9) return 'text-orange-700 bg-orange-50'
-  if (density > avg * 1.3) return 'text-emerald-700 bg-emerald-50'
+  if (density > avg * 1.3) return 'text-accent-700 bg-accent-50'
   if (density > avg * 1.1) return 'text-green-700 bg-green-50'
   return 'text-charcoal-700 bg-sand-50'
 }
@@ -422,7 +422,7 @@ export default function DesertsArtisanauxPage() {
               label="artisans du BTP"
             />
             <KeyFigure
-              icon={<BarChart3 className="w-5 h-5 text-emerald-600" />}
+              icon={<BarChart3 className="w-5 h-5 text-accent-600" />}
               value={`${stats.avgDensity}`}
               label="densité moyenne / 10k hab"
             />
@@ -538,7 +538,7 @@ export default function DesertsArtisanauxPage() {
       <section className="py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-8">
-            <TrendingUp className="w-6 h-6 text-emerald-600" />
+            <TrendingUp className="w-6 h-6 text-accent-600" />
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-charcoal-900">
               Top 10 des départements les mieux dotés
             </h2>
@@ -551,7 +551,7 @@ export default function DesertsArtisanauxPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-emerald-50 text-emerald-900">
+                <tr className="bg-accent-50 text-accent-900">
                   <th className="px-4 py-3 text-left font-semibold rounded-tl-lg">#</th>
                   <th className="px-4 py-3 text-left font-semibold">Département</th>
                   <th className="px-4 py-3 text-left font-semibold">Région</th>
@@ -567,13 +567,13 @@ export default function DesertsArtisanauxPage() {
                 {bestServed.map((d, i) => (
                   <tr
                     key={d.code}
-                    className={`border-b border-emerald-100 ${i % 2 === 0 ? 'bg-white' : 'bg-emerald-50/30'} hover:bg-emerald-50/60 transition-colors`}
+                    className={`border-b border-accent-100 ${i % 2 === 0 ? 'bg-white' : 'bg-accent-50/30'} hover:bg-accent-50/60 transition-colors`}
                   >
-                    <td className="px-4 py-3 font-bold text-emerald-700">{i + 1}</td>
+                    <td className="px-4 py-3 font-bold text-accent-700">{i + 1}</td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/departements/${d.slug}`}
-                        className="font-medium text-charcoal-900 hover:text-emerald-600 transition-colors"
+                        className="font-medium text-charcoal-900 hover:text-accent-600 transition-colors"
                       >
                         {d.name} ({d.code})
                       </Link>
@@ -583,7 +583,7 @@ export default function DesertsArtisanauxPage() {
                     <td className="px-4 py-3 text-right text-charcoal-600">{fmt(d.artisans)}</td>
                     <td className="px-4 py-3 text-right text-charcoal-600">{fmt(d.btp)}</td>
                     <td className="px-4 py-3 text-right">
-                      <span className="inline-flex items-center gap-1 font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
+                      <span className="inline-flex items-center gap-1 font-bold text-accent-700 bg-accent-100 px-2 py-0.5 rounded">
                         {d.density}
                       </span>
                     </td>
@@ -686,7 +686,7 @@ export default function DesertsArtisanauxPage() {
                   i < 3
                     ? 'border-red-200'
                     : i >= regionStats.length - 3
-                      ? 'border-emerald-200'
+                      ? 'border-accent-200'
                       : 'border-sand-300'
                 }`}
               >
@@ -697,7 +697,7 @@ export default function DesertsArtisanauxPage() {
                       r.density < stats.avgDensity * 0.9
                         ? 'text-red-600'
                         : r.density > stats.avgDensity * 1.1
-                          ? 'text-emerald-600'
+                          ? 'text-accent-600'
                           : 'text-charcoal-700'
                     }`}
                   >
@@ -713,7 +713,7 @@ export default function DesertsArtisanauxPage() {
                       r.density < stats.avgDensity * 0.9
                         ? 'bg-red-400'
                         : r.density > stats.avgDensity * 1.1
-                          ? 'bg-emerald-400'
+                          ? 'bg-accent-400'
                           : 'bg-amber-400'
                     }`}
                     style={{
@@ -1018,12 +1018,12 @@ function FindingCard({
 }) {
   const colors = {
     red: 'bg-red-50 border-red-200',
-    green: 'bg-emerald-50 border-emerald-200',
+    green: 'bg-accent-50 border-accent-200',
     amber: 'bg-amber-50 border-amber-200',
   }
   const statColors = {
     red: 'text-red-700',
-    green: 'text-emerald-700',
+    green: 'text-accent-700',
     amber: 'text-amber-700',
   }
 

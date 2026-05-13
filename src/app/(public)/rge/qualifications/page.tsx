@@ -111,11 +111,11 @@ export default async function RgeQualificationsHubPage() {
 
       <Breadcrumb items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Qualifications' }]} />
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guides officiels des qualifications RGE
             </span>
           </div>
@@ -125,14 +125,14 @@ export default async function RgeQualificationsHubPage() {
           >
             Qualifications RGE&nbsp;: le référentiel complet
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Comprendre ce que couvre chaque qualification RGE, quelles primes elle débloque et
             comment la vérifier avant de signer un devis.
           </p>
           <LastUpdated
             label="Référentiel ADEME mis à jour le"
             date={lastSyncDate}
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
         </div>
       </section>
@@ -145,21 +145,21 @@ export default async function RgeQualificationsHubPage() {
               <Link
                 key={slug}
                 href={`/rge/qualifications/${slug}`}
-                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 hover:shadow-lg transition"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                    <Award className="w-6 h-6 text-emerald-700" aria-hidden="true" />
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-50 border border-accent-100 flex items-center justify-center">
+                    <Award className="w-6 h-6 text-accent-700" aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide">
+                    <div className="text-xs font-semibold text-accent-700 uppercase tracking-wide">
                       {g.organisme}
                     </div>
-                    <div className="font-bold text-charcoal-900 text-xl mt-1 group-hover:text-emerald-700 transition">
+                    <div className="font-bold text-charcoal-900 text-xl mt-1 group-hover:text-accent-700 transition">
                       {g.name}
                     </div>
                     <p className="text-sm text-charcoal-600 mt-2 leading-relaxed">{g.lede}</p>
-                    <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                    <div className="text-sm font-semibold text-accent-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                       Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </div>
                   </div>
@@ -170,24 +170,24 @@ export default async function RgeQualificationsHubPage() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Trouvez un artisan RGE certifié
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Annuaire synchronisé hebdomadairement avec la base officielle ADEME.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Explorer l’annuaire RGE
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Demander un devis
             </Link>

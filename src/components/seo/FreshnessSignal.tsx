@@ -65,7 +65,7 @@ export default function FreshnessSignal({
   return (
     <p className="text-xs text-charcoal-400 flex items-center gap-1.5">
       <Clock className="h-3 w-3 flex-shrink-0" />
-      {isRecent && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full flex-shrink-0" />}
+      {isRecent && <span className="w-1.5 h-1.5 bg-accent-500 rounded-full flex-shrink-0" />}
       {isModerate && <span className="w-1.5 h-1.5 bg-amber-400 rounded-full flex-shrink-0" />}
       <span>
         {isRecent ? (

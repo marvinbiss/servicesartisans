@@ -58,7 +58,7 @@ export default function TarifsDevisCTA({
       <>
         <button
           onClick={handleClick}
-          className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-base"
+          className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl hover:-trancharcoal-y-0.5 transition-all text-base"
         >
           Devis gratuit sans engagement
           <ArrowRight className="w-4 h-4" />
@@ -81,7 +81,7 @@ export default function TarifsDevisCTA({
     <>
       <button
         onClick={handleClick}
-        className="inline-flex items-center gap-3 bg-white text-primary-500 px-10 py-5 rounded-2xl font-bold hover:bg-primary-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+        className="inline-flex items-center gap-3 bg-white text-primary-500 px-10 py-5 rounded-2xl font-bold hover:bg-primary-50 transition-all text-xl shadow-lg hover:shadow-xl hover:-trancharcoal-y-0.5"
       >
         {taskName
           ? `Obtenir mon devis ${taskName.toLowerCase()}`

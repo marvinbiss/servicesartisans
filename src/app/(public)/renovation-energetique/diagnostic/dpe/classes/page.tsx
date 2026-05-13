@@ -111,9 +111,9 @@ const tldr = [
 const CLASSES = [
   {
     lettre: 'A',
-    couleur: 'bg-emerald-600 text-white',
-    bordure: 'border-emerald-300',
-    fond: 'bg-emerald-50',
+    couleur: 'bg-accent-600 text-white',
+    bordure: 'border-accent-300',
+    fond: 'bg-accent-50',
     label: 'Très performant',
     energie: '≤ 70 kWh/m²/an',
     ges: '≤ 6 kg CO₂/m²/an',
@@ -125,9 +125,9 @@ const CLASSES = [
   },
   {
     lettre: 'B',
-    couleur: 'bg-emerald-500 text-white',
-    bordure: 'border-emerald-200',
-    fond: 'bg-emerald-50',
+    couleur: 'bg-accent-500 text-white',
+    bordure: 'border-accent-200',
+    fond: 'bg-accent-50',
     label: 'Très performant',
     energie: '71 → 110 kWh/m²/an',
     ges: '7 → 11 kg CO₂/m²/an',

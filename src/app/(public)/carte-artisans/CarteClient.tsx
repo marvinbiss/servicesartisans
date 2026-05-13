@@ -237,7 +237,7 @@ export default function CarteClient() {
       {/* Sidebar */}
       <div className="w-full lg:w-80 flex-shrink-0 order-2 lg:order-1">
         {/* Stats card */}
-        <div className="bg-gradient-to-br from-primary-500 to-indigo-700 text-white rounded-xl p-5 mb-4">
+        <div className="bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-xl p-5 mb-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
               <Users className="w-5 h-5" />

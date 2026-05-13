@@ -1,7 +1,7 @@
 /**
  * PriorityBadge — badge colore affichant le tier de priorite d'un dossier CEE.
  *
- * S = emerald-600 bg, "Priorite haute"
+ * S = accent-600 bg, "Priorite haute"
  * A = primary-500 bg, "Priorite moyenne"
  * B = amber-500 bg, "Standard"
  * C = charcoal-400 bg, "Faible valeur"
@@ -24,7 +24,7 @@ const TIER_CONFIG: Record<
   S: {
     label: 'Priorite haute',
     ariaLabel: 'Priorité S — dossier haute valeur',
-    bg: 'bg-emerald-600',
+    bg: 'bg-accent-600',
     text: 'text-white',
   },
   A: {

@@ -314,11 +314,11 @@ export default function ComparatifPrimesCee2026Page() {
       {/* ============================================================ */}
       {/*  HERO                                                        */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-accent-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <TrendingUp className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <TrendingUp className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Comparatif — Période 6 (2026-2030)
             </span>
           </div>
@@ -334,7 +334,7 @@ export default function ComparatifPrimesCee2026Page() {
             dateModified="2026-04-12"
             className="justify-center mt-4"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Analyse indépendante des 4 principaux acteurs du marché CEE en France. Montants, délais
             de paiement, avis clients, modèle économique. Données vérifiées avril 2026.
           </p>
@@ -346,7 +346,7 @@ export default function ComparatifPrimesCee2026Page() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <FileCheck2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Qu'est-ce qui change dans le dispositif CEE en P6 (2026-2030) ?
           </h2>
@@ -373,9 +373,9 @@ export default function ComparatifPrimesCee2026Page() {
             return (
               <div
                 key={stat.label}
-                className="p-5 bg-emerald-50 rounded-2xl border border-emerald-200 text-center"
+                className="p-5 bg-accent-50 rounded-2xl border border-accent-200 text-center"
               >
-                <Icon className="w-5 h-5 text-emerald-600 mx-auto mb-2" aria-hidden="true" />
+                <Icon className="w-5 h-5 text-accent-600 mx-auto mb-2" aria-hidden="true" />
                 <div className="font-heading text-2xl font-extrabold text-charcoal-900">
                   {stat.value}
                 </div>
@@ -393,7 +393,7 @@ export default function ComparatifPrimesCee2026Page() {
           </p>
           <p>
             Certaines opérations ont été modifiées&nbsp;: BAR-TH-104 (PAC) remplacée par{' '}
-            <Link href="/cee/bar-th-171" className="text-emerald-700 font-semibold">
+            <Link href="/cee/bar-th-171" className="text-accent-700 font-semibold">
               BAR-TH-171
             </Link>
             , BAR-TH-164 remplacée par BAR-TH-174/175 (rénovation d’ampleur avec MAR). Le geste par
@@ -408,7 +408,7 @@ export default function ComparatifPrimesCee2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Building2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Qui sont les 4 acteurs majeurs du marché des primes CEE en 2026 ?
             </h2>
@@ -421,7 +421,7 @@ export default function ComparatifPrimesCee2026Page() {
               >
                 <div className="flex flex-wrap items-center gap-3 mb-4">
                   <h3 className="font-heading font-bold text-xl text-charcoal-900">{actor.name}</h3>
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-accent-50 border border-accent-100 text-xs font-semibold text-accent-700">
                     {actor.type}
                   </span>
                   <span className="text-sm text-charcoal-500">
@@ -436,7 +436,7 @@ export default function ComparatifPrimesCee2026Page() {
                   </div>
                   <div>
                     <span className="font-semibold text-charcoal-700">Prime max&nbsp;:</span>{' '}
-                    <span className="text-emerald-700 font-semibold">{actor.primeMax}</span>
+                    <span className="text-accent-700 font-semibold">{actor.primeMax}</span>
                   </div>
                   <div>
                     <span className="font-semibold text-charcoal-700">Délai paiement&nbsp;:</span>{' '}
@@ -447,13 +447,13 @@ export default function ComparatifPrimesCee2026Page() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <h4 className="font-semibold text-charcoal-700 text-sm mb-2 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <CheckCircle2 className="w-4 h-4 text-accent-600" />
                       Forces
                     </h4>
                     <ul className="space-y-1">
                       {actor.forces.map((f) => (
                         <li key={f} className="text-sm text-charcoal-600 flex items-start gap-2">
-                          <span className="text-emerald-400 mt-0.5">&bull;</span>
+                          <span className="text-accent-400 mt-0.5">&bull;</span>
                           <span>{f}</span>
                         </li>
                       ))}
@@ -485,7 +485,7 @@ export default function ComparatifPrimesCee2026Page() {
       {/* ============================================================ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <Euro className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Quels sont les montants indicatifs CEE par opération en 2026 (P6) ?
           </h2>
@@ -496,8 +496,8 @@ export default function ComparatifPrimesCee2026Page() {
               <tr>
                 <th className="text-left p-4 font-semibold">Opération</th>
                 <th className="text-left p-4 font-semibold">Code</th>
-                <th className="text-left p-4 font-semibold text-emerald-700">Prime classique</th>
-                <th className="text-left p-4 font-semibold text-emerald-700">Prime précarité</th>
+                <th className="text-left p-4 font-semibold text-accent-700">Prime classique</th>
+                <th className="text-left p-4 font-semibold text-accent-700">Prime précarité</th>
               </tr>
             </thead>
             <tbody>
@@ -506,20 +506,20 @@ export default function ComparatifPrimesCee2026Page() {
                   <td className="p-4 font-semibold text-charcoal-900 align-top">
                     <Link
                       href={`/cee/${op.code.toLowerCase()}`}
-                      className="hover:text-emerald-700 transition"
+                      className="hover:text-accent-700 transition"
                     >
                       {op.nom}
                     </Link>
                   </td>
                   <td className="p-4 align-top">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent-50 border border-accent-100 text-xs font-semibold text-accent-700">
                       {op.code}
                     </span>
                   </td>
                   <td className="p-4 text-charcoal-700 font-semibold align-top">
                     {op.primeClassique}
                   </td>
-                  <td className="p-4 text-emerald-700 font-semibold align-top">
+                  <td className="p-4 text-accent-700 font-semibold align-top">
                     {op.primePrecarite}
                   </td>
                 </tr>
@@ -532,7 +532,7 @@ export default function ComparatifPrimesCee2026Page() {
           la surface, du type de logement et du délégataire choisi. Utilisez le{' '}
           <Link
             href="/simulateur-aides-renovation"
-            className="text-emerald-700 font-semibold hover:underline"
+            className="text-accent-700 font-semibold hover:underline"
           >
             simulateur de prime CEE
           </Link>{' '}
@@ -556,7 +556,7 @@ export default function ComparatifPrimesCee2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Comment bien choisir son acteur CEE&nbsp;?
             </h2>
@@ -597,11 +597,11 @@ export default function ComparatifPrimesCee2026Page() {
           {FAQS.map((faq) => (
             <details
               key={faq.question}
-              className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
+              className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 transition"
             >
               <summary className="font-heading font-bold text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-3">
                 <span>{faq.question}</span>
-                <span className="text-emerald-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -614,32 +614,32 @@ export default function ComparatifPrimesCee2026Page() {
       {/* ============================================================ */}
       {/*  CTA FINAL                                                    */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Estimez votre prime CEE en 2 minutes
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Simulateur gratuit, sans engagement. Comparez les montants et trouvez un artisan RGE
             qualifié près de chez vous.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Simuler ma prime
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/devenir-partenaire-cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Artisan RGE ? Rejoignez-nous
             </Link>
             <Link
               href="/cee/mandataire-vs-direct"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Obligé vs délégataire vs mandataire
             </Link>

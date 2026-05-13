@@ -125,7 +125,7 @@ export default function DatasetsHubPage() {
           <Breadcrumb items={[{ label: 'Datasets', href: PAGE_PATH }]} />
 
           <header className="mt-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+            <div className="inline-flex items-center gap-2 rounded-full bg-accent-100 px-3 py-1 text-xs font-semibold text-accent-800">
               <Database className="h-3.5 w-3.5" aria-hidden="true" />
               Tous les datasets sont publiés sous licence CC-BY 4.0
             </div>
@@ -147,11 +147,11 @@ export default function DatasetsHubPage() {
                 <Link
                   key={d.href}
                   href={d.href}
-                  className="block rounded-xl border border-sand-300 bg-white p-6 hover:border-emerald-500 hover:shadow transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                  className="block rounded-xl border border-sand-300 bg-white p-6 hover:border-accent-500 hover:shadow transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-50">
-                      <Icon className="h-6 w-6 text-emerald-600" aria-hidden="true" />
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent-50">
+                      <Icon className="h-6 w-6 text-accent-600" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
                       <h2 className="text-xl font-bold text-charcoal-900">{d.title}</h2>
@@ -165,7 +165,7 @@ export default function DatasetsHubPage() {
                         <span className="inline-flex items-center gap-1 rounded-full bg-sand-100 px-2 py-1 font-mono text-charcoal-700">
                           {d.format}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 font-semibold text-emerald-700">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-accent-50 px-2 py-1 font-semibold text-accent-700">
                           CC-BY 4.0
                         </span>
                       </div>

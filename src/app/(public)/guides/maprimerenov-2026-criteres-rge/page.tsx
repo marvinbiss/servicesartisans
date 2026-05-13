@@ -427,7 +427,7 @@ export default function MaPrimeRenov2026CriteresRgePage() {
 
         {/* Cumul CEE */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-accent-600 to-green-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading flex items-center gap-3">
               <Calculator className="w-8 h-8" />
               Comment cumuler MaPrimeRénov&apos; et CEE pour maximiser l&apos;aide&nbsp;?
@@ -449,7 +449,7 @@ export default function MaPrimeRenov2026CriteresRgePage() {
             </p>
             <Link
               href="/guides/cee-certificats-economies-energie-2026"
-              className="inline-flex items-center gap-2 mt-5 bg-white text-emerald-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+              className="inline-flex items-center gap-2 mt-5 bg-white text-accent-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-50 transition-colors"
             >
               Lire le guide CEE 2026
               <ArrowRight className="w-4 h-4" />
@@ -487,7 +487,7 @@ export default function MaPrimeRenov2026CriteresRgePage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-green-600 to-accent-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               Besoin d&apos;un artisan RGE pour votre dossier MaPrimeRénov&apos; ?
             </h2>

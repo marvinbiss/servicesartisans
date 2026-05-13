@@ -139,7 +139,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
               value={serviceSlug}
               onChange={(e) => setServiceSlug(e.target.value)}
               required
-              className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition"
+              className="w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none transition"
             >
               <option value="">Sélectionnez un service</option>
               {services.map((s) => (
@@ -174,7 +174,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
               }}
               placeholder="ex : 75001"
               required
-              className={`w-full rounded-xl border ${cpError ? 'border-red-400' : 'border-sand-300'} bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none transition`}
+              className={`w-full rounded-xl border ${cpError ? 'border-red-400' : 'border-sand-300'} bg-white px-4 py-3 text-charcoal-900 shadow-sm focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none transition`}
             />
             <p id="cee-cp-help" className="mt-1 text-xs text-charcoal-400">
               5 chiffres, ex : 75001
@@ -190,7 +190,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
         <button
           type="submit"
           disabled={loading || !serviceSlug || postalCode.length !== 5}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-600 text-white font-semibold shadow-lg hover:bg-accent-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {loading ? (
             <>
@@ -241,14 +241,11 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
         <div className="space-y-6" aria-live="polite">
           {/* Zone climatique */}
           {result.zone_climatique && (
-            <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4">
-              <MapPin
-                className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600"
-                aria-hidden="true"
-              />
+            <div className="flex items-start gap-3 rounded-xl border border-accent-200 bg-accent-50/60 p-4">
+              <MapPin className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent-600" aria-hidden="true" />
               <div>
-                <p className="font-semibold text-emerald-900">{result.zone_climatique}</p>
-                <p className="text-sm text-emerald-700">
+                <p className="font-semibold text-accent-900">{result.zone_climatique}</p>
+                <p className="text-sm text-accent-700">
                   {ZONE_DESCRIPTIONS[result.zone_climatique]}
                 </p>
               </div>
@@ -262,7 +259,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
             return (
               <div
                 key={item.code}
-                className="rounded-xl border border-emerald-200 bg-white p-6 shadow-soft"
+                className="rounded-xl border border-accent-200 bg-white p-6 shadow-soft"
               >
                 <div className="mb-1 text-xs font-mono text-charcoal-400">{item.code}</div>
                 <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
@@ -273,22 +270,22 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
                   {/* Fourchette classique */}
                   <div className="rounded-lg bg-sand-50 p-4">
                     <p className="text-sm font-medium text-charcoal-600 mb-1">Prime classique</p>
-                    <p className="text-2xl font-bold text-emerald-700">
+                    <p className="text-2xl font-bold text-accent-700">
                       {formatEuros(est.euros_classique_min)} –{' '}
                       {formatEuros(est.euros_classique_max)}
                     </p>
                   </div>
 
                   {/* Fourchette précarité */}
-                  <div className="rounded-lg bg-emerald-50 p-4">
+                  <div className="rounded-lg bg-accent-50 p-4">
                     <p className="text-sm font-medium text-charcoal-600 mb-1">
                       Prime précarité énergétique
                     </p>
-                    <p className="text-2xl font-bold text-emerald-700">
+                    <p className="text-2xl font-bold text-accent-700">
                       {formatEuros(est.euros_precarite_min)} –{' '}
                       {formatEuros(est.euros_precarite_max)}
                     </p>
-                    <p className="mt-1 text-xs text-emerald-600">
+                    <p className="mt-1 text-xs text-accent-600">
                       Ménages aux revenus modestes (barème Anah)
                     </p>
                   </div>
@@ -301,7 +298,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
           <div className="text-center">
             <Link
               href={`/devis?service=${serviceSlug}&source=simulateur-cee`}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg hover:bg-emerald-700 transition"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-accent-600 text-white font-semibold shadow-lg hover:bg-accent-700 transition"
             >
               Demander un devis gratuit
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
@@ -340,7 +337,7 @@ export default function CeeSimulator({ services }: CeeSimulatorProps) {
           </p>
           <Link
             href="/cee"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 transition"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 text-white font-semibold text-sm hover:bg-accent-700 transition"
           >
             Voir toutes les opérations CEE
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

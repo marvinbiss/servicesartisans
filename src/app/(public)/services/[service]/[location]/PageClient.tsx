@@ -281,7 +281,7 @@ export default function ServiceLocationPageClient({
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3">
                 {liveCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
-                    <Leaf className="w-4 h-4 text-emerald-600" />
+                    <Leaf className="w-4 h-4 text-accent-600" />
                     <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan
                     {liveCount > 1 ? 's' : ''} RGE certifié{liveCount > 1 ? 's' : ''}
                   </span>
@@ -454,7 +454,7 @@ export default function ServiceLocationPageClient({
           </div>
           <Link
             href={buildDevisHref(serviceSlug || service.slug, location.name)}
-            className="inline-flex items-center gap-2 bg-white text-primary-600 font-bold px-6 py-2.5 rounded-xl shadow-cta hover:bg-sand-50 hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
+            className="inline-flex items-center gap-2 bg-white text-primary-600 font-bold px-6 py-2.5 rounded-xl shadow-cta hover:bg-sand-50 hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
           >
             Recevoir mes devis gratuits
             <ArrowRight className="w-4 h-4" />
@@ -494,7 +494,7 @@ export default function ServiceLocationPageClient({
                 </p>
                 <Link
                   href={buildDevisHref(serviceSlug || service.slug, location.name)}
-                  className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-200 text-base"
+                  className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-200 text-base"
                 >
                   <FileText className="w-5 h-5" />
                   Recevoir mes devis gratuits
@@ -504,8 +504,8 @@ export default function ServiceLocationPageClient({
             ) : (
               <>
                 {rgeCount > 0 && (
-                  <div className="mx-4 mt-4 mb-2 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-sm text-emerald-900">
-                    <Leaf className="w-4 h-4 flex-shrink-0 mt-0.5 text-emerald-600" />
+                  <div className="mx-4 mt-4 mb-2 flex items-start gap-2.5 rounded-xl border border-accent-200 bg-accent-50 px-3.5 py-2.5 text-sm text-accent-900">
+                    <Leaf className="w-4 h-4 flex-shrink-0 mt-0.5 text-accent-600" />
                     <p className="leading-snug">
                       Pour les aides <span className="font-semibold">MaPrimeRénov&apos;</span>,{' '}
                       <span className="font-semibold">CEE</span> et{' '}

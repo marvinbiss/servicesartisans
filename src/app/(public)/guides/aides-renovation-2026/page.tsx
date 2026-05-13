@@ -136,7 +136,7 @@ const aides = [
       "Adaptation du logement pour le maintien à domicile : seniors (60+), handicap, perte d'autonomie",
     cumulable: 'Certaines aides locales',
     lien: null,
-    couleur: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    couleur: 'bg-primary-50 text-primary-700 border-primary-200',
   },
 ]
 

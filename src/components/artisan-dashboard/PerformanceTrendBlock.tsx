@@ -204,7 +204,7 @@ export default function PerformanceTrendBlock() {
             total={totals.phoneClicks}
             series={series.phoneClicks}
             icon={<PhoneCall className="w-4 h-4" aria-hidden />}
-            colorClass="text-indigo-600"
+            colorClass="text-primary-600"
             deltaLabel="sur la seconde moitié de la période"
           />
           <TrendRow

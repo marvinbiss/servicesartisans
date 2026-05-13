@@ -549,7 +549,7 @@ export default function Page() {
               id="vraies-aides"
               className="font-heading text-2xl font-bold text-sand-900 mb-3 flex items-center gap-2"
             >
-              <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden />5 vraies aides PAC
+              <CheckCircle2 className="w-5 h-5 text-accent-700" aria-hidden />5 vraies aides PAC
               cumulables 2026
             </h2>
             <p className="text-sand-700 mb-5">
@@ -667,7 +667,7 @@ export default function Page() {
                       <strong>Total aides cumulées :</strong> {s.aidesTotal}
                     </li>
                   </ul>
-                  <p className="text-sm font-bold text-emerald-700 m-0 mb-2">
+                  <p className="text-sm font-bold text-accent-700 m-0 mb-2">
                     Reste à charge : {s.resteCharge}
                   </p>
                   <p className="text-sm text-sand-700 m-0">{s.detail}</p>

@@ -470,7 +470,7 @@ export default function Page() {
                   <p className="text-xs text-sand-600 m-0 mb-2">
                     <strong>Rendement :</strong> {c.rendement}
                   </p>
-                  <p className="text-xs text-emerald-700 m-0 mb-1">
+                  <p className="text-xs text-accent-700 m-0 mb-1">
                     <strong>+</strong> {c.avantages}
                   </p>
                   <p className="text-xs text-amber-700 m-0">

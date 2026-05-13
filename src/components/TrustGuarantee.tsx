@@ -47,7 +47,7 @@ export default function TrustGuarantee({ variant = 'banner' }: TrustGuaranteePro
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200/60 rounded-2xl p-6">
+    <div className="bg-gradient-to-br from-green-50 to-accent-50 border border-green-200/60 rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-4">
         <Shield className="w-5 h-5 text-accent-600" />
         <h3 className="font-heading text-lg font-bold text-charcoal-900">

@@ -27,7 +27,7 @@ export default function ScreenSurface({ value, onSelect }: Props) {
         {OPTIONS.map((o) => (
           <CardButton key={o.id} selected={value === o.id} onClick={() => onSelect(o.id)}>
             <div className="flex flex-col items-center gap-2 py-3">
-              <Maximize2 className="h-6 w-6 text-emerald-600" />
+              <Maximize2 className="h-6 w-6 text-accent-600" />
               <span className="text-base font-bold text-charcoal-900">{o.label}</span>
               <span className="text-xs text-charcoal-500">{o.sub}</span>
             </div>

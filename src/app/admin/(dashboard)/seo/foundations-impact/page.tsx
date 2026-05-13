@@ -76,7 +76,7 @@ function DeltaCell({
     )
   }
   const isImprovement = invert ? value < 0 : value > 0
-  const cls = isImprovement ? 'text-emerald-700' : 'text-red-700'
+  const cls = isImprovement ? 'text-accent-700' : 'text-red-700'
   const Icon = value > 0 ? ArrowUp : ArrowDown
   return (
     <span className={`inline-flex items-center gap-1 font-semibold tabular-nums ${cls}`}>

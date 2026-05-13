@@ -28,7 +28,7 @@ export default function VerticalCrossLinks({
   return (
     <section className="py-8 border-t border-charcoal-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 className="text-sm font-semibold text-stone-800 mb-3">
+        <h3 className="text-sm font-semibold text-sand-800 mb-3">
           {INTENT_LABELS[intent]} à {villeName}
         </h3>
         <div className="flex flex-wrap gap-2">
@@ -36,7 +36,7 @@ export default function VerticalCrossLinks({
             <Link
               key={s.slug}
               href={`/${intent}/${s.slug}/${villeSlug}`}
-              className="px-3 py-1.5 text-sm text-stone-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
+              className="px-3 py-1.5 text-sm text-sand-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
             >
               {getAnchorText({
                 serviceSlug: s.slug,

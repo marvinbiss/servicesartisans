@@ -306,7 +306,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
           >
             <span
               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                freeQuote ? 'translate-x-6' : 'translate-x-1'
+                freeQuote ? 'trancharcoal-x-6' : 'trancharcoal-x-1'
               }`}
             />
           </button>

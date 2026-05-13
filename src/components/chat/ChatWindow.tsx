@@ -165,9 +165,9 @@ export function ChatWindow({
   }
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="flex flex-col h-full bg-white dark:bg-charcoal-900 rounded-xl shadow-sm border border-charcoal-200 dark:border-charcoal-700">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center gap-3 p-4 border-b border-charcoal-200 dark:border-charcoal-700">
         <div className="relative">
           {otherUserAvatar ? (
             <NextImage
@@ -186,12 +186,12 @@ export function ChatWindow({
             </div>
           )}
           {isOtherUserOnline && (
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full" />
+            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-charcoal-900 rounded-full" />
           )}
         </div>
         <div>
-          <h3 className="font-medium text-gray-900 dark:text-white">{otherUserName}</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <h3 className="font-medium text-charcoal-900 dark:text-white">{otherUserName}</h3>
+          <p className="text-xs text-charcoal-500 dark:text-charcoal-400">
             {isOtherUserOnline ? 'En ligne' : 'Hors ligne'}
           </p>
         </div>
@@ -206,7 +206,7 @@ export function ChatWindow({
             <div key={message.id}>
               {needsDateSeparator(index) && (
                 <div className="flex items-center justify-center my-4">
-                  <span className="px-3 py-1 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full">
+                  <span className="px-3 py-1 text-xs text-charcoal-500 dark:text-charcoal-400 bg-charcoal-100 dark:bg-charcoal-800 rounded-full">
                     {formatDateSeparator(message.created_at)}
                   </span>
                 </div>
@@ -217,7 +217,7 @@ export function ChatWindow({
                     'max-w-[70%] rounded-2xl px-4 py-2',
                     isOwn
                       ? 'bg-blue-600 text-white rounded-br-md'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
+                      : 'bg-charcoal-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white rounded-bl-md'
                   )}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -227,7 +227,7 @@ export function ChatWindow({
                       isOwn ? 'justify-end' : 'justify-start'
                     )}
                   >
-                    <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-gray-400')}>
+                    <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-charcoal-400')}>
                       {formatTime(message.created_at)}
                     </span>
                     {isOwn &&
@@ -245,18 +245,18 @@ export function ChatWindow({
 
         {/* Typing indicator */}
         {getTypingText() && (
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-charcoal-500 dark:text-charcoal-400">
             <div className="flex gap-1">
               <span
-                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                className="w-2 h-2 bg-charcoal-400 rounded-full animate-bounce"
                 style={{ animationDelay: '0ms' }}
               />
               <span
-                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                className="w-2 h-2 bg-charcoal-400 rounded-full animate-bounce"
                 style={{ animationDelay: '150ms' }}
               />
               <span
-                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                className="w-2 h-2 bg-charcoal-400 rounded-full animate-bounce"
                 style={{ animationDelay: '300ms' }}
               />
             </div>
@@ -268,7 +268,7 @@ export function ChatWindow({
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-t border-charcoal-200 dark:border-charcoal-700">
         <form
           onSubmit={(e) => {
             e.preventDefault()

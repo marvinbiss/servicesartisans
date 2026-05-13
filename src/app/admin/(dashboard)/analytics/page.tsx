@@ -586,7 +586,7 @@ function AudiencePanel({
             <span className="w-2.5 h-2.5 rounded-full bg-indigo-400" /> Visiteurs uniques
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Pages vues
+            <span className="w-2.5 h-2.5 rounded-full bg-accent-400" /> Pages vues
           </span>
         </div>
       </div>
@@ -991,7 +991,7 @@ function KpiCard({
       iconBg: 'bg-white/20',
     },
     green: {
-      card: 'from-emerald-500 to-green-600',
+      card: 'from-accent-500 to-green-600',
       ring: 'ring-green-500/10',
       iconBg: 'bg-white/20',
     },

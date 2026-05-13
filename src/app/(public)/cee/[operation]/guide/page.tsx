@@ -229,13 +229,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
-              Guide officiel {guide.code}
-            </span>
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">Guide officiel {guide.code}</span>
           </div>
           <h1
             className="font-heading text-4xl md:text-5xl font-extrabold leading-tight mb-4"
@@ -249,7 +247,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             dateModified={monthlyAnchorIso().slice(0, 10)}
             className="mt-4 mb-5"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">{guide.lede}</p>
         </div>
       </section>
 
@@ -260,8 +258,8 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       {/* Résumé montants */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-          <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-5">
-            <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-1">
+          <div className="rounded-xl border border-accent-100 bg-accent-50/60 p-5">
+            <div className="text-xs font-semibold text-accent-700 uppercase tracking-wide mb-1">
               Prime CEE classique
             </div>
             <div className="text-xl font-bold text-charcoal-900">{guide.primeClassique}</div>
@@ -298,16 +296,16 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
         </div>
 
         {/* Qualifications RGE requises */}
-        <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50/40 p-6">
+        <div className="mt-8 rounded-2xl border border-accent-200 bg-accent-50/40 p-6">
           <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-4 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
             Qualifications RGE exigées
           </h2>
           <ul className="space-y-2">
             {guide.rgeRequises.map((qualif) => (
               <li key={qualif} className="flex items-start gap-2 text-charcoal-700">
                 <CheckCircle2
-                  className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
                   aria-hidden="true"
                 />
                 <span className="font-semibold">{qualif}</span>
@@ -320,7 +318,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
                 href={operation.url_fiche_officielle}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold hover:text-emerald-900"
+                className="inline-flex items-center gap-1.5 text-accent-700 font-semibold hover:text-accent-900"
               >
                 Consulter la fiche officielle DGEC {guide.code}
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -331,9 +329,9 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
 
         {/* Maillage RGE — guides qualification requis pour cette opération */}
         {guide.requiredQualifications.length > 0 && (
-          <div className="mt-6 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-white p-6">
+          <div className="mt-6 rounded-2xl border border-accent-200 bg-gradient-to-br from-accent-50/60 to-white p-6">
             <h2 className="font-heading text-xl font-extrabold text-charcoal-900 mb-2 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+              <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
               Qualifications RGE requises — nos guides
             </h2>
             <p className="text-sm text-charcoal-600 mb-4">
@@ -348,18 +346,18 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
                   <li key={slug}>
                     <Link
                       href={`/rge/qualifications/${slug}`}
-                      className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-emerald-100 hover:border-emerald-400 hover:shadow-sm transition"
+                      className="group flex items-start justify-between gap-3 p-4 bg-white rounded-xl border border-accent-100 hover:border-accent-400 hover:shadow-sm transition"
                     >
                       <span className="flex-1">
-                        <span className="block text-xs font-semibold text-emerald-700 uppercase tracking-wide">
+                        <span className="block text-xs font-semibold text-accent-700 uppercase tracking-wide">
                           {rgeGuide.organisme}
                         </span>
-                        <span className="block text-sm font-semibold text-charcoal-900 group-hover:text-emerald-800 transition">
+                        <span className="block text-sm font-semibold text-charcoal-900 group-hover:text-accent-800 transition">
                           {rgeGuide.name}
                         </span>
                       </span>
                       <ArrowRight
-                        className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0"
+                        className="w-4 h-4 text-accent-600 mt-0.5 flex-shrink-0"
                         aria-hidden="true"
                       />
                     </Link>
@@ -386,11 +384,11 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
             {guide.faq.map((item, i) => (
               <details
                 key={i}
-                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-lg border border-charcoal-200 bg-white p-5 open:border-accent-300 open:shadow-sm"
               >
                 <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
-                  <span className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none">
+                  <span className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none">
                     +
                   </span>
                 </summary>
@@ -412,9 +410,9 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
               <Link
                 key={city.slug}
                 href={`/cee/${urlCode}/${city.slug}`}
-                className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-sm transition"
+                className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
               >
-                <span className="font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
+                <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
                   {city.name}
                 </span>
                 <span className="text-sm font-semibold text-charcoal-900 tabular-nums ml-2">
@@ -432,26 +430,26 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
       </div>
 
       {/* CTAs */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Obtenez votre prime {guide.code}
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Demander un devis gratuit
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href={`/cee/${urlCode}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Voir la fiche {guide.code}
             </Link>

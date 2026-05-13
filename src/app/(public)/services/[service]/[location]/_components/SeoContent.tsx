@@ -281,8 +281,8 @@ export default function SeoContent({
             )}
 
             {locationContent.dataDriven.marcheArtisanal && (
-              <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
-                <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-emerald-500 pl-4">
+              <div className="bg-gradient-to-br from-accent-50/50 to-green-50/30 rounded-2xl border border-accent-100 p-8">
+                <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-accent-500 pl-4">
                   Marché artisanal à {location.name}
                 </h2>
                 <p className="text-charcoal-700 leading-relaxed">
@@ -291,8 +291,8 @@ export default function SeoContent({
                 {communeData && (
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {communeData.nb_entreprises_artisanales && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">
+                      <div className="text-center p-3 bg-white rounded-xl border border-accent-100">
+                        <div className="text-lg font-bold text-accent-700">
                           {formatNumber(communeData.nb_entreprises_artisanales)}
                         </div>
                         <div className="text-xs text-charcoal-500 mt-1">
@@ -301,16 +301,16 @@ export default function SeoContent({
                       </div>
                     )}
                     {communeData.nb_artisans_btp && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">
+                      <div className="text-center p-3 bg-white rounded-xl border border-accent-100">
+                        <div className="text-lg font-bold text-accent-700">
                           {formatNumber(communeData.nb_artisans_btp)}
                         </div>
                         <div className="text-xs text-charcoal-500 mt-1">Entreprises BTP</div>
                       </div>
                     )}
                     {communeData.nb_artisans_rge != null && communeData.nb_artisans_rge > 0 && (
-                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
-                        <div className="text-lg font-bold text-emerald-700">
+                      <div className="text-center p-3 bg-white rounded-xl border border-accent-100">
+                        <div className="text-lg font-bold text-accent-700">
                           {formatNumber(communeData.nb_artisans_rge)}
                         </div>
                         <div className="text-xs text-charcoal-500 mt-1">Certifiés RGE</div>
@@ -417,8 +417,8 @@ export default function SeoContent({
             )}
 
             {locationContent.dataDriven.demandeLocale && (
-              <div className="bg-gradient-to-br from-violet-50/50 to-purple-50/30 rounded-2xl border border-violet-100 p-8">
-                <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-violet-500 pl-4">
+              <div className="bg-gradient-to-br from-primary-50/50 to-purple-50/30 rounded-2xl border border-primary-100 p-8">
+                <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-4 border-l-4 border-primary-500 pl-4">
                   Demande locale en {service.name.toLowerCase()} à {location.name}
                 </h2>
                 <p className="text-charcoal-700 leading-relaxed">

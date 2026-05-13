@@ -221,7 +221,7 @@ export default function DevelopersHubPage() {
                 {ENDPOINTS.map((ep) => (
                   <tr key={ep.path} className="border-t border-sand-200">
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center rounded-md bg-emerald-100 px-2 py-0.5 text-xs font-mono text-emerald-800">
+                      <span className="inline-flex items-center rounded-md bg-accent-100 px-2 py-0.5 text-xs font-mono text-accent-800">
                         {ep.method}
                       </span>
                     </td>
@@ -247,7 +247,7 @@ export default function DevelopersHubPage() {
               Accès anonyme par défaut. Pour 10 000 requêtes/jour ou usage commercial, demandez une
               clé API par email.
             </p>
-            <pre className="rounded-md bg-charcoal-950 p-3 text-xs text-emerald-300 overflow-x-auto">
+            <pre className="rounded-md bg-charcoal-950 p-3 text-xs text-accent-300 overflow-x-auto">
               {`curl -H "X-API-Key: sa_xxxxx" \\
   ${SITE_URL}/api/v1/rge/lookup?siret=12345678901234`}
             </pre>
@@ -273,9 +273,9 @@ export default function DevelopersHubPage() {
 
         <section
           aria-labelledby="license"
-          className="mb-12 rounded-2xl border border-emerald-200 bg-emerald-50 p-6"
+          className="mb-12 rounded-2xl border border-accent-200 bg-accent-50 p-6"
         >
-          <Scale className="w-8 h-8 text-emerald-700 mb-3" aria-hidden="true" />
+          <Scale className="w-8 h-8 text-accent-700 mb-3" aria-hidden="true" />
           <h2 id="license" className="text-xl font-bold text-charcoal-900 font-heading mb-2">
             Licence Creative Commons CC-BY 4.0
           </h2>
@@ -285,14 +285,14 @@ export default function DevelopersHubPage() {
               href="https://creativecommons.org/licenses/by/4.0/deed.fr"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-emerald-700"
+              className="underline hover:text-accent-700"
             >
               Creative Commons Attribution 4.0
             </a>
             . Vous pouvez le copier, le modifier et le redistribuer librement, y compris à des fins
             commerciales, à condition de citer la source.
           </p>
-          <p className="text-xs text-charcoal-600 font-mono bg-white rounded p-3 border border-emerald-200">
+          <p className="text-xs text-charcoal-600 font-mono bg-white rounded p-3 border border-accent-200">
             Source : ServicesArtisans (servicesartisans.fr/datasets/rge), CC-BY 4.0, données ADEME /
             France Rénov&apos;
           </p>

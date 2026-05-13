@@ -426,7 +426,7 @@ export function ArtisanProfileCard({
 
           {/* Desktop CTA */}
           <div className="hidden sm:flex items-center pr-5">
-            <ChevronRight className="w-6 h-6 text-charcoal-400 group-hover:text-primary-400 group-hover:translate-x-1 transition-all" />
+            <ChevronRight className="w-6 h-6 text-charcoal-400 group-hover:text-primary-400 group-hover:trancharcoal-x-1 transition-all" />
           </div>
         </Link>
       </article>

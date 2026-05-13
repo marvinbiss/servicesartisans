@@ -41,11 +41,11 @@ const iconMap: Record<LeadEventType, React.ReactNode> = {
 
 const colorMap: Record<LeadEventType, string> = {
   created: 'bg-primary-100 text-primary-500 ring-primary-100',
-  dispatched: 'bg-indigo-100 text-indigo-600 ring-indigo-200',
+  dispatched: 'bg-primary-100 text-primary-600 ring-primary-200',
   viewed: 'bg-yellow-100 text-yellow-600 ring-yellow-200',
   quoted: 'bg-green-100 text-green-600 ring-green-200',
   declined: 'bg-sand-100 text-charcoal-500 ring-sand-300',
-  accepted: 'bg-emerald-100 text-emerald-600 ring-emerald-200',
+  accepted: 'bg-accent-100 text-accent-600 ring-accent-200',
   refused: 'bg-red-100 text-red-600 ring-red-200',
   completed: 'bg-green-100 text-green-700 ring-green-200',
   expired: 'bg-orange-100 text-orange-600 ring-orange-200',

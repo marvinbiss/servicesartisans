@@ -154,7 +154,7 @@ export function SiretAutocomplete({
         `}
       >
         {/* Left Icon */}
-        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+        <div className="absolute left-3 top-1/2 -trancharcoal-y-1/2">
           <Building2 className="w-5 h-5 text-charcoal-400" />
         </div>
 
@@ -183,7 +183,7 @@ export function SiretAutocomplete({
         />
 
         {/* Right Actions */}
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+        <div className="absolute right-3 top-1/2 -trancharcoal-y-1/2 flex items-center gap-2">
           {/* Status Icon */}
           {getStatusIcon()}
 
@@ -218,7 +218,7 @@ export function SiretAutocomplete({
 
       {/* Company Preview Card */}
       {showCompanyPreview && isValid && extendedInfo && (
-        <div className="mt-3 p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl animate-in slide-in-from-top-2 duration-300">
+        <div className="mt-3 p-4 bg-gradient-to-br from-green-50 to-accent-50 border border-green-200 rounded-xl animate-in slide-in-from-top-2 duration-300">
           <div className="flex items-start gap-3">
             <div className="p-2 bg-green-100 rounded-lg">
               <Building2 className="w-5 h-5 text-green-600" />

@@ -436,7 +436,7 @@ export default function ArtisanRGEPage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-green-600 to-accent-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               {"Besoin d'un artisan RGE pour vos travaux ?"}
             </h2>

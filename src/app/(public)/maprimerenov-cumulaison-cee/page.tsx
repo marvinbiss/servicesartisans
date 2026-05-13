@@ -216,7 +216,7 @@ const FAQ: Array<{ question: string; answer: string }> = [
 function StatusCell({ status }: { status: CumulStatus }) {
   if (status === 'oui') {
     return (
-      <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold">
+      <span className="inline-flex items-center gap-1 text-accent-700 font-semibold">
         <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
         Oui
       </span>
@@ -336,11 +336,11 @@ export default function MaprimeRenovCumulCeePage() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Landmark className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Landmark className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Mis à jour pour MaPrimeRénov’ 2026
             </span>
           </div>
@@ -354,9 +354,9 @@ export default function MaprimeRenovCumulCeePage() {
             author="ServicesArtisans"
             datePublished={PUBLISHED_AT}
             dateModified={UPDATED_AT}
-            className="justify-start mt-2 text-emerald-50/80"
+            className="justify-start mt-2 text-accent-50/80"
           />
-          <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 max-w-3xl leading-relaxed">
             Peut-on cumuler MaPrimeRénov’ et la prime CEE&nbsp;? Oui dans la majorité des cas, et
             c’est même prévu par les textes. Ce guide détaille les règles, exceptions (PAC air/air,
             chaudière gaz, PAC hybride), plafonds 2026 et procédure pour obtenir les deux aides.
@@ -364,13 +364,13 @@ export default function MaprimeRenovCumulCeePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Obtenir un devis gratuit
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Catalogue CEE
@@ -395,7 +395,7 @@ export default function MaprimeRenovCumulCeePage() {
               ['#faq', '6. Questions fréquentes'],
             ].map(([href, label]) => (
               <li key={href}>
-                <a href={href} className="text-emerald-700 font-semibold hover:underline">
+                <a href={href} className="text-accent-700 font-semibold hover:underline">
                   {label}
                 </a>
               </li>
@@ -484,8 +484,8 @@ export default function MaprimeRenovCumulCeePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl border border-charcoal-200 p-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-accent-100 flex items-center justify-center">
+                  <FileCheck2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-charcoal-900">
                   Parcours par geste
@@ -504,8 +504,8 @@ export default function MaprimeRenovCumulCeePage() {
             </div>
             <div className="bg-white rounded-2xl border border-charcoal-200 p-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <ClipboardList className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-xl bg-accent-100 flex items-center justify-center">
+                  <ClipboardList className="w-5 h-5 text-accent-700" aria-hidden="true" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-charcoal-900">
                   Parcours Accompagné
@@ -562,7 +562,7 @@ export default function MaprimeRenovCumulCeePage() {
                   <td className="px-4 py-3">
                     <Link
                       href={row.href}
-                      className="text-xs font-mono font-semibold text-emerald-700 hover:underline"
+                      className="text-xs font-mono font-semibold text-accent-700 hover:underline"
                     >
                       {row.code}
                     </Link>
@@ -715,7 +715,7 @@ export default function MaprimeRenovCumulCeePage() {
             },
           ].map((step) => (
             <li key={step.n} className="flex gap-5 items-start">
-              <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-accent-600 text-white font-bold flex items-center justify-center flex-shrink-0">
                 {step.n}
               </div>
               <div>
@@ -771,11 +771,11 @@ export default function MaprimeRenovCumulCeePage() {
             {FAQ.map((item, idx) => (
               <details
                 key={idx}
-                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+                className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
               >
                 <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                   <span>{item.question}</span>
-                  <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                  <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                     +
                   </span>
                 </summary>
@@ -811,47 +811,47 @@ export default function MaprimeRenovCumulCeePage() {
       </div>
 
       {/* CTA final */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold mb-4">
             Prêt à monter votre dossier&nbsp;?
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Devis gratuit auprès d’un artisan RGE vérifié, ou approfondissez avec nos ressources
             CEE, RGE et rénovation.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Demander un devis gratuit
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               <Euro className="w-5 h-5" aria-hidden="true" />
               Catalogue des primes CEE
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Annuaire RGE
             </Link>
             <Link
               href="/cee/guides"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Guides CEE
             </Link>
             <Link
               href="/cee/mandataire-vs-direct"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
               Mandataire ou direct&nbsp;?

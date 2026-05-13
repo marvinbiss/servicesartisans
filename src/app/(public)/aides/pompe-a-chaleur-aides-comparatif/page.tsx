@@ -331,11 +331,11 @@ export default function PompeAChaleurAidesComparatifPage() {
         />
       </div>
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Scale className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Scale className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               Comparatif aides 2026 · 4 technologies PAC
             </span>
           </div>
@@ -345,7 +345,7 @@ export default function PompeAChaleurAidesComparatifPage() {
           >
             Aides pompe à chaleur 2026 : montants par type de PAC
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Comparatif officiel des aides nationales (MaPrimeRénov’, prime CEE, Coup de pouce
             Chauffage, éco-PTZ) selon le type de PAC installé. Sources : ANAH, ADEME, France Rénov’,
             arrêtés DGEC.
@@ -353,19 +353,19 @@ export default function PompeAChaleurAidesComparatifPage() {
           <LastUpdated
             label="Comparatif vérifié le"
             date={REVIEWED_AT}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides PAC
             </Link>
             <Link
               href="/guides/pompe-a-chaleur-cee-maprimerenov-2026"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Guide PAC complet
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -389,7 +389,7 @@ export default function PompeAChaleurAidesComparatifPage() {
       <section className="bg-white py-12" aria-labelledby="cards-pac-heading">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-6">
-            <Sparkles className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Sparkles className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2
               id="cards-pac-heading"
               className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900"
@@ -403,11 +403,11 @@ export default function PompeAChaleurAidesComparatifPage() {
               return (
                 <article
                   key={p.slug}
-                  className="rounded-2xl border border-charcoal-100 bg-white p-6 hover:border-emerald-300 hover:shadow-md transition"
+                  className="rounded-2xl border border-charcoal-100 bg-white p-6 hover:border-accent-300 hover:shadow-md transition"
                 >
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-50">
-                      <Icon className="h-6 w-6 text-emerald-700" aria-hidden="true" />
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent-50">
+                      <Icon className="h-6 w-6 text-accent-700" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="font-heading font-bold text-charcoal-900">{p.name}</h3>
@@ -437,7 +437,7 @@ export default function PompeAChaleurAidesComparatifPage() {
                       <dd className="font-semibold text-charcoal-900">{p.ecoPtzPlafond}</dd>
                     </div>
                   </dl>
-                  <p className="text-xs text-emerald-700 font-semibold mb-2">
+                  <p className="text-xs text-accent-700 font-semibold mb-2">
                     Cumul max (modeste, H1) : {p.cumulMaxModeste}
                   </p>
                   <p className="text-xs text-charcoal-600 leading-relaxed">{p.notes}</p>
@@ -452,7 +452,7 @@ export default function PompeAChaleurAidesComparatifPage() {
       </section>
 
       <section
-        className="bg-emerald-50/40 py-12 border-y border-emerald-100"
+        className="bg-accent-50/40 py-12 border-y border-accent-100"
         aria-labelledby="full-table-heading"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -465,7 +465,7 @@ export default function PompeAChaleurAidesComparatifPage() {
           <p className="text-charcoal-700 mb-6">
             Vue à plat des montants nationaux 2026. Pastilles{' '}
             <CheckCircle2
-              className="inline w-4 h-4 text-emerald-600 align-text-bottom"
+              className="inline w-4 h-4 text-accent-600 align-text-bottom"
               aria-hidden="true"
             />{' '}
             indiquent le type de PAC qui touche le forfait MaPrimeRénov’ le plus élevé sur le
@@ -477,7 +477,7 @@ export default function PompeAChaleurAidesComparatifPage() {
                 Tableau des aides 2026 par type de pompe à chaleur (air-eau, air-air, géothermique,
                 hybride)
               </caption>
-              <thead className="bg-emerald-50 text-charcoal-800">
+              <thead className="bg-accent-50 text-charcoal-800">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-semibold">
                     Type de PAC
@@ -505,7 +505,7 @@ export default function PompeAChaleurAidesComparatifPage() {
                     <td className="px-4 py-3">
                       {p.slug === 'geothermique' && (
                         <CheckCircle2
-                          className="inline w-4 h-4 text-emerald-600 mr-1 align-text-bottom"
+                          className="inline w-4 h-4 text-accent-600 mr-1 align-text-bottom"
                           aria-label="Forfait MaPrimeRénov’ le plus élevé sur ce critère"
                         />
                       )}
@@ -529,8 +529,8 @@ export default function PompeAChaleurAidesComparatifPage() {
         aria-labelledby="bridge-heading"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex items-start gap-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 p-6 md:p-8">
-            <Info className="w-6 h-6 text-emerald-700 flex-shrink-0 mt-1" aria-hidden="true" />
+          <div className="flex items-start gap-4 rounded-2xl bg-accent-50/60 border border-accent-200 p-6 md:p-8">
+            <Info className="w-6 h-6 text-accent-700 flex-shrink-0 mt-1" aria-hidden="true" />
             <div>
               <h2
                 id="bridge-heading"
@@ -549,14 +549,14 @@ export default function PompeAChaleurAidesComparatifPage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/simulateur-aides-renovation"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 text-white font-semibold shadow-md hover:bg-emerald-800 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-700 text-white font-semibold shadow-md hover:bg-accent-800 transition"
                 >
                   <Calculator className="w-5 h-5" aria-hidden="true" />
                   Simuler mon plan d’aides PAC
                 </Link>
                 <Link
                   href="/aides/maprimerenov-vs-coup-de-pouce"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold hover:bg-emerald-50 transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300 text-accent-700 font-semibold hover:bg-accent-50 transition"
                 >
                   MaPrimeRénov’ vs Coup de pouce
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -582,12 +582,12 @@ export default function PompeAChaleurAidesComparatifPage() {
             {FAQ.map((item, i) => (
               <details
                 key={`faq-${i}`}
-                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-emerald-300 open:shadow-sm"
+                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-accent-300 open:shadow-sm"
               >
                 <summary className="cursor-pointer list-none font-semibold text-charcoal-900 flex items-start justify-between gap-4">
                   <span>{item.question}</span>
                   <span
-                    className="text-emerald-600 group-open:rotate-45 transition-transform text-xl leading-none"
+                    className="text-accent-600 group-open:rotate-45 transition-transform text-xl leading-none"
                     aria-hidden="true"
                   >
                     +
@@ -608,21 +608,21 @@ export default function PompeAChaleurAidesComparatifPage() {
           <div className="flex flex-wrap justify-center gap-3 mt-4">
             <Link
               href="/aides/aide-pompe-a-chaleur"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-semibold transition"
             >
               Page aide PAC
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/guides/pompe-a-chaleur-cee-maprimerenov-2026"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-semibold transition"
             >
               Guide PAC + aides
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/services/pompe-a-chaleur"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 hover:bg-accent-700 text-white font-semibold transition"
             >
               Trouver un installateur
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

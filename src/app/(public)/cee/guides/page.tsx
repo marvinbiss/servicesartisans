@@ -104,11 +104,11 @@ export default function CeeGuidesIndexPage() {
 
       <Breadcrumb items={[{ label: 'Primes CEE', href: '/cee' }, { label: 'Guides' }]} />
 
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <BookOpen className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <BookOpen className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guides éditoriaux rénovation énergétique
             </span>
           </div>
@@ -118,7 +118,7 @@ export default function CeeGuidesIndexPage() {
           >
             Guides des primes CEE 2026
           </h1>
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Conditions techniques, montants de la prime classique et bonifiée précarité, cumul
             MaPrimeRénov’ et pièges à éviter pour les 5 opérations CEE résidentielles les plus
             mobilisées.
@@ -139,23 +139,23 @@ export default function CeeGuidesIndexPage() {
               <Link
                 key={code}
                 href={`/cee/${code.toLowerCase()}/guide`}
-                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 hover:shadow-lg transition"
+                className="group block p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 hover:shadow-lg transition"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-accent-50 border border-accent-100 text-xs font-semibold text-accent-700">
                     {g.code}
                   </span>
                   <span className="text-xs text-charcoal-900">{g.primeClassique}</span>
                 </div>
-                <h2 className="font-heading font-bold text-xl text-charcoal-900 group-hover:text-emerald-700 transition leading-snug">
+                <h2 className="font-heading font-bold text-xl text-charcoal-900 group-hover:text-accent-700 transition leading-snug">
                   {g.h1}
                 </h2>
                 <p className="text-sm text-charcoal-600 mt-3 leading-relaxed">{g.lede}</p>
                 <div className="flex items-center gap-2 mt-4 text-xs text-charcoal-900">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+                  <ShieldCheck className="w-4 h-4 text-accent-600" aria-hidden="true" />
                   <span>RGE requis&nbsp;: {g.rgeRequises.join(', ')}</span>
                 </div>
-                <div className="text-sm font-semibold text-emerald-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                <div className="text-sm font-semibold text-accent-700 mt-4 inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                   Lire le guide <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </div>
               </Link>
@@ -177,50 +177,50 @@ export default function CeeGuidesIndexPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-600 text-white font-semibold hover:bg-accent-700 transition"
             >
               Voir les 19 primes CEE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/cee/coup-de-pouce-2026"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Coup de pouce 2026
             </Link>
             <Link
               href="/cee/mandataire-vs-direct"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Mandataire vs direct
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Cumul MaPrimeRénov’ &amp; CEE
             </Link>
             <Link
               href="/rge/qualifications"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Qualifications RGE
             </Link>
             <Link
               href="/comparatif-primes-cee-2026"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Comparatif primes 2026
             </Link>
             <Link
               href="/leads-exclusifs-vs-partages"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Leads exclusifs vs partagés
             </Link>
             <Link
               href="/ademe"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300 bg-white text-emerald-800 font-semibold hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300 bg-white text-accent-800 font-semibold hover:bg-accent-50 transition"
             >
               Source officielle ADEME
             </Link>
@@ -228,18 +228,18 @@ export default function CeeGuidesIndexPage() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Prêt à lancer votre projet&nbsp;?
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Demandez un devis gratuit auprès d’un artisan RGE certifié et sécurisez votre prime CEE
             dès la signature.
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
           >
             Demander un devis gratuit
             <ArrowRight className="w-4 h-4" aria-hidden="true" />

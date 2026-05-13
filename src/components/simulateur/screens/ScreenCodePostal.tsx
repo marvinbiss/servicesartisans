@@ -31,7 +31,7 @@ export default function ScreenCodePostal({ value, onChange, onNext, detectedCity
       </ScreenTitle>
       <div className="mx-auto max-w-xs">
         <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+          <MapPin className="absolute left-3 top-1/2 h-5 w-5 -trancharcoal-y-1/2 text-charcoal-400" />
           <input
             type="text"
             inputMode="numeric"
@@ -42,19 +42,17 @@ export default function ScreenCodePostal({ value, onChange, onNext, detectedCity
             onChange={(e) => onChange(e.target.value.replace(/\D/g, ''))}
             onKeyDown={handleKeyDown}
             placeholder="ex : 75001"
-            className="w-full rounded-xl border-2 border-slate-200 py-4 pl-11 pr-4 text-center text-2xl font-bold tracking-widest text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-xl border-2 border-charcoal-200 py-4 pl-11 pr-4 text-center text-2xl font-bold tracking-widest text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
         </div>
         {detectedCity && valid && (
-          <p className="mt-3 text-center text-sm font-medium text-emerald-700">
-            {detectedCity}
-          </p>
+          <p className="mt-3 text-center text-sm font-medium text-accent-700">{detectedCity}</p>
         )}
         <button
           type="button"
           onClick={onNext}
           disabled={!valid}
-          className="mt-5 w-full rounded-xl bg-emerald-600 py-3.5 text-base font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-40"
+          className="mt-5 w-full rounded-xl bg-accent-600 py-3.5 text-base font-semibold text-white transition hover:bg-accent-700 disabled:opacity-40"
         >
           Continuer
         </button>

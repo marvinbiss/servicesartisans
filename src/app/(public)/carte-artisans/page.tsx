@@ -81,7 +81,7 @@ export default function CarteArtisansPage() {
 
       <div className="min-h-screen bg-gradient-to-b from-sand-50 to-white">
         {/* Header section */}
-        <div className="bg-gradient-to-r from-primary-500 to-indigo-700 text-white">
+        <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
             <Breadcrumb
               items={breadcrumbItems}

@@ -411,7 +411,7 @@ export default function DpeClasseFPage() {
                   className="bg-white border border-sand-200 rounded-xl p-5 shadow-sm"
                 >
                   <div className="flex items-start gap-4 flex-wrap">
-                    <div className="font-heading text-2xl font-bold text-emerald-700 shrink-0">
+                    <div className="font-heading text-2xl font-bold text-accent-700 shrink-0">
                       {s.saut}
                     </div>
                     <div className="flex-1 min-w-[280px]">
@@ -426,7 +426,7 @@ export default function DpeClasseFPage() {
                         </div>
                         <div>
                           <p className="text-xs uppercase text-sand-500 mb-0.5">Aides</p>
-                          <p className="font-semibold text-emerald-700">{s.aides}</p>
+                          <p className="font-semibold text-accent-700">{s.aides}</p>
                         </div>
                         <div>
                           <p className="text-xs uppercase text-sand-500 mb-0.5">Reste à charge</p>
@@ -440,7 +440,7 @@ export default function DpeClasseFPage() {
                         </div>
                       </div>
                       <p className="text-sm text-sand-600 mt-3 border-t border-sand-100 pt-3">
-                        <Leaf className="inline w-4 h-4 text-emerald-600 mr-1" aria-hidden />
+                        <Leaf className="inline w-4 h-4 text-accent-600 mr-1" aria-hidden />
                         {s.impact}
                       </p>
                     </div>
@@ -450,12 +450,12 @@ export default function DpeClasseFPage() {
             </div>
           </section>
 
-          <section className="my-10 bg-emerald-50 border-2 border-emerald-200 rounded-xl p-6">
-            <h2 className="font-heading text-xl font-bold text-emerald-900 mb-3">
+          <section className="my-10 bg-accent-50 border-2 border-accent-200 rounded-xl p-6">
+            <h2 className="font-heading text-xl font-bold text-accent-900 mb-3">
               <Calculator className="inline w-5 h-5 mr-2" aria-hidden />
               Estimer mes aides en 2 minutes
             </h2>
-            <p className="text-sm text-emerald-800 mb-4 leading-relaxed">
+            <p className="text-sm text-accent-800 mb-4 leading-relaxed">
               Le simulateur officiel France Rénov’ calcule MaPrimeRénov’ + CEE + éco-PTZ selon votre
               revenu fiscal de référence et la classe DPE de départ (bonus passoire +10 % + sortie
               passoire 1 500 €).
@@ -463,14 +463,14 @@ export default function DpeClasseFPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/simulateur-aides-renovation"
-                className="inline-flex items-center gap-2 bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+                className="inline-flex items-center gap-2 bg-accent-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-800 transition-colors"
               >
                 Simulateur aides
                 <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>
               <Link
                 href="/renovation-energetique/passoires-thermiques/interdiction-location-g-f"
-                className="inline-flex items-center gap-2 bg-white border border-emerald-300 text-emerald-800 px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-50 transition-colors"
+                className="inline-flex items-center gap-2 bg-white border border-accent-300 text-accent-800 px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-50 transition-colors"
               >
                 Détail interdiction location G+F
                 <ArrowRight className="w-4 h-4" aria-hidden />

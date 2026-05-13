@@ -58,8 +58,8 @@ export default function RgeGlossaryBlock({
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
         <div className="flex items-center gap-2 mb-3">
-          <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-          <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+          <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
+          <span className="text-xs font-bold text-accent-800 uppercase tracking-wider">
             Glossaire RGE
           </span>
         </div>
@@ -75,7 +75,7 @@ export default function RgeGlossaryBlock({
             <div key={e.slug} id={`term-${e.slug}`} className="scroll-mt-24">
               <dt className="font-heading font-bold text-charcoal-900 text-base flex items-baseline gap-2 flex-wrap">
                 <dfn className="not-italic">{e.name}</dfn>
-                <span className="text-xs font-semibold text-emerald-700">{e.organisme}</span>
+                <span className="text-xs font-semibold text-accent-700">{e.organisme}</span>
               </dt>
               <dd className="text-sm text-charcoal-700 mt-1.5 leading-relaxed">{e.definition}</dd>
             </div>
@@ -85,7 +85,7 @@ export default function RgeGlossaryBlock({
           <div className="mt-8">
             <Link
               href={RGE_GLOSSAIRE_CANONICAL_PATH}
-              className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-900 underline-offset-4 hover:underline"
+              className="inline-flex items-center gap-2 text-accent-700 font-semibold hover:text-accent-900 underline-offset-4 hover:underline"
             >
               Voir le glossaire RGE complet
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

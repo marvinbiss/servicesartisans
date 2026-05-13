@@ -224,7 +224,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500/15 backdrop-blur-sm rounded-full border border-accent-400/25">
                 <MapPin className="w-4 h-4 text-accent-400" />
                 <span className="text-sm font-medium text-accent-200">Quartier</span>
-                <span className="w-1 h-1 rounded-full bg-emerald-400/50" />
+                <span className="w-1 h-1 rounded-full bg-accent-400/50" />
                 <span className="text-sm font-medium text-white/90">{ville.name}</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
@@ -349,8 +349,8 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Users className="w-4 h-4 text-violet-600" />
+                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Users className="w-4 h-4 text-primary-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-charcoal-900">Population</p>
@@ -409,7 +409,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-emerald-200' : 'bg-white border border-sand-200'}`}
+                className={`rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-trancharcoal-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-accent-50 border-2 border-accent-200' : 'bg-white border border-sand-200'}`}
               >
                 <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
                   {service.name}
@@ -495,7 +495,7 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
 
             {/* Marché artisanal */}
-            <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
+            <div className="bg-gradient-to-br from-accent-50/50 to-green-50/30 rounded-2xl border border-accent-100 p-8">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 bg-accent-100 rounded-lg flex items-center justify-center">
                   <BarChart3 className="w-4 h-4 text-accent-600" />
@@ -509,14 +509,14 @@ export default async function QuartierPage({ params }: PageProps) {
               </p>
               {content.dataDriven.statCards.artisansBtp > 0 && (
                 <div className="mt-6 grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-white rounded-2xl border border-emerald-100">
+                  <div className="text-center p-3 bg-white rounded-2xl border border-accent-100">
                     <div className="text-lg font-bold text-accent-700">
                       {formatNumber(content.dataDriven.statCards.artisansBtp)}
                     </div>
                     <div className="text-xs text-charcoal-500 mt-1">Artisans BTP du secteur</div>
                   </div>
                   {content.dataDriven.statCards.artisansProximite > 0 && (
-                    <div className="text-center p-3 bg-white rounded-2xl border border-emerald-100">
+                    <div className="text-center p-3 bg-white rounded-2xl border border-accent-100">
                       <div className="text-lg font-bold text-accent-700">
                         {formatNumber(content.dataDriven.statCards.artisansProximite)}
                       </div>
@@ -660,8 +660,8 @@ export default async function QuartierPage({ params }: PageProps) {
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-primary-600" />
               </div>
               <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
                 Villes proches de {ville.name}
@@ -747,7 +747,7 @@ export default async function QuartierPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-trancharcoal-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

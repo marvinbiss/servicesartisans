@@ -109,9 +109,9 @@ const BADGE_CONFIG: Record<
     icon: Leaf,
     label: 'Eco-Friendly',
     labelFr: 'Éco-Responsable',
-    color: 'text-emerald-600',
-    bgColor: 'bg-emerald-50',
-    borderColor: 'border-emerald-300',
+    color: 'text-accent-600',
+    bgColor: 'bg-accent-50',
+    borderColor: 'border-accent-300',
     description: 'Pratiques écologiques',
   },
 }

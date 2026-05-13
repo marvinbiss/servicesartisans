@@ -28,7 +28,7 @@ export default function ScreenRevenus({ foyer, idf, value, onSelect }: Props) {
             className={`w-full rounded-xl border-2 p-4 text-left transition ${
               value === card.categorie
                 ? `${card.borderColor} ${card.bgColor} ring-2 ring-opacity-40`
-                : 'border-slate-200 bg-white hover:border-slate-300'
+                : 'border-charcoal-200 bg-white hover:border-charcoal-300'
             }`}
           >
             <div className="flex items-center justify-between">

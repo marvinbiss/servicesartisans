@@ -20,7 +20,7 @@ export default function AideDemarche({ demarche }: Props) {
               key={`${idx}-${step.name.slice(0, 24)}`}
               className="flex gap-4 rounded-2xl border border-charcoal-100 bg-white p-5"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-accent-600 text-white font-bold flex items-center justify-center">
                 {idx + 1}
               </div>
               <div>

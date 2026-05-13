@@ -496,7 +496,7 @@ export default function QuickSearch() {
       return <Building2 className="w-4 h-4 text-amber-500" />
     }
     // combined
-    return <Search className="w-4 h-4 text-emerald-500" />
+    return <Search className="w-4 h-4 text-accent-500" />
   }
 
   return (
@@ -593,7 +593,7 @@ export default function QuickSearch() {
                             ? 'bg-rose-100'
                             : suggestion.type === 'enterprise'
                               ? 'bg-amber-100'
-                              : 'bg-emerald-100'
+                              : 'bg-accent-100'
                         : 'bg-sand-100'
                     }`}
                   >
@@ -650,7 +650,7 @@ export default function QuickSearch() {
                           ? 'bg-rose-50 text-rose-600'
                           : suggestion.type === 'enterprise'
                             ? 'bg-amber-50 text-amber-600'
-                            : 'bg-emerald-50 text-emerald-600'
+                            : 'bg-accent-50 text-accent-600'
                     }`}
                   >
                     {suggestion.type === 'service'

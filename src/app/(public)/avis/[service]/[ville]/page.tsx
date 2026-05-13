@@ -856,7 +856,7 @@ async function renderAvisServiceVillePage({
             <div className="mt-8">
               <Link
                 href={buildDevisHref(service, villeData.name)}
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-trancharcoal-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
                 Devis gratuit à {villeData.name}

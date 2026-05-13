@@ -544,9 +544,9 @@ export default function Page() {
                       <p className="text-sand-600 m-0">Aides 2026</p>
                       <p className="font-semibold text-sand-900 m-0">{c.aides}</p>
                     </div>
-                    <div className="bg-emerald-50 rounded p-2">
-                      <p className="text-emerald-700 m-0">Net après aides</p>
-                      <p className="font-bold text-emerald-900 m-0">{c.netApresAides}</p>
+                    <div className="bg-accent-50 rounded p-2">
+                      <p className="text-accent-700 m-0">Net après aides</p>
+                      <p className="font-bold text-accent-900 m-0">{c.netApresAides}</p>
                     </div>
                   </div>
                 </article>
@@ -613,7 +613,7 @@ export default function Page() {
                   </h3>
                   <p className="text-xs text-sand-500 m-0 mb-2">Origine : {f.origine}</p>
                   <p className="text-sm text-sand-700 m-0 mb-2">{f.particularite}</p>
-                  <p className="text-xs font-semibold text-emerald-700 m-0">
+                  <p className="text-xs font-semibold text-accent-700 m-0">
                     Prix indicatif : {f.prixIndicatif}
                   </p>
                 </article>

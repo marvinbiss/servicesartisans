@@ -457,7 +457,7 @@ async function renderVillePage({ params }: PageProps) {
 
       {/* RGE local signal — bandeau visible si au moins 1 artisan RGE */}
       {rgeCount > 0 && (
-        <section className="mt-6 py-4 bg-emerald-50 border-y border-emerald-100">
+        <section className="mt-6 py-4 bg-accent-50 border-y border-accent-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <RgePseoCtaLink
               href={`/artisans-rge/${villeSlug}`}
@@ -465,20 +465,20 @@ async function renderVillePage({ params }: PageProps) {
               className="flex items-center justify-between gap-4 group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                  <Leaf className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-5 h-5 text-accent-700" aria-hidden="true" />
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-emerald-900">
+                  <div className="text-sm font-semibold text-accent-900">
                     {rgeCount} artisan{rgeCount > 1 ? 's' : ''} certifié{rgeCount > 1 ? 's' : ''}{' '}
                     RGE à {ville.name}
                   </div>
-                  <div className="text-xs text-emerald-700">
+                  <div className="text-xs text-accent-700">
                     Requis pour MaPrimeRénov&apos;, CEE et TVA 5,5 %
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-sm font-medium text-emerald-700 group-hover:text-emerald-900 transition-colors flex-shrink-0">
+              <div className="flex items-center gap-1 text-sm font-medium text-accent-700 group-hover:text-accent-900 transition-colors flex-shrink-0">
                 <span className="hidden sm:inline">Voir la liste</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </div>

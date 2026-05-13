@@ -105,9 +105,9 @@ export default function PartnerSiretLookup() {
     <section id="inscription-rapide" className="bg-white border-y border-charcoal-100">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1 mb-4">
-            <BadgeCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-            <span className="text-xs font-semibold text-emerald-800">
+          <div className="inline-flex items-center gap-2 bg-accent-50 border border-accent-200 rounded-full px-3 py-1 mb-4">
+            <BadgeCheck className="w-4 h-4 text-accent-700" aria-hidden="true" />
+            <span className="text-xs font-semibold text-accent-800">
               Vérification ADEME en 10 secondes
             </span>
           </div>
@@ -145,19 +145,19 @@ export default function PartnerSiretLookup() {
                 onBlur={() => {
                   if (isComplete && state.kind === 'idle') void handleLookup()
                 }}
-                className="w-full px-4 py-3 pr-10 rounded-xl border border-charcoal-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono text-base tracking-wider"
+                className="w-full px-4 py-3 pr-10 rounded-xl border border-charcoal-300 bg-white focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-accent-500 font-mono text-base tracking-wider"
                 aria-invalid={state.kind === 'error'}
                 aria-describedby={state.kind === 'error' ? 'siret-error' : 'siret-help'}
               />
               <Search
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none"
+                className="absolute right-3 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400 pointer-events-none"
                 aria-hidden="true"
               />
             </div>
             <button
               type="submit"
               disabled={!isComplete || state.kind === 'loading'}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700 transition disabled:bg-charcoal-300 disabled:cursor-not-allowed whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-accent-600 text-white font-semibold shadow hover:bg-accent-700 transition disabled:bg-charcoal-300 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {state.kind === 'loading' ? (
                 <>
@@ -183,11 +183,11 @@ export default function PartnerSiretLookup() {
           <div
             role="status"
             aria-live="polite"
-            className="max-w-2xl mt-5 bg-white border-2 border-emerald-300 rounded-2xl p-5 md:p-6"
+            className="max-w-2xl mt-5 bg-white border-2 border-accent-300 rounded-2xl p-5 md:p-6"
           >
             <div className="flex items-start gap-3 mb-4">
               <CheckCircle2
-                className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-6 h-6 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div>
@@ -226,10 +226,10 @@ export default function PartnerSiretLookup() {
             </dl>
 
             {state.data.rge.hasQualifications && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4">
+              <div className="bg-accent-50 border border-accent-200 rounded-xl p-4 mb-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <BadgeCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
-                  <p className="text-sm font-semibold text-emerald-900">
+                  <BadgeCheck className="w-4 h-4 text-accent-700" aria-hidden="true" />
+                  <p className="text-sm font-semibold text-accent-900">
                     {state.data.rge.qualifications.length} qualification
                     {state.data.rge.qualifications.length > 1 ? 's' : ''} RGE active
                     {state.data.rge.qualifications.length > 1 ? 's' : ''}
@@ -237,14 +237,14 @@ export default function PartnerSiretLookup() {
                 </div>
                 <ul className="space-y-1.5">
                   {state.data.rge.qualifications.slice(0, 5).map((q) => (
-                    <li key={`${q.code}-${q.organisme}`} className="text-xs text-emerald-900">
+                    <li key={`${q.code}-${q.organisme}`} className="text-xs text-accent-900">
                       <span className="font-mono font-semibold">{q.code}</span> —{' '}
                       {cleanAdemeText(q.nom)}{' '}
-                      <span className="text-emerald-700">({cleanAdemeText(q.organisme)})</span>
+                      <span className="text-accent-700">({cleanAdemeText(q.organisme)})</span>
                     </li>
                   ))}
                   {state.data.rge.qualifications.length > 5 && (
-                    <li className="text-xs text-emerald-700 italic">
+                    <li className="text-xs text-accent-700 italic">
                       + {state.data.rge.qualifications.length - 5} autre
                       {state.data.rge.qualifications.length - 5 > 1 ? 's' : ''}
                     </li>
@@ -336,7 +336,7 @@ export default function PartnerSiretLookup() {
                     cta_label: 'continuer_inscription_siret',
                   })
                 }
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700 transition"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-600 text-white font-semibold shadow hover:bg-accent-700 transition"
               >
                 Continuer l'inscription
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

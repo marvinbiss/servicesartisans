@@ -137,7 +137,7 @@ export function autoLinkRgeTerms(text: string, options?: { hostPath?: string }):
         key={`${term.slug}-${m.index}`}
         href={`${linkPrefix}#term-${term.slug}`}
         title={term.title}
-        className="text-emerald-700 underline-offset-2 hover:underline"
+        className="text-accent-700 underline-offset-2 hover:underline"
       >
         {matchedText}
       </a>

@@ -383,7 +383,7 @@ export default function Page() {
             className="mb-6"
           />
           <header className="mb-8">
-            <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-medium px-2.5 py-1 rounded-full mb-4">
+            <div className="inline-flex items-center gap-1.5 bg-accent-50 text-accent-800 text-xs font-medium px-2.5 py-1 rounded-full mb-4">
               <Droplets className="w-3.5 h-3.5" aria-hidden />
               ECS EnR — Aides MPR + CEE jusqu&apos;à 1 350 €
             </div>

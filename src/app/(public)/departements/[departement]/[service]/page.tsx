@@ -355,7 +355,7 @@ export default async function DeptServicePage({ params }: PageProps) {
 
             <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-16 bg-accent-500/15 backdrop-blur rounded-2xl flex items-center justify-center border border-accent-400/20">
-                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-primary-200">
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200">
                   {dept.code}
                 </span>
               </div>
@@ -507,8 +507,8 @@ export default async function DeptServicePage({ params }: PageProps) {
                   {content.profile.housingLabel}
                 </div>
               </div>
-              <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">
+              <div className="bg-primary-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-primary-700 uppercase tracking-wider mb-1">
                   Économie
                 </div>
                 <div className="text-sm text-charcoal-800 font-medium">
@@ -600,10 +600,10 @@ export default async function DeptServicePage({ params }: PageProps) {
                 <Link
                   key={ville.slug}
                   href={`/services/${serviceSlug}/${ville.slug}`}
-                  className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group"
+                  className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-trancharcoal-y-0.5 transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg flex items-center justify-center group-hover:from-primary-100 group-hover:to-primary-200 transition-colors">
                       <MapPin className="w-5 h-5 text-accent-600" />
                     </div>
                     <div className="min-w-0">
@@ -653,8 +653,8 @@ export default async function DeptServicePage({ params }: PageProps) {
         {relatedServicesData.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-primary-600" />
               </div>
               <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
                 Services complémentaires dans le {dept.name}
@@ -665,7 +665,7 @@ export default async function DeptServicePage({ params }: PageProps) {
                 <Link
                   key={s.slug}
                   href={`/departements/${deptSlug}/${s.slug}`}
-                  className="bg-white border border-violet-200 hover:bg-violet-50 hover:border-violet-300 text-charcoal-700 hover:text-violet-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                  className="bg-white border border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-charcoal-700 hover:text-primary-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                 >
                   {s.name} dans le {dept.code}
                 </Link>
@@ -770,7 +770,7 @@ export default async function DeptServicePage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-trancharcoal-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

@@ -306,11 +306,11 @@ export default async function MprDeptPage({ params }: PageProps) {
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-14 md:py-20">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <MapPin className="w-4 h-4 text-emerald-300" aria-hidden="true" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <MapPin className="w-4 h-4 text-accent-300" aria-hidden="true" />
+            <span className="text-sm font-medium text-accent-100">
               {dept.region} — {zoneLabel.split('—')[0].trim()}
             </span>
           </div>
@@ -319,14 +319,14 @@ export default async function MprDeptPage({ params }: PageProps) {
             className="font-heading text-3xl md:text-5xl font-extrabold leading-tight mb-4"
           >
             MaPrimeRénov&apos; {getDeptPreposition(dept.name)}{' '}
-            <span className="text-emerald-200">({dept.code})</span>
+            <span className="text-accent-200">({dept.code})</span>
           </h1>
-          <p className="text-base md:text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-base md:text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Aide officielle de l&apos;Anah pour rénover votre logement en {dept.region}. Barèmes
             2026, artisans RGE vérifiés via l&apos;API ADEME, cumul avec primes CEE et TVA 5,5 %
             automatique.
           </p>
-          <p className="mt-4 text-sm text-emerald-100/80">
+          <p className="mt-4 text-sm text-accent-100/80">
             Auteur : <span className="font-medium text-white">{author.name}</span>
             {' · '}
             Mis à jour le{' '}
@@ -342,19 +342,19 @@ export default async function MprDeptPage({ params }: PageProps) {
           <LastUpdated
             label="Barèmes vérifiés le"
             date={CONTENT_UPDATED_AT}
-            className="mt-4 text-emerald-100/90"
+            className="mt-4 text-accent-100/90"
           />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <Calculator className="w-5 h-5" aria-hidden="true" />
               Simuler mes aides
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               Devis gratuit
             </Link>
@@ -378,7 +378,7 @@ export default async function MprDeptPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="rounded-2xl border border-charcoal-100 bg-white p-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center">
                   <FileCheck2 className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-charcoal-900">
@@ -389,12 +389,12 @@ export default async function MprDeptPage({ params }: PageProps) {
                 Pour 1 ou 2 travaux isolés : isolation combles, fenêtres, pompe à chaleur, poêle
                 granulés. Demande autonome en ligne sur maprimerenov.gouv.fr.
               </p>
-              <div className="text-sm font-semibold text-emerald-700 mb-3">
+              <div className="text-sm font-semibold text-accent-700 mb-3">
                 Plafond 30 000 € / logement
               </div>
               <Link
                 href="/guides/maprimerenov-2026"
-                className="inline-flex items-center gap-1 text-sm text-emerald-700 font-medium hover:text-emerald-800"
+                className="inline-flex items-center gap-1 text-sm text-accent-700 font-medium hover:text-accent-800"
               >
                 Voir le guide détaillé
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -402,7 +402,7 @@ export default async function MprDeptPage({ params }: PageProps) {
             </div>
             <div className="rounded-2xl border border-charcoal-100 bg-white p-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-accent-100 text-accent-700 flex items-center justify-center">
                   <Sparkles className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-charcoal-900">
@@ -413,12 +413,12 @@ export default async function MprDeptPage({ params }: PageProps) {
                 Obligatoire dès 2 gestes d&apos;isolation + changement de chauffage OU pour un saut
                 d&apos;au moins 2 classes DPE. Accompagnement MAR obligatoire.
               </p>
-              <div className="text-sm font-semibold text-emerald-700 mb-3">
+              <div className="text-sm font-semibold text-accent-700 mb-3">
                 Plafond 70 000 € / logement
               </div>
               <Link
                 href="/guides/maprimerenov-parcours-accompagne"
-                className="inline-flex items-center gap-1 text-sm text-emerald-700 font-medium hover:text-emerald-800"
+                className="inline-flex items-center gap-1 text-sm text-accent-700 font-medium hover:text-accent-800"
               >
                 Voir le parcours accompagné
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -429,10 +429,10 @@ export default async function MprDeptPage({ params }: PageProps) {
       </section>
 
       {/* Zone climatique */}
-      <section className="bg-emerald-50/40 py-12 border-y border-emerald-100">
+      <section className="bg-accent-50/40 py-12 border-y border-accent-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-600 text-white flex items-center justify-center">
               <Thermometer className="w-6 h-6" aria-hidden="true" />
             </div>
             <div>
@@ -442,7 +442,7 @@ export default async function MprDeptPage({ params }: PageProps) {
               <p className="text-charcoal-700 leading-relaxed">{zoneImpact}</p>
               <Link
                 href="/aides/cee"
-                className="mt-3 inline-flex items-center gap-1 text-sm text-emerald-700 font-medium hover:text-emerald-800"
+                className="mt-3 inline-flex items-center gap-1 text-sm text-accent-700 font-medium hover:text-accent-800"
               >
                 Voir les primes CEE 2026
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -476,11 +476,11 @@ export default async function MprDeptPage({ params }: PageProps) {
                     .replace(/[̀-ͯ]/g, '')
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-|-$/g, '')}`}
-                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+                  className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <Home className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-                    <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 transition">
+                    <Home className="w-5 h-5 text-accent-700" aria-hidden="true" />
+                    <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 transition">
                       Artisans RGE {ville}
                     </h3>
                   </div>
@@ -512,7 +512,7 @@ export default async function MprDeptPage({ params }: PageProps) {
             {faqs.map((item) => (
               <details
                 key={item.question}
-                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-emerald-300"
+                className="group rounded-xl border border-charcoal-200 bg-white p-5 open:border-accent-300"
               >
                 <summary className="cursor-pointer font-heading font-bold text-charcoal-900 list-none flex justify-between items-start gap-4">
                   <span>{item.question}</span>
@@ -536,11 +536,11 @@ export default async function MprDeptPage({ params }: PageProps) {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap items-center gap-4 text-sm text-charcoal-600">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
+              <ShieldCheck className="w-4 h-4 text-accent-700" aria-hidden="true" />
               Sources officielles Anah et France Rénov&apos;
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-700" aria-hidden="true" />
+              <ShieldCheck className="w-4 h-4 text-accent-700" aria-hidden="true" />
               Annuaire artisans RGE synchronisé ADEME
             </div>
           </div>

@@ -329,11 +329,11 @@ export default function CoupDePouce2026Page() {
       />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <Sparkles className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <Sparkles className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guide neutre — article L221-7 du code de l’énergie
             </span>
           </div>
@@ -347,15 +347,15 @@ export default function CoupDePouce2026Page() {
             author="ServicesArtisans"
             datePublished={PUBLISHED}
             dateModified={MODIFIED}
-            className="justify-start mt-2 text-emerald-50/80"
+            className="justify-start mt-2 text-accent-50/80"
           />
-          <p className="text-lg md:text-xl text-emerald-50/90 leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 leading-relaxed">
             Les chartes «&nbsp;Coup de pouce&nbsp;» bonifient certaines primes CEE d’une opération
             standardisée. Ce guide recense les chartes actives en 2026, leur cadre juridique, les
             opérations concernées et le parcours à suivre pour en bénéficier sans se faire piéger.
           </p>
           <div
-            className="speakable-summary mt-6 text-base md:text-lg text-emerald-50/80 leading-relaxed border-l-2 border-emerald-400/40 pl-4"
+            className="speakable-summary mt-6 text-base md:text-lg text-accent-50/80 leading-relaxed border-l-2 border-accent-400/40 pl-4"
             data-speakable="true"
           >
             <p>
@@ -459,8 +459,8 @@ export default function CoupDePouce2026Page() {
                 className="bg-white border border-charcoal-200 rounded-xl p-6 shadow-sm"
               >
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-emerald-700" />
+                  <div className="w-10 h-10 rounded-lg bg-accent-50 border border-accent-100 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-accent-700" />
                   </div>
                   <div>
                     <h3 className="font-heading text-lg font-bold text-charcoal-900 leading-tight">
@@ -553,7 +553,7 @@ export default function CoupDePouce2026Page() {
                 key={i}
                 className="flex items-start gap-4 bg-white border border-charcoal-200 rounded-lg p-4"
               >
-                <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-accent-600 text-white font-bold flex items-center justify-center flex-shrink-0">
                   {i + 1}
                 </div>
                 <div>
@@ -592,7 +592,7 @@ export default function CoupDePouce2026Page() {
             Pour un panorama détaillé du cumul et de ses limites, voir notre guide&nbsp;:{' '}
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="text-emerald-700 underline hover:text-emerald-800"
+              className="text-accent-700 underline hover:text-accent-800"
             >
               MaPrimeRénov’ et CEE&nbsp;: règles de cumul
             </Link>
@@ -674,7 +674,7 @@ export default function CoupDePouce2026Page() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-8 flex items-center gap-3">
-            <BookOpen className="w-7 h-7 text-emerald-700" />
+            <BookOpen className="w-7 h-7 text-accent-700" />
             Questions fréquentes
           </h2>
           <div className="space-y-4">
@@ -693,7 +693,7 @@ export default function CoupDePouce2026Page() {
 
       {/* CTA fin */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
-        <div className="bg-gradient-to-br from-emerald-50 to-primary-50 border border-emerald-100 rounded-2xl p-8">
+        <div className="bg-gradient-to-br from-accent-50 to-primary-50 border border-accent-100 rounded-2xl p-8">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900 mb-3">
             Aller plus loin
           </h2>
@@ -704,9 +704,9 @@ export default function CoupDePouce2026Page() {
           <div className="grid sm:grid-cols-2 gap-4">
             <Link
               href="/cee"
-              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-accent-300 transition-colors"
             >
-              <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-5 h-5 text-accent-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">
                   Primes CEE&nbsp;: panorama général
@@ -718,9 +718,9 @@ export default function CoupDePouce2026Page() {
             </Link>
             <Link
               href="/cee/guides"
-              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-accent-300 transition-colors"
             >
-              <BookOpen className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
+              <BookOpen className="w-5 h-5 text-accent-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">Guides CEE par opération</div>
                 <div className="text-sm text-charcoal-600">Isolation, chauffage, ventilation</div>
@@ -728,9 +728,9 @@ export default function CoupDePouce2026Page() {
             </Link>
             <Link
               href="/maprimerenov-cumulaison-cee"
-              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-accent-300 transition-colors"
             >
-              <FileCheck2 className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
+              <FileCheck2 className="w-5 h-5 text-accent-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">MaPrimeRénov’ + CEE</div>
                 <div className="text-sm text-charcoal-600">Règles de cumul et plafonds</div>
@@ -738,9 +738,9 @@ export default function CoupDePouce2026Page() {
             </Link>
             <Link
               href="/cee/mandataire-vs-direct"
-              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-emerald-300 transition-colors"
+              className="flex items-start gap-3 bg-white border border-charcoal-200 rounded-lg p-4 hover:border-accent-300 transition-colors"
             >
-              <ShieldCheck className="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-5 h-5 text-accent-700 flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-charcoal-900">
                   Obligé, délégataire, mandataire

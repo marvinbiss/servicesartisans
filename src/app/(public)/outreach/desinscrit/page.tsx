@@ -18,13 +18,13 @@ export const metadata: Metadata = {
 export default function OutreachUnsubscribedPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold text-gray-900">Vous êtes désinscrit</h1>
-      <p className="mt-4 text-gray-700">
+      <h1 className="text-3xl font-bold text-charcoal-900">Vous êtes désinscrit</h1>
+      <p className="mt-4 text-charcoal-700">
         Nous ne vous adresserons plus d&apos;emails de prospection. Si vous changez d&apos;avis ou
         souhaitez revendiquer votre fiche artisan plus tard, vous pourrez toujours le faire depuis
         notre site.
       </p>
-      <p className="mt-2 text-gray-700">
+      <p className="mt-2 text-charcoal-700">
         Pour toute question relative à vos données, contactez-nous à
         <a className="ml-1 text-orange-600 underline" href="mailto:contact@servicesartisans.fr">
           contact@servicesartisans.fr

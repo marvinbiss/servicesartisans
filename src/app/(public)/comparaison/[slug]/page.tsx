@@ -357,7 +357,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
 
         {/* Verdict */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-primary-500 to-indigo-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading flex items-center gap-3">
               <Trophy className="w-8 h-8" />
               Notre verdict
@@ -482,7 +482,7 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
                     </Link>
                     <Link
                       href={`/devis/${svc.slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm text-accent-600 hover:text-accent-800 bg-accent-50 hover:bg-accent-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit
                     </Link>

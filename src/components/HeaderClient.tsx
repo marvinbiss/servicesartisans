@@ -233,7 +233,7 @@ export default function HeaderClient({
         aria-haspopup="true"
         className={cn(
           'relative flex items-center gap-1 px-3 py-2 rounded-lg font-medium text-[0.85rem] transition-all duration-200',
-          'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full',
+          'after:absolute after:bottom-0.5 after:left-1/2 after:-trancharcoal-x-1/2 after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full',
           openMenu === menu
             ? 'text-primary-400 bg-primary-50/80 after:w-[60%]'
             : 'text-charcoal-600 hover:text-primary-400 hover:bg-sand-100/80 after:w-0 hover:after:w-[60%]'
@@ -446,7 +446,7 @@ export default function HeaderClient({
               <Link
                 href="/connexion"
                 prefetch={false}
-                className="relative text-charcoal-600 hover:text-primary-400 px-3 py-2 rounded-lg font-medium text-[0.85rem] hover:bg-sand-100/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full"
+                className="relative text-charcoal-600 hover:text-primary-400 px-3 py-2 rounded-lg font-medium text-[0.85rem] hover:bg-sand-100/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-trancharcoal-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full"
               >
                 Connexion
               </Link>
@@ -469,7 +469,7 @@ export default function HeaderClient({
               <Link
                 href="/devis"
                 onClick={() => trackEvent('header_devis_click', { source: 'header', pathname })}
-                className="ml-2 px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                className="ml-2 px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 active:trancharcoal-y-0 transition-all duration-200"
               >
                 Trouver un artisan
               </Link>

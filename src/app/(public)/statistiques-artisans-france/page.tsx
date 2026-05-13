@@ -462,7 +462,7 @@ export default function StatistiquesArtisansFrancePage() {
         </div>
 
         {/* Hero */}
-        <header className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-indigo-900 text-white mt-4">
+        <header className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white mt-4">
           <div className="absolute inset-0 opacity-10">
             <div
               className="absolute inset-0"
@@ -1097,7 +1097,7 @@ export default function StatistiquesArtisansFrancePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Trend 1 */}
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 p-6">
+              <div className="bg-gradient-to-br from-green-50 to-accent-50 rounded-xl border border-green-200 p-6">
                 <div className="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mb-4">
                   <Building2 className="w-5 h-5" />
                 </div>
@@ -1113,7 +1113,7 @@ export default function StatistiquesArtisansFrancePage() {
               </div>
 
               {/* Trend 2 */}
-              <div className="bg-gradient-to-br from-primary-50 to-indigo-50 rounded-xl border border-primary-200 p-6">
+              <div className="bg-gradient-to-br from-primary-50 to-primary-50 rounded-xl border border-primary-200 p-6">
                 <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-500 flex items-center justify-center mb-4">
                   <Zap className="w-5 h-5" />
                 </div>
@@ -1129,7 +1129,7 @@ export default function StatistiquesArtisansFrancePage() {
               </div>
 
               {/* Trend 3 */}
-              <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl border border-purple-200 p-6">
+              <div className="bg-gradient-to-br from-purple-50 to-primary-50 rounded-xl border border-purple-200 p-6">
                 <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-4">
                   <BarChart3 className="w-5 h-5" />
                 </div>
@@ -1306,7 +1306,7 @@ export default function StatistiquesArtisansFrancePage() {
           {/* Cross-links / CTA */}
           {/* ============================================================= */}
           <section className="mb-12">
-            <div className="bg-gradient-to-r from-primary-500 to-indigo-700 rounded-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-primary-500 to-primary-700 rounded-xl p-8 text-white">
               <h2 className="text-2xl font-bold mb-4">Explorez nos autres ressources</h2>
               <p className="text-primary-100 mb-6">
                 Retrouvez des données détaillées sur les tarifs, les artisans par ville et nos

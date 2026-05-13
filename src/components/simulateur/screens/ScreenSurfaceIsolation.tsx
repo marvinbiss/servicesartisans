@@ -52,7 +52,7 @@ export default function ScreenSurfaceIsolation({
       </ScreenTitle>
       <div className="mx-auto max-w-xs">
         <div className="relative">
-          <Home className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+          <Home className="absolute left-3 top-1/2 h-5 w-5 -trancharcoal-y-1/2 text-charcoal-400" />
           <input
             type="number"
             inputMode="numeric"
@@ -64,9 +64,9 @@ export default function ScreenSurfaceIsolation({
             onChange={(e) => handleChange(Number(e.target.value))}
             onKeyDown={handleKeyDown}
             aria-label="Surface en mètres carrés"
-            className="w-full rounded-xl border-2 border-slate-200 py-4 pl-11 pr-16 text-center text-2xl font-bold tracking-wide text-charcoal-900 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-xl border-2 border-charcoal-200 py-4 pl-11 pr-16 text-center text-2xl font-bold tracking-wide text-charcoal-900 transition focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-200"
           />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-500">
+          <span className="absolute right-4 top-1/2 -trancharcoal-y-1/2 text-sm font-semibold text-charcoal-500">
             m²
           </span>
         </div>
@@ -78,16 +78,16 @@ export default function ScreenSurfaceIsolation({
           value={local}
           onChange={(e) => handleChange(Number(e.target.value))}
           aria-label="Ajustez la surface de toiture"
-          className="mt-4 w-full accent-emerald-600"
+          className="mt-4 w-full accent-accent-600"
         />
-        <p className="mt-2 text-center text-xs text-slate-500">
+        <p className="mt-2 text-center text-xs text-charcoal-500">
           Estimation pré-remplie à partir de la surface habitable. Ajustez si besoin.
         </p>
         <button
           type="button"
           onClick={onNext}
           disabled={!valid}
-          className="mt-5 w-full rounded-xl bg-emerald-600 py-3.5 text-base font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-40"
+          className="mt-5 w-full rounded-xl bg-accent-600 py-3.5 text-base font-semibold text-white transition hover:bg-accent-700 disabled:opacity-40"
         >
           Continuer
         </button>

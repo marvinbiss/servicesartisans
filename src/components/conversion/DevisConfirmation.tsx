@@ -341,11 +341,11 @@ export default function DevisConfirmation({
               className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}
             >
               <Leaf
-                className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"
+                className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div className="flex-1 min-w-0">
-                <span className="font-semibold text-emerald-700">Artisan RGE requis :</span>{' '}
+                <span className="font-semibold text-accent-700">Artisan RGE requis :</span>{' '}
                 <span className="text-charcoal-600">
                   {requiredRgeQualifs.slice(0, 4).join(', ')}
                   {requiredRgeQualifs.length > 4 ? ` +${requiredRgeQualifs.length - 4}` : ''}
@@ -374,22 +374,22 @@ export default function DevisConfirmation({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32 }}
-          className={`rounded-xl border border-emerald-200 bg-emerald-50 p-4 ${compact ? 'mb-3' : 'mb-5'}`}
+          className={`rounded-xl border border-accent-200 bg-accent-50 p-4 ${compact ? 'mb-3' : 'mb-5'}`}
         >
           <div className="flex items-start gap-3">
             <div
               aria-hidden="true"
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-accent-100"
             >
-              <Sparkles className="h-5 w-5 text-emerald-600" />
+              <Sparkles className="h-5 w-5 text-accent-600" />
             </div>
             <div className="flex-1 min-w-0">
               <p
-                className={`font-heading font-semibold text-emerald-900 ${compact ? 'text-xs' : 'text-sm'}`}
+                className={`font-heading font-semibold text-accent-900 ${compact ? 'text-xs' : 'text-sm'}`}
               >
                 Bonne nouvelle&nbsp;: vos travaux sont éligibles à une prime CEE&nbsp;!
               </p>
-              <p className={`text-emerald-800 mt-1 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              <p className={`text-accent-800 mt-1 ${compact ? 'text-[11px]' : 'text-xs'}`}>
                 Notre équipe prend en charge les démarches pour récupérer votre prime Certificats
                 d&apos;Économies d&apos;Énergie. Aucune paperasse supplémentaire pour vous.
               </p>
@@ -399,11 +399,11 @@ export default function DevisConfirmation({
           {/* Opérations éligibles */}
           {ceeOperationCodes.length > 0 && (
             <div
-              className={`mt-3 pt-3 border-t border-emerald-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+              className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
             >
-              <p className="font-medium text-emerald-800">
+              <p className="font-medium text-accent-800">
                 Opérations éligibles&nbsp;:{' '}
-                <span className="font-semibold text-emerald-900">
+                <span className="font-semibold text-accent-900">
                   {ceeOperationCodes.join(', ')}
                 </span>
               </p>
@@ -412,9 +412,9 @@ export default function DevisConfirmation({
 
           {/* Checklist pièces à préparer */}
           <div
-            className={`mt-3 pt-3 border-t border-emerald-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
           >
-            <p className="font-semibold text-emerald-900 mb-2">Pièces à préparer&nbsp;:</p>
+            <p className="font-semibold text-accent-900 mb-2">Pièces à préparer&nbsp;:</p>
             <ul className="space-y-1.5">
               {[
                 'Facture des travaux',
@@ -424,10 +424,10 @@ export default function DevisConfirmation({
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <CheckCircle
-                    className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"
+                    className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
-                  <span className="text-emerald-800">{item}</span>
+                  <span className="text-accent-800">{item}</span>
                 </li>
               ))}
             </ul>
@@ -435,21 +435,21 @@ export default function DevisConfirmation({
 
           {/* CTA — voir le guide de l'opération CEE principale */}
           {ceeOperationCodes.length > 0 && (
-            <div className={`mt-3 pt-3 border-t border-emerald-100`}>
+            <div className={`mt-3 pt-3 border-t border-accent-100`}>
               <Link
                 href={`/cee/${ceeOperationCodes[0].toLowerCase()}/guide?source=devis-confirmation`}
-                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors ${compact ? 'text-xs w-full' : 'text-sm'}`}
+                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-600 hover:bg-accent-700 text-white font-semibold rounded-lg transition-colors ${compact ? 'text-xs w-full' : 'text-sm'}`}
               >
                 Voir les étapes de votre dossier CEE
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               {ceeOperationCodes.length > 1 && (
-                <p className={`mt-2 text-emerald-700 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+                <p className={`mt-2 text-accent-700 ${compact ? 'text-[11px]' : 'text-xs'}`}>
                   + {ceeOperationCodes.length - 1} autre
                   {ceeOperationCodes.length - 1 > 1 ? 's' : ''} opération
                   {ceeOperationCodes.length - 1 > 1 ? 's' : ''} éligible
                   {ceeOperationCodes.length - 1 > 1 ? 's' : ''} —{' '}
-                  <Link href="/cee" className="underline font-semibold hover:text-emerald-900">
+                  <Link href="/cee" className="underline font-semibold hover:text-accent-900">
                     voir toutes les primes CEE
                   </Link>
                 </p>
@@ -459,7 +459,7 @@ export default function DevisConfirmation({
 
           {/* Texte rassurant */}
           <p
-            className={`mt-3 pt-3 border-t border-emerald-100 text-emerald-700 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            className={`mt-3 pt-3 border-t border-accent-100 text-accent-700 ${compact ? 'text-[11px]' : 'text-xs'}`}
           >
             Votre artisan RGE vous guidera pour chaque étape. La prime sera déduite de votre facture
             ou versée après validation.

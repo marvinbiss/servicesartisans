@@ -176,7 +176,7 @@ export function InstantSearch({
     <div ref={containerRef} className={cn('relative', className)}>
       {/* Search input */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+        <Search className="absolute left-4 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
         <input
           ref={inputRef}
           type="text"
@@ -188,12 +188,12 @@ export function InstantSearch({
           className="w-full pl-12 pr-12 py-4 text-lg border border-sand-400 rounded-xl bg-white text-charcoal-900 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent"
         />
         {isLoading ? (
-          <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400 animate-spin" />
+          <Loader2 className="absolute right-4 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400 animate-spin" />
         ) : (
           query && (
             <button
               onClick={handleClear}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-sand-100 rounded-full"
+              className="absolute right-4 top-1/2 -trancharcoal-y-1/2 p-1 hover:bg-sand-100 rounded-full"
             >
               <X className="w-5 h-5 text-charcoal-400" />
             </button>

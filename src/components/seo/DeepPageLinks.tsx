@@ -660,13 +660,13 @@ export default async function DeepPageLinks({
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((mod) => (
             <section key={mod.title}>
-              <h3 className="text-sm font-semibold text-stone-800 mb-3">{mod.title}</h3>
+              <h3 className="text-sm font-semibold text-sand-800 mb-3">{mod.title}</h3>
               <div className="flex flex-wrap gap-2">
                 {mod.links.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="px-3 py-1.5 text-sm text-stone-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
+                    className="px-3 py-1.5 text-sm text-sand-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
                   >
                     {link.label}
                   </Link>

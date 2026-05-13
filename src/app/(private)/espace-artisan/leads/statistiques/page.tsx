@@ -211,8 +211,8 @@ export default function ArtisanLeadStatsPage() {
                 {
                   label: 'Acceptés',
                   value: stats.accepted,
-                  color: 'bg-emerald-500',
-                  icon: <Check className="w-4 h-4 text-emerald-500" />,
+                  color: 'bg-accent-500',
+                  icon: <Check className="w-4 h-4 text-accent-500" />,
                 },
                 {
                   label: 'Terminés',

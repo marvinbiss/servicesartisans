@@ -560,9 +560,9 @@ export default function Page() {
                       <p className="font-medium text-sand-600 m-0">Aides 2026</p>
                       <p className="font-semibold text-sand-900 m-0">{a.aides}</p>
                     </div>
-                    <div className="bg-emerald-50 rounded p-2">
-                      <p className="font-medium text-emerald-700 m-0">Net après aides</p>
-                      <p className="font-bold text-emerald-900 m-0">{a.netApresAides}</p>
+                    <div className="bg-accent-50 rounded p-2">
+                      <p className="font-medium text-accent-700 m-0">Net après aides</p>
+                      <p className="font-bold text-accent-900 m-0">{a.netApresAides}</p>
                     </div>
                   </div>
                   <p className="text-sm text-sand-700 m-0 mb-1">
@@ -644,9 +644,9 @@ export default function Page() {
                       <p className="text-sand-600 m-0">Aides cumulées</p>
                       <p className="font-semibold text-sand-900 m-0">{p.aides}</p>
                     </div>
-                    <div className="bg-emerald-50 rounded p-2">
-                      <p className="text-emerald-700 m-0">Reste à charge</p>
-                      <p className="font-bold text-emerald-900 m-0">{p.cumul}</p>
+                    <div className="bg-accent-50 rounded p-2">
+                      <p className="text-accent-700 m-0">Reste à charge</p>
+                      <p className="font-bold text-accent-900 m-0">{p.cumul}</p>
                     </div>
                   </div>
                 </article>

@@ -316,7 +316,7 @@ export default function TwoFactorSettings() {
               Code à 6 chiffres
             </label>
             <div className="relative max-w-xs">
-              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+              <KeyRound className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
               <input
                 id="totp-verify"
                 value={code}
@@ -396,7 +396,7 @@ export default function TwoFactorSettings() {
             Saisissez un code TOTP valide (ou un code de secours <code>XXXXXXXX-XXXXXXXX</code>).
           </p>
           <div className="relative max-w-xs">
-            <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
+            <KeyRound className="absolute left-3 top-1/2 -trancharcoal-y-1/2 w-4 h-4 text-charcoal-400" />
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}

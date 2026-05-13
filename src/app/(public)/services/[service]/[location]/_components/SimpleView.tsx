@@ -268,7 +268,7 @@ export default function SimpleView({
           </p>
           <Link
             href={buildDevisHref(serviceSlug, location.name)}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:scale-[1.02] hover:-trancharcoal-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Obtenir mon devis gratuit
             <span aria-hidden="true" className="text-lg">

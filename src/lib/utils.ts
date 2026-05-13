@@ -173,12 +173,12 @@ export function getInitials(name: string): string {
 // Deterministic avatar gradient color based on name
 const AVATAR_COLORS = [
   'from-blue-500 to-blue-600',
-  'from-emerald-500 to-emerald-600',
-  'from-violet-500 to-violet-600',
+  'from-accent-500 to-accent-600',
+  'from-primary-500 to-primary-600',
   'from-rose-500 to-rose-600',
   'from-amber-500 to-amber-600',
   'from-teal-500 to-teal-600',
-  'from-indigo-500 to-indigo-600',
+  'from-primary-500 to-primary-600',
   'from-cyan-500 to-cyan-600',
   'from-orange-500 to-orange-600',
   'from-fuchsia-500 to-fuchsia-600',

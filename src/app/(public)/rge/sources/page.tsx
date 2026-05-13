@@ -162,11 +162,11 @@ export default function RgeSourcesPage() {
         items={[{ label: 'Artisans RGE', href: '/rge' }, { label: 'Sources et méthodologie' }]}
       />
 
-      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-accent-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Transparence éditoriale E-E-A-T
             </span>
           </div>
@@ -182,7 +182,7 @@ export default function RgeSourcesPage() {
             dateModified="2026-04-09"
             className="justify-center mt-4"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             D’où proviennent les données RGE affichées sur ServicesArtisans, à quelle fréquence
             elles sont mises à jour et comment vérifier vous-même la qualification d’un artisan
             auprès des organismes officiels.
@@ -192,7 +192,7 @@ export default function RgeSourcesPage() {
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <Database className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <Database className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Sources officielles mobilisées
           </h2>
@@ -201,10 +201,10 @@ export default function RgeSourcesPage() {
           {OFFICIAL_SOURCES.map((src) => (
             <article
               key={src.name}
-              className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
+              className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 transition"
             >
               <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-accent-50 border border-accent-100 text-xs font-semibold text-accent-700">
                   {src.role}
                 </span>
               </div>
@@ -226,7 +226,7 @@ export default function RgeSourcesPage() {
                 href={src.url}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-900 transition"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent-700 hover:text-accent-900 transition"
               >
                 Consulter la source
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
@@ -239,7 +239,7 @@ export default function RgeSourcesPage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <RefreshCw className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <RefreshCw className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Cadence de mise à jour
             </h2>
@@ -269,7 +269,7 @@ export default function RgeSourcesPage() {
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <FileCheck2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <FileCheck2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Vérifier vous-même une qualification RGE
           </h2>
@@ -278,7 +278,7 @@ export default function RgeSourcesPage() {
           Avant de signer un devis, vérifiez la qualification de l’artisan auprès des organismes
           officiels. C’est la seule garantie d’éligibilité aux primes CEE et à MaPrimeRénov’.
         </p>
-        <ol className="space-y-3 list-decimal pl-6 marker:text-emerald-600 marker:font-bold">
+        <ol className="space-y-3 list-decimal pl-6 marker:text-accent-600 marker:font-bold">
           {VERIFICATION_STEPS.map((step, i) => (
             <li key={i} className="text-charcoal-700 leading-relaxed">
               {step}
@@ -303,32 +303,32 @@ export default function RgeSourcesPage() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">
             Explorer l’annuaire RGE
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Consultez les artisans RGE certifiés par métier et par ville, ou approfondissez votre
             connaissance des qualifications officielles.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Annuaire artisans RGE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/rge/qualifications"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Guides qualifications RGE
             </Link>
             <Link
               href="/cee"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Primes CEE 2026
             </Link>

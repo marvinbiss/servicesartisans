@@ -280,7 +280,7 @@ export default async function UrgencePage() {
       <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-charcoal-900 text-white py-20 overflow-hidden">
         {/* Animated pulse background */}
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-500 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[600px] h-[600px] bg-red-500 rounded-full blur-[150px] animate-pulse" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
@@ -574,7 +574,7 @@ export default async function UrgencePage() {
       {/* Final CTA */}
       <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-charcoal-900 text-white py-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-red-500 rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -trancharcoal-x-1/2 -trancharcoal-y-1/2 w-[400px] h-[400px] bg-red-500 rounded-full blur-[120px]" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

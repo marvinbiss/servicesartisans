@@ -196,7 +196,7 @@ export default function CeeRegionalAidsDatasetPage() {
           />
 
           <header className="mt-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+            <div className="inline-flex items-center gap-2 rounded-full bg-accent-100 px-3 py-1 text-xs font-semibold text-accent-800">
               <Database className="h-3.5 w-3.5" aria-hidden="true" />
               Données ouvertes — licence CC-BY 4.0
             </div>
@@ -229,7 +229,7 @@ export default function CeeRegionalAidsDatasetPage() {
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <a
                 href="/api/datasets/cee-regional-aids.json"
-                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-emerald-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-accent-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               >
                 <FileJson className="h-6 w-6 flex-shrink-0 text-primary-600" aria-hidden="true" />
                 <div>
@@ -244,11 +244,11 @@ export default function CeeRegionalAidsDatasetPage() {
               </a>
               <a
                 href="/api/datasets/cee-regional-aids.csv"
-                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-emerald-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                className="flex items-start gap-3 rounded-xl border border-sand-300 bg-white p-5 hover:border-accent-500 hover:shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 download
               >
                 <FileSpreadsheet
-                  className="h-6 w-6 flex-shrink-0 text-emerald-600"
+                  className="h-6 w-6 flex-shrink-0 text-accent-600"
                   aria-hidden="true"
                 />
                 <div>

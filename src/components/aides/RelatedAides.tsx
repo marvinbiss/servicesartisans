@@ -30,19 +30,19 @@ export default function RelatedAides({ title = 'Aides cumulables', aides }: Prop
             <Link
               key={a.slug}
               href={`/aides/${a.slug}`}
-              className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition"
+              className="group block rounded-xl border border-charcoal-100 bg-white p-5 hover:border-accent-300 hover:shadow-md transition"
             >
               <div className="flex items-start justify-between gap-3 mb-2">
-                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-emerald-700 transition">
+                <h3 className="font-heading font-bold text-charcoal-900 group-hover:text-accent-700 transition">
                   {a.name}
                 </h3>
                 <ArrowUpRight
-                  className="w-4 h-4 text-charcoal-400 group-hover:text-emerald-700 transition flex-shrink-0"
+                  className="w-4 h-4 text-charcoal-400 group-hover:text-accent-700 transition flex-shrink-0"
                   aria-hidden="true"
                 />
               </div>
               <p className="text-sm text-charcoal-600 leading-relaxed">{a.tagline}</p>
-              <span className="mt-3 inline-block text-xs font-medium text-emerald-700">
+              <span className="mt-3 inline-block text-xs font-medium text-accent-700">
                 {a.category}
               </span>
             </Link>

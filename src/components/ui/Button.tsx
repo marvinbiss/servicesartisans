@@ -46,7 +46,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'focus-visible:ring-primary-400',
         'shadow-[0_4px_14px_0_rgba(232,107,75,0.3)]',
         'hover:shadow-[0_8px_25px_0_rgba(212,85,58,0.4)]',
-        'hover:-translate-y-[2px]',
+        'hover:-trancharcoal-y-[2px]',
       ],
       secondary: [
         'bg-charcoal-900 text-white',
@@ -54,7 +54,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'focus-visible:ring-charcoal-700',
         'shadow-[0_4px_14px_0_rgba(28,25,23,0.2)]',
         'hover:shadow-[0_8px_25px_0_rgba(28,25,23,0.3)]',
-        'hover:-translate-y-[2px]',
+        'hover:-trancharcoal-y-[2px]',
       ],
       outline: [
         'bg-transparent border-2 border-primary-400 text-primary-500',
@@ -72,7 +72,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'focus-visible:ring-red-500',
         'shadow-[0_4px_14px_0_rgba(239,68,68,0.25)]',
         'hover:shadow-[0_8px_25px_0_rgba(239,68,68,0.35)]',
-        'hover:-translate-y-[2px]',
+        'hover:-trancharcoal-y-[2px]',
       ],
       premium: [
         'bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold',
@@ -80,9 +80,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'focus-visible:ring-secondary-500',
         'shadow-[0_4px_20px_0_rgba(232,150,10,0.35)]',
         'hover:shadow-[0_10px_35px_0_rgba(232,150,10,0.45)]',
-        'hover:-translate-y-[3px]',
+        'hover:-trancharcoal-y-[3px]',
         'relative overflow-hidden',
-        'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700',
+        'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:trancharcoal-x-[-200%] hover:before:trancharcoal-x-[200%] before:transition-transform before:duration-700',
       ],
     }
 

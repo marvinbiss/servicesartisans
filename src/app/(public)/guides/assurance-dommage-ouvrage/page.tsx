@@ -225,7 +225,7 @@ export default function AssuranceDommageOuvragePage() {
 
         {/* Obligation légale */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-teal-600 to-emerald-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-teal-600 to-accent-700 rounded-2xl p-8 md:p-10 text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 font-heading">
               {'Obligation légale : que dit la loi ?'}
             </h2>
@@ -523,7 +523,7 @@ export default function AssuranceDommageOuvragePage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 py-12">
-          <div className="bg-gradient-to-r from-teal-600 to-emerald-600 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-teal-600 to-accent-600 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               {'Prêt à lancer votre chantier ?'}
             </h2>

@@ -462,7 +462,7 @@ export default function TrouverArtisanPage() {
 
         {/* 7. Vos droits en tant que client */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-8 md:p-10 text-white">
             <div className="flex items-center gap-3 mb-6">
               <Scale className="w-8 h-8" />
               <h2 className="text-2xl md:text-3xl font-bold font-heading">
@@ -472,7 +472,7 @@ export default function TrouverArtisanPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-lg font-semibold mb-4">Droit de rétractation</h3>
-                <ul className="space-y-3 text-indigo-50">
+                <ul className="space-y-3 text-primary-50">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
                     <span>
@@ -501,7 +501,7 @@ export default function TrouverArtisanPage() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-4">Garanties légales</h3>
-                <ul className="space-y-3 text-indigo-50">
+                <ul className="space-y-3 text-primary-50">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 mt-0.5 shrink-0" />
                     <span>

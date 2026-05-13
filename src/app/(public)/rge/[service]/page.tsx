@@ -254,11 +254,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-emerald-700 via-emerald-800 to-charcoal-900 text-white py-16 md:py-24">
+      <section className="relative bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <ShieldCheck className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               {label ? `${label.label} — ${label.organisme}` : 'Mention RGE officielle'}
             </span>
           </div>
@@ -268,7 +268,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           >
             {content.h1}
           </h1>
-          <p className="text-lg md:text-xl text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-accent-50/90 max-w-3xl leading-relaxed">
             {hasStats ? (
               <>
                 <strong className="text-white">
@@ -284,19 +284,19 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           <LastUpdated
             label="Données ADEME synchronisées le"
             date={lastSyncDate}
-            className="mt-5 text-emerald-100/90"
+            className="mt-5 text-accent-100/90"
           />
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/verifier-artisan"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Vérifier un artisan
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               Demander un devis gratuit
             </Link>
@@ -346,7 +346,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       <section className="bg-white border-b border-charcoal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">
               {hasStats ? total.toLocaleString('fr-FR') : '—'}
             </div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
@@ -355,7 +355,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             </div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">
               {label?.label ?? 'RGE'}
             </div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
@@ -364,7 +364,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             </div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-emerald-700">
+            <div className="text-3xl md:text-4xl font-extrabold text-accent-700">
               {content.aides.length}
             </div>
             <div className="text-sm text-charcoal-600 mt-2 leading-relaxed">
@@ -377,11 +377,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
 
       {/* Guides RGE qualif — cross-linking éditorial vers /rge/qualifications/[slug] */}
       {rgeGuideLinks.length > 0 && (
-        <section className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 border-b border-emerald-100">
+        <section className="bg-gradient-to-br from-accent-50 via-white to-accent-50/40 border-b border-accent-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
             <div className="flex items-center gap-2 mb-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+              <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
+              <span className="text-xs font-bold text-accent-800 uppercase tracking-wider">
                 Guides qualifications RGE
               </span>
             </div>
@@ -397,29 +397,27 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={g.slug}
                   href={`/rge/qualifications/${g.slug}`}
-                  className="group block p-6 bg-white rounded-2xl border border-emerald-100 hover:border-emerald-400 hover:shadow-sm transition"
+                  className="group block p-6 bg-white rounded-2xl border border-accent-100 hover:border-accent-400 hover:shadow-sm transition"
                 >
                   <div className="flex items-start gap-3">
                     <ShieldCheck
-                      className="w-5 h-5 text-emerald-700 mt-1 flex-shrink-0"
+                      className="w-5 h-5 text-accent-700 mt-1 flex-shrink-0"
                       aria-hidden="true"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <h3 className="font-heading font-bold text-charcoal-900 text-lg group-hover:text-emerald-700 transition">
+                        <h3 className="font-heading font-bold text-charcoal-900 text-lg group-hover:text-accent-700 transition">
                           {g.name}
                         </h3>
-                        <span className="text-xs font-semibold text-emerald-700">
-                          {g.organisme}
-                        </span>
+                        <span className="text-xs font-semibold text-accent-700">{g.organisme}</span>
                       </div>
                       <p className="text-sm text-charcoal-600 mt-1.5 leading-relaxed line-clamp-3">
                         {g.lede}
                       </p>
-                      <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 group-hover:text-emerald-900">
+                      <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-accent-700 group-hover:text-accent-900">
                         Lire le guide
                         <ArrowRight
-                          className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                          className="w-4 h-4 group-hover:trancharcoal-x-0.5 transition-transform"
                           aria-hidden="true"
                         />
                       </div>
@@ -460,7 +458,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                   <span className="font-mono font-bold text-primary-800 text-xs">{c.code}</span>
                   <span className="text-charcoal-700">{c.label}</span>
                   <ArrowRight
-                    className="w-3.5 h-3.5 text-primary-500 group-hover:translate-x-0.5 transition-transform"
+                    className="w-3.5 h-3.5 text-primary-500 group-hover:trancharcoal-x-0.5 transition-transform"
                     aria-hidden="true"
                   />
                 </Link>
@@ -489,7 +487,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* Travaux couverts */}
-      <section className="bg-emerald-50/40 border-y border-emerald-100">
+      <section className="bg-accent-50/40 border-y border-accent-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold text-charcoal-900 mb-3">
             Travaux couverts par la qualification
@@ -503,7 +501,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               <div key={idx} className="p-6 bg-white rounded-2xl border border-charcoal-200">
                 <div className="flex items-start gap-3">
                   <Wrench
-                    className="w-5 h-5 text-emerald-700 mt-1 flex-shrink-0"
+                    className="w-5 h-5 text-accent-700 mt-1 flex-shrink-0"
                     aria-hidden="true"
                   />
                   <div>
@@ -529,17 +527,14 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {content.aides.map((a, idx) => (
-              <div key={idx} className="p-6 bg-emerald-50/60 rounded-2xl border border-emerald-100">
+              <div key={idx} className="p-6 bg-accent-50/60 rounded-2xl border border-accent-100">
                 <div className="flex items-start gap-3">
-                  <Euro
-                    className="w-5 h-5 text-emerald-700 mt-1 flex-shrink-0"
-                    aria-hidden="true"
-                  />
+                  <Euro className="w-5 h-5 text-accent-700 mt-1 flex-shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
                     <div className="flex items-baseline gap-2 flex-wrap">
                       <h3 className="font-heading font-bold text-charcoal-900">{a.label}</h3>
                       {a.montant !== '—' && (
-                        <span className="text-sm font-bold text-emerald-700">{a.montant}</span>
+                        <span className="text-sm font-bold text-accent-700">{a.montant}</span>
                       )}
                     </div>
                     <p className="text-sm text-charcoal-600 mt-1.5 leading-relaxed">{a.detail}</p>
@@ -567,14 +562,14 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={city.slug}
                   href={`/rge/${serviceSlug}/${city.slug}`}
-                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200"
+                  className="group flex items-center justify-between p-3 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:-trancharcoal-y-0.5 hover:shadow-card-hover transition-all duration-200"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <MapPin
-                      className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"
+                      className="w-3.5 h-3.5 text-accent-600 flex-shrink-0"
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-semibold text-charcoal-900 group-hover:text-emerald-700 transition truncate">
+                    <span className="text-sm font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
                       {city.name}
                     </span>
                   </div>
@@ -604,7 +599,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
               <Link
                 key={d.slug}
                 href={`/rge/${serviceSlug}/departement/${d.slug}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sand-50 hover:bg-emerald-50 border border-charcoal-200 hover:border-emerald-300 rounded-full text-xs font-medium text-charcoal-700 hover:text-emerald-700 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sand-50 hover:bg-accent-50 border border-charcoal-200 hover:border-accent-300 rounded-full text-xs font-medium text-charcoal-700 hover:text-accent-700 transition"
               >
                 <span className="tabular-nums text-charcoal-400">{d.code}</span>
                 <span>{d.name}</span>
@@ -619,7 +614,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div className="flex items-start gap-3">
             <FileCheck2
-              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0"
               aria-hidden="true"
             />
             <div>
@@ -631,7 +626,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </div>
           <div className="flex items-start gap-3">
             <FileCheck2
-              className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0"
+              className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0"
               aria-hidden="true"
             />
             <div>
@@ -642,7 +637,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Percent className="w-5 h-5 text-emerald-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <Percent className="w-5 h-5 text-accent-700 mt-0.5 flex-shrink-0" aria-hidden="true" />
             <div>
               <div className="font-semibold text-charcoal-900">TVA à 5,5 %</div>
               <div className="text-sm text-charcoal-600">
@@ -661,8 +656,8 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           <DeepSectionsToc sections={deepSections} title={`Sommaire — ${content.h1}`} />
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
             <div className="flex items-center gap-2 mb-3">
-              <BookOpen className="w-5 h-5 text-emerald-700" aria-hidden="true" />
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+              <BookOpen className="w-5 h-5 text-accent-700" aria-hidden="true" />
+              <span className="text-xs font-bold text-accent-800 uppercase tracking-wider">
                 Approfondir le sujet
               </span>
             </div>
@@ -714,11 +709,11 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           {content.faq.map((item, idx) => (
             <details
               key={idx}
-              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-300 transition p-6"
+              className="group bg-white rounded-2xl border border-charcoal-200 hover:border-accent-300 transition p-6"
             >
               <summary className="font-heading font-bold text-lg text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-4">
                 <span>{item.question}</span>
-                <span className="text-emerald-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-2xl leading-none flex-shrink-0 group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -741,9 +736,9 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                 <Link
                   key={s}
                   href={`/rge/${s}`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white rounded-full border border-charcoal-200 text-sm font-medium text-charcoal-700 hover:border-emerald-400 hover:text-emerald-700 transition"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white rounded-full border border-charcoal-200 text-sm font-medium text-charcoal-700 hover:border-accent-400 hover:text-accent-700 transition"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-accent-600" aria-hidden="true" />
                   {otherLabel?.label ?? s}
                 </Link>
               )
@@ -753,32 +748,32 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
       </section>
 
       {/* CTAs finaux */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
           <h2 className="font-heading text-2xl md:text-4xl font-extrabold mb-4">
             Prêt à lancer vos travaux avec un artisan RGE ?
           </h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-8 leading-relaxed">
             Vérifiez la qualification d&apos;un artisan, demandez un devis gratuit et sans
             engagement, ou approfondissez le sujet avec nos guides éditoriaux.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/verifier-artisan"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               <ShieldCheck className="w-5 h-5" aria-hidden="true" />
               Vérifier un artisan
             </Link>
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-500 text-white font-semibold hover:bg-accent-400 transition"
             >
               Demander un devis gratuit
             </Link>
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-emerald-300/60 text-white font-semibold hover:bg-emerald-600/30 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
             >
               <BookOpen className="w-5 h-5" aria-hidden="true" />
               Retour au hub RGE

@@ -41,8 +41,8 @@ export default function ScreenDpe({ value, onSelect }: Props) {
         {OPTIONS.map((o) => (
           <CardButton key={o.id} selected={value === o.id} onClick={() => onSelect(o.id)}>
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100">
-                <o.Icon className="h-6 w-6 text-emerald-700" />
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-accent-100">
+                <o.Icon className="h-6 w-6 text-accent-700" />
               </div>
               <div>
                 <p className="text-base font-semibold text-charcoal-900">{o.label}</p>

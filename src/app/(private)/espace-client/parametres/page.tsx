@@ -1005,7 +1005,7 @@ function ToggleSetting({
           disabled={loading}
           className="peer sr-only"
         />
-        <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full peer-disabled:opacity-50"></div>
+        <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:trancharcoal-x-full peer-disabled:opacity-50"></div>
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-500 border-t-transparent"></div>

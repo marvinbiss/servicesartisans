@@ -41,12 +41,12 @@ export function MessageBubble({
       <div
         className={cn(
           'absolute top-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
-          isOwn ? 'left-0 -translate-x-full pr-2' : 'right-0 translate-x-full pl-2'
+          isOwn ? 'left-0 -trancharcoal-x-full pr-2' : 'right-0 trancharcoal-x-full pl-2'
         )}
       >
         <button
           onClick={() => onReply?.(message)}
-          className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400"
+          className="p-1.5 rounded-full hover:bg-charcoal-100 dark:hover:bg-charcoal-700 text-charcoal-400"
           title="Répondre"
         >
           <Reply className="w-4 h-4" />
@@ -54,7 +54,7 @@ export function MessageBubble({
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400"
+            className="p-1.5 rounded-full hover:bg-charcoal-100 dark:hover:bg-charcoal-700 text-charcoal-400"
           >
             <MoreVertical className="w-4 h-4" />
           </button>
@@ -63,13 +63,13 @@ export function MessageBubble({
           {showMenu && (
             <div
               className={cn(
-                'absolute z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px]',
+                'absolute z-50 bg-white dark:bg-charcoal-800 rounded-lg shadow-lg border border-charcoal-200 dark:border-charcoal-700 py-1 min-w-[140px]',
                 isOwn ? 'right-0' : 'left-0'
               )}
             >
               <button
                 onClick={handleCopy}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                className="w-full px-3 py-2 text-left text-sm hover:bg-charcoal-100 dark:hover:bg-charcoal-700 flex items-center gap-2"
               >
                 <Copy className="w-4 h-4" />
                 Copier
@@ -88,7 +88,7 @@ export function MessageBubble({
               'text-xs px-3 py-1.5 mb-1 rounded-t-lg border-l-2',
               isOwn
                 ? 'bg-blue-500/20 border-blue-300 text-blue-100'
-                : 'bg-gray-200 dark:bg-gray-700 border-gray-400 text-gray-600 dark:text-gray-300'
+                : 'bg-charcoal-200 dark:bg-charcoal-700 border-charcoal-400 text-charcoal-600 dark:text-charcoal-300'
             )}
           >
             <span className="font-medium">
@@ -104,7 +104,7 @@ export function MessageBubble({
             'rounded-2xl px-4 py-2',
             isOwn
               ? 'bg-blue-600 text-white rounded-br-md'
-              : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md',
+              : 'bg-charcoal-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white rounded-bl-md',
             replyToMessage && 'rounded-t-none'
           )}
         >
@@ -117,7 +117,7 @@ export function MessageBubble({
           <div
             className={cn('flex items-center gap-1 mt-1', isOwn ? 'justify-end' : 'justify-start')}
           >
-            <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-gray-400')}>
+            <span className={cn('text-xs', isOwn ? 'text-blue-200' : 'text-charcoal-400')}>
               {formatTime(message.created_at)}
             </span>
             {isOwn &&

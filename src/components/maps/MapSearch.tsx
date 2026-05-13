@@ -573,7 +573,7 @@ export default function MapSearch() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
+                className="absolute top-4 left-1/2 -trancharcoal-x-1/2 z-20"
               >
                 <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-primary-500" />

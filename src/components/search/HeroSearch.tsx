@@ -112,7 +112,7 @@ const services = [
     name: 'Maçon',
     slug: 'macon',
     icon: 'Wrench',
-    color: 'from-stone-500 to-stone-600',
+    color: 'from-sand-500 to-sand-600',
     searches: '3k/mois',
     urgent: false,
   },
@@ -120,7 +120,7 @@ const services = [
     name: 'Pompe à chaleur',
     slug: 'pompe-a-chaleur',
     icon: 'Thermometer',
-    color: 'from-emerald-500 to-emerald-600',
+    color: 'from-accent-500 to-accent-600',
     searches: '8k/mois',
     urgent: false,
   },
@@ -742,7 +742,7 @@ export function HeroSearch() {
                             <ChevronRight
                               className={`w-4 h-4 transition-all duration-150 ${
                                 isHighlighted
-                                  ? 'text-primary-300 translate-x-0.5'
+                                  ? 'text-primary-300 trancharcoal-x-0.5'
                                   : 'text-charcoal-300'
                               }`}
                             />

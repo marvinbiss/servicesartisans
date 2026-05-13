@@ -245,7 +245,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                   <span className="font-medium text-charcoal-800 group-hover:text-primary-700">
                     {c.name}
                   </span>
-                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 group-hover:trancharcoal-x-0.5 transition-all" />
                 </Link>
               </li>
             ))}
@@ -295,7 +295,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       </section>
 
       {isRgeAllowedService(service) && (
-        <section className="py-10 md:py-14 border-t border-emerald-100 bg-emerald-50/40">
+        <section className="py-10 md:py-14 border-t border-accent-100 bg-accent-50/40">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
               {name} RGE et primes associées
@@ -307,7 +307,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={`/rge/${service}`}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-300 bg-white hover:bg-emerald-100 hover:border-emerald-500 transition text-sm font-semibold text-emerald-900"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-accent-300 bg-white hover:bg-accent-100 hover:border-accent-500 transition text-sm font-semibold text-accent-900"
               >
                 Artisans RGE {nameLc}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -318,9 +318,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                   <Link
                     key={op.code}
                     href={`/cee/${op.code.toLowerCase()}/guide`}
-                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-emerald-200 bg-white hover:bg-emerald-100 transition text-sm"
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-accent-200 bg-white hover:bg-accent-100 transition text-sm"
                   >
-                    <span className="font-bold text-emerald-900">{op.code}</span>
+                    <span className="font-bold text-accent-900">{op.code}</span>
                     <span className="text-charcoal-700">{op.label}</span>
                   </Link>
                 ))}
@@ -340,7 +340,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           </p>
           <Link
             href={`/devis/${service}`}
-            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:-trancharcoal-y-0.5 transition-all duration-300"
           >
             Demander un devis gratuit
             <ArrowRight className="w-5 h-5" />

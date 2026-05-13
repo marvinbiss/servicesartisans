@@ -260,11 +260,11 @@ export default function CommentDevenirRgePage() {
       />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-charcoal-900 via-charcoal-800 to-accent-900 text-white py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full px-4 py-1.5 mb-5">
-            <GraduationCap className="w-4 h-4 text-emerald-300" />
-            <span className="text-sm font-medium text-emerald-100">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-400/30 rounded-full px-4 py-1.5 mb-5">
+            <GraduationCap className="w-4 h-4 text-accent-300" />
+            <span className="text-sm font-medium text-accent-100">
               Guide artisan — qualification RGE
             </span>
           </div>
@@ -280,12 +280,12 @@ export default function CommentDevenirRgePage() {
             dateModified="2026-04-09"
             className="justify-center mt-4"
           />
-          <p className="text-lg text-emerald-50/90 max-w-3xl leading-relaxed">
+          <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Guide factuel et non commercial pour obtenir la qualification Reconnu Garant de
             l’Environnement&nbsp;: quels organismes&nbsp;? quelles étapes&nbsp;? combien ça coûte
             vraiment&nbsp;? Et surtout, est-ce rentable pour votre entreprise&nbsp;?
           </p>
-          <p className="text-sm text-emerald-100/70 mt-4 max-w-3xl">
+          <p className="text-sm text-accent-100/70 mt-4 max-w-3xl">
             Rédigé sur la base de l’arrêté du 1<sup>er</sup> décembre 2015 modifié, de la charte RGE
             France Rénov’ et des documents publics des organismes certificateurs.
           </p>
@@ -295,7 +295,7 @@ export default function CommentDevenirRgePage() {
       {/* QU'EST-CE QUE LE RGE */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <ShieldCheck className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <ShieldCheck className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Qu’est-ce que le label RGE concrètement&nbsp;?
           </h2>
@@ -339,7 +339,7 @@ export default function CommentDevenirRgePage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <Building2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Building2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Quels organismes délivrent la qualification RGE en France&nbsp;?
             </h2>
@@ -358,11 +358,11 @@ export default function CommentDevenirRgePage() {
               return (
                 <article
                   key={org.name}
-                  className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
+                  className="p-6 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 transition"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+                    <div className="w-10 h-10 rounded-xl bg-accent-50 border border-accent-100 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-accent-700" aria-hidden="true" />
                     </div>
                     <h3 className="font-heading font-bold text-lg text-charcoal-900">{org.name}</h3>
                   </div>
@@ -371,7 +371,7 @@ export default function CommentDevenirRgePage() {
                     {org.badges.map((b) => (
                       <span
                         key={b}
-                        className="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700"
+                        className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent-50 border border-accent-100 text-xs font-semibold text-accent-700"
                       >
                         {b}
                       </span>
@@ -386,7 +386,7 @@ export default function CommentDevenirRgePage() {
                     href={org.url}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition"
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-accent-700 hover:text-accent-900 transition"
                   >
                     Site officiel →
                   </a>
@@ -404,7 +404,7 @@ export default function CommentDevenirRgePage() {
       {/* 5 ETAPES (HowTo) */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <CheckCircle2 className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <CheckCircle2 className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Comment obtenir la qualification RGE en 5 étapes&nbsp;?
           </h2>
@@ -415,7 +415,7 @@ export default function CommentDevenirRgePage() {
               key={step.name}
               className="p-6 bg-white rounded-2xl border border-charcoal-200 flex gap-4"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-600 text-white font-heading font-extrabold flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-accent-600 text-white font-heading font-extrabold flex items-center justify-center">
                 {i + 1}
               </div>
               <div>
@@ -433,7 +433,7 @@ export default function CommentDevenirRgePage() {
       <section className="bg-sand-50 border-y border-charcoal-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <Euro className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+            <Euro className="w-5 h-5 text-accent-700" aria-hidden="true" />
             <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
               Combien coûte vraiment l’obtention d’une qualification RGE&nbsp;?
             </h2>
@@ -458,7 +458,7 @@ export default function CommentDevenirRgePage() {
                 {COSTS.map((row) => (
                   <tr key={row.item} className="border-t border-charcoal-100">
                     <td className="p-4 font-semibold text-charcoal-900 align-top">{row.item}</td>
-                    <td className="p-4 text-emerald-700 font-semibold align-top">{row.range}</td>
+                    <td className="p-4 text-accent-700 font-semibold align-top">{row.range}</td>
                     <td className="p-4 text-charcoal-600 align-top">{row.note}</td>
                   </tr>
                 ))}
@@ -476,7 +476,7 @@ export default function CommentDevenirRgePage() {
       {/* COMBIEN CA RAPPORTE */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center gap-2 mb-6">
-          <TrendingUp className="w-5 h-5 text-emerald-700" aria-hidden="true" />
+          <TrendingUp className="w-5 h-5 text-accent-700" aria-hidden="true" />
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-charcoal-900">
             Combien rapporte la qualification RGE pour un artisan&nbsp;?
           </h2>
@@ -546,11 +546,11 @@ export default function CommentDevenirRgePage() {
           {FAQS.map((faq) => (
             <details
               key={faq.question}
-              className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-emerald-400 transition"
+              className="group p-5 bg-white rounded-2xl border border-charcoal-200 hover:border-accent-400 transition"
             >
               <summary className="font-heading font-bold text-charcoal-900 cursor-pointer list-none flex items-start justify-between gap-3">
                 <span>{faq.question}</span>
-                <span className="text-emerald-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
+                <span className="text-accent-600 text-xl font-extrabold group-open:rotate-45 transition-transform">
                   +
                 </span>
               </summary>
@@ -561,36 +561,36 @@ export default function CommentDevenirRgePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 text-white">
+      <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-3">Aller plus loin</h2>
-          <p className="text-emerald-100 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className="text-accent-100 max-w-2xl mx-auto mb-6 leading-relaxed">
             Explorez l’annuaire RGE officiel, approfondissez les qualifications ou découvrez comment
             référencer gratuitement votre entreprise sur ServicesArtisans.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
               href="/rge"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-800 font-semibold shadow-lg hover:bg-emerald-50 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
             >
               Annuaire artisans RGE
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <Link
               href="/rge/qualifications"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Guides qualifications
             </Link>
             <Link
               href="/rge/sources"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Sources et méthodologie
             </Link>
             <Link
               href="/espace-artisan"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-emerald-300/50 bg-emerald-800/40 text-white font-semibold hover:bg-emerald-800/60 transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent-300/50 bg-accent-800/40 text-white font-semibold hover:bg-accent-800/60 transition"
             >
               Inscription artisan (gratuite)
             </Link>

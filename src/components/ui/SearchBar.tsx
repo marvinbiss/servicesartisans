@@ -338,7 +338,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
           <div className="flex flex-col md:flex-row gap-3">
             {/* Service field */}
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+              <Search className="absolute left-4 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
               <input
                 ref={serviceInputRef}
                 type="text"
@@ -357,7 +357,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                     setQuery('')
                     serviceInputRef.current?.focus()
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-charcoal-600 p-1"
+                  className="absolute right-4 top-1/2 -trancharcoal-y-1/2 text-charcoal-400 hover:text-charcoal-600 p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -456,7 +456,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
             {/* Location field */}
             <div className="flex-1 relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+              <MapPin className="absolute left-4 top-1/2 -trancharcoal-y-1/2 w-5 h-5 text-charcoal-400" />
               <input
                 ref={locationInputRef}
                 type="text"
@@ -477,7 +477,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 type="button"
                 onClick={handleGeolocate}
                 disabled={isLocating}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-charcoal-400 hover:text-primary-500 hover:bg-primary-50 rounded-full transition-colors disabled:opacity-50"
+                className="absolute right-3 top-1/2 -trancharcoal-y-1/2 p-2 text-charcoal-400 hover:text-primary-500 hover:bg-primary-50 rounded-full transition-colors disabled:opacity-50"
                 title="Utiliser ma position"
               >
                 {isLocating ? (
@@ -575,11 +575,11 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
             {/* Submit button */}
             <button
               type="submit"
-              className="relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
+              className="relative overflow-hidden bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/40 hover:-trancharcoal-y-0.5 active:trancharcoal-y-0 flex items-center justify-center gap-2 group"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent trancharcoal-x-[-200%] group-hover:trancharcoal-x-[200%] transition-transform duration-700" />
               <span className="relative">Rechercher</span>
-              <ArrowRight className="w-5 h-5 relative group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-5 h-5 relative group-hover:trancharcoal-x-0.5 transition-transform" />
             </button>
           </div>
         </div>

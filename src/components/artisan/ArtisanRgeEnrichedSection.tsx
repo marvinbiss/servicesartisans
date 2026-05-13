@@ -188,13 +188,13 @@ export function ArtisanRgeEnrichedSection({
   return (
     <section
       aria-labelledby="rge-enriched-heading"
-      className="bg-white rounded-2xl shadow-soft border border-emerald-100 overflow-hidden"
+      className="bg-white rounded-2xl shadow-soft border border-accent-100 overflow-hidden"
     >
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-charcoal-900 text-white px-6 py-5">
+      <div className="bg-gradient-to-br from-accent-600 via-accent-700 to-charcoal-900 text-white px-6 py-5">
         <div className="flex items-start gap-3">
           <div className="rounded-full bg-white/15 border border-white/25 p-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-100" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent-100" aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1">
             <h2
@@ -205,7 +205,7 @@ export function ArtisanRgeEnrichedSection({
                 ? 'Artisan reconnu RGE par l’ADEME'
                 : 'Qualifications RGE & aides débloquées'}
             </h2>
-            <p className="text-sm text-emerald-50/90 mt-1 leading-relaxed">
+            <p className="text-sm text-accent-50/90 mt-1 leading-relaxed">
               Certifications officielles issues de l’annuaire ADEME.{' '}
               {validUntilLabel ? (
                 <>
@@ -220,7 +220,7 @@ export function ArtisanRgeEnrichedSection({
       {/* Guides RGE détectés */}
       {guides.length > 0 && (
         <div className="px-6 pt-6">
-          <h3 className="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-bold text-accent-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Award className="w-3.5 h-3.5" aria-hidden="true" />
             Comprendre ces qualifications
           </h3>
@@ -231,14 +231,14 @@ export function ArtisanRgeEnrichedSection({
                 href={`/rge/qualifications/${g.slug}`}
                 data-testid={`rge-guide-link-${g.slug}`}
                 onClick={() => handleClick('guide', g.slug)}
-                className="group block rounded-xl border border-emerald-100 bg-emerald-50/40 hover:border-emerald-300 hover:bg-emerald-50 transition p-4"
+                className="group block rounded-xl border border-accent-100 bg-accent-50/40 hover:border-accent-300 hover:bg-accent-50 transition p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="font-heading font-extrabold text-charcoal-900 text-base leading-tight">
                       {g.name}
                     </div>
-                    <div className="text-xs text-emerald-700 font-semibold mt-0.5">
+                    <div className="text-xs text-accent-700 font-semibold mt-0.5">
                       Délivrée par {g.organisme}
                     </div>
                     <p className="text-sm text-charcoal-700 mt-2 leading-relaxed">
@@ -246,7 +246,7 @@ export function ArtisanRgeEnrichedSection({
                     </p>
                   </div>
                   <ArrowRight
-                    className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-1 group-hover:translate-x-0.5 transition-transform"
+                    className="w-4 h-4 text-accent-600 flex-shrink-0 mt-1 group-hover:trancharcoal-x-0.5 transition-transform"
                     aria-hidden="true"
                   />
                 </div>
@@ -306,7 +306,7 @@ export function ArtisanRgeEnrichedSection({
             href="/rge/sources"
             data-testid="rge-footer-sources"
             onClick={() => handleClick('footer', 'sources')}
-            className="inline-flex items-center gap-1 text-emerald-700 font-semibold hover:text-emerald-900 underline underline-offset-2"
+            className="inline-flex items-center gap-1 text-accent-700 font-semibold hover:text-accent-900 underline underline-offset-2"
           >
             Sources &amp; méthodologie
           </Link>
@@ -315,7 +315,7 @@ export function ArtisanRgeEnrichedSection({
               href={`/rge/${rgeServiceSlug}/departement/${departementSlug}`}
               data-testid="rge-footer-dept"
               onClick={() => handleClick('footer', `dept-${rgeServiceSlug}`)}
-              className="inline-flex items-center gap-1 text-emerald-700 font-semibold hover:text-emerald-900 underline underline-offset-2"
+              className="inline-flex items-center gap-1 text-accent-700 font-semibold hover:text-accent-900 underline underline-offset-2"
             >
               Autres artisans RGE dans ce département
             </Link>
@@ -324,7 +324,7 @@ export function ArtisanRgeEnrichedSection({
             href="/cee/guides"
             data-testid="rge-footer-cee-guides"
             onClick={() => handleClick('footer', 'cee-guides')}
-            className="inline-flex items-center gap-1 text-emerald-700 font-semibold hover:text-emerald-900 underline underline-offset-2"
+            className="inline-flex items-center gap-1 text-accent-700 font-semibold hover:text-accent-900 underline underline-offset-2"
           >
             Tous les guides CEE
           </Link>

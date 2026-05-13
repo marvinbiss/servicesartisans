@@ -101,9 +101,9 @@ export default function ResultatActions({
   return (
     <section className="mt-6 grid gap-4 md:grid-cols-2">
       {/* Path A — artisan RGE */}
-      <div className="rounded-2xl border-2 border-emerald-200 bg-white p-6 flex flex-col">
+      <div className="rounded-2xl border-2 border-accent-200 bg-white p-6 flex flex-col">
         <div className="flex items-start gap-3 mb-3">
-          <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-emerald-600 flex items-center justify-center">
+          <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-accent-600 flex items-center justify-center">
             <HardHat className="w-5 h-5 text-white" aria-hidden="true" />
           </div>
           <div className="flex-1">
@@ -118,22 +118,22 @@ export default function ResultatActions({
         </div>
         <ul className="text-sm text-charcoal-700 space-y-1.5 mb-4 flex-1">
           <li className="flex items-start gap-2">
-            <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span className="text-accent-600 font-bold mt-0.5">✓</span>
             <span>Lead exclusif — un seul artisan vous contacte</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span className="text-accent-600 font-bold mt-0.5">✓</span>
             <span>Certifié RGE pour éligibilité aux aides</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-emerald-600 font-bold mt-0.5">✓</span>
+            <span className="text-accent-600 font-bold mt-0.5">✓</span>
             <span>Gratuit, sans engagement</span>
           </li>
         </ul>
         <Link
           href={devisHref}
           onClick={handleDevisClick}
-          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow-md hover:bg-emerald-700 transition"
+          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent-600 text-white font-semibold shadow-md hover:bg-accent-700 transition"
         >
           Recevoir un devis RGE
         </Link>
@@ -171,14 +171,14 @@ export default function ResultatActions({
         </ul>
 
         {status === 'success' ? (
-          <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3">
+          <div className="flex items-start gap-2 rounded-xl bg-accent-50 border border-accent-200 p-3">
             <CheckCircle2
-              className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5"
               aria-hidden="true"
             />
             <div>
-              <p className="text-sm font-semibold text-emerald-800">Demande enregistrée</p>
-              <p className="text-xs text-emerald-700 mt-0.5">
+              <p className="text-sm font-semibold text-accent-800">Demande enregistrée</p>
+              <p className="text-xs text-accent-700 mt-0.5">
                 Un conseiller vous rappelle sous 2h ouvrées.
               </p>
             </div>

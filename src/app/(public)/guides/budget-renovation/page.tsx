@@ -509,7 +509,7 @@ export default function BudgetRenovationPage() {
 
         {/* 4. Aides financières */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-green-600 to-accent-700 rounded-2xl p-8 md:p-10 text-white">
             <div className="flex items-center gap-3 mb-6">
               <PiggyBank className="w-8 h-8" />
               <h2 className="text-2xl md:text-3xl font-bold font-heading">
@@ -625,7 +625,7 @@ export default function BudgetRenovationPage() {
 
         {/* 7. Financement */}
         <section className="max-w-5xl mx-auto px-4 py-10">
-          <div className="bg-gradient-to-br from-primary-500 to-indigo-700 rounded-2xl p-8 md:p-10 text-white">
+          <div className="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-8 md:p-10 text-white">
             <div className="flex items-center gap-3 mb-6">
               <Euro className="w-8 h-8" />
               <h2 className="text-2xl md:text-3xl font-bold font-heading">

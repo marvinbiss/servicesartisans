@@ -111,7 +111,7 @@ const sections: ChecklistSection[] = [
     title: '2. Choisir ses artisans',
     description: 'Devis, vérifications et contrat : sécuriser le choix de vos professionnels.',
     icon: Users,
-    iconColor: 'text-emerald-600 bg-emerald-50',
+    iconColor: 'text-accent-600 bg-accent-50',
     items: [
       {
         text: 'Demander minimum 3 devis détaillés pour chaque lot',
@@ -464,10 +464,10 @@ export default function ChecklistTravauxPage() {
         </div>
 
         {/* Hero */}
-        <div className="bg-gradient-to-b from-indigo-50 to-sand-50">
+        <div className="bg-gradient-to-b from-primary-50 to-sand-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="flex items-center gap-3 mb-4">
-              <ClipboardCheck className="w-8 h-8 text-indigo-600" />
+              <ClipboardCheck className="w-8 h-8 text-primary-600" />
               <h1
                 data-speakable="true"
                 className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
@@ -485,7 +485,7 @@ export default function ChecklistTravauxPage() {
                 <a
                   key={section.id}
                   href={`#${section.id}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-sand-300 rounded-lg text-sm text-charcoal-700 hover:border-indigo-300 hover:text-indigo-600 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-sand-300 rounded-lg text-sm text-charcoal-700 hover:border-primary-300 hover:text-primary-600 transition-colors"
                 >
                   <section.icon className="w-4 h-4" />
                   {section.title.replace(/^\d+\.\s/, '')}
@@ -628,18 +628,18 @@ export default function ChecklistTravauxPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-12 bg-gradient-to-r from-indigo-600 to-primary-500 rounded-2xl p-8 md:p-12 text-center text-white">
+          <div className="mt-12 bg-gradient-to-r from-primary-600 to-primary-500 rounded-2xl p-8 md:p-12 text-center text-white">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 font-heading">
               {'Prêt à lancer vos travaux ?'}
             </h2>
-            <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
               {
                 'Trouvez des artisans RGE certifiés près de chez vous. Devis gratuit et sans engagement.'
               }
             </p>
             <Link
               href="/devis"
-              className="inline-flex items-center justify-center gap-2 bg-white text-indigo-700 px-8 py-3.5 rounded-xl font-bold hover:bg-indigo-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 px-8 py-3.5 rounded-xl font-bold hover:bg-primary-50 transition-colors"
             >
               Obtenir mon devis gratuit
             </Link>

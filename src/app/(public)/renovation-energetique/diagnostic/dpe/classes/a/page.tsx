@@ -233,7 +233,7 @@ export default function DpeClasseAPage() {
 
         <article className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
           <header className="mb-8">
-            <p className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
+            <p className="inline-flex items-center gap-2 bg-accent-100 text-accent-800 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
               <Star className="w-3.5 h-3.5" aria-hidden /> Excellence — 1 % du parc
             </p>
             <h1 className="font-heading text-3xl sm:text-4xl font-bold text-sand-900 mt-3 mb-3 leading-tight">
@@ -262,9 +262,9 @@ export default function DpeClasseAPage() {
               {SEUILS_A.map((s) => (
                 <div
                   key={s.indicateur}
-                  className="bg-white border-2 border-emerald-200 rounded-xl p-5 shadow-sm"
+                  className="bg-white border-2 border-accent-200 rounded-xl p-5 shadow-sm"
                 >
-                  <p className="font-semibold text-emerald-700 text-sm uppercase tracking-wide">
+                  <p className="font-semibold text-accent-700 text-sm uppercase tracking-wide">
                     {s.indicateur}
                   </p>
                   <p className="font-heading text-2xl font-bold text-sand-900 mt-2 mb-3">
@@ -293,19 +293,19 @@ export default function DpeClasseAPage() {
             </div>
           </section>
 
-          <section className="my-10 bg-emerald-50 border-2 border-emerald-200 rounded-xl p-6">
-            <h2 className="font-heading text-xl font-bold text-emerald-900 mb-3">
+          <section className="my-10 bg-accent-50 border-2 border-accent-200 rounded-xl p-6">
+            <h2 className="font-heading text-xl font-bold text-accent-900 mb-3">
               <Calculator className="inline w-5 h-5 mr-2" aria-hidden />
               Estimer mes aides en 2 minutes
             </h2>
-            <p className="text-sm text-emerald-800 mb-4 leading-relaxed">
+            <p className="text-sm text-accent-800 mb-4 leading-relaxed">
               Si vous envisagez une rénovation BBC complète (D/C → A), le simulateur officiel France
               Rénov’ calcule MaPrimeRénov’ Parcours accompagné + CEE + éco-PTZ + prime
               autoconsommation.
             </p>
             <Link
               href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-2 bg-emerald-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-800 transition-colors"
+              className="inline-flex items-center gap-2 bg-accent-700 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-accent-800 transition-colors"
             >
               Simulateur aides
               <ArrowRight className="w-4 h-4" aria-hidden />
