@@ -1,3 +1,18 @@
+/**
+ * /guides/chauffe-eau-thermodynamique-prix — Hub CET (Pilier 2).
+ *
+ * @kw-primary    prix chauffe-eau thermodynamique
+ * @kw-volume     700
+ * @kw-kd         0
+ * @kw-cpc        46
+ * @cluster       4 (chauffe-eau / ECS)
+ * @intent        transactional pur (prix)
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/keyword_opportunities_2026-05.csv:14
+ * @snapshot      2026-05-13 (chantier #10 KW commerciaux)
+ *
+ * Sonergia rang 7 sur ce KW = striking distance. KD 0 = peu de défense
+ * concurrentielle. CPC 46 € = bonne intent commercial.
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Droplet, ArrowRight, AlertTriangle, Phone } from 'lucide-react'
@@ -19,7 +34,9 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chauffe-eau thermodynamique 2026 : prix'
+// Title optimisé KW exact "prix chauffe-eau thermodynamique" (700 vol, KD 0,
+// CPC 46 €). Sonergia rang 7 = striking distance. Préfixe "Prix" en tête.
+const TITLE = 'Prix chauffe-eau thermodynamique 2026 : tarifs + aides'
 const DESCRIPTION =
   'Chauffe-eau thermodynamique 2026 : 2 200-4 500 € TTC posé, COP 2,5-3,8. MaPrimeRénov’ 400-1 200 €, CEE 150-600 €, TVA 5,5 %. Comparatif vs électrique.'
 
@@ -139,7 +156,7 @@ export default function Page() {
               data-speakable="true"
               className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
             >
-              Chauffe-eau thermodynamique : prix 2026
+              Prix chauffe-eau thermodynamique 2026 : tarifs posé + aides
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">
               Un chauffe-eau thermodynamique (CET) divise par 3 la consommation d’eau chaude

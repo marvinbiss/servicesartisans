@@ -1,3 +1,19 @@
+/**
+ * /guides/chaudiere-fioul-interdite-2026 — Hub fioul (Pilier 2).
+ *
+ * @kw-primary    chaudière fioul
+ * @kw-volume     1300
+ * @kw-kd         1
+ * @kw-cpc        45
+ * @kw-secondary  chaudiere fioul (2300, KD 0), interdiction chaudière fioul
+ * @cluster       3 (chauffage fioul → remplacement)
+ * @intent        commercial + informational (anxiété réglementaire)
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/keyword_opportunities_2026-05.csv:5-8
+ * @snapshot      2026-05-13 (chantier #10 KW commerciaux)
+ *
+ * Hellio rang 5 sur ce KW = striking distance.
+ * Vrai jackpot : KW transactionnel parce que décret 2022-8 force le remplacement.
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Flame, ArrowRight, AlertTriangle, Phone } from 'lucide-react'
@@ -19,9 +35,11 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 export const revalidate = 86400
 
-const TITLE = 'Chaudière fioul interdite 2026'
+// Title optimisé KW exact "chaudière fioul" (1 300 vol, KD 1, CPC 45 €) + variante
+// "chaudiere fioul" (2 300 vol, KD 0). Hellio rang 5 = striking distance.
+const TITLE = 'Chaudière fioul 2026 : interdiction, remplacement et aides'
 const DESCRIPTION =
-  'Chaudière fioul interdite neuf/remplacement 2022 (décret 2022-8). Réparation OK si existante. Remplacement PAC/biomasse, aides majorées Coup de pouce.'
+  'Chaudière fioul 2026 : interdite à l’installation depuis juillet 2022 (décret 2022-8). Remplacement PAC ou biomasse, aides cumulées 7 000-17 500 €. Devis artisan RGE 24 h.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -145,7 +163,7 @@ export default function Page() {
               data-speakable="true"
               className="font-heading text-3xl md:text-4xl font-bold text-sand-900 mb-4"
             >
-              Chaudière fioul interdite : ce qui change
+              Chaudière fioul 2026 : interdiction, remplacement et aides
             </h1>
             <p className="text-lg text-sand-700 leading-relaxed">
               Depuis le 1er juillet 2022, installer une chaudière fioul neuve est interdit en France

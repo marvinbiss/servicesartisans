@@ -1,3 +1,27 @@
+/**
+ * /guides/pompe-a-chaleur — Hub PAC (Pilier 2 rénovation énergétique).
+ *
+ * @kw-primary    pompe à chaleur prix
+ * @kw-volume     4700
+ * @kw-kd         1
+ * @kw-cpc        94
+ * @kw-secondary  pompe a chaleur prix (1700, KD 2, CPC 105), prix pompe à chaleur (additional)
+ * @cluster       2 (pompe à chaleur)
+ * @intent        commercial + transactional (prix + aides)
+ * @ahrefs-source docs/audit-ahrefs-2026-05-03/keyword_opportunities_2026-05.csv:11-17
+ * @snapshot      2026-05-13 (Ahrefs Bloc 1 v3 + chantier #10 KW commerciaux)
+ *
+ * Optimisations 2026-05-13 :
+ *   - Title meta ciblé exact "pompe à chaleur prix" (vs "Pompe à Chaleur : Prix et Aides")
+ *   - H1 priorise "prix 2026" en position 1-2 (boost relevance signal)
+ *   - Sonergia rang 9 sur ce KW = striking distance → opportunité rang 3-5
+ *
+ * Patterns DoD (audit-rge-template) :
+ *   - selectFittingTitle maxLen=60
+ *   - Article + Speakable + author + reviewedBy (RgeGuideBlock)
+ *   - GovernmentService (MaPrimeRénov') + FinancialProduct (cumul aides)
+ *   - FAQ + Tableau prix sourcé ADEME / ANAH
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
@@ -36,23 +60,25 @@ const PAGE_URL = `${SITE_URL}/guides/pompe-a-chaleur`
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'Pompe à Chaleur : Prix et Aides 2026',
+  // Title optimisé KW exact "pompe à chaleur prix" (4 700 vol, KD 1, CPC 94 €).
+  // Sonergia rang 9 sur ce KW = striking distance.
+  title: 'Pompe à chaleur prix 2026 : air-eau, air-air, géothermie + aides',
   description:
-    'Guide pompe à chaleur 2026 : air-eau, air-air, géothermique. Prix 3 000-30 000 €, MaPrimeRénov’ jusqu’à 11 000 €, installation artisan RGE.',
+    'Pompe à chaleur prix 2026 : air-air 3 000-8 000 €, air-eau 8 000-16 000 €, géothermique 15 000-30 000 €. MaPrimeRénov’ jusqu’à 11 000 €. Devis artisan RGE en 24h.',
   alternates: getAlternates('/guides/pompe-a-chaleur'),
   openGraph: {
-    title: 'Pompe à Chaleur : Prix, Aides et Installation 2026',
+    title: 'Pompe à chaleur prix 2026 : tous les tarifs + aides MaPrimeRénov’',
     description:
-      'Tout savoir sur la pompe à chaleur : types, prix, aides financières MaPrimeRénov’, installation et entretien par un artisan RGE.',
+      'Tarifs pompe à chaleur 2026 par type (air-air, air-eau, géothermique), avec aides MaPrimeRénov’, CEE, TVA 5,5 % et conseils d’artisan RGE.',
     url: PAGE_URL,
     type: 'article',
     siteName: SITE_NAME,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pompe à Chaleur : Prix, Aides et Installation 2026',
+    title: 'Pompe à chaleur prix 2026 : tous les tarifs + aides MaPrimeRénov’',
     description:
-      'Tout savoir sur la pompe à chaleur : types, prix, aides financières MaPrimeRénov’, installation et entretien par un artisan RGE.',
+      'Tarifs PAC 2026 par type (air-air, air-eau, géothermique) avec aides cumulées et devis artisan RGE.',
   },
 }
 
@@ -299,11 +325,11 @@ export default function PompeAChaleurPage() {
             data-speakable="true"
             className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-charcoal-900 mb-6 font-heading leading-tight"
           >
-            {'Pompe à chaleur : guide complet prix, aides et installation 2026'}
+            {'Pompe à chaleur prix 2026 : tous les tarifs (air-eau, air-air, géothermique)'}
           </h1>
           <p className="text-lg md:text-xl text-charcoal-600 max-w-3xl mx-auto leading-relaxed">
             {
-              'Vous envisagez d’installer une pompe à chaleur ? Découvrez les types de PAC, les prix, les aides financières et les conseils pour choisir le bon modèle et le bon artisan RGE.'
+              'Prix pompe à chaleur 2026 par type : 3 000-8 000 € pour une PAC air-air, 8 000-16 000 € pour une air-eau, 15 000-30 000 € en géothermie. Aides cumulées MaPrimeRénov’ + CEE + TVA 5,5 %, devis artisan RGE en 24 h.'
             }
           </p>
         </section>
