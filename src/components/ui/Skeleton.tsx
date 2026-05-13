@@ -112,43 +112,54 @@ export function FormSkeleton() {
   )
 }
 
-// Provider card skeleton - matches ProviderCard layout
+// Provider card skeleton — mirrors the real ProviderCard footprint
+// (padding, header, rating row, RGE badges, pricing, response-time, CTA)
+// so swapping skeleton → live card produces near-zero CLS on the listing.
 export function ProviderCardSkeleton() {
   return (
     <div
-      className="bg-white rounded-2xl border border-sand-300 p-4 shadow-sm"
+      className="relative overflow-hidden rounded-2xl border border-sand-300 bg-white p-5 sm:p-6 shadow-soft min-h-[340px] sm:min-h-[360px]"
       role="article"
       aria-busy="true"
       aria-label="Chargement d'un artisan"
     >
-      {/* Badge placeholder */}
-      <Skeleton className="h-6 w-32 rounded-full mb-3" />
+      {/* Top-right favourite slot (real card has FavoriteButton 36×36 absolute) */}
+      <Skeleton className="absolute top-3 right-3 w-9 h-9 rounded-full" />
 
-      {/* Header */}
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex-1">
-          <Skeleton className="h-6 w-48 mb-2" />
-          <Skeleton className="h-5 w-20 rounded-full" />
+      {/* Avatar + name + specialty pill */}
+      <div className="flex items-start gap-3 pr-12">
+        <Skeleton className="w-14 h-14 rounded-full flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <Skeleton className="h-6 w-56 max-w-full mb-2" />
+          <div className="flex flex-wrap gap-2">
+            <Skeleton className="h-5 w-24 rounded-full" />
+            <Skeleton className="h-5 w-16 rounded-full" />
+          </div>
         </div>
-        <Skeleton className="h-7 w-24 rounded-full ml-3" />
       </div>
 
-      {/* Address */}
-      <div className="flex items-start gap-2 mb-2">
-        <Skeleton className="w-4 h-4 rounded mt-0.5" />
-        <Skeleton className="h-4 w-56" />
+      {/* Rating + review count row */}
+      <div className="flex items-center gap-2 mt-4">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-24" />
       </div>
 
-      {/* Contact */}
-      <div className="flex gap-4 mt-3 pt-3 border-t border-sand-200">
-        <Skeleton className="h-5 w-28" />
-        <Skeleton className="h-5 w-20" />
+      {/* Address line */}
+      <div className="flex items-center gap-2 mt-3">
+        <Skeleton className="w-4 h-4 rounded" />
+        <Skeleton className="h-4 w-56 max-w-full" />
       </div>
 
-      {/* CTA buttons */}
+      {/* Pricing + response-time inline metrics */}
+      <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t border-sand-200">
+        <Skeleton className="h-5 w-28 rounded-full" />
+        <Skeleton className="h-5 w-32 rounded-full" />
+      </div>
+
+      {/* CTA pair (Voir la fiche / Devis) */}
       <div className="flex gap-2 mt-4">
-        <Skeleton className="flex-1 h-10 rounded-xl" />
-        <Skeleton className="flex-1 h-10 rounded-xl" />
+        <Skeleton className="flex-1 h-11 rounded-xl" />
+        <Skeleton className="flex-1 h-11 rounded-xl" />
       </div>
     </div>
   )
