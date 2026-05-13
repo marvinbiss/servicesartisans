@@ -20,6 +20,7 @@ import { useDevisForm, urgencyOptions, initialDevisFormData } from '@/hooks/useD
 import type { DevisFormData } from '@/hooks/useDevisForm'
 import DevisConfirmation from '@/components/conversion/DevisConfirmation'
 import CeePrimeEstimateCard from '@/components/devis/CeePrimeEstimateCard'
+import { loadUserContactPrefs, saveUserContactPrefs } from '@/lib/storage/user-prefs'
 
 const budgetOptions = [
   { value: 'moins-500', label: 'Moins de 500 €' },
@@ -212,8 +213,40 @@ export default function DevisForm({
       } catch {
         // ignore
       }
+      // Persist contact info for prefill on the next quote — the user already
+      // consented to share these when submitting (RGPD consent checkbox).
+      saveUserContactPrefs({
+        nom: form.formData.nom,
+        email: form.formData.email,
+        telephone: form.formData.telephone,
+      })
     },
   })
+
+  // Smart prefill : restore contact info from previous submit when there is
+  // no draft to recover (otherwise the draft handler below takes over).
+  // Runs once on mount only — uses functional setState to avoid race with
+  // the draft-recovery effect below.
+  const prefillAppliedRef = useRef(false)
+  useEffect(() => {
+    if (prefillAppliedRef.current) return
+    prefillAppliedRef.current = true
+    if (isPrefilled) return
+    try {
+      if (localStorage.getItem(STORAGE_KEY)) return // draft will handle restoration
+    } catch {
+      // ignore
+    }
+    const prefs = loadUserContactPrefs()
+    if (!prefs) return
+    form.setFormData((prev) => ({
+      ...prev,
+      nom: prev.nom || prefs.nom,
+      email: prev.email || prefs.email,
+      telephone: prev.telephone || prefs.telephone,
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [showResumeBanner, setShowResumeBanner] = useState(false)
   const [savedService, setSavedService] = useState('')
