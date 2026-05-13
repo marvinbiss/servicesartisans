@@ -55,10 +55,12 @@ type ClaimRow = {
   provider_id: string
   status: string
   email_confirmed_at: string | null
+  manual_verification_required: boolean | null
   providers: {
     id: string
     user_id: string | null
     rge_valid_until: string | null
+    siret: string | null
   } | null
 }
 
@@ -127,10 +129,11 @@ export const GET = withCronCheckIn('cron-claim-auto-approve', async (request: Re
     const { data: claims, error } = await supabase
       .from('provider_claims')
       .select(
-        `id, provider_id, status, email_confirmed_at,
-         providers:provider_id (id, user_id, rge_valid_until)`
+        `id, provider_id, status, email_confirmed_at, manual_verification_required,
+         providers:provider_id (id, user_id, rge_valid_until, siret)`
       )
       .eq('status', 'pending')
+      .eq('manual_verification_required', false)
       .not('email_confirmed_at', 'is', null)
       .order('created_at', { ascending: true })
       .limit(BATCH_SIZE)
@@ -168,6 +171,8 @@ export const GET = withCronCheckIn('cron-claim-auto-approve', async (request: Re
           reasons.push('provider_not_found')
         } else {
           if (provider.user_id !== null) reasons.push('provider_already_claimed')
+          if (!provider.siret) reasons.push('provider_siret_missing')
+          if (claim.manual_verification_required) reasons.push('manual_verification_required')
           if (!provider.rge_valid_until) reasons.push('rge_missing')
           else if (new Date(provider.rge_valid_until).getTime() <= Date.now()) {
             reasons.push('rge_expired')

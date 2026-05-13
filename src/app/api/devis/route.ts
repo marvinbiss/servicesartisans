@@ -27,7 +27,7 @@ const devisSchema = z.object({
   // fallback, donc pas d'impact data.
   urgency: z.enum(['flexible', 'mois', 'semaine', 'urgent']).optional().default('flexible'),
   budget: z.string().max(20).optional(),
-  description: z.string().optional(),
+  description: z.string().max(2000).optional(),
   codePostal: z.string().optional(),
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis').optional().or(z.literal('')),

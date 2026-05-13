@@ -42,6 +42,7 @@ export const GET = withCronCheckIn('cron-healthcheck-deep', async (request: Requ
     const res = await fetch(url, {
       signal: AbortSignal.timeout(HEALTH_CHECK_TIMEOUT_MS),
       cache: 'no-store',
+      headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` },
     })
     const latencyMs = Date.now() - startedAt
     const body = (await res.json().catch(() => ({}))) as Record<string, unknown>

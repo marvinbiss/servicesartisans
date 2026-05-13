@@ -19,6 +19,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
+import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -122,7 +123,12 @@ async function checkAdemeRge(): Promise<Check> {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const authHeader = request.headers.get('authorization')
+  if (!verifyCronSecret(authHeader)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const startTime = Date.now()
 
   // Parallel — wall-clock = max(per-dep timeout) ≈ 3s.

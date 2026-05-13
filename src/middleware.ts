@@ -486,15 +486,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       // Vérification stricte du hostname.
       //
       // 2026-05-07 — assouplit la vérif :
-      //   1. same-origin (Origin === request URL origin) : par définition non-CSRF,
-      //      always safe — couvre les Vercel previews `*.vercel.app` + le custom
-      //      domain prod sans dépendre de NEXT_PUBLIC_SITE_URL.
+      //   1. same-origin (Origin === request URL origin) : par définition non-CSRF.
       //   2. NEXT_PUBLIC_SITE_URL et ses sous-domaines (apex/www).
-      //   3. *.vercel.app (Vercel previews testés depuis un autre alias).
-      //
-      // L'ancienne version échouait silencieusement quand l'utilisateur arrivait
-      // via une URL preview ou que la prod tournait sur un alias non ré-injecté
-      // dans NEXT_PUBLIC_SITE_URL — bouton « ne fonctionne pas » côté user.
+      //   3. Vercel previews du projet SA uniquement : `servicesartisans-*.vercel.app`.
+      //      L'ancien wildcard `*.vercel.app` acceptait n'importe quel projet
+      //      Vercel tiers comme Origin valide = CSRF cross-tenant.
       try {
         const originHostname = new URL(origin).hostname
         const requestHostname = request.nextUrl.hostname
@@ -504,9 +500,10 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         const isSameOrigin = originHostname === requestHostname
         const isAllowedHost =
           originHostname === allowedHostname || originHostname.endsWith('.' + allowedHostname)
-        const isVercelPreview = originHostname.endsWith('.vercel.app')
+        const isSaVercelPreview =
+          originHostname.endsWith('.vercel.app') && originHostname.startsWith('servicesartisans-')
 
-        if (!isSameOrigin && !isAllowedHost && !isVercelPreview) {
+        if (!isSameOrigin && !isAllowedHost && !isSaVercelPreview) {
           return new NextResponse(JSON.stringify({ error: 'Origine non autorisée' }), {
             status: 403,
             headers: { 'Content-Type': 'application/json' },
