@@ -630,6 +630,7 @@ export default function ServiceLocationPageClient({
               height="100%"
               className="h-full"
               onMarkerHover={setMapHoveredProviderId}
+              fitBoundsTrigger={`${activeFilterCount}-${filteredProviders.length}`}
             />
           </div>
         )}

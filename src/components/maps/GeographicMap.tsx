@@ -34,6 +34,12 @@ interface GeographicMapProps {
   className?: string
   onMarkerHover?: (providerId: string | null) => void
   onSearchArea?: (bounds: import('leaflet').LatLngBounds) => void
+  /**
+   * When this value changes, the map fits its bounds to the current markers
+   * (padding 40px, maxZoom 14). Use to refit after filter changes — e.g. pass
+   * `${activeFilterCount}-${filteredCount}`. Untouched on hover/highlight.
+   */
+  fitBoundsTrigger?: string | number
 }
 
 export default function GeographicMap({
@@ -47,6 +53,7 @@ export default function GeographicMap({
   className = '',
   onMarkerHover,
   onSearchArea,
+  fitBoundsTrigger,
 }: GeographicMapProps) {
   const [mapReady, setMapReady] = useState(false)
   const [_L, setL] = useState<typeof import('leaflet') | null>(null)
@@ -326,6 +333,29 @@ export default function GeographicMap({
       if (icon) marker.setIcon(icon)
     })
   }, [highlightedProviderId, _L, validProviders, getMarkerIcon])
+
+  // Fit bounds when filter trigger changes. Skip first mount — let
+  // initial center/zoom drive that frame.
+  const initialFitRef = useRef(true)
+  useEffect(() => {
+    if (initialFitRef.current) {
+      initialFitRef.current = false
+      return
+    }
+    const map = mapRef.current
+    const group = clusterGroupRef.current
+    if (!map || !group || validProviders.length === 0) return
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bounds = (group as any).getBounds?.()
+      if (bounds && bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 })
+        setMapMoved(false)
+      }
+    } catch {
+      // markercluster getBounds may throw on empty layers
+    }
+  }, [fitBoundsTrigger, validProviders])
 
   // Handle "Rechercher dans cette zone" click
   const handleSearchArea = useCallback(() => {
