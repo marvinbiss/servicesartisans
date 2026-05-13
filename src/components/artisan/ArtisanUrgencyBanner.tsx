@@ -1,5 +1,3 @@
-'use client'
-
 import { Zap, Clock, CheckCircle, RefreshCw } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 

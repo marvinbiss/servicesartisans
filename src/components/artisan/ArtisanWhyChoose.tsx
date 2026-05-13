@@ -1,5 +1,3 @@
-'use client'
-
 import { Trophy, Calendar, Shield, Users, MapPin, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 

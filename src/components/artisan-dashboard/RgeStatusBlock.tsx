@@ -1,5 +1,3 @@
-'use client'
-
 import useSWR from 'swr'
 import { ShieldCheck, AlertTriangle, XCircle, Info, ExternalLink, Calendar } from 'lucide-react'
 

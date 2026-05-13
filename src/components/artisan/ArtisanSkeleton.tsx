@@ -1,5 +1,3 @@
-'use client'
-
 // Shimmer animation component
 function Shimmer({ className }: { className?: string }) {
   return (

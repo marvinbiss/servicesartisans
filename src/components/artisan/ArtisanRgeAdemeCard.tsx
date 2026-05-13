@@ -1,5 +1,3 @@
-'use client'
-
 import { ShieldCheck } from 'lucide-react'
 import { ClaimButton } from '@/components/artisan/ClaimButton'
 

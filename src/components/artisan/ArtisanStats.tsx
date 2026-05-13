@@ -1,5 +1,3 @@
-'use client'
-
 import { Calendar, Award, Shield, Users, Clock, Navigation, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 

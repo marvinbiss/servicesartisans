@@ -1,5 +1,3 @@
-'use client'
-
 import { Wrench, Clock, Euro, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 

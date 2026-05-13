@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import useSWR from 'swr'
 import { Star, MessageCircle, Mail, ArrowRight, Sparkles, Clock } from 'lucide-react'
