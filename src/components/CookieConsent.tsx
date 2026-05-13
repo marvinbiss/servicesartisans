@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useId, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -57,6 +57,20 @@ export default function CookieConsent() {
     marketing: false,
     personalization: false,
   })
+  const titleId = useId()
+  const analyticsLabelId = useId()
+  const marketingLabelId = useId()
+  const personalizationLabelId = useId()
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  // Send focus to the heading when the banner appears so keyboard / SR
+  // users hear the consent prompt instead of being stranded at the page
+  // top. Non-modal — the page behind stays interactive.
+  useEffect(() => {
+    if (isVisible) {
+      headingRef.current?.focus()
+    }
+  }, [isVisible])
 
   useEffect(() => {
     // Check if user has already consented
@@ -175,7 +189,7 @@ export default function CookieConsent() {
         <div
           className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-sand-200"
           role="dialog"
-          aria-label="Gestion des cookies"
+          aria-labelledby={titleId}
           aria-modal="false"
         >
           <div className="p-6">
@@ -198,7 +212,12 @@ export default function CookieConsent() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-charcoal-900">
+                  <h3
+                    ref={headingRef}
+                    id={titleId}
+                    tabIndex={-1}
+                    className="text-lg font-semibold text-charcoal-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg"
+                  >
                     Nous respectons votre vie privée
                   </h3>
                   <p className="text-sm text-charcoal-500">Conformité RGPD</p>
@@ -245,7 +264,9 @@ export default function CookieConsent() {
                   {/* Analytics cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-sand-50 p-4">
                     <div>
-                      <h4 className="font-medium text-charcoal-900">Cookies analytiques</h4>
+                      <h4 id={analyticsLabelId} className="font-medium text-charcoal-900">
+                        Cookies analytiques
+                      </h4>
                       <p className="text-sm text-charcoal-500">
                         Nous aident à comprendre comment vous utilisez le site
                       </p>
@@ -253,20 +274,25 @@ export default function CookieConsent() {
                     <label className="relative inline-flex cursor-pointer items-center">
                       <input
                         type="checkbox"
+                        role="switch"
+                        aria-checked={preferences.analytics}
+                        aria-labelledby={analyticsLabelId}
                         checked={preferences.analytics}
                         onChange={(e) =>
                           setPreferences({ ...preferences, analytics: e.target.checked })
                         }
                         className="peer sr-only"
                       />
-                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full"></div>
+                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary-400 peer-focus-visible:ring-offset-2"></div>
                     </label>
                   </div>
 
                   {/* Marketing cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-sand-50 p-4">
                     <div>
-                      <h4 className="font-medium text-charcoal-900">Cookies marketing</h4>
+                      <h4 id={marketingLabelId} className="font-medium text-charcoal-900">
+                        Cookies marketing
+                      </h4>
                       <p className="text-sm text-charcoal-500">
                         Utilisés pour vous proposer des publicités pertinentes
                       </p>
@@ -274,20 +300,25 @@ export default function CookieConsent() {
                     <label className="relative inline-flex cursor-pointer items-center">
                       <input
                         type="checkbox"
+                        role="switch"
+                        aria-checked={preferences.marketing}
+                        aria-labelledby={marketingLabelId}
                         checked={preferences.marketing}
                         onChange={(e) =>
                           setPreferences({ ...preferences, marketing: e.target.checked })
                         }
                         className="peer sr-only"
                       />
-                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full"></div>
+                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary-400 peer-focus-visible:ring-offset-2"></div>
                     </label>
                   </div>
 
                   {/* Personalization cookies */}
                   <div className="flex items-center justify-between rounded-lg bg-sand-50 p-4">
                     <div>
-                      <h4 className="font-medium text-charcoal-900">Cookies de personnalisation</h4>
+                      <h4 id={personalizationLabelId} className="font-medium text-charcoal-900">
+                        Cookies de personnalisation
+                      </h4>
                       <p className="text-sm text-charcoal-500">
                         Permettent de mémoriser vos préférences
                       </p>
@@ -295,13 +326,16 @@ export default function CookieConsent() {
                     <label className="relative inline-flex cursor-pointer items-center">
                       <input
                         type="checkbox"
+                        role="switch"
+                        aria-checked={preferences.personalization}
+                        aria-labelledby={personalizationLabelId}
                         checked={preferences.personalization}
                         onChange={(e) =>
                           setPreferences({ ...preferences, personalization: e.target.checked })
                         }
                         className="peer sr-only"
                       />
-                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full"></div>
+                      <div className="peer h-6 w-11 rounded-full bg-sand-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-500 peer-checked:after:translate-x-full peer-focus-visible:ring-2 peer-focus-visible:ring-primary-400 peer-focus-visible:ring-offset-2"></div>
                     </label>
                   </div>
                 </motion.div>
