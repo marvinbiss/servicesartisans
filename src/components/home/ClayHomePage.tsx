@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { MagneticLink } from '@/components/ui/MagneticLink'
 import {
   Droplets,
   Zap,
@@ -285,13 +286,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
 
           {/* Primary CTA — high contrast, impossible to miss */}
           <div className="flex flex-col items-center gap-4 mb-8 md:mb-10">
-            <Link
+            <MagneticLink
               href="/devis"
-              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover transition-all duration-200 hover:-translate-y-1 animate-pulse-subtle"
+              strength={0.22}
+              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover hover:-translate-y-1 animate-pulse-subtle"
             >
               <ClipboardList className="w-6 h-6" />
               Obtenir mes 3 devis gratuits — en 2 min
-            </Link>
+            </MagneticLink>
             {/* Trust micro-copy directly under CTA */}
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
               <span className="inline-flex items-center gap-1">
@@ -761,12 +763,13 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               Des milliers de propriétaires font confiance à ServicesArtisans pour leurs travaux.
             </p>
             <div className="flex gap-3 flex-wrap justify-center">
-              <Link
+              <MagneticLink
                 href="/devis"
-                className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-200 bg-white hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+                strength={0.2}
+                className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full bg-white shadow-lg hover:shadow-xl"
               >
                 Obtenir mon devis gratuit
-              </Link>
+              </MagneticLink>
               <Link
                 href="/espace-artisan"
                 className="text-white text-sm font-bold px-7 py-4 rounded-full transition-all duration-200 hover:bg-white/10 border-[1.5px] border-white/40"

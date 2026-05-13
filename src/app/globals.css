@@ -511,6 +511,35 @@ img {
 }
 
 /* ===========================================
+   CROSS-DOCUMENT VIEW TRANSITIONS
+   Spec : https://drafts.csswg.org/css-view-transitions-2/
+   Behaviour : on supporting browsers (Chromium 126+),
+   navigations between same-origin pages cross-fade
+   instead of hard cutting. Falls back silently to a
+   no-op on Firefox/Safari, so there is zero regression
+   risk for unsupported clients.
+   `prefers-reduced-motion` automatically disables the
+   transition (UA-level).
+   =========================================== */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ===========================================
    HERO SECTION - Premium Animations
    =========================================== */
 
