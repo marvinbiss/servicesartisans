@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Provider } from '@/types'
 
 import ProviderCard from './ProviderCard'
 import SearchFilters from './SearchFilters'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { useScrollRestoration } from '@/hooks/useScrollRestoration'
 
 interface ProviderListProps {
   providers: Provider[]
@@ -49,6 +51,13 @@ export default function ProviderList({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
+  const pathname = usePathname()
+
+  // Persist scrollTop so a "back from artisan profile" navigation lands
+  // the user back on the card they tapped. sessionStorage scope is per
+  // tab — closing the tab clears it, which is the right TTL for a
+  // browsing context.
+  useScrollRestoration(listRef, `sa:listing-scroll:${pathname}`)
 
   // Scroll to highlighted card when map pin is hovered
   useEffect(() => {
