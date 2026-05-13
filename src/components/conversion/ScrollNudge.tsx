@@ -80,6 +80,20 @@ export default function ScrollNudge({
     }
   }
 
+  // Escape dismisses the nudge for keyboard users.
+  useEffect(() => {
+    if (!visible) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleDismiss()
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+    // handleDismiss is stable enough (no external deps) — silencing the
+    // exhaustive-deps lint to avoid re-creating the listener every render
+  }, [visible])
+
   if (!visible) return null
 
   return (
@@ -91,10 +105,10 @@ export default function ScrollNudge({
         transform: 'translateX(-50%)',
       }}
     >
-      <div
-        role="status"
-        aria-live="polite"
+      <button
+        type="button"
         onClick={onAction ? handleTap : handleDismiss}
+        aria-label={onAction ? `${message} — appuyez pour ouvrir le formulaire` : message}
         className={`
           px-4 py-2.5 rounded-full
           bg-charcoal-900/90 backdrop-blur-sm
@@ -103,6 +117,8 @@ export default function ScrollNudge({
           cursor-pointer touch-manipulation
           whitespace-nowrap
           transition-all duration-300 ease-out
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900
+          motion-reduce:transition-none
           ${exiting ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100 translate-y-0 scale-100'}
         `}
         style={{
@@ -112,6 +128,13 @@ export default function ScrollNudge({
         <span aria-hidden="true" className="mr-1.5">
           &#128161;
         </span>
+        {message}
+      </button>
+
+      {/* SR-only live region — announces the nudge once when it
+          appears without making the visible bubble itself a
+          live-region target (which double-announces on re-render). */}
+      <div role="status" aria-live="polite" className="sr-only">
         {message}
       </div>
 
