@@ -21,6 +21,7 @@ import ProviderList from '@/components/ProviderList'
 import { RgeTracking } from '@/lib/analytics/tracking'
 import { buildDevisHref } from '@/lib/utils'
 import { SaveSearchButton } from '@/components/providers/SaveSearchButton'
+import { SortDropdown, type SortOrder } from '@/components/providers/SortDropdown'
 import { FilterPanel, countActiveFilters, parseFilters } from '@/components/providers/FilterPanel'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
@@ -85,8 +86,8 @@ export default function ServiceLocationPageClient({
 
   // Read initial values from URL params
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
-  const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>(
-    (searchParams.get('sort') as 'default' | 'name' | 'rating') || 'name'
+  const [sortOrder, setSortOrder] = useState<SortOrder>(
+    (searchParams.get('sort') as SortOrder) || 'relevance'
   )
 
   // Update URL params when search/sort change
@@ -98,7 +99,7 @@ export default function ServiceLocationPageClient({
       } else {
         params.delete('q')
       }
-      if (sort && sort !== 'default') {
+      if (sort && sort !== 'relevance' && sort !== 'default') {
         params.set('sort', sort)
       } else {
         params.delete('sort')
@@ -118,7 +119,7 @@ export default function ServiceLocationPageClient({
   )
 
   const handleSortChange = useCallback(
-    (value: 'default' | 'name' | 'rating') => {
+    (value: SortOrder) => {
       setSortOrder(value)
       updateUrlParams(searchQuery, value)
     },
@@ -342,6 +343,7 @@ export default function ServiceLocationPageClient({
                 villeLabel={location.name}
                 filters={rgeOnly ? 'rge=1' : ''}
               />
+              <SortDropdown value={sortOrder} onChange={handleSortChange} />
               <div className="flex items-center gap-1 bg-sand-200 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode('split')}
@@ -415,16 +417,7 @@ export default function ServiceLocationPageClient({
           <Search className="w-4 h-4" />
           <span>{searchQuery || 'Rechercher un artisan...'}</span>
         </button>
-        <select
-          value={sortOrder}
-          onChange={(e) => handleSortChange(e.target.value as 'default' | 'name' | 'rating')}
-          className="px-3 py-2.5 bg-sand-100 rounded-xl text-sm text-charcoal-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-primary-400"
-          aria-label="Trier les resultats"
-        >
-          <option value="default">Trier</option>
-          <option value="name">Nom A-Z</option>
-          <option value="rating">Avis</option>
-        </select>
+        <SortDropdown value={sortOrder} onChange={handleSortChange} variant="mobile" />
         <div className="flex items-center gap-1 bg-sand-200 rounded-xl p-1">
           <button
             type="button"

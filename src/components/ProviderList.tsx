@@ -13,7 +13,7 @@ interface ProviderListProps {
   isLoading?: boolean
   totalCount?: number
   searchQuery?: string
-  sortOrder?: 'default' | 'name' | 'rating'
+  sortOrder?: 'default' | 'relevance' | 'name' | 'rating' | 'reviews'
   highlightedProviderId?: string | null
   /** When true, `providers` is already pre-filtered RGE server-side. Passed down from page URL `?rge=1`. */
   rgeOnly?: boolean
@@ -57,9 +57,17 @@ export default function ProviderList({
     }
   }, [highlightedProviderId])
 
-  // Merge external sortOrder prop into filters
-  const effectiveSortBy =
-    sortOrder === 'name' ? 'name' : sortOrder === 'rating' ? 'rating' : filters.sortBy
+  // Merge external sortOrder prop into filters. Default to 'relevance'.
+  const effectiveSortBy: 'relevance' | 'name' | 'rating' | 'reviews' =
+    sortOrder === 'name'
+      ? 'name'
+      : sortOrder === 'rating'
+        ? 'rating'
+        : sortOrder === 'reviews'
+          ? 'reviews'
+          : sortOrder === 'relevance'
+            ? 'relevance'
+            : filters.sortBy
 
   const today = useMemo(() => new Date().toISOString().slice(0, 10), [])
 
@@ -92,13 +100,33 @@ export default function ProviderList({
       return true
     })
 
-    // Apply sorting
+    // Apply sorting.
+    // 'relevance' = composite score: RGE actif > claimed > verified > rating × log(reviews)
+    // matches Google Maps / Booking.com pertinence heuristic.
+    const relevanceScore = (p: Provider): number => {
+      const hasRge =
+        !!p.rge_qualifications &&
+        p.rge_qualifications.length > 0 &&
+        !!p.rge_valid_until &&
+        p.rge_valid_until >= today
+      const rgeBoost = hasRge ? 1000 : 0
+      const claimedBoost = p.user_id ? 200 : 0
+      const verifiedBoost = p.is_verified ? 100 : 0
+      const rating = p.rating_average ?? 0
+      const reviews = p.review_count ?? 0
+      const reviewWeight = Math.log10(reviews + 1) * 20
+      return rgeBoost + claimedBoost + verifiedBoost + rating * 10 + reviewWeight
+    }
     return [...filtered].sort((a, b) => {
       switch (effectiveSortBy) {
         case 'name':
           return a.name.localeCompare(b.name)
         case 'rating':
           return (b.rating_average ?? 0) - (a.rating_average ?? 0)
+        case 'reviews':
+          return (b.review_count ?? 0) - (a.review_count ?? 0)
+        case 'relevance':
+          return relevanceScore(b) - relevanceScore(a)
         default:
           return a.name.localeCompare(b.name)
       }
