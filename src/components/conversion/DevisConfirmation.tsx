@@ -78,6 +78,15 @@ interface DevisConfirmationProps {
    *   cause analysis (Pipedrive silent failure).
    */
   outcome?: 'duplicate' | 'pending_dispatch' | null
+  /** UUID returned by /api/devis. Short prefix is shown as a human-readable
+   *  reference so the user can quote it when calling the conseiller. */
+  requestId?: string | null
+}
+
+function formatRequestRef(id: string): string {
+  // Take first 8 chars of the UUID, upper-case, group as "XXXX-XXXX"
+  const cleaned = id.replace(/-/g, '').slice(0, 8).toUpperCase()
+  return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 8)}`
 }
 
 /* ─── Helpers ──────────────────────────────────────────────────────── */
@@ -109,11 +118,13 @@ export default function DevisConfirmation({
   serviceSlug: _serviceSlug,
   postalCode: _postalCode,
   outcome = null,
+  requestId = null,
 }: DevisConfirmationProps) {
   const [providers, setProviders] = useState<MatchedProvider[]>([])
   const [loading, setLoading] = useState(true)
   const [providerCount, setProviderCount] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
+  const [refCopied, setRefCopied] = useState(false)
   const [ceeDetails, setCeeDetails] = useState<CeeOperationDetail[]>([])
 
   // Fetch matched providers async — success UI shows immediately
@@ -562,6 +573,42 @@ export default function DevisConfirmation({
         ) : null}
       </div>
 
+      {/* ── Reference number ── */}
+      {requestId && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className={`flex items-center justify-between gap-3 px-4 py-3 bg-charcoal-900 text-white rounded-xl ${compact ? 'mb-3 text-xs' : 'mb-5 text-sm'}`}
+        >
+          <div className="min-w-0">
+            <p className="text-charcoal-400 uppercase tracking-wider text-[10px] font-semibold">
+              Numéro de votre demande
+            </p>
+            <p className="font-mono font-bold text-lg tracking-wider">
+              {formatRequestRef(requestId)}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(formatRequestRef(requestId))
+              setRefCopied(true)
+              setTimeout(() => setRefCopied(false), 2000)
+            }}
+            aria-label="Copier le numéro de demande"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900"
+          >
+            {refCopied ? (
+              <Check className="w-3.5 h-3.5 text-accent-300" aria-hidden="true" />
+            ) : (
+              <Copy className="w-3.5 h-3.5" aria-hidden="true" />
+            )}
+            <span>{refCopied ? 'Copié' : 'Copier'}</span>
+          </button>
+        </motion.div>
+      )}
+
       {/* ── Contact confirmation & next steps ── */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -693,15 +740,34 @@ export default function DevisConfirmation({
           </a>
           <button
             type="button"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href)
-              setCopied(true)
-              setTimeout(() => setCopied(false), 2000)
+            onClick={async () => {
+              const url =
+                typeof window !== 'undefined' ? window.location.href : 'https://servicesartisans.fr'
+              try {
+                if (navigator.share) {
+                  await navigator.share({
+                    title: 'ServicesArtisans',
+                    text: "J'ai trouvé des artisans RGE de confiance sur ServicesArtisans",
+                    url,
+                  })
+                  return
+                }
+                await navigator.clipboard.writeText(url)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              } catch (err) {
+                // navigator.share AbortError when user dismisses the OS sheet — silent
+                if (err instanceof Error && err.name === 'AbortError') return
+                // Fallback path also failed — surface the URL inline
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }
             }}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-colors text-sm"
+            aria-label="Partager ou copier le lien"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-700 font-medium rounded-xl hover:bg-sand-50 transition-colors text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
           >
             {copied ? <Check className="w-4 h-4 text-accent-500" /> : <Copy className="w-4 h-4" />}
-            {copied ? 'Copié !' : 'Copier le lien'}
+            {copied ? 'Copié !' : 'Partager'}
           </button>
         </div>
       </motion.div>

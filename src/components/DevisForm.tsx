@@ -196,6 +196,7 @@ export default function DevisForm({
   const [ceeOperationCodes, setCeeOperationCodes] = useState<string[]>([])
   const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || '')
   const [monthlyCount, setMonthlyCount] = useState<string>('1 200+')
+  const [requestId, setRequestId] = useState<string | null>(null)
 
   const form = useDevisForm({
     source: 'devis_form',
@@ -205,9 +206,11 @@ export default function DevisForm({
     villeQueryDebounceMs: 300,
     onSubmitSuccess: (responseBody) => {
       const body = responseBody as {
+        id?: string
         cee_eligible?: boolean
         cee_operation_codes?: string[]
       } | null
+      if (body?.id) setRequestId(body.id)
       if (body?.cee_eligible) {
         setCeeEligible(true)
         setCeeOperationCodes(body.cee_operation_codes || [])
@@ -611,6 +614,7 @@ export default function DevisForm({
           serviceSlug={form.formData.service}
           postalCode={selectedVillePostal}
           outcome={form.submitOutcome}
+          requestId={requestId}
         />
 
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
