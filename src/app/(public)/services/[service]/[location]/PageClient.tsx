@@ -26,6 +26,7 @@ import { FilterPanel, countActiveFilters, parseFilters } from '@/components/prov
 import { ActiveFilterChips } from '@/components/providers/ActiveFilterChips'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 import { StickyMobileDevisCTA } from '@/components/providers/StickyMobileDevisCTA'
+import { SmartEmptyState } from '@/components/providers/SmartEmptyState'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -568,17 +569,14 @@ export default function ServiceLocationPageClient({
                     : ''}
                 </div>
                 {activeFilterCount > 0 && filteredProviders.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-center px-6 py-12">
-                    <div className="w-14 h-14 bg-sand-200 rounded-2xl flex items-center justify-center mb-4">
-                      <SearchX className="w-7 h-7 text-charcoal-400" />
-                    </div>
-                    <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-1">
-                      Aucun artisan ne correspond à ces filtres
-                    </h3>
-                    <p className="text-charcoal-500 text-sm max-w-sm">
-                      Essayez d&apos;assouplir vos critères depuis le panneau de filtres ci-dessus.
-                    </p>
-                  </div>
+                  <SmartEmptyState
+                    serviceSlug={serviceSlug || service.slug}
+                    serviceName={service.name}
+                    locationSlug={locationSlug || location.slug}
+                    locationName={location.name}
+                    hasActiveFilters
+                    devisHref={buildDevisHref(serviceSlug || service.slug, location.name)}
+                  />
                 ) : (
                   <ProviderList
                     providers={filteredProviders}
