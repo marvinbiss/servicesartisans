@@ -9,6 +9,7 @@ import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from '
 
 import Breadcrumb from '@/components/Breadcrumb'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -310,6 +311,13 @@ async function renderCommunePage({ params }: PageProps) {
           <SourcesSection />
         </div>
       </main>
+
+      <StickyMobileCTA
+        cityName={commune.name}
+        citySlug={commune.slug}
+        ctaText="Devis artisan local"
+        providerCount={commune.nb_artisans_btp || undefined}
+      />
     </>
   )
 }

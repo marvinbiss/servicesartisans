@@ -15,6 +15,7 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   buildHubRgeGlossarySchema,
@@ -782,6 +783,12 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <StickyMobileCTA
+        serviceSlug={serviceSlug}
+        ctaText="Devis RGE gratuit en 2 min"
+        providerCount={total > 0 ? total : undefined}
+      />
     </>
   )
 }

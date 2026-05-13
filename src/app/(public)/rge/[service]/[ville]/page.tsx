@@ -29,6 +29,7 @@ import { FileText } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
@@ -1050,6 +1051,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </Link>
         </section>
       </div>
+
+      <StickyMobileCTA
+        serviceSlug={serviceSlug}
+        cityName={villeName}
+        citySlug={villeSlug}
+        ctaText="Devis RGE gratuit"
+        providerCount={count > 0 ? count : undefined}
+      />
     </main>
   )
 }

@@ -6,6 +6,7 @@ import { ShieldCheck, FileCheck2, Percent, ExternalLink, BookOpen } from 'lucide
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import ProviderList from '@/components/ProviderList'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -694,6 +695,12 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <StickyMobileCTA
+        cityName={ville.name}
+        citySlug={ville.slug}
+        ctaText="Devis artisan RGE gratuit"
+      />
     </>
   )
 }

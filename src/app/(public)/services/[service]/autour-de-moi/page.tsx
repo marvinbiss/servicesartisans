@@ -9,6 +9,7 @@ import { getServiceBySlug } from '@/lib/supabase'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
+import StickyMobileCTA from '@/components/StickyMobileCTA'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import AroundMeGeolocator from '@/components/seo/AroundMeGeolocator'
@@ -347,6 +348,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           </Link>
         </div>
       </section>
+
+      <StickyMobileCTA serviceSlug={service} ctaText="Devis près de moi gratuit" />
     </>
   )
 }
