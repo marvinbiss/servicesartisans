@@ -159,19 +159,34 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
               {provider.name}
             </Link>
             {provider.is_verified && (
-              <span
-                className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-accent-400 to-accent-600"
-                aria-label="Artisan vérifié"
-                title="Artisan vérifié"
-              >
-                <svg
-                  className="w-3.5 h-3.5 text-white relative z-10"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+              <span className="relative inline-block group/verified">
+                <span
+                  tabIndex={0}
+                  role="img"
+                  aria-label="Artisan vérifié"
+                  aria-describedby={`${provider.id}-verified-tip`}
+                  className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-accent-400 to-accent-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 cursor-help"
                 >
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                </svg>
-                <span className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                  <svg
+                    className="w-3.5 h-3.5 text-white relative z-10"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                  </svg>
+                  <span
+                    className="absolute inset-0 -translate-x-full animate-[shimmer_2.5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent motion-reduce:animate-none"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span
+                  id={`${provider.id}-verified-tip`}
+                  role="tooltip"
+                  className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-30 whitespace-nowrap rounded-lg bg-charcoal-900 text-white text-xs font-medium px-2.5 py-1.5 shadow-lg pointer-events-none opacity-0 -translate-y-1 transition-all duration-150 group-hover/verified:opacity-100 group-hover/verified:translate-y-0 group-focus-within/verified:opacity-100 group-focus-within/verified:translate-y-0 motion-reduce:transition-none"
+                >
+                  Identité, SIRET et assurance vérifiés par ServicesArtisans
+                </span>
               </span>
             )}
           </div>
