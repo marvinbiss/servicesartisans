@@ -506,12 +506,14 @@ export default function HeaderClient({
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
                 aria-expanded={isMenuOpen}
-                className="flex items-center justify-center w-11 h-11 rounded-lg active:bg-sand-200 hover:bg-sand-100 transition-colors"
+                aria-haspopup="dialog"
+                aria-controls="mobile-menu-drawer"
+                className="flex items-center justify-center w-11 h-11 rounded-lg active:bg-sand-200 hover:bg-sand-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
               >
                 {isMenuOpen ? (
-                  <X className="w-6 h-6 text-charcoal-700" />
+                  <X className="w-6 h-6 text-charcoal-700" aria-hidden="true" />
                 ) : (
-                  <Menu className="w-6 h-6 text-charcoal-700" />
+                  <Menu className="w-6 h-6 text-charcoal-700" aria-hidden="true" />
                 )}
               </button>
             </div>

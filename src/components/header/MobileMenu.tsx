@@ -120,6 +120,7 @@ export default function MobileMenu({
   return (
     <div
       ref={dialogRef}
+      id="mobile-menu-drawer"
       data-menu-content="mobile-menu"
       role="dialog"
       aria-modal="true"
