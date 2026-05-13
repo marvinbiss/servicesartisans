@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Search,
@@ -288,6 +288,10 @@ export function HeroSearch() {
   const locationInputRef = useRef<HTMLInputElement>(null)
   const serviceListRef = useRef<HTMLDivElement>(null)
   const cityListRef = useRef<HTMLDivElement>(null)
+  // ARIA combobox pattern — stable ids so each input can advertise
+  // aria-controls + aria-activedescendant against its listbox.
+  const serviceListId = useId()
+  const cityListId = useId()
 
   // Load recent searches on mount
   useEffect(() => {
@@ -629,6 +633,7 @@ export function HeroSearch() {
                   <input
                     ref={serviceInputRef}
                     type="text"
+                    role="combobox"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setActiveField('service')}
@@ -637,6 +642,13 @@ export function HeroSearch() {
                     aria-label="Type de service recherche"
                     aria-expanded={activeField === 'service'}
                     aria-haspopup="listbox"
+                    aria-controls={serviceListId}
+                    aria-autocomplete="list"
+                    aria-activedescendant={
+                      activeField === 'service' && highlightedServiceIndex >= 0
+                        ? `${serviceListId}-opt-${highlightedServiceIndex}`
+                        : undefined
+                    }
                     autoComplete="off"
                     className="w-full bg-transparent text-base md:text-lg text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none"
                   />
@@ -666,6 +678,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    id={serviceListId}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-charcoal-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[420px] overflow-y-auto"
                     role="listbox"
                     aria-label="Services disponibles"
@@ -703,6 +716,7 @@ export function HeroSearch() {
                         return (
                           <button
                             key={service.slug}
+                            id={`${serviceListId}-opt-${idx}`}
                             type="button"
                             role="option"
                             aria-selected={isHighlighted}
@@ -802,6 +816,7 @@ export function HeroSearch() {
                   <input
                     ref={locationInputRef}
                     type="text"
+                    role="combobox"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     onFocus={() => setActiveField('location')}
@@ -810,6 +825,13 @@ export function HeroSearch() {
                     aria-label="Ville ou code postal"
                     aria-expanded={activeField === 'location'}
                     aria-haspopup="listbox"
+                    aria-controls={cityListId}
+                    aria-autocomplete="list"
+                    aria-activedescendant={
+                      activeField === 'location' && highlightedCityIndex >= 0
+                        ? `${cityListId}-opt-${highlightedCityIndex}`
+                        : undefined
+                    }
                     autoComplete="off"
                     className="w-full bg-transparent text-base md:text-lg text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none"
                   />
@@ -839,6 +861,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    id={cityListId}
                     className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-charcoal-200/80 z-50 overflow-hidden max-h-[60vh] md:max-h-[460px] overflow-y-auto"
                     role="listbox"
                     aria-label="Villes disponibles"
@@ -881,6 +904,7 @@ export function HeroSearch() {
                           return (
                             <button
                               key={`recent-${cityName}`}
+                              id={`${cityListId}-opt-${idx}`}
                               type="button"
                               role="option"
                               aria-selected={isHighlighted}
@@ -933,6 +957,7 @@ export function HeroSearch() {
                           return (
                             <button
                               key={city.slug}
+                              id={`${cityListId}-opt-${idx}`}
                               type="button"
                               role="option"
                               aria-selected={isHighlighted}
