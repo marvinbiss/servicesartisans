@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -126,6 +126,15 @@ export default function DevisConfirmation({
   const [copied, setCopied] = useState(false)
   const [refCopied, setRefCopied] = useState(false)
   const [ceeDetails, setCeeDetails] = useState<CeeOperationDetail[]>([])
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  // Move focus to the confirmation heading on mount so keyboard / SR
+  // users land on the success copy instead of the now-defunct submit
+  // button at the bottom of the form. tabIndex={-1} keeps the heading
+  // out of the natural tab order; .focus() is the only entry point.
+  useEffect(() => {
+    headingRef.current?.focus()
+  }, [])
 
   // Fetch matched providers async — success UI shows immediately
   useEffect(() => {
@@ -258,7 +267,10 @@ export default function DevisConfirmation({
         className="text-center"
       >
         <h3
-          className={`font-heading font-bold text-charcoal-900 ${
+          ref={headingRef}
+          tabIndex={-1}
+          aria-live="polite"
+          className={`font-heading font-bold text-charcoal-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg ${
             compact ? 'text-lg mb-1' : 'text-2xl md:text-3xl mb-2'
           }`}
         >
