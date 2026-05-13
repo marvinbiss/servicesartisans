@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import {
   X,
   Star,
@@ -14,6 +14,7 @@ import {
   Leaf,
   Wallet,
   Zap,
+  Sparkles,
 } from 'lucide-react'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { clsx } from 'clsx'
@@ -69,18 +70,75 @@ interface CompareRowProps {
   icon?: React.ReactNode
   children: React.ReactNode
   providers: CompareProvider[]
+  isDiff?: boolean
+  highlight?: boolean
 }
 
-function CompareRow({ label, icon, children }: CompareRowProps) {
+function CompareRow({ label, icon, children, isDiff, highlight }: CompareRowProps) {
+  const showDiff = !!isDiff && !!highlight
   return (
-    <div className="grid grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] items-start border-b border-sand-200 last:border-b-0">
-      <div className="flex items-center gap-2 py-3 px-4 bg-sand-50 font-medium text-sm text-charcoal-600 self-stretch">
+    <div
+      className={clsx(
+        'grid grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] items-start border-b border-sand-200 last:border-b-0',
+        showDiff && 'bg-amber-50/40'
+      )}
+    >
+      <div
+        className={clsx(
+          'flex items-center gap-2 py-3 px-4 self-stretch font-medium text-sm',
+          showDiff
+            ? 'bg-amber-50 text-amber-900 border-l-4 border-amber-400'
+            : 'bg-sand-50 text-charcoal-600'
+        )}
+      >
         {icon}
-        {label}
+        <span>{label}</span>
+        {showDiff && (
+          <span
+            className="ml-auto text-[10px] uppercase tracking-wide font-bold text-amber-700"
+            aria-label="critère différent"
+          >
+            Diff
+          </span>
+        )}
       </div>
       <div className="py-3 px-4">{children}</div>
     </div>
   )
+}
+
+/**
+ * Build a stable diff signature for every comparable row. A row is `isDiff`
+ * when at least two artisans expose distinct values for that criterion.
+ * Strings are lower-cased to avoid casing flips registering as differences;
+ * nullish values normalise to the literal `null` so missing-vs-missing
+ * never counts as a diff.
+ */
+function computeRowDiffs(providers: CompareProvider[]): Record<string, boolean> {
+  if (providers.length < 2) {
+    return {}
+  }
+  const norm = (v: string | number | boolean | null | undefined): string => {
+    if (v === null || v === undefined) return 'null'
+    if (typeof v === 'string') return v.trim().toLowerCase()
+    return String(v)
+  }
+  const differs = (values: Array<string | number | boolean | null | undefined>): boolean =>
+    new Set(values.map(norm)).size > 1
+
+  return {
+    rating: differs(
+      providers.map((p) => (typeof p.rating_average === 'number' ? p.rating_average : null))
+    ),
+    ville: differs(providers.map((p) => p.address_city ?? null)),
+    verified: differs(providers.map((p) => !!p.is_verified)),
+    rge: differs(providers.map((p) => hasActiveRgeQualification(p.rge_qualifications))),
+    tarif: differs(providers.map((p) => `${p.hourly_rate_min ?? 'n'}-${p.hourly_rate_max ?? 'n'}`)),
+    urgences: differs(providers.map((p) => !!(p.emergency_available || p.available_24h))),
+    devis: differs(providers.map((p) => !!p.free_quote)),
+    siret: differs(providers.map((p) => p.siret ?? null)),
+    postal: differs(providers.map((p) => p.address_postal_code ?? null)),
+  }
 }
 
 function ProviderGrid({
@@ -109,6 +167,9 @@ function ProviderGrid({
 
 export function CompareView({ onClose }: CompareViewProps) {
   const { compareList, removeFromCompare } = useCompare()
+  const [highlightDiff, setHighlightDiff] = useState(true)
+  const rowDiffs = useMemo(() => computeRowDiffs(compareList), [compareList])
+  const diffCount = useMemo(() => Object.values(rowDiffs).filter(Boolean).length, [rowDiffs])
 
   // Lock body scroll & handle Escape
   useEffect(() => {
@@ -142,17 +203,41 @@ export function CompareView({ onClose }: CompareViewProps) {
           aria-labelledby="compare-title"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-sand-200">
-            <h2 id="compare-title" className="text-xl font-bold text-charcoal-900 font-heading">
-              Comparer les artisans
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-2 -m-2 text-charcoal-400 hover:text-charcoal-600 transition-colors rounded-lg hover:bg-sand-100"
-              aria-label="Fermer"
-            >
-              <X className="w-5 h-5" />
-            </button>
+          <div className="flex items-center justify-between gap-4 p-6 border-b border-sand-200">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <h2 id="compare-title" className="text-xl font-bold text-charcoal-900 font-heading">
+                Comparer les artisans
+              </h2>
+              {compareList.length >= 2 && diffCount > 0 && (
+                <span
+                  className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-amber-800 bg-amber-100 px-2 py-1 rounded-full"
+                  aria-live="polite"
+                >
+                  <Sparkles className="w-3 h-3" aria-hidden="true" />
+                  {diffCount} critère{diffCount > 1 ? 's' : ''} diffèrent
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {compareList.length >= 2 && diffCount > 0 && (
+                <label className="inline-flex items-center gap-1.5 text-xs text-charcoal-600 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={highlightDiff}
+                    onChange={(e) => setHighlightDiff(e.target.checked)}
+                    className="w-4 h-4 rounded border-sand-300 text-amber-500 focus:ring-amber-400"
+                  />
+                  Différences
+                </label>
+              )}
+              <button
+                onClick={onClose}
+                className="p-2 -m-2 text-charcoal-400 hover:text-charcoal-600 transition-colors rounded-lg hover:bg-sand-100"
+                aria-label="Fermer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Provider headers */}
@@ -188,6 +273,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Note"
               icon={<Star className="w-4 h-4 text-amber-500" />}
               providers={compareList}
+              isDiff={rowDiffs.rating}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => <RatingCell provider={provider} />}
@@ -199,6 +286,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Ville"
               icon={<MapPin className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
+              isDiff={rowDiffs.ville}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
@@ -219,6 +308,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Vérifié"
               icon={<Shield className="w-4 h-4 text-green-500" />}
               providers={compareList}
+              isDiff={rowDiffs.verified}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => <BooleanCell value={provider.is_verified} />}
@@ -230,6 +321,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Certifié RGE"
               icon={<Leaf className="w-4 h-4 text-accent-500" />}
               providers={compareList}
+              isDiff={rowDiffs.rge}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
@@ -243,6 +336,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Tarif horaire"
               icon={<Wallet className="w-4 h-4 text-amber-500" />}
               providers={compareList}
+              isDiff={rowDiffs.tarif}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => {
@@ -274,6 +369,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Urgences 24/7"
               icon={<Zap className="w-4 h-4 text-orange-500" />}
               providers={compareList}
+              isDiff={rowDiffs.urgences}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
@@ -287,6 +384,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Devis gratuit"
               icon={<FileText className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
+              isDiff={rowDiffs.devis}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => <BooleanCell value={provider.free_quote} />}
@@ -321,6 +420,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="SIRET"
               icon={<FileText className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
+              isDiff={rowDiffs.siret}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
@@ -336,6 +437,8 @@ export function CompareView({ onClose }: CompareViewProps) {
               label="Code postal"
               icon={<MapPinned className="w-4 h-4 text-charcoal-400" />}
               providers={compareList}
+              isDiff={rowDiffs.postal}
+              highlight={highlightDiff}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
