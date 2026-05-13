@@ -24,6 +24,7 @@ import { SaveSearchButton } from '@/components/providers/SaveSearchButton'
 import { SortDropdown, type SortOrder } from '@/components/providers/SortDropdown'
 import { FilterPanel, countActiveFilters, parseFilters } from '@/components/providers/FilterPanel'
 import { ActiveFilterChips } from '@/components/providers/ActiveFilterChips'
+import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 
 const PAGE_SIZE = 50
@@ -503,10 +504,10 @@ export default function ServiceLocationPageClient({
             }`}
           >
             {isHydrating ? (
-              /* Loading state while client-side fetch is in progress */
-              <div className="flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
-                <div className="w-12 h-12 border-4 border-primary-400 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-                <p className="text-charcoal-500 font-medium">Chargement des artisans...</p>
+              /* Skeleton state while client-side fetch is in progress.
+                 5 cards match typical PAGE_SIZE viewport hint. */
+              <div className="px-4 py-4">
+                <ProviderListSkeleton count={5} />
               </div>
             ) : allProviders.length === 0 ? (
               /* Empty state when 0 providers — primary CTA devis + fallback élargir zone */
