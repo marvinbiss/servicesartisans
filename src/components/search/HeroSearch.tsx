@@ -1043,6 +1043,7 @@ export function HeroSearch() {
                             return (
                               <button
                                 key={city.slug}
+                                id={`${cityListId}-opt-${idx}`}
                                 type="button"
                                 role="option"
                                 aria-selected={isHighlighted}
