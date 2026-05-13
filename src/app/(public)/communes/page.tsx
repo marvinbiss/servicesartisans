@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
@@ -120,9 +121,9 @@ export default function CommunesHubPage() {
           <Breadcrumb items={breadcrumbUiItems} />
 
           <header className="mt-6 mb-8">
-            <h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">
+            <PageHeroH1 size="page">
               36 000 communes — données locales pour artisans & particuliers
-            </h1>
+            </PageHeroH1>
             <p className="mt-3 text-charcoal-700">
               Toutes les communes de France métropolitaine et des DOM avec leurs données ouvertes :
               démographie INSEE, climat Météo-France, risques Géorisques (BRGM), marché immobilier

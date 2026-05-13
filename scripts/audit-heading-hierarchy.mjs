@@ -100,7 +100,9 @@ function collectHeadingSequence(src) {
     const start = returnIdxs[i]
     const end = returnIdxs[i + 1] ?? cleaned.length
     const segment = cleaned.slice(start, end)
-    const headings = [...segment.matchAll(/<h([1-6])\b/g)].map((m) => parseInt(m[1], 10))
+    const headings = [...segment.matchAll(/<(?:h([1-6])|PageHeroH1)\b/g)].map((m) =>
+      m[1] ? parseInt(m[1], 10) : 1
+    )
     if (headings.length === 0) continue
     if (headings.includes(1) && headings.length > bestWithH1.length) {
       bestWithH1 = headings

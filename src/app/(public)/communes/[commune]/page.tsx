@@ -8,6 +8,7 @@ import { isDynamicServerError } from 'next/dist/client/components/hooks-server-c
 import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
+import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -220,9 +221,9 @@ async function renderCommunePage({ params }: PageProps) {
           <Breadcrumb items={breadcrumbUiItems} />
 
           <header className="mt-6 mb-8">
-            <h1 data-speakable="true" className="text-3xl md:text-4xl font-bold text-charcoal-900">
+            <PageHeroH1 size="page">
               {commune.name} ({cp}) — Données locales & artisans
-            </h1>
+            </PageHeroH1>
             <p className="mt-2 text-charcoal-600">
               {region ? `${region} · ` : ''}
               {dept}
