@@ -6,6 +6,7 @@ import { Provider } from '@/types'
 import ProviderCard from './ProviderCard'
 import SearchFilters from './SearchFilters'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface ProviderListProps {
   providers: Provider[]
@@ -47,15 +48,16 @@ export default function ProviderList({
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const reducedMotion = useReducedMotion()
 
   // Scroll to highlighted card when map pin is hovered
   useEffect(() => {
     if (!highlightedProviderId || !listRef.current) return
     const el = listRef.current.querySelector(`[data-provider-id="${highlightedProviderId}"]`)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' })
     }
-  }, [highlightedProviderId])
+  }, [highlightedProviderId, reducedMotion])
 
   // Merge external sortOrder prop into filters. Default to 'relevance'.
   const effectiveSortBy: 'relevance' | 'name' | 'rating' | 'reviews' =
