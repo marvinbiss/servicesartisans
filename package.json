@@ -102,7 +102,7 @@
     "fast-check": "^4.6.0",
     "husky": "^9.1.7",
     "jsdom": "^28.0.0",
-    "lint-staged": "^15.5.1",
+    "lint-staged": "^15.5.2",
     "pg": "^8.18.0",
     "playwright": "^1.58.2",
     "postcss": "^8.5.6",
