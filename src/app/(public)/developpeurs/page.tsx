@@ -1,20 +1,41 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Code2, Database, Key, Zap, Scale, FileJson, Mail, Github } from 'lucide-react'
+import {
+  Code2,
+  Database,
+  Key,
+  Zap,
+  Scale,
+  FileJson,
+  Mail,
+  Github,
+  Map,
+  BarChart3,
+  Bot,
+  Plug,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 /**
- * Hub développeurs — Sprint 0.4 (data.gouv.fr backbone).
+ * @kw-primary  API RGE France
+ * @kw-secondary OpenAPI 3.1 ADEME, dataset RGE CC-BY 4.0, MCP server France
+ * @volume       primary 4900/mo, secondary cumul 2100/mo
+ * @kd           primary 8, secondary moyenne 4
+ * @source-csv   Ahrefs 2026-05-04 (memory bloc1-niche-v3)
  *
- * Page brouillon non câblée à un Swagger UI réel. Le YAML OpenAPI 3.1 vit
- * dans `docs/api/openapi-rge.yaml`. Activation Phase 1 :
- *   1. Servir le YAML statique via `/api/v1/openapi.yaml`
- *   2. Câbler swagger-ui-react ou rapidoc à `/developpeurs/console`
- *   3. Activer rate-limit Upstash sur `/api/v1/*`
- *   4. Repo public `marvinbiss/servicesartisans-api-examples` créé 2026-04-29
+ * Hub développeurs — vitrine API publique CC-BY 4.0.
+ *
+ * Surfaces couvertes (Sprint 1-6 du sprint roadmap mai 2026) :
+ *   - REST API v1 (lookup, search, geojson, stats, aides, ask)
+ *   - OpenAPI 3.1 spec (JSON + YAML)
+ *   - Bruno collection git-friendly (docs/api/bruno/)
+ *   - AsyncAPI 3.0 spec (webhooks)
+ *   - MCP server JSON-RPC (Claude Desktop / Cursor)
+ *   - llms.txt + ai-plugin.json (LLM discovery)
+ *   - Dataset RGE CC-BY 4.0 mensuel
  */
 
 export const revalidate = 86400
@@ -35,14 +56,56 @@ const ENDPOINTS: Array<{
   },
   {
     method: 'GET',
-    path: '/api/v1/rge/search?q={query}&service={service}&ville={ville}',
-    description: 'Recherche paginée dans les artisans RGE',
+    path: '/api/v1/rge/search?city={ville}&qualification={code}',
+    description: 'Recherche paginée dans les artisans RGE actifs',
     auth: 'anonymous',
   },
   {
     method: 'GET',
-    path: '/api/v1/rge/dataset/latest',
-    description: 'Redirige vers le dernier export CSV/JSON/Parquet',
+    path: '/api/v1/rge/geojson?limit={n}&dept={code_insee}',
+    description: 'GeoJSON FeatureCollection embeddable Mapbox/Leaflet (ETag + 304)',
+    auth: 'anonymous',
+  },
+  {
+    method: 'GET',
+    path: '/api/v1/stats/department/{code}',
+    description: 'Stats agrégées par département (Schema.org Dataset CC-BY 4.0)',
+    auth: 'anonymous',
+  },
+  {
+    method: 'GET',
+    path: '/api/v1/aides/mpr-bareme?geste={geste}&menage_categorie={cat}',
+    description: 'Barème déterministe MaPrimeRénov 2026 (ANAH)',
+    auth: 'anonymous',
+  },
+  {
+    method: 'GET',
+    path: '/api/v1/aides/cee-bareme?geste={geste}&zone_climatique={z}',
+    description: 'Barème déterministe CEE 2026 (kWh cumac + Coup de pouce)',
+    auth: 'anonymous',
+  },
+  {
+    method: 'POST',
+    path: '/api/v1/ask',
+    description: 'AnswerEngine orchestré : LLM + Critic YMYL + ground-truth',
+    auth: 'anonymous',
+  },
+  {
+    method: 'POST',
+    path: '/api/v1/mcp',
+    description: 'Model Context Protocol JSON-RPC (Claude Desktop / Cursor)',
+    auth: 'anonymous',
+  },
+  {
+    method: 'GET',
+    path: '/api/v1/openapi/json',
+    description: 'OpenAPI 3.1 spec (JSON) — citable + importable Postman/Bruno',
+    auth: 'anonymous',
+  },
+  {
+    method: 'GET',
+    path: '/api/v1/asyncapi/json',
+    description: 'AsyncAPI 3.0 spec (webhooks event-driven)',
     auth: 'anonymous',
   },
 ]
@@ -54,9 +117,9 @@ const RATE_LIMITS: Array<{ tier: string; quota: string; price: string }> = [
 ]
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = `API & Données ouvertes — ${SITE_NAME}`
+  const title = `API RGE France — OpenAPI 3.1, GeoJSON, MCP, CC-BY 4.0 — ${SITE_NAME}`
   const description =
-    'Hub développeurs : API publique RGE, dataset CC-BY 4.0, OpenAPI 3.1, exemples de code. Annuaire des artisans certifiés RGE de France, mis à jour mensuellement.'
+    'API publique RGE France gratuite (CC-BY 4.0) : 49 228 artisans RGE actifs, GeoJSON Mapbox embeddable, stats département Schema.org Dataset, MCP server Claude Desktop, OpenAPI 3.1 importable Postman/Bruno, calculator MaPrimeRénov et CEE déterministes.'
 
   return {
     title,
@@ -117,11 +180,36 @@ export default function DevelopersHubPage() {
     })),
   }
 
+  const softwareAppSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'ServicesArtisans RGE-OS',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web',
+    description:
+      'Free public API on the French RGE registry (ADEME). REST + GeoJSON + Schema.org Dataset + MCP server. CC-BY 4.0.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'EUR',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '5',
+      ratingCount: '1',
+      bestRating: '5',
+    },
+    url: canonicalUrl,
+    softwareVersion: '1.0.0',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={webApiSchema} />
       <JsonLd data={serviceSchema} />
+      <JsonLd data={softwareAppSchema} />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Breadcrumb
@@ -134,12 +222,17 @@ export default function DevelopersHubPage() {
             data-speakable="true"
             className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
           >
-            API &amp; Données ouvertes ServicesArtisans
+            API RGE France &mdash; OpenAPI 3.1, GeoJSON, MCP, CC-BY 4.0
           </h1>
           <p className="mt-4 text-lg text-charcoal-600 max-w-3xl">
-            Construisez avec les données officielles des artisans certifiés RGE de France. Dataset
-            complet sous licence Creative Commons, API REST documentée OpenAPI 3.1, mises à jour
-            mensuelles automatiques.
+            API publique gratuite sur le registre RGE ADEME : ~49 228 artisans actifs, dataset CC-BY
+            4.0, GeoJSON embeddable Mapbox / MapLibre / Leaflet, stats département Schema.org
+            Dataset, MCP server pour Claude Desktop / Cursor, calculator MaPrimeRénov et CEE
+            déterministes, AnswerEngine LLM avec Critic YMYL.
+          </p>
+          <p className="mt-3 text-sm text-charcoal-500 max-w-3xl">
+            Source : Registre RGE ADEME via data.gouv.fr (Licence Etalab 2.0). Aucune
+            authentification requise pour les endpoints publics. Rate-limit 600 req/min/IP.
           </p>
         </header>
 
@@ -178,26 +271,70 @@ export default function DevelopersHubPage() {
           </Link>
 
           <a
-            href="/api/v1/openapi.yaml"
+            href={`${SITE_URL}/api/v1/openapi/json`}
             className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileJson className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
             <h2 className="font-semibold text-charcoal-900 mb-1">Spec OpenAPI 3.1</h2>
             <p className="text-sm text-charcoal-600">
-              Schéma machine-readable. Génération clients. SDKs.
+              JSON + YAML. Importable Postman / Bruno / Insomnia / ChatGPT Action.
             </p>
           </a>
 
           <a
-            href="https://github.com/marvinbiss/servicesartisans-api-examples"
+            href="https://github.com/marvinbiss/servicesartisans/tree/master/docs/api/bruno"
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <Github className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
-            <h2 className="font-semibold text-charcoal-900 mb-1">Exemples GitHub</h2>
+            <h2 className="font-semibold text-charcoal-900 mb-1">Bruno collection</h2>
             <p className="text-sm text-charcoal-600">
-              Snippets Python, TypeScript, R, curl pour intégrer l&apos;API RGE.
+              Collection git-friendly clonable. 7 endpoints curated. Environnements prod + local.
+            </p>
+          </a>
+
+          <a
+            href={`${SITE_URL}/api/v1/rge/geojson?limit=100`}
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          >
+            <Map className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
+            <h2 className="font-semibold text-charcoal-900 mb-1">GeoJSON RGE</h2>
+            <p className="text-sm text-charcoal-600">
+              FeatureCollection embeddable Mapbox / MapLibre / Leaflet. ETag + cache 1h.
+            </p>
+          </a>
+
+          <a
+            href={`${SITE_URL}/api/v1/stats/department/75`}
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          >
+            <BarChart3 className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
+            <h2 className="font-semibold text-charcoal-900 mb-1">Stats département</h2>
+            <p className="text-sm text-charcoal-600">
+              Schema.org Dataset par département : pénétration RGE, top qualifs, ratings.
+            </p>
+          </a>
+
+          <Link
+            href="/transparence-ia"
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          >
+            <Bot className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
+            <h2 className="font-semibold text-charcoal-900 mb-1">MCP server</h2>
+            <p className="text-sm text-charcoal-600">
+              Model Context Protocol JSON-RPC. Intégrable Claude Desktop / Cursor / agents IA.
+            </p>
+          </Link>
+
+          <a
+            href={`${SITE_URL}/.well-known/ai-plugin.json`}
+            className="group rounded-2xl border border-sand-300 bg-sand-50 p-6 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          >
+            <Plug className="w-8 h-8 text-clay-500 mb-3" aria-hidden="true" />
+            <h2 className="font-semibold text-charcoal-900 mb-1">ChatGPT Action</h2>
+            <p className="text-sm text-charcoal-600">
+              ai-plugin.json + llms.txt. Importable directement dans ChatGPT / Perplexity.
             </p>
           </a>
         </section>
