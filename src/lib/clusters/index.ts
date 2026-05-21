@@ -21,3 +21,10 @@ export type { ClusterCriticInput, ClusterCriticResult } from './critic-runner'
 
 export { publishCluster, publishReadyBatch } from './publisher'
 export type { PublishResult } from './publisher'
+
+export { generateClusterContent, ClusterContentParseError } from './content-generator'
+export type {
+  GenerateClusterInput,
+  GenerateClusterDeps,
+  GroundTruthFacts,
+} from './content-generator'
