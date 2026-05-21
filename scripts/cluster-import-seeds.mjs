@@ -15,7 +15,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { config as dotenvConfig } from 'dotenv'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenvConfig({ path: path.join(__dirname, '..', '.env.local') })
@@ -31,9 +31,10 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const DRY_RUN = process.argv.includes('--dry-run')
 
 const seedsModulePath = path.join(__dirname, '..', 'src', 'lib', 'clusters', 'taxonomy.ts')
+const seedsModuleUrl = pathToFileURL(seedsModulePath).href
 const { tsImport } = await import('tsx/esm/api')
-const taxonomy = await tsImport(seedsModulePath, import.meta.url)
-const { ALL_SEEDS } = taxonomy
+const taxonomy = await tsImport(seedsModuleUrl, import.meta.url)
+const { ALL_SEEDS } = taxonomy.default ?? taxonomy
 
 console.log(`Loaded ${ALL_SEEDS.length} seeds from taxonomy`)
 
