@@ -701,6 +701,32 @@ describe('goneResponseHeaders', () => {
   })
 })
 
+describe('evaluateGonePath — BLOCKED_PROVIDER_PATHS', () => {
+  const blocked =
+    '/services/diagnostiqueur/chaville/guillaume-boudarham-laboratoire-d-analyses-de-residus-de-tir-lart-807734595'
+
+  it('fiche bannie → 410 provider_blocked', () => {
+    expect(evaluateGonePath(blocked)).toEqual({ gone: true, reason: 'provider_blocked' })
+  })
+
+  it('trailing slash normalisé → 410', () => {
+    expect(evaluateGonePath(blocked + '/')).toEqual({ gone: true, reason: 'provider_blocked' })
+  })
+
+  it('casse normalisée → 410', () => {
+    expect(evaluateGonePath(blocked.toUpperCase())).toEqual({
+      gone: true,
+      reason: 'provider_blocked',
+    })
+  })
+
+  it('fiche voisine non bannie → gone:false', () => {
+    expect(
+      evaluateGonePath('/services/diagnostiqueur/chaville/jean-dupont-diagnostic-123456789')
+    ).toEqual({ gone: false })
+  })
+})
+
 describe('GONE_RESPONSE_BODY', () => {
   it('body minimal sans HTML (éviter leakage de contenu)', () => {
     expect(GONE_RESPONSE_BODY).not.toContain('<')

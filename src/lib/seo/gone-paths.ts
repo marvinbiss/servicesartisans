@@ -211,6 +211,25 @@ function normalizePath(p: string): string {
 export const VILLE_SLUG_RE = /^[a-z0-9](?!.*--)[a-z0-9-]{0,58}[a-z0-9]$/
 
 /**
+ * Fiches artisans (3-segment URLs `/services/[s]/[v]/[publicId]`) bannies
+ * pour cause de mauvaise catégorisation NAF, contenu inapproprié, ou demande
+ * de retrait. Pathname lowercase strict — strip trailing slash via
+ * `normalizePath` au lookup.
+ *
+ * Pourquoi pas un flag DB (`providers.is_active=false` + `noindex=true`) ?
+ * — La page renvoie `notFound()` côté server sur is_active=false, mais
+ *   bug Next.js 14.2 #69103 → HTTP 200 + meta noindex → soft 404, Google
+ *   garde l'URL en mémoire et continue à crawler. Le middleware émet un
+ *   vrai 410 = purge index sous 24-48h.
+ *
+ * Le DB flag est complémentaire (empêche sitemap regen). Voir SQL associé
+ * dans la PR / memory `servicesartisans-provider-block-2026-05-21`.
+ */
+export const BLOCKED_PROVIDER_PATHS: ReadonlySet<string> = new Set([
+  '/services/diagnostiqueur/chaville/guillaume-boudarham-laboratoire-d-analyses-de-residus-de-tir-lart-807734595',
+])
+
+/**
  * Résultat d'une validation. `gone: true` signifie que le chemin est
  * structurellement invalide et doit retourner HTTP 410 immédiatement.
  *
@@ -229,6 +248,7 @@ export interface GonePathDecision {
     | 'ville_slug_malformed'
     | 'tarifs_task_deprecated'
     | 'problem_slug_unknown'
+    | 'provider_blocked'
   /**
    * Sprint AI Ahrefs 2026-05-03 — Cache-Control optionnel pour 301 récents.
    * Si fourni, override le default `s-maxage=86400` du middleware. Permet aux
@@ -256,6 +276,12 @@ function validateVilleSlug(ville: string): GonePathDecision {
  * + `dynamicParams: true` sont inspectées.
  */
 export function evaluateGonePath(pathname: string): GonePathDecision {
+  // 0. Blocklist statique de fiches artisans (3-segment) bannies.
+  //    Check tôt — court-circuite tous les autres matchers.
+  if (BLOCKED_PROVIDER_PATHS.has(normalizePath(pathname))) {
+    return { gone: true, reason: 'provider_blocked' }
+  }
+
   // 1. /services/[service]/[location] — NE PAS matcher le 3e segment (artisan publicId)
   //    pour éviter de tuer les URLs /services/plombier/paris/ABC123 (fiche artisan).
   const servicesMatch = /^\/services\/([^/]+)\/([^/]+)\/?$/.exec(pathname)
