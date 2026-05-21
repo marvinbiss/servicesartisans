@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-05-21",
-  "routes_count": 332,
+  "routes_count": 333,
   "routes": [
     "/connexion",
     "/embed/rge",
@@ -99,6 +99,7 @@
     "/departements/[departement]/[service]",
     "/developpeurs",
     "/developpeurs/api-catalog",
+    "/developpeurs/api-explorer",
     "/devenir-partenaire-cee",
     "/devis",
     "/devis/[service]",
