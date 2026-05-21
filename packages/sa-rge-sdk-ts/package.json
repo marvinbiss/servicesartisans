@@ -1,0 +1,53 @@
+{
+  "name": "@servicesartisans/rge-sdk",
+  "version": "0.1.0",
+  "description": "Official TypeScript SDK for the ServicesArtisans RGE-OS open-data + AI APIs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT",
+  "author": "ServicesArtisans",
+  "homepage": "https://servicesartisans.fr/developpeurs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/servicesartisans/rge-sdk.git"
+  },
+  "keywords": [
+    "rge",
+    "maprimerenov",
+    "cee",
+    "renovation",
+    "artisans",
+    "france",
+    "open-data",
+    "ai",
+    "sdk",
+    "typescript"
+  ],
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^4.1.4",
+    "@types/node": "^20.0.0"
+  }
+}

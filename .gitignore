@@ -97,3 +97,7 @@ public/datasets/rge/*.parquet
 docs/audit-ahrefs-2026-05-03/F_supply/F2_top5000_artisans.csv
 docs/audit-ahrefs-2026-05-03/F_supply/outreach_lemlist_*.csv
 docs/audit-ahrefs-2026-05-03/D_backlinks/outreach_lemlist_*.csv
+
+# Standalone SDK packages — build output and local node_modules (publish from package dir)
+packages/*/dist/
+packages/*/node_modules/
