@@ -1,0 +1,60 @@
+name: YMYL Factual Eval
+
+on:
+  pull_request:
+    paths:
+      - 'src/lib/llm/**'
+      - 'src/lib/critic/**'
+      - 'src/lib/seo/aides/**'
+      - 'evals/**'
+      - '.github/workflows/eval-ymyl.yml'
+  push:
+    branches: ['master']
+    paths:
+      - 'src/lib/llm/**'
+      - 'src/lib/critic/**'
+      - 'src/lib/seo/aides/**'
+      - 'evals/**'
+
+jobs:
+  eval:
+    name: MaPrimeRénov gold eval
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install repo dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Validate gold JSONL
+        run: |
+          set -e
+          while IFS= read -r line; do
+            if [ -z "$line" ]; then continue; fi
+            echo "$line" | node -e "let s=''; process.stdin.on('data',c=>s+=c).on('end',()=>{ JSON.parse(s); })" \
+              || { echo "Invalid JSON line:"; echo "$line"; exit 1; }
+          done < evals/gold/mpr-bareme-2026.jsonl
+
+      - name: Run YMYL eval
+        run: node evals/scripts/eval-runner.mjs
+        env:
+          NODE_ENV: test
+
+      - name: Upload eval results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval-results.json
+          retention-days: 30
+          if-no-files-found: warn

@@ -1,0 +1,40 @@
+description: SA YMYL factual eval — MaPrimeRénov 2026 barème
+
+prompts:
+  - file://prompts/aide-mpr-classify.txt
+
+providers:
+  # Local stub provider for this sprint — returns expected_answer to exercise
+  # the eval infrastructure (parsing, asserters, CI wiring) without any live
+  # LLM call. Real provider plugs in once Ralph 4 LLMProvider.complete()
+  # ships live HTTP. See evals/scripts/local-stub-provider.mjs.
+  - id: file://scripts/local-stub-provider.mjs
+
+tests: file://gold/mpr-bareme-2026.jsonl
+
+defaultTest:
+  assert:
+    - type: javascript
+      value: file://scripts/asserters/bareme-amount.mjs
+
+outputPath: ./eval-results.json
+
+# Hard gate per category.
+# - bareme_amount: 90% pass rate minimum (legal financial figures)
+# - eligibilite:   100% required (false positive = RGPD/UCC drama)
+# - cumul_aides:    95% pass rate
+# Below these thresholds, eval-runner.mjs propagates exit 1 and blocks CI.
+sharing:
+  exitCodeOnPass: 0
+  exitCodeOnFail: 1
+  threshold:
+    - filter: category=bareme_amount
+      minPassRate: 0.9
+    - filter: category=eligibilite
+      minPassRate: 1.0
+    - filter: category=cumul_aides
+      minPassRate: 0.95
+    - filter: category=delai
+      minPassRate: 0.8
+    - filter: category=plafond_revenus
+      minPassRate: 0.9
