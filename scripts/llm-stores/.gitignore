@@ -1,0 +1,3 @@
+manifest-out/
+!manifest-out/.gitkeep
+node_modules/

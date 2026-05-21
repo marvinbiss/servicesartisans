@@ -1,0 +1,27 @@
+{
+  "name": "sa-llm-stores-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tooling to submit ServicesArtisans RGE-OS datasets + spec + ontology to LLM stores (llms.txt, data.gouv.fr, Google Dataset Search, HuggingFace, MCP registry, ChatGPT plugin, Wikidata).",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "dry-run-all": "node bin/submit-all.mjs --dry-run",
+    "clean": "node -e \"import('node:fs/promises').then(fs => fs.rm('manifest-out', { recursive: true, force: true }))\""
+  },
+  "engines": {
+    "node": ">=18.3.0"
+  },
+  "license": "MIT",
+  "author": "ServicesArtisans",
+  "keywords": [
+    "rge-os",
+    "llm-stores",
+    "llms.txt",
+    "data.gouv.fr",
+    "huggingface",
+    "mcp",
+    "chatgpt-plugin",
+    "open-data"
+  ]
+}
