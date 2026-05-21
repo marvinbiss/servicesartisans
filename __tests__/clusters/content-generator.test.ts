@@ -57,7 +57,13 @@ function mockProvider(content: string): LLMProvider {
         toolCalls: [],
         modelUsed: 'claude-opus-4-7',
         providerUsed: 'claude',
-        usage: { inputTokens: 100, outputTokens: 800, totalTokens: 900 },
+        usage: {
+          inputTokens: 100,
+          outputTokens: 800,
+          cacheReadTokens: 0,
+          cacheCreationTokens: 0,
+          cost: 0,
+        },
         latencyMs: 1200,
         stopReason: 'end_turn',
       })

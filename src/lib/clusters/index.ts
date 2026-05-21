@@ -28,3 +28,10 @@ export type {
   GenerateClusterDeps,
   GroundTruthFacts,
 } from './content-generator'
+
+export {
+  getMprFactsForServiceSlug,
+  getCeeFactsForServiceSlug,
+  getRgeFactsForServiceSlug,
+  assembleGroundTruth,
+} from './ground-truth-adapters'
