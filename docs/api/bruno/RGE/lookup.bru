@@ -1,0 +1,24 @@
+meta {
+  name: RGE Lookup by SIRET
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/rge/lookup?siret=12345678900012
+  body: none
+  auth: none
+}
+
+params:query {
+  siret: 12345678900012
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Look up RGE qualifications by SIRET (14 digits).
+  Returns full qualification array from ADEME registry.
+}

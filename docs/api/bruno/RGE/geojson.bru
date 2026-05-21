@@ -1,0 +1,30 @@
+meta {
+  name: GeoJSON FeatureCollection
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/rge/geojson?limit=100&dept=75
+  body: none
+  auth: none
+}
+
+params:query {
+  limit: 100
+  dept: 75
+  offset: 0
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  GeoJSON FeatureCollection of RGE-active providers.
+
+  - limit max 5000 (Mapbox layer budget)
+  - dept = INSEE code 2-3 chars (75, 69, 2A, 974)
+  - ETag + 304 support via If-None-Match
+  - License CC-BY 4.0 + Etalab 2.0
+}

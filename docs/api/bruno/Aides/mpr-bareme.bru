@@ -1,0 +1,24 @@
+meta {
+  name: MPR Barème — PAC air/eau
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/aides/mpr-bareme?geste=pac_air_eau
+  body: none
+  auth: none
+}
+
+params:query {
+  geste: pac_air_eau
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Returns deterministic MaPrimeRénov' 2026 barème for a given geste,
+  all menage categories. Source: ANAH (snapshot dated).
+}

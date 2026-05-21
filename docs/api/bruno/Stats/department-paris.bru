@@ -1,0 +1,26 @@
+meta {
+  name: Department Stats — Paris (75)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/stats/department/75
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Schema.org Dataset with aggregated RGE stats for department 75 (Paris).
+
+  Fields:
+  - totalProviders, totalRgeActive, rgePenetration
+  - topQualifications (top 5 RGE codes)
+  - avgRating, totalReviews
+
+  License CC-BY 4.0 — citable in articles + LLMs.
+}

@@ -47,6 +47,7 @@ export const OPENAPI_SPEC = {
     { name: 'GraphQL', description: 'GraphQL-as-RPC subset' },
     { name: 'MCP', description: 'Model Context Protocol JSON-RPC server' },
     { name: 'Webhooks', description: 'Event subscription pipeline' },
+    { name: 'Stats', description: 'Aggregated public statistics (Schema.org Dataset)' },
     { name: 'Meta', description: 'OpenAPI spec, ontology, etc.' },
   ],
   paths: {
@@ -304,6 +305,91 @@ export const OPENAPI_SPEC = {
         responses: { '200': { description: 'OK' } },
       },
     },
+    '/api/v1/rge/geojson': {
+      get: {
+        tags: ['RGE'],
+        summary: 'GeoJSON FeatureCollection of active RGE providers',
+        description:
+          'FeatureCollection of all RGE-active providers (qualification date_fin > now()). Designed for direct consumption by Mapbox/MapLibre/Leaflet. Includes per-feature qualifications array with code/nom/organisme/date_fin. Attribution Etalab 2.0 mandatory.',
+        operationId: 'rgeGeoJson',
+        parameters: [
+          {
+            name: 'limit',
+            in: 'query',
+            required: false,
+            schema: { type: 'integer', minimum: 1, maximum: 5000, default: 1000 },
+          },
+          {
+            name: 'offset',
+            in: 'query',
+            required: false,
+            schema: { type: 'integer', minimum: 0, default: 0 },
+          },
+          {
+            name: 'dept',
+            in: 'query',
+            required: false,
+            description: 'INSEE department code 2-3 chars (75, 69, 2A, 974). Filters providers.',
+            schema: { type: 'string', pattern: '^(2A|2B|\\d{2,3})$' },
+          },
+          {
+            name: 'If-None-Match',
+            in: 'header',
+            required: false,
+            description: 'ETag from previous response. Returns 304 if unchanged.',
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'GeoJSON FeatureCollection',
+            headers: {
+              ETag: { schema: { type: 'string' } },
+              'X-Total-Count': { schema: { type: 'integer' } },
+            },
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/RgeGeoJsonFeatureCollection' },
+              },
+            },
+          },
+          '304': { description: 'Not modified (ETag match)' },
+          '429': { description: 'Rate-limited (600 req/min/IP).' },
+          '500': { description: 'Database error.' },
+        },
+      },
+    },
+    '/api/v1/stats/department/{code}': {
+      get: {
+        tags: ['Stats'],
+        summary: 'RGE statistics aggregated by INSEE department',
+        description:
+          'Schema.org Dataset partial with totalProviders, totalRgeActive, rgePenetration, topQualifications (top 5), avgRating, totalReviews. Distribution = JSON inline. License CC-BY 4.0. Designed for media citation + LLM reference.',
+        operationId: 'statsDepartment',
+        parameters: [
+          {
+            name: 'code',
+            in: 'path',
+            required: true,
+            description: 'INSEE department code (75, 69, 2A, 974).',
+            schema: { type: 'string', pattern: '^(2A|2B|\\d{2,3})$' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Department stats Dataset',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/DepartmentStatsDataset' },
+              },
+            },
+          },
+          '400': { description: 'Invalid department code.' },
+          '429': { description: 'Rate-limited (600 req/min/IP).' },
+          '500': { description: 'Database error.' },
+        },
+      },
+    },
     '/api/v1/graphql': {
       post: {
         tags: ['GraphQL'],
@@ -531,6 +617,119 @@ export const OPENAPI_SPEC = {
   },
   components: {
     schemas: {
+      RgeGeoJsonFeatureCollection: {
+        type: 'object',
+        required: ['type', 'metadata', 'features'],
+        properties: {
+          type: { type: 'string', const: 'FeatureCollection' },
+          metadata: {
+            type: 'object',
+            properties: {
+              attribution: { type: 'string' },
+              license: { type: 'string', format: 'uri' },
+              source: { type: 'string', format: 'uri' },
+              generatedAt: { type: 'string', format: 'date-time' },
+              totalCount: { type: 'integer' },
+              returnedCount: { type: 'integer' },
+              limit: { type: 'integer' },
+              offset: { type: 'integer' },
+              deptFilter: { type: ['string', 'null'] },
+            },
+          },
+          features: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['type', 'geometry', 'properties'],
+              properties: {
+                type: { type: 'string', const: 'Feature' },
+                id: { type: 'string' },
+                geometry: {
+                  type: 'object',
+                  required: ['type', 'coordinates'],
+                  properties: {
+                    type: { type: 'string', const: 'Point' },
+                    coordinates: {
+                      type: 'array',
+                      minItems: 2,
+                      maxItems: 2,
+                      items: { type: 'number' },
+                    },
+                  },
+                },
+                properties: {
+                  type: 'object',
+                  properties: {
+                    slug: { type: ['string', 'null'] },
+                    name: { type: 'string' },
+                    city: { type: ['string', 'null'] },
+                    department: { type: ['string', 'null'] },
+                    qualifications: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          code: { type: 'string' },
+                          nom: { type: 'string' },
+                          organisme: { type: 'string' },
+                          date_fin: { type: 'string', format: 'date' },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      DepartmentStatsDataset: {
+        type: 'object',
+        required: ['@context', '@type', 'name', 'stats', 'metadata'],
+        properties: {
+          '@context': { type: 'string', const: 'https://schema.org' },
+          '@type': { type: 'string', const: 'Dataset' },
+          '@id': { type: 'string', format: 'uri' },
+          name: { type: 'string' },
+          description: { type: 'string' },
+          url: { type: 'string', format: 'uri' },
+          license: { type: 'string', format: 'uri' },
+          creator: { type: 'object' },
+          isBasedOn: { type: 'string', format: 'uri' },
+          keywords: { type: 'array', items: { type: 'string' } },
+          temporalCoverage: { type: 'string' },
+          distribution: { type: 'array' },
+          metadata: {
+            type: 'object',
+            properties: {
+              attribution: { type: 'string' },
+              generatedAt: { type: 'string', format: 'date-time' },
+              departmentCode: { type: 'string' },
+            },
+          },
+          stats: {
+            type: 'object',
+            required: ['totalProviders', 'totalRgeActive', 'rgePenetration'],
+            properties: {
+              totalProviders: { type: 'integer' },
+              totalRgeActive: { type: 'integer' },
+              rgePenetration: { type: 'number', minimum: 0, maximum: 1 },
+              topQualifications: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    code: { type: 'string' },
+                    count: { type: 'integer' },
+                  },
+                },
+              },
+              avgRating: { type: ['number', 'null'] },
+              totalReviews: { type: 'integer' },
+            },
+          },
+        },
+      },
       Geste: {
         type: 'string',
         enum: [
