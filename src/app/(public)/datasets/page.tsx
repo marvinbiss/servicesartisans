@@ -73,7 +73,7 @@ const DATASETS: DatasetCard[] = [
     icon: FileBox,
   },
   {
-    href: '/rge/glossaire',
+    href: '/datasets/glossaire-rge',
     title: 'Glossaire RGE — Définitions canoniques',
     description:
       'Vocabulaire canonique des 16 qualifications RGE officielles (QualiPAC, QualiSol, Qualibat, Qualifelec, OPQIBI…) avec organismes certificateurs, domaines de travaux et primes débloquées.',

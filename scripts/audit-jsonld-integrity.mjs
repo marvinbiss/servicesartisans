@@ -110,6 +110,7 @@ const ALLOWED_TYPES = new Set([
   'CreativeWork',
   'DefinedTerm',
   'DefinedTermSet',
+  'PropertyValue',
   // Web App
   'WebApplication',
   'SoftwareApplication',

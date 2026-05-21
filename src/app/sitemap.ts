@@ -1846,6 +1846,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.6,
       },
       {
+        url: `${SITE_URL}/datasets/glossaire-rge`,
+        lastModified: '2026-05-21',
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      },
+      {
         url: `${SITE_URL}/developpeurs`,
         lastModified: '2026-04-29',
         changeFrequency: 'monthly',

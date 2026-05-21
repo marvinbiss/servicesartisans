@@ -1,0 +1,612 @@
+# =============================================================================
+# OpenAPI 3.1 — ServicesArtisans API publique /api/v1/* (Ralph itération 6)
+# =============================================================================
+#
+# Documente la surface complète /api/v1/* actuellement déployée en production
+# (juin 2026). Côté complémentaire de `docs/api/openapi-rge.yaml` qui couvre
+# le sous-ensemble RGE — ce fichier-ci agrège **tous** les endpoints v1
+# (rge + barometre + stats + tarifs + docs) en une spec unique pour codegen
+# côté consommateurs API (TS/Python/Go/Rust).
+#
+# Endpoints couverts (tous live en prod, vérifié 2026-05-21) :
+#   GET /api/v1/rge/lookup              src/app/api/v1/rge/lookup/route.ts
+#   GET /api/v1/rge/search              src/app/api/v1/rge/search/route.ts
+#   GET /api/v1/stats                   src/app/api/v1/stats/route.ts
+#   GET /api/v1/tarifs                  src/app/api/v1/tarifs/route.ts
+#   GET /api/v1/barometre/renovation/embed.html
+#                                       src/app/api/v1/barometre/renovation/embed.html/route.ts
+#   GET /api/v1/docs                    src/app/api/v1/docs/route.ts
+#
+# Licence des données servies : CC-BY-4.0 (cf. /datasets/*).
+# =============================================================================
+
+openapi: 3.1.0
+info:
+  title: ServicesArtisans Public API v1
+  version: 1.0.0
+  summary: |
+    API publique d'accès aux données RGE, baromètres tarifs et indices
+    rénovation énergétique de ServicesArtisans, sourcées du dataset
+    officiel ADEME / France Rénov' et enrichies (géolocalisation, services,
+    validations).
+  description: |
+    Six endpoints actuellement exposés sous le namespace `/api/v1/*` :
+
+    1. **`GET /rge/lookup`** — Vérifie le statut RGE d'une entreprise par SIRET ou SIREN.
+    2. **`GET /rge/search`** — Recherche paginée d'artisans RGE actifs.
+    3. **`GET /stats`** — Statistiques régionales ou départementales tous métiers confondus.
+    4. **`GET /tarifs`** — Statistiques agrégées du baromètre par métier (+ filtres géo).
+    5. **`GET /barometre/renovation/embed.html`** — Iframe partageable Indice Rénovation.
+    6. **`GET /docs`** — Documentation HTML lisible (mirror lisible humain de cette spec).
+
+    ### Attribution
+
+    Toute redistribution doit créditer :
+    `Source : ServicesArtisans — https://servicesartisans.fr/datasets`
+
+    ### Rate limits
+
+    | Endpoint                 | Quota IP / minute | Mode fail-open |
+    | ------------------------ | ----------------- | -------------- |
+    | `/rge/lookup`            | 600               | oui            |
+    | `/rge/search`            | 600               | oui            |
+    | `/stats`, `/tarifs`      | implicite CDN     | n/a            |
+    | `/barometre/...embed`    | static cache      | n/a            |
+    | `/docs`                  | 1 req/24h cache   | n/a            |
+
+    Dépassement = 429 Too Many Requests.
+
+    ### Stabilité
+
+    Le payload est **stable et versionné** (`v1`). Toute breaking change
+    ouvrira un namespace `/api/v2/*` en parallèle, avec dépréciation
+    annoncée 90 jours à l'avance via le header `Sunset`.
+  license:
+    name: CC-BY-4.0
+    url: https://creativecommons.org/licenses/by/4.0/
+  contact:
+    name: ServicesArtisans API
+    email: api@servicesartisans.fr
+    url: https://servicesartisans.fr/developpeurs
+  termsOfService: https://servicesartisans.fr/cgv
+
+servers:
+  - url: https://servicesartisans.fr/api/v1
+    description: Production
+
+tags:
+  - name: rge
+    description: Endpoints RGE (Reconnu Garant de l'Environnement)
+  - name: barometre
+    description: Baromètres tarifs et indices rénovation
+  - name: stats
+    description: Statistiques agrégées géographiques
+  - name: docs
+    description: Documentation lisible humain
+  - name: public
+    description: Endpoints non authentifiés
+
+paths:
+  /rge/lookup:
+    get:
+      tags: [rge, public]
+      summary: Recherche RGE par SIRET ou SIREN
+      operationId: lookupRgeBySiret
+      description: |
+        Retourne le statut RGE officiel d'une entreprise. La donnée provient
+        du dataset ADEME (sync hebdomadaire) — quand l'entreprise n'a pas de
+        qualification RGE active, le payload renvoie `rge_status: not_rge`
+        plutôt qu'un 404 (pour distinguer "non-RGE" de "inconnue").
+      parameters:
+        - name: siret
+          in: query
+          required: false
+          description: SIRET 14 chiffres (avec ou sans espaces)
+          schema:
+            type: string
+            pattern: '^\d{14}$'
+            example: '83001931100026'
+        - name: siren
+          in: query
+          required: false
+          description: SIREN 9 chiffres
+          schema:
+            type: string
+            pattern: '^\d{9}$'
+            example: '830019311'
+      responses:
+        '200':
+          description: Statut RGE retourné (positif ou négatif)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RgeLookupResponse'
+        '400':
+          description: SIRET / SIREN invalide ou manquant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Rate limit dépassé (600 req/min/IP)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /rge/search:
+    get:
+      tags: [rge, public]
+      summary: Recherche paginée d'artisans RGE actifs
+      operationId: searchRgeProviders
+      description: |
+        Recherche full-text + filtres structurés. Retourne uniquement les
+        fiches `is_active=true AND rge_qualifications IS NOT NULL
+        AND rge_valid_until > today`. Trié par `rge_valid_until DESC`.
+        Au moins un filtre parmi `q`, `city`, `qualification`, `specialty`
+        est requis.
+      parameters:
+        - name: q
+          in: query
+          description: Recherche partielle dans le nom (max 100 char.)
+          schema:
+            type: string
+            maxLength: 100
+            example: 'RENOV'
+        - name: city
+          in: query
+          description: Ville — match exact insensible à la casse
+          schema:
+            type: string
+            maxLength: 80
+            example: lyon
+        - name: qualification
+          in: query
+          description: Code qualification RGE (ex. `QualiPAC`, `Qualibat`, `RGE`)
+          schema:
+            type: string
+            maxLength: 40
+            example: QualiPAC
+        - name: specialty
+          in: query
+          description: Slug du métier (ex. `pompe-a-chaleur`)
+          schema:
+            type: string
+            maxLength: 40
+            example: pompe-a-chaleur
+        - name: limit
+          in: query
+          description: Nb max de résultats (1–50, défaut 20)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: Offset de pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Liste paginée d'artisans RGE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RgeSearchResponse'
+        '400':
+          description: Aucun filtre fourni
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Rate limit dépassé
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /stats:
+    get:
+      tags: [stats, public]
+      summary: Statistiques régionales ou départementales tous métiers
+      operationId: getStatsByGeography
+      description: |
+        Statistiques agrégées (nb artisans, note moyenne, nb avis…) pour
+        toute une région ou un département, tous métiers confondus. Au
+        moins un des deux paramètres `region` ou `departement` requis.
+      parameters:
+        - name: region
+          in: query
+          description: Slug de la région (ex. `ile-de-france`)
+          schema:
+            type: string
+            example: ile-de-france
+        - name: departement
+          in: query
+          description: Code département (`01`–`95`, `971`–`976`)
+          schema:
+            type: string
+            pattern: '^(0[1-9]|[1-8]\d|9[0-5]|97[1-6])$'
+            example: '75'
+      responses:
+        '200':
+          description: Stats agrégées par zone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+        '400':
+          description: Ni `region` ni `departement` fourni
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /tarifs:
+    get:
+      tags: [barometre, public]
+      summary: Statistiques agrégées du baromètre par métier
+      operationId: getTarifsByMetier
+      description: |
+        Statistiques baromètre (note, nb artisans, taux de vérification…)
+        pour un métier donné, optionnellement filtrées par ville, département
+        ou région. Le paramètre `metier` est obligatoire.
+      parameters:
+        - name: metier
+          in: query
+          required: true
+          description: Slug du métier (ex. `plombier`, `chauffagiste`)
+          schema:
+            type: string
+            example: plombier
+        - name: ville
+          in: query
+          description: Slug de la ville (ex. `paris`)
+          schema:
+            type: string
+            example: paris
+        - name: departement
+          in: query
+          description: Code département (ex. `75`)
+          schema:
+            type: string
+            example: '75'
+        - name: region
+          in: query
+          description: Slug de la région
+          schema:
+            type: string
+            example: ile-de-france
+      responses:
+        '200':
+          description: Stats baromètre filtrées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TarifsResponse'
+        '400':
+          description: Paramètre `metier` manquant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /barometre/renovation/embed.html:
+    get:
+      tags: [barometre, public]
+      summary: Iframe HTML partageable Indice Rénovation
+      operationId: getRenovationBarometreEmbed
+      description: |
+        Iframe statique cache-friendly servant 6 KPIs (parc DPE, MPR distribués,
+        RGE actifs, marché €) pour insertion média / blog en 1 ligne :
+
+        ```html
+        <iframe src="https://servicesartisans.fr/api/v1/barometre/renovation/embed.html"
+                width="100%" height="640" loading="lazy" frameborder="0"></iframe>
+        ```
+
+        Licence CC-BY 4.0 — attribution + lien vers
+        `/barometre/renovation-energetique-2026` obligatoire.
+      responses:
+        '200':
+          description: Document HTML autonome (revalidate 24h)
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<!DOCTYPE html><html>...</html>'
+
+  /docs:
+    get:
+      tags: [docs, public]
+      summary: Documentation HTML lisible humain
+      operationId: getApiDocs
+      description: |
+        Page HTML autonome documentant les endpoints disponibles. Mirror
+        lisible humain de cette spec OpenAPI, généré au build et caché 24h.
+      responses:
+        '200':
+          description: Documentation HTML
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  schemas:
+    RgeQualification:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          description: Code officiel de la qualification RGE
+          example: QualiPAC
+        nom:
+          type: string
+          example: Qualification Pompes À Chaleur
+        organisme:
+          type: string
+          description: Organisme certificateur
+          example: Qualit'EnR
+        domaine:
+          type: string
+          example: 'Chauffage / ECS'
+        date_debut:
+          type: string
+          format: date
+          example: '2024-03-15'
+        date_fin:
+          type: string
+          format: date
+          example: '2027-03-14'
+
+    RgeStatus:
+      type: string
+      enum: [rge_active, rge_expired, not_rge, not_found]
+      description: |
+        - `rge_active` — qualifications RGE en cours de validité
+        - `rge_expired` — qualifications expirées (date_fin dépassée)
+        - `not_rge` — entreprise connue, aucune qualification RGE
+        - `not_found` — entreprise non référencée dans notre base
+
+    RgeProvider:
+      type: object
+      required: [siret, name]
+      properties:
+        siret:
+          type: string
+          pattern: '^\d{14}$'
+          example: '83001931100026'
+        siren:
+          type: string
+          pattern: '^\d{9}$'
+          example: '830019311'
+        name:
+          type: string
+          example: 'Chauffage Lyon SARL'
+        address_city:
+          type: string
+          nullable: true
+          example: 'Lyon'
+        address_postal_code:
+          type: string
+          nullable: true
+          example: '69003'
+        specialty:
+          type: string
+          nullable: true
+          example: 'chauffagiste'
+        rge_qualifications:
+          type: array
+          items: { $ref: '#/components/schemas/RgeQualification' }
+        rge_valid_until:
+          type: string
+          format: date
+          nullable: true
+          example: '2027-03-14'
+        rge_organismes:
+          type: array
+          items:
+            type: string
+          example: ["Qualit'EnR", 'Qualibat']
+        public_url:
+          type: string
+          format: uri
+          example: 'https://servicesartisans.fr/services/chauffagiste/lyon/...'
+
+    RgeLookupResponse:
+      type: object
+      required: [identifier, identifier_type, found, source]
+      properties:
+        identifier:
+          type: string
+          example: '83001931100026'
+        identifier_type:
+          type: string
+          enum: [siret, siren]
+        found:
+          type: boolean
+        rge_status:
+          $ref: '#/components/schemas/RgeStatus'
+        siret:
+          type: string
+        siren:
+          type: string
+        name:
+          type: string
+        address_city:
+          type: string
+          nullable: true
+        address_postal_code:
+          type: string
+          nullable: true
+        specialty:
+          type: string
+          nullable: true
+        rge_valid_until:
+          type: string
+          format: date
+          nullable: true
+        rge_organismes:
+          type: array
+          items:
+            type: string
+        rge_qualifications:
+          type: array
+          items: { $ref: '#/components/schemas/RgeQualification' }
+        public_url:
+          type: string
+          format: uri
+          nullable: true
+        source:
+          type: string
+          example: 'ADEME annuaire-entreprises RGE officiel (sync hebdo)'
+
+    Pagination:
+      type: object
+      required: [total, limit, offset, has_more]
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          example: 1247
+        limit:
+          type: integer
+          example: 20
+        offset:
+          type: integer
+          example: 0
+        has_more:
+          type: boolean
+          example: true
+
+    RgeSearchResponse:
+      type: object
+      required: [results, pagination]
+      properties:
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/RgeProvider' }
+        pagination: { $ref: '#/components/schemas/Pagination' }
+        attribution: { $ref: '#/components/schemas/Attribution' }
+
+    StatsRow:
+      type: object
+      properties:
+        metier:
+          type: string
+          example: Plombier
+        metier_slug:
+          type: string
+          example: plombier
+        zone:
+          type: string
+          example: Île-de-France
+        nb_artisans:
+          type: integer
+          example: 12500
+        note_moyenne:
+          type: number
+          format: double
+          example: 4.35
+        nb_avis:
+          type: integer
+          example: 84200
+        taux_verification:
+          type: number
+          format: double
+          example: 0.452
+
+    StatsResponse:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/StatsRow' }
+        attribution: { $ref: '#/components/schemas/Attribution' }
+
+    TarifsRow:
+      type: object
+      properties:
+        metier:
+          type: string
+          example: Plombier
+        metier_slug:
+          type: string
+          example: plombier
+        ville:
+          type: string
+          nullable: true
+          example: Paris
+        nb_artisans:
+          type: integer
+          example: 1250
+        note_moyenne:
+          type: number
+          format: double
+          example: 4.35
+        nb_avis:
+          type: integer
+          example: 8420
+        taux_verification:
+          type: number
+          format: double
+          example: 0.4520
+
+    TarifsResponse:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/TarifsRow' }
+        attribution: { $ref: '#/components/schemas/Attribution' }
+
+    Attribution:
+      type: object
+      required: [text, url]
+      properties:
+        text:
+          type: string
+          example: 'Source : ServicesArtisans — Baromètre des Artisans'
+        url:
+          type: string
+          format: uri
+          example: 'https://servicesartisans.fr/barometre'
+        license:
+          type: string
+          example: 'CC-BY-4.0'
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: Code stable d'erreur (snake_case) ou message libre
+          example: invalid_siret
+        message:
+          type: string
+          description: Description lisible (FR)
+          example: 'Le SIRET doit contenir 14 chiffres'
+        docs:
+          type: string
+          format: uri
+          example: 'https://servicesartisans.fr/api/v1/docs'
+
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        Clé API optionnelle (rate-limit étendu). Demande à
+        `api@servicesartisans.fr`. Sans clé : quota anonyme.
+
+security:
+  - {} # endpoints publics par défaut
+  - apiKey: []
