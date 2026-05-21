@@ -12,7 +12,8 @@
  *   - totalRgeActive (au moins 1 qualif active)
  *   - rgePenetration (totalRgeActive / totalProviders)
  *   - topQualifications (top 5 codes RGE actifs)
- *   - avgRating + totalReviews
+ *   Ratings : non inclus v1 — providers.average_rating live sur profiles
+ *   (join 2-hops). À ajouter en v2 via reviews aggregate.
  *
  * Cache CDN 24h frais + 7j SWR. Pas d'auth (donnée publique).
  * Rate-limit 600/min/IP fail-open.
@@ -52,8 +53,6 @@ export async function OPTIONS() {
 type ProviderRow = {
   id: string
   rge_qualifications: RgeQualification[] | null
-  average_rating: number | null
-  review_count: number | null
 }
 
 function sanitizeCode(raw: string): string | null {
@@ -89,7 +88,7 @@ export async function GET(request: NextRequest, { params }: Params) {
     const admin = createAdminClient()
     const { data, error } = await admin
       .from('providers')
-      .select('id, rge_qualifications, average_rating, review_count')
+      .select('id, rge_qualifications')
       .eq('is_active', true)
       .eq('address_department', code)
       .limit(50_000)
@@ -103,9 +102,6 @@ export async function GET(request: NextRequest, { params }: Params) {
     const now = Date.now()
 
     let totalRgeActive = 0
-    let ratingSum = 0
-    let ratingCount = 0
-    let totalReviews = 0
     const qualifCount = new Map<string, number>()
 
     for (const row of rows) {
@@ -119,11 +115,6 @@ export async function GET(request: NextRequest, { params }: Params) {
           }
         }
       }
-      if (typeof row.average_rating === 'number' && (row.review_count ?? 0) > 0) {
-        ratingSum += row.average_rating * (row.review_count ?? 0)
-        ratingCount += row.review_count ?? 0
-      }
-      totalReviews += row.review_count ?? 0
     }
 
     const topQualifications = Array.from(qualifCount.entries())
@@ -133,7 +124,6 @@ export async function GET(request: NextRequest, { params }: Params) {
 
     const totalProviders = rows.length
     const rgePenetration = totalProviders > 0 ? totalRgeActive / totalProviders : 0
-    const avgRating = ratingCount > 0 ? ratingSum / ratingCount : null
 
     const datasetUrl = `${SITE_URL}/api/v1/stats/department/${code}`
     const datasetSchema = {
@@ -170,8 +160,6 @@ export async function GET(request: NextRequest, { params }: Params) {
           totalRgeActive,
           rgePenetration: Math.round(rgePenetration * 10_000) / 10_000,
           topQualifications,
-          avgRating: avgRating == null ? null : Math.round(avgRating * 100) / 100,
-          totalReviews,
         },
       },
       { status: 200, headers: CORS_HEADERS }

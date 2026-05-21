@@ -364,7 +364,7 @@ export const OPENAPI_SPEC = {
         tags: ['Stats'],
         summary: 'RGE statistics aggregated by INSEE department',
         description:
-          'Schema.org Dataset partial with totalProviders, totalRgeActive, rgePenetration, topQualifications (top 5), avgRating, totalReviews. Distribution = JSON inline. License CC-BY 4.0. Designed for media citation + LLM reference.',
+          'Schema.org Dataset partial with totalProviders, totalRgeActive, rgePenetration, topQualifications (top 5). Distribution = JSON inline. License CC-BY 4.0. Designed for media citation + LLM reference.',
         operationId: 'statsDepartment',
         parameters: [
           {
@@ -724,8 +724,6 @@ export const OPENAPI_SPEC = {
                   },
                 },
               },
-              avgRating: { type: ['number', 'null'] },
-              totalReviews: { type: 'integer' },
             },
           },
         },
