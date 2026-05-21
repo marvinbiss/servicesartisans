@@ -300,12 +300,21 @@ Attribution requise : "Source : ServicesArtisans.fr — donnees ADEME (Etalab 2.
 
 ## API publique
 - [Documentation API](https://servicesartisans.fr/api/v1/docs): API REST gratuite
+- [OpenAPI 3.1 spec (JSON)](https://servicesartisans.fr/api/v1/openapi/json): Source de verite contrat API, citable + importable Postman/Bruno/Insomnia/ChatGPT Action
+- [OpenAPI 3.1 spec (YAML)](https://servicesartisans.fr/api/v1/openapi/yaml): Variante YAML
+- [AsyncAPI 3.0 spec (JSON)](https://servicesartisans.fr/api/v1/asyncapi/json): Webhooks event-driven API
+- [Bruno collection (git)](https://github.com/marvinbiss/servicesartisans/tree/master/docs/api/bruno): Collection git-friendly clonable
 - Endpoint tarifs : GET /api/v1/tarifs?metier=plombier&ville=paris
-- Endpoint stats : GET /api/v1/stats?region=ile-de-france
+- Endpoint stats globales : GET /api/v1/stats?region=ile-de-france
+- Endpoint stats departement : GET /api/v1/stats/department/{code} - Schema.org Dataset CC-BY 4.0 (totalProviders, rgePenetration, topQualifications)
 - Endpoint RGE lookup : GET /api/v1/rge/lookup?siret=XXXXXXXXXXXXXX
 - Endpoint RGE search : GET /api/v1/rge/search?metier=pompe-a-chaleur&dept=75
+- Endpoint RGE GeoJSON : GET /api/v1/rge/geojson?limit=1000&dept=75 - FeatureCollection embeddable Mapbox/Leaflet, ETag cache 1h
+- Endpoint MCP : POST /api/v1/mcp - Model Context Protocol JSON-RPC pour Claude Desktop / Cursor
+- Endpoint AnswerEngine : POST /api/v1/ask - LLM + Critic + ground-truth MPR/CEE
 - Endpoint barometre : GET /api/v1/barometre/renovation/embed.html
 - Format de reponse : JSON (sauf embed.html)
+- License : CC-BY 4.0 sur tous les endpoints (cite "Source: ServicesArtisans")
 - Attribution obligatoire avec lien vers servicesartisans.fr/barometre
 
 ## Flux

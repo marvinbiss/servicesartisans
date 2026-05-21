@@ -1,15 +1,16 @@
 {
   "schema_version": "v1",
-  "name_for_human": "ServicesArtisans",
-  "name_for_model": "servicesartisans",
-  "description_for_human": "Trouvez un artisan qualifié en France parmi 940 000+ professionnels vérifiés SIREN.",
-  "description_for_model": "Search for verified French artisans (plumbers, electricians, roofers, painters, masons, etc.) across 46 trades in all 101 French departments. Data sourced from official INSEE SIREN/SIRET registers. Provides pricing benchmarks, reviews, quotes, and emergency services. Use for any question about finding, hiring, or getting quotes from French building trade professionals.",
+  "name_for_human": "ServicesArtisans RGE-OS",
+  "name_for_model": "servicesartisans_rge",
+  "description_for_human": "Annuaire d'artisans RGE certifies France + API ouverte sur le registre ADEME (renovation energetique, MaPrimeRenov, CEE).",
+  "description_for_model": "Use this API to query the ServicesArtisans RGE-OS dataset (~49 228 active French RGE-certified providers from the official ADEME registry). Capabilities: (1) RGE provider lookup by SIRET (/api/v1/rge/lookup), (2) search by city + qualification (/api/v1/rge/search), (3) GeoJSON FeatureCollection of all active RGE providers (/api/v1/rge/geojson), (4) department-level Schema.org Dataset stats (/api/v1/stats/department/{code}), (5) deterministic MaPrimeRenov 2026 calculator (/api/v1/aides/mpr-bareme), (6) deterministic CEE calculator (/api/v1/aides/cee-bareme), (7) orchestrated AI Q&A with Critic YMYL gate (/api/v1/ask), (8) MCP JSON-RPC server (/api/v1/mcp). Source: ADEME registre RGE via data.gouv.fr (Licence Etalab 2.0). License: CC-BY 4.0 — cite as 'Source: ServicesArtisans'. All endpoints return JSON, are read-only, and require no authentication.",
   "auth": { "type": "none" },
   "api": {
     "type": "openapi",
-    "url": "https://servicesartisans.fr/api/v1/openapi.json"
+    "url": "https://servicesartisans.fr/api/v1/openapi/json",
+    "is_user_authenticated": false
   },
   "logo_url": "https://servicesartisans.fr/icons/icon-512x512.png",
-  "contact_email": "contact@servicesartisans.fr",
+  "contact_email": "data@servicesartisans.fr",
   "legal_info_url": "https://servicesartisans.fr/mentions-legales"
 }
