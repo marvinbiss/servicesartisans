@@ -36,3 +36,12 @@ export { NoopCache, serializeCacheKey } from './cache'
 export type { LLMCache, LLMCacheKey } from './cache'
 
 export { logLLMRequest, logLLMResponse, logLLMError } from './telemetry'
+
+export { getPricing, calculateCost } from './pricing'
+export type { ModelPricing } from './pricing'
+
+export { httpJsonRequest } from './http'
+export type { HttpRequestOptions } from './http'
+
+export { initLLMRegistryFromEnv } from './registry-init'
+export type { InitLLMRegistryOptions } from './registry-init'

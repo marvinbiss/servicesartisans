@@ -111,36 +111,30 @@ describe('error hierarchy', () => {
   })
 })
 
-describe('provider stubs', () => {
-  it('MistralProvider.complete throws unavailable', async () => {
-    const p = new MistralProvider()
+describe('provider construction', () => {
+  it('MistralProvider exposes name + defaultModel and refuses empty key', () => {
+    expect(() => new MistralProvider('')).toThrow(LLMProviderUnavailableError)
+    const p = new MistralProvider('test-key')
     expect(p.name).toBe('mistral')
     expect(p.defaultModel).toBe('mistral-large-latest')
-    await expect(p.complete({ messages: [], classification: 'generic' })).rejects.toBeInstanceOf(
-      LLMProviderUnavailableError
-    )
   })
 
-  it('ClaudeProvider.complete throws unavailable', async () => {
-    const p = new ClaudeProvider()
+  it('ClaudeProvider exposes name + defaultModel and refuses empty key', () => {
+    expect(() => new ClaudeProvider('')).toThrow(LLMProviderUnavailableError)
+    const p = new ClaudeProvider('test-key')
     expect(p.name).toBe('claude')
     expect(p.defaultModel).toBe('claude-sonnet-4-6')
-    await expect(p.complete({ messages: [], classification: 'generic' })).rejects.toBeInstanceOf(
-      LLMProviderUnavailableError
-    )
   })
 
-  it('GeminiProvider.complete throws unavailable', async () => {
-    const p = new GeminiProvider()
+  it('GeminiProvider exposes name + defaultModel and refuses empty key', () => {
+    expect(() => new GeminiProvider('')).toThrow(LLMProviderUnavailableError)
+    const p = new GeminiProvider('test-key')
     expect(p.name).toBe('gemini')
     expect(p.defaultModel).toBe('gemini-2.5-pro')
-    await expect(p.complete({ messages: [], classification: 'generic' })).rejects.toBeInstanceOf(
-      LLMProviderUnavailableError
-    )
   })
 
   it('MistralProvider.stream throws unavailable on first iteration', async () => {
-    const p = new MistralProvider()
+    const p = new MistralProvider('test-key')
     const iter = p.stream({ messages: [], classification: 'generic' })[Symbol.asyncIterator]()
     await expect(iter.next()).rejects.toBeInstanceOf(LLMProviderUnavailableError)
   })
