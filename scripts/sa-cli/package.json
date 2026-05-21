@@ -1,0 +1,33 @@
+{
+  "name": "sa-rge-os",
+  "version": "0.1.0",
+  "description": "Official CLI for the ServicesArtisans RGE-OS open-data + AI stack",
+  "type": "module",
+  "main": "src/index.mjs",
+  "bin": {
+    "sa-rge-os": "bin/sa-rge-os.mjs"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "smoke": "node bin/sa-rge-os.mjs --help"
+  },
+  "engines": {
+    "node": ">=18.3.0"
+  },
+  "license": "MIT",
+  "author": "ServicesArtisans",
+  "homepage": "https://servicesartisans.fr/developpeurs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/servicesartisans/sa-rge-os.git"
+  },
+  "keywords": [
+    "rge",
+    "maprimerenov",
+    "cee",
+    "renovation",
+    "artisans",
+    "france",
+    "open-data"
+  ]
+}
