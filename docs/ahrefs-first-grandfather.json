@@ -1,8 +1,9 @@
 {
   "generated_at": "2026-05-21",
-  "routes_count": 330,
+  "routes_count": 331,
   "routes": [
     "/connexion",
+    "/embed/rge",
     "/definir-mot-de-passe",
     "/inscription",
     "/inscription-artisan",
