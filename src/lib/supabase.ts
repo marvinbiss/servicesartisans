@@ -408,6 +408,21 @@ const PROVIDER_DETAIL_SELECT = [
   'accepts_new_clients',
   'free_quote',
   'available_24h',
+  // Mig 306 (Ralph iter 2 — 2026-05-21) : completer le SELECT pour les 5
+  // colonnes restantes (avatar_url + arrays certifications/insurance/
+  // payment_methods/languages). Vivantes en DB depuis mig 306 mais jamais
+  // lues cote code → resolvaient `undefined` sur ProviderRecord. Surcoût
+  // negligeable (~150 octets/row, single-row fetch). Debloque :
+  //   - E-E-A-T (certifications/insurance pour fiche artisan)
+  //   - Schema.org LocalBusiness (languages, payment_methods, image=avatar)
+  //   - Agents IA futurs (Quote-Builder, Aides-Calculator)
+  //   - AI Act tracabilite (data presente, pas silencieusement NULL)
+  // Voir memory `servicesartisans-mig306-status-2026-04-28`.
+  'certifications',
+  'insurance',
+  'payment_methods',
+  'languages',
+  'avatar_url',
 ].join(',')
 
 /**
