@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { AI_AGENTS } from '@/app/(public)/transparence-ia/page'
+import { AI_AGENTS } from '@/app/(public)/transparence-ia/_ai-agents'
 
 describe('AI_AGENTS data', () => {
   it('contains at least 6 agents', () => {
