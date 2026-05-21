@@ -1,0 +1,43 @@
+{
+  "siret": "33333333300018",
+  "siren": "333333333",
+  "name": "Audit Énergie Rhône-Alpes EURL (example)",
+  "legalForm": "EURL",
+  "nafCode": "71.20B",
+  "address": {
+    "streetAddress": "45 quai Saint-Antoine",
+    "postalCode": "69002",
+    "addressLocality": "Lyon",
+    "addressRegion": "Auvergne-Rhône-Alpes",
+    "addressDepartmentCode": "69",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "latitude": 45.7619,
+    "longitude": 4.8305
+  },
+  "phoneE164": "+33400000000",
+  "rgeQualifications": [
+    {
+      "code": "OPQIBI-1905",
+      "organisme": "OPQIBI",
+      "domaine": "Audit énergétique des bâtiments tertiaires et résidentiels",
+      "metaDomaine": "etudes_audits",
+      "dateDebut": "2024-09-01",
+      "dateFin": "2027-08-31",
+      "isActive": true,
+      "url": "https://www.opqibi.com/entreprise/33333333300018"
+    }
+  ],
+  "sources": [
+    {
+      "name": "ADEME RGE Registry",
+      "url": "https://data.ademe.fr/datasets/liste-des-entreprises-rge",
+      "license": "Etalab-2.0",
+      "retrievedAt": "2026-05-15"
+    }
+  ],
+  "canonicalUrl": "https://servicesartisans.fr/rge/audit-energetique/lyon/audit-energie-rhone-alpes-33333333300018",
+  "license": "CC-BY-4.0",
+  "schemaVersion": "1.0.0"
+}

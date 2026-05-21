@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://servicesartisans.fr/spec/rge/v1.0/enums/categories-meta-domaines.json",
+  "title": "RGE Meta-Categories",
+  "description": "Top-level groupings used to aggregate RGE qualifications by family. New entries are accepted in MINOR releases.",
+  "type": "string",
+  "enum": [
+    "chauffage_eau_chaude",
+    "isolation_bati",
+    "ventilation",
+    "energie_renouvelable",
+    "etudes_audits"
+  ]
+}

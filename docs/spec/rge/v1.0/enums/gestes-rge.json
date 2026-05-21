@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://servicesartisans.fr/spec/rge/v1.0/enums/gestes-rge.json",
+  "title": "RGE-Eligible Renovation Operations",
+  "description": "Canonical machine slugs for the renovation operations eligible for RGE qualification. New entries are accepted in MINOR releases.",
+  "type": "string",
+  "enum": [
+    "pac_air_eau",
+    "pac_geothermique",
+    "pac_air_air",
+    "chauffe_eau_thermo",
+    "isolation_combles",
+    "isolation_ite",
+    "isolation_planchers_bas",
+    "vmc_double_flux",
+    "chaudiere_biomasse",
+    "audit_energetique",
+    "panneaux_solaires_pv",
+    "panneaux_solaires_thermiques",
+    "raccordement_reseau_chaleur",
+    "isolation_iti",
+    "menuiseries_ext"
+  ]
+}

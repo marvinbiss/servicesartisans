@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://servicesartisans.fr/spec/rge/v1.0/rge.schema.json",
+  "title": "RGE Artisan Spec v1.0",
+  "description": "Canonical schema for French RGE (Reconnu Garant de l'Environnement) certified contractors. Published by ServicesArtisans under CC-BY 4.0. See README.md.",
+  "type": "object",
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "description": "Postal address of the artisan's principal establishment.",
+      "properties": {
+        "streetAddress": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "postalCode": {
+          "type": "string",
+          "pattern": "^[0-9]{5}$"
+        },
+        "addressLocality": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "addressRegion": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "addressDepartmentCode": {
+          "type": "string",
+          "pattern": "^(0[1-9]|[1-8][0-9]|9[0-5]|2[AB]|97[1-6])$",
+          "description": "INSEE department code (01-95 + 2A/2B + DROM 971-976)."
+        },
+        "addressCountry": {
+          "type": "string",
+          "const": "FR"
+        }
+      },
+      "required": ["postalCode", "addressLocality", "addressCountry"],
+      "additionalProperties": false
+    },
+    "GeoLocation": {
+      "type": "object",
+      "description": "WGS84 geographic coordinates of the principal establishment.",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      },
+      "required": ["latitude", "longitude"],
+      "additionalProperties": false
+    },
+    "Source": {
+      "type": "object",
+      "description": "Upstream data source from which the record was derived.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "examples": ["ADEME RGE Registry", "Qualibat", "Qualifelec"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "license": {
+          "type": "string",
+          "enum": ["Etalab-2.0", "CC-BY-4.0", "Public-Domain"]
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": ["name", "url", "license", "retrievedAt"],
+      "additionalProperties": false
+    },
+    "RgeQualification": {
+      "type": "object",
+      "description": "A single RGE qualification record granted by a certifying organisation.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Qualification code (e.g., QualiPAC, Qualibat-5911, Qualifelec-IRVE).",
+          "maxLength": 100
+        },
+        "organisme": {
+          "$ref": "enums/organismes-certificateurs.json"
+        },
+        "domaine": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "metaDomaine": {
+          "$ref": "enums/categories-meta-domaines.json"
+        },
+        "dateDebut": {
+          "type": "string",
+          "format": "date"
+        },
+        "dateFin": {
+          "type": "string",
+          "format": "date"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL canonique fiche certification (optionnel)."
+        }
+      },
+      "required": ["code", "organisme", "dateDebut", "dateFin", "isActive"],
+      "additionalProperties": false
+    },
+    "RgeArtisan": {
+      "type": "object",
+      "description": "Top-level entity representing a French RGE-certified contractor.",
+      "properties": {
+        "siret": {
+          "type": "string",
+          "pattern": "^[0-9]{14}$"
+        },
+        "siren": {
+          "type": "string",
+          "pattern": "^[0-9]{9}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "legalForm": {
+          "type": "string",
+          "examples": ["SARL", "SAS", "EURL", "SASU", "EI", "Auto-entrepreneur"]
+        },
+        "nafCode": {
+          "type": "string",
+          "pattern": "^[0-9]{2}\\.[0-9]{1,2}[A-Z]?$"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        },
+        "geo": {
+          "$ref": "#/$defs/GeoLocation"
+        },
+        "phoneE164": {
+          "type": ["string", "null"],
+          "pattern": "^\\+33[0-9]{9}$",
+          "description": "Public phone in E.164 only if ADEME public registry exposes it (RGE-only). Source ADEME mandatory."
+        },
+        "rgeQualifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RgeQualification"
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Source"
+          },
+          "minItems": 1
+        },
+        "canonicalUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical public URL for this entity (e.g., SA fiche, ADEME entry)."
+        },
+        "license": {
+          "type": "string",
+          "const": "CC-BY-4.0"
+        },
+        "schemaVersion": {
+          "type": "string",
+          "const": "1.0.0"
+        }
+      },
+      "required": [
+        "siret",
+        "siren",
+        "name",
+        "address",
+        "rgeQualifications",
+        "sources",
+        "canonicalUrl",
+        "license",
+        "schemaVersion"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/RgeArtisan"
+}

@@ -1,0 +1,42 @@
+{
+  "siret": "11111111100015",
+  "siren": "111111111",
+  "name": "PAC Pro Île-de-France SARL (example)",
+  "legalForm": "SARL",
+  "nafCode": "43.22A",
+  "address": {
+    "streetAddress": "12 rue de la Rénovation",
+    "postalCode": "75001",
+    "addressLocality": "Paris",
+    "addressRegion": "Île-de-France",
+    "addressDepartmentCode": "75",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "latitude": 48.8607,
+    "longitude": 2.3367
+  },
+  "phoneE164": "+33100000000",
+  "rgeQualifications": [
+    {
+      "code": "QualiPAC",
+      "organisme": "Qualit'EnR",
+      "domaine": "Pompes à chaleur",
+      "metaDomaine": "chauffage_eau_chaude",
+      "dateDebut": "2024-01-15",
+      "dateFin": "2027-01-14",
+      "isActive": true
+    }
+  ],
+  "sources": [
+    {
+      "name": "ADEME RGE Registry",
+      "url": "https://data.ademe.fr/datasets/liste-des-entreprises-rge",
+      "license": "Etalab-2.0",
+      "retrievedAt": "2026-05-15"
+    }
+  ],
+  "canonicalUrl": "https://servicesartisans.fr/rge/pompe-a-chaleur/paris/pac-pro-ile-de-france-11111111100015",
+  "license": "CC-BY-4.0",
+  "schemaVersion": "1.0.0"
+}

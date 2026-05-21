@@ -1,0 +1,32 @@
+{
+  "siren": "444444444",
+  "name": "Missing SIRET Test Case (invalid example)",
+  "legalForm": "SARL",
+  "address": {
+    "postalCode": "31000",
+    "addressLocality": "Toulouse",
+    "addressCountry": "FR"
+  },
+  "rgeQualifications": [
+    {
+      "code": "QualiSol",
+      "organisme": "Qualit'EnR",
+      "domaine": "Chauffage et eau chaude solaire",
+      "metaDomaine": "energie_renouvelable",
+      "dateDebut": "2025-06-01",
+      "dateFin": "2028-05-31",
+      "isActive": true
+    }
+  ],
+  "sources": [
+    {
+      "name": "ADEME RGE Registry",
+      "url": "https://data.ademe.fr/datasets/liste-des-entreprises-rge",
+      "license": "Etalab-2.0",
+      "retrievedAt": "2026-05-15"
+    }
+  ],
+  "canonicalUrl": "https://servicesartisans.fr/rge/chauffage-solaire/toulouse/missing-siret",
+  "license": "CC-BY-4.0",
+  "schemaVersion": "1.0.0"
+}

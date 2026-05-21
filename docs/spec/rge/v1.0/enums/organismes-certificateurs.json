@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://servicesartisans.fr/spec/rge/v1.0/enums/organismes-certificateurs.json",
+  "title": "RGE Certifying Organizations",
+  "description": "Authorised French organisations granting RGE qualifications. New entries are accepted in MINOR releases.",
+  "type": "string",
+  "enum": [
+    "Qualibat",
+    "Qualifelec",
+    "Qualit'EnR",
+    "QualiPAC",
+    "QualiSol",
+    "QualiBois",
+    "QualiPV",
+    "OPQIBI",
+    "OPQTECC",
+    "Cequami",
+    "Eco Artisan",
+    "Pros de la Performance Énergétique",
+    "RGE Études"
+  ]
+}

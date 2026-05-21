@@ -1,0 +1,58 @@
+{
+  "siret": "22222222200017",
+  "siren": "222222222",
+  "name": "Isolation Aquitaine SAS (example)",
+  "legalForm": "SAS",
+  "nafCode": "43.29A",
+  "address": {
+    "streetAddress": "8 cours de l'Intendance",
+    "postalCode": "33000",
+    "addressLocality": "Bordeaux",
+    "addressRegion": "Nouvelle-Aquitaine",
+    "addressDepartmentCode": "33",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "latitude": 44.8378,
+    "longitude": -0.5792
+  },
+  "phoneE164": null,
+  "rgeQualifications": [
+    {
+      "code": "Qualibat-7131",
+      "organisme": "Qualibat",
+      "domaine": "Isolation thermique par l'extérieur (ITE)",
+      "metaDomaine": "isolation_bati",
+      "dateDebut": "2025-03-01",
+      "dateFin": "2028-02-29",
+      "isActive": true,
+      "url": "https://www.qualibat.com/entreprise/22222222200017"
+    },
+    {
+      "code": "Qualibat-7141",
+      "organisme": "Qualibat",
+      "domaine": "Isolation thermique par l'intérieur (ITI)",
+      "metaDomaine": "isolation_bati",
+      "dateDebut": "2025-03-01",
+      "dateFin": "2028-02-29",
+      "isActive": true
+    }
+  ],
+  "sources": [
+    {
+      "name": "ADEME RGE Registry",
+      "url": "https://data.ademe.fr/datasets/liste-des-entreprises-rge",
+      "license": "Etalab-2.0",
+      "retrievedAt": "2026-05-15"
+    },
+    {
+      "name": "Qualibat",
+      "url": "https://www.qualibat.com/",
+      "license": "Public-Domain",
+      "retrievedAt": "2026-05-15"
+    }
+  ],
+  "canonicalUrl": "https://servicesartisans.fr/rge/isolation-thermique-exterieure/bordeaux/isolation-aquitaine-22222222200017",
+  "license": "CC-BY-4.0",
+  "schemaVersion": "1.0.0"
+}
