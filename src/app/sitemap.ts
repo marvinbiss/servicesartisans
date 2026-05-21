@@ -1858,6 +1858,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         priority: 0.5,
       },
       {
+        url: `${SITE_URL}/rge-os`,
+        lastModified: '2026-05-21',
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      },
+      {
         url: `${SITE_URL}/artisans`,
         lastModified: STATIC_DATE,
         changeFrequency: 'weekly',
