@@ -1,0 +1,22 @@
+# Python build / venv artifacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# uv lockfile
+uv.lock
+
+# Dry-run outputs (large + ephemeral)
+wiki-staging/
+sample-articles/
+*.wiki
+manifest.json
