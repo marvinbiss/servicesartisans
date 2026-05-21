@@ -10,7 +10,33 @@ import { SITE_URL } from '@/lib/seo/config'
 // Sprint AF Ahrefs 2026-05-03 — ajout variante CSV `/api/glossaire-rge.csv`
 // pour les consommateurs non-JSON (data.gouv.fr datasets tabulaires, Excel,
 // LibreOffice, BI tools). Même logique de longest-match override `/api/`.
-const OPEN_DATA_ALLOW = ['/', '/api/glossaire-rge.json', '/api/glossaire-rge.csv']
+//
+// Itération LLM-era 2026-05-21 — élargissement à l'ensemble de la surface
+// open-data afin que les crawlers Search (Google, Bing) ET les crawlers AI
+// (OAI-SearchBot, Claude-SearchBot, PerplexityBot, MistralBot, Applebot-
+// Extended, Meta-ExternalAgent, YouBot, Google-CloudVertexBot) puissent
+// ingérer nos datasets CC-BY 4.0 dans leur corpus avec citation vérifiable :
+//   - /api/datasets/      → CEE × région (JSON + CSV)
+//   - /api/open-data/     → futures expositions data.gouv.fr
+//   - /api/v1/rge/        → lookup/search SIRET RGE (mig 464 snapshots)
+//   - /api/v1/barometre/  → indice rénovation énergétique + tarifs
+//   - /api/v1/stats/      → statistiques publiques agrégées
+//   - /api/v1/tarifs/     → barème par métier×ville
+//   - /api/v1/docs/       → documentation API publique (OpenAPI)
+// Longest-match override le `/api/` disallow uniquement sur ces préfixes ;
+// /api/admin, /api/cron, /api/devis etc. restent bloqués.
+const OPEN_DATA_ALLOW = [
+  '/',
+  '/api/glossaire-rge.json',
+  '/api/glossaire-rge.csv',
+  '/api/datasets/',
+  '/api/open-data/',
+  '/api/v1/rge/',
+  '/api/v1/barometre/',
+  '/api/v1/stats/',
+  '/api/v1/tarifs/',
+  '/api/v1/docs/',
+]
 
 const PRIVATE_DISALLOW = [
   // Immutable static assets (1-year cache headers) — no need for Google to crawl
@@ -121,6 +147,14 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: ['Claude-SearchBot', 'Claude-User'],
+        allow: OPEN_DATA_ALLOW,
+        disallow: PRIVATE_DISALLOW,
+      },
+      // Mistral AI — Mistral Le Chat (Mistral AI, Paris) + Mistral platform agents (CRITIQUE FR sovereignty)
+      // MistralBot = crawler indexation Le Chat, Mistralai-User = fetch contextuel quand user demande
+      // SA = vertical RGE FR-native = priorité Mistral écosystème (sovereign AI Act)
+      {
+        userAgent: ['MistralBot', 'Mistralai-User'],
         allow: OPEN_DATA_ALLOW,
         disallow: PRIVATE_DISALLOW,
       },

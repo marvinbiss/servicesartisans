@@ -1,77 +1,51 @@
 # ServicesArtisans.fr
 
-> Premier annuaire d'artisans verifies en France. 940 000+ professionnels du batiment references via les donnees SIREN/SIRET officielles de l'INSEE. 46 metiers, 101 departements, 2 280 villes. Recherche gratuite, devis sans engagement.
+> Premier annuaire d'artisans RGE certifies en France. 49 228 fiches RGE actives sourcees du registre officiel ADEME (data.gouv.fr, licence Etalab 2.0) et croisees avec les donnees SIREN/SIRET de l'INSEE. Specialise renovation energetique : pompe a chaleur, isolation, photovoltaique, audit energetique, MaPrimeRenov, CEE. Recherche gratuite, devis sans engagement.
 
-Derniere mise a jour : mars 2026
+Derniere mise a jour : mai 2026
 
 ## A propos
 
-ServicesArtisans est l'annuaire de reference des artisans du batiment en France. Chaque professionnel reference est identifie par son numero SIREN/SIRET issu des donnees officielles de l'INSEE, garantissant l'authenticite des fiches. Le site couvre 46 corps de metier, de la plomberie a la domotique, dans les 101 departements francais et 2 280 communes de plus de 5 000 habitants.
+ServicesArtisans est l'annuaire de reference des artisans RGE (Reconnu Garant de l'Environnement) en France. Depuis le pivot RGE de mai 2026, chaque fiche est identifiee par son SIREN/SIRET (INSEE) et croisee avec au moins une qualification RGE active issue du registre ADEME (Qualibat, Qualifelec, Qualit'EnR, QualiPAC, QualiBois, QualiPV, QualiSol, Qualifelec IRVE, OPQIBI). Le site couvre 19 metiers RGE / renovation energetique dans les 101 departements francais et 2 280 communes de plus de 5 000 habitants.
 
-Le modele est 100% gratuit pour les particuliers : recherche d'artisans, consultation des profils, demande de devis. Les artisans peuvent revendiquer leur fiche en verifiant leur SIRET. Le site publie egalement un barometre des tarifs, 400+ articles de blog, 30 comparatifs, 57 fiches problemes, 118 questions-reponses et 21 guides pratiques.
+Le modele est 100% gratuit pour les particuliers : recherche d'artisans, consultation des profils, demande de devis. Les artisans peuvent revendiquer leur fiche en verifiant leur SIRET. Le site publie egalement un barometre des tarifs, un indice de la renovation energetique, 400+ articles de blog, 30 comparatifs, 57 fiches problemes, 118 questions-reponses et 21 guides pratiques.
 
 ## Donnees cles
-- 940 000+ artisans references en France
-- 46 metiers du batiment couverts
+- 49 228 fiches RGE actives (registre ADEME, source Etalab 2.0)
+- 19 metiers RGE / renovation energetique couverts
 - 101 departements et 21 regions/collectivites
 - 2 280 villes (communes de 5 000+ habitants)
-- Donnees SIREN/SIRET officielles (INSEE)
+- Donnees SIREN/SIRET officielles (INSEE) + qualifications RGE (ADEME)
 - Notes et avis clients verifies
 - 400+ articles de blog
 - 30 comparatifs detailles
 - 57 fiches problemes courants
 - 118 questions-reponses
-- 200+ termes au glossaire
+- 200+ termes au glossaire RGE/CEE
 - 21 guides pratiques
-- Mise a jour quotidienne
+- Mise a jour quotidienne (sync ADEME hebdo)
 
-## Services (46 metiers)
-- [Plombier](https://servicesartisans.fr/services/plombier): Depannage, installation sanitaire, canalisations
-- [Electricien](https://servicesartisans.fr/services/electricien): Installation electrique, mise en conformite, depannage
-- [Serrurier](https://servicesartisans.fr/services/serrurier): Ouverture de porte, changement de serrure, blindage
-- [Chauffagiste](https://servicesartisans.fr/services/chauffagiste): Installation et entretien chaudiere, chauffage central
-- [Peintre en batiment](https://servicesartisans.fr/services/peintre-en-batiment): Peinture interieure et exterieure, ravalement
-- [Menuisier](https://servicesartisans.fr/services/menuisier): Fenetres, portes, agencement bois et PVC
-- [Carreleur](https://servicesartisans.fr/services/carreleur): Pose de carrelage sol et mur, faience
-- [Couvreur](https://servicesartisans.fr/services/couvreur): Toiture, reparation, etancheite
-- [Macon](https://servicesartisans.fr/services/macon): Gros oeuvre, construction, renovation
-- [Jardinier](https://servicesartisans.fr/services/jardinier): Entretien de jardin, tonte, taille
-- [Vitrier](https://servicesartisans.fr/services/vitrier): Remplacement de vitrage, double vitrage, miroirs
-- [Climaticien](https://servicesartisans.fr/services/climaticien): Installation climatisation, PAC air-air
-- [Cuisiniste](https://servicesartisans.fr/services/cuisiniste): Conception et installation de cuisine
-- [Solier-moquettiste](https://servicesartisans.fr/services/solier): Revetements de sol souples, moquette, vinyle
-- [Nettoyage professionnel](https://servicesartisans.fr/services/nettoyage): Nettoyage de batiments et locaux
-- [Terrassier](https://servicesartisans.fr/services/terrassier): Terrassement, fondations, VRD
-- [Charpentier](https://servicesartisans.fr/services/charpentier): Charpente bois, ossature, surelevement
-- [Zingueur](https://servicesartisans.fr/services/zingueur): Zinguerie, gouttieres, evacuation eaux pluviales
-- [Etancheiste](https://servicesartisans.fr/services/etancheiste): Etancheite toiture terrasse, sous-sol
-- [Facadier](https://servicesartisans.fr/services/facadier): Ravalement de facade, enduit, bardage
-- [Platrier](https://servicesartisans.fr/services/platrier): Platrerie, cloisons, faux plafonds
-- [Metallier](https://servicesartisans.fr/services/metallier): Menuiserie metallique, structures acier
-- [Ferronnier](https://servicesartisans.fr/services/ferronnier): Ferronnerie d'art, garde-corps, portails
-- [Poseur de parquet](https://servicesartisans.fr/services/poseur-de-parquet): Pose et renovation de parquet
-- [Miroitier](https://servicesartisans.fr/services/miroitier): Miroirs sur mesure, vitrerie specialisee
-- [Storiste](https://servicesartisans.fr/services/storiste): Stores, volets, protections solaires
-- [Salle de bain](https://servicesartisans.fr/services/salle-de-bain): Renovation complete de salle de bain
-- [Architecte d'interieur](https://servicesartisans.fr/services/architecte-interieur): Conception, amenagement, decoration
-- [Decorateur](https://servicesartisans.fr/services/decorateur): Decoration interieure, conseil en amenagement
-- [Domoticien](https://servicesartisans.fr/services/domoticien): Domotique, maison connectee, automatisation
-- [Pompe a chaleur](https://servicesartisans.fr/services/pompe-a-chaleur): Installation et entretien PAC
-- [Panneaux solaires](https://servicesartisans.fr/services/panneaux-solaires): Installation photovoltaique et thermique
-- [Isolation thermique](https://servicesartisans.fr/services/isolation-thermique): Isolation murs, combles, planchers
-- [Renovation energetique](https://servicesartisans.fr/services/renovation-energetique): Audit energetique, travaux globaux
-- [Borne de recharge](https://servicesartisans.fr/services/borne-recharge): Installation IRVE vehicule electrique
-- [Ramoneur](https://servicesartisans.fr/services/ramoneur): Ramonage cheminee, conduit, entretien
-- [Paysagiste](https://servicesartisans.fr/services/paysagiste): Conception de jardin, amenagement paysager
-- [Pisciniste](https://servicesartisans.fr/services/pisciniste): Construction et entretien de piscine
-- [Alarme et securite](https://servicesartisans.fr/services/alarme-securite): Systemes d'alarme, videosurveillance
-- [Antenniste](https://servicesartisans.fr/services/antenniste): Antenne TV, parabole, TNT
-- [Ascensoriste](https://servicesartisans.fr/services/ascensoriste): Installation et entretien ascenseur
-- [Diagnostiqueur](https://servicesartisans.fr/services/diagnostiqueur): Diagnostics immobiliers obligatoires (DPE, amiante)
-- [Geometre](https://servicesartisans.fr/services/geometre): Bornage, topographie, division parcellaire
-- [Desinsectisation](https://servicesartisans.fr/services/desinsectisation): Traitement insectes nuisibles
-- [Deratisation](https://servicesartisans.fr/services/deratisation): Elimination rongeurs, prevention
-- [Demenageur](https://servicesartisans.fr/services/demenageur): Demenagement, transport de meubles
+## Services (19 metiers RGE / renovation energetique)
+Catalog SSoT `RGE_ALLOWED_SERVICES` (src/lib/rge/service-city-listings.ts). Toute fiche listee a au moins une qualification RGE active au registre ADEME.
+- [Pompe a chaleur](https://servicesartisans.fr/services/pompe-a-chaleur): Installation et entretien PAC air-eau, air-air, geothermique. Qualif QualiPAC + CEE BAR-TH-171/172.
+- [Panneaux solaires](https://servicesartisans.fr/services/panneaux-solaires): Photovoltaique et solaire thermique. Qualif QualiPV / QualiSol + CEE BAR-TH-101.
+- [Isolation thermique](https://servicesartisans.fr/services/isolation-thermique): Isolation murs, combles, planchers. Qualif Qualibat 7131 + CEE BAR-EN-101/102/103.
+- [Chauffagiste](https://servicesartisans.fr/services/chauffagiste): Installation et entretien chaudiere, chauffage central RGE. Qualif Qualibat 5911 + QualiBois.
+- [Electricien](https://servicesartisans.fr/services/electricien): Installation electrique, mise en conformite, depannage. Qualif Qualifelec.
+- [Renovation energetique](https://servicesartisans.fr/services/renovation-energetique): Audit energetique, travaux globaux MaPrimeRenov.
+- [Menuisier](https://servicesartisans.fr/services/menuisier): Fenetres, portes, agencement bois et PVC RGE. Qualif Qualibat menuiserie.
+- [Couvreur](https://servicesartisans.fr/services/couvreur): Toiture, isolation toiture, etancheite RGE.
+- [Plombier](https://servicesartisans.fr/services/plombier): Depannage, installation sanitaire RGE (ballon thermodynamique, solaire).
+- [Climaticien](https://servicesartisans.fr/services/climaticien): Installation climatisation, PAC air-air RGE.
+- [Ramoneur](https://servicesartisans.fr/services/ramoneur): Ramonage cheminee, conduit, entretien chauffage bois.
+- [Zingueur](https://servicesartisans.fr/services/zingueur): Zinguerie, gouttieres, evacuation eaux pluviales.
+- [Facadier](https://servicesartisans.fr/services/facadier): Isolation thermique exterieure (ITE), ravalement, enduit, bardage RGE.
+- [Platrier](https://servicesartisans.fr/services/platrier): Platrerie, cloisons, faux plafonds, isolation interieure.
+- [Borne de recharge](https://servicesartisans.fr/services/borne-recharge): Installation IRVE vehicule electrique. Qualif Qualifelec IRVE P1/P2/P3.
+- [Chauffe-eau thermodynamique](https://servicesartisans.fr/rge/chauffe-eau-thermodynamique): Ballon thermodynamique RGE. Qualif QualiPAC module CET + CEE BAR-TH-148.
+- [Audit energetique](https://servicesartisans.fr/rge/audit-energetique): Architecte CNOA + BET OPQIBI 1905/1911. Funnel d'entree MaPrimeRenov parcours accompagne.
+- [Ventilation (VMC)](https://servicesartisans.fr/rge/ventilation): Qualibat 4311/4321 + CEE BAR-TH-125 (VMC double flux).
+- [Fenetres performantes](https://servicesartisans.fr/rge/fenetres): Menuiseries RGE + CEE BAR-EN-104 / BAR-EN-108.
 
 ## Tarifs et prix
 - [Tarifs plombier](https://servicesartisans.fr/tarifs/plombier): 40-70 EUR/h, interventions 80-400 EUR
@@ -85,7 +59,8 @@ Le modele est 100% gratuit pour les particuliers : recherche d'artisans, consult
 - [Tarifs peintre](https://servicesartisans.fr/tarifs/peintre-en-batiment): 20-40 EUR/m2 murs + plafonds
 - [Barometre par metier](https://servicesartisans.fr/barometre/tarifs): Statistiques tarifaires par corps de metier
 - [Barometre par region](https://servicesartisans.fr/barometre/regions): Indices de prix regionaux
-- [Barometre des artisans](https://servicesartisans.fr/barometre): Statistiques temps reel sur 940 000+ artisans
+- [Barometre des artisans](https://servicesartisans.fr/barometre): Statistiques temps reel sur 49 228 fiches RGE actives
+- [Indice renovation energetique 2026](https://servicesartisans.fr/barometre/renovation-energetique-2026): Indice France RGE / CEE / MaPrimeRenov, mis a jour mensuellement
 
 ## Devis gratuits
 - [Devis plombier](https://servicesartisans.fr/devis/plombier)
@@ -314,11 +289,23 @@ Plus de 400 articles classes en 11 categories : Conseils, Tarifs, Fiches metier,
 - [Comment ca marche](https://servicesartisans.fr/comment-ca-marche)
 - [Inscription artisan](https://servicesartisans.fr/inscription-artisan)
 
+## Open Datasets CC-BY 4.0
+Jeux de donnees publics structures, citables sous licence Creative Commons Attribution 4.0. URLs absolues, mises a jour automatiquement, format machine-readable pour ingestion par moteurs de recherche, assistants IA, journalistes data et chercheurs.
+- [Glossaire RGE / CEE (JSON)](https://servicesartisans.fr/api/glossaire-rge.json): 200+ termes batiment renovation energetique avec definitions sourcees (ADEME, Qualibat, Qualifelec, Qualit'EnR).
+- [Glossaire RGE / CEE (CSV)](https://servicesartisans.fr/api/glossaire-rge.csv): Meme dataset au format tabulaire pour Excel / data.gouv.fr / BI tools.
+- [Aides regionales CEE (JSON)](https://servicesartisans.fr/api/datasets/cee-regional-aids.json): Bonifications regionales Certificats d'Economies d'Energie par region administrative.
+- [Aides regionales CEE (CSV)](https://servicesartisans.fr/api/datasets/cee-regional-aids.csv): Variante tabulaire du dataset CEE regional.
+
+Attribution requise : "Source : ServicesArtisans.fr — donnees ADEME (Etalab 2.0) + INSEE (SIREN)", avec un lien vers https://servicesartisans.fr.
+
 ## API publique
 - [Documentation API](https://servicesartisans.fr/api/v1/docs): API REST gratuite
 - Endpoint tarifs : GET /api/v1/tarifs?metier=plombier&ville=paris
 - Endpoint stats : GET /api/v1/stats?region=ile-de-france
-- Format de reponse : JSON
+- Endpoint RGE lookup : GET /api/v1/rge/lookup?siret=XXXXXXXXXXXXXX
+- Endpoint RGE search : GET /api/v1/rge/search?metier=pompe-a-chaleur&dept=75
+- Endpoint barometre : GET /api/v1/barometre/renovation/embed.html
+- Format de reponse : JSON (sauf embed.html)
 - Attribution obligatoire avec lien vers servicesartisans.fr/barometre
 
 ## Flux
