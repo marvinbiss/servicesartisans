@@ -88,6 +88,7 @@ export default function FooterClusterLinks() {
   const trustLinks: FooterLink[] = [
     { href: '/methodologie', label: 'Notre méthodologie' },
     { href: '/sources', label: 'Sources officielles' },
+    { href: '/transparence-ia', label: 'Transparence IA' },
     { href: '/etudes', label: 'Études & données' },
     { href: '/normes', label: 'Normes applicables' },
     { href: '/garantie', label: 'Garantie plateforme' },

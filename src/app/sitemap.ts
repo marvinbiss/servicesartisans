@@ -1925,6 +1925,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.4,
       },
+      {
+        url: `${SITE_URL}/transparence-ia`,
+        lastModified: '2026-05-21',
+        changeFrequency: 'monthly',
+        priority: 0.5,
+      },
       // Plan du site HTML — aide le maillage interne + facilite le crawl des
       // robots moins sophistiqués. Priority 0.3 (navigation utility).
       {
