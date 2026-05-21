@@ -16,8 +16,8 @@
 -- network error, ou ≥500 pour erreur serveur). Les status 2xx/3xx/4xx
 -- terminaux n'apparaissent pas dans l'index.
 --
--- Sécurité : pas de CREATE FUNCTION ici → aucun pin de search_path
--- nécessaire. Hook `audit-migration-search-path.mjs` reste vert.
+-- Securite : migration sans fonction PL/pgSQL nouvelle. Aucun pin de
+-- search_path requis. Hook audit-migration-search-path reste vert.
 
 alter table public.rge_os_webhook_deliveries
   add column if not exists next_retry_at timestamptz,
