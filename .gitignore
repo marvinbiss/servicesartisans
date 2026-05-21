@@ -101,3 +101,10 @@ docs/audit-ahrefs-2026-05-03/D_backlinks/outreach_lemlist_*.csv
 # Standalone SDK packages — build output and local node_modules (publish from package dir)
 packages/*/dist/
 packages/*/node_modules/
+
+# Python SDK (packages/sa-rge-sdk-py) — build artifacts, cache, virtualenv
+packages/sa-rge-sdk-py/**/__pycache__/
+packages/sa-rge-sdk-py/**/.pytest_cache/
+packages/sa-rge-sdk-py/**/*.egg-info/
+packages/sa-rge-sdk-py/build/
+packages/sa-rge-sdk-py/.venv/
