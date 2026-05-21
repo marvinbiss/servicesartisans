@@ -1,0 +1,91 @@
+---
+license: cc-by-4.0
+task_categories:
+  - text-classification
+  - feature-extraction
+language:
+  - fr
+size_categories:
+  - 10K<n<100K
+pretty_name: ServicesArtisans RGE 49K Enriched
+tags:
+  - renovation
+  - energy-efficiency
+  - rge
+  - france
+  - construction
+  - artisans
+  - building-trades
+  - open-data
+  - cc-by-4.0
+configs:
+  - config_name: default
+    data_files:
+      - split: train
+        path: data/shard-*.parquet
+---
+
+# Dataset Card for {{ dataset_name }}
+
+{{ description }}
+
+## Dataset Description
+
+- **Total rows**: {{ total_rows }}
+- **Shards**: {{ total_shards }} Parquet files
+- **License**: {{ license }} (Creative Commons Attribution 4.0 International)
+- **Source**: {{ source_url }}
+- **Last updated**: {{ last_updated }}
+- **Language**: French
+
+## Columns
+
+{% for col in columns -%}
+- **`{{ col.name }}`** ({{ col.dtype }}): {{ col.description }}
+{% endfor %}
+
+## Source Data
+
+This dataset is derived from the French ADEME RGE (Reconnu Garant de l'Environnement) public registry available at https://data.ademe.fr/datasets/liste-des-entreprises-rge. ServicesArtisans (https://servicesartisans.fr) augments the raw ADEME records with:
+
+- Canonical URL pointing to the public artisan profile on ServicesArtisans.fr
+- AI-generated E-E-A-T compliant descriptions (rubric v1.3+) per Google's Search Quality Evaluator Guidelines
+- INSEE code resolution for each provider's municipality
+
+The ADEME baseline is published under Etalab 2.0; the SA-authored
+descriptions and SA canonical URLs are SA's own work, jointly released
+here under CC-BY 4.0.
+
+## Considerations for Using the Data
+
+### Personal Information
+
+This dataset contains business entity information (SIRET/SIREN) of registered French RGE-certified contractors. SIRET/SIREN are public identifiers under French commercial law (data.gouv.fr Etalab 2.0 default).
+
+Per ServicesArtisans CLAUDE.md policy (decision 2026-05-07), only RGE-certified contractors with active qualifications are exposed in this dataset. Non-RGE providers are deliberately excluded to preserve their privacy.
+
+No telephone numbers are exposed in this dataset.
+
+### Bias and Limitations
+
+- **Geographic bias**: French RGE contractors only. Not applicable outside metropolitan France + DROM.
+- **Qualification recency**: dates `date_debut` and `date_fin` reflect ADEME registry as of `last_updated`. Real-world status may have changed since.
+- **Description quality**: AI-generated descriptions are rubric-scored but not human-reviewed at scale. Descriptions are intended as machine-readable summaries, not editorial endorsements.
+- **Coverage gap**: ~49 228 active RGE providers as of the latest snapshot; the ADEME registry refreshes weekly and trails real-world certifications by 1-4 weeks.
+
+### Licensing
+
+This dataset is released under CC-BY 4.0. You may use, modify, and redistribute provided you give appropriate credit to ServicesArtisans and ADEME. Recommended citation:
+
+```bibtex
+{{ citation_bibtex }}
+```
+
+## Source
+
+ADEME RGE registry (data.gouv.fr, Etalab 2.0) refreshed weekly via ServicesArtisans ingestion pipeline (mig 380, mig 381, cron `sync-ademe-rge`).
+
+## Contact
+
+- ServicesArtisans: https://servicesartisans.fr
+- Dataset issues: https://huggingface.co/datasets/{{ dataset_name }}/discussions

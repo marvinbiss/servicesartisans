@@ -1,0 +1,526 @@
+[
+  {
+    "siret": "12345678900011",
+    "siren": "123456789",
+    "name": "Énergie PAC Lyon",
+    "address_city": "Lyon",
+    "address_postal_code": "69001",
+    "address_region": "Auvergne-Rhône-Alpes",
+    "code_insee": "69381",
+    "latitude": 45.764043,
+    "longitude": 4.835659,
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC",
+        "organisme": "Qualit'EnR",
+        "domaine": "Pompe à chaleur",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2024-01-15",
+        "date_fin": "2027-01-14"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Installateur RGE de pompes à chaleur à Lyon, certifié QualiPAC depuis 2024. Spécialiste de la rénovation énergétique résidentielle.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/pompe-a-chaleur/lyon/energie-pac-lyon-abc123"
+  },
+  {
+    "siret": "98765432100027",
+    "siren": "987654321",
+    "name": "Isolation Combles Paris",
+    "address_city": "Paris",
+    "address_postal_code": "75011",
+    "address_region": "Île-de-France",
+    "code_insee": "75111",
+    "latitude": 48.858844,
+    "longitude": 2.379414,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-7131",
+        "organisme": "Qualibat",
+        "domaine": "Isolation thermique",
+        "meta_domaine": "Isolation",
+        "date_debut": "2023-06-01",
+        "date_fin": "2026-05-31"
+      }
+    ],
+    "naf_code": "4329A",
+    "description": "Entreprise d'isolation thermique des combles à Paris, certifiée Qualibat 7131. Travaux éligibles MaPrimeRénov'.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/isolation-combles/paris/isolation-combles-paris-def456"
+  },
+  {
+    "siret": "55555555500017",
+    "siren": "555555555",
+    "name": "VMC Pro Marseille",
+    "address_city": "Marseille",
+    "address_postal_code": "13001",
+    "address_region": "Provence-Alpes-Côte d'Azur",
+    "code_insee": "13201",
+    "latitude": 43.296482,
+    "longitude": 5.36978,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5911",
+        "organisme": "Qualibat",
+        "domaine": "Ventilation",
+        "meta_domaine": "Ventilation",
+        "date_debut": "2024-03-01",
+        "date_fin": "2027-02-28"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": null,
+    "description_version": null,
+    "sa_public_url": "https://servicesartisans.fr/services/vmc/marseille/vmc-pro-marseille-ghi789"
+  },
+  {
+    "siret": "11111111100013",
+    "siren": "111111111",
+    "name": "Audit Énergétique Toulouse",
+    "address_city": "Toulouse",
+    "address_postal_code": "31000",
+    "address_region": "Occitanie",
+    "code_insee": "31555",
+    "latitude": 43.604652,
+    "longitude": 1.444209,
+    "rge_qualifications": [
+      {
+        "code": "OPQIBI-1905",
+        "organisme": "OPQIBI",
+        "domaine": "Audit énergétique",
+        "meta_domaine": "Audit",
+        "date_debut": "2024-02-01",
+        "date_fin": "2027-01-31"
+      }
+    ],
+    "naf_code": "7112B",
+    "description": "Bureau d'études certifié OPQIBI 1905 pour l'audit énergétique réglementaire à Toulouse.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/audit-energetique/toulouse/audit-toulouse-jkl012"
+  },
+  {
+    "siret": "22222222200019",
+    "siren": "222222222",
+    "name": "Photovoltaïque Bordeaux",
+    "address_city": "Bordeaux",
+    "address_postal_code": "33000",
+    "address_region": "Nouvelle-Aquitaine",
+    "code_insee": "33063",
+    "latitude": 44.837789,
+    "longitude": -0.57918,
+    "rge_qualifications": [
+      {
+        "code": "QualiPV",
+        "organisme": "Qualit'EnR",
+        "domaine": "Photovoltaïque",
+        "meta_domaine": "Solaire",
+        "date_debut": "2023-09-01",
+        "date_fin": "2026-08-31"
+      }
+    ],
+    "naf_code": "4321A",
+    "description": "Installateur RGE QualiPV photovoltaïque à Bordeaux. Solutions clés en main pour particuliers.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/photovoltaique/bordeaux/photo-bordeaux-mno345"
+  },
+  {
+    "siret": "33333333300015",
+    "siren": "333333333",
+    "name": "Chaudière Gaz Lille",
+    "address_city": "Lille",
+    "address_postal_code": "59000",
+    "address_region": "Hauts-de-France",
+    "code_insee": "59350",
+    "latitude": 50.62925,
+    "longitude": 3.057256,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5311",
+        "organisme": "Qualibat",
+        "domaine": "Chaudière gaz à condensation",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2024-04-01",
+        "date_fin": "2027-03-31"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Plombier-chauffagiste RGE Qualibat 5311 à Lille. Pose de chaudières gaz à condensation.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/chaudiere-gaz/lille/chaudiere-lille-pqr678"
+  },
+  {
+    "siret": "44444444400011",
+    "siren": "444444444",
+    "name": "Ballon Thermodynamique Nantes",
+    "address_city": "Nantes",
+    "address_postal_code": "44000",
+    "address_region": "Pays de la Loire",
+    "code_insee": "44109",
+    "latitude": 47.218371,
+    "longitude": -1.553621,
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC",
+        "organisme": "Qualit'EnR",
+        "domaine": "Chauffe-eau thermodynamique",
+        "meta_domaine": "ECS",
+        "date_debut": "2023-11-01",
+        "date_fin": "2026-10-31"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": null,
+    "description_version": null,
+    "sa_public_url": "https://servicesartisans.fr/services/ballon-thermodynamique/nantes/ballon-nantes-stu901"
+  },
+  {
+    "siret": "66666666600014",
+    "siren": "666666666",
+    "name": "ITE Strasbourg",
+    "address_city": "Strasbourg",
+    "address_postal_code": "67000",
+    "address_region": "Grand Est",
+    "code_insee": "67482",
+    "latitude": 48.580002,
+    "longitude": 7.75,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-7141",
+        "organisme": "Qualibat",
+        "domaine": "Isolation thermique par l'extérieur",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-01-01",
+        "date_fin": "2026-12-31"
+      }
+    ],
+    "naf_code": "4329A",
+    "description": "Spécialiste ITE (isolation thermique par l'extérieur) à Strasbourg, certifié Qualibat 7141.",
+    "description_version": "rubric-v1.2",
+    "sa_public_url": "https://servicesartisans.fr/services/isolation-exterieure/strasbourg/ite-strasbourg-vwx234"
+  },
+  {
+    "siret": "77777777700012",
+    "siren": "777777777",
+    "name": "Menuiseries RGE Rennes",
+    "address_city": "Rennes",
+    "address_postal_code": "35000",
+    "address_region": "Bretagne",
+    "code_insee": "35238",
+    "latitude": 48.117266,
+    "longitude": -1.677793,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-3722",
+        "organisme": "Qualibat",
+        "domaine": "Menuiseries extérieures",
+        "meta_domaine": "Menuiserie",
+        "date_debut": "2023-07-01",
+        "date_fin": "2026-06-30"
+      }
+    ],
+    "naf_code": "4332A",
+    "description": "Pose de menuiseries extérieures RGE Qualibat 3722 à Rennes. Fenêtres, portes, volets.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/menuiseries/rennes/menuiseries-rennes-yza567"
+  },
+  {
+    "siret": "88888888800018",
+    "siren": "888888888",
+    "name": "Solaire Thermique Nice",
+    "address_city": "Nice",
+    "address_postal_code": "06000",
+    "address_region": "Provence-Alpes-Côte d'Azur",
+    "code_insee": "06088",
+    "latitude": 43.710173,
+    "longitude": 7.261953,
+    "rge_qualifications": [
+      {
+        "code": "QualiSol",
+        "organisme": "Qualit'EnR",
+        "domaine": "Solaire thermique",
+        "meta_domaine": "Solaire",
+        "date_debut": "2024-05-01",
+        "date_fin": "2027-04-30"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Installateur QualiSol solaire thermique à Nice. ECS et chauffage solaire.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/solaire-thermique/nice/solaire-nice-bcd890"
+  },
+  {
+    "siret": "99999999900016",
+    "siren": "999999999",
+    "name": "Multi-Qualif Grenoble",
+    "address_city": "Grenoble",
+    "address_postal_code": "38000",
+    "address_region": "Auvergne-Rhône-Alpes",
+    "code_insee": "38185",
+    "latitude": 45.188529,
+    "longitude": 5.724524,
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC",
+        "organisme": "Qualit'EnR",
+        "domaine": "Pompe à chaleur",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2023-01-01",
+        "date_fin": "2026-12-31"
+      },
+      {
+        "code": "QualiBois",
+        "organisme": "Qualit'EnR",
+        "domaine": "Chaudière bois",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2024-02-01",
+        "date_fin": "2027-01-31"
+      },
+      {
+        "code": "Qualibat-5911",
+        "organisme": "Qualibat",
+        "domaine": "Ventilation",
+        "meta_domaine": "Ventilation",
+        "date_debut": "2024-03-01",
+        "date_fin": "2027-02-28"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Multi-certifié RGE QualiPAC + QualiBois + Qualibat 5911 à Grenoble. Solution chauffage complète.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/chauffagiste-rge/grenoble/multi-grenoble-efg123"
+  },
+  {
+    "siret": "10101010100015",
+    "siren": "101010101",
+    "name": "Géothermie Dijon",
+    "address_city": "Dijon",
+    "address_postal_code": "21000",
+    "address_region": "Bourgogne-Franche-Comté",
+    "code_insee": "21231",
+    "latitude": 47.322047,
+    "longitude": 5.04148,
+    "rge_qualifications": [
+      {
+        "code": "QualiForage",
+        "organisme": "Qualit'EnR",
+        "domaine": "Géothermie",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2024-01-01",
+        "date_fin": "2026-12-31"
+      }
+    ],
+    "naf_code": "4321A",
+    "description": "Spécialiste QualiForage géothermie à Dijon. PAC géothermiques résidentielles et tertiaires.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/geothermie/dijon/geothermie-dijon-hij456"
+  },
+  {
+    "siret": "12121212100017",
+    "siren": "121212121",
+    "name": "Poêle Bois Reims",
+    "address_city": "Reims",
+    "address_postal_code": "51100",
+    "address_region": "Grand Est",
+    "code_insee": "51454",
+    "latitude": null,
+    "longitude": null,
+    "rge_qualifications": [
+      {
+        "code": "QualiBois",
+        "organisme": "Qualit'EnR",
+        "domaine": "Poêle à bois",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2023-10-01",
+        "date_fin": "2026-09-30"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Poseur RGE QualiBois à Reims. Poêles à bois et à granulés.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/poele-bois/reims/poele-reims-klm789"
+  },
+  {
+    "siret": "13131313100013",
+    "siren": "131313131",
+    "name": "VMC Double Flux Angers",
+    "address_city": "Angers",
+    "address_postal_code": "49000",
+    "address_region": "Pays de la Loire",
+    "code_insee": "49007",
+    "latitude": 47.478419,
+    "longitude": -0.563166,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5921",
+        "organisme": "Qualibat",
+        "domaine": "VMC double flux",
+        "meta_domaine": "Ventilation",
+        "date_debut": "2024-02-15",
+        "date_fin": "2027-02-14"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": null,
+    "description_version": null,
+    "sa_public_url": "https://servicesartisans.fr/services/vmc-double-flux/angers/vmc-angers-nop012"
+  },
+  {
+    "siret": "14141414100018",
+    "siren": "141414141",
+    "name": "Plancher Chauffant Montpellier",
+    "address_city": "Montpellier",
+    "address_postal_code": "34000",
+    "address_region": "Occitanie",
+    "code_insee": "34172",
+    "latitude": 43.610769,
+    "longitude": 3.876716,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5331",
+        "organisme": "Qualibat",
+        "domaine": "Plancher chauffant",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2023-12-01",
+        "date_fin": "2026-11-30"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Plancher chauffant hydraulique RGE Qualibat 5331 à Montpellier. Compatible PAC et chaudière condensation.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/plancher-chauffant/montpellier/pch-montpellier-qrs345"
+  },
+  {
+    "siret": "15151515100014",
+    "siren": "151515151",
+    "name": "Isolation Sol Le Havre",
+    "address_city": "Le Havre",
+    "address_postal_code": "76600",
+    "address_region": "Normandie",
+    "code_insee": "76351",
+    "latitude": 49.49437,
+    "longitude": 0.107929,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-7132",
+        "organisme": "Qualibat",
+        "domaine": "Isolation des sols",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-01-01",
+        "date_fin": "2026-12-31"
+      }
+    ],
+    "naf_code": "4329A",
+    "description": "Isolation des sols et planchers bas RGE Qualibat 7132 au Havre.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/isolation-sol/le-havre/iso-sol-havre-tuv678"
+  },
+  {
+    "siret": "16161616100011",
+    "siren": "161616161",
+    "name": "Climatisation RGE Saint-Étienne",
+    "address_city": "Saint-Étienne",
+    "address_postal_code": "42000",
+    "address_region": "Auvergne-Rhône-Alpes",
+    "code_insee": "42218",
+    "latitude": 45.439695,
+    "longitude": 4.387178,
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC",
+        "organisme": "Qualit'EnR",
+        "domaine": "PAC air/air réversible",
+        "meta_domaine": "Climatisation",
+        "date_debut": "2024-03-01",
+        "date_fin": "2027-02-28"
+      }
+    ],
+    "naf_code": "4322B",
+    "description": "Climatisation réversible PAC air/air RGE QualiPAC à Saint-Étienne.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/climatisation/saint-etienne/clim-stetienne-wxy901"
+  },
+  {
+    "siret": "17171717100017",
+    "siren": "171717171",
+    "name": "Toiture RGE Limoges",
+    "address_city": "Limoges",
+    "address_postal_code": "87000",
+    "address_region": "Nouvelle-Aquitaine",
+    "code_insee": "87085",
+    "latitude": null,
+    "longitude": null,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-3171",
+        "organisme": "Qualibat",
+        "domaine": "Couverture isolée",
+        "meta_domaine": "Couverture",
+        "date_debut": "2023-08-01",
+        "date_fin": "2026-07-31"
+      }
+    ],
+    "naf_code": "4391A",
+    "description": null,
+    "description_version": null,
+    "sa_public_url": "https://servicesartisans.fr/services/toiture/limoges/toiture-limoges-zab234"
+  },
+  {
+    "siret": "18181818100013",
+    "siren": "181818181",
+    "name": "Domotique Énergie Brest",
+    "address_city": "Brest",
+    "address_postal_code": "29200",
+    "address_region": "Bretagne",
+    "code_insee": "29019",
+    "latitude": 48.390394,
+    "longitude": -4.486076,
+    "rge_qualifications": [
+      {
+        "code": "Qualifelec-RGE",
+        "organisme": "Qualifelec",
+        "domaine": "Régulation chauffage",
+        "meta_domaine": "Électricité",
+        "date_debut": "2024-04-01",
+        "date_fin": "2027-03-31"
+      }
+    ],
+    "naf_code": "4321A",
+    "description": "Électricien Qualifelec RGE à Brest. Domotique et régulation chauffage.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/electricien-rge/brest/domotique-brest-cde567"
+  },
+  {
+    "siret": "19191919100019",
+    "siren": "191919191",
+    "name": "Rénovation Globale Clermont",
+    "address_city": "Clermont-Ferrand",
+    "address_postal_code": "63000",
+    "address_region": "Auvergne-Rhône-Alpes",
+    "code_insee": "63113",
+    "latitude": 45.777222,
+    "longitude": 3.087025,
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-RGE",
+        "organisme": "Qualibat",
+        "domaine": "Rénovation énergétique globale",
+        "meta_domaine": "Multi-lots",
+        "date_debut": "2024-01-01",
+        "date_fin": "2026-12-31"
+      },
+      {
+        "code": "QualiPAC",
+        "organisme": "Qualit'EnR",
+        "domaine": "Pompe à chaleur",
+        "meta_domaine": "Chauffage",
+        "date_debut": "2024-02-01",
+        "date_fin": "2027-01-31"
+      }
+    ],
+    "naf_code": "4399C",
+    "description": "Rénovation énergétique globale RGE Qualibat + QualiPAC à Clermont-Ferrand. Accompagnement Mon Accompagnateur Rénov'.",
+    "description_version": "rubric-v1.3",
+    "sa_public_url": "https://servicesartisans.fr/services/renovation-globale/clermont-ferrand/reno-clermont-fgh890"
+  }
+]
