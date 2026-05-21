@@ -1,0 +1,27 @@
+meta {
+  name: Deterministic MaPrimeRenov 2026 bareme
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/aides/mpr-bareme?geste=&menage_categorie=&zone=&rfr=&nb_personnes=
+  body: none
+  auth: none
+}
+
+params:query {
+  geste: pac_air_eau
+  menage_categorie: tres_modeste
+  zone: idf
+  rfr: 0
+  nb_personnes: 0
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Deterministic MaPrimeRenov 2026 bareme
+}

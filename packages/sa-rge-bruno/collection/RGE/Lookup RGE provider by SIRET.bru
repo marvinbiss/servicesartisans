@@ -1,0 +1,23 @@
+meta {
+  name: Lookup RGE provider by SIRET
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/rge/lookup?siret=
+  body: none
+  auth: none
+}
+
+params:query {
+  siret: 
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Lookup RGE provider by SIRET
+}

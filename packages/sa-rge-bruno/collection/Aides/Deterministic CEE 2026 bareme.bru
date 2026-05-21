@@ -1,0 +1,26 @@
+meta {
+  name: Deterministic CEE 2026 bareme
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/aides/cee-bareme?geste=&zone_climatique=&type_logement=&menage_categorie=
+  body: none
+  auth: none
+}
+
+params:query {
+  geste: pac_air_eau
+  zone_climatique: H1
+  type_logement: maison_individuelle
+  menage_categorie: tres_modeste
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Deterministic CEE 2026 bareme
+}

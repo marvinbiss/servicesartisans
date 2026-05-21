@@ -1,0 +1,25 @@
+meta {
+  name: Search RGE providers by metier ville
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/rge/search?metier=&ville=&limit=
+  body: none
+  auth: none
+}
+
+params:query {
+  metier: 
+  ville: 
+  ~limit: 0
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  Search RGE providers by metier + ville
+}

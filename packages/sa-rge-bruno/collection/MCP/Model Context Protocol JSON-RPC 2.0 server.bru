@@ -1,0 +1,24 @@
+meta {
+  name: Model Context Protocol JSON-RPC 2.0 server
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/mcp
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {}
+}
+
+docs {
+  Model Context Protocol JSON-RPC 2.0 server
+}

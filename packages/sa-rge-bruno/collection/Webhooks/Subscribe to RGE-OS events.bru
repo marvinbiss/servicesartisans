@@ -1,0 +1,29 @@
+meta {
+  name: Subscribe to RGE-OS events
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/webhooks/subscribe
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "url": "string",
+    "events": [
+      "rge.snapshot.refreshed"
+    ]
+  }
+}
+
+docs {
+  Subscribe to RGE-OS events
+}

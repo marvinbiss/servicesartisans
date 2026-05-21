@@ -1,0 +1,19 @@
+meta {
+  name: List webhooks by integrator
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/webhooks/list
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  List webhooks by integrator
+}

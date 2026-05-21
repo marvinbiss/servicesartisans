@@ -1,0 +1,26 @@
+meta {
+  name: AnswerEngine orchestrated LLM Critic ground-truth response
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/ask
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "query": "Quel est le bareme MaPrimeRenov pour une PAC air/eau ?"
+  }
+}
+
+docs {
+  POST a French-language query plus optional aidesContext to get a structured answer with citations, trace, and (on YMYL) Critic verdict. Rate-limit 60/min/IP fail-open.
+}
