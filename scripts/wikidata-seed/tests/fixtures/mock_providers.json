@@ -1,0 +1,269 @@
+[
+  {
+    "siret": "10000000010007",
+    "siren": "100000000",
+    "name": "Plomberie Île-de-France Test",
+    "address_city": "Paris",
+    "address_postal_code": "75011",
+    "address_region": "Île-de-France",
+    "code_insee": "75111",
+    "latitude": 48.8588443,
+    "longitude": 2.2943506,
+    "naf_code": "4322A",
+    "sa_public_url": "https://servicesartisans.fr/services/plombier/paris/test-001",
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC-Module-Air-Eau",
+        "organisme": "QualiPAC",
+        "domaine": "Pompe à chaleur",
+        "meta_domaine": "Chauffage ENR",
+        "date_debut": "2025-01-01",
+        "date_fin": "2027-12-31",
+        "url": "https://www.qualit-enr.org/qualifications/qualipac"
+      }
+    ]
+  },
+  {
+    "siret": "10000000100014",
+    "siren": "100000001",
+    "name": "Énergies PACA Multi-RGE",
+    "address_city": "Marseille",
+    "address_postal_code": "13008",
+    "address_region": "Provence-Alpes-Côte d'Azur",
+    "code_insee": "13208",
+    "latitude": 43.2965,
+    "longitude": 5.3698,
+    "naf_code": "4321A",
+    "sa_public_url": "https://servicesartisans.fr/services/electricien/marseille/test-002",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5911",
+        "organisme": "Qualibat",
+        "domaine": "Isolation thermique par l'intérieur",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-06-15",
+        "date_fin": "2027-06-14",
+        "url": null
+      },
+      {
+        "code": "QualiPV-36",
+        "organisme": "Qualit'EnR",
+        "domaine": "Photovoltaïque",
+        "meta_domaine": "Solaire ENR",
+        "date_debut": "2025-03-01",
+        "date_fin": "2028-02-29",
+        "url": null
+      },
+      {
+        "code": "QualiPAC-Combles-Perdus",
+        "organisme": "QualiPAC",
+        "domaine": "PAC air-eau",
+        "meta_domaine": "Chauffage ENR",
+        "date_debut": "2025-02-01",
+        "date_fin": "2028-01-31",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "20000000200028",
+    "siren": "200000002",
+    "name": "Lyon Rénov AURA",
+    "address_city": "Lyon",
+    "address_postal_code": "69003",
+    "address_region": "Auvergne-Rhône-Alpes",
+    "code_insee": "69383",
+    "latitude": 45.764043,
+    "longitude": 4.835659,
+    "naf_code": "4399C",
+    "sa_public_url": "https://servicesartisans.fr/services/chauffagiste/lyon/test-003",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-8611",
+        "organisme": "Qualibat",
+        "domaine": "Audit énergétique maison individuelle",
+        "meta_domaine": "Audit",
+        "date_debut": "2025-04-10",
+        "date_fin": "2028-04-09",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "30000000300032",
+    "siren": "300000003",
+    "name": "Dijon BFC Toiture",
+    "address_city": "Dijon",
+    "address_postal_code": "21000",
+    "address_region": "Bourgogne-Franche-Comté",
+    "code_insee": "21231",
+    "latitude": 47.322,
+    "longitude": 5.0415,
+    "naf_code": "4391B",
+    "sa_public_url": "https://servicesartisans.fr/services/couvreur/dijon/test-004",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-7141",
+        "organisme": "Qualibat",
+        "domaine": "Isolation thermique extérieure",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-09-01",
+        "date_fin": "2027-08-31",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "40000000400046",
+    "siren": "400000004",
+    "name": "Outre-Mer Réunion Énergies",
+    "address_city": "Saint-Denis",
+    "address_postal_code": "97400",
+    "address_region": "La Réunion",
+    "code_insee": "97411",
+    "latitude": -20.8823,
+    "longitude": 55.4504,
+    "naf_code": "4321A",
+    "sa_public_url": "https://servicesartisans.fr/services/electricien/saint-denis/test-005",
+    "rge_qualifications": [
+      {
+        "code": "QualiPV-Bat",
+        "organisme": "Qualit'EnR",
+        "domaine": "Photovoltaïque bâtiment",
+        "meta_domaine": "Solaire ENR",
+        "date_debut": "2025-05-01",
+        "date_fin": "2028-04-30",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "50000000500057",
+    "siren": "500000005",
+    "name": "Strasbourg Grand Est Iso",
+    "address_city": "Strasbourg",
+    "address_postal_code": "67000",
+    "address_region": "Grand Est",
+    "code_insee": null,
+    "latitude": 48.5734,
+    "longitude": 7.7521,
+    "naf_code": "4329B",
+    "sa_public_url": "https://servicesartisans.fr/services/isolation/strasbourg/test-006",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-7131",
+        "organisme": "Qualibat",
+        "domaine": "Isolation combles perdus",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-11-01",
+        "date_fin": "2027-10-31",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "60000000600061",
+    "siren": "600000006",
+    "name": "Nantes Pays de la Loire Pompes",
+    "address_city": "Nantes",
+    "address_postal_code": "44000",
+    "address_region": "Pays de la Loire",
+    "code_insee": "44109",
+    "latitude": 47.2184,
+    "longitude": -1.5536,
+    "naf_code": "4322B",
+    "sa_public_url": "https://servicesartisans.fr/services/pompe-a-chaleur/nantes/test-007",
+    "rge_qualifications": [
+      {
+        "code": "QualiPAC-Air-Air",
+        "organisme": "QualiPAC",
+        "domaine": "PAC air-air",
+        "meta_domaine": "Chauffage ENR",
+        "date_debut": "2025-01-15",
+        "date_fin": "2028-01-14",
+        "url": null
+      },
+      {
+        "code": "Qualibat-5912",
+        "organisme": "Qualibat",
+        "domaine": "Isolation thermique intérieure",
+        "meta_domaine": "Isolation",
+        "date_debut": "2024-12-01",
+        "date_fin": "2027-11-30",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "70000000700075",
+    "siren": "700000007",
+    "name": "Bordeaux Nouvelle-Aquitaine Bois",
+    "address_city": "Bordeaux",
+    "address_postal_code": "33000",
+    "address_region": "Nouvelle-Aquitaine",
+    "code_insee": "33063",
+    "latitude": 44.8378,
+    "longitude": -0.5792,
+    "naf_code": "4332A",
+    "sa_public_url": "https://servicesartisans.fr/services/menuisier/bordeaux/test-008",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-3514",
+        "organisme": "Qualibat",
+        "domaine": "Menuiseries extérieures bois",
+        "meta_domaine": "Menuiserie",
+        "date_debut": "2025-03-15",
+        "date_fin": "2028-03-14",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "80000000800089",
+    "siren": "800000008",
+    "name": "Lille Hauts-de-France Élec",
+    "address_city": "Lille",
+    "address_postal_code": "59000",
+    "address_region": "Hauts-de-France",
+    "code_insee": "59350",
+    "latitude": 50.6292,
+    "longitude": 3.0573,
+    "naf_code": "4321A",
+    "sa_public_url": "https://servicesartisans.fr/services/electricien/lille/test-009",
+    "rge_qualifications": [
+      {
+        "code": "Qualifelec-IRVE",
+        "organisme": "Qualifelec",
+        "domaine": "Bornes recharge véhicules électriques",
+        "meta_domaine": "Mobilité électrique",
+        "date_debut": "2025-02-10",
+        "date_fin": "2028-02-09",
+        "url": null
+      }
+    ]
+  },
+  {
+    "siret": "90000000900093",
+    "siren": "900000009",
+    "name": "Toulouse Occitanie Chauffe",
+    "address_city": "Toulouse",
+    "address_postal_code": "31000",
+    "address_region": "Occitanie",
+    "code_insee": "31555",
+    "latitude": null,
+    "longitude": null,
+    "naf_code": null,
+    "sa_public_url": "https://servicesartisans.fr/services/chauffagiste/toulouse/test-010",
+    "rge_qualifications": [
+      {
+        "code": "Qualibat-5331",
+        "organisme": "Qualibat",
+        "domaine": "Plomberie sanitaire",
+        "meta_domaine": "Plomberie",
+        "date_debut": "2024-10-01",
+        "date_fin": "2027-09-30",
+        "url": null
+      }
+    ]
+  }
+]

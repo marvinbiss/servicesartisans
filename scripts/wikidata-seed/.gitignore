@@ -1,0 +1,22 @@
+# Python build / venv artifacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# uv lockfile + cache (intentionally not committed in v0 to avoid pinning
+# the team to a specific resolver state before live mode lands)
+uv.lock
+
+# Dry-run outputs (large + ephemeral)
+sample.jsonl
+wikidata-seed-output.jsonl
+*.jsonl
