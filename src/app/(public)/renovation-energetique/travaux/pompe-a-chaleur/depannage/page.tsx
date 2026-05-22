@@ -49,9 +49,13 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -238,7 +242,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('chauffagiste', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -439,6 +444,70 @@ export default function Page() {
             </div>
           </article>
 
+          <PrixComparatif
+            title="Garanties & SAV 2026 : 5 marques de PAC"
+            caption="La garantie constructeur conditionne le prix moyen d'un dépannage. Source : conditions générales constructeurs, retours SAV 2026."
+            withSchema
+            rows={[
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Ecodan PUZ-WM',
+                priceRange: '11 500 – 17 500 €',
+                cop: 4.2,
+                warranty: '7 ans automatique',
+                rating: 4.5,
+                notes: 'Garantie record marché, SAV France',
+                highlight: true,
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma 3 H HT',
+                priceRange: '12 000 – 18 000 €',
+                cop: 4.3,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: '600 techniciens SAV FR, pièces 10 ans',
+              },
+              {
+                brand: 'Hitachi',
+                model: 'Yutaki S',
+                priceRange: '11 000 – 16 500 €',
+                cop: 4.1,
+                warranty: '5 ans',
+                rating: 4.0,
+                notes: 'SAV FR via réseau agréé',
+              },
+              {
+                brand: 'Atlantic',
+                model: 'Alfea Excellia',
+                priceRange: '10 000 – 15 000 €',
+                cop: 4.0,
+                warranty: '2 – 5 ans',
+                rating: 4.0,
+                notes: 'Garantie variable selon installateur',
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma H Hybrid',
+                priceRange: '14 000 – 21 000 €',
+                cop: 4.5,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: 'Hybride = double SAV (PAC + gaz)',
+              },
+            ]}
+          />
+          <SimulateurAideBox
+            serviceKey="pompe-a-chaleur"
+            estimatedSaving={5000}
+            subtitle="MaPrimeRénov' jusqu'à 5 000 € + CEE BAR-TH-171 ~4 000 €"
+          />
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="chauffagiste RGE QualiPAC"
+            cityName=""
+            max={3}
+          />
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
 

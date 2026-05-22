@@ -57,9 +57,13 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -312,7 +316,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('chauffagiste', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -565,6 +570,61 @@ export default function Page() {
             </ul>
           </article>
 
+          <PrixComparatif
+            title="Gamme Daikin 2026 : 4 modèles air-eau RGE QualiPAC"
+            caption="Daikin Altherma 3 — gammes officielles disponibles via le réseau RGE QualiPAC France. Source : daikin.fr 2026, retours installateurs."
+            withSchema
+            rows={[
+              {
+                brand: 'Daikin',
+                model: 'Altherma 3 H HT (haute T° 70 °C)',
+                priceRange: '12 000 – 18 000 €',
+                cop: 4.3,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: 'Idéal radiateurs anciens, fluide R32',
+                highlight: true,
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma 3 R290 (propane)',
+                priceRange: '12 500 – 18 500 €',
+                cop: 4.4,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: 'Fluide naturel PRG 3, futur-proof F-Gas',
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma H Hybrid (PAC + gaz)',
+                priceRange: '14 000 – 21 000 €',
+                cop: 4.5,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: "Seul hybride éligible MaPrimeRénov'",
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma 3 M (monobloc)',
+                priceRange: '11 000 – 16 000 €',
+                cop: 4.2,
+                warranty: '5 ans',
+                rating: 4.0,
+                notes: 'Compact monobloc, pose simplifiée',
+              },
+            ]}
+          />
+          <SimulateurAideBox
+            serviceKey="pompe-a-chaleur"
+            estimatedSaving={5000}
+            subtitle="MaPrimeRénov' jusqu'à 5 000 € + CEE BAR-TH-171 ~4 000 €"
+          />
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="chauffagiste RGE QualiPAC Daikin"
+            cityName=""
+            max={3}
+          />
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
 

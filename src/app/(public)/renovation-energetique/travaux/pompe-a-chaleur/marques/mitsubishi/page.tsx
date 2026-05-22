@@ -58,9 +58,13 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -344,7 +348,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('chauffagiste', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -602,6 +607,61 @@ export default function Page() {
             </ul>
           </article>
 
+          <PrixComparatif
+            title="Gamme Mitsubishi Electric 2026 : 4 modèles air-eau RGE QualiPAC"
+            caption="Mitsubishi Ecodan & Zubadan — gammes disponibles via le réseau RGE QualiPAC France. Source : mitsubishielectric.fr 2026, retours installateurs."
+            withSchema
+            rows={[
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Ecodan PUZ-WM (Inverter R32)',
+                priceRange: '11 500 – 17 500 €',
+                cop: 4.2,
+                warranty: '7 ans automatique',
+                rating: 4.5,
+                notes: 'Acoustique record 33 dB, modèle volume',
+                highlight: true,
+              },
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Zubadan PUZ-HWM (grand froid)',
+                priceRange: '13 500 – 18 500 €',
+                cop: 4.3,
+                warranty: '7 ans automatique',
+                rating: 4.5,
+                notes: "Fonctionne jusqu'à -28 °C sans appoint",
+              },
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Ecodan Hydrobox',
+                priceRange: '11 000 – 16 000 €',
+                cop: 4.2,
+                warranty: '7 ans automatique',
+                rating: 4.5,
+                notes: 'Module hydraulique compact intégré',
+              },
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Ecodan Cylinder (avec ECS)',
+                priceRange: '13 000 – 17 500 €',
+                cop: 4.1,
+                warranty: '7 ans automatique',
+                rating: 4.0,
+                notes: 'Ballon ECS 180-300 L intégré',
+              },
+            ]}
+          />
+          <SimulateurAideBox
+            serviceKey="pompe-a-chaleur"
+            estimatedSaving={5000}
+            subtitle="MaPrimeRénov' jusqu'à 5 000 € + CEE BAR-TH-171 ~4 000 €"
+          />
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="chauffagiste RGE QualiPAC Mitsubishi"
+            cityName=""
+            max={3}
+          />
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
 

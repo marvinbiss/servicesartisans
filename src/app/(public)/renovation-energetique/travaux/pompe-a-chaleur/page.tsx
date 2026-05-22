@@ -49,9 +49,13 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getFinancialProductSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -308,7 +312,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('chauffagiste', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -582,6 +587,70 @@ export default function Page() {
             </p>
           </article>
 
+          <PrixComparatif
+            title="Comparatif PAC 2026 : 5 marques leaders du marché"
+            caption="Sources : sites officiels constructeurs, AFPAC, retours installateurs RGE QualiPAC 2026."
+            withSchema
+            rows={[
+              {
+                brand: 'Daikin',
+                model: 'Altherma 3 H HT',
+                priceRange: '12 000 – 18 000 €',
+                cop: 4.3,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: 'N°1 mondial, classe énergétique A+++',
+                highlight: true,
+              },
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Ecodan / Zubadan',
+                priceRange: '11 500 – 17 500 €',
+                cop: 4.2,
+                warranty: '5 ans (7 ans auto)',
+                rating: 4.5,
+                notes: 'Acoustique record 33 dB, grand froid -28 °C',
+              },
+              {
+                brand: 'Atlantic',
+                model: 'Alfea Excellia',
+                priceRange: '10 000 – 15 000 €',
+                cop: 4.0,
+                warranty: '2 – 5 ans',
+                rating: 4.0,
+                notes: 'Fabrication française, SAV national',
+              },
+              {
+                brand: 'Daikin',
+                model: 'Altherma H Hybrid',
+                priceRange: '14 000 – 21 000 €',
+                cop: 4.5,
+                warranty: '5 ans',
+                rating: 4.5,
+                notes: 'PAC + gaz, seul hybride éligible MPR',
+              },
+              {
+                brand: 'Hitachi',
+                model: 'Yutaki S',
+                priceRange: '11 000 – 16 500 €',
+                cop: 4.1,
+                warranty: '5 ans',
+                rating: 4.0,
+                notes: 'Compact bi-bloc, idéal petites maisons',
+              },
+            ]}
+          />
+          <SimulateurAideBox
+            serviceKey="pompe-a-chaleur"
+            estimatedSaving={5000}
+            subtitle="MaPrimeRénov' jusqu'à 5 000 € + CEE BAR-TH-171 ~4 000 €"
+          />
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="chauffagiste RGE QualiPAC"
+            cityName=""
+            max={3}
+          />
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
 
