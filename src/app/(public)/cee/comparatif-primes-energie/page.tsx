@@ -66,7 +66,13 @@ import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema, getFinancialProductSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCeeGovServiceSchema,
+  getCoupDePouceGovServiceSchema,
+  getFAQSchema,
+  getFinancialProductSchema,
+} from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 
 export const revalidate = 86400
@@ -384,9 +390,20 @@ export default function Page() {
     feesAndCommissionsSpecification:
       'Aucune avance ni frais à charge du bénéficiaire. La prime est versée après dépôt du dossier complet (4-12 sem selon obligé). Cumul avec MaPrimeRénov’, éco-PTZ et TVA 5,5 % autorisé (interdiction double valorisation CEE).',
   })
-  const schemas = [articleSchema, breadcrumbSchema, faqSchema, finProductSchema].filter(
-    (s): s is Record<string, unknown> => s !== null
-  )
+  // GovernmentService — page de comparatif des primes CEE + Coup de pouce 2026.
+  // Émet 2 nodes (CEE classique + Coup de pouce bonifié) avec fragment d'URL
+  // distinct pour @id uniques.
+  const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
+  const coupDePouceGovSchema = getCoupDePouceGovServiceSchema(`${PAGE_URL}#coup-de-pouce`)
+
+  const schemas = [
+    articleSchema,
+    breadcrumbSchema,
+    faqSchema,
+    finProductSchema,
+    ceeGovSchema,
+    coupDePouceGovSchema,
+  ].filter((s): s is Record<string, unknown> => s !== null)
 
   return (
     <>

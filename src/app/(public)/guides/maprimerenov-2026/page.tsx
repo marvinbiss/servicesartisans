@@ -36,9 +36,11 @@ import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import JsonLd from '@/components/JsonLd'
 import {
   getBreadcrumbSchema,
+  getEcoPtzGovServiceSchema,
   getFAQSchema,
   getFinancialProductSchema,
   getLoanOrCreditSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -493,10 +495,25 @@ export default function MaPrimeRenov2026Page() {
     loanTerm: 'P20Y',
   })
 
+  // GovernmentService — guide MPR 2026 + éco-PTZ. Émet 2 dispositifs publics
+  // avec fragment URL distinct (cohabite avec FinancialProduct/LoanOrCredit
+  // qui couvrent l'angle « produit financier » côté Google rich result).
+  const PAGE_URL_MPR = `${SITE_URL}/guides/maprimerenov-2026`
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL_MPR}#maprimerenov`)
+  const ecoPtzGovSchema = getEcoPtzGovServiceSchema(`${PAGE_URL_MPR}#eco-ptz`)
+
   return (
     <>
       <JsonLd
-        data={[breadcrumbSchema, faqSchema, articleSchema, financialProductSchema, ecoPtzSchema]}
+        data={[
+          breadcrumbSchema,
+          faqSchema,
+          articleSchema,
+          financialProductSchema,
+          ecoPtzSchema,
+          mprGovSchema,
+          ecoPtzGovSchema,
+        ]}
       />
 
       <div className="min-h-screen bg-sand-50">

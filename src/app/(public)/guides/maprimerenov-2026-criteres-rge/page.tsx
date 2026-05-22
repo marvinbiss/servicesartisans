@@ -2,7 +2,11 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getFAQSchema,
+  getMaPrimeRenovGovServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
@@ -234,9 +238,12 @@ export default function MaPrimeRenov2026CriteresRgePage() {
 
   const faqSchema = getFAQSchema(faqItems)
 
+  // GovernmentService — guide critères RGE MPR 2026. Émet le node MPR officiel.
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`)
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema, mprGovSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-green-50/60 to-white">
         <div className="max-w-5xl mx-auto px-4 pt-6">

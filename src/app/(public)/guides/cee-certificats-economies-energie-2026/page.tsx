@@ -3,7 +3,12 @@ import Link from 'next/link'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getCeeGovServiceSchema,
+  getCoupDePouceGovServiceSchema,
+  getFAQSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 
 const G_AUTHOR = authors['claire-dubois']
@@ -234,9 +239,16 @@ export default function CEE2026Page() {
 
   const faqSchema = getFAQSchema(faqItems)
 
+  // GovernmentService — guide CEE 2026 + Coup de pouce. Fragment URL distinct
+  // pour @id uniques. Couvre les 2 dispositifs publics centraux de la page.
+  const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
+  const coupDePouceGovSchema = getCoupDePouceGovServiceSchema(`${PAGE_URL}#coup-de-pouce`)
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema]} />
+      <JsonLd
+        data={[breadcrumbSchema, articleSchema, faqSchema, ceeGovSchema, coupDePouceGovSchema]}
+      />
 
       <div className="min-h-screen bg-gradient-to-b from-green-50/60 to-white">
         <div className="max-w-5xl mx-auto px-4 pt-6">

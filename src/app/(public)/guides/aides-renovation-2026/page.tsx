@@ -4,9 +4,12 @@ import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
 import {
+  getCeeGovServiceSchema,
+  getEcoPtzGovServiceSchema,
+  getFAQSchema,
   getFinancialProductSchema,
   getLoanOrCreditSchema,
-  getFAQSchema,
+  getMaPrimeRenovGovServiceSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -268,6 +271,13 @@ export default function AidesRenovation2026Page() {
     loanTerm: 'P20Y',
   })
 
+  // GovernmentService — guide aides 2026. Émet 3 dispositifs publics (MPR/CEE/
+  // éco-PTZ) avec fragment URL distinct. Cohabite avec les FinancialProduct
+  // et LoanOrCredit déjà émis (rich result classique + GS pour LLMs).
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`)
+  const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
+  const ecoPtzGovSchema = getEcoPtzGovServiceSchema(`${PAGE_URL}#eco-ptz`)
+
   return (
     <>
       <JsonLd
@@ -278,6 +288,9 @@ export default function AidesRenovation2026Page() {
           maprimeRenovSchema,
           ceeSchema,
           ecoPtzSchema,
+          mprGovSchema,
+          ceeGovSchema,
+          ecoPtzGovSchema,
         ]}
       />
 

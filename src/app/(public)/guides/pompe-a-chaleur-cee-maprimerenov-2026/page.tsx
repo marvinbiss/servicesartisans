@@ -2,7 +2,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import JsonLd from '@/components/JsonLd'
-import { getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getCeeGovServiceSchema,
+  getCoupDePouceGovServiceSchema,
+  getFAQSchema,
+  getMaPrimeRenovGovServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import Breadcrumb from '@/components/Breadcrumb'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
@@ -194,9 +200,24 @@ export default function PacAidesCumulablesPage() {
 
   const faqSchema = getFAQSchema(faqItems)
 
+  // GovernmentService — guide PAC + CEE + MPR + Coup de pouce. Émet les
+  // 3 dispositifs publics cités, fragment URL distinct pour @id uniques.
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`)
+  const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
+  const coupDePouceGovSchema = getCoupDePouceGovServiceSchema(`${PAGE_URL}#coup-de-pouce`)
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, articleSchema, faqSchema]} />
+      <JsonLd
+        data={[
+          breadcrumbSchema,
+          articleSchema,
+          faqSchema,
+          mprGovSchema,
+          ceeGovSchema,
+          coupDePouceGovSchema,
+        ]}
+      />
 
       <div className="min-h-screen bg-gradient-to-b from-green-50/60 to-white">
         <div className="max-w-5xl mx-auto px-4 pt-6">

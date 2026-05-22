@@ -21,7 +21,13 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getFAQSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCeeGovServiceSchema,
+  getFAQSchema,
+  getMaPrimeRenovGovServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 
 const MPR_CEE_AUTHOR = authors['claire-dubois']
@@ -317,15 +323,19 @@ export default function MaprimeRenovCumulCeePage() {
     ],
   }
 
+  // GovernmentService — page cumul MPR + CEE. Émet les 2 dispositifs cités
+  // avec fragment URL distinct pour @id KG uniques.
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`)
+  const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
+
+  const baseSchemas: Record<string, unknown>[] = faqSchema
+    ? [breadcrumbSchema, articleSchema, faqSchema]
+    : [breadcrumbSchema, articleSchema]
+  const allSchemas: Record<string, unknown>[] = [...baseSchemas, mprGovSchema, ceeGovSchema]
+
   return (
     <>
-      <JsonLd
-        data={
-          faqSchema
-            ? [breadcrumbSchema, articleSchema, faqSchema]
-            : [breadcrumbSchema, articleSchema]
-        }
-      />
+      <JsonLd data={allSchemas} />
 
       <Breadcrumb
         items={[

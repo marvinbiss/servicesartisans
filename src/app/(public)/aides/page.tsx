@@ -31,7 +31,14 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { aidesCatalog } from '@/lib/aides/aides-catalog'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
-import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
+import {
+  getBreadcrumbSchema,
+  getCeeGovServiceSchema,
+  getCoupDePouceGovServiceSchema,
+  getEcoPtzGovServiceSchema,
+  getMaPrimeRenovGovServiceSchema,
+  getReviewedByPersonSchema,
+} from '@/lib/seo/jsonld'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const dynamic = 'force-static'
@@ -162,11 +169,27 @@ export default function AidesHubPage() {
     `Sources : ANAH, ADEME, gouv.fr — révision mensuelle`,
   ]
 
+  /**
+   * GovernmentService — hub aides. Émet 4 nodes pour les 4 dispositifs publics
+   * cités sur le tableau récapitulatif : MPR, CEE, Coup de pouce CEE, éco-PTZ.
+   * Fragment d'URL distinct par dispositif (`#mpr`, `#cee`, `#coup-de-pouce`,
+   * `#eco-ptz`) pour produire des `@id` uniques côté Knowledge Graph et éviter
+   * la collision des 4 GovernmentService sur un seul `@id` partagé.
+   */
+  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${SITE_URL}${PATH}#maprimerenov`)
+  const ceeGovSchema = getCeeGovServiceSchema(`${SITE_URL}${PATH}#cee`)
+  const coupDePouceGovSchema = getCoupDePouceGovServiceSchema(`${SITE_URL}${PATH}#coup-de-pouce`)
+  const ecoPtzGovSchema = getEcoPtzGovServiceSchema(`${SITE_URL}${PATH}#eco-ptz`)
+
   const jsonLdItems: Record<string, unknown>[] = [
     breadcrumbSchema as Record<string, unknown>,
     articleSchema as Record<string, unknown>,
     webPageSchema as Record<string, unknown>,
     itemListSchema as Record<string, unknown>,
+    mprGovSchema as Record<string, unknown>,
+    ceeGovSchema as Record<string, unknown>,
+    coupDePouceGovSchema as Record<string, unknown>,
+    ecoPtzGovSchema as Record<string, unknown>,
   ]
 
   return (
