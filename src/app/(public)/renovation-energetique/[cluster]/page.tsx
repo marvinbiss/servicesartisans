@@ -103,6 +103,11 @@ export default async function ClusterPage({ params }: PageProps) {
     author: c.author?.profileUrl
       ? { '@type': 'Person', name: c.author.name, url: c.author.profileUrl }
       : { '@type': 'Person', name: c.author?.name ?? 'Rédaction ServicesArtisans' },
+    reviewedBy: {
+      '@type': 'Person',
+      name: 'Comité éditorial ServicesArtisans',
+      url: `${SITE_URL}/equipe`,
+    },
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',

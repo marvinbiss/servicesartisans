@@ -10,7 +10,17 @@ import { describe, it, expect } from 'vitest'
 import { mkdtemp, readFile, readdir, stat } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { generate } from '../../scripts/generate-bruno-collection.mjs'
+
+type GenerateOpts = { outDir: string; baseUrl?: string }
+type GenerateFn = (opts: GenerateOpts) => Promise<{ count: number; outDir: string }>
+
+let cachedGenerate: GenerateFn | null = null
+async function getGenerate(): Promise<GenerateFn> {
+  if (cachedGenerate) return cachedGenerate
+  const mod = await import('../../scripts/generate-bruno-collection.mjs')
+  cachedGenerate = (mod as { generate: GenerateFn }).generate
+  return cachedGenerate
+}
 
 async function listAll(dir: string, acc: string[] = []): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true })
@@ -25,7 +35,9 @@ async function listAll(dir: string, acc: string[] = []): Promise<string[]> {
 describe('generate-bruno-collection — end to end', () => {
   it('writes a populated collection to the target directory', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    const result = (await generate({ outDir: out })) as {
+    const result = (await (
+      await getGenerate()
+    )({ outDir: out })) as {
       count: number
       outDir: string
     }
@@ -43,7 +55,9 @@ describe('generate-bruno-collection — end to end', () => {
 
   it('writes bruno.json with the expected metadata', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const text = await readFile(path.join(out, 'bruno.json'), 'utf8')
     const parsed = JSON.parse(text)
     expect(parsed.type).toBe('collection')
@@ -52,30 +66,40 @@ describe('generate-bruno-collection — end to end', () => {
 
   it('Production env points at servicesartisans.fr', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const text = await readFile(path.join(out, 'environments', 'Production.bru'), 'utf8')
     expect(text).toContain('base_url: https://servicesartisans.fr')
   })
 
   it('Local env points at localhost:3099', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const text = await readFile(path.join(out, 'environments', 'Local.bru'), 'utf8')
     expect(text).toContain('base_url: http://localhost:3099')
   })
 
   it('is idempotent — second run leaves the same file set', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const first = (await listAll(out)).sort()
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const second = (await listAll(out)).sort()
     expect(second).toEqual(first)
   })
 
   it('honours a custom baseUrl', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out, baseUrl: 'https://example.test' })
+    await (
+      await getGenerate()
+    )({ outDir: out, baseUrl: 'https://example.test' })
     const all = await listAll(out)
     const someBru = all.find((f) => f.endsWith('.bru') && !f.includes('environments'))
     expect(someBru).toBeDefined()
@@ -85,7 +109,9 @@ describe('generate-bruno-collection — end to end', () => {
 
   it('writes a non-empty .bru file under a tag folder', async () => {
     const out = await mkdtemp(path.join(tmpdir(), 'bruno-test-'))
-    await generate({ outDir: out })
+    await (
+      await getGenerate()
+    )({ outDir: out })
     const all = await listAll(out)
     const someBru = all.find(
       (f) => f.endsWith('.bru') && f.includes(`${path.sep}collection${path.sep}`)
