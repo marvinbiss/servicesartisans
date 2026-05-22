@@ -234,13 +234,21 @@ export const GET = withCronCheckIn(
           // pour sortir le row du pool 'pending' (audit security 04-29).
           if (upErr.code === '23505') {
             stats.collision = (stats.collision ?? 0) + 1
-            await supabase
+            const { error: collisionErr } = await supabase
               .from('providers')
               .update({
                 google_sync_status: 'collision',
                 google_synced_at: new Date().toISOString(),
               })
               .eq('id', p.id)
+            if (collisionErr) {
+              // Re-update failed : row reste 'pending' — stat collision_unflagged
+              // pour visibilité Sentry (row sera retraité au prochain run).
+              stats.collision_unflagged = (stats.collision_unflagged ?? 0) + 1
+              logger.warn(
+                `[google-places-sync] collision flag failed for ${p.id}: ${collisionErr.message}`
+              )
+            }
           } else {
             logger.warn(`[google-places-sync] update failed for ${p.id}: ${upErr.message}`)
           }

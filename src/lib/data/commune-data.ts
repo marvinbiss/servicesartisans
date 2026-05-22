@@ -7,6 +7,7 @@
  */
 
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
+import { logger } from '@/lib/logger'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -245,7 +246,12 @@ export async function getCommunesSitemapHybrid(
   radiusKm: number = 20,
   maxCommunes: number = 30_000
 ): Promise<CommuneSitemapHybridRow[]> {
-  if (IS_BUILD) return []
+  if (IS_BUILD) {
+    // Explicit warn : si NEXT_BUILD_SKIP_DB=1 sans NEXT_PUBLIC_SUPABASE_URL,
+    // sitemap perd ~8K URLs hybrides. Visibilité Sentry pour diff post-build.
+    logger.warn('[commune-data] getCommunesSitemapHybrid skipped (IS_BUILD=true)')
+    return []
+  }
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -253,7 +259,12 @@ export async function getCommunesSitemapHybrid(
       p_radius_km: radiusKm,
       p_max_communes: maxCommunes,
     })
-    if (error || !data) return []
+    if (error || !data) {
+      logger.warn(
+        `[commune-data] get_communes_sitemap_hybrid RPC failed: ${error?.message ?? 'no data'} — fallback to getAllCommuneSlugs`
+      )
+      return []
+    }
     return data as CommuneSitemapHybridRow[]
   } catch {
     return []

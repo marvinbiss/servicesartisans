@@ -2720,7 +2720,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }))
     }
     // Fallback pre-mig 527 : garde le comportement vague γ.
+    // Log explicite : sitemap shrink ~8K URLs sans la RPC hybride → visibilité
+    // Sentry pour distinguer "DB blip" (transient) vs "mig non appliquée"
+    // (chronique). Sans ce log, le fallback dégrade silencieusement le crawl-budget.
     const slugs = await getAllCommuneSlugs()
+    const { logger } = await import('@/lib/logger')
+    logger.warn(
+      `[sitemap] communes-cities-${batchIndex} : hybrid RPC empty, fallback to getAllCommuneSlugs (${slugs.length} slugs)`
+    )
     const start = batchIndex * BATCH
     const slice = slugs.slice(start, start + BATCH)
     return slice.map((slug) => ({
