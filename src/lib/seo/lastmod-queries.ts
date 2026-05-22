@@ -724,51 +724,71 @@ export async function getQualifiedCeeCombos(
   const supabase = safeAdminClient()
   if (!supabase || operationCodes.length === 0) return null
 
-  let SERVICE_TO_SPECIALTIES: Record<string, string[]> = {}
+  // ── Qualifications-aware matching (port du fix `c45e04f42` côté CEE) ──
+  // Avant : on indexait providers par `specialty` NAF strict puis on
+  // mappait `op.services_slugs` → `SERVICE_TO_SPECIALTIES[slug]` (ex.
+  // 'pompe-a-chaleur' → ['pompe-a-chaleur']). Mais en DB la grande
+  // majorité des PAC RGE ont `specialty='chauffagiste'` ou
+  // `'climaticien'` avec une qualif QualiPAC dans `rge_qualifications[]`.
+  // Audit live 2026-05-22 : 879 URLs émises au lieu de ~22 000 attendues
+  // (le filtre rejetait 96% des combos qualifiés).
+  //
+  // Après : on réutilise `getRgeServicesFromQualifications` (même fonction
+  // qui a remonté `getQualifiedRgeCombos` de 1→8 217 URLs le 2026-04-30)
+  // pour projeter chaque provider RGE vers ses services RGE (categories
+  // qualifs + specialty NAF directe). On intersecte ensuite avec
+  // `operation.services_slugs` pour chaque op CEE.
   let getCeeOperationByCode: (code: string) => Promise<{ services_slugs: string[] } | null>
+  let RGE_ALLOWED_SERVICES: readonly string[] = []
+  let getRgeServicesFromQualifications: (
+    q: unknown,
+    s: string | null | undefined,
+    a: readonly string[]
+  ) => string[] = () => []
   try {
-    const supaMod = await import('@/lib/supabase')
-    SERVICE_TO_SPECIALTIES = supaMod.SERVICE_TO_SPECIALTIES
     const catMod = await import('@/lib/cee/catalogue')
     getCeeOperationByCode = catMod.getCeeOperationByCode as typeof getCeeOperationByCode
+    const rgeMod = await import('@/lib/rge/service-city-listings')
+    RGE_ALLOWED_SERVICES = rgeMod.RGE_ALLOWED_SERVICES
+    const matcherMod = await import('@/lib/rge/qualification-matcher')
+    getRgeServicesFromQualifications =
+      matcherMod.getRgeServicesFromQualifications as typeof getRgeServicesFromQualifications
   } catch {
     return null
   }
 
-  // Resolve each operation's candidate specialties once (same logic as
-  // lib/cee/listings.ts::resolveSpecialtiesForOperation).
-  const opToSpecialties = new Map<string, Set<string>>()
+  // Pour chaque op CEE : Set des services RGE éligibles. Source = DB CEE
+  // (`operation.services_slugs`, migration 383), intersecté avec
+  // RGE_ALLOWED_SERVICES pour rester découplé du sitemap RGE.
+  const opToServices = new Map<string, Set<string>>()
   for (const code of operationCodes) {
     try {
       const op = await getCeeOperationByCode(code)
       if (!op) continue
-      const set = new Set<string>()
+      const allowed = new Set<string>()
       for (const slug of op.services_slugs || []) {
-        const mapped = SERVICE_TO_SPECIALTIES[slug]
-        if (mapped && mapped.length > 0) {
-          for (const s of mapped) set.add(normalizeKey(s))
-        } else {
-          set.add(normalizeKey(slug))
+        if ((RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)) {
+          allowed.add(slug)
         }
       }
-      if (set.size > 0) opToSpecialties.set(code, set)
+      if (allowed.size > 0) opToServices.set(code, allowed)
     } catch {
       // Skip this op on error; fail-open at the op level rather than nuking all.
       continue
     }
   }
 
-  if (opToSpecialties.size === 0) return null
+  if (opToServices.size === 0) return null
 
-  // Reverse map: specialty → [op codes] for O(1) lookup during the scan.
-  const specialtyToOps = new Map<string, string[]>()
-  for (const [code, specSet] of Array.from(opToSpecialties.entries())) {
-    for (const spec of Array.from(specSet)) {
-      const existing = specialtyToOps.get(spec)
+  // Reverse index : serviceSlug → [opCodes] pour O(1) lookup.
+  const serviceToOps = new Map<string, string[]>()
+  for (const [code, services] of Array.from(opToServices.entries())) {
+    for (const svc of Array.from(services)) {
+      const existing = serviceToOps.get(svc)
       if (existing) {
         if (!existing.includes(code)) existing.push(code)
       } else {
-        specialtyToOps.set(spec, [code])
+        serviceToOps.set(svc, [code])
       }
     }
   }
@@ -787,12 +807,15 @@ export async function getQualifiedCeeCombos(
     const maxRows = 600_000
 
     while (from < maxRows) {
+      // Même query que `getQualifiedRgeCombos` — un RGE actif a forcément
+      // `noindex=false` (invariant trigger mig 460 + 471). SELECT inclut
+      // `rge_qualifications` pour alimenter le matcher.
       const { data, error } = await supabase
         .from('providers')
-        .select('specialty, address_city, updated_at')
+        .select('specialty, address_city, rge_qualifications, updated_at')
         .eq('is_active', true)
         .eq('noindex', false)
-        .not('specialty', 'is', null)
+        .not('rge_qualifications', 'is', null)
         .not('address_city', 'is', null)
         .gte('rge_valid_until', today)
         .range(from, from + pageSize - 1)
@@ -803,11 +826,21 @@ export async function getQualifiedCeeCombos(
       for (const row of data) {
         const specialty = row.specialty as string | null
         const city = row.address_city as string | null
+        const qualifs = row.rge_qualifications as unknown
         const updatedAt = toDateStr(row.updated_at as string | null | undefined)
-        if (!specialty || !city) continue
+        if (!city) continue
 
-        const ops = specialtyToOps.get(normalizeKey(specialty))
-        if (!ops || ops.length === 0) continue
+        const services = getRgeServicesFromQualifications(qualifs, specialty, RGE_ALLOWED_SERVICES)
+        if (services.length === 0) continue
+
+        // Collecter toutes les opérations CEE adressables pour ce provider.
+        const matchingOps = new Set<string>()
+        for (const svc of services) {
+          const ops = serviceToOps.get(svc)
+          if (!ops) continue
+          for (const op of ops) matchingOps.add(op)
+        }
+        if (matchingOps.size === 0) continue
 
         const cityKey = normalizeKey(city)
           .replace(/\s+\d+\s*(er|e|eme|ieme)?\s*(arr|arrondissement)?\.?\s*$/, '')
@@ -815,7 +848,7 @@ export async function getQualifiedCeeCombos(
         const villeSlug = cityToSlug.get(cityKey)
         if (!villeSlug) continue
 
-        for (const op of ops) {
+        for (const op of Array.from(matchingOps)) {
           const key = `${op}::${villeSlug}`
           combos.add(key)
           if (updatedAt) {
