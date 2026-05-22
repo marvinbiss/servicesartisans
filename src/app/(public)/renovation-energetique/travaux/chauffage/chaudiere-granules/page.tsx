@@ -349,6 +349,16 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Chaudière granulés prix 2026',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-granules/prix',
+    description: 'Grille 15-30 kW + ROI vs fioul/gaz + 5 marques',
+  },
+  {
+    label: 'Installation chaudière granulés 2026',
+    href: '/renovation-energetique/travaux/chauffage/chaudiere-granules/installation',
+    description: '10 étapes + conduit T400-P1 + désembouage + RGE',
+  },
+  {
     label: 'Chaudière à bois 2026',
     href: '/renovation-energetique/travaux/chauffage/chaudiere-bois',
     description: 'Biomasse au sens large (bûches, granulés, mixte)',

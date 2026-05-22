@@ -233,6 +233,11 @@ const relatedPages = [
     description: 'DPE + audit + thermographie comparés',
   },
   {
+    label: 'DPE prix 2026 : 100-250 € + pack DDT',
+    href: '/renovation-energetique/diagnostic/dpe/prix',
+    description: 'Grille par surface + comparaison pack DDT',
+  },
+  {
     label: 'DPE location : obligations bailleur 2026',
     href: '/renovation-energetique/diagnostic/dpe/location',
     description: 'Calendrier interdiction G 2025 / F 2028 / E 2034',

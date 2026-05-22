@@ -201,6 +201,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Audit énergétique prix 2026 + aide ANAH 500 €',
+    href: '/renovation-energetique/diagnostic/audit-energetique/prix',
+    description: 'Grille par surface + comparatif DPE + RGE Audit Énergétique',
+  },
+  {
     label: 'Audit énergétique : prix, aides détaillées',
     href: '/guides/audit-energetique-prix-aides',
     description: 'Grille de prix par surface + aides MaPrimeRénov’ + processus complet',

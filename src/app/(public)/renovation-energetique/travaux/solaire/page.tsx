@@ -295,6 +295,16 @@ const relatedPages = [
     description: 'Cluster PAC : air-eau, air-air, géothermie',
   },
   {
+    label: 'Panneau solaire prix 2026',
+    href: '/renovation-energetique/travaux/solaire/prix',
+    description: 'Grille 3-9 kWc + prime CRE + ROI 25 ans',
+  },
+  {
+    label: 'Installation panneau solaire 2026',
+    href: '/renovation-energetique/travaux/solaire/installation',
+    description: 'Étapes + démarches Enedis / CRE / EDF OA',
+  },
+  {
     label: 'Rendement panneau solaire (technos + facteurs)',
     href: '/renovation-energetique/travaux/solaire/rendement',
     description: 'Mono 18-22 %, poly 14-17 %, dégradation 25 ans, calcul ROI',

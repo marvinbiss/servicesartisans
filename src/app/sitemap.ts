@@ -489,6 +489,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.75,
       },
+      // Sprint pSEO 2026-05-22 — sub-page commerciale audit énergétique prix.
+      // KW Ahrefs gap CSV 2026-05-04 :
+      //   - "audit énergétique prix" ~1100 KD 5 pivot ⭐ + "audit énergétique tarif" 1000 KD 2
+      //   - Famille cumulée ~3 300 vol/mo + focus aide ANAH 500 €.
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/audit-energetique/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
       // Sprint S — 2026-05-03 — Labels RGE Qualibat + QualiPAC.
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
       //   - "qualibat" → 9 344 vol, KD 2, CPC $0,02 ⭐⭐⭐ MASSIVE EASY WIN
@@ -608,6 +618,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.7,
+      },
+      // Sprint pSEO 2026-05-22 — sub-pages commerciales isolation (cluster isolation).
+      // KW Ahrefs gap CSV 2026-05-04 :
+      //   - "prix isolation extérieur" 1900 KD 3 + variants ~7K vol/mo (prix)
+      //   - "installation isolation" ~320 + "isolation par l'extérieur" 12K head (installation)
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/isolation/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
       },
       // Vague A — 2026-05-04 — Cluster aides (hub + MPR pivot + 3 sub MPR + CEE + éco-PTZ + Coup de pouce).
       // KW pivots Ahrefs API live (snapshot 2026-05-03) :
@@ -986,6 +1012,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.9,
       },
+      // Sprint pSEO 2026-05-22 — sub-pages commerciales chaudière granulés (cluster biomasse).
+      // KW Ahrefs gap CSV 2026-05-04 :
+      //   - "chaudière granulés prix" 1100 KD 4 + variants ~9K vol/mo (prix)
+      //   - "installation chaudière granulés" ~220 + biomasse 2800 head (installation)
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-granules/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/chauffage/chaudiere-granules/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       {
         // Levier M 2026-05-06 — sub-page tubage cheminée / fumisterie (~1 600 vol/mo cumulé).
         // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
@@ -1189,6 +1231,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.92,
+      },
+      // Sprint pSEO 2026-05-22 — sub-pages commerciales solaire (cluster solaire_pv).
+      // KW Ahrefs gap CSV 2026-05-04 :
+      //   - "panneau solaire prix" 6300 KD 25 pivot ⭐ + variants ~22K vol/mo (prix)
+      //   - "installation panneau solaire" ~1500 + variants ~2.7K (installation)
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/solaire/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
       },
       // P0 ABSENT Bloc 1 — rendement panneau solaire 3 200 vol KD 6 (#10 du top P0).
       // Famille cumulée ~5 000 vol/mo. Anti-cannib : hub /solaire (prix), /autoconsommation (mode),
@@ -1454,6 +1512,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_DATE,
         changeFrequency: 'monthly',
         priority: 0.95,
+      },
+      // Sprint pSEO 2026-05-22 — sub-page commerciale DPE prix.
+      // KW Ahrefs gap CSV 2026-05-04 :
+      //   - "prix dpe" 2700 KD 6 pivot ⭐ + "tarif dpe" + "prix dpe maison" variants
+      //   - Famille cumulée ~6 900 vol/mo (head + longues traînes prix).
+      {
+        url: `${SITE_URL}/renovation-energetique/diagnostic/dpe/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.9,
       },
       {
         // Levier F 2026-05-06 — sub-page DPE location (~9 700 vol/mo cumulé).

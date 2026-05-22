@@ -241,6 +241,16 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Prix isolation 2026 (ITE, ITI, combles au m²)',
+    href: '/renovation-energetique/travaux/isolation/prix',
+    description: 'Grille 7 techniques + aides + 4 cas types budget',
+  },
+  {
+    label: 'Installation isolation 2026 (étapes + RGE)',
+    href: '/renovation-energetique/travaux/isolation/installation',
+    description: '10 étapes + DTU 45.3 / 31.2 + checklist devis',
+  },
+  {
     label: 'Isolation des combles : prix et techniques',
     href: '/renovation-energetique/travaux/isolation/combles',
     description: 'Soufflage, déroulé, sarking — combles perdus et aménagés',
