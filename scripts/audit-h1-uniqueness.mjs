@@ -83,7 +83,7 @@ function stripComments(src) {
  * Count `<h1>` opening tags dans `src`. Simple count.
  */
 function countH1(src) {
-  const matches = stripComments(src).match(/<(?:h1|PageHeroH1)\b/g)
+  const matches = stripComments(src).match(/<(?:h1|PageHeroH1|LandingHero)\b/g)
   return matches ? matches.length : 0
 }
 
@@ -109,7 +109,7 @@ function countH1BranchAware(src) {
     const start = returnIdxs[i]
     const end = returnIdxs[i + 1] ?? cleaned.length
     const segment = cleaned.slice(start, end)
-    const count = (segment.match(/<(?:h1|PageHeroH1)\b/g) || []).length
+    const count = (segment.match(/<(?:h1|PageHeroH1|LandingHero)\b/g) || []).length
     if (count > maxH1) maxH1 = count
   }
   return maxH1
@@ -125,12 +125,20 @@ function countH1BranchAware(src) {
  * la complexité. Les layouts communs (ex: hero partagé) ne sont pas
  * analysés ; à surveiller manuellement.
  */
+// Composants H1-canonical traités au niveau JSX dans `countH1BranchAware`
+// (déjà comptés via `<PageHeroH1>` / `<LandingHero>`). Ne PAS additionner
+// leur contenu interne sinon double-comptage (le composant N'AJOUTE pas
+// un H1 — il EST le H1).
+const H1_CANONICAL_COMPONENTS = new Set(['PageHeroH1', 'LandingHero'])
+
 function resolveLocalH1(pageFile, src) {
   const pageDir = dirname(pageFile)
   let extraH1 = 0
-  const importRe = /import\s+\w+\s+from\s+['"](\.\/[^'"]+|@\/[^'"]+)['"]/g
+  const importRe = /import\s+(\w+)\s+from\s+['"](\.\/[^'"]+|@\/[^'"]+)['"]/g
   for (const m of src.matchAll(importRe)) {
-    const spec = m[1]
+    const name = m[1]
+    if (H1_CANONICAL_COMPONENTS.has(name)) continue
+    const spec = m[2]
     const candidates = []
     if (spec.startsWith('./')) {
       const base = join(pageDir, spec.replace(/^\.\//, ''))
@@ -186,7 +194,9 @@ for (const f of pages) {
       const branchesWithClient = returnBlocks.filter((b) =>
         /<[A-Z]\w*(?:Client|PageClient)\b/.test(b[0])
       )
-      const branchesWithInlineH1 = returnBlocks.filter((b) => /<(?:h1|PageHeroH1)\b/.test(b[0]))
+      const branchesWithInlineH1 = returnBlocks.filter((b) =>
+        /<(?:h1|PageHeroH1|LandingHero)\b/.test(b[0])
+      )
       // Si les deux branches sont disjointes (pas de chevauchement H1 + Client),
       // le total runtime = 1 par branche. On accepte.
       const overlap = branchesWithClient.filter((b) => branchesWithInlineH1.includes(b))
