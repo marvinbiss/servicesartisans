@@ -66,9 +66,10 @@ describe('SocialProofBadge', () => {
     const { container } = render(<SocialProofBadge average={3.6} count={20} />)
     const stars = container.querySelectorAll('svg')
     expect(stars.length).toBe(5)
-    // First 4 should be filled-amber (rounded(3.6) = 4), last one not.
+    // First 4 should be filled-secondary (rounded(3.6) = 4), last one not.
+    // Palette : `secondary-400` (honey gold SA tokens, cf. LandingHero star pattern).
     const filledCount = Array.from(stars).filter((s) =>
-      s.classList.contains('fill-amber-400')
+      s.classList.contains('fill-secondary-400')
     ).length
     expect(filledCount).toBe(4)
   })

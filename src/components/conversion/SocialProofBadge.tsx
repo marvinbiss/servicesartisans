@@ -56,7 +56,7 @@ export function SocialProofBadge({
             key={i}
             size={iconSize}
             className={
-              i < rounded ? 'fill-amber-400 text-amber-400' : 'fill-none text-charcoal-300'
+              i < rounded ? 'fill-secondary-400 text-secondary-400' : 'fill-none text-charcoal-300'
             }
           />
         ))}

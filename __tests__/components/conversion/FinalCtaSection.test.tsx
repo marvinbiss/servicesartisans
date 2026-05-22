@@ -103,6 +103,10 @@ describe('FinalCtaSection', () => {
   })
 
   it('accent variants appliquent les bonnes classes (blue / green / amber)', () => {
+    // Palette aliases SA :
+    //   blue  → primary  (terra / maple)
+    //   green → accent   (forest)
+    //   amber → secondary (honey gold)
     const { container: cBlue } = render(
       <FinalCtaSection
         heading="t"
@@ -111,11 +115,9 @@ describe('FinalCtaSection', () => {
         accent="blue"
       />
     )
-    expect(cBlue.querySelector('section')?.className).toMatch(/bg-accent-50/)
-    expect(cBlue.querySelector('a[data-intent="final-cta"]')?.className).toMatch(/bg-accent-600/)
+    expect(cBlue.querySelector('section')?.className).toMatch(/bg-primary-50/)
+    expect(cBlue.querySelector('a[data-intent="final-cta"]')?.className).toMatch(/bg-primary-600/)
 
-    // Note : "green" est aliasé sur le palette `accent` (forest green = brand color),
-    // l'aliasing évite tout emerald-* générique côté design tokens.
     const { container: cGreen } = render(
       <FinalCtaSection
         heading="t"
@@ -135,13 +137,15 @@ describe('FinalCtaSection', () => {
         accent="amber"
       />
     )
-    expect(cAmber.querySelector('section')?.className).toMatch(/bg-amber-50/)
-    expect(cAmber.querySelector('a[data-intent="final-cta"]')?.className).toMatch(/bg-amber-600/)
+    expect(cAmber.querySelector('section')?.className).toMatch(/bg-secondary-50/)
+    expect(cAmber.querySelector('a[data-intent="final-cta"]')?.className).toMatch(
+      /bg-secondary-600/
+    )
 
-    // default = blue
+    // default = blue → primary
     const { container: cDefault } = render(
       <FinalCtaSection heading="t" description="d" primaryCta={{ label: 'P', href: '/p' }} />
     )
-    expect(cDefault.querySelector('section')?.className).toMatch(/bg-accent-50/)
+    expect(cDefault.querySelector('section')?.className).toMatch(/bg-primary-50/)
   })
 })
