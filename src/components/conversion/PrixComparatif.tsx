@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react'
+import { safeJsonStringify } from '@/lib/seo/safe-json'
 
 /**
  * PrixComparatif — tableau comparatif marques/configs intent achat.
@@ -109,7 +110,7 @@ export default function PrixComparatif({
       {schema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(schema) }}
         />
       )}
       <table className="w-full text-sm">

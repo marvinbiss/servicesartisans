@@ -304,6 +304,16 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Prix ballon thermodynamique 2026 — par capacité, marques, ROI',
+    href: '/renovation-energetique/travaux/ballon-thermodynamique/prix',
+    description: '2 200-4 800 € posé · ROI 6-9 ans · MPR + CEE',
+  },
+  {
+    label: 'Installation ballon thermodynamique — guide étapes 2026',
+    href: '/renovation-energetique/travaux/ballon-thermodynamique/installation',
+    description: 'Étapes pose, conditions techniques, prix main d’œuvre',
+  },
+  {
     label: 'Chauffe-eau thermodynamique 2026 — système complet',
     href: '/renovation-energetique/travaux/chauffage/chauffe-eau-thermodynamique',
     description: 'COP 3-3,5, ROI 4-6 ans, comparatif vs ballon élec',

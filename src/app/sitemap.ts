@@ -880,6 +880,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         changeFrequency: 'monthly',
         priority: 0.92,
       },
+      // Sprint 3 strat 20/80 — sub-pages commerciales ballon thermo (cluster ballon_thermo).
+      // KW : "ballon thermodynamique prix" 700 KD 0 + "installation ballon thermodynamique" ~300 KD 0.
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/ballon-thermodynamique/prix`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.88,
+      },
+      {
+        url: `${SITE_URL}/renovation-energetique/travaux/ballon-thermodynamique/installation`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      },
       // Levier K 2026-05-06 — head term chaudière gaz (~20 100 vol/mo cumulé).
       // KW pivot Ahrefs gap CSV (snapshot 2026-05-04) :
       //   - "chaudiere gaz"            12 000 vol KD 1 ⭐⭐⭐ pivot rang #6
