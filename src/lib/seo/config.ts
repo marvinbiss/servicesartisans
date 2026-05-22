@@ -1,8 +1,11 @@
 import { getDeptPreposition, getRegionPreposition } from '@/lib/geo-strings'
+import { sanitizeUrl } from '@/lib/utils/sanitize-url'
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr')
-  .trim()
-  .replace(/\/+$/, '')
+// Defensive : `NEXT_PUBLIC_SITE_URL` had a literal `\n` baked into Vercel env
+// (2026-05-22 incident), cascading into JSON-LD `@id` on 45 677 RGE pages.
+// `sanitizeUrl` strips ALL whitespace + control chars + trailing slashes, so
+// any env pollution cannot leak into canonicals, OG URLs, sitemap entries.
+export const SITE_URL = sanitizeUrl(process.env.NEXT_PUBLIC_SITE_URL)
 export const SITE_NAME = 'ServicesArtisans'
 export const PHONE_NUMBER = '07 56 87 27 87'
 export const PHONE_TEL = 'tel:+33756872787'

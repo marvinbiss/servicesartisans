@@ -36,6 +36,8 @@
  *     présents (le composant skip ce qui est null).
  *   - DEV / TEST / CI → skip total.
  */
+import { sanitizeUrl } from '@/lib/utils/sanitize-url'
+
 type LegalCheck = { var: string; validate: (v: string) => boolean; hint: string }
 
 // F-quater : tolérance whitespace pour le SIRET. Le format français standard
@@ -117,7 +119,11 @@ export const companyIdentity = {
   tagline: 'Le premier annuaire 100% artisans RGE certifiés',
   description:
     "Le premier annuaire 100% artisans RGE certifiés en France. 49 000 professionnels qualifiés (Qualibat, Qualifelec, QualiPAC) pour vos travaux de rénovation énergétique éligibles MaPrimeRénov' et CEE. SIREN vérifié, devis gratuits.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
+  // Defensive sanitization : strip `\n` / whitespace / control chars + trailing
+  // slash. Root cause incident 2026-05-22 — literal `\n` in Vercel env baked
+  // into JSON-LD `@id` of 45 677 RGE pages. `sanitizeUrl` falls back to the
+  // canonical apex if the env is unusable.
+  url: sanitizeUrl(process.env.NEXT_PUBLIC_SITE_URL),
 
   // Legal identity (Level 1 — from env vars, null until company registration)
   legalName: process.env.COMPANY_LEGAL_NAME || null,
