@@ -1,0 +1,92 @@
+<!--
+  Indice Rénovation Énergétique 2026 — ServicesArtisans
+  Trois snippets prêts à coller. Licence Creative Commons BY 4.0.
+  Crédit obligatoire : "Source : Indice Rénovation 2026 — ServicesArtisans"
+  + lien retour vers https://servicesartisans.fr/barometre/renovation-energetique-2026
+-->
+
+<!-- =========================================================
+     Version 1 — HTML pur (iframe)
+     À coller dans n'importe quel CMS acceptant le HTML brut.
+     ========================================================= -->
+<figure class="sa-barometre-embed">
+  <iframe
+    src="https://servicesartisans.fr/api/v1/barometre/renovation/embed.html"
+    width="100%"
+    height="640"
+    style="border:0; max-width:100%;"
+    loading="lazy"
+    title="Indice Rénovation Énergétique 2026 — ServicesArtisans"
+  ></iframe>
+  <figcaption>
+    Source : <a
+      href="https://servicesartisans.fr/barometre/renovation-energetique-2026"
+      rel="noopener"
+      target="_blank"
+    >Indice Rénovation 2026 — ServicesArtisans</a>.
+    Données agrégées sous licence
+    <a
+      href="https://creativecommons.org/licenses/by/4.0/deed.fr"
+      rel="noopener license"
+      target="_blank"
+    >CC-BY 4.0</a>.
+    Sources : ADEME (Observatoire DPE), ANAH (MaPrimeRénov'), data.gouv (Registre RGE).
+  </figcaption>
+</figure>
+
+<!-- =========================================================
+     Version 2 — Markdown
+     Pour rédactions utilisant un éditeur Markdown (Ghost, Hugo, etc.).
+     Coller tel quel après avoir retiré les balises <pre><code>.
+     ========================================================= -->
+<pre><code class="language-markdown">
+&lt;iframe src="https://servicesartisans.fr/api/v1/barometre/renovation/embed.html"
+        width="100%" height="640" style="border:0"
+        loading="lazy"
+        title="Indice Rénovation Énergétique 2026 — ServicesArtisans"&gt;&lt;/iframe&gt;
+
+*Source : [Indice Rénovation 2026 — ServicesArtisans](https://servicesartisans.fr/barometre/renovation-energetique-2026).
+Données sous licence [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr).
+Sources : ADEME (Observatoire DPE), ANAH (MaPrimeRénov'), data.gouv (Registre RGE).*
+</code></pre>
+
+<!-- =========================================================
+     Version 3 — WordPress shortcode
+     À placer dans functions.php du thème ou via plugin Code Snippets.
+     Usage dans un article : [sa_barometre_renovation_2026]
+     ========================================================= -->
+<pre><code class="language-php">
+&lt;?php
+/**
+ * Shortcode WordPress pour intégrer l'Indice Rénovation 2026.
+ * Usage dans un article ou une page : [sa_barometre_renovation_2026]
+ * Licence du contenu agrégé : CC-BY 4.0. Crédit obligatoire.
+ */
+add_shortcode( 'sa_barometre_renovation_2026', function() {
+    $src        = 'https://servicesartisans.fr/api/v1/barometre/renovation/embed.html';
+    $source_url = 'https://servicesartisans.fr/barometre/renovation-energetique-2026';
+    $license    = 'https://creativecommons.org/licenses/by/4.0/deed.fr';
+
+    return sprintf(
+        '&lt;figure class="sa-barometre-embed"&gt;
+            &lt;iframe src="%1$s" width="100%%" height="640" style="border:0;max-width:100%%;" loading="lazy" title="Indice Rénovation Énergétique 2026 — ServicesArtisans"&gt;&lt;/iframe&gt;
+            &lt;figcaption&gt;Source : &lt;a href="%2$s" rel="noopener" target="_blank"&gt;Indice Rénovation 2026 — ServicesArtisans&lt;/a&gt;. Données sous licence &lt;a href="%3$s" rel="noopener license" target="_blank"&gt;CC-BY 4.0&lt;/a&gt;. Sources : ADEME, ANAH, data.gouv.&lt;/figcaption&gt;
+        &lt;/figure&gt;',
+        esc_url( $src ),
+        esc_url( $source_url ),
+        esc_url( $license )
+    );
+} );
+?&gt;
+</code></pre>
+
+<!--
+  Rappel licence
+  --------------
+  - Licence du baromètre agrégé : CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/deed.fr)
+  - Crédit obligatoire à afficher : "Source : Indice Rénovation 2026 — ServicesArtisans"
+  - Lien retour obligatoire : https://servicesartisans.fr/barometre/renovation-energetique-2026
+  - Sources sous-jacentes citées : ADEME (Observatoire DPE), ANAH (MaPrimeRénov'),
+    data.gouv (Registre RGE — Etalab 2.0).
+  - Pour toute question d'usage commercial dérivé, contacter presse@servicesartisans.fr.
+-->
