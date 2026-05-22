@@ -14,6 +14,10 @@
  *      Pillar prix ballon thermodynamique (Sprint 20/80 commercial KD≤5).
  *   4. /renovation-energetique/travaux/ballon-thermodynamique/installation
  *      Pillar installation, jumeau du précédent dans le funnel devis.
+ *   5-13. /renovation-energetique/travaux/vmc + 8 sub-pages
+ *      Sprint 1 strat 20/80 — cluster VMC (102K vol top 200 + 26K long-tail
+ *      KD 0-2). Funnel commercial complet câblé (SimulateurAideBox +
+ *      LocalProviderShowcase + PrixComparatif sur 6 pages commercial).
  *
  * Pourquoi un script et pas /api/indexnow ?
  *   - One-shot opérationnel post-déploiement (cf. indexnow-sprint-v-canonical-rge).
@@ -37,10 +41,22 @@ const SITE_URL = 'https://servicesartisans.fr'
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/IndexNow'
 
 const SPRINT5_URLS: readonly string[] = [
+  // Sprint 5 — baromètre Indice Rénovation
   `${SITE_URL}/barometre/renovation-energetique-2026`,
   `${SITE_URL}/api/v1/barometre/renovation/embed.html`,
+  // Sprint 3 — Ballon thermodynamique sub-pages
   `${SITE_URL}/renovation-energetique/travaux/ballon-thermodynamique/prix`,
   `${SITE_URL}/renovation-energetique/travaux/ballon-thermodynamique/installation`,
+  // Sprint 1 — VMC cluster (9 pages : hub + 8 sub)
+  `${SITE_URL}/renovation-energetique/travaux/vmc`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/installation`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/double-flux-thermodynamique`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/hygroreglable`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/hygroreglable/type-b`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/simple-flux`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/branchement-pose`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/salle-de-bain`,
+  `${SITE_URL}/renovation-energetique/travaux/vmc/entretien`,
 ]
 
 const DRY_RUN = process.argv.includes('--dry-run')

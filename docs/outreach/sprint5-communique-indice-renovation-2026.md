@@ -10,7 +10,7 @@ ServicesArtisans publie l'Indice Rénovation 2026, baromètre public sous licenc
 
 ## Sous-titre
 
-Un croisement inédit de trois sources officielles — ADEME, ANAH, data.gouv — pour situer la rénovation énergétique en France région par région.
+Un croisement de trois sources officielles — ADEME, ANAH, data.gouv — pour situer la rénovation énergétique en France région par région.
 
 ## Chapeau
 
