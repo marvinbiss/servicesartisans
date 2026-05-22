@@ -66,6 +66,7 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 
 export const revalidate = 86400
 
@@ -600,6 +601,13 @@ export default function DpeClasseGPage() {
               </Link>
             </div>
           </section>
+
+          <SimulateurAideBox
+            serviceKey="isolation"
+            estimatedSaving={11000}
+            title="Sortir de classe F/G : estimez vos aides en 3 min"
+            subtitle="MaPrimeRénov' Rénovation d'ampleur jusqu'à 70 000 € + CEE bonus + Éco-PTZ"
+          />
 
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />

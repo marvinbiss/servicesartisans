@@ -39,6 +39,7 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 
 export const revalidate = 86400
 
@@ -396,6 +397,13 @@ export default function DpeClasseEPage() {
               </Link>
             </div>
           </section>
+
+          <SimulateurAideBox
+            serviceKey="isolation"
+            estimatedSaving={6500}
+            title="Améliorer mon DPE : aides 2026"
+            subtitle="MaPrimeRénov' par geste + CEE + Éco-PTZ — gain 1-2 classes"
+          />
 
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />

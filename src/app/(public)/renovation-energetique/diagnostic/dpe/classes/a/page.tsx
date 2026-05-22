@@ -37,6 +37,7 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 
 export const revalidate = 86400
 
@@ -311,6 +312,13 @@ export default function DpeClasseAPage() {
               <ArrowRight className="w-4 h-4" aria-hidden />
             </Link>
           </section>
+
+          <SimulateurAideBox
+            serviceKey="renovation-energetique"
+            estimatedSaving={3000}
+            title="Maintenir mon DPE A/B/C : aides entretien"
+            subtitle="Éco-gestes + remplacement équipements vieillissants — MaPrimeRénov' par geste"
+          />
 
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />
