@@ -25,7 +25,6 @@ import {
   SITEMAP_CITY_COUNT,
   SITEMAP_CITY_COUNT_TIER2,
   SITEMAP_CEE_CITY_COUNT,
-  SITEMAP_SERVICE_CITIES_COUNT,
 } from '@/lib/seo/sitemap-config'
 import { RGE_ALLOWED_SERVICES } from '@/lib/rge/service-city-listings'
 import { CEE_OPERATIONS_WITH_GUIDE } from '@/lib/cee/operation-guides-content'
@@ -88,17 +87,23 @@ function normalizeName(s: string): string {
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
  */
 export async function generateSitemaps() {
-  // Tiered sitemap strategy — ~742K URLs total.
-  // Tier 1 (service, devis, tarifs, urgence × ALL cities): contenu le plus riche.
-  // Tier 2 (tarifs-tâche, avis, problèmes × top 500 cities): plus template-like.
+  // Tiered sitemap strategy — ~83K URLs post-pivot RGE (cible recalibrée 2026-05-22).
+  // Tier 1 (service, urgence × villes filtrées RGE-compatibles).
+  // Tier 2 (avis, problèmes × top 500 cities): plus template-like.
   // Quartier-level sitemaps removed (too granular, thin content).
-  // Use SITEMAP_SERVICE_CITIES_COUNT (= SITEMAP_CITY_COUNT + GSC priority extras)
-  // pour matcher la longueur réelle de `mergedCities` ci-dessous, sinon les
-  // ~3 700 URLs GSC priority sortent du dernier batch slice.
-  const serviceCitiesBatchCount = Math.ceil(
-    (services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH
-  )
-
+  //
+  // Post-pivot RGE 2026-05-03 + Tier C filter `isServiceVilleIndexable` :
+  // les shards `service-cities-1..5` (formule legacy 5-6 shards × 20K)
+  // retournaient 0 URL en prod (audit 2026-05-22, cf.
+  // tmp/sitemap-diff-2026-05-22.md). Cleanup décidé 2026-05-22 :
+  // `service-cities-0` seul (≤ LARGE_BATCH = 20K), recalc des shards
+  // supplémentaires si un jour la matrice services × villes ré-explose
+  // (claim massif, Tier A/B expansion, etc.).
+  //
+  // Référence valeur courante : `_serviceCitiesBatchCountTheoretical` ci-
+  // dessous laissé en commentaire pour traçabilité — restaurer
+  // l'Array.from(...) si la valeur dépasse 1 après recalcul live.
+  //
   // emergencySlugs anciennement utilisé pour calculer le nombre de shards
   // urgence-service-cities (21 svc RGE × ~2 267 villes / 8K STATIC_BATCH = 14 shards).
   // V2 #4 stratégie 140K (2026-04-29) consolide tout dans 1 shard ⇒ plus besoin.
@@ -113,7 +118,12 @@ export async function generateSitemaps() {
 
   const sitemaps: { id: string }[] = [
     { id: 'static' },
-    ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
+    // Cleanup 2026-05-22 : `service-cities-1` / `service-cities-2` retournaient
+    // 0 URL (Tier C filter post-pivot RGE). Restaurer la formule
+    // `Array.from({ length: Math.ceil((services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH) }, ...)`
+    // dès que `service-cities-0` dépasse LARGE_BATCH = 20K URLs (= claim massif
+    // ou expansion Tier A/B).
+    { id: 'service-cities-0' },
     { id: 'cities' },
     { id: 'geo' },
     { id: 'devis-services' },
@@ -155,17 +165,19 @@ export async function generateSitemaps() {
     // commune.slug = ville statique : permanentRedirect 301 vers /villes/[v]
     // (canonical priority maintenu).
     //
-    // 4 shards de STATIC_BATCH (8 000) = 32 000 capacité — empiriquement
-    // suffisant : le filtre `getAllCommuneSlugs(qualifiedOnly=true)` (≥500 hab
-    // OU ≥1 artisan) exclut les communes thin et ramène le total à ~28-30K.
-    // Audit Sentry 2026-05-02 : `communes-cities-4` retournait -100% car shard
-    // empty. Réintroduire dès que le total dépasse 32 000 (ex. après une
-    // vague de claims provider_count >= 1).
+    // 3 shards de STATIC_BATCH (8 000) = 24 000 capacité.
+    // Audit 2026-05-22 : `communes-cities-3` retournait 0 URL et
+    // `communes-cities-2` était ≤1.5K (cf. tmp/sitemap-diff-2026-05-22.md) —
+    // le total live (`getAllCommuneSlugs(qualifiedOnly=true)`, ≥500 hab OU
+    // ≥1 artisan) tourne autour de 17.5K post-pivot RGE. Cleanup de
+    // `communes-cities-3` (vide) ; réintroduire dès que le total dépasse
+    // 24 000 (ex. après une vague de claims provider_count >= 1).
+    // Historique : `communes-cities-4` déjà retiré 2026-05-02 (audit Sentry
+    // -100%).
     { id: 'communes' },
     { id: 'communes-cities-0' },
     { id: 'communes-cities-1' },
     { id: 'communes-cities-2' },
-    { id: 'communes-cities-3' },
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] pour 11
     // aides nationales × 101 départements = 1 111 URLs (la 12ème = MaPrimeRénov'
     // est déjà émise séparément par /aides/[dept]/maprimerenov, cf. shard 'static').

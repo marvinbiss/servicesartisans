@@ -1,13 +1,8 @@
 import { NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, departements } from '@/lib/data/france'
+import { departements } from '@/lib/data/france'
 import { getTradesSlugs } from '@/lib/data/trade-content'
-import {
-  LARGE_BATCH,
-  PROVIDER_BATCH_SIZE,
-  MAX_PROVIDER_SITEMAPS,
-  SITEMAP_SERVICE_CITIES_COUNT,
-} from '@/lib/seo/sitemap-config'
+import { LARGE_BATCH, PROVIDER_BATCH_SIZE, MAX_PROVIDER_SITEMAPS } from '@/lib/seo/sitemap-config'
 import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
 
 /**
@@ -31,15 +26,13 @@ export async function GET(request: Request) {
 
   const ids: string[] = [
     'static',
-    // service × city — full scale: 21 services RGE × (2 267 + GSC priority extras).
-    // Audit 2026-04-25 (B1) : on doit utiliser SITEMAP_SERVICE_CITIES_COUNT
-    // (= SITEMAP_CITY_COUNT + extras GSC) pour matcher la longueur réelle
-    // de mergedCities émise par le handler, sinon les ~3 700 URLs prioritaires
-    // GSC sortent du dernier batch slice et ne sont jamais déclarées.
-    ...Array.from(
-      { length: Math.ceil((services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH) },
-      (_, i) => `service-cities-${i}`
-    ),
+    // service × city — post-pivot RGE 2026-05-03 + Tier C filter
+    // `isServiceVilleIndexable` : 1 shard suffit (audit live 2026-05-22 :
+    // shards 1-5 retournaient 0 URL). Restaurer l'Array.from(...) avec
+    // `Math.ceil((services.length * SITEMAP_SERVICE_CITIES_COUNT) / LARGE_BATCH)`
+    // dès que `service-cities-0` dépasse LARGE_BATCH = 20K URLs.
+    // KEEP IN SYNC avec src/app/sitemap.ts:generateSitemaps().
+    'service-cities-0',
     'cities',
     'geo',
     'devis-services',
@@ -64,16 +57,16 @@ export async function GET(request: Request) {
     // Voir src/lib/seo/problemes-whitelist.ts.
     'problemes-cities-0',
     // V3 #1 stratégie 140K (2026-04-29) — BUILD /communes/[c]. Hub /communes
-    // + 4 shards data-driven Supabase de STATIC_BATCH (8 000). Initialement
-    // 5 shards mais `qualifiedOnly` (≥500 hab OU ≥1 artisan) ramène le total
-    // à ~28-30K (audit Sentry 2026-05-02 : shard 4 empty -100%). Réintroduire
-    // 'communes-cities-4' dès dépassement 32 000 communes qualifiées. KEEP IN
-    // SYNC avec src/app/sitemap.ts.
+    // + 3 shards data-driven Supabase de STATIC_BATCH (8 000). Audit
+    // 2026-05-22 : `communes-cities-3` retournait 0 URL (live ~17.5K post-
+    // pivot RGE). Cleanup décidé. Réintroduire `communes-cities-3` dès
+    // dépassement 24 000 communes qualifiées (claim massif).
+    // Historique : `communes-cities-4` retiré 2026-05-02 (audit Sentry -100%).
+    // KEEP IN SYNC avec src/app/sitemap.ts.
     'communes',
     'communes-cities-0',
     'communes-cities-1',
     'communes-cities-2',
-    'communes-cities-3',
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] (11 × 101
     // = 1 111 URLs). MaPrimeRénov par dept déjà dans 'static' (legacy).
     'aides-dept',
