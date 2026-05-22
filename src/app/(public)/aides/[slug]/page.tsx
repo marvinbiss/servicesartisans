@@ -16,6 +16,8 @@ import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
 import FinalCtaSection from '@/components/conversion/FinalCtaSection'
+import DevisQuickForm from '@/components/conversion/DevisQuickForm'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import RelatedLinks from '@/components/seo/RelatedLinks'
 import { getAideRelatedLinks } from '@/lib/seo/related-links'
 import {
@@ -361,6 +363,26 @@ export default async function AidePage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* DevisQuickForm immédiat post-Hero — YMYL aide financière, intention
+          haute, on capture le lead avant les sections explicatives longues.
+          NEUTRE artisan : pas de provider ciblé. */}
+      <section
+        data-devis-form
+        aria-labelledby="devis-quick-aide"
+        className="bg-warm-cream-50 py-10 border-b border-charcoal-100"
+      >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 id="devis-quick-aide" className="sr-only">
+            Demande de devis pour {aide.name}
+          </h2>
+          <DevisQuickForm
+            defaultService="renovation-energetique"
+            source={`aide_${aide.slug.replace(/[^a-z0-9_-]/g, '-').slice(0, 30)}`}
+            heading={`Éligible ${aide.name} ? Recevez 3 devis RGE en 24h`}
+          />
+        </div>
+      </section>
+
       <section className="bg-white py-10 border-b border-charcoal-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <TldrBlock title={`${aide.name} en 4 points`} bullets={tldrBullets} />
@@ -493,6 +515,8 @@ export default async function AidePage({ params }: PageProps) {
         accent="blue"
         trustLine="Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD"
       />
+
+      <StickyMobileCTA serviceSlug="renovation-energetique" ctaText={`Devis ${aide.name}`} />
     </>
   )
 }

@@ -444,6 +444,26 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
             Opération standardisée résidentielle éligible aux Certificats d’Économies d’Énergie,
             sous conditions de qualification RGE de l’entreprise.
           </p>
+          {/* CTA above-fold — sortir la fiche du mode "page documentation" et
+              capter l'intention CEE immédiate. Primary scroll vers DevisQuickForm
+              (data-devis-form), secondary vers simulateur. */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#devis-cee"
+              className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
+              data-intent="hero-cee-devis"
+            >
+              <ShieldCheck className="w-5 h-5" aria-hidden="true" />
+              Recevoir 3 devis CEE en 24h
+            </a>
+            <Link
+              href={`/simulateur-aides-renovation?cee=${operation.code.toLowerCase()}`}
+              className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl border-2 border-accent-300/60 text-white font-semibold hover:bg-accent-600/30 transition"
+              data-intent="hero-cee-simu"
+            >
+              Simuler ma prime {operation.code}
+            </Link>
+          </div>
           {/* Freshness signal — révision éditoriale des barèmes. Bascule sur
               `cee_operations.updated_at` quand la sync DGEC persistera des
               timestamps (cf. `lib/cee/operation-guides-content.ts`). */}
@@ -693,8 +713,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
 
       {/* DevisQuickForm — 4-champs avant FAQ. defaultService = premier service
           RGE applicable de l'opération CEE (si dispo). Services proposés =
-          intersection des services RGE pour cette opération. NEUTRE artisan. */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-10">
+          intersection des services RGE pour cette opération. NEUTRE artisan.
+          id="devis-cee" = anchor target du CTA Hero (above-fold scroll). */}
+      <section
+        id="devis-cee"
+        data-devis-form
+        className="max-w-3xl mx-auto px-4 sm:px-6 pb-10 scroll-mt-24"
+      >
         <DevisQuickForm
           defaultService={rgeServices[0]}
           services={

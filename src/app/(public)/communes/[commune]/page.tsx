@@ -12,6 +12,7 @@ import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import DevisQuickForm from '@/components/conversion/DevisQuickForm'
 import { getSocialProofGlobal } from '@/lib/conversion/social-proof'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
@@ -282,6 +283,22 @@ async function renderCommunePage({ params }: PageProps) {
             </p>
           </header>
 
+          {/* Above-fold DevisQuickForm — friction-free conversion path immédiat.
+              defaultService = 'renovation-energetique' (le slug le plus large,
+              page commune = pas de service spécifique). Pre-fill CP + ville. */}
+          <section data-devis-form aria-labelledby="devis-quick-commune" className="mb-8">
+            <h2 id="devis-quick-commune" className="sr-only">
+              Devis artisan à {commune.name}
+            </h2>
+            <DevisQuickForm
+              defaultService="renovation-energetique"
+              defaultPostalCode={cp}
+              defaultVille={commune.name}
+              source={`communes_${slug.slice(0, 40)}`}
+              heading={`Recevez 3 devis d'artisans RGE à ${commune.name} en 24h`}
+            />
+          </section>
+
           {isFallbackMode && (
             <FallbackRgeBanner
               communeName={commune.name}
@@ -377,6 +394,7 @@ async function renderCommunePage({ params }: PageProps) {
       />
 
       <StickyMobileCTA
+        serviceSlug="renovation-energetique"
         cityName={commune.name}
         citySlug={commune.slug}
         ctaText="Devis artisan local"
