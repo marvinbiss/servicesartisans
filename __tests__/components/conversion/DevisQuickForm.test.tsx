@@ -42,8 +42,10 @@ describe('DevisQuickForm', () => {
     expect(screen.getByLabelText(/code postal/i)).toBeDefined()
     expect(screen.getByLabelText(/type de travaux/i)).toBeDefined()
     expect(screen.getByRole('button', { name: /recevoir mes devis gratuits/i })).toBeDefined()
-    // RGPD link
-    const rgpdLink = screen.getByRole('link', { name: /rgpd/i }) as HTMLAnchorElement
+    // RGPD link — texte conforme art.13 (politique de confidentialité, base légale, droits).
+    const rgpdLink = screen.getByRole('link', {
+      name: /politique de confidentialité/i,
+    }) as HTMLAnchorElement
     expect(rgpdLink.getAttribute('href')).toBe('/rgpd')
     // form has accessible name (heading default)
     const form = document.querySelector('form')!

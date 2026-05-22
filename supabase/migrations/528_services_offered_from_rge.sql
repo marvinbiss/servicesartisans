@@ -323,4 +323,16 @@ COMMENT ON TRIGGER trg_providers_sync_services_from_rge ON providers IS
   'les fiches non revendiquées (user_id IS NULL). Une fiche claim conserve sa '
   'liste manuelle. Source : mig 527.';
 
+-- -----------------------------------------------------------------------------
+-- 5. Sécurité — REVOKE PUBLIC sur fonctions exposées via PostgREST
+-- -----------------------------------------------------------------------------
+-- Cohérence avec mig 527 + 529 : PostgREST grant EXECUTE à PUBLIC par défaut,
+-- exposant `derive_*` à `anon`. Les fonctions sont IMMUTABLE pures sans
+-- dépendance données, mais on REVOKE pour conformité CVE-2018-1058 et
+-- principe least-privilege. La trigger function `providers_sync_services_from_rge`
+-- tourne sous service_role lors du sync ADEME — pas besoin de grant.
+
+REVOKE ALL ON FUNCTION public.derive_service_slugs_from_qualif(TEXT, TEXT) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.derive_services_offered_from_rge(JSONB) FROM PUBLIC;
+
 COMMIT;

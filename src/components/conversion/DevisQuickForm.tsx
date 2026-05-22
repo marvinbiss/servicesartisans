@@ -150,10 +150,14 @@ export default function DevisQuickForm({
     setErrField(null)
 
     startTransition(async () => {
+      // AbortSignal timeout 30s : réseau stallé sinon bloque le formulaire indéfiniment.
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30_000)
       try {
         const res = await fetch('/api/devis', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
           body: JSON.stringify({
             service,
             nom: name.trim(),
@@ -172,11 +176,19 @@ export default function DevisQuickForm({
         setStatus('success')
         setName('')
         setPhone('')
-        // Garde codePostal + service pour cohérence UX (page ville/service).
       } catch (err) {
         setStatus('error')
         setErrField(null)
-        setErrMsg(err instanceof Error ? err.message : 'Erreur réseau. Réessayez.')
+        const aborted = err instanceof Error && err.name === 'AbortError'
+        setErrMsg(
+          aborted
+            ? 'Délai dépassé (30s). Vérifiez votre connexion et réessayez.'
+            : err instanceof Error
+              ? err.message
+              : 'Erreur réseau. Réessayez.'
+        )
+      } finally {
+        clearTimeout(timeoutId)
       }
     })
   }
@@ -322,13 +334,20 @@ export default function DevisQuickForm({
         {pending ? 'Envoi…' : 'Recevoir mes devis gratuits'}
       </button>
 
-      <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-charcoal-500 text-center">
-        <ShieldCheck className="w-3.5 h-3.5 text-accent-500" aria-hidden="true" />
-        Données protégées —{' '}
-        <a href="/rgpd" className="underline hover:text-charcoal-700">
-          RGPD
-        </a>{' '}
-        · Leads exclusifs (1 artisan)
+      <p className="mt-3 flex items-start justify-center gap-1.5 text-xs leading-relaxed text-charcoal-500 text-center">
+        <ShieldCheck
+          className="w-3.5 h-3.5 mt-0.5 text-accent-500 flex-shrink-0"
+          aria-hidden="true"
+        />
+        <span>
+          Données utilisées pour vous mettre en relation avec <strong>un seul artisan</strong> RGE
+          (leads exclusifs). Base légale : exécution précontractuelle (art. 6.1.b RGPD). Droits
+          d&apos;accès, rectification, opposition :{' '}
+          <a href="/rgpd" className="underline hover:text-charcoal-700">
+            politique de confidentialité
+          </a>
+          .
+        </span>
       </p>
     </form>
   )
