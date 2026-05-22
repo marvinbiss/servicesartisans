@@ -9,6 +9,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { ShieldCheck, CheckCircle, ArrowRight } from 'lucide-react'
 
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -164,36 +165,114 @@ export default async function ClusterPage({ params }: PageProps) {
       ? getFAQSchema(c.faq.map((f) => ({ question: f.question, answer: f.answer })))
       : null
 
+  // Hero subtitle = first sentence of intro (above-fold concision).
+  // Full intro is preserved further down in the article body for E-E-A-T.
+  const introFirstSentence = c.intro.split(/\.\s+/)[0].replace(/\.$/, '') + '.'
+  const introRest = c.intro.slice(introFirstSentence.length).trim()
+
+  // Primary CTA = simulateur (intent capture, 30s engagement).
+  // Secondary CTA = artisans RGE (intent fully-formed users).
+  const simulateurHref = row.service_slug
+    ? `/simulateur-aides-renovation?service=${row.service_slug}`
+    : '/simulateur-aides-renovation'
+  const providersHref = row.service_slug ? `/rge/${row.service_slug}` : '/rge'
+
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8">
+    <main>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
 
-      <Breadcrumb
-        items={[
-          { label: 'Accueil', href: '/' },
-          { label: 'Rénovation énergétique', href: '/renovation-energetique' },
-          { label: c.h1 },
-        ]}
-      />
+      {/* HERO — above-fold conversion. Émet l'unique H1 de la page. */}
+      <section className="bg-gradient-to-b from-primary-50 via-white to-white border-b">
+        <div className="mx-auto max-w-5xl px-4 py-10 md:py-14">
+          <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 mb-4 leading-tight">
+            {c.h1}
+          </h1>
+          <p className="text-lg md:text-xl text-charcoal-700 mb-6 max-w-3xl">
+            {introFirstSentence}
+          </p>
 
-      <article>
-        <h1 className="text-3xl font-bold mb-4">{c.h1}</h1>
-        <p className="text-lg text-charcoal-700 mb-6">{c.intro}</p>
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <Link
+              href={simulateurHref}
+              className="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-md font-semibold transition-colors shadow-sm"
+            >
+              Estimer mes aides en 2 min
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href={providersHref}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-charcoal-50 text-charcoal-900 border border-charcoal-300 px-6 py-3 rounded-md font-semibold transition-colors"
+            >
+              {row.service_slug ? 'Voir les artisans RGE' : 'Tous les artisans RGE'}
+            </Link>
+          </div>
 
-        {/* Funnel conversion — MiniSimulateurInline juste après l'intro pour
-            capturer le funnel rénovation avant que l'utilisateur scrolle dans
-            les sections éditoriales. 100 % renovation intent par construction
-            du cluster (table renovation_clusters). Injecté 2026-05-22. */}
-        <section className="mb-8">
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-charcoal-700">
+            <li className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-green-600" />
+              <span>Artisans RGE certifiés</span>
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <span>MaPrimeRénov&apos; + CEE + Éco-PTZ</span>
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+              <span>Source : ANAH / Service-Public.fr</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF / PROVIDERS — fold 2. Cartes visibles (pas jsonLdOnly)
+          pour donner un signal humain immédiat sous le hero. */}
+      {showProviderShowcase && showcaseProviders.length > 0 && (
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-5xl px-4 py-8">
+            <h2 className="text-xl md:text-2xl font-bold text-charcoal-900 mb-4">
+              Quelques artisans RGE recommandés
+            </h2>
+            <LocalProviderShowcase
+              providers={showcaseProviders}
+              serviceName={c.h1}
+              cityName="France"
+              max={3}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* SIMULATEUR INLINE — fold 3. Capture funnel avant scroll. */}
+      <section className="bg-primary-50/30 border-b">
+        <div className="mx-auto max-w-5xl px-4 py-8">
           <MiniSimulateurInline
             service={row.service_slug ?? row.primary_kw}
             source={`renovation_cluster:${row.slug}`}
-            variant="inline"
+            variant="card"
             headline={`${c.h1} — combien d'aides pouvez-vous toucher ?`}
           />
-        </section>
+        </div>
+      </section>
+
+      {/* BREADCRUMB — navigation discrète post-hero (SEO préservé via JSON-LD). */}
+      <nav className="mx-auto max-w-4xl px-4 pt-6" aria-label="Fil d'Ariane">
+        <Breadcrumb
+          items={[
+            { label: 'Accueil', href: '/' },
+            { label: 'Rénovation énergétique', href: '/renovation-energetique' },
+            { label: c.h1 },
+          ]}
+        />
+      </nav>
+
+      {/* ARTICLE CONTENT — long-read SEO. E-E-A-T préservé : intro complète,
+          sections, FAQ, sources, author byline. */}
+      <article className="mx-auto max-w-4xl px-4 py-8">
+        {introRest.length > 0 && (
+          <p className="text-base text-charcoal-700 mb-8 leading-relaxed">{introRest}</p>
+        )}
 
         {c.sections.map((section) => (
           <section key={section.h2} className="mb-8">
@@ -245,15 +324,6 @@ export default async function ClusterPage({ params }: PageProps) {
           </p>
         )}
 
-        <div className="mt-8 border-t pt-6">
-          <Link
-            href="/simulateur-aides-renovation"
-            className="inline-block bg-accent-500 text-white px-6 py-3 rounded-md font-semibold"
-          >
-            {c.ctaText}
-          </Link>
-        </div>
-
         {/* LocalProviderShowcase en mode jsonLdOnly — émet 3 LocalBusiness
             JSON-LD pour donner à Google des signaux artisans rattachés au
             cluster éditorial, sans afficher de cartes hors contexte
@@ -269,6 +339,25 @@ export default async function ClusterPage({ params }: PageProps) {
           />
         )}
       </article>
+
+      {/* FINAL CTA — conversion fallback. */}
+      <section className="bg-accent-50 border-t">
+        <div className="mx-auto max-w-3xl px-4 py-12 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
+            Prêt à démarrer vos travaux ?
+          </h2>
+          <p className="text-charcoal-700 mb-6 text-lg">
+            Recevez 3 devis d&apos;artisans RGE certifiés en moins de 24h.
+          </p>
+          <Link
+            href={simulateurHref}
+            className="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white px-7 py-3.5 rounded-md font-semibold transition-colors shadow-sm"
+          >
+            {c.ctaText || 'Obtenir mes devis gratuits'}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
     </main>
   )
 }
