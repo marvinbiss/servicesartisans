@@ -1,5 +1,19 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
+
+// Bug Next.js 14.2 vercel/next.js#69103 — root cause résiduel.
+// Quand la page principale appelle `notFound()` sur une ISR avec
+// `dynamicParams: true`, Next.js rend ce composant et peut renvoyer HTTP 200
+// (cache ISR servant `not-found.tsx`). Sans ce `metadata.robots` explicite,
+// le layout racine impose `robots: { index: true, follow: true }` et le HTML
+// servi contient `<meta name="robots" content="index, follow">` → Google
+// indexe + soft-404. On force noindex/nofollow ici comme dernier rempart,
+// indépendamment du chemin de rendu (cache miss, cache hit, revalidation).
+export const metadata: Metadata = {
+  title: 'Page non trouvée',
+  robots: { index: false, follow: false },
+}
 
 export default function ServiceLocationNotFound() {
   return (

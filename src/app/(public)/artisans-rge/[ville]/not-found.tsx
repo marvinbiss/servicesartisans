@@ -1,5 +1,15 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
+
+// Bug Next.js 14.2 vercel/next.js#69103 — voir commentaire détaillé dans
+// /services/[service]/[location]/not-found.tsx. Robots noindex/nofollow
+// explicite pour neutraliser l'inheritance `robots: { index: true }` du
+// layout racine quand ce composant est servi avec HTTP 200 par l'ISR.
+export const metadata: Metadata = {
+  title: 'Ville inconnue dans la base ADEME',
+  robots: { index: false, follow: false },
+}
 
 export default function ArtisansRgeVilleNotFound() {
   return (

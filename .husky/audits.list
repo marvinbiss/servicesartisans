@@ -82,3 +82,4 @@ audit-public-rge-only.mjs --strict
 audit-banned-tokens.mjs --strict
 audit-z-index.mjs --strict
 audit-cluster-ahrefs-source.mjs --strict
+audit-not-found-metadata.mjs --strict

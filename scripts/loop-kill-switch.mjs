@@ -97,16 +97,17 @@ function tryRun(cmd) {
   }
 }
 
-// 4. PRE-COMMIT BLOAT — seuil 95 (91 audits actuels post-SLA-99.9 +
-//    marge tampon ~4 audits avant escalade). Bumpé 2026-05-06 pour
-//    accommoder `audit-sla-99-9.mjs` (Vague 4 chaos invariants). Si on
-//    retape ce plafond → vraie escalade humaine, retirer audits redondants.
+// 4. PRE-COMMIT BLOAT — seuil 100 (96 audits actuels post-soft-404 fix +
+//    marge tampon ~4 audits avant escalade). Bumpé 2026-05-22 pour
+//    accommoder `audit-not-found-metadata.mjs` (mitigation route-level
+//    not-found.tsx pour bug Next.js 14.2 #69103). Si on retape ce plafond
+//    → vraie escalade humaine, retirer audits redondants.
 {
   try {
     const auditCount = readdirSync(join(ROOT, 'scripts')).filter((f) =>
       f.startsWith('audit-')
     ).length
-    if (auditCount > 95) {
+    if (auditCount > 100) {
       triggers.push({ kind: 'precommit_bloat', audit_count: auditCount })
     }
   } catch {
