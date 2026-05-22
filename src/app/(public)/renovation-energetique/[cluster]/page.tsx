@@ -18,6 +18,7 @@ import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getProvidersByService } from '@/lib/supabase'
+import { getAuthorByName, getReviewerForAuthor } from '@/lib/data/authors'
 import type { ClusterContent } from '@/lib/clusters'
 
 export const revalidate = 21600
@@ -105,6 +106,25 @@ export default async function ClusterPage({ params }: PageProps) {
     ? await getProvidersByService(row.service_slug as string, 3, { rgeOnly: true }).catch(() => [])
     : []
 
+  // Peer cross-review YMYL (cf. Tier 1-8 patterns) — auto-derive from the
+  // author's reviewerSlug map when the author is a known editorial Person ;
+  // fall back to the editorial committee (link réel `/equipe`) sinon. Pas
+  // d'invention de Person : `getAuthorByName` retourne undefined si l'auteur
+  // du cluster (ex. "Rédaction ServicesArtisans") n'est pas dans le registre.
+  const authorProfile = c.author?.name ? getAuthorByName(c.author.name) : undefined
+  const reviewerProfile = getReviewerForAuthor(authorProfile)
+  const reviewedBy = reviewerProfile
+    ? {
+        '@type': 'Person',
+        name: reviewerProfile.name,
+        url: `${SITE_URL}/equipe/${reviewerProfile.slug}`,
+      }
+    : {
+        '@type': 'Person',
+        name: 'Comité éditorial ServicesArtisans',
+        url: `${SITE_URL}/equipe`,
+      }
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -119,11 +139,7 @@ export default async function ClusterPage({ params }: PageProps) {
     author: c.author?.profileUrl
       ? { '@type': 'Person', name: c.author.name, url: c.author.profileUrl }
       : { '@type': 'Person', name: c.author?.name ?? 'Rédaction ServicesArtisans' },
-    reviewedBy: {
-      '@type': 'Person',
-      name: 'Comité éditorial ServicesArtisans',
-      url: `${SITE_URL}/equipe`,
-    },
+    reviewedBy,
     publisher: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
