@@ -1,38 +1,51 @@
 # ai.txt — ServicesArtisans
 # https://servicesartisans.fr
+# Last updated : 2026-05-22 (post-pivot RGE 2026-05-03)
 
 User-Agent: *
 Allow: /
 
 # About
 Name: ServicesArtisans
-Description: Premier annuaire d'artisans vérifiés en France. 940 000+ professionnels du bâtiment référencés via les données SIREN/SIRET officielles de l'INSEE.
+Description: Annuaire français des artisans RGE (Reconnu Garant de l'Environnement) — pivot 2026-05-03 vers le marché de la rénovation énergétique. Toutes les fiches publiées sont issues du Registre RGE officiel (data.gouv.fr, Etalab 2.0).
 URL: https://servicesartisans.fr
 Contact: contact@servicesartisans.fr
 Phone: 07 56 87 27 87
 
 # Data
-Source: Répertoire SIREN/SIRET de l'INSEE
-Update-Frequency: Daily
+Source-Primary: Registre RGE — data.gouv.fr (Etalab 2.0)
+Source-Secondary: ADEME (Observatoire DPE), ANAH (MaPrimeRénov'), Légifrance (CEE)
+Update-Frequency: Weekly (sync ADEME) + Daily (IndexNow)
 Coverage: France métropolitaine + DOM-TOM (101 départements)
-Services: 46 métiers du bâtiment
-Providers: 940 000+
+Services: 19 métiers RGE (PAC, VMC, isolation, solaire, chauffage, audit énergétique, etc.)
+Providers: ~49 000 artisans RGE actifs
 Cities: 2 267+
 
+# Strategy
+Focus: Rénovation énergétique — aides MaPrimeRénov', CEE, Éco-PTZ
+Differentiator: Leads exclusifs (1 lead = 1 artisan, jamais partagé)
+
 # License
-Content-License: CC-BY-4.0 (données Baromètre uniquement)
+Content-License: CC-BY-4.0 (Baromètre Indice Rénovation + datasets RGE publics uniquement)
 Attribution: ServicesArtisans (servicesartisans.fr)
+Citation: Required — mention "ServicesArtisans (servicesartisans.fr) — Source : Registre RGE ADEME (Etalab 2.0)"
 
 # Machine-readable resources
 LLM-Info: https://servicesartisans.fr/llms.txt
 LLM-Full: https://servicesartisans.fr/llms-full.txt
 Sitemap: https://servicesartisans.fr/sitemap.xml
 OpenAPI: https://servicesartisans.fr/api/v1/openapi.json
+GraphQL: https://servicesartisans.fr/api/v1/graphql
+SPARQL-KG: https://servicesartisans.fr/api/v1/kg/sparql
+MCP-Server: https://servicesartisans.fr/api/v1/mcp
+RGE-Lookup: https://servicesartisans.fr/api/v1/rge/lookup
+RGE-Search: https://servicesartisans.fr/api/v1/rge/search
 RSS-Blog: https://servicesartisans.fr/feed/blog.xml
 RSS-Artisans: https://servicesartisans.fr/feed/nouveaux-artisans.xml
 AI-Plugin: https://servicesartisans.fr/.well-known/ai-plugin.json
+Dataset-Baromètre: https://servicesartisans.fr/barometre/renovation-energetique-2026
 
 # Policy
-Training: Disallowed (see robots.txt for bot-specific rules)
-Search: Allowed
-Citation: Required — mention "ServicesArtisans (servicesartisans.fr)" with link
+Training: Disallowed for unauthorized training; see robots.txt for bot-specific rules
+Search: Allowed (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, MistralBot, PerplexityBot, etc.)
+Citation: Required — mention "ServicesArtisans (servicesartisans.fr) — Source : Registre RGE ADEME"
