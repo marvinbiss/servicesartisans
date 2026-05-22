@@ -62,6 +62,7 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 
 export const revalidate = 86400
 
@@ -645,6 +646,12 @@ export default function Page() {
               </div>
             </div>
           </article>
+
+          <SimulateurAideBox
+            serviceKey="vmc"
+            estimatedSaving={300}
+            subtitle="CEE Coup de pouce 100-300 € + TVA 5,5 % (rénovation > 2 ans) — éligibilité conditionnée à un artisan RGE Qualibat 8721 ou Qualifelec"
+          />
 
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />

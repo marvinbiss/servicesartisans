@@ -47,6 +47,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -392,6 +394,45 @@ export default function Page() {
               </Link>
             </div>
           </article>
+
+          <PrixComparatif
+            title="Prix VMC hygroréglable A vs B (posé clé en main 2026)"
+            caption="Maison 100 m² en rénovation, RGE Qualibat 8721, TVA 5,5 % incluse. Sources : ADEME 2026, AFPAC, retours terrain devis."
+            rows={[
+              {
+                brand: 'VMC hygroréglable type A',
+                priceRange: '900 - 2 200 €',
+                notes: 'Bouches modulent seules, économie 5-8 %',
+                rating: 4.0,
+              },
+              {
+                brand: 'VMC hygroréglable type B',
+                priceRange: '1 100 - 2 500 €',
+                notes: "Bouches + entrées d'air modulent, économie 8-12 %",
+                rating: 4.4,
+                highlight: true,
+              },
+              {
+                brand: 'VMC autoréglable (référence)',
+                priceRange: '500 - 1 200 €',
+                notes: 'Pas de modulation, débit fixe',
+                rating: 3.4,
+              },
+              {
+                brand: 'VMC hygro B basse conso (EC)',
+                priceRange: '1 600 - 3 000 €',
+                notes: 'Moteurs EC -50 % conso élec',
+                rating: 4.5,
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc-hygroreglable"
+            estimatedSaving={300}
+            subtitle="CEE Coup de pouce 100-300 € + TVA 5,5 % — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
 

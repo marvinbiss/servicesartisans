@@ -59,6 +59,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -640,6 +642,61 @@ export default function Page() {
               </li>
             </ul>
           </article>
+
+          <PrixComparatif
+            title="Top 5 marques VMC double flux thermodynamique 2026 (posé clé en main)"
+            caption="Prix tout compris matériel + pose RGE Qualibat 8721 + QualiClimaFroid. Maison 100-130 m². Sources : Aldes, Atlantic, Zehnder, Helios, Mitsubishi, retours terrain devis."
+            rows={[
+              {
+                brand: 'Aldes',
+                model: 'T.Flow ThermoVisio',
+                priceRange: '7 500 - 9 500 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.4,
+                notes: 'Made in France, COP 3,5-4,2, ECS option',
+                highlight: true,
+              },
+              {
+                brand: 'Atlantic',
+                model: 'Optimocosy HR Hygro Thermo',
+                priceRange: '7 000 - 9 000 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.3,
+                notes: 'Hygro B + récup 90 %, filtre F7 pollens',
+              },
+              {
+                brand: 'Zehnder',
+                model: 'ComfoAir Q450 + ComfoCool',
+                priceRange: '8 500 - 11 000 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.6,
+                notes: 'Haut de gamme suisse, échangeur 95 %, < 35 dB',
+              },
+              {
+                brand: 'Helios',
+                model: 'KWL EC 370 W ET',
+                priceRange: '7 500 - 9 500 €',
+                warranty: '5 ans matériel',
+                rating: 4.2,
+                notes: 'Récup 92 % + cycle inversé été, domotique KNX',
+              },
+              {
+                brand: 'Mitsubishi Electric',
+                model: 'Lossnay LGH-200',
+                priceRange: '8 000 - 10 500 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.1,
+                notes: 'Échangeur enthalpique, idéal 150-250 m²',
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc-double-flux-thermodynamique"
+            estimatedSaving={3700}
+            subtitle="MaPrimeRénov' Bleu 2 500 € + CEE Coup de pouce 500-1 200 € — RGE Qualibat 8721 + QualiClimaFroid obligatoire"
+          />
 
           <FlagshipFaq items={faqs} />
 

@@ -64,6 +64,7 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 
 export const revalidate = 86400
 
@@ -610,6 +611,13 @@ export default function Page() {
               </li>
             </ul>
           </article>
+
+          <SimulateurAideBox
+            serviceKey="vmc"
+            estimatedSaving={3700}
+            title="Remplacer votre VMC ? Estimez vos aides en 3 min"
+            subtitle="MaPrimeRénov' (double flux) + CEE Coup de pouce + TVA 5,5 % — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
           <FlagshipSources sources={sources} />

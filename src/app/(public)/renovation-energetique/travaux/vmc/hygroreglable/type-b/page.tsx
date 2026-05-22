@@ -47,6 +47,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -515,6 +517,52 @@ export default function Page() {
               </Link>
             </div>
           </article>
+
+          <PrixComparatif
+            title="Top marques VMC hygroréglable type B 2026 (posé clé en main)"
+            caption="Maison 100 m² en rénovation, RGE Qualibat 8721, TVA 5,5 % incluse. Sources : Aldes, Atlantic, Unelvent, retours terrain devis."
+            rows={[
+              {
+                brand: 'Aldes',
+                model: 'EasyHOME Hygro Premium MW',
+                priceRange: '1 400 - 2 500 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.5,
+                notes: 'Made in France, basse conso EC, silencieux',
+                highlight: true,
+              },
+              {
+                brand: 'Atlantic',
+                model: 'Optimocosy HR Hygro B',
+                priceRange: '1 300 - 2 400 €',
+                warranty: '2 ans pose + 5 ans matériel',
+                rating: 4.4,
+                notes: 'Filtre F7 pollens, auto-équilibrage',
+              },
+              {
+                brand: 'Unelvent',
+                model: 'Ozeo Hygro B Eco',
+                priceRange: '1 100 - 2 200 €',
+                warranty: '2 ans pose + 2 ans matériel',
+                rating: 4.0,
+                notes: 'Bon rapport qualité/prix',
+              },
+              {
+                brand: 'VMC hygro B entrée gamme',
+                priceRange: '1 100 - 1 600 €',
+                warranty: '2 ans pose + 2 ans matériel',
+                rating: 3.7,
+                notes: 'Conformité minimale arrêté 24/03/1982',
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc-hygroreglable-type-b"
+            estimatedSaving={300}
+            subtitle="CEE Coup de pouce 100-300 € + TVA 5,5 % — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
 

@@ -48,6 +48,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -399,6 +401,45 @@ export default function Page() {
               </Link>
             </div>
           </article>
+
+          <PrixComparatif
+            title="Prix installation VMC par type (posé clé en main, RGE Qualibat 8721)"
+            caption="Maison 100 m² en rénovation. TVA 5,5 % incluse. Sources : ADEME 2026, AFPAC, retours terrain devis RGE."
+            rows={[
+              {
+                brand: 'VMC simple flux auto',
+                priceRange: '500 - 1 200 €',
+                notes: 'Entrée de gamme, rénovation basique',
+                rating: 3.5,
+              },
+              {
+                brand: 'VMC hygroréglable B',
+                priceRange: '1 100 - 2 500 €',
+                notes: 'Standard rénovation maison, économie 5-10 %',
+                rating: 4.0,
+                highlight: true,
+              },
+              {
+                brand: 'VMC double flux standard',
+                priceRange: '4 000 - 6 500 €',
+                notes: 'Récup chaleur 70-90 %, MPR Bleu 2 500 €',
+                rating: 4.5,
+              },
+              {
+                brand: 'VMC double flux thermodynamique',
+                priceRange: '6 000 - 9 000 €',
+                notes: 'PAC intégrée + rafraîchissement été',
+                rating: 4.3,
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc"
+            estimatedSaving={3700}
+            subtitle="MaPrimeRénov' Bleu 2 500 € + CEE Coup de pouce 500-1 200 € — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
 

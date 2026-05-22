@@ -45,6 +45,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -440,6 +442,45 @@ export default function Page() {
               </Link>
             </div>
           </article>
+
+          <PrixComparatif
+            title="Prix VMC simple flux : autoréglable vs hygroréglable (posé clé en main 2026)"
+            caption="Maison 100 m² en rénovation, RGE Qualibat 8721, TVA 5,5 % incluse. Sources : ADEME 2026, AFPAC, retours terrain devis."
+            rows={[
+              {
+                brand: 'VMC simple flux autoréglable',
+                priceRange: '500 - 1 200 €',
+                notes: 'Débit fixe, entrée de gamme construction neuve',
+                rating: 3.5,
+              },
+              {
+                brand: 'VMC simple flux auto basse conso (EC)',
+                priceRange: '700 - 1 800 €',
+                notes: 'Moteurs EC -50 % conso élec, ROI 6-8 ans',
+                rating: 4.0,
+              },
+              {
+                brand: 'VMC simple flux hygroréglable A',
+                priceRange: '900 - 2 200 €',
+                notes: 'Bouches modulent humidité, économie 5-8 %',
+                rating: 4.1,
+              },
+              {
+                brand: 'VMC simple flux hygroréglable B',
+                priceRange: '1 100 - 2 500 €',
+                notes: "Bouches + entrées d'air modulent, économie 8-12 %",
+                rating: 4.4,
+                highlight: true,
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc-simple-flux"
+            estimatedSaving={300}
+            subtitle="CEE Coup de pouce 100-300 € + TVA 5,5 % — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
 

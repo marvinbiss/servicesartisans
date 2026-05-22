@@ -48,6 +48,8 @@ import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
+import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
 
@@ -543,6 +545,49 @@ Disj. 16 A         (autres
               </Link>
             </div>
           </article>
+
+          <PrixComparatif
+            title="Prix pose et branchement VMC par type (main d'œuvre RGE)"
+            caption="Pose seule + raccordement électrique NF C 15-100. Artisan RGE Qualibat 8721 + Qualifelec. Sources : ADEME 2026, retours terrain devis."
+            rows={[
+              {
+                brand: 'Pose VMC simple flux auto',
+                priceRange: '350 - 700 €',
+                warranty: 'Décennale obligatoire',
+                rating: 3.8,
+                notes: '1 jour, caisson + 4-5 bouches + raccordement',
+              },
+              {
+                brand: 'Pose VMC simple flux hygro B',
+                priceRange: '500 - 900 €',
+                warranty: 'Décennale obligatoire',
+                rating: 4.2,
+                notes: "1-2 jours, bouches + entrées d'air hygro",
+                highlight: true,
+              },
+              {
+                brand: 'Pose VMC double flux',
+                priceRange: '1 200 - 2 000 €',
+                warranty: 'Décennale obligatoire',
+                rating: 4.4,
+                notes: '2-4 jours, 4 réseaux gaines + équilibrage',
+              },
+              {
+                brand: 'Pose VMC double flux thermo',
+                priceRange: '1 600 - 2 800 €',
+                warranty: 'Décennale obligatoire',
+                rating: 4.3,
+                notes: 'Qualifelec + QualiClimaFroid (PAC)',
+              },
+            ]}
+            withSchema
+          />
+
+          <SimulateurAideBox
+            serviceKey="vmc"
+            estimatedSaving={1500}
+            subtitle="MaPrimeRénov' (double flux) + CEE Coup de pouce + TVA 5,5 % — pose par artisan RGE Qualibat 8721"
+          />
 
           <FlagshipFaq items={faqs} />
 
