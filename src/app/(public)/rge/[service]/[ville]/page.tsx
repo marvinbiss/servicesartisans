@@ -33,6 +33,7 @@ import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import DevisQuickForm from '@/components/conversion/DevisQuickForm'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
@@ -790,6 +791,20 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             ville={villeName}
             source="rge_service_ville"
             variant="inline"
+          />
+        </section>
+
+        {/* DevisQuickForm — 4-champs friction-free, complémentaire au mini-
+            simulateur ci-dessus (l'un convertit sur aides, l'autre sur devis).
+            NEUTRE artisan : pas de provider ciblé → règle "no CTA devis sur
+            fiches unclaimed" préservée. */}
+        <section className="mb-8">
+          <DevisQuickForm
+            defaultService={serviceSlug}
+            defaultPostalCode={location.postal_code ?? undefined}
+            defaultVille={villeName}
+            source="rge_service_ville_quick"
+            heading={`Recevez 3 devis ${serviceName} RGE à ${villeName} en 24h`}
           />
         </section>
 

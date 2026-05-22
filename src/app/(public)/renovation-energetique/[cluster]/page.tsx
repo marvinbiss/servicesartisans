@@ -18,6 +18,7 @@ import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import { getSocialProofForCluster, getSocialProofGlobal } from '@/lib/conversion/social-proof'
+import DevisQuickForm from '@/components/conversion/DevisQuickForm'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -304,6 +305,17 @@ export default async function ClusterPage({ params }: PageProps) {
             )}
           </section>
         ))}
+
+        {/* DevisQuickForm — friction-free avant FAQ. Cluster sans ville :
+            defaultService = primary_kw du cluster, source taggue le cluster
+            pour analytics Pipedrive. NEUTRE artisan. */}
+        <section className="mb-8">
+          <DevisQuickForm
+            defaultService={row.service_slug ?? undefined}
+            source={`renovation_cluster_${row.slug.replace(/[^a-z0-9_-]/g, '-').slice(0, 30)}`}
+            heading={`${c.h1} — recevez 3 devis RGE en 24h`}
+          />
+        </section>
 
         {c.faq.length > 0 && (
           <section className="mb-8">

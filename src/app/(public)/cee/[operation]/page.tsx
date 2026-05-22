@@ -7,6 +7,7 @@ import CeeCTA from '@/components/cee/CeeCTA'
 import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import { getSocialProofForCluster } from '@/lib/conversion/social-proof'
+import DevisQuickForm, { type DevisQuickFormService } from '@/components/conversion/DevisQuickForm'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
@@ -688,6 +689,25 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-6">
         <h2 className="sr-only">L’essentiel de la prime CEE {operation.code}</h2>
         <TldrBlock bullets={tldrBullets} />
+      </section>
+
+      {/* DevisQuickForm — 4-champs avant FAQ. defaultService = premier service
+          RGE applicable de l'opération CEE (si dispo). Services proposés =
+          intersection des services RGE pour cette opération. NEUTRE artisan. */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-10">
+        <DevisQuickForm
+          defaultService={rgeServices[0]}
+          services={
+            rgeServices.length > 0
+              ? (rgeServices.map((slug) => ({
+                  slug,
+                  label: SERVICE_DISPLAY_NAME[slug] ?? slug,
+                })) satisfies DevisQuickFormService[])
+              : undefined
+          }
+          source={`cee_${operation.code.toLowerCase().replace(/[^a-z0-9_-]/g, '-')}_quick`}
+          heading={`Prime CEE ${operation.code} — recevez 3 devis d'artisans RGE en 24h`}
+        />
       </section>
 
       {/* FAQ visible — cohérent avec FAQPage schema émis (anti rich-snippet spam) */}

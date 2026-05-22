@@ -41,6 +41,7 @@ import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import FaqAndBlogSection from './FaqAndBlogSection'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
+import DevisQuickForm from '@/components/conversion/DevisQuickForm'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -266,6 +267,20 @@ export default function SimpleView({
           />
         </section>
       )}
+
+      {/* DevisQuickForm — friction-free 4-champs avant la FAQ. Surface
+          conversion canonique des pages pSEO (cf. plan 2026-05-22).
+          NEUTRE artisan : pas de provider ciblé → respecte la règle
+          "no CTA devis sur fiches unclaimed" (CLAUDE.md). */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2">
+        <DevisQuickForm
+          defaultService={serviceSlug}
+          defaultPostalCode={location.postal_code ?? undefined}
+          defaultVille={location.name}
+          source="services_slug_ville_quick"
+          heading={`Recevez 3 devis d'artisans RGE à ${location.name} en 24h`}
+        />
+      </section>
 
       {/* Bloc 6 — FAQ (5 questions max) */}
       {top5Faq.length > 0 && (
