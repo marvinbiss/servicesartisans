@@ -66,6 +66,64 @@ import {
 } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif, { type PrixComparatifRow } from '@/components/conversion/PrixComparatif'
+
+/**
+ * Comparatif marques isolants — données factuelles fiches techniques fabricants.
+ * Sources : fiches produits Isover/Knauf/Rockwool/Ursa/Soprema + ACERMI 2026
+ * (Association pour la Certification des Matériaux Isolants).
+ */
+const ISOLANTS_ROWS: PrixComparatifRow[] = [
+  {
+    brand: 'Isover (FR — Saint-Gobain)',
+    model: 'GR 32 / Isoconfort 35',
+    priceRange: '15 - 40 €/m²',
+    cop: 'λ 0,032 - 0,035 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'Laine de verre. Standard FR. Compatible ITI + combles.',
+    highlight: true,
+  },
+  {
+    brand: 'Knauf Insulation (DE/FR)',
+    model: 'TI 135 U / Earthwool',
+    priceRange: '14 - 38 €/m²',
+    cop: 'λ 0,032 - 0,035 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'Laine de verre / roche. Bonne perf acoustique.',
+  },
+  {
+    brand: 'Rockwool (DK)',
+    model: 'Rockmur / Deltarock',
+    priceRange: '20 - 55 €/m²',
+    cop: 'λ 0,034 - 0,037 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'Laine de roche. Incombustible (Euroclasse A1).',
+  },
+  {
+    brand: 'Ursa (ES/FR)',
+    model: 'Pureone / Terra',
+    priceRange: '13 - 35 €/m²',
+    cop: 'λ 0,032 - 0,038 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'Laine minérale. Rapport qualité-prix.',
+  },
+  {
+    brand: 'Soprema (FR)',
+    model: 'Pavatex (fibre de bois)',
+    priceRange: '25 - 60 €/m²',
+    cop: 'λ 0,036 - 0,041 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'Biosourcé. Bonus MPR +5-10 €/m². Inertie estivale.',
+  },
+  {
+    brand: 'Recticel (BE)',
+    model: 'Eurowall / Eurothane',
+    priceRange: '30 - 70 €/m²',
+    cop: 'λ 0,022 - 0,026 W/m.K',
+    warranty: 'ACERMI · 10 ans',
+    notes: 'PUR/PIR. λ très faible, faible épaisseur.',
+  },
+]
 
 export const revalidate = 86400
 
@@ -784,6 +842,13 @@ export default function Page() {
               </li>
             </ul>
           </article>
+
+          <PrixComparatif
+            title="Prix isolants par marque 2026 (ACERMI)"
+            caption="λ (conductivité thermique) certifiée ACERMI. Prix matériel HT pour épaisseur 100-200 mm. Sources : fiches produits constructeurs + ACERMI 2026."
+            withSchema
+            rows={ISOLANTS_ROWS}
+          />
 
           <SimulateurAideBox
             serviceKey="isolation"

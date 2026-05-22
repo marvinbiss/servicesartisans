@@ -15,6 +15,8 @@ import AideDemarche from '@/components/aides/AideDemarche'
 import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
+import RelatedLinks from '@/components/seo/RelatedLinks'
+import { getAideRelatedLinks } from '@/lib/seo/related-links'
 import {
   aidesCatalog,
   aidesSlugs,
@@ -378,6 +380,13 @@ export default async function AidePage({ params }: PageProps) {
       <AideFAQ aideName={aide.name} faqs={aide.faqs} />
 
       <RelatedAides title={`Aides cumulables avec ${aide.name}`} aides={cumulables} />
+
+      {/* Maillage topical : CEE + services + cluster reno spécifiques à l'aide */}
+      <RelatedLinks
+        title={`Travaux et primes CEE liés à ${aide.name}`}
+        links={getAideRelatedLinks(slug)}
+        ariaLabel={`Pages associées à ${aide.name}`}
+      />
 
       <section
         className="bg-accent-50/40 py-10 border-t border-accent-100"

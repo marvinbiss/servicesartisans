@@ -67,6 +67,64 @@ import {
 } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import PrixComparatif, { type PrixComparatifRow } from '@/components/conversion/PrixComparatif'
+
+/**
+ * Comparatif modules photovoltaïques — données factuelles fiches produits constructeurs.
+ * Sources : fiches techniques officielles + AFNOR EN IEC 61215 / 61730 + ADEME 2026.
+ * Prix indicatifs module 400-450 Wc seul (hors onduleur, pose, structure).
+ */
+const PANNEAUX_ROWS: PrixComparatifRow[] = [
+  {
+    brand: 'DualSun (FR)',
+    model: 'Flash Half-Cut 425',
+    priceRange: '230 - 290 €/module',
+    cop: 'Rendement 21,4 %',
+    warranty: '25 ans (produit) · 30 ans (perf)',
+    notes: 'Fabricant FR (Marseille). Origine France garantie.',
+    highlight: true,
+  },
+  {
+    brand: 'Voltec Solar (FR)',
+    model: 'Tarka 425 BB',
+    priceRange: '220 - 280 €/module',
+    cop: 'Rendement 21,2 %',
+    warranty: '25 ans (produit) · 30 ans (perf)',
+    notes: 'Fabricant FR (Alsace). Modules glass-glass.',
+  },
+  {
+    brand: 'REC (NO/SG)',
+    model: 'Alpha Pure-R 430',
+    priceRange: '230 - 300 €/module',
+    cop: 'Rendement 22,3 %',
+    warranty: '20 ans (produit) · 25 ans (perf)',
+    notes: 'Module HJT haut rendement. Garantie linéaire.',
+  },
+  {
+    brand: 'Trina Solar (CN)',
+    model: 'Vertex S+ NEG9R 440',
+    priceRange: '170 - 230 €/module',
+    cop: 'Rendement 22,3 %',
+    warranty: '15 ans (produit) · 30 ans (perf)',
+    notes: 'Volume mondial #1. Bon rapport puissance-prix.',
+  },
+  {
+    brand: 'JA Solar (CN)',
+    model: 'JAM54D40 425',
+    priceRange: '160 - 220 €/module',
+    cop: 'Rendement 21,8 %',
+    warranty: '12 ans (produit) · 30 ans (perf)',
+    notes: 'Volume mondial top 3. Entrée de gamme fiable.',
+  },
+  {
+    brand: 'SunPower (US)',
+    model: 'Maxeon 6 AC 435',
+    priceRange: '320 - 420 €/module',
+    cop: 'Rendement 22,8 %',
+    warranty: '40 ans (produit + perf)',
+    notes: 'Référence premium. Cellules IBC sans busbars.',
+  },
+]
 
 export const revalidate = 86400
 
@@ -747,6 +805,13 @@ export default function Page() {
               </li>
             </ul>
           </article>
+
+          <PrixComparatif
+            title="Comparatif modules photovoltaïques par marque 2026"
+            caption="Prix module 400-450 Wc seul (hors onduleur, pose, structure). Rendements et garanties certifiés sur fiche produit constructeur. Sources : AFNOR EN IEC 61215/61730, fiches produits, ADEME."
+            withSchema
+            rows={PANNEAUX_ROWS}
+          />
 
           <SimulateurAideBox
             serviceKey="panneau-solaire"

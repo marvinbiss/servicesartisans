@@ -51,6 +51,8 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import RelatedLinks from '@/components/seo/RelatedLinks'
+import { getClusterRelatedLinks } from '@/lib/seo/related-links'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getFinancialProductSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
@@ -597,6 +599,14 @@ export default function Page() {
               ))}
             </ul>
           </section>
+
+          {/* Maillage topical : aides isolation + CEE BAR-EN-* + services RGE */}
+          <RelatedLinks
+            title="Aides, primes CEE et artisans RGE pour l’isolation"
+            links={getClusterRelatedLinks('isolation')}
+            ariaLabel="Pages associées à l’isolation thermique"
+            className="-mx-4 sm:-mx-6 my-10"
+          />
 
           <FlagshipAuthorCard
             authorName={AUTHOR_NAME}

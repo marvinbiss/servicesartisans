@@ -20,7 +20,9 @@ import {
 } from '@/lib/seo/jsonld'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
+import RelatedLinks from '@/components/seo/RelatedLinks'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { getCeeRelatedLinks } from '@/lib/seo/related-links'
 import { getCeeOperationByCode, getCeeOperations, CEE_DOMAINE_LABELS } from '@/lib/cee/catalogue'
 import { getCeeClientTerm } from '@/lib/cee/client-terms'
 import { getCeeTopCitiesByOperation } from '@/lib/cee/listings'
@@ -699,6 +701,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           ))}
         </div>
       </section>
+
+      {/* Maillage topical : aides + cluster reno + services RGE applicables */}
+      <RelatedLinks
+        title={`Aides, services et travaux liés à la prime CEE ${operation.code}`}
+        links={getCeeRelatedLinks(operation.code, operation.services_slugs)}
+        ariaLabel={`Pages associées à la prime CEE ${operation.code}`}
+      />
 
       {/* CTAs */}
       <section className="bg-gradient-to-br from-accent-700 to-accent-900 text-white">
