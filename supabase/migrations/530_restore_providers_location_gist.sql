@@ -20,11 +20,12 @@
 -- ROLLBACK : DROP INDEX IF EXISTS public.idx_providers_location_gist;
 -- =============================================================================
 
--- IMPORTANT : pas de BEGIN/COMMIT — CREATE INDEX CONCURRENTLY ne peut pas
--- tourner en transaction. Le runner Supabase psql tolère le -1 implicite ;
--- on émet IF NOT EXISTS pour idempotence.
+-- IMPORTANT : pas de CONCURRENTLY — Supabase SQL editor wrap chaque query
+-- dans une transaction implicite (cf. mig 476 precedent). Partial GiST sur
+-- (is_active, noindex=false, location NOT NULL) = ~49K rows post-pivot RGE
+-- 2026-05-03 = lock table providers <30s acceptable hors trafic pointe.
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_providers_location_gist
+CREATE INDEX IF NOT EXISTS idx_providers_location_gist
   ON public.providers
   USING GIST (location)
   WHERE is_active = true
