@@ -12,9 +12,12 @@ import { notFound } from 'next/navigation'
 
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getProvidersByService } from '@/lib/supabase'
 import type { ClusterContent } from '@/lib/clusters'
 
 export const revalidate = 21600
@@ -89,6 +92,19 @@ export default async function ClusterPage({ params }: PageProps) {
   const c = row.content_jsonb
   const pageUrl = `${SITE_URL}/renovation-energetique/${row.slug}`
 
+  // Funnel conversion 2026-05-22 — pages cluster éditoriales étaient sans
+  // surface artisans ni simulateur (seul un Link CTA en bas). Inject :
+  //   - LocalProviderShowcase (jsonLdOnly) si service_slug !== null et que le
+  //     cluster n'est pas un hub pillar (skip Aleyda data-uniqueness rule).
+  //   - MiniSimulateurInline après l'intro (toujours, 100 % renovation intent).
+  // Fetch national RGE-only via getProvidersByService — pas de query
+  // dupliquée, helper existant. Best-effort : la page éditoriale survit si
+  // Supabase hoquette (fallback liste vide).
+  const showProviderShowcase = row.cluster_type !== 'pillar' && Boolean(row.service_slug)
+  const showcaseProviders = showProviderShowcase
+    ? await getProvidersByService(row.service_slug as string, 3, { rgeOnly: true }).catch(() => [])
+    : []
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -150,6 +166,19 @@ export default async function ClusterPage({ params }: PageProps) {
         <h1 className="text-3xl font-bold mb-4">{c.h1}</h1>
         <p className="text-lg text-charcoal-700 mb-6">{c.intro}</p>
 
+        {/* Funnel conversion — MiniSimulateurInline juste après l'intro pour
+            capturer le funnel rénovation avant que l'utilisateur scrolle dans
+            les sections éditoriales. 100 % renovation intent par construction
+            du cluster (table renovation_clusters). Injecté 2026-05-22. */}
+        <section className="mb-8">
+          <MiniSimulateurInline
+            service={row.service_slug ?? row.primary_kw}
+            source={`renovation_cluster:${row.slug}`}
+            variant="inline"
+            headline={`${c.h1} — combien d'aides pouvez-vous toucher ?`}
+          />
+        </section>
+
         {c.sections.map((section) => (
           <section key={section.h2} className="mb-8">
             <h2 className="text-2xl font-bold mb-3">{section.h2}</h2>
@@ -208,6 +237,21 @@ export default async function ClusterPage({ params }: PageProps) {
             {c.ctaText}
           </Link>
         </div>
+
+        {/* LocalProviderShowcase en mode jsonLdOnly — émet 3 LocalBusiness
+            JSON-LD pour donner à Google des signaux artisans rattachés au
+            cluster éditorial, sans afficher de cartes hors contexte
+            géographique (UX confuse à l'échelle nationale). Gated sur
+            cluster_type !== 'pillar' (Aleyda data-uniqueness). */}
+        {showProviderShowcase && showcaseProviders.length > 0 && (
+          <LocalProviderShowcase
+            providers={showcaseProviders.slice(0, 3)}
+            serviceName={c.h1}
+            cityName=""
+            max={3}
+            jsonLdOnly
+          />
+        )}
       </article>
     </main>
   )

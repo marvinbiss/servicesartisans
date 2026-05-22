@@ -30,6 +30,7 @@ import { FileText } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
+import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
@@ -743,6 +744,20 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           {enrichedParagraphs.map((para, i) => (
             <p key={`para-${i}-${para.slice(0, 20)}`}>{para}</p>
           ))}
+        </section>
+
+        {/* Funnel conversion — MiniSimulateurInline placé après l'intro pour
+            capter le funnel rénovation énergétique avant le scroll-deep. Le
+            SimulateurCTA banner existant reste en footer (showCeeBlock).
+            Tous les services RGE sont par nature "renovation intent" :
+            pas de gating supplémentaire requis. Injecté 2026-05-22. */}
+        <section className="mb-8">
+          <MiniSimulateurInline
+            service={serviceName.toLowerCase()}
+            ville={villeName}
+            source="rge_service_ville"
+            variant="inline"
+          />
         </section>
 
         <section className="mb-6 rounded-lg border border-accent-200 bg-accent-50 p-4 text-sm text-accent-900">

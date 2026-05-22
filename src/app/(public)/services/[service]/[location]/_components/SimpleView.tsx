@@ -38,7 +38,9 @@ import ImmediateAnswerBlock from '@/components/seo/ImmediateAnswerBlock'
 import ReviewsDeptBlock from '@/components/seo/ReviewsDeptBlock'
 import CommuneContextBlock from '@/components/seo/CommuneContextBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import FaqAndBlogSection from './FaqAndBlogSection'
+import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -105,6 +107,9 @@ interface SimpleViewProps {
   speakableSummary?: string
   trade: TradeContent | null
   pricingMultiplier: number
+  /** True when service intent === 'renovation' — gates MiniSimulateurInline.
+   *  Computed upstream via `shouldRenderRenovationBlocks(getServiceIntent(slug))`. */
+  isRenovationIntent?: boolean
 }
 
 export default function SimpleView({
@@ -128,6 +133,7 @@ export default function SimpleView({
   speakableSummary,
   trade,
   pricingMultiplier,
+  isRenovationIntent = false,
 }: SimpleViewProps) {
   const showReviews = Boolean(
     reviewStats && reviewStats.review_count >= 3 && reviewStats.avg_rating > 0
@@ -164,6 +170,22 @@ export default function SimpleView({
           du PageClient affiche un duplicata visuel (downgradé en <p> pour
           éviter le bug "Multiple H1 tags"). */}
       <h1 className="sr-only">{h1Text}</h1>
+
+      {/* JSON-LD LocalBusiness per provider (jsonLdOnly = pas de duplication
+          visuelle avec le listing rendu par ServiceLocationPageClient). Donne
+          à Google les signaux structurés top-3 artisans (rating + areaServed)
+          sans empiler une seconde grille de cartes mobile. Funnel conversion
+          injection 2026-05-22 — SimpleView était sans aucune surface
+          LocalProviderShowcase. */}
+      {providers.length > 0 && (
+        <LocalProviderShowcase
+          providers={providers.slice(0, 3)}
+          serviceName={service.name}
+          cityName={location.name}
+          max={3}
+          jsonLdOnly
+        />
+      )}
 
       {/* Bloc 2 — ImmediateAnswerBlock (featured snippet bait) */}
       <ImmediateAnswerBlock
@@ -215,6 +237,21 @@ export default function SimpleView({
             departmentName={location.department_name || ''}
             stats={reviewStats}
             reviews={topReviews}
+          />
+        </section>
+      )}
+
+      {/* Funnel conversion — MiniSimulateurInline (gate intent renovation).
+          Off-intent sur dépannage/urgence : aide MaPrimeRénov' = faux signal
+          YMYL et dilue CTR. Funnel injection 2026-05-22 — SimpleView était
+          sans surface simulateur, brûlait 95 % du trafic renovation. */}
+      {isRenovationIntent && (
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2">
+          <MiniSimulateurInline
+            service={service.name.toLowerCase()}
+            ville={location.name}
+            source="services_slug_ville_simple"
+            variant="inline"
           />
         </section>
       )}

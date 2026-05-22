@@ -1191,6 +1191,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
         speakableSummary={speakableSummary}
         trade={trade ?? null}
         pricingMultiplier={pricingMultiplier}
+        isRenovationIntent={renderRenovationBlocks}
       />
     )
   }
