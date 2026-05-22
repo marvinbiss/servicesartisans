@@ -113,9 +113,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // thermo 31K + variantes). Description garde le jargon ADEME pour autorité.
   // Cf. docs/audit-ahrefs-2026-05-03/E_site/STRIKING_DISTANCE_PLAN.md.
   const clientTerm = getCeeClientTerm(opCode)
+  // truncate à 46 char raw : +19 char brand suffix (` | ServicesArtisans` ajouté
+  // par le root layout) = ≤ 65 char rendu (cf. scripts/audit-title-length.mjs).
   const title = clientTerm
-    ? truncate(`${clientTerm} : prime CEE 2026 (${opCode}) — artisans RGE`, 60)
-    : truncate(`Prime CEE ${opName} (${opCode}) — artisans RGE`, 60)
+    ? truncate(`${clientTerm} : prime CEE 2026 (${opCode}) — artisans RGE`, 46)
+    : truncate(`Prime CEE ${opName} (${opCode}) — artisans RGE`, 46)
   const description = truncate(
     `${opName} : conditions, qualifications RGE requises, villes couvertes. Prime CEE mobilisable avec MaPrimeRénov’ et TVA 5,5 %.`,
     158

@@ -14,6 +14,8 @@ import { getStatsByMetier, getMetierTopVilles } from '@/lib/barometre/queries'
 import type { BarometreStatRow } from '@/lib/barometre/queries'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
+import { hashCode } from '@/lib/seo/location-content'
 
 // ---------------------------------------------------------------------------
 // Static params (top 30 métiers)
@@ -48,7 +50,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countStr = count > 0 ? `${count.toLocaleString('fr-FR')} ` : ''
   const noteStr = stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}★ · ` : ''
 
-  const title = `${noteStr}${metier.label} RGE France 2026 — ${countStr}artisans certifiés + stats`
+  // selectFittingTitle : variants ordonnés du plus riche au plus court.
+  // maxLen = 46 char raw : +19 char brand suffix = ≤ 65 char rendu.
+  const titleHash = Math.abs(hashCode(`barometre-title-${metierSlug}`))
+  const titleVariants = [
+    `${noteStr}${metier.label} RGE France 2026 — ${countStr}artisans`,
+    `${metier.label} RGE France 2026 — ${countStr}artisans certifiés`,
+    `Baromètre ${metier.label} RGE 2026 — ${countStr}artisans`,
+    `Baromètre ${metier.label} RGE France 2026`,
+    `${metier.label} RGE France 2026 — stats`,
+  ]
+  const title = selectFittingTitle(titleVariants, titleHash, 46)
   const description = `Baromètre ${metier.label.toLowerCase()} RGE 2026 : ${countStr}artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) référencés en France, note moyenne ${stats?.note_moyenne?.toFixed(1) ?? '--'}/5, ${(stats?.nb_avis ?? 0).toLocaleString('fr-FR')} avis vérifiés. Statistiques par ville et département. Source ADEME.`
   const canonicalUrl = `${SITE_URL}/barometre/tarifs/${metierSlug}`
 

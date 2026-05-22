@@ -58,7 +58,8 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-function truncate(s: string, max = 58): string {
+// default 46 char raw : +19 char brand suffix (root layout) = ≤ 65 char rendu.
+function truncate(s: string, max = 46): string {
   if (s.length <= max) return s
   return s.slice(0, max - 1).replace(/\s+\S*$/, '') + '…'
 }

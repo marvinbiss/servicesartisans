@@ -53,7 +53,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const path = `/cee/${urlCode}/guide`
 
   return {
-    title: truncate(guide.metaTitle, 60),
+    // truncate à 46 char raw : +19 char brand suffix = ≤ 65 char rendu.
+    title: truncate(guide.metaTitle, 46),
     description: truncate(guide.metaDescription, 158),
     robots: {
       index: true,

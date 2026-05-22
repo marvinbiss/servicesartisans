@@ -137,7 +137,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         `${serviceName} RGE : Tarifs 2026 + Devis Gratuit`,
         `${serviceName} 2026 — Artisans RGE certifiés en France`,
       ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 60)
+  // maxLen 46 raw : +19 char brand suffix = ≤ 65 char rendu (Google SERP cutoff).
+  const title = selectFittingTitle(titleTemplates, titleHash, 46)
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [

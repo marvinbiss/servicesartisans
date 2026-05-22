@@ -49,9 +49,13 @@ const head = src.split(/\r?\n/, 60).join('\n')
 
 const checks = [
   {
-    id: 'truncate_60',
-    label: 'selectFittingTitle maxLen=60 (Sprint 5 vague 4)',
-    ok: /selectFittingTitle\([^)]+,\s*\d+,\s*60\)/.test(src) || /selectFittingTitle\([^,]+,[^,]+,\s*60\s*\)/.test(src),
+    id: 'fitting_title',
+    label: 'selectFittingTitle wrap (maxLen ≤ 46 raw + 19 brand = 65 rendu)',
+    // 2026-05-22 — bumped from maxLen=60 to maxLen=46 : le rendu HTML
+    // ajoute ` | ServicesArtisans` (19c) via le root layout template,
+    // donc 60 raw = 79 rendu (Google tronque ~580px desktop). Voir
+    // scripts/audit-title-length.mjs --strict pour le gate cross-templates.
+    ok: /selectFittingTitle\([^,]+,[^,]+,\s*(?:41|46)\s*\)/.test(src),
   },
   {
     id: 'sprint2_review_prefix',

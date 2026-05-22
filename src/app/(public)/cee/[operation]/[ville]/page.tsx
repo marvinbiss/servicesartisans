@@ -146,7 +146,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const providerCount = await getCeeProviderCountByOperationAndCity(opCode, villeSlug)
   const isNoindex = providerCount === 0 || !operation
 
-  const title = truncate(`Prime CEE ${opName} à ${villeName} — artisans RGE`, 60)
+  // truncate à 46 char raw : +19 char brand suffix = ≤ 65 char rendu.
+  const title = truncate(`Prime CEE ${opName} à ${villeName} — artisans RGE`, 46)
   const description = truncate(
     `${opName} à ${villeName} : artisans RGE certifiés, prime CEE mobilisable, cumul MaPrimeRénov’ et TVA 5,5 %. Vérification ADEME.`,
     158

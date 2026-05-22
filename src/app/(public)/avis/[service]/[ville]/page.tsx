@@ -310,8 +310,8 @@ export async function generateMetadata({
     `${reviewPrefix}Avis ${trade.name} ${villeData.name} 2026`,
     `${reviewPrefix}Avis ${tradeLower} ${villeData.name}`,
   ]
-  // Tier 1 2026-05-04 — maxLen 41 → 60 (Google SERP desktop limite).
-  const title = selectFittingTitle(titleTemplates, titleHash, 60)
+  // maxLen 46 raw : +19 char brand suffix = ≤ 65 char rendu (Google SERP cutoff).
+  const title = selectFittingTitle(titleTemplates, titleHash, 46)
 
   // FS-bait : count + price + comparison signal (PAA "Quel est le meilleur X à Y").
   // pluralTerm corrige les noms composés ("pompes à chaleur" et non

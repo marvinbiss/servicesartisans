@@ -20,6 +20,7 @@ import { getBreadcrumbSchema, getFAQSchema, getAvisHubSchema } from '@/lib/seo/j
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { hashCode } from '@/lib/seo/location-content'
+import { selectFittingTitle } from '@/lib/seo/title-selector'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes } from '@/lib/data/france'
@@ -60,23 +61,26 @@ export async function generateMetadata({
   // Fetch stats to enrich title with real rating data
   const stats = await getServiceStats(service)
 
+  // selectFittingTitle : variants ordonnés du plus ambitieux au plus court.
+  // maxLen = 46 char raw : +19 char brand suffix = ≤ 65 char rendu.
   let title: string
+  const titleHash = Math.abs(hashCode(`avis-title-${service}`))
   if (stats.totalReviews > 0 && stats.avgRating > 0) {
-    const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `${stats.avgRating}★ Avis ${trade.name} RGE 2026 — ${stats.totalReviews} avis vérifiés`,
-      `Avis ${trade.name} RGE 2026 : ${stats.avgRating}/5 sur ${stats.totalReviews} clients`,
-      `${trade.name} RGE : ${stats.avgRating}★ (${stats.totalReviews} avis) — Pros certifiés 2026`,
+      `${stats.avgRating}★ Avis ${trade.name} RGE — ${stats.totalReviews} avis`,
+      `Avis ${trade.name} RGE : ${stats.avgRating}/5 — ${stats.totalReviews} clients`,
+      `${trade.name} RGE : ${stats.avgRating}★ (${stats.totalReviews} avis) 2026`,
+      `Avis ${trade.name} RGE ${stats.avgRating}/5 — 2026`,
     ]
-    title = titleTemplates[titleHash % titleTemplates.length]
+    title = selectFittingTitle(titleTemplates, titleHash, 46)
   } else {
-    const titleHash = Math.abs(hashCode(`avis-title-${service}`))
     const titleTemplates = [
-      `Avis ${trade.name} RGE 2026 — Témoignages clients vérifiés`,
-      `Avis ${trade.name} RGE 2026 — Comparez les pros certifiés + Devis 24h`,
-      `${trade.name} RGE 2026 : avis et recommandations vérifiés`,
+      `Avis ${trade.name} RGE 2026 — Témoignages vérifiés`,
+      `Avis ${trade.name} RGE 2026 — Pros certifiés`,
+      `${trade.name} RGE : avis et recommandations 2026`,
+      `Avis ${trade.name} RGE 2026`,
     ]
-    title = titleTemplates[titleHash % titleTemplates.length]
+    title = selectFittingTitle(titleTemplates, titleHash, 46)
   }
 
   const ratingSnippet =

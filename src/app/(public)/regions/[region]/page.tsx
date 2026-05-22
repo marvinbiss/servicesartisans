@@ -68,7 +68,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Artisans ${region.name} 2026`,
     `Artisans ${region.name}`,
   ]
-  const title = selectFittingTitle(titleTemplates, titleHash, 60)
+  // maxLen 46 raw : +19 char brand suffix = ≤ 65 char rendu (Google SERP cutoff).
+  const title = selectFittingTitle(titleTemplates, titleHash, 46)
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
   const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
