@@ -59,6 +59,7 @@ audit-search-pages-coverage.mjs --threshold 85 --strict
 audit-claude-md-mig-drift.mjs --strict
 audit-unclaimed-cta-rules.mjs --strict
 audit-thin-pages-coverage.mjs --threshold 95 --strict
+audit-title-length.mjs --strict
 audit-funnel-devis-fail-soft.mjs --strict
 audit-cron-sentry-coverage.mjs --threshold 95 --strict
 audit-lead-exclusivity-rules.mjs --strict
