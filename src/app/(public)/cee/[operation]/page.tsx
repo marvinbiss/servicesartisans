@@ -705,7 +705,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                 })) satisfies DevisQuickFormService[])
               : undefined
           }
-          source={`cee_${operation.code.toLowerCase().replace(/[^a-z0-9_-]/g, '-')}_quick`}
+          source={`cee_${operation.code.toLowerCase()}_quick`}
           heading={`Prime CEE ${operation.code} — recevez 3 devis d'artisans RGE en 24h`}
         />
       </section>

@@ -139,6 +139,7 @@ export default async function ClusterPage({ params }: PageProps) {
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${pageUrl}#article`,
     headline: c.h1,
     description: c.metaDescription,
     url: pageUrl,
