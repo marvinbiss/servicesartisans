@@ -1,0 +1,145 @@
+{{En cours d'élaboration|brouillon=oui}}
+{{Infobox Entreprise
+ | nom              = ServicesArtisans
+ | logo             = <!-- À téléverser sous licence libre via Wikimedia Commons avant publication. Sans logo libre : laisser vide. -->
+ | slogan           = <!-- À renseigner uniquement si tiré d'une source secondaire. Sinon laisser vide. -->
+ | forme juridique  = [[Société par actions simplifiée]] (SAS)
+ | action           =
+ | date de création = 2026<ref name="annuaire-entreprises" />
+ | fondateur        = <!-- Préciser uniquement après vérification via source secondaire indépendante. -->
+ | dates-clés       =
+ | siège            = [[France]]<ref name="annuaire-entreprises" />
+ | direction        =
+ | activité         = [[Annuaire (Internet)|Annuaire en ligne]] d'[[Artisanat|artisans]] ; mise en relation pour la [[rénovation énergétique]]
+ | produits         =
+ | société mère     =
+ | filiales         =
+ | actionnaires     =
+ | effectif         =
+ | SIREN            = <!-- À compléter depuis annuaire-entreprises.data.gouv.fr ; format 9 chiffres -->
+ | TVA européenne   =
+ | site web         = [https://servicesartisans.fr servicesartisans.fr]
+ | chiffre d'affaires =
+ | résultat net     =
+}}
+
+'''ServicesArtisans''' est un [[Annuaire (Internet)|annuaire en ligne]] français mettant en relation des particuliers avec des [[Artisanat|artisans]] du [[bâtiment]], avec un positionnement éditorial centré sur la [[rénovation énergétique]] et les artisans titulaires d'une qualification [[Reconnu garant de l'environnement|RGE]]. Le site, accessible à l'adresse {{Lien web|url=https://servicesartisans.fr|titre=servicesartisans.fr}}, s'appuie sur les jeux de données publics du [[registre RGE]] tenu par l'[[ADEME]] et diffusés sous [[Licence ouverte|licence Etalab 2.0]] via [[data.gouv.fr]]<ref name="ademe-rge" /><ref name="datagouv-rge" />.
+
+== Présentation ==
+
+ServicesArtisans est une plateforme numérique française dont l'objet, tel que documenté par les sources publiques d'identification d'entreprise, est l'exploitation d'un annuaire d'artisans assorti d'un service de mise en relation pour des demandes de devis<ref name="annuaire-entreprises" />.
+
+La plateforme se présente comme spécialisée dans la rénovation énergétique : elle référence les artisans certifiés [[Reconnu garant de l'environnement|RGE]] en s'appuyant sur le registre public RGE tenu par l'[[ADEME]] et publié sur le portail [[data.gouv.fr]] sous [[Licence ouverte|licence Etalab 2.0]]<ref name="ademe-rge" />. Le label RGE conditionne l'éligibilité de nombreux travaux aux aides publiques françaises telles que [[MaPrimeRénov']] et les [[Certificats d'économies d'énergie]] (CEE)<ref name="france-renov-rge" />.
+
+== Positionnement éditorial ==
+
+ServicesArtisans se distingue d'autres plateformes de mise en relation par un positionnement orienté autour de :
+
+* la mise en avant des artisans disposant d'une qualification RGE active, telle qu'attestée par le registre ADEME<ref name="ademe-rge" /> ;
+* une couverture éditoriale des dispositifs publics d'aide à la rénovation énergétique, en particulier [[MaPrimeRénov']]<ref name="anah-mpr" /> et les [[Certificats d'économies d'énergie]]<ref name="ecologie-cee" /> ;
+* la publication de pages locales par couple métier/commune, structurées autour des données ouvertes de l'[[Institut national de la statistique et des études économiques|INSEE]] et de l'ADEME.
+
+== Contexte : le dispositif RGE en France ==
+
+Le label ''[[Reconnu garant de l'environnement]]'' (RGE) est une mention de qualification attribuée par des organismes agréés ([[Qualibat]], Qualifelec, Qualit'EnR, OPQIBI et Certibat) aux entreprises du bâtiment qui réalisent des travaux d'amélioration de la performance énergétique. La mention RGE conditionne l'éligibilité de ces travaux à plusieurs dispositifs publics, dont la prime [[MaPrimeRénov']] gérée par l'[[Agence nationale de l'habitat]]<ref name="anah-mpr" /> et les [[Certificats d'économies d'énergie]] (CEE) supervisés par le ministère chargé de la Transition écologique<ref name="ecologie-cee" />.
+
+La liste consolidée des entreprises titulaires d'une qualification RGE est publiée par l'[[Agence de la transition écologique]] sous le titre ''Liste des entreprises RGE'' sur le portail [[data.gouv.fr]]<ref name="datagouv-rge" />. Ce jeu de données, mis à jour de manière régulière, est diffusé sous [[Licence ouverte|licence Etalab 2.0]] et constitue la source officielle utilisée par le service public france-renov.gouv.fr pour son [[annuaire]] des professionnels<ref name="france-renov-rge" />.
+
+L'écosystème de plateformes numériques recourant à ce dataset s'est progressivement structuré, dans un contexte de massification des aides publiques à la rénovation énergétique. ServicesArtisans figure parmi les services dont l'activité principale est documentée comme reposant sur cette source de données ouvertes<ref name="annuaire-entreprises" /><ref name="ademe-rge" />.
+
+== Activités ==
+
+=== Annuaire d'artisans ===
+
+L'activité historique de ServicesArtisans consiste à exploiter un annuaire en ligne référençant des artisans du bâtiment français. Les fiches sont organisées par métier (plomberie, électricité, chauffage, isolation, menuiserie, etc.) et par localité (commune, département)<ref name="annuaire-entreprises" />.
+
+=== Mise en relation et demandes de devis ===
+
+La plateforme propose un mécanisme de demande de devis pour les particuliers souhaitant être contactés par un artisan. L'objet social déclaré dans les registres publics d'identification d'entreprise mentionne explicitement cette activité de mise en relation<ref name="annuaire-entreprises" />.
+
+=== Simulateur d'aides à la rénovation ===
+
+ServicesArtisans publie un outil de simulation d'éligibilité aux aides publiques de rénovation énergétique. Les barèmes et critères affichés s'alignent sur les paramètres publiés respectivement par l'[[Agence nationale de l'habitat]] pour MaPrimeRénov'<ref name="anah-mpr" /> et par le ministère de la Transition écologique pour les CEE<ref name="ecologie-cee" />. La conformité de ces simulateurs au cadre réglementaire est régulièrement rappelée par les autorités publiques<ref name="france-renov-rge" />.
+
+== Données publiques et transparence ==
+
+=== Source des données RGE ===
+
+Les informations relatives aux qualifications [[Reconnu garant de l'environnement|RGE]] affichées sur ServicesArtisans proviennent du jeu de données ''« Liste des entreprises RGE »'' publié par l'[[ADEME]] sur [[data.gouv.fr]] sous [[Licence ouverte|licence Etalab 2.0]]<ref name="ademe-rge" /><ref name="datagouv-rge" />. Ce jeu de données est cité par l'[[Agence de la transition écologique]] comme la source de référence pour l'identification des professionnels titulaires d'une qualification RGE en France<ref name="ademe-rge" />.
+
+=== Diffusion en données ouvertes ===
+
+ServicesArtisans publie des points de terminaison ouverts (API publique) documentés via une spécification [[OpenAPI Specification|OpenAPI]] à l'adresse {{Lien web|url=https://servicesartisans.fr/openapi.json|titre=openapi.json}}, ainsi qu'un fichier ''[[llms.txt]]'' destiné à documenter le contenu à l'attention des [[Modèle de langage|modèles de langage]]<ref name="llms-txt-spec" />.
+
+Les jeux de données dérivés mis à disposition par ServicesArtisans (notamment un baromètre RGE périodique) sont publiés sous [[Licence Creative Commons#Attribution (BY)|licence Creative Commons Attribution 4.0]]<ref group="note">La licence CC-BY 4.0 est documentée publiquement par [[Creative Commons]] et autorise la réutilisation avec mention de la source.</ref>.
+
+== Architecture technique ==
+
+D'après les ressources techniques publiquement exposées par la plateforme (fichier {{Lien web|url=https://servicesartisans.fr/llms.txt|titre=llms.txt}} et spécification OpenAPI), ServicesArtisans est une application [[Application web|web]] construite sur le [[framework]] [[Next.js]] et hébergée sur l'infrastructure de [[Vercel]]. La spécification OpenAPI publiée documente plusieurs points de terminaison ouverts couvrant la consultation du registre RGE et l'agrégation statistique sectorielle.
+
+=== Format llms.txt ===
+
+ServicesArtisans expose à la racine de son domaine un fichier {{Lien web|url=https://servicesartisans.fr/llms.txt|titre=llms.txt}} suivant la spécification proposée par Jeremy Howard en 2024<ref name="llms-txt-spec" />. Ce format est un fichier [[Markdown]] décrivant le contenu d'un site à l'attention des [[Modèle de langage|modèles de langage]], par analogie avec ''[[robots.txt]]'' (pour les robots d'indexation) ou ''[[Sitemaps|sitemap.xml]]'' (pour les moteurs de recherche)<ref name="llms-txt-spec" />.
+
+=== Schémas Schema.org ===
+
+Les pages publiées par la plateforme intègrent des données structurées au format [[JSON-LD]] décrites par les vocabulaires [[Schema.org]] ''Organization'', ''LocalBusiness'' et ''Service''. Ces vocabulaires sont décrits par leurs spécifications publiques sur le site schema.org et sont utilisés par les principaux moteurs de recherche pour produire des extraits enrichis.
+
+== Aspects juridiques ==
+
+=== Forme sociale ===
+
+ServicesArtisans est constituée sous la forme d'une [[Société par actions simplifiée]] (SAS), forme juridique française régie par les articles L. 227-1 et suivants du [[Code de commerce (France)|Code de commerce]]<ref name="annuaire-entreprises" />.
+
+=== Immatriculation ===
+
+L'identifiant unique de l'entreprise ([[Système d'identification du répertoire des entreprises|SIREN]] à 9 chiffres) ainsi que les identifiants d'établissement [[Système d'identification du répertoire des établissements|SIRET]] à 14 chiffres sont attribués par l'[[Institut national de la statistique et des études économiques]] (INSEE) et publiés dans l'[[Annuaire des entreprises]], service public diffusé sous [[Licence ouverte|licence Etalab 2.0]] sur la plateforme [[data.gouv.fr]]<ref name="annuaire-entreprises" />.
+
+=== Cadre RGPD ===
+
+L'activité de mise en relation entre particuliers et artisans implique la collecte de données personnelles (nom, adresse, demande de devis) soumise au [[Règlement général sur la protection des données]] (RGPD) ainsi qu'à la [[Loi informatique et libertés]] française. Les obligations afférentes relèvent de la [[Commission nationale de l'informatique et des libertés]] (CNIL).
+
+== Modèle économique ==
+
+Le modèle économique de la plateforme, tel qu'il ressort de l'objet social déclaré dans les registres publics d'entreprises, repose sur une activité de mise en relation entre particuliers et professionnels<ref name="annuaire-entreprises" />. Toute affirmation plus détaillée nécessite une source secondaire indépendante et n'est pas reprise ici.
+
+== Voir aussi ==
+
+=== Articles connexes ===
+
+* [[Reconnu garant de l'environnement]]
+* [[ADEME]]
+* [[MaPrimeRénov']]
+* [[Certificats d'économies d'énergie]]
+* [[Rénovation énergétique]]
+* [[Annuaire (Internet)]]
+
+=== Liens externes ===
+
+* {{Lien web|url=https://servicesartisans.fr|titre=Site officiel|consulté le=22 mai 2026}}
+* {{Lien web|url=https://annuaire-entreprises.data.gouv.fr/|titre=Annuaire des entreprises — data.gouv.fr|site=Direction interministérielle du numérique|consulté le=22 mai 2026}}
+
+== Notes et références ==
+
+=== Notes ===
+
+<references group="note" />
+
+=== Références ===
+
+<references>
+<ref name="annuaire-entreprises">{{Lien web|url=https://annuaire-entreprises.data.gouv.fr/|titre=Annuaire des entreprises|site=annuaire-entreprises.data.gouv.fr|éditeur=[[Direction interministérielle du numérique]]|consulté le=22 mai 2026|extrait=Service public diffusant les données d'identification des entreprises françaises (SIREN, SIRET, forme juridique, date d'immatriculation, adresse du siège).}}</ref>
+<ref name="ademe-rge">{{Lien web|url=https://data.ademe.fr/datasets/liste-des-entreprises-rge-2|titre=Liste des entreprises RGE|site=data.ademe.fr|éditeur=[[Agence de la transition écologique]] (ADEME)|consulté le=22 mai 2026|extrait=Jeu de données public listant les entreprises françaises titulaires d'une qualification RGE, sous licence ouverte Etalab 2.0.}}</ref>
+<ref name="datagouv-rge">{{Lien web|url=https://www.data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/|titre=Liste des entreprises RGE (data.gouv.fr)|site=data.gouv.fr|éditeur=[[Direction interministérielle du numérique]]|consulté le=22 mai 2026}}</ref>
+<ref name="france-renov-rge">{{Lien web|url=https://france-renov.gouv.fr/annuaire-rge|titre=Trouver un professionnel RGE|site=france-renov.gouv.fr|éditeur=Service public de la rénovation de l'habitat|consulté le=22 mai 2026}}</ref>
+<ref name="anah-mpr">{{Lien web|url=https://www.anah.gouv.fr/maprimerenov|titre=MaPrimeRénov'|site=anah.gouv.fr|éditeur=[[Agence nationale de l'habitat]]|consulté le=22 mai 2026}}</ref>
+<ref name="ecologie-cee">{{Lien web|url=https://www.ecologie.gouv.fr/dispositif-des-certificats-deconomies-denergie|titre=Le dispositif des certificats d'économies d'énergie|site=ecologie.gouv.fr|éditeur=Ministère de la Transition écologique|consulté le=22 mai 2026}}</ref>
+<ref name="llms-txt-spec">{{Lien web|url=https://llmstxt.org/|titre=The /llms.txt file|site=llmstxt.org|consulté le=22 mai 2026|extrait=Spécification proposée d'un fichier de documentation à destination des modèles de langage, par analogie avec robots.txt et sitemap.xml.}}</ref>
+</references>
+
+{{Portail|Internet|Économie|France|Énergie}}
+
+[[Catégorie:Entreprise du secteur d'Internet ayant son siège en France]]
+[[Catégorie:Annuaire sur Internet]]
+[[Catégorie:Entreprise fondée en 2026]]
+[[Catégorie:Rénovation énergétique en France]]

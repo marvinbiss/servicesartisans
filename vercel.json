@@ -100,6 +100,10 @@
       "schedule": "15 6 * * *"
     },
     {
+      "path": "/api/cron/indexnow-batch",
+      "schedule": "0 8 * * *"
+    },
+    {
       "path": "/api/cron/voice-lead-expiry",
       "schedule": "0 */4 * * *"
     },

@@ -1,0 +1,391 @@
+{
+  "$comment": "Wikidata payload — entité corporate ServicesArtisans (SAS). Format compatible wbeditentity (action=wbeditentity / new=item). Aucun Q-ID n'est encore réservé : Wikidata l'attribuera à la création. DRY-RUN — ne pas exécuter sans bot flag approuvé. Date de génération : 2026-05-22.",
+  "type": "item",
+  "labels": {
+    "fr": { "language": "fr", "value": "ServicesArtisans" },
+    "en": { "language": "en", "value": "ServicesArtisans" },
+    "de": { "language": "de", "value": "ServicesArtisans" },
+    "es": { "language": "es", "value": "ServicesArtisans" },
+    "it": { "language": "it", "value": "ServicesArtisans" }
+  },
+  "descriptions": {
+    "fr": {
+      "language": "fr",
+      "value": "annuaire en ligne d'artisans français spécialisé dans la rénovation énergétique et les certifications RGE"
+    },
+    "en": {
+      "language": "en",
+      "value": "French online directory of craftsmen specialised in energy renovation and RGE-certified providers"
+    }
+  },
+  "aliases": {
+    "fr": [
+      { "language": "fr", "value": "Services Artisans" },
+      { "language": "fr", "value": "servicesartisans.fr" }
+    ],
+    "en": [
+      { "language": "en", "value": "Services Artisans" },
+      { "language": "en", "value": "servicesartisans.fr" }
+    ]
+  },
+  "claims": {
+    "P31": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P31",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": { "entity-type": "item", "id": "Q4830453", "$label": "business enterprise" }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "references": [
+          {
+            "snaks": {
+              "P854": [
+                {
+                  "snaktype": "value",
+                  "property": "P854",
+                  "datavalue": {
+                    "type": "string",
+                    "value": "https://annuaire-entreprises.data.gouv.fr/entreprise/servicesartisans"
+                  }
+                }
+              ],
+              "P813": [
+                {
+                  "snaktype": "value",
+                  "property": "P813",
+                  "datavalue": {
+                    "type": "time",
+                    "value": {
+                      "time": "+2026-05-22T00:00:00Z",
+                      "timezone": 0,
+                      "before": 0,
+                      "after": 0,
+                      "precision": 11,
+                      "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "P17": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P17",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": { "entity-type": "item", "id": "Q142", "$label": "France" }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "references": [
+          {
+            "snaks": {
+              "P854": [
+                {
+                  "snaktype": "value",
+                  "property": "P854",
+                  "datavalue": { "type": "string", "value": "https://servicesartisans.fr" }
+                }
+              ],
+              "P813": [
+                {
+                  "snaktype": "value",
+                  "property": "P813",
+                  "datavalue": {
+                    "type": "time",
+                    "value": {
+                      "time": "+2026-05-22T00:00:00Z",
+                      "timezone": 0,
+                      "before": 0,
+                      "after": 0,
+                      "precision": 11,
+                      "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "P1454": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P1454",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": {
+              "entity-type": "item",
+              "id": "Q188790",
+              "$label": "société par actions simplifiée (SAS)"
+            }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "references": [
+          {
+            "snaks": {
+              "P854": [
+                {
+                  "snaktype": "value",
+                  "property": "P854",
+                  "datavalue": {
+                    "type": "string",
+                    "value": "https://annuaire-entreprises.data.gouv.fr/entreprise/servicesartisans"
+                  }
+                }
+              ],
+              "P813": [
+                {
+                  "snaktype": "value",
+                  "property": "P813",
+                  "datavalue": {
+                    "type": "time",
+                    "value": {
+                      "time": "+2026-05-22T00:00:00Z",
+                      "timezone": 0,
+                      "before": 0,
+                      "after": 0,
+                      "precision": 11,
+                      "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "P452": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P452",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": { "entity-type": "item", "id": "Q1130645", "$label": "construction industry" }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "references": [
+          {
+            "snaks": {
+              "P854": [
+                {
+                  "snaktype": "value",
+                  "property": "P854",
+                  "datavalue": { "type": "string", "value": "https://servicesartisans.fr/llms.txt" }
+                }
+              ],
+              "P813": [
+                {
+                  "snaktype": "value",
+                  "property": "P813",
+                  "datavalue": {
+                    "type": "time",
+                    "value": {
+                      "time": "+2026-05-22T00:00:00Z",
+                      "timezone": 0,
+                      "before": 0,
+                      "after": 0,
+                      "precision": 11,
+                      "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "P856": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P856",
+          "datavalue": { "type": "string", "value": "https://servicesartisans.fr" }
+        },
+        "qualifiers": {
+          "P407": [
+            {
+              "snaktype": "value",
+              "property": "P407",
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": { "entity-type": "item", "id": "Q150", "$label": "French" }
+              }
+            }
+          ]
+        },
+        "type": "statement",
+        "rank": "normal"
+      }
+    ],
+    "P571": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P571",
+          "datavalue": {
+            "type": "time",
+            "value": {
+              "time": "+2026-02-21T00:00:00Z",
+              "timezone": 0,
+              "before": 0,
+              "after": 0,
+              "precision": 11,
+              "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+            }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "$comment-note": "Date de mise en ligne du premier site (memory user_first_website 2026-02-21). Date d'immatriculation SAS distincte — à confirmer via INSEE avant publication.",
+        "references": [
+          {
+            "snaks": {
+              "P854": [
+                {
+                  "snaktype": "value",
+                  "property": "P854",
+                  "datavalue": {
+                    "type": "string",
+                    "value": "https://annuaire-entreprises.data.gouv.fr/entreprise/servicesartisans"
+                  }
+                }
+              ],
+              "P813": [
+                {
+                  "snaktype": "value",
+                  "property": "P813",
+                  "datavalue": {
+                    "type": "time",
+                    "value": {
+                      "time": "+2026-05-22T00:00:00Z",
+                      "timezone": 0,
+                      "before": 0,
+                      "after": 0,
+                      "precision": 11,
+                      "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "P159": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P159",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": {
+              "entity-type": "item",
+              "id": "Q142",
+              "$label": "France (placeholder — remplacer par la commune INSEE du siège après confirmation Kbis)"
+            }
+          }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "$comment-pending": "Remplacer Q142 par la commune INSEE exacte du siège social (champ à compléter avant publication live). Source attendue : annuaire-entreprises.data.gouv.fr / extrait Kbis."
+      }
+    ],
+    "P407": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P407",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": { "entity-type": "item", "id": "Q150", "$label": "French" }
+          }
+        },
+        "type": "statement",
+        "rank": "normal"
+      }
+    ],
+    "P1343": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P1343",
+          "datavalue": {
+            "type": "wikibase-entityid",
+            "value": {
+              "entity-type": "item",
+              "id": "Q_PLACEHOLDER_DATAGOUV_RGE_DATASET",
+              "$label": "Liste des entreprises RGE — data.gouv.fr (Q-item à créer)"
+            }
+          }
+        },
+        "qualifiers": {
+          "P854": [
+            {
+              "snaktype": "value",
+              "property": "P854",
+              "datavalue": {
+                "type": "string",
+                "value": "https://www.data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/"
+              }
+            }
+          ]
+        },
+        "type": "statement",
+        "rank": "normal"
+      }
+    ],
+    "P973": [
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P973",
+          "datavalue": { "type": "string", "value": "https://servicesartisans.fr/llms.txt" }
+        },
+        "type": "statement",
+        "rank": "normal",
+        "$comment": "Documentation machine-lisible LLM-friendly (llms.txt + ai.txt + OpenAPI)."
+      },
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P973",
+          "datavalue": { "type": "string", "value": "https://servicesartisans.fr/ai.txt" }
+        },
+        "type": "statement",
+        "rank": "normal"
+      },
+      {
+        "mainsnak": {
+          "snaktype": "value",
+          "property": "P973",
+          "datavalue": { "type": "string", "value": "https://servicesartisans.fr/openapi.json" }
+        },
+        "type": "statement",
+        "rank": "normal"
+      }
+    ]
+  },
+  "sitelinks": {}
+}

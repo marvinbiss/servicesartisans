@@ -1,0 +1,89 @@
+{
+  "$comment": "Wikidata reference snaks (P854 stated-in URL + P813 retrieval date + P248 stated-in Q-item quand applicable). Toutes les références ci-dessous sont publiques, sous licence Etalab 2.0 ou CC-BY 4.0, et vérifiables. Date de génération : 2026-05-22.",
+  "retrieved_at": "2026-05-22",
+  "calendarmodel": "http://www.wikidata.org/entity/Q1985727",
+  "license_notes": {
+    "ademe_rge": "Licence Ouverte / Etalab 2.0 — Source : Registre RGE ADEME",
+    "data_gouv": "Licence Ouverte / Etalab 2.0 — Source : data.gouv.fr",
+    "annuaire_entreprises": "Diffusion publique INSEE / DGFiP — annuaire-entreprises.data.gouv.fr",
+    "servicesartisans_api": "CC-BY 4.0 — endpoints publics ServicesArtisans (barometre, glossaire, openapi)"
+  },
+  "references": [
+    {
+      "id": "ref-annuaire-entreprises",
+      "label_fr": "Annuaire des entreprises — data.gouv.fr (fiche ServicesArtisans)",
+      "snaks": {
+        "P854": "https://annuaire-entreprises.data.gouv.fr/entreprise/servicesartisans",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": [
+        "P31 instance of",
+        "P1454 legal form",
+        "P571 inception",
+        "P159 headquarters location (à compléter)"
+      ],
+      "notes": "Source officielle pour la forme juridique, le SIREN/SIRET, la date d'immatriculation et l'adresse du siège. Mettre à jour P571 avec la date Kbis exacte si différente du 2026-02-21 (mise en ligne du site)."
+    },
+    {
+      "id": "ref-ademe-rge-dataset",
+      "label_fr": "Liste des entreprises RGE — data.gouv.fr (jeu de données ADEME)",
+      "snaks": {
+        "P248": "Q_PLACEHOLDER_DATAGOUV_RGE_DATASET",
+        "P854": "https://www.data.gouv.fr/fr/datasets/liste-des-entreprises-rge-2/",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["Référence pour les statements liés au volet RGE (mention CEE/RGE de l'activité)"],
+      "notes": "Le Q-item dédié au dataset n'existe pas encore sur Wikidata — création nécessaire (community proposal) avant publication live. Aligné avec le scaffold scripts/wikidata-seed/src/sa_wikidata/vocab.py (Q.ADEME_RGE_DATASET)."
+    },
+    {
+      "id": "ref-ademe-rge-portail",
+      "label_fr": "Portail data ADEME — Registre RGE",
+      "snaks": {
+        "P854": "https://data.ademe.fr/datasets/liste-des-entreprises-rge-2",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["P452 industry (secteur construction / rénovation énergétique)"],
+      "notes": "Source ADEME directe, miroir du dataset data.gouv.fr."
+    },
+    {
+      "id": "ref-llms-txt",
+      "label_fr": "llms.txt ServicesArtisans (documentation machine-lisible)",
+      "snaks": {
+        "P854": "https://servicesartisans.fr/llms.txt",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["P973 described at URL", "P1343 described by source"],
+      "notes": "Document de description LLM-friendly. Wikidata accepte les ressources auto-publiées en P973 (described at URL) — n'est pas circular puisqu'il s'agit d'une description, pas d'une revendication de notabilité."
+    },
+    {
+      "id": "ref-ai-txt",
+      "label_fr": "ai.txt ServicesArtisans",
+      "snaks": {
+        "P854": "https://servicesartisans.fr/ai.txt",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["P973 described at URL"],
+      "notes": "Politique d'usage IA / preferences."
+    },
+    {
+      "id": "ref-openapi",
+      "label_fr": "OpenAPI spec ServicesArtisans",
+      "snaks": {
+        "P854": "https://servicesartisans.fr/openapi.json",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["P973 described at URL"],
+      "notes": "Spécification OpenAPI des endpoints publics CC-BY 4.0 (barometre, glossaire RGE, lookup SIRET)."
+    },
+    {
+      "id": "ref-barometre-rge",
+      "label_fr": "Baromètre RGE — endpoint public CC-BY 4.0",
+      "snaks": {
+        "P854": "https://servicesartisans.fr/api/v1/barometre/rge",
+        "P813": "+2026-05-22T00:00:00Z"
+      },
+      "usage": ["P973 described at URL"],
+      "notes": "Snapshots licenciés CC-BY 4.0 — réutilisables pour Wikidata sans risque de licence."
+    }
+  ]
+}
