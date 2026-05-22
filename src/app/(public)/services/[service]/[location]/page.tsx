@@ -51,11 +51,13 @@ import {
   getItemListSchema,
   getEnrichedLocalServiceSchema,
   getReviewedByPersonSchema,
-  getMaPrimeRenovGovServiceSchema,
-  getCeeGovServiceSchema,
-  getEcoPtzGovServiceSchema,
+  getGovernmentServiceSchema,
   getFinancialProductSchema,
 } from '@/lib/seo/jsonld'
+import {
+  getApplicableAidesForService,
+  isServiceEligibleForAides,
+} from '@/lib/seo/aides-for-service'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import { getAuthorForServiceSlug } from '@/lib/data/service-author'
 import { getReviewerForAuthor } from '@/lib/data/authors'
@@ -1040,24 +1042,48 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
     ...spreadCitationsForTopics(`${service.name} ${trade?.name ?? ''} ${location.name}`),
   })
 
-  // YMYL E-E-A-T 2026-05-05 — sur les services rénovation énergétique, on
-  // déclare le rattachement aux dispositifs publics (GovernmentService) et
-  // aux produits financiers (FinancialProduct). Source de vérité Knowledge
-  // Graph officiel : factories canoniques + sameAs gouv.fr / Anah / Légifrance
-  // / france-renov. Aligne le signal "official aid eligible" avec ce que
-  // Hellio / Effy / Selectra émettent et qui leur donne l'edge SERP YMYL.
-  // Ne s'applique qu'aux services classés `renovation` dans service-intents
-  // (chauffagiste, pompe-a-chaleur, isolation-thermique, panneaux-solaires…).
-  if (pageIntent === 'renovation') {
+  // YMYL E-E-A-T 2026-05-22 — Schema GovernmentService per-service.
+  //
+  // Avant : injection générique de MaPrimeRénov' + CEE + Éco-PTZ sur TOUS
+  // les services classés `renovation` (cf. service-intents.ts). Même triplet
+  // sur chauffagiste, panneaux-solaires, isolation-thermique, etc. — le
+  // détail des opérations CEE applicables (BAR-TH-104 PAC, BAR-EN-101
+  // combles, BAR-TH-148 ballon thermo…) n'apparaissait nulle part dans
+  // les schemas, KG dédoublonnait via @id générique `#government-service`.
+  //
+  // Après : whitelist stricte (`isServiceEligibleForAides`) + mapping
+  // per-service (`getApplicableAidesForService`) qui renvoie les aides
+  // RÉELLEMENT applicables avec `idFragment` unique par (aide × service)
+  // pour empêcher la collision KG sur les ~50K URLs. Sources officielles
+  // (.gouv.fr / Légifrance / Service-Public) embarquées dans `sameAs`.
+  // Aucune valeur chiffrée inventée dans les descriptions — barèmes exacts
+  // restent sur les pages racines `/aides/...`.
+  //
+  // Hors whitelist (plombier, électricien, ramoneur, peintre, carreleur…)
+  // = zéro injection (évite spam Schema sur dépannage/commodité).
+  if (isServiceEligibleForAides(serviceSlug)) {
     const pageUrl = `${SITE_URL}/services/${serviceSlug}/${locationSlug}`
-    jsonLdSchemas.push(
-      getMaPrimeRenovGovServiceSchema(pageUrl),
-      getCeeGovServiceSchema(pageUrl),
-      getEcoPtzGovServiceSchema(pageUrl)
-    )
-    // FinancialProduct dédié au service courant — donne à Google une entité
-    // "produit aidé" avec catégorie + fourchette de prix locale.
-    if (trade) {
+    const applicableAides = getApplicableAidesForService(serviceSlug)
+    for (const aide of applicableAides) {
+      jsonLdSchemas.push(
+        getGovernmentServiceSchema({
+          name: aide.name,
+          description: aide.description,
+          url: `${pageUrl}#${aide.fragment}`,
+          idFragment: aide.fragment,
+          serviceType: aide.serviceType,
+          category: aide.category,
+          audience: aide.audience,
+          temporalCoverage: aide.temporalCoverage,
+          serviceOperator: aide.serviceOperator,
+          sameAs: aide.sameAs,
+        })
+      )
+    }
+    // FinancialProduct dédié au service courant — wrapper "produit aidé"
+    // qui agrège l'éligibilité (catégorie + tarif local indicatif). Conservé
+    // car distinct des GovernmentService individuels (pas de doublon @id).
+    if (trade && applicableAides.length > 0) {
       jsonLdSchemas.push(
         getFinancialProductSchema({
           name: `Aide à la rénovation énergétique — ${service.name} à ${location.name}`,

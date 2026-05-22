@@ -52,6 +52,10 @@ import {
   getFinancialProductSchema,
   getReviewedByPersonSchema,
 } from '@/lib/seo/jsonld'
+import {
+  getApplicableAidesForService,
+  isServiceEligibleForAides,
+} from '@/lib/seo/aides-for-service'
 import { spreadCitationsForTopics } from '@/lib/seo/authoritative-citations'
 import {
   buildAggregateRatingFromProviders,
@@ -515,27 +519,39 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
       }
     : null
 
-  // Sprint 0.1 — GovernmentService (ANAH / France Rénov’) : signal YMYL
-  // expliquant à Google que cette page documente un programme officiel.
-  const governmentServiceSchema = upgradeV2
-    ? getGovernmentServiceSchema({
-        name: `MaPrimeRénov’ et France Rénov’ pour ${serviceName.toLowerCase()} à ${villeName}`,
-        description: `Programmes publics MaPrimeRénov’ (ANAH) et France Rénov’ permettant aux propriétaires de ${villeName} de financer des travaux de ${serviceName.toLowerCase()} réalisés par un artisan RGE certifié. Aides cumulables avec les CEE et la TVA réduite à 5,5 %.`,
-        url: pageUrl,
-        serviceType: 'Aide financière à la rénovation énergétique',
-        audience: `Propriétaires occupants ou bailleurs d’un logement à ${villeName}`,
-        temporalCoverage: '2026-01-01/2030-12-31',
-        serviceOperator: {
-          name: "Agence nationale de l'habitat (ANAH)",
-          url: 'https://france-renov.gouv.fr/',
-        },
-        sameAs: [
-          'https://france-renov.gouv.fr/',
-          'https://www.maprimerenov.gouv.fr/',
-          'https://www.service-public.fr/particuliers/vosdroits/F342',
-        ],
-      })
-    : null
+  // YMYL E-E-A-T 2026-05-22 — Schema GovernmentService per-service.
+  //
+  // Avant : un seul `governmentServiceSchema` générique MaPrimeRénov'+France
+  // Rénov' identique pour TOUS les services RGE (PAC, isolation, VMC,
+  // fenêtres…). Détail des opérations CEE jamais émis.
+  //
+  // Après : whitelist stricte (`isServiceEligibleForAides`) + mapping
+  // per-service (`getApplicableAidesForService`) — fragment URL unique par
+  // (aide × service) pour empêcher la collision Knowledge Graph sur les
+  // ~50K URLs RGE. Toute aide listée a un `serviceOperator` officiel et
+  // ≥1 `sameAs` .gouv.fr / Légifrance. Aucun chiffre € ou kWh cumac inventé.
+  //
+  // Tous les services RGE de l'allowlist sont éligibles aux aides — la
+  // double gate (`upgradeV2 && isServiceEligibleForAides`) est défense en
+  // profondeur : si un slug est ajouté à RGE_ALLOWED_SERVICES mais oublié
+  // dans aides-for-service, on émet 0 schema plutôt qu'un schema bidon.
+  const governmentServiceSchemas: Array<Record<string, unknown>> =
+    upgradeV2 && isServiceEligibleForAides(serviceSlug)
+      ? getApplicableAidesForService(serviceSlug).map((aide) =>
+          getGovernmentServiceSchema({
+            name: aide.name,
+            description: aide.description,
+            url: `${pageUrl}#${aide.fragment}`,
+            idFragment: aide.fragment,
+            serviceType: aide.serviceType,
+            category: aide.category,
+            audience: aide.audience,
+            temporalCoverage: aide.temporalCoverage,
+            serviceOperator: aide.serviceOperator,
+            sameAs: aide.sameAs,
+          })
+        )
+      : []
 
   // Sprint 0.1 — FinancialProduct (cumul aides MaPrimeRénov’ + CEE + TVA 5,5 % + éco-PTZ).
   const financialProductSchema = upgradeV2
@@ -638,12 +654,13 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(articleSchema) }}
         />
       )}
-      {governmentServiceSchema && (
+      {governmentServiceSchemas.map((schema, idx) => (
         <script
+          key={`govservice-${idx}`}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: safeJsonStringify(governmentServiceSchema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(schema) }}
         />
-      )}
+      ))}
       {financialProductSchema && (
         <script
           type="application/ld+json"

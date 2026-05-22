@@ -74,7 +74,16 @@ const checks = [
   {
     id: 'government_service_schema',
     label: 'GovernmentService (ANAH / France Rénov)',
-    ok: src.includes('getGovernmentServiceSchema(') && src.includes('france-renov.gouv.fr'),
+    // 2026-05-22 — extension Schema GovernmentService per-service.
+    // Le template peut soit déclarer les sameAs france-renov en inline
+    // (legacy generic injection), soit déléguer au helper aides-for-service
+    // (per-service injection). On accepte les deux signatures pour ne pas
+    // bloquer la migration.
+    ok:
+      src.includes('getGovernmentServiceSchema(') &&
+      (src.includes('france-renov.gouv.fr') ||
+        src.includes('getApplicableAidesForService') ||
+        src.includes("from '@/lib/seo/aides-for-service'")),
   },
   {
     id: 'financial_product_schema',

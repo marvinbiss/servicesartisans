@@ -932,12 +932,17 @@ export function getGovernmentServiceSchema(params: {
   /**
    * Legal terms of service URL (Légifrance article, arrêté CEE…). Required by
    * Schema.org for `GovernmentService` when the programme is regulated by law.
+   * Also used on per-operation pages when the programme is regulated by a
+   * specific cited text.
    */
   termsOfService?: string
   /**
    * Override the `@id` fragment (defaults to `government-service`). Use when
-   * multiple GovernmentService entities co-exist on related routes or when
-   * a per-operation stable @id is needed (ex: `cee-operation-bar-th-148`).
+   * multiple GovernmentService entities co-exist on related routes or on a
+   * single page (ex. PAC page emitting both MPR + BAR-TH-104 + éco-PTZ) —
+   * each fragment must be unique to avoid Knowledge Graph collapsing the
+   * entities into one. Conventions: `cee-operation-<code>` for /cee/[op],
+   * `aide-<code>-<serviceSlug>` for per-service injection (cf. `aides-for-service.ts`).
    */
   idFragment?: string
 }) {
