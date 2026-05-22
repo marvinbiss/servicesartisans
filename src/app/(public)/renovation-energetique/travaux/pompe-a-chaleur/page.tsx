@@ -210,6 +210,11 @@ const sources = [
 
 const relatedPages = [
   {
+    label: 'Alternative ECS : ballon thermodynamique',
+    href: '/renovation-energetique/travaux/ballon-thermodynamique',
+    description: 'Si vous voulez chauffer uniquement l’eau chaude : 2 200-4 800 € + MPR 1 200 €',
+  },
+  {
     label: 'PAC air-eau : prix détaillés 2026',
     href: '/renovation-energetique/travaux/pompe-a-chaleur/air-eau-prix',
     description: 'Grille de prix par puissance + aides cumulées détaillées',
