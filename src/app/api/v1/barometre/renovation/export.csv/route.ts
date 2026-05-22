@@ -113,7 +113,7 @@ export async function GET() {
       'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
       'X-License': 'CC-BY-4.0',
       'X-License-URL': 'https://creativecommons.org/licenses/by/4.0/',
-      'X-Attribution': 'ServicesArtisans — Baromètre Rénovation Énergétique 2026',
+      'X-Attribution': 'ServicesArtisans - Barometre Renovation Energetique 2026',
       'X-Canonical-URL': 'https://servicesartisans.fr/barometre/renovation-energetique-2026',
     },
   })

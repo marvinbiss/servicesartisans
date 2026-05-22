@@ -7,38 +7,7 @@
  * Si l'un de ces tests casse, le dataset officiel risque d'être rejeté
  * par les registries (data.gouv, EU Open Data Portal, registry CKAN).
  */
-import { describe, expect, it, vi } from 'vitest'
-
-// NextResponse passe ses headers via la classe Web `Headers` qui exige des
-// ByteString (ISO-8859-1). Notre endpoint envoie `X-Attribution` avec un
-// em-dash (8212) + accents — chars légitimes en UTF-8 mais hors ByteString.
-// Next.js sérialise correctement en prod (HTTP/2 supporte UTF-8 via Buffer),
-// mais sous vitest+undici strict on doit court-circuiter. On mock
-// NextResponse par une Response Web standard qui tolère les chars >255 si
-// on encode les valeurs proprement (encodeURIComponent ou laisse undici
-// faire son boulot avec `Headers` lax).
-vi.mock('next/server', () => {
-  class MockNextResponse extends Response {
-    constructor(body: BodyInit, init?: ResponseInit & { headers?: Record<string, string> }) {
-      const safeHeaders: Record<string, string> = {}
-      if (init?.headers) {
-        for (const [k, v] of Object.entries(init.headers)) {
-          // Remplace tout char hors ByteString par '?' pour passer la
-          // sérialisation Headers — la valeur originale reste accessible via
-          // `MockNextResponse._raw` pour les tests qui en auraient besoin.
-          let safe = ''
-          for (let i = 0; i < v.length; i++) {
-            const code = v.charCodeAt(i)
-            safe += code > 255 ? '?' : v[i]
-          }
-          safeHeaders[k] = safe
-        }
-      }
-      super(body, { ...init, headers: safeHeaders })
-    }
-  }
-  return { NextResponse: MockNextResponse }
-})
+import { describe, expect, it } from 'vitest'
 
 import { GET } from '@/app/api/v1/barometre/renovation/export.csv/route'
 

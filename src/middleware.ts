@@ -163,7 +163,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 // fail-open mais saturaient quand même le compteur Upstash, (2) couper Ahrefs
 // nous prive de notre propre télémétrie SEO. Tous en GET/HEAD only (cf. note
 // ci-dessus sur le risque de spoofing UA).
-const CRAWLER_RE =
+export const CRAWLER_RE =
   /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|Applebot-Extended|DuckDuckBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|MistralBot|Mistralai-User|Amazonbot|Meta-ExternalAgent|YouBot|AhrefsBot|SemrushBot|MJ12bot|DataForSeoBot|YandexBot|BLEXBot|facebookexternalhit|LinkedInBot|Twitterbot/i
 
 /** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
