@@ -65,6 +65,7 @@ import {
 } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 
 export const revalidate = 86400
 
@@ -646,6 +647,22 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis pose isolation"
+        description="Recevez 3 devis d'artisans RGE Qualibat en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=isolation',
+          intent: 'final-devis-installation',
+        }}
+        secondaryCta={{
+          label: 'Voir les artisans RGE Qualibat',
+          href: '/rge/labels/qualibat',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE Qualibat • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react'
 
 import CeeCTA from '@/components/cee/CeeCTA'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import { getSocialProofForCluster } from '@/lib/conversion/social-proof'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -751,6 +752,22 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      <FinalCtaSection
+        heading={`Profiter de la prime CEE ${operation.code}`}
+        description="Estimez le montant + recevez 3 devis d'artisans RGE certifiés en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: `Profiter de la prime CEE ${operation.code}`,
+          href: '/simulateur-aides-renovation',
+          intent: 'final-cee-simu',
+        }}
+        secondaryCta={{
+          label: 'Toutes les primes CEE',
+          href: '/cee',
+        }}
+        accent="green"
+        trustLine="Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD"
+      />
+
       {/* Sticky bottom mobile */}
       <CeeCTA variant="sticky-bottom" operationCode={operation.code} serviceSlug={rgeServices[0]} />
     </main>

@@ -66,6 +66,7 @@ import {
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 
 export const revalidate = 86400
 
@@ -973,6 +974,22 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis ballon thermodynamique"
+        description="Recevez 3 devis d'artisans RGE QualiPAC en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=ballon-thermodynamique',
+          intent: 'final-devis-prix',
+        }}
+        secondaryCta={{
+          label: 'Voir les chauffagistes RGE',
+          href: '/rge/chauffagiste',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE QualiPAC • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

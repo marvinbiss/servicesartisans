@@ -15,6 +15,7 @@ import AideDemarche from '@/components/aides/AideDemarche'
 import AideFAQ from '@/components/aides/AideFAQ'
 import RelatedAides from '@/components/aides/RelatedAides'
 import AideSources from '@/components/aides/AideSources'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import RelatedLinks from '@/components/seo/RelatedLinks'
 import { getAideRelatedLinks } from '@/lib/seo/related-links'
 import {
@@ -476,6 +477,22 @@ export default async function AidePage({ params }: PageProps) {
         lastReviewed={aide.lastReviewed}
         author={AUTHOR ? { name: AUTHOR.name } : undefined}
       />
+
+      <FinalCtaSection
+        heading={`Estimer mes aides : ${aide.name}`}
+        description="Simulateur officiel + 3 devis d'artisans RGE en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Estimer mes aides',
+          href: '/simulateur-aides-renovation',
+          intent: 'final-aide-simu',
+        }}
+        secondaryCta={{
+          label: "Voir l'annuaire RGE",
+          href: '/artisans-rge',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }
@@ -754,6 +771,22 @@ function renderDeptHub(hub: AidesDeptHubData) {
           </div>
         </div>
       </section>
+
+      <FinalCtaSection
+        heading={`Estimer mes aides ${hub.dept.name}`}
+        description="Simulateur officiel MaPrimeRénov' / CEE + 3 devis d'artisans RGE en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Estimer mes aides',
+          href: '/simulateur-aides-renovation',
+          intent: 'final-aide-dept-simu',
+        }}
+        secondaryCta={{
+          label: "Voir l'annuaire RGE",
+          href: '/artisans-rge',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

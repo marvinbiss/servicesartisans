@@ -65,6 +65,7 @@ import {
 } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 
 export const revalidate = 86400
 
@@ -828,6 +829,22 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis chaudière à granulés"
+        description="Recevez 3 devis d'artisans RGE Qualibois en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=chaudiere-granules',
+          intent: 'final-devis-prix',
+        }}
+        secondaryCta={{
+          label: 'Voir les chauffagistes RGE',
+          href: '/rge/labels/qualibois',
+        }}
+        accent="blue"
+        trustLine="Chauffagistes RGE Qualibois • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

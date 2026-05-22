@@ -63,6 +63,7 @@ import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
@@ -717,6 +718,22 @@ export default async function Page() {
           </div>
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis pose pompe à chaleur"
+        description="Recevez 3 devis d'artisans RGE QualiPAC en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=pompe-a-chaleur',
+          intent: 'final-devis-installation',
+        }}
+        secondaryCta={{
+          label: 'Voir les chauffagistes RGE',
+          href: '/rge/chauffagiste',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE QualiPAC • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

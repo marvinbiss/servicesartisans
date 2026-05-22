@@ -68,6 +68,7 @@ import {
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 import PrixComparatif, { type PrixComparatifRow } from '@/components/conversion/PrixComparatif'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 
 /**
  * Comparatif modules photovoltaïques — données factuelles fiches produits constructeurs.
@@ -868,6 +869,22 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis solaire"
+        description="Recevez 3 devis d'installateurs RGE QualiSol / QualiPV en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=panneau-solaire',
+          intent: 'final-devis-prix',
+        }}
+        secondaryCta={{
+          label: 'Voir les installateurs RGE',
+          href: '/rge/labels/qualisol',
+        }}
+        accent="blue"
+        trustLine="Installateurs RGE QualiSol / QualiPV • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

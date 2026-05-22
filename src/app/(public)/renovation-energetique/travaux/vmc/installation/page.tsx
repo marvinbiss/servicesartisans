@@ -50,6 +50,7 @@ import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jso
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import { getProvidersByService } from '@/lib/supabase'
 
@@ -481,6 +482,22 @@ export default async function Page() {
           />
         </div>
       </div>
+
+      <FinalCtaSection
+        heading="Demandez vos devis pose VMC"
+        description="Recevez 3 devis d'artisans qualifiés en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation?service=vmc',
+          intent: 'final-devis-installation',
+        }}
+        secondaryCta={{
+          label: 'Voir les artisans RGE',
+          href: '/rge/labels/qualibat',
+        }}
+        accent="blue"
+        trustLine="Artisans qualifiés • Source : Registre RGE ADEME • RGPD"
+      />
     </>
   )
 }

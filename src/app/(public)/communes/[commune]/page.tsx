@@ -10,6 +10,7 @@ import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from '
 import Breadcrumb from '@/components/Breadcrumb'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import { getSocialProofGlobal } from '@/lib/conversion/social-proof'
 import JsonLd from '@/components/JsonLd'
@@ -354,6 +355,26 @@ async function renderCommunePage({ params }: PageProps) {
           <SourcesSection />
         </div>
       </main>
+
+      <FinalCtaSection
+        heading={`Trouvez votre artisan RGE à ${commune.name}`}
+        description="Recevez 3 devis d'artisans RGE certifiés en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: '/simulateur-aides-renovation',
+          intent: 'final-devis-commune',
+        }}
+        secondaryCta={{
+          label: "Voir l'annuaire RGE",
+          href: '/artisans-rge',
+        }}
+        accent="blue"
+        trustLine={
+          commune.nb_artisans_btp
+            ? `${commune.nb_artisans_btp} artisans BTP à ${commune.name} • Source : Registre RGE ADEME • RGPD`
+            : 'Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD'
+        }
+      />
 
       <StickyMobileCTA
         cityName={commune.name}
