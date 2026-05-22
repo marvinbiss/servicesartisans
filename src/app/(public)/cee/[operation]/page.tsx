@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { MapPin, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react'
 
 import CeeCTA from '@/components/cee/CeeCTA'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import { getSocialProofForCluster } from '@/lib/conversion/social-proof'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
@@ -200,6 +202,13 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   const rgeServices: RgeAllowedService[] = (operation.services_slugs ?? []).filter(
     (slug): slug is RgeAllowedService => (RGE_ALLOWED_SERVICES as readonly string[]).includes(slug)
   )
+
+  // Social proof above-fold sous H1 — agrégat national filtré par les
+  // services_slugs liés à l'opération (skip silencieux si <3 reviews).
+  const socialProof =
+    operation.services_slugs && operation.services_slugs.length > 0
+      ? await getSocialProofForCluster(operation.services_slugs).catch(() => null)
+      : null
 
   const hasGuide = hasCeeOperationGuide(opCode)
 
@@ -421,6 +430,11 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
           >
             Prime CEE : {operation.nom}
           </h1>
+          {socialProof && (
+            <div className="mb-4 inline-flex bg-white/95 text-charcoal-900 rounded-md px-3 py-1.5 shadow-sm">
+              <SocialProofBadge {...socialProof} size="sm" />
+            </div>
+          )}
           <p className="text-lg text-accent-50/90 max-w-3xl leading-relaxed">
             Domaine{' '}
             <strong className="text-white">{domaineInfo?.label || operation.domaine}</strong>

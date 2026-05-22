@@ -35,6 +35,7 @@ import ProblemesCourantsBlock from '@/components/seo/ProblemesCourantsBlock'
 import MaillageInterneBlock from '@/components/seo/MaillageInterneBlock'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import { ArticleMeta } from '@/components/ArticleMeta'
@@ -104,6 +105,7 @@ import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import SearchRecorder from '@/components/SearchRecorder'
 import DemandIndicator from '@/components/DemandIndicator'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
@@ -1266,6 +1268,20 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           >
             {h1Text}
           </h1>
+          {reviewStats && reviewStats.review_count >= 3 && (
+            <div className="mt-2">
+              <SocialProofBadge
+                average={reviewStats.avg_rating}
+                count={reviewStats.review_count}
+                label={
+                  location.department_name
+                    ? `avis vérifiés en ${location.department_name}`
+                    : 'avis vérifiés'
+                }
+                size="md"
+              />
+            </div>
+          )}
           {(location.department_name || location.postal_code) && (
             <p className="text-charcoal-500 text-sm mt-1">
               {location.department_name
@@ -1730,6 +1746,26 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           </div>
         </div>
       </section>
+
+      <FinalCtaSection
+        heading={`Trouvez votre artisan ${service.name.toLowerCase()} à ${location.name}`}
+        description="Recevez 3 devis d'artisans RGE certifiés en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: `/simulateur-aides-renovation?service=${serviceSlug}&cp=${location.postal_code ?? ''}`,
+          intent: 'final-devis',
+        }}
+        secondaryCta={{
+          label: 'Voir les artisans RGE',
+          href: `/rge/${serviceSlug}/${locationSlug}`,
+        }}
+        accent="blue"
+        trustLine={
+          rgeProviderCount > 0
+            ? `${rgeProviderCount} artisan${rgeProviderCount > 1 ? 's' : ''} RGE • Source : Registre RGE ADEME • RGPD`
+            : 'Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD'
+        }
+      />
 
       <StickyMobileCTA serviceSlug={serviceSlug} cityName={location.name} citySlug={locationSlug} />
 

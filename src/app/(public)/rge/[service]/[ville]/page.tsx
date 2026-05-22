@@ -31,6 +31,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import PrimesCEEBlock from '@/components/seo/PrimesCEEBlock'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
@@ -718,6 +720,20 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               </>
             )}
           </h1>
+          {deptStats && deptStats.review_count >= 3 && (
+            <div className="mt-2">
+              <SocialProofBadge
+                average={deptStats.avg_rating}
+                count={deptStats.review_count}
+                label={
+                  location.department_name
+                    ? `avis vérifiés en ${location.department_name}`
+                    : 'avis vérifiés'
+                }
+                size="md"
+              />
+            </div>
+          )}
           <p className="mt-3 text-charcoal-600">
             {isFallback && location.department_name ? (
               <>
@@ -1083,6 +1099,26 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </Link>
         </section>
       </div>
+
+      <FinalCtaSection
+        heading={`Comparez 3 artisans RGE ${serviceName.toLowerCase()} à ${villeName}`}
+        description="Devis gratuit en moins de 24h. Éligible MaPrimeRénov' et CEE."
+        primaryCta={{
+          label: 'Demander mes devis',
+          href: `/simulateur-aides-renovation?service=${serviceSlug}&cp=${location.postal_code ?? ''}`,
+          intent: 'final-devis-rge',
+        }}
+        secondaryCta={{
+          label: 'Voir les artisans RGE',
+          href: `/services/${serviceSlug}/${villeSlug}`,
+        }}
+        accent="blue"
+        trustLine={
+          count > 0
+            ? `${count} artisan${count > 1 ? 's' : ''} RGE certifié${count > 1 ? 's' : ''} • Source : Registre RGE ADEME • RGPD`
+            : 'Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD'
+        }
+      />
 
       <StickyMobileCTA
         serviceSlug={serviceSlug}

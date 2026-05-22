@@ -10,6 +10,8 @@ import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from '
 import Breadcrumb from '@/components/Breadcrumb'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import { getSocialProofGlobal } from '@/lib/conversion/social-proof'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
@@ -186,6 +188,10 @@ async function renderCommunePage({ params }: PageProps) {
     : await getNearestRgeProvidersForCommune(slug, { radiusKm: 20, limit: 5 })
   const isFallbackMode = !hasLocalRge && nearestRgeProviders.length > 0
 
+  // Social proof above-fold sous H1 — agrégat national tous artisans (la page
+  // commune n'a pas de notion de service unique). Skip si <3 reviews.
+  const socialProof = await getSocialProofGlobal('avis vérifiés en France').catch(() => null)
+
   const breadcrumbSchemaItems = [
     { name: 'Accueil', url: SITE_URL },
     { name: 'Communes', url: `${SITE_URL}/communes` },
@@ -249,6 +255,11 @@ async function renderCommunePage({ params }: PageProps) {
             <PageHeroH1 size="page">
               {commune.name} ({cp}) — Données locales & artisans
             </PageHeroH1>
+            {socialProof && (
+              <div className="mt-2">
+                <SocialProofBadge {...socialProof} size="md" />
+              </div>
+            )}
             <p className="mt-2 text-charcoal-600">
               {region ? `${region} · ` : ''}
               {dept}

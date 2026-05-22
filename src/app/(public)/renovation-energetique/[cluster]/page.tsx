@@ -15,6 +15,9 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
+import FinalCtaSection from '@/components/conversion/FinalCtaSection'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import { getSocialProofForCluster, getSocialProofGlobal } from '@/lib/conversion/social-proof'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -107,6 +110,12 @@ export default async function ClusterPage({ params }: PageProps) {
     ? await getProvidersByService(row.service_slug as string, 3, { rgeOnly: true }).catch(() => [])
     : []
 
+  // Social proof above-fold (mini-badge sous H1). Cluster-level si on a un
+  // service_slug, sinon global. Skip silencieux si <3 reviews (anti-fake).
+  const socialProof = row.service_slug
+    ? await getSocialProofForCluster([row.service_slug]).catch(() => null)
+    : await getSocialProofGlobal('avis vérifiés en France').catch(() => null)
+
   // Peer cross-review YMYL (cf. Tier 1-8 patterns) — auto-derive from the
   // author's reviewerSlug map when the author is a known editorial Person ;
   // fall back to the editorial committee (link réel `/equipe`) sinon. Pas
@@ -189,6 +198,11 @@ export default async function ClusterPage({ params }: PageProps) {
           <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 mb-4 leading-tight">
             {c.h1}
           </h1>
+          {socialProof && (
+            <div className="mb-4">
+              <SocialProofBadge {...socialProof} size="md" />
+            </div>
+          )}
           <p className="text-lg md:text-xl text-charcoal-700 mb-6 max-w-3xl">
             {introFirstSentence}
           </p>
@@ -340,24 +354,17 @@ export default async function ClusterPage({ params }: PageProps) {
         )}
       </article>
 
-      {/* FINAL CTA — conversion fallback. */}
-      <section className="bg-accent-50 border-t">
-        <div className="mx-auto max-w-3xl px-4 py-12 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
-            Prêt à démarrer vos travaux ?
-          </h2>
-          <p className="text-charcoal-700 mb-6 text-lg">
-            Recevez 3 devis d&apos;artisans RGE certifiés en moins de 24h.
-          </p>
-          <Link
-            href={simulateurHref}
-            className="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white px-7 py-3.5 rounded-md font-semibold transition-colors shadow-sm"
-          >
-            {c.ctaText || 'Obtenir mes devis gratuits'}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
+      <FinalCtaSection
+        heading="Estimez vos aides + recevez 3 devis"
+        description="Simulateur officiel MaPrimeRénov' / CEE + 3 devis d'artisans RGE en moins de 24h. Gratuit, sans engagement."
+        primaryCta={{
+          label: c.ctaText || 'Obtenir mes devis gratuits',
+          href: simulateurHref,
+          intent: 'final-devis-cluster',
+        }}
+        accent="blue"
+        trustLine="Artisans RGE certifiés • Source : Registre RGE ADEME • RGPD"
+      />
     </main>
   )
 }

@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import CeeCTA from '@/components/cee/CeeCTA'
+import SocialProofBadge from '@/components/conversion/SocialProofBadge'
+import { getSocialProofForCluster } from '@/lib/conversion/social-proof'
 import Breadcrumb from '@/components/Breadcrumb'
 import ProviderList from '@/components/ProviderList'
 import JsonLd from '@/components/JsonLd'
@@ -239,6 +241,12 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
   // renovation-energetique). Réutilisé par MaillageInterneBlock + AEO blocks.
   const proxyRgeServices = getRgeServicesForCeeOp(operation.code)
   const sprint4ProxyServiceSlug = proxyRgeServices[0] ?? 'renovation-energetique'
+
+  // Social proof above-fold sous H1 — agrégat national filtré par services
+  // proxy de l'opération CEE. Skip silencieux si <3 reviews (anti-fake).
+  const socialProof = await getSocialProofForCluster(
+    proxyRgeServices.length > 0 ? proxyRgeServices : [sprint4ProxyServiceSlug]
+  ).catch(() => null)
   const sprint4ProxyService = services.find((s) => s.slug === sprint4ProxyServiceSlug)
   const sprint4ProxyServiceName = sprint4ProxyService?.name ?? 'Rénovation énergétique'
 
@@ -470,6 +478,11 @@ export default async function CeeOperationCityPage({ params }: PageProps) {
           >
             {operation.nom} : artisans RGE certifiés à {villeName} ({monthYear})
           </h1>
+          {socialProof && (
+            <div className="mt-2">
+              <SocialProofBadge {...socialProof} size="md" />
+            </div>
+          )}
           <p className="mt-3 text-charcoal-600">
             {count > 0 ? (
               <>
