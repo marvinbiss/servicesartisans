@@ -337,3 +337,86 @@ describe('ArtisanSchema — fallback E-E-A-T sans aggregateRating (97% fiches RG
     expect(creds?.find((c) => c.identifier === '12345678901234')).toBeDefined()
   })
 })
+
+describe('ArtisanSchema — hasOfferCatalog depuis services_offered (mig 527)', () => {
+  type OfferCatalog = {
+    '@type': string
+    name: string
+    itemListElement: Array<{
+      '@type': string
+      position?: number
+      itemOffered: { '@type': string; name: string; serviceType?: string; areaServed?: string }
+    }>
+  }
+
+  it('émet un OfferCatalog "léger" depuis services quand service_prices vide', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      services: ['pompe-a-chaleur', 'isolation-thermique'],
+      service_prices: [],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const catalog = node.hasOfferCatalog as OfferCatalog | undefined
+    expect(catalog).toBeDefined()
+    expect(catalog?.['@type']).toBe('OfferCatalog')
+    expect(catalog?.itemListElement).toHaveLength(2)
+    const names = catalog?.itemListElement.map((it) => it.itemOffered.name)
+    expect(names).toContain('Pompe à chaleur')
+    expect(names).toContain('Isolation thermique')
+    catalog?.itemListElement.forEach((it, idx) => {
+      expect(it.position).toBe(idx + 1)
+      expect(it.itemOffered.serviceType).toBeDefined()
+    })
+  })
+
+  it('priorise service_prices sur services quand les deux sont présents', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      services: ['pompe-a-chaleur', 'isolation-thermique'],
+      service_prices: [{ name: 'Diagnostic plomberie', description: 'Visite', price: '80€' }],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const catalog = node.hasOfferCatalog as OfferCatalog | undefined
+    expect(catalog).toBeDefined()
+    expect(catalog?.itemListElement).toHaveLength(1)
+    expect(catalog?.itemListElement?.[0].itemOffered.name).toBe('Diagnostic plomberie')
+  })
+
+  it('omet hasOfferCatalog quand services ET service_prices sont vides', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      services: [],
+      service_prices: [],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    expect(node.hasOfferCatalog).toBeUndefined()
+  })
+
+  it('déduplique les services (un slug RGE peut apparaître plusieurs fois)', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      services: ['pompe-a-chaleur', 'pompe-a-chaleur', 'isolation-thermique'],
+      service_prices: [],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const catalog = node.hasOfferCatalog as OfferCatalog | undefined
+    expect(catalog?.itemListElement).toHaveLength(2)
+  })
+
+  it('inclut areaServed = city dans chaque Offer issue de services', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      city: 'Lyon',
+      services: ['pompe-a-chaleur'],
+      service_prices: [],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const catalog = node.hasOfferCatalog as OfferCatalog | undefined
+    expect(catalog?.itemListElement?.[0].itemOffered.areaServed).toBe('Lyon')
+  })
+})

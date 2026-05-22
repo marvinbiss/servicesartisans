@@ -8,6 +8,7 @@ import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { authors } from '@/lib/data/authors'
 import { SITE_URL } from '@/lib/seo/config'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
+import { getServiceLabel } from '@/lib/services/labels'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -154,32 +155,78 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         },
       }),
 
-    ...((artisan.service_prices ?? []).length > 0 && {
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'Services',
-        itemListElement: (artisan.service_prices ?? []).map((s, _i) => ({
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: s.name,
-            description: s.description,
-          },
-          ...(() => {
-            if (!s.price) return {}
-            const numericPrice = s.price.replace(/[^0-9]/g, '')
-            if (!numericPrice || numericPrice === '0' || /devis/i.test(s.price)) return {}
-            return {
-              priceSpecification: {
-                '@type': 'PriceSpecification',
-                price: numericPrice,
-                priceCurrency: 'EUR',
+    // hasOfferCatalog — priorité au catalog manuel (`service_prices` saisi par
+    // l'artisan claim), fallback sur `services` (= providers.services_offered)
+    // dérivé du Registre RGE ADEME via mig 527 sur ~45K fiches non revendiquées.
+    // Cf. memory `servicesartisans-rge-phone-exception-2026-05-07.md` : la
+    // donnée RGE publique (Etalab 2.0) peut alimenter le Schema même non claim.
+    // Dédupe pour éviter double-mention si l'artisan a saisi une partie + RGE.
+    ...(() => {
+      const priced = artisan.service_prices ?? []
+      const slugs = (artisan.services ?? []).filter((s) => typeof s === 'string' && s.length > 0)
+
+      // Cas 1 — service_prices présent : on garde l'historique (catalog
+      // au niveau prix, c'est plus riche que les seuls slugs).
+      if (priced.length > 0) {
+        return {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Services',
+            itemListElement: priced.map((s) => ({
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: s.name,
+                description: s.description,
               },
-            }
-          })(),
-        })),
-      },
-    }),
+              ...(() => {
+                if (!s.price) return {}
+                const numericPrice = s.price.replace(/[^0-9]/g, '')
+                if (!numericPrice || numericPrice === '0' || /devis/i.test(s.price)) return {}
+                return {
+                  priceSpecification: {
+                    '@type': 'PriceSpecification',
+                    price: numericPrice,
+                    priceCurrency: 'EUR',
+                  },
+                }
+              })(),
+            })),
+          },
+        }
+      }
+
+      // Cas 2 — pas de prix saisis MAIS slugs services_offered alimentés :
+      // émettre un OfferCatalog "léger" basé sur les slugs RGE. Source =
+      // Registre RGE ADEME (data.gouv.fr Etalab 2.0). On désuplique en
+      // préservant l'ordre stable de premier appearance.
+      if (slugs.length === 0) return {}
+      const seen = new Set<string>()
+      const uniqSlugs: string[] = []
+      for (const s of slugs) {
+        if (!seen.has(s)) {
+          seen.add(s)
+          uniqSlugs.push(s)
+        }
+      }
+      const areaServed = artisan.city || artisan.region || undefined
+      return {
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: `Services proposés par ${displayName}`,
+          itemListElement: uniqSlugs.map((slug, idx) => ({
+            '@type': 'Offer',
+            position: idx + 1,
+            itemOffered: {
+              '@type': 'Service',
+              name: getServiceLabel(slug),
+              serviceType: slug,
+              ...(areaServed && { areaServed }),
+            },
+          })),
+        },
+      }
+    })(),
 
     ...(artisan.intervention_radius_km &&
       artisan.latitude &&
