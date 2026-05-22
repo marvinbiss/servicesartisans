@@ -182,3 +182,158 @@ describe('ArtisanSchema — fallback aggregateRating Google Places', () => {
     expect(sameAs.some((u) => u.includes('maps/place'))).toBe(false)
   })
 })
+
+describe('ArtisanSchema — fallback E-E-A-T sans aggregateRating (97% fiches RGE)', () => {
+  const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  const pastDate = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+
+  it('émet award + hasCredential RGE quand qualif active présente', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      // Pas de rating first-party ni Google
+      average_rating: 0,
+      review_count: 0,
+      google_place_id: null,
+      rge_qualifications: [
+        {
+          code: 'QB5911',
+          nom: 'Pompe à chaleur',
+          organisme: 'Qualibat',
+          domaine: 'Chauffage',
+          meta_domaine: 'Énergie',
+          date_debut: '2024-01-01',
+          date_fin: futureDate,
+          url: 'https://www.qualibat.com/qualif/5911',
+        },
+      ],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+
+    // Pas d'aggregateRating attendu (compensation E-E-A-T)
+    expect(node.aggregateRating).toBeUndefined()
+
+    // award = libellé court lisible humain
+    const awards = node.award as string[] | undefined
+    expect(awards).toBeDefined()
+    expect(awards).toHaveLength(1)
+    expect(awards?.[0]).toContain('Qualibat')
+    expect(awards?.[0]).toContain('Pompe à chaleur')
+    expect(awards?.[0]).toContain('valide jusqu')
+
+    // hasCredential = EducationalOccupationalCredential détaillé
+    const creds = node.hasCredential as Array<Record<string, unknown>> | undefined
+    expect(creds).toBeDefined()
+    const rgeCred = creds?.find((c) => c.identifier === 'QB5911')
+    expect(rgeCred).toBeDefined()
+    expect(rgeCred?.['@type']).toBe('EducationalOccupationalCredential')
+    expect(rgeCred?.credentialCategory).toContain('RGE')
+  })
+
+  it('award absent quand toutes les qualifs RGE sont expirées', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      rge_qualifications: [
+        {
+          code: 'QB5911',
+          nom: 'Pompe à chaleur',
+          organisme: 'Qualibat',
+          domaine: null,
+          meta_domaine: null,
+          date_debut: '2020-01-01',
+          date_fin: pastDate,
+          url: null,
+        },
+      ],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    expect(node.award).toBeUndefined()
+    const creds = (node.hasCredential as Array<Record<string, unknown>> | undefined) ?? []
+    expect(creds.find((c) => c.identifier === 'QB5911')).toBeUndefined()
+  })
+
+  it('aucun award émis si rge_qualifications absent (zéro invention)', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      rge_qualifications: null,
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    expect(node.award).toBeUndefined()
+  })
+
+  it('émet hasCredential SIRET INSEE quand siret 14 chiffres + is_verified=true', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      siret: '12345678901234',
+      is_verified: true,
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const creds = (node.hasCredential as Array<Record<string, unknown>> | undefined) ?? []
+    const siretCred = creds.find((c) => c.identifier === '12345678901234')
+    expect(siretCred).toBeDefined()
+    expect(siretCred?.credentialCategory).toContain('INSEE')
+    const recognizedBy = siretCred?.recognizedBy as Record<string, unknown> | undefined
+    expect(recognizedBy?.name).toContain('INSEE')
+  })
+
+  it('omit SIRET hasCredential quand is_verified=false (pas de conformité inventée)', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      siret: '12345678901234',
+      is_verified: false,
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const creds = (node.hasCredential as Array<Record<string, unknown>> | undefined) ?? []
+    expect(creds.find((c) => c.identifier === '12345678901234')).toBeUndefined()
+  })
+
+  it('omit SIRET hasCredential quand SIRET malformé (12 chiffres)', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      siret: '123456789012',
+      is_verified: true,
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+    const creds = (node.hasCredential as Array<Record<string, unknown>> | undefined) ?? []
+    expect(creds.find((c) => c.identifier === '123456789012')).toBeUndefined()
+  })
+
+  it('combine award RGE + hasCredential RGE + hasCredential INSEE sur fiche complète', () => {
+    const artisan: LegacyArtisan = {
+      ...baseArtisan,
+      siret: '12345678901234',
+      is_verified: true,
+      rge_qualifications: [
+        {
+          code: 'QER5111',
+          nom: 'Photovoltaïque',
+          organisme: "Qualit'EnR",
+          domaine: 'Solaire',
+          meta_domaine: 'Énergie',
+          date_debut: '2024-01-01',
+          date_fin: futureDate,
+          url: null,
+        },
+      ],
+    }
+    const { container } = render(<ArtisanSchema artisan={artisan} />)
+    const node = getLocalBusinessNode(container)
+
+    // award présent (RGE)
+    const awards = node.award as string[] | undefined
+    expect(awards).toBeDefined()
+    expect(awards?.[0]).toContain('Photovoltaïque')
+
+    // hasCredential = tableau avec 2 éléments (RGE + INSEE)
+    const creds = node.hasCredential as Array<Record<string, unknown>> | undefined
+    expect(creds).toBeDefined()
+    expect(creds?.length).toBe(2)
+    expect(creds?.find((c) => c.identifier === 'QER5111')).toBeDefined()
+    expect(creds?.find((c) => c.identifier === '12345678901234')).toBeDefined()
+  })
+})

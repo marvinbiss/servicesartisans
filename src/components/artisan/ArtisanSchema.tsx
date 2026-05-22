@@ -316,41 +316,94 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
         })(),
       }),
 
-    // RGE certifications — EducationalOccupationalCredential per qualification.
-    // Dedupe par code (un artisan peut avoir plusieurs entrées pour la même
-    // qualif avec dates différentes — on garde la plus récente par date_fin).
+    // RGE certifications + SIRET INSEE credential + `award` lisible humain.
+    //
+    // Compensation E-E-A-T pour les 97% de fiches RGE sans aggregateRating
+    // (44 560 / 45 677 fiches RGE — audit 2026-05-22). Sans avis first-party
+    // ni match Google Places, on émet :
+    //   - `hasCredential` : tableau d'EducationalOccupationalCredential, inclut
+    //     les qualifs RGE actives (dedupe par code, date_fin maxi) + un
+    //     credential INSEE quand `is_verified=true` (signal Registre national).
+    //   - `award` : libellés courts "{organisme} — {nom-qualif} (valide
+    //     jusqu'au {date})". Schema.org `award` accepte string — Google
+    //     Knowledge Graph les indexe pour les entités LocalBusiness.
+    //
+    // JAMAIS d'invention : sans qualifs actives ni SIRET vérifié, aucun
+    // credential émis (règle `feedback_legal_data_quality.md` zéro-tolérance).
+    // Source RGE : Registre RGE ADEME data.gouv.fr Etalab 2.0.
     ...(() => {
+      const credentials: Array<Record<string, unknown>> = []
+      const awards: string[] = []
+
       const rge = artisan.rge_qualifications
-      if (!Array.isArray(rge) || rge.length === 0) return {}
-      const now = Date.now()
-      const active = rge.filter((q) => {
-        if (!q?.date_fin) return false
-        const end = Date.parse(q.date_fin)
-        return Number.isFinite(end) && end > now
-      })
-      if (active.length === 0) return {}
-      // Dedupe par code, garder la plus longue validité
-      const byCode = new Map<string, (typeof active)[number]>()
-      for (const q of active) {
-        const existing = byCode.get(q.code)
-        if (!existing || Date.parse(q.date_fin) > Date.parse(existing.date_fin)) {
-          byCode.set(q.code, q)
+      if (Array.isArray(rge) && rge.length > 0) {
+        const now = Date.now()
+        const active = rge.filter((q) => {
+          if (!q?.date_fin) return false
+          const end = Date.parse(q.date_fin)
+          return Number.isFinite(end) && end > now
+        })
+        if (active.length > 0) {
+          // Dedupe par code, garder la plus longue validité
+          const byCode = new Map<string, (typeof active)[number]>()
+          for (const q of active) {
+            const existing = byCode.get(q.code)
+            if (!existing || Date.parse(q.date_fin) > Date.parse(existing.date_fin)) {
+              byCode.set(q.code, q)
+            }
+          }
+          for (const q of Array.from(byCode.values())) {
+            credentials.push({
+              '@type': 'EducationalOccupationalCredential',
+              name: cleanAdemeText(q.nom),
+              identifier: q.code,
+              credentialCategory: "RGE (Reconnu Garant de l'Environnement)",
+              recognizedBy: {
+                '@type': 'Organization',
+                name: cleanAdemeText(q.organisme),
+              },
+              validFrom: q.date_debut || undefined,
+              validThrough: q.date_fin,
+              ...(q.url ? { url: q.url } : {}),
+            })
+            const organisme = cleanAdemeText(q.organisme)
+            const nom = cleanAdemeText(q.nom)
+            const dateFr = (() => {
+              try {
+                return new Date(q.date_fin).toLocaleDateString('fr-FR')
+              } catch {
+                return q.date_fin
+              }
+            })()
+            awards.push(`${organisme} — ${nom} (valide jusqu'au ${dateFr})`)
+          }
         }
       }
-      const credentials = Array.from(byCode.values()).map((q) => ({
-        '@type': 'EducationalOccupationalCredential',
-        name: cleanAdemeText(q.nom),
-        identifier: q.code,
-        credentialCategory: "RGE (Reconnu Garant de l'Environnement)",
-        recognizedBy: {
-          '@type': 'Organization',
-          name: cleanAdemeText(q.organisme),
-        },
-        validFrom: q.date_debut || undefined,
-        validThrough: q.date_fin,
-        ...(q.url ? { url: q.url } : {}),
-      }))
-      return { hasCredential: credentials }
+
+      // SIRET INSEE credential — n'émettre QUE si SIRET 14 chiffres ET
+      // `is_verified=true`. Signal "entreprise déclarée au Registre national
+      // des entreprises", complémentaire au bloc `identifier` PropertyValue
+      // déjà émis plus haut. Pas de credential si is_verified=false (pas
+      // d'invention de conformité — règle zéro-tolérance legal data).
+      const siret = artisan.siret?.trim()
+      if (siret && /^\d{14}$/.test(siret) && artisan.is_verified) {
+        credentials.push({
+          '@type': 'EducationalOccupationalCredential',
+          name: 'Entreprise enregistrée — Registre national des entreprises',
+          identifier: siret,
+          credentialCategory: 'Registre national des entreprises (INSEE)',
+          recognizedBy: {
+            '@type': 'Organization',
+            name: 'INSEE — Registre national des entreprises',
+            url: 'https://annuaire-entreprises.data.gouv.fr/',
+          },
+        })
+      }
+
+      const out: Record<string, unknown> = {}
+      if (credentials.length > 0) out.hasCredential = credentials
+      if (awards.length > 0) out.award = awards
+      return out
     })(),
 
     // Organismes RGE ayant délivré au moins une qualification active —
