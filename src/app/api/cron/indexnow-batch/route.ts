@@ -2,15 +2,16 @@
  * Cron : IndexNow batch auto — push quotidien des pages récemment modifiées.
  *
  * Complément du cron `indexnow-submit` (rotation statique pSEO 2500/jour) :
- * ce cron cible spécifiquement les **nouvelles pages** ajoutées au filesystem
- * et les **providers DB** dont `updated_at` < 2 jours. Cap volontairement bas
- * (1000 URLs/jour) pour rester gentil avec le quota IndexNow et éviter le
- * recouvrement avec l'autre cron.
+ * ce cron cible spécifiquement les **nouvelles pages** (lastmod récent dans
+ * sitemap.xml) et les **providers DB** dont `updated_at` < 2 jours. Cap
+ * volontairement bas (1000 URLs/jour) pour rester gentil avec le quota
+ * IndexNow et éviter le recouvrement avec l'autre cron.
  *
- * Logique (mirroir conceptuel de `scripts/indexnow-batch-auto.ts`) :
- *   1. Liste les routes statiques reno récentes via une whitelist explicite
- *      (le filesystem scan du script n'est pas dispo en serverless — fs.readdirSync
- *      sur le bundle n'expose pas les routes Next.js).
+ * Logique :
+ *   1. Lit dynamiquement le sitemap.xml (index + sub-sitemaps) en HTTP et
+ *      filtre les entrées `<lastmod>` ≥ now - SITEMAP_LOOKBACK_DAYS. Élimine
+ *      la dérive d'une whitelist statique. Fallback whitelist minimal si le
+ *      sitemap.xml répond mal.
  *   2. Query providers updated_at >= now - 2j (cron quotidien donc 48h ≈ 2x
  *      grace pour rattraper si run skip).
  *   3. Filtre via `evaluateGonePath` + dedup + cap 1000.
@@ -36,56 +37,108 @@ export const dynamic = 'force-dynamic'
 const MAX_URLS_PER_DAY = 1000
 /** Fenêtre updated_at pour les providers — 2 jours = grace si cron skip 1 fois. */
 const LOOKBACK_DAYS = 2
+/** Fenêtre lastmod pour le filtrage sitemap — un peu plus large pour rattraper. */
+const SITEMAP_LOOKBACK_DAYS = 7
+/** Cap absolu sur le nombre de sub-sitemaps lus (sitemap index ~39 entrées connues). */
+const MAX_SUBSITEMAPS = 50
+/** Cap absolu sur URLs extraites du sitemap (reste du quota va aux providers). */
+const MAX_SITEMAP_URLS = 500
+/** Timeout par fetch sitemap pour éviter le cron blocking. */
+const SITEMAP_FETCH_TIMEOUT_MS = 10_000
 
 export const maxDuration = 60
 
 /**
- * Whitelist explicite des hubs reno récents (Sprint 1 VMC + Sprint 3 ballon
- * thermo + Sprint 5 baromètre + pillars Sprint 20/80). Ces pages ne sont PAS
- * dans la rotation `indexnow-submit/route.ts` (qui couvre /services/devis/tarifs
- * pSEO uniquement).
- *
- * Ne PAS dépasser ~50 URLs ici — le reste du quota va aux providers DB frais.
+ * Fallback whitelist minimale — utilisée UNIQUEMENT si la lecture sitemap.xml
+ * échoue (DNS, 5xx, parse). Garde un floor pour les hubs reno les plus
+ * critiques afin qu'un run dégradé pousse toujours quelque chose. La source
+ * de vérité est désormais `${SITE_URL}/sitemap.xml`.
  */
-const RECENT_RENO_ROUTES: readonly string[] = [
-  // Sprint 5 — baromètre Indice Rénovation
-  '/barometre/renovation-energetique-2026',
-  '/api/v1/barometre/renovation/embed.html',
-  // Sprint 3 — Ballon thermodynamique
-  '/renovation-energetique/travaux/ballon-thermodynamique',
-  '/renovation-energetique/travaux/ballon-thermodynamique/prix',
-  '/renovation-energetique/travaux/ballon-thermodynamique/installation',
-  // Sprint 1 — VMC cluster
-  '/renovation-energetique/travaux/vmc',
-  '/renovation-energetique/travaux/vmc/installation',
-  '/renovation-energetique/travaux/vmc/double-flux-thermodynamique',
-  '/renovation-energetique/travaux/vmc/hygroreglable',
-  '/renovation-energetique/travaux/vmc/hygroreglable/type-b',
-  '/renovation-energetique/travaux/vmc/simple-flux',
-  '/renovation-energetique/travaux/vmc/branchement-pose',
-  '/renovation-energetique/travaux/vmc/salle-de-bain',
-  '/renovation-energetique/travaux/vmc/entretien',
-  // PAC sous-cluster (rappel quotidien — pages denses, ROI immédiat)
-  '/renovation-energetique/travaux/pompe-a-chaleur',
-  '/renovation-energetique/travaux/pompe-a-chaleur/air-air-prix',
-  '/renovation-energetique/travaux/pompe-a-chaleur/air-eau-prix',
-  '/renovation-energetique/travaux/pompe-a-chaleur/installation',
-  '/renovation-energetique/travaux/pompe-a-chaleur/entretien',
-  // Hubs reno
+const FALLBACK_RENO_ROUTES: readonly string[] = [
   '/renovation-energetique',
   '/renovation-energetique/aides',
-  '/renovation-energetique/diagnostic',
-  '/renovation-energetique/passoires-thermiques',
   '/renovation-energetique/travaux',
-  // Conversion / commercial
+  '/renovation-energetique/travaux/pompe-a-chaleur',
+  '/renovation-energetique/travaux/vmc',
   '/simulateur-aides-renovation',
-  '/devenir-partenaire-cee',
+  '/barometre/renovation-energetique-2026',
   '/comparatif-primes-cee-2026',
+  '/devenir-partenaire-cee',
   '/leads-exclusifs-vs-partages',
 ] as const
 
+const SITEMAP_USER_AGENT = 'ServicesArtisans-IndexNow-Cron/1.0'
+
 /**
- * Filter routes through `evaluateGonePath` (skip 410s) + dedup + absolutize.
+ * Lit le sitemap.xml (index + sub-sitemaps) et retourne les URLs dont le
+ * `<lastmod>` est dans les `daysAgo` derniers jours.
+ *
+ * Robuste :
+ *   - Cap `MAX_SUBSITEMAPS` sur le nombre de sub-sitemaps lus
+ *   - `AbortSignal.timeout(SITEMAP_FETCH_TIMEOUT_MS)` par fetch
+ *   - Un sub-sitemap qui échoue (5xx, parse fail) est skip silencieusement
+ *
+ * Throw uniquement si le sitemap INDEX lui-même est inaccessible — le caller
+ * bascule alors sur la fallback whitelist.
+ */
+async function fetchRecentSitemapUrls(daysAgo: number, limit: number): Promise<string[]> {
+  const sitemapIndex = `${SITE_URL}/sitemap.xml`
+  const cutoff = new Date(Date.now() - daysAgo * 86_400_000)
+
+  const indexRes = await fetch(sitemapIndex, {
+    headers: { 'User-Agent': SITEMAP_USER_AGENT },
+    cache: 'no-store',
+    signal: AbortSignal.timeout(SITEMAP_FETCH_TIMEOUT_MS),
+  })
+  if (!indexRes.ok) {
+    throw new Error(`Sitemap index HTTP ${indexRes.status}`)
+  }
+  const indexXml = await indexRes.text()
+
+  // Parse via exec-loop pour éviter le besoin de --downlevelIteration sur les iterators.
+  const subSitemaps: string[] = []
+  const locRegex = /<loc>([^<]+)<\/loc>/g
+  let locMatch: RegExpExecArray | null
+  while ((locMatch = locRegex.exec(indexXml)) !== null) {
+    if (subSitemaps.length >= MAX_SUBSITEMAPS) break
+    const u = locMatch[1].trim()
+    if (u.startsWith('http')) subSitemaps.push(u)
+  }
+
+  const urls = new Set<string>()
+  for (const subUrl of subSitemaps) {
+    if (urls.size >= limit) break
+    try {
+      const subRes = await fetch(subUrl, {
+        headers: { 'User-Agent': SITEMAP_USER_AGENT },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(SITEMAP_FETCH_TIMEOUT_MS),
+      })
+      if (!subRes.ok) continue
+      const subXml = await subRes.text()
+      const entryRegex = /<url>\s*<loc>([^<]+)<\/loc>\s*(?:<lastmod>([^<]+)<\/lastmod>)?/g
+      let entryMatch: RegExpExecArray | null
+      while ((entryMatch = entryRegex.exec(subXml)) !== null) {
+        if (urls.size >= limit) break
+        const loc = entryMatch[1]?.trim()
+        const lastmodStr = entryMatch[2]?.trim()
+        if (!loc || !lastmodStr) continue
+        const lm = new Date(lastmodStr)
+        if (Number.isNaN(lm.getTime())) continue
+        if (lm < cutoff) continue
+        urls.add(loc)
+      }
+    } catch {
+      // 5xx, timeout, parse error — skip ce sub-sitemap silencieusement
+      continue
+    }
+  }
+  return Array.from(urls)
+}
+
+/**
+ * Filter relative routes through `evaluateGonePath` (skip 410s) + dedup + absolutize.
+ * Utilisé pour la fallback whitelist (chemins relatifs hardcodés).
  */
 function filterAndAbsolutize(routes: readonly string[]): string[] {
   const seen = new Set<string>()
@@ -99,6 +152,30 @@ function filterAndAbsolutize(routes: readonly string[]): string[] {
     if (seen.has(abs)) continue
     seen.add(abs)
     out.push(abs)
+  }
+  return out
+}
+
+/**
+ * Filter absolute URLs (issues du sitemap) — extrait le pathname, applique
+ * `evaluateGonePath`, dedupe et garde l'URL absolue d'origine.
+ */
+function filterAbsoluteUrls(urls: readonly string[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const url of urls) {
+    let pathname: string
+    try {
+      pathname = new URL(url).pathname
+    } catch {
+      continue
+    }
+    if (!pathname.startsWith('/')) continue
+    const decision = evaluateGonePath(pathname)
+    if (decision.gone) continue
+    if (seen.has(url)) continue
+    seen.add(url)
+    out.push(url)
   }
   return out
 }
@@ -162,25 +239,43 @@ export const GET = withCronCheckIn('cron-indexnow-batch', async (request: Reques
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 
-      // ── 1. Static reno whitelist ──────────────────────────────────────
-      const renoUrls = filterAndAbsolutize(RECENT_RENO_ROUTES)
+      // ── 1. Dynamic sitemap.xml read (replaces static whitelist) ───────
+      let sitemapUrls: string[] = []
+      let sitemapSource: 'sitemap' | 'fallback' = 'sitemap'
+      try {
+        const raw = await fetchRecentSitemapUrls(SITEMAP_LOOKBACK_DAYS, MAX_SITEMAP_URLS)
+        sitemapUrls = filterAbsoluteUrls(raw)
+      } catch (err) {
+        sitemapSource = 'fallback'
+        const message = err instanceof Error ? err.message : 'unknown'
+        logger.warn('indexnow-batch: sitemap fetch failed, using fallback whitelist', {
+          error: message,
+        })
+        Sentry.captureMessage('indexnow-batch sitemap fetch failed', {
+          level: 'warning',
+          extra: { error: message },
+        })
+        sitemapUrls = filterAndAbsolutize(FALLBACK_RENO_ROUTES)
+      }
 
       // ── 2. Fresh providers from DB ────────────────────────────────────
-      // Reserve LIMIT-renoUrls for provider routes.
-      const providerSlots = Math.max(0, MAX_URLS_PER_DAY - renoUrls.length)
+      // Reserve LIMIT-sitemapUrls for provider routes.
+      const providerSlots = Math.max(0, MAX_URLS_PER_DAY - sitemapUrls.length)
       const providerUrls = providerSlots > 0 ? await getRecentProviderUrls(providerSlots) : []
 
       // ── 3. Merge + dedup + cap ────────────────────────────────────────
-      const merged = [...renoUrls, ...providerUrls]
+      const merged = [...sitemapUrls, ...providerUrls]
       const uniqueUrls = Array.from(new Set(merged)).slice(0, MAX_URLS_PER_DAY)
 
       logger.info('indexnow-batch: submitting URLs', {
         action: 'indexnow-batch-cron',
-        renoCount: renoUrls.length,
+        sitemapCount: sitemapUrls.length,
+        sitemapSource,
         providerCount: providerUrls.length,
         totalUnique: uniqueUrls.length,
         cap: MAX_URLS_PER_DAY,
         lookbackDays: LOOKBACK_DAYS,
+        sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
       })
 
       if (uniqueUrls.length === 0) {
@@ -189,7 +284,7 @@ export const GET = withCronCheckIn('cron-indexnow-batch', async (request: Reques
           submitted: 0,
           success: true,
           note: 'no URLs candidate',
-          breakdown: { reno: 0, providers: 0 },
+          breakdown: { sitemap: 0, providers: 0, sitemapSource },
         })
       }
 
@@ -199,8 +294,9 @@ export const GET = withCronCheckIn('cron-indexnow-batch', async (request: Reques
       return NextResponse.json({
         ...result,
         urlCount: uniqueUrls.length,
-        breakdown: { reno: renoUrls.length, providers: providerUrls.length },
+        breakdown: { sitemap: sitemapUrls.length, providers: providerUrls.length, sitemapSource },
         lookbackDays: LOOKBACK_DAYS,
+        sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
       })
     },
     {
