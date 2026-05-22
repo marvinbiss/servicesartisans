@@ -63,6 +63,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -345,7 +347,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('ventilation', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -651,6 +654,12 @@ export default function Page() {
             serviceKey="vmc"
             estimatedSaving={300}
             subtitle="CEE Coup de pouce 100-300 € + TVA 5,5 % (rénovation > 2 ans) — éligibilité conditionnée à un artisan RGE Qualibat 8721 ou Qualifelec"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Installateur VMC RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

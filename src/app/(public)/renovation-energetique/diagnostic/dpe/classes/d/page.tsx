@@ -39,6 +39,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -183,7 +185,8 @@ const faqs = [
   },
 ]
 
-export default function DpeClasseDPage() {
+export default async function DpeClasseDPage() {
+  const providers = await getProvidersByService('isolation-thermique', 6)
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Rénovation énergétique', url: '/renovation-energetique' },
@@ -346,6 +349,12 @@ export default function DpeClasseDPage() {
             estimatedSaving={6500}
             title="Améliorer mon DPE : aides 2026"
             subtitle="MaPrimeRénov' par geste + CEE + Éco-PTZ — gain 1-2 classes"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Artisan RGE isolation thermique"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

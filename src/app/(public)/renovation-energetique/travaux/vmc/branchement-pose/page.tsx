@@ -49,6 +49,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
@@ -314,7 +316,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('ventilation', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -587,6 +590,12 @@ Disj. 16 A         (autres
             serviceKey="vmc"
             estimatedSaving={1500}
             subtitle="MaPrimeRénov' (double flux) + CEE Coup de pouce + TVA 5,5 % — pose par artisan RGE Qualibat 8721"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Installateur VMC RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

@@ -60,6 +60,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
 
 export const revalidate = 86400
@@ -387,7 +389,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('ventilation', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -696,6 +699,12 @@ export default function Page() {
             serviceKey="vmc-double-flux-thermodynamique"
             estimatedSaving={3700}
             subtitle="MaPrimeRénov' Bleu 2 500 € + CEE Coup de pouce 500-1 200 € — RGE Qualibat 8721 + QualiClimaFroid obligatoire"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Installateur VMC RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

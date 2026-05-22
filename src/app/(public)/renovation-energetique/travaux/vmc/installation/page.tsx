@@ -50,6 +50,8 @@ import { getBreadcrumbSchema, getFAQSchema, getHowToSchema } from '@/lib/seo/jso
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
 import PrixComparatif from '@/components/conversion/PrixComparatif'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -261,7 +263,8 @@ const relatedPages = [
   },
 ]
 
-export default function Page() {
+export default async function Page() {
+  const providers = await getProvidersByService('ventilation', 6)
   const articleSchema = getFlagshipArticleSchema({
     title: TITLE,
     description: DESCRIPTION,
@@ -439,6 +442,12 @@ export default function Page() {
             serviceKey="vmc"
             estimatedSaving={3700}
             subtitle="MaPrimeRénov' Bleu 2 500 € + CEE Coup de pouce 500-1 200 € — éligibilité conditionnée à un artisan RGE Qualibat 8721"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Installateur VMC RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

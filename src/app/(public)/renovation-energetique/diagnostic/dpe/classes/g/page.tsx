@@ -67,6 +67,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -320,7 +322,8 @@ const faqs = [
   },
 ]
 
-export default function DpeClasseGPage() {
+export default async function DpeClasseGPage() {
+  const providers = await getProvidersByService('audit-energetique', 6)
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Rénovation énergétique', url: '/renovation-energetique' },
@@ -607,6 +610,12 @@ export default function DpeClasseGPage() {
             estimatedSaving={11000}
             title="Sortir de classe F/G : estimez vos aides en 3 min"
             subtitle="MaPrimeRénov' Rénovation d'ampleur jusqu'à 70 000 € + CEE bonus + Éco-PTZ"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Auditeur énergétique RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />

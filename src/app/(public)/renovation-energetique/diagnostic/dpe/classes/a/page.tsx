@@ -38,6 +38,8 @@ import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
 import SimulateurAideBox from '@/components/conversion/SimulateurAideBox'
+import LocalProviderShowcase from '@/components/seo/LocalProviderShowcase'
+import { getProvidersByService } from '@/lib/supabase'
 
 export const revalidate = 86400
 
@@ -183,7 +185,8 @@ const faqs = [
   },
 ]
 
-export default function DpeClasseAPage() {
+export default async function DpeClasseAPage() {
+  const providers = await getProvidersByService('chauffagiste', 6)
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
     { name: 'Rénovation énergétique', url: '/renovation-energetique' },
@@ -318,6 +321,12 @@ export default function DpeClasseAPage() {
             estimatedSaving={3000}
             title="Maintenir mon DPE A/B/C : aides entretien"
             subtitle="Éco-gestes + remplacement équipements vieillissants — MaPrimeRénov' par geste"
+          />
+
+          <LocalProviderShowcase
+            providers={providers}
+            serviceName="Chauffagiste RGE"
+            cityName="France"
           />
 
           <FlagshipFaq items={faqs} />
