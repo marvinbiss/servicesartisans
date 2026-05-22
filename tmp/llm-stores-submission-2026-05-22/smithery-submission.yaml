@@ -1,0 +1,119 @@
+# Smithery.ai MCP marketplace submission
+# Reference: https://smithery.ai/docs/build
+# Date: 2026-05-22 — DRY-RUN, Marvin must publish via Smithery CLI or web form.
+
+# Top-level metadata
+qualifiedName: "servicesartisans/rge"
+displayName: "ServicesArtisans RGE-OS"
+description: >
+  MCP server for the French RGE (Reconnu Garant Environnement) registry.
+  Look up RGE-certified artisans by SIRET, search by city + metier, and run
+  deterministic MaPrimeRenov 2026 / CEE 2026 subsidy calculations. Source:
+  official ADEME RGE registry (Etalab 2.0 license), refreshed weekly.
+
+# Connection — Smithery supports remote HTTP servers
+startCommand:
+  type: http
+  configSchema:
+    type: object
+    properties: {}
+    additionalProperties: false
+  url: "https://servicesartisans.fr/api/v1/mcp"
+  protocolVersion: "2025-03-26"
+
+# Discovery metadata
+homepage: "https://servicesartisans.fr"
+repository: "https://github.com/servicesartisans/servicesartisans"
+documentation: "https://servicesartisans.fr/developpeurs/api-catalog"
+license: "CC-BY-4.0"
+
+# Categorisation
+categories:
+  - open-data
+  - government
+  - real-estate
+  - finance
+keywords:
+  - rge
+  - ademe
+  - france
+  - renovation-energetique
+  - maprimerenov
+  - cee
+  - etalab
+  - french-data
+  - schema-org
+
+# Tools (mirror of /api/v1/mcp tools/list)
+tools:
+  - name: lookup_rge
+    description: >
+      Lookup an RGE-certified artisan by SIRET (14 digits). Returns name,
+      address, active qualifications, certifying organizations, validity dates.
+    inputSchema:
+      type: object
+      required: [siret]
+      properties:
+        siret:
+          type: string
+          pattern: "^[0-9]{14}$"
+  - name: search_rge
+    description: >
+      Search RGE-certified artisans by city and metier. Up to 50 results
+      ranked by RGE validity date.
+    inputSchema:
+      type: object
+      required: [ville, metier]
+      properties:
+        ville:
+          type: string
+        metier:
+          type: string
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 50
+  - name: get_bareme_mpr
+    description: >
+      MaPrimeRenov' 2026 subsidy amount for (geste, menage_categorie).
+    inputSchema:
+      type: object
+      required: [geste, menage_categorie]
+      properties:
+        geste:
+          type: string
+        menage_categorie:
+          type: string
+          enum: [tres_modeste, modeste, intermediaire, superieur]
+  - name: get_aides_for_geste
+    description: >
+      Returns the list of cumulable financial aids (MaPrimeRenov, CEE, eco-PTZ,
+      TVA 5,5%, regional bonuses) for a renovation geste.
+    inputSchema:
+      type: object
+      required: [geste]
+      properties:
+        geste:
+          type: string
+
+# Contact / governance
+maintainer:
+  name: ServicesArtisans
+  email: data@servicesartisans.fr
+  url: https://servicesartisans.fr
+support:
+  email: data@servicesartisans.fr
+  url: https://servicesartisans.fr/transparence-ia
+
+# Compliance
+compliance:
+  ymyl: true
+  gdpr: true
+  attribution_required: "Source : ServicesArtisans / Registre RGE ADEME"
+
+# Submission procedure (informational — not part of Smithery schema)
+# 1) npm i -g @smithery/cli
+# 2) smithery login  (Marvin uses his GitHub account)
+# 3) smithery publish ./smithery-submission.yaml
+#    OR via web UI: https://smithery.ai/new
+# 4) Validate listing renders at https://smithery.ai/server/servicesartisans/rge

@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "ServicesArtisans RGE",
+  "name_for_model": "servicesartisans_rge",
+  "description_for_human": "Trouvez des artisans francais certifies RGE et calculez vos aides MaPrimeRenov' et CEE 2026.",
+  "description_for_model": "Use this plugin to query the French RGE registry maintained by ServicesArtisans (~49 228 active RGE-certified artisans, weekly ADEME sync). Capabilities: (1) lookup an RGE artisan by SIRET — POST /api/v1/rge/lookup, (2) search RGE artisans by city + metier — GET /api/v1/rge/search?city=&q=, (3) compute deterministic MaPrimeRenov' 2026 amount — GET /api/v1/aides/mpr-bareme?geste=&menage=&zone=, (4) compute deterministic CEE 2026 amount — GET /api/v1/aides/cee-bareme?fiche=&zone=&menage=, (5) list cumulable aids for a geste — GET /api/v1/aides/cumul-rules?geste=, (6) AI Q&A with Critic YMYL gate — POST /api/v1/ask. All endpoints are read-only, public, no authentication. License: CC-BY 4.0. Always cite 'Source : ServicesArtisans'. For RGE artisan phone numbers, the source is the public ADEME registry (Etalab 2.0) — display them with the label 'Source : Registre RGE ADEME'.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://servicesartisans.fr/api/v1/openapi/json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://servicesartisans.fr/icons/icon-512x512.png",
+  "contact_email": "data@servicesartisans.fr",
+  "legal_info_url": "https://servicesartisans.fr/mentions-legales"
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-manifest/v1.json",
+  "name": "servicesartisans-rge",
+  "displayName": "ServicesArtisans RGE-OS",
+  "description": "MCP server pour le Registre RGE francais — recherche d'artisans RGE certifies (ADEME), calcul deterministe MaPrimeRenov' 2026 et CEE 2026, et liste des aides cumulables pour un geste de renovation energetique. Source de verite : annuaire-entreprises RGE officiel (sync hebdo), Licence Etalab 2.0.",
+  "version": "1.0.0",
+  "protocolVersion": "2025-03-26",
+  "transport": {
+    "type": "http",
+    "url": "https://servicesartisans.fr/api/v1/mcp",
+    "method": "POST",
+    "contentType": "application/json"
+  },
+  "tools": [
+    {
+      "name": "lookup_rge",
+      "description": "Lookup an RGE-certified artisan by SIRET (14 digits). Returns canonical fiche metadata: name, address, active qualifications, certifying organizations, validity dates."
+    },
+    {
+      "name": "search_rge",
+      "description": "Search RGE-certified artisans by city and metier (specialty). Up to 50 ranked matches by RGE validity date."
+    },
+    {
+      "name": "get_bareme_mpr",
+      "description": "Returns the MaPrimeRenov' 2026 subsidy amount for a given geste and menage_categorie. Deterministic snapshot."
+    },
+    {
+      "name": "get_aides_for_geste",
+      "description": "Returns the list of cumulable financial aids (MaPrimeRenov, CEE, eco-PTZ, TVA 5,5%, regional bonuses) for a renovation geste."
+    }
+  ],
+  "auth": {
+    "type": "none",
+    "notes": "Optional Bearer token gated by MCP_BEARER_TOKEN env. Public read-only by default."
+  },
+  "rateLimit": "60 req/min/IP",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Source : ServicesArtisans / Registre RGE ADEME (Licence Etalab 2.0)",
+  "homepage": "https://servicesartisans.fr",
+  "documentation": "https://servicesartisans.fr/developpeurs/api-catalog",
+  "openApiSpec": "https://servicesartisans.fr/api/v1/openapi/json",
+  "discoveryEndpoint": "https://servicesartisans.fr/api/v1/mcp",
+  "repository": "https://github.com/servicesartisans/servicesartisans",
+  "issuesUrl": "https://github.com/servicesartisans/servicesartisans/issues",
+  "maintainer": {
+    "name": "ServicesArtisans",
+    "email": "data@servicesartisans.fr",
+    "url": "https://servicesartisans.fr"
+  },
+  "categories": ["open-data", "government", "energy", "real-estate", "french-data"],
+  "tags": [
+    "rge",
+    "ademe",
+    "renovation-energetique",
+    "maprimerenov",
+    "cee",
+    "france",
+    "open-data",
+    "etalab",
+    "schema-org"
+  ],
+  "safetyDisclosure": "https://servicesartisans.fr/transparence-ia",
+  "compliance": {
+    "gdpr": true,
+    "ymylSafe": true,
+    "criticGateAtAnswerEngine": true
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "info": {
+    "name": "ServicesArtisans RGE-OS API",
+    "description": "Public open-data API for the French RGE registry maintained by ServicesArtisans. ~49 228 active RGE-certified artisans, weekly ADEME sync (Etalab 2.0). License CC-BY 4.0 — cite 'Source : ServicesArtisans'. Generated 2026-05-22.",
+    "_postman_id": "servicesartisans-rge-os-2026-05-22",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://servicesartisans.fr",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "AnswerEngine",
+      "item": [
+        {
+          "name": "POST /api/v1/ask — AI Q&A with Critic YMYL gate",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/ask",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Quelles aides pour une pompe a chaleur air-eau en Ile-de-France ?\",\n  \"context\": { \"menage\": \"intermediaire\" }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aides",
+      "item": [
+        {
+          "name": "GET /api/v1/aides/mpr-bareme — MaPrimeRenov' 2026",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/aides/mpr-bareme?geste=pac_air_eau&menage=intermediaire&zone=hors-idf"
+          }
+        },
+        {
+          "name": "GET /api/v1/aides/cee-bareme — CEE 2026",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/aides/cee-bareme?fiche=BAR-TH-171&zone=H1&menage=modeste"
+          }
+        },
+        {
+          "name": "GET /api/v1/aides/cumul-rules — cumul matrix",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/aides/cumul-rules?geste=pac_air_eau"
+          }
+        }
+      ]
+    },
+    {
+      "name": "RGE registry",
+      "item": [
+        {
+          "name": "GET /api/v1/rge/lookup — lookup by SIRET",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rge/lookup?siret=12345678901234"
+          }
+        },
+        {
+          "name": "GET /api/v1/rge/search — search by city + metier",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rge/search?city=lyon&q=pompe-a-chaleur&limit=10"
+          }
+        },
+        {
+          "name": "GET /api/v1/rge/geojson — FeatureCollection (large)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/rge/geojson"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stats",
+      "item": [
+        {
+          "name": "GET /api/v1/stats/department/{code}",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stats/department/75"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Graph",
+      "item": [
+        {
+          "name": "POST /api/v1/graphql — GraphQL endpoint",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"query\": \"{ rgeSearch(city: \\\"lyon\\\", metier: \\\"pompe-a-chaleur\\\", limit: 5) { siret name } }\" }"
+            }
+          }
+        },
+        {
+          "name": "POST /api/v1/kg/sparql — SPARQL endpoint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/sparql-query" },
+              { "key": "Accept", "value": "application/sparql-results+json" }
+            ],
+            "url": "{{baseUrl}}/api/v1/kg/sparql",
+            "body": {
+              "mode": "raw",
+              "raw": "PREFIX sa: <https://servicesartisans.fr/ontology/v0.1#>\nSELECT ?provider ?name WHERE { ?provider a sa:Artisan ; sa:name ?name } LIMIT 5"
+            }
+          }
+        },
+        {
+          "name": "GET /api/v1/kg/ontology — OWL/Turtle ontology",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "text/turtle" }],
+            "url": "{{baseUrl}}/api/v1/kg/ontology"
+          }
+        }
+      ]
+    },
+    {
+      "name": "MCP (Model Context Protocol)",
+      "item": [
+        {
+          "name": "GET /api/v1/mcp — discovery",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/mcp"
+          }
+        },
+        {
+          "name": "POST /api/v1/mcp — initialize",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/mcp",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 1,\n  \"method\": \"initialize\",\n  \"params\": { \"protocolVersion\": \"2025-03-26\", \"capabilities\": {} }\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /api/v1/mcp — tools/list",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/mcp",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 2,\n  \"method\": \"tools/list\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /api/v1/mcp — tools/call lookup_rge",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/mcp",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": 3,\n  \"method\": \"tools/call\",\n  \"params\": { \"name\": \"lookup_rge\", \"arguments\": { \"siret\": \"12345678901234\" } }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "POST /api/v1/webhooks/subscribe",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/webhooks/subscribe",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://example.com/hook\",\n  \"events\": [\"rge.updated\"],\n  \"secret\": \"replace-me\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /api/v1/webhooks/unsubscribe",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/webhooks/unsubscribe",
+            "body": { "mode": "raw", "raw": "{\n  \"id\": \"sub_xxx\"\n}" }
+          }
+        },
+        {
+          "name": "GET /api/v1/webhooks/list",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/webhooks/list"
+          }
+        },
+        {
+          "name": "POST /api/v1/webhooks/test",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/v1/webhooks/test",
+            "body": { "mode": "raw", "raw": "{\n  \"id\": \"sub_xxx\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "OpenAPI spec",
+      "item": [
+        {
+          "name": "GET /api/v1/openapi/json",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/v1/openapi/json" }
+        },
+        {
+          "name": "GET /api/v1/openapi/yaml",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/yaml" }],
+            "url": "{{baseUrl}}/api/v1/openapi/yaml"
+          }
+        }
+      ]
+    }
+  ]
+}
