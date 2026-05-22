@@ -218,6 +218,101 @@ export function isCommuneQualified(commune: CommuneData | null): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// Hybride 25K — RGE local OU rayon 20 km (Migration 527, 2026-05-22)
+// ---------------------------------------------------------------------------
+
+export type CommuneSitemapHybridRow = {
+  commune_slug: string
+  code_insee: string
+  has_local_rge: boolean
+  nearest_rge_distance_km: number | null
+  last_modified: string | null
+}
+
+/**
+ * Retourne tous les slugs de communes éligibles au sitemap selon la stratégie
+ * hybride 25K (mig 527) :
+ *   - Vague 1 : communes avec ≥1 RGE local (nb_artisans_rge >= 1).
+ *   - Vague 2 : communes sans RGE local mais ≥1 RGE valide dans rayon `radiusKm`.
+ *
+ * Skip strict des communes >20 km de tout RGE valide (vrai soft 404).
+ *
+ * Graceful fallback : si la RPC échoue (DB blip, mig non appliquée), on
+ * retombe sur `getAllCommuneSlugs(qualifiedOnly=true)` pour ne pas casser le
+ * sitemap en prod (le set existant reste un sous-ensemble plus large).
+ */
+export async function getCommunesSitemapHybrid(
+  radiusKm: number = 20,
+  maxCommunes: number = 30_000
+): Promise<CommuneSitemapHybridRow[]> {
+  if (IS_BUILD) return []
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+    const { data, error } = await supabase.rpc('get_communes_sitemap_hybrid', {
+      p_radius_km: radiusKm,
+      p_max_communes: maxCommunes,
+    })
+    if (error || !data) return []
+    return data as CommuneSitemapHybridRow[]
+  } catch {
+    return []
+  }
+}
+
+/**
+ * Variante "slug-only" pour les shards sitemap qui n'ont besoin que des URLs.
+ * Avec fallback gracieux vers `getAllCommuneSlugs(qualifiedOnly=true)` si la
+ * RPC hybride retourne vide (DB blip ou mig 527 non appliquée).
+ */
+export async function getAllCommuneSlugsHybrid(maxSlugs: number = 30_000): Promise<string[]> {
+  const rows = await getCommunesSitemapHybrid(20, maxSlugs)
+  if (rows.length > 0) return rows.map((r) => r.commune_slug)
+  // Fallback : pre-mig 527 → garde le comportement vague γ
+  return getAllCommuneSlugs(maxSlugs, true)
+}
+
+export type NearestRgeProviderRow = {
+  id: string
+  name: string
+  slug: string
+  stable_id: string | null
+  specialty: string | null
+  address_city: string | null
+  address_postal_code: string | null
+  home_commune_slug: string | null
+  distance_km: number
+}
+
+/**
+ * Retourne les N RGE valides les plus proches d'une commune (rayon `radiusKm`).
+ * Pour le mode "fallback" de la page commune (no local RGE).
+ *
+ * Returns [] si la commune n'a pas de geo, ou si la RPC échoue (DB blip,
+ * mig 527 non appliquée).
+ */
+export async function getNearestRgeProvidersForCommune(
+  communeSlug: string,
+  opts: { radiusKm?: number; limit?: number } = {}
+): Promise<NearestRgeProviderRow[]> {
+  if (IS_BUILD) return []
+  const { radiusKm = 20, limit = 5 } = opts
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+    const { data, error } = await supabase.rpc('get_nearest_rge_providers_for_commune', {
+      p_commune_slug: communeSlug,
+      p_radius_km: radiusKm,
+      p_limit: limit,
+    })
+    if (error || !data) return []
+    return data as NearestRgeProviderRow[]
+  } catch {
+    return []
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Fetch commune data by slug (cached 24h)
 // ---------------------------------------------------------------------------
 

@@ -4,7 +4,7 @@ import { services, villes, departements, regions } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { getIndexableProblemeCombos } from '@/lib/seo/problemes-whitelist'
-import { getAllCommuneSlugs } from '@/lib/data/commune-data'
+import { getAllCommuneSlugs, getCommunesSitemapHybrid } from '@/lib/data/commune-data'
 import {
   assertTierPartitionCoverage,
   getServiceCityPriority,
@@ -165,19 +165,19 @@ export async function generateSitemaps() {
     // commune.slug = ville statique : permanentRedirect 301 vers /villes/[v]
     // (canonical priority maintenu).
     //
-    // 3 shards de STATIC_BATCH (8 000) = 24 000 capacité.
-    // Audit 2026-05-22 : `communes-cities-3` retournait 0 URL et
-    // `communes-cities-2` était ≤1.5K (cf. tmp/sitemap-diff-2026-05-22.md) —
-    // le total live (`getAllCommuneSlugs(qualifiedOnly=true)`, ≥500 hab OU
-    // ≥1 artisan) tourne autour de 17.5K post-pivot RGE. Cleanup de
-    // `communes-cities-3` (vide) ; réintroduire dès que le total dépasse
-    // 24 000 (ex. après une vague de claims provider_count >= 1).
-    // Historique : `communes-cities-4` déjà retiré 2026-05-02 (audit Sentry
-    // -100%).
+    // Mig 527 (2026-05-22) — Hybride 25K : `getCommunesSitemapHybrid()` via
+    // RPC `get_communes_sitemap_hybrid` UNION 17K (RGE local) + ~8K (RGE
+    // ≤20km via ST_DWithin PostGIS). Skip strict des communes >20km de tout
+    // RGE valide (évite soft 404 post-pivot RGE 2026-05-03). 4 shards de
+    // STATIC_BATCH (8 000) = 32 000 capacité — réintroduit `communes-cities-3`
+    // pour absorber le delta hybride (~+8K vs vague γ). Fallback gracieux
+    // vers `getAllCommuneSlugs(qualifiedOnly=true)` si la RPC échoue.
+    // Historique : `communes-cities-4` retiré 2026-05-02 (audit Sentry -100%).
     { id: 'communes' },
     { id: 'communes-cities-0' },
     { id: 'communes-cities-1' },
     { id: 'communes-cities-2' },
+    { id: 'communes-cities-3' },
     // V3 #3 stratégie 140K (2026-04-29) — BUILD /aides/[dept]/[aide] pour 11
     // aides nationales × 101 départements = 1 111 URLs (la 12ème = MaPrimeRénov'
     // est déjà émise séparément par /aides/[dept]/maprimerenov, cf. shard 'static').
@@ -2698,15 +2698,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Communes long-tail pages (V3 #1 stratégie 140K) ─────────────────
-  // 35 999 communes INSEE actives / STATIC_BATCH 8 000 = 5 shards.
-  // Slugs fetchés depuis Supabase au build/ISR (`getAllCommuneSlugs`),
-  // graceful fallback sur shard vide si DB indisponible.
-  // Les communes dont le slug = ville statique seront 301 par la page handler
-  // — on les inclut quand même au sitemap pour signaler le canonical à Google.
+  // ── Communes long-tail pages (V3 #1 stratégie 140K + mig 527 hybride 25K) ──
+  // Mig 527 (2026-05-22) — Hybride 25K : on consomme la RPC
+  // `get_communes_sitemap_hybrid` (UNION 17K RGE local + ~8K RGE ≤20km).
+  // Les communes >20km de tout RGE valide sont SKIPPÉES (vrai soft 404).
+  // Priorité dégradée pour les pages fallback (0.4 vs 0.5 RGE-local) — signal
+  // crawl-budget pour orienter Google vers les pages maximales.
+  // Fallback gracieux vers `getAllCommuneSlugs(qualifiedOnly=true)` si la RPC
+  // échoue (DB blip, mig non appliquée).
   if (id.startsWith('communes-cities-')) {
     const batchIndex = parseInt(id.replace('communes-cities-', ''), 10)
     const BATCH = STATIC_BATCH
+    const hybridRows = await getCommunesSitemapHybrid()
+    if (hybridRows.length > 0) {
+      const slice = hybridRows.slice(batchIndex * BATCH, batchIndex * BATCH + BATCH)
+      return slice.map((row) => ({
+        url: `${SITE_URL}/communes/${row.commune_slug}`,
+        lastModified: row.last_modified ?? undefined,
+        changeFrequency: 'monthly' as const,
+        priority: row.has_local_rge ? 0.5 : 0.4,
+      }))
+    }
+    // Fallback pre-mig 527 : garde le comportement vague γ.
     const slugs = await getAllCommuneSlugs()
     const start = batchIndex * BATCH
     const slice = slugs.slice(start, start + BATCH)

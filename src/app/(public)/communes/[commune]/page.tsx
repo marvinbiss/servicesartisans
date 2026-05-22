@@ -13,6 +13,7 @@ import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getReviewedByPersonSchema } from '@/lib/seo/jsonld'
 import { authors, getReviewerForAuthor } from '@/lib/data/authors'
+import { slugify } from '@/lib/utils'
 
 const COMM_AUTHOR = authors['sophie-martin']
 const COMM_REVIEWER = getReviewerForAuthor(COMM_AUTHOR)
@@ -20,6 +21,7 @@ import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
   getCommuneBySlug,
+  getNearestRgeProvidersForCommune,
   hasDemographicData,
   hasGeorisquesData,
   formatNumber,
@@ -27,6 +29,7 @@ import {
   monthName,
   isCommuneQualified,
   type CommuneData,
+  type NearestRgeProviderRow,
 } from '@/lib/data/commune-data'
 import {
   getVilleBySlug,
@@ -87,7 +90,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dept = commune.departement_name ?? commune.departement_code
   const cp = commune.code_postal ?? commune.departement_code
   const title = `${commune.name} (${cp}) — Artisans, données INSEE & RGE 2026`
-  const truncated = title.length > 60 ? title.slice(0, 59).replace(/\s+\S*$/, '') + '…' : title
+  // truncate à 46 char raw : +19 char brand suffix = ≤ 65 char rendu.
+  const truncated = title.length > 46 ? title.slice(0, 45).replace(/\s+\S*$/, '') + '…' : title
 
   const populationFr = commune.population ? `${formatNumber(commune.population)} habitants` : ''
   const description =
@@ -101,7 +105,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Vague γ nettoyage 2026-05-02 : commune hors filter qualifié (population
   // <500 ET 0 artisan) → noindex pour aligner avec l'omission sitemap.
   // Sans ce check, Google peut indexer ces pages via découvertes externes.
-  const isExcludedByQualification = !isCommuneQualified(commune)
+  //
+  // Mig 527 (2026-05-22) — Hybride 25K : si la commune n'est pas qualifiée
+  // sur les critères vague γ MAIS qu'elle a au moins 1 RGE valide dans rayon
+  // 20km, on la garde indexable (fallback page = vraie valeur ajoutée vs soft 404).
+  // Probe léger LIMIT 1 — pas de N+1 car ISR `revalidate=86400`.
+  let isExcludedByQualification = !isCommuneQualified(commune)
+  if (isExcludedByQualification) {
+    const nearby = await getNearestRgeProvidersForCommune(slug, { radiusKm: 20, limit: 1 })
+    if (nearby.length > 0) isExcludedByQualification = false
+  }
 
   return {
     title: truncated,
@@ -161,6 +174,17 @@ async function renderCommunePage({ params }: PageProps) {
   const cp = commune.code_postal ?? commune.departement_code
   const dept = commune.departement_name ?? commune.departement_code
   const region = commune.region_name ?? ''
+
+  // Mig 527 — Hybride 25K : si pas de RGE local, on tente le fallback rayon 20km.
+  // Si rien à <=20km : page reste accessible mais noindex via metadata
+  // (vrai soft 404 évité ; même sans liste de RGE, les sections INSEE/Climat
+  // /Géorisques restent informatives mais le signal est trop faible pour push
+  // dans le sitemap → robots.noindex décidé en metadata).
+  const hasLocalRge = (commune.nb_artisans_rge ?? 0) >= 1
+  const nearestRgeProviders: NearestRgeProviderRow[] = hasLocalRge
+    ? []
+    : await getNearestRgeProvidersForCommune(slug, { radiusKm: 20, limit: 5 })
+  const isFallbackMode = !hasLocalRge && nearestRgeProviders.length > 0
 
   const breadcrumbSchemaItems = [
     { name: 'Accueil', url: SITE_URL },
@@ -245,6 +269,14 @@ async function renderCommunePage({ params }: PageProps) {
               </time>
             </p>
           </header>
+
+          {isFallbackMode && (
+            <FallbackRgeBanner
+              communeName={commune.name}
+              providers={nearestRgeProviders}
+              radiusKm={20}
+            />
+          )}
 
           {snippetData && (
             <section aria-labelledby="en-bref-commune" className="mb-8">
@@ -774,6 +806,81 @@ function guessNearestStaticVille(commune: CommuneData): string | null {
   const dept = commune.departement_code
   if (!dept) return null
   return getDepartementCapitalSlug(dept)
+}
+
+/**
+ * Mig 527 (2026-05-22) — Hybride 25K. Banner affiché sur les communes qui
+ * n'ont aucun RGE basé localement mais ont ≥1 RGE valide dans rayon 20 km.
+ * Préserve la transparence (« pas d'artisan à X, voici les plus proches »)
+ * pour éviter le ressenti soft 404 sans casser la règle "no phone from DB"
+ * (les fiches RGE conservent leur tel via gate isRgeActive côté fiche).
+ */
+function FallbackRgeBanner({
+  communeName,
+  providers,
+  radiusKm,
+}: {
+  communeName: string
+  providers: NearestRgeProviderRow[]
+  radiusKm: number
+}) {
+  if (providers.length === 0) return null
+  return (
+    <section
+      aria-labelledby="fallback-rge-heading"
+      className="mb-8 rounded-xl border-l-4 border-amber-400 bg-amber-50 p-6"
+    >
+      <h2
+        id="fallback-rge-heading"
+        className="mb-2 flex items-center gap-2 text-lg font-semibold text-amber-900"
+      >
+        <Building2 className="h-5 w-5" aria-hidden /> Artisans RGE proches de {communeName}
+      </h2>
+      <p className="mb-4 text-sm text-amber-900">
+        Aucun artisan RGE n&apos;est basé directement à {communeName}. Voici les {providers.length}{' '}
+        artisans RGE certifiés les plus proches (rayon {radiusKm} km), tous habilités MaPrimeRénov
+        et CEE.
+      </p>
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {providers.map((p) => {
+          const publicId = p.slug || p.stable_id || null
+          const serviceSlug = p.specialty ? slugify(p.specialty) : null
+          const canonicalHref =
+            publicId && serviceSlug && p.home_commune_slug
+              ? `/services/${serviceSlug}/${p.home_commune_slug}/${publicId}`
+              : null
+          const inner = (
+            <>
+              <span className="block font-medium">{p.name}</span>
+              <span className="block text-xs text-charcoal-500">
+                {p.specialty ? `${p.specialty} · ` : ''}
+                {p.distance_km} km
+              </span>
+            </>
+          )
+          return (
+            <li key={p.id}>
+              {canonicalHref ? (
+                <Link
+                  href={canonicalHref}
+                  className="block rounded-lg bg-white px-3 py-2 text-sm text-charcoal-800 hover:bg-coral-50 hover:text-coral-700"
+                >
+                  {inner}
+                </Link>
+              ) : (
+                <span className="block rounded-lg bg-white px-3 py-2 text-sm text-charcoal-800">
+                  {inner}
+                </span>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+      <p className="mt-3 text-xs text-amber-800">
+        Source : registre RGE ADEME (artisans certifiés valides au jour de la requête).
+      </p>
+    </section>
+  )
 }
 
 function getDepartementCapitalSlug(deptCode: string): string | null {
