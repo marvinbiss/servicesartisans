@@ -26,7 +26,9 @@ import { getProvidersByService } from '@/lib/supabase'
 import { getAuthorByName, getReviewerForAuthor } from '@/lib/data/authors'
 import type { ClusterContent } from '@/lib/clusters'
 
-export const revalidate = 21600
+// ISR aligné avec autres templates pSEO (rge/cee/services/communes/aides = 86400).
+// Cluster content ne change pas plus vite que les autres pSEO data-driven.
+export const revalidate = 86400
 
 type ClusterRow = {
   slug: string

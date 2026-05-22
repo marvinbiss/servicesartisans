@@ -85,11 +85,14 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
-      // Cache-Control for programmatic public pages (CDN caching)
+      // Cache-Control for programmatic public pages (CDN caching).
+      // stale-while-revalidate 86400 (1j) sur routes data-heavy (artisan listings
+      // synced daily via ADEME) — réduit la fenêtre artisan disparu/rge expiré
+      // encore servi. Routes statiques (blog/guides/legal) gardent 604800 (7j).
       {
         source: '/services/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=86400' },
         ],
       },
       {
@@ -164,25 +167,25 @@ const nextConfig = {
       {
         source: '/rge/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=86400' },
         ],
       },
       {
         source: '/cee',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=86400' },
         ],
       },
       {
         source: '/cee/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=86400' },
         ],
       },
       {
         source: '/artisans-rge/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=604800' },
+          { key: 'Cache-Control', value: 'public, s-maxage=86400, stale-while-revalidate=86400' },
         ],
       },
       {

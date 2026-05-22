@@ -14,10 +14,13 @@ import { safeJsonStringify } from '@/lib/seo/safe-json'
 import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
 
+// Restrict to weights used in production (audit 2026-05-22 : ~80KB saved).
+// DM_Sans 400 (body) + 500 (sublines) ; Sora 600/700/800 (h1-h3 + brand).
 const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-dm-sans',
   display: 'swap',
+  weight: ['400', '500'],
   adjustFontFallback: true,
 })
 
@@ -25,7 +28,7 @@ const sora = Sora({
   subsets: ['latin'],
   variable: '--font-heading',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['600', '700', '800'],
   adjustFontFallback: true,
 })
 
