@@ -1,0 +1,109 @@
+{
+  "title": "Indice Rénovation Énergétique 2026 — ServicesArtisans",
+  "acronym": "IRE-2026-SA",
+  "description": "Baromètre annuel agrégeant les indicateurs publics clés du marché de la rénovation énergétique en France pour l'année 2026 : parc de logements (résidences principales INSEE), passoires thermiques classes F+G (ADEME), dossiers MaPrimeRénov' versés (ANAH), nombre d'artisans RGE actifs (France Rénov' / annuaire ADEME), taille du marché en valeur (BPI France / Xerfi) et trajectoire des émissions CO₂ du secteur résidentiel (Citepa).\n\nLes 6 KPIs sont stables au format CSV (5 colonnes : metric, value, unit, source, last_updated), exposés également au format HTML autonome (iframe responsive prête à intégrer) et au format JSON-LD Schema.org Dataset (rich result Google Dataset Search).\n\nDonnées agrégées de sources publiques officielles uniquement (aucune donnée propriétaire ServicesArtisans). Mise à jour mensuelle au gré des publications ADEME / ANAH / France Rénov'. Licence Creative Commons Attribution 4.0 (CC-BY 4.0) — réutilisation libre commerciale et non commerciale sous réserve de la citation « Source : ServicesArtisans — Baromètre Rénovation 2026 » avec lien retour vers https://servicesartisans.fr/barometre/renovation-energetique-2026.\n\nUsages cibles : journalisme data, recherche académique, observatoires publics, médias régionaux (réutilisation iframe), acteurs MOA / MOE rénovation énergétique, agences immobilières (info passoires thermiques Loi Climat 2021).",
+  "license": "cc-by",
+  "frequency": "monthly",
+  "frequency_date": "2026-05-06",
+  "tags": [
+    "renovation-energetique",
+    "rge",
+    "maprimerenov",
+    "cee",
+    "ademe",
+    "anah",
+    "passoires-thermiques",
+    "aides",
+    "artisans",
+    "dpe",
+    "logement",
+    "insee",
+    "transition-ecologique"
+  ],
+  "spatial": {
+    "granularity": "country",
+    "zones": ["country/FR"]
+  },
+  "temporal_coverage": {
+    "start": "2026-01-01",
+    "end": null
+  },
+  "extras": {
+    "attribution": "ServicesArtisans — Baromètre Rénovation Énergétique 2026",
+    "contact_email": "data@servicesartisans.fr",
+    "canonical_url": "https://servicesartisans.fr/barometre/renovation-energetique-2026",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "source_pages": [
+      "https://servicesartisans.fr/barometre/renovation-energetique-2026",
+      "https://servicesartisans.fr/datasets"
+    ],
+    "siren_publisher": "ServicesArtisans SAS"
+  },
+  "resources": [
+    {
+      "title": "Indice Rénovation Énergétique 2026 (CSV)",
+      "description": "Export CSV stable (RFC 4180, UTF-8, CRLF). 5 colonnes : metric, value, unit, source, last_updated. 6 KPIs publiés.",
+      "url": "https://servicesartisans.fr/api/v1/barometre/renovation/export.csv",
+      "type": "main",
+      "filetype": "remote",
+      "format": "csv",
+      "mime": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "metric",
+            "type": "string",
+            "description": "Identifiant snake_case stable de l'indicateur"
+          },
+          {
+            "name": "value",
+            "type": "number",
+            "description": "Valeur numérique brute (sans séparateur ni unité)"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "Unité (logements, dossiers, entreprises, euros, pourcentage)"
+          },
+          {
+            "name": "source",
+            "type": "string",
+            "description": "Source officielle (ADEME / ANAH / INSEE / France Rénov' / BPI France / Citepa)"
+          },
+          {
+            "name": "last_updated",
+            "type": "date",
+            "description": "Date ISO 8601 de dernière mise à jour côté ServicesArtisans"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Indice Rénovation Énergétique 2026 (HTML embed)",
+      "description": "Page HTML autonome iframe-friendly (6 cartes KPI + attribution CC-BY 4.0). Pour réutilisation médias / blogs / partenaires. Cache 1h, CSP frame-ancestors *.",
+      "url": "https://servicesartisans.fr/api/v1/barometre/renovation/embed.html",
+      "type": "documentation",
+      "filetype": "remote",
+      "format": "html",
+      "mime": "text/html"
+    },
+    {
+      "title": "Baromètre Rénovation Énergétique 2026 (page canonique + Schema.org Dataset)",
+      "description": "Page éditoriale complète avec parc DPE détaillé, historique MaPrimeRénov' 2020-2025, répartition RGE par spécialité, méthodologie et JSON-LD Dataset embarqué. Source de vérité.",
+      "url": "https://servicesartisans.fr/barometre/renovation-energetique-2026",
+      "type": "documentation",
+      "filetype": "remote",
+      "format": "html",
+      "mime": "text/html"
+    },
+    {
+      "title": "Catalogue Datasets ServicesArtisans (hub)",
+      "description": "Hub Schema.org DataCatalog listant tous les datasets ServicesArtisans (RGE, CEE, glossaire, baromètre). Tous CC-BY 4.0.",
+      "url": "https://servicesartisans.fr/datasets",
+      "type": "documentation",
+      "filetype": "remote",
+      "format": "html",
+      "mime": "text/html"
+    }
+  ]
+}
