@@ -24,6 +24,8 @@ import { CRAWLER_RE } from '@/middleware'
 
 const REAL_BOT_UA: Record<string, string> = {
   // OpenAI
+  GPTBot:
+    'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.2; +https://openai.com/gptbot',
   'OAI-SearchBot':
     'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot',
   'ChatGPT-User':
@@ -58,6 +60,9 @@ const REAL_BOT_UA: Record<string, string> = {
   // Apple
   'Applebot-Extended': 'Mozilla/5.0 (compatible; Applebot-Extended/0.1)',
 
+  // CommonCrawl — alimente la majorité des datasets training LLM (GPT/Claude/Mistral).
+  CCBot: 'CCBot/2.0 (https://commoncrawl.org/faq/)',
+
   // SEO tools
   AhrefsBot: 'Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)',
   SemrushBot: 'Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)',
@@ -66,28 +71,6 @@ const REAL_BOT_UA: Record<string, string> = {
   // Classic search engines
   Googlebot: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
   Bingbot: 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
-}
-
-/**
- * GAPS RÉVÉLÉS PAR CE TEST — bots NON couverts par CRAWLER_RE actuel.
- *
- * On utilise `it.fails()` (vitest) pour documenter le gap : la suite reste
- * verte tant que le bot N'EST PAS matché. Si la regex est mise à jour pour
- * couvrir l'un d'eux, le test passera puis échouera (par contrat `it.fails`)
- * et signalera qu'il faut déplacer l'entrée vers REAL_BOT_UA.
- *
- * NE PAS FIXER ICI — un commit séparé doit étendre CRAWLER_RE après
- * arbitrage prod (impact rate-limit, anti-spoofing, telemetry).
- */
-const KNOWN_GAPS: Record<string, string> = {
-  // OpenAI GPTBot (crawler training principal d'OpenAI — pas un search bot).
-  // Source : https://platform.openai.com/docs/bots — distinct de OAI-SearchBot.
-  GPTBot:
-    'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.2; +https://openai.com/gptbot',
-
-  // CommonCrawl — alimente la majorité des datasets training LLM (GPT/Claude/Mistral).
-  // Source : https://commoncrawl.org/faq
-  CCBot: 'CCBot/2.0 (https://commoncrawl.org/faq/)',
 }
 
 const HUMAN_UA = [
@@ -119,27 +102,15 @@ describe('CRAWLER_RE — bot detection coverage', () => {
     })
 
     it('lowercase bot name matches (regex is case-insensitive)', () => {
-      // Le regex a flag /i — `claudebot` doit matcher comme `ClaudeBot`.
-      // Note : `gptbot` NON testé ici car GPTBot absent du regex (gap connu).
       expect(CRAWLER_RE.test('claudebot')).toBe(true)
       expect(CRAWLER_RE.test('ahrefsbot')).toBe(true)
       expect(CRAWLER_RE.test('perplexitybot')).toBe(true)
+      expect(CRAWLER_RE.test('gptbot')).toBe(true)
+      expect(CRAWLER_RE.test('ccbot')).toBe(true)
     })
 
     it('regex is case-insensitive (has /i flag)', () => {
       expect(CRAWLER_RE.flags).toContain('i')
     })
-  })
-
-  // Gaps connus — documentés ici via `it.fails()` pour rester verts tant
-  // que le bot n'est PAS matché. Quand un bot est ajouté à CRAWLER_RE, le
-  // test inversera (PASS) et `it.fails` le marquera comme FAIL → forcera
-  // à déplacer l'entrée vers REAL_BOT_UA.
-  describe('KNOWN GAPS — bots non couverts par CRAWLER_RE (do NOT fix here)', () => {
-    for (const [name, ua] of Object.entries(KNOWN_GAPS)) {
-      it.fails(`GAP: ${name} not yet matched (expected gap, fix in separate commit)`, () => {
-        expect(CRAWLER_RE.test(ua)).toBe(true)
-      })
-    }
   })
 })

@@ -164,7 +164,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 // nous prive de notre propre télémétrie SEO. Tous en GET/HEAD only (cf. note
 // ci-dessus sur le risque de spoofing UA).
 export const CRAWLER_RE =
-  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|Applebot-Extended|DuckDuckBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|MistralBot|Mistralai-User|Amazonbot|Meta-ExternalAgent|YouBot|AhrefsBot|SemrushBot|MJ12bot|DataForSeoBot|YandexBot|BLEXBot|facebookexternalhit|LinkedInBot|Twitterbot/i
+  /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool|GoogleOther|Google-CloudVertexBot|Google-Extended|bingbot|Applebot|Applebot-Extended|DuckDuckBot|GPTBot|OAI-SearchBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-SearchBot|Claude-User|anthropic-ai|MistralBot|Mistralai-User|Amazonbot|Meta-ExternalAgent|YouBot|CCBot|AhrefsBot|SemrushBot|MJ12bot|DataForSeoBot|YandexBot|BLEXBot|facebookexternalhit|LinkedInBot|Twitterbot/i
 
 /** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
 async function logGooglebotCrawl(url: string, userAgent: string) {

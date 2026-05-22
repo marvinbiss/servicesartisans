@@ -923,17 +923,36 @@ export function getGovernmentServiceSchema(params: {
   audience?: string
   /** Temporal coverage (ex: "2026-01-01/2030-12-31" for P6 CEE). */
   temporalCoverage?: string
+  /**
+   * Programme category (ex: "Aide à la rénovation énergétique — Chauffage").
+   * Useful on dynamic operation pages to expose the family
+   * (chauffage/isolation/ventilation/...) in the Knowledge Graph entity.
+   */
+  category?: string
+  /**
+   * Legal terms of service URL (Légifrance article, arrêté CEE…). Required by
+   * Schema.org for `GovernmentService` when the programme is regulated by law.
+   */
+  termsOfService?: string
+  /**
+   * Override the `@id` fragment (defaults to `government-service`). Use when
+   * multiple GovernmentService entities co-exist on related routes or when
+   * a per-operation stable @id is needed (ex: `cee-operation-bar-th-148`).
+   */
+  idFragment?: string
 }) {
+  const fragment = params.idFragment || 'government-service'
   return {
     '@context': 'https://schema.org',
     '@type': 'GovernmentService',
-    '@id': `${params.url}#government-service`,
+    '@id': `${params.url}#${fragment}`,
     name: params.name,
     description: params.description,
     url: params.url,
     inLanguage: 'fr-FR',
     isPartOf: { '@id': `${SITE_URL}#website` },
     serviceType: params.serviceType || 'Financial Assistance',
+    ...(params.category && { category: params.category }),
     areaServed: {
       '@type': 'Country',
       name: 'France',
@@ -957,6 +976,7 @@ export function getGovernmentServiceSchema(params: {
       '@id': `${SITE_URL}#organization`,
       name: SITE_NAME,
     },
+    ...(params.termsOfService && { termsOfService: params.termsOfService }),
     ...(params.sameAs && params.sameAs.length > 0 && { sameAs: params.sameAs }),
   }
 }

@@ -287,15 +287,25 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
   ]
   if (operation.url_fiche_officielle) officialSources.unshift(operation.url_fiche_officielle)
 
+  // GovernmentService enrichi par opération : fragment @id distinct (code op)
+  // pour donner à chaque BAR-XX-XXX une entité Knowledge Graph stable, category
+  // = libellé domaine DGEC (chauffage/isolation/ventilation/...), termsOfService
+  // = section Légifrance L.221-1 du code de l'énergie (article cadre du
+  // dispositif CEE). Sourçage strict : aucun montant inventé, uniquement les
+  // metadata catalogue DGEC + URL officielle quand disponible.
   const governmentServiceSchema = getGovernmentServiceSchema({
     name: `Prime CEE ${operation.code} — ${operation.nom}`,
     description: `Opération standardisée ${operation.code} du catalogue DGEC. Aide financière obligatoire versée par les vendeurs d'énergie (loi POPE 2005, période P6 2026-2030) pour les travaux ${operation.nom.toLowerCase()}.`,
     url: `${SITE_URL}${path}`,
     serviceType: 'Aide financière à la rénovation énergétique',
+    category: `Certificats d'économies d'énergie — ${domaineInfo?.label || operation.domaine}`,
     audience: operation.precarite_eligible
       ? 'Propriétaires et locataires, bonification pour ménages en précarité énergétique'
       : 'Propriétaires et locataires de logements résidentiels',
     temporalCoverage: '2026-01-01/2030-12-31',
+    termsOfService:
+      'https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000023983208/LEGISCTA000023985322/',
+    idFragment: `cee-operation-${operation.code.toLowerCase()}`,
     sameAs: officialSources,
   })
 
