@@ -73,6 +73,21 @@ export function resolveProviderCities<
   return providers.map(resolveProviderCity)
 }
 
+/**
+ * Normalize an `address_city` value — which is an INSEE code for ~91% of rows
+ * (e.g. "69123", or arrondissement "75110") and a plain name for the rest —
+ * into a display city name. Returns null for an unknown INSEE code.
+ *
+ * Used by valid-combos to map `mv_provider_counts.city` → ville slug. Without
+ * this, name-based mapping silently dropped ~91% of rows and the "Top villes"
+ * block on every service hub came up nearly empty.
+ */
+export function cityValueToName(value: string | null | undefined): string | null {
+  if (!value) return null
+  if (!isInseeCode(value)) return value
+  return getCommune(value)?.n ?? null
+}
+
 // ─── Reverse map: city name → INSEE codes (for queries) ─────────────
 
 const _normalize = (t: string) =>

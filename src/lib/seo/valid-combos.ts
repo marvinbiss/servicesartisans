@@ -22,6 +22,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { villes } from '@/lib/data/france'
 import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
+import { cityValueToName, getCityValues } from '@/lib/insee-resolver'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
@@ -40,6 +41,21 @@ function getCityNameToSlugMap(): Map<string, string> {
   }
   _nameToSlugCache = map
   return map
+}
+
+/**
+ * `mv_provider_counts.city` holds an INSEE code for ~91% of rows (e.g. "69123",
+ * arrondissement "75110") and a plain name for the rest. Resolve either form to
+ * a known ville slug, or undefined if it maps to no first-class ville.
+ * Without the INSEE step, name-only mapping dropped ~91% of rows → empty hubs.
+ */
+function resolveCityRowToSlug(
+  rowCity: string | null | undefined,
+  nameToSlug: Map<string, string>
+): string | undefined {
+  const name = cityValueToName(rowCity)
+  if (!name) return undefined
+  return nameToSlug.get(name.toLowerCase().trim())
 }
 
 /**
@@ -87,9 +103,7 @@ export async function getValidCitySlugsForService(
         const slugs: string[] = []
 
         for (const row of data ?? []) {
-          const cityName = (row.city ?? '').toLowerCase().trim()
-          if (!cityName) continue
-          const slug = nameToSlug.get(cityName)
+          const slug = resolveCityRowToSlug(row.city, nameToSlug)
           if (!slug || seen.has(slug)) continue
           seen.add(slug)
           slugs.push(slug)
@@ -147,7 +161,10 @@ export async function getValidCityCountsForService(
             .in('specialty', specialties)
             .gte('rge_provider_count', minCount)
             .order('rge_provider_count', { ascending: false })
-            .limit(limit * 3),
+            // surchunk : une grande ville est éclatée en N codes INSEE
+            // d'arrondissement (Paris ×20, Marseille ×16, Lyon ×9) qu'on
+            // ré-agrège ensuite par slug — il faut fetch assez large.
+            .limit(Math.max(limit * 6, 60)),
           5_000,
           `valid_combo_counts:${serviceSlug}`
         )
@@ -162,24 +179,22 @@ export async function getValidCityCountsForService(
         }
 
         const nameToSlug = getCityNameToSlugMap()
-        const seen = new Set<string>()
-        const out: CityWithCount[] = []
+        const bySlug = new Map<string, CityWithCount>()
 
         for (const row of data ?? []) {
-          const cityName = (row.city ?? '').toLowerCase().trim()
-          if (!cityName) continue
-          const slug = nameToSlug.get(cityName)
-          if (!slug || seen.has(slug)) continue
-          seen.add(slug)
-          out.push({
-            slug,
-            cityName: row.city,
-            count: row.rge_provider_count ?? 0,
-          })
-          if (out.length >= limit) break
+          const name = cityValueToName(row.city)
+          if (!name) continue
+          const slug = nameToSlug.get(name.toLowerCase().trim())
+          if (!slug) continue
+          const count = row.rge_provider_count ?? 0
+          const existing = bySlug.get(slug)
+          if (existing) existing.count += count
+          else bySlug.set(slug, { slug, cityName: name, count })
         }
 
-        return out
+        return Array.from(bySlug.values())
+          .sort((a, b) => b.count - a.count)
+          .slice(0, limit)
       } catch (err) {
         logger.error('valid-combos: counts timeout', {
           error: String(err),
@@ -216,16 +231,18 @@ export async function isComboValid(serviceSlug: string, citySlug: string): Promi
           supabase
             .from('mv_provider_counts')
             .select('rge_provider_count')
+            // `city` = code INSEE pour ~91% des lignes : matcher le nom seul
+            // ratait la quasi-totalité des combos. getCityValues couvre nom +
+            // codes INSEE (dont arrondissements).
             .in('specialty', specialties)
-            .ilike('city', ville.name)
+            .in('city', getCityValues(ville.name, ville.departementCode))
             .gte('rge_provider_count', 1)
-            .limit(1)
-            .maybeSingle(),
+            .limit(1),
           3_000,
           `valid_combo_check:${serviceSlug}:${citySlug}`
         )
         if (error) return true // fail-open
-        return (data?.rge_provider_count ?? 0) > 0
+        return (data?.length ?? 0) > 0
       } catch {
         return true // fail-open
       }
