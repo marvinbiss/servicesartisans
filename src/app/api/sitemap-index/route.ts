@@ -14,6 +14,9 @@ import { sitemapHeaders } from '@/lib/seo/sitemap-headers'
  *
  * All constants imported from sitemap-config.ts (single source of truth).
  */
+// Reads request headers (ETag/If-None-Match) and queries the DB → never static.
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     // emergencySlugs anciennement utilisé pour calculer le nombre de shards

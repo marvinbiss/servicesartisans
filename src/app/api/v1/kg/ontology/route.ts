@@ -17,7 +17,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 
 export const runtime = 'nodejs'
-export const revalidate = 86_400
+// Reads the Accept header for content negotiation → must opt out of static
+// prerender (build-time DynamicServerError). CDN caching still applies via the
+// Cache-Control header on the response.
+export const dynamic = 'force-dynamic'
 
 const TURTLE = `@prefix sa: <https://servicesartisans.fr/ontology/rge#> .
 @prefix schema: <https://schema.org/> .

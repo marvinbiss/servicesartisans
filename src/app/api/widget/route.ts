@@ -10,6 +10,10 @@ import { logger } from '@/lib/logger'
  * - ville: city slug (e.g. "paris")
  * - name: artisan/business name
  */
+// Reads query params from request.url → opt out of static prerender. CDN
+// caching still applies via the Cache-Control header on the response.
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
