@@ -139,10 +139,13 @@ const PATTERNS_API = [
     id: 'dynamic_force',
     label: "dynamic = 'force-dynamic' si DB",
     severity: 'P2',
+    // Caching explicite (Cache-Control / s-maxage / sitemapHeaders) = stratégie
+    // de fraîcheur assumée par l'auteur ; forcer dynamic écraserait ce choix.
     test: (src) =>
       !/\bcreateAdminClient\b|\bcreateClient\b|\bcreateServerClient\b/.test(src) ||
       /export\s+const\s+dynamic\s*=\s*['"]force-dynamic['"]/.test(src) ||
-      /\bexport\s+const\s+revalidate\b/.test(src),
+      /\bexport\s+const\s+revalidate\b/.test(src) ||
+      /['"]Cache-Control['"]|s-maxage|sitemapHeaders/.test(src),
     appliesTo: () => true,
   },
   {
