@@ -11,11 +11,14 @@
  */
 
 import YmylDisclaimer from '@/components/aides/YmylDisclaimer'
+import RenovationClusterNav from '@/components/seo/RenovationClusterNav'
 
 export default function RenovationEnergetiqueLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
+      {/* Maillage dense du cluster reno (autorité topique) — couvre ~80 pages. */}
+      <RenovationClusterNav />
       <section className="bg-white border-t border-sand-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <YmylDisclaimer
