@@ -143,10 +143,17 @@ export function ClayHeroSearch() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const slug = selectedServiceSlug || serviceSuggestions[0]?.slug
-    const citySlug = selectedCitySlug || citySuggestions[0]?.slug
+    // City slug may be unresolved if the user submits before the full villes
+    // dataset finishes loading (async race) and villesLight had no match.
+    // Resolve it against the full list before routing so the city isn't dropped.
+    let citySlug = selectedCitySlug || citySuggestions[0]?.slug
+    if (!citySlug && ville.trim()) {
+      const full = await getAllVilles()
+      citySlug = searchCitiesSync(ville, full)[0]?.slug
+    }
     capture(EVENT.SEARCH_PERFORMED, {
       service: slug || service || null,
       city: citySlug || ville || null,
