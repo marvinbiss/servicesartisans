@@ -28,6 +28,10 @@ export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 200
 
+// SLA-99.9 : cap dur sur le nombre de providers traités par run (filet en plus
+// du wall-clock). Le lease + l'ordre stable par id garantissent la progression.
+const MAX_PROVIDERS_PER_RUN = 50_000
+
 // SLA-99.9 : wall-clock 50s sous Vercel maxDuration 60s.
 const MAX_RUNTIME_MS = 50_000
 const LEASE_NAME = 'cron_calculate_trust_badges'
@@ -96,6 +100,7 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
     let totalUpdated = 0
     let totalErrors = 0
     let totalSkipped = 0
+    let totalProcessed = 0
     let offset = 0
     let hasMore = true
     let capReached = false
@@ -103,6 +108,11 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
     while (hasMore) {
       // SLA-99.9 : wall-clock guard.
       if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        break
+      }
+      // SLA-99.9 : cap dur sur le volume traité par run.
+      if (totalProcessed >= MAX_PROVIDERS_PER_RUN) {
         capReached = true
         break
       }
@@ -125,6 +135,8 @@ export const GET = withCronCheckIn('cron-calculate-trust-badges', async (request
         hasMore = false
         break
       }
+
+      totalProcessed += providers.length
 
       // Batch-fetch all reviews for this batch of providers (eliminates N+1)
       const providerIds = providers.map((p) => p.id).filter((id): id is string => !!id)

@@ -12,6 +12,11 @@ export const dynamic = 'force-dynamic'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
+// SLA-99.9 : wall-clock guard (1 email Resend = ~500ms-1.5s) + lease anti-double-run.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_abandon_emails'
+const LEASE_TTL_SECONDS = 15 * 60
+
 /**
  * GET/POST /api/cron/abandon-emails
  * Cron job to send recovery email sequences (30min, 24h, 72h).
@@ -32,7 +37,35 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
 
   const supabase = createAdminClient()
   const now = new Date()
+  const startedAt = Date.now()
   const sent = { email1: 0, email2: 0, email3: 0 }
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
     // Email 1: 30 min after abandon, not yet sent
@@ -47,6 +80,8 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
       .limit(50)
 
     for (const row of batch1 || []) {
+      // SLA-99.9 : wall-clock guard.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
       const unsubscribeUrl = `${SITE_URL}/api/devis/unsubscribe?id=${row.id}`
       const { subject, html } = getAbandonEmail1({
         service: row.service_slug || 'travaux',
@@ -81,6 +116,8 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
       .limit(50)
 
     for (const row of batch2 || []) {
+      // SLA-99.9 : wall-clock guard.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
       const unsubscribeUrl = `${SITE_URL}/api/devis/unsubscribe?id=${row.id}`
       const { subject, html } = getAbandonEmail2({
         service: row.service_slug || 'travaux',
@@ -115,6 +152,8 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
       .limit(50)
 
     for (const row of batch3 || []) {
+      // SLA-99.9 : wall-clock guard.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
       const unsubscribeUrl = `${SITE_URL}/api/devis/unsubscribe?id=${row.id}`
       const { subject, html } = getAbandonEmail3({
         service: row.service_slug || 'travaux',
@@ -143,6 +182,13 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
   } catch (err) {
     console.error('[abandon-emails] Cron error:', err)
     return NextResponse.json({ error: 'cron failed' }, { status: 500 })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })
 

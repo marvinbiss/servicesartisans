@@ -25,6 +25,11 @@ export const dynamic = 'force-dynamic'
 const BATCH_SIZE = 500
 const UPDATE_CHUNK_SIZE = 50
 
+// SLA-99.9 : cap dur sur le nombre de providers traités par run (filet en plus
+// du wall-clock). ~1M providers → plusieurs runs ; le lease + l'ordre stable
+// par id garantissent la progression sans double-traitement.
+const MAX_PROVIDERS_PER_RUN = 50_000
+
 // SLA-99.9 : wall-clock guard. Vercel maxDuration = 60s ; on s'arrête à 50s
 // pour avoir le temps d'appeler release_cron_lease avant kill.
 const MAX_RUNTIME_MS = 50_000
@@ -132,6 +137,7 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
 
     let totalUpdated = 0
     let totalErrors = 0
+    let totalProcessed = 0
     let offset = 0
     let hasMore = true
     let capReached = false
@@ -139,6 +145,11 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
     while (hasMore) {
       // SLA-99.9 : wall-clock guard avant chaque batch (le plus coûteux).
       if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        capReached = true
+        break
+      }
+      // SLA-99.9 : cap dur sur le volume traité par run.
+      if (totalProcessed >= MAX_PROVIDERS_PER_RUN) {
         capReached = true
         break
       }
@@ -163,6 +174,8 @@ export const GET = withCronCheckIn('cron-recalculate-quality', async (request: R
         hasMore = false
         break
       }
+
+      totalProcessed += providers.length
 
       // Calculate scores in memory first, then batch-update in parallel chunks
       const updates = providers.map((provider) => {

@@ -28,15 +28,28 @@ const DAYS_90 = 90 * 24 * 60 * 60 * 1000
 const YEARS_3 = 3 * 365 * 24 * 60 * 60 * 1000
 const MONTHS_6 = 180 * 24 * 60 * 60 * 1000
 
+// SLA-99.9 : cap dur sur le nombre de rows anonymisées par règle/run + wall-clock
+// guard 50s + lease anti-double-run.
+const MAX_ROWS_PER_RUN = 50_000
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_rgpd_anonymize'
+const LEASE_TTL_SECONDS = 15 * 60
+
 type SupabaseAdmin = ReturnType<typeof createAdminClient>
 
 /**
  * Règle 1 : RFR > 90j → NULL.
  * La colonne rfr_tranche a été remplie à l'insertion, donc on ne perd rien.
  */
-async function applyRule1(supabase: SupabaseAdmin, cutoff: string): Promise<number> {
+async function applyRule1(
+  supabase: SupabaseAdmin,
+  cutoff: string,
+  startedAt: number
+): Promise<number> {
   let total = 0
   for (;;) {
+    // SLA-99.9 : wall-clock + cap guards.
+    if (Date.now() - startedAt > MAX_RUNTIME_MS || total >= MAX_ROWS_PER_RUN) break
     // Select ids in batches to avoid long-running UPDATE
     const { data: rows, error: selErr } = await supabase
       .from('simulateur_estimations')
@@ -72,9 +85,15 @@ async function applyRule1(supabase: SupabaseAdmin, cutoff: string): Promise<numb
  * Règle 2 : > 3 ans ET pipedrive_deal_id IS NULL → vider coords + anonymized_at.
  * Si Pipedrive a converti, on garde (obligation légale comptable).
  */
-async function applyRule2(supabase: SupabaseAdmin, cutoff: string): Promise<number> {
+async function applyRule2(
+  supabase: SupabaseAdmin,
+  cutoff: string,
+  startedAt: number
+): Promise<number> {
   let total = 0
   for (;;) {
+    // SLA-99.9 : wall-clock + cap guards.
+    if (Date.now() - startedAt > MAX_RUNTIME_MS || total >= MAX_ROWS_PER_RUN) break
     const { data: rows, error: selErr } = await supabase
       .from('simulateur_estimations')
       .select('id')
@@ -115,9 +134,15 @@ async function applyRule2(supabase: SupabaseAdmin, cutoff: string): Promise<numb
 /**
  * Règle 3 : > 6 mois ET ip_hash IS NOT NULL → ip_hash = NULL.
  */
-async function applyRule3(supabase: SupabaseAdmin, cutoff: string): Promise<number> {
+async function applyRule3(
+  supabase: SupabaseAdmin,
+  cutoff: string,
+  startedAt: number
+): Promise<number> {
   let total = 0
   for (;;) {
+    // SLA-99.9 : wall-clock + cap guards.
+    if (Date.now() - startedAt > MAX_RUNTIME_MS || total >= MAX_ROWS_PER_RUN) break
     const { data: rows, error: selErr } = await supabase
       .from('simulateur_estimations')
       .select('id')
@@ -161,16 +186,50 @@ export const GET = withCronCheckIn('cron-rgpd-anonymize', async (request: Reques
       }
 
       const now = Date.now()
+      const startedAt = now
       const cutoff90 = new Date(now - DAYS_90).toISOString()
       const cutoff3y = new Date(now - YEARS_3).toISOString()
       const cutoff6m = new Date(now - MONTHS_6).toISOString()
 
       const supabase = createAdminClient()
 
+      // SLA-99.9 : lease avec abort 5s.
+      const leaseController = new AbortController()
+      const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+      let acquired: boolean | null = null
+      let leaseErr: { message: string } | null = null
       try {
-        const rule1 = await applyRule1(supabase, cutoff90)
-        const rule2 = await applyRule2(supabase, cutoff3y)
-        const rule3 = await applyRule3(supabase, cutoff6m)
+        const leaseResult = await supabase
+          .rpc('acquire_cron_lease', {
+            p_name: LEASE_NAME,
+            p_ttl_seconds: LEASE_TTL_SECONDS,
+          })
+          .abortSignal(leaseController.signal)
+        acquired = leaseResult.data as boolean | null
+        leaseErr = leaseResult.error
+      } catch (err) {
+        leaseErr = { message: err instanceof Error ? err.message : String(err) }
+      } finally {
+        clearTimeout(leaseTimer)
+      }
+
+      if (leaseErr) {
+        logger.error('rgpd-anonymize: lease error', undefined, {
+          component: 'cron/rgpd-anonymize',
+          lease: LEASE_NAME,
+          error: leaseErr.message,
+        })
+        return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+      }
+      if (acquired !== true) {
+        logger.info('rgpd-anonymize: skipped (lease already held)', { lease: LEASE_NAME })
+        return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+      }
+
+      try {
+        const rule1 = await applyRule1(supabase, cutoff90, startedAt)
+        const rule2 = await applyRule2(supabase, cutoff3y, startedAt)
+        const rule3 = await applyRule3(supabase, cutoff6m, startedAt)
 
         logger.info('rgpd-anonymize: done', {
           component: 'cron/rgpd-anonymize',
@@ -190,6 +249,13 @@ export const GET = withCronCheckIn('cron-rgpd-anonymize', async (request: Reques
         logger.error('rgpd-anonymize: failed', err, { component: 'cron/rgpd-anonymize' })
         Sentry.captureException(err, { tags: { cron: 'rgpd-anonymize' } })
         return NextResponse.json({ error: message }, { status: 500 })
+      } finally {
+        // SLA-99.9 : release best-effort.
+        try {
+          await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+        } catch {
+          // swallowed : TTL acts as safety net
+        }
       }
     },
     {

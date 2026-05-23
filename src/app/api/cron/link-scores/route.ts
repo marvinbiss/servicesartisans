@@ -239,6 +239,13 @@ function computeLinkScores(): PageLinkData[] {
 
 const UPSERT_BATCH_SIZE = 500
 
+// SLA-99.9 : cap dur sur le nombre de pages upsertées par run + wall-clock guard
+// 50s + lease anti-double-run.
+const MAX_PAGES_PER_RUN = 1_000_000
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_link_scores'
+const LEASE_TTL_SECONDS = 15 * 60
+
 /**
  * Cron: Recalculate internal link scores and persist to seo_page_scores.
  *
@@ -258,7 +265,39 @@ export const GET = withCronCheckIn('cron-link-scores', async (request: Request) 
   }
 
   const start = Date.now()
+  const startedAt = start
   const runId = `ls-${new Date().toISOString().slice(0, 10)}-${Date.now().toString(36)}`
+
+  const supabase = createAdminClient()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const leaseResult = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseErr = leaseResult.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[link-scores] lease error', leaseErr.message, { action: 'link-scores' })
+    return NextResponse.json({ success: false, error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[link-scores] skipped (lease already held)', { action: 'link-scores' })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
     logger.info('[link-scores] Starting link score computation', { action: 'link-scores-start' })
@@ -267,11 +306,15 @@ export const GET = withCronCheckIn('cron-link-scores', async (request: Request) 
     const scores = computeLinkScores()
 
     // 2. Upsert into seo_page_scores in batches
-    const supabase = createAdminClient()
     let upsertErrors = 0
+    let upsertedPages = 0
 
     for (let i = 0; i < scores.length; i += UPSERT_BATCH_SIZE) {
+      // SLA-99.9 : wall-clock + cap guards.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
+      if (upsertedPages >= MAX_PAGES_PER_RUN) break
       const batch = scores.slice(i, i + UPSERT_BATCH_SIZE)
+      upsertedPages += batch.length
 
       const rows = batch.map((s) => ({
         page_path: s.page_path,
@@ -330,5 +373,12 @@ export const GET = withCronCheckIn('cron-link-scores', async (request: Request) 
     logger.error('[link-scores] Cron failed', err, { action: 'link-scores-cron' })
 
     return NextResponse.json({ success: false, error: message }, { status: 500 })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

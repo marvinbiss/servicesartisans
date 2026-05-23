@@ -35,6 +35,13 @@ const ALERTS_EMAIL = process.env.ALERTS_EMAIL || 'partenariats@servicesartisans.
 const MAX_DETAILS_ROWS = 50
 const SAMPLE_LOOKBACK_DAYS = 30
 
+// SLA-99.9 : cap dur par run (alias explicite de MAX_DETAILS_ROWS) + wall-clock
+// guard 50s + lease anti-double-run.
+const MAX_ROWS_PER_RUN = MAX_DETAILS_ROWS
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_pipedrive_dead_letter_review'
+const LEASE_TTL_SECONDS = 15 * 60
+
 // Plan C — C-5 : seuils paliers d'alerting Sentry, configurables via env.
 // `info` → debug (pas d'alerte ops), `warning` → on regarde, `error` → escalade visible.
 const WARN_THRESHOLD = Number(process.env.ALERTS_DLQ_WARN_THRESHOLD) || 10
@@ -132,109 +139,163 @@ export const GET = withCronCheckIn(
     }
 
     const supabase = createAdminClient()
+    const startedAt = Date.now()
     const sinceISO = new Date(Date.now() - SAMPLE_LOOKBACK_DAYS * 24 * 3600 * 1000).toISOString()
 
-    // Total count (toutes périodes confondues, pour l'alerte volumétrique)
-    const { count: totalCount, error: countError } = await supabase
-      .from('devis_requests')
-      .select('id', { count: 'exact', head: true })
-      .not('pipedrive_dead_letter_at', 'is', null)
-
-    if (countError) {
-      logger.error('[pipedrive-dead-letter-review] count failed', countError)
-      return NextResponse.json({ error: 'count_failed' }, { status: 500 })
-    }
-
-    if (!totalCount || totalCount === 0) {
-      // Pas d'alerte si zéro dead-letter — bon signe.
-      return NextResponse.json({ ok: true, dead_letter_count: 0 })
-    }
-
-    // Détails des 50 plus récents (window 30j) pour l'email
-    const { data: rows, error: detailsError } = await supabase
-      .from('devis_requests')
-      .select(
-        'id, created_at, pipedrive_dead_letter_at, pipedrive_last_error, pipedrive_attempts, service_slug, city_slug, email, phone'
-      )
-      .not('pipedrive_dead_letter_at', 'is', null)
-      .gte('pipedrive_dead_letter_at', sinceISO)
-      .order('pipedrive_dead_letter_at', { ascending: false })
-      .limit(MAX_DETAILS_ROWS)
-
-    if (detailsError) {
-      logger.error('[pipedrive-dead-letter-review] details fetch failed', detailsError)
-      return NextResponse.json({ error: 'details_failed' }, { status: 500 })
-    }
-
-    const recentRows = (rows ?? []) as DeadLetterRow[]
-
-    // Sentry tagged event pour visibilité ops (palier de criticité)
-    const level: 'info' | 'warning' | 'error' =
-      totalCount >= ERROR_THRESHOLD ? 'error' : totalCount >= WARN_THRESHOLD ? 'warning' : 'info'
-    Sentry.captureMessage('Pipedrive dead-letter weekly review', {
-      level,
-      tags: {
-        cron: 'pipedrive-dead-letter-review',
-        dead_letter: 'weekly-review',
-        severity: level,
-      },
-      extra: {
-        total_count: totalCount,
-        recent_30d_count: recentRows.length,
-        warn_threshold: WARN_THRESHOLD,
-        error_threshold: ERROR_THRESHOLD,
-        alerts_email: ALERTS_EMAIL,
-      },
-    })
-
-    // Email summary à l'équipe partenariats
-    let emailSent = false
-    let emailError: unknown = null
+    // SLA-99.9 : lease avec abort 5s.
+    const leaseController = new AbortController()
+    const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+    let acquired: boolean | null = null
+    let leaseErr: { message: string } | null = null
     try {
-      const result = await sendEmail({
-        to: ALERTS_EMAIL,
-        subject: `[ServicesArtisans] Pipedrive dead-letter : ${totalCount} leads à réviser`,
-        html: buildEmailHtml(recentRows, totalCount),
-        text: buildEmailText(totalCount),
-        replyTo: 'tech@servicesartisans.fr',
-      })
-      emailSent = result.success
-      if (!emailSent) {
-        emailError = result.error
-        logger.error('[pipedrive-dead-letter-review] email send failed', { error: result.error })
-      }
+      const leaseResult = await supabase
+        .rpc('acquire_cron_lease', {
+          p_name: LEASE_NAME,
+          p_ttl_seconds: LEASE_TTL_SECONDS,
+        })
+        .abortSignal(leaseController.signal)
+      acquired = leaseResult.data as boolean | null
+      leaseErr = leaseResult.error
     } catch (err) {
-      emailError = err
-      logger.error('[pipedrive-dead-letter-review] email throw', err)
+      leaseErr = { message: err instanceof Error ? err.message : String(err) }
+    } finally {
+      clearTimeout(leaseTimer)
     }
 
-    // Plan C — C-5 : si l'email échoue ALORS qu'on a des dead-letters à
-    // signaler, on capture une exception Sentry séparée (le `captureMessage`
-    // ci-dessus est info-only). Sans ça l'opacité de DLQ-2 persiste.
-    if (!emailSent && totalCount > 0) {
-      Sentry.captureException(
-        emailError instanceof Error
-          ? emailError
-          : new Error(`DLQ alert email failed: ${String(emailError ?? 'unknown')}`),
-        {
-          tags: {
-            cron: 'pipedrive-dead-letter-review',
-            failure: 'email_send',
-            critical: 'true',
-          },
-          extra: {
-            total_count: totalCount,
-            recipient: ALERTS_EMAIL,
-          },
+    if (leaseErr) {
+      logger.error('[pipedrive-dead-letter-review] lease error', { error: leaseErr.message })
+      return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+    }
+    if (acquired !== true) {
+      logger.info('[pipedrive-dead-letter-review] skipped (lease already held)')
+      return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+    }
+
+    try {
+      // Total count (toutes périodes confondues, pour l'alerte volumétrique)
+      const { count: totalCount, error: countError } = await supabase
+        .from('devis_requests')
+        .select('id', { count: 'exact', head: true })
+        .not('pipedrive_dead_letter_at', 'is', null)
+
+      if (countError) {
+        logger.error('[pipedrive-dead-letter-review] count failed', countError)
+        return NextResponse.json({ error: 'count_failed' }, { status: 500 })
+      }
+
+      if (!totalCount || totalCount === 0) {
+        // Pas d'alerte si zéro dead-letter — bon signe.
+        return NextResponse.json({ ok: true, dead_letter_count: 0 })
+      }
+
+      // Détails des 50 plus récents (window 30j) pour l'email
+      const { data: rows, error: detailsError } = await supabase
+        .from('devis_requests')
+        .select(
+          'id, created_at, pipedrive_dead_letter_at, pipedrive_last_error, pipedrive_attempts, service_slug, city_slug, email, phone'
+        )
+        .not('pipedrive_dead_letter_at', 'is', null)
+        .gte('pipedrive_dead_letter_at', sinceISO)
+        .order('pipedrive_dead_letter_at', { ascending: false })
+        .limit(MAX_ROWS_PER_RUN)
+
+      if (detailsError) {
+        logger.error('[pipedrive-dead-letter-review] details fetch failed', detailsError)
+        return NextResponse.json({ error: 'details_failed' }, { status: 500 })
+      }
+
+      const recentRows = (rows ?? []) as DeadLetterRow[]
+
+      // Sentry tagged event pour visibilité ops (palier de criticité)
+      const level: 'info' | 'warning' | 'error' =
+        totalCount >= ERROR_THRESHOLD ? 'error' : totalCount >= WARN_THRESHOLD ? 'warning' : 'info'
+      Sentry.captureMessage('Pipedrive dead-letter weekly review', {
+        level,
+        tags: {
+          cron: 'pipedrive-dead-letter-review',
+          dead_letter: 'weekly-review',
+          severity: level,
+        },
+        extra: {
+          total_count: totalCount,
+          recent_30d_count: recentRows.length,
+          warn_threshold: WARN_THRESHOLD,
+          error_threshold: ERROR_THRESHOLD,
+          alerts_email: ALERTS_EMAIL,
+        },
+      })
+
+      // Email summary à l'équipe partenariats
+      // SLA-99.9 : wall-clock guard avant l'I/O email (évite kill avant release).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+        logger.warn('[pipedrive-dead-letter-review] wall-clock budget exhausted before email', {
+          elapsedMs: Date.now() - startedAt,
+          dead_letter_count: totalCount,
+        })
+        return NextResponse.json({
+          ok: true,
+          dead_letter_count: totalCount,
+          recent_30d_count: recentRows.length,
+          email_sent: false,
+          skipped: 'wallclock_budget',
+        })
+      }
+
+      let emailSent = false
+      let emailError: unknown = null
+      try {
+        const result = await sendEmail({
+          to: ALERTS_EMAIL,
+          subject: `[ServicesArtisans] Pipedrive dead-letter : ${totalCount} leads à réviser`,
+          html: buildEmailHtml(recentRows, totalCount),
+          text: buildEmailText(totalCount),
+          replyTo: 'tech@servicesartisans.fr',
+        })
+        emailSent = result.success
+        if (!emailSent) {
+          emailError = result.error
+          logger.error('[pipedrive-dead-letter-review] email send failed', { error: result.error })
         }
-      )
-    }
+      } catch (err) {
+        emailError = err
+        logger.error('[pipedrive-dead-letter-review] email throw', err)
+      }
 
-    return NextResponse.json({
-      ok: true,
-      dead_letter_count: totalCount,
-      recent_30d_count: recentRows.length,
-      email_sent: emailSent,
-    })
+      // Plan C — C-5 : si l'email échoue ALORS qu'on a des dead-letters à
+      // signaler, on capture une exception Sentry séparée (le `captureMessage`
+      // ci-dessus est info-only). Sans ça l'opacité de DLQ-2 persiste.
+      if (!emailSent && totalCount > 0) {
+        Sentry.captureException(
+          emailError instanceof Error
+            ? emailError
+            : new Error(`DLQ alert email failed: ${String(emailError ?? 'unknown')}`),
+          {
+            tags: {
+              cron: 'pipedrive-dead-letter-review',
+              failure: 'email_send',
+              critical: 'true',
+            },
+            extra: {
+              total_count: totalCount,
+              recipient: ALERTS_EMAIL,
+            },
+          }
+        )
+      }
+
+      return NextResponse.json({
+        ok: true,
+        dead_letter_count: totalCount,
+        recent_30d_count: recentRows.length,
+        email_sent: emailSent,
+      })
+    } finally {
+      // SLA-99.9 : release best-effort.
+      try {
+        await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+      } catch {
+        // swallowed : TTL acts as safety net
+      }
+    }
   }
 )

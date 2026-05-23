@@ -20,12 +20,22 @@ import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 export const maxDuration = 300 // Vercel Pro — same budget as rge-sync
 export const dynamic = 'force-dynamic'
 
-async function fetchAllProviders(): Promise<ProviderRow[]> {
+// SLA-99.9 : wall-clock guard (maxDuration 300 → marge 10s) + cap dur sur les
+// providers lus par run + lease anti-double-run.
+const MAX_RUNTIME_MS = 290_000
+const MAX_PROVIDERS_PER_RUN = 200_000
+const LEASE_NAME = 'cron_barometre_rge'
+const LEASE_TTL_SECONDS = 15 * 60
+
+async function fetchAllProviders(startedAt: number): Promise<ProviderRow[]> {
   const supabase = createAdminClient()
   const pageSize = 1000
   const out: ProviderRow[] = []
   let from = 0
   for (;;) {
+    // SLA-99.9 : wall-clock + cap guards sur la pagination.
+    if (Date.now() - startedAt > MAX_RUNTIME_MS) break
+    if (out.length >= MAX_PROVIDERS_PER_RUN) break
     const { data, error } = await supabase
       .from('providers')
       .select('id,specialty,address_region,rge_qualifications,rge_valid_until,rge_organismes')
@@ -90,9 +100,39 @@ export const GET = withCronCheckIn('cron-barometre-rge', async (request: Request
 
       const yearmonth = new Date().toISOString().slice(0, 7)
       const started = Date.now()
+      const leaseSupabase = createAdminClient()
+
+      // SLA-99.9 : lease avec abort 5s.
+      const leaseController = new AbortController()
+      const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+      let acquired: boolean | null = null
+      let leaseErr: { message: string } | null = null
+      try {
+        const leaseResult = await leaseSupabase
+          .rpc('acquire_cron_lease', {
+            p_name: LEASE_NAME,
+            p_ttl_seconds: LEASE_TTL_SECONDS,
+          })
+          .abortSignal(leaseController.signal)
+        acquired = leaseResult.data as boolean | null
+        leaseErr = leaseResult.error
+      } catch (err) {
+        leaseErr = { message: err instanceof Error ? err.message : String(err) }
+      } finally {
+        clearTimeout(leaseTimer)
+      }
+
+      if (leaseErr) {
+        logger.error('[cron-barometre-rge] lease error', { error: leaseErr.message })
+        return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+      }
+      if (acquired !== true) {
+        logger.info('[cron-barometre-rge] skipped (lease already held)')
+        return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+      }
 
       try {
-        const [rows, total] = await Promise.all([fetchAllProviders(), fetchTotalProviders()])
+        const [rows, total] = await Promise.all([fetchAllProviders(started), fetchTotalProviders()])
         const snap = aggregate(rows, yearmonth, total)
         await upsertSnapshot(snap)
 
@@ -120,6 +160,13 @@ export const GET = withCronCheckIn('cron-barometre-rge', async (request: Request
         const msg = (err as Error).message
         logger.error('[cron-barometre-rge] failed', { error: msg })
         return NextResponse.json({ error: 'barometre_rge_failed', message: msg }, { status: 500 })
+      } finally {
+        // SLA-99.9 : release best-effort.
+        try {
+          await leaseSupabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+        } catch {
+          // swallowed : TTL acts as safety net
+        }
       }
     },
     {

@@ -29,6 +29,10 @@ import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
+// SLA-99.9 : lease anti-double-run (release best-effort en finally, TTL filet).
+const LEASE_NAME = 'cron_lead_reassign'
+const LEASE_TTL_SECONDS = 15 * 60
+
 export const GET = withCronCheckIn('cron-lead-reassign', async (request: Request) => {
   const authHeader = request.headers.get('authorization')
   if (!verifyCronSecret(authHeader)) {
@@ -41,6 +45,38 @@ export const GET = withCronCheckIn('cron-lead-reassign', async (request: Request
 
   const admin = createAdminClient()
   const startedAt = Date.now()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await admin
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[lead-reassign] lease error', undefined, {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ success: false, error: { message: 'lease_error' } }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[lead-reassign] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
     // Fenêtre de ré-assignation depuis algorithm_config (default 24h).
@@ -123,5 +159,12 @@ export const GET = withCronCheckIn('cron-lead-reassign', async (request: Request
       { success: false, error: err instanceof Error ? err.message : 'fatal' },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await admin.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

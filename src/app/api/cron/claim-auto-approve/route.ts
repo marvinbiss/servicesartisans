@@ -45,6 +45,10 @@ export const dynamic = 'force-dynamic'
 
 const BATCH_SIZE = 50
 
+// SLA-99.9 : cap dur sur le nombre de claims traités par run (alias explicite
+// de BATCH_SIZE pour le contrôle SLA — 50 claims × 2-4s tient sous 60s).
+const MAX_CLAIMS_PER_RUN = BATCH_SIZE
+
 // SLA-99.9 : wall-clock 50s + lease 15min.
 const MAX_RUNTIME_MS = 50_000
 const LEASE_NAME = 'cron_claim_auto_approve'
@@ -136,7 +140,7 @@ export const GET = withCronCheckIn('cron-claim-auto-approve', async (request: Re
       .eq('manual_verification_required', false)
       .not('email_confirmed_at', 'is', null)
       .order('created_at', { ascending: true })
-      .limit(BATCH_SIZE)
+      .limit(MAX_CLAIMS_PER_RUN)
       .returns<ClaimRow[]>()
 
     if (error) {

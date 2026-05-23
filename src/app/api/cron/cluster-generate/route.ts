@@ -37,6 +37,13 @@ const BATCH_LIMIT = 50
 const DEFAULT_AUTHOR_NAME = 'Rédaction ServicesArtisans'
 const DEFAULT_AUTHOR_ROLE = 'Conseil en rénovation énergétique'
 
+// SLA-99.9 : cap dur par run (alias explicite de BATCH_LIMIT) + wall-clock guard
+// (maxDuration 300 → marge 10s) + lease anti-double-run.
+const MAX_CLUSTERS_PER_RUN = BATCH_LIMIT
+const MAX_RUNTIME_MS = 290_000
+const LEASE_NAME = 'cron_cluster_generate'
+const LEASE_TTL_SECONDS = 15 * 60
+
 let registryBooted = false
 function ensureRegistry(): boolean {
   if (registryBooted) return true
@@ -90,57 +97,111 @@ export const GET = withCronCheckIn('cron-cluster-generate', async (request: Requ
   }
 
   const admin = createAdminClient()
-  const { data, error } = await admin
-    .from('renovation_clusters')
-    .select(
-      'slug, parent_cluster_slug, cluster_type, service_slug, primary_kw, volume_monthly, kd_ahrefs, cpc_eur, ahrefs_source_date'
-    )
-    .is('content_jsonb', null)
-    .order('volume_monthly', { ascending: false, nullsFirst: false })
-    .limit(BATCH_LIMIT)
+  const startedAt = Date.now()
 
-  if (error) {
-    logger.error('cron.cluster-generate.query_failed', { error: error.message })
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const leaseResult = await admin
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseErr = leaseResult.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
   }
 
-  const rows = (data ?? []) as ClusterRowForGenerate[]
-  if (rows.length === 0) {
-    return NextResponse.json({ ok: true, processed: 0, errors: 0, batchLimit: BATCH_LIMIT })
+  if (leaseErr) {
+    logger.error('cron.cluster-generate.lease_error', {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('cron.cluster-generate.skipped', { lease: LEASE_NAME })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
   }
 
-  const freshness = new Date().toISOString().slice(0, 10)
-  let processed = 0
-  let errors = 0
-  for (const row of rows) {
-    const seed = rowToSeed(row)
-    try {
-      const groundTruth = await assembleGroundTruth(seed.serviceSlug, freshness)
-      const input: GenerateClusterInput = {
-        seed,
-        groundTruth,
-        authorName: DEFAULT_AUTHOR_NAME,
-        authorRole: DEFAULT_AUTHOR_ROLE,
-      }
-      const draft = await generateClusterContent(input)
-      const { error: upErr } = await admin
-        .from('renovation_clusters')
-        .update({
-          content_jsonb: draft.contentJsonb,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('slug', seed.slug)
-      if (upErr) throw new Error(upErr.message)
-      processed += 1
-    } catch (err) {
-      errors += 1
-      logger.error('cron.cluster-generate.row_failed', {
-        slug: seed.slug,
-        error: err instanceof Error ? err.message : String(err),
+  try {
+    const { data, error } = await admin
+      .from('renovation_clusters')
+      .select(
+        'slug, parent_cluster_slug, cluster_type, service_slug, primary_kw, volume_monthly, kd_ahrefs, cpc_eur, ahrefs_source_date'
+      )
+      .is('content_jsonb', null)
+      .order('volume_monthly', { ascending: false, nullsFirst: false })
+      .limit(MAX_CLUSTERS_PER_RUN)
+
+    if (error) {
+      logger.error('cron.cluster-generate.query_failed', { error: error.message })
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    const rows = (data ?? []) as ClusterRowForGenerate[]
+    if (rows.length === 0) {
+      return NextResponse.json({
+        ok: true,
+        processed: 0,
+        errors: 0,
+        batchLimit: MAX_CLUSTERS_PER_RUN,
       })
     }
-  }
 
-  logger.info('cron.cluster-generate.batch_done', { processed, errors, batchLimit: BATCH_LIMIT })
-  return NextResponse.json({ ok: true, processed, errors, batchLimit: BATCH_LIMIT })
+    const freshness = new Date().toISOString().slice(0, 10)
+    let processed = 0
+    let errors = 0
+    for (const row of rows) {
+      // SLA-99.9 : wall-clock guard (1 génération LLM = plusieurs secondes).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
+      const seed = rowToSeed(row)
+      try {
+        const groundTruth = await assembleGroundTruth(seed.serviceSlug, freshness)
+        const input: GenerateClusterInput = {
+          seed,
+          groundTruth,
+          authorName: DEFAULT_AUTHOR_NAME,
+          authorRole: DEFAULT_AUTHOR_ROLE,
+        }
+        const draft = await generateClusterContent(input)
+        const { error: upErr } = await admin
+          .from('renovation_clusters')
+          .update({
+            content_jsonb: draft.contentJsonb,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('slug', seed.slug)
+        if (upErr) throw new Error(upErr.message)
+        processed += 1
+      } catch (err) {
+        errors += 1
+        logger.error('cron.cluster-generate.row_failed', {
+          slug: seed.slug,
+          error: err instanceof Error ? err.message : String(err),
+        })
+      }
+    }
+
+    logger.info('cron.cluster-generate.batch_done', {
+      processed,
+      errors,
+      batchLimit: MAX_CLUSTERS_PER_RUN,
+    })
+    return NextResponse.json({ ok: true, processed, errors, batchLimit: MAX_CLUSTERS_PER_RUN })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await admin.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
+  }
 })

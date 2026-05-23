@@ -47,6 +47,11 @@ const BATCH_SIZE = 50
 const THROTTLE_MS = 300
 const STALE_DAYS = 90
 
+// SLA-99.9 : cap dur par run (alias explicite de BATCH_SIZE) + lease anti-double-run.
+const MAX_PROVIDERS_PER_RUN = BATCH_SIZE
+const LEASE_NAME = 'cron_google_places_sync'
+const LEASE_TTL_SECONDS = 15 * 60
+
 type ProviderRow = {
   id: string
   name: string
@@ -107,6 +112,36 @@ export const GET = withCronCheckIn(
     })
 
     const startedAt = Date.now()
+
+    // SLA-99.9 : lease avec abort 5s.
+    const leaseController = new AbortController()
+    const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+    let acquired: boolean | null = null
+    let leaseErr: { message: string } | null = null
+    try {
+      const leaseResult = await supabase
+        .rpc('acquire_cron_lease', {
+          p_name: LEASE_NAME,
+          p_ttl_seconds: LEASE_TTL_SECONDS,
+        })
+        .abortSignal(leaseController.signal)
+      acquired = leaseResult.data as boolean | null
+      leaseErr = leaseResult.error
+    } catch (err) {
+      leaseErr = { message: err instanceof Error ? err.message : String(err) }
+    } finally {
+      clearTimeout(leaseTimer)
+    }
+
+    if (leaseErr) {
+      logger.error('[google-places-sync] lease error', leaseErr.message)
+      return NextResponse.json({ success: false, error: 'lease_error' }, { status: 500 })
+    }
+    if (acquired !== true) {
+      logger.info('[google-places-sync] skipped (lease already held)')
+      return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+    }
+
     Sentry.addBreadcrumb({
       category: 'cron',
       level: 'info',
@@ -127,7 +162,7 @@ export const GET = withCronCheckIn(
         .neq('siret', '')
         .gt('rge_valid_until', nowIso)
         .order('id', { ascending: true })
-        .limit(BATCH_SIZE)
+        .limit(MAX_PROVIDERS_PER_RUN)
 
       if (pErr) {
         throw new Error(`select priority batch failed: ${pErr.message}`)
@@ -147,7 +182,7 @@ export const GET = withCronCheckIn(
           .not('siret', 'is', null)
           .neq('siret', '')
           .order('id', { ascending: true })
-          .limit(BATCH_SIZE)
+          .limit(MAX_PROVIDERS_PER_RUN)
         if (fErr) throw new Error(`select fallback batch failed: ${fErr.message}`)
         batch = (fallbackBatch ?? []) as ProviderRow[]
       }
@@ -168,7 +203,7 @@ export const GET = withCronCheckIn(
           .not('siret', 'is', null)
           .neq('siret', '')
           .order('google_synced_at', { ascending: true })
-          .limit(BATCH_SIZE)
+          .limit(MAX_PROVIDERS_PER_RUN)
         if (sErr) throw new Error(`select stale batch failed: ${sErr.message}`)
         batch = (staleBatch ?? []) as ProviderRow[]
       }
@@ -291,6 +326,13 @@ export const GET = withCronCheckIn(
         extra: { message },
       })
       return NextResponse.json({ success: false, error: message }, { status: 500 })
+    } finally {
+      // SLA-99.9 : release best-effort.
+      try {
+        await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+      } catch {
+        // swallowed : TTL acts as safety net
+      }
     }
   }
 )

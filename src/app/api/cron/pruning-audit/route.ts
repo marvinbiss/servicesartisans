@@ -36,6 +36,13 @@ export const dynamic = 'force-dynamic'
 
 export const maxDuration = 60 // seconds — may need to scan many combinations
 
+// SLA-99.9 : cap dur sur le nombre de combinaisons service×ville scannées + wall-
+// clock guard 50s + lease anti-double-run.
+const MAX_COMBINATIONS_PER_RUN = 100_000
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_pruning_audit'
+const LEASE_TTL_SECONDS = 15 * 60
+
 export const GET = withCronCheckIn('cron-pruning-audit', async (request: Request) => {
   // Auth: same pattern as all other crons
   if (!process.env.CRON_SECRET) {
@@ -47,10 +54,39 @@ export const GET = withCronCheckIn('cron-pruning-audit', async (request: Request
   }
 
   const startTime = Date.now()
+  const startedAt = startTime
+  const supabase = createAdminClient()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const leaseResult = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseErr = leaseResult.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[pruning-audit] lease error:', leaseErr.message)
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[pruning-audit] skipped (lease already held)')
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
-    const supabase = createAdminClient()
-
     // -----------------------------------------------------------------------
     // Step 1: Get provider counts per city (aggregated)
     // Single query: count active providers grouped by address_city
@@ -121,11 +157,20 @@ export const GET = withCronCheckIn('cron-pruning-audit', async (request: Request
     // Sample: top 500 cities (covers >95% of traffic)
     const citiesToAudit = villes.slice(0, 500)
 
+    let scanned = 0
+    let scanCapReached = false
     for (const service of staticServices) {
+      if (scanCapReached) break
       const specialties = SERVICE_TO_SPECIALTIES[service.slug]
       if (!specialties || specialties.length === 0) continue
 
       for (const ville of citiesToAudit) {
+        // SLA-99.9 : wall-clock + cap guards sur le scan.
+        if (Date.now() - startedAt > MAX_RUNTIME_MS || scanned >= MAX_COMBINATIONS_PER_RUN) {
+          scanCapReached = true
+          break
+        }
+        scanned++
         totalServiceCityPages++
 
         // Count providers for this service×city combination
@@ -262,6 +307,13 @@ export const GET = withCronCheckIn('cron-pruning-audit', async (request: Request
       { error: 'Erreur interne', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })
 

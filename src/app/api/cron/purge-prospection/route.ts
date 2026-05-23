@@ -34,6 +34,12 @@ export const maxDuration = 60
 // 2000 contacts / chunks de 200 = 10 roundtrips archive + 10 soft-delete + 10 fetch
 // = ~30 roundtrips Supabase, largement sous la limite.
 const BATCH_LIMIT = 2_000
+// SLA-99.9 : cap dur par run (alias explicite de BATCH_LIMIT) + wall-clock guard
+// 50s + lease anti-double-run.
+const MAX_CONTACTS_PER_RUN = BATCH_LIMIT
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_purge_prospection'
+const LEASE_TTL_SECONDS = 15 * 60
 const WARN_THRESHOLD = 50_000
 // Chunks de 200 : moins de roundtrips qu'avec 100, plus de débit, payload
 // archive encore raisonnable (~200 rows × ~30 colonnes).
@@ -86,7 +92,41 @@ export const GET = withCronCheckIn('cron-purge-prospection', async (request: Req
   const url = new URL(request.url)
   const dryRun = url.searchParams.get('dry_run') === 'true'
   const startTime = Date.now()
+  const startedAt = startTime
   const supabase = createAdminClient()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseAcqErr: { message: string } | null = null
+  try {
+    const leaseResult = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseAcqErr = leaseResult.error
+  } catch (err) {
+    leaseAcqErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseAcqErr) {
+    logger.error('[purge-prospection] lease error', {
+      action: 'purge-prospection',
+      lease: LEASE_NAME,
+      error: leaseAcqErr.message,
+    })
+    return NextResponse.json({ ok: false, error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[purge-prospection] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
   // Cutoff : 3 ans en arrière (fin de journée pour inclusivité)
   const cutoffDate = new Date()
@@ -118,7 +158,7 @@ export const GET = withCronCheckIn('cron-purge-prospection', async (request: Req
       .eq('is_active', true)
       .lt('updated_at', cutoffIso)
       .order('updated_at', { ascending: true })
-      .limit(BATCH_LIMIT)
+      .limit(MAX_CONTACTS_PER_RUN)
 
     if (selectError) {
       throw new Error(`SELECT candidats: ${selectError.message}`)
@@ -212,6 +252,8 @@ export const GET = withCronCheckIn('cron-purge-prospection', async (request: Req
     //     si le process crash entre les deux. Le prochain run le reprendra.
     // -------------------------------------------------------------------
     for (let i = 0; i < candidates.length; i += ARCHIVE_CHUNK) {
+      // SLA-99.9 : wall-clock guard avant chaque chunk (archive + soft-delete).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
       const chunk = candidates.slice(i, i + ARCHIVE_CHUNK)
       const chunkIds = chunk.map((c) => c.id)
 
@@ -388,5 +430,12 @@ export const GET = withCronCheckIn('cron-purge-prospection', async (request: Req
       },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

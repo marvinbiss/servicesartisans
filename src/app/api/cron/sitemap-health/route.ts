@@ -14,6 +14,11 @@ export const dynamic = 'force-dynamic'
 const RGE_STALE_WARN_DAYS = 7
 const RGE_STALE_CRITICAL_DAYS = 14
 
+// SLA-99.9 : wall-clock guard 50s + lease anti-double-run.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_sitemap_health'
+const LEASE_TTL_SECONDS = 15 * 60
+
 type RgeFreshness = {
   ok: boolean
   lastSyncedAt: string | null
@@ -107,147 +112,193 @@ export const GET = withCronCheckIn('cron-sitemap-health', async (request: Reques
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 
-      // Fetch sitemap index to get all child sitemaps
-      const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, {
-        cache: 'no-store',
-        signal: AbortSignal.timeout(15000),
-      })
-      if (!indexRes.ok) {
-        logger.error('[sitemap-health] CRITICAL: sitemap index returned', undefined, {
-          status: indexRes.status,
-        })
-        Sentry.captureMessage('Sitemap index unhealthy', {
-          level: 'error',
-          extra: { status: indexRes.status },
-        })
-        return NextResponse.json(
-          { error: "Échec de l'index sitemap", status: indexRes.status },
-          { status: 500 }
-        )
-      }
+      const startedAt = Date.now()
+      const leaseSupabase = createAdminClient()
 
-      const indexXml = await indexRes.text()
-      const locRegex = /<loc>(.*?)<\/loc>/g
-      const sitemapUrls: string[] = []
-      let match
-      while ((match = locRegex.exec(indexXml)) !== null) {
-        sitemapUrls.push(match[1])
-      }
-
-      // Check each child sitemap
-      const results: { url: string; status: number; urls: number; ok: boolean }[] = []
-      const failures: string[] = []
-
-      // Check in parallel batches of 5 to avoid overwhelming the server
-      for (let i = 0; i < sitemapUrls.length; i += 5) {
-        const batch = sitemapUrls.slice(i, i + 5)
-        const batchResults = await Promise.all(
-          batch.map(async (url) => {
-            try {
-              const res = await fetch(url, {
-                cache: 'no-store',
-                signal: AbortSignal.timeout(15000),
-              })
-              const text = res.ok ? await res.text() : ''
-              const urlCount = (text.match(/<url>/g) || []).length
-              const ok = res.ok && urlCount > 0
-              if (!ok) failures.push(url)
-              return { url, status: res.status, urls: urlCount, ok }
-            } catch {
-              failures.push(url)
-              return { url, status: 0, urls: 0, ok: false }
-            }
-          })
-        )
-        results.push(...batchResults)
-      }
-
-      // Also check special sitemaps
-      for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
-        try {
-          const res = await fetch(special, {
-            cache: 'no-store',
-            signal: AbortSignal.timeout(15000),
-          })
-          // news-sitemap can legitimately be empty (0 articles in last 48h)
-          const ok = res.ok
-          if (!ok) failures.push(special)
-          results.push({ url: special, status: res.status, urls: 0, ok })
-        } catch {
-          failures.push(special)
-          results.push({ url: special, status: 0, urls: 0, ok: false })
-        }
-      }
-
-      const totalUrls = results.reduce((sum, r) => sum + r.urls, 0)
-      const allOk = failures.length === 0
-
-      if (!allOk) {
-        logger.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed`, undefined, {
-          failures,
-        })
-        Sentry.captureMessage(`Sitemap health: ${failures.length} sitemaps failed`, {
-          level: 'warning',
-          extra: { failures },
-        })
-      } else {
-        logger.info(
-          `[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`
-        )
-      }
-
-      // Bouclier 5 — diff jour-à-jour + persistance fail-safe.
-      // Ne bloque pas le cron principal en cas d'erreur DB.
-      let diffAlerts: Awaited<ReturnType<typeof computeSitemapDiff>> = []
+      // SLA-99.9 : lease avec abort 5s.
+      const leaseController = new AbortController()
+      const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+      let acquired: boolean | null = null
+      let leaseErr: { message: string } | null = null
       try {
-        const supabase = createAdminClient()
-        const sitemapRuns: SitemapRun[] = results.map((r) => ({
-          sitemap_url: r.url,
-          url_count: r.urls,
-          status: r.status,
-          ok: r.ok,
-        }))
-        diffAlerts = await computeSitemapDiff(supabase, sitemapRuns)
-        await persistSitemapRun(supabase, sitemapRuns)
-
-        for (const alert of diffAlerts) {
-          const pct = (alert.delta_pct * 100).toFixed(1)
-          logger.error(
-            `[sitemap-health] ${alert.severity.toUpperCase()} diff ${pct}% on ${alert.sitemap_url}`,
-            undefined,
-            {
-              kind: 'sitemap_diff_alert',
-              ...alert,
-            }
-          )
-          Sentry.captureMessage(`Sitemap diff ${alert.severity}: ${alert.sitemap_url} ${pct}%`, {
-            level: alert.severity === 'critical' ? 'error' : 'warning',
-            extra: { ...alert },
+        const result = await leaseSupabase
+          .rpc('acquire_cron_lease', {
+            p_name: LEASE_NAME,
+            p_ttl_seconds: LEASE_TTL_SECONDS,
           })
-        }
+          .abortSignal(leaseController.signal)
+        acquired = result.data as boolean | null
+        leaseErr = result.error
       } catch (err) {
-        logger.warn('[sitemap-health] diff/persist failed (non-blocking)', {
-          error: err instanceof Error ? err.message : String(err),
-        })
+        leaseErr = { message: err instanceof Error ? err.message : String(err) }
+      } finally {
+        clearTimeout(leaseTimer)
       }
 
-      const rgeFreshness = await checkRgeFreshness()
+      if (leaseErr) {
+        logger.error('[sitemap-health] lease error', undefined, {
+          lease: LEASE_NAME,
+          error: leaseErr.message,
+        })
+        return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+      }
+      if (acquired !== true) {
+        logger.info('[sitemap-health] skipped (lease already held)', { lease: LEASE_NAME })
+        return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+      }
 
-      await pingHeartbeat('sitemap-health')
-      return NextResponse.json({
-        healthy: allOk,
-        checked: results.length,
-        totalUrls,
-        failures: failures.length > 0 ? failures : undefined,
-        diffAlerts: diffAlerts.length > 0 ? diffAlerts : undefined,
-        rge: {
-          healthy: rgeFreshness.ok,
-          lastSyncedAt: rgeFreshness.lastSyncedAt,
-          daysStale: rgeFreshness.daysStale,
-          severity: rgeFreshness.severity,
-        },
-        timestamp: new Date().toISOString(),
-      })
+      try {
+        // Fetch sitemap index to get all child sitemaps
+        const indexRes = await fetch(`${SITE_URL}/sitemap.xml`, {
+          cache: 'no-store',
+          signal: AbortSignal.timeout(15000),
+        })
+        if (!indexRes.ok) {
+          logger.error('[sitemap-health] CRITICAL: sitemap index returned', undefined, {
+            status: indexRes.status,
+          })
+          Sentry.captureMessage('Sitemap index unhealthy', {
+            level: 'error',
+            extra: { status: indexRes.status },
+          })
+          return NextResponse.json(
+            { error: "Échec de l'index sitemap", status: indexRes.status },
+            { status: 500 }
+          )
+        }
+
+        const indexXml = await indexRes.text()
+        const locRegex = /<loc>(.*?)<\/loc>/g
+        const sitemapUrls: string[] = []
+        let match
+        while ((match = locRegex.exec(indexXml)) !== null) {
+          sitemapUrls.push(match[1])
+        }
+
+        // Check each child sitemap
+        const results: { url: string; status: number; urls: number; ok: boolean }[] = []
+        const failures: string[] = []
+
+        // Check in parallel batches of 5 to avoid overwhelming the server
+        for (let i = 0; i < sitemapUrls.length; i += 5) {
+          // SLA-99.9 : wall-clock guard.
+          if (Date.now() - startedAt > MAX_RUNTIME_MS) break
+          const batch = sitemapUrls.slice(i, i + 5)
+          const batchResults = await Promise.all(
+            batch.map(async (url) => {
+              try {
+                const res = await fetch(url, {
+                  cache: 'no-store',
+                  signal: AbortSignal.timeout(15000),
+                })
+                const text = res.ok ? await res.text() : ''
+                const urlCount = (text.match(/<url>/g) || []).length
+                const ok = res.ok && urlCount > 0
+                if (!ok) failures.push(url)
+                return { url, status: res.status, urls: urlCount, ok }
+              } catch {
+                failures.push(url)
+                return { url, status: 0, urls: 0, ok: false }
+              }
+            })
+          )
+          results.push(...batchResults)
+        }
+
+        // Also check special sitemaps
+        for (const special of [`${SITE_URL}/image-sitemap.xml`, `${SITE_URL}/news-sitemap.xml`]) {
+          try {
+            const res = await fetch(special, {
+              cache: 'no-store',
+              signal: AbortSignal.timeout(15000),
+            })
+            // news-sitemap can legitimately be empty (0 articles in last 48h)
+            const ok = res.ok
+            if (!ok) failures.push(special)
+            results.push({ url: special, status: res.status, urls: 0, ok })
+          } catch {
+            failures.push(special)
+            results.push({ url: special, status: 0, urls: 0, ok: false })
+          }
+        }
+
+        const totalUrls = results.reduce((sum, r) => sum + r.urls, 0)
+        const allOk = failures.length === 0
+
+        if (!allOk) {
+          logger.error(`[sitemap-health] ALERT: ${failures.length} sitemaps failed`, undefined, {
+            failures,
+          })
+          Sentry.captureMessage(`Sitemap health: ${failures.length} sitemaps failed`, {
+            level: 'warning',
+            extra: { failures },
+          })
+        } else {
+          logger.info(
+            `[sitemap-health] OK: ${results.length} sitemaps healthy, ${totalUrls} total URLs`
+          )
+        }
+
+        // Bouclier 5 — diff jour-à-jour + persistance fail-safe.
+        // Ne bloque pas le cron principal en cas d'erreur DB.
+        let diffAlerts: Awaited<ReturnType<typeof computeSitemapDiff>> = []
+        try {
+          const supabase = createAdminClient()
+          const sitemapRuns: SitemapRun[] = results.map((r) => ({
+            sitemap_url: r.url,
+            url_count: r.urls,
+            status: r.status,
+            ok: r.ok,
+          }))
+          diffAlerts = await computeSitemapDiff(supabase, sitemapRuns)
+          await persistSitemapRun(supabase, sitemapRuns)
+
+          for (const alert of diffAlerts) {
+            const pct = (alert.delta_pct * 100).toFixed(1)
+            logger.error(
+              `[sitemap-health] ${alert.severity.toUpperCase()} diff ${pct}% on ${alert.sitemap_url}`,
+              undefined,
+              {
+                kind: 'sitemap_diff_alert',
+                ...alert,
+              }
+            )
+            Sentry.captureMessage(`Sitemap diff ${alert.severity}: ${alert.sitemap_url} ${pct}%`, {
+              level: alert.severity === 'critical' ? 'error' : 'warning',
+              extra: { ...alert },
+            })
+          }
+        } catch (err) {
+          logger.warn('[sitemap-health] diff/persist failed (non-blocking)', {
+            error: err instanceof Error ? err.message : String(err),
+          })
+        }
+
+        const rgeFreshness = await checkRgeFreshness()
+
+        await pingHeartbeat('sitemap-health')
+        return NextResponse.json({
+          healthy: allOk,
+          checked: results.length,
+          totalUrls,
+          failures: failures.length > 0 ? failures : undefined,
+          diffAlerts: diffAlerts.length > 0 ? diffAlerts : undefined,
+          rge: {
+            healthy: rgeFreshness.ok,
+            lastSyncedAt: rgeFreshness.lastSyncedAt,
+            daysStale: rgeFreshness.daysStale,
+            severity: rgeFreshness.severity,
+          },
+          timestamp: new Date().toISOString(),
+        })
+      } finally {
+        // SLA-99.9 : release best-effort.
+        try {
+          await leaseSupabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+        } catch {
+          // swallowed : TTL acts as safety net
+        }
+      }
     },
     {
       schedule: { type: 'crontab', value: '0 6 * * *' },

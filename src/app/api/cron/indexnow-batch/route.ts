@@ -35,6 +35,13 @@ export const dynamic = 'force-dynamic'
 
 /** Cap quotidien volontairement bas pour rester sous le radar Bing. */
 const MAX_URLS_PER_DAY = 1000
+
+// SLA-99.9 : cap dur par run (alias explicite de MAX_URLS_PER_DAY) + wall-clock
+// guard 50s + lease anti-double-run.
+const MAX_URLS_PER_RUN = MAX_URLS_PER_DAY
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_indexnow_batch'
+const LEASE_TTL_SECONDS = 15 * 60
 /** Fenêtre updated_at pour les providers — 2 jours = grace si cron skip 1 fois. */
 const LOOKBACK_DAYS = 2
 /** Fenêtre lastmod pour le filtrage sitemap — un peu plus large pour rattraper. */
@@ -239,65 +246,125 @@ export const GET = withCronCheckIn('cron-indexnow-batch', async (request: Reques
         return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
       }
 
-      // ── 1. Dynamic sitemap.xml read (replaces static whitelist) ───────
-      let sitemapUrls: string[] = []
-      let sitemapSource: 'sitemap' | 'fallback' = 'sitemap'
+      const startedAt = Date.now()
+      const { createAdminClient: createLeaseClient } = await import('@/lib/supabase/admin')
+      const leaseSupabase = createLeaseClient()
+
+      // SLA-99.9 : lease avec abort 5s.
+      const leaseController = new AbortController()
+      const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+      let acquired: boolean | null = null
+      let leaseErr: { message: string } | null = null
       try {
-        const raw = await fetchRecentSitemapUrls(SITEMAP_LOOKBACK_DAYS, MAX_SITEMAP_URLS)
-        sitemapUrls = filterAbsoluteUrls(raw)
+        const result = await leaseSupabase
+          .rpc('acquire_cron_lease', {
+            p_name: LEASE_NAME,
+            p_ttl_seconds: LEASE_TTL_SECONDS,
+          })
+          .abortSignal(leaseController.signal)
+        acquired = result.data as boolean | null
+        leaseErr = result.error
       } catch (err) {
-        sitemapSource = 'fallback'
-        const message = err instanceof Error ? err.message : 'unknown'
-        logger.warn('indexnow-batch: sitemap fetch failed, using fallback whitelist', {
-          error: message,
-        })
-        Sentry.captureMessage('indexnow-batch sitemap fetch failed', {
-          level: 'warning',
-          extra: { error: message },
-        })
-        sitemapUrls = filterAndAbsolutize(FALLBACK_RENO_ROUTES)
+        leaseErr = { message: err instanceof Error ? err.message : String(err) }
+      } finally {
+        clearTimeout(leaseTimer)
       }
 
-      // ── 2. Fresh providers from DB ────────────────────────────────────
-      // Reserve LIMIT-sitemapUrls for provider routes.
-      const providerSlots = Math.max(0, MAX_URLS_PER_DAY - sitemapUrls.length)
-      const providerUrls = providerSlots > 0 ? await getRecentProviderUrls(providerSlots) : []
+      if (leaseErr) {
+        logger.error('indexnow-batch: lease error', {
+          lease: LEASE_NAME,
+          error: leaseErr.message,
+        })
+        return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+      }
+      if (acquired !== true) {
+        logger.info('indexnow-batch: skipped (lease already held)', { lease: LEASE_NAME })
+        return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+      }
 
-      // ── 3. Merge + dedup + cap ────────────────────────────────────────
-      const merged = [...sitemapUrls, ...providerUrls]
-      const uniqueUrls = Array.from(new Set(merged)).slice(0, MAX_URLS_PER_DAY)
+      try {
+        // ── 1. Dynamic sitemap.xml read (replaces static whitelist) ───────
+        let sitemapUrls: string[] = []
+        let sitemapSource: 'sitemap' | 'fallback' = 'sitemap'
+        try {
+          const raw = await fetchRecentSitemapUrls(SITEMAP_LOOKBACK_DAYS, MAX_SITEMAP_URLS)
+          sitemapUrls = filterAbsoluteUrls(raw)
+        } catch (err) {
+          sitemapSource = 'fallback'
+          const message = err instanceof Error ? err.message : 'unknown'
+          logger.warn('indexnow-batch: sitemap fetch failed, using fallback whitelist', {
+            error: message,
+          })
+          Sentry.captureMessage('indexnow-batch sitemap fetch failed', {
+            level: 'warning',
+            extra: { error: message },
+          })
+          sitemapUrls = filterAndAbsolutize(FALLBACK_RENO_ROUTES)
+        }
 
-      logger.info('indexnow-batch: submitting URLs', {
-        action: 'indexnow-batch-cron',
-        sitemapCount: sitemapUrls.length,
-        sitemapSource,
-        providerCount: providerUrls.length,
-        totalUnique: uniqueUrls.length,
-        cap: MAX_URLS_PER_DAY,
-        lookbackDays: LOOKBACK_DAYS,
-        sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
-      })
+        // ── 2. Fresh providers from DB ────────────────────────────────────
+        // Reserve LIMIT-sitemapUrls for provider routes.
+        const providerSlots = Math.max(0, MAX_URLS_PER_DAY - sitemapUrls.length)
+        const providerUrls = providerSlots > 0 ? await getRecentProviderUrls(providerSlots) : []
 
-      if (uniqueUrls.length === 0) {
+        // ── 3. Merge + dedup + cap ────────────────────────────────────────
+        const merged = [...sitemapUrls, ...providerUrls]
+        const uniqueUrls = Array.from(new Set(merged)).slice(0, MAX_URLS_PER_RUN)
+
+        logger.info('indexnow-batch: submitting URLs', {
+          action: 'indexnow-batch-cron',
+          sitemapCount: sitemapUrls.length,
+          sitemapSource,
+          providerCount: providerUrls.length,
+          totalUnique: uniqueUrls.length,
+          cap: MAX_URLS_PER_DAY,
+          lookbackDays: LOOKBACK_DAYS,
+          sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
+        })
+
+        if (uniqueUrls.length === 0) {
+          await pingHeartbeat('indexnow-batch')
+          return NextResponse.json({
+            submitted: 0,
+            success: true,
+            note: 'no URLs candidate',
+            breakdown: { sitemap: 0, providers: 0, sitemapSource },
+          })
+        }
+
+        // SLA-99.9 : wall-clock guard — si la lecture sitemap+DB a mangé le
+        // budget, on skip le POST plutôt que de risquer un kill avant release.
+        if (Date.now() - startedAt > MAX_RUNTIME_MS) {
+          logger.warn('indexnow-batch: wall-clock budget exhausted before submit, skipping', {
+            elapsedMs: Date.now() - startedAt,
+            pendingUrls: uniqueUrls.length,
+          })
+          return NextResponse.json({
+            ok: true,
+            skipped: true,
+            reason: 'wallclock_budget',
+            submitted: 0,
+          })
+        }
+
+        const result = await submitToIndexNow(uniqueUrls)
+
         await pingHeartbeat('indexnow-batch')
         return NextResponse.json({
-          submitted: 0,
-          success: true,
-          note: 'no URLs candidate',
-          breakdown: { sitemap: 0, providers: 0, sitemapSource },
+          ...result,
+          urlCount: uniqueUrls.length,
+          breakdown: { sitemap: sitemapUrls.length, providers: providerUrls.length, sitemapSource },
+          lookbackDays: LOOKBACK_DAYS,
+          sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
         })
+      } finally {
+        // SLA-99.9 : release best-effort.
+        try {
+          await leaseSupabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+        } catch {
+          // swallowed : TTL acts as safety net
+        }
       }
-
-      const result = await submitToIndexNow(uniqueUrls)
-
-      await pingHeartbeat('indexnow-batch')
-      return NextResponse.json({
-        ...result,
-        urlCount: uniqueUrls.length,
-        breakdown: { sitemap: sitemapUrls.length, providers: providerUrls.length, sitemapSource },
-        lookbackDays: LOOKBACK_DAYS,
-        sitemapLookbackDays: SITEMAP_LOOKBACK_DAYS,
-      })
     },
     {
       schedule: { type: 'crontab', value: '0 8 * * *' },

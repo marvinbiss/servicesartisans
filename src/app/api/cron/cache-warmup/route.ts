@@ -3,6 +3,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { logger } from '@/lib/logger'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
@@ -33,6 +34,11 @@ const MAX_URLS_PER_RUN = 7_500
 const BATCH_SIZE = 50
 const SAFETY_TIMEOUT_MS = 45_000
 const REQUEST_TIMEOUT_MS = 5_000
+
+// SLA-99.9 : wall-clock guard 50s + lease anti-double-run.
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_cache_warmup'
+const LEASE_TTL_SECONDS = 15 * 60
 const TOP_100_CITIES = villes.slice(0, 100)
 const TOP_50_CITIES = villes.slice(0, 50)
 
@@ -190,86 +196,130 @@ export const GET = withCronCheckIn('cron-cache-warmup', async (request: Request)
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
-  const slot = getSlot()
-  const urls: string[] = []
+  const supabase = createAdminClient()
+  const startedAt = Date.now()
 
-  // Always: static pages + service hubs + city hubs (~2,300)
-  urls.push(...getStaticUrls())
-  urls.push(...getServiceHubUrls())
-  urls.push(...getCityHubUrls())
-
-  // Rotating: based on slot (~1,150 to ~3,885)
-  const { category, urls: rotatingUrls } = getRotatingUrls(slot)
-  urls.push(...rotatingUrls)
-
-  // Cap at 7,500 to stay within 60s timeout
-  const cappedUrls = urls.slice(0, MAX_URLS_PER_RUN)
-
-  logger.info('[cache-warmup] Starting', {
-    slot,
-    category,
-    alwaysUrls: urls.length - rotatingUrls.length,
-    rotatingUrls: rotatingUrls.length,
-    totalUrls: urls.length,
-    cappedAt: cappedUrls.length,
-  })
-
-  // Fetch in batches of 50 to avoid overwhelming the origin
-  let warmed = 0
-  let failed = 0
-  const startTime = Date.now()
-
-  for (let i = 0; i < cappedUrls.length; i += BATCH_SIZE) {
-    // Safety: abort if approaching timeout (55s)
-    if (Date.now() - startTime > SAFETY_TIMEOUT_MS) {
-      logger.warn('[cache-warmup] Approaching timeout, stopping early', {
-        processed: i,
-        total: cappedUrls.length,
-        slot,
-        category,
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
       })
-      break
-    }
-
-    const batch = cappedUrls.slice(i, i + BATCH_SIZE)
-    const results = await Promise.allSettled(
-      batch.map((url) =>
-        fetch(url, {
-          method: 'GET',
-          headers: { 'User-Agent': 'SA-Cache-Warmup/1.0' },
-          signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-        })
-      )
-    )
-    warmed += results.filter(
-      (r) => r.status === 'fulfilled' && (r as PromiseFulfilledResult<Response>).value.ok
-    ).length
-    failed += results.filter(
-      (r) =>
-        r.status === 'rejected' ||
-        (r.status === 'fulfilled' && !(r as PromiseFulfilledResult<Response>).value.ok)
-    ).length
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
   }
 
-  const duration = Date.now() - startTime
+  if (leaseErr) {
+    logger.error('[cache-warmup] lease error', undefined, {
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[cache-warmup] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
-  logger.info('[cache-warmup] Completed', {
-    slot,
-    category,
-    total: cappedUrls.length,
-    warmed,
-    failed,
-    durationMs: duration,
-  })
+  try {
+    const slot = getSlot()
+    const urls: string[] = []
 
-  return NextResponse.json({
-    success: true,
-    slot,
-    category,
-    total: cappedUrls.length,
-    warmed,
-    failed,
-    durationMs: duration,
-    timestamp: new Date().toISOString(),
-  })
+    // Always: static pages + service hubs + city hubs (~2,300)
+    urls.push(...getStaticUrls())
+    urls.push(...getServiceHubUrls())
+    urls.push(...getCityHubUrls())
+
+    // Rotating: based on slot (~1,150 to ~3,885)
+    const { category, urls: rotatingUrls } = getRotatingUrls(slot)
+    urls.push(...rotatingUrls)
+
+    // Cap at 7,500 to stay within 60s timeout
+    const cappedUrls = urls.slice(0, MAX_URLS_PER_RUN)
+
+    logger.info('[cache-warmup] Starting', {
+      slot,
+      category,
+      alwaysUrls: urls.length - rotatingUrls.length,
+      rotatingUrls: rotatingUrls.length,
+      totalUrls: urls.length,
+      cappedAt: cappedUrls.length,
+    })
+
+    // Fetch in batches of 50 to avoid overwhelming the origin
+    let warmed = 0
+    let failed = 0
+    const startTime = Date.now()
+
+    for (let i = 0; i < cappedUrls.length; i += BATCH_SIZE) {
+      // SLA-99.9 : wall-clock guard — abort if approaching Vercel maxDuration.
+      if (Date.now() - startedAt > MAX_RUNTIME_MS || Date.now() - startTime > SAFETY_TIMEOUT_MS) {
+        logger.warn('[cache-warmup] Approaching timeout, stopping early', {
+          processed: i,
+          total: cappedUrls.length,
+          slot,
+          category,
+        })
+        break
+      }
+
+      const batch = cappedUrls.slice(i, i + BATCH_SIZE)
+      const results = await Promise.allSettled(
+        batch.map((url) =>
+          fetch(url, {
+            method: 'GET',
+            headers: { 'User-Agent': 'SA-Cache-Warmup/1.0' },
+            signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+          })
+        )
+      )
+      warmed += results.filter(
+        (r) => r.status === 'fulfilled' && (r as PromiseFulfilledResult<Response>).value.ok
+      ).length
+      failed += results.filter(
+        (r) =>
+          r.status === 'rejected' ||
+          (r.status === 'fulfilled' && !(r as PromiseFulfilledResult<Response>).value.ok)
+      ).length
+    }
+
+    const duration = Date.now() - startTime
+
+    logger.info('[cache-warmup] Completed', {
+      slot,
+      category,
+      total: cappedUrls.length,
+      warmed,
+      failed,
+      durationMs: duration,
+    })
+
+    return NextResponse.json({
+      success: true,
+      slot,
+      category,
+      total: cappedUrls.length,
+      warmed,
+      failed,
+      durationMs: duration,
+      timestamp: new Date().toISOString(),
+    })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
+  }
 })

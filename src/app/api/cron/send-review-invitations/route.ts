@@ -33,6 +33,13 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.f
 const BATCH_SIZE = 100
 const MAX_ATTEMPTS = 3
 
+// SLA-99.9 : cap dur par run (alias explicite de BATCH_SIZE) + wall-clock guard
+// 50s (1 email Resend = ~500ms-1.5s) + lease anti-double-run.
+const MAX_INVITATIONS_PER_RUN = BATCH_SIZE
+const MAX_RUNTIME_MS = 50_000
+const LEASE_NAME = 'cron_send_review_invitations'
+const LEASE_TTL_SECONDS = 15 * 60
+
 const TRANSIENT_PATTERNS = [
   /429/,
   /rate.?limit/i,
@@ -133,138 +140,180 @@ export const GET = withCronCheckIn('cron-send-review-invitations', async (reques
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const nowIso = new Date().toISOString()
+  const startedAt = Date.now()
 
-  const { data: invitations, error } = await supabase
-    .from('review_invitations')
-    .select(
-      'id, devis_request_id, provider_id, client_email, client_name, service_name, scheduled_at, attempts'
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const leaseResult = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseErr = leaseResult.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[send-review-invitations] lease error', { error: leaseErr.message })
+    return NextResponse.json({ success: false, error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[send-review-invitations] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
+
+  try {
+    const nowIso = new Date().toISOString()
+
+    const { data: invitations, error } = await supabase
+      .from('review_invitations')
+      .select(
+        'id, devis_request_id, provider_id, client_email, client_name, service_name, scheduled_at, attempts'
+      )
+      .is('sent_at', null)
+      .is('completed_at', null)
+      .lte('scheduled_at', nowIso)
+      .gt('expires_at', nowIso)
+      .lt('attempts', MAX_ATTEMPTS)
+      .order('scheduled_at', { ascending: true })
+      .limit(MAX_INVITATIONS_PER_RUN)
+
+    if (error) {
+      logger.error('[send-review-invitations] fetch error', error)
+      return NextResponse.json({ success: false, error: 'fetch_failed' }, { status: 500 })
+    }
+
+    const pending = (invitations ?? []) as InvitationRow[]
+    if (pending.length === 0) {
+      return NextResponse.json({ success: true, sent: 0, failed: 0 })
+    }
+
+    const providerIds = Array.from(
+      new Set(pending.map((i) => i.provider_id).filter((id): id is string => !!id))
     )
-    .is('sent_at', null)
-    .is('completed_at', null)
-    .lte('scheduled_at', nowIso)
-    .gt('expires_at', nowIso)
-    .lt('attempts', MAX_ATTEMPTS)
-    .order('scheduled_at', { ascending: true })
-    .limit(BATCH_SIZE)
 
-  if (error) {
-    logger.error('[send-review-invitations] fetch error', error)
-    return NextResponse.json({ success: false, error: 'fetch_failed' }, { status: 500 })
-  }
-
-  const pending = (invitations ?? []) as InvitationRow[]
-  if (pending.length === 0) {
-    return NextResponse.json({ success: true, sent: 0, failed: 0 })
-  }
-
-  const providerIds = Array.from(
-    new Set(pending.map((i) => i.provider_id).filter((id): id is string => !!id))
-  )
-
-  const artisanNames = new Map<string, string>()
-  if (providerIds.length > 0) {
-    const { data: providers } = await supabase
-      .from('providers')
-      .select('id, name')
-      .in('id', providerIds)
-    for (const provider of providers ?? []) {
-      if (provider.name) artisanNames.set(provider.id, provider.name)
+    const artisanNames = new Map<string, string>()
+    if (providerIds.length > 0) {
+      const { data: providers } = await supabase
+        .from('providers')
+        .select('id, name')
+        .in('id', providerIds)
+      for (const provider of providers ?? []) {
+        if (provider.name) artisanNames.set(provider.id, provider.name)
+      }
     }
-  }
 
-  let sent = 0
-  let failed = 0
-  const updates: Array<{
-    id: string
-    sent_at?: string
-    scheduled_at?: string
-    attempts?: number
-    last_error?: string
-    token_hash?: string
-  }> = []
+    let sent = 0
+    let failed = 0
+    const updates: Array<{
+      id: string
+      sent_at?: string
+      scheduled_at?: string
+      attempts?: number
+      last_error?: string
+      token_hash?: string
+    }> = []
 
-  for (const invitation of pending) {
-    // Regenerate token each attempt so the plaintext can be transmitted.
-    // Previous token_hash is overwritten on retry (the old email link stops working,
-    // which is the desired behaviour for retry semantics).
-    const { plaintext, hash } = createInvitationToken()
-    const reviewUrl = `${SITE_URL}/invitation-avis/${plaintext}`
-    // Mailto unsubscribe : RFC 2369 minimal viable. Le subject inclut l'ID
-    // pour que Marvin puisse retrouver et marquer manuellement l'invitation
-    // (ou setup une auto-traitement plus tard).
-    // TODO V2 : endpoint `/api/reviews/unsubscribe/[token]` + colonne
-    // `review_invitations.unsubscribed_at` (migration 486) pour permettre le
-    // List-Unsubscribe-Post one-click (RFC 8058) qui requiert HTTPS.
-    const unsubscribeMailto = `mailto:contact@servicesartisans.fr?subject=Desinscription%20avis%20-%20${invitation.id}&body=Merci%20de%20me%20desinscrire%20des%20invitations%20a%20laisser%20un%20avis.`
+    for (const invitation of pending) {
+      // SLA-99.9 : wall-clock guard (1 email Resend = ~500ms-1.5s).
+      if (Date.now() - startedAt > MAX_RUNTIME_MS) break
+      // Regenerate token each attempt so the plaintext can be transmitted.
+      // Previous token_hash is overwritten on retry (the old email link stops working,
+      // which is the desired behaviour for retry semantics).
+      const { plaintext, hash } = createInvitationToken()
+      const reviewUrl = `${SITE_URL}/invitation-avis/${plaintext}`
+      // Mailto unsubscribe : RFC 2369 minimal viable. Le subject inclut l'ID
+      // pour que Marvin puisse retrouver et marquer manuellement l'invitation
+      // (ou setup une auto-traitement plus tard).
+      // TODO V2 : endpoint `/api/reviews/unsubscribe/[token]` + colonne
+      // `review_invitations.unsubscribed_at` (migration 486) pour permettre le
+      // List-Unsubscribe-Post one-click (RFC 8058) qui requiert HTTPS.
+      const unsubscribeMailto = `mailto:contact@servicesartisans.fr?subject=Desinscription%20avis%20-%20${invitation.id}&body=Merci%20de%20me%20desinscrire%20des%20invitations%20a%20laisser%20un%20avis.`
 
-    const template = buildReviewEmail({
-      clientName: invitation.client_name ?? '',
-      serviceName: invitation.service_name ?? 'votre prestation',
-      reviewUrl,
-      artisanName: invitation.provider_id
-        ? (artisanNames.get(invitation.provider_id) ?? null)
-        : null,
-      unsubscribeUrl: unsubscribeMailto,
-    })
-
-    // List-Unsubscribe (RFC 2369) requis par Gmail/Outlook 2024 sender guidelines
-    // pour les bulk senders >5K/jour (cf. https://support.google.com/mail/answer/81126).
-    // Mailto-only ici ; List-Unsubscribe-Post (RFC 8058) nécessite endpoint HTTPS
-    // dédié + colonne `unsubscribed_at` (TODO migration).
-    // ReplyTo redirige les réponses humaines vers contact@ (existant) plutôt que
-    // FROM_EMAIL (potentiellement noreply@) → conformité best practices et trust.
-    const result = await sendEmail({
-      to: invitation.client_email,
-      ...template,
-      replyTo: 'contact@servicesartisans.fr',
-      headers: {
-        'List-Unsubscribe': `<${unsubscribeMailto}>`,
-      },
-    })
-
-    if (result.success) {
-      sent++
-      updates.push({
-        id: invitation.id,
-        sent_at: new Date().toISOString(),
-        attempts: invitation.attempts + 1,
-        token_hash: hash,
+      const template = buildReviewEmail({
+        clientName: invitation.client_name ?? '',
+        serviceName: invitation.service_name ?? 'votre prestation',
+        reviewUrl,
+        artisanName: invitation.provider_id
+          ? (artisanNames.get(invitation.provider_id) ?? null)
+          : null,
+        unsubscribeUrl: unsubscribeMailto,
       })
-    } else if (isTransientError(result.error)) {
-      // Transient error (429/5xx/timeout) : on préserve les attempts et on
-      // reschedule. Le burst Resend ne brûle plus nos 3 tentatives en 5 min.
-      failed++
-      updates.push({
-        id: invitation.id,
-        scheduled_at: transientBackoffISO(invitation.attempts),
-        last_error: `transient: ${result.error ?? 'unknown'}`,
-        token_hash: hash,
-      })
-    } else {
-      failed++
-      updates.push({
-        id: invitation.id,
-        attempts: invitation.attempts + 1,
-        last_error: result.error ?? 'unknown',
-        token_hash: hash,
-      })
-    }
-  }
 
-  await Promise.all(
-    updates.map(({ id, ...patch }) =>
-      supabase
-        .from('review_invitations')
-        .update(patch)
-        .eq('id', id)
-        .then(({ error: updateError }) => {
-          if (updateError) {
-            logger.error('[send-review-invitations] update error', { id, error: updateError })
-          }
+      // List-Unsubscribe (RFC 2369) requis par Gmail/Outlook 2024 sender guidelines
+      // pour les bulk senders >5K/jour (cf. https://support.google.com/mail/answer/81126).
+      // Mailto-only ici ; List-Unsubscribe-Post (RFC 8058) nécessite endpoint HTTPS
+      // dédié + colonne `unsubscribed_at` (TODO migration).
+      // ReplyTo redirige les réponses humaines vers contact@ (existant) plutôt que
+      // FROM_EMAIL (potentiellement noreply@) → conformité best practices et trust.
+      const result = await sendEmail({
+        to: invitation.client_email,
+        ...template,
+        replyTo: 'contact@servicesartisans.fr',
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeMailto}>`,
+        },
+      })
+
+      if (result.success) {
+        sent++
+        updates.push({
+          id: invitation.id,
+          sent_at: new Date().toISOString(),
+          attempts: invitation.attempts + 1,
+          token_hash: hash,
         })
-    )
-  )
+      } else if (isTransientError(result.error)) {
+        // Transient error (429/5xx/timeout) : on préserve les attempts et on
+        // reschedule. Le burst Resend ne brûle plus nos 3 tentatives en 5 min.
+        failed++
+        updates.push({
+          id: invitation.id,
+          scheduled_at: transientBackoffISO(invitation.attempts),
+          last_error: `transient: ${result.error ?? 'unknown'}`,
+          token_hash: hash,
+        })
+      } else {
+        failed++
+        updates.push({
+          id: invitation.id,
+          attempts: invitation.attempts + 1,
+          last_error: result.error ?? 'unknown',
+          token_hash: hash,
+        })
+      }
+    }
 
-  return NextResponse.json({ success: true, sent, failed, processed: pending.length })
+    await Promise.all(
+      updates.map(({ id, ...patch }) =>
+        supabase
+          .from('review_invitations')
+          .update(patch)
+          .eq('id', id)
+          .then(({ error: updateError }) => {
+            if (updateError) {
+              logger.error('[send-review-invitations] update error', { id, error: updateError })
+            }
+          })
+      )
+    )
+
+    return NextResponse.json({ success: true, sent, failed, processed: pending.length })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
+  }
 })

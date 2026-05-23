@@ -34,7 +34,9 @@ export const GET = withCronCheckIn('cron-metrics-snapshot', async (request: Requ
   try {
     const supabase = createAdminClient()
 
-    const { data, error } = await supabase.rpc('snapshot_metrics_daily')
+    const { data, error } = await supabase
+      .rpc('snapshot_metrics_daily')
+      .abortSignal(AbortSignal.timeout(10_000))
 
     if (error) {
       logger.error('metrics-snapshot cron: RPC failed', error)

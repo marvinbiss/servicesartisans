@@ -7,6 +7,10 @@ import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 // Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
 export const dynamic = 'force-dynamic'
 
+// SLA-99.9 : lease anti-double-run (release best-effort en finally, TTL filet).
+const LEASE_NAME = 'cron_seo_monitor'
+const LEASE_TTL_SECONDS = 15 * 60
+
 /**
  * GET /api/cron/seo-monitor
  * Dashboard endpoint: aggregated SEO metrics from seo_page_scores.
@@ -23,10 +27,42 @@ export const GET = withCronCheckIn('cron-seo-monitor', async (request: Request) 
   }
 
   const start = Date.now()
+  const supabase = createAdminClient()
+
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const result = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = result.data as boolean | null
+    leaseErr = result.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[seo-monitor] lease error', undefined, {
+      action: 'seo-monitor',
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[seo-monitor] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ ok: true, skipped: true, reason: 'already_running' })
+  }
 
   try {
-    const supabase = createAdminClient()
-
     // Run all queries in parallel for performance
     // Fetch top pages and worst orphans
     const [topPagesResult, worstOrphansResult] = await Promise.all([
@@ -209,5 +245,12 @@ export const GET = withCronCheckIn('cron-seo-monitor', async (request: Request) 
     logger.error('[seo-monitor] Failed', err, { action: 'seo-monitor' })
 
     return NextResponse.json({ error: 'Échec du moniteur SEO', message }, { status: 500 })
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })

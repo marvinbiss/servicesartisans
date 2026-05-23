@@ -10,6 +10,11 @@ export const dynamic = 'force-dynamic'
 
 export const maxDuration = 300
 
+// SLA-99.9 : cap dur sur le nombre de pages classées par run + lease anti-double-run.
+const MAX_PAGES_PER_RUN = 1_000_000
+const LEASE_NAME = 'cron_orphan_check'
+const LEASE_TTL_SECONDS = 15 * 60
+
 /**
  * Cron: Orphan page detection via seo_page_scores table.
  *
@@ -33,9 +38,42 @@ export const GET = withCronCheckIn('cron-orphan-check', async (request: Request)
   const startTime = Date.now()
   const runId = `oc-${new Date().toISOString().slice(0, 10)}-${Date.now().toString(36)}`
 
-  try {
-    const supabase = createAdminClient()
+  const supabase = createAdminClient()
 
+  // SLA-99.9 : lease avec abort 5s.
+  const leaseController = new AbortController()
+  const leaseTimer = setTimeout(() => leaseController.abort(), 5_000)
+  let acquired: boolean | null = null
+  let leaseErr: { message: string } | null = null
+  try {
+    const leaseResult = await supabase
+      .rpc('acquire_cron_lease', {
+        p_name: LEASE_NAME,
+        p_ttl_seconds: LEASE_TTL_SECONDS,
+      })
+      .abortSignal(leaseController.signal)
+    acquired = leaseResult.data as boolean | null
+    leaseErr = leaseResult.error
+  } catch (err) {
+    leaseErr = { message: err instanceof Error ? err.message : String(err) }
+  } finally {
+    clearTimeout(leaseTimer)
+  }
+
+  if (leaseErr) {
+    logger.error('[orphan-check] lease error', undefined, {
+      action: 'orphan-check',
+      lease: LEASE_NAME,
+      error: leaseErr.message,
+    })
+    return NextResponse.json({ success: false, error: 'lease_error' }, { status: 500 })
+  }
+  if (acquired !== true) {
+    logger.info('[orphan-check] skipped (lease already held)', { lease: LEASE_NAME })
+    return NextResponse.json({ success: true, skipped: true, reason: 'already_running' })
+  }
+
+  try {
     // ── 1. Source of truth: all page paths from sitemap logic ──────────
     const allPages = getAllPagePaths()
     const totalChecked = allPages.length
@@ -103,7 +141,11 @@ export const GET = withCronCheckIn('cron-orphan-check', async (request: Request)
     }
     const upsertBatch: UpsertRow[] = []
 
+    let classified = 0
     for (const pagePath of allPages) {
+      // SLA-99.9 : cap dur sur le volume classé par run.
+      if (classified >= MAX_PAGES_PER_RUN) break
+      classified++
       const existing = existingScores.get(pagePath)
       const linksIn = existing?.internal_links_in ?? 0
 
@@ -216,6 +258,13 @@ export const GET = withCronCheckIn('cron-orphan-check', async (request: Request)
       },
       { status: 500 }
     )
+  } finally {
+    // SLA-99.9 : release best-effort.
+    try {
+      await supabase.rpc('release_cron_lease', { p_name: LEASE_NAME })
+    } catch {
+      // swallowed : TTL acts as safety net
+    }
   }
 })
 
