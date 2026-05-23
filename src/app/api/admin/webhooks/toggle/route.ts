@@ -16,6 +16,7 @@
  */
 
 import { NextResponse, type NextRequest } from 'next/server'
+import { z } from 'zod'
 
 import { logAdminAction, requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -25,6 +26,10 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+const toggleSchema = z
+  .object({ id: z.string().optional(), active: z.unknown().optional() })
+  .passthrough()
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const auth = await requirePermission('settings', 'write')
@@ -36,11 +41,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch {
     return NextResponse.json({ error: { code: 'invalid_body' } }, { status: 400 })
   }
-  if (raw === null || typeof raw !== 'object') {
+  const parsed = toggleSchema.safeParse(raw)
+  if (!parsed.success) {
     return NextResponse.json({ error: { code: 'invalid_body' } }, { status: 400 })
   }
 
-  const body = raw as Record<string, unknown>
+  const body = parsed.data
   const id = typeof body.id === 'string' ? body.id : ''
   const active = body.active === true
   if (!id || !UUID_RE.test(id)) {

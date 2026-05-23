@@ -7,6 +7,8 @@ import { safeJsonBody } from '@/lib/api/handler'
 // Basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/devis/abandon-tracking
  * Track form abandonment when user fills email at step 2 but doesn't complete.

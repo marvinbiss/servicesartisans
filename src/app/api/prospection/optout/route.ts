@@ -14,6 +14,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyOptoutToken, hashIp } from '@/lib/prospection/optout'
@@ -267,16 +268,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   )
 }
 
-interface PostBody {
-  email?: unknown
-  campaign_id?: unknown
-  token?: unknown
-  reason?: unknown
-  source?: unknown
-}
-
-const ALLOWED_REASONS = new Set(['user_request', 'complaint', 'legal_request'])
-const ALLOWED_SOURCES = new Set(['email_link', 'sms_reply_stop', 'api', 'manual_admin'])
+// Comportement legacy préservé : un `reason`/`source` non-string retombe sur
+// le défaut (le code historique testait `typeof === 'string'`), tandis qu'un
+// string hors liste reste rejeté en `invalid_reason_or_source`.
+const stringOnly = (v: unknown) => (typeof v === 'string' ? v : undefined)
+const optoutPostSchema = z.object({
+  email: z.string().min(1),
+  campaign_id: z.string().min(1),
+  token: z.string().min(1),
+  reason: z.preprocess(
+    stringOnly,
+    z.enum(['user_request', 'complaint', 'legal_request']).default('user_request')
+  ),
+  source: z.preprocess(
+    stringOnly,
+    z.enum(['email_link', 'sms_reply_stop', 'api', 'manual_admin']).default('api')
+  ),
+})
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const ip = getClientIp(request)
@@ -295,25 +303,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     )
   }
 
-  let body: PostBody
+  let rawBody: unknown
   try {
-    body = (await request.json()) as PostBody
+    rawBody = await request.json()
   } catch {
     return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
   }
 
-  const email = typeof body.email === 'string' ? body.email : null
-  const campaignId = typeof body.campaign_id === 'string' ? body.campaign_id : null
-  const token = typeof body.token === 'string' ? body.token : null
-  const reasonRaw = typeof body.reason === 'string' ? body.reason : 'user_request'
-  const sourceRaw = typeof body.source === 'string' ? body.source : 'api'
+  const parsed = optoutPostSchema.safeParse(rawBody)
+  if (!parsed.success) {
+    const onCredentials = parsed.error.issues.some((i) =>
+      ['email', 'campaign_id', 'token'].includes(String(i.path[0]))
+    )
+    return NextResponse.json(
+      { error: onCredentials ? 'missing_fields' : 'invalid_reason_or_source' },
+      { status: 400 }
+    )
+  }
 
-  if (!email || !campaignId || !token) {
-    return NextResponse.json({ error: 'missing_fields' }, { status: 400 })
-  }
-  if (!ALLOWED_REASONS.has(reasonRaw) || !ALLOWED_SOURCES.has(sourceRaw)) {
-    return NextResponse.json({ error: 'invalid_reason_or_source' }, { status: 400 })
-  }
+  const { email, campaign_id: campaignId, token, reason, source } = parsed.data
 
   const userAgent = request.headers.get('user-agent')?.slice(0, 500) || null
   const ipHash = ip !== 'unknown' ? hashIp(ip) : null
@@ -322,8 +330,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     email,
     campaignId,
     token,
-    reason: reasonRaw as OptoutInput['reason'],
-    source: sourceRaw as OptoutInput['source'],
+    reason,
+    source,
     ipHash,
     userAgent,
   })

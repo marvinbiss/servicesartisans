@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { sendLeadAlert } from '@/lib/services/notifications-service'
+
+// Enveloppe de SendLeadAlertInput. Les contrôles fins (UUID, cap 50,
+// types des champs) restent délégués à `sendLeadAlert` qui renvoie ses
+// propres 400 — on valide ici juste la forme structurelle.
+const leadAlertSchema = z
+  .object({
+    provider_ids: z.array(z.string()),
+    service: z.string().optional(),
+    city: z.string().optional(),
+    description: z.string().optional(),
+    urgency: z.string().optional(),
+    client_name: z.string().optional(),
+  })
+  .passthrough()
 
 /**
  * POST /api/notifications/send-lead-alert
@@ -34,9 +49,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
+    const parsed = leadAlertSchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'provider_ids required' }, { status: 400 })
+    }
 
-    const result = await sendLeadAlert(body)
+    const result = await sendLeadAlert(parsed.data)
 
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: result.status })

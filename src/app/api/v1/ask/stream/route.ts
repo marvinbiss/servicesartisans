@@ -35,6 +35,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
@@ -46,6 +47,11 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const MAX_QUERY_LEN = 4000
+
+// Garde d'enveloppe structurelle uniquement (« objet JSON »). Les messages
+// d'erreur précis par champ (query, aidesContext, citedSources…) restent
+// produits par `validateStreamBody` pour préserver le contrat de réponse.
+const streamEnvelopeSchema = z.object({ query: z.unknown().optional() }).passthrough()
 
 const META_BASE = {
   api_version: 'v1' as const,
@@ -117,6 +123,20 @@ export async function POST(req: NextRequest): Promise<Response> {
       return new Response(
         JSON.stringify({
           error: { code: 'invalid_body', message: 'Body must be valid JSON' },
+          _meta: META_BASE,
+        }),
+        { status: 400, headers: JSON_ERROR_HEADERS }
+      )
+    }
+
+    const envelope = streamEnvelopeSchema.safeParse(raw)
+    if (!envelope.success) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            code: 'invalid_params',
+            message: envelope.error.issues[0]?.message ?? 'invalid body',
+          },
           _meta: META_BASE,
         }),
         { status: 400, headers: JSON_ERROR_HEADERS }

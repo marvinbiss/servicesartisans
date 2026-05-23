@@ -19,6 +19,7 @@
  */
 
 import { NextResponse, type NextRequest } from 'next/server'
+import { z } from 'zod'
 
 import { logAdminAction, requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -30,6 +31,10 @@ export const dynamic = 'force-dynamic'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
+const fireTestSchema = z
+  .object({ id: z.string().optional(), event: z.string().optional() })
+  .passthrough()
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const auth = await requirePermission('settings', 'write')
   if (!auth.success || !auth.admin) return auth.error
@@ -40,11 +45,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch {
     return NextResponse.json({ error: { code: 'invalid_body' } }, { status: 400 })
   }
-  if (raw === null || typeof raw !== 'object') {
+  const parsed = fireTestSchema.safeParse(raw)
+  if (!parsed.success) {
     return NextResponse.json({ error: { code: 'invalid_body' } }, { status: 400 })
   }
 
-  const body = raw as Record<string, unknown>
+  const body = parsed.data
   const id = typeof body.id === 'string' ? body.id : ''
   const event = typeof body.event === 'string' ? body.event : ''
   if (!id || !UUID_RE.test(id)) {

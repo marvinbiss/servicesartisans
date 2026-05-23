@@ -78,6 +78,7 @@ export async function POST(request: Request) {
           timestamp: new Date().toISOString(),
         },
       }),
+      signal: AbortSignal.timeout(10000),
     })
 
     if (res.status === 204) {

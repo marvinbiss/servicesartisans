@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
@@ -19,6 +20,18 @@ import type { ProspectionContact, ProspectionConversationMessage } from '@/types
 
 export const dynamic = 'force-dynamic'
 
+// Enveloppe Twilio — loose + passthrough : on ne valide que les champs connus
+// et on préserve tout le reste. Best-effort : un payload non conforme ne doit
+// JAMAIS produire un 400 (Twilio retenterait alors la livraison en boucle).
+const twilioIncomingSchema = z
+  .object({
+    MessageSid: z.string().optional(),
+    SmsSid: z.string().optional(),
+    From: z.string().optional(),
+    Body: z.string().optional(),
+  })
+  .passthrough()
+
 /**
  * Webhook Twilio - Messages entrants (SMS et WhatsApp)
  * Gère les réponses des contacts et déclenche l'IA si configurée
@@ -32,6 +45,14 @@ export async function POST(request: NextRequest) {
     formData.forEach((value, key) => {
       params[key] = value.toString()
     })
+
+    // Best-effort validation (no hard-400 : delivery retries protection)
+    const parsed = twilioIncomingSchema.safeParse(params)
+    if (!parsed.success) {
+      logger.warn('Twilio incoming webhook: payload shape unexpected', {
+        issues: parsed.error.flatten().fieldErrors,
+      })
+    }
 
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {

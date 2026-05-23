@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 
 // Basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const abandonSchema = z.object({
+  email: z.string().min(1).max(254).regex(EMAIL_REGEX, 'Format email invalide'),
+})
+
+export const dynamic = 'force-dynamic'
 
 /**
  * POST /api/devis/abandon-complete
@@ -29,16 +36,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { email } = await request.json()
-
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'email required' }, { status: 400 })
+    const parsed = abandonSchema.safeParse(await request.json())
+    if (!parsed.success) {
+      const isMissing = parsed.error.issues.some(
+        (i) => i.path[0] === 'email' && (i.code === 'invalid_type' || i.code === 'too_small')
+      )
+      return NextResponse.json(
+        { error: isMissing ? 'email required' : 'Format email invalide' },
+        { status: 400 }
+      )
     }
-
-    // Validate email format before any DB operation
-    if (!EMAIL_REGEX.test(email) || email.length > 254) {
-      return NextResponse.json({ error: 'Format email invalide' }, { status: 400 })
-    }
+    const { email } = parsed.data
 
     const supabase = createAdminClient()
 

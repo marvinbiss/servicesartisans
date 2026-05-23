@@ -154,11 +154,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     })
   } catch (err) {
     // Fail-open : on renvoie un résultat "non éligible" plutôt qu'une 500
-    // pour ne jamais bloquer l'affichage du tunnel devis.
-    logger.warn('cee_estimate_unexpected_error', {
-      action: 'cee-estimate',
-      error: err instanceof Error ? err.message : String(err),
-    })
+    // pour ne jamais bloquer l'affichage du tunnel devis. On log néanmoins en
+    // `error` pour forwarder l'incident à Sentry (visibilité SLA-99.9).
+    logger.error('cee_estimate_unexpected_error', err, { action: 'cee-estimate' })
     return NextResponse.json(
       {
         eligible: false,

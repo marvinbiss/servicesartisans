@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -92,6 +93,30 @@ interface GscRow {
   query?: string
 }
 
+// Loose : on accepte tous les payloads déjà tolérés (tableau ou enveloppe
+// { rows | data }). Les champs des lignes sont eux-mêmes tous optionnels —
+// le handler les normalise/coerce en aval (parseFloat/parseInt).
+const gscRowSchema = z
+  .object({
+    page: z.unknown().optional(),
+    position: z.unknown().optional(),
+    impressions: z.unknown().optional(),
+    clicks: z.unknown().optional(),
+    query: z.unknown().optional(),
+  })
+  .passthrough()
+
+const priorityImportSchema = z.union([
+  z.array(gscRowSchema),
+  z
+    .object({ rows: z.array(gscRowSchema).optional(), data: z.array(gscRowSchema).optional() })
+    .passthrough(),
+])
+
+const priorityPutSchema = z
+  .object({ path: z.string().optional(), enhanced: z.boolean().optional() })
+  .passthrough()
+
 export async function POST(request: Request) {
   try {
     const authResult = await requirePermission('settings', 'write')
@@ -99,7 +124,15 @@ export async function POST(request: Request) {
       return authResult.error
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = priorityImportSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Format de données invalide.' } },
+        { status: 400 }
+      )
+    }
+    const body = parsed.data as unknown as GscRow[] | { rows?: GscRow[]; data?: GscRow[] }
     const rows: GscRow[] = Array.isArray(body) ? body : body.rows || body.data || []
 
     if (!rows.length) {
@@ -226,8 +259,15 @@ export async function PUT(request: Request) {
       return authResult.error
     }
 
-    const body = await request.json()
-    const { path, enhanced } = body as { path?: string; enhanced?: boolean }
+    const rawBody = await request.json()
+    const putParsed = priorityPutSchema.safeParse(rawBody)
+    if (!putParsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Format de données invalide.' } },
+        { status: 400 }
+      )
+    }
+    const { path, enhanced } = putParsed.data
 
     if (!path) {
       return NextResponse.json(

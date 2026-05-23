@@ -22,6 +22,7 @@
 import crypto from 'node:crypto'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
@@ -31,6 +32,16 @@ import { deliverWebhook, isValidEvent, mockPayloadFor, type WebhookEvent } from 
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Garde d'enveloppe. Les contrôles précis (id uuid, secret présent, event
+// connu, comparaison timing-safe) restent inchangés ci-dessous.
+const webhookTestSchema = z
+  .object({
+    id: z.unknown().optional(),
+    secret: z.unknown().optional(),
+    event: z.unknown().optional(),
+  })
+  .passthrough()
 
 const META_BASE = {
   api_version: 'v1' as const,
@@ -87,7 +98,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    if (raw === null || typeof raw !== 'object') {
+    const parsed = webhookTestSchema.safeParse(raw)
+    if (!parsed.success) {
       return NextResponse.json(
         {
           error: { code: 'invalid_body', message: 'Body must be a JSON object' },
@@ -97,7 +109,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const body = raw as Record<string, unknown>
+    const body = parsed.data as Record<string, unknown>
     const id = typeof body.id === 'string' ? body.id : ''
     const secret = typeof body.secret === 'string' ? body.secret : ''
     const event = typeof body.event === 'string' ? body.event : ''

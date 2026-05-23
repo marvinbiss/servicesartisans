@@ -25,6 +25,7 @@ export async function GET() {
       status: 'unhealthy',
       error: err instanceof Error ? err.message : String(err),
     }
+    logger.error('Health check: environment load failed', err)
   }
 
   // Check Supabase
@@ -47,6 +48,7 @@ export async function GET() {
       status: 'unhealthy',
       error: err instanceof Error ? err.message : String(err),
     }
+    logger.error('Health check: database probe failed', err)
   }
 
   // Check Stripe (config only)

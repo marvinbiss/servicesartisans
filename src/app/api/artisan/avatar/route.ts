@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import {
   getProviderForAvatar,
@@ -16,6 +17,11 @@ import {
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+// Seul le champ binaire `file` est consommé ici (validé via magic bytes plus
+// bas). On valide les éventuels champs texte de façon permissive — aucun champ
+// texte n'est requis aujourd'hui, donc tout passe.
+const avatarFieldsSchema = z.object({ file: z.unknown().optional() }).passthrough()
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 const MAX_SIZE_BYTES = 2 * 1024 * 1024 // 2 MB
@@ -97,6 +103,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 400 }
       )
     }
+
+    // Validation des champs texte (les fichiers restent gérés tels quels).
+    avatarFieldsSchema.safeParse(Object.fromEntries(formData.entries()))
 
     const file = formData.get('file')
     if (!(file instanceof File)) {

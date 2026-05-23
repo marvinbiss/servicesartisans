@@ -16,6 +16,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
@@ -33,6 +34,16 @@ import {
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Garde d'enveloppe. La validation fine (URL https, email, events connus)
+// reste déléguée aux helpers `validate*` qui renvoient des erreurs par champ.
+const subscribeSchema = z
+  .object({
+    url: z.unknown().optional(),
+    email: z.unknown().optional(),
+    events: z.unknown().optional(),
+  })
+  .passthrough()
 
 const META_BASE = {
   api_version: 'v1' as const,
@@ -77,7 +88,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    if (raw === null || typeof raw !== 'object') {
+    const parsed = subscribeSchema.safeParse(raw)
+    if (!parsed.success) {
       return NextResponse.json(
         {
           error: { code: 'invalid_body', message: 'Body must be a JSON object' },
@@ -87,7 +99,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const body = raw as Record<string, unknown>
+    const body = parsed.data as Record<string, unknown>
 
     const urlCheck = validateWebhookUrl(body.url)
     if (!urlCheck.ok) {

@@ -27,6 +27,7 @@
  */
 
 import { NextResponse, type NextRequest } from 'next/server'
+import { z } from 'zod'
 
 import { answer, type AnswerResult, type Citation } from '@/lib/answer-engine'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -58,6 +59,17 @@ const RESPONSE_HEADERS: Record<string, string> = {
 }
 
 const MAX_QUERY_LEN = 4000
+
+// Loose : on n'impose que « objet JSON ». Les codes d'erreur précis
+// (invalid_query, missing_public_key) restent produits par les checks ci-dessous
+// pour préserver le contrat de réponse.
+const messageBodySchema = z
+  .object({
+    query: z.unknown().optional(),
+    public_key: z.unknown().optional(),
+    aidesContext: z.unknown().optional(),
+  })
+  .passthrough()
 
 function buildStoreDeps(): SessionStoreDeps {
   const supabase = createAdminClient()
@@ -141,9 +153,9 @@ export async function POST(
       )
     }
 
-    let raw: { query?: unknown; public_key?: unknown; aidesContext?: unknown } = {}
+    let rawJson: unknown
     try {
-      raw = (await req.json()) as typeof raw
+      rawJson = await req.json()
     } catch {
       return NextResponse.json(
         {
@@ -153,6 +165,18 @@ export async function POST(
         { status: 400, headers: RESPONSE_HEADERS }
       )
     }
+
+    const parsed = messageBodySchema.safeParse(rawJson)
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: { code: 'invalid_body', message: 'Body must be a JSON object.' },
+          _meta: META_BASE,
+        },
+        { status: 400, headers: RESPONSE_HEADERS }
+      )
+    }
+    const raw = parsed.data
 
     const query = typeof raw.query === 'string' ? raw.query : ''
     const publicKey = typeof raw.public_key === 'string' ? raw.public_key : ''

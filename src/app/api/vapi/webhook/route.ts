@@ -20,6 +20,8 @@ import type {
 } from '@/types/voice-qualification'
 
 export const maxDuration = 30
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 const IDEMPOTENT_EVENTS = new Set(['status-update', 'end-of-call-report'])
 

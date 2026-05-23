@@ -23,6 +23,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
@@ -34,6 +35,12 @@ import { isValidEvent, type WebhookEvent, type WebhookPayloadByEvent } from '@/l
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Garde d'enveloppe. Les codes d'erreur précis (invalid_event/invalid_payload)
+// restent produits par les checks dédiés ci-dessous.
+const adminEmitSchema = z
+  .object({ event: z.unknown().optional(), payload: z.unknown().optional() })
+  .passthrough()
 
 const META_BASE = {
   api_version: 'v1' as const,
@@ -160,7 +167,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    if (raw === null || typeof raw !== 'object') {
+    const parsed = adminEmitSchema.safeParse(raw)
+    if (!parsed.success) {
       return NextResponse.json(
         {
           error: { code: 'invalid_body', message: 'Body must be a JSON object' },
@@ -170,7 +178,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const body = raw as { event?: unknown; payload?: unknown }
+    const body = parsed.data as { event?: unknown; payload?: unknown }
 
     if (typeof body.event !== 'string' || !isValidEvent(body.event)) {
       return NextResponse.json(

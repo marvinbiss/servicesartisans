@@ -119,6 +119,7 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${apiToken}`,
         Accept: 'application/json',
       },
+      signal: AbortSignal.timeout(8000),
     })
 
     if (response.status === 404) {

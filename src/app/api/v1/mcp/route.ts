@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { logger } from '@/lib/logger'
 
@@ -52,18 +53,41 @@ class MCPError extends Error {
   }
 }
 
+// Enveloppe JSON-RPC 2.0 — loose + passthrough : on préserve params/id et tout
+// champ inconnu. La conformité fine (jsonrpc === '2.0', method string) reste
+// vérifiée plus bas pour renvoyer le code JSON-RPC INVALID_REQUEST exact.
+const jsonRpcEnvelopeSchema = z
+  .object({
+    jsonrpc: z.unknown().optional(),
+    method: z.unknown().optional(),
+    id: z.unknown().optional(),
+    params: z.unknown().optional(),
+  })
+  .passthrough()
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const auth = checkMCPAuth(req.headers.get('authorization'))
   if (!auth.authorized) {
     return jsonRpcError(null, JSONRPC_ERROR_CODES.UNAUTHORIZED, auth.reason, 401)
   }
 
-  let body: JsonRpcRequest
+  let raw: unknown
   try {
-    body = (await req.json()) as JsonRpcRequest
+    raw = await req.json()
   } catch {
     return jsonRpcError(null, JSONRPC_ERROR_CODES.PARSE_ERROR, 'invalid JSON body', 400)
   }
+
+  const envelope = jsonRpcEnvelopeSchema.safeParse(raw)
+  if (!envelope.success) {
+    return jsonRpcError(
+      null,
+      JSONRPC_ERROR_CODES.INVALID_REQUEST,
+      'not a valid JSON-RPC 2.0 request',
+      400
+    )
+  }
+  const body = envelope.data as JsonRpcRequest
 
   if (
     !body ||

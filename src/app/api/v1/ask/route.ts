@@ -29,6 +29,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { answer, type AnswerRequest } from '@/lib/answer-engine'
 import { logger } from '@/lib/logger'
@@ -37,6 +38,11 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 import { ensureRegistryBooted } from './_registry-boot'
 import { validateAskRequest } from './_validation'
+
+// Garde d'enveloppe (forme structurelle). La validation fine des enums
+// (classification, geste, menageCategorie…) reste dans `validateAskRequest`,
+// volontairement zéro-dépendance pour rester sur le hot path le plus léger.
+const askEnvelopeSchema = z.object({ query: z.string().trim().min(1).max(4000) }).passthrough()
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -79,6 +85,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         {
           error: { code: 'invalid_body', message: 'Body must be valid JSON' },
+          _meta: META_BASE,
+        },
+        { status: 400, headers: RESPONSE_HEADERS }
+      )
+    }
+
+    const envelope = askEnvelopeSchema.safeParse(raw)
+    if (!envelope.success) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'invalid_params',
+            message: 'Query parameters validation failed',
+            errors: envelope.error.issues.map((i) => ({
+              field: i.path.join('.') || '_body',
+              message: i.message,
+            })),
+          },
           _meta: META_BASE,
         },
         { status: 400, headers: RESPONSE_HEADERS }

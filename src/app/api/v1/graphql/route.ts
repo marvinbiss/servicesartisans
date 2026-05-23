@@ -13,6 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
@@ -24,6 +25,11 @@ import { SDL, ROOT_QUERY_FIELDS } from './_schema'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Enveloppe GraphQL-as-RPC : on valide uniquement `{ query: string }` et on
+// préserve les champs inconnus (variables, operationName d'éventuels clients).
+// La longueur max + le parse fin restent gérés en aval.
+const graphqlBodySchema = z.object({ query: z.string().min(1) }).passthrough()
 
 const SITE_URL = 'https://servicesartisans.fr'
 
@@ -95,26 +101,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    if (!body || typeof body !== 'object') {
+    const bodyParsed = graphqlBodySchema.safeParse(body)
+    if (!bodyParsed.success) {
+      const isObject = body !== null && typeof body === 'object'
       return NextResponse.json(
         {
           data: null,
-          errors: [{ message: 'Body must be a JSON object.' }],
+          errors: [
+            {
+              message: isObject
+                ? 'Missing required field: query (non-empty string).'
+                : 'Body must be a JSON object.',
+            },
+          ],
         },
         { status: 400, headers: SUCCESS_HEADERS }
       )
     }
 
-    const queryRaw = (body as { query?: unknown }).query
-    if (typeof queryRaw !== 'string' || queryRaw.length === 0) {
-      return NextResponse.json(
-        {
-          data: null,
-          errors: [{ message: 'Missing required field: query (non-empty string).' }],
-        },
-        { status: 400, headers: SUCCESS_HEADERS }
-      )
-    }
+    const queryRaw = bodyParsed.data.query
 
     if (queryRaw.length > PARSER_LIMITS.MAX_SOURCE_LEN) {
       return NextResponse.json(

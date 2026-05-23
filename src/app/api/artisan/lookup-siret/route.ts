@@ -219,6 +219,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`, {
       headers: { Authorization: `Bearer ${apiToken}`, Accept: 'application/json' },
       cache: 'no-store',
+      signal: AbortSignal.timeout(8000),
     })
 
     if (response.status === 404) {

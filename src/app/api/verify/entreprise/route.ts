@@ -38,6 +38,8 @@ const entreprisePostSchema = z.object({
   artisanId: z.string().uuid().optional(),
 })
 
+export const dynamic = 'force-dynamic'
+
 /**
  * API de vérification d'entreprise
  * Combine les données INSEE et Pappers pour une vérification complète

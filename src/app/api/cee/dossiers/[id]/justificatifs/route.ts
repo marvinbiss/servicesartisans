@@ -18,6 +18,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import {
@@ -28,6 +29,13 @@ import {
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+// Champs texte du multipart (le binaire `file` reste géré tel quel). `code` et
+// `label` sont requis non-vides — le handler les déréférence déjà comme tels.
+const justificatifFieldsSchema = z.object({
+  code: z.string().min(1),
+  label: z.string().min(1),
+})
 
 interface RouteContext {
   params: Promise<{ id: string }> | { id: string }
@@ -82,18 +90,19 @@ export async function POST(request: Request, context: RouteContext) {
     }
 
     const fileEntry = formData.get('file')
-    const code = formData.get('code')
-    const label = formData.get('label')
 
     if (!(fileEntry instanceof File)) {
       return NextResponse.json({ ok: false, error: 'invalid_file' }, { status: 400 })
     }
-    if (typeof code !== 'string' || !code) {
+
+    const fields = justificatifFieldsSchema.safeParse({
+      code: formData.get('code'),
+      label: formData.get('label'),
+    })
+    if (!fields.success) {
       return NextResponse.json({ ok: false, error: 'invalid_input' }, { status: 400 })
     }
-    if (typeof label !== 'string' || !label) {
-      return NextResponse.json({ ok: false, error: 'invalid_input' }, { status: 400 })
-    }
+    const { code, label } = fields.data
 
     // --- 4. Pré-validations rapides (avant lecture du buffer) ---------------
     if (!ALLOWED_MIME_TYPES.has(fileEntry.type)) {
