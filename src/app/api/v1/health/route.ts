@@ -16,6 +16,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -25,28 +26,38 @@ const BUILD_REF = process.env.VERCEL_GIT_COMMIT_REF ?? 'local'
 const APP_VERSION = '1.0.0'
 
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json(
-    {
-      status: 'ok',
-      version: APP_VERSION,
-      build: { sha: BUILD_SHA.slice(0, 7), ref: BUILD_REF },
-      timestamp: new Date().toISOString(),
-      docs: 'https://servicesartisans.fr/developpeurs',
-    },
-    {
-      status: 200,
-      headers: {
-        'Cache-Control': 'no-store',
-        'X-License': 'CC-BY-4.0',
-        'Access-Control-Allow-Origin': '*',
+  try {
+    return NextResponse.json(
+      {
+        status: 'ok',
+        version: APP_VERSION,
+        build: { sha: BUILD_SHA.slice(0, 7), ref: BUILD_REF },
+        timestamp: new Date().toISOString(),
+        docs: 'https://servicesartisans.fr/developpeurs',
       },
-    }
-  )
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store',
+          'X-License': 'CC-BY-4.0',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    )
+  } catch (error) {
+    logger.error('[api/v1/health] GET failed', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
 }
 
 export async function HEAD(): Promise<NextResponse> {
-  return new NextResponse(null, {
-    status: 200,
-    headers: { 'Cache-Control': 'no-store' },
-  })
+  try {
+    return new NextResponse(null, {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store' },
+    })
+  } catch (error) {
+    logger.error('[api/v1/health] HEAD failed', error)
+    return new NextResponse(null, { status: 500 })
+  }
 }

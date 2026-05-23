@@ -17,6 +17,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-static'
@@ -40,15 +41,20 @@ function getSnippet(): string {
 }
 
 export async function GET(): Promise<NextResponse> {
-  const body = getSnippet()
-  return new NextResponse(body, {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/javascript; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-      'Access-Control-Allow-Origin': '*',
-      'X-License': 'CC-BY-4.0',
-      'X-RGE-OS-Pillar': '10',
-    },
-  })
+  try {
+    const body = getSnippet()
+    return new NextResponse(body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/javascript; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+        'Access-Control-Allow-Origin': '*',
+        'X-License': 'CC-BY-4.0',
+        'X-RGE-OS-Pillar': '10',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/v1/embed/rge-snippet] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
+  }
 }

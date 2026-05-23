@@ -3,6 +3,7 @@ import { getTradeContent, tradeContent } from '@/lib/data/trade-content'
 import { getVilleBySlug } from '@/lib/data/france'
 import { getRegionalMultiplier } from '@/lib/seo/location-content'
 import { servicePricings } from '@/lib/data/barometre'
+import { logger } from '@/lib/logger'
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -40,118 +41,125 @@ export async function OPTIONS() {
 // ---------------------------------------------------------------------------
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = request.nextUrl
-  const serviceSlug = searchParams.get('service')?.toLowerCase().trim()
-  const villeSlug = searchParams.get('ville')?.toLowerCase().trim()
-  const format = searchParams.get('format')?.toLowerCase().trim()
+  try {
+    const { searchParams } = request.nextUrl
+    const serviceSlug = searchParams.get('service')?.toLowerCase().trim()
+    const villeSlug = searchParams.get('ville')?.toLowerCase().trim()
+    const format = searchParams.get('format')?.toLowerCase().trim()
 
-  // --- Validate service ---
-  if (!serviceSlug) {
-    return errorResponse(
-      'Paramètre "service" manquant. Exemple : ?service=plombier&ville=paris',
-      format
-    )
-  }
+    // --- Validate service ---
+    if (!serviceSlug) {
+      return errorResponse(
+        'Paramètre "service" manquant. Exemple : ?service=plombier&ville=paris',
+        format
+      )
+    }
 
-  const trade = getTradeContent(serviceSlug)
-  if (!trade) {
-    const availableSlugs = Object.keys(tradeContent).slice(0, 10).join(', ')
-    return errorResponse(
-      `Service "${escapeHtml(serviceSlug)}" non trouvé. Services disponibles : ${availableSlugs}…`,
-      format
-    )
-  }
+    const trade = getTradeContent(serviceSlug)
+    if (!trade) {
+      const availableSlugs = Object.keys(tradeContent).slice(0, 10).join(', ')
+      return errorResponse(
+        `Service "${escapeHtml(serviceSlug)}" non trouvé. Services disponibles : ${availableSlugs}…`,
+        format
+      )
+    }
 
-  // --- Validate ville ---
-  if (!villeSlug) {
-    return errorResponse(
-      'Paramètre "ville" manquant. Exemple : ?service=plombier&ville=paris',
-      format
-    )
-  }
+    // --- Validate ville ---
+    if (!villeSlug) {
+      return errorResponse(
+        'Paramètre "ville" manquant. Exemple : ?service=plombier&ville=paris',
+        format
+      )
+    }
 
-  const ville = getVilleBySlug(villeSlug)
-  if (!ville) {
-    return errorResponse(
-      `Ville "${escapeHtml(villeSlug)}" non trouvée. Utilisez le slug de la ville (ex: paris, lyon, marseille).`,
-      format
-    )
-  }
+    const ville = getVilleBySlug(villeSlug)
+    if (!ville) {
+      return errorResponse(
+        `Ville "${escapeHtml(villeSlug)}" non trouvée. Utilisez le slug de la ville (ex: paris, lyon, marseille).`,
+        format
+      )
+    }
 
-  // --- Compute prices ---
-  const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
+    // --- Compute prices ---
+    const multiplier = getRegionalMultiplier(ville.region, ville.departementCode)
 
-  // Use barometre data if available for richer data, fallback to trade priceRange
-  const barometreService = servicePricings.find((s) => s.service === serviceSlug)
+    // Use barometre data if available for richer data, fallback to trade priceRange
+    const barometreService = servicePricings.find((s) => s.service === serviceSlug)
 
-  let priceMin: number
-  let priceMax: number
-  let unit: string
-  let interventions: { name: string; prixMin: number; prixMax: number; unite: string }[] | undefined
+    let priceMin: number
+    let priceMax: number
+    let unit: string
+    let interventions:
+      | { name: string; prixMin: number; prixMax: number; unite: string }[]
+      | undefined
 
-  if (barometreService) {
-    // Compute overall range from all interventions
-    const allMin = barometreService.interventions.map((i) => i.prixMin)
-    const allMax = barometreService.interventions.map((i) => i.prixMax)
-    priceMin = Math.round(Math.min(...allMin) * multiplier)
-    priceMax = Math.round(Math.max(...allMax) * multiplier)
-    unit = 'intervention'
-    interventions = barometreService.interventions.map((i) => ({
-      name: i.name,
-      prixMin: Math.round(i.prixMin * multiplier),
-      prixMax: Math.round(i.prixMax * multiplier),
-      unite: i.unite,
-    }))
-  } else {
-    priceMin = Math.round(trade.priceRange.min * multiplier)
-    priceMax = Math.round(trade.priceRange.max * multiplier)
-    unit = trade.priceRange.unit
-  }
+    if (barometreService) {
+      // Compute overall range from all interventions
+      const allMin = barometreService.interventions.map((i) => i.prixMin)
+      const allMax = barometreService.interventions.map((i) => i.prixMax)
+      priceMin = Math.round(Math.min(...allMin) * multiplier)
+      priceMax = Math.round(Math.max(...allMax) * multiplier)
+      unit = 'intervention'
+      interventions = barometreService.interventions.map((i) => ({
+        name: i.name,
+        prixMin: Math.round(i.prixMin * multiplier),
+        prixMax: Math.round(i.prixMax * multiplier),
+        unite: i.unite,
+      }))
+    } else {
+      priceMin = Math.round(trade.priceRange.min * multiplier)
+      priceMax = Math.round(trade.priceRange.max * multiplier)
+      unit = trade.priceRange.unit
+    }
 
-  const sourceUrl = `https://servicesartisans.fr/${serviceSlug}/${villeSlug}`
+    const sourceUrl = `https://servicesartisans.fr/${serviceSlug}/${villeSlug}`
 
-  // --- JSON response ---
-  if (format === 'json') {
-    return NextResponse.json(
-      {
-        service: serviceSlug,
-        serviceName: trade.name,
-        ville: villeSlug,
-        villeName: ville.name,
-        region: ville.region,
-        priceMin,
-        priceMax,
-        unit,
-        multiplier,
-        ...(interventions && { interventions }),
-        source: 'ServicesArtisans.fr',
-        sourceUrl,
+    // --- JSON response ---
+    if (format === 'json') {
+      return NextResponse.json(
+        {
+          service: serviceSlug,
+          serviceName: trade.name,
+          ville: villeSlug,
+          villeName: ville.name,
+          region: ville.region,
+          priceMin,
+          priceMax,
+          unit,
+          multiplier,
+          ...(interventions && { interventions }),
+          source: 'ServicesArtisans.fr',
+          sourceUrl,
+        },
+        {
+          headers: { ...CORS_HEADERS, ...CACHE_HEADERS },
+        }
+      )
+    }
+
+    // --- HTML widget response ---
+    const html = buildWidgetHtml({
+      serviceName: trade.name,
+      villeName: ville.name,
+      region: ville.region,
+      priceMin,
+      priceMax,
+      unit,
+      interventions,
+      sourceUrl,
+    })
+
+    return new NextResponse(html, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        ...CORS_HEADERS,
+        ...CACHE_HEADERS,
       },
-      {
-        headers: { ...CORS_HEADERS, ...CACHE_HEADERS },
-      }
-    )
+    })
+  } catch (error) {
+    logger.error('[api/prix-widget] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
   }
-
-  // --- HTML widget response ---
-  const html = buildWidgetHtml({
-    serviceName: trade.name,
-    villeName: ville.name,
-    region: ville.region,
-    priceMin,
-    priceMax,
-    unit,
-    interventions,
-    sourceUrl,
-  })
-
-  return new NextResponse(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      ...CORS_HEADERS,
-      ...CACHE_HEADERS,
-    },
-  })
 }
 
 // ---------------------------------------------------------------------------

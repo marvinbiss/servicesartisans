@@ -1,4 +1,5 @@
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 
 /**
  * GET /api/v1/docs
@@ -6,7 +7,8 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
  * Page de documentation HTML de l'API Baromètre des Artisans
  */
 export async function GET() {
-  const html = `<!DOCTYPE html>
+  try {
+    const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -185,10 +187,14 @@ curl "${SITE_URL}/api/v1/rge/search?specialty=pompe-a-chaleur&limit=50"</code></
 </body>
 </html>`
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-    },
-  })
+    return new Response(html, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/v1/docs] GET failed', error)
+    return new Response('Erreur serveur', { status: 500 })
+  }
 }

@@ -16,18 +16,24 @@
 import { NextResponse } from 'next/server'
 
 import { ASYNCAPI_SPEC } from '../_spec'
+import { logger } from '@/lib/logger'
 
 export const runtime = 'nodejs'
 export const revalidate = 3600
 
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json(ASYNCAPI_SPEC, {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-      'X-License': 'CC-BY-4.0',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
+  try {
+    return NextResponse.json(ASYNCAPI_SPEC, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+        'X-License': 'CC-BY-4.0',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/v1/asyncapi/json] GET failed', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
 }

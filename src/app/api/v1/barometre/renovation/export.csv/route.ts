@@ -21,6 +21,7 @@
  * Cache 1h (compatible recrawl léger des moteurs/dataset registries).
  */
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
@@ -103,18 +104,23 @@ function renderCsv(): string {
 }
 
 export async function GET() {
-  const csv = renderCsv()
-  return new NextResponse(csv, {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': 'inline; filename="indice-renovation-energetique-2026.csv"',
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-      'X-License': 'CC-BY-4.0',
-      'X-License-URL': 'https://creativecommons.org/licenses/by/4.0/',
-      'X-Attribution': 'ServicesArtisans - Barometre Renovation Energetique 2026',
-      'X-Canonical-URL': 'https://servicesartisans.fr/barometre/renovation-energetique-2026',
-    },
-  })
+  try {
+    const csv = renderCsv()
+    return new NextResponse(csv, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': 'inline; filename="indice-renovation-energetique-2026.csv"',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+        'X-License': 'CC-BY-4.0',
+        'X-License-URL': 'https://creativecommons.org/licenses/by/4.0/',
+        'X-Attribution': 'ServicesArtisans - Barometre Renovation Energetique 2026',
+        'X-Canonical-URL': 'https://servicesartisans.fr/barometre/renovation-energetique-2026',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/v1/barometre/renovation/export.csv] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
+  }
 }

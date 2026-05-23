@@ -8,6 +8,7 @@ import { requirePermission } from '@/lib/admin-auth'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
 import { getEstimationLeads, deleteEstimationLead } from '@/lib/services/admin-stats-service'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,7 +42,8 @@ export async function GET(request: NextRequest) {
       success: true,
       ...result,
     })
-  } catch {
+  } catch (error) {
+    logger.error('[api/admin/estimation-leads] GET failed', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -60,7 +62,8 @@ export async function DELETE(request: NextRequest) {
     await deleteEstimationLead(id)
 
     return NextResponse.json({ success: true })
-  } catch {
+  } catch (error) {
+    logger.error('[api/admin/estimation-leads] DELETE failed', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

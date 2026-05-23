@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { z } from 'zod'
 import { paginationSchema } from '@/lib/validations/schemas'
+import { logger } from '@/lib/logger'
 
 // GET query params schema
 const subscriptionsQuerySchema = paginationSchema.extend({
@@ -55,7 +56,8 @@ export async function GET(request: NextRequest) {
       page,
       totalPages: 0,
     })
-  } catch {
+  } catch (error) {
+    logger.error('[api/admin/subscriptions] GET failed', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*', // CORS: public API endpoint, intentionally allows cross-origin
@@ -98,7 +99,8 @@ export async function GET(request: NextRequest) {
         },
       }
     )
-  } catch {
+  } catch (error) {
+    logger.error('[api/v1/stats] GET failed', error)
     return NextResponse.json(
       { error: 'Erreur serveur inattendue.' },
       { status: 500, headers: CORS_HEADERS }

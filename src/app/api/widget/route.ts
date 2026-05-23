@@ -1,4 +1,5 @@
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 
 /**
  * Serves a lightweight JavaScript widget that artisans can embed on their websites.
@@ -10,23 +11,28 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
  * - name: artisan/business name
  */
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const service = searchParams.get('service') || ''
-  const ville = searchParams.get('ville') || ''
-  const name = searchParams.get('name') || ''
+  try {
+    const { searchParams } = new URL(request.url)
+    const service = searchParams.get('service') || ''
+    const ville = searchParams.get('ville') || ''
+    const name = searchParams.get('name') || ''
 
-  // Build the profile link
-  // Escape for safe JS string embedding
-  const esc = (s: string) =>
-    s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
+    // Build the profile link
+    // Escape for safe JS string embedding
+    const esc = (s: string) =>
+      s
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
 
-  const escapedName = esc(name)
-  const escapedService = esc(service)
-  const escapedVille = esc(ville)
-  const escapedSiteName = esc(SITE_NAME)
-  const escapedSiteUrl = esc(SITE_URL)
+    const escapedName = esc(name)
+    const escapedService = esc(service)
+    const escapedVille = esc(ville)
+    const escapedSiteName = esc(SITE_NAME)
+    const escapedSiteUrl = esc(SITE_URL)
 
-  const script = `(function(){
+    const script = `(function(){
   var c=document.getElementById('sa-widget');
   if(!c)return;
   var s=c.getAttribute('data-service')||'${escapedService}';
@@ -50,11 +56,15 @@ export async function GET(request: Request) {
   c.innerHTML=h;
 })();`
 
-  return new Response(script, {
-    headers: {
-      'Content-Type': 'application/javascript; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-      'Access-Control-Allow-Origin': '*', // CORS: public widget endpoint, intentionally allows cross-origin
-    },
-  })
+    return new Response(script, {
+      headers: {
+        'Content-Type': 'application/javascript; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+        'Access-Control-Allow-Origin': '*', // CORS: public widget endpoint, intentionally allows cross-origin
+      },
+    })
+  } catch (error) {
+    logger.error('[api/widget] GET failed', error)
+    return new Response('Erreur serveur', { status: 500 })
+  }
 }

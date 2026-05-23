@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,7 +38,8 @@ export async function GET() {
         role: profile?.role || 'client',
       },
     })
-  } catch {
+  } catch (error) {
+    logger.error('[api/auth/me] GET failed', error)
     return NextResponse.json({ user: null }, { status: 500 })
   }
 }

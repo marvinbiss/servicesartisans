@@ -2,41 +2,47 @@ import { createApiHandler, jsonResponse } from '@/lib/api/handler'
 import { createClient } from '@/lib/supabase/server'
 import { providerUpdateSchema } from '@/schemas/provider'
 import { NotFoundError } from '@/lib/errors'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 export const PATCH = createApiHandler(
   async ({ body, user }) => {
-    if (!user) throw new NotFoundError('Utilisateur')
-    const supabase = await createClient()
+    try {
+      if (!user) throw new NotFoundError('Utilisateur')
+      const supabase = await createClient()
 
-    // Get provider for this user
-    const { data: provider, error: fetchError } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
+      // Get provider for this user
+      const { data: provider, error: fetchError } = await supabase
+        .from('providers')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
 
-    if (fetchError || !provider) {
-      throw new NotFoundError('Profil artisan')
+      if (fetchError || !provider) {
+        throw new NotFoundError('Profil artisan')
+      }
+
+      // Update provider
+      const { data: updated, error: updateError } = await supabase
+        .from('providers')
+        .update({
+          ...body,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', provider.id)
+        .select()
+        .single()
+
+      if (updateError) {
+        throw updateError
+      }
+
+      return jsonResponse(updated)
+    } catch (error) {
+      logger.error('[api/provider/update] PATCH failed', error)
+      throw error
     }
-
-    // Update provider
-    const { data: updated, error: updateError } = await supabase
-      .from('providers')
-      .update({
-        ...body,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', provider.id)
-      .select()
-      .single()
-
-    if (updateError) {
-      throw updateError
-    }
-
-    return jsonResponse(updated)
   },
   {
     bodySchema: providerUpdateSchema,

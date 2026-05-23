@@ -13,6 +13,7 @@ import {
   getProviderForAvatar,
   updateProviderAvatarUrl,
 } from '@/lib/services/artisan-profile-service'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,105 +75,110 @@ function validateMagicBytes(bytes: Uint8Array): boolean {
 // =============================================================================
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const { error: guardError, user, supabase } = await requireArtisan()
-  if (guardError) return guardError
-
-  // Récupérer le provider lié à cet utilisateur
-
-  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
-
-  if (providerError || !provider) {
-    return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
-  }
-
-  // Parser le FormData et extraire le fichier
-  let formData: FormData
   try {
-    formData = await request.formData()
-  } catch {
-    return NextResponse.json(
-      { error: 'Corps de requête invalide. Attendu: multipart/form-data.' },
-      { status: 400 }
-    )
-  }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
-  const file = formData.get('file')
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: 'Champ "file" manquant ou invalide.' }, { status: 400 })
-  }
+    // Récupérer le provider lié à cet utilisateur
 
-  // Valider le type MIME déclaré et la taille
-  if (!isAllowedMimeType(file.type)) {
-    return NextResponse.json(
-      {
-        error: `Type de fichier non autorisé: ${file.type}. Types acceptés: JPEG, PNG, WebP.`,
-      },
-      { status: 422 }
-    )
-  }
+    const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
 
-  if (file.size > MAX_SIZE_BYTES) {
-    return NextResponse.json(
-      { error: 'Fichier trop volumineux. Taille maximale: 2 Mo.' },
-      { status: 422 }
-    )
-  }
-
-  // Bug 1 fix — Validation des magic bytes pour contrer le MIME type spoofing.
-  // Le file.type est fourni par le client et peut être falsifié. On lit les
-  // premiers octets du buffer pour confirmer le vrai format du fichier.
-  const buffer = await file.arrayBuffer()
-  const bytes = new Uint8Array(buffer)
-
-  if (!validateMagicBytes(bytes)) {
-    return NextResponse.json({ error: 'Format de fichier invalide' }, { status: 400 })
-  }
-
-  // Créer un Blob depuis le buffer validé (pas le File original) pour l'upload Storage.
-  // Cela garantit qu'on upload exactement les octets lus côté serveur.
-  const fileBlob = new Blob([buffer], { type: file.type })
-
-  // Supprimer l'ancien avatar s'il existe
-  const currentAvatarUrl = provider.avatar_url as string | null
-  if (currentAvatarUrl) {
-    const oldPath = storagePathFromUrl(currentAvatarUrl, 'avatars')
-    if (oldPath) {
-      // Erreur non bloquante: on continue même si la suppression échoue
-      await supabase.storage.from('avatars').remove([oldPath])
+    if (providerError || !provider) {
+      return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
     }
+
+    // Parser le FormData et extraire le fichier
+    let formData: FormData
+    try {
+      formData = await request.formData()
+    } catch {
+      return NextResponse.json(
+        { error: 'Corps de requête invalide. Attendu: multipart/form-data.' },
+        { status: 400 }
+      )
+    }
+
+    const file = formData.get('file')
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: 'Champ "file" manquant ou invalide.' }, { status: 400 })
+    }
+
+    // Valider le type MIME déclaré et la taille
+    if (!isAllowedMimeType(file.type)) {
+      return NextResponse.json(
+        {
+          error: `Type de fichier non autorisé: ${file.type}. Types acceptés: JPEG, PNG, WebP.`,
+        },
+        { status: 422 }
+      )
+    }
+
+    if (file.size > MAX_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: 'Fichier trop volumineux. Taille maximale: 2 Mo.' },
+        { status: 422 }
+      )
+    }
+
+    // Bug 1 fix — Validation des magic bytes pour contrer le MIME type spoofing.
+    // Le file.type est fourni par le client et peut être falsifié. On lit les
+    // premiers octets du buffer pour confirmer le vrai format du fichier.
+    const buffer = await file.arrayBuffer()
+    const bytes = new Uint8Array(buffer)
+
+    if (!validateMagicBytes(bytes)) {
+      return NextResponse.json({ error: 'Format de fichier invalide' }, { status: 400 })
+    }
+
+    // Créer un Blob depuis le buffer validé (pas le File original) pour l'upload Storage.
+    // Cela garantit qu'on upload exactement les octets lus côté serveur.
+    const fileBlob = new Blob([buffer], { type: file.type })
+
+    // Supprimer l'ancien avatar s'il existe
+    const currentAvatarUrl = provider.avatar_url as string | null
+    if (currentAvatarUrl) {
+      const oldPath = storagePathFromUrl(currentAvatarUrl, 'avatars')
+      if (oldPath) {
+        // Erreur non bloquante: on continue même si la suppression échoue
+        await supabase.storage.from('avatars').remove([oldPath])
+      }
+    }
+
+    // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
+    const ext = extensionFromMime(file.type)
+
+    const storagePath = `${user.id}/avatar.${ext}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(storagePath, fileBlob, { upsert: true, contentType: file.type })
+
+    if (uploadError) {
+      return NextResponse.json(
+        { error: `Échec de l'upload: ${uploadError.message}` },
+        { status: 500 }
+      )
+    }
+
+    // Obtenir l'URL publique
+    const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(storagePath)
+
+    const publicUrl = publicUrlData.publicUrl
+
+    // Mettre à jour la colonne avatar_url dans providers
+
+    const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, publicUrl)
+
+    if (updateError) {
+      return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
+    }
+
+    // Retourner l'URL publique
+    return NextResponse.json({ url: publicUrl }, { status: 200 })
+  } catch (error) {
+    logger.error('[api/artisan/avatar] POST failed', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
-
-  // Uploader le nouveau fichier dans Storage (fileBlob, pas file)
-  const ext = extensionFromMime(file.type)
-
-  const storagePath = `${user.id}/avatar.${ext}`
-
-  const { error: uploadError } = await supabase.storage
-    .from('avatars')
-    .upload(storagePath, fileBlob, { upsert: true, contentType: file.type })
-
-  if (uploadError) {
-    return NextResponse.json(
-      { error: `Échec de l'upload: ${uploadError.message}` },
-      { status: 500 }
-    )
-  }
-
-  // Obtenir l'URL publique
-  const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(storagePath)
-
-  const publicUrl = publicUrlData.publicUrl
-
-  // Mettre à jour la colonne avatar_url dans providers
-
-  const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, publicUrl)
-
-  if (updateError) {
-    return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
-  }
-
-  // Retourner l'URL publique
-  return NextResponse.json({ url: publicUrl }, { status: 200 })
 }
 
 // =============================================================================
@@ -180,52 +186,57 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 // =============================================================================
 
 export async function DELETE(): Promise<NextResponse> {
-  const { error: guardError, user, supabase } = await requireArtisan()
-  if (guardError) return guardError
+  try {
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
-  // Récupérer le provider et son avatar_url actuel
+    // Récupérer le provider et son avatar_url actuel
 
-  const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
+    const { data: provider, error: providerError } = await getProviderForAvatar(supabase, user.id)
 
-  if (providerError || !provider) {
-    return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
+    if (providerError || !provider) {
+      return NextResponse.json({ error: 'Profil artisan introuvable.' }, { status: 404 })
+    }
+
+    const currentAvatarUrl = provider.avatar_url as string | null
+
+    if (!currentAvatarUrl) {
+      return NextResponse.json({ error: 'Aucun avatar à supprimer.' }, { status: 404 })
+    }
+
+    // Bug 2 fix: si storagePathFromUrl retourne null, on ne peut pas localiser le
+    // fichier dans Storage. On refuse de nullifier avatar_url pour éviter un fichier
+    // orphelin (fichier en Storage mais URL supprimée de la DB sans le supprimer).
+    const storagePath = storagePathFromUrl(currentAvatarUrl, 'avatars')
+
+    if (!storagePath) {
+      return NextResponse.json(
+        { error: 'Impossible de localiser le fichier avatar' },
+        { status: 400 }
+      )
+    }
+
+    const { error: removeError } = await supabase.storage.from('avatars').remove([storagePath])
+
+    if (removeError) {
+      return NextResponse.json(
+        { error: `Échec de la suppression du fichier: ${removeError.message}` },
+        { status: 500 }
+      )
+    }
+
+    // Mettre avatar_url à NULL dans providers (uniquement après suppression réussie)
+
+    const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, null)
+
+    if (updateError) {
+      return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
+    }
+
+    // Retourner succès
+    return NextResponse.json({ success: true }, { status: 200 })
+  } catch (error) {
+    logger.error('[api/artisan/avatar] DELETE failed', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
-
-  const currentAvatarUrl = provider.avatar_url as string | null
-
-  if (!currentAvatarUrl) {
-    return NextResponse.json({ error: 'Aucun avatar à supprimer.' }, { status: 404 })
-  }
-
-  // Bug 2 fix: si storagePathFromUrl retourne null, on ne peut pas localiser le
-  // fichier dans Storage. On refuse de nullifier avatar_url pour éviter un fichier
-  // orphelin (fichier en Storage mais URL supprimée de la DB sans le supprimer).
-  const storagePath = storagePathFromUrl(currentAvatarUrl, 'avatars')
-
-  if (!storagePath) {
-    return NextResponse.json(
-      { error: 'Impossible de localiser le fichier avatar' },
-      { status: 400 }
-    )
-  }
-
-  const { error: removeError } = await supabase.storage.from('avatars').remove([storagePath])
-
-  if (removeError) {
-    return NextResponse.json(
-      { error: `Échec de la suppression du fichier: ${removeError.message}` },
-      { status: 500 }
-    )
-  }
-
-  // Mettre avatar_url à NULL dans providers (uniquement après suppression réussie)
-
-  const { error: updateError } = await updateProviderAvatarUrl(supabase, user.id, null)
-
-  if (updateError) {
-    return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
-  }
-
-  // Retourner succès
-  return NextResponse.json({ success: true }, { status: 200 })
 }

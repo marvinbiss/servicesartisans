@@ -14,6 +14,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const runtime = 'nodejs'
 export const revalidate = 86_400
@@ -182,26 +183,31 @@ function negotiate(accept: string): 'turtle' | 'jsonld' {
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const accept = req.headers.get('accept') ?? ''
-  const fmt = negotiate(accept)
-  if (fmt === 'turtle') {
-    return new NextResponse(TURTLE, {
+  try {
+    const accept = req.headers.get('accept') ?? ''
+    const fmt = negotiate(accept)
+    if (fmt === 'turtle') {
+      return new NextResponse(TURTLE, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/turtle; charset=utf-8',
+          'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+          'X-License': 'CC-BY-4.0',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    }
+    return NextResponse.json(JSONLD, {
       status: 200,
       headers: {
-        'Content-Type': 'text/turtle; charset=utf-8',
+        'Content-Type': 'application/ld+json; charset=utf-8',
         'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
         'X-License': 'CC-BY-4.0',
         'Access-Control-Allow-Origin': '*',
       },
     })
+  } catch (error) {
+    logger.error('[api/v1/kg/ontology] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
   }
-  return NextResponse.json(JSONLD, {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/ld+json; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-      'X-License': 'CC-BY-4.0',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
 }

@@ -281,7 +281,9 @@ export async function GET(request: NextRequest) {
       return new NextResponse(null, { status: 304, headers: responseHeaders })
     }
     return new NextResponse(xml, { headers: responseHeaders })
-  } catch {
+  } catch (error) {
+    const { logger } = await import('@/lib/logger')
+    logger.error('[api/sitemap-providers] GET failed', error)
     // Return empty but valid sitemap on error
     const xml =
       '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>'

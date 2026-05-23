@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { villes, regions } from '@/lib/data/france'
+import { logger } from '@/lib/logger'
 
 // This route is server-only — france.ts never reaches the client bundle via Header.tsx
 
@@ -61,10 +62,15 @@ const domTomRegions = regions.slice(13).map((r) => ({
 const payload = { citiesByRegion, popularCities, metroRegions, domTomRegions }
 
 export async function GET() {
-  return NextResponse.json(payload, {
-    headers: {
-      // Cache for 24 h at CDN edge, stale-while-revalidate for 7 days
-      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
-    },
-  })
+  try {
+    return NextResponse.json(payload, {
+      headers: {
+        // Cache for 24 h at CDN edge, stale-while-revalidate for 7 days
+        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/geo/menu-data] GET failed', error)
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+  }
 }

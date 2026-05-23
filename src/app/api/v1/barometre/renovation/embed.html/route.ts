@@ -18,6 +18,7 @@
  */
 import { NextResponse } from 'next/server'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-static'
 export const revalidate = 86400
@@ -129,16 +130,21 @@ function renderHtml(): string {
 }
 
 export async function GET() {
-  const html = renderHtml()
-  return new NextResponse(html, {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      // Embeds tiers : autoriser le cross-origin frame.
-      'Access-Control-Allow-Origin': '*',
-      'X-Frame-Options': 'ALLOWALL',
-      'Content-Security-Policy': 'frame-ancestors *',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-    },
-  })
+  try {
+    const html = renderHtml()
+    return new NextResponse(html, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        // Embeds tiers : autoriser le cross-origin frame.
+        'Access-Control-Allow-Origin': '*',
+        'X-Frame-Options': 'ALLOWALL',
+        'Content-Security-Policy': 'frame-ancestors *',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    })
+  } catch (error) {
+    logger.error('[api/v1/barometre/renovation/embed.html] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
+  }
 }

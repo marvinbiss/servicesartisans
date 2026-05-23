@@ -200,54 +200,59 @@ function buildManifest(): Record<string, unknown> {
 }
 
 export async function GET(_request: Request, ctx: { params: Promise<{ dataset: string }> }) {
-  const { dataset } = await ctx.params
-  if (!VALID_DATASETS.has(dataset)) {
-    return NextResponse.json({ error: 'dataset_not_found' }, { status: 404 })
-  }
-
-  const headersBase: Record<string, string> = {
-    'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=43200',
-    'Access-Control-Allow-Origin': '*',
-    'X-Robots-Tag': 'noindex, follow',
-    'X-Content-Type-Options': 'nosniff',
-  }
-
-  if (dataset === 'manifest.json') {
-    // Manifest = pure mémoire (pas de RPC), le sur-cacher n'a pas de sens.
-    // Le data.gouv bot doit voir une mise à jour de modified rapidement
-    // (audit code-reviewer 2026-04-29 P2-3).
-    return NextResponse.json(buildManifest(), {
-      headers: {
-        ...headersBase,
-        'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    })
-  }
-
-  let rows: LocalStatsRow[]
   try {
-    rows = await fetchLocalStats()
-  } catch {
-    return NextResponse.json({ error: 'dataset_unavailable' }, { status: 503 })
-  }
+    const { dataset } = await ctx.params
+    if (!VALID_DATASETS.has(dataset)) {
+      return NextResponse.json({ error: 'dataset_not_found' }, { status: 404 })
+    }
 
-  if (dataset === 'local-stats.csv') {
-    return new Response(rowsToCsv(rows), {
+    const headersBase: Record<string, string> = {
+      'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=43200',
+      'Access-Control-Allow-Origin': '*',
+      'X-Robots-Tag': 'noindex, follow',
+      'X-Content-Type-Options': 'nosniff',
+    }
+
+    if (dataset === 'manifest.json') {
+      // Manifest = pure mémoire (pas de RPC), le sur-cacher n'a pas de sens.
+      // Le data.gouv bot doit voir une mise à jour de modified rapidement
+      // (audit code-reviewer 2026-04-29 P2-3).
+      return NextResponse.json(buildManifest(), {
+        headers: {
+          ...headersBase,
+          'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      })
+    }
+
+    let rows: LocalStatsRow[]
+    try {
+      rows = await fetchLocalStats()
+    } catch {
+      return NextResponse.json({ error: 'dataset_unavailable' }, { status: 503 })
+    }
+
+    if (dataset === 'local-stats.csv') {
+      return new Response(rowsToCsv(rows), {
+        headers: {
+          ...headersBase,
+          'Content-Type': 'text/csv; charset=utf-8',
+          'Content-Disposition': 'inline; filename="servicesartisans-local-stats.csv"',
+        },
+      })
+    }
+
+    // local-stats.json (NDJSON streaming-friendly)
+    return new Response(rowsToNdjson(rows), {
       headers: {
         ...headersBase,
-        'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': 'inline; filename="servicesartisans-local-stats.csv"',
+        'Content-Type': 'application/x-ndjson; charset=utf-8',
+        'Content-Disposition': 'inline; filename="servicesartisans-local-stats.ndjson"',
       },
     })
+  } catch (error) {
+    logger.error('[api/open-data/[dataset]] GET failed', error)
+    return new NextResponse('Erreur serveur', { status: 500 })
   }
-
-  // local-stats.json (NDJSON streaming-friendly)
-  return new Response(rowsToNdjson(rows), {
-    headers: {
-      ...headersBase,
-      'Content-Type': 'application/x-ndjson; charset=utf-8',
-      'Content-Disposition': 'inline; filename="servicesartisans-local-stats.ndjson"',
-    },
-  })
 }
