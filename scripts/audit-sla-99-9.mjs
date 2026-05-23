@@ -42,6 +42,37 @@ import { glob } from 'glob'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 
+// ---------------------------------------------------------------------------
+// Couverture transverse (middleware) — évite les faux positifs par-route
+// ---------------------------------------------------------------------------
+// Le rate-limit est appliqué GLOBALEMENT dans le middleware sur tout `/api/`
+// (sauf /api/health) avec getRateLimitConfig + respect de failOpen. Auditer
+// `checkRateLimit` par fichier-route produit 210 faux positifs : chaque route
+// est déjà protégée à l'edge. On lit le middleware une fois pour confirmer.
+const MIDDLEWARE_SRC = (() => {
+  try {
+    return readFileSync(join(ROOT, 'src/middleware.ts'), 'utf8')
+  } catch {
+    return ''
+  }
+})()
+const MIDDLEWARE_RATE_LIMITS_API =
+  /startsWith\(['"]\/api\/['"]\)[\s\S]{0,800}?\bcheckRateLimit\s*\(/.test(MIDDLEWARE_SRC)
+
+// Un cron est « lourd » (et donc concerné par lease / cap / wall-clock) s'il
+// traite une collection : pagination Supabase (.range), boucle, fan-out
+// Promise.all, ou batch. Les crons triviaux (un seul insert/update, ping,
+// refresh court) n'ont pas besoin de verrou anti-double-run ni de cap — les
+// exiger = sur-ingénierie (décision produit 2026-05-23 : « crons lourds only »).
+function isHeavyCron(src) {
+  return (
+    /\.range\(/.test(src) ||
+    /\bfor\s*\(|\bfor\s+await\b|\bwhile\s*\(/.test(src) ||
+    /Promise\.all\(/.test(src) ||
+    /\bbatch|\bpaginat|PER_RUN|chunk/i.test(src)
+  )
+}
+
 const CWD = process.cwd()
 const argv = process.argv.slice(2)
 const FLAG_JSON = argv.includes('--json')
@@ -59,17 +90,21 @@ const TOP_N = (() => {
 const PATTERNS_API = [
   {
     id: 'rate_limit',
-    label: 'Rate-limit présent',
+    label: 'Rate-limit présent (middleware global OU par route)',
     severity: 'P0',
-    test: (src) => /\bcheckRateLimit\s*\(/.test(src),
+    // Couvert globalement par le middleware sur tout /api/ (cf. MIDDLEWARE_RATE_LIMITS_API).
+    test: (src) => MIDDLEWARE_RATE_LIMITS_API || /\bcheckRateLimit\s*\(/.test(src),
     appliesTo: (path) => !/\/api\/cron\//.test(path) && !/\/api\/health\//.test(path),
   },
   {
     id: 'rate_limit_fail_open',
-    label: 'Rate-limit failOpen:true',
+    label: 'Rate-limit failOpen respecté',
     severity: 'P0',
+    // Le middleware respecte le flag failOpen par bucket (getRateLimitConfig).
     test: (src) =>
-      !/\bcheckRateLimit\s*\(/.test(src) || /failOpen\s*:\s*true/.test(src),
+      MIDDLEWARE_RATE_LIMITS_API ||
+      !/\bcheckRateLimit\s*\(/.test(src) ||
+      /failOpen\s*:\s*true/.test(src),
     appliesTo: (path) => !/\/api\/cron\//.test(path),
   },
   {
@@ -134,10 +169,10 @@ const PATTERNS_CRON = [
   },
   {
     id: 'cron_secret_timing_safe',
-    label: 'CRON_SECRET timingSafeEqual',
+    label: 'CRON_SECRET timingSafeEqual (ou helper verifyCronSecret)',
     severity: 'P0',
     test: (src) =>
-      /timingSafeEqual|safeCompare|constantTimeEqual/.test(src) ||
+      /timingSafeEqual|safeCompare|constantTimeEqual|verifyCronSecret/.test(src) ||
       !/CRON_SECRET/.test(src),
   },
   {
@@ -145,12 +180,14 @@ const PATTERNS_CRON = [
     label: 'Lease anti-double-run',
     severity: 'P1',
     test: (src) => /acquire_cron_lease|cron_lease|p_name/.test(src),
+    appliesTo: (_path, src) => isHeavyCron(src),
   },
   {
     id: 'cron_cap',
     label: 'Cap MAX_*_PER_RUN',
     severity: 'P1',
     test: (src) => /MAX_[A-Z_]+_PER_RUN|\.limit\(\s*\d+\s*\)/.test(src),
+    appliesTo: (_path, src) => isHeavyCron(src),
   },
   {
     id: 'cron_wallclock',
@@ -158,6 +195,7 @@ const PATTERNS_CRON = [
     severity: 'P1',
     test: (src) =>
       /Date\.now\(\)\s*-\s*startedAt|MAX_RUNTIME_MS|wall.?clock|elapsed|maxDurationMs/.test(src),
+    appliesTo: (_path, src) => isHeavyCron(src),
   },
   {
     id: 'cron_abort_signal',
@@ -208,7 +246,7 @@ for (const file of apiFiles) {
   let score = 0
   let weight = 0
   for (const p of patterns) {
-    if (p.appliesTo && !p.appliesTo(rel)) continue
+    if (p.appliesTo && !p.appliesTo(rel, src)) continue
     const w = p.severity === 'P0' ? 10 : p.severity === 'P1' ? 5 : 2
     weight += w
     if (p.test(src)) {
