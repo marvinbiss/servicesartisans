@@ -126,9 +126,13 @@ const PATTERNS_API = [
     id: 'zod_validation',
     label: 'Zod validation sur body',
     severity: 'P1',
+    // N/A si pas de handler mutant, ou si aucun body de requête n'est lu
+    // (mutations basées sur params d'URL/session — rien à valider).
+    // constructEvent() = vérif signature cryptographique Stripe (plus fort que zod).
     test: (src) =>
       !/export\s+async\s+function\s+(POST|PUT|PATCH)/.test(src) ||
-      /\.safeParse\(|\.parse\(|validateRequest\(/.test(src),
+      !/\b(?:req|request|_req)\.(?:json|formData|text)\(\)/.test(src) ||
+      /\.safeParse\(|\.parse\(|validateRequest\(|constructEvent\(/.test(src),
     appliesTo: () => true,
   },
   {
