@@ -79,7 +79,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Aides panneau solaire 2026 : EDF OA, TVA, IR'
 const DESCRIPTION =
-  'Aides panneau solaire 2026 : prime EDF OA autoconsommation, TVA 10 % ≤ 3 kWc, exonération IR ≤ 3 kWc. PV PAS éligible MaPrimeRénov\\u2019 ni CEE — clarification anti-arnaque.'
+  'Aides panneau solaire 2026 : prime EDF OA autoconsommation, TVA 10 % ≤ 3 kWc, exonération IR ≤ 3 kWc. PV PAS éligible MaPrimeRénov’ ni CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

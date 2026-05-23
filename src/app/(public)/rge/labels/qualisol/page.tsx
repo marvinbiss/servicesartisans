@@ -53,7 +53,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'QualiSol 2026 : label RGE solaire thermique CESI / SSC'
 const DESCRIPTION =
-  'QualiSol 2026 : label RGE Qualit’EnR pour les installateurs de chauffe-eau solaire (CESI) et systèmes solaires combinés (SSC). Obligation aides MaPrimeRénov’ + CEE.'
+  'QualiSol 2026 : label RGE Qualit’EnR pour les installateurs de chauffe-eau solaire (CESI) et systèmes solaires combinés (SSC). Aides MaPrimeRénov’ + CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

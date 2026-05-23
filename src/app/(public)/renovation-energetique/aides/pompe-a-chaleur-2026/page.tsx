@@ -79,7 +79,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Aide pompe à chaleur 2026 : MPR, CEE, vraies aides'
 const DESCRIPTION =
-  "Aides pompe à chaleur 2026 : 4 vraies aides cumulables (MPR Bleu jusqu'à 5 000 €, CEE Coup de pouce 4 000 €, bonus passoire 1 500 €, éco-PTZ 30 000 €, TVA 5,5 %). Anti-arnaque PAC à 1 €."
+  "Aides pompe à chaleur 2026 : MPR Bleu jusqu'à 5 000 €, CEE Coup de pouce 4 000 €, bonus passoire 1 500 €, éco-PTZ, TVA 5,5 %. Anti-arnaque PAC à 1 €."
 
 export const metadata: Metadata = {
   title: TITLE,

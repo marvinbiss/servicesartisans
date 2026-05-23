@@ -19,7 +19,7 @@ const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), {
 export const metadata: Metadata = {
   title: "À propos — Annuaire d'artisans RGE certifiés",
   description:
-    "ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN. Annuaire gratuit et transparent.",
+    "ServicesArtisans référence des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN.",
   alternates: getAlternates('/a-propos'),
   robots: {
     index: true,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "À propos — Annuaire d'artisans RGE certifiés en France",
     description:
-      "ServicesArtisans référence uniquement des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN.",
+      "ServicesArtisans référence des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), vérifiés via la base ADEME et le registre SIREN.",
     url: `${SITE_URL}/a-propos`,
     type: 'website',
     images: [

@@ -64,7 +64,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Branchement et pose VMC 2026 : schéma, sécurité, sections'
 const DESCRIPTION =
-  'Branchement VMC 2026 : schéma raccordement mono-phase, NF C 15-100 volumes humides, section câble 2,5 mm², DDR 30 mA, pose caisson combles, raccordement gaines. Guide pro RGE Qualibat 8721.'
+  'Branchement VMC 2026 : raccordement mono-phase, NF C 15-100 volumes humides, section câble 2,5 mm², DDR 30 mA, pose caisson combles. Guide pro RGE.'
 
 export const metadata: Metadata = {
   title: TITLE,

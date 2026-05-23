@@ -77,7 +77,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Chaudière gaz 2026 : prix, types & alternatives'
 const DESCRIPTION =
-  'Chaudière gaz 2026 : 4 technologies (atmosphérique, basse temp, condensation, hybride), prix posés 3 500-9 500 €, statut RE2020 (interdite neuf), aides limitées, alternatives PAC.'
+  'Chaudière gaz 2026 : 4 technologies (atmosphérique, basse temp, condensation, hybride), prix posés 3 500-9 500 €, statut RE2020, alternatives PAC.'
 
 export const metadata: Metadata = {
   title: TITLE,

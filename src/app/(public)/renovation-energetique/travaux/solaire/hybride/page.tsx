@@ -74,7 +74,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Panneau solaire hybride PV-T 2026 : prix & marques'
 const DESCRIPTION =
-  'Panneau solaire hybride PV-T 2026 : 2-en-1 électricité + ECS, prix 12 000-20 000 €, rendement combiné 60-75 %, fabricants français DualSun et Systovi, aides cumulables.'
+  'Panneau solaire hybride PV-T 2026 : électricité + ECS, prix 12 000-20 000 €, rendement combiné 60-75 %, fabricants DualSun et Systovi, aides cumulables.'
 
 export const metadata: Metadata = {
   title: TITLE,

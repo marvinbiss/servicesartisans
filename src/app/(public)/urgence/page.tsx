@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   // Les sous-pages hors whitelist sont noindex (cf. URGENCE_RGE_COMPATIBLE_SLUGS).
   title: 'Artisan RGE en urgence : plomberie, chauffage, électricité',
   description:
-    'Plombier, chauffagiste, électricien, couvreur, climaticien : artisans RGE certifiés disponibles en urgence. Dépannage soir et week-end. Devis gratuit, SIREN vérifié.',
+    'Plombier, chauffagiste, électricien, couvreur, climaticien : artisans RGE certifiés disponibles en urgence. Devis gratuit, SIREN vérifié.',
   alternates: getAlternates(`/urgence`),
   openGraph: {
     locale: 'fr_FR',

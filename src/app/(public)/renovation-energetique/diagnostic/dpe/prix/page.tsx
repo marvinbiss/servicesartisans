@@ -69,7 +69,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Prix DPE 2026 : 100-250 € selon surface + comparatif'
 const DESCRIPTION =
-  'Prix DPE 2026 : appartement 90-180 €, maison 150-250 € TTC. Validité 10 ans, méthode 3CL-2021 opposable. Aide non, sauf MaPrimeAdapt’. Comparatif 3 diagnostiqueurs avant signature.'
+  'Prix DPE 2026 : appartement 90-180 €, maison 150-250 € TTC. Validité 10 ans, méthode 3CL-2021 opposable. Comparatif 3 diagnostiqueurs avant signature.'
 
 export const metadata: Metadata = {
   title: TITLE,

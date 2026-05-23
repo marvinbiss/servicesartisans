@@ -63,7 +63,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'VMC hygroréglable type B 2026 : prix, marques, économie'
 const DESCRIPTION =
-  'VMC hygroréglable type B 2026 : entrées + bouches hygro, modulation totale 5-45 m³/h. Prix posé 1 200-2 800 €. Économie chauffage 8-12 %. CEE 100-300 €. Top marques.'
+  'VMC hygroréglable type B 2026 : entrées + bouches hygro, modulation 5-45 m³/h. Prix posé 1 200-2 800 €. Économie chauffage 8-12 %. CEE 100-300 €.'
 
 export const metadata: Metadata = {
   title: TITLE,

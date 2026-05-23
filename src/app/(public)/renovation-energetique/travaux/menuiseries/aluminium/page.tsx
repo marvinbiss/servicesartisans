@@ -60,7 +60,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Menuiserie aluminium 2026 : prix, RPT, aides MaPrimeRénov’'
 const DESCRIPTION =
-  'Menuiserie aluminium 2026 : 800-1 800 €/fenêtre posée. Rupture pont thermique RPT obligatoire (Uw ≤ 1,3 W/m².K), Sw, profilés. Aides MaPrimeRénov’ + CEE. Comparatif PVC / alu / bois.'
+  'Menuiserie aluminium 2026 : 800-1 800 €/fenêtre posée. Rupture pont thermique RPT (Uw ≤ 1,3), aides MaPrimeRénov’ + CEE. Comparatif PVC / alu / bois.'
 
 export const metadata: Metadata = {
   title: TITLE,

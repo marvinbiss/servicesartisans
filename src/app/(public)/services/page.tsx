@@ -53,11 +53,11 @@ export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
   title: 'Tous les Métiers RGE Artisans 2026',
-  description: `${staticServicesList.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, peintre, couvreur, plombier, électricien. Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC), devis gratuit.`,
+  description: `${staticServicesList.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, couvreur, plombier, électricien. Devis gratuit.`,
   alternates: getAlternates('/services'),
   openGraph: {
     title: 'Tous les Métiers RGE Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers RGE du bâtiment. Artisans RGE certifiés dans 101 départements. Trouvez un professionnel certifié RGE, devis gratuit éligible MaPrimeRénov' & CEE.`,
+    description: `${staticServicesList.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, couvreur, plombier, électricien. Devis gratuit.`,
     url: `${SITE_URL}/services`,
     images: [
       {
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Tous les Métiers Artisans 2026 — Devis Gratuit 24h',
-    description: `${staticServicesList.length} métiers RGE du bâtiment : plombier, électricien, chauffagiste, couvreur, pompe à chaleur, isolation. Artisans certifiés ADEME, devis gratuit.`,
+    description: `${staticServicesList.length} métiers RGE du bâtiment : pompe à chaleur, isolation, chauffagiste, couvreur, plombier, électricien. Devis gratuit.`,
   },
 }
 

@@ -73,7 +73,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'VMC 2026 : types, prix, installation et aides (guide complet)'
 const DESCRIPTION =
-  'VMC 2026 : tout sur la ventilation mécanique contrôlée. 4 types comparés (autoréglable, hygro A/B, double flux), prix posés 500-6 500 €, MaPrimeRénov’ jusqu’à 2 500 €, obligation depuis 1982, économie 5-25 % chauffage.'
+  'VMC 2026 : 4 types comparés (autoréglable, hygro A/B, double flux), prix posés 500-6 500 €, MaPrimeRénov’ jusqu’à 2 500 €, économie 5-25 % chauffage.'
 
 export const metadata: Metadata = {
   title: TITLE,

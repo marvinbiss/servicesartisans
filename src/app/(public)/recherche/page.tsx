@@ -14,7 +14,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Rechercher un artisan RGE certifié',
   description:
-    "Recherchez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC) près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit éligible MaPrimeRénov' et CEE.",
+    'Recherchez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC) près de chez vous. Comparez avis et tarifs, obtenez un devis gratuit.',
   alternates: getAlternates(`/recherche`),
   openGraph: {
     title: 'Rechercher un artisan RGE — Trouvez le bon professionnel',

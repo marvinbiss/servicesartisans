@@ -35,7 +35,7 @@ const path = '/rge/glossaire'
 export const metadata: Metadata = {
   title: 'Glossaire RGE 2026 : QualiPAC, Qualibat, Qualifelec',
   description:
-    'Glossaire officiel des qualifications RGE 2026 : QualiPAC, QualiSol, QualiBois, Qualibat 7141 / 7144 / 7131, Qualifelec IRVE, OPQIBI 1905. Définitions et primes débloquées.',
+    'Glossaire des qualifications RGE 2026 : QualiPAC, QualiSol, QualiBois, Qualibat 7141/7144/7131, Qualifelec IRVE, OPQIBI 1905. Définitions et primes.',
   robots: {
     index: true,
     follow: true,

@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   // Sonergia rang 9 sur ce KW = striking distance.
   title: 'Pompe à chaleur prix 2026 : air-eau, air-air, géothermie + aides',
   description:
-    'Pompe à chaleur prix 2026 : air-air 3 000-8 000 €, air-eau 8 000-16 000 €, géothermique 15 000-30 000 €. MaPrimeRénov’ jusqu’à 11 000 €. Devis artisan RGE en 24h.',
+    'Pompe à chaleur prix 2026 : air-air 3 000-8 000 €, air-eau 8 000-16 000 €, géothermique 15 000-30 000 €. MaPrimeRénov’ jusqu’à 11 000 €.',
   alternates: getAlternates('/guides/pompe-a-chaleur'),
   openGraph: {
     title: 'Pompe à chaleur prix 2026 : tous les tarifs + aides MaPrimeRénov’',

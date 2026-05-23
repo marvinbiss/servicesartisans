@@ -56,7 +56,7 @@ const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const TITLE = 'Anah ou MaPrimeRénov’ 2026 : la fausse opposition expliquée'
 const DESCRIPTION =
-  "Anah vs MaPrimeRénov' 2026 : ce n'est pas une opposition. L'Anah GÈRE MaPrimeRénov' depuis 2020. Comparatif des 6 dispositifs Anah actuels (MPR, Loc'Avantages, MaPrimeAdapt…)."
+  "Anah vs MaPrimeRénov' 2026 : l'Anah GÈRE MaPrimeRénov' depuis 2020. Comparatif des 6 dispositifs Anah actuels (MPR, Loc'Avantages, MaPrimeAdapt…)."
 
 type AnahDispositif = {
   slug: string

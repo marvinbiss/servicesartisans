@@ -76,7 +76,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Prix installation climatisation 2026 : 1 500-15 000 €'
 const DESCRIPTION =
-  'Installation climatisation 2026 : monosplit 1 500-3 500 €, multisplit 3 000-8 000 €, gainable 6 000-15 000 €. Réversible, dépannage, attestation fluides obligatoire.'
+  'Installation climatisation 2026 : monosplit 1 500-3 500 €, multisplit 3 000-8 000 €, gainable 6 000-15 000 €. Réversible, attestation fluides.'
 
 export const metadata: Metadata = {
   title: TITLE,

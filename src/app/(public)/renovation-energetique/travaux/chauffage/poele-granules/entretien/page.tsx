@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Entretien poêle à granulés 2026 : prix & fréquence'
 const DESCRIPTION =
-  'Entretien poêle à granulés 2026 : nettoyage hebdo gratuit, ramonage 80-150 €, entretien annuel pro 150-220 € HT. 12 points contrôlés, garantie constructeur, sécurité CO.'
+  'Entretien poêle à granulés 2026 : nettoyage hebdo, ramonage 80-150 €, entretien annuel pro 150-220 € HT. 12 points contrôlés, sécurité CO.'
 
 export const metadata: Metadata = {
   title: TITLE,

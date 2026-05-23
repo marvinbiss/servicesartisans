@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'Validité DPE 2026 : durée 10 ans, renouvellement, vérification'
 const DESCRIPTION =
-  'Validité DPE 2026 : 10 ans depuis 1er juillet 2021. DPE 2013-2020 invalides depuis 2025. Comment vérifier, renouveler, contester. Méthode 3CL-2021 + correction 2024.'
+  'Validité DPE 2026 : 10 ans depuis le 1er juillet 2021. DPE 2013-2020 invalides depuis 2025. Comment vérifier, renouveler, contester.'
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -78,7 +78,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Chaudière granulés prix 2026 : maison 80-200 m², aides'
 const DESCRIPTION =
-  'Chaudière à granulés prix 2026 : 15 000-25 000 € posée selon puissance (15-30 kW). MaPrimeRénov’ Bleu 7 000 € + CEE BAR-TH-113 + Coup de pouce. Reste à charge 4 000-12 000 €. ROI 9-13 ans.'
+  'Chaudière à granulés prix 2026 : 15 000-25 000 € posée (15-30 kW). MaPrimeRénov’ Bleu 7 000 € + CEE BAR-TH-113. Reste à charge 4 000-12 000 €.'
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -84,7 +84,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Autoconsommation Solaire 2026 : kit, batterie, prime, ROI'
 const DESCRIPTION =
-  'Autoconsommation solaire 2026 : kit 7 500-15 000 € (3-6 kWc), Prime autoconso EDF OA + TVA 10 %. Batterie 5 000-10 000 €. ROI 8-12 ans. Avec/sans surplus injecté.'
+  'Autoconsommation solaire 2026 : kit 7 500-15 000 € (3-6 kWc), Prime autoconso EDF OA + TVA 10 %. Batterie 5 000-10 000 €. ROI 8-12 ans.'
 
 export const metadata: Metadata = {
   title: TITLE,

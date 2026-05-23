@@ -23,7 +23,7 @@ const PUBLISHED_DATE = getPublishedDate('/regions')
 export const metadata: Metadata = {
   title: 'Artisans RGE par Région — 18 Régions',
   description:
-    'Explorez les artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans les 18 régions de France. Métiers RGE rénovation énergétique. Recherche gratuite, devis sans engagement.',
+    'Explorez les artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) dans les 18 régions de France. Recherche gratuite, devis sans engagement.',
   alternates: getAlternates(`/regions`),
   openGraph: {
     title: 'Artisans RGE par Région — 18 Régions',

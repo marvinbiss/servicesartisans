@@ -66,7 +66,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'DPE classe F 2026 : interdiction location 2028, sauts F→E/D/C'
 const DESCRIPTION =
-  'DPE classe F en 2026 : 331-420 kWh/m²/an, 71-100 kg CO₂/m². Location interdite 1er janvier 2028 (33 mois) — urgence bailleurs. 4 sauts F→E/D/C/B chiffrés avec aides MPR.'
+  'DPE classe F en 2026 : 331-420 kWh/m²/an, 71-100 kg CO₂/m². Location interdite 1er janvier 2028. 4 sauts F→E/D/C/B chiffrés avec aides MPR.'
 
 export const metadata: Metadata = {
   title: TITLE,

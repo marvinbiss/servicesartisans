@@ -78,7 +78,7 @@ const AUTHOR_NAME = 'Isabelle Renault'
 
 const TITLE = 'Installation isolation 2026 : étapes ITE, ITI, combles + RGE'
 const DESCRIPTION =
-  'Installation isolation 2026 : guide pose ITE crépi/bardage 3-6 sem, combles 1-2 jours, ITI 5-10 jours. DTU 45.3 / 31.2. RGE Qualibat 7141/7142/8611 obligatoire pour MPR + CEE.'
+  'Installation isolation 2026 : pose ITE 3-6 sem, combles 1-2 jours, ITI 5-10 jours. DTU 45.3 / 31.2. RGE Qualibat 7141/7142/8611 pour MPR + CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -26,7 +26,7 @@ const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUB
 export const metadata: Metadata = {
   title: 'Avis Artisans RGE Certifiés 2026',
   description:
-    'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
+    'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, certification ADEME.',
   alternates: getAlternates('/avis'),
   robots: {
     index: true,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Avis Artisans RGE Certifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, certification ADEME.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Avis Artisans RGE Certifiés 2026 — Choisir un pro de confiance',
     description:
-      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Certification RGE vérifiée ADEME. Comparez les notes et choisissez un pro de confiance.',
+      'Avis vérifiés 2026 sur les artisans RGE certifiés : plombier, chauffagiste, pompe à chaleur et 21 métiers RGE. Comparez les notes, certification ADEME.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

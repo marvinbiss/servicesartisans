@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Baromètre Rénovation Énergétique 2026 — chiffres clés (CC-BY 4.0)'
 const DESCRIPTION =
-  'Baromètre Rénovation Énergétique 2026 ServicesArtisans : 30 millions de logements, 6,7M passoires, 700K dossiers MPR/an, 62K artisans RGE, marché 87 Mds€. Données CC-BY 4.0.'
+  'Baromètre Rénovation Énergétique 2026 : 30 millions de logements, 6,7M passoires, 700K dossiers MPR/an, 62K artisans RGE, marché 87 Mds€. CC-BY 4.0.'
 
 export const metadata: Metadata = {
   title: TITLE,

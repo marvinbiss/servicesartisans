@@ -72,7 +72,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Meilleur poêle à granulés 2026 : 8 marques comparées'
 const DESCRIPTION =
-  'Comparatif 8 marques de poêles à granulés 2026 (RIKA, MCZ, Edilkamin, Stuv, Wodtke, Palazzetti, Hark, Termoflux). 6 critères + 3 budgets (entry / mid / premium) + 4 erreurs à éviter.'
+  'Comparatif 8 marques de poêles à granulés 2026 (RIKA, MCZ, Edilkamin, Stuv, Wodtke, Palazzetti, Hark, Termoflux). 6 critères + 3 budgets.'
 
 export const metadata: Metadata = {
   title: TITLE,

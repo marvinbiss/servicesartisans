@@ -66,7 +66,7 @@ const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const TITLE = 'Aides rénovation énergétique par région 2026 : 13 régions'
 const DESCRIPTION =
-  "Aides rénovation énergétique 2026 par région : MaPrimeRénov', CEE, éco-PTZ + aides régionales cumulables. 13 régions métropolitaines, zones climatiques RT2012, dataset open-data."
+  "Aides rénovation énergétique 2026 par région : MaPrimeRénov', CEE, éco-PTZ + aides régionales cumulables. 13 régions, zones climatiques RT2012."
 
 // Alias court pour la lisibilité du JSX. Source canonique + verrou invariant
 // dans `region-hub-data.ts` (test `isRegionHubFeaturedOpInSeed`).

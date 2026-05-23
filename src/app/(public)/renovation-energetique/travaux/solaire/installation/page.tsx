@@ -77,7 +77,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Installation panneau solaire 2026 : étapes, démarches, RGE'
 const DESCRIPTION =
-  'Installation panneau solaire 2026 : chantier 1-3 jours, démarches Enedis + CRE + EDF OA 2-4 mois. Norme NF C 15-712-1, RGE QualiPV obligatoire pour prime autoconso + TVA 10 %.'
+  'Installation panneau solaire 2026 : chantier 1-3 jours, démarches Enedis + CRE + EDF OA 2-4 mois. RGE QualiPV obligatoire pour prime autoconso.'
 
 export const metadata: Metadata = {
   title: TITLE,

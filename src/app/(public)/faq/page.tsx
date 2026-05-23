@@ -18,7 +18,7 @@ const faqTitleRoot = 'FAQ — Questions Artisans RGE et Travaux'
 export const metadata: Metadata = {
   title: faqTitleRoot,
   description:
-    "Retrouvez les réponses aux questions fréquentes sur ServicesArtisans : annuaire 100% artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR), demande de devis, vérification ADEME.",
+    'Réponses aux questions fréquentes sur ServicesArtisans : annuaire 100% artisans RGE certifiés, demande de devis, vérification ADEME.',
   alternates: getAlternates('/faq'),
   openGraph: {
     title: faqTitle,

@@ -79,7 +79,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Ballon thermodynamique prix 2026 : ROI, marques & aides'
 const DESCRIPTION =
-  'Prix ballon thermodynamique 2026 : 2 200-4 800 € posé selon capacité (150-300 L). Comparatif Atlantic / Thermor / Ariston / De Dietrich / Auer. ROI 6-9 ans vs cumulus. MPR 1 200 € + CEE BAR-TH-148.'
+  'Prix ballon thermodynamique 2026 : 2 200-4 800 € posé selon capacité (150-300 L). Comparatif Atlantic / Thermor / Ariston. ROI 6-9 ans, MPR + CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

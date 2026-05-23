@@ -76,7 +76,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Panneau solaire thermique 2026 : prix CESI & SSC'
 const DESCRIPTION =
-  "Panneau solaire thermique 2026 : CESI 4-7 000 €, SSC 11-15 000 €, capteurs plans vs tubes, MaPrimeRénov' jusqu'à 4 000 € + CEE BAR-TH-101. Label Qualisol obligatoire."
+  "Panneau solaire thermique 2026 : CESI 4-7 000 €, SSC 11-15 000 €, capteurs plans vs tubes, MaPrimeRénov' jusqu'à 4 000 € + CEE. Label Qualisol."
 
 export const metadata: Metadata = {
   title: TITLE,

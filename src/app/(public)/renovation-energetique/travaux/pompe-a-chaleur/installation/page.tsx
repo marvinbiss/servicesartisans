@@ -82,7 +82,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Installation pompe à chaleur 2026 : étapes, durée, RGE QualiPAC'
 const DESCRIPTION =
-  'Installation PAC 2026 : 8 étapes du bilan thermique à la mise en service, durée 2-5 jours, RGE QualiPAC obligatoire pour aides MPR + CEE. Devis 3 artisans en 2 min.'
+  'Installation PAC 2026 : 8 étapes du bilan thermique à la mise en service, durée 2-5 jours, RGE QualiPAC obligatoire pour aides MPR + CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

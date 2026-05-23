@@ -137,7 +137,7 @@ const AUTHOR_NAME = 'Isabelle Renault'
 
 const TITLE = 'Prix isolation 2026 : ITE, ITI, combles au m² + aides'
 const DESCRIPTION =
-  'Prix isolation 2026 au m² : ITE 120-220 €/m², ITI 60-110 €/m², combles soufflés 20-45 €/m². MaPrimeRénov’ + CEE BAR-EN-101/103 + TVA 5,5 % avec RGE. Reste à charge typique 30-60 %.'
+  'Prix isolation 2026 au m² : ITE 120-220 €/m², ITI 60-110 €/m², combles soufflés 20-45 €/m². MaPrimeRénov’ + CEE BAR-EN-101/103 + TVA 5,5 %.'
 
 export const metadata: Metadata = {
   title: TITLE,

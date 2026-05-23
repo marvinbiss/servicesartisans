@@ -22,7 +22,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Artisans RGE par Département',
   description:
-    "Annuaire d'artisans RGE certifiés dans les 101 départements français. Trouvez un artisan RGE certifié près de chez vous pour vos travaux de rénovation énergétique. Devis gratuits, sans engagement.",
+    "Annuaire d'artisans RGE certifiés dans les 101 départements français pour vos travaux de rénovation énergétique. Devis gratuits, sans engagement.",
   alternates: getAlternates(`/departements`),
   openGraph: {
     title: 'Artisans RGE par Département — 101 Départements',

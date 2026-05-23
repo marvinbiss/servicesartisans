@@ -80,7 +80,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Prix ramonage cheminée 2026 : 50-150 € + obligation'
 const DESCRIPTION =
-  'Ramonage cheminée 2026 : 50-90 € pour cheminée/insert, 70-120 € poêle granulés, 90-150 € chaudière bois. Obligation annuelle (Décret 2023-741), certificat exigé.'
+  'Ramonage cheminée 2026 : 50-90 € cheminée/insert, 70-120 € poêle granulés, 90-150 € chaudière bois. Obligation annuelle (Décret 2023-741).'
 
 export const metadata: Metadata = {
   title: TITLE,

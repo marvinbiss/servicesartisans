@@ -24,7 +24,7 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Artisans RGE par Ville — Annuaire France',
-  description: `Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
+  description: `Trouvez un artisan RGE certifié dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits.`,
   alternates: getAlternates(`/villes`),
   openGraph: {
     title: 'Artisans RGE par Ville — Annuaire par commune en France',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Artisans RGE par Ville — Annuaire par commune en France',
-    description: `Trouvez un artisan RGE certifié dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits, sans engagement.`,
+    description: `Trouvez un artisan RGE certifié dans votre ville. ${villes.length} villes couvertes, annuaire par commune dans 101 départements. Devis gratuits.`,
   },
 }
 

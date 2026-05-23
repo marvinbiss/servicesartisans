@@ -76,7 +76,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'PAC eau-eau 2026 : nappe phréatique, COP 5-6, prix posée'
 const DESCRIPTION =
-  'PAC eau-eau 2026 : prélève les calories de la nappe phréatique. COP 5-6 (le plus performant), prix 18-30K€ posée, MPR jusqu’à 11 000 €. Déclaration DDT obligatoire.'
+  'PAC eau-eau 2026 : prélève les calories de la nappe phréatique. COP 5-6, prix 18-30K€ posée, MPR jusqu’à 11 000 €. Déclaration DDT obligatoire.'
 
 export const metadata: Metadata = {
   title: TITLE,

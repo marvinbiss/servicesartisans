@@ -68,7 +68,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'Prime CEE / Prime énergie 2026 : montants, comment l’obtenir'
 const DESCRIPTION =
-  'Prime CEE = prime énergie 2026 : EDF, Engie, TotalEnergies, Auchan… Tous les obligés versent la même prime. Cumul MaPrimeRénov’. Comparer les offres avant signature devis.'
+  'Prime CEE = prime énergie 2026 : EDF, Engie, TotalEnergies, Auchan… Tous versent la même prime. Cumul MaPrimeRénov’. Comparer avant signature.'
 
 export const metadata: Metadata = {
   title: TITLE,

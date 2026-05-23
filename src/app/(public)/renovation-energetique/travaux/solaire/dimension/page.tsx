@@ -81,7 +81,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Dimension panneau solaire 2026 : taille, poids, surface'
 const DESCRIPTION =
-  'Dimensions panneau solaire 2026 : 4 formats résidentiel (60/72 cellules + demi-cellules + full-black), largeur 99-115 cm, hauteur 165-205 cm, poids 18-26 kg, calcul surface toit nécessaire pour 3-9 kWc.'
+  'Dimensions panneau solaire 2026 : 4 formats résidentiel, largeur 99-115 cm, hauteur 165-205 cm, poids 18-26 kg, calcul surface toit pour 3-9 kWc.'
 
 export const metadata: Metadata = {
   title: TITLE,

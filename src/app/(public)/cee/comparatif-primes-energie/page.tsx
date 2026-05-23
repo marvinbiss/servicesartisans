@@ -86,7 +86,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Prime Énergie 2026 : comparatif EDF, Engie, TotalEnergies, Sonergia'
 const DESCRIPTION =
-  'Prime énergie / prime CEE 2026 : comparatif EDF, Engie, TotalEnergies, Sonergia, Hellio. Montants, conditions, délai paiement. Choisir le bon obligé pour son dossier.'
+  'Prime énergie / prime CEE 2026 : comparatif EDF, Engie, TotalEnergies, Sonergia, Hellio. Montants, conditions, délai de paiement par obligé.'
 
 export const metadata: Metadata = {
   title: TITLE,

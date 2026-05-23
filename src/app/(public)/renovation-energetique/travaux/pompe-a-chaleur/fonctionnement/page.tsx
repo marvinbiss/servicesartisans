@@ -78,7 +78,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Fonctionnement pompe à chaleur : cycle, COP, fluide frigo'
 const DESCRIPTION =
-  'Comment fonctionne une pompe à chaleur en 2026 : cycle thermodynamique 4 phases (évaporation, compression, condensation, détente), COP/SCOP, fluides R32/R290, dégivrage.'
+  'Comment fonctionne une pompe à chaleur en 2026 : cycle thermodynamique 4 phases (évaporation, compression, condensation, détente), COP/SCOP, fluides.'
 
 export const metadata: Metadata = {
   title: TITLE,

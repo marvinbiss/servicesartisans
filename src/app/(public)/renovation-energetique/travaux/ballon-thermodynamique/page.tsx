@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Ballon thermodynamique 2026 : prix, capacité & MPR'
 const DESCRIPTION =
-  "Ballon thermodynamique 2026 : prix 2 500-4 500 €, capacités 150-300 L, COP 3-3,5, classes A+ à A+++, marques Atlantic / Thermor / Ariston, MPR jusqu'à 1 200 € + CEE BAR-TH-148."
+  "Ballon thermodynamique 2026 : prix 2 500-4 500 €, capacités 150-300 L, COP 3-3,5, marques Atlantic / Thermor / Ariston, MPR jusqu'à 1 200 € + CEE."
 
 export const metadata: Metadata = {
   title: TITLE,

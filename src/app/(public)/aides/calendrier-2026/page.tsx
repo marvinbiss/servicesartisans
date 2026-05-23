@@ -68,7 +68,7 @@ const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const TITLE = 'Calendrier des aides rénovation 2026 : 11 dates clés à retenir'
 const DESCRIPTION =
-  "Calendrier officiel des aides rénovation énergétique 2026 : revalorisations barèmes, échéances dépôt MaPrimeRénov', deadlines factures, saisonnalité optimale par travaux. Source ANAH, ADEME, France Rénov'."
+  "Calendrier des aides rénovation énergétique 2026 : barèmes, échéances dépôt MaPrimeRénov', deadlines factures, saisonnalité par travaux. Source ANAH."
 
 const CATEGORY_ICONS: Record<CalendarEventCategory, typeof Calendar> = {
   bareme: Calculator,

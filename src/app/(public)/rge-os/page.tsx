@@ -23,7 +23,7 @@ import { safeJsonStringify } from '@/lib/seo/safe-json'
 const PAGE_PATH = '/rge-os'
 const PAGE_TITLE = 'RGE-OS — Première API publique ouverte du registre RGE ADEME'
 const PAGE_DESCRIPTION =
-  'RGE-OS expose le registre national RGE ADEME via une API publique CC-BY 4.0 : artisans certifiés normalisés, 14 endpoints (REST, GraphQL, SPARQL, MCP, Webhooks), SDK TypeScript et Python, spécifications OpenAPI 3.1 et AsyncAPI 3.0.0. Conformité Etalab 2.0.'
+  'RGE-OS expose le registre national RGE ADEME via une API publique CC-BY 4.0 : 14 endpoints (REST, GraphQL, SPARQL, MCP), SDK TypeScript et Python.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

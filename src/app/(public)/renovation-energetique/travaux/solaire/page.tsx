@@ -77,7 +77,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Panneau solaire 2026 : prix, aides, rendement'
 const DESCRIPTION =
-  'Panneau solaire 2026 : prix posé 7 500-19 000 € (3-9 kWc), prime autoconsommation EDF OA, TVA 10 %, rendement 14-22 %. Comparatif PV / hybride / souple, ROI 8-12 ans.'
+  'Panneau solaire 2026 : prix posé 7 500-19 000 € (3-9 kWc), prime autoconsommation EDF OA, TVA 10 %, rendement 14-22 %. Comparatif PV / hybride.'
 
 export const metadata: Metadata = {
   title: TITLE,

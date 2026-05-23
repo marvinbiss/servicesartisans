@@ -34,7 +34,7 @@ const PUBLISHED_DATE = getPublishedDate('/tarifs')
 export const metadata: Metadata = {
   title: 'Tarifs Artisans RGE 2026 : Prix par Métier',
   description:
-    'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
+    'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Devis gratuit.',
   alternates: getAlternates('/tarifs'),
   robots: {
     index: true,
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
     description:
-      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
+      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Devis gratuit.',
     url: `${SITE_URL}/tarifs`,
     type: 'website',
     images: [
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tarifs Artisans 2026 : Prix Moyens par Métier et Ville',
     description:
-      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Comparez 20+ métiers RGE + devis gratuit.',
+      'Tarifs artisans RGE 2026 : 35 à 90 €/h selon le métier. Prix plombier, électricien, chauffagiste, pompe à chaleur, isolation. Devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

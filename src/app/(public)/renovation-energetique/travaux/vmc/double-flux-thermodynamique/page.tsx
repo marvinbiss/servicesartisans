@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'VMC double flux thermodynamique 2026 : prix, ROI, marques'
 const DESCRIPTION =
-  'VMC double flux thermodynamique 2026 : 6 000-9 000 € posée, COP 3-4,5, MaPrimeRénov’ 2 500 € + CEE 500-1 200 €. Pré-chauffe hiver + rafraîchissement été. Marques Aldes, Atlantic, Zehnder.'
+  'VMC double flux thermodynamique 2026 : 6 000-9 000 € posée, COP 3-4,5, MaPrimeRénov’ 2 500 € + CEE. Pré-chauffe hiver, marques Aldes, Atlantic, Zehnder.'
 
 export const metadata: Metadata = {
   title: TITLE,

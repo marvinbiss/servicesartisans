@@ -35,7 +35,7 @@ const canonicalUrl = `${SITE_URL}/barometre`
 export const metadata: Metadata = {
   title: `Baromètre Artisans RGE 2026 — Stats métier`,
   description:
-    "Baromètre des artisans RGE certifiés en France : statistiques sur ~50 000 professionnels (Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Notes moyennes, avis, répartition par métier et ville. Source ADEME.",
+    'Baromètre des artisans RGE certifiés en France : statistiques sur ~50 000 professionnels. Notes, avis, répartition par métier et ville. Source ADEME.',
   alternates: getAlternates('/barometre'),
   robots: {
     index: true,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     title: `Baromètre des Artisans RGE 2026 | ${SITE_NAME}`,
     description:
-      "Statistiques temps réel sur ~50 000 artisans RGE certifiés en France (Qualibat, Qualifelec, QualiPAC, Qualit'EnR). Notes, avis, taux de vérification par métier et par ville.",
+      'Baromètre des artisans RGE certifiés en France : statistiques sur ~50 000 professionnels. Notes, avis, répartition par métier et ville. Source ADEME.',
     url: canonicalUrl,
     type: 'website',
     images: [

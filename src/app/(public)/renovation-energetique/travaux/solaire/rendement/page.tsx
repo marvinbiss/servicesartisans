@@ -62,7 +62,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Rendement panneau solaire 2026 : technos, calcul, dégradation 25 ans'
 const DESCRIPTION =
-  'Rendement panneau solaire 2026 : monocristallin 18-22 %, polycristallin 14-17 %, amorphe 6-9 %. Facteurs d’influence (climat, orientation, ombrage), calcul ROI, dégradation 0,5 %/an, garantie 25 ans.'
+  'Rendement panneau solaire 2026 : monocristallin 18-22 %, polycristallin 14-17 %, amorphe 6-9 %. Facteurs d’influence, calcul ROI, garantie 25 ans.'
 
 export const metadata: Metadata = {
   title: TITLE,

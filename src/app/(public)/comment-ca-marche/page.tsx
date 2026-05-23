@@ -26,7 +26,7 @@ import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan RGE certifié',
   description:
-    "Recherchez, comparez et contactez un artisan RGE certifié en 3 étapes. Annuaire 100% RGE (Qualibat, Qualifelec, QualiPAC) dans 101 départements. Éligibilité MaPrimeRénov' & CEE.",
+    "Recherchez, comparez et contactez un artisan RGE certifié en 3 étapes. Annuaire 100% RGE dans 101 départements. Éligibilité MaPrimeRénov' & CEE.",
   alternates: getAlternates('/comment-ca-marche'),
   robots: {
     index: true,

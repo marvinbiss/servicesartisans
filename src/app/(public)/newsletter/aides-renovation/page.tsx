@@ -53,7 +53,7 @@ const MODIFIED = '2026-05-04'
 
 const TITLE = 'Newsletter aides rénovation 2026 — actualités MaPrimeRénov, CEE'
 const DESCRIPTION =
-  'Recevez chaque mois les actualités MaPrimeRénov, CEE, Coup de pouce, Éco-PTZ : nouveaux barèmes 2026, calendrier passoires thermiques, gestes éligibles. Gratuit, désinscription en un clic.'
+  'Recevez chaque mois les actualités MaPrimeRénov, CEE, Coup de pouce, Éco-PTZ : barèmes 2026, calendrier passoires, gestes éligibles. Gratuit.'
 
 export const metadata: Metadata = {
   title: TITLE,

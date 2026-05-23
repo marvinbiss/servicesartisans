@@ -79,7 +79,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Pompe à chaleur hybride 2026 : prix, aides, fabricants'
 const DESCRIPTION =
-  "Système hybride PAC + chaudière gaz condensation 2026 : fonctionnement bivalent, 4 cas d'usage, comparatif vs PAC pure, 4 fabricants leaders, prix posé 14-22 K€, aides MPR + CEE jusqu'à 6 000 €."
+  "Système hybride PAC + chaudière gaz 2026 : fonctionnement bivalent, comparatif vs PAC pure, prix posé 14-22 K€, aides MPR + CEE jusqu'à 6 000 €."
 
 export const metadata: Metadata = {
   title: TITLE,

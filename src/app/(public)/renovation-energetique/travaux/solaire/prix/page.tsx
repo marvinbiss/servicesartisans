@@ -138,7 +138,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Panneau solaire prix 2026 : 3-9 kWc, ROI, aides'
 const DESCRIPTION =
-  'Panneau solaire prix 2026 : 3 kWc 7 000-10 000 €, 6 kWc 12 000-17 000 €, 9 kWc 17 000-25 000 € posé. Prime autoconso CRE jusqu’à 1 080 €, revente surplus EDF OA, TVA 10 %, ROI 8-12 ans.'
+  'Panneau solaire prix 2026 : 3 kWc 7 000-10 000 €, 6 kWc 12 000-17 000 €, 9 kWc 17 000-25 000 € posé. Prime autoconso CRE, revente EDF OA, TVA 10 %.'
 
 export const metadata: Metadata = {
   title: TITLE,

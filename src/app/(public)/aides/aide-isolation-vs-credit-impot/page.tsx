@@ -52,7 +52,7 @@ const REVIEWER = getReviewerForAuthor(AUTHOR)
 
 const TITLE = 'Aide isolation 2026 : le crédit d’impôt n’existe plus'
 const DESCRIPTION =
-  "Aide isolation vs crédit d'impôt 2026 : le CITE a été supprimé fin 2020. Les 4 dispositifs actuels qui le remplacent (MaPrimeRénov', CEE, TVA 5,5 %, éco-PTZ) avec montants et conditions."
+  "Aide isolation vs crédit d'impôt 2026 : le CITE a été supprimé fin 2020. Les 4 dispositifs qui le remplacent (MaPrimeRénov', CEE, TVA 5,5 %, éco-PTZ)."
 
 type Replacement = {
   slug: string

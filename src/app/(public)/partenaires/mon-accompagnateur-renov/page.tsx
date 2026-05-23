@@ -50,7 +50,7 @@ const MODIFIED = '2026-05-04'
 
 const TITLE = "Partenariat Mon Accompagnateur Rénov' — ServicesArtisans"
 const DESCRIPTION =
-  "ServicesArtisans propose aux Mon Accompagnateur Rénov' (MAR) agréés ANAH un flux de chantiers RGE certifiés. Partenariat mutualisé sur la France entière : leads exclusifs propriétaires Parcours accompagné MaPrimeRénov'."
+  "ServicesArtisans propose aux Mon Accompagnateur Rénov' (MAR) agréés ANAH un flux de chantiers RGE certifiés : leads exclusifs, France entière."
 
 const PARTNER_EMAIL = 'partenariats@servicesartisans.fr'
 

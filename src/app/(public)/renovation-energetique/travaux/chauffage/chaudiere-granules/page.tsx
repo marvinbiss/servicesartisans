@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Chaudière à granulés 2026 : prix & aides MPR'
 const DESCRIPTION =
-  "Chaudière à granulés 2026 : prix posé 15 000-25 000 €, aides MaPrimeRénov' jusqu'à 7 000 € + CEE 5 000 €, rendement 90-95 %, ROI 7-10 ans. Choisir un installateur RGE Qualibois."
+  "Chaudière à granulés 2026 : prix posé 15 000-25 000 €, MaPrimeRénov' jusqu'à 7 000 € + CEE 5 000 €, rendement 90-95 %, ROI 7-10 ans. RGE Qualibois."
 
 export const metadata: Metadata = {
   title: TITLE,

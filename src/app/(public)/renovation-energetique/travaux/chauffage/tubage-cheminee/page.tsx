@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Prix tubage cheminée 2026 : 50-150 €/m + obligation pose'
 const DESCRIPTION =
-  'Tubage cheminée 2026 : 50-150 €/ml (inox flexible 304L/316L/904L), 1 500-4 000 € posé. Obligation appareils modernes, NF DTU 24.1, classes T-P-W et certification.'
+  'Tubage cheminée 2026 : 50-150 €/ml (inox flexible 304L/316L/904L), 1 500-4 000 € posé. Obligation appareils modernes, NF DTU 24.1.'
 
 export const metadata: Metadata = {
   title: TITLE,

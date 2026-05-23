@@ -75,7 +75,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Disconnecteur chaudière 2026 : rôle, types, prix, contrôle'
 const DESCRIPTION =
-  'Disconnecteur chaudière 2026 : équipement anti-pollution OBLIGATOIRE (NF EN 1717, arrêté 30/11/2005). 4 types (CA, CB, BA, EB), contrôle annuel CB, prix achat 80-200 € + pose 80-150 €, 4 marques.'
+  'Disconnecteur chaudière 2026 : équipement anti-pollution obligatoire (NF EN 1717), 4 types (CA, CB, BA, EB), contrôle annuel, prix 80-200 € + pose.'
 
 export const metadata: Metadata = {
   title: TITLE,

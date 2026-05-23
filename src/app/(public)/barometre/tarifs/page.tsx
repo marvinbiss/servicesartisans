@@ -23,7 +23,7 @@ const canonicalUrl = `${SITE_URL}/barometre/tarifs`
 export const metadata: Metadata = {
   title: `Stats par métier RGE — Baromètre`,
   description:
-    "Consultez les statistiques par métier RGE certifié : pompe à chaleur, isolation, photovoltaïque, plomberie, électricité. Volumes, notes moyennes et avis par corps de métier RGE (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France 2026. Source ADEME.",
+    'Statistiques par métier RGE certifié : pompe à chaleur, isolation, photovoltaïque, plomberie, électricité. Volumes, notes et avis par métier 2026.',
   alternates: getAlternates('/barometre/tarifs'),
   robots: { index: true, follow: true },
   openGraph: {

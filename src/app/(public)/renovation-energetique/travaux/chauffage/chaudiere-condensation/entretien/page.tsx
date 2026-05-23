@@ -78,7 +78,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Entretien chaudière gaz 2026 : prix & obligation'
 const DESCRIPTION =
-  'Entretien chaudière gaz 2026 : obligation légale annuelle, prix 100-200 € HT, 12 points de contrôle, contrat ou ponctuel, attestation 2 ans. Choisir un pro QualiGaz.'
+  'Entretien chaudière gaz 2026 : obligation légale annuelle, prix 100-200 € HT, 12 points de contrôle, attestation 2 ans. Choisir un pro QualiGaz.'
 
 export const metadata: Metadata = {
   title: TITLE,

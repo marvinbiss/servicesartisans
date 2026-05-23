@@ -79,7 +79,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Remplacement chaudière gaz 2026 : prix, aides & alternatives'
 const DESCRIPTION =
-  "Remplacer ou changer sa chaudière gaz en 2026 : signaux d'alerte, 5 alternatives (condensation, PAC, hybride, biomasse), prix net après aides, planning chantier 4 phases, 10 erreurs à éviter."
+  "Remplacer sa chaudière gaz en 2026 : signaux d'alerte, 5 alternatives (condensation, PAC, hybride, biomasse), prix net après aides, planning chantier."
 
 export const metadata: Metadata = {
   title: TITLE,

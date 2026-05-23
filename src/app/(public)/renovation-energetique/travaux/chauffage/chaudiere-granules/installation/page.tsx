@@ -77,7 +77,7 @@ const AUTHOR_NAME = 'Jean-Pierre Duval'
 
 const TITLE = 'Installation chaudière à granulés 2026 : étapes & RGE'
 const DESCRIPTION =
-  'Installation chaudière granulés 2026 : chantier 3-5 jours, conduit T400-P1 obligatoire, désembouage circuit, silo 1-5 t. RGE Qualibois Module Chaudière obligatoire pour MPR + CEE BAR-TH-113.'
+  'Installation chaudière granulés 2026 : chantier 3-5 jours, conduit T400-P1, silo 1-5 t. RGE Qualibois Chaudière obligatoire pour MPR + CEE BAR-TH-113.'
 
 export const metadata: Metadata = {
   title: TITLE,

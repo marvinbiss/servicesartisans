@@ -16,7 +16,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Transparence IA — ServicesArtisans',
   description:
-    'Liste publique des agents IA utilisés par ServicesArtisans, leurs garde-fous (Critic, Calculator déterministe), modèles, sources officielles. Conformité AI Act + RGPD Art. 22.',
+    'Liste publique des agents IA de ServicesArtisans, leurs garde-fous, modèles et sources officielles. Conformité AI Act + RGPD Art. 22.',
   alternates: getAlternates(PAGE_PATH),
   openGraph: {
     type: 'website',

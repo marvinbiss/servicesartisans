@@ -39,7 +39,7 @@ export const revalidate = 86400
 // "chaudiere fioul" (2 300 vol, KD 0). Hellio rang 5 = striking distance.
 const TITLE = 'Chaudière fioul 2026 : interdiction, remplacement et aides'
 const DESCRIPTION =
-  'Chaudière fioul 2026 : interdite à l’installation depuis juillet 2022 (décret 2022-8). Remplacement PAC ou biomasse, aides cumulées 7 000-17 500 €. Devis artisan RGE 24 h.'
+  'Chaudière fioul 2026 : interdite à l’installation depuis juillet 2022 (décret 2022-8). Remplacement PAC ou biomasse, aides cumulées 7 000-17 500 €.'
 
 export const metadata: Metadata = {
   title: TITLE,

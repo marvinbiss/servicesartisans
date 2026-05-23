@@ -41,7 +41,7 @@ export const revalidate = 86400
 // KD 0) en plus de "radiateur inertie prix". Sonergia rang 5 = striking distance.
 const TITLE = 'Radiateur électrique basse consommation 2026 : inertie, prix, pose'
 const DESCRIPTION =
-  'Radiateur électrique basse consommation 2026 : inertie fluide 350-700 €, fonte/céramique 600-1 400 € posé. Économie 15-25 % vs convecteur. Pilotage Wi-Fi + CEE 200-400 €.'
+  'Radiateur électrique basse consommation 2026 : inertie fluide 350-700 €, fonte/céramique 600-1 400 € posé. Économie 15-25 %. Pilotage Wi-Fi + CEE.'
 
 export const metadata: Metadata = {
   title: TITLE,

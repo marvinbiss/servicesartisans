@@ -23,7 +23,7 @@ const canonicalUrl = `${SITE_URL}/barometre/regions`
 export const metadata: Metadata = {
   title: `Baromètre par région — Artisans RGE en France`,
   description:
-    "Découvrez les statistiques des artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie. Indices de prix, volumes et tendances 2026.",
+    'Statistiques des artisans RGE certifiés par région : Île-de-France, Auvergne-Rhône-Alpes, PACA, Occitanie. Indices de prix, volumes et tendances 2026.',
   alternates: getAlternates('/barometre/regions'),
   robots: { index: true, follow: true },
   openGraph: {

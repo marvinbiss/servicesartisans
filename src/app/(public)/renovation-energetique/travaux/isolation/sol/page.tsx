@@ -83,7 +83,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'Isolation plancher bas 2026 : vide-sanitaire, cave, prix'
 const DESCRIPTION =
-  'Isolation plancher bas 2026 : par dessous (cave, vide-sanitaire, garage) 25-50 €/m², par dessus 60-110 €/m², mousse projetée 35-70 €/m². Aides MPR + CEE BAR-EN-103, R ≥ 3 m².K/W.'
+  'Isolation plancher bas 2026 : par dessous 25-50 €/m², par dessus 60-110 €/m², mousse projetée 35-70 €/m². Aides MPR + CEE BAR-EN-103, R ≥ 3.'
 
 export const metadata: Metadata = {
   title: TITLE,

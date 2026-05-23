@@ -76,7 +76,7 @@ const AUTHOR_NAME = 'Marc Lefebvre'
 
 const TITLE = 'Installation ballon thermodynamique 2026 : étapes & prix pose'
 const DESCRIPTION =
-  'Installation ballon thermodynamique 2026 : guide pose 1-2 jours, prix 900-2 200 € main d’œuvre, conditions techniques (local 20 m³, ventilation, électricité), RGE QualiPAC obligatoire pour aides.'
+  'Installation ballon thermodynamique 2026 : pose 1-2 jours, prix 900-2 200 € main d’œuvre, conditions techniques, RGE QualiPAC obligatoire pour aides.'
 
 export const metadata: Metadata = {
   title: TITLE,

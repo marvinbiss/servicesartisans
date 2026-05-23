@@ -81,7 +81,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'DPE classe G 2026 : seuils, conséquences et travaux pour sortir'
 const DESCRIPTION =
-  'DPE classe G en 2026 : > 420 kWh/m²/an + > 100 kg CO₂/m². Location interdite depuis 2025, audit énergétique obligatoire à la vente, décote 10-15 %. 5 sauts G→F/E/D/C/B chiffrés.'
+  'DPE classe G en 2026 : > 420 kWh/m²/an. Location interdite depuis 2025, audit obligatoire à la vente, décote 10-15 %. 5 sauts G→F/E/D/C/B chiffrés.'
 
 export const metadata: Metadata = {
   title: TITLE,

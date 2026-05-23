@@ -38,7 +38,7 @@ export const revalidate = 86400
 
 const TITLE = 'Thermostat 2026 : prix, connecté ou programmable + aides CEE'
 const DESCRIPTION =
-  'Thermostat 2026 : programmable 30-80 €, connecté Wi-Fi 100-250 €, sans fil 50-150 €. Économie 15-25 % chauffage. CEE BAR-TH-118 : 50-150 € prime. Comparatif Netatmo, Tado, Nest.'
+  'Thermostat 2026 : programmable 30-80 €, connecté Wi-Fi 100-250 €, sans fil 50-150 €. Économie 15-25 % chauffage. CEE BAR-TH-118 : 50-150 € prime.'
 
 export const metadata: Metadata = {
   title: TITLE,

@@ -54,7 +54,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'DPE classe E 2026 : seuils, interdiction location 2034, sauts E→C/B'
 const DESCRIPTION =
-  'DPE classe E en 2026 : 251-330 kWh/m²/an, 51-70 kg CO₂/m². 24 % du parc français. Interdiction location au 1er janvier 2034. 3 sauts E→D/C/B chiffrés avec aides MaPrimeRénov’ 2026.'
+  'DPE classe E en 2026 : 251-330 kWh/m²/an, 24 % du parc. Interdiction location au 1er janvier 2034. 3 sauts E→D/C/B chiffrés avec aides MaPrimeRénov’.'
 
 export const metadata: Metadata = {
   title: TITLE,

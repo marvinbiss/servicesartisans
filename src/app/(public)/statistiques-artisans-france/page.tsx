@@ -190,7 +190,7 @@ const variationMoyenne = getVariationMoyenne()
 // ---------------------------------------------------------------------------
 
 const pageTitle = 'Statistiques Artisans France 2026'
-const pageDescription = `Chiffres clés du marché artisanal France 2026 : ~1,3M d'artisans (estimation INSEE/CMA), répartition géographique, tarifs moyens, rénovation énergétique, emploi. Sources officielles.`
+const pageDescription = `Chiffres clés du marché artisanal France 2026 : ~1,3M d'artisans (estimation INSEE/CMA), répartition géographique, tarifs moyens, emploi.`
 const pageUrl = `${SITE_URL}/statistiques-artisans-france`
 
 export const metadata: Metadata = {

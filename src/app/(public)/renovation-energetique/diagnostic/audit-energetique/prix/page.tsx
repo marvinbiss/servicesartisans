@@ -73,7 +73,7 @@ const AUTHOR_NAME = 'Claire Dubois'
 
 const TITLE = 'Audit énergétique prix 2026 : 500-1 500 € + aide 500 €'
 const DESCRIPTION =
-  'Audit énergétique prix 2026 : 500-1 200 € maison standard, 800-1 500 € grande maison. Aide ANAH 500 € (MPR Parcours accompagné). Obligatoire vente F/G/E + projets MPR > 5 000 €.'
+  'Audit énergétique prix 2026 : 500-1 200 € maison standard, 800-1 500 € grande maison. Aide ANAH 500 €. Obligatoire vente F/G/E + MPR > 5 000 €.'
 
 export const metadata: Metadata = {
   title: TITLE,

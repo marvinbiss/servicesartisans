@@ -17,13 +17,13 @@ export const revalidate = 3600 // ISR - revalidate every hour
 export const metadata: Metadata = {
   title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
   description:
-    "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Pompe à chaleur, isolation, photovoltaïque, plomberie et 20+ métiers RGE. Données SIREN officielles + certification RGE vérifiée ADEME.",
+    "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous : pompe à chaleur, isolation, photovoltaïque, plomberie.",
   alternates: getAlternates(`/artisans`),
   openGraph: {
     locale: 'fr_FR',
     title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
     description:
-      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) en France. 100 % des artisans publiés sont RGE — données SIREN officielles et certification RGE vérifiée ADEME.",
+      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous : pompe à chaleur, isolation, photovoltaïque, plomberie.",
     url: `${SITE_URL}/artisans`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Annuaire Artisans RGE Certifiés France — SIREN Vérifiés',
     description:
-      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous. Données SIREN officielles + certification RGE vérifiée ADEME.",
+      "Trouvez un artisan RGE certifié (Qualibat, Qualifelec, QualiPAC, Qualit'EnR) près de chez vous : pompe à chaleur, isolation, photovoltaïque, plomberie.",
   },
 }
 

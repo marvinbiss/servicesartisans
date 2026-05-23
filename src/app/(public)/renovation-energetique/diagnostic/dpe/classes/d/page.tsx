@@ -53,7 +53,7 @@ const AUTHOR_NAME = 'Sophie Martin'
 
 const TITLE = 'DPE classe D 2026 : seuils, % parc, sauts D→C/B'
 const DESCRIPTION =
-  'DPE classe D en 2026 : 181-250 kWh/m²/an. 30 % du parc résidentiel français — le plus gros segment. Pas concerné par interdictions location. 3 sauts D→C/B/A chiffrés avec aides MPR.'
+  'DPE classe D en 2026 : 181-250 kWh/m²/an, 30 % du parc résidentiel. Pas concerné par interdictions location. 3 sauts D→C/B/A chiffrés avec aides MPR.'
 
 export const metadata: Metadata = {
   title: TITLE,
