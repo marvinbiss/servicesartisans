@@ -42,6 +42,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import TopCitiesGrid from '@/components/seo/TopCitiesGrid'
+import ServiceQuestions from '@/components/seo/ServiceQuestions'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import dynamic from 'next/dynamic'
 import { getPublishedDate } from '@/lib/seo/published-dates'
@@ -799,6 +800,10 @@ export default async function TarifsServicePage({
           </div>
         </div>
       </section>
+
+      {/* Questions détaillées — inbound links vers le cluster /questions
+          (dé-orphelinage : PR contextuel depuis le hub tarifs). */}
+      <ServiceQuestions serviceSlug={service} serviceName={trade.name} />
 
       {/* Top 20 villes — maillage interne SEO */}
       <TopCitiesGrid

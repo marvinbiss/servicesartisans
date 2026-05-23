@@ -44,6 +44,7 @@ import { getDynamicLastModifiedByService } from '@/lib/seo/dynamic-lastmod'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import RgeGuideBlock from '@/components/rge/RgeGuideBlock'
 import RgeGlossaryBlock from '@/components/seo/RgeGlossaryBlock'
+import ServiceQuestions from '@/components/seo/ServiceQuestions'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { getDeepSections } from '@/lib/seo/trade-deep-sections'
 import { getTradeContent } from '@/lib/data/trade-content'
@@ -256,18 +257,28 @@ export default async function ServicePage({ params }: PageProps) {
     return null
   })
 
-  // Top 12 cities — single source of truth via mat-view `mv_provider_counts`
-  // (mig 312 + 516, RGE-aware). Le helper retourne villes triées par count RGE
-  // descendant ET le count pour rendre un badge "X artisans RGE" social proof.
-  // Avant pivot full RGE, ce hub listait des villes statiques qui partaient en
-  // notFound() côté /services/[s]/[v] (~50% des cas). Cf. lib/seo/valid-combos.ts.
-  const cityCounts = await getValidCityCountsForService(serviceSlug, { limit: 30 })
-  const cityCountMap = new Map(cityCounts.map((c) => [c.slug, c.count]))
-  const topCities: CityInfo[] = getStaticCities()
-    .filter((c) => cityCountMap.has(c.slug))
-    .map((c) => ({ ...c, rgeCount: cityCountMap.get(c.slug) }))
-    .sort((a, b) => (b.rgeCount ?? 0) - (a.rgeCount ?? 0))
-    .slice(0, 12)
+  // Top villes — single source of truth via mat-view `mv_provider_counts`
+  // (mig 312 + 516, RGE-aware). Le helper résout les codes INSEE → slug ville
+  // (cf. lib/insee-resolver — `city` = code INSEE pour ~91% des lignes) et
+  // agrège par ville (arrondissements sommés), trié par nb d'artisans RGE desc.
+  // On construit topCities directement depuis ces counts — PAS par intersection
+  // avec le top-12 population, qui vidait la liste quand les villes peuplées
+  // n'avaient pas d'artisan RGE. Cf. lib/seo/valid-combos.ts.
+  const cityCounts = await getValidCityCountsForService(serviceSlug, { limit: 12 })
+  const villeBySlug = new Map(villes.map((v) => [v.slug, v]))
+  let topCities: CityInfo[] = cityCounts.map((c) => {
+    const v = villeBySlug.get(c.slug)
+    return {
+      id: c.slug,
+      name: c.cityName,
+      slug: c.slug,
+      department_code: v?.departementCode,
+      region_name: v?.region,
+      rgeCount: c.count,
+    }
+  })
+  // Fallback gracieux si la MV échoue (timeout) — évite une section vide.
+  if (topCities.length === 0) topCities = getStaticCities()
 
   // Trade-specific rich content (prices, FAQ, certifications)
   const tradeBase = getTradeContent(serviceSlug)
@@ -688,6 +699,10 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Questions détaillées — inbound links vers le cluster /questions
+          (dé-orphelinage : PR contextuel depuis le hub métier). */}
+      <ServiceQuestions serviceSlug={serviceSlug} serviceName={service.name} />
 
       {/* Conseils succincts — gardés pour les services avec trade content */}
       {trade && trade.tips.length > 0 && (
