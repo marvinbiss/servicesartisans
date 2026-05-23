@@ -37,6 +37,7 @@ import { prestationsArticles } from './batch-prestations-problemes'
 import { piliersArticles } from './batch-piliers-2026'
 import { isolationPhoniqueArticles } from './batch-isolation-phonique'
 import { vagueETarifs2026Articles } from './batch-vague-e-tarifs-2026'
+import { prixVagueF2026Articles } from './batch-prix-vague-f-2026'
 
 export interface BlogArticle {
   title: string
@@ -150,6 +151,7 @@ const _rawArticles: Record<string, BlogArticle> = {
   ...piliersArticles,
   ...isolationPhoniqueArticles,
   ...vagueETarifs2026Articles,
+  ...prixVagueF2026Articles,
 }
 
 /** Filtered articles — redirected doublons excluded */
