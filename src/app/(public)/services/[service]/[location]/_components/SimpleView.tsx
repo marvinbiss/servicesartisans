@@ -188,7 +188,13 @@ export default function SimpleView({
         />
       )}
 
-      {/* Bloc 2 — ImmediateAnswerBlock (featured snippet bait) */}
+      {/* Bloc 2 — ImmediateAnswerBlock (featured snippet bait).
+          H2 sr-only : restaure l'outline sémantique (le bloc n'a aucun
+          heading visuel) + cible "prix {service} {ville}". Invisible pour
+          ne pas toucher le layout above-fold de conversion. */}
+      <h2 className="sr-only">
+        Prix {service.name.toLowerCase()} à {location.name} en 2026
+      </h2>
       <ImmediateAnswerBlock
         serviceName={service.name}
         villeName={location.name}
@@ -201,7 +207,12 @@ export default function SimpleView({
         variant="services"
       />
 
-      {/* Bloc 3 — Listing (ServiceLocationPageClient = hero + listing + map) */}
+      {/* Bloc 3 — Listing (ServiceLocationPageClient = hero + listing + map).
+          H2 sr-only : le hero/listing affiche du gras non-sémantique → on
+          ajoute le heading d'outline + cible "artisans rge {service} {ville}". */}
+      <h2 className="sr-only">
+        Artisans RGE {service.name.toLowerCase()} à {location.name}
+      </h2>
       <ServiceLocationPageClient
         service={service}
         location={location}
