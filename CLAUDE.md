@@ -126,6 +126,27 @@ Recherche Person: email d'abord, fallback phone. Retry DLQ: cron 6h, backoff exp
 Domaine canonical: `servicesartisans.fr` (apex, sans www). Le www → 301 qui casse les POST.
 `/api/revalidate` exige header `Origin: https://servicesartisans.fr`.
 
+## Crons — pattern SLA 99.9
+
+Tout cron sous `src/app/api/cron/**` doit passer `scripts/audit-sla-99-9.mjs` (objectif p0/p1/p2 = 0). Référence canonique : **`src/app/api/cron/cee-relance/route.ts`** (copier son squelette).
+
+**Obligatoire pour TOUS les crons (P0)** :
+
+- **Auth** : `verifyCronSecret(request.headers.get('authorization'))` de `@/lib/auth/verify-cron-secret` (comparaison `timingSafeEqual`, fail-closed si `CRON_SECRET` absent).
+- **Check-in** : wrapper `withCronCheckIn('cron-<name>', handler)` de `@/lib/monitoring/sentry-checkin` (monitoring Sentry).
+- **try/catch** englobant + `logger.error(...)` (forwardé à Sentry).
+
+**Obligatoire pour crons LOURDS uniquement (P1)** — un cron est « lourd » dès qu'il boucle, pagine, fait `Promise.all` ou des batches :
+
+- **Lease anti-double-run** via RPC `acquire_cron_lease(p_name TEXT, p_ttl_seconds INT) → bool` + `release_cron_lease(p_name TEXT)` (mig `409`+`411`, déjà en prod, `GRANT … service_role`). Acquisition avec `AbortController` 5 s ; not-acquired → `200 {skipped:true}` ; lease error → `500`. **Toujours** `release_cron_lease` dans un `finally` (le TTL sert de filet). `LEASE_NAME` unique par cron (`cron_<name>`), `LEASE_TTL_SECONDS = 15 * 60`.
+- **Cap par run** : const `MAX_<THING>_PER_RUN` appliqué en `.limit(...)` ou compteur `budget` — jamais d'ensemble non borné.
+- **Wall-clock** : `const startedAt = Date.now()` + `if (Date.now() - startedAt > MAX_RUNTIME_MS) break` dans la boucle, `MAX_RUNTIME_MS` sous le `maxDuration` Vercel (ex. 50 000 pour 60 s, 290 000 pour 300 s).
+- **AbortSignal** sur `.rpc()` lourds : `.abortSignal(AbortSignal.timeout(ms))`.
+
+Crons triviaux (action unique, pas de boucle) : auth + checkin + try/catch suffisent ; pas de lease/cap/wallclock (sinon code mort).
+
+Tests : mocker `.rpc('acquire_cron_lease')` → `{data:true}` et `release_cron_lease` → OK, avec `.abortSignal()` chaînable (cf. `__tests__/api/cron/cee-relance.test.ts`).
+
 ## Outils externes — Ahrefs API
 
 Token stocké hors repo : `/c/Users/USER/.secrets/ahrefs.env` (40 chars, préfixe `-fUKR_`). **Ne JAMAIS** copier dans `.env*` ni dans le repo.
