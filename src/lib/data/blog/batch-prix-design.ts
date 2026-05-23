@@ -235,7 +235,7 @@ export const prixDesignArticles: Record<string, BlogArticle> = {
     tags: ['Paysagiste', 'Tarifs 2026', 'Jardin', 'Terrasse', 'Élagage'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-26',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: "Combien coûte la création d'un jardin paysager en 2026 ?",

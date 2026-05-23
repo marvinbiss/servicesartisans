@@ -90,6 +90,8 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     'menuisier',
     [
       'prix-menuisier-2026-tarifs-travaux',
+      'prix-veranda-2026-guide-complet',
+      'prix-renovation-cuisine-guide-complet-2026',
       'comment-choisir-menuisier-guide',
       'menuiseries-bois-pvc-alu-comparatif',
     ],
@@ -106,6 +108,8 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
     'macon',
     [
       'prix-macon-2026-gros-oeuvre-renovation',
+      'extension-maison-prix-demarches-2026',
+      'prix-terrasse-exterieure-2026',
       'comment-choisir-macon-guide',
       'agrandir-maison-extension-guide',
     ],
@@ -137,6 +141,7 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   [
     'zingueur',
     [
+      'prix-zingueur-2026-tarifs-gouttiere',
       'comment-choisir-zingueur-guide',
       'prix-toiture-2026-refection-reparation-materiaux',
       'etancheite-toiture-terrasse-solutions',
@@ -157,6 +162,7 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   [
     'platrier',
     [
+      'prix-platrier-2026-tarifs-platerie',
       'plaque-de-platre-ba13-guide',
       'prix-renovation-appartement-2026-budget',
       'renovation-maison-par-ou-commencer',
@@ -165,6 +171,8 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
   [
     'salle-de-bain',
     [
+      'prix-renovation-salle-de-bain-guide-complet-2026',
+      'prix-douche-italienne-2026',
       'renovation-salle-de-bain-budget-etapes',
       'tendances-salle-de-bain-2026',
       'prix-salle-de-bain-complete-2026',

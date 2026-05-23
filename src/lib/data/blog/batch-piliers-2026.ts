@@ -319,7 +319,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-04',
-    updatedDate: '2026-04-29',
+    updatedDate: '2026-05-23',
     readTime: '16 min',
     category: 'Tarifs',
     tags: [
@@ -609,7 +609,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-07',
-    updatedDate: '2026-04-29',
+    updatedDate: '2026-05-23',
     readTime: '16 min',
     category: 'Tarifs',
     tags: ['cuisine', 'rénovation', 'prix', 'plan de travail', 'électroménager', '2026'],
@@ -1639,7 +1639,7 @@ Les fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3, 
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
     date: '2026-03-19',
-    updatedDate: '2026-04-29',
+    updatedDate: '2026-05-23',
     readTime: '15 min',
     category: 'Guides',
     tags: [

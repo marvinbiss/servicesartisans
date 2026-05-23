@@ -821,6 +821,7 @@ Trouvez des artisans RGE certifiés sur ServicesArtisans et commencez votre proj
     image: '🌡️',
     author: "L'équipe ServicesArtisans",
     date: '2026-02-25',
+    updatedDate: '2026-05-23',
     readTime: '10 min',
     category: 'Tarifs',
     tags: ['véranda', 'extension', 'prix', 'menuisier'],

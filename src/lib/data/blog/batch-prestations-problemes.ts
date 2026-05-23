@@ -238,10 +238,10 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     date: '2026-03-13',
     readTime: '12 min',
     category: 'Tarifs',
-    tags: ['Douche italienne', 'Salle de bain', 'Tarifs 2026', 'Carrelage'],
+    tags: ['Douche italienne', 'Salle de bain', 'Rénovation', 'Tarifs 2026', 'Carrelage'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-18',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: "Quel est le prix d'une douche italienne tout compris en 2026 ?",

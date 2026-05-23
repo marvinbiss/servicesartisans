@@ -201,7 +201,7 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
     tags: ['Zingueur', 'Tarifs 2026', 'Gros œuvre'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-22',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: 'Combien coûte le remplacement de gouttières en zinc en 2026 ?',
@@ -437,7 +437,7 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
     tags: ['Plâtrier', 'Tarifs 2026', 'Gros œuvre'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-30',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: 'Combien coûte une cloison en placo au m² en 2026 ?',

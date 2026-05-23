@@ -125,7 +125,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Serrurier', 'Tarifs 2026', 'Sécurité'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: 'Combien coûte une ouverture de porte claquée en 2026 ?',
@@ -1721,7 +1721,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     tags: ['Terrasse', 'Aménagement extérieur', 'Bois composite'],
     authorBio:
       "L'équipe éditoriale de ServicesArtisans analyse les prix du marché et consulte des artisans certifiés pour produire des guides fiables et actualisés.",
-    updatedDate: '2026-03-01',
+    updatedDate: '2026-05-23',
     faq: [
       {
         question: 'Quel est le meilleur matériau pour une terrasse en 2026 ?',
