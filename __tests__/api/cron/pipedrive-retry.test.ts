@@ -27,8 +27,20 @@ vi.mock('@/lib/integrations/pipedrive', () => ({
 
 const mockSupabaseSelect = vi.fn()
 const mockSupabaseFrom = vi.fn()
+const mockSupabaseRpc = vi.fn((fn: string) => {
+  const result =
+    fn === 'acquire_cron_lease' ? { data: true, error: null } : { data: null, error: null }
+  const builder: {
+    abortSignal: (s: AbortSignal) => typeof builder
+    then: Promise<typeof result>['then']
+  } = {
+    abortSignal: () => builder,
+    then: (onF, onR) => Promise.resolve(result).then(onF, onR),
+  }
+  return builder
+})
 vi.mock('@/lib/supabase/admin', () => ({
-  createAdminClient: vi.fn(() => ({ from: mockSupabaseFrom })),
+  createAdminClient: vi.fn(() => ({ from: mockSupabaseFrom, rpc: mockSupabaseRpc })),
 }))
 
 function buildRequest(secret?: string): Request {

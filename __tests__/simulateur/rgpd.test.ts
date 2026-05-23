@@ -141,6 +141,18 @@ function makeSupabaseStub(selectRows: MockRow[]) {
 
   const client = {
     from: vi.fn(() => buildChain()),
+    rpc: vi.fn((fn: string) => {
+      const result =
+        fn === 'acquire_cron_lease' ? { data: true, error: null } : { data: null, error: null }
+      const builder: {
+        abortSignal: (s: AbortSignal) => typeof builder
+        then: Promise<typeof result>['then']
+      } = {
+        abortSignal: () => builder,
+        then: (onF, onR) => Promise.resolve(result).then(onF, onR),
+      }
+      return builder
+    }),
   }
 
   return { client }

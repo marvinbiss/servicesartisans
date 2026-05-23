@@ -29,11 +29,39 @@ vi.mock('@/lib/monitoring/sentry', () => ({
   captureError: (...args: unknown[]) => mockCaptureError(...args),
 }))
 
+// `mockRpc` reste le spy que les tests configurent (.mockResolvedValueOnce)
+// et sur lequel les assertions portent (purge_audit_logs / find_inactive_users).
+// Le wrapper `rpc` ci-dessous intercepte les appels de lease anti-double-run
+// (acquire_cron_lease / release_cron_lease) SANS consommer la file séquentielle
+// de mockRpc, et rend chaque retour chaînable avec .abortSignal() (la route
+// appelle .abortSignal(AbortSignal.timeout(...)) sur les RPC métier).
 const mockRpc = vi.fn()
 const mockDeleteUser = vi.fn()
+
+// Convertit une valeur/Promise de résultat en builder PostgREST-like :
+// chaînable via .abortSignal() ET directement awaitable.
+function makeRpcBuilder(resultLike: unknown) {
+  const builder: {
+    abortSignal: (s: AbortSignal) => typeof builder
+    then: (onF?: (v: unknown) => unknown, onR?: (e: unknown) => unknown) => Promise<unknown>
+  } = {
+    abortSignal: () => builder,
+    then: (onF, onR) => Promise.resolve(resultLike).then(onF, onR),
+  }
+  return builder
+}
+
+const rpcWrapper = vi.fn((fn: string, args?: unknown) => {
+  if (fn === 'acquire_cron_lease') return makeRpcBuilder({ data: true, error: null })
+  if (fn === 'release_cron_lease') return makeRpcBuilder({ data: null, error: null })
+  // RPC métier : on délègue au spy séquentiel (préserve mockResolvedValueOnce
+  // + les assertions toHaveBeenCalledWith), puis on wrappe pour .abortSignal().
+  return makeRpcBuilder(mockRpc(fn, args))
+})
+
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(() => ({
-    rpc: mockRpc,
+    rpc: rpcWrapper,
     auth: { admin: { deleteUser: mockDeleteUser } },
   })),
 }))
