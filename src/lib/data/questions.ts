@@ -14,6 +14,17 @@ export interface Question {
   relatedService: string
   tags: string[]
   relatedQuestions?: string[]
+  /**
+   * Optional price grid rendered as a semantic <table>. Google lifts HTML
+   * tables into featured snippets for "prix … au m²" / "budget …" queries —
+   * the highest-value structural lever for the price-intent questions.
+   */
+  priceTable?: {
+    caption: string
+    columns: string[]
+    rows: string[][]
+    note?: string
+  }
 }
 
 export const categoryLabels: Record<QuestionCategory, string> = {
@@ -30,6 +41,19 @@ export const questions: Question[] = [
   // ============================================================
   {
     slug: 'combien-coute-plombier',
+    priceTable: {
+      caption: "Tarifs d'un plombier en 2026",
+      columns: ['Prestation', 'Prix'],
+      rows: [
+        ['Taux horaire', '40 à 70 € HT'],
+        ['Changement de robinet', '80 à 200 €'],
+        ['Débouchage de canalisation', '100 à 300 €'],
+        ['Réparation de fuite', '90 à 250 €'],
+        ['Intervention urgence (fuite, dégât des eaux)', '150 à 400 €'],
+        ['Majoration soir / week-end / férié', '+50 à 100 %'],
+      ],
+      note: 'Hors fournitures. Île-de-France +20 à 30 %. TVA à 10 % en rénovation (logement de plus de 2 ans).',
+    },
     question: 'Combien coûte un plombier ?',
     shortAnswer:
       "Un plombier coûte en moyenne 40 à 70 € de l'heure. Une intervention simple (robinet, joint) revient à 80-200 €, une urgence (fuite, dégât des eaux) coûte 150 à 400 € avec majorations le soir et le week-end.",
@@ -45,6 +69,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-renovation-salle-de-bain',
+    priceTable: {
+      caption: "Prix d'une rénovation de salle de bain en 2026",
+      columns: ['Type de rénovation', 'Prix'],
+      rows: [
+        ['Rafraîchissement (peinture, robinetterie)', '1 500 à 3 000 €'],
+        ['Rénovation partielle', '3 000 à 8 000 €'],
+        ['Rénovation complète (5 à 8 m²)', '8 000 à 15 000 €'],
+        ['Rénovation complète au m²', '800 à 1 500 €/m²'],
+        ["Douche à l'italienne posée", '1 200 à 3 500 €'],
+        ['Baignoire balnéo', '2 000 à 5 000 €'],
+      ],
+      note: "TVA à 10 % si le logement a plus de 2 ans. Douche PMR éligible MaPrimeRénov'.",
+    },
     question: "Quel est le prix d'une rénovation de salle de bain ?",
     shortAnswer:
       'Une rénovation de salle de bain coûte entre 3 000 et 15 000 € selon la surface et les prestations. Pour une rénovation complète (plomberie, carrelage, sanitaires), comptez 800 à 1 500 € par m².',
@@ -60,6 +97,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'tarif-electricien-au-m2',
+    priceTable: {
+      caption: "Tarif d'un électricien au m² en 2026",
+      columns: ['Prestation', 'Prix'],
+      rows: [
+        ['Installation neuve complète', '80 à 120 €/m²'],
+        ['Rénovation partielle', '50 à 80 €/m²'],
+        ['Remplacement câblage (logement ancien)', '100 à 150 €/m²'],
+        ['Mise en conformité du tableau', '800 à 2 000 €'],
+        ['Taux horaire', '40 à 60 € HT'],
+        ['Tableau domotique', '1 500 à 4 000 €'],
+      ],
+      note: 'Norme NF C 15-100. Attestation Consuel obligatoire pour le raccordement Enedis.',
+    },
     question: "Quel est le tarif d'un électricien au m² ?",
     shortAnswer:
       "Le tarif d'un électricien est de 80 à 120 € par m² pour une installation neuve complète, et de 50 à 80 € par m² pour une rénovation partielle. Le taux horaire moyen se situe entre 40 et 60 € HT.",
@@ -75,6 +125,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'cout-installation-chaudiere',
+    priceTable: {
+      caption: "Prix d'installation d'une chaudière en 2026",
+      columns: ['Équipement / aide', 'Montant'],
+      rows: [
+        ['Chaudière gaz à condensation (posée)', '3 000 à 7 000 €'],
+        ['Pompe à chaleur air-eau (tout compris)', '8 000 à 15 000 €'],
+        ['Chaudière à granulés de bois (posée)', '10 000 à 20 000 €'],
+        ["MaPrimeRénov'", '2 000 à 5 000 €'],
+        ['CEE', '500 à 2 500 €'],
+        ['Entretien annuel obligatoire', '120 à 200 €'],
+      ],
+      note: 'Chauffagiste RGE obligatoire pour les aides. Cumulées, elles couvrent 30 à 50 % du coût.',
+    },
     question: "Combien coûte l'installation d'une chaudière ?",
     shortAnswer:
       "L'installation d'une chaudière coûte entre 3 000 et 12 000 € selon le type. Une chaudière gaz à condensation revient à 3 000-6 000 € posée, une pompe à chaleur air-eau à 8 000-15 000 €. Des aides peuvent couvrir 30 à 50 % du coût.",
@@ -90,6 +153,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-peinture-appartement',
+    priceTable: {
+      caption: 'Prix pour peindre un appartement',
+      columns: ['Prestation', 'Prix au m²'],
+      rows: [
+        ['Tarif moyen (surface murale)', '20 à 40 €/m²'],
+        ['Entrée de gamme', '15 à 20 €/m²'],
+        ['Milieu de gamme', '25 à 35 €/m²'],
+        ['Haut de gamme', '35 à 50 €/m²'],
+        ['Supplément plafond', '+5 à 10 €/m²'],
+        ['Appartement de 60 m² au sol', '3 000 à 6 000 €'],
+      ],
+      note: 'Surface murale (murs + plafonds), pas au sol. TVA à 10 % si le logement a plus de 2 ans.',
+    },
     question: 'Quel est le prix pour peindre un appartement ?',
     shortAnswer:
       'Peindre un appartement coûte en moyenne 20 à 40 € par m² de surface murale (murs + plafonds). Pour un appartement de 60 m² au sol, comptez 3 000 à 6 000 € tout compris avec un peintre professionnel.',
@@ -105,6 +181,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'tarif-serrurier-urgence',
+    priceTable: {
+      caption: "Tarif d'un serrurier en urgence",
+      columns: ['Prestation', 'Prix'],
+      rows: [
+        ['Ouverture porte claquée (journée)', '80 à 150 €'],
+        ['Ouverture avec serrure forcée', '150 à 300 €'],
+        ['Changement de serrure', '150 à 450 €'],
+        ['Déplacement', '30 à 50 €'],
+        ['Intervention de nuit', '300 à 500 €'],
+        ['Majoration nuit / jour férié', '+75 à 100 %'],
+      ],
+      note: 'Exigez un devis écrit et signé avant intervention. Méfiez-vous des tarifs bas annoncés par téléphone.',
+    },
     question: "Quel est le tarif d'un serrurier en urgence ?",
     shortAnswer:
       "Un serrurier en urgence coûte entre 100 et 350 € en journée, et 200 à 500 € la nuit ou le week-end. L'ouverture d'une porte claquée revient à 80-150 €, un changement de serrure coûte 150 à 450 € selon le modèle.",
@@ -120,6 +209,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'cout-refaire-toiture',
+    priceTable: {
+      caption: "Prix de réfection d'une toiture au m²",
+      columns: ['Matériau / poste', 'Prix au m²'],
+      rows: [
+        ['Tuiles béton (posées)', '30 à 50 €/m²'],
+        ['Tuiles terre cuite (posées)', '40 à 60 €/m²'],
+        ['Zinc', '60 à 120 €/m²'],
+        ['Ardoise naturelle', '80 à 150 €/m²'],
+        ['Dépose ancienne couverture', '10 à 20 €/m²'],
+        ['Toiture complète (maison 100 m²)', '10 000 à 25 000 €'],
+      ],
+      note: 'Charpente +30 à 50 €/m² si nécessaire. Sarking (isolation) +100 à 200 €/m². Garantie décennale obligatoire.',
+    },
     question: "Combien coûte la réfection d'une toiture ?",
     shortAnswer:
       'Refaire une toiture coûte entre 100 et 250 € par m² selon le matériau (tuiles, ardoise, zinc). Pour une maison de 100 m² de toiture, le budget total se situe entre 10 000 et 25 000 € tout compris.',
@@ -147,9 +249,42 @@ export const questions: Question[] = [
     category: 'prix',
     relatedService: 'salle-de-bain',
     tags: ['carrelage', 'pose', 'prix au m²', 'carreleur'],
+    relatedQuestions: [
+      'prix-renovation-salle-de-bain',
+      'tarif-electricien-au-m2',
+      'prix-cuisine-equipee-pose',
+    ],
+    priceTable: {
+      caption: 'Prix de pose du carrelage au m² en 2026',
+      columns: ['Prestation', 'Prix au m²'],
+      rows: [
+        ['Pose droite standard (30×30, 45×45)', '30 à 45 €'],
+        ['Pose grand format (60×60 et plus)', '40 à 70 €'],
+        ['Pose diagonale ou en chevrons', '+10 à 15 €'],
+        ['Grès cérame basique (fourniture)', '15 à 25 €'],
+        ['Imitation bois ou pierre (fourniture)', '25 à 50 €'],
+        ['Carreaux de ciment (fourniture)', '60 à 100 €'],
+        ['Préparation (ragréage, dépose)', '10 à 25 €'],
+        ['Total pose + fourniture', '50 à 150 €'],
+      ],
+      note: "Prix moyens main-d'œuvre et fournitures, hors TVA. TVA à 10 % en rénovation (logement de plus de 2 ans). Prévoyez 10 % de carrelage supplémentaire pour les coupes.",
+    },
   },
   {
     slug: 'tarif-menuisier-sur-mesure',
+    priceTable: {
+      caption: "Tarif d'un menuisier pour du sur-mesure",
+      columns: ['Réalisation', 'Prix'],
+      rows: [
+        ['Taux horaire', '40 à 70 € HT'],
+        ['Placard sur mesure', '1 200 à 3 500 €'],
+        ['Dressing sur mesure', '1 500 à 6 000 €'],
+        ['Bibliothèque encastrée', '1 000 à 4 000 €'],
+        ['Plan de travail bois massif', '300 à 1 200 €'],
+        ["Porte d'entrée sur mesure", '1 000 à 3 500 €'],
+      ],
+      note: "Bois massif +30 à 50 % vs MDF/mélaminé. Ébéniste-agenceur spécialisé jusqu'à 80-100 €/h.",
+    },
     question: "Quel est le tarif d'un menuisier pour du sur-mesure ?",
     shortAnswer:
       "Un menuisier sur mesure facture 40 à 70 € de l'heure. Un meuble sur mesure coûte 500 à 5 000 € selon la taille et le matériau. Un dressing sur mesure revient à 1 500 à 6 000 €, une bibliothèque encastrée à 1 000 à 4 000 €.",
@@ -165,6 +300,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'cout-isolation-combles',
+    priceTable: {
+      caption: "Prix d'isolation des combles au m²",
+      columns: ['Technique / aide', 'Montant au m²'],
+      rows: [
+        ['Combles perdus (soufflage)', '20 à 50 €/m²'],
+        ['Combles aménagés (rampants)', '40 à 80 €/m²'],
+        ["Sarking (par l'extérieur)", '100 à 200 €/m²'],
+        ["MaPrimeRénov'", "jusqu'à 25 €/m²"],
+        ['CEE', "jusqu'à 12 €/m²"],
+        ['Reste à charge (ménages modestes)', '< 5 €/m²'],
+      ],
+      note: 'Artisan RGE obligatoire pour les aides. Viser R ≥ 7 (combles perdus), R ≥ 6 (rampants).',
+    },
     question: "Combien coûte l'isolation des combles ?",
     shortAnswer:
       "L'isolation des combles coûte 20 à 50 € par m² pour des combles perdus (soufflage) et 40 à 80 € par m² pour des combles aménagés. Les aides MaPrimeRénov' et CEE peuvent couvrir 50 à 90 % du coût.",
@@ -180,6 +328,17 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-installation-climatisation',
+    priceTable: {
+      caption: "Prix d'une installation de climatisation",
+      columns: ['Type', 'Prix posé'],
+      rows: [
+        ['Climatiseur mobile', '300 à 800 €'],
+        ['Monosplit (1 unité)', '1 500 à 3 500 €'],
+        ['Multisplit (2 à 5 unités)', '3 000 à 8 000 €'],
+        ['Climatisation gainable', '5 000 à 12 000 €'],
+      ],
+      note: 'Réversible (chaud/froid) = COP 3 à 4. Frigoriste certifié obligatoire (manipulation des fluides frigorigènes).',
+    },
     question: "Quel est le prix d'une installation de climatisation ?",
     shortAnswer:
       "L'installation d'une climatisation réversible coûte entre 1 500 et 5 000 € pour un split, et 5 000 à 10 000 € pour un multisplit (3-4 unités). Le climatiseur mobile est moins cher (300-800 €) mais moins performant.",
@@ -195,6 +354,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'cout-ravalement-facade',
+    priceTable: {
+      caption: "Prix d'un ravalement de façade au m²",
+      columns: ['Technique', 'Prix au m²'],
+      rows: [
+        ['Nettoyage haute pression', '15 à 30 €/m²'],
+        ['Peinture de façade', '20 à 45 €/m²'],
+        ['Enduit monocouche', '40 à 70 €/m²'],
+        ["ITE (isolation par l'extérieur)", '100 à 200 €/m²'],
+        ['Échafaudage', '10 à 25 €/m²'],
+        ['Maison 100 m² de façade', '3 000 à 10 000 €'],
+      ],
+      note: "Ravalement obligatoire tous les 10 ans dans certaines communes. ITE éligible MaPrimeRénov'/CEE. Façadier Qualibat.",
+    },
     question: 'Combien coûte un ravalement de façade ?',
     shortAnswer:
       "Un ravalement de façade coûte entre 30 et 100 € par m² selon la technique (nettoyage simple, enduit, peinture, ITE). Pour une maison de 100 m² de façade, prévoyez 3 000 à 10 000 €. L'ITE coûte 100 à 200 €/m².",
@@ -729,6 +901,19 @@ export const questions: Question[] = [
   // ============================================================
   {
     slug: 'prix-renovation-maison-m2',
+    priceTable: {
+      caption: "Prix de rénovation d'une maison au m²",
+      columns: ['Niveau / poste', 'Prix'],
+      rows: [
+        ['Rafraîchissement', '250 à 600 €/m²'],
+        ['Rénovation complète', '600 à 1 200 €/m²'],
+        ['Rénovation lourde (restructuration)', '1 200 à 2 000 €/m²'],
+        ['Maison 100 m² (rénovation complète)', '60 000 à 120 000 €'],
+        ['Charpente / toiture', '15 000 à 30 000 €'],
+        ['Mise aux normes électriques', '8 000 à 15 000 €'],
+      ],
+      note: '+20 à 40 % selon la région. Prévoir 10 à 15 % de marge pour les imprévus.',
+    },
     question: "Quel est le prix de rénovation d'une maison au m² ?",
     shortAnswer:
       "Le prix de rénovation d'une maison varie de 250 à 600 €/m² pour un rafraîchissement, 600 à 1 200 €/m² pour une rénovation complète et 1 200 à 2 000 €/m² pour une rénovation lourde avec restructuration.",
@@ -744,6 +929,18 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-extension-maison-m2',
+    priceTable: {
+      caption: "Prix d'une extension de maison au m²",
+      columns: ['Type de construction', 'Prix au m²'],
+      rows: [
+        ['Ossature bois', '1 000 à 1 800 €/m²'],
+        ['Construction traditionnelle (parpaing/brique)', '1 200 à 2 500 €/m²'],
+        ['Véranda', '800 à 2 500 €/m²'],
+        ['Surélévation', '2 000 à 3 500 €/m²'],
+        ['Extension 20 m² (traditionnelle)', '24 000 à 50 000 €'],
+      ],
+      note: 'Déclaration préalable < 20 m² (40 m² en zone PLU), permis au-delà. Architecte obligatoire si surface totale > 150 m².',
+    },
     question: 'Combien coûte une extension de maison au m² ?',
     shortAnswer:
       'Une extension de maison coûte entre 1 200 et 2 500 €/m² pour une construction traditionnelle, 1 000 à 1 800 €/m² en ossature bois et 2 000 à 3 500 €/m² pour une surélévation. Les prix incluent le gros œuvre et le second œuvre.',
@@ -759,6 +956,18 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-veranda-2026',
+    priceTable: {
+      caption: "Prix d'une véranda en 2026 au m²",
+      columns: ['Matériau', 'Prix au m²'],
+      rows: [
+        ['PVC', '800 à 1 200 €/m²'],
+        ['Aluminium', '1 200 à 2 000 €/m²'],
+        ['Bois', '1 500 à 2 500 €/m²'],
+        ['Acier / fer forgé', '2 000 à 3 500 €/m²'],
+        ['Véranda 15 m² alu (tout compris)', '20 000 à 35 000 €'],
+      ],
+      note: 'Triple vitrage + stores intégrés +15 à 25 %. Bioclimatique +30 %. Une véranda augmente la taxe foncière.',
+    },
     question: "Quel est le prix d'une véranda en 2026 ?",
     shortAnswer:
       'Une véranda coûte entre 15 000 et 50 000 € en 2026, soit 800 à 2 500 €/m². Le prix dépend du matériau (PVC, aluminium, bois), de la surface et du vitrage. Une véranda en aluminium de 15 m² revient à 20 000-35 000 €.',
@@ -774,6 +983,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-salle-de-bain-complete',
+    priceTable: {
+      caption: "Prix d'une rénovation complète de salle de bain (4 à 6 m²)",
+      columns: ['Gamme / poste', 'Prix'],
+      rows: [
+        ['Entrée de gamme', '5 000 à 8 000 €'],
+        ['Milieu de gamme', '8 000 à 15 000 €'],
+        ['Haut de gamme', '15 000 à 25 000 €'],
+        ['Carrelage murs et sol (posé)', '2 000 à 5 000 €'],
+        ['Plomberie et évacuation', '1 500 à 3 000 €'],
+        ["Douche à l'italienne", '2 500 à 5 000 €'],
+      ],
+      note: "Déplacer la plomberie : +1 000 à 3 000 €. Dépose de l'ancienne salle de bain : 500 à 1 500 €.",
+    },
     question: 'Combien coûte une rénovation complète de salle de bain ?',
     shortAnswer:
       "Une rénovation complète de salle de bain coûte entre 5 000 et 15 000 € pour une salle de bain standard (4-6 m²). Le budget monte à 15 000-25 000 € pour une salle de bain haut de gamme avec douche à l'italienne et meuble sur mesure.",
@@ -801,6 +1023,23 @@ export const questions: Question[] = [
     category: 'prix',
     relatedService: 'menuisier',
     tags: ['cuisine équipée', 'pose', 'prix', 'budget', 'cuisiniste'],
+    relatedQuestions: [
+      'tarif-menuisier-sur-mesure',
+      'prix-pose-carrelage-m2',
+      'prix-renovation-salle-de-bain',
+    ],
+    priceTable: {
+      caption: "Budget d'une cuisine équipée posée en 2026",
+      columns: ['Gamme ou poste', 'Budget pose comprise'],
+      rows: [
+        ['Entrée de gamme (grande surface)', '5 000 à 12 000 €'],
+        ['Milieu de gamme (cuisiniste)', '12 000 à 25 000 €'],
+        ['Haut de gamme / sur mesure', '25 000 à 50 000 €'],
+        ['Pose seule', '1 500 à 5 000 €'],
+        ['Plan de travail (au mètre linéaire)', '200 € (stratifié) à 800 € (granit)'],
+      ],
+      note: 'Cuisine de 6 à 8 mètres linéaires, électroménager inclus. La pose représente 15 à 25 % du budget total. TVA à 10 % en rénovation.',
+    },
   },
 
   // ============================================================
@@ -940,6 +1179,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-renovation-electrique-appartement',
+    priceTable: {
+      caption: "Prix d'une rénovation électrique complète",
+      columns: ['Poste', 'Prix'],
+      rows: [
+        ['Mise aux normes standard', '80 à 120 €/m²'],
+        ['Installation vétuste', '120 à 150 €/m²'],
+        ['Tableau électrique', '800 à 2 500 €'],
+        ['Câblage complet', '30 à 50 €/m²'],
+        ['Prise ou interrupteur (posé)', '15 à 40 € pièce'],
+        ['Appartement 70 m² (TTC)', '6 000 à 12 000 €'],
+      ],
+      note: 'Norme NF C 15-100. Passage Consuel 500 à 1 000 €. TVA à 10 % si le logement a plus de 2 ans.',
+    },
     question: 'Combien coûte une rénovation électrique complète ?',
     shortAnswer:
       'Une rénovation électrique complète coûte entre 80 et 150 €/m² selon l’état de l’installation existante. Pour un appartement de 70 m², comptez 6 000 à 12 000 € TTC, incluant tableau, câblage, prises, interrupteurs et mise aux normes NF C 15-100.',
@@ -985,6 +1237,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'depannage-plomberie-nuit-weekend',
+    priceTable: {
+      caption: 'Tarif dépannage plomberie nuit et week-end',
+      columns: ['Intervention', 'Prix'],
+      rows: [
+        ['Débouchage de canalisation', '200 à 450 €'],
+        ['Réparation de fuite', '150 à 400 €'],
+        ["Remplacement robinet d'arrêt", '180 à 350 €'],
+        ['Dégorgement de WC', '150 à 350 €'],
+        ['Déplacement urgence de nuit', '80 à 150 €'],
+        ['Majoration nuit / dimanche / férié', '+50 à 100 %'],
+      ],
+      note: "Soir et samedi après-midi : +25 à 50 %. Exigez un devis écrit. Coupez l'arrivée d'eau en attendant.",
+    },
     question: 'Dépannage plomberie nuit et week-end : quel tarif ?',
     shortAnswer:
       'Un dépannage plomberie de nuit ou le week-end coûte 150 à 500 € selon l’intervention. Les majorations sont de 50 à 100 % par rapport au tarif normal. Exigez un devis écrit avant toute intervention et méfiez-vous des tarifs excessifs pratiqués par certains dépanneurs.',
@@ -1000,6 +1265,18 @@ export const questions: Question[] = [
   },
   {
     slug: 'renovation-cuisine-combien-temps',
+    priceTable: {
+      caption: "Durée d'une rénovation de cuisine",
+      columns: ['Type de travaux', 'Durée'],
+      rows: [
+        ['Rafraîchissement (peinture, crédence)', '3 à 5 jours'],
+        ['Remplacement meubles (réseaux existants)', '1 à 2 semaines'],
+        ['Rénovation complète (réseaux modifiés)', '3 à 6 semaines'],
+        ['Fabrication cuisine sur mesure', '4 à 8 semaines'],
+        ['Cuisine en kit (Ikea, Leroy Merlin)', '1 à 2 semaines'],
+      ],
+      note: 'Planning type complet : démolition 1 sem. + plomberie/élec 1 sem. + carrelage/peinture 1 sem. + pose 1 à 2 sem.',
+    },
     question: 'Combien de temps dure une rénovation de cuisine ?',
     shortAnswer:
       'Une rénovation de cuisine complète dure 3 à 6 semaines en moyenne. Un simple remplacement de meubles prend 1 à 2 semaines. Les délais les plus longs concernent la commande des meubles sur mesure (4 à 8 semaines) et les travaux de plomberie/électricité.',
@@ -1705,6 +1982,18 @@ export const questions: Question[] = [
   // ============================================================
   {
     slug: 'prix-peinture-m2-maison',
+    priceTable: {
+      caption: 'Prix de la peinture au m² en 2026',
+      columns: ['Surface', 'Prix au m² (TTC)'],
+      rows: [
+        ['Murs intérieurs (entrée de gamme)', '20 à 30 €/m²'],
+        ['Murs intérieurs (milieu-haut de gamme)', '35 à 45 €/m²'],
+        ['Plafonds', '25 à 50 €/m²'],
+        ['Peinture décorative (béton ciré, stucco)', '50 à 90 €/m²'],
+        ['Façade extérieure', '30 à 80 €/m²'],
+      ],
+      note: "Main-d'œuvre + fournitures. TVA à 10 % si logement de plus de 2 ans. 1 m² au sol ≈ 2,5 à 3 m² de surface murale.",
+    },
     question: 'Quel est le prix de la peinture au m² en 2026 ?',
     shortAnswer:
       "En 2026, le prix de la peinture au m² varie de 20 à 45 € TTC (main-d'œuvre + fournitures) pour des murs intérieurs. Les plafonds coûtent 25 à 50 €/m² et une façade extérieure 30 à 80 €/m² selon l'état du support.",
@@ -1721,6 +2010,19 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-renovation-cuisine-complete',
+    priceTable: {
+      caption: "Prix d'une rénovation de cuisine complète (10 à 15 m²)",
+      columns: ['Gamme / poste', 'Prix'],
+      rows: [
+        ['Entrée de gamme (total)', '8 000 à 15 000 €'],
+        ['Milieu de gamme (total)', '12 000 à 20 000 €'],
+        ['Haut de gamme', '30 000 à 50 000 €'],
+        ['Plan de travail stratifié', '80 à 200 €/ml'],
+        ['Plan de travail quartz', '200 à 500 €/ml'],
+        ['Plan de travail granit', '250 à 600 €/ml'],
+      ],
+      note: "Meubles + plan de travail = 40 à 50 % du budget. Cuisiniste indépendant 15 à 25 % moins cher. TVA 10 % sur la main-d'œuvre.",
+    },
     question: 'Combien coûte une rénovation de cuisine complète ?',
     shortAnswer:
       "Une rénovation de cuisine complète coûte entre 8 000 et 25 000 € pour une cuisine standard (10-15 m²). Ce budget inclut les meubles, l'électroménager, la plomberie, l'électricité et la pose. Une cuisine haut de gamme peut atteindre 30 000 à 50 000 €.",
@@ -1865,6 +2167,18 @@ export const questions: Question[] = [
   },
   {
     slug: 'prix-renovation-complete-m2',
+    priceTable: {
+      caption: "Prix d'une rénovation complète au m² en 2026",
+      columns: ['Niveau', 'Prix au m²'],
+      rows: [
+        ['Rafraîchissement léger', '200 à 500 €/m²'],
+        ['Rénovation moyenne', '500 à 800 €/m²'],
+        ['Rénovation complète standard', '800 à 1 500 €/m²'],
+        ['Rénovation lourde (structure)', '1 200 à 2 000 €/m²'],
+        ['Appartement 70 m² (complète)', '56 000 à 105 000 €'],
+      ],
+      note: 'Île-de-France +20 à 30 %. Diagnostic amiante/plomb 300 à 600 €. Marge imprévus 10 à 15 %. TVA 10 % (5,5 % perf. énergétique).',
+    },
     question: "Quel est le prix d'une rénovation complète au m² ?",
     shortAnswer:
       "Le prix d'une rénovation complète varie de 800 à 1 500 €/m² en 2026 pour un appartement ou une maison. Un rafraîchissement léger coûte 200 à 500 €/m², une rénovation moyenne 500 à 800 €/m², et une rénovation lourde (structure, redistribution) 1 200 à 2 000 €/m².",
@@ -1895,4 +2209,14 @@ export function getQuestionSlugs(): string[] {
 
 export function getQuestionsByCategory(category: QuestionCategory): Question[] {
   return questions.filter((q) => q.category === category)
+}
+
+/**
+ * Questions whose `relatedService` matches a service slug. Used to inject
+ * contextual links into /services/[service] and /tarifs/[service] hubs so the
+ * orphan-prone /questions cluster gets inbound links from topically-relevant,
+ * higher-PageRank hubs (not just the single /questions index link).
+ */
+export function getQuestionsByService(serviceSlug: string, limit = 6): Question[] {
+  return questions.filter((q) => q.relatedService === serviceSlug).slice(0, limit)
 }

@@ -8,6 +8,7 @@ import { getBreadcrumbSchema, getQAPageSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from '@/lib/data/questions'
 import RelatedHubs from '@/components/seo/RelatedHubs'
+import { resolveCitationsFromText } from '@/lib/seo/authoritative-citations'
 import dynamic from 'next/dynamic'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
@@ -66,9 +67,22 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
   const question = getQuestionBySlug(params.slug)
   if (!question) notFound()
 
-  const relatedQuestions = getQuestionsByCategory(question.category)
-    .filter((q) => q.slug !== question.slug)
-    .slice(0, 5)
+  // Curated cross-category links when defined (concentrates internal link
+  // equity on the commercial price cluster) — else fall back to same category.
+  const relatedQuestions = (
+    question.relatedQuestions?.length
+      ? question.relatedQuestions
+          .map((slug) => getQuestionBySlug(slug))
+          .filter((q): q is NonNullable<typeof q> => Boolean(q))
+      : getQuestionsByCategory(question.category).filter((q) => q.slug !== question.slug)
+  ).slice(0, 5)
+
+  // Authoritative .gouv/official sources matched to the answer's topics (aides,
+  // RGE, CEE, TVA…). Returns [] when nothing relevant → block hidden. Honest
+  // E-E-A-T: real outbound citations only, never fabricated. Cf. CLAUDE.md.
+  const sources = resolveCitationsFromText(
+    [question.shortAnswer, ...question.detailedAnswer].join(' ')
+  )
 
   const breadcrumbItems = [{ label: 'Questions', href: '/questions' }, { label: question.question }]
 
@@ -113,6 +127,10 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
           >
             {question.question}
           </h1>
+          <p className="mt-4 text-sm text-primary-100">
+            Par <span className="font-semibold text-white">l'équipe ServicesArtisans</span> ·
+            Réponse vérifiée et mise à jour régulièrement
+          </p>
         </div>
       </section>
 
@@ -132,6 +150,52 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
               </div>
             </div>
 
+            {/* Price grid — semantic <table> for "prix … au m²" snippet capture */}
+            {question.priceTable && (
+              <section className="mb-10">
+                <h2 className="text-2xl font-bold font-heading text-charcoal-900 mb-4">
+                  Grille de prix détaillée
+                </h2>
+                <div className="overflow-x-auto rounded-xl border border-sand-200">
+                  <table className="w-full text-left border-collapse text-sm sm:text-base">
+                    <caption className="sr-only">{question.priceTable.caption}</caption>
+                    <thead>
+                      <tr className="bg-sand-50 border-b-2 border-primary-200">
+                        {question.priceTable.columns.map((col) => (
+                          <th
+                            key={col}
+                            scope="col"
+                            className="py-3 px-4 font-semibold text-charcoal-900"
+                          >
+                            {col}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {question.priceTable.rows.map((row, ri) => (
+                        <tr key={ri} className="border-b border-sand-100 last:border-0">
+                          {row.map((cell, ci) => (
+                            <td
+                              key={ci}
+                              className={`py-2.5 px-4 text-charcoal-700 ${
+                                ci === row.length - 1 ? 'font-medium whitespace-nowrap' : ''
+                              }`}
+                            >
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {question.priceTable.note && (
+                  <p className="text-xs text-charcoal-500 mt-3">{question.priceTable.note}</p>
+                )}
+              </section>
+            )}
+
             {/* Detailed answer */}
             <div className="prose prose-lg max-w-none">
               <h2 className="text-2xl font-bold font-heading text-charcoal-900 mb-6">
@@ -143,6 +207,37 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
                 </p>
               ))}
             </div>
+
+            {/* Sources officielles — E-E-A-T, citations .gouv réelles uniquement */}
+            {sources.length > 0 && (
+              <div className="mt-10 pt-8 border-t">
+                <h2 className="text-xl font-bold font-heading text-charcoal-900 mb-4">
+                  Sources officielles
+                </h2>
+                <ul className="space-y-2">
+                  {sources.map((url) => {
+                    let host = url
+                    try {
+                      host = new URL(url).hostname.replace(/^www\./, '')
+                    } catch {
+                      /* keep raw url */
+                    }
+                    return (
+                      <li key={url}>
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary-600 hover:text-primary-700 underline underline-offset-2 break-words"
+                        >
+                          {host}
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
 
             {/* Cross-links */}
             <div className="mt-10 pt-8 border-t">

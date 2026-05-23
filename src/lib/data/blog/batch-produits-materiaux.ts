@@ -429,6 +429,8 @@ Pour un remplacement de chaudière ou une installation de PAC, faites appel à u
       },
     ],
     content: [
+      `Une **fenêtre double vitrage** associe deux verres séparés par une lame d'air ou d'argon, ce qui divise par deux les pertes de chaleur par rapport au simple vitrage. Comptez 300 à 700 € posée en PVC et 500 à 1 200 € en aluminium. Le coefficient Uw doit être inférieur ou égal à 1,3 W/m²K pour ouvrir droit aux aides MaPrimeRénov' 2026.`,
+
       `## Types de fenêtres double vitrage
 
 Le double vitrage standard se compose de deux verres de 4 mm séparés par une lame d"air ou d"argon de 16 mm (notation 4/16/4). L"argon améliore l"isolation de 15 % par rapport à l"air. Le vitrage à isolation renforcée (VIR) intègre une couche métallique invisible qui réfléchit la chaleur vers l"intérieur. Le coefficient Ug (vitrage seul) atteint 1,0 W/m²K pour les meilleurs modèles.`,
@@ -441,11 +443,26 @@ Le double vitrage standard se compose de deux verres de 4 mm séparés par une l
 
 **Bois** : 500 à 1 000 €. Le plus isolant naturellement (Uw 1,0-1,2), esthétique chaleureuse. Entretien : lasure ou peinture tous les 5 à 8 ans.
 
-**Mixte bois-alu** : 700 à 1 500 €. Bois à l"intérieur (isolation, esthétique) et alu à l"extérieur (durabilité, zéro entretien).`,
+**Mixte bois-alu** : 700 à 1 500 €. Bois à l"intérieur (isolation, esthétique) et alu à l"extérieur (durabilité, zéro entretien).
+
+| Matériau | Prix posé | Uw (W/m²K) | Entretien | Durée de vie |
+| --- | --- | --- | --- | --- |
+| PVC | 300 à 700 € | 1,1 à 1,3 | Minimal | 30 à 40 ans |
+| Aluminium | 500 à 1 200 € | ≤ 1,4 | Minimal | 40 à 50 ans |
+| Bois | 500 à 1 000 € | 1,0 à 1,2 | Lasure 5-8 ans | 40 à 50 ans |
+| Mixte bois-alu | 700 à 1 500 € | 1,0 à 1,3 | Minimal | 45 à 50 ans |`,
 
       `## Prix et budget global
 
-Pour une maison avec 10 fenêtres standard (120x140 cm), le budget total varie de 5 000 à 12 000 € en PVC et de 8 000 à 18 000 € en aluminium. La porte-fenêtre coulissante (200x215 cm) coûte 800 à 2 000 € selon le matériau. Les volets roulants intégrés ajoutent 200 à 500 € par fenêtre. La dépose totale (remplacement du dormant) coûte 100 à 200 € de plus que la rénovation.`,
+Pour une maison avec 10 fenêtres standard (120x140 cm), le budget total varie de 5 000 à 12 000 € en PVC et de 8 000 à 18 000 € en aluminium. La porte-fenêtre coulissante (200x215 cm) coûte 800 à 2 000 € selon le matériau. Les volets roulants intégrés ajoutent 200 à 500 € par fenêtre. La dépose totale (remplacement du dormant) coûte 100 à 200 € de plus que la rénovation.
+
+| Élément | Prix posé |
+| --- | --- |
+| Fenêtre PVC (120×140 cm) | 300 à 700 € |
+| Fenêtre aluminium (120×140 cm) | 500 à 1 200 € |
+| Porte-fenêtre coulissante (200×215 cm) | 800 à 2 000 € |
+| Volet roulant intégré | +200 à 500 € |
+| Maison de 10 fenêtres (PVC) | 5 000 à 12 000 € |`,
 
       `## Performances thermiques
 
