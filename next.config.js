@@ -508,6 +508,11 @@ const nextConfig = {
       // Toiture/prix: canonical = prix-toiture-2026-refection-reparation-materiaux
       { source: '/blog/prix-couvreur-2026-cout-refection-toiture', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
       { source: '/blog/refaire-toiture-guide-proprietaire', destination: '/blog/prix-toiture-2026-refection-reparation-materiaux', permanent: true },
+      // Orphaned 404s with residual GSC equity (analysis 2026-05-23). Old slugs 404 because blog has dynamicParams=false → redirect to live canonical.
+      // parquet: 152 impr / pos 8.6 (was the top informational page) → recreated angle prix-renovation-parquet-2026 (Vague F).
+      { source: '/blog/prix-pose-parquet-m2-2026', destination: '/blog/prix-renovation-parquet-2026', permanent: true },
+      // peintre Paris: 15 impr → canonical national article.
+      { source: '/blog/prix-peintre-en-batiment-paris-2026', destination: '/blog/prix-peintre-batiment-2026-guide-complet', permanent: true },
 
       // ====== SEO Cannibalization Audit 2026-04-03 — 22 redirects (23 in audit, 1 eco-ptz was same slug) ======
       // See: scripts/gsc-data/cannibalization-audit.md
