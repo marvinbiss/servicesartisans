@@ -55,9 +55,6 @@ export {
   RatingStars,
 } from './TrustBadges'
 
-// Search (Doctolib-style)
-export { SearchBar } from './SearchBar'
-
 // Artisan Cards (Airbnb-style)
 export { ArtisanCard, ArtisanGrid } from './ArtisanCard'
 
