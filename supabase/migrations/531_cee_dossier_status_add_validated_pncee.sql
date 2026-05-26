@@ -1,0 +1,28 @@
+-- =============================================================================
+-- Migration 531 — cee_dossier_status : ajout de 'validated_pncee'
+-- =============================================================================
+-- Audit Sentry 2026-05-26 (issues JAVASCRIPT-NEXTJS-93 / JAVASCRIPT-NEXTJS-94)
+--
+-- Drift entre trigger SQL et enum DB :
+--   - Migration 433 (2026-04-14) a réécrit `cee_dossiers_check_status_transition`
+--     avec les cases `'deposited' → 'validated_pncee'` et `'validated_pncee' → 'paid_client'`
+--   - La migration 437 (cee_security_hardening) utilise aussi `'validated_pncee'`
+--   - Le code TS `src/lib/cee/dossier-transitions.ts` déclare `validated_pncee`
+--     dans `CeeDossierV3Status` et l'enum DOSSIER_TRANSITIONS
+--   - AUCUNE migration n'a jamais exécuté `ALTER TYPE ... ADD VALUE 'validated_pncee'`
+--   - L'enum en DB a `'validated'` (mig 425/449), pas `'validated_pncee'`
+--
+-- Conséquence : le cron `/api/cron/cee-dossier-transitions` (Règle C) exécute
+--   `.eq('status', 'validated_pncee')` → PostgREST cast → Postgres throw
+--   `22P02 invalid input value for enum cee_dossier_status: "validated_pncee"`
+--   à chaque tick du cron (toutes les heures). ~24 events/24h depuis 2026-05-06.
+--
+-- Fix : ajouter `validated_pncee` à l'enum (idempotent, IF NOT EXISTS).
+--   `validated` historique est conservé (migration future peut auditer si des
+--   lignes prod l'utilisent et les migrer si nécessaire).
+--
+-- ALTER TYPE ... ADD VALUE n'est pas transactionnel en PostgreSQL ≤ 17 :
+-- exécuter hors BEGIN/COMMIT en autocommit. `IF NOT EXISTS` = idempotent.
+-- =============================================================================
+
+ALTER TYPE public.cee_dossier_status ADD VALUE IF NOT EXISTS 'validated_pncee';
