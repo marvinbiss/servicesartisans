@@ -694,7 +694,7 @@ describe('VALID_RGE_SERVICE_SLUGS — cohérence avec RGE_ALLOWED_SERVICES', () 
 describe('goneResponseHeaders', () => {
   it('expose les headers attendus pour HTTP 410', () => {
     const h = goneResponseHeaders()
-    expect(h['Content-Type']).toBe('text/plain; charset=utf-8')
+    expect(h['Content-Type']).toBe('text/html; charset=utf-8')
     expect(h['X-Robots-Tag']).toBe('noindex, nofollow')
     expect(h['Cache-Control']).toContain('s-maxage=86400')
     expect(h['CDN-Cache-Control']).toContain('s-maxage=86400')
@@ -728,8 +728,27 @@ describe('evaluateGonePath — BLOCKED_PROVIDER_PATHS', () => {
 })
 
 describe('GONE_RESPONSE_BODY', () => {
-  it('body minimal sans HTML (éviter leakage de contenu)', () => {
-    expect(GONE_RESPONSE_BODY).not.toContain('<')
-    expect(GONE_RESPONSE_BODY).toMatch(/Gone/i)
+  it('page HTML brandée auto-contenue', () => {
+    expect(GONE_RESPONSE_BODY).toContain('<!DOCTYPE html>')
+    expect(GONE_RESPONSE_BODY).toContain('lang="fr"')
+    // robots noindex en ceinture-bretelles du header X-Robots-Tag
+    expect(GONE_RESPONSE_BODY).toMatch(/<meta name="robots" content="noindex/)
+    expect(GONE_RESPONSE_BODY).toMatch(/n'existe plus/)
+  })
+
+  it('offre une sortie vers le périmètre RGE réel (pas de 301 home menteur)', () => {
+    expect(GONE_RESPONSE_BODY).toContain('href="/renovation-energetique"')
+    expect(GONE_RESPONSE_BODY).toContain('href="/"')
+  })
+
+  it("champ recherche GET vers /recherche/artisans (récupère l'intention)", () => {
+    expect(GONE_RESPONSE_BODY).toContain('action="/recherche/artisans"')
+    expect(GONE_RESPONSE_BODY).toMatch(/method="get"/)
+    expect(GONE_RESPONSE_BODY).toContain('name="q"')
+  })
+
+  it('auto-contenue : CSS inline, zéro asset externe (Edge-friendly)', () => {
+    expect(GONE_RESPONSE_BODY).not.toMatch(/<link[^>]+href=/)
+    expect(GONE_RESPONSE_BODY).not.toMatch(/<script/)
   })
 })

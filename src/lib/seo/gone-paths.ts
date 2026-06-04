@@ -540,18 +540,78 @@ export function evaluateGonePath(pathname: string): GonePathDecision {
  *     prend 24-48h pour purger l'index sur un 410.
  *   - `X-Robots-Tag: noindex, nofollow` : demande explicite de désindexation
  *     immédiate (complémentaire du code 410).
- *   - `Content-Type: text/plain; charset=utf-8` : éviter de servir du HTML
- *     (pas de render Next, donc on reste minimaliste).
+ *   - `Content-Type: text/html; charset=utf-8` : page brandée auto-contenue
+ *     (cf. `GONE_RESPONSE_BODY`). Le statut 410 reste le signal SEO ; le body
+ *     HTML ne sert qu'à offrir une sortie gracieuse à l'humain rare qui
+ *     atterrit depuis un vieux lien/SERP résiduel (décision 2026-06-04).
  */
 export function goneResponseHeaders(): Record<string, string> {
   return {
-    'Content-Type': 'text/plain; charset=utf-8',
+    'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
     'CDN-Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
     'X-Robots-Tag': 'noindex, nofollow',
   }
 }
 
-export const GONE_RESPONSE_BODY =
-  'Gone — This URL no longer matches any content on servicesartisans.fr. ' +
-  'If you arrived here from a search engine, the page has been permanently removed.'
+/**
+ * Page HTML 410 brandée, auto-contenue (CSS inline, zéro dépendance, ~2 kB).
+ *
+ * Pourquoi pas un render Next ? Le middleware Edge répond AVANT le renderer
+ * (cf. soft-404 permanent solve). On garde donc une string statique servie
+ * directement — pas de coût render, CDN-cacheable.
+ *
+ * Intention produit : l'utilisateur cherchait un métier qui n'est plus couvert
+ * (pivot full RGE). On ne ment pas (pas de 301 vers l'accueil = soft 404), on
+ * assume le dead-end ET on propose une sortie vers ce que le site fait
+ * réellement : annuaire d'artisans RGE + rénovation énergétique.
+ *
+ * `<meta name="robots" noindex>` en ceinture-bretelles du header X-Robots-Tag.
+ */
+export const GONE_RESPONSE_BODY = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Page introuvable — ServicesArtisans</title>
+<style>
+:root{--t:#C24B2A;--ink:#1f2937;--muted:#6b7280;--bg:#fdf1ec}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;line-height:1.5}
+.card{max-width:560px;width:100%;background:#fff;border-radius:16px;padding:40px 32px;box-shadow:0 10px 40px rgba(0,0,0,.06);text-align:center}
+.badge{display:inline-block;font-size:13px;font-weight:600;color:var(--t);background:var(--bg);padding:6px 14px;border-radius:999px;margin-bottom:20px}
+h1{font-size:26px;margin:0 0 12px}
+p{color:var(--muted);margin:0 0 24px;font-size:16px}
+form{display:flex;gap:8px;margin:0 0 16px}
+input{flex:1;min-width:0;padding:13px 14px;border:1px solid #e5e7eb;border-radius:10px;font-size:15px}
+input:focus{outline:2px solid var(--t);border-color:var(--t)}
+button{padding:13px 18px;border:0;border-radius:10px;background:var(--t);color:#fff;font-weight:600;font-size:15px;cursor:pointer}
+button:hover{opacity:.92}
+.links{display:flex;flex-direction:column;gap:10px}
+a.btn{display:block;padding:13px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px}
+a.primary{background:var(--t);color:#fff}
+a.ghost{background:#f3f4f6;color:var(--ink)}
+a.btn:hover{opacity:.92}
+.foot{margin-top:24px;font-size:13px;color:var(--muted)}
+.foot a{color:var(--t);text-decoration:none}
+@media(max-width:480px){form{flex-direction:column}button{width:100%}}
+</style>
+</head>
+<body>
+<main class="card">
+<span class="badge">ServicesArtisans</span>
+<h1>Cette page n'existe plus</h1>
+<p>Le contenu que vous cherchiez a été retiré. ServicesArtisans est l'annuaire des artisans RGE certifiés en France — plomberie, électricité, chauffage, toiture, rénovation et plus. Trouvez le bon près de chez vous.</p>
+<form action="/recherche/artisans" method="get">
+<input type="search" name="q" placeholder="Métier ou ville (ex. plombier Dieppe)" aria-label="Rechercher un artisan RGE">
+<button type="submit">Rechercher</button>
+</form>
+<div class="links">
+<a class="btn primary" href="/">Voir tous les métiers</a>
+<a class="btn ghost" href="/renovation-energetique">Rénovation énergétique &amp; aides</a>
+</div>
+<p class="foot">Besoin d'aide&nbsp;? <a href="tel:+33756872787">07&nbsp;56&nbsp;87&nbsp;27&nbsp;87</a></p>
+</main>
+</body>
+</html>`

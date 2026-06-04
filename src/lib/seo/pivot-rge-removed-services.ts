@@ -4,7 +4,7 @@
  * Liste centralisée des slugs métiers retirés lors du pivot full RGE
  * du 2026-05-03. Source unique de vérité importée depuis :
  *   - src/app/sitemap.ts (filtre des URLs émises)
- *   - src/lib/seo/gone-paths.ts (redirect 301 vers /renovation-energetique)
+ *   - src/lib/seo/gone-paths.ts (slugs hors canon → HTTP 410 Gone)
  *   - src/middleware.ts (potentiel pour future redirection edge)
  *
  * Repositionnement : « Le premier annuaire 100% artisans RGE certifiés ».
