@@ -283,7 +283,7 @@ export async function getRgeProvidersByServiceAndCity(
     async () => {
       try {
         let query = supabase
-          .from('providers')
+          .from('providers_public')
           .select(
             [
               'id',
@@ -392,7 +392,7 @@ export async function getRgeProvidersByServiceAndDepartement(
     async () => {
       try {
         let query = supabase
-          .from('providers')
+          .from('providers_public')
           .select(
             [
               'id',
@@ -498,7 +498,7 @@ export async function getRgeCountByServiceAndCityStrict(
 
   try {
     let query = supabase
-      .from('providers')
+      .from('providers_public')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
       .in('address_city', cityValues)
@@ -547,7 +547,7 @@ export async function getRgeCountByServiceAndDepartementStrict(
 
   try {
     let query = supabase
-      .from('providers')
+      .from('providers_public')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
       .eq('address_department', departementCode)

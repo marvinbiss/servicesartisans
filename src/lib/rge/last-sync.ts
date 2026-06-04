@@ -34,7 +34,7 @@ export async function getRgeLastSyncDate(): Promise<string | null> {
     async () => {
       try {
         const { data, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('rge_last_synced_at')
           .not('rge_last_synced_at', 'is', null)
           .order('rge_last_synced_at', { ascending: false })

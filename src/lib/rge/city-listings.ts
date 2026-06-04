@@ -85,7 +85,7 @@ export async function getRgeProvidersByCity(
         const today = todayIso()
 
         const { data, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select(RGE_LIST_SELECT)
           .in('address_city', cityValues)
           .eq('is_active', true)
@@ -129,7 +129,7 @@ export async function getRgeProviderCountByCity(citySlug: string): Promise<numbe
         const today = todayIso()
 
         const { count, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('id', { count: 'exact', head: true })
           .in('address_city', cityValues)
           .eq('is_active', true)

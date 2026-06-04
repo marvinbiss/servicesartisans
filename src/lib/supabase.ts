@@ -444,7 +444,7 @@ async function queryProviderDetail(field: 'stable_id' | 'id' | 'slug', value: st
   // RGE-only 2026-04-19. Le 404/noindex split est piloté par la stratégie
   // sitemap (sitemap n'inclut que noindex=false) + filtre de listing dédié.
   const { data } = await supabase
-    .from('providers')
+    .from('providers_public')
     .select(PROVIDER_DETAIL_SELECT)
     .eq(field, value)
     .eq('is_active', true)
@@ -749,7 +749,7 @@ export async function getProvidersByServiceAndLocation(
       if (postalCode) {
         return await retryWithBackoff(async () => {
           let query = supabase
-            .from('providers')
+            .from('providers_public')
             .select(PROVIDER_LIST_SELECT)
             .in('specialty', specialties)
             .eq('address_postal_code', postalCode)
@@ -774,7 +774,7 @@ export async function getProvidersByServiceAndLocation(
         return await retryWithBackoff(async () => {
           // Primary: direct specialty + city (fast — uses index + .in())
           let primary = supabase
-            .from('providers')
+            .from('providers_public')
             .select(PROVIDER_LIST_SELECT)
             .in('specialty', specialties)
             .in('address_city', cityValues)
@@ -849,7 +849,7 @@ export async function getProvidersByServiceAndDepartment(
 
         return await retryWithBackoff(async () => {
           let query = supabase
-            .from('providers')
+            .from('providers_public')
             .select(PROVIDER_LIST_SELECT)
             .in('specialty', specialties)
             .eq('address_department', departmentCode)
@@ -914,7 +914,7 @@ export async function hasProvidersByServiceAndLocation(
 
             const cityValues = getCityValues(cityName, ville?.departementCode)
             let query = supabase
-              .from('providers')
+              .from('providers_public')
               .select('id', { count: 'exact', head: true })
               .in('specialty', specialties)
               .in('address_city', cityValues)
@@ -969,7 +969,7 @@ export async function getProviderCountByServiceAndLocation(
 
             const cityValues = getCityValues(cityName, ville?.departementCode)
             let query = supabase
-              .from('providers')
+              .from('providers_public')
               .select('id', { count: 'exact', head: true })
               .in('specialty', specialties)
               .in('address_city', cityValues)
@@ -1018,7 +1018,7 @@ export async function getProviderCountByServiceAndLocationStrict(
 
   try {
     let query = supabase
-      .from('providers')
+      .from('providers_public')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
       .in('address_city', cityValues)
@@ -1066,7 +1066,7 @@ export async function getRgeProviderCountByServiceAndLocation(
           const cityValues = getCityValues(cityName, ville?.departementCode)
           const today = new Date().toISOString().slice(0, 10)
           const { count, error } = await supabase
-            .from('providers')
+            .from('providers_public')
             .select('id', { count: 'exact', head: true })
             .in('specialty', specialties)
             .in('address_city', cityValues)
@@ -1113,7 +1113,7 @@ export async function getProvidersByLocation(
         return await retryWithBackoff(
           async () => {
             let query = supabase
-              .from('providers')
+              .from('providers_public')
               .select(PROVIDER_LIST_SELECT)
               .in('address_city', cityValues)
               .eq('is_active', true)
@@ -1152,7 +1152,7 @@ export async function getAllProviders() {
     async () => {
       return retryWithBackoff(async () => {
         const { data, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select(PROVIDER_LIST_SELECT)
           .eq('is_active', true)
           .order('rge_valid_until', { ascending: false, nullsFirst: false })
@@ -1193,7 +1193,7 @@ export async function getProvidersByService(
     return await retryWithBackoff(
       async () => {
         let query = supabase
-          .from('providers')
+          .from('providers_public')
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .eq('is_active', true)
@@ -1233,7 +1233,7 @@ export async function getProviderCountByService(
     return await withTimeout(
       (async () => {
         let query = supabase
-          .from('providers')
+          .from('providers_public')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .eq('is_active', true)
@@ -1322,7 +1322,7 @@ export async function getLocationsByService(
   return retryWithBackoff(async () => {
     // Step 1: get distinct cities from active providers with this specialty
     let citiesQuery = supabase
-      .from('providers')
+      .from('providers_public')
       .select('address_city')
       .in('specialty', specialties)
       .eq('is_active', true)

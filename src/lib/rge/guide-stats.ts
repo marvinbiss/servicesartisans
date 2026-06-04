@@ -103,7 +103,7 @@ export async function getRgeNationalStats(): Promise<RgeNationalStats> {
         // Total national : count des providers RGE actifs.
         const today = new Date().toISOString().slice(0, 10)
         const { count, error: countErr } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('id', { count: 'exact', head: true })
           .eq('is_active', true)
           .not('rge_qualifications', 'is', null)
@@ -181,7 +181,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
 
         // Count total
         const { count, error: countErr } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .eq('is_active', true)
@@ -195,7 +195,7 @@ export async function getRgeServiceStats(serviceSlug: RgeAllowedService): Promis
         // (Top 10 villes saturaient les 500 lignes échantillonnées et masquaient
         // la queue moyenne — Lille, Nantes, Reims, Toulon, Le Havre, etc.).
         const { data: sampleRows, error: sampleErr } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('address_city')
           .in('specialty', specialties)
           .eq('is_active', true)

@@ -128,7 +128,7 @@ export async function getCeeProvidersByOperationAndCity(
         // d'une ville auront le code spécifique requis pour une opération
         // donnée).
         const { data, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
           .in('address_city', cityValues)
@@ -207,7 +207,7 @@ export async function getCeeProviderCountByOperationAndCity(
       try {
         // Filtre rge_qualifications redondant retiré (cf. note ci-dessus).
         const { count, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
           .in('address_city', cityValues)
@@ -261,7 +261,7 @@ export async function getCeeCountByOperationAndCityStrict(
 
   try {
     const { count, error } = await supabase
-      .from('providers')
+      .from('providers_public')
       .select('id', { count: 'exact', head: true })
       .in('specialty', specialties)
       .in('address_city', cityValues)
@@ -307,7 +307,7 @@ export async function getCeeTopCitiesByOperation(operationCode: string): Promise
         // Filtre rge_qualifications redondant retiré + .order pour aiguiller
         // le planner vers `idx_providers_rge_active` (partial index sélectif).
         const { data, error } = await supabase
-          .from('providers')
+          .from('providers_public')
           .select('address_city')
           .in('specialty', specialties)
           .eq('is_active', true)
