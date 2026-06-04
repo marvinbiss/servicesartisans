@@ -99,6 +99,7 @@ const checks = PII_CRITICAL_TABLES.map((table) => {
 // service_role BYPASSRLS). Documentées en commentaire dans la migration.
 const ORPHAN_DROP_WHITELIST = new Set([
   '417_reviews_rls_hardening_fix.sql', // clean sweep INSERT policies — admin FOR ALL couvre
+  '532_profiles_rls_reenable_p0.sql', // drop policy soup permissive (fuite) ; couverture = own-row + is_admin() + service_role BYPASSRLS
 ])
 
 let droppedPoliciesSample = []
