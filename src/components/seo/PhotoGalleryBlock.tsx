@@ -61,7 +61,7 @@ export default function PhotoGalleryBlock({
       </p>
 
       <Link
-        href="/inscription"
+        href="/inscription-artisan"
         className="inline-flex items-center gap-1 mt-2 text-xs font-medium text-primary-600 hover:text-primary-700 transition-colors"
       >
         Vous êtes artisan ? Ajoutez vos photos

@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { Menu, X, ChevronDown, Heart, Phone } from 'lucide-react'
+import { Menu, X, ChevronDown, Phone } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { capture, EVENT } from '@/lib/analytics/posthog'
-import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL } from '@/lib/seo/config'
@@ -41,7 +40,6 @@ export default function HeaderClient({
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
-  const { count: favoritesCount } = useFavorites()
 
   // Mobile search state
   const [serviceQuery, setServiceQuery] = useState('')
@@ -465,21 +463,6 @@ export default function HeaderClient({
               <NavTrigger menu="renovation" label="Rénovation & aides" />
               <NavTrigger menu="aide" label="Aide" />
 
-              {/* Favoris */}
-              <Link
-                href="/mes-favoris"
-                className="relative text-charcoal-500 hover:text-red-500 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-red-50/80"
-                aria-label={`Mes favoris${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
-                title="Mes favoris"
-              >
-                <Heart className="w-5 h-5" />
-                {mounted && favoritesCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1 leading-none">
-                    {favoritesCount > 99 ? '99+' : favoritesCount}
-                  </span>
-                )}
-              </Link>
-
               <Link
                 href="/connexion"
                 prefetch={false}
@@ -579,7 +562,6 @@ export default function HeaderClient({
             popularCities={popularCities}
             metroRegions={metroRegions}
             domTomRegions={domTomRegions}
-            favoritesCount={favoritesCount}
             closeMobileMenu={closeMobileMenu}
           />
         )}

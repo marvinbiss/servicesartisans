@@ -15,7 +15,6 @@ import {
   Map,
   Building2,
   Phone,
-  Heart,
   BookOpen,
   Leaf,
 } from 'lucide-react'
@@ -41,7 +40,6 @@ interface MobileMenuProps {
   popularCities: PopularCity[]
   metroRegions: MetroRegion[]
   domTomRegions: DomTomRegion[]
-  favoritesCount: number
   closeMobileMenu: () => void
 }
 
@@ -58,7 +56,6 @@ export default function MobileMenu({
   popularCities,
   metroRegions,
   domTomRegions,
-  favoritesCount,
   closeMobileMenu,
 }: MobileMenuProps) {
   const closeAndResetAccordion = () => {
@@ -550,19 +547,6 @@ export default function MobileMenu({
 
           {/* CTAs */}
           <div className="pt-3 space-y-3">
-            <Link
-              href="/mes-favoris"
-              className="flex items-center justify-center gap-2 w-full py-3 border-2 border-red-100 text-red-600 rounded-xl font-medium hover:bg-red-50 transition-all duration-200"
-              onClick={closeMobileMenu}
-            >
-              <Heart className="w-5 h-5" />
-              Mes favoris
-              {favoritesCount > 0 && (
-                <span className="min-w-[20px] h-[20px] flex items-center justify-center bg-red-500 text-white text-[11px] font-bold rounded-full px-1 leading-none">
-                  {favoritesCount > 99 ? '99+' : favoritesCount}
-                </span>
-              )}
-            </Link>
             {/* Pivot full RGE 2026-05-03 : CTA mobile "Urgences 24h"
                 remplacé par "Simuler aides MaPrimeRénov & CEE". */}
             <Link

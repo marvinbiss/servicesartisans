@@ -80,7 +80,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Dois-je créer un compte ?',
-        a: 'Non, vous pouvez demander un devis sans créer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
+        a: "Non, aucun compte n'est nécessaire : vos demandes de devis se font directement en ligne et les artisans vous recontactent par téléphone ou email. Seuls les artisans disposent d'un espace dédié.",
       },
       {
         q: 'Comment supprimer mon compte ?',

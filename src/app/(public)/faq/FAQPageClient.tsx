@@ -152,12 +152,12 @@ export default function FAQPageClient() {
               </span>
             </Link>
             <Link
-              href="/inscription"
+              href="/inscription-artisan"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-charcoal-900 mb-2">Créer un compte</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-2">Vous êtes artisan ?</h3>
               <p className="text-charcoal-600 text-sm mb-3">
-                Inscrivez-vous pour suivre vos demandes et réservations.
+                Créez votre compte artisan et recevez des demandes de devis exclusives.
               </p>
               <span className="text-primary-500 text-sm font-medium inline-flex items-center gap-1">
                 S'inscrire <ArrowRight className="w-4 h-4" />

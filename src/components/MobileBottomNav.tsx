@@ -28,8 +28,9 @@ export default function MobileBottomNav() {
       )
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
-          const meta = session.user.user_metadata
-          setAccountHref(meta?.user_type === 'artisan' ? '/espace-artisan' : '/espace-client')
+          // Espace particulier fermé 2026-06-05 : toute session valide est
+          // artisan ou admin — l'espace artisan est la seule destination.
+          setAccountHref('/espace-artisan')
         }
       })
     } catch {

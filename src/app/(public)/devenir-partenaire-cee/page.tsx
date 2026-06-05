@@ -732,7 +732,7 @@ export default function DevenirPartenaireCeePage() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <PartnerCtaLink
-              href="/inscription"
+              href="/inscription-artisan"
               surface="final_cta"
               ctaLabel="Rejoindre le programme"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-accent-800 font-semibold shadow-lg hover:bg-accent-50 transition"
