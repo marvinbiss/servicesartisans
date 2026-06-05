@@ -1,18 +1,27 @@
 /**
  * StatusBadge — pastille de statut d'un dossier CEE.
  *
- * Mappe les 12 statuts du DAG (`dossier-types.ts`) à un libellé français
- * + un jeu de classes Tailwind light-only.
+ * Accepte DEUX familles de statuts :
+ *   - V2 (legacy, `CeeDossierStatus` — libellés FR du schéma 402)
+ *   - V3 (`CeeDossierV3Status` — enum public.cee_dossier_status, schéma 431)
+ *
+ * Mappe chaque statut à un libellé français + un jeu de classes Tailwind
+ * light-only. Les pages V3 (`/espace-artisan/cee`) passent l'enum V3 ; les
+ * usages legacy continuent de fonctionner via l'union de types.
  */
 
 import type { CeeDossierStatus } from '@/lib/cee/dossier-types'
+import type { CeeDossierV3Status } from '@/lib/cee/dossier-transitions'
+
+type AnyDossierStatus = CeeDossierStatus | CeeDossierV3Status
 
 interface StatusBadgeProps {
-  status: CeeDossierStatus
+  status: AnyDossierStatus
   className?: string
 }
 
-const LABELS: Record<CeeDossierStatus, string> = {
+const LABELS: Record<AnyDossierStatus, string> = {
+  // --- V2 (schéma 402) ---
   brouillon: 'Brouillon',
   pre_visite_planifiee: 'Pré-visite planifiée',
   pre_visite_effectuee: 'Pré-visite effectuée',
@@ -25,9 +34,23 @@ const LABELS: Record<CeeDossierStatus, string> = {
   valide: 'Validé',
   rejete: 'Rejeté',
   annule: 'Annulé',
+  // --- V3 (enum cee_dossier_status, schéma 431) ---
+  draft: 'Brouillon',
+  submitted_by_artisan: 'Soumis',
+  qa_pending: 'Contrôle qualité',
+  qa_approved: 'QA validé',
+  qa_rejected: 'QA rejeté',
+  deposited: 'Déposé',
+  validated_pncee: 'Validé PNCEE',
+  rejected_pncee: 'Rejeté PNCEE',
+  paid_client: 'Payé client',
+  commission_due: 'Commission due',
+  commission_paid: 'Commission versée',
+  archived: 'Archivé',
 }
 
-const CLASSES: Record<CeeDossierStatus, string> = {
+const CLASSES: Record<AnyDossierStatus, string> = {
+  // --- V2 ---
   brouillon: 'bg-sand-100 text-charcoal-700 border-sand-300',
   pre_visite_planifiee: 'bg-sky-50 text-sky-700 border-sky-200',
   pre_visite_effectuee: 'bg-sky-100 text-sky-800 border-sky-200',
@@ -40,23 +63,25 @@ const CLASSES: Record<CeeDossierStatus, string> = {
   valide: 'bg-green-100 text-green-800 border-green-200',
   rejete: 'bg-red-100 text-red-700 border-red-200',
   annule: 'bg-sand-100 text-charcoal-600 border-sand-300',
+  // --- V3 ---
+  draft: 'bg-sand-100 text-charcoal-700 border-sand-300',
+  submitted_by_artisan: 'bg-sky-50 text-sky-700 border-sky-200',
+  qa_pending: 'bg-amber-50 text-amber-800 border-amber-200',
+  qa_approved: 'bg-primary-50 text-primary-700 border-primary-200',
+  qa_rejected: 'bg-red-100 text-red-700 border-red-200',
+  deposited: 'bg-primary-50 text-primary-600 border-primary-200',
+  validated_pncee: 'bg-primary-100 text-primary-800 border-primary-200',
+  rejected_pncee: 'bg-red-100 text-red-700 border-red-200',
+  paid_client: 'bg-green-100 text-green-800 border-green-200',
+  commission_due: 'bg-secondary-50 text-charcoal-800 border-secondary-200',
+  commission_paid: 'bg-green-100 text-green-800 border-green-200',
+  archived: 'bg-sand-100 text-charcoal-600 border-sand-300',
 }
 
-// Référence contraste WCAG AA (ratio ≥ 4.5:1) — les 12 statuts CEE :
-//   brouillon            → charcoal-100   / charcoal-700   (~10.4:1)
-//   pre_visite_planifiee → sky-50     / sky-700    (~8.1:1)
-//   pre_visite_effectuee → sky-100    / sky-800    (~9.6:1)
-//   engagement_signe     → primary-50  / primary-700 (~9.5:1)
-//   travaux_en_cours     → amber-50   / amber-800  (~8.9:1)
-//   travaux_acheves      → amber-100  / amber-800  (~8.5:1)
-//   ah_signee            → primary-50  / primary-700 (~9.2:1)
-//   depose_delegataire   → blue-50    / blue-700   (~8.7:1)
-//   depose_pncee         → blue-100   / blue-800   (~9.8:1)
-//   valide               → green-100  / green-800  (~8.3:1)
-//   rejete               → red-100    / red-700    (~7.7:1)
-//   annule               → charcoal-100   / charcoal-600   (~6.7:1)  — remonté depuis charcoal-500 (~4.1:1, sous AA)
+// Référence contraste WCAG AA (ratio ≥ 4.5:1) — les paires couleur/fond ci-dessus
+// reprennent les teintes V2 déjà auditées (sand/sky/amber/primary/green/red).
 
-export function getStatusLabel(status: CeeDossierStatus): string {
+export function getStatusLabel(status: AnyDossierStatus): string {
   return LABELS[status] ?? status
 }
 

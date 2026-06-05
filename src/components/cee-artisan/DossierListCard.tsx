@@ -5,18 +5,18 @@
  * Server Component — ne dépend d'aucun hook. Affiche :
  *   - Statut (pastille via StatusBadge)
  *   - Code opération CEE (ex. BAR-TH-104)
- *   - Prime estimée en euros
- *   - Date d'engagement formatée fr-FR
+ *   - Prime estimée en euros (prime_total_cts / 100, schéma V3)
+ *   - Date de devis formatée fr-FR
  *   - CTA vers la page détail
  */
 
 import Link from 'next/link'
 import { ChevronRight, FileText, Euro, Calendar } from 'lucide-react'
-import type { CeeDossier } from '@/lib/cee/dossier-types'
+import type { CeeDossierV3Row } from '@/lib/cee/dossiers-v3'
 import StatusBadge from './StatusBadge'
 
 interface DossierListCardProps {
-  dossier: CeeDossier
+  dossier: CeeDossierV3Row
 }
 
 function formatEuros(value: number | null): string {
@@ -37,6 +37,10 @@ function formatDate(value: string | null): string {
 
 export default function DossierListCard({ dossier }: DossierListCardProps) {
   const href = `/espace-artisan/cee/${dossier.id}`
+
+  // Prime affichée = prime_total_cts (CEE + MPR) avec fallback prime_cee_cts.
+  const primeCts = dossier.prime_total_cts ?? dossier.prime_cee_cts
+  const primeEur = primeCts === null ? null : primeCts / 100
 
   return (
     <Link
@@ -60,26 +64,24 @@ export default function DossierListCard({ dossier }: DossierListCardProps) {
               <dt className="sr-only">Prime estimée</dt>
               <dd>
                 Prime estimée :{' '}
-                <span className="font-semibold text-charcoal-900">
-                  {formatEuros(dossier.prime_estimee_eur)}
-                </span>
+                <span className="font-semibold text-charcoal-900">{formatEuros(primeEur)}</span>
               </dd>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-charcoal-400" aria-hidden="true" />
-              <dt className="sr-only">Date d&apos;engagement</dt>
+              <dt className="sr-only">Date de devis</dt>
               <dd>
-                Engagement :{' '}
+                Devis :{' '}
                 <span className="font-semibold text-charcoal-900">
-                  {formatDate(dossier.date_engagement)}
+                  {formatDate(dossier.date_devis)}
                 </span>
               </dd>
             </div>
           </dl>
 
-          {dossier.postal_code && (
+          {dossier.client_code_postal && (
             <p className="mt-2 text-xs text-charcoal-500">
-              Zone : {dossier.zone_climatique ?? '—'} · {dossier.postal_code}
+              Code postal : {dossier.client_code_postal}
             </p>
           )}
         </div>

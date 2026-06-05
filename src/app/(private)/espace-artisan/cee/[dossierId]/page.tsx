@@ -11,12 +11,12 @@
 
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, Euro, FileCheck2, MapPin, ThermometerSun, Hash } from 'lucide-react'
+import { ArrowLeft, Calendar, Euro, FileCheck2, MapPin, Hash, Wallet } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createClient } from '@/lib/supabase/server'
-import { getCeeDossierById } from '@/lib/cee/dossiers'
+import { getCeeDossierByIdV3 } from '@/lib/cee/dossiers-v3'
 import { getJustificatifsGap, getJustificatifsRequisForOperation } from '@/lib/cee/justificatifs'
-import type { CeeDossierEvent } from '@/lib/cee/dossier-types'
+import type { CeeDossierEvent, CeeDossierJustificatif } from '@/lib/cee/dossier-types'
 import StatusBadge from '@/components/cee-artisan/StatusBadge'
 import JustificatifGapBadge from '@/components/cee-artisan/JustificatifGapBadge'
 import DossierTimeline from '@/components/cee-artisan/DossierTimeline'
@@ -65,6 +65,25 @@ async function fetchDossierEvents(
   return data as unknown as CeeDossierEvent[]
 }
 
+/**
+ * Liste les pièces justificatives déjà déposées (colonne JSONB `justificatifs`,
+ * schéma V3 — vivante via migration 487). Fail-open : `[]` sur erreur DB.
+ */
+async function fetchDossierJustificatifs(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  dossierId: string
+): Promise<CeeDossierJustificatif[]> {
+  const { data, error } = await supabase
+    .from('cee_dossiers')
+    .select('justificatifs')
+    .eq('id', dossierId)
+    .maybeSingle()
+
+  if (error || !data) return []
+  const raw = (data as { justificatifs: unknown }).justificatifs
+  return Array.isArray(raw) ? (raw as CeeDossierJustificatif[]) : []
+}
+
 export default async function CeeDossierDetailPage({ params }: PageProps) {
   const { dossierId } = await params
   const supabase = await createClient()
@@ -80,7 +99,7 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
   }
 
   // --- Dossier ------------------------------------------------------------
-  const dossier = await getCeeDossierById(supabase, dossierId)
+  const dossier = await getCeeDossierByIdV3(supabase, dossierId)
   if (!dossier) notFound()
 
   // --- Ownership check ----------------------------------------------------
@@ -97,48 +116,57 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
   }
 
   // --- Data auxiliaire en parallèle ---------------------------------------
-  const [gap, requis, events] = await Promise.all([
+  const [gap, requis, events, justificatifs] = await Promise.all([
     getJustificatifsGap(supabase, dossier.id),
     getJustificatifsRequisForOperation(supabase, dossier.operation_code),
     fetchDossierEvents(supabase, dossier.id),
+    fetchDossierJustificatifs(supabase, dossier.id),
   ])
+
+  // Mapping V3 (cf. dossiers-v3.ts) : montants en centimes → euros.
+  // Prime affichée = prime_total_cts (CEE + MPR) avec fallback prime_cee_cts.
+  const primeCts = dossier.prime_total_cts ?? dossier.prime_cee_cts
+  const primeEur = primeCts === null ? null : primeCts / 100
+  const montantHtEur = dossier.montant_ht_cts === null ? null : dossier.montant_ht_cts / 100
+  const resteAChargeEur =
+    dossier.reste_a_charge_cts === null ? null : dossier.reste_a_charge_cts / 100
 
   const infoItems: Array<{ icon: typeof Hash; label: string; value: string }> = [
     { icon: Hash, label: 'Code opération', value: dossier.operation_code },
     {
       icon: Euro,
       label: 'Prime estimée',
-      value: formatEuros(dossier.prime_estimee_eur),
+      value: formatEuros(primeEur),
     },
     {
       icon: Calendar,
-      label: 'Engagement',
-      value: formatDate(dossier.date_engagement),
+      label: 'Devis',
+      value: formatDate(dossier.date_devis),
     },
     {
       icon: Calendar,
-      label: 'Pré-visite',
-      value: formatDate(dossier.date_pre_visite),
+      label: 'Chantier prévu',
+      value: formatDate(dossier.date_chantier_prevue),
     },
     {
       icon: Calendar,
-      label: 'Début travaux',
-      value: formatDate(dossier.date_debut_travaux),
-    },
-    {
-      icon: Calendar,
-      label: 'Fin travaux',
-      value: formatDate(dossier.date_fin_travaux),
+      label: 'Chantier réalisé',
+      value: formatDate(dossier.date_chantier_realisee),
     },
     {
       icon: MapPin,
       label: 'Code postal',
-      value: dossier.postal_code ?? '—',
+      value: dossier.client_code_postal ?? '—',
     },
     {
-      icon: ThermometerSun,
-      label: 'Zone climatique',
-      value: dossier.zone_climatique ?? '—',
+      icon: Euro,
+      label: 'Montant HT',
+      value: formatEuros(montantHtEur),
+    },
+    {
+      icon: Wallet,
+      label: 'Reste à charge',
+      value: formatEuros(resteAChargeEur),
     },
   ]
 
@@ -221,13 +249,13 @@ export default async function CeeDossierDetailPage({ params }: PageProps) {
                 <h2 className="text-lg font-semibold text-charcoal-900">Pièces fournies</h2>
                 <JustificatifGapBadge gap={gap} />
               </div>
-              {dossier.justificatifs.length === 0 ? (
+              {justificatifs.length === 0 ? (
                 <p className="text-sm text-charcoal-500">
                   Aucune pièce enregistrée pour le moment.
                 </p>
               ) : (
                 <ul className="space-y-2" role="list">
-                  {dossier.justificatifs.map((j, idx) => (
+                  {justificatifs.map((j, idx) => (
                     <li
                       key={`${j.code}-${idx}`}
                       className="flex items-start gap-3 rounded-lg border border-sand-200 bg-sand-50 p-3"

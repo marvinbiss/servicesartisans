@@ -17,32 +17,36 @@
 
 import { useState, useMemo, useId } from 'react'
 import { Search, X, SlidersHorizontal } from 'lucide-react'
-import type { CeeDossier, CeeDossierStatus } from '@/lib/cee/dossier-types'
+import type { CeeDossierV3Row } from '@/lib/cee/dossiers-v3'
+import type { CeeDossierV3Status } from '@/lib/cee/dossier-transitions'
 import DossierListCard from '@/components/cee-artisan/DossierListCard'
 import PriorityBadge from '@/components/cee-artisan/PriorityBadge'
 import { extractScoreFromMetadata } from '@/lib/cee/scoring'
 
 interface CeeDashboardFiltersProps {
-  dossiers: CeeDossier[]
+  dossiers: CeeDossierV3Row[]
 }
 
-const STATUS_OPTIONS: Array<{ value: CeeDossierStatus | 'all'; label: string }> = [
+// Enum V3 (cf. dossier-transitions.ts / StatusBadge LABELS) — libellés FR alignés.
+const STATUS_OPTIONS: Array<{ value: CeeDossierV3Status | 'all'; label: string }> = [
   { value: 'all', label: 'Tous les statuts' },
-  { value: 'brouillon', label: 'Brouillon' },
-  { value: 'engagement_signe', label: 'Engagement signé' },
-  { value: 'travaux_en_cours', label: 'Travaux en cours' },
-  { value: 'travaux_acheves', label: 'Travaux achevés' },
-  { value: 'ah_signee', label: 'Attestation signée' },
-  { value: 'depose_delegataire', label: 'Déposé délégataire' },
-  { value: 'depose_pncee', label: 'Déposé PNCEE' },
-  { value: 'valide', label: 'Validé' },
-  { value: 'rejete', label: 'Rejeté' },
-  { value: 'annule', label: 'Annulé' },
+  { value: 'draft', label: 'Brouillon' },
+  { value: 'submitted_by_artisan', label: 'Soumis' },
+  { value: 'qa_pending', label: 'Contrôle qualité' },
+  { value: 'qa_approved', label: 'QA validé' },
+  { value: 'qa_rejected', label: 'QA rejeté' },
+  { value: 'deposited', label: 'Déposé' },
+  { value: 'validated_pncee', label: 'Validé PNCEE' },
+  { value: 'rejected_pncee', label: 'Rejeté PNCEE' },
+  { value: 'paid_client', label: 'Payé client' },
+  { value: 'commission_due', label: 'Commission due' },
+  { value: 'commission_paid', label: 'Commission versée' },
+  { value: 'archived', label: 'Archivé' },
 ]
 
 export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersProps) {
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<CeeDossierStatus | 'all'>('all')
+  const [statusFilter, setStatusFilter] = useState<CeeDossierV3Status | 'all'>('all')
   const searchId = useId()
   const statusId = useId()
   const resultsId = useId()
@@ -55,7 +59,8 @@ export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersPro
     if (search.trim()) {
       const q = search.trim().toLowerCase()
       result = result.filter(
-        (d) => d.operation_code.toLowerCase().includes(q) || (d.postal_code ?? '').includes(q)
+        (d) =>
+          d.operation_code.toLowerCase().includes(q) || (d.client_code_postal ?? '').includes(q)
       )
     }
     return result
@@ -112,7 +117,7 @@ export default function CeeDashboardFilters({ dossiers }: CeeDashboardFiltersPro
           <select
             id={statusId}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as CeeDossierStatus | 'all')}
+            onChange={(e) => setStatusFilter(e.target.value as CeeDossierV3Status | 'all')}
             aria-controls={resultsId}
             className="w-full rounded-lg border border-sand-300 bg-white py-2 pl-3 pr-8 text-sm text-charcoal-900 transition-colors hover:border-sand-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-1"
           >

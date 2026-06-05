@@ -26,8 +26,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createClient } from '@/lib/supabase/server'
-import { listCeeDossiersForProvider } from '@/lib/cee/dossiers'
-import type { CeeDossier } from '@/lib/cee/dossier-types'
+import { listCeeDossiersForProviderV3, type CeeDossierV3Row } from '@/lib/cee/dossiers-v3'
 import type { CeeDossierV3Status } from '@/lib/cee/dossier-transitions'
 import { extractScoreFromMetadata } from '@/lib/cee/scoring'
 import { logger } from '@/lib/logger'
@@ -123,13 +122,13 @@ export default async function EspaceArtisanCeePage() {
   const rgeInvalid = !providerRow.is_rge
 
   // --- Fetch dossiers + commissions en parallèle --------------------------
-  let dossiers: CeeDossier[] = []
+  let dossiers: CeeDossierV3Row[] = []
   let loadError = false
   let commissionsTotal = 0
 
   try {
     const [raw, commResult] = await Promise.all([
-      listCeeDossiersForProvider(supabase, providerRow.id),
+      listCeeDossiersForProviderV3(supabase, providerRow.id),
       supabase
         .from('cee_commissions')
         .select('amount_cts, status, cee_artisan_partners!inner(provider_id)')
@@ -158,15 +157,9 @@ export default async function EspaceArtisanCeePage() {
   }
 
   // --- KPIs (V3 status enum — cf. dossier-transitions.ts / migration 433) ---
-  const draftCount = dossiers.filter(
-    (d) => (d.status as unknown as CeeDossierV3Status) === 'draft'
-  ).length
-  const submittedCount = dossiers.filter((d) =>
-    SUBMITTED_STATUSES.includes(d.status as unknown as CeeDossierV3Status)
-  ).length
-  const paidCount = dossiers.filter((d) =>
-    VALIDATED_STATUSES.includes(d.status as unknown as CeeDossierV3Status)
-  ).length
+  const draftCount = dossiers.filter((d) => d.status === 'draft').length
+  const submittedCount = dossiers.filter((d) => SUBMITTED_STATUSES.includes(d.status)).length
+  const paidCount = dossiers.filter((d) => VALIDATED_STATUSES.includes(d.status)).length
 
   const kpiCards = [
     {

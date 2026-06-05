@@ -67,6 +67,10 @@ const DOSSIER_SELECT = [
  * L'acteur à l'origine de la création doit être passé via `actor` pour
  * alimenter le trigger d'audit (`cee_dossiers_audit_log`) qui lit
  * `metadata._actor_type` / `metadata._actor_id`.
+ *
+ * @deprecated Schéma 402 mort (table droppée par migration 431). Voir
+ *   `dossiers-v3.ts`. Conservé pour ne pas casser ses tests/importeurs legacy ;
+ *   ne doit plus être appelé par les pages.
  */
 export async function createCeeDossier(
   supabase: SupabaseClient,
@@ -128,6 +132,9 @@ export async function createCeeDossier(
 /**
  * Récupère un dossier par son id. Fail-open : retourne `null` si non trouvé
  * ou en cas d'erreur DB.
+ *
+ * @deprecated Schéma 402 mort (table droppée par migration 431). Utiliser
+ *   `getCeeDossierByIdV3` de `dossiers-v3.ts`.
  */
 export async function getCeeDossierById(
   supabase: SupabaseClient,
@@ -156,6 +163,9 @@ export async function getCeeDossierById(
 /**
  * Liste les dossiers CEE d'un artisan, triés par date de création descendante.
  * Fail-open : retourne `[]` sur erreur DB.
+ *
+ * @deprecated Schéma 402 mort (table droppée par migration 431). Utiliser
+ *   `listCeeDossiersForProviderV3` de `dossiers-v3.ts`.
  */
 export async function listCeeDossiersForProvider(
   supabase: SupabaseClient,
