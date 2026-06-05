@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import { assertArtisanTwoFactor } from '@/lib/auth/artisan-guard'
 import {
   getProviderFull,
   getProviderForUpdate,
@@ -37,7 +38,7 @@ export async function GET() {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, two_factor_enabled')
       .eq('id', user.id)
       .single()
 
@@ -48,6 +49,9 @@ export async function GET() {
     if (profile.role !== 'artisan') {
       return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
+
+    const twoFactorError = await assertArtisanTwoFactor(profile.two_factor_enabled, user.id)
+    if (twoFactorError) return twoFactorError
 
     // Fetch provider by user_id
     const { data: provider, error: providerError } = await getProviderFull(supabase, user.id)
@@ -83,7 +87,7 @@ export async function PUT(request: Request) {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('role')
+      .select('role, two_factor_enabled')
       .eq('id', user.id)
       .single()
 
@@ -94,6 +98,9 @@ export async function PUT(request: Request) {
     if (profile.role !== 'artisan') {
       return NextResponse.json({ error: 'Accès réservé aux artisans' }, { status: 403 })
     }
+
+    const twoFactorError = await assertArtisanTwoFactor(profile.two_factor_enabled, user.id)
+    if (twoFactorError) return twoFactorError
 
     // Get provider by user_id (need provider.id for update + fields for revalidation)
     const { data: provider, error: providerError } = await getProviderForUpdate(supabase, user.id)
