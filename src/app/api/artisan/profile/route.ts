@@ -24,7 +24,10 @@ const updateProfileSchema = z.object({
   full_name: z.string().max(100).optional(),
   // Provider fields (written to providers table, not profiles)
   name: z.string().max(200).optional(),
-  siret: z.string().max(20).optional(),
+  siret: z
+    .string()
+    .regex(/^\d{14}$/, 'Le SIRET doit contenir exactement 14 chiffres')
+    .optional(),
   phone: z.string().max(20).optional(),
   address_street: z.string().max(200).optional(),
   address_city: z.string().max(100).optional(),
