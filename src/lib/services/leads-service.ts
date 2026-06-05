@@ -292,9 +292,14 @@ export async function getAssignmentForAction(
 export async function updateAssignmentStatus(
   supabase: SupabaseClient,
   assignmentId: string,
+  providerId: string,
   updates: Record<string, unknown>
 ): Promise<void> {
-  const { error } = await supabase.from('lead_assignments').update(updates).eq('id', assignmentId)
+  const { error } = await supabase
+    .from('lead_assignments')
+    .update(updates)
+    .eq('id', assignmentId)
+    .eq('provider_id', providerId)
 
   if (error) {
     logger.error('Lead assignment update error:', error)

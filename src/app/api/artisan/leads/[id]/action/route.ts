@@ -107,7 +107,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
       // Bug 1 fix: use authenticated supabase client (RLS policy "lead_assignments_provider_update"
       // from migration 103 allows the artisan to UPDATE their own assignments).
-      await updateAssignmentStatus(supabase, id, { status: 'viewed', viewed_at: now })
+      await updateAssignmentStatus(supabase, id, provider.id, { status: 'viewed', viewed_at: now })
 
       await logLeadEvent(assignment.lead_id, 'viewed', {
         providerId: provider.id,
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       // (the most recent prior state for a quoted action) to keep a consistent state.
 
       // Step 1: UPDATE assignment status -> 'quoted'
-      await updateAssignmentStatus(supabase, id, { status: 'quoted' })
+      await updateAssignmentStatus(supabase, id, provider.id, { status: 'quoted' })
 
       // Step 2: INSERT quote — if this fails, roll back assignment status
       try {
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         })
       } catch {
         // Rollback: restore previous status
-        await updateAssignmentStatus(supabase, id, { status: assignment.status })
+        await updateAssignmentStatus(supabase, id, provider.id, { status: assignment.status })
         return NextResponse.json(
           { success: false, error: { message: 'Erreur lors de la création du devis' } },
           { status: 500 }
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const { reason } = body
 
       // Bug 1 fix: use authenticated supabase client for mutation
-      await updateAssignmentStatus(supabase, id, { status: 'declined' })
+      await updateAssignmentStatus(supabase, id, provider.id, { status: 'declined' })
 
       await logLeadEvent(assignment.lead_id, 'declined', {
         providerId: provider.id,

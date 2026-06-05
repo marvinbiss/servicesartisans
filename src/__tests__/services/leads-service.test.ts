@@ -377,14 +377,12 @@ describe('getAssignmentForAction', () => {
 // ===========================================================================
 
 describe('updateAssignmentStatus', () => {
-  it('updates assignment successfully', async () => {
-    const builder = createMockQueryBuilder()
-    builder.eq = vi.fn().mockResolvedValue({ error: null })
-    builder.update = vi.fn().mockReturnValue(builder)
+  it('updates assignment successfully scoped to provider', async () => {
+    const builder = createMockQueryBuilder({ error: null })
     mockSupabaseFrom.mockReturnValue(builder)
 
     await expect(
-      updateAssignmentStatus(mockSupabaseClient as never, 'assign-1', {
+      updateAssignmentStatus(mockSupabaseClient as never, 'assign-1', 'provider-1', {
         status: 'viewed',
         viewed_at: '2026-01-01',
       })
@@ -395,16 +393,18 @@ describe('updateAssignmentStatus', () => {
       status: 'viewed',
       viewed_at: '2026-01-01',
     })
+    expect(builder.eq).toHaveBeenCalledWith('id', 'assign-1')
+    expect(builder.eq).toHaveBeenCalledWith('provider_id', 'provider-1')
   })
 
   it('throws on DB error', async () => {
-    const builder = createMockQueryBuilder()
-    builder.eq = vi.fn().mockResolvedValue({ error: { message: 'update failed' } })
-    builder.update = vi.fn().mockReturnValue(builder)
+    const builder = createMockQueryBuilder({ error: { message: 'update failed' } })
     mockSupabaseFrom.mockReturnValue(builder)
 
     await expect(
-      updateAssignmentStatus(mockSupabaseClient as never, 'assign-1', { status: 'viewed' })
+      updateAssignmentStatus(mockSupabaseClient as never, 'assign-1', 'provider-1', {
+        status: 'viewed',
+      })
     ).rejects.toThrow('Erreur lors de la mise à jour du lead')
   })
 })
