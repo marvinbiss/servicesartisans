@@ -50,7 +50,13 @@ function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Pro
 }
 
 const BodySchema = z.object({
-  iban: z.string().min(14).max(64),
+  // Fail-fast cohérent avec l'intention FR-only de validateIban (iban-crypto) :
+  // le schéma seul était trompeusement permissif (tout string 14-64).
+  iban: z
+    .string()
+    .min(14)
+    .max(64)
+    .regex(/^[A-Z]{2}\d{2}[A-Z0-9 ]{10,40}$/i),
   bic: z
     .string()
     .regex(/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/i)
@@ -60,7 +66,7 @@ const BodySchema = z.object({
 
 export async function POST(request: NextRequest) {
   // MUST-9 CSRF
-  if (!validateOrigin(request)) {
+  if (!validateOrigin(request, { requireOrigin: true })) {
     return csrfRejectResponse()
   }
 

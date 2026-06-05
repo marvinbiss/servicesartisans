@@ -78,7 +78,8 @@ type MockResult = { body: Record<string, unknown>; status: number }
 function makeRequest(headers?: Record<string, string>) {
   return new Request('http://localhost:3000/api/cee/partners/activate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...headers },
+    // Origin requis depuis le mode strict validateOrigin sur routes financieres
+    headers: { 'Content-Type': 'application/json', Origin: 'http://localhost:3000', ...headers },
   })
 }
 

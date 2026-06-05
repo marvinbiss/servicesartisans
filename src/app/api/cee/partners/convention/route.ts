@@ -82,7 +82,7 @@ function isYousignPdfUrl(url: string | null | undefined): boolean {
 
 export async function POST(request: NextRequest) {
   // MUST-9 CSRF
-  if (!validateOrigin(request)) {
+  if (!validateOrigin(request, { requireOrigin: true })) {
     return csrfRejectResponse()
   }
 

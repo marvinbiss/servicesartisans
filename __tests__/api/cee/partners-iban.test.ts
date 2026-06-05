@@ -94,7 +94,8 @@ type MockResult = { body: Record<string, unknown>; status: number; headers: Reco
 function makeRequest(body: unknown, headers?: Record<string, string>) {
   return new Request('http://localhost:3000/api/cee/partners/onboarding/iban', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...headers },
+    // Origin requis depuis le mode strict validateOrigin sur routes financieres
+    headers: { 'Content-Type': 'application/json', Origin: 'http://localhost:3000', ...headers },
     body: typeof body === 'string' ? body : JSON.stringify(body),
   })
 }

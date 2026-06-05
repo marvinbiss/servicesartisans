@@ -13,12 +13,19 @@
  * - If no allowed URLs are configured (dev mode), allow all.
  * - Missing Origin header → allow (curl, server-to-server, same-origin from
  *   some Safari versions). Session auth provides primary protection.
+ * - `requireOrigin: true` (routes financières IBAN/activate/convention) :
+ *   un POST navigateur cross-origin porte toujours `Origin` ; l'exiger ferme
+ *   le résidu non-navigateur sans casser le flow app (fetch same-origin
+ *   envoie `Origin` sur POST).
  */
 
 import type { NextRequest } from 'next/server'
 import { logger } from '@/lib/logger'
 
-export function validateOrigin(request: NextRequest): boolean {
+export function validateOrigin(
+  request: NextRequest,
+  options: { requireOrigin?: boolean } = {}
+): boolean {
   const origin = request.headers.get('origin') || request.headers.get('referer')
   const secFetchSite = request.headers.get('sec-fetch-site')
 
@@ -30,6 +37,12 @@ export function validateOrigin(request: NextRequest): boolean {
   }
 
   if (!origin) {
+    if (options.requireOrigin) {
+      logger.warn('cee-csrf: missing origin rejected (strict mode)', {
+        action: 'cee-csrf-missing-origin',
+      })
+      return false
+    }
     return true
   }
 

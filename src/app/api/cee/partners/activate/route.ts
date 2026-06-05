@@ -51,7 +51,7 @@ function withTimeout<T>(promise: PromiseLike<T>, ms: number, label: string): Pro
 }
 
 export async function POST(request: NextRequest) {
-  if (!validateOrigin(request)) return csrfRejectResponse()
+  if (!validateOrigin(request, { requireOrigin: true })) return csrfRejectResponse()
 
   // SLA-99.9 : rate limit IP-based (defense in depth contre abus distribué).
   const ip = getClientIp(request.headers)
