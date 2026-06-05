@@ -287,7 +287,7 @@ export default async function LongTailPage({ params }: PageProps) {
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-3 font-semibold text-white shadow-cta transition hover:bg-primary-700"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-5 py-3 font-semibold text-white shadow-cta transition hover:bg-primary-600"
             >
               Obtenir mes devis <ArrowRight className="h-4 w-4" />
             </Link>

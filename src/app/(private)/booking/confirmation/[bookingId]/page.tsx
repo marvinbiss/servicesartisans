@@ -148,7 +148,7 @@ END:VCALENDAR`
           <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
+            className="inline-block bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition"
           >
             Retour à l'accueil
           </Link>

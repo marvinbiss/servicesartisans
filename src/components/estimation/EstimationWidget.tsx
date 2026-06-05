@@ -175,7 +175,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             }
           >
             {/* Header */}
-            <div className="flex items-center justify-between gap-3 bg-primary-400 px-4 py-3 text-white sm:rounded-t-[20px] shrink-0">
+            <div className="flex items-center justify-between gap-3 bg-primary-500 px-4 py-3 text-white sm:rounded-t-[20px] shrink-0">
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* Mini logo SA */}
                 <div className="flex items-center font-heading font-bold text-base shrink-0">
@@ -190,7 +190,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                       ? `Devis avec ${context.artisan.name}`
                       : `${context.metier} à ${context.ville}`}
                   </p>
-                  <p className="text-[11px] text-white/80">Estimation gratuite IA</p>
+                  <p className="text-2xs text-white/80">Estimation gratuite IA</p>
                 </div>
               </div>
               <button
@@ -237,7 +237,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
 
             {/* Footer with privacy link */}
             <div className="border-t border-sand-100 px-4 py-2 text-center shrink-0">
-              <p className="text-[11px] text-charcoal-400">
+              <p className="text-2xs text-charcoal-400">
                 Propulsé par{' '}
                 <a
                   href="https://servicesartisans.fr"

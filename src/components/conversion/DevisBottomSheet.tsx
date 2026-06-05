@@ -222,7 +222,7 @@ export default function DevisBottomSheet({
                           form.step > i + 1
                             ? 'bg-accent-500 text-white'
                             : form.step === i + 1
-                              ? 'bg-primary-400 text-white shadow-cta scale-110'
+                              ? 'bg-primary-500 text-white shadow-cta scale-110'
                               : 'bg-sand-200 text-charcoal-400'
                         }`}
                       >
@@ -277,7 +277,7 @@ export default function DevisBottomSheet({
                 />
                 <button
                   onClick={onClose}
-                  className="w-full py-3 bg-primary-400 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all touch-manipulation"
+                  className="w-full py-3 bg-primary-500 text-white font-semibold rounded-xl shadow-cta active:scale-[0.98] transition-all touch-manipulation"
                 >
                   Fermer
                 </button>
@@ -581,7 +581,7 @@ export default function DevisBottomSheet({
                       </button>
                     </div>
 
-                    <p className="text-[10px] text-charcoal-400 text-center">
+                    <p className="text-2xs text-charcoal-400 text-center">
                       Gratuit et sans engagement
                     </p>
                   </div>
@@ -595,7 +595,7 @@ export default function DevisBottomSheet({
       <noscript>
         <Link
           href="/devis"
-          className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-400 text-white font-semibold rounded-xl md:hidden"
+          className="fixed bottom-4 left-4 right-4 z-[56] block text-center py-3 bg-primary-500 text-white font-semibold rounded-xl md:hidden"
         >
           Obtenir mon devis gratuit
         </Link>

@@ -115,7 +115,7 @@ export default function ReviewPage() {
           <p className="text-charcoal-600 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
+            className="inline-block bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition"
           >
             Retour à l'accueil
           </Link>
@@ -138,7 +138,7 @@ export default function ReviewPage() {
           </p>
           <Link
             href="/"
-            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition"
+            className="inline-block bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition"
           >
             Découvrir d'autres artisans
           </Link>
@@ -265,7 +265,7 @@ export default function ReviewPage() {
           <button
             type="submit"
             disabled={submitting || rating === 0}
-            className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-primary-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>

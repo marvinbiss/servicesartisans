@@ -248,7 +248,7 @@ export default function TwoFactorSettings() {
           type="button"
           disabled={submitting}
           onClick={startSetup}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-medium disabled:opacity-60"
         >
           {submitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -334,7 +334,7 @@ export default function TwoFactorSettings() {
             type="button"
             disabled={submitting || code.length !== 6}
             onClick={submitVerify}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-medium disabled:opacity-60"
           >
             {submitting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -426,7 +426,7 @@ export default function TwoFactorSettings() {
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium disabled:opacity-60 ${
                 phase === 'disabling'
                   ? 'bg-red-600 hover:bg-red-700'
-                  : 'bg-primary-600 hover:bg-primary-700'
+                  : 'bg-primary-500 hover:bg-primary-600'
               }`}
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}

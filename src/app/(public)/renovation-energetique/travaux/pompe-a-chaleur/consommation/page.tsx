@@ -454,8 +454,8 @@ export default function Page() {
               3,4 (zone H1 froide) à 3,9 (zone H3 chaude) en 2026.
             </p>
             <p className="text-xs text-sand-500">
-              ⚠ Le COP communiqué par les fabricants est souvent le COP nominal (+7 °C). Pour
-              estimer la consommation réelle annuelle, baser le calcul sur le SCOP, pas le COP.
+              Le COP communiqué par les fabricants est souvent le COP nominal (+7 °C). Pour estimer
+              la consommation réelle annuelle, baser le calcul sur le SCOP, pas le COP.
             </p>
 
             <h2 id="calcul">Calcul théorique de la consommation</h2>
@@ -574,7 +574,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

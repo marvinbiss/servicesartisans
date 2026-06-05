@@ -147,38 +147,38 @@ const COMPARATIF = [
   },
   {
     critere: 'Eau chaude sanitaire (ECS)',
-    air_air: '❌ Non',
-    air_eau: '✅ Oui (avec ballon)',
+    air_air: 'Non',
+    air_eau: 'Oui (avec ballon)',
     avantage: 'air-eau',
   },
   {
     critere: 'Chauffage central (radiateurs/plancher)',
-    air_air: '❌ Non',
-    air_eau: '✅ Oui',
+    air_air: 'Non',
+    air_eau: 'Oui',
     avantage: 'air-eau',
   },
   {
     critere: 'Rafraîchissement été (clim)',
-    air_air: '✅ Oui (réversible)',
-    air_eau: '⚠️ Non sauf modèle réversible',
+    air_air: 'Oui (réversible)',
+    air_eau: 'Non sauf modèle réversible',
     avantage: 'air-air',
   },
   {
     critere: 'MaPrimeRénov’',
-    air_air: '❌ Non éligible',
-    air_eau: '✅ 3 000-5 000 €',
+    air_air: 'Non éligible',
+    air_eau: '3 000-5 000 €',
     avantage: 'air-eau',
   },
   {
     critere: 'CEE Coup de pouce',
-    air_air: '⚠️ Limité (remplacement chaudière)',
-    air_eau: '✅ 2 500-4 000 €',
+    air_air: 'Limité (remplacement chaudière)',
+    air_eau: '2 500-4 000 €',
     avantage: 'air-eau',
   },
   {
     critere: 'TVA 5,5 % avec RGE',
-    air_air: '⚠️ 10 % seulement',
-    air_eau: '✅ 5,5 %',
+    air_air: '10 % seulement',
+    air_eau: '5,5 %',
     avantage: 'air-eau',
   },
   {
@@ -467,7 +467,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

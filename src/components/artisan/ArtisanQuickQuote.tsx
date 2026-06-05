@@ -48,7 +48,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           {/* CTA Button */}
           <button
             onClick={handleClick}
-            className="w-full py-3.5 px-6 bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full py-3.5 px-6 bg-primary-500 hover:bg-primary-600 shadow-lg shadow-primary-500/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation hover:scale-[1.02] active:scale-[0.98]"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />

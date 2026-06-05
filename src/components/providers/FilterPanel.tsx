@@ -344,7 +344,7 @@ export function FilterPanel({ resultCount, variant = 'sidebar' }: FilterPanelPro
             <Filter className="w-4 h-4" />
             Filtres
             {activeCount > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary-400 text-white text-2xs font-bold">
+              <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary-500 text-white text-2xs font-bold">
                 {activeCount}
               </span>
             )}

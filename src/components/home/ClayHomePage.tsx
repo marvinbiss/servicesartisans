@@ -689,7 +689,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         <div className="flex justify-end items-center">
                           <Link
                             href={profileHref}
-                            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-200 bg-primary-400 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover"
+                            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-200 bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover"
                           >
                             Voir le profil
                           </Link>

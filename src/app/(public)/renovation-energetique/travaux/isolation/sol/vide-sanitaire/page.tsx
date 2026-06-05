@@ -75,7 +75,7 @@ const tldr = [
   '<strong>2 techniques</strong> selon hauteur : panneaux rigides en plafond (VS ≥ 60 cm accessible) 25-50 €/m², mousse polyuréthane projetée (VS bas 30-60 cm) 35-70 €/m².',
   'CEE BAR-EN-103 opérationnel : R ≥ 3 m².K/W, plancher sur vide-sanitaire, RGE obligatoire. Forfait kWhc/m² maison H1 1 600, H2 1 300, H3 900.',
   'MaPrimeRénov’ + Coup de pouce isolation cumulables + éco-PTZ + TVA 5,5 %.',
-  '⚠ <strong>Conserver la ventilation</strong> du vide-sanitaire (grilles d’aération) : isoler ne doit pas étouffer le VS, sinon humidité + moisissures.',
+  '<strong>Conserver la ventilation</strong> du vide-sanitaire (grilles d’aération) : isoler ne doit pas étouffer le VS, sinon humidité + moisissures.',
   'Sensation pieds froids éliminée dès le premier hiver. ROI typique 3-5 ans.',
 ]
 
@@ -463,7 +463,7 @@ export default function Page() {
               </p>
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white font-semibold px-5 py-3 rounded-lg transition"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-3 rounded-lg transition"
               >
                 Demander mon devis vide-sanitaire <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>

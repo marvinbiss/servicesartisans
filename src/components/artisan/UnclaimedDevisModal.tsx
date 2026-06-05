@@ -419,7 +419,7 @@ export function UnclaimedDevisModal({
                           type="button"
                           onClick={handleContinue}
                           disabled={!canContinue}
-                          className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary-400 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base shadow-cta transition-all duration-200"
+                          className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base shadow-cta transition-all duration-200"
                         >
                           Continuer
                           <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -521,7 +521,7 @@ export function UnclaimedDevisModal({
                             type="button"
                             onClick={handleSubmit}
                             disabled={submitting}
-                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary-400 hover:bg-primary-600 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold text-base shadow-cta transition-all duration-200"
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-primary-500 hover:bg-primary-600 disabled:opacity-70 disabled:cursor-not-allowed text-white font-bold text-base shadow-cta transition-all duration-200"
                           >
                             {submitting ? (
                               <>

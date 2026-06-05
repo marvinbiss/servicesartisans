@@ -205,37 +205,37 @@ const CHIFFRES_CLES = [
 const QUAND_CHOISIR = [
   {
     cas: 'Vous remplacez un ballon électrique en zone ensoleillée',
-    reco: '✅ CESI excellent',
+    reco: 'CESI excellent',
     detail:
       'PACA, Occitanie, Nouvelle-Aquitaine, Corse : la production solaire (700-900 kWh/m²/an) couvre 70-80 % des besoins ECS. ROI 6-9 ans. Aides cumulées MPR + CEE peuvent financer 50-60 % du projet.',
   },
   {
     cas: 'Vous construisez en neuf BBC ou RE 2020',
-    reco: '✅ SSC pertinent',
+    reco: 'SSC pertinent',
     detail:
       "Maison neuve bien isolée + plancher chauffant basse T° + 8-12 m² capteurs sud = SSC idéal. Couverture 50-60 % chauffage + ECS combinés. Crédit d'impôt et aides cumulables.",
   },
   {
     cas: 'Vous avez une maison ancienne mal isolée',
-    reco: '🟡 SSC sous-performant',
+    reco: 'SSC sous-performant',
     detail:
       "Le SSC nécessite une émission de chaleur basse T° (plancher chauffant ou radiateurs BT). Une maison mal isolée a besoin de hautes températures = perte d'efficacité solaire. Isoler avant d'envisager SSC.",
   },
   {
     cas: 'Vous habitez en zone Nord ou hivers longs',
-    reco: '🟡 Tubes sous vide ou hybride PAC',
+    reco: 'Tubes sous vide ou hybride PAC',
     detail:
       'Bretagne, Hauts-de-France, Alsace, Massif Central : production solaire faible 350-450 kWh/m²/an. Préférer tubes sous vide (+30-40 % rendement hiver) ou hybride solaire + PAC.',
   },
   {
     cas: "Vous voulez maximiser l'autonomie",
-    reco: '✅ CESI + PV combinés',
+    reco: 'CESI + PV combinés',
     detail:
       'Pour une maison autonome ECS + chauffage + élec : CESI 4-6 m² (ECS) + PV 3-6 kWc + ballon thermo (appoint sortie de saison) + isolation. Investissement 25-35K € mais facture quasi-nulle.',
   },
   {
     cas: 'Vous habitez en appartement ou logement collectif',
-    reco: '❌ Difficile en individuel',
+    reco: 'Difficile en individuel',
     detail:
       "Nécessite copropriété qui pilote l'installation. Préférer ballon thermodynamique (PAC sur air ambiant), 5-10x moins cher et installable individuellement.",
   },
@@ -569,7 +569,7 @@ export default function Page() {
                 </p>
                 <Link
                   href="/simulateur-aides-renovation"
-                  className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                 >
                   Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                 </Link>

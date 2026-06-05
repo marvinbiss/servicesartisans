@@ -479,7 +479,7 @@ export default function EviterArnaquesArtisanPage() {
                   </Link>
                   <Link
                     href="/services"
-                    className="inline-flex items-center gap-2 bg-primary-400 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary-300 transition-colors border border-primary-300"
+                    className="inline-flex items-center gap-2 bg-primary-500 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     <ArrowRight className="w-4 h-4" />
                     {"Parcourir l'annuaire"}
@@ -655,7 +655,7 @@ export default function EviterArnaquesArtisanPage() {
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center gap-2 bg-primary-400 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-300 transition-colors border border-primary-300"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-600 transition-colors"
               >
                 <Search className="w-5 h-5" />
                 {"Parcourir l'annuaire"}

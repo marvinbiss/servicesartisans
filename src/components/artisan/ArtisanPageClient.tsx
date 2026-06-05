@@ -206,7 +206,7 @@ export default function ArtisanPageClient({
           </p>
           <Link
             href="/recherche"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-400 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour à la recherche
@@ -233,13 +233,13 @@ export default function ArtisanPageClient({
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
         <a
           href="#main-content"
-          className="absolute top-4 left-4 z-50 bg-primary-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-primary-500 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller au contenu principal
         </a>
         <a
           href="#contact-sidebar"
-          className="absolute top-4 left-4 z-50 bg-primary-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-primary-500 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller aux informations de contact
         </a>

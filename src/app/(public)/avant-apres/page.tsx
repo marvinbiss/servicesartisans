@@ -401,7 +401,7 @@ export default function AvantApresPage() {
               </Link>
               <Link
                 href="/devis"
-                className="inline-flex items-center justify-center gap-2 bg-primary-400 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-300 transition-colors border border-primary-300"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-600 transition-colors"
               >
                 <FileCheck className="w-5 h-5" />
                 Obtenir mon devis gratuit

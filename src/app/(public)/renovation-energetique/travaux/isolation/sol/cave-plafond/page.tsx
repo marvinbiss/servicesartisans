@@ -73,7 +73,7 @@ const tldr = [
   '<strong>Prix 25-55 €/m² posé</strong> selon matériau (PIR, laine de roche, mousse projetée).',
   'CEE BAR-EN-103 opérationnel : R ≥ 3 m².K/W, plancher sur sous-sol non chauffé, RGE obligatoire.',
   'MaPrimeRénov’ par geste + Coup de pouce + éco-PTZ + TVA 5,5 % cumulables.',
-  '⚠ <strong>Cave humide</strong> = diagnostic préalable obligatoire. Sans traitement humidité, l’isolation pourrit en 2-3 ans.',
+  '<strong>Cave humide</strong> = diagnostic préalable obligatoire. Sans traitement humidité, l’isolation pourrit en 2-3 ans.',
   'Bénéfice immédiat : sols qui passent de 12 °C à 18-19 °C. Sensation pieds froids éliminée.',
 ]
 
@@ -428,9 +428,9 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="not-prose border-2 border-blue-200 bg-blue-50 rounded-lg p-4 my-6 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-blue-700 shrink-0 mt-0.5" aria-hidden />
-              <div className="text-sm text-blue-900">
+            <div className="not-prose border-2 border-sand-300 bg-sand-100 rounded-lg p-4 my-6 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-charcoal-700 shrink-0 mt-0.5" aria-hidden />
+              <div className="text-sm text-charcoal-900">
                 <p className="font-semibold m-0 mb-1">Maintenir la ventilation de la cave</p>
                 <p className="m-0">
                   Une fois le plafond isolé, la cave perd la chaleur résiduelle qu’elle recevait du
@@ -480,7 +480,7 @@ export default function Page() {
               </p>
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white font-semibold px-5 py-3 rounded-lg transition"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-3 rounded-lg transition"
               >
                 Demander mon devis cave plafond <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>

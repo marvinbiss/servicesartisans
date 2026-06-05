@@ -198,7 +198,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                         setIsDevisOpen(true)
                       }
                     }}
-                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-600 hover:bg-primary-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-500 hover:bg-primary-600 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary-500/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
                     aria-label="Devis gratuit en 2 min"
                   >
                     <FileText className="w-5 h-5" aria-hidden="true" />

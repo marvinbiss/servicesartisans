@@ -107,31 +107,31 @@ const COMPARATIF_VS_PAC = [
 const QUAND_CHOISIR = [
   {
     cas: 'Vous remplacez une vieille chaudière gaz (> 20 ans)',
-    reco: '✅ Pertinent en attente de PAC',
+    reco: 'Pertinent en attente de PAC',
     detail:
       'Si vous n’êtes pas prêt à passer à la PAC (budget, travaux), une condensation maintient le gaz tout en réduisant la facture de 20-30 %.',
   },
   {
     cas: 'Vous avez une chaudière fioul',
-    reco: '❌ Non recommandé',
+    reco: 'Non recommandé',
     detail:
       'Préférez une PAC air-eau : aides massives (MPR 5 000 € + CEE 4 000 € Bleu) et économies factures 50-70 %. La condensation gaz est une fausse bonne idée (gaz fossile reste cher).',
   },
   {
     cas: 'Vous construisez en neuf',
-    reco: '❌ Interdit RE2020',
+    reco: 'Interdit RE2020',
     detail:
       'Depuis le 1er janvier 2025, les chaudières gaz sont interdites dans les logements neufs (RE2020). Obligation PAC, biomasse ou raccordement réseau de chaleur.',
   },
   {
     cas: 'Vous habitez en zone sans réseau gaz',
-    reco: '❌ Pas pertinent',
+    reco: 'Pas pertinent',
     detail:
       'Sans gaz de ville, la condensation n’a pas d’intérêt. Préférez PAC air-eau, chaudière biomasse ou poêle granulés.',
   },
   {
     cas: 'Vous voulez de l’hybride PAC + condensation',
-    reco: '✅ Possible MPR maintenue',
+    reco: 'Possible MPR maintenue',
     detail:
       'Les chaudières hybrides (PAC + appoint condensation) restent éligibles MPR (forfait identique à la PAC seule). Intéressant pour grands volumes mal isolés.',
   },
@@ -378,7 +378,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

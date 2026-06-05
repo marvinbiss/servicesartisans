@@ -227,7 +227,7 @@ export default function MethodologiePage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/sources"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-600 transition-colors"
               >
                 Nos sources de données
                 <ArrowRight className="w-4 h-4" />

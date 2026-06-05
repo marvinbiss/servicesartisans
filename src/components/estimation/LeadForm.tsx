@@ -83,7 +83,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
       <button
         type="submit"
         disabled={lead.leadLoading || !lead.leadPhone.trim() || !lead.rgpdConsent}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-400 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors disabled:opacity-50 shadow-cta"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-primary-600 transition-colors disabled:opacity-50 shadow-cta"
       >
         {lead.leadLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />

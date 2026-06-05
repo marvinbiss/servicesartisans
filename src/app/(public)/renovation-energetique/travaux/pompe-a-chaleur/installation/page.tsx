@@ -564,7 +564,7 @@ export default async function Page() {
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href="/simulateur-aides-renovation"
-                      className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                     >
                       Simulateur aides <ArrowRight className="w-4 h-4" aria-hidden />
                     </Link>

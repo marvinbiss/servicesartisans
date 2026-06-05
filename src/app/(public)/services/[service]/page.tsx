@@ -761,7 +761,7 @@ export default async function ServicePage({ params }: PageProps) {
           </p>
           <Link
             href={`/devis/${serviceSlug}`}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             Demander un devis gratuit
             <ArrowRight className="w-5 h-5" aria-hidden="true" />

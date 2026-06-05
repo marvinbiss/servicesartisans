@@ -53,7 +53,7 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
                 devisSection.scrollIntoView({ behavior: 'smooth' })
               }
             }}
-            className="w-full py-4 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 shadow-lg shadow-primary-600/25 text-white font-bold text-base flex items-center justify-center gap-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
+            className="w-full py-4 px-4 rounded-xl bg-primary-500 hover:bg-primary-600 shadow-lg shadow-primary-500/25 text-white font-bold text-base flex items-center justify-center gap-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 group"
           >
             <FileText
               className="w-5 h-5 transition-transform group-hover:scale-110"

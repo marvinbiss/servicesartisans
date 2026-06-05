@@ -181,7 +181,7 @@ const CLUSTERS = [
     href: '/renovation-energetique/travaux/solaire',
     headline: 'Autoconsommation EDF OA',
     detail:
-      'Panneaux PV pour autoconsommation + revente surplus. Prime EDF OA 190-380 €/kWc. ⚠ HORS CEE et HORS MaPrimeRénov’ (PV ≠ solaire thermique). Supply : 3 985 artisans QualiPV actifs.',
+      'Panneaux PV pour autoconsommation + revente surplus. Prime EDF OA 190-380 €/kWc. HORS CEE et HORS MaPrimeRénov’ (PV ≠ solaire thermique). Supply : 3 985 artisans QualiPV actifs.',
     pages: [
       {
         label: 'Hub solaire PV (6.3K vol KD 25)',
@@ -560,7 +560,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

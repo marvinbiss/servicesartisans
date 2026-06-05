@@ -386,7 +386,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="w-full py-3 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Continuer
                   <ChevronRight className="w-5 h-5" aria-hidden="true" />
@@ -513,7 +513,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3.5 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
                   aria-label={`Envoyer ma demande de devis à ${displayName}`}
                 >
                   {loading ? (

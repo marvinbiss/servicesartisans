@@ -29,7 +29,7 @@ export const StatusTabs = memo(function StatusTabs({
           onClick={() => onTabChange(tab.key)}
           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
             activeTab === tab.key
-              ? 'bg-primary-600 text-white shadow-sm'
+              ? 'bg-primary-500 text-white shadow-sm'
               : 'bg-white text-charcoal-600 border border-sand-200 hover:bg-sand-50 hover:border-sand-300'
           }`}
         >

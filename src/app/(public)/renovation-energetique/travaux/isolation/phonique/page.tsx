@@ -102,7 +102,7 @@ const tldr = [
   'Indice clé : <strong>Rw dB</strong> (affaiblissement acoustique pondéré, NF EN ISO 717-1). Plus c’est haut, mieux le bruit est arrêté.',
   'Loi physique de base : <strong>masse-ressort-masse</strong>. 2 parois lourdes + matériau absorbant entre = isolation maximale (Rw 55-65 dB).',
   'Prix posé 2026 par poste — mur 80-180 €/m², plafond 60-150 €/m², sol 40-110 €/m², fenêtre Rw 38-42 dB ~600-1 200 €/unité.',
-  '⚠ <strong>Pas d’aide MaPrimeRénov’ ni CEE</strong> pour l’isolation phonique seule. Sauf si combinée à une opération thermique (laine minérale en toiture par ex.).',
+  '<strong>Pas d’aide MaPrimeRénov’ ni CEE</strong> pour l’isolation phonique seule. Sauf si combinée à une opération thermique (laine minérale en toiture par ex.).',
   'Mythes courants : « 1€ phonique » = arnaque, panneaux mousse 25 €/m² = +3-5 dB seuls (insuffisant), vitrage feuilleté ≠ phonique automatique.',
   'Diagnostic acoustique préalable (BE) : 250-600 € — identifie le pont phonique exact (mur, sol, gaine, fenêtre) avant travaux.',
   'Aide spécifique aéroport : <strong>insonorisation PEB zones A/B/C</strong> jusqu’à 80 % du devis pour propriétaires riverains (DGAC).',
@@ -230,7 +230,7 @@ const MATERIAUX = [
     densite: '25-40 kg/m³',
     rwApport: 'Faible (+3-8 dB seul)',
     prix: '15-50 €/m²',
-    note: '⚠ Souvent vendu pour faire de l’isolation phonique — efficace pour ABSORBER la réverbération à l’intérieur d’une pièce, mais N’ARRÊTE PAS le bruit du voisin. Ne pas confondre absorption et isolation.',
+    note: 'Souvent vendu pour faire de l’isolation phonique — efficace pour ABSORBER la réverbération à l’intérieur d’une pièce, mais N’ARRÊTE PAS le bruit du voisin. Ne pas confondre absorption et isolation.',
   },
 ]
 
@@ -599,7 +599,7 @@ export default function Page() {
               </p>
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white font-semibold px-5 py-3 rounded-lg transition"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-3 rounded-lg transition"
               >
                 Demander mon devis isolation phonique <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>

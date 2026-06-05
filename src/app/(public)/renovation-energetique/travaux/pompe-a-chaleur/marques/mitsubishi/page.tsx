@@ -209,49 +209,49 @@ const COMPARATIF_MITSUBISHI_DAIKIN = [
     critere: 'COP / SCOP',
     mitsu: '4,45 / 4,40',
     daikin: '4,40 / 4,30',
-    winner: '✅ Mitsubishi',
+    winner: 'Mitsubishi',
   },
   {
     critere: 'Acoustique',
     mitsu: '33-37 dB',
     daikin: '35-39 dB',
-    winner: '✅ Mitsubishi',
+    winner: 'Mitsubishi',
   },
   {
     critere: 'Garantie auto',
     mitsu: '7 ans (sans enregistrement)',
     daikin: '5 ans (7 sur enregistrement)',
-    winner: '✅ Mitsubishi',
+    winner: 'Mitsubishi',
   },
   {
     critere: 'Prix posée 10 kW',
     mitsu: '11 500 - 14 500 €',
     daikin: '12 000 - 15 500 €',
-    winner: '✅ Mitsubishi',
+    winner: 'Mitsubishi',
   },
   {
     critere: 'Eau haute T°',
     mitsu: '60 °C',
     daikin: '70 °C (H HT)',
-    winner: '✅ Daikin',
+    winner: 'Daikin',
   },
   {
     critere: 'Largeur de gamme',
     mitsu: '3 gammes air-eau',
     daikin: '5 gammes air-eau',
-    winner: '✅ Daikin',
+    winner: 'Daikin',
   },
   {
     critere: 'SAV France (techniciens)',
     mitsu: '~400',
     daikin: '~600',
-    winner: '✅ Daikin',
+    winner: 'Daikin',
   },
   {
     critere: 'Climat très froid (-25 °C+)',
     mitsu: 'Zubadan = oui',
     daikin: 'H HT = limite',
-    winner: '✅ Mitsubishi',
+    winner: 'Mitsubishi',
   },
 ]
 
@@ -567,7 +567,7 @@ export default async function Page() {
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href="/simulateur-aides-renovation"
-                      className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                     >
                       Simulateur aides <ArrowRight className="w-4 h-4" aria-hidden />
                     </Link>

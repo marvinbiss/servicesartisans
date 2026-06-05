@@ -319,7 +319,7 @@ export function ClayHeroSearch() {
       <button
         type="submit"
         aria-label="Rechercher un artisan"
-        className="bg-primary-400 hover:bg-primary-600 text-white font-heading font-bold text-base px-8 h-[52px] md:h-[56px] rounded-xl shrink-0 transition-all duration-200 w-full md:w-auto shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0"
+        className="bg-primary-500 hover:bg-primary-600 text-white font-heading font-bold text-base px-8 h-[52px] md:h-[56px] rounded-xl shrink-0 transition-all duration-200 w-full md:w-auto shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0"
       >
         Trouver
       </button>

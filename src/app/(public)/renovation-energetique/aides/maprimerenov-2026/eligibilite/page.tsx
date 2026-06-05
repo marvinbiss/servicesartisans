@@ -87,51 +87,60 @@ const CONDITIONS = [
     icon: Users,
     title: 'Statut du demandeur',
     items: [
-      '✅ Propriétaire occupant (résidence principale)',
-      '✅ Propriétaire bailleur (résidence principale du locataire)',
-      '✅ Indivisaire (avec mandat des co-indivisaires)',
-      '✅ Usufruitier (avec accord du nu-propriétaire)',
-      '✅ Société civile immobilière (SCI familiale uniquement)',
-      '❌ Locataire (passer par le bailleur)',
-      '❌ Société commerciale (SARL, SAS, SA)',
+      { ok: true, text: 'Propriétaire occupant (résidence principale)' },
+      { ok: true, text: 'Propriétaire bailleur (résidence principale du locataire)' },
+      { ok: true, text: 'Indivisaire (avec mandat des co-indivisaires)' },
+      { ok: true, text: 'Usufruitier (avec accord du nu-propriétaire)' },
+      { ok: true, text: 'Société civile immobilière (SCI familiale uniquement)' },
+      { ok: false, text: 'Locataire (passer par le bailleur)' },
+      { ok: false, text: 'Société commerciale (SARL, SAS, SA)' },
     ],
   },
   {
     icon: Home,
     title: 'Caractéristiques du logement',
     items: [
-      '✅ Logement de plus de 15 ans à la date de demande',
-      '✅ Maison individuelle ou appartement en copropriété',
-      '✅ Résidence principale (occupée ≥ 8 mois/an)',
-      '✅ Engagement de maintenir en résidence principale 5-6 ans',
-      '❌ Logement neuf < 15 ans (exception : changement chauffage EnR depuis 2026)',
-      '❌ Résidence secondaire',
-      '❌ Logement loué moins de 12 mois sur les 24 derniers (Bailleur)',
+      { ok: true, text: 'Logement de plus de 15 ans à la date de demande' },
+      { ok: true, text: 'Maison individuelle ou appartement en copropriété' },
+      { ok: true, text: 'Résidence principale (occupée ≥ 8 mois/an)' },
+      { ok: true, text: 'Engagement de maintenir en résidence principale 5-6 ans' },
+      {
+        ok: false,
+        text: 'Logement neuf < 15 ans (exception : changement chauffage EnR depuis 2026)',
+      },
+      { ok: false, text: 'Résidence secondaire' },
+      { ok: false, text: 'Logement loué moins de 12 mois sur les 24 derniers (Bailleur)' },
     ],
   },
   {
     icon: ClipboardCheck,
     title: 'Travaux éligibles',
     items: [
-      '✅ Pompe à chaleur air-eau, géothermique, hybride',
-      '✅ Chaudière biomasse (granulés, bûches), chauffe-eau thermodynamique',
-      '✅ Isolation thermique (combles, murs, sols, ITE/ITI)',
-      '✅ VMC double flux, audit énergétique, solaire combiné',
-      '✅ Fenêtres double vitrage (Parcours accompagné uniquement)',
-      '❌ PAC air-air (climatisation réversible)',
-      '❌ Chaudière fioul ou gaz (interdites depuis 2022)',
+      { ok: true, text: 'Pompe à chaleur air-eau, géothermique, hybride' },
+      { ok: true, text: 'Chaudière biomasse (granulés, bûches), chauffe-eau thermodynamique' },
+      { ok: true, text: 'Isolation thermique (combles, murs, sols, ITE/ITI)' },
+      { ok: true, text: 'VMC double flux, audit énergétique, solaire combiné' },
+      { ok: true, text: 'Fenêtres double vitrage (Parcours accompagné uniquement)' },
+      { ok: false, text: 'PAC air-air (climatisation réversible)' },
+      { ok: false, text: 'Chaudière fioul ou gaz (interdites depuis 2022)' },
     ],
   },
   {
     icon: ShieldCheck,
     title: 'Artisan',
     items: [
-      '✅ Mention RGE (Reconnu Garant de l’Environnement) valide à la date du devis',
-      '✅ Qualification spécifique au métier : Qualibat 5911 (ITE), QualiPAC, Qualifelec, etc.',
-      '✅ Devis détaillé avec performance équipements (ETAS, COP, R, Up)',
-      '✅ Sous-traitant lui-même RGE (pas de marque blanche)',
-      '❌ Artisan sans mention RGE',
-      '❌ Auto-réalisation (travaux par le propriétaire lui-même)',
+      {
+        ok: true,
+        text: 'Mention RGE (Reconnu Garant de l’Environnement) valide à la date du devis',
+      },
+      {
+        ok: true,
+        text: 'Qualification spécifique au métier : Qualibat 5911 (ITE), QualiPAC, Qualifelec, etc.',
+      },
+      { ok: true, text: 'Devis détaillé avec performance équipements (ETAS, COP, R, Up)' },
+      { ok: true, text: 'Sous-traitant lui-même RGE (pas de marque blanche)' },
+      { ok: false, text: 'Artisan sans mention RGE' },
+      { ok: false, text: 'Auto-réalisation (travaux par le propriétaire lui-même)' },
     ],
   },
 ]
@@ -368,13 +377,12 @@ export default function Page() {
                     </div>
                     <ul className="text-sm text-sand-700 space-y-1.5 list-none m-0 p-0">
                       {c.items.map((item) => {
-                        const isYes = item.startsWith('✅')
-                        const Icon2 = isYes ? CheckCircle2 : XCircle
-                        const color = isYes ? 'text-primary-700' : 'text-amber-700'
+                        const Icon2 = item.ok ? CheckCircle2 : XCircle
+                        const color = item.ok ? 'text-accent-600' : 'text-red-600'
                         return (
-                          <li key={item} className="flex items-start gap-2">
+                          <li key={item.text} className="flex items-start gap-2">
                             <Icon2 className={`w-4 h-4 shrink-0 mt-0.5 ${color}`} aria-hidden />
-                            <span>{item.replace(/^[✅❌]\s*/, '')}</span>
+                            <span>{item.text}</span>
                           </li>
                         )
                       })}
@@ -418,7 +426,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

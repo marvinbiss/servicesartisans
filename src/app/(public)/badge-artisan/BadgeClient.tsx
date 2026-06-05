@@ -457,7 +457,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                 key={item.step}
                 className="bg-sand-50 rounded-xl border border-sand-200 p-6 text-center shadow-soft hover:shadow-card-hover transition-shadow"
               >
-                <div className="w-10 h-10 bg-primary-400 text-white rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-4">
+                <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-4">
                   {item.step}
                 </div>
                 <item.icon className="w-6 h-6 text-primary-400 mx-auto mb-3" />

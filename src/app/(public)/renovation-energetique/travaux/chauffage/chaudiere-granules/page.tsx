@@ -233,37 +233,37 @@ const COMPARATIF_VS_AUTRES = [
 const QUAND_CHOISIR = [
   {
     cas: 'Vous avez une chaudière fioul à remplacer',
-    reco: '✅ Excellente option',
+    reco: 'Excellente option',
     detail:
       'Remplacement direct chaufferie : aides massives (MPR Bleu 7 000 € + CEE 5 000 € sortie fioul). ROI 6-8 ans. Mieux que la PAC en zone froide (Alsace, Massif Central) ou maison ancienne mal isolée (PAC moins performante quand T° ext < -7 °C).',
   },
   {
     cas: 'Vous habitez en zone rurale avec espace de stockage',
-    reco: '✅ Top choix',
+    reco: 'Top choix',
     detail:
       'Filière granulés bois locale = approvisionnement à 50-150 km. Stocker 3-5 t (silo 4-7 m³) demande un local annexe ou garage. Idéal en maison individuelle avec dépendance.',
   },
   {
     cas: 'Vous voulez un chauffage 100 % EnR sans dépendance électrique',
-    reco: '✅ Pertinent',
+    reco: 'Pertinent',
     detail:
       "Combustible biomasse renouvelable, neutre en CO2 (cycle court bois). Demande peu d'électricité (250-500 W pour vis + ventilateur). Reste autonome en panne secteur courte (versions UPS).",
   },
   {
     cas: 'Vous habitez en appartement ou T2 sans local technique',
-    reco: '❌ Non adapté',
+    reco: 'Non adapté',
     detail:
       'Encombrement chaudière + silo (5-7 m² mini) impossible en appartement. Préférez un poêle à granulés (1 pièce) ou chauffage électrique + isolation.',
   },
   {
     cas: 'Vous construisez en neuf bien isolé (RT 2012/RE 2020)',
-    reco: '🟡 Surdimensionné',
+    reco: 'Surdimensionné',
     detail:
       'Une chaudière granulés est surdimensionnée pour un logement neuf RE 2020 (besoin de chaleur faible). Préférez une PAC air-eau ou un poêle granulés en chauffage principal.',
   },
   {
     cas: 'Vous avez une chaudière gaz récente (< 12 ans)',
-    reco: '🟡 Garder en attente',
+    reco: 'Garder en attente',
     detail:
       "Ne remplacez pas par anticipation : pas d'interdiction du gaz résidentiel. Anticipez plutôt le remplacement de votre prochaine chaudière en chaudière granulés ou PAC selon votre zone.",
   },
@@ -613,7 +613,7 @@ export default function Page() {
                 </p>
                 <Link
                   href="/simulateur-aides-renovation"
-                  className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                 >
                   Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                 </Link>

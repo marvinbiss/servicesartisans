@@ -49,7 +49,7 @@ export const Pagination = memo(function Pagination({
               aria-current={pageNum === page ? 'page' : undefined}
               className={`w-9 h-9 text-sm rounded-lg transition-colors ${
                 pageNum === page
-                  ? 'bg-primary-600 text-white font-medium'
+                  ? 'bg-primary-500 text-white font-medium'
                   : 'text-charcoal-600 hover:bg-sand-100'
               }`}
             >

@@ -617,7 +617,7 @@ export default function AidesRenovation2026Page() {
               </Link>
               <Link
                 href="/outils/calculateur-prix"
-                className="inline-flex items-center justify-center gap-2 bg-primary-400 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-300 transition-colors border border-primary-300"
+                className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-primary-600 transition-colors"
               >
                 <Calculator className="w-5 h-5" />
                 Estimer mes aides

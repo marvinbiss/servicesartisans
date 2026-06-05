@@ -368,7 +368,7 @@ export default async function DepartementsIndexPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-primary-400 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-500 hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:bg-primary-600 hover:-translate-y-0.5 transition-all duration-300"
             >
               Obtenir mon devis gratuit
             </Link>

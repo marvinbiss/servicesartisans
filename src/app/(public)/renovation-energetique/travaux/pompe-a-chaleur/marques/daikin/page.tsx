@@ -204,22 +204,22 @@ const POINTS_FAIBLES = [
 ]
 
 const COMPARATIF = [
-  { critere: 'COP / SCOP', daikin: '4,40 / 4,30', avg: '4,20 / 4,15', winner: '✅ Daikin' },
+  { critere: 'COP / SCOP', daikin: '4,40 / 4,30', avg: '4,20 / 4,15', winner: 'Daikin' },
   { critere: 'Garantie standard', daikin: '5 ans', avg: '5 ans', winner: 'Égal' },
-  { critere: 'Pièces détachées', daikin: '10-15 ans', avg: '8-10 ans', winner: '✅ Daikin' },
+  { critere: 'Pièces détachées', daikin: '10-15 ans', avg: '8-10 ans', winner: 'Daikin' },
   {
     critere: 'Prix posée 10 kW',
     daikin: '12 000-15 500 €',
     avg: '10 500-13 500 €',
-    winner: '⚠ Concurrence',
+    winner: 'Concurrence',
   },
-  { critere: 'SAV France', daikin: '600 techniciens', avg: '200-400', winner: '✅ Daikin' },
-  { critere: 'Acoustique unité ext.', daikin: '35-39 dB', avg: '38-42 dB', winner: '✅ Daikin' },
+  { critere: 'SAV France', daikin: '600 techniciens', avg: '200-400', winner: 'Daikin' },
+  { critere: 'Acoustique unité ext.', daikin: '35-39 dB', avg: '38-42 dB', winner: 'Daikin' },
   {
     critere: 'Connectivité',
     daikin: 'ONECTA + voix',
     avg: 'App propriétaire',
-    winner: '✅ Daikin',
+    winner: 'Daikin',
   },
 ]
 
@@ -533,7 +533,7 @@ export default async function Page() {
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href="/simulateur-aides-renovation"
-                      className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                     >
                       Simulateur aides <ArrowRight className="w-4 h-4" aria-hidden />
                     </Link>

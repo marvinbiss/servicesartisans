@@ -428,7 +428,7 @@ export default async function TarifsPage() {
 
                       <Link
                         href={`/tarifs/${trade.slug}`}
-                        className="flex items-center justify-between w-full bg-primary-400 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-500 transition-colors text-sm"
+                        className="flex items-center justify-between w-full bg-primary-500 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors text-sm"
                       >
                         <span>Voir les tarifs détaillés</span>
                         <ArrowRight className="w-4 h-4" />

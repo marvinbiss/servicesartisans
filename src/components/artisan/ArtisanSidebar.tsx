@@ -69,7 +69,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="w-full py-4 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="w-full py-4 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
@@ -202,7 +202,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
             aria-label="Appeler un conseiller ServicesArtisans"
           >
             <Phone className="w-5 h-5" />
-            <span className="text-[9px] leading-tight mt-0.5">Conseiller</span>
+            <span className="text-2xs leading-tight mt-0.5">Conseiller</span>
           </a>
 
           {/* Primary: Devis CTA - MASSIF */}
@@ -215,7 +215,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="flex-1 py-4 px-6 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-600/25 transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex-1 py-4 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5 flex-shrink-0" aria-hidden="true" />

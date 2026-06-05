@@ -53,11 +53,17 @@ import {
   AlertTriangle,
   Calculator,
   Coins,
+  Hash,
+  MoveHorizontal,
+  MoveVertical,
   Ruler,
+  Scale,
   ShieldCheck,
   Sun,
   Weight,
 } from 'lucide-react'
+
+import type { LucideIcon } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -149,33 +155,33 @@ const FORMATS_STANDARDS = [
   },
 ]
 
-const PARAMETRES_TECHNIQUES = [
+const PARAMETRES_TECHNIQUES: { icon: LucideIcon; titre: string; detail: string }[] = [
   {
-    icone: '↔️',
+    icon: MoveHorizontal,
     titre: 'Largeur (99-115 cm)',
     detail:
       "La largeur standard d'un panneau résidentiel oscille entre 99 cm (60 cellules ou 72 cellules pleins) et 115 cm (demi-cellules + grands formats). Cette largeur conditionne le nombre de rangées sur un toit donné. Pour un toit de 5 m de large : 4-5 panneaux par rangée selon le format.",
   },
   {
-    icone: '↕️',
+    icon: MoveVertical,
     titre: 'Hauteur (165-205 cm)',
     detail:
       'La hauteur (longueur dans le sens de la pente) varie entre 165 cm (60 cellules), 175 cm (demi-cellules) et 205 cm (72 cellules). Pour un toit de 7 m de pente : 3-4 panneaux par colonne selon le format. Attention au respect des distances de bord (50 cm minimum, plus en zone vent).',
   },
   {
-    icone: '📏',
+    icon: Ruler,
     titre: 'Épaisseur (30-40 mm)',
     detail:
       "L'épaisseur d'un panneau résidentiel monocristallin classique est de 30-40 mm (cadre aluminium + verre 3,2 mm + EVA + cellules + back-sheet + boîte de jonction). Les panneaux à double-verre (bifaciaux) atteignent 7-8 mm. La structure de fixation ajoute 8-15 cm au-dessus de la couverture.",
   },
   {
-    icone: '⚖️',
+    icon: Scale,
     titre: 'Poids (18-26 kg / panneau)',
     detail:
       'Un panneau résidentiel pèse 18-20 kg (60 cellules), 20-22 kg (demi-cellules) ou 22-26 kg (72 cellules grand format). Surface 1,7-2 m² → charge surfacique 9-13 kg/m² (panneau seul). Avec structure de fixation (rails + crochets + visserie) : 12-15 kg/m². Comparable aux tuiles terre cuite (40-60 kg/m²) — toiture saine = aucun problème.',
   },
   {
-    icone: '🔢',
+    icon: Hash,
     titre: 'Surface unitaire (1,6-2,3 m²)',
     detail:
       "La surface utile d'un panneau (largeur × hauteur, hors cadre) varie de 1,6 m² (60 cellules) à 2,3 m² (grand format 72 cellules). C'est le paramètre clé pour calculer la surface toit nécessaire en multipliant par le nombre de panneaux (selon puissance kWc visée).",
@@ -492,17 +498,18 @@ export default function Page() {
               d&apos;un panneau solaire :
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {PARAMETRES_TECHNIQUES.map((p) => (
-                <article key={p.titre} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    <span className="mr-2" aria-hidden>
-                      {p.icone}
-                    </span>
-                    {p.titre}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0">{p.detail}</p>
-                </article>
-              ))}
+              {PARAMETRES_TECHNIQUES.map((p) => {
+                const Icon = p.icon
+                return (
+                  <article key={p.titre} className="bg-white border border-sand-200 rounded-lg p-5">
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {p.titre}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0">{p.detail}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -602,7 +609,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/electricien"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un installateur QualiPV vérifié
               <ArrowRight className="w-4 h-4" aria-hidden />

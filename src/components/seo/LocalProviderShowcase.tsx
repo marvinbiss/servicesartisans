@@ -287,7 +287,7 @@ export default function LocalProviderShowcase({
                   {/* CTA */}
                   <Link
                     href={providerUrl}
-                    className="relative z-20 block w-full py-2.5 text-center bg-primary-400 text-white rounded-lg font-bold text-sm shadow-cta hover:bg-primary-500 hover:shadow-cta-hover active:scale-[0.98] transition-all duration-200"
+                    className="relative z-20 block w-full py-2.5 text-center bg-primary-500 text-white rounded-lg font-bold text-sm shadow-cta hover:bg-primary-600 hover:shadow-cta-hover active:scale-[0.98] transition-all duration-200"
                   >
                     Voir le profil
                   </Link>

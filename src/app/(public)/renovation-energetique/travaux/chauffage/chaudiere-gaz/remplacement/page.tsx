@@ -50,12 +50,21 @@ import {
   ArrowRight,
   AlertTriangle,
   Calculator,
-  CheckCircle2,
+  Circle,
+  Clock,
   Coins,
+  Droplet,
   Flame,
   ShieldCheck,
+  Siren,
+  TrendingUp,
+  Volume2,
+  Wind,
   Wrench,
+  XCircle,
 } from 'lucide-react'
+
+import type { LucideIcon } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -108,45 +117,45 @@ const tldr = [
   'Choisir QualiGaz Évolution + RGE pour bénéficier TVA 5,5 % et CEE. Vérifier décennale + 3 références.',
 ]
 
-const SIGNAUX_REMPLACEMENT = [
+const SIGNAUX_REMPLACEMENT: { icon: LucideIcon; titre: string; detail: string }[] = [
   {
-    icone: '🕰️',
+    icon: Clock,
     titre: 'Âge supérieur à 15 ans',
     detail:
       "Une chaudière gaz a une durée de vie réelle de 15-20 ans. Au-delà, le rendement chute (perte 5-10 % vs neuf à condensation), les pièces de rechange deviennent rares et le coût d'entretien grimpe (180-300 € HT/an au lieu de 100-180 €). À 18 ans, anticiper le remplacement plutôt qu'attendre la panne hivernale.",
   },
   {
-    icone: '🚨',
+    icon: Siren,
     titre: '2 pannes ou plus par an',
     detail:
       "Si vous appelez le SAV plus de 2 fois par an pour une réparation chaudière (vase d'expansion, circulateur, sonde, brûleur), le coût cumulé dépasse souvent 600-1 000 €/an. À ce niveau, l'amortissement d'une neuve devient rapide.",
   },
   {
-    icone: '🌫️',
+    icon: Wind,
     titre: 'Fumées noires ou odeurs',
     detail:
       'Combustion incomplète = brûleur encrassé, dépôts de suie, échangeur entartré. Risque CO (intoxication monoxyde de carbone). Faire intervenir un chauffagiste QualiGaz immédiatement et remplacer si la chaudière est obsolète (atmosphérique sans condensation).',
   },
   {
-    icone: '📈',
+    icon: TrendingUp,
     titre: 'Facture gaz qui grimpe sans raison',
     detail:
       "Si votre consommation augmente de 15-25 % d'une année sur l'autre à climat constant, c'est le signe d'un rendement en chute libre. Une chaudière atmosphérique de 25 ans tourne à 65-70 % vs 92-94 % pour une condensation neuve. Économie 20-30 % sur la facture juste avec le remplacement.",
   },
   {
-    icone: '💧',
+    icon: Droplet,
     titre: 'Fuite ou pression instable',
     detail:
       "Pression circuit qui chute en permanence (vous remettez de l'eau chaque semaine) = fuite micro sur l'échangeur ou les soudures. Une réparation coûte 400-800 € sans garantie de tenir. Si la chaudière a > 12 ans, basculer sur le remplacement.",
   },
   {
-    icone: '🔊',
+    icon: Volume2,
     titre: 'Bruits anormaux (claquements, sifflements)',
     detail:
       "Claquement = expansion thermique de l'échangeur entartré. Sifflement = entartrage circuit ECS ou problème de circulation. Symptômes mécaniques d'une chaudière en fin de vie. Le remplacement reste plus rentable qu'une réparation lourde (échangeur neuf : 600-1 200 €).",
   },
   {
-    icone: '⚫',
+    icon: Circle,
     titre: 'Suie ou condensation visible sur la chaudière',
     detail:
       'Suie noire autour du brûleur ou du conduit = combustion défectueuse. Condensation excessive sur le corps = isolation thermique dégradée. Ces deux symptômes accompagnent souvent un rendement effondré (< 75 %). Remplacement urgent vers une condensation moderne ou (mieux) une PAC.',
@@ -245,7 +254,7 @@ const PHASES_CHANTIER = [
 
 const PRIX_PAR_SCENARIO = [
   {
-    scenario: '1️⃣ Remplacement direct condensation (logique actuelle)',
+    scenario: '1. Remplacement direct condensation (logique actuelle)',
     detail:
       'Vieille chaudière atmosphérique → condensation 18-24 kW murale, tubage existant réutilisé.',
     prixPose: '4 500-6 500 €',
@@ -253,7 +262,7 @@ const PRIX_PAR_SCENARIO = [
     cumul: '4 000-6 000 € net',
   },
   {
-    scenario: '2️⃣ Remplacement condensation + ballon ECS séparé',
+    scenario: '2. Remplacement condensation + ballon ECS séparé',
     detail:
       'Vieille chaudière atmosphérique → condensation 25-35 kW au sol + ballon ECS 200 L intégré.',
     prixPose: '6 500-9 500 €',
@@ -261,21 +270,21 @@ const PRIX_PAR_SCENARIO = [
     cumul: '6 000-8 800 € net',
   },
   {
-    scenario: '3️⃣ Switch vers PAC air-eau (RECOMMANDÉ)',
+    scenario: '3. Switch vers PAC air-eau (RECOMMANDÉ)',
     detail: 'Chaudière gaz → PAC air-eau bibloc 8-14 kW + module hydraulique.',
     prixPose: '12 000-15 000 €',
     aides: "5 000 € MPR Bleu + 4 000 € CEE = 9 000 € (jusqu'à 10 500 € si passoire)",
     cumul: '3 000-6 000 € net (souvent < condensation seule)',
   },
   {
-    scenario: '4️⃣ Switch vers hybride PAC + condensation',
+    scenario: '4. Switch vers hybride PAC + condensation',
     detail: 'Chaudière fioul ou gaz → système hybride PAC 5-8 kW + condensation 24 kW.',
     prixPose: '14 000-22 000 €',
     aides: '4 000 € MPR Bleu + 2 000 € CEE = 6 000 €',
     cumul: '8 000-16 000 € net',
   },
   {
-    scenario: '5️⃣ Switch vers chaudière granulés (biomasse)',
+    scenario: '5. Switch vers chaudière granulés (biomasse)',
     detail: 'Vieille chaudière → chaudière granulés 18-28 kW + silo 3-5 m³.',
     prixPose: '18 000-28 000 €',
     aides: "7 000 € MPR Bleu + 4 000 € CEE = 11 000 € (jusqu'à 12 500 € passoire)",
@@ -284,16 +293,16 @@ const PRIX_PAR_SCENARIO = [
 ]
 
 const ERREURS_A_EVITER = [
-  '❌ Signer un devis sans visite technique préalable (mesure puissance, tubage, alimentation gaz).',
-  '❌ Choisir un installateur non QualiGaz Évolution (refus assurance + obligation décennale).',
-  '❌ Choisir un installateur non RGE (perte CEE + TVA 20 % au lieu de 5,5 %).',
-  '❌ Démarrer le chantier avant dépôt du dossier CEE (pas de CEE rétroactif, perdu sec).',
-  '❌ Surdimensionner (puissance > 30 % besoins) → cycles courts, surconsommation 10-15 %, usure rapide.',
-  '❌ Sous-dimensionner (puissance < besoins) → confort dégradé, fonctionnement permanent en pointe.',
-  '❌ Réutiliser un tubage non compatible condensation (corrosion 6 mois) — exiger tubage inox 316L.',
-  '❌ Oublier la sonde extérieure (perte 8-15 % rendement saisonnier — obligatoire RT2012/RE2020).',
-  '❌ Refuser la mise en service formelle (contrôle combustion, CO, CO2 fumées, attestation).',
-  '❌ Confier la révocation du contrat fioul/gaz précédent au chauffagiste (vous = titulaire, vous résiliez).',
+  'Signer un devis sans visite technique préalable (mesure puissance, tubage, alimentation gaz).',
+  'Choisir un installateur non QualiGaz Évolution (refus assurance + obligation décennale).',
+  'Choisir un installateur non RGE (perte CEE + TVA 20 % au lieu de 5,5 %).',
+  'Démarrer le chantier avant dépôt du dossier CEE (pas de CEE rétroactif, perdu sec).',
+  'Surdimensionner (puissance > 30 % besoins) → cycles courts, surconsommation 10-15 %, usure rapide.',
+  'Sous-dimensionner (puissance < besoins) → confort dégradé, fonctionnement permanent en pointe.',
+  'Réutiliser un tubage non compatible condensation (corrosion 6 mois) — exiger tubage inox 316L.',
+  'Oublier la sonde extérieure (perte 8-15 % rendement saisonnier — obligatoire RT2012/RE2020).',
+  'Refuser la mise en service formelle (contrôle combustion, CO, CO2 fumées, attestation).',
+  'Confier la révocation du contrat fioul/gaz précédent au chauffagiste (vous = titulaire, vous résiliez).',
 ]
 
 const faqs = [
@@ -518,17 +527,18 @@ export default function Page() {
               30-50 % en urgence) :
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {SIGNAUX_REMPLACEMENT.map((s) => (
-                <article key={s.titre} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    <span className="mr-2" aria-hidden>
-                      {s.icone}
-                    </span>
-                    {s.titre}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0">{s.detail}</p>
-                </article>
-              ))}
+              {SIGNAUX_REMPLACEMENT.map((s) => {
+                const Icon = s.icon
+                return (
+                  <article key={s.titre} className="bg-white border border-sand-200 rounded-lg p-5">
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {s.titre}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0">{s.detail}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -672,7 +682,7 @@ export default function Page() {
                   key={e}
                   className="text-sm text-sand-700 m-0 flex items-start gap-2 border-b border-sand-100 last:border-b-0 py-2 first:pt-0 last:pb-0"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
+                  <XCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
                   <span>{e}</span>
                 </li>
               ))}
@@ -705,7 +715,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/chauffagiste"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un chauffagiste QualiGaz vérifié
               <ArrowRight className="w-4 h-4" aria-hidden />

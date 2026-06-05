@@ -255,7 +255,7 @@ export default function OpenDataPage() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="/datasets/rge/rge-latest.csv"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-2.5 text-sm transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-2.5 text-sm transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 download
               >
                 <Download className="w-4 h-4" aria-hidden="true" /> CSV (rge-latest.csv)
@@ -306,7 +306,7 @@ export default function OpenDataPage() {
             <div className="flex flex-wrap gap-3">
               <a
                 href="/api/open-data/local-stats.csv"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-2.5 text-sm transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-2.5 text-sm transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
                 download="servicesartisans-local-stats.csv"
               >
                 <Download className="w-4 h-4" aria-hidden="true" /> CSV

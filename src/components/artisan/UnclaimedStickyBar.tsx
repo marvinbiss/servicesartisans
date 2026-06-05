@@ -115,7 +115,7 @@ export function UnclaimedStickyBar({
               })
               onDevisClick()
             }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-lg shadow-primary-600/25 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm shadow-lg shadow-primary-500/25 transition-all duration-200"
           >
             <FileText className="w-4 h-4" aria-hidden="true" />
             Devis {specialtyLower} gratuit
@@ -141,7 +141,7 @@ export function UnclaimedStickyBar({
             aria-label={phoneAriaLabel}
           >
             <Phone className="w-5 h-5" />
-            <span className="text-[9px] leading-tight mt-0.5">{phoneLabel}</span>
+            <span className="text-2xs leading-tight mt-0.5">{phoneLabel}</span>
           </a>
           <button
             onClick={() => {
@@ -152,7 +152,7 @@ export function UnclaimedStickyBar({
               })
               onDevisClick()
             }}
-            className="flex-1 py-3.5 px-5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-600/25 transition-all duration-200 touch-manipulation"
+            className="flex-1 py-3.5 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-500/25 transition-all duration-200 touch-manipulation"
             aria-label={`Devis ${specialtyLower} gratuit à ${city}`}
           >
             <FileText className="w-4.5 h-4.5 flex-shrink-0" aria-hidden="true" />

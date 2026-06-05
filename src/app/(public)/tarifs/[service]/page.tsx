@@ -548,7 +548,7 @@ export default async function TarifsServicePage({
             <div className="mt-8">
               <Link
                 href={`/devis/${service}`}
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
                 Obtenir un devis personnalisé

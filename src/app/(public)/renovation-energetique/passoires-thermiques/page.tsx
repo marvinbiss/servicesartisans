@@ -382,13 +382,13 @@ export default function Page() {
                 </thead>
                 <tbody className="align-top">
                   {[
-                    ['A', '≤ 70 kWh/m²/an', '≤ 6 kg CO2', '✅ Autorisée'],
-                    ['B', '71-110', '7-11', '✅ Autorisée'],
-                    ['C', '111-180', '12-30', '✅ Autorisée'],
-                    ['D', '181-250', '31-50', '✅ Autorisée'],
+                    ['A', '≤ 70 kWh/m²/an', '≤ 6 kg CO2', 'Autorisée'],
+                    ['B', '71-110', '7-11', 'Autorisée'],
+                    ['C', '111-180', '12-30', 'Autorisée'],
+                    ['D', '181-250', '31-50', 'Autorisée'],
                     ['E', '251-330', '51-70', 'Interdite à partir de 2034'],
                     ['F', '331-420', '71-100', 'Interdite à partir de 2028'],
-                    ['G', '> 420', '> 100', '🛑 Interdite depuis 2025'],
+                    ['G', '> 420', '> 100', 'Interdite depuis 2025'],
                   ].map(([cls, conso, ges, statut]) => {
                     const isPasso = cls === 'F' || cls === 'G'
                     return (
@@ -529,7 +529,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

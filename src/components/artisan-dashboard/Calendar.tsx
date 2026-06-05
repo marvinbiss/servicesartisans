@@ -227,13 +227,13 @@ export default function Calendar({
                       <span
                         className={`
                         absolute bottom-1 right-1 min-w-[18px] h-[18px] flex items-center justify-center
-                        text-[10px] font-bold rounded-full
+                        text-2xs font-bold rounded-full
                         ${
                           count >= 3
                             ? 'bg-red-500 text-white'
                             : count >= 2
                               ? 'bg-secondary-500 text-white'
-                              : 'bg-primary-400 text-white'
+                              : 'bg-primary-500 text-white'
                         }
                       `}
                       >
@@ -313,7 +313,7 @@ export default function Calendar({
                               ? 'bg-red-500 text-white'
                               : count >= 2
                                 ? 'bg-secondary-500 text-white'
-                                : 'bg-primary-400 text-white'
+                                : 'bg-primary-500 text-white'
                           }
                         `}
                         >
@@ -333,7 +333,7 @@ export default function Calendar({
                 Disponible
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-primary-400" />1 RDV
+                <span className="w-3 h-3 rounded-full bg-primary-500" />1 RDV
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-secondary-500" />2 RDV
@@ -392,7 +392,7 @@ export default function Calendar({
             <div className="space-y-3">
               {selectedSlots.length > 0 && (
                 <h5 className="text-sm font-semibold text-charcoal-700 flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-primary-400" />
+                  <span className="w-3 h-3 rounded-full bg-primary-500" />
                   Rendez-vous ({selectedBookings.length})
                 </h5>
               )}

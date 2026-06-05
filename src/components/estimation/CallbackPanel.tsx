@@ -116,7 +116,7 @@ export const CallbackPanel = memo(function CallbackPanel({ context, lead }: Call
               disabled={
                 lead.callbackLoading || !lead.callbackPhone.trim() || !lead.rgpdCallbackConsent
               }
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-400 px-4 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors disabled:opacity-50 shadow-cta"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-3 text-sm font-semibold text-white hover:bg-primary-600 transition-colors disabled:opacity-50 shadow-cta"
             >
               {lead.callbackLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

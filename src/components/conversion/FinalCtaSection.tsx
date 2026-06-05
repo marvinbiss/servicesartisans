@@ -33,7 +33,7 @@ const ACCENT = {
 } as const
 
 const BTN_ACCENT = {
-  blue: 'bg-primary-600 hover:bg-primary-700 text-white',
+  blue: 'bg-primary-500 hover:bg-primary-600 text-white',
   green: 'bg-accent-600 hover:bg-accent-700 text-white',
   amber: 'bg-secondary-600 hover:bg-secondary-700 text-charcoal-900',
 } as const

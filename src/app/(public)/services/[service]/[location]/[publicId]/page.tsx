@@ -1074,7 +1074,7 @@ async function renderProviderPage({ params }: PageProps) {
               </div>
               <Link
                 href={buildDevisHref(serviceSlug, artisan.city)}
-                className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
               >
                 Obtenir mon devis gratuit
                 <svg

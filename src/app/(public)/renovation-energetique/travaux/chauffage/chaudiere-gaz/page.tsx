@@ -111,7 +111,7 @@ const TYPES_CHAUDIERE = [
     type: 'Chaudière atmosphérique (basse perf)',
     rendement: '70-80 %',
     prix: '3 500-5 000 € posée',
-    statut: '⚠️ Obsolète — à remplacer',
+    statut: 'Obsolète — à remplacer',
     detail:
       'Combustion en air ambiant, évacuation par tirage naturel. Très peu de chaudières neuves vendues (<5 % du marché 2026). Si la vôtre date de plus de 15 ans, son rendement réel est probablement < 75 %, soit 25-30 % de surconsommation par rapport à une condensation moderne.',
   },
@@ -119,7 +119,7 @@ const TYPES_CHAUDIERE = [
     type: 'Chaudière basse température (BT)',
     rendement: '88-92 %',
     prix: '4 000-5 500 € posée',
-    statut: '🟡 Transition — milieu de gamme',
+    statut: 'Transition — milieu de gamme',
     detail:
       "Chaudière à circuit étanche (combustion sur air extérieur via ventouse). Rendement supérieur à l'atmosphérique mais inférieur à la condensation. Compromis prix-perf si remplacement urgent et budget contraint.",
   },
@@ -127,7 +127,7 @@ const TYPES_CHAUDIERE = [
     type: 'Chaudière à condensation',
     rendement: '105-110 % PCI (η_s 92-94 %)',
     prix: '4 500-7 500 € posée',
-    statut: '✅ Standard 2026 (mais MPR supprimée)',
+    statut: 'Standard 2026 (mais MPR supprimée)',
     detail:
       "Récupère la chaleur de condensation des fumées. Rendement nominal > 100 % sur PCI. Standard du marché depuis 2018. NON éligible MaPrimeRénov' depuis 2024 sauf hybride.",
   },
@@ -135,7 +135,7 @@ const TYPES_CHAUDIERE = [
     type: 'Chaudière hybride (PAC + condensation)',
     rendement: 'COP PAC 3,5-4 + condensation appoint',
     prix: '14 000-22 000 € posée',
-    statut: '✅ Top — éligible MPR comme PAC',
+    statut: 'Top — éligible MPR comme PAC',
     detail:
       "Pompe à chaleur air-eau (chauffage principal) + chaudière gaz condensation (appoint grand froid). Idéal maisons mal isolées. Éligible MaPrimeRénov' (forfait identique PAC seule) + CEE Coup de pouce.",
   },
@@ -165,25 +165,25 @@ const PRIX_PAR_PUISSANCE = [
 const STATUT_REGLEMENTAIRE = [
   {
     cas: 'Logement neuf (permis de construire ≥ 1er janvier 2022)',
-    statut: '❌ Interdite',
+    statut: 'Interdite',
     detail:
       'La RE2020 (Décret n° 2021-1004) impose un seuil carbone qui exclut de fait les chaudières gaz du neuf depuis le 1er janvier 2022 (maison individuelle) et 1er juillet 2022 (logement collectif). Solutions : PAC, biomasse, raccordement réseau de chaleur urbain.',
   },
   {
     cas: "Remplacement d'une chaudière gaz existante",
-    statut: '✅ Autorisé',
+    statut: 'Autorisé',
     detail:
       "Aucune interdiction de remplacer une chaudière gaz par une autre chaudière gaz. La législation française n'impose pas de date butoir pour la disparition du gaz naturel résidentiel (objectif neutralité 2050 du Code énergie L100-4 — pas d'interdiction directe).",
   },
   {
     cas: "Remplacement d'une chaudière fioul",
-    statut: '🟡 Autorisé mais déconseillé',
+    statut: 'Autorisé mais déconseillé',
     detail:
       "Depuis l'arrêté du 5 juillet 2022, les chaudières fioul neuves sont interdites. Vous pouvez les remplacer par une chaudière gaz si raccordement disponible, MAIS la PAC est très majoritairement plus rentable : aides MPR Bleu jusqu'à 5 000 € + CEE Coup de pouce jusqu'à 4 000 €, économies 50-70 % sur facture.",
   },
   {
     cas: 'Logement social, copropriété en chauffage collectif',
-    statut: '🟡 Cas particulier',
+    statut: 'Cas particulier',
     detail:
       'Les chaufferies collectives gaz restent autorisées en remplacement. La transition vers PAC collective ou raccordement réseau de chaleur est encouragée par MPR Copropriétés et CEE BAR-TH-145 (chaufferie biomasse) / BAR-TH-160 (raccordement réseau).',
   },
@@ -192,25 +192,25 @@ const STATUT_REGLEMENTAIRE = [
 const QUAND_REMPLACER = [
   {
     cas: 'Votre chaudière gaz a moins de 12 ans et fonctionne bien',
-    reco: '✅ Garder en attente',
+    reco: 'Garder en attente',
     detail:
       "Pas urgent. Continuez l'entretien annuel obligatoire (100-180 € HT). Anticipez le remplacement à partir de 15-18 ans pour éviter une panne en plein hiver.",
   },
   {
     cas: 'Votre chaudière gaz a 15-20 ans avec pannes répétées',
-    reco: '🟡 Remplacer — comparer condensation et PAC',
+    reco: 'Remplacer — comparer condensation et PAC',
     detail:
       "Faites établir 2-3 devis : (1) chaudière condensation (4 500-7 500 € sans MPR), (2) PAC air-eau (12 000-15 000 € avec aides MPR + CEE jusqu'à 8 000 €). PAC souvent gagnante grand-total.",
   },
   {
     cas: 'Votre chaudière fioul est en fin de vie',
-    reco: '✅ PAC air-eau prioritaire',
+    reco: 'PAC air-eau prioritaire',
     detail:
       'Aides massives (MPR Bleu 5 000 € + CEE 4 000 € Coup de pouce + bonus sortie passoire si DPE F/G). Économies factures 50-70 %. ROI 5-7 ans. Voir notre guide dédié.',
   },
   {
     cas: 'Vous construisez en neuf',
-    reco: '❌ Chaudière gaz impossible',
+    reco: 'Chaudière gaz impossible',
     detail:
       'RE2020 interdit le gaz dans le neuf depuis le 1er janvier 2022 (maison individuelle). Solutions : PAC air-eau, plancher chauffant + PAC géothermique, biomasse pellets, raccordement réseau de chaleur urbain.',
   },
@@ -565,7 +565,7 @@ export default function Page() {
                 </p>
                 <Link
                   href="/simulateur-aides-renovation"
-                  className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                 >
                   Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                 </Link>

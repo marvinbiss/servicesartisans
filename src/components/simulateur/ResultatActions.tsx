@@ -256,7 +256,7 @@ export default function ResultatActions({
             <button
               type="submit"
               disabled={isPending}
-              className="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-500 text-white font-semibold shadow-md hover:bg-primary-600 transition disabled:opacity-60"
             >
               {isPending ? (
                 <>
@@ -272,7 +272,7 @@ export default function ResultatActions({
           <button
             type="button"
             onClick={openCallback}
-            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition"
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-500 text-white font-semibold shadow-md hover:bg-primary-600 transition"
           >
             Être rappelé gratuitement
           </button>

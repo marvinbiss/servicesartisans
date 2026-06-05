@@ -121,7 +121,7 @@ function renderPills(
               return (
                 <span
                   key={key}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-primary-400 text-white cursor-default"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-primary-500 text-white cursor-default"
                   aria-current="page"
                 >
                   <Icon className="w-4 h-4" />

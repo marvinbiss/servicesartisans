@@ -48,14 +48,21 @@ import Link from 'next/link'
 import {
   ArrowRight,
   AlertTriangle,
+  Ban,
   Calculator,
   CheckCircle2,
   Coins,
   Flame,
+  Home,
   ShieldCheck,
+  Snowflake,
+  Thermometer,
   Wrench,
+  XCircle,
   Zap,
 } from 'lucide-react'
+
+import type { LucideIcon } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -131,9 +138,18 @@ const FONCTIONNEMENT_PHASES = [
   },
 ]
 
-const CAS_USAGE = [
+const CAS_USAGE: {
+  icon: LucideIcon
+  titre: string
+  profil: string
+  pourquoiHybride: string
+  economie: string
+  aides: string
+  netApresAides: string
+}[] = [
   {
-    titre: '🏚️ Maison ancienne mal isolée (DPE E-F-G)',
+    icon: Thermometer,
+    titre: 'Maison ancienne mal isolée (DPE E-F-G)',
     profil: 'Maison < 1990 sans rénovation isolation, déperditions élevées',
     pourquoiHybride:
       'Une PAC seule devrait fournir 100 % de la puissance par grand froid sur une maison passoire — surdimensionnement coûteux et inefficient. La chaudière gaz couvre la pointe, la PAC tourne en optimum 80-90 % du temps. Compromis intelligent avant rénovation isolation globale.',
@@ -142,7 +158,8 @@ const CAS_USAGE = [
     netApresAides: '8 500-15 000 €',
   },
   {
-    titre: '🌨️ Climat froid (Massif Central, Est, Vosges, Jura)',
+    icon: Snowflake,
+    titre: 'Climat froid (Massif Central, Est, Vosges, Jura)',
     profil: 'Zone climatique H1c, H1b ou H2c avec T° base < -8 °C',
     pourquoiHybride:
       "Une PAC air-eau perd jusqu'à 30 % de COP en-dessous de -5 °C. Sur 60-90 jours/an de grand froid, les économies théoriques fondent. L'hybride bascule automatiquement sur le gaz aux pires moments, conserve la PAC en optimum le reste de l'année.",
@@ -151,7 +168,8 @@ const CAS_USAGE = [
     netApresAides: '9 000-15 000 €',
   },
   {
-    titre: '🏠 Conservation infrastructure gaz existante',
+    icon: Home,
+    titre: 'Conservation infrastructure gaz existante',
     profil: 'Tubage gaz récent + chaudière condensation < 5 ans + raccordement GRDF',
     pourquoiHybride:
       "Chaudière gaz performante encore amortissable, switch total vers PAC = perte d'investissement. L'hybride conserve la chaudière (intégrée au système), ajoute la PAC en charge principale. Investissement réduit (8-12K € vs 14-22K € pose neuve).",
@@ -160,7 +178,8 @@ const CAS_USAGE = [
     netApresAides: '6 000-10 000 €',
   },
   {
-    titre: '🚫 Refus PAC seule (esthétique, voisinage, copro)',
+    icon: Ban,
+    titre: 'Refus PAC seule (esthétique, voisinage, copro)',
     profil:
       'Contraintes copropriété, ABF (Architecte Bâtiments France), voisinage, espace ext limité',
     pourquoiHybride:
@@ -202,9 +221,9 @@ const COMPARATIF = [
   },
   {
     critere: 'Confort par grand froid (-10 °C)',
-    hybride: '✅ Excellent (gaz prend relais)',
-    pacSeule: '⚠️ Dégradé (COP 1,8-2,2)',
-    gazSeul: '✅ Excellent',
+    hybride: 'Excellent (gaz prend relais)',
+    pacSeule: 'Dégradé (COP 1,8-2,2)',
+    gazSeul: 'Excellent',
     detailHybride: 'Atout #1 hybride',
   },
   {
@@ -216,7 +235,7 @@ const COMPARATIF = [
   },
   {
     critere: 'Espace technique requis',
-    hybride: '⚠️ 1,5 m² intérieur + unité ext',
+    hybride: '1,5 m² intérieur + unité ext',
     pacSeule: '1 m² + unité ext',
     gazSeul: '0,5-1 m²',
     detailHybride: 'Plus gourmand',
@@ -269,16 +288,16 @@ const FABRICANTS = [
 ]
 
 const ERREURS_A_EVITER = [
-  '❌ Acheter hybride si maison déjà BIEN isolée (DPE C ou mieux) — PAC seule gagnante.',
-  '❌ Confondre chaudière hybride (PAC + gaz) et chaudière à condensation seule.',
-  '❌ Conserver une chaudière > 10 ans en hybride — fin de vie en 5-7 ans, double investissement.',
-  "❌ Mal régler le point de bivalence — surconsommation gaz (20-30 % d'écart selon paramétrage).",
-  '❌ Choisir installateur non QualiPAC + non QualiGaz — un seul label = perte CEE ou MPR.',
-  '❌ Surdimensionner la PAC (> besoin) — cycles courts, usure rapide, ROI dégradé.',
-  '❌ Sous-dimensionner la chaudière gaz (relais insuffisant) — confort dégradé par grand froid.',
-  "❌ Démarrer le chantier avant dépôt du dossier MPR/CEE — pas d'aide rétroactive.",
-  '❌ Oublier la sonde extérieure de bivalence — régulation aveugle, perte 10-15 % rendement.',
-  "❌ Omettre l'étude de dimensionnement (calcul G x DJU + DPE + zone climatique) — étape OBLIGATOIRE.",
+  'Acheter hybride si maison déjà BIEN isolée (DPE C ou mieux) — PAC seule gagnante.',
+  'Confondre chaudière hybride (PAC + gaz) et chaudière à condensation seule.',
+  'Conserver une chaudière > 10 ans en hybride — fin de vie en 5-7 ans, double investissement.',
+  "Mal régler le point de bivalence — surconsommation gaz (20-30 % d'écart selon paramétrage).",
+  'Choisir installateur non QualiPAC + non QualiGaz — un seul label = perte CEE ou MPR.',
+  'Surdimensionner la PAC (> besoin) — cycles courts, usure rapide, ROI dégradé.',
+  'Sous-dimensionner la chaudière gaz (relais insuffisant) — confort dégradé par grand froid.',
+  "Démarrer le chantier avant dépôt du dossier MPR/CEE — pas d'aide rétroactive.",
+  'Oublier la sonde extérieure de bivalence — régulation aveugle, perte 10-15 % rendement.',
+  "Omettre l'étude de dimensionnement (calcul G x DJU + DPE + zone climatique) — étape OBLIGATOIRE.",
 ]
 
 const faqs = [
@@ -524,33 +543,37 @@ export default function Page() {
               condensation classique sont plus pertinentes :
             </p>
             <div className="space-y-4">
-              {CAS_USAGE.map((c) => (
-                <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    {c.titre}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0 mb-2">
-                    <strong>Profil :</strong> {c.profil}
-                  </p>
-                  <p className="text-sm text-sand-700 m-0 mb-2">
-                    <strong>Pourquoi hybride :</strong> {c.pourquoiHybride}
-                  </p>
-                  <div className="grid sm:grid-cols-3 gap-2 text-xs">
-                    <div className="bg-sand-50 rounded p-2">
-                      <p className="text-sand-600 m-0">Économie facture</p>
-                      <p className="font-semibold text-sand-900 m-0">{c.economie}</p>
+              {CAS_USAGE.map((c) => {
+                const Icon = c.icon
+                return (
+                  <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {c.titre}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0 mb-2">
+                      <strong>Profil :</strong> {c.profil}
+                    </p>
+                    <p className="text-sm text-sand-700 m-0 mb-2">
+                      <strong>Pourquoi hybride :</strong> {c.pourquoiHybride}
+                    </p>
+                    <div className="grid sm:grid-cols-3 gap-2 text-xs">
+                      <div className="bg-sand-50 rounded p-2">
+                        <p className="text-sand-600 m-0">Économie facture</p>
+                        <p className="font-semibold text-sand-900 m-0">{c.economie}</p>
+                      </div>
+                      <div className="bg-sand-50 rounded p-2">
+                        <p className="text-sand-600 m-0">Aides 2026</p>
+                        <p className="font-semibold text-sand-900 m-0">{c.aides}</p>
+                      </div>
+                      <div className="bg-accent-50 rounded p-2">
+                        <p className="text-accent-700 m-0">Net après aides</p>
+                        <p className="font-bold text-accent-900 m-0">{c.netApresAides}</p>
+                      </div>
                     </div>
-                    <div className="bg-sand-50 rounded p-2">
-                      <p className="text-sand-600 m-0">Aides 2026</p>
-                      <p className="font-semibold text-sand-900 m-0">{c.aides}</p>
-                    </div>
-                    <div className="bg-accent-50 rounded p-2">
-                      <p className="text-accent-700 m-0">Net après aides</p>
-                      <p className="font-bold text-accent-900 m-0">{c.netApresAides}</p>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -635,7 +658,7 @@ export default function Page() {
                   key={e}
                   className="text-sm text-sand-700 m-0 flex items-start gap-2 border-b border-sand-100 last:border-b-0 py-2 first:pt-0 last:pb-0"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
+                  <XCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
                   <span>{e}</span>
                 </li>
               ))}
@@ -672,7 +695,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/chauffagiste"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un chauffagiste QualiPAC + QualiGaz vérifié
               <ArrowRight className="w-4 h-4" aria-hidden />

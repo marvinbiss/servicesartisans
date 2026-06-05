@@ -306,7 +306,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             <Link
               href={`${providerUrl}#devis`}
               rel={linkRel}
-              className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+              className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-500 text-white rounded-xl font-bold shadow-cta hover:bg-primary-600 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
             >
               Demander un devis
             </Link>
@@ -322,7 +322,7 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           <Link
             href={providerUrl}
             rel={linkRel}
-            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-400 text-white rounded-xl font-bold shadow-cta hover:bg-primary-500 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+            className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-primary-500 text-white rounded-xl font-bold shadow-cta hover:bg-primary-600 hover:shadow-cta-hover hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             Voir le profil
           </Link>

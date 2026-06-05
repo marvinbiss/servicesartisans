@@ -234,7 +234,7 @@ export default function WidgetPage() {
                 key={item.step}
                 className="bg-white rounded-xl border border-sand-200 p-6 text-center shadow-soft hover:shadow-card-hover transition-shadow"
               >
-                <div className="w-10 h-10 bg-primary-400 text-white rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-4">
+                <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-4">
                   {item.step}
                 </div>
                 <h3 className="font-heading font-semibold text-charcoal-900 mb-2">{item.title}</h3>
@@ -355,7 +355,7 @@ export default function WidgetPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-primary-400">
+      <section className="py-20 bg-primary-500">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
             Vous n'êtes pas encore référencé ?

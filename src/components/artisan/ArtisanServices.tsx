@@ -101,7 +101,7 @@ export function ArtisanServices({ artisan, isClaimed = false }: ArtisanServicesP
             </p>
             <a
               href="#devis"
-              className="inline-flex items-center gap-2 bg-primary-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-cta"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-cta"
             >
               Demandez mon devis gratuit — Sans frais supplémentaires
             </a>

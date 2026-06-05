@@ -45,13 +45,21 @@ import Link from 'next/link'
 import {
   ArrowRight,
   AlertTriangle,
+  Banknote,
   Calculator,
+  Calendar,
   CheckCircle2,
+  ClipboardList,
   Coins,
   Droplet,
+  FileText,
+  Lock,
   ShieldCheck,
   Wrench,
+  XCircle,
 } from 'lucide-react'
+
+import type { LucideIcon } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -147,24 +155,28 @@ const TYPES_DISCONNECTEUR = [
   },
 ]
 
-const POURQUOI_OBLIGATOIRE = [
+const POURQUOI_OBLIGATOIRE: { icon: LucideIcon; raison: string; detail: string }[] = [
   {
-    raison: '⚠️ Risque sanitaire pollution réseau public',
+    icon: AlertTriangle,
+    raison: 'Risque sanitaire pollution réseau public',
     detail:
       "Une chaudière contient de l'eau additivée (anticorrosion, antigel propylène-glycol jusqu'à 30 %, antitartre, biocides). En cas de baisse de pression réseau (coupure d'eau, fuite voisinage, intervention pompier), un siphonnage inverse peut aspirer cette eau polluée vers le réseau public d'eau potable. Le disconnecteur CB sectorise hydrauliquement les 2 circuits.",
   },
   {
-    raison: '📜 Obligation réglementaire',
+    icon: FileText,
+    raison: 'Obligation réglementaire',
     detail:
       "Trois textes encadrent l'installation : (1) arrêté du 30 novembre 2005 (protection contre les retours d'eau) ; (2) NF EN 1717 (norme européenne anti-pollution réseau eau potable) ; (3) Code de la santé publique R.1321-49 (responsabilité installateur + propriétaire). Absence de disconnecteur = mise en demeure ARS + responsabilité civile/pénale en cas de pollution avérée.",
   },
   {
-    raison: '🔒 Couverture assurance',
+    icon: Lock,
+    raison: 'Couverture assurance',
     detail:
       "En cas de pollution réseau, l'assurance habitation refuse la prise en charge si le disconnecteur est absent ou non contrôlé annuellement. Le propriétaire est financièrement responsable des frais ARS (analyses, désinfection, responsabilité civile voisinage). Coûts réels documentés : 5 000-50 000 €.",
   },
   {
-    raison: '✅ Garantie chaudière',
+    icon: CheckCircle2,
+    raison: 'Garantie chaudière',
     detail:
       "Les fabricants (Viessmann, De Dietrich, Saunier Duval, Atlantic) exigent l'installation d'un disconnecteur CB conforme NF EN 1717 dans leurs notices d'installation (souvent annexées au carnet d'entretien). Sans disconnecteur = perte de garantie matériel en cas de retour d'eau parasite endommageant l'échangeur.",
   },
@@ -193,33 +205,33 @@ const POSE_INSTALLATION = [
   },
 ]
 
-const CONTROLE_ANNUEL = [
+const CONTROLE_ANNUEL: { icon: LucideIcon; titre: string; detail: string }[] = [
   {
-    icone: '📅',
+    icon: Calendar,
     titre: 'Fréquence : 1 fois par an minimum',
     detail:
       "Le contrôle annuel du disconnecteur CB est OBLIGATOIRE par arrêté 30/11/2005 + NF EN 1717. Souvent réalisé en même temps que l'entretien annuel chaudière (Décret 2009-649) — gain de coût combiné.",
   },
   {
-    icone: '🛠️',
+    icon: Wrench,
     titre: 'Qui peut contrôler',
     detail:
       "Plombier-chauffagiste qualifié OU technicien certifié ASTEE (Association Scientifique et Technique pour l'Eau et l'Environnement) OU Carsat (Caisse d'Assurance Retraite Santé Travail). Vérifier formation NF EN 1717 + matériel manomètre différentiel calibré (étalonnage < 1 an).",
   },
   {
-    icone: '✅',
+    icon: CheckCircle2,
     titre: '5 points contrôlés',
     detail:
       "(1) Étanchéité 3 clapets (amont, intermédiaire, aval) au manomètre. (2) Pression différentielle entre chambres (doit être > 14 kPa). (3) Étanchéité aérateur (entonnoir d'évacuation libre). (4) État membrane élastomère. (5) Marquage NF EN 1717 + numéro de série visible.",
   },
   {
-    icone: '📋',
+    icon: ClipboardList,
     titre: 'Attestation à conserver 2 ans',
     detail:
       'Le pro remet une attestation de conformité (modèle ARS) avec date, n° de série, mesures relevées, conformité ou non-conformité. À conserver 2 ans MINIMUM. Exigée en cas de contrôle ARS, déclaration sinistre assurance, vente du logement (annexée au DDT — Dossier Diagnostic Technique).',
   },
   {
-    icone: '💸',
+    icon: Banknote,
     titre: 'Prix contrôle annuel',
     detail:
       '50-90 € HT pour un contrôle seul. Combiné avec entretien chaudière (forfait + 30-50 €) — recommandé. Contrats annuels chaudière (200-400 €/an) intègrent souvent le contrôle disconnecteur dans leurs prestations basique ou tout inclus.',
@@ -254,16 +266,16 @@ const MARQUES = [
 ]
 
 const ERREURS_A_EVITER = [
-  '❌ Acheter un disconnecteur CA pour chaudière (insuffisant — il faut CB minimum).',
-  "❌ Installer un disconnecteur sans entonnoir d'évacuation (non conforme NF EN 1717).",
-  '❌ Réducteur de pression POSÉ APRÈS le disconnecteur (peut bloquer la membrane).',
-  '❌ Disconnecteur dans placard fermé inaccessible (impossible de contrôler annuellement).',
-  '❌ Oublier le contrôle annuel obligatoire (perte garantie + assurance).',
-  "❌ Pâte d'étanchéité non alimentaire (rejet ARS — utiliser ATG/ACS).",
-  '❌ Surserrer le filetage laiton (fissuration → fuite → coupure réseau).',
-  '❌ Confondre disconnecteur (anti-pollution) et clapet anti-retour simple (insuffisant).',
-  '❌ Acheter sans marquage NF EN 1717 (non conforme français).',
-  '❌ Pose en zone gel sans protection (fissure corps laiton à -5 °C).',
+  'Acheter un disconnecteur CA pour chaudière (insuffisant — il faut CB minimum).',
+  "Installer un disconnecteur sans entonnoir d'évacuation (non conforme NF EN 1717).",
+  'Réducteur de pression POSÉ APRÈS le disconnecteur (peut bloquer la membrane).',
+  'Disconnecteur dans placard fermé inaccessible (impossible de contrôler annuellement).',
+  'Oublier le contrôle annuel obligatoire (perte garantie + assurance).',
+  "Pâte d'étanchéité non alimentaire (rejet ARS — utiliser ATG/ACS).",
+  'Surserrer le filetage laiton (fissuration → fuite → coupure réseau).',
+  'Confondre disconnecteur (anti-pollution) et clapet anti-retour simple (insuffisant).',
+  'Acheter sans marquage NF EN 1717 (non conforme français).',
+  'Pose en zone gel sans protection (fissure corps laiton à -5 °C).',
 ]
 
 const faqs = [
@@ -466,14 +478,21 @@ export default function Page() {
               rendent indispensable :
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {POURQUOI_OBLIGATOIRE.map((p) => (
-                <article key={p.raison} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    {p.raison}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0">{p.detail}</p>
-                </article>
-              ))}
+              {POURQUOI_OBLIGATOIRE.map((p) => {
+                const Icon = p.icon
+                return (
+                  <article
+                    key={p.raison}
+                    className="bg-white border border-sand-200 rounded-lg p-5"
+                  >
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {p.raison}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0">{p.detail}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -566,17 +585,18 @@ export default function Page() {
               points sont vérifiés au manomètre différentiel calibré :
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {CONTROLE_ANNUEL.map((c) => (
-                <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    <span className="mr-2" aria-hidden>
-                      {c.icone}
-                    </span>
-                    {c.titre}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0">{c.detail}</p>
-                </article>
-              ))}
+              {CONTROLE_ANNUEL.map((c) => {
+                const Icon = c.icon
+                return (
+                  <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {c.titre}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0">{c.detail}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -620,7 +640,7 @@ export default function Page() {
                   key={e}
                   className="text-sm text-sand-700 m-0 flex items-start gap-2 border-b border-sand-100 last:border-b-0 py-2 first:pt-0 last:pb-0"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
+                  <XCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
                   <span>{e}</span>
                 </li>
               ))}
@@ -652,7 +672,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/plombier"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un plombier-chauffagiste qualifié
               <ArrowRight className="w-4 h-4" aria-hidden />

@@ -165,7 +165,7 @@ export default function ComparaisonPage() {
             <div className="mt-6">
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all"
               >
                 Comparer les artisans
                 <ArrowRight className="w-4 h-4" />

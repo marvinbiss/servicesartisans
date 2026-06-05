@@ -73,7 +73,7 @@ const tldr = [
   'Garage attenant non chauffé = passage couvert au sens BAR-EN-103. Le plancher au-dessus est éligible aux aides plancher bas.',
   'Solution n°1 : <strong>isoler le plafond du garage par dessous</strong> avec PIR/PUR rigide ou laine de roche. <strong>25-50 €/m² posé</strong>. Aucune gêne dans le logement.',
   'Bonus <strong>acoustique</strong> : laine de roche réduit les bruits de moteur, portes claquées, marteau-piqueur.',
-  '⚠ Vérifier <strong>hauteur résiduelle</strong> pour le véhicule après isolation (perte 8-12 cm typique). Adapter épaisseur si garage bas.',
+  'Vérifier <strong>hauteur résiduelle</strong> pour le véhicule après isolation (perte 8-12 cm typique). Adapter épaisseur si garage bas.',
   'Aides cumulables : CEE BAR-EN-103 (R ≥ 3 m².K/W) + MaPrimeRénov’ + Coup de pouce + TVA 5,5 %.',
   'Réaction au feu : préférer matériaux M0/M1 ou A1 (laine de roche) face au risque incendie véhicule.',
 ]
@@ -455,7 +455,7 @@ export default function Page() {
               </p>
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white font-semibold px-5 py-3 rounded-lg transition"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-3 rounded-lg transition"
               >
                 Demander mon devis sol garage <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>

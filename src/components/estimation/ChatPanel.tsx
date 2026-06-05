@@ -73,7 +73,7 @@ export const ChatPanel = memo(function ChatPanel({ context, chat, lead, prompts 
               className={
                 'max-w-[85%] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap ' +
                 (msg.role === 'user'
-                  ? 'rounded-tr-sm bg-primary-400 text-white'
+                  ? 'rounded-tr-sm bg-primary-500 text-white'
                   : 'rounded-tl-sm bg-sand-100 text-charcoal-800')
               }
             >
@@ -148,7 +148,7 @@ export const ChatPanel = memo(function ChatPanel({ context, chat, lead, prompts 
           type="submit"
           disabled={chat.isStreaming || !chat.inputValue.trim()}
           aria-label="Envoyer le message"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-400 text-white hover:bg-primary-600 transition-colors disabled:opacity-40"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors disabled:opacity-40"
         >
           {chat.isStreaming ? (
             <Loader2 className="h-4 w-4 animate-spin" />

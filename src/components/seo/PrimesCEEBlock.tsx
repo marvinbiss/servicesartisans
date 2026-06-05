@@ -200,7 +200,7 @@ export default async function PrimesCEEBlock({
         >
           {bracketInfo.label}
         </span>
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 bg-blue-100">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-charcoal-700 bg-sand-200">
           Climat {climatLabel}
         </span>
       </div>
@@ -285,7 +285,7 @@ export default async function PrimesCEEBlock({
       <div className="mt-4 pt-4 border-t border-sand-200 space-y-3">
         <Link
           href={`/devis/${serviceSlug}`}
-          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-primary-600 text-white font-semibold shadow-md hover:bg-primary-700 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-primary-500 text-white font-semibold shadow-md hover:bg-primary-600 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
         >
           Devis gratuit {serviceName.toLowerCase()} à {villeName}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />

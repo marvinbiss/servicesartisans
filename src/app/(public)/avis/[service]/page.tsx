@@ -526,7 +526,7 @@ export default async function AvisServicePage({
             <div className="mt-8">
               <Link
                 href={`/devis/${service}`}
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg"
               >
                 <ArrowRight className="w-5 h-5" />
                 Comparer les artisans RGE
@@ -900,7 +900,7 @@ export default async function AvisServicePage({
             </Link>
             <Link
               href={`/services/${service}`}
-              className="inline-flex items-center gap-2 bg-primary-400 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-300 transition-colors text-lg border border-primary-300"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-colors text-lg border border-primary-300"
             >
               Trouver un {tradeLower} RGE certifié
               <ArrowRight className="w-5 h-5" />

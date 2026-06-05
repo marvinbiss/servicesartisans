@@ -44,11 +44,17 @@ import {
   ArrowRight,
   AlertTriangle,
   Award,
-  CheckCircle2,
   Coins,
+  Flame,
+  Palette,
   ShieldCheck,
   Star,
+  Timer,
+  Wrench,
+  XCircle,
 } from 'lucide-react'
+
+import type { LucideIcon } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -101,39 +107,39 @@ const tldr = [
   'Toujours 2-3 devis chez chauffagistes RGE Qualibois Module Air. SAV France = critère #1 long terme.',
 ]
 
-const CRITERES_COMPARAISON = [
+const CRITERES_COMPARAISON: { icon: LucideIcon; titre: string; detail: string }[] = [
   {
-    icone: '🔥',
+    icon: Flame,
     titre: 'Rendement (η_s saisonnier)',
     detail:
       "Minimum η ≥ 87 % pour MaPrimeRénov' + label Flamme Verte 7 étoiles + Ecodesign 2022. Les meilleures marques tournent à 89-93 % (RIKA Domo, Stuv P-10, Wodtke ixbase). Sous 87 % = exclusion aides 2026 + factures granulés +10-15 %.",
   },
   {
-    icone: '⏱️',
+    icon: Timer,
     titre: 'Autonomie réservoir',
     detail:
       'Capacité 15-30 kg pour autonomie 24-48 h en charge moyenne. Modèles haut de gamme (RIKA Memo, Wodtke ixbase 30 kg) atteignent 60-80 h. Critique si vous travaillez à plein temps ou voyagez. Réservoir externe en option (silo intégré : +800-1 500 €).',
   },
   {
-    icone: '🎨',
+    icon: Palette,
     titre: 'Design et intégration',
     detail:
       '8 esthétiques : compact carré, panoramique 270°, galets pierre, ultra-fin (< 25 cm profondeur), inox, contemporain, classique fonte. Stuv P-10 = référence design (vision panoramique 270°). MCZ Vivo = pierre naturelle. Edilkamin Lia = ultra-compact (50 × 50 × 95 cm).',
   },
   {
-    icone: '🛡️',
+    icon: ShieldCheck,
     titre: 'Garantie constructeur',
     detail:
       "Standard : 5 ans pièces, 2 ans main d'œuvre. Premium : 10 ans pièces (Stuv, RIKA), garantie corps brûleur 15 ans (Wodtke). Vérifier les exclusions : entartrage (eau usage), suie (granulés moisis = exclusion). Étendre via assurance partenaire (+150-300 €/5 ans).",
   },
   {
-    icone: '🔧',
+    icon: Wrench,
     titre: 'SAV et pièces détachées France',
     detail:
       'Critère #1 long terme. Marques avec SAV France solide : RIKA (réseau Sud-Est), MCZ (Italie + revendeurs France), Stuv (Belgique + 50 dépôts France), Wodtke (Allemagne + Lyon/Strasbourg), Edilkamin (Lyon). Délais pièces 1-3 jours = standard. Hors-réseau = 7-15 jours.',
   },
   {
-    icone: '💰',
+    icon: Coins,
     titre: 'Prix posé clé en main 2026',
     detail:
       'Entry 3 000-4 500 € (Termoflux, Palazzetti basique). Mid 4 500-7 000 € (MCZ, Edilkamin, Hark, Wodtke milieu). Premium 7 000-12 000 € (RIKA, Stuv, Wodtke ixbase, hydraulique haut de gamme). Le matériel = 50-65 %, la pose + conduit = 35-50 %.',
@@ -255,7 +261,7 @@ const TOP_MARQUES = [
 
 const BUDGETS = [
   {
-    titre: '💸 Entry 3 000-4 500 € — résidence secondaire / appoint',
+    titre: 'Entry 3 000-4 500 € — résidence secondaire / appoint',
     cas: 'Résidence secondaire, complément chauffage central, appartement 30-60 m². Usage 2-4 mois/an.',
     marques: 'Termoflux Mia/Asia, Palazzetti Ecofire 5 kW, MCZ Star',
     points:
@@ -264,7 +270,7 @@ const BUDGETS = [
       'Marques inconnues ou non labellisées Flamme Verte 7 étoiles (perte aides MPR + CEE). Prix < 2 800 € posé = suspect (matériel cheap, pose bâclée).',
   },
   {
-    titre: '🏠 Mid 4 500-7 000 € — résidence principale standard',
+    titre: 'Mid 4 500-7 000 € — résidence principale standard',
     cas: 'Maison principale 60-120 m², chauffage principal automatisé. Usage 5-7 mois/an.',
     marques: 'MCZ Vivo/Mood, Edilkamin Cute/Ottavia, Hark Avenso, Wodtke Sherry',
     points:
@@ -273,7 +279,7 @@ const BUDGETS = [
       'Modèles ultra-compacts à puissance insuffisante (< 6 kW pour > 80 m²). Vérifier dimensionnement par chauffagiste RGE Qualibois.',
   },
   {
-    titre: '👑 Premium 7 000-12 000 € — long terme + design + hydraulique',
+    titre: 'Premium 7 000-12 000 € — long terme + design + hydraulique',
     cas: 'Maison principale 100-180 m², investissement long terme 25+ ans, design soigné. Hydraulique = chauffage central complet via radiateurs ou plancher chauffant.',
     marques: 'RIKA Domo/Memo, Stuv P-10/P-30, Wodtke ixbase, Edilkamin haut de gamme',
     points:
@@ -284,16 +290,16 @@ const BUDGETS = [
 ]
 
 const ERREURS_A_EVITER = [
-  '❌ Choisir une marque sans label Flamme Verte 7 étoiles + Ecodesign 2022 (perte aides MPR + CEE).',
-  "❌ Acheter en magasin grande distribution (pas d'installateur, pas de SAV, pas de mise en service formelle).",
-  '❌ Surdimensionner la puissance (>= 30 % besoin réel) — cycles courts, surconso 10-15 %, usure rapide.',
-  '❌ Confondre poêle simple (Module Air) et poêle hydraulique (Module Eau pour chauffage central).',
-  '❌ Acheter sans visite technique préalable (mesure conduit, ventilation, distance évacuation).',
-  '❌ Choisir installateur non RGE Qualibois (perte CEE + TVA 20 % au lieu de 5,5 %).',
-  '❌ Démarrer le chantier avant dépôt CEE (pas de CEE rétroactif, perdu sec).',
-  '❌ Négliger le conduit de fumée (tubage inox 316L obligatoire pour granulés humides condensation).',
-  '❌ Ignorer la qualité du granulé (DIN+ ou ENplus A1 obligatoire — sinon usure brûleur 2-3× plus rapide).',
-  '❌ Oublier la mise en service formelle (paramétrage régulation, contrôle CO/CO2, formation utilisateur).',
+  'Choisir une marque sans label Flamme Verte 7 étoiles + Ecodesign 2022 (perte aides MPR + CEE).',
+  "Acheter en magasin grande distribution (pas d'installateur, pas de SAV, pas de mise en service formelle).",
+  'Surdimensionner la puissance (>= 30 % besoin réel) — cycles courts, surconso 10-15 %, usure rapide.',
+  'Confondre poêle simple (Module Air) et poêle hydraulique (Module Eau pour chauffage central).',
+  'Acheter sans visite technique préalable (mesure conduit, ventilation, distance évacuation).',
+  'Choisir installateur non RGE Qualibois (perte CEE + TVA 20 % au lieu de 5,5 %).',
+  'Démarrer le chantier avant dépôt CEE (pas de CEE rétroactif, perdu sec).',
+  'Négliger le conduit de fumée (tubage inox 316L obligatoire pour granulés humides condensation).',
+  'Ignorer la qualité du granulé (DIN+ ou ENplus A1 obligatoire — sinon usure brûleur 2-3× plus rapide).',
+  'Oublier la mise en service formelle (paramétrage régulation, contrôle CO/CO2, formation utilisateur).',
 ]
 
 const faqs = [
@@ -508,17 +514,18 @@ export default function Page() {
               font vraiment la différence sur 15-25 ans d&apos;usage :
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {CRITERES_COMPARAISON.map((c) => (
-                <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
-                  <h3 className="font-heading text-base font-semibold text-sand-900 mb-2">
-                    <span className="mr-2" aria-hidden>
-                      {c.icone}
-                    </span>
-                    {c.titre}
-                  </h3>
-                  <p className="text-sm text-sand-700 m-0">{c.detail}</p>
-                </article>
-              ))}
+              {CRITERES_COMPARAISON.map((c) => {
+                const Icon = c.icon
+                return (
+                  <article key={c.titre} className="bg-white border border-sand-200 rounded-lg p-5">
+                    <h3 className="font-heading text-base font-semibold text-sand-900 mb-2 flex items-center gap-2">
+                      <Icon className="w-5 h-5 text-primary-700 shrink-0" aria-hidden />
+                      {c.titre}
+                    </h3>
+                    <p className="text-sm text-sand-700 m-0">{c.detail}</p>
+                  </article>
+                )
+              })}
             </div>
           </section>
 
@@ -628,7 +635,7 @@ export default function Page() {
                   key={e}
                   className="text-sm text-sand-700 m-0 flex items-start gap-2 border-b border-sand-100 last:border-b-0 py-2 first:pt-0 last:pb-0"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
+                  <XCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
                   <span>{e}</span>
                 </li>
               ))}
@@ -662,7 +669,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/chauffagiste"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un chauffagiste Qualibois vérifié
               <ArrowRight className="w-4 h-4" aria-hidden />

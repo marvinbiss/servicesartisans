@@ -34,7 +34,7 @@ export const LauncherButton = memo(function LauncherButton({
       onClick={onClick}
       aria-label="Ouvrir le chat d'estimation"
       className={
-        'relative flex items-center justify-center bg-primary-400 text-white shadow-cta hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 transition-all duration-500 ' +
+        'relative flex items-center justify-center bg-primary-500 text-white shadow-cta hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 transition-all duration-500 ' +
         (isExpanded ? 'h-12 rounded-full px-5 gap-2.5' : 'h-14 w-14 rounded-full')
       }
     >
@@ -43,7 +43,7 @@ export const LauncherButton = memo(function LauncherButton({
 
       {/* Notification badge */}
       {showNotification && (
-        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm">
+        <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-2xs font-bold text-white shadow-sm">
           1
         </span>
       )}

@@ -552,7 +552,7 @@ export default function Page() {
               </p>
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-primary-700 hover:bg-primary-800 text-white font-semibold px-5 py-3 rounded-lg transition"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-5 py-3 rounded-lg transition"
               >
                 Demander mon devis chaudière bois <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>

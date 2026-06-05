@@ -165,7 +165,7 @@ export function ArtisanProfileCard({
                 Disponible maintenant
               </div>
             ) : isAvailableToday ? (
-              <div className="bg-primary-400 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <div className="bg-primary-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
                 Dispo aujourd'hui
               </div>
@@ -279,7 +279,7 @@ export function ArtisanProfileCard({
           <div className="flex gap-3 mt-6">
             <Link
               href={`${href}#reserver`}
-              className="flex-1 flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-600 text-white py-3 rounded-xl font-semibold transition-colors shadow-cta"
+              className="flex-1 flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-xl font-semibold transition-colors shadow-cta"
             >
               <Calendar className="w-4 h-4" />
               Reserver
@@ -417,7 +417,7 @@ export function ArtisanProfileCard({
 
             {/* Mobile CTAs */}
             <div className="flex gap-2 mt-4 sm:hidden">
-              <span className="flex-1 flex items-center justify-center gap-1 bg-primary-400 text-white py-2.5 rounded-lg font-medium text-sm shadow-cta">
+              <span className="flex-1 flex items-center justify-center gap-1 bg-primary-500 text-white py-2.5 rounded-lg font-medium text-sm shadow-cta">
                 <Calendar className="w-4 h-4" />
                 Reserver
               </span>

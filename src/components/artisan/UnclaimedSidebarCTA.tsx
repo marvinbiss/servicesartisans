@@ -56,7 +56,7 @@ export function UnclaimedSidebarCTA({
             trackEvent('artisan_devis_click', { source: 'unclaimed_sidebar', specialty, city })
             onDevisClick()
           }}
-          className="w-full py-3.5 px-5 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 mb-4"
+          className="w-full py-3.5 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 mb-4"
           aria-label="Demander un devis gratuit"
         >
           Devis gratuit
