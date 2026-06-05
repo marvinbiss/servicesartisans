@@ -109,6 +109,29 @@ export async function POST(request: Request) {
       )
     }
 
+    // Décision produit 2026-06-05 : plus d'espace particulier — connexion
+    // réservée aux artisans (et admins). Les comptes role='client' existants
+    // sont conservés en DB (RGPD : suppression sur demande) mais ne peuvent
+    // plus ouvrir de session. Les demandes de devis restent sans compte.
+    // IMPORTANT : ce check précède le flow 2FA, sinon un client avec 2FA
+    // activée obtiendrait une session via /verifier-2fa (bypass du blocage).
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, full_name')
+      .eq('id', data.user.id)
+      .single()
+
+    if (!profile || profile.role === 'client') {
+      await supabase.auth.signOut()
+      return NextResponse.json(
+        createErrorResponse(
+          ErrorCode.INSUFFICIENT_PERMISSIONS,
+          "L'espace personnel est réservé aux artisans. Vos demandes de devis ne nécessitent pas de compte — utilisez le formulaire de devis."
+        ),
+        { status: 403 }
+      )
+    }
+
     // Audit 2026-04-25 (agent #4 BLOCKER H6) puis Plan C C-1 (2026-05-05) :
     // avant 04-25, signin posait immédiatement le cookie de session après
     // signInWithPassword, ignorant le flag two_factor_enabled (bypass 2FA).
@@ -152,15 +175,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Get user profile (may not exist yet)
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, full_name')
-      .eq('id', data.user.id)
-      .single()
-
     // Déterminer si l'utilisateur est un artisan basé sur role
-    const isArtisan = profile?.role === 'artisan'
+    const isArtisan = profile.role === 'artisan'
 
     // SECURITY FIX: Ne pas exposer le refresh token dans la réponse JSON
     // Le refresh token est géré par les cookies HTTP-only de Supabase
@@ -174,8 +190,8 @@ export async function POST(request: Request) {
             data.user.user_metadata?.full_name ||
             `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() ||
             null,
-          role: profile?.role || 'user',
-          userType: profile?.role === 'artisan' ? 'artisan' : 'client',
+          role: profile.role,
+          userType: isArtisan ? 'artisan' : 'admin',
           isArtisan,
         },
         session: {

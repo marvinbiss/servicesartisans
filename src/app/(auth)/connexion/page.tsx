@@ -12,13 +12,22 @@ export default function ConnexionPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect')
+  // Erreurs renvoyées par /auth/callback (OAuth) via query param.
+  const callbackError = searchParams.get('error')
+  const callbackErrorMessage =
+    callbackError === 'espace_artisan_uniquement'
+      ? "L'espace personnel est réservé aux artisans. Vos demandes de devis ne nécessitent pas de compte — utilisez le formulaire de devis."
+      : callbackError === '2fa_oauth_unsupported'
+        ? 'Votre compte a la double authentification activée : connectez-vous avec votre email et mot de passe.'
+        : callbackError === '2fa_check_failed'
+          ? 'Vérification 2FA indisponible. Réessayez dans quelques instants.'
+          : null
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const [userType] = useState<'particulier' | 'artisan'>('particulier')
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(callbackErrorMessage)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,14 +68,15 @@ export default function ConnexionPage() {
 
       // Session managed by Supabase SSR cookies — no localStorage storage needed
 
-      // Redirect: honor ?redirect= param, else default to dashboard
+      // Redirect: honor ?redirect= param, else default to dashboard.
+      // Seuls artisan/admin passent le signin (espace particulier fermé 2026-06-05).
       const safeRedirect = getSafeRedirectPath(redirectTo, '')
       if (safeRedirect) {
         router.push(safeRedirect)
-      } else if (data.data?.user?.isArtisan) {
-        router.push('/espace-artisan')
+      } else if (data.data?.user?.role === 'super_admin') {
+        router.push('/admin')
       } else {
-        router.push('/espace-client')
+        router.push('/espace-artisan')
       }
     } catch {
       setError('Erreur de connexion au serveur')
@@ -118,7 +128,7 @@ export default function ConnexionPage() {
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">Connexion</h1>
-              <p className="text-charcoal-400">Accédez à votre espace personnel</p>
+              <p className="text-charcoal-400">Accédez à votre espace artisan</p>
             </div>
 
             {/* User type determined server-side after login — no toggle needed */}
@@ -194,11 +204,7 @@ export default function ConnexionPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-                  userType === 'artisan'
-                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30'
-                    : 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-primary-500/30'
-                }`}
+                className="w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-primary-500/30"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -213,12 +219,12 @@ export default function ConnexionPage() {
 
             <div className="mt-8 text-center">
               <p className="text-charcoal-400">
-                Pas encore de compte ?{' '}
+                Vous êtes artisan, pas encore de compte ?{' '}
                 <Link
-                  href={`${userType === 'artisan' ? '/inscription-artisan' : '/inscription'}${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                  className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-primary-300 hover:text-primary-200'}`}
+                  href="/inscription-artisan"
+                  className="font-medium text-primary-300 hover:text-primary-200"
                 >
-                  Créer un compte
+                  Créer un compte artisan
                 </Link>
               </p>
             </div>
@@ -293,8 +299,8 @@ export default function ConnexionPage() {
             </div>
             <h2 className="text-4xl font-bold mb-6">Bienvenue sur ServicesArtisans</h2>
             <p className="text-primary-100 text-lg mb-8">
-              Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer
-              votre compte.
+              Connectez-vous pour accéder à votre espace artisan, recevoir vos demandes de devis et
+              gérer votre fiche.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">

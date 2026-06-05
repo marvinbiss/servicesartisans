@@ -39,7 +39,7 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}/connexion?error=2fa_check_failed`)
       }
 
-      // Check if profile exists — create one if this is a first OAuth sign-in
+      // Check if profile exists
       const adminClient = createAdminClient()
       const { data: existingProfile } = await adminClient
         .from('profiles')
@@ -47,29 +47,23 @@ export async function GET(request: Request) {
         .eq('id', user.id)
         .maybeSingle()
 
-      if (!existingProfile) {
-        // Extract name from OAuth metadata
-        const meta = user.user_metadata
-        const fullName =
-          meta?.full_name ||
-          meta?.name ||
-          `${meta?.first_name || ''} ${meta?.last_name || ''}`.trim() ||
-          user.email?.split('@')[0] ||
-          ''
-
-        await adminClient.from('profiles').insert({
-          id: user.id,
-          email: (user.email || '').toLowerCase(),
-          full_name: fullName,
-          role: 'client',
-          created_at: new Date().toISOString(),
+      // Décision produit 2026-06-05 : plus d'espace particulier. La connexion
+      // OAuth est réservée aux comptes artisan/admin existants :
+      //  - profil role='client' → session refusée (compte conservé en DB)
+      //  - premier sign-in OAuth (pas de profil) → plus de création de compte
+      //    particulier ; on refuse et on oriente vers /inscription-artisan.
+      if (!existingProfile || existingProfile.role === 'client') {
+        await supabase.auth.signOut()
+        logger.warn('OAuth callback blocked: espace réservé aux artisans', {
+          userId: user.id,
+          hadProfile: Boolean(existingProfile),
         })
+        return NextResponse.redirect(`${origin}/connexion?error=espace_artisan_uniquement`)
       }
 
       // Redirect to appropriate dashboard if no specific next URL
       if (next === '/') {
-        const defaultRedirect =
-          existingProfile?.role === 'artisan' ? '/espace-artisan' : '/espace-client'
+        const defaultRedirect = existingProfile.role === 'artisan' ? '/espace-artisan' : '/admin'
         return NextResponse.redirect(`${origin}${defaultRedirect}`)
       }
 

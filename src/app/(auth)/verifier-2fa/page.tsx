@@ -51,7 +51,7 @@ export default function Verifier2FAPage() {
       }
 
       const safe = getSafeRedirectPath(next, '')
-      router.push(safe || '/espace-client')
+      router.push(safe || '/espace-artisan')
       router.refresh()
     } catch {
       setError('Erreur de connexion au serveur')

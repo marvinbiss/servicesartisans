@@ -21,7 +21,25 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: Request) {
+/**
+ * Décision produit 2026-06-05 : plus d'espace particulier — les inscriptions
+ * de comptes client sont fermées (la connexion role='client' est bloquée côté
+ * signin, créer un compte inutilisable serait un piège). Les demandes de devis
+ * restent sans compte. Artisans : /inscription-artisan.
+ * Réactivation : remplacer POST par _POST_legacy ci-dessous.
+ */
+export async function POST(_request: Request) {
+  return NextResponse.json(
+    createErrorResponse(
+      ErrorCode.INSUFFICIENT_PERMISSIONS,
+      'Les inscriptions particuliers sont fermées : les demandes de devis ne nécessitent pas de compte. Vous êtes artisan ? Inscrivez-vous sur /inscription-artisan.'
+    ),
+    { status: 403 }
+  )
+}
+
+// Conservé pour réactivation éventuelle — non routé (Next n'expose que POST).
+async function _POST_legacy(request: Request) {
   try {
     // Rate limiting (5 requests per 15 min per IP)
     const ip = getClientIp(request.headers)
@@ -162,3 +180,6 @@ export async function POST(request: Request) {
     )
   }
 }
+
+// noUnusedLocals : référence volontaire, la legacy reste compilée pour réactivation rapide.
+void _POST_legacy

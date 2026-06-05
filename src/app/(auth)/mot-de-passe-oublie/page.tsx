@@ -139,9 +139,9 @@ export default function MotDePasseOubliePage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-charcoal-500">
-          Vous n'avez pas de compte ?{' '}
-          <Link href="/inscription" className="text-primary-500 hover:underline">
-            Créer un compte
+          Vous êtes artisan, pas encore de compte ?{' '}
+          <Link href="/inscription-artisan" className="text-primary-500 hover:underline">
+            Créer un compte artisan
           </Link>
         </p>
       </div>

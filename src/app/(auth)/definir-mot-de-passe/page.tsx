@@ -170,8 +170,9 @@ export default function DefinirMotDePassePage() {
         await supabase.auth.signInWithPassword({ email: userEmail, password })
       }
 
-      // Determine redirect based on user role
-      let redirectPath = '/espace-client'
+      // Determine redirect based on user role.
+      // Espace particulier fermé 2026-06-05 : fallback = espace artisan.
+      let redirectPath = '/espace-artisan'
       const {
         data: { user: currentUser },
       } = await supabase.auth.getUser()
