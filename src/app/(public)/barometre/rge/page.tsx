@@ -35,13 +35,18 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `Baromètre RGE ${month} — ${active} artisans certifiés en France`,
     description: `Statistiques ${month} : ${active} artisans RGE actifs en France, top régions, qualifications (QualiPAC, Qualibat). Source ADEME.`,
     alternates: getAlternates('/barometre/rge'),
-    robots: {
-      index: true,
-      follow: true,
-      'max-snippet': -1,
-      'max-image-preview': 'large' as const,
-      'max-video-preview': -1,
-    },
+    // Sans snapshot, la page rend un placeholder « publié prochainement »
+    // qu'il ne faut pas laisser indexer (constaté 2026-06-05 : table
+    // snapshots vide pour cause de drift colonnes, réparé mig 537).
+    robots: snap
+      ? {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1,
+        }
+      : { index: false, follow: true },
     openGraph: {
       ...getOgDefaults(),
       locale: 'fr_FR',
