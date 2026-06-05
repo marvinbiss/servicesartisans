@@ -11,6 +11,7 @@ import {
   isServiceVilleIndexable,
 } from '@/lib/seo/services-tiers'
 import { isRemovedByRgePivot, isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
+import { BAROMETRE_REGIONS } from '@/lib/barometre/constants'
 
 // Boot-time guard : si un service est ajouté à france.ts sans MAJ tiers, throw
 // au build pour éviter le silent fallback Tier C en prod.
@@ -271,6 +272,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
       {
         url: `${SITE_URL}/rge`,
+        lastModified: STATIC_DATE,
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      },
+      {
+        // RE-06 hub ville-first artisans RGE — créé 2026-06-05 (audit 404 :
+        // 8 liens internes pointaient vers ce 404, 500 pages /artisans-rge/[ville]
+        // orphelines de hub).
+        url: `${SITE_URL}/artisans-rge`,
         lastModified: STATIC_DATE,
         changeFrequency: 'weekly',
         priority: 0.8,
@@ -2739,7 +2749,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Dept × service pages ────────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
-    const { byDeptService } = await getLastmodData()
+    const { byDeptServiceSlug } = await getLastmodData()
     const batchIndex = parseInt(id.replace('dept-services-', ''))
     // Pivot full RGE 2026-05-03 : filter out 4 commodity slugs.
     const tradeSlugs = getTradesSlugs().filter((slug) => !isRemovedByRgePivot(slug))
@@ -2749,10 +2759,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         // Vague δ nettoyage 2026-05-02 : on n'émet que les combos avec ≥1
         // provider (lastmod défini = ≥1 provider sur ce dept×service).
         // Sans provider, la page est thin par construction (juste template +
-        // commune stats). byDeptService = empty Map sur DB blip → fail-open.
-        const key = `${normalizeName(dept.name)}::${service}`
-        const lastmod = byDeptService.get(key)
-        if (byDeptService.size > 0 && !lastmod) continue
+        // commune stats). byDeptServiceSlug = empty Map sur DB blip → fail-open.
+        //
+        // Fix 2026-06-05 : la clé DB est `address_department` = CODE INSEE
+        // ('75', '2a'), PAS le nom — lookup par dept.name matchait 0 combo
+        // → shards dept-services VIDES depuis Vague δ (analogue dept-code-bug
+        // 2026-05-05). On utilise aussi byDeptServiceSlug (specialty résolue
+        // en service slug via SERVICE_TO_SPECIALTIES) au lieu du Map specialty brut.
+        const key = `${normalizeName(dept.code)}::${service}`
+        const lastmod = byDeptServiceSlug.get(key)
+        if (byDeptServiceSlug.size > 0 && !lastmod) continue
         allUrls.push({
           url: `${SITE_URL}/departements/${dept.slug}/${service}`,
           lastModified: lastmod,
@@ -2767,8 +2783,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Baromètre pages (regions + tarifs by métier) ────────────────────
   if (id === 'barometre') {
     const { byRegion, byService } = await getLastmodData()
-    // Baromètre régions — lastmod = dernier provider modifié dans la région
-    const barometreRegions: MetadataRoute.Sitemap = regions.map((region) => ({
+    // Baromètre régions — lastmod = dernier provider modifié dans la région.
+    // BAROMETRE_REGIONS (13 métropole) et PAS `regions` (france.ts, DOM-TOM
+    // inclus) : la page a dynamicParams=false → les slugs hors liste = 404
+    // (audit sitemap live 2026-06-05 : /barometre/regions/polynesie-francaise).
+    const barometreRegions: MetadataRoute.Sitemap = BAROMETRE_REGIONS.map((region) => ({
       url: `${SITE_URL}/barometre/regions/${region.slug}`,
       lastModified: byRegion.get(normalizeName(region.name)),
       changeFrequency: 'monthly' as const,
