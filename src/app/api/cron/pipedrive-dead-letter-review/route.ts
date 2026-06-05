@@ -10,7 +10,7 @@
  *
  * Action :
  *   - Liste tous les `devis_requests` avec `pipedrive_dead_letter_at` set,
- *     les groupe par `pipedrive_last_error` (pour identifier patterns récurrents)
+ *     les groupe par `pipedrive_sync_error` (pour identifier patterns récurrents)
  *     puis émet :
  *       (1) Sentry capture avec tag `dead_letter:weekly-review` + count
  *       (2) Email résumé à `ALERTS_EMAIL` ou `partenariats@servicesartisans.fr`
@@ -51,12 +51,10 @@ type DeadLetterRow = {
   id: string
   created_at: string | null
   pipedrive_dead_letter_at: string | null
-  pipedrive_last_error: string | null
-  pipedrive_attempts: number | null
-  service_slug: string | null
-  city_slug: string | null
-  email: string | null
-  phone: string | null
+  pipedrive_sync_error: string | null
+  pipedrive_sync_attempts: number | null
+  service_name: string | null
+  city: string | null
 }
 
 function escapeHtml(s: string): string {
@@ -70,7 +68,7 @@ function escapeHtml(s: string): string {
 function buildEmailHtml(rows: DeadLetterRow[], totalCount: number): string {
   const errorBreakdown = new Map<string, number>()
   for (const r of rows) {
-    const key = (r.pipedrive_last_error || 'unknown').slice(0, 80)
+    const key = (r.pipedrive_sync_error || 'unknown').slice(0, 80)
     errorBreakdown.set(key, (errorBreakdown.get(key) || 0) + 1)
   }
   const breakdownRows = Array.from(errorBreakdown.entries())
@@ -84,10 +82,10 @@ function buildEmailHtml(rows: DeadLetterRow[], totalCount: number): string {
       (r) => `
         <tr>
           <td>${escapeHtml(r.id.slice(0, 8))}</td>
-          <td>${escapeHtml(r.service_slug || '—')}</td>
-          <td>${escapeHtml(r.city_slug || '—')}</td>
-          <td>${r.pipedrive_attempts ?? 0}</td>
-          <td>${escapeHtml((r.pipedrive_last_error || '').slice(0, 60))}</td>
+          <td>${escapeHtml(r.service_name || '—')}</td>
+          <td>${escapeHtml(r.city || '—')}</td>
+          <td>${r.pipedrive_sync_attempts ?? 0}</td>
+          <td>${escapeHtml((r.pipedrive_sync_error || '').slice(0, 60))}</td>
           <td>${r.pipedrive_dead_letter_at ? new Date(r.pipedrive_dead_letter_at).toLocaleString('fr-FR') : '—'}</td>
         </tr>
       `
@@ -99,7 +97,7 @@ function buildEmailHtml(rows: DeadLetterRow[], totalCount: number): string {
     <html><body style="font-family:Arial,sans-serif;font-size:14px;color:#222">
       <h2 style="color:#C24B2A">Pipedrive dead-letter — revue hebdo</h2>
       <p><strong>${totalCount} leads</strong> ont atteint le seuil max de tentatives Pipedrive et n'ont jamais été synchronisés.</p>
-      <p>Action : vérifier ci-dessous, corriger manuellement (Pipedrive ou DB), puis reset <code>pipedrive_dead_letter_at = NULL</code> + <code>pipedrive_attempts = 0</code> pour réessayer.</p>
+      <p>Action : vérifier ci-dessous, corriger manuellement (Pipedrive ou DB), puis reset <code>pipedrive_dead_letter_at = NULL</code> + <code>pipedrive_sync_attempts = 0</code> pour réessayer.</p>
 
       <h3>Patterns d'erreur (top des 30 derniers jours)</h3>
       <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
@@ -192,7 +190,7 @@ export const GET = withCronCheckIn(
       const { data: rows, error: detailsError } = await supabase
         .from('devis_requests')
         .select(
-          'id, created_at, pipedrive_dead_letter_at, pipedrive_last_error, pipedrive_attempts, service_slug, city_slug, email, phone'
+          'id, created_at, pipedrive_dead_letter_at, pipedrive_sync_error, pipedrive_sync_attempts, service_name, city'
         )
         .not('pipedrive_dead_letter_at', 'is', null)
         .gte('pipedrive_dead_letter_at', sinceISO)

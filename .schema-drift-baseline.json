@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T21:06:24.311Z",
+  "generatedAt": "2026-06-05T13:32:28.793Z",
   "source": "OpenAPI (service_role, RLS-bypass)",
   "drifts": [
     {
@@ -13,34 +13,6 @@
     {
       "table": "providers",
       "column": "status"
-    },
-    {
-      "table": "reviews",
-      "column": "fraud_indicators"
-    },
-    {
-      "table": "devis_requests",
-      "column": "pipedrive_last_error"
-    },
-    {
-      "table": "devis_requests",
-      "column": "pipedrive_attempts"
-    },
-    {
-      "table": "devis_requests",
-      "column": "service_slug"
-    },
-    {
-      "table": "devis_requests",
-      "column": "city_slug"
-    },
-    {
-      "table": "devis_requests",
-      "column": "email"
-    },
-    {
-      "table": "devis_requests",
-      "column": "phone"
     },
     {
       "table": "cee_dossiers",
@@ -107,72 +79,12 @@
       "column": "notes"
     },
     {
-      "table": "cee_dossiers",
-      "column": "metadata"
-    },
-    {
-      "table": "audit_logs",
-      "column": "old_value"
-    },
-    {
-      "table": "audit_logs",
-      "column": "provider_id"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "captured_at"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "total_rge_active"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "total_rge_expired"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "total_providers"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "by_region"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "by_qualification"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "by_specialty"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "organismes"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "methodology"
-    },
-    {
-      "table": "barometre_rge_snapshots",
-      "column": "source_note"
-    },
-    {
       "table": "services",
       "column": "service_id"
     },
     {
       "table": "services",
       "column": "city"
-    },
-    {
-      "table": "newsletter_subscribers",
-      "column": "source"
-    },
-    {
-      "table": "access_logs",
-      "column": "user_id"
     },
     {
       "table": "review_stats_by_dept",
