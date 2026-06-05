@@ -570,12 +570,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
   const intro = buildIntroParagraph(serviceName, villeName, serviceSlug)
   const qualif = RGE_QUALIFICATION_LABELS[serviceSlug]
-  const hasGuide = [
-    'pompe-a-chaleur',
-    'panneaux-solaires',
-    'isolation-thermique',
-    'renovation-energetique',
-  ].includes(serviceSlug)
+  // Seuls les slugs avec un répertoire src/app/(public)/guides/<slug> existant —
+  // panneaux-solaires + renovation-energetique retirés (guides inexistants → 404).
+  const hasGuide = ['pompe-a-chaleur', 'isolation-thermique'].includes(serviceSlug)
 
   // Content enrichi (2-3 paragraphes spécifiques service x ville)
   const villeData = getVilleBySlug(villeSlug)

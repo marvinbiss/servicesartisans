@@ -46,7 +46,7 @@ describe('DevisQuickForm', () => {
     const rgpdLink = screen.getByRole('link', {
       name: /politique de confidentialité/i,
     }) as HTMLAnchorElement
-    expect(rgpdLink.getAttribute('href')).toBe('/rgpd')
+    expect(rgpdLink.getAttribute('href')).toBe('/confidentialite')
     // form has accessible name (heading default)
     const form = document.querySelector('form')!
     expect(form.getAttribute('aria-labelledby')).toBeTruthy()

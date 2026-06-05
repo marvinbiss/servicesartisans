@@ -159,7 +159,7 @@ export default function ComparatifsBlock({ serviceSlug, serviceName }: Comparati
 
               {/* CTA link */}
               <Link
-                href={`/comparatif/${comp.slug}`}
+                href={`/comparaison/${comp.slug}`}
                 className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-primary-700 hover:text-primary-800"
               >
                 Voir le comparatif complet <ArrowRight className="h-3.5 w-3.5" />

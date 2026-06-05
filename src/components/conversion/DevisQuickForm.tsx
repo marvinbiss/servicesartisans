@@ -343,7 +343,7 @@ export default function DevisQuickForm({
           Données utilisées pour vous mettre en relation avec <strong>un seul artisan</strong> RGE
           (leads exclusifs). Base légale : exécution précontractuelle (art. 6.1.b RGPD). Droits
           d&apos;accès, rectification, opposition :{' '}
-          <a href="/rgpd" className="underline hover:text-charcoal-700">
+          <a href="/confidentialite" className="underline hover:text-charcoal-700">
             politique de confidentialité
           </a>
           .

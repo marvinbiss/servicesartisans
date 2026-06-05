@@ -170,7 +170,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
       id: `ville-${v.slug}`,
       label: v.name,
       hint: v.region,
-      href: `/${v.slug}`,
+      href: `/villes/${v.slug}`,
       icon: <MapPin className="w-4 h-4" />,
       group: 'Villes',
       keywords: [v.departement || '', v.codePostal || ''],

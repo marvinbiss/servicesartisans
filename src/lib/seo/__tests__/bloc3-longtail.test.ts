@@ -43,7 +43,7 @@ describe('bloc3-longtail loader', () => {
   it('maps known seeds to topic hub URLs', () => {
     expect(getTopicHubForSeed('vmc')?.href).toBe('/renovation-energetique/travaux/vmc')
     expect(getTopicHubForSeed('cee')?.href).toBe('/cee')
-    expect(getTopicHubForSeed('dpe')?.href).toBe('/diagnostic/dpe')
+    expect(getTopicHubForSeed('dpe')?.href).toBe('/renovation-energetique/diagnostic/dpe')
     expect(getTopicHubForSeed('panneau solaire')?.label).toBe('Solaire')
   })
 

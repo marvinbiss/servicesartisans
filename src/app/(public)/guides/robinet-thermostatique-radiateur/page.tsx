@@ -110,8 +110,8 @@ const sources = [
 
 const relatedGuides = [
   { label: 'Pompe à chaleur prix 2026', href: '/guides/pompe-a-chaleur' },
-  { label: 'Thermostat connecté économies', href: '/guides/thermostat-connecte-economies' },
-  { label: 'Désembouage circuit chauffage', href: '/guides/desembouage-chauffage' },
+  { label: 'Thermostat connecté économies', href: '/guides/thermostat-connecte-economie-energie' },
+  { label: 'Chaudière ne chauffe plus : diagnostic', href: '/guides/chaudiere-ne-chauffe-plus' },
   {
     label: 'CEE certificats économies énergie 2026',
     href: '/guides/cee-certificats-economies-energie-2026',

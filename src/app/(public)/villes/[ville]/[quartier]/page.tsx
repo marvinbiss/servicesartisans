@@ -851,14 +851,14 @@ export default async function QuartierPage({ params }: PageProps) {
                   </Link>
                 )}
                 <Link
-                  href={`/devis/plombier/${villeSlug}`}
+                  href={`/services/plombier/${villeSlug}`}
                   className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
                 >
                   <ChevronRight className="w-3 h-3" />
                   Devis plombier à {ville.name}
                 </Link>
                 <Link
-                  href={`/devis/electricien/${villeSlug}`}
+                  href={`/services/electricien/${villeSlug}`}
                   className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-accent-600 py-2 transition-colors"
                 >
                   <ChevronRight className="w-3 h-3" />

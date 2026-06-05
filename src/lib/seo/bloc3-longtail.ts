@@ -139,7 +139,7 @@ export function getTopicHubForSeed(seed: string): { label: string; href: string 
     case 'cee':
       return { label: 'CEE', href: '/cee' }
     case 'dpe':
-      return { label: 'DPE', href: '/diagnostic/dpe' }
+      return { label: 'DPE', href: '/renovation-energetique/diagnostic/dpe' }
     case 'isolation':
       return { label: 'Isolation', href: '/renovation-energetique/travaux/isolation' }
     default:
