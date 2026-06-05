@@ -27,10 +27,13 @@ const CEE_CLIENT_TERMS: Record<string, string> = {
   'BAR-TH-112': 'Poêle à granulés',
   'BAR-TH-113': 'Chaudière biomasse',
 
-  // Pompes à chaleur
+  // Pompes à chaleur — intitulés alignés sur les fiches réelles (mig 384) :
+  // 171 = air/eau, 172 = eau/eau-sol/eau (géothermie), 129 = air/air, 159 = hybride
   'BAR-TH-104': 'Pompe à chaleur air/eau',
-  'BAR-TH-171': 'Pompe à chaleur hybride',
+  'BAR-TH-171': 'Pompe à chaleur air/eau',
   'BAR-TH-172': 'Pompe à chaleur géothermique',
+  'BAR-TH-129': 'Pompe à chaleur air/air',
+  'BAR-TH-159': 'Pompe à chaleur hybride',
 
   // Eau chaude
   'BAR-TH-148': 'Chauffe-eau thermodynamique',
@@ -40,27 +43,26 @@ const CEE_CLIENT_TERMS: Record<string, string> = {
   'BAR-TH-125': 'VMC double flux',
   'BAR-TH-127': 'VMC simple flux hygroréglable',
 
-  // Isolation
+  // Isolation — 102 = murs (ITI/ITE), 103 = plancher bas, 108 = volets isolants
   'BAR-EN-101': 'Isolation des combles',
-  'BAR-EN-102': 'Isolation murs intérieurs',
-  'BAR-EN-103': 'Isolation murs extérieurs (ITE)',
-  'BAR-EN-108': 'Isolation toiture-terrasse',
+  'BAR-EN-102': 'Isolation des murs',
+  'BAR-EN-103': 'Isolation du plancher bas',
+  'BAR-EN-108': 'Volets isolants',
 
   // Menuiseries
   'BAR-EN-104': 'Fenêtres double-vitrage',
 
   // Régulation / chauffage
-  'BAR-TH-129': 'Robinet thermostatique',
   'BAR-TH-143': 'Système solaire combiné',
-  'BAR-TH-159': 'Émetteurs électriques basse consommation',
-  'BAR-TH-161': 'Régulation par programmation chaudière',
-  'BAR-TH-173': 'Calorifugeage chauffage',
-  'BAR-TH-174': 'Mitigeur thermostatique',
-  'BAR-TH-175': 'Thermostat avec régulation',
-  'BAR-TH-177': 'Plancher chauffant solaire',
+  'BAR-TH-161': 'Calorifugeage des points singuliers',
+  'BAR-TH-173': 'Pilotage connecté du chauffage pièce par pièce',
 
-  // Sécurité
-  'BAR-SE-104': 'Détecteur autonome de fumée',
+  // Rénovation d'ampleur (ex-BAR-TH-164)
+  'BAR-TH-174': "Rénovation d'ampleur (maison individuelle)",
+  'BAR-TH-175': "Rénovation d'ampleur (appartement)",
+
+  // Services
+  'BAR-SE-104': 'Équilibrage du réseau de chauffage',
 }
 
 /**

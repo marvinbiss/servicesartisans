@@ -11,7 +11,8 @@ describe('getCeeClientTerm', () => {
     expect(getCeeClientTerm('BAR-TH-148')).toBe('Chauffe-eau thermodynamique')
     expect(getCeeClientTerm('BAR-TH-127')).toBe('VMC simple flux hygroréglable')
     expect(getCeeClientTerm('BAR-EN-104')).toBe('Fenêtres double-vitrage')
-    expect(getCeeClientTerm('BAR-EN-103')).toBe('Isolation murs extérieurs (ITE)')
+    // 103 = plancher bas (l'ancien terme « ITE » était faux — fiche réelle mig 384)
+    expect(getCeeClientTerm('BAR-EN-103')).toBe('Isolation du plancher bas')
   })
 
   it('is case-insensitive on the operation code', () => {

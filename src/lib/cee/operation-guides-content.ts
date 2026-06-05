@@ -1017,6 +1017,435 @@ export const CEE_OPERATION_GUIDES: Record<string, CeeGuideContent> = {
       },
     ],
   },
+
+  'BAR-TH-127': {
+    code: 'BAR-TH-127',
+    h1: 'Prime CEE BAR-TH-127 : VMC simple flux hygroréglable en 2026',
+    lede: "Ventilation mécanique simple flux hygroréglable (hygro A ou hygro B) en logement résidentiel existant : caisson basse consommation, bouches et entrées d'air pilotées par l'humidité, prime CEE BAR-TH-127 et qualification RGE mention « Ventilation ».",
+    metaTitle: 'Guide BAR-TH-127 : prime CEE VMC simple flux hygro 2026',
+    metaDescription:
+      'BAR-TH-127 : prime CEE VMC simple flux hygroréglable (hygro A/B) en résidentiel. Caisson basse consommation, bouches hygro, cumul aides et RGE « Ventilation ».',
+    primeClassique:
+      'forfait kWh cumac variable selon zone climatique et surface — simulation auprès du signataire de la charte',
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov:
+      'éligibilité limitée au Parcours Accompagné (geste annexe) — vérifier au cas par cas',
+    rgeRequises: ['RGE mention « Ventilation » (typiquement Qualibat ou Qualifelec RGE)'],
+    // VMC simple flux — RGE mention « Ventilation », pas de guide qualif RGE dédié actuellement.
+    requiredQualifications: [],
+    sections: [
+      {
+        heading: "Ce qu'encadre la fiche BAR-TH-127",
+        paragraphs: [
+          "La fiche BAR-TH-127 couvre l'installation d'un système de ventilation mécanique contrôlée (VMC) simple flux hygroréglable dans un logement résidentiel existant. Contrairement à la VMC double flux (fiche BAR-TH-125) qui récupère la chaleur de l'air extrait, la VMC simple flux extrait l'air vicié des pièces humides (cuisine, salle de bains, WC) et fait entrer l'air neuf par des entrées d'air en façade, sans échangeur de chaleur.",
+          "Le caractère « hygroréglable » est central : les bouches d'extraction et, selon le type, les entrées d'air modulent automatiquement leur débit en fonction du taux d'humidité ambiant. On distingue l'hygro A (bouches d'extraction hygroréglables, entrées d'air autoréglables) de l'hygro B (extraction ET entrées d'air hygroréglables). L'éligibilité CEE et le forfait dépendent du type de système installé et de sa performance certifiée ; les caractéristiques techniques doivent figurer sur la fiche produit et la facture.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime CEE BAR-TH-127',
+        paragraphs: [
+          "Le forfait en kWh cumac est défini par l'annexe de la fiche BAR-TH-127 publiée par la DGEC et dépend de la zone climatique (H1, H2, H3) et de la surface habitable. La conversion en euros dépend du cours hebdomadaire du kWh cumac et du barème propre à chaque signataire de la charte : aucun montant plancher n'est imposé, il faut demander une simulation nominative au mandataire ou au délégataire avant de signer.",
+          "La prime BAR-TH-127 reste modérée comparée aux opérations d'enveloppe ou de chauffage, à la hauteur d'un geste de coût d'installation limité. Les ménages modestes et très modestes peuvent bénéficier d'une bonification précarité. La VMC simple flux hygroréglable n'entre pas dans le périmètre des gestes MaPrimeRénov' résidentiels classiques : son intégration éventuelle se fait au sein d'un bouquet Parcours Accompagné, à vérifier au cas par cas.",
+        ],
+      },
+      {
+        heading: 'Qualification RGE et qualité de mise en œuvre',
+        paragraphs: [
+          "La qualification RGE exigée relève de la mention DGEC « Ventilation », typiquement portée par une qualification Qualibat de ventilation ou une qualification Qualifelec RGE selon le profil de l'entreprise. La qualification doit être active à la date d'acceptation du devis, et l'entreprise signataire de l'attestation sur l'honneur doit être celle titulaire du RGE. Vérifiez le certificat sur france-renov.gouv.fr avant de signer.",
+          "La performance réelle d'une VMC simple flux dépend énormément de la qualité de pose : dimensionnement correct des débits réglementaires par pièce, étanchéité des conduits, présence des entrées d'air sur les menuiseries des pièces sèches et équilibrage à la mise en service. Une installation bâclée (entrées d'air manquantes, conduits non étanches, caisson placé dans un volume mal isolé) dégrade le renouvellement d'air et favorise la condensation. Exigez un rapport de mise en service mentionnant les débits mesurés.",
+        ],
+      },
+      {
+        heading: 'Simple flux ou double flux : comment arbitrer',
+        paragraphs: [
+          "La VMC simple flux hygroréglable (BAR-TH-127) est nettement moins coûteuse à installer que la double flux (BAR-TH-125) et reste pertinente sur un logement moyennement isolé : elle limite les pertes par renouvellement d'air en modulant les débits selon l'occupation, sans le surcoût et la complexité d'un réseau double et d'un échangeur.",
+          "La double flux n'apporte un retour intéressant que sur un logement très bien isolé (RT2012, RE2020 ou rénovation performante), où la récupération de chaleur sur l'air extrait devient significative. Sur un bâti à l'enveloppe modeste, la simple flux hygroréglable offre souvent le meilleur rapport coût/bénéfice. Un artisan sérieux oriente vers la solution adaptée à l'état réel du logement plutôt que de pousser systématiquement la double flux.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Quelle différence entre hygro A et hygro B?',
+        answer:
+          "En hygro A, seules les bouches d'extraction sont hygroréglables, les entrées d'air étant autoréglables (débit fixe). En hygro B, les entrées d'air ET les bouches d'extraction modulent leur débit selon l'humidité. L'hygro B pilote donc l'air entrant et sortant, ce qui réduit davantage les déperditions sur les périodes peu occupées.",
+      },
+      {
+        question: "BAR-TH-127 est-elle cumulable avec MaPrimeRénov'?",
+        answer:
+          "La VMC simple flux hygroréglable n'est pas un geste MaPrimeRénov' résidentiel classique. Elle peut, selon les cas, être intégrée comme poste d'un bouquet de travaux dans le cadre du Parcours Accompagné (rénovation d'ampleur). En geste isolé, la prime CEE BAR-TH-127 reste la principale aide mobilisable : vérifiez l'éligibilité auprès de votre mandataire.",
+      },
+      {
+        question: 'Faut-il des entrées d’air sur les fenêtres?',
+        answer:
+          "Oui. Une VMC simple flux ne fonctionne correctement que si l'air neuf peut entrer par des entrées d'air situées dans les pièces sèches (séjour, chambres). Leur absence — fréquente après un changement de fenêtres sans report des entrées d'air — bloque le balayage de l'air et provoque humidité et condensation. C'est un point de contrôle systématique avant et après travaux.",
+      },
+      {
+        question: 'Quel entretien pour une VMC simple flux hygroréglable?',
+        answer:
+          "Nettoyage des bouches d'extraction une à deux fois par an, dépoussiérage des entrées d'air, et vérification du caisson et des conduits tous les 2 à 3 ans. Un entretien régulier préserve les débits réglementaires et la durée de vie du moteur. Budget d'entretien annuel faible, le geste pouvant souvent être réalisé par l'occupant pour les bouches accessibles.",
+      },
+    ],
+  },
+
+  'BAR-TH-161': {
+    code: 'BAR-TH-161',
+    h1: "Prime CEE BAR-TH-161 : isoler les points singuliers d'un réseau en 2026",
+    lede: "Isolation des points singuliers d'un réseau hydraulique de chauffage ou d'ECS — vannes, robinets, brides, raccords — au moyen de coquilles ou housses isolantes démontables, en complément du calorifugeage des conduits (fiche BAR-TH-160). Prime CEE BAR-TH-161, sans exigence de qualification RGE pour cette fiche.",
+    metaTitle: 'Guide BAR-TH-161 : prime CEE isolation points singuliers 2026',
+    metaDescription:
+      "BAR-TH-161 : prime CEE isolation des points singuliers d'un réseau de chauffage ou d'ECS (vannes, brides, robinets) par coquilles/housses isolantes démontables. Conditions et montants 2026.",
+    primeClassique:
+      'forfait kWh cumac par point isolé, valorisé au cours obligé — simulation auprès du signataire',
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov: 'non concerné (opération de réseau, hors gestes MaPrimeRénov’ logement)',
+    rgeRequises: [
+      "Aucune qualification RGE imposée par l'arrêté pour cette fiche (pose de housses isolantes, hors périmètre RGE bâtiment) — réalisation par un professionnel",
+    ],
+    requiredQualifications: [],
+    sections: [
+      {
+        heading: "Ce qu'encadre la fiche BAR-TH-161",
+        paragraphs: [
+          "La fiche BAR-TH-161 couvre l'isolation des « points singuliers » d'un réseau hydraulique de chauffage ou d'eau chaude sanitaire situé hors volume chauffé : vannes, robinets, brides, raccords, échangeurs et autres organes ponctuels que le calorifugeage continu des tubes (fiche BAR-TH-160) ne peut pas recouvrir. Ces organes, laissés nus, constituent des ponts thermiques qui dissipent une chaleur produite mais jamais utilisée.",
+          "L'isolation est réalisée au moyen de coquilles, matelas ou housses isolantes spécifiques, généralement démontables pour préserver l'accès à l'organe lors des opérations de maintenance. L'unité de mesure de la fiche est le point singulier isolé (et non le mètre linéaire comme pour le calorifugeage de conduits). La fiche vise principalement les chaufferies, sous-sols et locaux techniques d'immeubles collectifs, de copropriétés et de bâtiments tertiaires résidentiels.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime CEE BAR-TH-161',
+        paragraphs: [
+          "Le forfait est exprimé en kWh cumac par point singulier isolé, défini par l'annexe de la fiche DGEC. Le montant en euros se déduit du cours hebdomadaire du kWh cumac et du barème du signataire de la charte : aucun plancher réglementaire n'est imposé. Sur un réseau qui compte de nombreux points singuliers (chaufferie collective), le cumul des forfaits unitaires peut représenter une prime significative pour un investissement matériel modéré.",
+          "Le calorifugeage et l'isolation des points singuliers comptent parmi les opérations CEE au meilleur rapport temps de retour, car le coût des housses isolantes est faible au regard des pertes thermiques évitées toute l'année sur un réseau qui fonctionne en continu. Les ménages et copropriétés modestes peuvent bénéficier d'une bonification précarité selon le signataire.",
+        ],
+      },
+      {
+        heading: 'Réseau hors volume chauffé : la condition centrale',
+        paragraphs: [
+          "L'éligibilité suppose que le réseau (ou la portion concernée) soit situé hors du volume chauffé du bâtiment : chaufferie, sous-sol non chauffé, local technique, gaine froide. Isoler des organes situés à l'intérieur des pièces de vie n'apporte aucune économie nette puisque la chaleur dissipée participe alors au chauffage. C'est un point vérifié en contrôle : les points singuliers déclarés doivent réellement se trouver hors volume chauffé.",
+          "BAR-TH-161 va de pair avec BAR-TH-160 (isolation d'un réseau hydraulique de chauffage ou d'ECS, mesurée au mètre linéaire). En pratique, les deux fiches sont souvent mobilisées ensemble sur un même chantier de calorifugeage de chaufferie : les tubes relèvent de BAR-TH-160, les organes ponctuels de BAR-TH-161. Demandez un métré détaillé distinguant clairement linéaire de conduits et nombre de points singuliers.",
+        ],
+      },
+      {
+        heading: 'Qui réalise les travaux et points de vigilance',
+        paragraphs: [
+          "Point notable : l'arrêté n'impose aucun signe de qualité RGE pour cette opération — la pose de housses isolantes sur points singuliers est hors périmètre RGE bâtiment, et l'information précontractuelle remise au client doit mentionner cette absence d'exigence. En pratique, la prestation est réalisée par un chauffagiste, un plombier ou une entreprise de calorifugeage qui connaît le réseau.",
+          "Deux points de vigilance : (1) privilégier des housses démontables et réutilisables sur les organes nécessitant un accès régulier (vannes, purgeurs), afin que la maintenance ultérieure ne conduise pas à retirer définitivement l'isolant ; (2) refuser les chantiers où le métré gonfle artificiellement le nombre de points singuliers — chaque point déclaré doit correspondre à un organe réellement isolé, sous peine de redressement en contrôle. Exigez un récapitulatif photographique avant/après des organes traités.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Quelle différence entre BAR-TH-160 et BAR-TH-161?',
+        answer:
+          "BAR-TH-160 couvre l'isolation des conduits d'un réseau hydraulique de chauffage ou d'ECS, mesurée au mètre linéaire de tube calorifugé. BAR-TH-161 couvre l'isolation des points singuliers (vannes, brides, robinets, raccords) que le calorifugeage continu ne peut pas recouvrir, mesurée au point isolé. Les deux fiches sont complémentaires et souvent mobilisées ensemble sur une même chaufferie.",
+      },
+      {
+        question: 'Pourquoi isoler des vannes et des brides?',
+        answer:
+          "Un organe métallique nu (vanne, bride, raccord) situé sur un réseau d'eau chaude hors volume chauffé dissipe en continu une chaleur produite mais perdue. Sur une chaufferie collective, le cumul de ces déperditions ponctuelles est loin d'être négligeable. Les isoler avec des housses adaptées supprime ces ponts thermiques pour un coût matériel faible.",
+      },
+      {
+        question: 'Cette opération concerne-t-elle les maisons individuelles?',
+        answer:
+          "Elle vise surtout les réseaux dotés de nombreux organes situés hors volume chauffé — typiquement les chaufferies de copropriétés, d'immeubles collectifs et de bâtiments tertiaires résidentiels. En maison individuelle, le nombre de points singuliers hors volume chauffé est généralement faible, ce qui limite l'intérêt de la fiche prise isolément.",
+      },
+      {
+        question: 'Les housses isolantes doivent-elles être démontables?',
+        answer:
+          "Ce n'est pas une obligation pour tous les organes, mais c'est fortement recommandé sur ceux qui nécessitent un accès récurrent (vannes de réglage, purgeurs, organes de sécurité). Une housse démontable et réutilisable permet d'effectuer la maintenance sans retirer définitivement l'isolant, ce qui préserve l'économie d'énergie dans la durée.",
+      },
+    ],
+  },
+
+  'BAR-TH-173': {
+    code: 'BAR-TH-173',
+    h1: 'Prime CEE BAR-TH-173 : régulation par programmation horaire pièce par pièce en 2026',
+    lede: "Mise en place d'un système de régulation par programmation horaire pièce par pièce sur une installation de chauffage existante : têtes thermostatiques connectées ou modules de pilotage permettant de programmer la température de chaque pièce selon des plages horaires. Prime CEE BAR-TH-173, sans exigence de qualification RGE pour cette fiche.",
+    metaTitle: 'Guide BAR-TH-173 : prime CEE pilotage pièce par pièce 2026',
+    metaDescription:
+      'BAR-TH-173 : prime CEE pour la régulation par programmation horaire pièce par pièce (têtes thermostatiques connectées). Conditions, justificatifs et montants 2026.',
+    primeClassique:
+      'forfait kWh cumac par logement équipé — simulation auprès du signataire de la charte',
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov:
+      'non concerné en geste isolé (peut être intégré à un bouquet Parcours Accompagné)',
+    rgeRequises: [
+      "Aucune qualification RGE imposée par l'arrêté pour cette fiche — pose par un professionnel (électricien ou chauffagiste)",
+    ],
+    requiredQualifications: [],
+    sections: [
+      {
+        heading: "Ce qu'encadre la fiche BAR-TH-173",
+        paragraphs: [
+          "La fiche BAR-TH-173 (version vA69-2, en vigueur depuis le 1er juillet 2025) couvre la mise en place d'un système de régulation par programmation horaire pièce par pièce sur une installation de chauffage existante. Concrètement : des têtes thermostatiques connectées sur les radiateurs à eau chaude, ou des modules de pilotage équivalents, reliés à une centrale ou une application qui permet de programmer la température de chaque pièce selon des plages horaires distinctes.",
+          "L'intérêt est de ne chauffer chaque pièce qu'aux heures où elle est réellement occupée : chambre abaissée en journée, séjour réduit la nuit, salle de bains relancée aux heures de toilette. Cette granularité pièce par pièce distingue la fiche d'un simple thermostat d'ambiance central, qui ne relève pas de BAR-TH-173. Les caractéristiques du système (marque, modèle, nombre de pièces pilotées) doivent figurer sur le devis et la facture.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime CEE BAR-TH-173',
+        paragraphs: [
+          "Le forfait est exprimé en kWh cumac par logement équipé, défini par l'annexe de la fiche DGEC. La traduction en euros dépend du cours du kWh cumac et du barème du signataire de la charte : aucun montant plancher n'est imposé. Le coût matériel restant modéré (quelques têtes thermostatiques connectées et une passerelle), le reste à charge est généralement faible.",
+          "Le « Coup de pouce pilotage connecté » qui bonifiait cette opération a pris fin au 31 décembre 2024, mais la fiche BAR-TH-173 reste active au régime classique. Les ménages modestes et très modestes peuvent bénéficier d'une bonification précarité selon le signataire. En geste isolé, l'opération n'est pas un geste MaPrimeRénov' ; elle peut s'intégrer à un bouquet Parcours Accompagné. Demandez une offre de prime nominative avant de signer le devis.",
+        ],
+      },
+      {
+        heading: 'Conditions et justificatifs spécifiques',
+        paragraphs: [
+          "Particularité de cette fiche : le numéro de point de livraison d'énergie du logement (PDL/PRM pour l'électricité, PCE pour le gaz) doit être fourni dans le dossier — il figure sur la facture d'énergie. La facture des travaux doit être détaillée (identité du bénéficiaire, adresse, marque et modèle du système) et le devis signé doit être antérieur à toute commande ou visite technique.",
+          "Comme pour toutes les opérations CEE depuis la loi 2025-594, des photos avant/après horodatées et géolocalisées (EXIF conservé) sont exigées, ainsi que l'attestation sur l'honneur signée par le bénéficiaire et le professionnel. Conservation des pièces : 6 ans. Le système doit piloter réellement la température pièce par pièce selon un programme horaire — un récepteur on/off central ne suffit pas.",
+        ],
+      },
+      {
+        heading: 'Qui peut réaliser les travaux',
+        paragraphs: [
+          "Point notable : l'arrêté n'impose aucune qualification RGE pour cette opération — c'est une pose d'électronique de régulation, hors périmètre RGE bâtiment. L'information précontractuelle remise au client doit d'ailleurs mentionner explicitement cette absence d'exigence RGE (loi 2025-594). En pratique, l'installation est réalisée par un électricien ou un chauffagiste.",
+          "L'absence d'exigence RGE ne dispense pas de choisir un professionnel sérieux : le paramétrage initial des programmes horaires conditionne entièrement l'économie réelle. Exigez une mise en service avec programmation adaptée à votre rythme de vie et une prise en main de l'application de pilotage. Un système installé mais jamais programmé ne produit aucune économie.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Qu'est-ce que la régulation pièce par pièce?",
+        answer:
+          "C'est un pilotage du chauffage où chaque pièce a son propre programme horaire de température : têtes thermostatiques connectées sur les radiateurs, reliées à une centrale ou une application. On chauffe la chambre le soir, le séjour en journée, sans chauffer tout le logement à la même consigne en permanence.",
+      },
+      {
+        question: 'Faut-il un artisan RGE pour BAR-TH-173?',
+        answer:
+          "Non. L'arrêté n'impose aucun signe de qualité RGE pour cette fiche — c'est une opération de régulation électronique, hors périmètre RGE bâtiment. Le professionnel doit d'ailleurs vous informer par écrit de cette absence d'exigence avant la signature. Électricien ou chauffagiste réalisent l'installation.",
+      },
+      {
+        question: 'Quelle différence avec un thermostat programmable classique?',
+        answer:
+          "Un thermostat d'ambiance central programme une consigne unique pour tout le logement. BAR-TH-173 exige un pilotage horaire pièce par pièce : chaque radiateur ou chaque zone a son propre programme. C'est cette granularité qui ouvre droit à la fiche — un simple thermostat central n'y donne pas droit.",
+      },
+      {
+        question: 'Pourquoi fournir mon numéro PDL ou PCE?',
+        answer:
+          "La fiche exige le numéro de point de livraison d'énergie du logement (PDL/PRM électricité ou PCE gaz) dans le dossier de demande. Il identifie de façon unique le logement équipé et sécurise le contrôle anti-fraude. Vous le trouverez sur votre facture d'électricité ou de gaz.",
+      },
+    ],
+  },
+
+  'BAR-SE-104': {
+    code: 'BAR-SE-104',
+    h1: "Prime CEE BAR-SE-104 : réglage des organes d'équilibrage du chauffage en 2026",
+    lede: "Réglage des organes d'équilibrage d'une installation de chauffage à eau chaude : prestation d'équilibrage hydraulique, principalement en immeuble collectif, pour que chaque logement reçoive le bon débit d'eau chaude. Prime CEE BAR-SE-104, sans exigence de qualification RGE pour cette fiche.",
+    metaTitle: 'Guide BAR-SE-104 : prime CEE équilibrage chauffage 2026',
+    metaDescription:
+      "BAR-SE-104 : prime CEE pour l'équilibrage hydraulique d'une installation de chauffage à eau chaude (collectif). Conditions, justificatifs techniques et montants 2026.",
+    primeClassique:
+      "forfait kWh cumac selon l'installation équilibrée — simulation auprès du signataire de la charte",
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov: 'non concerné — prestation de réglage, hors gestes MaPrimeRénov’',
+    rgeRequises: [
+      "Aucune qualification RGE imposée par l'arrêté — prestation réalisée par un professionnel du chauffage",
+    ],
+    requiredQualifications: [],
+    sections: [
+      {
+        heading: "Ce qu'encadre la fiche BAR-SE-104",
+        paragraphs: [
+          "La fiche BAR-SE-104 couvre le réglage des organes d'équilibrage d'une installation de chauffage à eau chaude : vannes d'équilibrage en pied de colonne, tés de réglage, organes de répartition du débit. L'objectif de l'équilibrage hydraulique est que chaque émetteur — et, en collectif, chaque logement — reçoive le débit d'eau chaude nécessaire, ni plus ni moins.",
+          "Sur un réseau déséquilibré, les logements proches de la chaufferie surchauffent pendant que les plus éloignés restent froids ; la chaufferie compense en montant la température de départ, ce qui gaspille de l'énergie. L'équilibrage corrige cette dérive par un réglage méthodique des débits. La fiche vise principalement les immeubles collectifs et copropriétés, avec un objectif d'écart de température inférieur à 2 °C entre logements.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime CEE BAR-SE-104',
+        paragraphs: [
+          "Le forfait est exprimé en kWh cumac selon l'installation équilibrée, défini par l'annexe de la fiche DGEC, avec une durée de vie conventionnelle de l'opération de 10 ans. La conversion en euros dépend du cours du kWh cumac et du barème du signataire de la charte : aucun plancher réglementaire n'est fixé.",
+          "Pour une copropriété, la prime vient réduire le coût d'une prestation d'équilibrage décidée en assemblée générale — souvent l'un des gestes au meilleur rapport coût/économie sur un chauffage collectif, car il ne nécessite aucun remplacement de matériel lourd. Les ménages en précarité énergétique ouvrent droit à une bonification selon le signataire. Demandez l'offre de prime avant de signer le devis.",
+        ],
+      },
+      {
+        heading: 'Justificatifs techniques exigés',
+        paragraphs: [
+          "La fiche impose des livrables techniques précis, à conserver 6 ans : le schéma hydraulique de l'installation, la grille d'équilibrage (relevé des positions de réglage de chaque vanne) et le tableau des températures mesurées attestant du résultat. Sans ces documents, le dossier n'est pas valide en contrôle.",
+          "S'y ajoutent les pièces communes à toute opération CEE : devis signé antérieur à l'engagement, facture détaillée (avec schéma hydraulique ou numéro de point de livraison), attestation sur l'honneur signée, photos avant/après horodatées et géolocalisées (loi 2025-594), et preuve d'information précontractuelle mentionnant l'absence d'exigence RGE pour cette fiche.",
+        ],
+      },
+      {
+        heading: 'Qui réalise la prestation et pour quel résultat',
+        paragraphs: [
+          "L'arrêté n'impose aucun signe de qualité RGE pour cette opération — c'est une prestation hydraulique de réglage, pas des travaux sur le bâti. Elle est réalisée par un professionnel du chauffage (chauffagiste, entreprise de maintenance ou bureau spécialisé en équilibrage), idéalement celui qui connaît déjà l'installation.",
+          "Le résultat attendu est mesurable : températures homogènes entre logements (écart visé inférieur à 2 °C), possibilité d'abaisser la température de départ chaufferie, disparition des plaintes croisées « trop chaud / trop froid ». Exigez la grille d'équilibrage et le tableau de températures en fin de prestation : ce sont à la fois vos justificatifs CEE et la preuve du travail réellement effectué.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Qu'est-ce que l'équilibrage hydraulique?",
+        answer:
+          "C'est le réglage des débits d'eau chaude dans un réseau de chauffage pour que chaque radiateur — et chaque logement en collectif — reçoive exactement le débit nécessaire. Sans équilibrage, les logements proches de la chaufferie surchauffent et les plus éloignés restent froids, ce que la chaufferie compense en gaspillant de l'énergie.",
+      },
+      {
+        question: 'BAR-SE-104 concerne-t-elle les maisons individuelles?',
+        answer:
+          "La fiche vise principalement le chauffage collectif (immeubles, copropriétés), là où le déséquilibre entre colonnes est le plus pénalisant. C'est typiquement une décision de syndic ou d'assemblée générale de copropriété, souvent couplée à l'entretien de la chaufferie.",
+      },
+      {
+        question: 'Faut-il une entreprise RGE?',
+        answer:
+          "Non. L'arrêté n'impose aucune qualification RGE pour cette prestation de réglage hydraulique, hors périmètre RGE bâtiment. Le professionnel doit vous en informer par écrit avant signature. La prestation est réalisée par un professionnel du chauffage maîtrisant l'équilibrage.",
+      },
+      {
+        question: 'Quels documents prouvent que le travail a été fait?',
+        answer:
+          "Trois livrables techniques obligatoires : le schéma hydraulique de l'installation, la grille d'équilibrage (position de réglage de chaque vanne) et le tableau des températures mesurées. Ils servent de justificatifs CEE (conservation 6 ans) et vous permettent de vérifier le résultat : écart de température entre logements inférieur à 2 °C.",
+      },
+    ],
+  },
+
+  'BAR-TH-174': {
+    code: 'BAR-TH-174',
+    h1: "Prime CEE BAR-TH-174 : rénovation d'ampleur d'une maison individuelle en 2026",
+    lede: "Fiche « rénovation d'ampleur » qui a remplacé BAR-TH-164 (abrogée) : bouquet de travaux d'une maison individuelle visant un gain d'au moins 2 classes au DPE, avec audit énergétique préalable et accompagnement obligatoire par Mon Accompagnateur Rénov' (MAR) agréé Anah. Version vA80-3 applicable au 17/01/2026.",
+    metaTitle: "BAR-TH-174 : prime CEE rénovation d'ampleur maison 2026",
+    metaDescription:
+      "BAR-TH-174 vA80-3 (vigueur 17/01/2026) : rénovation d'ampleur maison individuelle, gain ≥ 2 classes DPE, audit préalable et Mon Accompagnateur Rénov' obligatoire. Cumul MaPrimeRénov' Parcours Accompagné.",
+    primeClassique:
+      'forfait CEE indexé sur le nombre de sauts de classe DPE et la surface — simulation auprès du signataire de la charte',
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov:
+      "cumul avec MaPrimeRénov' Parcours Accompagné (forfait modulé selon revenus et sauts de classe DPE)",
+    rgeRequises: [
+      "RGE par geste de travaux + accompagnement Mon Accompagnateur Rénov' (MAR) agréé Anah, obligatoire",
+    ],
+    requiredQualifications: ['architecte-audit-energetique'],
+    sections: [
+      {
+        heading: 'Ce que couvre exactement la fiche BAR-TH-174',
+        paragraphs: [
+          "La fiche BAR-TH-174 encadre la rénovation d'ampleur (ou rénovation globale) d'une maison individuelle résidentielle existante. Elle a remplacé l'ancienne fiche BAR-TH-164, abrogée fin 2023 (arrêté du 19 décembre 2023, JORFTEXT000048680133). Sa version en vigueur est la vA80-3, applicable aux opérations engagées à compter du 17 janvier 2026. Contrairement aux fiches « geste par geste », elle valorise un bouquet de travaux cohérent qui améliore significativement la performance globale du logement.",
+          "Le principe central est le saut de classe au diagnostic de performance énergétique (DPE) : l'opération doit viser un gain d'au moins 2 classes DPE entre l'état initial et l'état projeté, ce gain étant attesté par un audit énergétique réalisé avant l'engagement des travaux. Le bouquet associe généralement plusieurs gestes d'isolation de l'enveloppe et, le plus souvent, le remplacement du système de chauffage par une solution performante (PAC, biomasse, etc.).",
+        ],
+      },
+      {
+        heading: "Mon Accompagnateur Rénov' : un préalable obligatoire",
+        paragraphs: [
+          "La spécificité majeure de BAR-TH-174 est l'obligation d'un accompagnement par un opérateur « Mon Accompagnateur Rénov' » (MAR) agréé par l'Anah. Le MAR réalise ou exploite l'audit énergétique, définit le scénario de travaux, vérifie la cohérence du bouquet et accompagne le ménage jusqu'à la réception. Sans contrat MAR signé en amont, l'opération n'est pas éligible — ni au CEE BAR-TH-174, ni à MaPrimeRénov' Parcours Accompagné.",
+          "Ce dispositif est piloté par l'Anah dans le cadre de MaPrimeRénov' Parcours Accompagné, auquel BAR-TH-174 est étroitement adossé. Concrètement, le ménage ne traite pas une succession de devis isolés mais un projet global encadré, ce qui sécurise la qualité technique et la réalité du gain énergétique. C'est aussi ce qui rend la fiche plus exigeante administrativement que les opérations geste par geste.",
+        ],
+      },
+      {
+        heading: 'Conditions techniques et justificatifs au dossier',
+        paragraphs: [
+          "Les justificatifs structurants du dossier BAR-TH-174 sont : l'audit énergétique réalisé avant engagement (présentant l'état initial, les scénarios et le gain de classe DPE attendu), le contrat avec le Mon Accompagnateur Rénov' agréé Anah, et le DPE post-travaux démontrant le gain d'au moins 2 classes. Ces pièces doivent être conservées dans la durée réglementaire applicable aux opérations CEE. L'absence de l'une d'elles entraîne le rejet du dossier.",
+          "Pour chaque geste du bouquet, l'entreprise réalisant les travaux doit être titulaire d'un signe de qualité RGE couvrant la catégorie de travaux concernée, conformément à la clause générique du décret n° 2014-812 du 16 juillet 2014 reprise par la fiche vA80-3. Autrement dit, la qualification RGE s'apprécie geste par geste : isolation, chauffage, ventilation, menuiserie, chacun par une entreprise dûment qualifiée pour son lot.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime et cumul des aides',
+        paragraphs: [
+          "Le forfait CEE de BAR-TH-174 est indexé sur l'ampleur du gain (nombre de sauts de classe DPE) et la surface du logement ; sa traduction en euros dépend du cours du kWh cumac et du barème du signataire de la charte. Aucun montant plancher réglementaire n'étant fixé, il faut demander une simulation nominative. La prime CEE se cumule avec l'aide MaPrimeRénov' Parcours Accompagné, dont le forfait est modulé selon la couleur de revenus et le nombre de sauts de classe atteints.",
+          "Sur une rénovation d'ampleur, le montant total d'aides (CEE + MaPrimeRénov' Parcours Accompagné + éco-PTZ éventuel + TVA 5,5 % sur les gestes éligibles) peut couvrir une part substantielle du coût des travaux pour les ménages les plus modestes. Les chiffres réels dépendent du projet, du profil du ménage et des barèmes en vigueur : l'audit et le MAR fournissent un plan de financement détaillé avant tout engagement.",
+        ],
+      },
+      {
+        heading: 'Points de vigilance',
+        paragraphs: [
+          "Premier point : ne jamais engager les travaux avant la signature du contrat MAR et la réalisation de l'audit énergétique. Engager un geste en amont peut disqualifier l'ensemble du dossier au titre de la rénovation d'ampleur. L'ordre administratif (audit → scénario → contrat MAR → devis → travaux → DPE post-travaux) est strict.",
+          'Second point : le gain de 2 classes DPE doit être réel et vérifié après travaux, pas seulement projeté. Un audit optimiste suivi de travaux moins performants que prévu peut conduire à un DPE post-travaux insuffisant et à un refus, voire un redressement. Le rôle du MAR est précisément de fiabiliser cette trajectoire ; choisissez un opérateur agréé Anah et des entreprises RGE compétentes pour chaque lot.',
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'BAR-TH-174 remplace-t-elle BAR-TH-164?',
+        answer:
+          "Oui. L'ancienne fiche BAR-TH-164 (rénovation globale d'une maison individuelle) a été abrogée fin 2023 (arrêté du 19 décembre 2023) et remplacée par BAR-TH-174 pour les maisons individuelles (et BAR-TH-175 pour les appartements). La version en vigueur est la vA80-3, applicable au 17 janvier 2026.",
+      },
+      {
+        question: "Mon Accompagnateur Rénov' est-il vraiment obligatoire?",
+        answer:
+          "Oui. L'accompagnement par un Mon Accompagnateur Rénov' (MAR) agréé Anah est une condition d'éligibilité de la fiche, indissociable de MaPrimeRénov' Parcours Accompagné. Sans contrat MAR signé avant l'engagement des travaux et sans audit énergétique préalable, l'opération n'ouvre pas droit à la prime BAR-TH-174.",
+      },
+      {
+        question: 'Quel gain de performance faut-il atteindre?',
+        answer:
+          "Un gain d'au moins 2 classes au DPE entre l'état initial et l'état après travaux, attesté par un audit énergétique avant engagement et par un DPE post-travaux. C'est la logique « rénovation d'ampleur » qui distingue cette fiche des opérations geste par geste : c'est la performance globale du logement qui est valorisée.",
+      },
+      {
+        question: 'Faut-il un seul artisan RGE pour tout le chantier?',
+        answer:
+          "Non. La qualification RGE s'apprécie geste par geste : chaque entreprise intervenant sur un lot (isolation, chauffage, ventilation, menuiserie) doit être titulaire d'un signe de qualité RGE couvrant sa catégorie de travaux. Le Mon Accompagnateur Rénov' coordonne l'ensemble et vérifie la cohérence du bouquet.",
+      },
+      {
+        question: 'Quelle aide se cumule avec la prime CEE BAR-TH-174?',
+        answer:
+          "Principalement MaPrimeRénov' Parcours Accompagné, dont le forfait est modulé selon les revenus et le nombre de sauts de classe DPE, ainsi que l'éco-PTZ et la TVA 5,5 % sur les gestes éligibles. Le plan de financement détaillé est établi par l'audit et le Mon Accompagnateur Rénov' avant l'engagement des travaux.",
+      },
+    ],
+  },
+
+  'BAR-TH-175': {
+    code: 'BAR-TH-175',
+    h1: "Prime CEE BAR-TH-175 : rénovation d'ampleur d'un appartement en 2026",
+    lede: "Pendant de BAR-TH-174 pour les appartements : rénovation d'ampleur d'un logement en habitat collectif visant un gain d'au moins 2 classes DPE, avec audit énergétique préalable et Mon Accompagnateur Rénov' (MAR) agréé Anah obligatoire. Version vA80-3 applicable au 17/01/2026.",
+    metaTitle: "BAR-TH-175 : prime CEE rénovation d'ampleur appartement 2026",
+    metaDescription:
+      "BAR-TH-175 vA80-3 (vigueur 17/01/2026) : rénovation d'ampleur d'un appartement, gain ≥ 2 classes DPE, audit préalable et Mon Accompagnateur Rénov' obligatoire. Cumul MaPrimeRénov' Parcours Accompagné.",
+    primeClassique:
+      'forfait CEE indexé sur le nombre de sauts de classe DPE et la surface — simulation auprès du signataire de la charte',
+    primePrecarite: 'bonification précarité, variable selon signataire — simulation personnalisée',
+    maPrimeRenov:
+      "cumul avec MaPrimeRénov' Parcours Accompagné (forfait modulé selon revenus et sauts de classe DPE)",
+    rgeRequises: [
+      "RGE par geste de travaux + accompagnement Mon Accompagnateur Rénov' (MAR) agréé Anah, obligatoire",
+    ],
+    requiredQualifications: ['architecte-audit-energetique'],
+    sections: [
+      {
+        heading: 'Ce que couvre exactement la fiche BAR-TH-175',
+        paragraphs: [
+          "La fiche BAR-TH-175 est le pendant de BAR-TH-174 pour les appartements : elle encadre la rénovation d'ampleur d'un logement situé en habitat collectif. Comme BAR-TH-174, elle découle du remplacement de l'ancienne BAR-TH-164 (abrogée fin 2023) et s'applique dans sa version vA80-3 aux opérations engagées à compter du 17 janvier 2026. Elle valorise un bouquet de travaux cohérent plutôt qu'un geste isolé.",
+          "Le critère central est identique : l'opération doit viser un gain d'au moins 2 classes DPE entre l'état initial et l'état projeté de l'appartement, attesté par un audit énergétique réalisé avant l'engagement des travaux et confirmé par un DPE post-travaux. Le périmètre concerne les travaux propres au logement, dans le cadre — fréquent en copropriété — d'une articulation avec les parties communes.",
+        ],
+      },
+      {
+        heading: 'La spécificité appartement : parties privatives et copropriété',
+        paragraphs: [
+          "La rénovation d'ampleur d'un appartement porte sur les travaux relevant des parties privatives du logement (isolation des parois donnant sur l'extérieur ou sur des locaux non chauffés, remplacement des menuiseries, système de chauffage individuel, ventilation, etc.). Lorsque la performance visée implique des travaux sur les parties communes (isolation de façade, toiture, chauffage collectif), ceux-ci relèvent de la copropriété et d'autres dispositifs (notamment MaPrimeRénov' Copropriété).",
+          "Cette articulation entre parties privatives et parties communes est l'un des points qu'un Mon Accompagnateur Rénov' aide à cadrer. Selon la configuration de l'immeuble, atteindre 2 sauts de classe DPE sur le seul logement peut nécessiter des travaux à la fois en parties privatives et un appui sur la performance de l'enveloppe collective. L'audit énergétique détermine le scénario réaliste compte tenu de ces contraintes.",
+        ],
+      },
+      {
+        heading: 'Mon Accompagnateur Rénov’ et justificatifs au dossier',
+        paragraphs: [
+          "Comme pour BAR-TH-174, l'accompagnement par un Mon Accompagnateur Rénov' (MAR) agréé Anah est obligatoire, et l'opération est adossée à MaPrimeRénov' Parcours Accompagné. Les justificatifs structurants sont les mêmes : audit énergétique avant engagement (scénarios et gain de classe DPE attendu), contrat MAR, et DPE post-travaux démontrant le gain d'au moins 2 classes. Ces pièces sont conservées pendant la durée réglementaire applicable aux opérations CEE.",
+          "Pour chaque geste de travaux, l'entreprise réalisatrice doit être titulaire d'un signe de qualité RGE couvrant la catégorie concernée, selon la clause générique du décret n° 2014-812 du 16 juillet 2014 reprise par la fiche vA80-3. La qualification s'apprécie donc geste par geste, le MAR coordonnant l'ensemble du projet.",
+        ],
+      },
+      {
+        heading: 'Montant de la prime, cumul et points de vigilance',
+        paragraphs: [
+          "Le forfait CEE de BAR-TH-175 est indexé sur le nombre de sauts de classe DPE et la surface du logement, et se traduit en euros selon le cours du kWh cumac et le barème du signataire de la charte — sans plancher réglementaire, donc à objectiver par une simulation nominative. La prime se cumule avec MaPrimeRénov' Parcours Accompagné, l'éco-PTZ et la TVA 5,5 % sur les gestes éligibles.",
+          "Mêmes points de vigilance que pour la maison individuelle : ne pas engager les travaux avant la signature du contrat MAR et l'audit ; s'assurer que le gain de 2 classes DPE est réellement atteint après travaux, pas seulement projeté. En appartement s'ajoute la nécessité de bien articuler les travaux privatifs avec d'éventuelles décisions de copropriété, ce que le Mon Accompagnateur Rénov' aide à séquencer.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: 'Quelle différence entre BAR-TH-174 et BAR-TH-175?',
+        answer:
+          "Les deux fiches encadrent une rénovation d'ampleur visant un gain d'au moins 2 classes DPE avec Mon Accompagnateur Rénov' obligatoire. BAR-TH-174 s'applique aux maisons individuelles, BAR-TH-175 aux appartements. Les exigences (audit préalable, MAR, gain DPE, RGE par geste) sont les mêmes ; seule diffère la nature du logement et, en appartement, l'articulation avec la copropriété.",
+      },
+      {
+        question: "Peut-on faire une rénovation d'ampleur sur un seul appartement?",
+        answer:
+          "Oui, la fiche vise le logement individuel en habitat collectif. Les travaux portent sur les parties privatives. Lorsque atteindre 2 sauts de classe DPE nécessite d'agir aussi sur l'enveloppe collective (façade, toiture, chauffage collectif), ces travaux relèvent de la copropriété et d'autres dispositifs ; le Mon Accompagnateur Rénov' aide à cadrer cette articulation.",
+      },
+      {
+        question: "Mon Accompagnateur Rénov' est-il obligatoire aussi pour un appartement?",
+        answer:
+          "Oui. Comme pour la maison individuelle, l'accompagnement par un Mon Accompagnateur Rénov' agréé Anah et l'audit énergétique préalable sont des conditions d'éligibilité de BAR-TH-175, indissociables de MaPrimeRénov' Parcours Accompagné.",
+      },
+      {
+        question: 'Quel gain de classe DPE faut-il atteindre?',
+        answer:
+          "Un gain d'au moins 2 classes au DPE entre l'état initial et l'état après travaux, attesté par l'audit énergétique avant engagement et par un DPE post-travaux. C'est la même exigence de performance globale que pour la maison individuelle (BAR-TH-174).",
+      },
+    ],
+  },
 }
 
 /** Liste des codes d'opération ayant un guide éditorial long-format */
