@@ -83,8 +83,8 @@ export const faqCategories = [
         a: "Non, aucun compte n'est nécessaire : vos demandes de devis se font directement en ligne et les artisans vous recontactent par téléphone ou email. Seuls les artisans disposent d'un espace dédié.",
       },
       {
-        q: 'Comment supprimer mon compte ?',
-        a: 'Vous pouvez demander la suppression de votre compte et de vos données en nous contactant à dpo@servicesartisans.fr.',
+        q: 'Comment supprimer mes données personnelles ?',
+        a: "Conformément au RGPD (droit à l'effacement), vous pouvez demander la suppression de vos données personnelles à tout moment en écrivant à dpo@servicesartisans.fr. Nous traitons votre demande sous 30 jours.",
       },
       {
         q: 'Mes données sont-elles protégées ?',

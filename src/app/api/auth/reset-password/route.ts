@@ -54,6 +54,24 @@ export async function POST(request: Request) {
     const { email } = validation.data
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
+    // Espace particulier fermé (2026-06-05) : ne jamais envoyer de lien de
+    // reset à un compte client — réponse identique pour ne pas révéler
+    // l'existence du compte.
+    // ilike = match insensible à la casse ; échapper les wildcards LIKE
+    // pour qu'un email contenant % ou _ ne matche pas d'autres lignes
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .ilike('email', email.replace(/[\\%_]/g, '\\$&'))
+      .maybeSingle()
+
+    if (profile?.role === 'client') {
+      return NextResponse.json({
+        success: true,
+        message: 'Si un compte existe avec cet email, vous recevrez un lien de réinitialisation.',
+      })
+    }
+
     // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${siteUrl}/auth/callback?next=/definir-mot-de-passe`,

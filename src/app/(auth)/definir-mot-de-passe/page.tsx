@@ -25,12 +25,31 @@ export default function DefinirMotDePassePage() {
 
   // On mount: check session, parse hash fragment, exchange code, or verify OTP token
   useEffect(() => {
+    // Espace particulier fermé (2026-06-05) : un client qui suit un lien de
+    // reset obtiendrait une session recovery valide — on le déconnecte avant
+    // qu'il puisse définir un mot de passe. Retourne true si bloqué.
+    const rejectIfClient = async (userId: string): Promise<boolean> => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .maybeSingle()
+      if (profile?.role === 'client') {
+        await supabase.auth.signOut()
+        router.push('/connexion?error=espace_artisan_uniquement')
+        return true
+      }
+      setUserRole(profile?.role || null)
+      return false
+    }
+
     const init = async () => {
       // 0. Handle PKCE code parameter (from /auth/callback or direct Supabase redirect)
       if (codeFromQuery) {
         const { data: sessionData, error: sessionError } =
           await supabase.auth.exchangeCodeForSession(codeFromQuery)
         if (!sessionError && sessionData.user) {
+          if (await rejectIfClient(sessionData.user.id)) return
           setUserEmail(sessionData.user.email || null)
           // Clean the URL to remove the code
           window.history.replaceState(null, '', window.location.pathname)
@@ -60,6 +79,7 @@ export default function DefinirMotDePassePage() {
             })
 
             if (!sessionError && sessionData.user) {
+              if (await rejectIfClient(sessionData.user.id)) return
               setUserEmail(sessionData.user.email || null)
               // Clear hash from URL to avoid token leakage
               window.history.replaceState(null, '', window.location.pathname)
@@ -75,6 +95,7 @@ export default function DefinirMotDePassePage() {
           })
 
           if (!verifyError && verifyData.user) {
+            if (await rejectIfClient(verifyData.user.id)) return
             setUserEmail(verifyData.user.email || null)
             window.history.replaceState(null, '', window.location.pathname)
             setChecking(false)
@@ -90,6 +111,7 @@ export default function DefinirMotDePassePage() {
       // 2. Check for existing session (user already authenticated)
       const { data: userData } = await supabase.auth.getUser()
       if (userData.user) {
+        if (await rejectIfClient(userData.user.id)) return
         setUserEmail(userData.user.email || null)
         setChecking(false)
         return
@@ -109,6 +131,7 @@ export default function DefinirMotDePassePage() {
         }
 
         if (verifyData.user) {
+          if (await rejectIfClient(verifyData.user.id)) return
           setUserEmail(verifyData.user.email || null)
           setChecking(false)
           return
