@@ -98,7 +98,7 @@ const materiaux = [
 const services = [
   { label: 'Maçon', href: '/services/macon', icon: Building2 },
   { label: 'Charpentier', href: '/services/charpentier', icon: Hammer },
-  { label: 'Architecte', href: '/services/architecte', icon: Ruler },
+  { label: 'Couvreur', href: '/services/couvreur', icon: Ruler },
   { label: 'Électricien', href: '/services/electricien', icon: Hammer },
   { label: 'Plombier', href: '/services/plombier', icon: Hammer },
   { label: 'Couvreur', href: '/services/couvreur', icon: Home },

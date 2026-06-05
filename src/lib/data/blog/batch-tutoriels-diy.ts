@@ -99,7 +99,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
       {
         question: 'Quand faut-il appeler un peintre professionnel ?',
         answer:
-          "Faites appel à un [peintre professionnel](/services/peintre) pour les plafonds hauts (plus de 2,80 m), les finitions laquées exigeantes, les surfaces avec des problèmes d'humidité, ou si vous avez plus de 50 m² à peindre. Un professionnel facture entre 25 et 45 euros/m² tout compris.",
+          "Faites appel à un [peintre professionnel](/services/peintre-en-batiment) pour les plafonds hauts (plus de 2,80 m), les finitions laquées exigeantes, les surfaces avec des problèmes d'humidité, ou si vous avez plus de 50 m² à peindre. Un professionnel facture entre 25 et 45 euros/m² tout compris.",
       },
     ],
     content: [
@@ -127,7 +127,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       '## Étape 6 — Finitions et nettoyage',
 
-      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/services/peintre) pour un devis gratuit.",
+      "Retirez le ruban de masquage lorsque la dernière couche est encore légèrement humide (30 à 45 minutes après), en tirant à 45° pour un bord net. Vérifiez le résultat à la lumière rasante et effectuez les retouches nécessaires. Nettoyez vos outils à l'eau (peinture acrylique) immédiatement après usage. Si le résultat ne vous satisfait pas ou si le chantier est trop important, n'hésitez pas à [consulter un peintre qualifié](/services/peintre-en-batiment) pour un devis gratuit.",
     ],
   },
 
@@ -392,7 +392,7 @@ export const tutorielsDiyArticles: Record<string, BlogArticle> = {
 
       '## Étape 6 — Quand appeler un peintre professionnel',
 
-      "Le plafond est la surface la plus exigeante en peinture. Faites appel à un [peintre professionnel](/services/peintre) pour les plafonds hauts (plus de 2,80 m) où le travail en hauteur est dangereux, les plafonds avec moulures ou corniches nécessitant un rechampissage minutieux, les plafonds présentant des problèmes d'humidité (traitement préalable nécessaire), ou les grandes surfaces (plus de 40 m²) où la fatigue compromet la qualité. Un peintre professionnel facture entre 15 et 30 euros/m² pour un plafond.",
+      "Le plafond est la surface la plus exigeante en peinture. Faites appel à un [peintre professionnel](/services/peintre-en-batiment) pour les plafonds hauts (plus de 2,80 m) où le travail en hauteur est dangereux, les plafonds avec moulures ou corniches nécessitant un rechampissage minutieux, les plafonds présentant des problèmes d'humidité (traitement préalable nécessaire), ou les grandes surfaces (plus de 40 m²) où la fatigue compromet la qualité. Un peintre professionnel facture entre 15 et 30 euros/m² pour un plafond.",
     ],
   },
 

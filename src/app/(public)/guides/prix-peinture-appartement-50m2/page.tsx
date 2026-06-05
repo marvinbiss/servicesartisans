@@ -262,7 +262,7 @@ export default function Page() {
                     Qualibat 6111 recommandé. Visite obligatoire pour évaluer état supports.
                   </p>
                   <Link
-                    href="/services/peintre"
+                    href="/services/peintre-en-batiment"
                     className="inline-flex items-center gap-1.5 text-primary-700 font-semibold hover:underline"
                   >
                     Annuaire peintres <ArrowRight className="w-4 h-4" aria-hidden />
@@ -303,7 +303,7 @@ export default function Page() {
               ← Tous les guides
             </Link>
             <Link
-              href="/services/peintre"
+              href="/services/peintre-en-batiment"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
               Trouver un peintre <Paintbrush className="w-3.5 h-3.5" aria-hidden />

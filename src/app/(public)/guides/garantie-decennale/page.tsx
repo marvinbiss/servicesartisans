@@ -71,7 +71,7 @@ const services = [
   { label: 'Charpentier', href: '/services/charpentier', icon: Hammer },
   { label: 'Plombier', href: '/services/plombier', icon: Hammer },
   { label: 'Électricien', href: '/services/electricien', icon: Hammer },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Home },
+  { label: 'Plâtrier', href: '/services/platrier', icon: Home },
 ]
 
 const faqItems = [

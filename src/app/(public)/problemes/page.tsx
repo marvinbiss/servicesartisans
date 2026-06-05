@@ -462,10 +462,10 @@ export default function ProblemesPage() {
                   Électricien urgence
                 </Link>
                 <Link
-                  href="/urgence/serrurier"
+                  href="/urgence/climaticien"
                   className="block text-sm text-charcoal-600 hover:text-amber-600 py-1 transition-colors"
                 >
-                  Serrurier urgence
+                  Climaticien urgence
                 </Link>
                 <Link
                   href="/urgence/chauffagiste"
@@ -491,10 +491,10 @@ export default function ProblemesPage() {
                   Devis électricien
                 </Link>
                 <Link
-                  href="/devis/serrurier"
+                  href="/devis/pompe-a-chaleur"
                   className="block text-sm text-charcoal-600 hover:text-amber-600 py-1 transition-colors"
                 >
-                  Devis serrurier
+                  Devis pompe à chaleur
                 </Link>
                 <Link
                   href="/devis/chauffagiste"

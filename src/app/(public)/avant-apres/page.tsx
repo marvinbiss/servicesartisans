@@ -80,7 +80,7 @@ const transformations = [
     budget: '2 000 – 4 000 €',
     duree: '3 – 5 jours',
     artisans: ['Peintre'],
-    services: ['/services/peintre'],
+    services: ['/services/peintre-en-batiment'],
   },
   {
     title: 'Parquet rénové',
@@ -91,7 +91,7 @@ const transformations = [
     budget: '3 000 – 6 000 €',
     duree: '4 – 7 jours',
     artisans: ['Parqueteur', 'Peintre'],
-    services: ['/services/parqueteur', '/services/peintre'],
+    services: ['/services/menuisier', '/services/peintre-en-batiment'],
   },
   {
     title: 'Extension bois 15 m²',
@@ -128,8 +128,8 @@ const transformations = [
       'Terrasse en dalles sur plots (20 m²), pelouse semée, massifs arbustifs, haie de photinia, éclairage LED extérieur, arrosage automatique enterré. Clôture aluminium anthracite.',
     budget: '8 000 – 20 000 €',
     duree: '2 – 4 semaines',
-    artisans: ['Paysagiste', 'Maçon', 'Électricien'],
-    services: ['/services/paysagiste', '/services/macon', '/services/electricien'],
+    artisans: ['Maçon', 'Électricien'],
+    services: ['/services/macon', '/services/electricien'],
   },
   {
     title: 'Salle de bain PMR',
@@ -164,7 +164,7 @@ const transformations = [
     artisans: ['Charpentier', 'Plaquiste', 'Plombier', 'Électricien', 'Couvreur'],
     services: [
       '/services/charpentier',
-      '/services/plaquiste',
+      '/services/platrier',
       '/services/plombier',
       '/services/electricien',
       '/services/couvreur',

@@ -74,9 +74,9 @@ const services = [
   { label: 'Plombier', href: '/services/plombier', icon: Hammer },
   { label: 'Électricien', href: '/services/electricien', icon: Hammer },
   { label: 'Maçon', href: '/services/macon', icon: Building2 },
-  { label: 'Peintre', href: '/services/peintre', icon: Hammer },
+  { label: 'Peintre', href: '/services/peintre-en-batiment', icon: Hammer },
   { label: 'Menuisier', href: '/services/menuisier', icon: Hammer },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Building2 },
+  { label: 'Plâtrier', href: '/services/platrier', icon: Building2 },
 ]
 
 const faqItems = [

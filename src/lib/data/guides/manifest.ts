@@ -123,7 +123,7 @@ export function humanizeSlug(slug: string): string {
 export const PILLAR_HUB_BY_TOPIC: Record<GuideTopic, { href: string; label: string }> = {
   'rge-cee': { href: '/rge', label: 'Trouver un artisan RGE certifié' },
   isolation: {
-    href: '/services/isolation',
+    href: '/services/isolation-thermique',
     label: 'Artisans isolation qualifiés',
   },
   chauffage: {

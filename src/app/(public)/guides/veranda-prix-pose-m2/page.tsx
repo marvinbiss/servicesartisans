@@ -203,7 +203,7 @@ export default function Page() {
               ← Tous les guides
             </Link>
             <Link
-              href="/services/veranda"
+              href="/services/menuisier"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
               Trouver un pro véranda <Phone className="w-3.5 h-3.5" aria-hidden />

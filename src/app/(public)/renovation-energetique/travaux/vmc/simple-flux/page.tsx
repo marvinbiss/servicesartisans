@@ -250,7 +250,7 @@ const relatedPages = [
   },
   {
     label: 'Artisans RGE Qualibat 8721',
-    href: '/services/installateur-vmc',
+    href: '/rge/ventilation',
     description: 'Annuaire vérifié API ADEME',
   },
   {

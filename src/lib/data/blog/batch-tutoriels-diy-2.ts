@@ -439,7 +439,7 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
       {
         question: 'Peut-on enduire soi-même un mur très abîmé ?',
         answer:
-          'Pour les défauts superficiels (petits trous, fissures fines, irrégularités légères), le DIY donne d’excellents résultats. Pour un mur très dégradé (enduit qui se décolle, fissures structurelles, murs en torchis), faites appel à un [peintre](/services/peintre) ou un plâtrier professionnel qui dispose des outils et de l’expérience pour un résultat impeccable.',
+          'Pour les défauts superficiels (petits trous, fissures fines, irrégularités légères), le DIY donne d’excellents résultats. Pour un mur très dégradé (enduit qui se décolle, fissures structurelles, murs en torchis), faites appel à un [peintre](/services/peintre-en-batiment) ou un plâtrier professionnel qui dispose des outils et de l’expérience pour un résultat impeccable.',
       },
     ],
     content: [
@@ -453,7 +453,7 @@ export const tutorielsDiy2Articles: Record<string, BlogArticle> = {
 
       '## Poncer pour un résultat parfait\n\nAprès séchage complet (minimum 6 heures, idéalement une nuit), poncez au **papier abrasif grain 120** avec une cale à poncer ou une ponceuse orbitale. Travaillez en mouvements circulaires, sans appuyer trop fort. Vérifiez votre travail à la lumière rasante (lampe de poche orientée le long du mur) : les ombres révèlent les défauts restants. Corrigez les creux résiduels avec une fine couche d’enduit, laissez sécher et reponcez. Dépoussiérez le mur avec un balai microfibre.',
 
-      '## Appliquer la sous-couche et peindre\n\nAvant de peindre, appliquez une **sous-couche universelle** au rouleau. Elle scelle l’enduit, uniformise l’absorption et améliore la tenue de la peinture de finition. Laissez sécher 4 à 6 heures. Vous pouvez ensuite appliquer votre peinture de finition en toute confiance — le résultat sera net et uniforme. Pour les chantiers de grande envergure (pièce entière, murs très dégradés) ou les plafonds, un [peintre professionnel](/services/peintre) dispose d’outils spécifiques (airless, échafaudage) qui accélèrent considérablement le travail.',
+      '## Appliquer la sous-couche et peindre\n\nAvant de peindre, appliquez une **sous-couche universelle** au rouleau. Elle scelle l’enduit, uniformise l’absorption et améliore la tenue de la peinture de finition. Laissez sécher 4 à 6 heures. Vous pouvez ensuite appliquer votre peinture de finition en toute confiance — le résultat sera net et uniforme. Pour les chantiers de grande envergure (pièce entière, murs très dégradés) ou les plafonds, un [peintre professionnel](/services/peintre-en-batiment) dispose d’outils spécifiques (airless, échafaudage) qui accélèrent considérablement le travail.',
     ],
   },
 

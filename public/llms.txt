@@ -50,11 +50,11 @@ Catalog SSoT `RGE_ALLOWED_SERVICES` (src/lib/rge/service-city-listings.ts). Tout
 ## Tarifs et prix
 - [Tarifs plombier](https://servicesartisans.fr/tarifs/plombier): 40-70 EUR/h, interventions 80-400 EUR
 - [Tarifs electricien](https://servicesartisans.fr/tarifs/electricien): 40-60 EUR/h, 80-120 EUR/m2 neuf
-- [Tarifs serrurier](https://servicesartisans.fr/tarifs/serrurier): Ouverture 80-250 EUR, blindage 800-2000 EUR
+- [Tarifs platrier](https://servicesartisans.fr/tarifs/platrier): Cloisons, plafonds, enduits
 - [Tarifs chauffagiste](https://servicesartisans.fr/tarifs/chauffagiste): Entretien 120-200 EUR, installation 3000-15000 EUR
 - [Tarifs couvreur](https://servicesartisans.fr/tarifs/couvreur): 40-60 EUR/m2 reparation, 100-250 EUR/m2 refection
 - [Tarifs menuisier](https://servicesartisans.fr/tarifs/menuisier): Fenetre 300-1500 EUR posee
-- [Tarifs carreleur](https://servicesartisans.fr/tarifs/carreleur): 30-70 EUR/m2 pose comprise
+- [Tarifs climaticien](https://servicesartisans.fr/tarifs/climaticien): Installation et entretien climatisation
 - [Tarifs macon](https://servicesartisans.fr/tarifs/macon): 40-70 EUR/h, fondations 100-200 EUR/ml
 - [Tarifs peintre](https://servicesartisans.fr/tarifs/peintre-en-batiment): 20-40 EUR/m2 murs + plafonds
 - [Barometre par metier](https://servicesartisans.fr/barometre/tarifs): Statistiques tarifaires par corps de metier
@@ -70,21 +70,21 @@ Catalog SSoT `RGE_ALLOWED_SERVICES` (src/lib/rge/service-city-listings.ts). Tout
 - [Devis macon](https://servicesartisans.fr/devis/macon)
 - [Devis menuisier](https://servicesartisans.fr/devis/menuisier)
 - [Devis peintre](https://servicesartisans.fr/devis/peintre-en-batiment)
-- [Devis carreleur](https://servicesartisans.fr/devis/carreleur)
+- [Devis pompe a chaleur](https://servicesartisans.fr/devis/pompe-a-chaleur)
 - [Tous les devis](https://servicesartisans.fr/devis)
 
 ## Urgences
 - [Plombier urgence](https://servicesartisans.fr/urgence/plombier): Fuite d'eau, degat des eaux
 - [Electricien urgence](https://servicesartisans.fr/urgence/electricien): Panne electrique, court-circuit
-- [Serrurier urgence](https://servicesartisans.fr/urgence/serrurier): Porte claquee, serrure bloquee
+- [Climaticien urgence](https://servicesartisans.fr/urgence/climaticien): Panne climatisation, depannage
 - [Chauffagiste urgence](https://servicesartisans.fr/urgence/chauffagiste): Panne chaudiere, fuite gaz
-- [Vitrier urgence](https://servicesartisans.fr/urgence/vitrier): Vitre cassee, effraction
+- [Ramoneur urgence](https://servicesartisans.fr/urgence/ramoneur): Conduit obstrue, ramonage obligatoire
 - [Couvreur urgence](https://servicesartisans.fr/urgence/couvreur): Infiltration, toiture endommagee
 
 ## Avis artisans
 - [Avis plombier](https://servicesartisans.fr/avis/plombier)
 - [Avis electricien](https://servicesartisans.fr/avis/electricien)
-- [Avis serrurier](https://servicesartisans.fr/avis/serrurier)
+- [Avis chauffagiste pompe a chaleur](https://servicesartisans.fr/avis/pompe-a-chaleur)
 - [Avis chauffagiste](https://servicesartisans.fr/avis/chauffagiste)
 - [Avis couvreur](https://servicesartisans.fr/avis/couvreur)
 - [Avis menuisier](https://servicesartisans.fr/avis/menuisier)

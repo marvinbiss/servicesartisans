@@ -193,7 +193,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
 
       '## Façade et extérieurs',
 
-      "### Inspection de la façade\nRecherchez les fissures apparues pendant l'hiver (le gel fait travailler les murs), les traces d'humidité ou de moisissure, et les éventuels décollements d'enduit. Une fissure de moins de 2 mm peut être traitée en DIY avec un mastic de rebouchage (10-20 €). Au-delà, consultez un [façadier professionnel](/services/peintre).",
+      "### Inspection de la façade\nRecherchez les fissures apparues pendant l'hiver (le gel fait travailler les murs), les traces d'humidité ou de moisissure, et les éventuels décollements d'enduit. Une fissure de moins de 2 mm peut être traitée en DIY avec un mastic de rebouchage (10-20 €). Au-delà, consultez un [façadier professionnel](/services/peintre-en-batiment).",
 
       '### Terrasse et allées\nNettoyez la terrasse au nettoyeur haute pression (attention : pas sur le bois !) ou à la brosse avec un produit adapté. Vérifiez les joints entre les dalles et les éventuels affaissements. Pour une terrasse bois, appliquez un saturateur après nettoyage (15-25 €/litre, 1 litre pour 5-8 m²).',
 
@@ -783,7 +783,7 @@ export const saisonniers2026Articles: Record<string, BlogArticle> = {
     metaDescription:
       'Démoussage façade : meilleure période automne/printemps, prix 15-40€/m², produits pro. Guide complet pour une façade propre et protégée.',
     content: [
-      "La mousse, le lichen et les algues vertes sur les façades ne sont pas qu'un problème esthétique. Ces organismes retiennent l'humidité contre les murs, accélèrent la dégradation des enduits et des joints, et créent un environnement propice aux infiltrations. En 10 ans, une façade non entretenue peut perdre **30 à 50 % de sa capacité d'étanchéité**. Le démoussage, suivi d'un traitement hydrofuge, prolonge la durée de vie de la façade de 15 à 20 ans. Pour un travail professionnel, trouvez un [façadier qualifié](/services/peintre) près de chez vous.",
+      "La mousse, le lichen et les algues vertes sur les façades ne sont pas qu'un problème esthétique. Ces organismes retiennent l'humidité contre les murs, accélèrent la dégradation des enduits et des joints, et créent un environnement propice aux infiltrations. En 10 ans, une façade non entretenue peut perdre **30 à 50 % de sa capacité d'étanchéité**. Le démoussage, suivi d'un traitement hydrofuge, prolonge la durée de vie de la façade de 15 à 20 ans. Pour un travail professionnel, trouvez un [façadier qualifié](/services/peintre-en-batiment) près de chez vous.",
 
       '## Quand démousser sa façade : la meilleure période',
 

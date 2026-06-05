@@ -143,7 +143,7 @@ const services = [
   { label: 'Électricien', href: '/services/electricien', icon: Zap },
   { label: 'Plombier chauffagiste', href: '/services/plombier', icon: Flame },
   { label: 'Couvreur', href: '/services/couvreur', icon: Home },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Hammer },
+  { label: 'Diagnostiqueur certifié', href: '/services/diagnostiqueur', icon: Hammer },
 ]
 
 const faqItems = [

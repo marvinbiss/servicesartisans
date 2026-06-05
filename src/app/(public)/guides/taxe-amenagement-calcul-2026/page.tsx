@@ -224,10 +224,10 @@ export default function Page() {
               ← Tous les guides
             </Link>
             <Link
-              href="/services/architecte"
+              href="/services/macon"
               className="inline-flex items-center gap-1 hover:text-primary-700"
             >
-              Trouver un architecte <Phone className="w-3.5 h-3.5" aria-hidden />
+              Trouver un maçon <Phone className="w-3.5 h-3.5" aria-hidden />
             </Link>
           </div>
         </div>

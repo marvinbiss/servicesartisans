@@ -75,10 +75,10 @@ const majorites = [
 const services = [
   { label: 'Plombier', href: '/services/plombier', icon: Hammer },
   { label: 'Électricien', href: '/services/electricien', icon: Hammer },
-  { label: 'Peintre', href: '/services/peintre', icon: Hammer },
+  { label: 'Peintre', href: '/services/peintre-en-batiment', icon: Hammer },
   { label: 'Couvreur', href: '/services/couvreur', icon: Home },
   { label: 'Maçon', href: '/services/macon', icon: Building2 },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Home },
+  { label: 'Plâtrier', href: '/services/platrier', icon: Home },
 ]
 
 const faqItems = [

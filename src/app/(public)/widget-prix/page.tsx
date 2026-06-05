@@ -102,7 +102,7 @@ export default function WidgetPrixPage() {
     }
   ],
   "source": "ServicesArtisans.fr",
-  "sourceUrl": "https://servicesartisans.fr/plombier/lyon"
+  "sourceUrl": "https://servicesartisans.fr/services/plombier/lyon"
 }`
 
   return (

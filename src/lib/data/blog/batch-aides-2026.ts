@@ -394,7 +394,7 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       '## TVA à 10 % : travaux de rénovation et entretien',
 
       '### Travaux éligibles à la TVA 10 %',
-      "La TVA à 10 % couvre les travaux d'amélioration, de transformation, d'aménagement et d'entretien qui ne relèvent pas de la catégorie énergétique :\n- **Plomberie** : remplacement de sanitaires, réfection de salle de bain. Faites appel à un [plombier](/services/plombier)\n- **Électricité** : mise aux normes, ajout de prises, tableau électrique. Contactez un [électricien](/services/electricien)\n- **Revêtements** : peinture, carrelage, parquet, papier peint. Trouvez un [peintre](/services/peintre)\n- **Menuiserie intérieure** : portes, placards, escaliers. Un [menuisier](/services/menuisier) qualifié\n- **Maçonnerie** : ravalement de façade, reprise de fissures. Consultez un [maçon](/services/macon)\n- **Toiture** : réparation, remplacement de tuiles. Un [couvreur](/services/couvreur) certifié",
+      "La TVA à 10 % couvre les travaux d'amélioration, de transformation, d'aménagement et d'entretien qui ne relèvent pas de la catégorie énergétique :\n- **Plomberie** : remplacement de sanitaires, réfection de salle de bain. Faites appel à un [plombier](/services/plombier)\n- **Électricité** : mise aux normes, ajout de prises, tableau électrique. Contactez un [électricien](/services/electricien)\n- **Revêtements** : peinture, carrelage, parquet, papier peint. Trouvez un [peintre](/services/peintre-en-batiment)\n- **Menuiserie intérieure** : portes, placards, escaliers. Un [menuisier](/services/menuisier) qualifié\n- **Maçonnerie** : ravalement de façade, reprise de fissures. Consultez un [maçon](/services/macon)\n- **Toiture** : réparation, remplacement de tuiles. Un [couvreur](/services/couvreur) certifié",
 
       '### Conditions de la TVA 10 %',
       "- Mêmes conditions que la TVA 5,5 % : logement de plus de 2 ans, usage habitation\n- Les travaux ne doivent **pas** aboutir à une augmentation de la surface de plancher de plus de 10 %\n- Les travaux ne doivent **pas** rendre le logement « à l'état neuf » (remplacement de plus de 2/3 des planchers, façades ou fondations)",
@@ -437,7 +437,7 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       "Si votre chantier mélange travaux énergétiques et non énergétiques, l'artisan applique les taux correspondants à chaque poste : 5,5 % sur l'isolation et le chauffage, 10 % sur la cuisine et la plomberie.",
 
       '## Trouver un artisan près de chez vous',
-      'Pour bénéficier de la TVA réduite, les travaux doivent être facturés par un professionnel. Trouvez le vôtre : [plombier à Paris](/services/plombier/paris), [électricien à Lyon](/services/electricien/lyon), [peintre à Marseille](/services/peintre/marseille), [menuisier à Bordeaux](/services/menuisier/bordeaux), [maçon à Toulouse](/services/macon/toulouse).',
+      'Pour bénéficier de la TVA réduite, les travaux doivent être facturés par un professionnel. Trouvez le vôtre : [plombier à Paris](/services/plombier/paris), [électricien à Lyon](/services/electricien/lyon), [peintre à Marseille](/services/peintre-en-batiment/marseille), [menuisier à Bordeaux](/services/menuisier/bordeaux), [maçon à Toulouse](/services/macon/toulouse).',
 
       'Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).',
 
@@ -548,7 +548,7 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       'Déposez simultanément les demandes sur maprimerenov.gouv.fr et auprès de la Ville de Paris. Le conseiller APC vous aide à optimiser le cumul des aides.',
 
       '### 4. Choisir un artisan RGE à Paris',
-      'Trouvez un professionnel certifié : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Paris](/services/plombier/paris), [électricien à Paris](/services/electricien/paris), [peintre à Paris](/services/peintre/paris), [menuisier à Paris](/services/menuisier/paris).',
+      'Trouvez un professionnel certifié : [chauffagiste à Paris](/services/chauffagiste/paris), [plombier à Paris](/services/plombier/paris), [électricien à Paris](/services/electricien/paris), [peintre à Paris](/services/peintre-en-batiment/paris), [menuisier à Paris](/services/menuisier/paris).',
 
       'Pour estimer le coût de vos travaux, consultez notre guide des [prix rénovation énergétique en 2026](/blog/prix-renovation-energetique-2026-tarifs).',
 

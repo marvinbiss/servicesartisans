@@ -150,7 +150,7 @@ const categories = [
         scope: 'Étanchéité des toitures terrasses',
         requirements:
           "DTU 43.1 : toitures terrasses non accessibles (membrane bitumineuse ou synthétique, isolant, pare-vapeur, protection lourde ou autoprotégée). DTU 43.4 : toitures terrasses avec revêtement d'étanchéité apparente. Pente minimale 1 à 3 %.",
-        service: '/services/etancheur',
+        service: '/services/etancheiste',
         serviceLabel: 'Trouver un étancheur',
       },
     ],
@@ -173,7 +173,7 @@ const categories = [
         scope: 'Logements neufs et ERP',
         requirements:
           "Largeur des portes ≥ 83 cm (90 cm pour la porte d'entrée), salle de bain adaptable (espace de rotation Ø 150 cm), WC accessible, douche de plain-pied, interrupteurs à hauteur (90-130 cm), absence de ressaut > 2 cm. Les ERP existants devaient être mis en conformité (Ad'AP).",
-        service: '/services/renovation-interieure',
+        service: '/services',
         serviceLabel: 'Trouver un artisan',
       },
     ],

@@ -70,8 +70,8 @@ const services = [
   { label: 'Couvreur', href: '/services/couvreur', icon: Home },
   { label: 'Charpentier', href: '/services/charpentier', icon: Hammer },
   { label: 'Plombier', href: '/services/plombier', icon: Hammer },
-  { label: 'Rénovation intérieure', href: '/services/renovation-interieure', icon: Home },
-  { label: 'Extension maison', href: '/services/extension-maison', icon: Building2 },
+  { label: 'Plâtrier', href: '/services/platrier', icon: Home },
+  { label: 'Maçon', href: '/services/macon', icon: Building2 },
 ]
 
 const faqItems = [
