@@ -165,6 +165,7 @@ export function generateDossierReference(date: Date, uuidSuffix: string): string
 interface PartnerRow {
   id: string
   status: string
+  provider_id: string
   convention_signed_at: string | null
   certified_at: string | null
   operations_allowed: string[]
@@ -191,7 +192,7 @@ export async function checkDossierCreationGates(
   const { data: partner, error: partnerError } = await supabase
     .from('cee_artisan_partners')
     .select(
-      'id, status, convention_signed_at, certified_at, operations_allowed, provider:provider_id(rge_qualifications)'
+      'id, status, provider_id, convention_signed_at, certified_at, operations_allowed, provider:provider_id(rge_qualifications)'
     )
     .eq('id', partnerId)
     .maybeSingle()
@@ -338,6 +339,11 @@ export async function createDossier(
     return { ok: false, error: gateResult.error, detail: gateResult.detail }
   }
 
+  // Sécurité attribution : on dérive provider_id du partner côté serveur et on
+  // IGNORE l'input client (data.provider_id, validé UUID seulement). Empêche un
+  // artisan d'attribuer un dossier — donc sa commission — à un autre provider.
+  const providerId = gateResult.partner.provider_id
+
   // Idempotence check: same (partner_id, email_hash, operation_code) today
   const todayStart = new Date(depositDate)
   todayStart.setHours(0, 0, 0, 0)
@@ -378,7 +384,7 @@ export async function createDossier(
     .insert({
       reference,
       partner_id: data.partner_id,
-      provider_id: data.provider_id,
+      provider_id: providerId,
       client_nom_encrypted: `\\x${nomBuf.toString('hex')}`,
       client_prenom_encrypted: `\\x${prenomBuf.toString('hex')}`,
       client_email_encrypted: `\\x${emailBuf.toString('hex')}`,

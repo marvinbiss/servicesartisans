@@ -48,6 +48,7 @@ function makePartnerRow(
   return {
     id: 'partner-1',
     status,
+    provider_id: 'provider-1',
     convention_signed_at,
     certified_at,
     operations_allowed,
@@ -437,5 +438,54 @@ describe('createDossier', () => {
       expect(result.status).toBe('existing')
       expect(result.dossier.id).toBe('dossier-existing')
     }
+  })
+
+  it('derives provider_id from the partner, ignoring a forged input provider_id', async () => {
+    let insertedPayload: Record<string, unknown> | null = null
+    const supabase = {
+      from: vi.fn((table: string) => {
+        if (table === 'cee_artisan_partners') {
+          return {
+            select: vi.fn(() => ({
+              eq: vi.fn(() => ({
+                maybeSingle: vi.fn().mockResolvedValue({ data: makePartnerRow(), error: null }),
+              })),
+            })),
+          }
+        }
+        // cee_dossiers: idempotence check (no existing) then insert
+        const gteHandler = vi.fn(() => ({
+          maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+        }))
+        const eqStatus = vi.fn(() => ({ gte: gteHandler }))
+        const eqOp = vi.fn(() => ({ eq: eqStatus }))
+        const eqEmail = vi.fn(() => ({ eq: eqOp }))
+        const eqPartner = vi.fn(() => ({ eq: eqEmail }))
+        return {
+          select: vi.fn(() => ({ eq: eqPartner })),
+          insert: vi.fn((payload: Record<string, unknown>) => {
+            insertedPayload = payload
+            return {
+              select: vi.fn(() => ({
+                single: vi
+                  .fn()
+                  .mockResolvedValue({ data: { id: 'dossier-new', ...payload }, error: null }),
+              })),
+            }
+          }),
+        }
+      }),
+    }
+
+    // Input carries an attacker-controlled provider_id distinct from the partner's.
+    const result = await createDossier(supabase as never, {
+      ...makeValidInput(),
+      provider_id: '99999999-9999-4999-8999-999999999999',
+    })
+
+    expect(result.ok).toBe(true)
+    expect(insertedPayload).not.toBeNull()
+    // Must be the partner's provider_id ('provider-1'), never the forged input.
+    expect(insertedPayload!.provider_id).toBe('provider-1')
   })
 })
