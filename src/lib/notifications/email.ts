@@ -57,6 +57,9 @@ export interface PaymentFailedEmailData {
 }
 
 // Email templates
+// 2026-06-05 : les CTAs client « Gérer ma réservation » pointaient vers
+// /booking/[id] (espace authentifié) — inaccessibles depuis la fermeture de
+// l'espace particulier. Remplacés par /contact.
 const templates = {
   bookingConfirmationClient: (data: BookingEmailData) => ({
     subject: `Confirmation de votre rendez-vous - ${data.serviceName}`,
@@ -104,8 +107,8 @@ const templates = {
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/booking/${data.bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Gérer ma réservation
+                <a href="${SITE_URL}/contact" style="display: inline-block; background: #2563eb; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                  Modifier ou annuler (contact)
                 </a>
               </div>
 
@@ -134,7 +137,7 @@ Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 Artisan: ${data.artisanName}
 
-Gérer votre réservation: ${SITE_URL}/booking/${data.bookingId}
+Modifier ou annuler votre rendez-vous : ${SITE_URL}/contact
 
 Besoin de modifier ou annuler ? Utilisez le lien ci-dessus ou contactez directement l'artisan.
 
@@ -280,8 +283,8 @@ ${SITE_NAME}
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/booking/${data.bookingId}" style="display: inline-block; background: #f59e0b; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Gérer ma réservation
+                <a href="${SITE_URL}/contact" style="display: inline-block; background: #f59e0b; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                  Modifier ou annuler (contact)
                 </a>
               </div>
 
@@ -308,7 +311,7 @@ Service: ${data.serviceName}
 Date: ${data.date}
 Horaire: ${data.startTime} - ${data.endTime}
 
-Gérer votre réservation: ${SITE_URL}/booking/${data.bookingId}
+Modifier ou annuler votre rendez-vous : ${SITE_URL}/contact
 
 Si vous ne pouvez plus honorer ce rendez-vous, merci de l'annuler le plus tôt possible.
 

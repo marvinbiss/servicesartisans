@@ -92,7 +92,10 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
         to: row.email,
         subject,
         html,
-        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       })
       if (result.success) {
         await supabase
@@ -128,7 +131,10 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
         to: row.email,
         subject,
         html,
-        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       })
       if (result.success) {
         await supabase
@@ -164,7 +170,10 @@ const handleAbandonEmails = withCronCheckIn('cron-abandon-emails', async (reques
         to: row.email,
         subject,
         html,
-        headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>` },
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       })
       if (result.success) {
         await supabase
